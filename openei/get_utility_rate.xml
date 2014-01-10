@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 sp1 (x64) (http://www.altova.com) by Nicholas Long (National Renewable Energy Laboratory) -->
+<onDemandGeneratorDescription xsi:noNamespaceSchemaLocation="\\nrel.gov\shared\5500\5500 HPBldg\PROJECTS\SoftwareDevelopment\WebDevelopment\BCL\schemas\generatorDescription_2012_08_27.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<name>get_utility_rate</name>
+	<endpoint>get_utility_rate</endpoint>
+	<uid/>
+	<version_id>16cdb600-923f-012f-796c-00ff1036fe0a</version_id>
+	<description>On-demand generator takes 4 arguments and returns a space type .osm and .osc</description>
+	<fidelity_level>2</fidelity_level>
+	<provenances>
+		<provenance>
+			<author>nlong</author>
+			<datetime>2012-04-25T09:00:00Z</datetime>
+		</provenance>
+	</provenances>
+	<tags>
+		<tag>Utility Rate</tag>
+	</tags>
+	<arguments>
+		<argument>
+			<name>search_str</name>
+			<displayname>Search String</displayname>
+			<datatype>string</datatype>
+			<required>1</required>
+			<input_type>text</input_type>
+		</argument>
+	</arguments>
+	<files>
+		<file>
+			<version>
+				<software_program>OpenStudio</software_program>
+				<identifier>0.7.6</identifier>
+			</version>
+			<filename>utility_rate.osm</filename>
+			<filetype>osm</filetype>
+		</file>
+		<file>
+			<version>
+				<software_program>OpenStudio</software_program>
+				<identifier>0.7.6</identifier>
+			</version>
+			<filename>utility_rate.osc</filename>
+			<filetype>osc</filetype>
+		</file>
+	</files>
+	<resources>
+		<resource>
+			<filename>OpenEI.rb</filename>
+			<filetype>ruby</filetype>
+			<uid>todo</uid>
+			<version_id>todo</version_id>
+		</resource>
+		<resource>
+			<filename>OpenEIRate.rb</filename>
+			<filetype>ruby</filetype>
+			<uid>todo</uid>
+			<version_id>todo</version_id>
+		</resource>
+	</resources>
+	<dependencies>
+		<dependency>
+			<software_program>OpenStudio</software_program>
+			<identifier>0.7.6</identifier>
+		</dependency>
+	</dependencies>
+</onDemandGeneratorDescription>

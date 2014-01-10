@@ -1,0 +1,183 @@
+!-Generator IDFEditor 1.43
+!-Option SortedOrder
+
+!-NOTE: All comments with '!-' are ignored by the IDFEditor and are generated automatically.
+!-      Use '!' comments if they need to be retained when using the IDFEditor.
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULETYPELIMITS ===========
+
+ScheduleTypeLimits,
+    On/Off,                  !- Name
+    0,                       !- Lower Limit Value
+    1,                       !- Upper Limit Value
+    DISCRETE;                !- Numeric Type
+
+ScheduleTypeLimits,
+    Fraction,                !- Name
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    CONTINUOUS;              !- Numeric Type
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:COMPACT ===========
+
+Schedule:Compact,
+    FullServiceRestaurant_Kitchen_Exhaust,  !- Name
+    On/Off,                  !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 01:00,            !- Field 3
+    1.0,                     !- Field 4
+    Until: 05:00,            !- Field 5
+    0.0,                     !- Field 6
+    Until: 24:00,            !- Field 7
+    1.0;                     !- Field 8
+
+Schedule:Compact,
+    Hospital_Kitchen_Exhaust,!- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays,           !- Field 2
+    Until: 05:00,            !- Field 3
+    0,                       !- Field 4
+    Until: 18:00,            !- Field 5
+    1,                       !- Field 6
+    Until: 24:00,            !- Field 7
+    0,                       !- Field 8
+    For: SummerDesignDay,    !- Field 9
+    Until: 05:00,            !- Field 10
+    0,                       !- Field 11
+    Until: 18:00,            !- Field 12
+    1,                       !- Field 13
+    Until: 24:00,            !- Field 14
+    0,                       !- Field 15
+    For: WinterDesignDay,    !- Field 16
+    Until: 07:00,            !- Field 17
+    0,                       !- Field 18
+    Until: 15:00,            !- Field 19
+    1,                       !- Field 20
+    Until: 24:00,            !- Field 21
+    0,                       !- Field 22
+    For: Saturdays,          !- Field 23
+    Until: 07:00,            !- Field 24
+    0,                       !- Field 25
+    Until: 15:00,            !- Field 26
+    1,                       !- Field 27
+    Until: 24:00,            !- Field 28
+    0,                       !- Field 29
+    For: AllOtherDays,       !- Field 30
+    Until: 24:00,            !- Field 31
+    0;                       !- Field 32
+
+Schedule:Compact,
+    LargeHotel_Kitchen_Exhaust,  !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 07:00,            !- Field 3
+    0,                       !- Field 4
+    Until: 24:00,            !- Field 5
+    1;                       !- Field 6
+
+Schedule:Compact,
+    LargeHotel_Laundry_Exhaust_ALWAYS_ON,  !- Name
+    On/Off,                  !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00,            !- Field 3
+    1;                       !- Field 4
+
+Schedule:Compact,
+    Outpatient_FirstFlr_Exhaust,  !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays Saturday,  !- Field 2
+    Until: 04:00,            !- Field 3
+    0.00,                    !- Field 4
+    Until: 21:00,            !- Field 5
+    1.00,                    !- Field 6
+    Until: 24:00,            !- Field 7
+    0.00,                    !- Field 8
+    For: SummerDesignDay WinterDesignDay,  !- Field 9
+    Until: 24:00,            !- Field 10
+    1.00,                    !- Field 11
+    For: AllOtherDays,       !- Field 12
+    Until: 24:00,            !- Field 13
+    0.00;                    !- Field 14
+
+Schedule:Compact,
+    Outpatient_SecondFlr_Exhaust,  !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays Saturday,  !- Field 2
+    Until: 06:00,            !- Field 3
+    0.00,                    !- Field 4
+    Until: 18:00,            !- Field 5
+    1.00,                    !- Field 6
+    Until: 24:00,            !- Field 7
+    0.00,                    !- Field 8
+    For: SummerDesignDay WinterDesignDay,  !- Field 9
+    Until: 24:00,            !- Field 10
+    1.00,                    !- Field 11
+    For: AllOtherDays,       !- Field 12
+    Until: 24:00,            !- Field 13
+    0.00;                    !- Field 14
+
+Schedule:Compact,
+    PrimarySchool_Kitchen_Exhaust,  !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays SummerDesignDay,  !- Field 2
+    Until: 06:00,            !- Field 3
+    0,                       !- Field 4
+    Until: 21:00,            !- Field 5
+    1.0,                     !- Field 6
+    Until: 24:00,            !- Field 7
+    0,                       !- Field 8
+    For: AllOtherDays,       !- Field 9
+    Until: 24:00,            !- Field 10
+    0;                       !- Field 11
+
+Schedule:Compact,
+    QuickServiceRestaurant_Kitchen_Exhaust,  !- Name
+    On/Off,                  !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 01:00,            !- Field 3
+    1.0,                     !- Field 4
+    Until: 05:00,            !- Field 5
+    0.0,                     !- Field 6
+    Until: 24:00,            !- Field 7
+    1.0;                     !- Field 8
+
+Schedule:Compact,
+    SecondarySchool_Kitchen_Exhaust,  !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays SummerDesignDay,  !- Field 2
+    Until: 06:00,            !- Field 3
+    0,                       !- Field 4
+    Until: 21:00,            !- Field 5
+    1.0,                     !- Field 6
+    Until: 24:00,            !- Field 7
+    0,                       !- Field 8
+    For: AllOtherDays,       !- Field 9
+    Until: 24:00,            !- Field 10
+    0;                       !- Field 11
+
+Schedule:Compact,
+    SuperMarket_Deli_Exhaust,!- Name
+    On/Off,                  !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: WinterDesignDay SummerDesignDay,  !- Field 2
+    Until: 24:00,            !- Field 3
+    1.0,                     !- Field 4
+    For: AllOtherDays,       !- Field 5
+    Until: 06:00,            !- Field 6
+    0.0,                     !- Field 7
+    Until: 22:00,            !- Field 8
+    1.0,                     !- Field 9
+    Until: 24:00,            !- Field 10
+    0.0;                     !- Field 11
+
