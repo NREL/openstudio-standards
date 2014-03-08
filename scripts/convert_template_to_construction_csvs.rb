@@ -115,10 +115,146 @@ end
 class ConstructionNameParser
   def initialize(name)
     @name = name
+    if match_data = /.*ClimateZone(.*)/.match(@name)
+      @climate_zone_set = match_data[1].strip
+    end   
   end
   
   def name 
     return @name
+  end
+  
+  def construction_standard 
+    result = nil
+    if /ASHRAE 189\.1-2009/.match(@name)
+      result = "ASHRAE 189.1-2009"  
+    elsif /ASHRAE 90\.1-1999/.match(@name) 
+      result = "ASHRAE 90.1-1999"    
+    elsif /ASHRAE 90\.1-2001/.match(@name)
+      result = "ASHRAE 90.1-2001"            
+    elsif /ASHRAE 90\.1-2004/.match(@name)
+      result = "ASHRAE 90.1-2004"            
+    elsif /ASHRAE 90\.1-2007/.match(@name)
+      result = "ASHRAE 90.1-2007"        
+    elsif /CBECS Before-1980/.match(@name)
+      result = nil         # Right?
+    elsif /CBECS 1980-2004/.match(@name)
+      result = nil       # Right?       
+    elsif /Interior Partition/.match(@name)
+      result = nil       # Right?   
+    elsif /Interior Window/.match(@name)
+      result = nil       # Right?     
+    elsif /Interior Wall/.match(@name)
+      result = nil       # Right?    
+    elsif /Interior Floor/.match(@name)
+      result = nil       # Right?       
+    elsif /Interior Ceiling/.match(@name)
+      result = nil       # Right? 
+    elsif /Interior Door/.match(@name)
+      result = nil       # Right?             
+    else
+      puts "Unable to parse construction_standard from '#{@name}'"
+    end
+    return result   
+  end  
+  
+  def climate_zone_set 
+  
+    result = nil
+    if @climate_zone_set.nil?
+      result = "ClimateZone 1-8"  
+      puts "Unable to parse climate_zone_set from nil"
+      return result
+    end
+
+    if "1" == @climate_zone_set or "alt-res 1" == @climate_zone_set
+      result = "ClimateZone 1"   
+    elsif "2" == @climate_zone_set or "alt-res 2" == @climate_zone_set
+      result = "ClimateZone 2"  
+    elsif "2a" == @climate_zone_set
+      result = "ClimateZone 2a"      
+    elsif "2b" == @climate_zone_set or "2b 1" == @climate_zone_set
+      result = "ClimateZone 2b"        
+    elsif "3" == @climate_zone_set or "alt-res 3" == @climate_zone_set
+      result = "ClimateZone 3"  
+    elsif "3a" == @climate_zone_set
+      result = "ClimateZone 3a"          
+    elsif "3b" == @climate_zone_set
+      result = "ClimateZone 3b"     
+    elsif "3b LAS" == @climate_zone_set
+      result = "ClimateZone 3b"    # Right?      
+    elsif "3b LAX" == @climate_zone_set
+      result = "ClimateZone 3b"    # Right?    
+    elsif "3c" == @climate_zone_set or "alt-res 3c" == @climate_zone_set
+      result = "ClimateZone 3c"            
+    elsif "4" == @climate_zone_set or "alt-res 4" == @climate_zone_set
+      result = "ClimateZone 4"  
+    elsif "4a" == @climate_zone_set
+      result = "ClimateZone 4a"  
+    elsif "4b" == @climate_zone_set
+      result = "ClimateZone 4b"  
+    elsif "4c" == @climate_zone_set
+      result = "ClimateZone 4c"        
+    elsif "5" == @climate_zone_set or "alt-res 5" == @climate_zone_set
+      result = "ClimateZone 5" 
+    elsif "5a" == @climate_zone_set
+      result = "ClimateZone 5a"        
+    elsif "5b" == @climate_zone_set or "5b 1" == @climate_zone_set
+      result = "ClimateZone 5b"        
+    elsif "6" == @climate_zone_set or "alt-res 6" == @climate_zone_set
+      result = "ClimateZone 6"  
+    elsif "6a" == @climate_zone_set
+      result = "ClimateZone 6a"      
+    elsif "6b" == @climate_zone_set
+      result = "ClimateZone 6b" 
+    elsif "7" == @climate_zone_set or "alt-res 7" == @climate_zone_set or "7 1" == @climate_zone_set
+      result = "ClimateZone 7"  
+    elsif "8" == @climate_zone_set or "alt-res 8" == @climate_zone_set
+      result = "ClimateZone 8"  
+    elsif "1-2" == @climate_zone_set or "alt-res 1-2" == @climate_zone_set
+      result = "ClimateZone 1-2"   
+    elsif "1-3" == @climate_zone_set
+      result = "ClimateZone 1-3"       
+    elsif "1-3b" == @climate_zone_set
+      result = "ClimateZone 1-3b"   
+    elsif "1-4" == @climate_zone_set
+      result = "ClimateZone 1-4"         
+    elsif "1-5" == @climate_zone_set
+      result = "ClimateZone 1-5"    
+    elsif "1-7" == @climate_zone_set
+      result = "ClimateZone 1-7"       
+    elsif "1-8" == @climate_zone_set or "alt-lrgoff hosp 1-8" == @climate_zone_set or "alt-ware 1-8" == @climate_zone_set
+      result = "ClimateZone 1-8" 
+    elsif "2-3" == @climate_zone_set
+      result = "ClimateZone 2-3"       
+    elsif "2-5" == @climate_zone_set
+      result = "ClimateZone 2-5"         
+    elsif "3a-3b" == @climate_zone_set or "alt-resH 3a-3b" == @climate_zone_set or "alt-resA 3a-3b" == @climate_zone_set
+      result = "ClimateZone 3a-3b"  
+    elsif "3-4" == @climate_zone_set
+      result = "ClimateZone 3-4"        
+    elsif "4-5" == @climate_zone_set or "alt-res 4-5" == @climate_zone_set
+      result = "ClimateZone 4-5"        
+    elsif "4-6" == @climate_zone_set or "alt-res 4-6" == @climate_zone_set
+      result = "ClimateZone 4-6"   
+    elsif "4-8" == @climate_zone_set
+      result = "ClimateZone 4-8"     
+    elsif "4c-5a" == @climate_zone_set
+      result = "ClimateZone 4c-5a"        
+    elsif "5-6" == @climate_zone_set or "5-6 1" == @climate_zone_set or "alt-res 5-6" == @climate_zone_set
+      result = "ClimateZone 5-6"       
+    elsif "5-8" == @climate_zone_set
+      result = "ClimateZone 5-8"         
+    elsif "6-8" == @climate_zone_set
+      result = "ClimateZone 6-8"   
+    elsif "7-8" == @climate_zone_set
+      result = "ClimateZone 7-8"         
+    else
+      result = "ClimateZone 1-8"  
+      puts "Unable to parse climate_zone_set from '#{@climate_zone_set}'"
+    end
+
+    return result      
   end
   
   def intended_surface_type
@@ -203,7 +339,7 @@ class ConstructionNameParser
 end
 
 class SpreadSheetConstruction
-  attr_accessor :name, :intended_surface_type, :standards_construction_type, :material_1, :material_2, :material_3, :material_4, :material_5, :material_6
+  attr_accessor :name, :construction_standard, :climate_zone_set, :intended_surface_type, :standards_construction_type, :material_1, :material_2, :material_3, :material_4, :material_5, :material_6
   
   def getMaterialName(materials, index)
     material = materials[index]
@@ -224,6 +360,8 @@ class SpreadSheetConstruction
     end
     
     @name = name_parser.name
+    @construction_standard = name_parser.construction_standard
+    @climate_zone_set = name_parser.climate_zone_set
     @intended_surface_type = name_parser.intended_surface_type
     @standards_construction_type = name_parser.standards_construction_type
     @material_1 = getMaterialName(materials, 0)
@@ -235,7 +373,7 @@ class SpreadSheetConstruction
   end
   
   def to_row
-    return [@name, @intended_surface_type, @standards_construction_type, @material_1, @material_2, @material_3, @material_4, @material_5, @material_6]
+    return [@name, @construction_standard, @climate_zone_set, @intended_surface_type, @standards_construction_type, @material_1, @material_2, @material_3, @material_4, @material_5, @material_6]
   end
 
 end
@@ -457,7 +595,7 @@ class SpreadSheetConstructionSet
     if construction.empty?
       return nil
     end
-    name_parser = ConstructionNameParser.new(construction.name.get)
+    name_parser = ConstructionNameParser.new(construction.get.name.get)
     return name_parser.name
   end
   
@@ -524,7 +662,7 @@ class SpreadSheetConstructionSet
   end
   
   def to_row
-    return [@name, @template, @building_type, @space_type, @climate_zone_set, @construction_standard, @exterior_wall, @exterior_floor, @exterior_roof, @interior_wall, @interior_floor, @interior_ceiling, @ground_contact_wall, @ground_contact_floor, @ground_contact_ceiling, @exterior_fixed_window, @exterior_operable_window, @exterior_door, @exterior_glass_door, @exterior_overhead_door, @exterior_skylight, @tubular_daylight_dome, @tubular_daylight_diffuser, @interior_fixed_window, @interior_operable_window, @interior_door, @space_shading, @building_shading, @site_shading, @interior_partition]
+    return [@template, @building_type, @space_type, @climate_zone_set, @exterior_wall, @exterior_floor, @exterior_roof, @interior_wall, @interior_floor, @interior_ceiling, @ground_contact_wall, @ground_contact_floor, @ground_contact_ceiling, @exterior_fixed_window, @exterior_operable_window, @exterior_door, @exterior_glass_door, @exterior_overhead_door, @exterior_skylight, @tubular_daylight_dome, @tubular_daylight_diffuser, @interior_fixed_window, @interior_operable_window, @interior_door, @space_shading, @building_shading, @site_shading, @interior_partition]
   end
 
 end

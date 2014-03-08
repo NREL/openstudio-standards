@@ -13,3 +13,9 @@
 * I don't understand the Ventilation, Occupancy, InteriorLighting tabs.  They seem to have duplicate data that is already in the space types tab.  Are these needed to support the space types tab?  Should these be hidden or deleted?
 
 * I don't think we need the ConstructionStandards tab for now, can we just leave it blank?  Seems like that should also have the targeted U-values, etc in it for checking our constructions against or generating new ones.
+
+* Remove name and construction standard from ConstructionSet tab
+
+* Add Construction Standard and Climate Zone Set to Construction tab
+
+* Add standard u-value, SHGC, etc to the Constructions tab
