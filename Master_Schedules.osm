@@ -35021,23 +35021,23 @@ OS:DefaultScheduleSet,
   {5f0a1338-af69-4ab0-9d90-053b1f7f3870}, !- Handle
   Office Work Area Schedules,             !- Name
   ,                                       !- Hours of Operation Schedule Name
-  ,                                       !- Number of People Schedule Name
-  ,                                       !- People Activity Level Schedule Name
-  ,                                       !- Lighting Schedule Name
-  ,                                       !- Electric Equipment Schedule Name
+  {5c8ce96c-11fa-4673-a663-cbb6ee68ebef}, !- Number of People Schedule Name
+  {d7ccdbe3-e995-4959-89b7-e201ce62ddb7}, !- People Activity Level Schedule Name
+  {52097cbf-918a-41cc-b5cc-b0b01d902ea6}, !- Lighting Schedule Name
+  {6d371ce6-4c58-4343-9664-3cbcc7d7d7b7}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  ,                                       !- Infiltration Schedule Name
+  {515caa6f-35fe-4437-a994-d503a5eff544}, !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
 OS:Schedule:Ruleset,
   {5c8ce96c-11fa-4673-a663-cbb6ee68ebef}, ! Handle
   Office Work Area Occ,                   ! Name
-  ,                                       ! Schedule Type Limits Name
-  ,                                       ! Default Day Schedule Name
-  ,                                       ! Summer Design Day Schedule Name
-  ;                                       ! Winter Design Day Schedule Name
+  {0b8a95eb-9aa8-43a9-9736-998a36816f12}, ! Schedule Type Limits Name
+  {f4b45e55-26dd-44f4-bb68-4b649f2cc043}, ! Default Day Schedule Name
+  {ce37135e-9ade-4c04-b4fb-d3768d183334}, ! Summer Design Day Schedule Name
+  {9e5383ac-d7a0-470d-840e-81876e924e72}; ! Winter Design Day Schedule Name
 
 OS:Schedule:Day,
   {f4b45e55-26dd-44f4-bb68-4b649f2cc043}, ! Handle
@@ -35102,10 +35102,10 @@ OS:Schedule:Day,
 OS:Schedule:Ruleset,
   {d7ccdbe3-e995-4959-89b7-e201ce62ddb7}, ! Handle
   Office Activity,                        ! Name
-  ,                                       ! Schedule Type Limits Name
-  ,                                       ! Default Day Schedule Name
-  ,                                       ! Summer Design Day Schedule Name
-  ;                                       ! Winter Design Day Schedule Name
+  {0b8a95eb-9aa8-43a9-9736-998a36816f12}, ! Schedule Type Limits Name
+  {d7db9a64-8428-432c-8c1a-b0127217ba4d}, ! Default Day Schedule Name
+  {4c8c479f-783d-4b22-ac23-29cc723ae6d9}, ! Summer Design Day Schedule Name
+  {cf67eac7-7a6a-4850-b372-cec066288972}; ! Winter Design Day Schedule Name
 
 OS:Schedule:Day,
   {d7db9a64-8428-432c-8c1a-b0127217ba4d}, ! Handle
@@ -35137,11 +35137,11 @@ OS:Schedule:Day,
 OS:Schedule:Ruleset,
   {52097cbf-918a-41cc-b5cc-b0b01d902ea6}, ! Handle
   Office Bldg Light,                      ! Name
-  ,                                       ! Schedule Type Limits Name
-  ,                                       ! Default Day Schedule Name
-  ,                                       ! Summer Design Day Schedule Name
-  ;                                       ! Winter Design Day Schedule Name
-
+  {0b8a95eb-9aa8-43a9-9736-998a36816f12}, ! Schedule Type Limits Name DFG
+  {a1757099-c320-48d4-9198-ce3e9ef095c3}, ! Default Day Schedule Name
+  {59409791-c615-4638-ac9a-c773cf83408b}, ! Summer Design Day Schedule Name
+  {a007304a-d04c-4e33-af99-c506dd037640}; ! Winter Design Day Schedule Name
+  
 OS:Schedule:Day,
   {a1757099-c320-48d4-9198-ce3e9ef095c3}, ! Handle
   Medium Office Bldg Light Default Schedule, ! Name
@@ -35194,12 +35194,12 @@ OS:Schedule:Day,
   0;                                      ! Value Until Time 1
 
 OS:Schedule:Ruleset,
-  {6d371ce6-4c58-4343-9664-3cbcc7d7d7b7}, ! Handle
+  {0b8a95eb-9aa8-43a9-9736-998a36816f12}, ! Handle
   Office Bldg Equip,                      ! Name
-  ,                                       ! Schedule Type Limits Name
-  ,                                       ! Default Day Schedule Name
-  ,                                       ! Summer Design Day Schedule Name
-  ;                                       ! Winter Design Day Schedule Name
+  {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
+  {898562b5-f2b1-4a17-a390-c31508c91e2f}, ! Default Day Schedule Name
+  {14a5339e-1774-4f19-869b-3b48f32bfae5}, ! Summer Design Day Schedule Name
+  {285429eb-62fd-4850-be14-2e82e4abfc4c}; ! Winter Design Day Schedule Name
 
 OS:Schedule:Day,
   {898562b5-f2b1-4a17-a390-c31508c91e2f}, ! Handle
@@ -35252,10 +35252,10 @@ OS:Schedule:Day,
 OS:Schedule:Ruleset,
   {515caa6f-35fe-4437-a994-d503a5eff544}, ! Handle
   Office Infil Quarter On,                ! Name
-  ,                                       ! Schedule Type Limits Name
-  ,                                       ! Default Day Schedule Name
-  ,                                       ! Summer Design Day Schedule Name
-  ;                                       ! Winter Design Day Schedule Name
+  {0b8a95eb-9aa8-43a9-9736-998a36816f12}, ! Schedule Type Limits Name
+  {9dc1ea1f-e45b-4d6c-97cd-6123c1f08bd6}, ! Default Day Schedule Name
+  {abcdc554-f9cb-47c6-a7ae-9b785aca1ae2}, ! Summer Design Day Schedule Name
+  {e724b840-d890-40cb-bed4-a9131bd72992}; ! Winter Design Day Schedule Name
 
 OS:Schedule:Day,
   {9dc1ea1f-e45b-4d6c-97cd-6123c1f08bd6}, ! Handle
@@ -35306,23 +35306,23 @@ OS:DefaultScheduleSet,
   {c3159579-5a44-4ee8-a888-7d7280d27b5f}, !- Handle
   Office Misc Schedules,                  !- Name
   ,                                       !- Hours of Operation Schedule Name
-  ,                                       !- Number of People Schedule Name
-  ,                                       !- People Activity Level Schedule Name
-  ,                                       !- Lighting Schedule Name
-  ,                                       !- Electric Equipment Schedule Name
+  {2825fe31-1f47-40d2-8dcc-ddbbf6419a7c}, !- Number of People Schedule Name
+  {d7ccdbe3-e995-4959-89b7-e201ce62ddb7}, !- People Activity Level Schedule Name
+  {52097cbf-918a-41cc-b5cc-b0b01d902ea6}, !- Lighting Schedule Name
+  {6d371ce6-4c58-4343-9664-3cbcc7d7d7b7}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  ,                                       !- Infiltration Schedule Name
+  {515caa6f-35fe-4437-a994-d503a5eff544}, !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
 OS:Schedule:Ruleset,
   {2825fe31-1f47-40d2-8dcc-ddbbf6419a7c}, ! Handle
   Office Misc Occ,                        ! Name
-  ,                                       ! Schedule Type Limits Name
-  ,                                       ! Default Day Schedule Name
-  ,                                       ! Summer Design Day Schedule Name
-  ;                                       ! Winter Design Day Schedule Name
+  {0b8a95eb-9aa8-43a9-9736-998a36816f12}, ! Schedule Type Limits Name
+  {f4b45e55-26dd-44f4-bb68-4b649f2cc043}, ! Default Day Schedule Name
+  {ce37135e-9ade-4c04-b4fb-d3768d183334}, ! Summer Design Day Schedule Name
+  {9e5383ac-d7a0-470d-840e-81876e924e72}; ! Winter Design Day Schedule Name
 
 OS:Schedule:Day,
   {8691cb6a-989e-4097-b96b-0473455f1e2c}, ! Handle
