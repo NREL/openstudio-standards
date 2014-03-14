@@ -6,17 +6,22 @@ require 'openstudio'
 
 class SpaceTypeGenerator
 
-def initialize(path_to_space_type_json, path_to_master_schedules_library, path_to_office_schedules_library)
+def initialize(path_to_standards_json, path_to_master_schedules_library)
   
   #load the data from the JSON file into a ruby hash
-  @spc_types = {}
-  temp = File.read(path_to_space_type_json.to_s)
-  @spc_types = JSON.parse(temp)
-
+  @standards = {}
+  temp = File.read(path_to_standards_json.to_s)
+  @standards = JSON.parse(temp)
+  @spc_types = @standards["space_types"]
+  if @spc_types.nil?
+    puts "The space types json file did not load correctly."
+    exit
+  end
+  
   #check that the data was loaded correctly
   check_data = @spc_types["NREL_2009"]["ClimateZone 1-3"]["Hospital"]["Radiology"]["lighting_w_per_area"]
   unless check_data == 0.36
-    puts "The space types json file did not load correctly."
+    puts "The space types json file does not have expected content."
     exit
   end
 
@@ -24,10 +29,6 @@ def initialize(path_to_space_type_json, path_to_master_schedules_library, path_t
   path_to_master_schedules_library = OpenStudio::Path.new(path_to_master_schedules_library)
   @schedule_library = OpenStudio::Model::Model::load(path_to_master_schedules_library).get  
 
-  #load up the osm with the office building schedules
-  path_to_office_schedules_library = OpenStudio::Path.new(path_to_office_schedules_library)
-  @office_schedule_library = OpenStudio::Model::Model::load(path_to_office_schedules_library).get  
-  
   #make a new openstudio model to hold the space type
   @model = OpenStudio::Model::Model.new
 
@@ -43,12 +44,8 @@ def generate_space_type(template, clim, building_type, spc_type)
     sch = nil
     sch = @schedule_library.getObjectByTypeAndName("OS_Schedule_Ruleset".to_IddObjectType,sch_name)
     if sch.empty?
-      #temporarily check in the office file library.  this will be merged into master schedule library
-      sch = @office_schedule_library.getObjectByTypeAndName("OS_Schedule_Ruleset".to_IddObjectType,sch_name)
-      if sch.empty?
-        puts "schedule called '#{sch_name}' not found in master schedule library or office schedule library"
-        exit
-      end
+      puts "schedule called '#{sch_name}' not found in master schedule library"
+      exit
     end
     #clone the space type from the library model into the space type model
     clone_of_sch = sch.get.to_Schedule.get.clone(@model)

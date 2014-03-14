@@ -527,28 +527,35 @@ xl = WIN32OLE::new('Excel.Application')
 #open workbook
 wb = xl.workbooks.open(xlsx_path)
 
-standards = Hash.new
-standards["templates"] = getTemplatesHash(wb)
-standards["standards"] = getStandardsHash(wb)
-standards["climate_zones"] = getClimateZonesHash(wb)
-standards["climate_zone_sets"] = getClimateZoneSetsHash(wb)
-standards["space_types"] = getSpaceTypesHash(wb)
-standards["construction_sets"] = getConstructionSetsHash(wb)
-standards["constructions"] = getConstructionsHash(wb)
-standards["materials"] = getMaterialsHash(wb)
+begin
 
-#close workbook
-wb.Close(1)
-#quit Excel
-xl.Quit
+  standards = Hash.new
+  standards["templates"] = getTemplatesHash(wb)
+  standards["standards"] = getStandardsHash(wb)
+  standards["climate_zones"] = getClimateZonesHash(wb)
+  standards["climate_zone_sets"] = getClimateZoneSetsHash(wb)
+  standards["space_types"] = getSpaceTypesHash(wb)
+  standards["construction_sets"] = getConstructionSetsHash(wb)
+  standards["constructions"] = getConstructionsHash(wb)
+  standards["materials"] = getMaterialsHash(wb)
+  
+  # TODO: create any other views that would be useful
 
-# TODO: create any other views that would be useful
+  #write the space types hash to a JSON file
+  File.open("#{Dir.pwd}/OpenStudio_Standards.json", 'w') do |file|
+    file << standards.to_json
+  end
+  puts "Successfully generated OpenStudio_Standards.json"
 
-#write the space types hash to a JSON file
-File.open("#{Dir.pwd}/OpenStudio_Standards.json", 'w') do |file|
-  file << standards.to_json
+ensure
+
+  #close workbook
+  wb.Close(1)
+  #quit Excel
+  xl.Quit
+
 end
-puts "Successfully generated OpenStudio_Standards.json"
+
 
 
 
