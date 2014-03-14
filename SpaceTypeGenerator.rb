@@ -28,33 +28,39 @@ def initialize(path_to_standards_json, path_to_master_schedules_library)
   #load up the osm with all the reference building schedules
   path_to_master_schedules_library = OpenStudio::Path.new(path_to_master_schedules_library)
   @schedule_library = OpenStudio::Model::Model::load(path_to_master_schedules_library).get  
-
-  #make a new openstudio model to hold the space type
-  @model = OpenStudio::Model::Model.new
-
 end
 
-def generate_space_type(template, clim, building_type, spc_type)
+def generate_space_type(template, clim, building_type, spc_type, model = nil)
+
+  if model.nil?
+    model = OpenStudio::Model::Model.new
+  end
 
   puts "generating #{template}-#{clim}-#{building_type}-#{spc_type}"
 
   #grabs a schedule with a specific name from the library, clones it into the space type model, and returns itself to the user
-  def get_sch_from_lib(sch_name)
+  def get_sch_from_lib(sch_name, model)
+    #first check model
+    sch = model.getObjectByTypeAndName("OS_Schedule_Ruleset".to_IddObjectType, sch_name)
+    if not sch.empty?
+      # could clone here if you really wanted to
+      return sch.get.to_ScheduleRuleset.get
+    end
+    
     #get the correct space type from the library file
-    sch = nil
-    sch = @schedule_library.getObjectByTypeAndName("OS_Schedule_Ruleset".to_IddObjectType,sch_name)
+    sch = @schedule_library.getObjectByTypeAndName("OS_Schedule_Ruleset".to_IddObjectType, sch_name)
     if sch.empty?
       puts "schedule called '#{sch_name}' not found in master schedule library"
       exit
     end
     #clone the space type from the library model into the space type model
-    clone_of_sch = sch.get.to_Schedule.get.clone(@model)
+    clone_of_sch = sch.get.to_Schedule.get.clone(model)
     new_sch = clone_of_sch.to_ScheduleRuleset.get
     return new_sch
   end
 
   #create a new space type and name it
-  space_type = OpenStudio::Model::SpaceType.new(@model)
+  space_type = OpenStudio::Model::SpaceType.new(model)
   space_type.setName("#{template} #{clim} #{building_type} #{spc_type}")
 
   #set the standards building type and space type for this new space type
@@ -67,13 +73,13 @@ def generate_space_type(template, clim, building_type, spc_type)
   r = rgb[0].to_i
   g = rgb[1].to_i
   b = rgb[2].to_i
-  rendering_color = OpenStudio::Model::RenderingColor.new(@model)
+  rendering_color = OpenStudio::Model::RenderingColor.new(model)
   rendering_color.setRenderingRedValue(r)
   rendering_color.setRenderingGreenValue(g)
   rendering_color.setRenderingBlueValue(b)
   
   #create the schedule set for the space type
-  default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(@model)
+  default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(model)
   default_sch_set.setName("#{template} #{clim} #{building_type} #{spc_type} Schedule Set")
   space_type.setDefaultScheduleSet(default_sch_set)
 
@@ -88,7 +94,7 @@ def generate_space_type(template, clim, building_type, spc_type)
     if make_lighting == true
     
       #create the lighting definition 
-      lights_def = OpenStudio::Model::LightsDefinition.new(@model)
+      lights_def = OpenStudio::Model::LightsDefinition.new(model)
       lights_def.setName("#{template} #{clim} #{building_type} #{spc_type} Lights Definition")
       unless  lighting_per_area == 0 or lighting_per_area.nil?
         lights_def.setWattsperSpaceFloorArea(OpenStudio::convert(lighting_per_area,"W/ft^2","W/m^2").get)
@@ -105,7 +111,7 @@ def generate_space_type(template, clim, building_type, spc_type)
       #get the lighting schedule and set it as the default
       lighting_sch = @spc_types[template][clim][building_type][spc_type]["lighting_sch"]
       unless lighting_sch.nil?
-        default_sch_set.setLightingSchedule(get_sch_from_lib(lighting_sch))
+        default_sch_set.setLightingSchedule(get_sch_from_lib(lighting_sch, model))
       end    
     
     end
@@ -123,7 +129,7 @@ def generate_space_type(template, clim, building_type, spc_type)
     if make_ventilation == true
       
       #create the ventilation object and hook it up to the space type
-      ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(@model)
+      ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(model)
       ventilation.setName("#{template} #{clim} #{building_type} #{spc_type} Ventilation")
       space_type.setDesignSpecificationOutdoorAir(ventilation)
       ventilation.setOutdoorAirMethod("Sum")
@@ -148,7 +154,7 @@ def generate_space_type(template, clim, building_type, spc_type)
     if make_people == true
 
       #create the people definition
-      people_def = OpenStudio::Model::PeopleDefinition.new(@model)
+      people_def = OpenStudio::Model::PeopleDefinition.new(model)
       people_def.setName("#{template} #{clim} #{building_type} #{spc_type} People Definition")
       unless  occupancy_per_area == 0 or occupancy_per_area.nil?
         people_def.setPeopleperSpaceFloorArea(OpenStudio::convert(occupancy_per_area/1000,"people/ft^2","people/m^2").get)
@@ -162,11 +168,11 @@ def generate_space_type(template, clim, building_type, spc_type)
       #get the occupancy and occupant activity schedules from the library and set as the default
       occupancy_sch = @spc_types[template][clim][building_type][spc_type]["occupancy_sch"]
       unless occupancy_sch.nil?
-        default_sch_set.setNumberofPeopleSchedule(get_sch_from_lib(occupancy_sch))
+        default_sch_set.setNumberofPeopleSchedule(get_sch_from_lib(occupancy_sch, model))
       end
       occupancy_activity_sch = @spc_types[template][clim][building_type][spc_type]["occupancy_activity_sch"]  
       unless occupancy_activity_sch.nil?
-        default_sch_set.setPeopleActivityLevelSchedule(get_sch_from_lib(occupancy_activity_sch))
+        default_sch_set.setPeopleActivityLevelSchedule(get_sch_from_lib(occupancy_activity_sch, model))
       end
       
     end
@@ -180,7 +186,7 @@ def generate_space_type(template, clim, building_type, spc_type)
     if make_infiltration == true
       
       #create the infiltration object and hook it up to the space type
-      infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(@model)
+      infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration.setName("#{template} #{clim} #{building_type} #{spc_type} Infiltration")
       infiltration.setSpaceType(space_type)
       unless infiltration_per_area_ext == 0 or infiltration_per_area_ext.nil?
@@ -190,7 +196,7 @@ def generate_space_type(template, clim, building_type, spc_type)
       #get the infiltration schedule from the library and set as the default
       infiltration_sch = @spc_types[template][clim][building_type][spc_type]["infiltration_sch"]
       unless infiltration_sch.nil?
-        default_sch_set.setInfiltrationSchedule(get_sch_from_lib(infiltration_sch))
+        default_sch_set.setInfiltrationSchedule(get_sch_from_lib(infiltration_sch, model))
       end
 
     end    
@@ -204,7 +210,7 @@ def generate_space_type(template, clim, building_type, spc_type)
     if make_electric_equipment == true
     
       #create the electric equipment definition
-      elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(@model)
+      elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
       elec_equip_def.setName("#{template} #{clim} #{building_type} #{spc_type} Electric Equipment Definition")  
       unless  elec_equip_per_area == 0 or elec_equip_per_area.nil?
         elec_equip_def.setWattsperSpaceFloorArea(OpenStudio::convert(elec_equip_per_area,"W/ft^2","W/m^2").get)
@@ -218,7 +224,7 @@ def generate_space_type(template, clim, building_type, spc_type)
       #get the electric equipment schedule from the library and set as the default
       elec_equip_sch = @spc_types[template][clim][building_type][spc_type]["elec_equip_sch"]
       unless elec_equip_sch.nil?
-        default_sch_set.setElectricEquipmentSchedule(get_sch_from_lib(elec_equip_sch))
+        default_sch_set.setElectricEquipmentSchedule(get_sch_from_lib(elec_equip_sch, model))
       end
       
     end
@@ -232,7 +238,7 @@ def generate_space_type(template, clim, building_type, spc_type)
     if make_gas_equipment == true
     
       #create the gas equipment definition
-      gas_equip_def = OpenStudio::Model::GasEquipmentDefinition.new(@model)
+      gas_equip_def = OpenStudio::Model::GasEquipmentDefinition.new(model)
       gas_equip_def.setName("#{template} #{clim} #{building_type} #{spc_type} Gas Equipment Definition")
       unless  gas_equip_per_area == 0 or gas_equip_per_area.nil?
         gas_equip_def.setWattsperSpaceFloorArea(OpenStudio::convert(gas_equip_per_area,"Btu/hr*ft^2","W/m^2").get)
@@ -246,7 +252,7 @@ def generate_space_type(template, clim, building_type, spc_type)
       #get the gas equipment schedule from the library and set as the default
       gas_equip_sch = @spc_types[template][clim][building_type][spc_type]["gas_equip_sch"]
       unless gas_equip_sch.nil?
-        default_sch_set.setGasEquipmentSchedule(get_sch_from_lib(gas_equip_sch))
+        default_sch_set.setGasEquipmentSchedule(get_sch_from_lib(gas_equip_sch, model))
       end
 
     end
@@ -275,7 +281,7 @@ def generate_space_type(template, clim, building_type, spc_type)
 
   #save the space type as a .osm
   #puts "saving osm to #{osm_file_path}"
-  @model.toIdfFile().save(osm_file_path,true)
+  model.toIdfFile().save(osm_file_path,true)
   
   #save the componentized space type as a .osc
   #puts "saving osc to #{osc_file_path}"
