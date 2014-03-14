@@ -70,7 +70,7 @@ begin
         template_model = template_models[building_type]
         
         for spc_type in spc_types[template][climate][building_type].keys.sort
-          puts "******#{spc_type}"
+          #puts "******#{spc_type}"
           
           #generate the space type into the appropriate template
           space_type_generator.generate_space_type(template, climate, building_type, spc_type, template_model)
@@ -83,8 +83,6 @@ begin
         Profiler__::print_profile($stderr)
         exit
       end
-      
-      #raise "break"
       
     end #next climate
   end #next template

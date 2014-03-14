@@ -144,7 +144,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {5c8ce96c-11fa-4673-a663-cbb6ee68ebef}, ! Handle
-  Office Work Area Occ,                   ! Name
+  Office Work Occ,                   ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   {f4b45e55-26dd-44f4-bb68-4b649f2cc043}, ! Default Day Schedule Name
   {ce37135e-9ade-4c04-b4fb-d3768d183334}, ! Summer Design Day Schedule Name
@@ -219,7 +219,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Rule,
   {e5453716-7f68-48d0-82d2-2094a89b13b5}, ! Handle
-  Office Work Area Occ Rule 1,            ! Name
+  Office Work Occ Rule 1,            ! Name
   {5c8ce96c-11fa-4673-a663-cbb6ee68ebef}, ! Schedule Ruleset Name
   0,                                      ! Rule Order
   {34adaa15-3475-449e-8907-5192f3bea5c9}, ! Day Schedule Name
@@ -248,7 +248,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Rule,
   {d0fde86a-92d0-4a84-9824-6603c3d7a2dd}, ! Handle
-  Office Work Area Occ Rule 2,            ! Name
+  Office Work Occ Rule 2,            ! Name
   {5c8ce96c-11fa-4673-a663-cbb6ee68ebef}, ! Schedule Ruleset Name
   1,                                      ! Rule Order
   {8bb0e760-f34e-4058-9e8f-b6c36afee107}, ! Day Schedule Name
