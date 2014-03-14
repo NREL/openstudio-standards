@@ -50,6 +50,7 @@ template_models = {}
 building_types.each do |building_type|
   template_models[building_type] = OpenStudio::Model::Model.new
 end
+master_template = OpenStudio::Model::Model.new
 
 begin
   #create each space type and put it into the appropriate
@@ -72,8 +73,9 @@ begin
         for spc_type in spc_types[template][climate][building_type].keys.sort
           #puts "******#{spc_type}"
           
-          #generate the space type into the appropriate template
+          #generate the space type into the appropriate templates
           space_type_generator.generate_space_type(template, climate, building_type, spc_type, template_model)
+          space_type_generator.generate_space_type(template, climate, building_type, spc_type, master_template)
 
         end #next space type
       end #next building type
@@ -97,4 +99,5 @@ template_models.each do |building_type, template_model|
   template_file_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/#{building_type}.osm")
   template_model.toIdfFile().save(template_file_save_path,true)
 end
-
+master_template_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/MasterTemplate.osm")
+master_template.toIdfFile().save(master_template_save_path,true)
