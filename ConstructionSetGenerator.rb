@@ -184,7 +184,7 @@ def generate_construction_set(template, clim, building_type, spc_type, model = n
     construction = OpenStudio::Model::Construction.new(model)
     construction.setName(construction_name)
     
-    standards_info = OpenStudio::Model::StandardsInformationConstruction.new(construction)
+    standards_info = construction.standardsInformation
     standards_info.setIntendedSurfaceType(data["intended_surface_type"])
     standards_info.setStandardsConstructionType(data["construction_standard"])
     
