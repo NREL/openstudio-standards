@@ -184,8 +184,9 @@ def generate_construction_set(template, clim, building_type, spc_type, model = n
     construction = OpenStudio::Model::Construction.new(model)
     construction.setName(construction_name)
     
-    #intended_surface_type
-    #construction_standard"
+    standards_info = OpenStudio::Model::StandardsInformationConstruction.new(construction)
+    standards_info.setIntendedSurfaceType(data["intended_surface_type"])
+    standards_info.setStandardsConstructionType(data["construction_standard"])
     
     #TODO: could put color in the spreadsheet
     
