@@ -4,88 +4,103 @@
 
 require 'openstudio'
 require 'SpaceTypeGenerator.rb'
-
-do_profile = false
-if do_profile
-  require 'profiler'
-end
+require 'ConstructionSetGenerator.rb'
 
 path_to_standards_json = "#{Dir.pwd}/OpenStudio_Standards.json"
 path_to_master_schedules_library = "#{Dir.pwd}/Master_Schedules.osm"
 
-#create a new space type generator
+#create generators
 space_type_generator = SpaceTypeGenerator.new(path_to_standards_json, path_to_master_schedules_library)
+construction_set_generator = ConstructionSetGenerator.new(path_to_standards_json)
 
 #load the data from the JSON file into a ruby hash
 standards = {}
 temp = File.read(path_to_standards_json)
 standards = JSON.parse(temp)
-spc_types = standards["space_types"]
-
-#create a list of unique building types
-templates = []
-climates = []
-building_types = []
-for template in spc_types.keys.sort
-  next if template == "todo"
-  templates << template
-  for climate in spc_types[template].keys.sort
-    climates << climate
-    for building_type in spc_types[template][climate].keys.sort
-      building_types << building_type
-    end
-  end
-end
-templates = templates.uniq.sort
-climates = climates.uniq.sort
-building_types = building_types.uniq.sort
-#puts templates
-#puts climates
-#puts building_types
+space_types = standards["space_types"]
+construction_sets = standards["construction_sets"]
 
 #create a template model for each building type
 #space types will be added to the appropriate model
 #as they are generated
 template_models = {}
-building_types.each do |building_type|
-  template_models[building_type] = OpenStudio::Model::Model.new
-end
 master_template = OpenStudio::Model::Model.new
 
 begin
-  #create each space type and put it into the appropriate
-  #template model
-  for template in templates
+
+  #create each space type and put it into the appropriate template model
+  puts "Creating Space Types"
+  for template in space_types.keys.sort
     puts "#{template}"
-    
-    for climate in spc_types[template].keys.sort
+    for climate in space_types[template].keys.sort
       puts "**#{climate}"
-      
-      if do_profile
-        Profiler__::start_profile
-      end
-      
-      for building_type in spc_types[template][climate].keys.sort
+      for building_type in space_types[template][climate].keys.sort
         puts "****#{building_type}"
         
         template_model = template_models[building_type]
+        if template_model.nil?
+          template_model = OpenStudio::Model::Model.new
+          template_models[building_type] = template_model
+        end
         
-        for spc_type in spc_types[template][climate][building_type].keys.sort
-          #puts "******#{spc_type}"
-          
-          #generate the space type into the appropriate templates
-          space_type_generator.generate_space_type(template, climate, building_type, spc_type, template_model)
-          space_type_generator.generate_space_type(template, climate, building_type, spc_type, master_template)
+        for space_type in space_types[template][climate][building_type].keys.sort
+          #generate into the templates
+          space_type_generator.generate_space_type(template, climate, building_type, space_type, master_template)
+          space_type = space_type_generator.generate_space_type(template, climate, building_type, space_type, template_model)
+
+          if template == "NREL_2004" and space_type == "WholeBuilding"
+            # set building level defaults
+            building = template_model.getBuilding
+            building.setSpaceType(space_type[0])
+          end
 
         end #next space type
-      end #next building type
+      end #next building type 
+    end #next climate
+  end #next template
+
+  #create each space type and put it into the appropriate template model
+  puts "Creating Construction Sets"
+  for template in construction_sets.keys.sort
+    puts "#{template}"
+    for climate in construction_sets[template].keys.sort
+      puts "**#{climate}" 
+      for building_type in construction_sets[template][climate].keys.sort
+        next if building_type.empty?
+        puts "****#{building_type}"
+
+        template_model = template_models[building_type]
+        if template_model.nil?
+          template_model = OpenStudio::Model::Model.new
+          template_models[building_type] = template_model
+        end
       
-      if do_profile
-        Profiler__::stop_profile
-        Profiler__::print_profile($stderr)
-        exit
+        for space_type in construction_sets[template][climate][building_type].keys.sort
+          #generate into the templates
+          construction_set_generator.generate_construction_set(template, climate, building_type, space_type, master_template)
+          construction_set = construction_set_generator.generate_construction_set(template, climate, building_type, space_type, template_model)
+
+          if template == "NREL_2004" and (climate == "ClimateZone 5" or climate == "ClimateZone 5-6")
+            # set building level defaults
+            building = template_model.getBuilding
+            building.setDefaultConstructionSet(construction_set[0])
+          end
+
+        end #next space type
+      end #next building type 
+      
+      if generic_construction_set = construction_sets[template][climate].delete("")
+        puts "****Generic Building Type"
+        for building_type in construction_sets[template][climate].keys.sort
+          puts "******#{building_type}"
+          template_model = template_models[building_type]
+          for space_type in generic_construction_set.keys.sort
+            #generate into the templates
+            construction_set_generator.generate_construction_set(template, climate, "", space_type, master_template)
+            construction_set_generator.generate_construction_set(template, climate, "", space_type, template_model)
+          end
+        end
       end
-      
     end #next climate
   end #next template
   
@@ -94,8 +109,10 @@ rescue => e
   puts "error #{e}, #{e.backtrace}"
 end
 
+
 #save the template models
 template_models.each do |building_type, template_model|
+  puts "Writing #{building_type}.osm"
   template_file_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/#{building_type}.osm")
   template_model.toIdfFile().save(template_file_save_path,true)
 end

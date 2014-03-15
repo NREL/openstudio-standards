@@ -281,7 +281,7 @@ end
 
 # read the ConstructionSets tab and put into a Hash
 def getConstructionSetsHash(workbook)
-  # compound key for this sheet is [template][building_type][space_type][climate_zone_set]
+  # compound key for this sheet is [template][climate_zone_set][building_type][space_type]
   # building_type may be null to indicate all building types
   # space_type may be null to indicate all space types
 
@@ -351,40 +351,40 @@ def getConstructionSetsHash(workbook)
     climate = row[climate_col].strip
 
     #exterior surfaces
-    construction_sets[template][building_type][space_type][climate]["exterior_wall"] = row[exterior_wall_col]
-    construction_sets[template][building_type][space_type][climate]["exterior_floor"] = row[exterior_floor_col]
-    construction_sets[template][building_type][space_type][climate]["exterior_roof"] = row[exterior_roof_col]
+    construction_sets[template][climate][building_type][space_type]["exterior_wall"] = row[exterior_wall_col]
+    construction_sets[template][climate][building_type][space_type]["exterior_floor"] = row[exterior_floor_col]
+    construction_sets[template][climate][building_type][space_type]["exterior_roof"] = row[exterior_roof_col]
     
     #interior surfaces
-    construction_sets[template][building_type][space_type][climate]["interior_wall"] = row[interior_wall_col]
-    construction_sets[template][building_type][space_type][climate]["interior_floor"] = row[interior_floor_col]
-    construction_sets[template][building_type][space_type][climate]["interior_ceiling"] = row[interior_ceiling_col]
+    construction_sets[template][climate][building_type][space_type]["interior_wall"] = row[interior_wall_col]
+    construction_sets[template][climate][building_type][space_type]["interior_floor"] = row[interior_floor_col]
+    construction_sets[template][climate][building_type][space_type]["interior_ceiling"] = row[interior_ceiling_col]
     
     #ground_contact surfaces
-    construction_sets[template][building_type][space_type][climate]["ground_contact_wall"] = row[ground_contact_wall_col]
-    construction_sets[template][building_type][space_type][climate]["ground_contact_floor"] = row[ground_contact_floor_col]
-    construction_sets[template][building_type][space_type][climate]["ground_contact_ceiling"] = row[ground_contact_ceiling_col]    
+    construction_sets[template][climate][building_type][space_type]["ground_contact_wall"] = row[ground_contact_wall_col]
+    construction_sets[template][climate][building_type][space_type]["ground_contact_floor"] = row[ground_contact_floor_col]
+    construction_sets[template][climate][building_type][space_type]["ground_contact_ceiling"] = row[ground_contact_ceiling_col]    
     
     #exterior sub surfaces
-    construction_sets[template][building_type][space_type][climate]["exterior_fixed_window"] = row[exterior_fixed_window_col]
-    construction_sets[template][building_type][space_type][climate]["exterior_operable_window"] = row[exterior_operable_window_col]
-    construction_sets[template][building_type][space_type][climate]["exterior_door"] = row[exterior_door_col]    
-    construction_sets[template][building_type][space_type][climate]["exterior_glass_door"] = row[exterior_glass_door_col]
-    construction_sets[template][building_type][space_type][climate]["exterior_overhead_door"] = row[exterior_overhead_door_col]
-    construction_sets[template][building_type][space_type][climate]["exterior_skylight"] = row[exterior_skylight_col]    
-    construction_sets[template][building_type][space_type][climate]["tubular_daylight_dome"] = row[tubular_daylight_dome_col]
-    construction_sets[template][building_type][space_type][climate]["tubular_daylight_diffuser"] = row[tubular_daylight_diffuser_col]    
+    construction_sets[template][climate][building_type][space_type]["exterior_fixed_window"] = row[exterior_fixed_window_col]
+    construction_sets[template][climate][building_type][space_type]["exterior_operable_window"] = row[exterior_operable_window_col]
+    construction_sets[template][climate][building_type][space_type]["exterior_door"] = row[exterior_door_col]    
+    construction_sets[template][climate][building_type][space_type]["exterior_glass_door"] = row[exterior_glass_door_col]
+    construction_sets[template][climate][building_type][space_type]["exterior_overhead_door"] = row[exterior_overhead_door_col]
+    construction_sets[template][climate][building_type][space_type]["exterior_skylight"] = row[exterior_skylight_col]    
+    construction_sets[template][climate][building_type][space_type]["tubular_daylight_dome"] = row[tubular_daylight_dome_col]
+    construction_sets[template][climate][building_type][space_type]["tubular_daylight_diffuser"] = row[tubular_daylight_diffuser_col]    
     
     #interior sub surfaces
-    construction_sets[template][building_type][space_type][climate]["interior_fixed_window"] = row[interior_fixed_window_col]
-    construction_sets[template][building_type][space_type][climate]["interior_operable_window"] = row[interior_operable_window_col]
-    construction_sets[template][building_type][space_type][climate]["interior_door"] = row[interior_door_col]       
+    construction_sets[template][climate][building_type][space_type]["interior_fixed_window"] = row[interior_fixed_window_col]
+    construction_sets[template][climate][building_type][space_type]["interior_operable_window"] = row[interior_operable_window_col]
+    construction_sets[template][climate][building_type][space_type]["interior_door"] = row[interior_door_col]       
     
     #other
-    construction_sets[template][building_type][space_type][climate]["space_shading"] = row[space_shading_col]
-    construction_sets[template][building_type][space_type][climate]["building_shading"] = row[building_shading_col]
-    construction_sets[template][building_type][space_type][climate]["site_shading"] = row[site_shading_col]    
-    construction_sets[template][building_type][space_type][climate]["interior_partition"] = row[interior_partition_col]
+    construction_sets[template][climate][building_type][space_type]["space_shading"] = row[space_shading_col]
+    construction_sets[template][climate][building_type][space_type]["building_shading"] = row[building_shading_col]
+    construction_sets[template][climate][building_type][space_type]["site_shading"] = row[site_shading_col]    
+    construction_sets[template][climate][building_type][space_type]["interior_partition"] = row[interior_partition_col]
   
   end
   
@@ -455,30 +455,31 @@ def getMaterialsHash(workbook)
   #define the columns where the data live in the spreadsheet
   material_col = 0
   material_type_col = 1
-  thickness_col = 2 # in
-  conductivity_col = 3 # Btu*in/hr*ft^2*F	R
-  resistance_col = 4 # hr*ft^2*F/Btu	
-  density_col = 5 # lb/ft^3	
-  specific_heat_col = 6 # Btu/lbm*F
-	thermal_absorptance_col = 7
-	solar_absorptance_col = 8
-	visible_absorptance_col = 9
-	gas_type_col = 10	
-  u_factor_col = 11 # Btu/hr*ft^2*F	
-  solar_heat_gain_coefficient_col	= 12
-  visible_transmittance_col = 13	
-  optical_data_type_col = 14
-	solar_transmittance_at_normal_incidence_col = 15	
-  front_side_solar_reflectance_at_normal_incidence_col = 16	
-  back_side_solar_relectance_at_normal_incidence_col = 17	
-  visible_transmittance_at_normal_incidence_col = 18
-	front_side_visible_reflectance_at_normal_incidence_col = 19	
-  back_side_visible_relectance_at_normal_incidence_col = 20	
-  infrared_transmittance_at_normal_incidence_col = 21	
-  front_side_infrared_hemispherical_emissivity_col = 22	
-  back_side_infrared_hemispherical_emissivity_col = 23	
-  dirt_correction_factor_for_solar_and_visible_transmittance_col = 24	
-  solar_diffusing_col = 25
+  roughness_col = 2 # in
+  thickness_col = 3 # in
+  conductivity_col = 4 # Btu*in/hr*ft^2*F	R
+  resistance_col = 5 # hr*ft^2*F/Btu	
+  density_col = 6 # lb/ft^3	
+  specific_heat_col = 7 # Btu/lbm*F
+	thermal_absorptance_col = 8
+	solar_absorptance_col = 9
+	visible_absorptance_col = 10
+	gas_type_col = 11	
+  u_factor_col = 12 # Btu/hr*ft^2*F	
+  solar_heat_gain_coefficient_col	= 13
+  visible_transmittance_col = 14
+  optical_data_type_col = 15
+	solar_transmittance_at_normal_incidence_col = 16
+  front_side_solar_reflectance_at_normal_incidence_col = 17
+  back_side_solar_relectance_at_normal_incidence_col = 18
+  visible_transmittance_at_normal_incidence_col = 19
+	front_side_visible_reflectance_at_normal_incidence_col = 20
+  back_side_visible_relectance_at_normal_incidence_col = 21
+  infrared_transmittance_at_normal_incidence_col = 22
+  front_side_infrared_hemispherical_emissivity_col = 23	
+  back_side_infrared_hemispherical_emissivity_col = 24
+  dirt_correction_factor_for_solar_and_visible_transmittance_col = 25	
+  solar_diffusing_col = 26
   
   #create a nested hash to store all the data
   materials = Hash.new{|h,k| h[k]=Hash.new(&h.default_proc) }
@@ -489,6 +490,7 @@ def getMaterialsHash(workbook)
 
     #exterior surfaces
     materials[material]["material_type"] = row[material_type_col]
+    materials[material]["roughness"] = row[roughness_col]
     materials[material]["thickness"] = row[thickness_col]
     materials[material]["conductivity"] = row[conductivity_col]
     materials[material]["resistance"] = row[resistance_col]

@@ -38,6 +38,56 @@ def initialize(path_to_standards_json, path_to_master_schedules_library)
   @alt_schedule_library = vt.loadModel(path_to_office_schedules_library).get 
 end
 
+def make_name(template, clim, building_type, spc_type)
+  clim = clim.gsub("Climate Zone ", "CZ")
+  if building_type == "FullServiceRestaurant"
+    building_type = "FullSrvRest"
+  elsif building_type == "Hospital"
+    building_type = "Hospital"
+  elsif building_type == "LargeHotel"
+    building_type = "LrgHotel"
+  elsif building_type == "LargeOffice"
+    building_type = "LrgOffice"
+  elsif building_type == "MediumOffice"
+    building_type = "MedOffice"
+  elsif building_type == "Mid-riseApartment"
+    building_type = "MidApt"
+  elsif building_type == "Office"
+    building_type = "Office"
+  elsif building_type == "Outpatient"
+    building_type = "Outpatient"
+  elsif building_type == "PrimarySchool"
+    building_type = "PriSchl"
+  elsif building_type == "QuickServiceRestaurant"
+    building_type = "QckSrvRest"
+  elsif building_type == "Retail"
+    building_type = "Retail"
+  elsif building_type == "SecondarySchool"
+    building_type = "SecSchl"
+  elsif building_type == "SmallHotel"
+    building_type = "SmHotel"
+  elsif building_type == "SmallOffice"
+    building_type = "SmOffice"
+  elsif building_type == "StripMall"
+    building_type = "StMall"
+  elsif building_type == "SuperMarket"
+    building_type = "SpMarket"
+  elsif building_type == "Warehouse"
+    building_type = "Warehouse"
+  end
+  
+  result = "#{template}-#{clim}-#{building_type}-#{spc_type}"
+  if building_type.empty? and spc_type.empty?
+    result = "#{template}-#{clim}"
+  elsif building_type.empty?
+    result = "#{template}-#{clim}-#{spc_type}"
+  elsif spc_type.empty?
+    result = "#{template}-#{clim}-#{building_type}"
+  end
+
+  return result
+end
+
 def generate_space_type(template, clim, building_type, spc_type, model = nil)
 
   if model.nil?
@@ -73,10 +123,12 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
     new_sch = clone_of_sch.to_ScheduleRuleset.get
     return new_sch
   end
+  
+  name = make_name(template, clim, building_type, spc_type)
 
   #create a new space type and name it
   space_type = OpenStudio::Model::SpaceType.new(model)
-  space_type.setName("#{template} #{clim} #{building_type} #{spc_type}")
+  space_type.setName(name)
 
   #set the standards building type and space type for this new space type
   space_type.setStandardsBuildingType(building_type)
@@ -272,9 +324,6 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
 
     end
     
-  #component name
-  component_name = space_type.name.get
-
   #componentize the space type
   space_type_component = space_type.createComponent
 

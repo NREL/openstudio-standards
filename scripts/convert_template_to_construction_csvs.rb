@@ -16,7 +16,7 @@ class MaterialNameParser
 end
 
 class SpreadSheetMaterial
-  attr_accessor :name, :material_type, :thickness, :conductivity, :resistance, :density, :specific_heat, :thermal_absorptance, :solar_absorptance, :visible_absorptance, :gas_type, :u_factor, :solar_heat_gain_coefficient, :visible_transmittance, :optical_data_type, :solar_transmittance_at_normal_incidence, :front_side_solar_reflectance_at_normal_incidence, :back_side_solar_reflectance_at_normal_incidence, :visible_transmittance_at_normal_incidence, :front_side_visible_reflectance_at_normal_incidence, :back_side_visible_reflectance_at_normal_incidence, :infrared_transmittance_at_normal_incidence, :front_side_infrared_hemispherical_emissivity, :back_side_infrared_hemispherical_emissivity, :dirt_correction_factor_for_solar_and_visible_transmittance, :solar_diffusing
+  attr_accessor :name, :material_type, :roughness, :thickness, :conductivity, :resistance, :density, :specific_heat, :thermal_absorptance, :solar_absorptance, :visible_absorptance, :gas_type, :u_factor, :solar_heat_gain_coefficient, :visible_transmittance, :optical_data_type, :solar_transmittance_at_normal_incidence, :front_side_solar_reflectance_at_normal_incidence, :back_side_solar_reflectance_at_normal_incidence, :visible_transmittance_at_normal_incidence, :front_side_visible_reflectance_at_normal_incidence, :back_side_visible_reflectance_at_normal_incidence, :infrared_transmittance_at_normal_incidence, :front_side_infrared_hemispherical_emissivity, :back_side_infrared_hemispherical_emissivity, :dirt_correction_factor_for_solar_and_visible_transmittance, :solar_diffusing
 
   def getOptional(optional)
     if optional.empty?
@@ -32,6 +32,7 @@ class SpreadSheetMaterial
       name_parser = MaterialNameParser.new(@model_object.name.get)
       @name = name_parser.name
       @material_type = "StandardOpaqueMaterial"
+      @roughness = @model_object.roughness
       @thickness = OpenStudio::convert(@model_object.thickness, "m", "in").get
       @conductivity = OpenStudio::convert(@model_object.conductivity, "W/m*K", "Btu*in/hr*ft^2*R").get
       @resistance = 1.0/@conductivity
@@ -66,7 +67,7 @@ class SpreadSheetMaterial
       @model_object = model_object.to_Gas.get
       name_parser = MaterialNameParser.new(@model_object.name.get)
       @name = name_parser.name
-      @material_type = "AirGap"
+      @material_type = "Gas"
       @thickness = OpenStudio::convert(@model_object.thickness, "m", "in").get
       @gas_type = @model_object.gasType
       
@@ -106,7 +107,7 @@ class SpreadSheetMaterial
   end
   
   def to_row
-    return [@name, @material_type, @thickness, @conductivity, @resistance, @density, @specific_heat, @thermal_absorptance, @solar_absorptance, @visible_absorptance, @gas_type, @u_factor, @solar_heat_gain_coefficient, @visible_transmittance, @optical_data_type, @solar_transmittance_at_normal_incidence, @front_side_solar_reflectance_at_normal_incidence, @back_side_solar_reflectance_at_normal_incidence, @visible_transmittance_at_normal_incidence, @front_side_visible_reflectance_at_normal_incidence, @back_side_visible_reflectance_at_normal_incidence, @infrared_transmittance_at_normal_incidence, @front_side_infrared_hemispherical_emissivity, @back_side_infrared_hemispherical_emissivity, @dirt_correction_factor_for_solar_and_visible_transmittance, @solar_diffusing]
+    return [@name, @material_type, @roughness, @thickness, @conductivity, @resistance, @density, @specific_heat, @thermal_absorptance, @solar_absorptance, @visible_absorptance, @gas_type, @u_factor, @solar_heat_gain_coefficient, @visible_transmittance, @optical_data_type, @solar_transmittance_at_normal_incidence, @front_side_solar_reflectance_at_normal_incidence, @back_side_solar_reflectance_at_normal_incidence, @visible_transmittance_at_normal_incidence, @front_side_visible_reflectance_at_normal_incidence, @back_side_visible_reflectance_at_normal_incidence, @infrared_transmittance_at_normal_incidence, @front_side_infrared_hemispherical_emissivity, @back_side_infrared_hemispherical_emissivity, @dirt_correction_factor_for_solar_and_visible_transmittance, @solar_diffusing]
   end
 
 end
