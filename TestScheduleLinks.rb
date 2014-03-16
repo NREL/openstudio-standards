@@ -55,6 +55,7 @@ for template in spc_types.keys.sort
   end
 end
 
+puts "NOT FOUND SCHEDULES"
 not_found_names.uniq.each do |name|
   puts "Could not find schedule '#{name}'"
 end
