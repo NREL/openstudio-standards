@@ -20,6 +20,7 @@ def initialize(path_to_standards_json)
     exit
   end
 
+  @created_names = []
 end
 
 def make_name(template, clim, building_type, spc_type)
@@ -70,8 +71,15 @@ def make_name(template, clim, building_type, spc_type)
   elsif spc_type.empty?
     result = "#{template}-#{clim}-#{building_type}"
   end
+  
+  @created_names << result
 
   return result
+end
+
+def longest_name
+  sorted_names = @created_names.sort{|x,y| x.size <=> y.size}
+  return sorted_names[-1]
 end
 
 def generate_construction_set(template, clim, building_type, spc_type, model = nil)
@@ -185,8 +193,18 @@ def generate_construction_set(template, clim, building_type, spc_type, model = n
     construction.setName(construction_name)
     
     standards_info = construction.standardsInformation
-    standards_info.setIntendedSurfaceType(data["intended_surface_type"])
-    standards_info.setStandardsConstructionType(data["construction_standard"])
+    
+    intended_surface_type = data["intended_surface_type"]
+    if not intended_surface_type
+      intended_surface_type = ""
+    end
+    standards_info.setIntendedSurfaceType(intended_surface_type)
+    
+    construction_standard = data["construction_standard"]
+    if not construction_standard
+      construction_standard = ""
+    end
+    standards_info.setStandardsConstructionType(construction_standard)
     
     #TODO: could put color in the spreadsheet
     

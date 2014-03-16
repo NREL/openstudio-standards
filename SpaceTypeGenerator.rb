@@ -36,10 +36,12 @@ def initialize(path_to_standards_json, path_to_master_schedules_library)
   
   vt = OpenStudio::OSVersion::VersionTranslator.new
   @alt_schedule_library = vt.loadModel(path_to_office_schedules_library).get 
+  
+  @created_names = []
 end
 
 def make_name(template, clim, building_type, spc_type)
-  clim = clim.gsub("Climate Zone ", "CZ")
+  clim = clim.gsub("ClimateZone ", "CZ")
   if building_type == "FullServiceRestaurant"
     building_type = "FullSrvRest"
   elsif building_type == "Hospital"
@@ -85,7 +87,14 @@ def make_name(template, clim, building_type, spc_type)
     result = "#{template}-#{clim}-#{building_type}"
   end
 
+  @created_names << result
+  
   return result
+end
+
+def longest_name
+  sorted_names = @created_names.sort{|x,y| x.size <=> y.size}
+  return sorted_names[-1]
 end
 
 def generate_space_type(template, clim, building_type, spc_type, model = nil)
@@ -144,6 +153,7 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
   rendering_color.setRenderingRedValue(r)
   rendering_color.setRenderingGreenValue(g)
   rendering_color.setRenderingBlueValue(b)
+  space_type.setRenderingColor(rendering_color)
   
   #create the schedule set for the space type
   default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(model)
@@ -322,6 +332,16 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
         default_sch_set.setGasEquipmentSchedule(get_sch_from_lib(gas_equip_sch, model))
       end
 
+    end
+    
+    heating_setpoint_sch = @spc_types[template][clim][building_type][spc_type]["heating_setpoint_sch"]
+    unless heating_setpoint_sch.nil?
+      get_sch_from_lib(heating_setpoint_sch, model)
+    end
+   
+    cooling_setpoint_sch = @spc_types[template][clim][building_type][spc_type]["cooling_setpoint_sch"]
+    unless cooling_setpoint_sch.nil?
+      get_sch_from_lib(cooling_setpoint_sch, model)
     end
     
   #componentize the space type

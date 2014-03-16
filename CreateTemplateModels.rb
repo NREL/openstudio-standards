@@ -37,6 +37,8 @@ begin
       for building_type in space_types[template][climate].keys.sort
         puts "****#{building_type}"
         
+        next if not building_type == "Office"
+        
         template_model = template_models[building_type]
         if template_model.nil?
           template_model = OpenStudio::Model::Model.new
@@ -46,12 +48,12 @@ begin
         for space_type in space_types[template][climate][building_type].keys.sort
           #generate into the templates
           space_type_generator.generate_space_type(template, climate, building_type, space_type, master_template)
-          space_type = space_type_generator.generate_space_type(template, climate, building_type, space_type, template_model)
+          result = space_type_generator.generate_space_type(template, climate, building_type, space_type, template_model)
 
-          if template == "NREL_2004" and space_type == "WholeBuilding"
+          if template == "NREL_2004" and /WholeBuilding/.match(space_type)
             # set building level defaults
             building = template_model.getBuilding
-            building.setSpaceType(space_type[0])
+            building.setSpaceType(result[0])
           end
 
         end #next space type
@@ -68,6 +70,8 @@ begin
       for building_type in construction_sets[template][climate].keys.sort
         next if building_type.empty?
         puts "****#{building_type}"
+        
+        next if not (building_type == "Office" or building_type == "")
 
         template_model = template_models[building_type]
         if template_model.nil?
@@ -109,10 +113,26 @@ rescue => e
   puts "error #{e}, #{e.backtrace}"
 end
 
+puts space_type_generator.longest_name
+puts space_type_generator.longest_name.size
+puts construction_set_generator.longest_name
+puts construction_set_generator.longest_name.size
 
 #save the template models
 template_models.each do |building_type, template_model|
   puts "Writing #{building_type}.osm"
+  
+  if template_model.getOptionalBuilding
+    if template_model.getBuilding.defaultConstructionSet.empty?
+      puts "#{building_type} template has no default construction set" 
+    end
+    if template_model.getBuilding.spaceType.empty?
+      puts "#{building_type} template has no default space type" 
+    end
+  else
+    puts "#{building_type} template has no building object"
+  end
+  
   template_file_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/#{building_type}.osm")
   template_model.toIdfFile().save(template_file_save_path,true)
 end
