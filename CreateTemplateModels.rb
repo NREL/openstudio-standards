@@ -37,7 +37,7 @@ begin
       for building_type in space_types[template][climate].keys.sort
         puts "****#{building_type}"
         
-        next if not building_type == "Office"
+        #next if not building_type == "Office"
         
         template_model = template_models[building_type]
         if template_model.nil?
@@ -71,7 +71,7 @@ begin
         next if building_type.empty?
         puts "****#{building_type}"
         
-        next if not (building_type == "Office" or building_type == "")
+        #next if not (building_type == "Office" or building_type == "")
 
         template_model = template_models[building_type]
         if template_model.nil?
