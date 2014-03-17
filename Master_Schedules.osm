@@ -7628,7 +7628,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {292f0262-8342-4463-931f-3613ce7b974b}, ! Handle
-  LargeHotel Guest HtgSetp,               ! Name
+  LargeHotel GuestRoom HtgSetp,               ! Name
   {b199340e-8366-4083-ae1d-224c2712578a}, ! Schedule Type Limits Name
   {c709761b-1d68-4d01-9893-eaa2d3afe542}, ! Default Day Schedule Name
   {3bd75eb5-f38a-4d61-b354-344834b4298e}, ! Summer Design Day Schedule Name
@@ -7636,7 +7636,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Day,
   {c709761b-1d68-4d01-9893-eaa2d3afe542}, ! Handle
-  LargeHotel Guest HtgSetp Default Schedule, ! Name
+  LargeHotel GuestRoom HtgSetp Default Schedule, ! Name
   {b199340e-8366-4083-ae1d-224c2712578a}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -7645,7 +7645,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Rule,
   {ad9c25d9-7877-40a9-8e5e-4286acc11f56}, ! Handle
-  LargeHotel Guest HtgSetp Rule 1,        ! Name
+  LargeHotel GuestRoom HtgSetp Rule 1,        ! Name
   {292f0262-8342-4463-931f-3613ce7b974b}, ! Schedule Ruleset Name
   0,                                      ! Rule Order
   {1d9b3c45-2daa-4949-b610-c01434681777}, ! Day Schedule Name
@@ -7665,7 +7665,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {1d9b3c45-2daa-4949-b610-c01434681777}, ! Handle
-  LargeHotel Guest HtgSetp Rule 1 Day Schedule, ! Name
+  LargeHotel GuestRoom HtgSetp Rule 1 Day Schedule, ! Name
   {b199340e-8366-4083-ae1d-224c2712578a}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -7674,7 +7674,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {2fa89277-7a2a-4e8d-ad1c-bf5bcaec9f25}, ! Handle
-  LargeHotel Guest HtgSetp Winter Design Day, ! Name
+  LargeHotel GuestRoom HtgSetp Winter Design Day, ! Name
   {b199340e-8366-4083-ae1d-224c2712578a}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -7683,7 +7683,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {3bd75eb5-f38a-4d61-b354-344834b4298e}, ! Handle
-  LargeHotel Guest HtgSetp Summer Design Day, ! Name
+  LargeHotel GuestRoom HtgSetp Summer Design Day, ! Name
   {b199340e-8366-4083-ae1d-224c2712578a}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -8623,7 +8623,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {2b93d948-78ea-4fed-9ff6-6ed24168a51e}, ! Handle
-  LargeHotel Corr ClgSetp,                ! Name
+  LargeHotel Corridor ClgSetp,                ! Name
   {0e5f99a1-2c8f-421b-ba62-c12b7a28d2fb}, ! Schedule Type Limits Name
   {58acf294-516d-40c7-a6f4-6f4dc68187b3}, ! Default Day Schedule Name
   {31a0b83b-0d29-4331-92be-e8bc6c641e48}, ! Summer Design Day Schedule Name
@@ -8631,7 +8631,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Day,
   {58acf294-516d-40c7-a6f4-6f4dc68187b3}, ! Handle
-  LargeHotel Corr ClgSetp Default Schedule, ! Name
+  LargeHotel Corridor ClgSetp Default Schedule, ! Name
   {0e5f99a1-2c8f-421b-ba62-c12b7a28d2fb}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -8640,7 +8640,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Rule,
   {f63b3883-c15f-472f-8627-de92088d3dfd}, ! Handle
-  LargeHotel Corr ClgSetp Rule 1,         ! Name
+  LargeHotel Corridor ClgSetp Rule 1,         ! Name
   {2b93d948-78ea-4fed-9ff6-6ed24168a51e}, ! Schedule Ruleset Name
   0,                                      ! Rule Order
   {89e314fa-8922-49f5-a6ad-a963b978c193}, ! Day Schedule Name
@@ -8660,7 +8660,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {89e314fa-8922-49f5-a6ad-a963b978c193}, ! Handle
-  LargeHotel Corr ClgSetp Rule 1 Day Schedule, ! Name
+  LargeHotel Corridor ClgSetp Rule 1 Day Schedule, ! Name
   {0e5f99a1-2c8f-421b-ba62-c12b7a28d2fb}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -8669,7 +8669,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {5eea097b-c6a3-4429-9347-50ed0a5de1ce}, ! Handle
-  LargeHotel Corr ClgSetp Winter Design Day, ! Name
+  LargeHotel Corridor ClgSetp Winter Design Day, ! Name
   {0e5f99a1-2c8f-421b-ba62-c12b7a28d2fb}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -8678,7 +8678,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {31a0b83b-0d29-4331-92be-e8bc6c641e48}, ! Handle
-  LargeHotel Corr ClgSetp Summer Design Day, ! Name
+  LargeHotel Corridor ClgSetp Summer Design Day, ! Name
   {0e5f99a1-2c8f-421b-ba62-c12b7a28d2fb}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -14115,7 +14115,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {33bc2497-94af-4a4e-a4c6-df5f9d5ab1c3}, ! Handle
-  LargeHotel Guest ClgSetp,               ! Name
+  LargeHotel GuestRoom ClgSetp,               ! Name
   {a08a5a02-12c3-4cc8-aa7a-e67199780b56}, ! Schedule Type Limits Name
   {204f44ec-63d9-4a1e-95de-eac12ce6a025}, ! Default Day Schedule Name
   {a37d93f9-4426-49fc-88cd-4ac7146f09a3}, ! Summer Design Day Schedule Name
@@ -14123,7 +14123,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Day,
   {204f44ec-63d9-4a1e-95de-eac12ce6a025}, ! Handle
-  LargeHotel Guest ClgSetp Default Schedule, ! Name
+  LargeHotel GuestRoom ClgSetp Default Schedule, ! Name
   {a08a5a02-12c3-4cc8-aa7a-e67199780b56}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -14132,7 +14132,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Rule,
   {baaef71d-4929-4a61-9064-e190073e4a70}, ! Handle
-  LargeHotel Guest ClgSetp Rule 1,        ! Name
+  LargeHotel GuestRoom ClgSetp Rule 1,        ! Name
   {33bc2497-94af-4a4e-a4c6-df5f9d5ab1c3}, ! Schedule Ruleset Name
   0,                                      ! Rule Order
   {b92ca727-857d-4234-8925-41cb0484900b}, ! Day Schedule Name
@@ -14152,7 +14152,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {b92ca727-857d-4234-8925-41cb0484900b}, ! Handle
-  LargeHotel Guest ClgSetp Rule 1 Day Schedule, ! Name
+  LargeHotel GuestRoom ClgSetp Rule 1 Day Schedule, ! Name
   {a08a5a02-12c3-4cc8-aa7a-e67199780b56}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -14161,7 +14161,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {a338d6ff-cb61-4a11-8a75-3d8aa3767bea}, ! Handle
-  LargeHotel Guest ClgSetp Winter Design Day, ! Name
+  LargeHotel GuestRoom ClgSetp Winter Design Day, ! Name
   {a08a5a02-12c3-4cc8-aa7a-e67199780b56}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -14170,7 +14170,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {a37d93f9-4426-49fc-88cd-4ac7146f09a3}, ! Handle
-  LargeHotel Guest ClgSetp Summer Design Day, ! Name
+  LargeHotel GuestRoom ClgSetp Summer Design Day, ! Name
   {a08a5a02-12c3-4cc8-aa7a-e67199780b56}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -31714,7 +31714,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {b0e95d6e-4283-4404-8f39-a2c3e94d1451}, ! Handle
-  LargeHotel Corr HtgSetp,                ! Name
+  LargeHotel Corridor HtgSetp,                ! Name
   {e6a89461-1129-4518-8a31-f9225700ba34}, ! Schedule Type Limits Name
   {3eac4c3f-2e0b-4d00-b92b-d22bc4b73d86}, ! Default Day Schedule Name
   {dc08ce28-d30f-4681-a817-3660b5659c30}, ! Summer Design Day Schedule Name
@@ -31722,7 +31722,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Day,
   {3eac4c3f-2e0b-4d00-b92b-d22bc4b73d86}, ! Handle
-  LargeHotel Corr HtgSetp Default Schedule, ! Name
+  LargeHotel Corridor HtgSetp Default Schedule, ! Name
   {e6a89461-1129-4518-8a31-f9225700ba34}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -31731,7 +31731,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Rule,
   {d1f490e1-0cc6-4d1b-85b3-65508279d2ce}, ! Handle
-  LargeHotel Corr HtgSetp Rule 1,         ! Name
+  LargeHotel Corridor HtgSetp Rule 1,         ! Name
   {b0e95d6e-4283-4404-8f39-a2c3e94d1451}, ! Schedule Ruleset Name
   0,                                      ! Rule Order
   {295b165d-dec3-4243-847b-2316ccd6b6b1}, ! Day Schedule Name
@@ -31751,7 +31751,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {295b165d-dec3-4243-847b-2316ccd6b6b1}, ! Handle
-  LargeHotel Corr HtgSetp Rule 1 Day Schedule, ! Name
+  LargeHotel Corridor HtgSetp Rule 1 Day Schedule, ! Name
   {e6a89461-1129-4518-8a31-f9225700ba34}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -31760,7 +31760,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {70e23998-8961-4d04-aedb-2cd71fd284a6}, ! Handle
-  LargeHotel Corr HtgSetp Winter Design Day, ! Name
+  LargeHotel Corridor HtgSetp Winter Design Day, ! Name
   {e6a89461-1129-4518-8a31-f9225700ba34}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -31769,7 +31769,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {dc08ce28-d30f-4681-a817-3660b5659c30}, ! Handle
-  LargeHotel Corr HtgSetp Summer Design Day, ! Name
+  LargeHotel Corridor HtgSetp Summer Design Day, ! Name
   {e6a89461-1129-4518-8a31-f9225700ba34}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1

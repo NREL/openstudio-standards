@@ -82,6 +82,160 @@ def longest_name
   return sorted_names[-1]
 end
 
+def make_material(material_name, data, model)  
+
+  material = nil
+  material_type = data["material_type"]
+  
+  if material_type == "StandardOpaqueMaterial"
+    material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    material.setName(material_name)
+    
+    material.setRoughness(data["roughness"].to_s)
+    material.setThickness(OpenStudio::convert(data["thickness"].to_f, "in", "m").get)
+    material.setConductivity(OpenStudio::convert(data["conductivity"].to_f, "Btu*in/hr*ft^2*R", "W/m*K").get)
+    material.setDensity(OpenStudio::convert(data["density"].to_f, "lb/ft^3", "kg/m^3").get)
+    material.setSpecificHeat(OpenStudio::convert(data["specific_heat"].to_f, "Btu/lb*R", "J/kg*K").get)
+    material.setThermalAbsorptance(data["thermal_absorptance"].to_f)
+    material.setSolarAbsorptance(data["solar_absorptance"].to_f)
+    material.setVisibleAbsorptance(data["visible_absorptance"].to_f)
+    
+  elsif material_type == "MasslessOpaqueMaterial" 
+    material = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+    material.setName(material_name)
+    
+    material.setConductivity(OpenStudio::convert(data["conductivity"].to_f, "Btu*in/hr*ft^2*R", "W/m*K").get)
+    material.setDensity(OpenStudio::convert(data["density"].to_f, "lb/ft^3", "kg/m^3").get)
+    material.setSpecificHeat(OpenStudio::convert(data["specific_heat"].to_f, "Btu/lb*R", "J/kg*K").get)
+    material.setThermalAbsorptance(data["thermal_absorptance"].to_f)
+    material.setSolarAbsorptance(data["solar_absorptance"].to_f)
+    material.setVisibleAbsorptance(data["visible_absorptance"].to_f)
+    
+  elsif material_type == "AirGap"
+    material = OpenStudio::Model::AirGap.new(model)
+    material.setName(material_name)
+    
+    material.setThermalResistance(OpenStudio::convert(data["resistance"].to_f, "hr*ft^2*R/Btu*in", "m*K/W").get)
+
+  elsif material_type == "Gas"
+    material = OpenStudio::Model::Gas.new(model)
+    material.setName(material_name)
+
+    material.setThickness(OpenStudio::convert(data["thickness"].to_f, "in", "m").get)
+    material.setGasType(data["gas_type"].to_s)
+    
+  elsif material_type == "SimpleGlazing" 
+    material = OpenStudio::Model::SimpleGlazing.new(model)
+    material.setName(material_name)
+    
+    material.setUFactor(OpenStudio::convert(data["u_factor"].to_f, "Btu/hr*ft^2*R", "W/m^2*K").get)
+    material.setSolarHeatGainCoefficient(data["solar_heat_gain_coefficient"].to_f)
+    material.setVisibleTransmittance(data["visible_transmittance"].to_f)
+
+  elsif material_type == "StandardGlazing" 
+    material = OpenStudio::Model::StandardGlazing.new(model)
+    material.setName(material_name)
+    
+    material.setOpticalDataType(data["optical_data_type"].to_s)
+    material.setThickness(OpenStudio::convert(data["thickness"].to_f, "in", "m").get)
+    material.setSolarTransmittanceatNormalIncidence(data["solar_transmittance_at_normal_incidence"].to_f)
+    material.setFrontSideSolarReflectanceatNormalIncidence(data["front_side_solar_reflectance_at_normal_incidence"].to_f)
+    material.setBackSideSolarReflectanceatNormalIncidence(data["back_side_solar_reflectance_at_normal_incidence"].to_f)
+    material.setVisibleTransmittanceatNormalIncidence(data["visible_transmittance_at_normal_incidence"].to_f)
+    material.setFrontSideVisibleReflectanceatNormalIncidence(data["front_side_visible_reflectance_at_normal_incidence"].to_f)
+    material.setBackSideVisibleReflectanceatNormalIncidence(data["back_side_visible_reflectance_at_normal_incidence"].to_f)
+    material.setInfraredTransmittanceatNormalIncidence(data["infrared_transmittance_at_normal_incidence"].to_f)
+    material.setFrontSideInfraredHemisphericalEmissivity(data["front_side_infrared_hemispherical_emissivity"].to_f)
+    material.setBackSideInfraredHemisphericalEmissivity(data["back_side_infrared_hemispherical_emissivity"].to_f) 
+    material.setConductivity(OpenStudio::convert(data["conductivity"].to_f, "Btu*in/hr*ft^2*R", "W/m*K").get)
+    material.setDirtCorrectionFactorforSolarandVisibleTransmittance(data["dirt_correction_factor_for_solar_and_visible_transmittance"].to_f) 
+    if /true/i.match(data["solar_diffusing"].to_s)
+      material.setSolarDiffusing(true) 
+    else
+      material.setSolarDiffusing(false)
+    end
+    
+  else
+    puts "Unknown material type #{material_type}"
+    exit
+  end
+  
+  return material
+end
+
+def get_material(material_name, model)  
+  # first check model
+  model.getMaterials.each do |material|
+    if material.name.to_s == material_name
+      return material
+    end
+  end
+  
+  data = @materials[material_name]
+  if data
+    material = make_material(material_name, data, model) 
+    return material 
+  end
+  
+  puts "Cannot find material named '#{material_name}'"
+end
+
+def make_construction(construction_name, data, model)  
+  construction = OpenStudio::Model::Construction.new(model)
+  construction.setName(construction_name)
+  
+  standards_info = construction.standardsInformation
+  
+  intended_surface_type = data["intended_surface_type"]
+  if not intended_surface_type
+    intended_surface_type = ""
+  end
+  standards_info.setIntendedSurfaceType(intended_surface_type)
+  
+  construction_standard = data["construction_standard"]
+  if not construction_standard
+    construction_standard = ""
+  end
+  standards_info.setStandardsConstructionType(construction_standard)
+  
+  #TODO: could put color in the spreadsheet
+  
+  layers = OpenStudio::Model::MaterialVector.new
+  data["materials"].each do |material_name|
+    layers << get_material(material_name, model)
+  end
+  construction.setLayers(layers)
+  
+  return construction
+end
+
+def get_construction(construction_name, model)  
+  # first check model
+  model.getConstructions.each do |construction|
+    if construction.name.to_s == construction_name
+      return construction
+    end
+  end
+  
+  data = @constructions[construction_name]
+  if data
+    construction = make_construction(construction_name, data, model) 
+    return construction 
+  end
+  
+  puts "Cannot find construction named '#{construction_name}'"
+end
+
+def generate_all_constructions(model = nil)
+  if model.nil?
+    model = OpenStudio::Model::Model.new
+  end
+  
+  for construction_name in @constructions.keys.sort
+    get_construction(construction_name, model)  
+  end
+end
+
 def generate_construction_set(template, clim, building_type, spc_type, model = nil)
 
   if model.nil?
@@ -90,150 +244,6 @@ def generate_construction_set(template, clim, building_type, spc_type, model = n
 
   puts "generating #{template}-#{clim}-#{building_type}-#{spc_type}"
 
-  def make_material(material_name, data, model)  
-
-    material = nil
-    material_type = data["material_type"]
-    
-    if material_type == "StandardOpaqueMaterial"
-      material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-      material.setName(material_name)
-      
-      material.setRoughness(data["roughness"].to_s)
-      material.setThickness(OpenStudio::convert(data["thickness"].to_f, "in", "m").get)
-      material.setConductivity(OpenStudio::convert(data["conductivity"].to_f, "Btu*in/hr*ft^2*R", "W/m*K").get)
-      material.setDensity(OpenStudio::convert(data["density"].to_f, "lb/ft^3", "kg/m^3").get)
-      material.setSpecificHeat(OpenStudio::convert(data["specific_heat"].to_f, "Btu/lb*R", "J/kg*K").get)
-      material.setThermalAbsorptance(data["thermal_absorptance"].to_f)
-      material.setSolarAbsorptance(data["solar_absorptance"].to_f)
-      material.setVisibleAbsorptance(data["visible_absorptance"].to_f)
-      
-    elsif material_type == "MasslessOpaqueMaterial" 
-      material = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
-      material.setName(material_name)
-      
-      material.setConductivity(OpenStudio::convert(data["conductivity"].to_f, "Btu*in/hr*ft^2*R", "W/m*K").get)
-      material.setDensity(OpenStudio::convert(data["density"].to_f, "lb/ft^3", "kg/m^3").get)
-      material.setSpecificHeat(OpenStudio::convert(data["specific_heat"].to_f, "Btu/lb*R", "J/kg*K").get)
-      material.setThermalAbsorptance(data["thermal_absorptance"].to_f)
-      material.setSolarAbsorptance(data["solar_absorptance"].to_f)
-      material.setVisibleAbsorptance(data["visible_absorptance"].to_f)
-      
-    elsif material_type == "AirGap"
-      material = OpenStudio::Model::AirGap.new(model)
-      material.setName(material_name)
-      
-      material.setThermalResistance(OpenStudio::convert(data["resistance"].to_f, "hr*ft^2*R/Btu*in", "m*K/W").get)
-
-    elsif material_type == "Gas"
-      material = OpenStudio::Model::Gas.new(model)
-      material.setName(material_name)
-
-      material.setThickness(OpenStudio::convert(data["thickness"].to_f, "in", "m").get)
-      material.setGasType(data["gas_type"].to_s)
-      
-    elsif material_type == "SimpleGlazing" 
-      material = OpenStudio::Model::SimpleGlazing.new(model)
-      material.setName(material_name)
-      
-      material.setUFactor(OpenStudio::convert(data["u_factor"].to_f, "Btu/hr*ft^2*R", "W/m^2*K").get)
-      material.setSolarHeatGainCoefficient(data["solar_heat_gain_coefficient"].to_f)
-      material.setVisibleTransmittance(data["visible_transmittance"].to_f)
-
-    elsif material_type == "StandardGlazing" 
-      material = OpenStudio::Model::StandardGlazing.new(model)
-      material.setName(material_name)
-      
-      material.setOpticalDataType(data["optical_data_type"].to_s)
-      material.setThickness(OpenStudio::convert(data["thickness"].to_f, "in", "m").get)
-      material.setSolarTransmittanceatNormalIncidence(data["solar_transmittance_at_normal_incidence"].to_f)
-      material.setFrontSideSolarReflectanceatNormalIncidence(data["front_side_solar_reflectance_at_normal_incidence"].to_f)
-      material.setBackSideSolarReflectanceatNormalIncidence(data["back_side_solar_reflectance_at_normal_incidence"].to_f)
-      material.setVisibleTransmittanceatNormalIncidence(data["visible_transmittance_at_normal_incidence"].to_f)
-      material.setFrontSideVisibleReflectanceatNormalIncidence(data["front_side_visible_reflectance_at_normal_incidence"].to_f)
-      material.setBackSideVisibleReflectanceatNormalIncidence(data["back_side_visible_reflectance_at_normal_incidence"].to_f)
-      material.setInfraredTransmittanceatNormalIncidence(data["infrared_transmittance_at_normal_incidence"].to_f)
-      material.setFrontSideInfraredHemisphericalEmissivity(data["front_side_infrared_hemispherical_emissivity"].to_f)
-      material.setBackSideInfraredHemisphericalEmissivity(data["back_side_infrared_hemispherical_emissivity"].to_f) 
-      material.setConductivity(OpenStudio::convert(data["conductivity"].to_f, "Btu*in/hr*ft^2*R", "W/m*K").get)
-      material.setDirtCorrectionFactorforSolarandVisibleTransmittance(data["dirt_correction_factor_for_solar_and_visible_transmittance"].to_f) 
-      if /true/i.match(data["solar_diffusing"].to_s)
-        material.setSolarDiffusing(true) 
-      else
-        material.setSolarDiffusing(false)
-      end
-      
-    else
-      puts "Unknown material type #{material_type}"
-      exit
-    end
-    
-    return material
-  end
-  
-  def get_material(material_name, model)  
-    # first check model
-    model.getMaterials.each do |material|
-      if material.name.to_s == material_name
-        return material
-      end
-    end
-    
-    data = @materials[material_name]
-    if data
-      material = make_material(material_name, data, model) 
-      return material 
-    end
-    
-    puts "Cannot find material named '#{material_name}'"
-  end
-  
-  def make_construction(construction_name, data, model)  
-    construction = OpenStudio::Model::Construction.new(model)
-    construction.setName(construction_name)
-    
-    standards_info = construction.standardsInformation
-    
-    intended_surface_type = data["intended_surface_type"]
-    if not intended_surface_type
-      intended_surface_type = ""
-    end
-    standards_info.setIntendedSurfaceType(intended_surface_type)
-    
-    construction_standard = data["construction_standard"]
-    if not construction_standard
-      construction_standard = ""
-    end
-    standards_info.setStandardsConstructionType(construction_standard)
-    
-    #TODO: could put color in the spreadsheet
-    
-    layers = OpenStudio::Model::MaterialVector.new
-    data["materials"].each do |material_name|
-      layers << get_material(material_name, model)
-    end
-    construction.setLayers(layers)
-    
-    return construction
-  end
-  
-  def get_construction(construction_name, model)  
-    # first check model
-    model.getConstructions.each do |construction|
-      if construction.name.to_s == construction_name
-        return construction
-      end
-    end
-    
-    data = @constructions[construction_name]
-    if data
-      construction = make_construction(construction_name, data, model) 
-      return construction 
-    end
-    
-    puts "Cannot find construction named '#{construction_name}'"
-  end
-  
   data = nil
   if tmp1 = @construction_sets[template]
     if tmp2 = tmp1[clim]

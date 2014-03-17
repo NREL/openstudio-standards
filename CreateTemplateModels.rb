@@ -25,6 +25,23 @@ construction_sets = standards["construction_sets"]
 #as they are generated
 template_models = {}
 master_template = OpenStudio::Model::Model.new
+construction_set_generator.generate_all_constructions(master_template)
+
+default_space_type = Hash.new
+default_space_type["FullServiceRestaurant"] = "Dining"
+default_space_type["Hospital"] = "PatRoom"
+default_space_type["LargeHotel"] = "GuestRoom"
+default_space_type["MidriseApartment"] = "Apartment"
+default_space_type["Office"] = "OpenOffice"
+default_space_type["Outpatient"] = "Exam"
+default_space_type["PrimarySchool"] = "Classroom"
+default_space_type["QuickServiceRestaurant"] = "Dining"
+default_space_type["Retail"] = "Retail"
+default_space_type["SecondarySchool"] = "Classroom"
+default_space_type["SmallHotel"] = "GuestRoom"
+default_space_type["StripMall"] = "WholeBuilding"
+default_space_type["SuperMarket"] = "Sales/Produce"
+default_space_type["Warehouse"] = "Bulk"
 
 begin
 
@@ -42,6 +59,7 @@ begin
         template_model = template_models[building_type]
         if template_model.nil?
           template_model = OpenStudio::Model::Model.new
+          construction_set_generator.generate_all_constructions(template_model)
           template_models[building_type] = template_model
         end
         
@@ -50,7 +68,7 @@ begin
           space_type_generator.generate_space_type(template, climate, building_type, space_type, master_template)
           result = space_type_generator.generate_space_type(template, climate, building_type, space_type, template_model)
 
-          if template == "NREL_2004" and /WholeBuilding/.match(space_type)
+          if template == "NREL_2009" and default_space_type[building_type] == space_type
             # set building level defaults
             building = template_model.getBuilding
             building.setSpaceType(result[0])
@@ -76,6 +94,7 @@ begin
         template_model = template_models[building_type]
         if template_model.nil?
           template_model = OpenStudio::Model::Model.new
+          construction_set_generator.generate_all_constructions(template_model)
           template_models[building_type] = template_model
         end
       
@@ -84,7 +103,7 @@ begin
           construction_set_generator.generate_construction_set(template, climate, building_type, space_type, master_template)
           construction_set = construction_set_generator.generate_construction_set(template, climate, building_type, space_type, template_model)
 
-          if template == "NREL_2004" and (climate == "ClimateZone 5" or climate == "ClimateZone 5-6")
+          if template == "ASHRAE 189.1-2009" and (climate == "ClimateZone 5" or climate == "ClimateZone 4-5" or climate == "ClimateZone 5-6")
             # set building level defaults
             building = template_model.getBuilding
             building.setDefaultConstructionSet(construction_set[0])

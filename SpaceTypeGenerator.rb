@@ -322,16 +322,19 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
 
     end
     
+    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
+    thermostat.setName("#{template} #{clim} #{building_type} #{spc_type} Thermostat")
+    
     heating_setpoint_sch = @spc_types[template][clim][building_type][spc_type]["heating_setpoint_sch"]
     unless heating_setpoint_sch.nil?
-      get_sch_from_lib(heating_setpoint_sch, model)
+      thermostat.setHeatingSetpointTemperatureSchedule(get_sch_from_lib(heating_setpoint_sch, model))
     end
    
     cooling_setpoint_sch = @spc_types[template][clim][building_type][spc_type]["cooling_setpoint_sch"]
     unless cooling_setpoint_sch.nil?
-      get_sch_from_lib(cooling_setpoint_sch, model)
+      thermostat.setCoolingSetpointTemperatureSchedule(get_sch_from_lib(cooling_setpoint_sch, model))
     end
-    
+  
   #componentize the space type
   space_type_component = space_type.createComponent
 
