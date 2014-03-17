@@ -77,17 +77,23 @@ def make_name(template, clim, building_type, spc_type)
     building_type = "Warehouse"
   end
   
-  result = "#{template} - #{building_type} - #{spc_type} - #{clim}"
-  if clim.empty? and building_type.empty? and spc_type.empty?
-    result = "#{template}"
-  elsif building_type.empty? and spc_type.empty?
-    result = "#{template} - #{clim}"
-  elsif building_type.empty?
-    result = "#{template} - #{spc_type} - #{clim}"
-  elsif spc_type.empty?
-    result = "#{template} - #{building_type} - #{clim}"
+  
+  parts = [template]
+  
+  if not building_type.empty?
+    parts << building_type
   end
-
+    
+  if not spc_type.empty?
+    parts << spc_type
+  end
+  
+  if not clim.empty?
+    parts << clim
+  end
+  
+  result = parts.join(' - ')
+  
   @created_names << result
   
   return result
