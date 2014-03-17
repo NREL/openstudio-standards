@@ -8,8 +8,9 @@ The current workflow to add information to the OpenStudio standard is to:
 
 1. Edit the OpenStudio_Standards.xlsx and Master_Schedules.osm files
 2. Run the ExportStandardsToJSON.rb script to create OpenStudio_Standards.json
-3. The file SpaceTypeGenerator.rb contains a class to read OpenStudio_Standards.json
-4. Run CreateTemplateModels.rb this will generate new OSM template files 
+3. Validate the JSON export using the TestScheduleLinks.rb script
+4. The files SpaceTypeGenerator.rb and ConstructionSetGenerator.rb contain classes to read OpenStudio_Standards.json
+5. Run CreateTemplateModels.rb this will generate new OSM template files 
 
 The reference directory is for any reference materials, not used by the scripts in the main workflow
 
