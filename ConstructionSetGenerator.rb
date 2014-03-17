@@ -26,6 +26,9 @@ end
 def make_name(template, clim, building_type, spc_type)
 
   clim = clim.gsub("ClimateZone ", "CZ")
+  if clim == "CZ1-8"
+    clim = ""
+  end
   
   if building_type == "FullServiceRestaurant"
     building_type = "FullSrvRest"
@@ -63,13 +66,15 @@ def make_name(template, clim, building_type, spc_type)
     building_type = "Warehouse"
   end
   
-  result = "#{template}-#{clim}-#{building_type}-#{spc_type}"
-  if building_type.empty? and spc_type.empty?
-    result = "#{template}-#{clim}"
+  result = "#{template} - #{clim} - #{building_type} - #{spc_type}"
+  if clim.empty? and building_type.empty? and spc_type.empty?
+    result = "#{template}"
+  elsif building_type.empty? and spc_type.empty?
+    result = "#{template} - #{clim}"
   elsif building_type.empty?
-    result = "#{template}-#{clim}-#{spc_type}"
+    result = "#{template} - #{clim} - #{spc_type}"
   elsif spc_type.empty?
-    result = "#{template}-#{clim}-#{building_type}"
+    result = "#{template} - #{clim} - #{building_type}"
   end
   
   @created_names << result
@@ -192,11 +197,11 @@ def make_construction(construction_name, data, model)
   end
   standards_info.setIntendedSurfaceType(intended_surface_type)
   
-  construction_standard = data["construction_standard"]
-  if not construction_standard
-    construction_standard = ""
+  standards_construction_type = data["standards_construction_type"]
+  if not standards_construction_type
+    standards_construction_type = ""
   end
-  standards_info.setStandardsConstructionType(construction_standard)
+  standards_info.setStandardsConstructionType(standards_construction_type)
   
   #TODO: could put color in the spreadsheet
   

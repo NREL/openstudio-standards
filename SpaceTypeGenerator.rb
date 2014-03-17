@@ -35,7 +35,12 @@ def initialize(path_to_standards_json, path_to_master_schedules_library)
 end
 
 def make_name(template, clim, building_type, spc_type)
+
   clim = clim.gsub("ClimateZone ", "CZ")
+  if clim == "CZ1-8"
+    clim = ""
+  end
+  
   if building_type == "FullServiceRestaurant"
     building_type = "FullSrvRest"
   elsif building_type == "Hospital"
@@ -72,13 +77,15 @@ def make_name(template, clim, building_type, spc_type)
     building_type = "Warehouse"
   end
   
-  result = "#{template}-#{clim}-#{building_type}-#{spc_type}"
-  if building_type.empty? and spc_type.empty?
-    result = "#{template}-#{clim}"
+  result = "#{template} - #{building_type} - #{spc_type} - #{clim}"
+  if clim.empty? and building_type.empty? and spc_type.empty?
+    result = "#{template}"
+  elsif building_type.empty? and spc_type.empty?
+    result = "#{template} - #{clim}"
   elsif building_type.empty?
-    result = "#{template}-#{clim}-#{spc_type}"
+    result = "#{template} - #{spc_type} - #{clim}"
   elsif spc_type.empty?
-    result = "#{template}-#{clim}-#{building_type}"
+    result = "#{template} - #{building_type} - #{clim}"
   end
 
   @created_names << result
@@ -145,7 +152,7 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
   
   #create the schedule set for the space type
   default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(model)
-  default_sch_set.setName("#{template} #{clim} #{building_type} #{spc_type} Schedule Set")
+  default_sch_set.setName("#{name} Schedule Set")
   space_type.setDefaultScheduleSet(default_sch_set)
 
   #lighting  
@@ -160,7 +167,7 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
     
       #create the lighting definition 
       lights_def = OpenStudio::Model::LightsDefinition.new(model)
-      lights_def.setName("#{template} #{clim} #{building_type} #{spc_type} Lights Definition")
+      lights_def.setName("#{name} Lights Definition")
       unless  lighting_per_area == 0 or lighting_per_area.nil?
         lights_def.setWattsperSpaceFloorArea(OpenStudio::convert(lighting_per_area,"W/ft^2","W/m^2").get)
       end
@@ -170,7 +177,7 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
 
       #create the lighting instance and hook it up to the space type
       lights = OpenStudio::Model::Lights.new(lights_def)
-      lights.setName("#{template} #{clim} #{building_type} #{spc_type} Lights")
+      lights.setName("#{name} Lights")
       lights.setSpaceType(space_type)  
       
       #get the lighting schedule and set it as the default
@@ -195,7 +202,7 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
       
       #create the ventilation object and hook it up to the space type
       ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(model)
-      ventilation.setName("#{template} #{clim} #{building_type} #{spc_type} Ventilation")
+      ventilation.setName("#{name} Ventilation")
       space_type.setDesignSpecificationOutdoorAir(ventilation)
       ventilation.setOutdoorAirMethod("Sum")
       unless ventilation_per_area  == 0 or ventilation_per_area.nil? 
@@ -220,14 +227,14 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
 
       #create the people definition
       people_def = OpenStudio::Model::PeopleDefinition.new(model)
-      people_def.setName("#{template} #{clim} #{building_type} #{spc_type} People Definition")
+      people_def.setName("#{name} People Definition")
       unless  occupancy_per_area == 0 or occupancy_per_area.nil?
         people_def.setPeopleperSpaceFloorArea(OpenStudio::convert(occupancy_per_area/1000,"people/ft^2","people/m^2").get)
       end    
       
       #create the people instance and hook it up to the space type
       people = OpenStudio::Model::People.new(people_def)
-      people.setName("#{template} #{clim} #{building_type} #{spc_type} People")
+      people.setName("#{name} People")
       people.setSpaceType(space_type)
       
       #get the occupancy and occupant activity schedules from the library and set as the default
@@ -252,7 +259,7 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
       
       #create the infiltration object and hook it up to the space type
       infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-      infiltration.setName("#{template} #{clim} #{building_type} #{spc_type} Infiltration")
+      infiltration.setName("#{name} Infiltration")
       infiltration.setSpaceType(space_type)
       unless infiltration_per_area_ext == 0 or infiltration_per_area_ext.nil?
         infiltration.setFlowperExteriorSurfaceArea(OpenStudio::convert(infiltration_per_area_ext,"ft^3/min*ft^2","m^3/s*m^2").get)
@@ -276,14 +283,14 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
     
       #create the electric equipment definition
       elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
-      elec_equip_def.setName("#{template} #{clim} #{building_type} #{spc_type} Electric Equipment Definition")  
+      elec_equip_def.setName("#{name} Electric Equipment Definition")  
       unless  elec_equip_per_area == 0 or elec_equip_per_area.nil?
         elec_equip_def.setWattsperSpaceFloorArea(OpenStudio::convert(elec_equip_per_area,"W/ft^2","W/m^2").get)
       end
         
       #create the electric equipment instance and hook it up to the space type
       elec_equip = OpenStudio::Model::ElectricEquipment.new(elec_equip_def)
-      elec_equip.setName("#{template} #{clim} #{building_type} #{spc_type} Electric Equipment")
+      elec_equip.setName("#{name} Electric Equipment")
       elec_equip.setSpaceType(space_type)
       
       #get the electric equipment schedule from the library and set as the default
@@ -304,14 +311,14 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
     
       #create the gas equipment definition
       gas_equip_def = OpenStudio::Model::GasEquipmentDefinition.new(model)
-      gas_equip_def.setName("#{template} #{clim} #{building_type} #{spc_type} Gas Equipment Definition")
+      gas_equip_def.setName("#{name} Gas Equipment Definition")
       unless  gas_equip_per_area == 0 or gas_equip_per_area.nil?
         gas_equip_def.setWattsperSpaceFloorArea(OpenStudio::convert(gas_equip_per_area,"Btu/hr*ft^2","W/m^2").get)
       end
       
       #create the gas equipment instance and hook it up to the space type
       gas_equip = OpenStudio::Model::GasEquipment.new(gas_equip_def)
-      gas_equip.setName("#{template} #{clim} #{building_type} #{spc_type} Gas Equipment")
+      gas_equip.setName("#{name} Gas Equipment")
       gas_equip.setSpaceType(space_type)
       
       #get the gas equipment schedule from the library and set as the default
@@ -323,7 +330,7 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
     end
     
     thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
-    thermostat.setName("#{template} #{clim} #{building_type} #{spc_type} Thermostat")
+    thermostat.setName("#{name} Thermostat")
     
     heating_setpoint_sch = @spc_types[template][clim][building_type][spc_type]["heating_setpoint_sch"]
     unless heating_setpoint_sch.nil?
