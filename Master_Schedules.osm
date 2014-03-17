@@ -35659,7 +35659,7 @@ OS:Schedule:Day,
 
 OS:DefaultScheduleSet,
   {1166a6f2-50ab-40c9-9752-03977eee95a2}, !- Handle
-  Office Work Area Schedules,             !- Name
+  Office Work Schedules,             !- Name
   ,                                       !- Hours of Operation Schedule Name
   {1421b596-5bcc-4c8c-8067-15882e5cfe10}, !- Number of People Schedule Name
   {c5474c5f-43fd-43f8-9b7e-7babf106ba56}, !- People Activity Level Schedule Name
@@ -35673,7 +35673,7 @@ OS:DefaultScheduleSet,
 
 OS:Schedule:Ruleset,
   {1421b596-5bcc-4c8c-8067-15882e5cfe10}, ! Handle
-  Office Work Area Occ,                   ! Name
+  Office Work Occ,                   ! Name
   {0b8a95eb-9aa8-43a9-9736-998a36816f12}, ! Schedule Type Limits Name
   {65daa9cb-8605-4db3-9f7e-8d4d8cf66a00}, ! Default Day Schedule Name
   {51d3ace3-a484-4231-86ac-c74141d776c7}, ! Summer Design Day Schedule Name
@@ -35741,7 +35741,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Rule,
   {6e735343-4269-4f1b-9b76-72fd738ed543}, ! Handle
-  Office Work Area Occ Rule 1,            ! Name
+  Office Work Occ Rule 1,            ! Name
   {1421b596-5bcc-4c8c-8067-15882e5cfe10}, ! Schedule Ruleset Name
   0,                                      ! Rule Order
   {6383db1f-634c-4ef8-949c-8015940d8af0}, ! Day Schedule Name
@@ -35761,7 +35761,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Rule,
   {e8898ae5-aa95-4bf3-a21b-ccfb38020069}, ! Handle
-  Office Work Area Occ Rule 2,            ! Name
+  Office Work Occ Rule 2,            ! Name
   {1421b596-5bcc-4c8c-8067-15882e5cfe10}, ! Schedule Ruleset Name
   1,                                      ! Rule Order
   {7afd88fd-6a68-4bf5-b04d-7ab47f41f4cb}, ! Day Schedule Name
