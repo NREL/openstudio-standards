@@ -28,14 +28,8 @@ def initialize(path_to_standards_json, path_to_master_schedules_library)
   #load up the osm with all the reference building schedules
   path_to_master_schedules_library = OpenStudio::Path.new(path_to_master_schedules_library)
   
-  # TODO: remove this
-  path_to_office_schedules_library = OpenStudio::Path.new(path_to_master_schedules_library.to_s.gsub('Master_Schedules.osm', 'Jan2014_OfficeSchedules.osm'))
-  
   vt = OpenStudio::OSVersion::VersionTranslator.new
   @schedule_library = vt.loadModel(path_to_master_schedules_library).get  
-  
-  vt = OpenStudio::OSVersion::VersionTranslator.new
-  @alt_schedule_library = vt.loadModel(path_to_office_schedules_library).get 
   
   @created_names = []
 end
@@ -119,13 +113,7 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
     
     if sch.empty?
       puts "schedule called '#{sch_name}' not found in master schedule library"
-      
-      # TODO: remove check in alternate file
-      sch = @alt_schedule_library.getObjectByTypeAndName("OS_Schedule_Ruleset".to_IddObjectType, sch_name)
-      if sch.empty?
-        puts "schedule called '#{sch_name}' not found in alternate schedule library"
-        exit
-      end
+      exit
     end
     #clone the space type from the library model into the space type model
     clone_of_sch = sch.get.to_Schedule.get.clone(model)
