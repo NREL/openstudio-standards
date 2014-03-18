@@ -19,7 +19,7 @@ def initialize(path_to_standards_json, path_to_master_schedules_library)
   end
   
   #check that the data was loaded correctly
-  check_data = @spc_types["NREL_2009"]["ClimateZone 1-3"]["Hospital"]["Radiology"]["lighting_w_per_area"]
+  check_data = @spc_types["189.1-2009"]["ClimateZone 1-3"]["Hospital"]["Radiology"]["lighting_w_per_area"]
   unless check_data == 0.36
     puts "The space types json file does not have expected content."
     exit
@@ -110,7 +110,7 @@ def generate_space_type(template, clim, building_type, spc_type, model = nil)
     model = OpenStudio::Model::Model.new
   end
 
-  puts "generating #{template}-#{clim}-#{building_type}-#{spc_type}"
+  puts "generating space type: #{template}-#{clim}-#{building_type}-#{spc_type}"
 
   #grabs a schedule with a specific name from the library, clones it into the space type model, and returns itself to the user
   def get_sch_from_lib(sch_name, model)

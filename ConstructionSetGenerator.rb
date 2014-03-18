@@ -252,7 +252,7 @@ def generate_construction_set(template, clim, building_type, spc_type, model = n
     model = OpenStudio::Model::Model.new
   end
 
-  puts "generating #{template}-#{clim}-#{building_type}-#{spc_type}"
+  puts "generating construction set: #{template}-#{clim}-#{building_type}-#{spc_type}"
 
   data = nil
   if tmp1 = @construction_sets[template]

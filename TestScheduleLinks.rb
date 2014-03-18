@@ -2,8 +2,8 @@ require 'openstudio'
 require 'rubygems'
 require 'json'
 
-path_to_standards_json = ARGV[0]
-path_to_master_schedules_library = ARGV[1]
+path_to_standards_json = "#{Dir.pwd}/OpenStudio_Standards.json"
+path_to_master_schedules_library = "#{Dir.pwd}/Master_Schedules.osm"
 
 #load the data from the JSON file into a ruby hash
 standards = {}
