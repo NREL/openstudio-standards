@@ -25,6 +25,7 @@ construction_sets = standards["construction_sets"]
 #as they are generated
 template_models = {}
 master_template = OpenStudio::Model::Model.new
+minimal_template = OpenStudio::Model::Model.new
 construction_set_generator.generate_all_constructions(master_template)
 
 default_space_type = Hash.new
@@ -68,10 +69,17 @@ begin
           space_type_generator.generate_space_type(template, climate, building_type, space_type, master_template)
           result = space_type_generator.generate_space_type(template, climate, building_type, space_type, template_model)
 
-          if template == "NREL_2009" and default_space_type[building_type] == space_type
+          if template == "189.1-2009" and default_space_type[building_type] == space_type
             # set building level defaults
             building = template_model.getBuilding
             building.setSpaceType(result[0])
+          end
+          
+          if template == "189.1-2009" and building_type == "Office"
+            result = space_type_generator.generate_space_type(template, climate, building_type, space_type, minimal_template)
+            if default_space_type[building_type] == space_type
+              minimal_template.getBuilding.setSpaceType(result[0])
+            end
           end
 
         end #next space type
@@ -101,14 +109,21 @@ begin
         for space_type in construction_sets[template][climate][building_type].keys.sort
           #generate into the templates
           construction_set_generator.generate_construction_set(template, climate, building_type, space_type, master_template)
-          construction_set = construction_set_generator.generate_construction_set(template, climate, building_type, space_type, template_model)
+          result = construction_set_generator.generate_construction_set(template, climate, building_type, space_type, template_model)
 
-          if template == "ASHRAE 189.1-2009" and (climate == "ClimateZone 5" or climate == "ClimateZone 4-5" or climate == "ClimateZone 5-6")
+          if template == "189.1-2009" and (climate == "ClimateZone 5" or climate == "ClimateZone 4-5" or climate == "ClimateZone 5-6")
             # set building level defaults
             building = template_model.getBuilding
-            building.setDefaultConstructionSet(construction_set[0])
+            building.setDefaultConstructionSet(result[0])
           end
-
+          
+          if template == "189.1-2009" and building_type == "Office"
+            result = construction_set_generator.generate_construction_set(template, climate, building_type, space_type, minimal_template)
+            if (climate == "ClimateZone 5" or climate == "ClimateZone 4-5" or climate == "ClimateZone 5-6")
+              minimal_template.getBuilding.setDefaultConstructionSet(result[0])
+            end
+          end
+          
         end #next space type
       end #next building type 
       
@@ -155,5 +170,9 @@ template_models.each do |building_type, template_model|
   template_file_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/#{building_type}.osm")
   template_model.toIdfFile().save(template_file_save_path,true)
 end
+
 master_template_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/MasterTemplate.osm")
 master_template.toIdfFile().save(master_template_save_path,true)
+
+minimal_template_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/MinimalTemplate.osm")
+minimal_template.toIdfFile().save(minimal_template_save_path,true)
