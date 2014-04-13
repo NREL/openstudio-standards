@@ -1,7 +1,7 @@
 
 OS:Version,
-  {d3ee0a0d-7e3b-438f-a730-319d7498c5a7}, !- Handle
-  1.2.0;                                  !- Version Identifier
+  {211d772f-4a66-4dc8-8ce9-21a77c4c73a7}, !- Handle
+  1.2.3;                                  !- Version Identifier
 
 OS:YearDescription,
   {6cddbba6-efd7-4476-bf1d-990dc94dbd5e}; !- Handle
@@ -89,16 +89,6 @@ OS:RunPeriod,
   ,                                       !- Use Weather File Snow Indicators
   ;                                       !- Number of Times Runperiod to be Repeated
 
-OS:Building,
-  {10d62f2e-c9f8-4017-ab2d-36114b55e16f}, !- Handle
-  Building 1,                             !- Name
-  ,                                       !- Building Type
-  ,                                       !- North Axis {deg}
-  ,                                       !- Nominal Floor to Floor Height {m}
-  ,                                       !- Space Type Name
-  ,                                       !- Default Construction Set Name
-  ;                                       !- Default Schedule Set Name
-
 OS:Schedule:Ruleset,
   {d7ccdbe3-e995-4959-89b7-e201ce62ddb7}, ! Handle
   Office Activity,                        ! Name
@@ -117,7 +107,7 @@ OS:ScheduleTypeLimits,
 
 OS:Schedule:Day,
   {d7db9a64-8428-432c-8c1a-b0127217ba4d}, ! Handle
-  Medium Office Activity Default Schedule, ! Name
+  Office Activity Default Schedule,       ! Name
   {347282cd-26f5-4609-a38c-266dc1860601}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     !- Hour 1
@@ -126,7 +116,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {4c8c479f-783d-4b22-ac23-29cc723ae6d9}, ! Handle
-  Medium Office Activity Summer Design Day, ! Name
+  Office Activity Summer Design Day,      ! Name
   {347282cd-26f5-4609-a38c-266dc1860601}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     !- Hour 1
@@ -135,7 +125,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {cf67eac7-7a6a-4850-b372-cec066288972}, ! Handle
-  Medium Office Activity Winter Design Day, ! Name
+  Office Activity Winter Design Day,      ! Name
   {347282cd-26f5-4609-a38c-266dc1860601}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     !- Hour 1
@@ -159,7 +149,7 @@ OS:ScheduleTypeLimits,
 
 OS:Schedule:Day,
   {f4b45e55-26dd-44f4-bb68-4b649f2cc043}, ! Handle
-  Medium Office Bldg Occ Default Schedule, ! Name
+  Office Bldg Occ Default Schedule,       ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      !- Hour 1
@@ -195,7 +185,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {ce37135e-9ade-4c04-b4fb-d3768d183334}, ! Handle
-  Medium Office Bldg Occ Summer Design Day, ! Name
+  Office Bldg Occ Summer Design Day,      ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      ! Hour 1
@@ -210,7 +200,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {9e5383ac-d7a0-470d-840e-81876e924e72}, ! Handle
-  Medium Office Bldg Occ Winter Design Day, ! Name
+  Office Bldg Occ Winter Design Day,      ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -239,7 +229,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {34adaa15-3475-449e-8907-5192f3bea5c9}, ! Handle
-  Medium Office Bldg Occ Rule 1 Day Schedule, ! Name
+  Office Bldg Occ Rule 1 Day Schedule,    ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -268,7 +258,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {8bb0e760-f34e-4058-9e8f-b6c36afee107}, ! Handle
-  Medium Office Bldg Occ Rule 2 Day Schedule, ! Name
+  Office Bldg Occ Rule 2 Day Schedule,    ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      !- Hour 1
@@ -297,7 +287,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Day,
   {8691cb6a-989e-4097-b96b-0473455f1e2c}, ! Handle
-  Medium Office Bldg Occ Default Schedule 1, ! Name
+  Office Bldg Occ Default Schedule 1,     ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      !- Hour 1
@@ -321,7 +311,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {d36c26ae-2a71-4ab4-90f9-363f11d26838}, ! Handle
-  Medium Office Bldg Occ Summer Design Day 1, ! Name
+  Office Bldg Occ Summer Design Day 1,    ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      ! Hour 1
@@ -336,7 +326,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {a09d4065-74b7-44d0-9451-b128738f0259}, ! Handle
-  Medium Office Bldg Occ Winter Design Day 1, ! Name
+  Office Bldg Occ Winter Design Day 1,    ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -365,7 +355,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {4d7ffe87-8fca-4bc5-9d82-0c0d46ac6ecc}, ! Handle
-  Medium Office Bldg Occ Rule 1 Day Schedule 1, ! Name
+  Office Bldg Occ Rule 1 Day Schedule 1,  ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -394,7 +384,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {35799e1c-946b-43dc-9551-adc840e0eb76}, ! Handle
-  Medium Office Bldg Occ Rule 2 Day Schedule 1, ! Name
+  Office Bldg Occ Rule 2 Day Schedule 1,  ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      !- Hour 1
@@ -423,7 +413,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Day,
   {898562b5-f2b1-4a17-a390-c31508c91e2f}, ! Handle
-  Medium Office Bldg Equip Default Schedule, ! Name
+  Office Bldg Equip Default Schedule,     ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   8,                                      !- Hour 1
@@ -453,7 +443,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {14a5339e-1774-4f19-869b-3b48f32bfae5}, ! Handle
-  Medium Office Bldg Equip Summer Design Day, ! Name
+  Office Bldg Equip Summer Design Day,    ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -462,7 +452,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {285429eb-62fd-4850-be14-2e82e4abfc4c}, ! Handle
-  Medium Office Bldg Equip Winter Design Day, ! Name
+  Office Bldg Equip Winter Design Day,    ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -491,7 +481,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {1ba9a62a-f6dd-4381-911d-4c5da12f47e8}, ! Handle
-  Medium Office Bldg Equip Rule 1 Day Schedule, ! Name
+  Office Bldg Equip Rule 1 Day Schedule,  ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -520,7 +510,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {9c2a62c0-0e39-41c8-857a-0f03ffca0608}, ! Handle
-  Medium Office Bldg Equip Rule 2 Day Schedule, ! Name
+  Office Bldg Equip Rule 2 Day Schedule,  ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      ! Hour 1
@@ -549,7 +539,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Day,
   {a1757099-c320-48d4-9198-ce3e9ef095c3}, ! Handle
-  Medium Office Bldg Light Default Schedule, ! Name
+  Office Bldg Light Default Schedule,     ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   5,                                      !- Hour 1
@@ -582,7 +572,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {59409791-c615-4638-ac9a-c773cf83408b}, ! Handle
-  Medium Office Bldg Light Summer Design Day, ! Name
+  Office Bldg Light Summer Design Day,    ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -591,7 +581,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {a007304a-d04c-4e33-af99-c506dd037640}, ! Handle
-  Medium Office Bldg Light Winter Design Day, ! Name
+  Office Bldg Light Winter Design Day,    ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -620,7 +610,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {c3aad8f3-d960-4237-894c-abc0a1b11c56}, ! Handle
-  Medium Office Bldg Light Rule 1 Day Schedule, ! Name
+  Office Bldg Light Rule 1 Day Schedule,  ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -649,7 +639,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {d6efe5a5-4611-4da7-95e1-79660bc8c23f}, ! Handle
-  Medium Office Bldg Light Rule 2 Day Schedule, ! Name
+  Office Bldg Light Rule 2 Day Schedule,  ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      ! Hour 1
@@ -678,7 +668,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Day,
   {9dc1ea1f-e45b-4d6c-97cd-6123c1f08bd6}, ! Handle
-  Medium Office Infil Quarter On Default Schedule, ! Name
+  Office Infil Quarter On Default Schedule, ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      !- Hour 1
@@ -693,7 +683,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {abcdc554-f9cb-47c6-a7ae-9b785aca1ae2}, ! Handle
-  Medium Office Infil Quarter On Summer Design Day, ! Name
+  Office Infil Quarter On Summer Design Day, ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      ! Hour 1
@@ -708,7 +698,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {e724b840-d890-40cb-bed4-a9131bd72992}, ! Handle
-  Medium Office Infil Quarter On Winter Design Day, ! Name
+  Office Infil Quarter On Winter Design Day, ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      ! Hour 1
@@ -743,7 +733,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {5388954e-9ea9-4ca9-acfe-a19ac43b0faa}, ! Handle
-  Medium Office Infil Quarter On Rule 1 Day Schedule, ! Name
+  Office Infil Quarter On Rule 1 Day Schedule, ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
@@ -772,7 +762,7 @@ OS:Schedule:Rule,
 
 OS:Schedule:Day,
   {cb7be4b7-e5e1-4a74-8378-96ccf771cc9e}, ! Handle
-  Medium Office Infil Quarter On Rule 2 Day Schedule, ! Name
+  Office Infil Quarter On Rule 2 Day Schedule, ! Name
   {d9b4a865-0dd0-4333-8fdb-88a55fb07f16}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
   6,                                      ! Hour 1
@@ -812,4 +802,27 @@ OS:DefaultScheduleSet,
   {515caa6f-35fe-4437-a994-d503a5eff544}, !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
+
+OS:Building,
+  {10d62f2e-c9f8-4017-ab2d-36114b55e16f}, !- Handle
+  Building 1,                             !- Name
+  ,                                       !- Building Sector Type
+  ,                                       !- North Axis {deg}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Space Type Name
+  ,                                       !- Default Construction Set Name
+  ;                                       !- Default Schedule Set Name
+
+OS:ClimateZones,
+  {d1258527-0c76-4a78-a30f-cee34a624669}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ASHRAE,                                 !- Climate Zone Institution Name 1
+  ANSI/ASHRAE Standard 169,               !- Climate Zone Document Name 1
+  2006,                                   !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
 
