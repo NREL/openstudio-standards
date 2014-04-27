@@ -10,7 +10,7 @@ def getNumRows(worksheet, column, begin_row)
   # find number of rows
   max_row = 12000
   end_row = begin_row
-  data = worksheet.range("#{column}#{begin_row}:#{column}#{max_row}")['Value']
+  data = worksheet.range("#{column}#{begin_row}:#{column}#{max_row}").value
   data.each do |row|
     if row[0].nil?
       end_row -= 1
@@ -33,7 +33,7 @@ def getTemplatesHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -64,7 +64,7 @@ def getStandardsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -94,7 +94,7 @@ def getClimateZonesHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -130,7 +130,7 @@ def getClimateZoneSetsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -168,7 +168,7 @@ def getSpaceTypesHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -293,7 +293,7 @@ def getConstructionSetsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -403,7 +403,7 @@ def getConstructionsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -450,7 +450,7 @@ def getMaterialsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   material_col = 0
@@ -525,6 +525,7 @@ end
 #path to the space types xl file
 xlsx_path = "#{Dir.pwd}/OpenStudio_Standards.xlsx"
 #enable Excel
+#WIN32OLE.ole_initialize
 xl = WIN32OLE::new('Excel.Application')
 #open workbook
 wb = xl.workbooks.open(xlsx_path)
