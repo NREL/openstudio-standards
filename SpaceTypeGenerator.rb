@@ -20,7 +20,7 @@ def initialize(path_to_standards_json, path_to_master_schedules_library)
   
   #check that the data was loaded correctly
   check_data = @spc_types["189.1-2009"]["ClimateZone 1-3"]["Hospital"]["Radiology"]["lighting_w_per_area"]
-  unless check_data == 0.36
+  unless (check_data-0.36).abs < 0.0000001
     puts "The space types json file does not have expected content."
     exit
   end
