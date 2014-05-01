@@ -6,6 +6,18 @@ require 'json'
 require 'openstudio'
 require 'win32ole'
 
+class Hash
+  def sort_by_key(recursive = false, &block)
+    self.keys.sort(&block).reduce({}) do |seed, key|
+      seed[key] = self[key]
+      if recursive && seed[key].is_a?(Hash)
+        seed[key] = seed[key].sort_by_key(true, &block)
+      end
+      seed
+    end
+  end
+end
+
 def getNumRows(worksheet, column, begin_row)
   # find number of rows
   max_row = 12000
@@ -543,10 +555,13 @@ begin
   standards["materials"] = getMaterialsHash(wb)
   
   # TODO: create any other views that would be useful
+  
+  sorted_standards = standards.sort_by_key(true) {|x,y| x.to_s <=> y.to_s}
 
   #write the space types hash to a JSON file
   File.open("#{Dir.pwd}/OpenStudio_Standards.json", 'w') do |file|
-    file << standards.to_json
+    #file << standards.to_json
+    file << JSON::pretty_generate(sorted_standards)
   end
   puts "Successfully generated OpenStudio_Standards.json"
 
