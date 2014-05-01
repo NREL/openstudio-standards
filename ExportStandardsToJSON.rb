@@ -6,11 +6,23 @@ require 'json'
 require 'openstudio'
 require 'win32ole'
 
+class Hash
+  def sort_by_key(recursive = false, &block)
+    self.keys.sort(&block).reduce({}) do |seed, key|
+      seed[key] = self[key]
+      if recursive && seed[key].is_a?(Hash)
+        seed[key] = seed[key].sort_by_key(true, &block)
+      end
+      seed
+    end
+  end
+end
+
 def getNumRows(worksheet, column, begin_row)
   # find number of rows
   max_row = 12000
   end_row = begin_row
-  data = worksheet.range("#{column}#{begin_row}:#{column}#{max_row}")['Value']
+  data = worksheet.range("#{column}#{begin_row}:#{column}#{max_row}").value
   data.each do |row|
     if row[0].nil?
       end_row -= 1
@@ -33,7 +45,7 @@ def getTemplatesHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -64,7 +76,7 @@ def getStandardsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -94,7 +106,7 @@ def getClimateZonesHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -130,7 +142,7 @@ def getClimateZoneSetsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -168,7 +180,7 @@ def getSpaceTypesHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -293,7 +305,7 @@ def getConstructionSetsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -403,7 +415,7 @@ def getConstructionsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   #basic information
@@ -450,7 +462,7 @@ def getMaterialsHash(workbook)
   end_row = getNumRows(worksheet, begin_column, begin_row)
   
   #specify data range
-  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}")['Value']
+  data = worksheet.range("#{begin_column}#{begin_row}:#{end_column}#{end_row}").value
 
   #define the columns where the data live in the spreadsheet
   material_col = 0
@@ -525,6 +537,7 @@ end
 #path to the space types xl file
 xlsx_path = "#{Dir.pwd}/OpenStudio_Standards.xlsx"
 #enable Excel
+#WIN32OLE.ole_initialize
 xl = WIN32OLE::new('Excel.Application')
 #open workbook
 wb = xl.workbooks.open(xlsx_path)
@@ -542,10 +555,13 @@ begin
   standards["materials"] = getMaterialsHash(wb)
   
   # TODO: create any other views that would be useful
+  
+  sorted_standards = standards.sort_by_key(true) {|x,y| x.to_s <=> y.to_s}
 
   #write the space types hash to a JSON file
   File.open("#{Dir.pwd}/OpenStudio_Standards.json", 'w') do |file|
-    file << standards.to_json
+    #file << standards.to_json
+    file << JSON::pretty_generate(sorted_standards)
   end
   puts "Successfully generated OpenStudio_Standards.json"
 
