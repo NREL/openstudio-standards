@@ -15,7 +15,9 @@ def initialize(path_to_standards_json)
   @construction_sets = @standards["construction_sets"]
   @constructions = @standards["constructions"]
   @materials = @standards["materials"]
-  if @construction_sets.nil? or @constructions.nil? or @materials.nil?
+  @climate_zone_sets = @standards["climate_zone_sets"]
+  @climate_zones = @standards["climate_zones"]
+  if @construction_sets.nil? or @constructions.nil? or @materials.nil? or @climate_zone_sets.nil? or @climate_zones.nil?
     puts "The standards json file did not load correctly."
     exit
   end
@@ -246,6 +248,38 @@ def generate_all_constructions(model = nil)
   end
 end
 
+# pass in a specific climate zone here and get the climate zone set to use for generate_construction_set
+def find_climate_zone_set(template, clim, building_type, spc_type)
+  possible_climate_zone_sets = []
+  
+  if tmp1 = @construction_sets[template]
+    tmp1.each_pair do |climate_zone_set, tmp2|
+      if tmp3 = tmp2[building_type]
+        if data = tmp3[spc_type]
+          possible_climate_zone_sets << climate_zone_set
+        end
+      end
+    end
+  end
+  
+  result = nil
+  possible_climate_zone_sets.each do |possible_climate_zone_set|
+    if climate_zone_set = @climate_zone_sets[possible_climate_zone_set]
+      if climate_zones = climate_zone_set['climate_zones']
+        if climate_zones.include?(clim)
+          if not result
+            result = possible_climate_zone_set
+          else
+            puts "Error, climate zone contained in multiple climate zone sets"
+          end
+        end
+      end
+    end
+  end
+  return result
+end
+
+# pass in the climate zone set here
 def generate_construction_set(template, clim, building_type, spc_type, model = nil)
 
   if model.nil?
