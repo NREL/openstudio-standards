@@ -13,7 +13,9 @@ def initialize(path_to_standards_json, path_to_master_schedules_library)
   temp = File.read(path_to_standards_json.to_s)
   @standards = JSON.parse(temp)
   @spc_types = @standards["space_types"]
-  if @spc_types.nil?
+  @climate_zone_sets = @standards["climate_zone_sets"]
+  @climate_zones = @standards["climate_zones"]
+  if @spc_types.nil? or @climate_zone_sets.nil? or @climate_zones.nil?
     puts "The space types json file did not load correctly."
     exit
   end
@@ -104,6 +106,38 @@ def longest_name
   return sorted_names[-1]
 end
 
+# pass in a specific climate zone here and get the climate zone set to use for generate_construction_set
+def find_climate_zone_set(template, clim, building_type, spc_type)
+  possible_climate_zone_sets = []
+  
+  if tmp1 = @spc_types[template]
+    tmp1.each_pair do |climate_zone_set, tmp2|
+      if tmp3 = tmp2[building_type]
+        if data = tmp3[spc_type]
+          possible_climate_zone_sets << climate_zone_set
+        end
+      end
+    end
+  end
+  
+  result = nil
+  possible_climate_zone_sets.each do |possible_climate_zone_set|
+    if climate_zone_set = @climate_zone_sets[possible_climate_zone_set]
+      if climate_zones = climate_zone_set['climate_zones']
+        if climate_zones.include?(clim)
+          if not result
+            result = possible_climate_zone_set
+          else
+            puts "Error, climate zone contained in multiple climate zone sets"
+          end
+        end
+      end
+    end
+  end
+  return result
+end
+
+# pass in the climate zone set here
 def generate_space_type(template, clim, building_type, spc_type, model = nil)
 
   if model.nil?
