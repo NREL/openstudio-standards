@@ -106,6 +106,18 @@ def longest_name
   return sorted_names[-1]
 end
 
+# check if a specific climate zone is included in a given climate zone set
+def is_climate_zone_in_climate_zone_set(climate_zone, climate_zone_set)
+  if data = @climate_zone_sets[climate_zone_set]
+    if climate_zones = data["climate_zones"]
+      if climate_zones.include?(climate_zone)
+        return true
+      end
+    end
+  end
+  return false
+end
+
 # pass in a specific climate zone here and get the climate zone set to use for generate_construction_set
 def find_climate_zone_set(template, clim, building_type, spc_type)
   possible_climate_zone_sets = []
