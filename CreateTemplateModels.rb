@@ -44,6 +44,8 @@ default_space_type["StripMall"] = "WholeBuilding"
 default_space_type["SuperMarket"] = "Sales/Produce"
 default_space_type["Warehouse"] = "Bulk"
 
+error_log = []
+
 begin
 
   #create each space type and put it into the appropriate template model
@@ -144,7 +146,13 @@ begin
   
 rescue => e
   stack = e.backtrace.join("\n")
-  puts "error #{e}, #{e.backtrace}"
+  puts ""
+  puts ""  
+  error = "************Error in #{template} #{climate} #{building_type} #{space_type} #{e}, #{e.backtrace}"
+  puts error
+  error_log << error
+  puts ""
+  puts ""
 end
 
 puts space_type_generator.longest_name
@@ -191,3 +199,8 @@ master_template.toIdfFile().save(master_template_save_path,true)
 
 minimal_template_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/MinimalTemplate.osm")
 minimal_template.toIdfFile().save(minimal_template_save_path,true)
+
+puts "****Errors****"
+error_log.each do |error|
+  puts error
+end
