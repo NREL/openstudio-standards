@@ -46,6 +46,23 @@ default_space_type["Warehouse"] = "Bulk"
 
 error_log = []
 
+def ensure_air_wall(model)
+  air_wall_construction = nil
+  model.getConstructions.each do |construction|
+    if construction.name.get == "Air Wall"
+      air_wall_construction = construction
+      break
+    end
+  end
+  if not air_wall_construction
+    air_wall_material = OpenStudio::Model::AirWallMaterial.new(model)
+    air_wall_material.setName("Air Wall Material")
+    air_wall_construction = OpenStudio::Model::Construction.new(air_wall_material)
+    air_wall_construction.setName("Air Wall")
+  end
+  return air_wall_construction
+end
+
 begin
 
   #create each space type and put it into the appropriate template model
@@ -176,28 +193,18 @@ template_models.each do |building_type, template_model|
   end
   
   # add air wall material
-  air_wall_construction = nil
-  template_model.getConstructions.each do |construction|
-    if construction.name.get == "Air Wall"
-      air_wall_construction = construction
-      break
-    end
-  end
-  if not air_wall_construction
-    air_wall_material = OpenStudio::Model::AirWallMaterial.new(template_model)
-    air_wall_material.setName("Air Wall Material")
-    air_wall_construction = OpenStudio::Model::Construction.new(air_wall_material)
-    air_wall_construction.setName("Air Wall")
-  end
+  ensure_air_wall(template_model)
 
   template_file_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/#{building_type}.osm")
   template_model.toIdfFile().save(template_file_save_path,true)
 end
 
 master_template_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/MasterTemplate.osm")
+ensure_air_wall(master_template)
 master_template.toIdfFile().save(master_template_save_path,true)
 
 minimal_template_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/MinimalTemplate.osm")
+ensure_air_wall(minimal_template)
 minimal_template.toIdfFile().save(minimal_template_save_path,true)
 
 puts "****Errors****"
