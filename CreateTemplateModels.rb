@@ -167,6 +167,21 @@ template_models.each do |building_type, template_model|
     puts "#{building_type} template has no building object"
   end
   
+  # add air wall material
+  air_wall_construction = nil
+  template_model.getConstructions.each do |construction|
+    if construction.name.get == "Air Wall"
+      air_wall_construction = construction
+      break
+    end
+  end
+  if not air_wall_construction
+    air_wall_material = OpenStudio::Model::AirWallMaterial.new(template_model)
+    air_wall_material.setName("Air Wall Material")
+    air_wall_construction = OpenStudio::Model::Construction.new(air_wall_material)
+    air_wall_construction.setName("Air Wall")
+  end
+
   template_file_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/#{building_type}.osm")
   template_model.toIdfFile().save(template_file_save_path,true)
 end
