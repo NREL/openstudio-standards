@@ -37678,12 +37678,12 @@
             "ventilation_standard": "ASHRAE 62.1-1999"
           },
           "Corridor": {
-            "cooling_setpoint_sch": "MidriseApartment Apartment ClgSetp",
+            "cooling_setpoint_sch": "MidriseApartment Corridor ClgSetp",
             "elec_equip_per_area": 0.0,
             "elec_equip_sch": null,
             "gas_equip_per_area": null,
             "gas_equip_sch": null,
-            "heating_setpoint_sch": "MidriseApartment Apartment HtgSetp",
+            "heating_setpoint_sch": "MidriseApartment Corridor HtgSetp",
             "infiltration_per_area_ext": 0.0595,
             "infiltration_sch": "MidriseApartment Infil",
             "lighting_pri_spc_type": "Corridor/Transition",
@@ -40958,12 +40958,12 @@
             "ventilation_standard": "ASHRAE 62.1-1999"
           },
           "Corridor": {
-            "cooling_setpoint_sch": "MidriseApartment Apartment ClgSetp",
+            "cooling_setpoint_sch": "MidriseApartment Corridor ClgSetp",
             "elec_equip_per_area": 0.0,
             "elec_equip_sch": null,
             "gas_equip_per_area": null,
             "gas_equip_sch": null,
-            "heating_setpoint_sch": "MidriseApartment Apartment HtgSetp",
+            "heating_setpoint_sch": "MidriseApartment Corridor HtgSetp",
             "infiltration_per_area_ext": 0.0446,
             "infiltration_sch": "MidriseApartment Infil",
             "lighting_pri_spc_type": "Corridor/Transition",
@@ -44240,12 +44240,12 @@
             "ventilation_standard": "ASHRAE 62.1-2004"
           },
           "Corridor": {
-            "cooling_setpoint_sch": "MidriseApartment Apartment ClgSetp",
+            "cooling_setpoint_sch": "MidriseApartment Corridor ClgSetp",
             "elec_equip_per_area": 0.0,
             "elec_equip_sch": null,
             "gas_equip_per_area": null,
             "gas_equip_sch": null,
-            "heating_setpoint_sch": "MidriseApartment Apartment HtgSetp",
+            "heating_setpoint_sch": "MidriseApartment Corridor HtgSetp",
             "infiltration_per_area_ext": 0.0446,
             "infiltration_sch": "MidriseApartment Infil",
             "lighting_pri_spc_type": "Corridor/Transition",
@@ -47416,12 +47416,12 @@
             "ventilation_standard": "ASHRAE 62.1-2007"
           },
           "Corridor": {
-            "cooling_setpoint_sch": "MidriseApartment Apartment ClgSetp",
+            "cooling_setpoint_sch": "MidriseApartment Corridor ClgSetp",
             "elec_equip_per_area": 0.0,
             "elec_equip_sch": null,
             "gas_equip_per_area": null,
             "gas_equip_sch": null,
-            "heating_setpoint_sch": "MidriseApartment Apartment HtgSetp",
+            "heating_setpoint_sch": "MidriseApartment Corridor HtgSetp",
             "infiltration_per_area_ext": 0.0446,
             "infiltration_sch": "MidriseApartment Infil",
             "lighting_pri_spc_type": "Corridor/Transition",
@@ -50592,12 +50592,12 @@
             "ventilation_standard": "ASHRAE 62.1-1999"
           },
           "Corridor": {
-            "cooling_setpoint_sch": "MidriseApartment Apartment ClgSetp",
+            "cooling_setpoint_sch": "MidriseApartment Corridor ClgSetp",
             "elec_equip_per_area": 0.0,
             "elec_equip_sch": null,
             "gas_equip_per_area": null,
             "gas_equip_sch": null,
-            "heating_setpoint_sch": "MidriseApartment Apartment HtgSetp",
+            "heating_setpoint_sch": "MidriseApartment Corridor HtgSetp",
             "infiltration_per_area_ext": 0.2232,
             "infiltration_sch": "MidriseApartment Infil",
             "lighting_pri_spc_type": null,
@@ -53874,12 +53874,12 @@
             "ventilation_standard": "ASHRAE 62.1-1999"
           },
           "Corridor": {
-            "cooling_setpoint_sch": "MidriseApartment Apartment ClgSetp",
+            "cooling_setpoint_sch": "MidriseApartment Corridor ClgSetp",
             "elec_equip_per_area": 0.0,
             "elec_equip_sch": null,
             "gas_equip_per_area": null,
             "gas_equip_sch": null,
-            "heating_setpoint_sch": "MidriseApartment Apartment HtgSetp",
+            "heating_setpoint_sch": "MidriseApartment Corridor HtgSetp",
             "infiltration_per_area_ext": 0.0595,
             "infiltration_sch": "MidriseApartment Infil",
             "lighting_pri_spc_type": "Corridor/Transition",
@@ -57156,12 +57156,12 @@
             "ventilation_standard": "ASHRAE 62.1-1999"
           },
           "Corridor": {
-            "cooling_setpoint_sch": "MidriseApartment Apartment ClgSetp",
+            "cooling_setpoint_sch": "MidriseApartment Corridor ClgSetp",
             "elec_equip_per_area": 0.0,
             "elec_equip_sch": null,
             "gas_equip_per_area": null,
             "gas_equip_sch": null,
-            "heating_setpoint_sch": "MidriseApartment Apartment HtgSetp",
+            "heating_setpoint_sch": "MidriseApartment Corridor HtgSetp",
             "infiltration_per_area_ext": 0.2232,
             "infiltration_sch": "MidriseApartment Infil",
             "lighting_pri_spc_type": null,
