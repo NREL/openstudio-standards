@@ -2,6 +2,9 @@
 #using the information from the OpenStudio_space_types_and_standards json file
 #and the MasterSchedules.osm library
 
+#added path to support resoucrces in current path in ruby 2.0
+$: << File.dirname(__FILE__)
+
 require 'openstudio'
 require 'SpaceTypeGenerator.rb'
 require 'ConstructionSetGenerator.rb'
