@@ -34,7 +34,7 @@ require 'csv'
 #path to the xl file
 xlsx_path = "#{Dir.pwd}/COMNET_Appendix_C_Schedules.xlsx"
 #enable Excel
-xl = WIN32OLE::new('Excel.Application')
+xl = WIN32OLE.new('Excel.Application')
 #open workbook
 wb = xl.workbooks.open(xlsx_path)
 #specify worksheet
@@ -89,15 +89,15 @@ sch_st_cols.each do |sch_st_col|
 
   #determine the schedule limits type depending on schedule type
   case sch_nm
-  when "Occ":  
+  when "Occ"
     lim = frac_lim
-  when "LtAndPlg":   
+  when "LtAndPlg"
     lim = frac_lim
-  when "HVAC":
+  when "HVAC"
     lim = on_off_lim
-  when "SWH":
+  when "SWH"
     lim = frac_lim
-  when "Elev":   
+  when "Elev"
     lim = frac_lim
   end 
   
@@ -188,18 +188,19 @@ sch_st_cols.each do |sch_st_col|
   
   #assign the schedule to the correct place in the default schedule set
   case sch_nm
-  when "Occ":  
+  when "Occ"
     default_schedule_set.setNumberofPeopleSchedule(sch_ruleset)    
-  when "LtAndPlg":   
+  when "LtAndPlg"
     default_schedule_set.setLightingSchedule(sch_ruleset)    
     default_schedule_set.setElectricEquipmentSchedule(sch_ruleset)    
-  when "HVAC":
+  when "HVAC"
     default_schedule_set.setHoursofOperationSchedule(sch_ruleset)  
-  when "SWH":
+  when "SWH"
     default_schedule_set.setHotWaterEquipmentSchedule(sch_ruleset)   
-  when "Elev":   
+  when "Elev"
     default_schedule_set.setOtherEquipmentSchedule(sch_ruleset)
-  else puts "schedule type #{sch_nm} is not valid; skipping assingment"
+  else 
+    puts "schedule type #{sch_nm} is not valid; skipping assingment"
   end  
   
   # puts sch_ruleset
