@@ -21,3 +21,4 @@ The test directory is for automated tests that run on the output OpenStudio_Stan
 ## Development
 
 TODO: Move the building of the OpenStudio standards into a Rake task
+TODO: Remove windows dependencies
