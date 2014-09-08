@@ -93,9 +93,7 @@ Style/Next:
 Style/SpecialGlobalVars:
   Enabled: false
 
-# More Changes -- pulled from https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
-
-# Allow redundant returns
+# More Changes per DLM -- pulled from https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
 Style/RedundantReturn:
   Description: 'Do not use return where it is not required.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-explicit-return'

@@ -5,27 +5,27 @@ require 'json'
 path_to_standards_json = "#{Dir.pwd}/OpenStudio_Standards.json"
 path_to_master_schedules_library = "#{Dir.pwd}/Master_Schedules.osm"
 
-#load the data from the JSON file into a ruby hash
+# load the data from the JSON file into a ruby hash
 standards = {}
 temp = File.read(path_to_standards_json)
 standards = JSON.parse(temp)
-spc_types = standards["space_types"]
+spc_types = standards['space_types']
 
 vt = OpenStudio::OSVersion::VersionTranslator.new
-schedule_library = vt.loadModel(OpenStudio::Path.new(path_to_master_schedules_library)).get  
+schedule_library = vt.loadModel(OpenStudio::Path.new(path_to_master_schedules_library)).get
 
 def find_sch(data, key, model, not_found_names)
   value = data[key]
-  if not value
+  unless value
     puts "********#{key} is nil"
     return
   end
   find_sch_from_lib(value, model, not_found_names)
 end
-  
+
 def find_sch_from_lib(sch_name, model, not_found_names)
-  sch = model.getObjectByTypeAndName("OS_Schedule_Ruleset".to_IddObjectType, sch_name)
-  if not sch.empty?
+  sch = model.getObjectByTypeAndName('OS_Schedule_Ruleset'.to_IddObjectType, sch_name)
+  unless sch.empty?
     return nil
   end
   not_found_names << sch_name
@@ -42,20 +42,20 @@ for template in spc_types.keys.sort
       for spc_type in spc_types[template][clim][building_type].keys.sort
         puts "******#{spc_type}"
         data = spc_types[template][clim][building_type][spc_type]
-        find_sch(data, "lighting_sch", schedule_library, not_found_names)
-        find_sch(data, "occupancy_sch", schedule_library, not_found_names)
-        find_sch(data, "occupancy_activity_sch", schedule_library, not_found_names)
-        find_sch(data, "infiltration_sch", schedule_library, not_found_names)
-        find_sch(data, "elec_equip_sch", schedule_library, not_found_names)
-        find_sch(data, "gas_equip_sch", schedule_library, not_found_names)
-        find_sch(data, "heating_setpoint_sch", schedule_library, not_found_names)
-        find_sch(data, "cooling_setpoint_sch", schedule_library, not_found_names)
+        find_sch(data, 'lighting_sch', schedule_library, not_found_names)
+        find_sch(data, 'occupancy_sch', schedule_library, not_found_names)
+        find_sch(data, 'occupancy_activity_sch', schedule_library, not_found_names)
+        find_sch(data, 'infiltration_sch', schedule_library, not_found_names)
+        find_sch(data, 'elec_equip_sch', schedule_library, not_found_names)
+        find_sch(data, 'gas_equip_sch', schedule_library, not_found_names)
+        find_sch(data, 'heating_setpoint_sch', schedule_library, not_found_names)
+        find_sch(data, 'cooling_setpoint_sch', schedule_library, not_found_names)
       end
     end
   end
 end
 
-puts "NOT FOUND SCHEDULES"
+puts 'NOT FOUND SCHEDULES'
 not_found_names.uniq.each do |name|
   puts "Could not find schedule '#{name}'"
 end

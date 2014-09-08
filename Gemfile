@@ -1,6 +1,6 @@
-source "http://rubygems.org"
+source 'http://rubygems.org'
 
-gem "rake", "~> 10.3.2"
+gem 'rake', '~> 10.3.2'
 
 group :test do
   gem 'minitest', '~> 5.4.0'
@@ -8,4 +8,3 @@ group :test do
   gem 'rubocop-checkstyle_formatter', '~> 0.1.1'
   gem 'ci_reporter_minitest', '~> 1.0.0'
 end
-
