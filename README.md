@@ -17,3 +17,8 @@ The reference directory is for any reference materials, not used by the scripts 
 The scripts directory is for loose scripts which may be helpful but are not used in the main workflow
 
 The test directory is for automated tests that run on the output OpenStudio_Standards.json
+
+## Development
+
+TODO: Move the building of the OpenStudio standards into a Rake task
+TODO: Remove windows dependencies
