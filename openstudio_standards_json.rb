@@ -3,9 +3,10 @@
 
 require 'rubygems'
 require 'json'
-#require 'openstudio'
-#require 'win32ole'
+# require 'openstudio'
+# require 'win32ole'
 require 'rubyXL'
+
 class Hash
   def sort_by_key(recursive = false, &block)
     keys.sort(&block).reduce({}) do |seed, key|
@@ -26,9 +27,9 @@ module OpenStudio
       xlsx_path = "#{Dir.pwd}/OpenStudio_Standards.xlsx"
       # enable Excel
       # WIN32OLE.ole_initialize
-      #xl = WIN32OLE.new('Excel.Application')
+      # xl = WIN32OLE.new('Excel.Application')
       # open workbook
-      #wb = xl.workbooks.open(xlsx_path)
+      # wb = xl.workbooks.open(xlsx_path)
 
       wb = RubyXL::Parser.parse(xlsx_path)
       begin
@@ -73,13 +74,13 @@ module OpenStudio
       worksheet = workbook['Templates']
 
       # Add new headers as needed.
-      header = ["Name", "Notes"]
+      header = %w(Name Notes)
 
       # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
       data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
 
       # define the columns where the data live in the spreadsheet
-      standard_col = "Name"
+      standard_col = 'Name'
 
       # create a nested hash to store all the data
       templates = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
@@ -88,7 +89,7 @@ module OpenStudio
       data[:table].each do |row|
         # If a value does not exist in the cell, then it doesn't exist in the table. Accessor will return nil
         template = row[standard_col].strip
-        templates[template]['notes'] = row["Notes"]
+        templates[template]['notes'] = row['Notes']
       end
 
       return templates
@@ -102,13 +103,13 @@ module OpenStudio
       worksheet = workbook['Standards']
 
       # Add new headers as needed.
-      header = ["Name"]
+      header = ['Name']
 
       # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
       data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
 
       # define the columns where the data live in the spreadsheet
-      standard_col = "Name"
+      standard_col = 'Name'
 
       # create a nested hash to store all the data
       standards = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
@@ -131,16 +132,16 @@ module OpenStudio
       worksheet = workbook['ClimateZones']
 
       # Add new headers as needed.
-      header = ["Name", "Standard", "Representative City", "BCL Weather Component ID"]
+      header = ['Name', 'Standard', 'Representative City', 'BCL Weather Component ID']
 
       # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
       data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
 
       # define the columns where the data live in the spreadsheet
-      climate_zone_col = "Name"
-      standard_col = "Standard"
-      representative_city_col = "Representative City"
-      bcl_weather_component_id_col = "BCL Weather Component ID"
+      climate_zone_col = 'Name'
+      standard_col = 'Standard'
+      representative_city_col = 'Representative City'
+      bcl_weather_component_id_col = 'BCL Weather Component ID'
 
       # create a nested hash to store all the data
       climate_zones = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
@@ -156,7 +157,7 @@ module OpenStudio
       return climate_zones
     end
 
-# read the ClimateZoneSets tab and put into a Hash
+    # read the ClimateZoneSets tab and put into a Hash
     def get_climate_zone_sets_hash(workbook)
       # compound key for this sheet is [climate_zone_set]
 
@@ -164,14 +165,14 @@ module OpenStudio
       worksheet = workbook['ClimateZoneSets']
 
       # Add new headers as needed.
-      header = ["Name", "Climate Zone"]
+      header = ['Name', 'Climate Zone']
 
       # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
       data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
 
       # define the columns where the data live in the spreadsheet
-      climate_zone_set_col = "Name"
-      climate_zone_col_prefix = "Climate Zone"
+      climate_zone_set_col = 'Name'
+      climate_zone_col_prefix = 'Climate Zone'
 
       # create a nested hash to store all the data
       climate_zone_sets = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
@@ -186,7 +187,7 @@ module OpenStudio
       return climate_zone_sets
     end
 
-# read the SpaceTypes tab and put into a Hash
+    # read the SpaceTypes tab and put into a Hash
     def get_space_types_hash(workbook)
       # compound key for this sheet is [template][climate_zone_set][building_type][space_type]
 
@@ -194,61 +195,61 @@ module OpenStudio
       worksheet = workbook['SpaceTypes']
 
       # Add new headers as needed.
-      header = ["Template", "Climate Zone Set", "BuildingType", "SpaceType", "R_G_B", "Lighting Standard", "Lighting Primary Space Type"]
+      header = ['Template', 'Climate Zone Set', 'BuildingType', 'SpaceType', 'R_G_B', 'Lighting Standard', 'Lighting Primary Space Type']
 
       # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
       data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
 
       # define the columns where the data live in the spreadsheet
       # basic information
-      template_col = "Template"
-      climate_col = "Climate Zone Set"
-      building_type_col = "BuildingType"
-      space_type_col = "SpaceType"
+      template_col = 'Template'
+      climate_col = 'Climate Zone Set'
+      building_type_col = 'BuildingType'
+      space_type_col = 'SpaceType'
 
       # RGB color
-      rgb_col = "R_G_B"
+      rgb_col = 'R_G_B'
 
       # lighting
-      lighting_standard_col = "Lighting Standard"
-      lighting_pri_spc_type_col = "Lighting Primary Space Type"
-      lighting_sec_spc_type_col = "Lighting Secondary Space Type"
-      lighting_w_per_area_col = "STD Lighting (W/ft^2)"
-      lighting_w_per_person_col = "STD Lighting (W/person)"
-      lighting_w_per_linear_col = "STD Lighting (W/ft)"
-      lighting_sch_col = "Lighting Sch"
+      lighting_standard_col = 'Lighting Standard'
+      lighting_pri_spc_type_col = 'Lighting Primary Space Type'
+      lighting_sec_spc_type_col = 'Lighting Secondary Space Type'
+      lighting_w_per_area_col = 'STD Lighting (W/ft^2)'
+      lighting_w_per_person_col = 'STD Lighting (W/person)'
+      lighting_w_per_linear_col = 'STD Lighting (W/ft)'
+      lighting_sch_col = 'Lighting Sch'
 
       # ventilation
-      ventilation_standard_col = "Ventilation Standard"
-      ventilation_pri_spc_type_col = "Ventilation Primary Space Type"
-      ventilation_sec_spc_type_col = "Ventilation Secondary Space Type"
-      ventilation_per_area_col = "STD Ventilation (ft^3/min*ft^2)"
-      ventilation_per_person_col = "STD Ventilation (ft^3/min*person)"
-      ventilation_ach_col = "STD Ventilation (ach)"
+      ventilation_standard_col = 'Ventilation Standard'
+      ventilation_pri_spc_type_col = 'Ventilation Primary Space Type'
+      ventilation_sec_spc_type_col = 'Ventilation Secondary Space Type'
+      ventilation_per_area_col = 'STD Ventilation (ft^3/min*ft^2)'
+      ventilation_per_person_col = 'STD Ventilation (ft^3/min*person)'
+      ventilation_ach_col = 'STD Ventilation (ach)'
       # ventilation_sch_col = 25 #TODO: David where did this col go?
 
       # occupancy
-      occupancy_per_area_col = "OSM Occupancy (people/1000 ft^2)2"
-      occupancy_sch_col = "Occupancy Sch"
-      occupancy_activity_sch_col = "Activity Sch"
+      occupancy_per_area_col = 'OSM Occupancy (people/1000 ft^2)2'
+      occupancy_sch_col = 'Occupancy Sch'
+      occupancy_activity_sch_col = 'Activity Sch'
 
       # infiltration
-      infiltration_per_area_ext_col = "Infiltration (ft^3/min*ft^2 ext)"
-      infiltration_sch_col = "Infiltration Sch"
+      infiltration_per_area_ext_col = 'Infiltration (ft^3/min*ft^2 ext)'
+      infiltration_sch_col = 'Infiltration Sch'
 
       # gas equipment
-      gas_equip_per_area_col = "OSM Gas Equipment (Btu/hr*ft^2)"
+      gas_equip_per_area_col = 'OSM Gas Equipment (Btu/hr*ft^2)'
       # TODO: read fraction fields
-      gas_equip_sch_col = "Gas Equipment Sch"
+      gas_equip_sch_col = 'Gas Equipment Sch'
 
       # electric equipment
-      elec_equip_per_area_col = "OSM Electric Equipment (W/ft^2)"
+      elec_equip_per_area_col = 'OSM Electric Equipment (W/ft^2)'
       # TODO: read fraction fields
-      elec_equip_sch_col = "Electric Equipment Sch"
+      elec_equip_sch_col = 'Electric Equipment Sch'
 
       # thermostats
-      heating_setpoint_sch_col = "Heating Setpoint Schedule"
-      cooling_setpoint_sch_col = "Cooling Setpoint Schedule"
+      heating_setpoint_sch_col = 'Heating Setpoint Schedule'
+      cooling_setpoint_sch_col = 'Cooling Setpoint Schedule'
 
       # TODO: read service hot water
 
@@ -318,17 +319,17 @@ module OpenStudio
       worksheet = workbook['ConstructionSets']
 
       # Add new headers as needed.
-      header = ["Template", "Building Type", "Space Type", "Climate Zone Set", "Exterior Walls"]
+      header = ['Template', 'Building Type', 'Space Type', 'Climate Zone Set', 'Exterior Walls']
 
       # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
       data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
 
       # define the columns where the data live in the spreadsheet
       # basic information
-      template_col = "Template"
-      building_type_col = "Building Type"
-      space_type_col = "Space Type"
-      climate_col = "Climate Zone Set"
+      template_col = 'Template'
+      building_type_col = 'Building Type'
+      space_type_col = 'Space Type'
+      climate_col = 'Climate Zone Set'
 
       # exterior surfaces
       exterior_wall_col = 'Exterior Walls'
@@ -419,7 +420,7 @@ module OpenStudio
       return construction_sets
     end
 
-# read the Constructions tab and put into a Hash
+    # read the Constructions tab and put into a Hash
     def get_constructions_hash(workbook)
       # compound key for this sheet is [construction]
 
@@ -427,7 +428,7 @@ module OpenStudio
       worksheet = workbook['Constructions']
 
       # Add new headers as needed.
-      header = ["Name", "Construction Standard", "Climate Zone Set", "Intended Surface Type", "Standards Construction Type", "Material 1"]
+      header = ['Name', 'Construction Standard', 'Climate Zone Set', 'Intended Surface Type', 'Standards Construction Type', 'Material 1']
 
       # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
       data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
@@ -468,7 +469,7 @@ module OpenStudio
       worksheet = workbook['Materials']
 
       # Add new headers as needed.
-      header = ["Name", "Material Type", "Roughness"]
+      header = ['Name', 'Material Type', 'Roughness']
 
       # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
       data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
@@ -568,4 +569,3 @@ module OpenStudio
     end
   end
 end
-
