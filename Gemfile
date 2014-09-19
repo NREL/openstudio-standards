@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rake', '~> 10.3.2'
+gem 'rubyXL', '~> 3.2.3'
 
 group :test do
   gem 'minitest', '~> 5.4.0'

@@ -7,7 +7,7 @@ Standards data is defined in a spreadsheet and then exported to JSON format via 
 The current workflow to add information to the OpenStudio standard is to:
 
 1. Edit the OpenStudio_Standards.xlsx and Master_Schedules.osm files
-2. Run the ExportStandardsToJSON.rb script to create OpenStudio_Standards.json
+2. Run `rake build:standards` to create OpenStudio_Standards.json
 3. Validate the JSON export using the TestScheduleLinks.rb and TestConstructionSets.rb scripts
 4. The files SpaceTypeGenerator.rb and ConstructionSetGenerator.rb contain classes to read OpenStudio_Standards.json
 5. Run CreateTemplateModels.rb this will generate new OSM template files 

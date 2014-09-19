@@ -3,6 +3,17 @@ Bundler.setup
 
 require 'rake'
 
+namespace :build do
+
+  desc 'Create Standards JSON'
+  task :standards do
+
+    require_relative 'openstudio_standards_json'
+
+    a = OpenStudio::StandardsJson.create
+  end
+end
+
 require 'rubocop/rake_task'
 desc 'Run RuboCop for Static Code Analysis'
 RuboCop::RakeTask.new(:rubocop) do |task|
