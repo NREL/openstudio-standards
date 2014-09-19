@@ -2,3 +2,5 @@
 .DS_Store
 templates
 Gemfile.lock
+Berksfile.lock
+.vagrant
