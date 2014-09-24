@@ -30,9 +30,9 @@ module OpenStudio
         standards = {}
         standards['file_version'] = @version
         standards['templates'] = get_templates_hash(wb)
-        standards['standards'] = get_standards_hash(wb)
         standards['climate_zones'] = get_climate_zones_hash(wb)
         standards['climate_zone_sets'] = get_climate_zone_sets_hash(wb)
+        standards['standards'] = get_standards_hash(wb)
         standards['space_types'] = get_space_types_hash(wb)
         standards['construction_sets'] = get_construction_sets_hash(wb)
         standards['constructions'] = get_constructions_hash(wb)
@@ -40,22 +40,21 @@ module OpenStudio
 
         # create any other views that would be useful
 
-        sorted_standards = standards.sort_by_key(true) { |x, y| x.to_s <=> y.to_s }
-
         if @version == 1
+          standards = standards.sort_by_key(true) { |x, y| x.to_s <=> y.to_s }
+
           # write the space types hash to a JSON file
           save_file = 'build/OpenStudio_Standards.json'
           File.open(save_file, 'w') do |file|
             # file << standards.to_json
-            file << JSON.pretty_generate(sorted_standards)
+            file << JSON.pretty_generate(standards)
           end
           puts "Successfully generated #{save_file}"
         elsif @version == 2
-          # Do something for version 2
           save_file = 'build/openstudio_standards_version_2.json'
           File.open(save_file, 'w') do |file|
             # file << standards.to_json
-            file << JSON.pretty_generate(sorted_standards)
+            file << JSON.pretty_generate(standards)
           end
           puts "Successfully generated #{save_file}"
 
@@ -793,7 +792,6 @@ module OpenStudio
       else
         fail "Don't know how to process #{__method__} for version #{@version}"
       end
-
 
       return materials
     end
