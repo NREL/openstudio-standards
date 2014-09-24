@@ -8,10 +8,12 @@ The current workflow to add information to the OpenStudio standard is to:
 
 1. Edit the resources/OpenStudio_Standards.xlsx and resources/Master_Schedules.osm files
 1. Run `rake build:standards` to create OpenStudio_Standards.json. If this is the first time running, then run the following.
+
     ```
     bundle
     rake build:standards
     ```
+    
 1. Validate the JSON export using the TestScheduleLinks.rb and TestConstructionSets.rb scripts
 1. The files SpaceTypeGenerator.rb and ConstructionSetGenerator.rb contain classes to read OpenStudio_Standards.json
 1. Run CreateTemplateModels.rb this will generate new OSM template files
