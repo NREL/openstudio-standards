@@ -28741,6 +28741,7 @@
       "standards_construction_type": null
     }
   },
+  "file_version": 1,
   "materials": {
     "1/2IN Gypsum": {
       "back_side_infrared_hemispherical_emissivity": null,

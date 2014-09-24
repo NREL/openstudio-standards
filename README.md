@@ -7,7 +7,7 @@ Standards data is defined in a spreadsheet and then exported to JSON format via 
 The current workflow to add information to the OpenStudio standard is to:
 
 1. Edit the resources/OpenStudio_Standards.xlsx and resources/Master_Schedules.osm files
-1. Run `rake build:standards` to create OpenStudio_Standards.json. If this is the first time running, then run the following.
+1. Run `rake build:standards` to create OpenStudio_Standards.json. If this is the first time running, then run the following:
 
     ```
     bundle
@@ -17,6 +17,7 @@ The current workflow to add information to the OpenStudio standard is to:
 1. Validate the JSON export using the TestScheduleLinks.rb and TestConstructionSets.rb scripts
 1. The files SpaceTypeGenerator.rb and ConstructionSetGenerator.rb contain classes to read OpenStudio_Standards.json
 1. Run CreateTemplateModels.rb this will generate new OSM template files
+1. Run `rake build:standards[2]` to create openstudio_standards_version_2.json
 
 The reference directory is for any reference materials, not used by the scripts in the main workflow
 
@@ -26,5 +27,9 @@ The test directory is for automated tests that run on the output OpenStudio_Stan
 
 ## Development
 
-TODO: Move the building of the OpenStudio standards into a Rake task
-TODO: Remove windows dependencies
+1. Change all code to use version 2 of the standards JSON format
+1. Move the building of the OpenStudio templates into a Rake task
+1. Move the tests into a Rake task
+1. Move SpaceTypeGenerator and ConstructionSetGenerator into the lib directory
+1. Update all Ruby code to conform to Rubocop style rules
+1. Add additional export formats such as gbXML
