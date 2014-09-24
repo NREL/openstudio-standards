@@ -3,8 +3,6 @@
 
 require 'rubygems'
 require 'json'
-# require 'openstudio'
-# require 'win32ole'
 require 'rubyXL'
 
 class Hash
@@ -21,39 +19,42 @@ end
 
 module OpenStudio
   class StandardsJson
-    def initialize
-      # load in the space types
-      # path to the space types xl file
-      xlsx_path = "#{Dir.pwd}/OpenStudio_Standards.xlsx"
-      # enable Excel
-      # WIN32OLE.ole_initialize
-      # xl = WIN32OLE.new('Excel.Application')
-      # open workbook
-      # wb = xl.workbooks.open(xlsx_path)
 
+
+    def initialize(version=1, excel_file=nil)
+
+      # load in the space types
+      @version = version
+      xlsx_path = excel_file ? excel_file : 'resources/OpenStudio_Standards.xlsx'
+      
       wb = RubyXL::Parser.parse(xlsx_path)
       begin
-        standards = {}
-        standards['templates'] = get_templates_hash(wb)
-        standards['standards'] = get_standards_hash(wb)
-        standards['climate_zones'] = get_climate_zones_hash(wb)
-        standards['climate_zone_sets'] = get_climate_zone_sets_hash(wb)
-        standards['space_types'] = get_space_types_hash(wb)
-        standards['construction_sets'] = get_construction_sets_hash(wb)
-        standards['constructions'] = get_constructions_hash(wb)
-        standards['materials'] = get_materials_hash(wb)
+        if @version == 1
+          standards = {}
+          standards['templates'] = get_templates_hash(wb)
+          standards['standards'] = get_standards_hash(wb)
+          standards['climate_zones'] = get_climate_zones_hash(wb)
+          standards['climate_zone_sets'] = get_climate_zone_sets_hash(wb)
+          standards['space_types'] = get_space_types_hash(wb)
+          standards['construction_sets'] = get_construction_sets_hash(wb)
+          standards['constructions'] = get_constructions_hash(wb)
+          standards['materials'] = get_materials_hash(wb)
 
-        # TODO: create any other views that would be useful
+          # create any other views that would be useful
 
-        sorted_standards = standards.sort_by_key(true) { |x, y| x.to_s <=> y.to_s }
+          sorted_standards = standards.sort_by_key(true) { |x, y| x.to_s <=> y.to_s }
 
-        # write the space types hash to a JSON file
-        File.open("#{Dir.pwd}/OpenStudio_Standards.json", 'w') do |file|
-          # file << standards.to_json
-          file << JSON.pretty_generate(sorted_standards)
+          # write the space types hash to a JSON file
+          save_file = 'build/OpenStudio_Standards.json'
+          File.open(save_file, 'w') do |file|
+            # file << standards.to_json
+            file << JSON.pretty_generate(sorted_standards)
+          end
+          puts "Successfully generated #{save_file}"
+        elsif @version == 2
+          # Do something for version 2
+          puts 'This is not yet implemented'
         end
-        puts 'Successfully generated OpenStudio_Standards.json'
-
       rescue => e
         puts e.message
         puts e.backtrace.join "\n"
@@ -62,8 +63,8 @@ module OpenStudio
       end
     end
 
-    def self.create
-      return OpenStudio::StandardsJson.new
+    def self.create(version=1, excel_file=nil)
+      return OpenStudio::StandardsJson.new version, excel_file
     end
 
     # read the Templates tab and put into a Hash

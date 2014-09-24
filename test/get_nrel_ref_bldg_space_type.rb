@@ -102,7 +102,7 @@ unless check_data == 0.36
 end
 
 # load up the osm with all the reference building schedules
-schedule_library_path = OpenStudio::Path.new("#{Dir.pwd}/lib/Master_Schedules.osm")
+schedule_library_path = OpenStudio::Path.new("resources/Master_Schedules.osm")
 $schedule_library = OpenStudio::Model::Model.load(schedule_library_path).get
 
 # make a new openstudio model to hold the space type

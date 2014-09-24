@@ -9,8 +9,8 @@ require 'openstudio'
 require 'SpaceTypeGenerator.rb'
 require 'ConstructionSetGenerator.rb'
 
-path_to_standards_json = "#{Dir.pwd}/OpenStudio_Standards.json"
-path_to_master_schedules_library = "#{Dir.pwd}/Master_Schedules.osm"
+path_to_standards_json = "build/OpenStudio_Standards.json"
+path_to_master_schedules_library = "resources/Master_Schedules.osm"
 
 # create generators
 space_type_generator = SpaceTypeGenerator.new(path_to_standards_json, path_to_master_schedules_library)
