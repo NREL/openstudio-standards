@@ -28148,13 +28148,13 @@ OS:Schedule:Day,
   0.9,                                    !- Value Until Time 4
   18,                                     !- Hour 5
   0,                                      !- Minute 5
-  0.7,                                    !- Value Until Time 5
+  0.5,                                    !- Value Until Time 5
   20,                                     !- Hour 6
   0,                                      !- Minute 6
-  0.5,                                    !- Value Until Time 6
+  0.3,                                    !- Value Until Time 6
   22,                                     !- Hour 7
   0,                                      !- Minute 7
-  0.3,                                    !- Value Until Time 7
+  0.2,                                    !- Value Until Time 7
   23,                                     !- Hour 8
   0,                                      !- Minute 8
   0.1,                                    !- Value Until Time 8
@@ -28234,21 +28234,21 @@ OS:Schedule:Day,
   Office Bldg Light Rule 2 Day Schedule,  ! Name
   {0b8a95eb-9aa8-43a9-9736-998a36816f12}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
-  6,                                      ! Hour 1
-  0,                                      ! Minute 1
-  0.050000000000000003,                   ! Value Until Time 1
-  8,                                      ! Hour 2
-  0,                                      ! Minute 2
-  0.10000000000000001,                    ! Value Until Time 2
-  14,                                     ! Hour 3
-  0,                                      ! Minute 3
-  0.5,                                    ! Value Until Time 3
-  17,                                     ! Hour 4
-  0,                                      ! Minute 4
-  0.14999999999999999,                    ! Value Until Time 4
-  24,                                     ! Hour 5
-  0,                                      ! Minute 5
-  0.050000000000000003;                   ! Value Until Time 5
+  6,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.05,                                   !- Value Until Time 1
+  8,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.1,                                    !- Value Until Time 2
+  12,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.3,                                    !- Value Until Time 3
+  17,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.15,                                   !- Value Until Time 4
+  24,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.05;                                   !- Value Until Time 5
 
 OS:Schedule:Ruleset,
   {b57cd9b4-9a2a-4588-a5c6-ede72e36d9ef}, ! Handle
