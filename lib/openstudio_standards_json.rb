@@ -712,6 +712,9 @@ module OpenStudio
       back_side_infrared_hemispherical_emissivity_col = 'Back Side Infrared Hemispherical Emissivity'
       dirt_correction_factor_for_solar_and_visible_transmittance_col = 'Dirt Correction Factor For Solar And Visible Transmittance'
       solar_diffusing_col = 'Solar Diffusing'
+      material_standard_col = 'Material Standard'
+      code_category_col = 'Code Category'
+      code_identifier_col = 'Code Identifier'
 
 
       materials = nil
@@ -750,6 +753,9 @@ module OpenStudio
           materials[material]['back_side_infrared_hemispherical_emissivity'] = return_cell_value(row, back_side_infrared_hemispherical_emissivity_col)
           materials[material]['dirt_correction_factor_for_solar_and_visible_transmittance'] = return_cell_value(row, dirt_correction_factor_for_solar_and_visible_transmittance_col)
           materials[material]['solar_diffusing'] = return_cell_value(row, solar_diffusing_col, 'boolean')
+          materials[material]['material_standard'] = return_cell_value(row, material_standard_col)
+          materials[material]['code_category'] = return_cell_value(row, code_category_col)
+          materials[material]['code_identifier'] = return_cell_value(row, code_identifier_col)
         end
       elsif @version == 2
         materials = []
@@ -786,6 +792,9 @@ module OpenStudio
           h['back_side_infrared_hemispherical_emissivity'] = return_cell_value(row, back_side_infrared_hemispherical_emissivity_col)
           h['dirt_correction_factor_for_solar_and_visible_transmittance'] = return_cell_value(row, dirt_correction_factor_for_solar_and_visible_transmittance_col)
           h['solar_diffusing'] = return_cell_value(row, solar_diffusing_col, 'boolean')
+          h['material_standard'] = return_cell_value(row, material_standard_col)
+          h['code_category'] = return_cell_value(row, code_category_col)
+          h['code_identifier'] = return_cell_value(row, code_identifier_col)
 
           materials << h
         end
