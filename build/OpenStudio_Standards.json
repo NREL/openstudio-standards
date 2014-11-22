@@ -7113,6 +7113,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 1",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 1",
+            "exterior_overhead_door": null,
+            "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 1",
+            "exterior_skylight": null,
+            "exterior_wall": "ASHRAE 90.1-2010 ExtWall WoodFrame ClimateZone 1-4",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -7491,6 +7519,34 @@
             "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
             "exterior_skylight": null,
             "exterior_wall": "ASHRAE 90.1-2010 ExtWall SteelFrame ClimateZone alt-res 2-6",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 2",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 2",
+            "exterior_overhead_door": null,
+            "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
+            "exterior_skylight": null,
+            "exterior_wall": "ASHRAE 90.1-2010 ExtWall WoodFrame ClimateZone 1-4",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -7961,6 +8017,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 3",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 3",
+            "exterior_overhead_door": null,
+            "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
+            "exterior_skylight": null,
+            "exterior_wall": "ASHRAE 90.1-2010 ExtWall WoodFrame ClimateZone 1-4",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -8311,6 +8395,34 @@
             "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
             "exterior_skylight": null,
             "exterior_wall": "ASHRAE 90.1-2010 ExtWall SteelFrame ClimateZone alt-res 2-6",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 3",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 3",
+            "exterior_overhead_door": null,
+            "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
+            "exterior_skylight": null,
+            "exterior_wall": "ASHRAE 90.1-2010 ExtWall WoodFrame ClimateZone 1-4",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -8693,6 +8805,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 4-6",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 4-6",
+            "exterior_overhead_door": null,
+            "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
+            "exterior_skylight": null,
+            "exterior_wall": "ASHRAE 90.1-2010 ExtWall WoodFrame ClimateZone 1-4",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -8906,6 +9046,34 @@
             "ground_contact_ceiling": "ExtSlab 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlab 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlab 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 4-6",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 4-6",
+            "exterior_overhead_door": null,
+            "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
+            "exterior_skylight": null,
+            "exterior_wall": "ASHRAE 90.1-2010 ExtWall WoodFrame ClimateZone 5",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
             "interior_ceiling": "Interior Ceiling",
             "interior_door": "Interior Door",
             "interior_fixed_window": "Interior Window",
@@ -9315,6 +9483,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 4-6",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 4-6",
+            "exterior_overhead_door": null,
+            "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
+            "exterior_skylight": null,
+            "exterior_wall": "ASHRAE 90.1-2010 ExtWall WoodFrame ClimateZone 6-7",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "SuperMarket": {
           "": {
             "building_shading": null,
@@ -9665,6 +9861,34 @@
             "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
             "exterior_skylight": null,
             "exterior_wall": "ASHRAE 90.1-2010 ExtWall SteelFrame ClimateZone alt-res 7",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 7-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 7-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
+            "exterior_skylight": null,
+            "exterior_wall": "ASHRAE 90.1-2010 ExtWall WoodFrame ClimateZone 6-7",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -10087,6 +10311,34 @@
             "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
             "exterior_skylight": null,
             "exterior_wall": "ASHRAE 90.1-2010 ExtWall SteelFrame ClimateZone alt-res 8",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 7-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "ASHRAE 90.1-2010 ExtWindow Metal ClimateZone 7-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "ASHRAE 90.1-2010 ExtRoof IEAD ClimateZone 2-8",
+            "exterior_skylight": null,
+            "exterior_wall": "ASHRAE 90.1-2010 ExtWall WoodFrame ClimateZone 8",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -10527,6 +10779,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 1-2",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 1-2",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 1",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 1",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -10933,6 +11213,34 @@
             "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 2a",
             "exterior_skylight": null,
             "exterior_wall": "CBECS 1980-2004 ExtWall SteelFrame ClimateZone 2a",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 1-2",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 1-2",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 2a",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 2a",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -11371,6 +11679,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 1-2",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 1-2",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 2b",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 2b",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -11777,6 +12113,34 @@
             "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 3a",
             "exterior_skylight": null,
             "exterior_wall": "CBECS 1980-2004 ExtWall SteelFrame ClimateZone 3a",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 3a",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 3a",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 3a",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 3a",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -12215,6 +12579,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 3b LAX",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 3b LAX",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 3b LAX",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 3b LAX",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -12593,6 +12985,34 @@
             "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 3c",
             "exterior_skylight": null,
             "exterior_wall": "CBECS 1980-2004 ExtWall SteelFrame ClimateZone 3c",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone alt-lrgoff hosp 1-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone alt-lrgoff hosp 1-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 3c",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 3c",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -13031,6 +13451,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 4a",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 4a",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 4a",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 4a",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -13437,6 +13885,34 @@
             "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 4b",
             "exterior_skylight": null,
             "exterior_wall": "CBECS 1980-2004 ExtWall SteelFrame ClimateZone 4b",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 4b",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 4b",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 4b",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 4b",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -13875,6 +14351,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 4c",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 4c",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 4c",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 4c-5a",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -14281,6 +14785,34 @@
             "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 5a",
             "exterior_skylight": null,
             "exterior_wall": "CBECS 1980-2004 ExtWall SteelFrame ClimateZone 5",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 5",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 5",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 5a",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 4c-5a",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -14719,6 +15251,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 5",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 5",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 5b",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 5b",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -15125,6 +15685,34 @@
             "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 6a",
             "exterior_skylight": null,
             "exterior_wall": "CBECS 1980-2004 ExtWall SteelFrame ClimateZone 6a",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 6",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 6",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 6a",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 6a",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -15563,6 +16151,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone alt-lrgoff hosp 1-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone alt-lrgoff hosp 1-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 6b",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 6b",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -15985,6 +16601,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone 7",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone 7",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 7",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 7",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -16391,6 +17035,34 @@
             "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 8",
             "exterior_skylight": null,
             "exterior_wall": "CBECS 1980-2004 ExtWall SteelFrame ClimateZone 8",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS 1980-2004 ExtWindow ClimateZone alt-lrgoff hosp 1-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS 1980-2004 ExtWindow ClimateZone alt-lrgoff hosp 1-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS 1980-2004 ExtRoof IEAD ClimateZone 8",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS 1980-2004 ExtWall Mass ClimateZone 8",
             "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
@@ -19633,6 +20305,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 1-3",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 1-3b",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "SuperMarket": {
           "": {
             "building_shading": null,
@@ -20059,6 +20759,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 1-3",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 1-3b",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "SuperMarket": {
           "": {
             "building_shading": null,
@@ -20244,6 +20972,34 @@
             "ground_contact_ceiling": "ExtSlab 4in ClimateZone 1-8",
             "ground_contact_floor": "ExtSlab 4in ClimateZone 1-8",
             "ground_contact_wall": "ExtSlab 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 1-3",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 1-3b",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
             "interior_ceiling": "Interior Ceiling",
             "interior_door": "Interior Door",
             "interior_fixed_window": "Interior Window",
@@ -20596,6 +21352,34 @@
           }
         },
         "SmallHotel": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 1-3",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 3c",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
           "": {
             "building_shading": null,
             "exterior_door": "Exterior Door",
@@ -21045,6 +21829,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 4a",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 4a",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -21440,6 +22252,34 @@
           }
         },
         "SmallHotel": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 4b",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 4b",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
           "": {
             "building_shading": null,
             "exterior_door": "Exterior Door",
@@ -21889,6 +22729,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 1-4",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 4c",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 4c",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -22284,6 +23152,34 @@
           }
         },
         "SmallHotel": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 5-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 5-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 5a",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 5a",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
           "": {
             "building_shading": null,
             "exterior_door": "Exterior Door",
@@ -22733,6 +23629,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone alt-lrgoff hosp 1-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone alt-lrgoff hosp 1-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 5b",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 5b",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -23128,6 +24052,34 @@
           }
         },
         "SmallHotel": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 5-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 5-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 6",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 6",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
           "": {
             "building_shading": null,
             "exterior_door": "Exterior Door",
@@ -23577,6 +24529,34 @@
             "tubular_daylight_dome": "Interior Window"
           }
         },
+        "SmallOffice": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 5-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 5-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 7",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 7",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
         "StripMall": {
           "": {
             "building_shading": null,
@@ -23972,6 +24952,34 @@
           }
         },
         "SmallHotel": {
+          "": {
+            "building_shading": null,
+            "exterior_door": "Exterior Door",
+            "exterior_fixed_window": "CBECS Before-1980 ExtWindow ClimateZone 5-8",
+            "exterior_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "exterior_glass_door": null,
+            "exterior_operable_window": "CBECS Before-1980 ExtWindow ClimateZone 5-8",
+            "exterior_overhead_door": null,
+            "exterior_roof": "CBECS Before-1980 ExtRoof IEAD ClimateZone 8",
+            "exterior_skylight": null,
+            "exterior_wall": "CBECS Before-1980 ExtWall SteelFrame ClimateZone 8",
+            "ground_contact_ceiling": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_floor": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "ground_contact_wall": "ExtSlabCarpet 4in ClimateZone 1-8",
+            "interior_ceiling": "Interior Ceiling",
+            "interior_door": "Interior Door",
+            "interior_fixed_window": "Interior Window",
+            "interior_floor": "Interior Floor",
+            "interior_operable_window": "Interior Window",
+            "interior_partition": "Interior Partition",
+            "interior_wall": "Interior Wall",
+            "site_shading": null,
+            "space_shading": null,
+            "tubular_daylight_diffuser": "Interior Window",
+            "tubular_daylight_dome": "Interior Window"
+          }
+        },
+        "SmallOffice": {
           "": {
             "building_shading": null,
             "exterior_door": "Exterior Door",
