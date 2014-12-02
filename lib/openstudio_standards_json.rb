@@ -715,7 +715,13 @@ module OpenStudio
       material_standard_col = 'Material Standard'
       code_category_col = 'Code Category'
       code_identifier_col = 'Code Identifier'
-
+      framing_material_col = 'FramingMaterial'
+      framing_configuration_col = 'Framing Configuration'
+      framing_depth_col = 'Framing Depth'
+      framing_size_col = 'FramingSize'
+      cavity_insulation_col = 'CavityInsulation (R-XX)'	
+      assembly_r_value_col = 'Assembly R Value (h-ft2.F/Btu)'	
+      material_standard_source_col = 'Table 2013 JA4-10' # TODO, this is wrong
 
       materials = nil
       if @version == 1
@@ -756,6 +762,14 @@ module OpenStudio
           materials[material]['material_standard'] = row[material_standard_col]
           materials[material]['code_category'] = row[code_category_col]
           materials[material]['code_identifier'] = row[code_identifier_col]
+          materials[material]['framing_material'] = row[framing_material_col]
+          materials[material]['framing_configuration'] = row[framing_configuration_col]
+          materials[material]['framing_depth'] = row[framing_depth_col]
+          materials[material]['framing_size'] = row[framing_size_col]
+          materials[material]['cavity_insulation'] = row[cavity_insulation_col]
+          materials[material]['assembly_r_value'] = row[assembly_r_value_col]
+          materials[material]['material_standard_source'] = row[material_standard_source_col]
+
         end
       elsif @version == 2
         materials = []
@@ -795,7 +809,15 @@ module OpenStudio
           h['material_standard'] = row[material_standard_col]
           h['code_category'] = row[code_category_col]
           h['code_identifier'] = row[code_identifier_col]
-
+          h['framing_material'] = row[framing_material_col]
+          h['framing_configuration'] = row[framing_configuration_col]
+          h['framing_depth'] = row[framing_depth_col]
+          h['framing_size'] = row[framing_size_col]
+          h['cavity_insulation'] = row[cavity_insulation_col]
+          h['assembly_r_value'] = row[assembly_r_value_col]
+          h['code_identifier'] = row[code_identifier_col]
+          h['material_standard_source'] = row[material_standard_source_col]
+          
           materials << h
         end
       else
