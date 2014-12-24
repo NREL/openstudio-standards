@@ -29,7 +29,10 @@ construction_sets = standards['construction_sets']
 template_models = {}
 master_template = OpenStudio::Model::Model.new
 minimal_template = OpenStudio::Model::Model.new
-construction_set_generator.generate_all_constructions(master_template)
+cec_template = OpenStudio::Model::Model.new
+
+#construction_set_generator.generate_all_constructions(master_template)
+construction_set_generator.generate_all_materials(cec_template)
 
 default_space_type = {}
 default_space_type['FullServiceRestaurant'] = 'Dining'
@@ -67,7 +70,7 @@ def ensure_air_wall(model)
 end
 
 begin
-
+raise 'whoops'
   # create each space type and put it into the appropriate template model
   puts 'Creating Space Types'
   for template in space_types.keys.sort
@@ -175,10 +178,11 @@ rescue => e
   puts ''
 end
 
+puts 'ok'
 puts space_type_generator.longest_name
-puts space_type_generator.longest_name.size
+#puts space_type_generator.longest_name.size
 puts construction_set_generator.longest_name
-puts construction_set_generator.longest_name.size
+#puts construction_set_generator.longest_name.size
 
 # save the template models
 template_models.each do |building_type, template_model|
@@ -209,6 +213,10 @@ master_template.toIdfFile.save(master_template_save_path, true)
 minimal_template_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/MinimalTemplate.osm")
 ensure_air_wall(minimal_template)
 minimal_template.toIdfFile.save(minimal_template_save_path, true)
+
+cec_template_save_path = OpenStudio::Path.new("#{Dir.pwd}/templates/CECTemplate.osm")
+ensure_air_wall(cec_template)
+cec_template.toIdfFile.save(cec_template_save_path, true)
 
 puts '****Errors****'
 error_log.each do |error|

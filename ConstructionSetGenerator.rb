@@ -167,7 +167,22 @@ class ConstructionSetGenerator
       puts "Unknown material type #{material_type}"
       exit
     end
-
+    
+    begin
+      standards_information = material.standardsInformation
+      standards_information.setMaterialStandard(data['material_standard'].to_s) if data['material_standard']
+      standards_information.setMaterialStandardSource(data['material_standard_source'].to_s) if data['material_standard_source']
+      standards_information.setStandardsCategory(data['code_category'].to_s) if data['code_category']
+      standards_information.setStandardsIdentifier(data['code_identifier'].to_s) if data['code_identifier']
+      standards_information.setCompositeFramingMaterial(data['framing_material'].to_s) if data['framing_material']
+      standards_information.setCompositeFramingConfiguration(data['framing_configuration'].to_s) if data['framing_configuration']
+      standards_information.setCompositeFramingDepth(data['framing_depth'].to_s) if data['framing_depth']
+      standards_information.setCompositeFramingSize(data['framing_size'].to_s) if data['framing_size']
+      standards_information.setCompositeCavityInsulation(data['cavity_insulation'].to_s) if data['cavity_insulation']
+    rescue
+      puts "Cannot create standards information object"
+    end
+    
     return material
   end
 
@@ -187,7 +202,17 @@ class ConstructionSetGenerator
 
     puts "Cannot find material named '#{material_name}'"
   end
+  
+  def generate_all_materials(model = nil)
+    if model.nil?
+      model = OpenStudio::Model::Model.new
+    end
 
+    for material_name in @materials.keys.sort
+      get_material(material_name, model)
+    end
+  end
+  
   def make_construction(construction_name, data, model)
     construction = OpenStudio::Model::Construction.new(model)
     construction.setName(construction_name)

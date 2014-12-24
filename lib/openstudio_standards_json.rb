@@ -713,22 +713,22 @@ module OpenStudio
       dirt_correction_factor_for_solar_and_visible_transmittance_col = 'Dirt Correction Factor For Solar And Visible Transmittance'
       solar_diffusing_col = 'Solar Diffusing'
       material_standard_col = 'Material Standard'
+      material_standard_source_col = 'Material Standard Source' 
       code_category_col = 'Code Category'
       code_identifier_col = 'Code Identifier'
-      framing_material_col = 'FramingMaterial'
+      framing_material_col = 'Framing Material'
       framing_configuration_col = 'Framing Configuration'
       framing_depth_col = 'Framing Depth'
-      framing_size_col = 'FramingSize'
-      cavity_insulation_col = 'CavityInsulation (R-XX)'	
-      assembly_r_value_col = 'Assembly R Value (h-ft2.F/Btu)'	
-      material_standard_source_col = 'Table 2013 JA4-10' # TODO, this is wrong
+      framing_size_col = 'Framing Size'
+      cavity_insulation_col = 'Cavity Insulation (hr*ft^2*F/Btu)'	
+      assembly_r_value_col = 'Assembly R Value (hr*ft^2*F/Btu)'	
 
       materials = nil
       if @version == 1
         # create a nested hash to store all the data
         materials = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
 
-        # loop through all the ref bldg space types and put them into a nested hash
+        # loop through all the materials and put them into a nested hash
         data[:table].each do |row|
           material = row[material_col].strip
 
@@ -760,6 +760,7 @@ module OpenStudio
           materials[material]['dirt_correction_factor_for_solar_and_visible_transmittance'] = return_cell_value(row, dirt_correction_factor_for_solar_and_visible_transmittance_col)
           materials[material]['solar_diffusing'] = return_cell_value(row, solar_diffusing_col, 'boolean')
           materials[material]['material_standard'] = row[material_standard_col]
+          materials[material]['material_standard_source'] = row[material_standard_source_col]
           materials[material]['code_category'] = row[code_category_col]
           materials[material]['code_identifier'] = row[code_identifier_col]
           materials[material]['framing_material'] = row[framing_material_col]
@@ -767,8 +768,6 @@ module OpenStudio
           materials[material]['framing_depth'] = row[framing_depth_col]
           materials[material]['framing_size'] = row[framing_size_col]
           materials[material]['cavity_insulation'] = row[cavity_insulation_col]
-          materials[material]['assembly_r_value'] = row[assembly_r_value_col]
-          materials[material]['material_standard_source'] = row[material_standard_source_col]
 
         end
       elsif @version == 2
@@ -807,6 +806,7 @@ module OpenStudio
           h['dirt_correction_factor_for_solar_and_visible_transmittance'] = return_cell_value(row, dirt_correction_factor_for_solar_and_visible_transmittance_col)
           h['solar_diffusing'] = return_cell_value(row, solar_diffusing_col, 'boolean')
           h['material_standard'] = row[material_standard_col]
+          h['material_standard_source'] = row[material_standard_source_col]
           h['code_category'] = row[code_category_col]
           h['code_identifier'] = row[code_identifier_col]
           h['framing_material'] = row[framing_material_col]
@@ -814,10 +814,7 @@ module OpenStudio
           h['framing_depth'] = row[framing_depth_col]
           h['framing_size'] = row[framing_size_col]
           h['cavity_insulation'] = row[cavity_insulation_col]
-          h['assembly_r_value'] = row[assembly_r_value_col]
-          h['code_identifier'] = row[code_identifier_col]
-          h['material_standard_source'] = row[material_standard_source_col]
-          
+
           materials << h
         end
       else
