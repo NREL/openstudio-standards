@@ -31,8 +31,15 @@ master_template = OpenStudio::Model::Model.new
 minimal_template = OpenStudio::Model::Model.new
 cec_template = OpenStudio::Model::Model.new
 
-#construction_set_generator.generate_all_constructions(master_template)
+construction_set_generator.generate_all_constructions(master_template)
 construction_set_generator.generate_all_materials(cec_template)
+
+cec_template.getMaterials.each do |m|
+  info = m.standardsInformation
+  if info.materialStandard.empty? || info.materialStandard.get != 'CEC Title24-2013'
+    m.remove
+  end
+end
 
 default_space_type = {}
 default_space_type['FullServiceRestaurant'] = 'Dining'
@@ -70,7 +77,7 @@ def ensure_air_wall(model)
 end
 
 begin
-raise 'whoops'
+
   # create each space type and put it into the appropriate template model
   puts 'Creating Space Types'
   for template in space_types.keys.sort

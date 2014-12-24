@@ -218,7 +218,13 @@ class ConstructionSetGenerator
     construction.setName(construction_name)
 
     standards_info = construction.standardsInformation
-
+    
+    construction_standard = data['construction_standard']
+    unless construction_standard
+      construction_standard = ''
+    end
+    standards_info.setConstructionStandard(construction_standard)
+    
     intended_surface_type = data['intended_surface_type']
     unless intended_surface_type
       intended_surface_type = ''
@@ -230,6 +236,8 @@ class ConstructionSetGenerator
       standards_construction_type = ''
     end
     standards_info.setStandardsConstructionType(standards_construction_type)
+    
+    standards_construction_type
 
     # TODO: could put color in the spreadsheet
 
