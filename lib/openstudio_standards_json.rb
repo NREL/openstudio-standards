@@ -267,7 +267,7 @@ module OpenStudio
       worksheet = workbook['Space Types']
 
       # Add new headers as needed.
-      header = ['Template', 'Climate Zone Set', 'BuildingType', 'SpaceType', 'R_G_B', 'Lighting Standard', 'Lighting Primary Space Type']
+      header = ['Template', 'Climate Zone Set', 'Building Type', 'Space Type', 'RGB', 'Lighting Standard', 'Lighting Primary Space Type']
 
       # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
       data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
@@ -276,52 +276,52 @@ module OpenStudio
       # basic information
       template_col = 'Template'
       climate_col = 'Climate Zone Set'
-      building_type_col = 'BuildingType'
-      space_type_col = 'SpaceType'
+      building_type_col = 'Building Type'
+      space_type_col = 'Space Type'
 
       # RGB color
-      rgb_col = 'R_G_B'
+      rgb_col = 'RGB'
 
       # lighting
       lighting_standard_col = 'Lighting Standard'
-      lighting_pri_spc_type_col = 'Lighting Primary Space Type'
-      lighting_sec_spc_type_col = 'Lighting Secondary Space Type'
-      lighting_w_per_area_col = 'STD Lighting (W/ft^2)'
-      lighting_w_per_person_col = 'STD Lighting (W/person)'
-      lighting_w_per_linear_col = 'STD Lighting (W/ft)'
-      lighting_sch_col = 'Lighting Sch'
+      lighting_primary_space_type_col = 'Lighting Primary Space Type'
+      lighting_secondary_space_type_col = 'Lighting Secondary Space Type'
+      lighting_per_area_col = 'Lighting per Area (W/ft^2)'
+      lighting_per_person_col = 'Lighting per Person (W/person)'
+      lighting_w_per_linear_col = 'Lighting per Length (W/ft)'
+      lighting_schedule_col = 'Lighting Schedule'
 
       # ventilation
       ventilation_standard_col = 'Ventilation Standard'
-      ventilation_pri_spc_type_col = 'Ventilation Primary Space Type'
-      ventilation_sec_spc_type_col = 'Ventilation Secondary Space Type'
-      ventilation_per_area_col = 'STD Ventilation (ft^3/min*ft^2)'
-      ventilation_per_person_col = 'STD Ventilation (ft^3/min*person)'
-      ventilation_ach_col = 'STD Ventilation (ach)'
+      ventilation_primary_space_type_col = 'Ventilation Primary Space Type'
+      ventilation_secondary_space_type_col = 'Ventilation Secondary Space Type'
+      ventilation_per_area_col = 'Ventilation per Area (ft^3/min*ft^2)'
+      ventilation_per_person_col = 'Ventilation per Person (ft^3/min*person)'
+      ventilation_air_changes_col = 'Ventilation Air Changes (ach)'
       # ventilation_sch_col = 25 #TODO: David where did this col go?
 
       # occupancy
-      occupancy_per_area_col = 'OSM Occupancy (people/1000 ft^2)2'
-      occupancy_sch_col = 'Occupancy Sch'
-      occupancy_activity_sch_col = 'Activity Sch'
+      occupancy_per_area_col = 'Occupancy per Area (people/1000 ft^2)'
+      occupancy_schedule_col = 'Occupancy Schedule'
+      occupancy_activity_schedule_col = 'Occupancy Activity Schedule'
 
       # infiltration
-      infiltration_per_area_ext_col = 'Infiltration (ft^3/min*ft^2 ext)'
-      infiltration_sch_col = 'Infiltration Sch'
+      infiltration_per_exterior_area_col = 'Infiltration per Exterior Area (ft^3/min*ft^2 ext)'
+      infiltration_schedule_col = 'Infiltration Schedule'
 
       # gas equipment
-      gas_equip_per_area_col = 'OSM Gas Equipment (Btu/hr*ft^2)'
+      gas_equipment_per_area_col = 'Gas Equipment per Area (Btu/hr*ft^2)'
       # TODO: read fraction fields
-      gas_equip_sch_col = 'Gas Equipment Sch'
+      gas_equipment_schedule_col = 'Gas Equipment Schedule'
 
       # electric equipment
-      elec_equip_per_area_col = 'OSM Electric Equipment (W/ft^2)'
+      electric_equipment_per_area_col = 'Electric Equipment per Area (W/ft^2)'
       # TODO: read fraction fields
-      elec_equip_sch_col = 'Electric Equipment Sch'
+      electric_equipment_schedule_col = 'Electric Equipment Schedule'
 
       # thermostats
-      heating_setpoint_sch_col = 'Heating Setpoint Schedule'
-      cooling_setpoint_sch_col = 'Cooling Setpoint Schedule'
+      heating_setpoint_schedule_col = 'Heating Setpoint Schedule'
+      cooling_setpoint_schedule_col = 'Cooling Setpoint Schedule'
 
       # TODO: read service hot water
 
@@ -344,41 +344,41 @@ module OpenStudio
 
           # lighting
           space_types[template][climate][building_type][space_type]['lighting_standard'] = row[lighting_standard_col]
-          space_types[template][climate][building_type][space_type]['lighting_pri_spc_type'] = row[lighting_pri_spc_type_col]
-          space_types[template][climate][building_type][space_type]['lighting_sec_spc_type'] = row[lighting_sec_spc_type_col]
-          space_types[template][climate][building_type][space_type]['lighting_w_per_area'] = row[lighting_w_per_area_col] ? row[lighting_w_per_area_col].to_f : nil
-          space_types[template][climate][building_type][space_type]['lighting_w_per_person'] = row[lighting_w_per_person_col] ? row[lighting_w_per_person_col].to_f : nil
-          space_types[template][climate][building_type][space_type]['lighting_sch'] = row[lighting_sch_col]
+          space_types[template][climate][building_type][space_type]['lighting_primary_space_type'] = row[lighting_primary_space_type_col]
+          space_types[template][climate][building_type][space_type]['lighting_secondary_space_type'] = row[lighting_secondary_space_type_col]
+          space_types[template][climate][building_type][space_type]['lighting_per_area'] = row[lighting_per_area_col] ? row[lighting_per_area_col].to_f : nil
+          space_types[template][climate][building_type][space_type]['lighting_per_person'] = row[lighting_per_person_col] ? row[lighting_per_person_col].to_f : nil
+          space_types[template][climate][building_type][space_type]['lighting_schedule'] = row[lighting_schedule_col]
 
           # ventilation
           space_types[template][climate][building_type][space_type]['ventilation_standard'] = row[ventilation_standard_col]
-          space_types[template][climate][building_type][space_type]['ventilation_pri_spc_type'] = row[ventilation_pri_spc_type_col]
-          space_types[template][climate][building_type][space_type]['ventilation_sec_spc_type'] = row[ventilation_sec_spc_type_col]
+          space_types[template][climate][building_type][space_type]['ventilation_primary_space_type'] = row[ventilation_primary_space_type_col]
+          space_types[template][climate][building_type][space_type]['ventilation_secondary_space_type'] = row[ventilation_secondary_space_type_col]
           space_types[template][climate][building_type][space_type]['ventilation_per_area'] = row[ventilation_per_area_col].to_f
           space_types[template][climate][building_type][space_type]['ventilation_per_person'] = row[ventilation_per_person_col].to_f
-          space_types[template][climate][building_type][space_type]['ventilation_ach'] = row[ventilation_ach_col].to_f
+          space_types[template][climate][building_type][space_type]['ventilation_air_changes'] = row[ventilation_air_changes_col].to_f
           # space_types[template][climate][building_type][space_type]["ventilation_sch"] = row[ventilation_sch_col]
 
           # occupancy
           space_types[template][climate][building_type][space_type]['occupancy_per_area'] = row[occupancy_per_area_col] ? row[occupancy_per_area_col].to_f : nil
-          space_types[template][climate][building_type][space_type]['occupancy_sch'] = row[occupancy_sch_col]
-          space_types[template][climate][building_type][space_type]['occupancy_activity_sch'] = row[occupancy_activity_sch_col]
+          space_types[template][climate][building_type][space_type]['occupancy_schedule'] = row[occupancy_schedule_col]
+          space_types[template][climate][building_type][space_type]['occupancy_activity_schedule'] = row[occupancy_activity_schedule_col]
 
           # infiltration
-          space_types[template][climate][building_type][space_type]['infiltration_per_area_ext'] = row[infiltration_per_area_ext_col].to_f
-          space_types[template][climate][building_type][space_type]['infiltration_sch'] = row[infiltration_sch_col]
+          space_types[template][climate][building_type][space_type]['infiltration_per_exterior_area'] = row[infiltration_per_exterior_area_col].to_f
+          space_types[template][climate][building_type][space_type]['infiltration_schedule'] = row[infiltration_schedule_col]
 
           # gas equipment
-          space_types[template][climate][building_type][space_type]['gas_equip_per_area'] = row[gas_equip_per_area_col] ? row[gas_equip_per_area_col].to_f : nil
-          space_types[template][climate][building_type][space_type]['gas_equip_sch'] = row[gas_equip_sch_col]
+          space_types[template][climate][building_type][space_type]['gas_equipment_per_area'] = row[gas_equipment_per_area_col] ? row[gas_equipment_per_area_col].to_f : nil
+          space_types[template][climate][building_type][space_type]['gas_equipment_schedule'] = row[gas_equipment_schedule_col]
 
           # electric equipment
-          space_types[template][climate][building_type][space_type]['elec_equip_per_area'] = row[elec_equip_per_area_col].to_f
-          space_types[template][climate][building_type][space_type]['elec_equip_sch'] = row[elec_equip_sch_col]
+          space_types[template][climate][building_type][space_type]['electric_equipment_per_area'] = row[electric_equipment_per_area_col].to_f
+          space_types[template][climate][building_type][space_type]['electric_equipment_schedule'] = row[electric_equipment_schedule_col]
 
           # thermostats
-          space_types[template][climate][building_type][space_type]['heating_setpoint_sch'] = row[heating_setpoint_sch_col]
-          space_types[template][climate][building_type][space_type]['cooling_setpoint_sch'] = row[cooling_setpoint_sch_col]
+          space_types[template][climate][building_type][space_type]['heating_setpoint_schedule'] = row[heating_setpoint_schedule_col]
+          space_types[template][climate][building_type][space_type]['cooling_setpoint_schedule'] = row[cooling_setpoint_schedule_col]
         end
       elsif @version == 2
         space_types = []
@@ -386,7 +386,7 @@ module OpenStudio
           h = {}
 
           h['template'] = row[template_col].strip
-          h['climate_zone'] = row[climate_col].strip
+          h['climate_zone_set'] = row[climate_col].strip
           h['building_type'] = row[building_type_col].strip
           h['space_type'] = row[space_type_col].strip
 
@@ -396,41 +396,41 @@ module OpenStudio
 
           # lighting
           h['lighting_standard'] = row[lighting_standard_col]
-          h['lighting_pri_spc_type'] = row[lighting_pri_spc_type_col]
-          h['lighting_sec_spc_type'] = row[lighting_sec_spc_type_col]
-          h['lighting_w_per_area'] = row[lighting_w_per_area_col] ? row[lighting_w_per_area_col].to_f : nil
-          h['lighting_w_per_person'] = row[lighting_w_per_person_col] ? row[lighting_w_per_person_col].to_f : nil
-          h['lighting_sch'] = row[lighting_sch_col]
+          h['lighting_primary_space_type'] = row[lighting_primary_space_type_col]
+          h['lighting_secondary_space_type'] = row[lighting_secondary_space_type_col]
+          h['lighting_per_area'] = row[lighting_per_area_col] ? row[lighting_per_area_col].to_f : nil
+          h['lighting_per_person'] = row[lighting_per_person_col] ? row[lighting_per_person_col].to_f : nil
+          h['lighting_schedule'] = row[lighting_schedule_col]
 
           # ventilation
           h['ventilation_standard'] = row[ventilation_standard_col]
-          h['ventilation_pri_spc_type'] = row[ventilation_pri_spc_type_col]
-          h['ventilation_sec_spc_type'] = row[ventilation_sec_spc_type_col]
+          h['ventilation_primary_space_type'] = row[ventilation_primary_space_type_col]
+          h['ventilation_secondary_space_type'] = row[ventilation_secondary_space_type_col]
           h['ventilation_per_area'] = row[ventilation_per_area_col].to_f
           h['ventilation_per_person'] = row[ventilation_per_person_col].to_f
-          h['ventilation_ach'] = row[ventilation_ach_col].to_f
+          h['ventilation_air_changes'] = row[ventilation_air_changes_col].to_f
           # h["ventilation_sch"] = row[ventilation_sch_col]
 
           # occupancy
           h['occupancy_per_area'] = row[occupancy_per_area_col] ? row[occupancy_per_area_col].to_f : nil
-          h['occupancy_sch'] = row[occupancy_sch_col]
-          h['occupancy_activity_sch'] = row[occupancy_activity_sch_col]
+          h['occupancy_schedule'] = row[occupancy_schedule_col]
+          h['occupancy_activity_schedule'] = row[occupancy_activity_schedule_col]
 
           # infiltration
-          h['infiltration_per_area_ext'] = row[infiltration_per_area_ext_col].to_f
-          h['infiltration_sch'] = row[infiltration_sch_col]
+          h['infiltration_per_exterior_area'] = row[infiltration_per_exterior_area_col].to_f
+          h['infiltration_schedule'] = row[infiltration_schedule_col]
 
           # gas equipment
-          h['gas_equip_per_area'] = row[gas_equip_per_area_col] ? row[gas_equip_per_area_col].to_f : nil
-          h['gas_equip_sch'] = row[gas_equip_sch_col]
+          h['gas_equipment_per_area'] = row[gas_equipment_per_area_col] ? row[gas_equipment_per_area_col].to_f : nil
+          h['gas_equipment_schedule'] = row[gas_equipment_schedule_col]
 
           # electric equipment
-          h['elec_equip_per_area'] = row[elec_equip_per_area_col].to_f
-          h['elec_equip_sch'] = row[elec_equip_sch_col]
+          h['electric_equipment_per_area'] = row[electric_equipment_per_area_col].to_f
+          h['electric_equipment_schedule'] = row[electric_equipment_schedule_col]
 
           # thermostats
-          h['heating_setpoint_sch'] = row[heating_setpoint_sch_col]
-          h['cooling_setpoint_sch'] = row[cooling_setpoint_sch_col]
+          h['heating_setpoint_schedule'] = row[heating_setpoint_schedule_col]
+          h['cooling_setpoint_schedule'] = row[cooling_setpoint_schedule_col]
 
 
           space_types << h
@@ -562,43 +562,43 @@ module OpenStudio
           h['template'] = row[template_col].strip
           h['building_type'] = row[building_type_col] ? row[building_type_col].strip : nil
           h['space_type'] = row[space_type_col] ? row[space_type_col].strip : nil
-          h['climate_zone'] = row[climate_col].strip
+          h['climate_zone_set'] = row[climate_col].strip
 
           # exterior surfaces
-          h['exterior_wall'] = row[exterior_wall_col]
-          h['exterior_floor'] = row[exterior_floor_col]
-          h['exterior_roof'] = row[exterior_roof_col]
+          h['exterior_walls'] = row[exterior_wall_col]
+          h['exterior_floors'] = row[exterior_floor_col]
+          h['exterior_roofs'] = row[exterior_roof_col]
 
           # interior surfaces
-          h['interior_wall'] = row[interior_wall_col]
-          h['interior_floor'] = row[interior_floor_col]
-          h['interior_ceiling'] = row[interior_ceiling_col]
+          h['interior_walls'] = row[interior_wall_col]
+          h['interior_floors'] = row[interior_floor_col]
+          h['interior_ceilings'] = row[interior_ceiling_col]
 
           # ground_contact surfaces
-          h['ground_contact_wall'] = row[ground_contact_wall_col]
-          h['ground_contact_floor'] = row[ground_contact_floor_col]
-          h['ground_contact_ceiling'] = row[ground_contact_ceiling_col]
+          h['ground_contact_walls'] = row[ground_contact_wall_col]
+          h['ground_contact_floors'] = row[ground_contact_floor_col]
+          h['ground_contact_ceilings'] = row[ground_contact_ceiling_col]
 
           # exterior sub surfaces
-          h['exterior_fixed_window'] = row[exterior_fixed_window_col]
-          h['exterior_operable_window'] = row[exterior_operable_window_col]
-          h['exterior_door'] = row[exterior_door_col]
-          h['exterior_glass_door'] = row[exterior_glass_door_col]
-          h['exterior_overhead_door'] = row[exterior_overhead_door_col]
-          h['exterior_skylight'] = row[exterior_skylight_col]
-          h['tubular_daylight_dome'] = row[tubular_daylight_dome_col]
-          h['tubular_daylight_diffuser'] = row[tubular_daylight_diffuser_col]
+          h['exterior_fixed_windows'] = row[exterior_fixed_window_col]
+          h['exterior_operable_windows'] = row[exterior_operable_window_col]
+          h['exterior_doors'] = row[exterior_door_col]
+          h['exterior_glass_doors'] = row[exterior_glass_door_col]
+          h['exterior_overhead_doors'] = row[exterior_overhead_door_col]
+          h['exterior_skylights'] = row[exterior_skylight_col]
+          h['tubular_daylight_domes'] = row[tubular_daylight_dome_col]
+          h['tubular_daylight_diffusers'] = row[tubular_daylight_diffuser_col]
 
           # interior sub surfaces
-          h['interior_fixed_window'] = row[interior_fixed_window_col]
-          h['interior_operable_window'] = row[interior_operable_window_col]
-          h['interior_door'] = row[interior_door_col]
+          h['interior_fixed_windows'] = row[interior_fixed_window_col]
+          h['interior_operable_windows'] = row[interior_operable_window_col]
+          h['interior_doors'] = row[interior_door_col]
 
           # other
-          h['space_shading'] = row[space_shading_col]
-          h['building_shading'] = row[building_shading_col]
-          h['site_shading'] = row[site_shading_col]
-          h['interior_partition'] = row[interior_partition_col]
+          h['space_shadings'] = row[space_shading_col]
+          h['building_shadings'] = row[building_shading_col]
+          h['site_shadings'] = row[site_shading_col]
+          h['interior_partitions'] = row[interior_partition_col]
 
           construction_sets << h
         end
