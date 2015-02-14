@@ -30,9 +30,9 @@ module OpenStudio
         standards = {}
         standards['file_version'] = @version
         standards['templates'] = get_templates_hash(wb)
+        standards['standards'] = get_standards_hash(wb)
         standards['climate_zones'] = get_climate_zones_hash(wb)
         standards['climate_zone_sets'] = get_climate_zone_sets_hash(wb)
-        standards['standards'] = get_standards_hash(wb)
         standards['space_types'] = get_space_types_hash(wb)
         standards['construction_sets'] = get_construction_sets_hash(wb)
         standards['constructions'] = get_constructions_hash(wb)
