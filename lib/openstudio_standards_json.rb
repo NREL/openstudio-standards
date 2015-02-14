@@ -163,7 +163,7 @@ module OpenStudio
       # compound key for this sheet is [climate_zone]
 
       # specify worksheet
-      worksheet = workbook['ClimateZones']
+      worksheet = workbook['Climate Zones']
 
       # Add new headers as needed.
       header = ['Name', 'Standard', 'Representative City', 'BCL Weather Component ID']
@@ -215,7 +215,7 @@ module OpenStudio
       # compound key for this sheet is [climate_zone_set]
 
       # specify worksheet
-      worksheet = workbook['ClimateZoneSets']
+      worksheet = workbook['Climate Zone Sets']
 
       # Add new headers as needed.
       header = ['Name', 'Climate Zone']
@@ -264,7 +264,7 @@ module OpenStudio
       # compound key for this sheet is [template][climate_zone_set][building_type][space_type]
 
       # specify worksheet
-      worksheet = workbook['SpaceTypes']
+      worksheet = workbook['Space Types']
 
       # Add new headers as needed.
       header = ['Template', 'Climate Zone Set', 'BuildingType', 'SpaceType', 'R_G_B', 'Lighting Standard', 'Lighting Primary Space Type']
@@ -449,7 +449,7 @@ module OpenStudio
       # space_type may be null to indicate all space types
 
       # specify worksheet
-      worksheet = workbook['ConstructionSets']
+      worksheet = workbook['Construction Sets']
 
       # Add new headers as needed.
       header = ['Template', 'Building Type', 'Space Type', 'Climate Zone Set', 'Exterior Walls']
