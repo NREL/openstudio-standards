@@ -5,821 +5,232 @@ require 'rubygems'
 require 'json'
 require 'rubyXL'
 
-class Hash
-  def sort_by_key(recursive = false, &block)
-    keys.sort(&block).reduce({}) do |seed, key|
-      seed[key] = self[key]
-      if recursive && seed[key].is_a?(Hash)
-        seed[key] = seed[key].sort_by_key(true, &block)
-      end
-      seed
-    end
+class String
+
+  def snake_case
+    self.downcase.gsub(' ','_').gsub('-','_')
   end
+
 end
 
 module OpenStudio
   class StandardsJson
-    def initialize(version=1, excel_file=nil)
+  
+    def self.export_json
 
-      # load in the space types
-      @version = version
-      xlsx_path = excel_file ? excel_file : 'resources/OpenStudio_Standards.xlsx'
+      # Path to the xlsx file
+      xlsx_path = 'resources/OpenStudio_Standards.xlsx'
 
-      wb = RubyXL::Parser.parse(xlsx_path)
-      begin
-        standards = {}
-        standards['file_version'] = @version
-        standards['templates'] = get_templates_hash(wb)
-        standards['standards'] = get_standards_hash(wb)
-        standards['climate_zones'] = get_climate_zones_hash(wb)
-        standards['climate_zone_sets'] = get_climate_zone_sets_hash(wb)
-        standards['space_types'] = get_space_types_hash(wb)
-        standards['construction_sets'] = get_construction_sets_hash(wb)
-        standards['constructions'] = get_constructions_hash(wb)
-        standards['materials'] = get_materials_hash(wb)
+      # List of worksheets to skip
+      worksheets_to_skip = []
+      worksheets_to_skip << 'ventilation'
+      worksheets_to_skip << 'occupancy'
+      worksheets_to_skip << 'interior_lighting'
+      worksheets_to_skip << 'lookups'
 
-        # create any other views that would be useful
+      # List of columns to skip
+      cols_to_skip = []
+      cols_to_skip << 'lookup'
+      cols_to_skip << 'lookupcolumn'
+      cols_to_skip << 'vlookupcolumn'
+      cols_to_skip << 'osm_lighting_per_person'
+      cols_to_skip << 'osm_lighting_per_area'
+      cols_to_skip << 'lighting_per_length'
+      cols_to_skip << 'lighting_fraction_to_return_air'
+      cols_to_skip << 'lighting_fraction_radiant'
+      cols_to_skip << 'lighting_fraction_visible'
+      cols_to_skip << 'gas_equipment_fraction_latent'
+      cols_to_skip << 'gas_equipment_fraction_radiant'
+      cols_to_skip << 'gas_equipment_fraction_lost'
+      cols_to_skip << 'electric_equipment_fraction_latent'
+      cols_to_skip << 'electric_equipment_fraction_radiant'
+      cols_to_skip << 'electric_equipment_fraction_lost'
+      cols_to_skip << 'service_water_heating_peak_flow_rate'
+      cols_to_skip << 'service_water_heating_area'
+      cols_to_skip << 'service_water_heating_peak_flow_per_area'
+      cols_to_skip << 'service_water_heating_target_temperature'
+      cols_to_skip << 'service_water_heating_fraction_sensible'
+      cols_to_skip << 'service_water_heating_fraction_latent'
+      cols_to_skip << 'service_water_heating_schedule'
+      cols_to_skip << 'exhaust_per_area'
+      cols_to_skip << 'exhaust_per_unit'
+      cols_to_skip << 'exhaust_fan_efficiency'
+      cols_to_skip << 'exhaust_fan_pressure_rise'
+      cols_to_skip << 'exhaust_fan_power'
+      cols_to_skip << 'exhaust_fan_power_per_area'
+      cols_to_skip << 'exhaust_schedule'
+      
+      # List of columns that are boolean
+      # (rubyXL returns 0 or 1, will translate to true/false)
+      bool_cols = []
+      bool_cols << 'solar_diffusing'
+      
+      # Open workbook
+      workbook = RubyXL::Parser.parse(xlsx_path)
 
-        if @version == 1
-          standards = standards.sort_by_key(true) { |x, y| x.to_s <=> y.to_s }
+      standards_data = {}
+      standards_data['file_version'] = 3
+      workbook.worksheets.each do |worksheet|
+        
+        sheet_name = worksheet.sheet_name.snake_case
+        
+        # Skip the specified worksheets
+        if worksheets_to_skip.include?(sheet_name)
+          puts "Skipping #{sheet_name}"
+          next
+        else
+          puts "Exporting #{sheet_name}"
+        end
+        
+        # All spreadsheets must have headers in row 3
+        # and data from roworksheet 4 onward.
+        header_row = 2 # Base 0
 
-          # write the space types hash to a JSON file
-          save_file = 'build/OpenStudio_Standards.json'
-          File.open(save_file, 'w') do |file|
-            # file << standards.to_json
-            file << JSON.pretty_generate(standards)
+        # Get all data
+        all_data = worksheet.extract_data
+        
+        # Get the header row data
+        header_data = all_data[header_row]
+        # Format the headers and parse out units (in parentheses)
+        headers = []
+        header_data.each do |header_string|
+          # Stop when reach a blank header
+          break if header_string.nil?
+          header = {}
+          header['name'] = header_string.gsub(/\(.*\)/,'').strip.snake_case
+          header_unit_parens = header_string.scan(/\(.*\)/)[0]
+          if header_unit_parens.nil?
+            header['units'] = nil
+          else
+            header['units'] = header_unit_parens.gsub(/\(|\)/,'').strip
           end
-          puts "Successfully generated #{save_file}"
-        elsif @version == 2
-          save_file = 'build/openstudio_standards_version_2.json'
-          File.open(save_file, 'w') do |file|
-            # file << standards.to_json
-            file << JSON.pretty_generate(standards)
+          headers << header
+        end
+        puts "--found #{headers.size} columns"
+
+        # Loop through all rows and export
+        # data for the row to a hash.
+        objs = []
+        for i in (header_row + 1)..(all_data.size - 1)
+          row = all_data[i]
+          # Stop when reach a blank row
+          break if row.nil?
+          #puts "------row #{i} = #{row}"
+          obj = {}
+          # Check if all cells in the row are null
+          all_null = true
+          for j in 0..headers.size - 1
+            val = row[j]
+            # Don't record nil values
+            #next if val.nil?
+            # Flip the switch if a value is found
+            if !val.nil?
+              all_null = false
+            end
+            # Skip specified columns
+            next if cols_to_skip.include?(headers[j]['name'])
+            # Convert specified columns to boolean
+            if bool_cols.include?(headers[j]['name'])
+              if val == 1
+                val = true
+              elsif val == 0
+                val = false
+              else
+                val = nil
+              end
+            end
+            # Record the value
+            obj[headers[j]['name']] = val
+            # Skip recording units for unitless values
+            next if headers[j]['units'].nil?
+            # Record the units
+            #obj["#{headers[j]['name']}_units"] = headers[j]['units']
           end
-          puts "Successfully generated #{save_file}"
-
-        end
-      rescue => e
-        puts e.message
-        puts e.backtrace.join "\n"
-      ensure
-        # Do nothing
-      end
-    end
-
-    def self.create(version=1, excel_file=nil)
-      return OpenStudio::StandardsJson.new version, excel_file
-    end
-
-    # read the Templates tab and put into a Hash
-    def get_templates_hash(workbook)
-      # compound key for this sheet is [template]
-
-      # specify worksheet
-      worksheet = workbook['Templates']
-
-      # Add new headers as needed.
-      header = %w(Name Notes)
-
-      # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
-      data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
-
-      # define the columns where the data live in the spreadsheet
-      standard_col = 'Name'
-
-      templates = nil
-      if @version == 1
-        # create a nested hash to store all the data
-        templates = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          # If a value does not exist in the cell, then it doesn't exist in the table. Accessor will return nil
-          template = row[standard_col].strip
-          templates[template]['notes'] = row['Notes']
-        end
-      elsif @version == 2
-        templates = []
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          h = {}
-
-          h[standard_col.downcase] = row[standard_col].strip
-          h['notes'] = row['Notes']
-
-          templates << h
-        end
-      else
-        fail "Don't know how to process #{__method__} for version #{@version}"
-      end
-
-      return templates
-    end
-
-    # read the Standards tab and put into a Hash
-    def get_standards_hash(workbook)
-      # compound key for this sheet is [standard]
-
-      # specify worksheet
-      worksheet = workbook['Standards']
-
-      # Add new headers as needed.
-      header = ['Name']
-
-      # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
-      data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
-
-      # define the columns where the data live in the spreadsheet
-      standard_col = 'Name'
-
-      standards = nil
-      if @version == 1
-        # create a nested hash to store all the data
-        standards = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          # If a value does not exist in the cell, then it doesn't exist in the table. Accessor will return nil
-          standard = row[standard_col].strip
-          standards[standard]
-        end
-      elsif @version == 2
-        standards = []
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          standards << row[standard_col].strip
-        end
-      else
-        fail "Don't know how to process #{__method__} for version #{@version}"
-      end
-
-      return standards
-    end
-
-    # read the ClimateZones tab and put into a Hash
-    def get_climate_zones_hash(workbook)
-      # compound key for this sheet is [climate_zone]
-
-      # specify worksheet
-      worksheet = workbook['Climate Zones']
-
-      # Add new headers as needed.
-      header = ['Name', 'Standard', 'Representative City', 'BCL Weather Component ID']
-
-      # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
-      data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
-
-      # define the columns where the data live in the spreadsheet
-      climate_zone_col = 'Name'
-      standard_col = 'Standard'
-      representative_city_col = 'Representative City'
-      bcl_weather_component_id_col = 'BCL Weather Component ID'
-
-      climate_zones = nil
-      if @version == 1
-        # create a nested hash to store all the data
-        climate_zones = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          climate_zone = row[climate_zone_col].strip
-          climate_zones[climate_zone]['standard'] = row[standard_col]
-          climate_zones[climate_zone]['representative_city'] = row[representative_city_col]
-          climate_zones[climate_zone]['bcl_weather_component_id'] = row[bcl_weather_component_id_col]
-        end
-      elsif @version == 2
-        climate_zones = []
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          h = {}
-
-          h['name'] = row[climate_zone_col].strip
-          h['standard'] = row[standard_col]
-          h['representative_city'] = row[representative_city_col]
-          h['bcl_weather_component_id'] = row[bcl_weather_component_id_col]
-
-          climate_zones << h
-        end
-      else
-        fail "Don't know how to process #{__method__} for version #{@version}"
-      end
-
-      return climate_zones
-    end
-
-    # read the ClimateZoneSets tab and put into a Hash
-    def get_climate_zone_sets_hash(workbook)
-      # compound key for this sheet is [climate_zone_set]
-
-      # specify worksheet
-      worksheet = workbook['Climate Zone Sets']
-
-      # Add new headers as needed.
-      header = ['Name', 'Climate Zone']
-
-      # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
-      data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
-
-      # define the columns where the data live in the spreadsheet
-      climate_zone_set_col = 'Name'
-      climate_zone_col_prefix = 'Climate Zone'
-
-
-      climate_zone_sets = nil
-      if @version == 1
-        # create a nested hash to store all the data
-        climate_zone_sets = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          climate_zone_set = row[climate_zone_set_col].strip
-          climate_zones = row.select { |k, v| k =~ /#{climate_zone_col_prefix}.*/ }.values
-          climate_zone_sets[climate_zone_set]['climate_zones'] = climate_zones
-        end
-      elsif @version == 2
-        climate_zone_sets = []
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          h = {}
-
-          h['name'] = row[climate_zone_set_col].strip
-          h['climate_zones'] = row.select { |k, v| k =~ /#{climate_zone_col_prefix}.*/ }.values
-
-          climate_zone_sets << h
-        end
-      else
-        fail "Don't know how to process #{__method__} for version #{@version}"
-      end
-
-
-      return climate_zone_sets
-    end
-
-    # read the SpaceTypes tab and put into a Hash
-    def get_space_types_hash(workbook)
-      # compound key for this sheet is [template][climate_zone_set][building_type][space_type]
-
-      # specify worksheet
-      worksheet = workbook['Space Types']
-
-      # Add new headers as needed.
-      header = ['Template', 'Climate Zone Set', 'Building Type', 'Space Type', 'RGB', 'Lighting Standard', 'Lighting Primary Space Type']
-
-      # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
-      data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
-
-      # define the columns where the data live in the spreadsheet
-      # basic information
-      template_col = 'Template'
-      climate_col = 'Climate Zone Set'
-      building_type_col = 'Building Type'
-      space_type_col = 'Space Type'
-
-      # RGB color
-      rgb_col = 'RGB'
-
-      # lighting
-      lighting_standard_col = 'Lighting Standard'
-      lighting_primary_space_type_col = 'Lighting Primary Space Type'
-      lighting_secondary_space_type_col = 'Lighting Secondary Space Type'
-      lighting_per_area_col = 'Lighting per Area (W/ft^2)'
-      lighting_per_person_col = 'Lighting per Person (W/person)'
-      lighting_w_per_linear_col = 'Lighting per Length (W/ft)'
-      lighting_schedule_col = 'Lighting Schedule'
-
-      # ventilation
-      ventilation_standard_col = 'Ventilation Standard'
-      ventilation_primary_space_type_col = 'Ventilation Primary Space Type'
-      ventilation_secondary_space_type_col = 'Ventilation Secondary Space Type'
-      ventilation_per_area_col = 'Ventilation per Area (ft^3/min*ft^2)'
-      ventilation_per_person_col = 'Ventilation per Person (ft^3/min*person)'
-      ventilation_air_changes_col = 'Ventilation Air Changes (ach)'
-      # ventilation_sch_col = 25 #TODO: David where did this col go?
-
-      # occupancy
-      occupancy_per_area_col = 'Occupancy per Area (people/1000 ft^2)'
-      occupancy_schedule_col = 'Occupancy Schedule'
-      occupancy_activity_schedule_col = 'Occupancy Activity Schedule'
-
-      # infiltration
-      infiltration_per_exterior_area_col = 'Infiltration per Exterior Area (ft^3/min*ft^2 ext)'
-      infiltration_schedule_col = 'Infiltration Schedule'
-
-      # gas equipment
-      gas_equipment_per_area_col = 'Gas Equipment per Area (Btu/hr*ft^2)'
-      # TODO: read fraction fields
-      gas_equipment_schedule_col = 'Gas Equipment Schedule'
-
-      # electric equipment
-      electric_equipment_per_area_col = 'Electric Equipment per Area (W/ft^2)'
-      # TODO: read fraction fields
-      electric_equipment_schedule_col = 'Electric Equipment Schedule'
-
-      # thermostats
-      heating_setpoint_schedule_col = 'Heating Setpoint Schedule'
-      cooling_setpoint_schedule_col = 'Cooling Setpoint Schedule'
-
-      # TODO: read service hot water
-
-      # TODO: this needs to be cleaned up
-
-      space_types = nil
-      if @version == 1
-        # create a nested hash to store all the data
-        space_types = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
-
-        # loop through all the ref bldg space types and put them into a nested hash
-        data[:table].each do |row|
-          template = row[template_col].strip
-          climate = row[climate_col].strip
-          building_type = row[building_type_col].strip
-          space_type = row[space_type_col].strip
-
-          # RGB color
-          space_types[template][climate][building_type][space_type]['rgb'] = row[rgb_col]
-
-          # lighting
-          space_types[template][climate][building_type][space_type]['lighting_standard'] = row[lighting_standard_col]
-          space_types[template][climate][building_type][space_type]['lighting_primary_space_type'] = row[lighting_primary_space_type_col]
-          space_types[template][climate][building_type][space_type]['lighting_secondary_space_type'] = row[lighting_secondary_space_type_col]
-          space_types[template][climate][building_type][space_type]['lighting_per_area'] = row[lighting_per_area_col] ? row[lighting_per_area_col].to_f : nil
-          space_types[template][climate][building_type][space_type]['lighting_per_person'] = row[lighting_per_person_col] ? row[lighting_per_person_col].to_f : nil
-          space_types[template][climate][building_type][space_type]['lighting_schedule'] = row[lighting_schedule_col]
-
-          # ventilation
-          space_types[template][climate][building_type][space_type]['ventilation_standard'] = row[ventilation_standard_col]
-          space_types[template][climate][building_type][space_type]['ventilation_primary_space_type'] = row[ventilation_primary_space_type_col]
-          space_types[template][climate][building_type][space_type]['ventilation_secondary_space_type'] = row[ventilation_secondary_space_type_col]
-          space_types[template][climate][building_type][space_type]['ventilation_per_area'] = row[ventilation_per_area_col].to_f
-          space_types[template][climate][building_type][space_type]['ventilation_per_person'] = row[ventilation_per_person_col].to_f
-          space_types[template][climate][building_type][space_type]['ventilation_air_changes'] = row[ventilation_air_changes_col].to_f
-          # space_types[template][climate][building_type][space_type]["ventilation_sch"] = row[ventilation_sch_col]
-
-          # occupancy
-          space_types[template][climate][building_type][space_type]['occupancy_per_area'] = row[occupancy_per_area_col] ? row[occupancy_per_area_col].to_f : nil
-          space_types[template][climate][building_type][space_type]['occupancy_schedule'] = row[occupancy_schedule_col]
-          space_types[template][climate][building_type][space_type]['occupancy_activity_schedule'] = row[occupancy_activity_schedule_col]
-
-          # infiltration
-          space_types[template][climate][building_type][space_type]['infiltration_per_exterior_area'] = row[infiltration_per_exterior_area_col].to_f
-          space_types[template][climate][building_type][space_type]['infiltration_schedule'] = row[infiltration_schedule_col]
-
-          # gas equipment
-          space_types[template][climate][building_type][space_type]['gas_equipment_per_area'] = row[gas_equipment_per_area_col] ? row[gas_equipment_per_area_col].to_f : nil
-          space_types[template][climate][building_type][space_type]['gas_equipment_schedule'] = row[gas_equipment_schedule_col]
-
-          # electric equipment
-          space_types[template][climate][building_type][space_type]['electric_equipment_per_area'] = row[electric_equipment_per_area_col].to_f
-          space_types[template][climate][building_type][space_type]['electric_equipment_schedule'] = row[electric_equipment_schedule_col]
-
-          # thermostats
-          space_types[template][climate][building_type][space_type]['heating_setpoint_schedule'] = row[heating_setpoint_schedule_col]
-          space_types[template][climate][building_type][space_type]['cooling_setpoint_schedule'] = row[cooling_setpoint_schedule_col]
-        end
-      elsif @version == 2
-        space_types = []
-        data[:table].each do |row|
-          h = {}
-
-          h['template'] = row[template_col].strip
-          h['climate_zone_set'] = row[climate_col].strip
-          h['building_type'] = row[building_type_col].strip
-          h['space_type'] = row[space_type_col].strip
-
-
-          # RGB color
-          h['rgb'] = row[rgb_col]
-
-          # lighting
-          h['lighting_standard'] = row[lighting_standard_col]
-          h['lighting_primary_space_type'] = row[lighting_primary_space_type_col]
-          h['lighting_secondary_space_type'] = row[lighting_secondary_space_type_col]
-          h['lighting_per_area'] = row[lighting_per_area_col] ? row[lighting_per_area_col].to_f : nil
-          h['lighting_per_person'] = row[lighting_per_person_col] ? row[lighting_per_person_col].to_f : nil
-          h['lighting_schedule'] = row[lighting_schedule_col]
-
-          # ventilation
-          h['ventilation_standard'] = row[ventilation_standard_col]
-          h['ventilation_primary_space_type'] = row[ventilation_primary_space_type_col]
-          h['ventilation_secondary_space_type'] = row[ventilation_secondary_space_type_col]
-          h['ventilation_per_area'] = row[ventilation_per_area_col].to_f
-          h['ventilation_per_person'] = row[ventilation_per_person_col].to_f
-          h['ventilation_air_changes'] = row[ventilation_air_changes_col].to_f
-          # h["ventilation_sch"] = row[ventilation_sch_col]
-
-          # occupancy
-          h['occupancy_per_area'] = row[occupancy_per_area_col] ? row[occupancy_per_area_col].to_f : nil
-          h['occupancy_schedule'] = row[occupancy_schedule_col]
-          h['occupancy_activity_schedule'] = row[occupancy_activity_schedule_col]
-
-          # infiltration
-          h['infiltration_per_exterior_area'] = row[infiltration_per_exterior_area_col].to_f
-          h['infiltration_schedule'] = row[infiltration_schedule_col]
-
-          # gas equipment
-          h['gas_equipment_per_area'] = row[gas_equipment_per_area_col] ? row[gas_equipment_per_area_col].to_f : nil
-          h['gas_equipment_schedule'] = row[gas_equipment_schedule_col]
-
-          # electric equipment
-          h['electric_equipment_per_area'] = row[electric_equipment_per_area_col].to_f
-          h['electric_equipment_schedule'] = row[electric_equipment_schedule_col]
-
-          # thermostats
-          h['heating_setpoint_schedule'] = row[heating_setpoint_schedule_col]
-          h['cooling_setpoint_schedule'] = row[cooling_setpoint_schedule_col]
-
-
-          space_types << h
-        end
-      else
-        fail "Don't know how to process #{__method__} for version #{@version}"
-      end
-
-      return space_types
-    end
-
-    # read the ConstructionSets tab and put into a Hash
-    def get_construction_sets_hash(workbook)
-      # compound key for this sheet is [template][climate_zone_set][building_type][space_type]
-      # building_type may be null to indicate all building types
-      # space_type may be null to indicate all space types
-
-      # specify worksheet
-      worksheet = workbook['Construction Sets']
-
-      # Add new headers as needed.
-      header = ['Template', 'Building Type', 'Space Type', 'Climate Zone Set', 'Exterior Walls']
-
-      # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
-      data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
-
-      # define the columns where the data live in the spreadsheet
-      # basic information
-      template_col = 'Template'
-      building_type_col = 'Building Type'
-      space_type_col = 'Space Type'
-      climate_col = 'Climate Zone Set'
-
-      # exterior surfaces
-      exterior_wall_col = 'Exterior Walls'
-      exterior_floor_col = 'Exterior Floors'
-      exterior_roof_col = 'Exterior Roofs'
-
-      # interior surfaces
-      interior_wall_col = 'Interior Walls'
-      interior_floor_col = 'Interior Floors'
-      interior_ceiling_col = 'Interior Ceilings'
-
-      # ground_contact surfaces
-      ground_contact_wall_col = 'Ground Contact Walls'
-      ground_contact_floor_col = 'Ground Contact Floors'
-      ground_contact_ceiling_col = 'Ground Contact Ceilings'
-
-      # exterior sub surfaces
-      exterior_fixed_window_col = 'Exterior Fixed Windows'
-      exterior_operable_window_col = 'Exterior Operable Windows'
-      exterior_door_col = 'Exterior Doors'
-      exterior_glass_door_col = 'Exterior Glass Doors'
-      exterior_overhead_door_col = 'Exterior Overhead Doors'
-      exterior_skylight_col = 'Exterior Skylights'
-      tubular_daylight_dome_col = 'Tubular Daylight Domes'
-      tubular_daylight_diffuser_col = 'Tubular Daylight Diffusers'
-
-      # interior sub surfaces
-      interior_fixed_window_col = 'Interior Fixed Windows'
-      interior_operable_window_col = 'Interior Operable Windows'
-      interior_door_col = 'Interior Doors'
-
-      # other
-      space_shading_col = 'Space Shading'
-      building_shading_col = 'Building Shading'
-      site_shading_col = 'Site Shading'
-      interior_partition_col = 'Interior Partitions'
-
-      construction_sets = nil
-      if @version == 1
-        # create a nested hash to store all the data
-        construction_sets = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
-
-        # loop through all the ref bldg space types and put them into a nested hash
-        data[:table].each do |row|
-          template = row[template_col].strip
-          building_type = row[building_type_col]
-          building_type = building_type.strip unless building_type.nil?
-          space_type = row[space_type_col]
-          space_type = space_type.strip unless space_type.nil?
-          climate = row[climate_col].strip
-
-          # exterior surfaces
-          construction_sets[template][climate][building_type][space_type]['exterior_wall'] = row[exterior_wall_col]
-          construction_sets[template][climate][building_type][space_type]['exterior_floor'] = row[exterior_floor_col]
-          construction_sets[template][climate][building_type][space_type]['exterior_roof'] = row[exterior_roof_col]
-
-          # interior surfaces
-          construction_sets[template][climate][building_type][space_type]['interior_wall'] = row[interior_wall_col]
-          construction_sets[template][climate][building_type][space_type]['interior_floor'] = row[interior_floor_col]
-          construction_sets[template][climate][building_type][space_type]['interior_ceiling'] = row[interior_ceiling_col]
-
-          # ground_contact surfaces
-          construction_sets[template][climate][building_type][space_type]['ground_contact_wall'] = row[ground_contact_wall_col]
-          construction_sets[template][climate][building_type][space_type]['ground_contact_floor'] = row[ground_contact_floor_col]
-          construction_sets[template][climate][building_type][space_type]['ground_contact_ceiling'] = row[ground_contact_ceiling_col]
-
-          # exterior sub surfaces
-          construction_sets[template][climate][building_type][space_type]['exterior_fixed_window'] = row[exterior_fixed_window_col]
-          construction_sets[template][climate][building_type][space_type]['exterior_operable_window'] = row[exterior_operable_window_col]
-          construction_sets[template][climate][building_type][space_type]['exterior_door'] = row[exterior_door_col]
-          construction_sets[template][climate][building_type][space_type]['exterior_glass_door'] = row[exterior_glass_door_col]
-          construction_sets[template][climate][building_type][space_type]['exterior_overhead_door'] = row[exterior_overhead_door_col]
-          construction_sets[template][climate][building_type][space_type]['exterior_skylight'] = row[exterior_skylight_col]
-          construction_sets[template][climate][building_type][space_type]['tubular_daylight_dome'] = row[tubular_daylight_dome_col]
-          construction_sets[template][climate][building_type][space_type]['tubular_daylight_diffuser'] = row[tubular_daylight_diffuser_col]
-
-          # interior sub surfaces
-          construction_sets[template][climate][building_type][space_type]['interior_fixed_window'] = row[interior_fixed_window_col]
-          construction_sets[template][climate][building_type][space_type]['interior_operable_window'] = row[interior_operable_window_col]
-          construction_sets[template][climate][building_type][space_type]['interior_door'] = row[interior_door_col]
-
-          # other
-          construction_sets[template][climate][building_type][space_type]['space_shading'] = row[space_shading_col]
-          construction_sets[template][climate][building_type][space_type]['building_shading'] = row[building_shading_col]
-          construction_sets[template][climate][building_type][space_type]['site_shading'] = row[site_shading_col]
-          construction_sets[template][climate][building_type][space_type]['interior_partition'] = row[interior_partition_col]
-
-        end
-
-      elsif @version == 2
-        construction_sets = []
-
-        # loop through all the ref bldg space types and put them into a nested hash
-        data[:table].each do |row|
-          h = {}
-
-          h['template'] = row[template_col].strip
-          h['building_type'] = row[building_type_col] ? row[building_type_col].strip : nil
-          h['space_type'] = row[space_type_col] ? row[space_type_col].strip : nil
-          h['climate_zone_set'] = row[climate_col].strip
-
-          # exterior surfaces
-          h['exterior_walls'] = row[exterior_wall_col]
-          h['exterior_floors'] = row[exterior_floor_col]
-          h['exterior_roofs'] = row[exterior_roof_col]
-
-          # interior surfaces
-          h['interior_walls'] = row[interior_wall_col]
-          h['interior_floors'] = row[interior_floor_col]
-          h['interior_ceilings'] = row[interior_ceiling_col]
-
-          # ground_contact surfaces
-          h['ground_contact_walls'] = row[ground_contact_wall_col]
-          h['ground_contact_floors'] = row[ground_contact_floor_col]
-          h['ground_contact_ceilings'] = row[ground_contact_ceiling_col]
-
-          # exterior sub surfaces
-          h['exterior_fixed_windows'] = row[exterior_fixed_window_col]
-          h['exterior_operable_windows'] = row[exterior_operable_window_col]
-          h['exterior_doors'] = row[exterior_door_col]
-          h['exterior_glass_doors'] = row[exterior_glass_door_col]
-          h['exterior_overhead_doors'] = row[exterior_overhead_door_col]
-          h['exterior_skylights'] = row[exterior_skylight_col]
-          h['tubular_daylight_domes'] = row[tubular_daylight_dome_col]
-          h['tubular_daylight_diffusers'] = row[tubular_daylight_diffuser_col]
-
-          # interior sub surfaces
-          h['interior_fixed_windows'] = row[interior_fixed_window_col]
-          h['interior_operable_windows'] = row[interior_operable_window_col]
-          h['interior_doors'] = row[interior_door_col]
-
-          # other
-          h['space_shadings'] = row[space_shading_col]
-          h['building_shadings'] = row[building_shading_col]
-          h['site_shadings'] = row[site_shading_col]
-          h['interior_partitions'] = row[interior_partition_col]
-
-          construction_sets << h
-        end
-      else
-        fail "Don't know how to process #{__method__} for version #{@version}"
-      end
-      return construction_sets
-    end
-
-    # read the Constructions tab and put into a Hash
-    def get_constructions_hash(workbook)
-      # compound key for this sheet is [construction]
-
-      # specify worksheet
-      worksheet = workbook['Constructions']
-
-      # Add new headers as needed.
-      header = ['Name', 'Construction Standard', 'Climate Zone Set', 'Intended Surface Type', 'Standards Construction Type', 'Material 1']
-
-      # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
-      data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
-
-      # define the columns where the data live in the spreadsheet
-      # basic information
-      construction_col = 'Name'
-      construction_standard_col = 'Construction Standard'
-      climate_zone_set_col = 'Climate Zone Set'
-      intended_surface_type_col = 'Intended Surface Type'
-      standards_construction_type_col = 'Standards Construction Type'
-      material_col_prefix = 'Material'
-
-      constructions = nil
-      if @version == 1
-        # create a nested hash to store all the data
-        constructions = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          construction = row[construction_col].strip
-
-          constructions[construction]['construction_standard'] = row[construction_standard_col]
-          constructions[construction]['climate_zone_set'] = row[climate_zone_set_col]
-          constructions[construction]['intended_surface_type'] = row[intended_surface_type_col]
-          constructions[construction]['standards_construction_type'] = row[standards_construction_type_col]
-
-          materials = row.select { |k, v| k =~ /#{material_col_prefix}.*/ }.values
-          constructions[construction]['materials'] = materials
-        end
-
-      elsif @version == 2
-        constructions = []
-
-        # loop through all the templates and put them into a nested hash
-        data[:table].each do |row|
-          h = {}
-
-          h['name'] = row[construction_col].strip
-
-          h['construction_standard'] = row[construction_standard_col]
-          h['climate_zone_set'] = row[climate_zone_set_col]
-          h['intended_surface_type'] = row[intended_surface_type_col]
-          h['standards_construction_type'] = row[standards_construction_type_col]
-          h['materials'] = row.select { |k, v| k =~ /#{material_col_prefix}.*/ }.values
-
-          constructions << h
-        end
-      else
-        fail "Don't know how to process #{__method__} for version #{@version}"
-      end
-      return constructions
-    end
-
-    # read the Materials tab and put into a Hash
-    def get_materials_hash(workbook)
-      # compound key for this sheet is [material]
-
-      # specify worksheet
-      worksheet = workbook['Materials']
-
-      # Add new headers as needed.
-      header = ['Name', 'Material Type', 'Roughness']
-
-      # Parse the worksheet. Set last header to something pointless so that it parses all the header rows
-      data = worksheet.get_table(header, last_header: 'do_not_parse_after_me')
-
-      # define the columns where the data live in the spreadsheet
-      material_col = 'Name'
-      material_type_col = 'Material Type'
-      roughness_col = 'Roughness' # in
-      thickness_col = 'Thickness (in)' # in
-      conductivity_col = 'Conductivity (Btu*in/hr*ft^2*F)' # Btu*in/hr*ft^2*F	R
-      resistance_col = 'Resistance (hr*ft^2*F/Btu)' # hr*ft^2*F/Btu
-      density_col = 'Density (lb/ft^3)' # lb/ft^3
-      specific_heat_col = 'Specific Heat (Btu/lbm*F)' # Btu/lbm*F
-      thermal_absorptance_col = 'Thermal Absorptance'
-      solar_absorptance_col = 'Solar Absorptance'
-      visible_absorptance_col = 'Visible Absorptance'
-      gas_type_col = 'Gas Type'
-      u_factor_col = 'U-Factor (Btu/hr*ft^2*F)' # Btu/hr*ft^2*F
-      solar_heat_gain_coefficient_col = 'Solar Heat Gain Coefficient'
-      visible_transmittance_col = 'Visible Transmittance'
-      optical_data_type_col = 'Optical Data Type'
-      solar_transmittance_at_normal_incidence_col = 'Solar Transmittance At Normal Incidence'
-      front_side_solar_reflectance_at_normal_incidence_col = 'Front Side Solar Reflectance At Normal Incidence'
-      back_side_solar_relectance_at_normal_incidence_col = 'Back Side Solar Relectance At Normal Incidence'
-      visible_transmittance_at_normal_incidence_col = 'Visible Transmittance At Normal Incidence'
-      front_side_visible_reflectance_at_normal_incidence_col = 'Front Side Visible Reflectance At Normal Incidence'
-      back_side_visible_relectance_at_normal_incidence_col = 'Back Side Visible Relectance At Normal Incidence'
-      infrared_transmittance_at_normal_incidence_col = 'Infrared Transmittance At Normal Incidence'
-      front_side_infrared_hemispherical_emissivity_col = 'Front Side Infrared Hemispherical Emissivity'
-      back_side_infrared_hemispherical_emissivity_col = 'Back Side Infrared Hemispherical Emissivity'
-      dirt_correction_factor_for_solar_and_visible_transmittance_col = 'Dirt Correction Factor For Solar And Visible Transmittance'
-      solar_diffusing_col = 'Solar Diffusing'
-
-
-      materials = nil
-      if @version == 1
-        # create a nested hash to store all the data
-        materials = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
-
-        # loop through all the ref bldg space types and put them into a nested hash
-        data[:table].each do |row|
-          material = row[material_col].strip
-
-          # exterior surfaces
-          materials[material]['material_type'] = row[material_type_col]
-          materials[material]['roughness'] = row[roughness_col]
-          materials[material]['thickness'] = row[thickness_col] ? row[thickness_col].to_f : nil
-          materials[material]['conductivity'] = row[conductivity_col] ? row[conductivity_col].to_f : nil
-          materials[material]['resistance'] = row[resistance_col]
-          materials[material]['density'] = row[density_col]
-          materials[material]['specific_heat'] = row[specific_heat_col]
-          materials[material]['thermal_absorptance'] = row[thermal_absorptance_col]
-          materials[material]['solar_absorptance'] = row[solar_absorptance_col]
-          materials[material]['visible_absorptance'] = row[visible_absorptance_col]
-          materials[material]['gas_type'] = row[gas_type_col]
-          materials[material]['u_factor'] = row[u_factor_col]
-          materials[material]['solar_heat_gain_coefficient'] = row[solar_heat_gain_coefficient_col]
-          materials[material]['visible_transmittance'] = row[visible_transmittance_col]
-          materials[material]['optical_data_type'] = row[optical_data_type_col]
-          materials[material]['solar_transmittance_at_normal_incidence'] = row[solar_transmittance_at_normal_incidence_col]
-          materials[material]['front_side_solar_reflectance_at_normal_incidence'] = row[front_side_solar_reflectance_at_normal_incidence_col]
-          materials[material]['back_side_solar_relectance_at_normal_incidence'] = return_cell_value(row, back_side_solar_relectance_at_normal_incidence_col)
-          materials[material]['visible_transmittance_at_normal_incidence'] = return_cell_value(row, visible_transmittance_at_normal_incidence_col)
-          materials[material]['front_side_visible_reflectance_at_normal_incidence'] = return_cell_value(row, front_side_visible_reflectance_at_normal_incidence_col)
-          materials[material]['back_side_visible_relectance_at_normal_incidence'] = return_cell_value(row, back_side_visible_relectance_at_normal_incidence_col)
-          materials[material]['infrared_transmittance_at_normal_incidence'] = return_cell_value(row, infrared_transmittance_at_normal_incidence_col)
-          materials[material]['front_side_infrared_hemispherical_emissivity'] = return_cell_value(row, front_side_infrared_hemispherical_emissivity_col)
-          materials[material]['back_side_infrared_hemispherical_emissivity'] = return_cell_value(row, back_side_infrared_hemispherical_emissivity_col)
-          materials[material]['dirt_correction_factor_for_solar_and_visible_transmittance'] = return_cell_value(row, dirt_correction_factor_for_solar_and_visible_transmittance_col)
-          materials[material]['solar_diffusing'] = return_cell_value(row, solar_diffusing_col, 'boolean')
-        end
-      elsif @version == 2
-        materials = []
-
-        # loop through all the ref bldg space types and put them into a nested hash
-        data[:table].each do |row|
-          h = {}
-          h['name'] = row[material_col].strip
-
-          # exterior surfaces
-          h['material_type'] = row[material_type_col]
-          h['roughness'] = row[roughness_col]
-          h['thickness'] = row[thickness_col] ? row[thickness_col].to_f : nil
-          h['conductivity'] = row[conductivity_col] ? row[conductivity_col].to_f : nil
-          h['resistance'] = row[resistance_col]
-          h['density'] = row[density_col]
-          h['specific_heat'] = row[specific_heat_col]
-          h['thermal_absorptance'] = row[thermal_absorptance_col]
-          h['solar_absorptance'] = row[solar_absorptance_col]
-          h['visible_absorptance'] = row[visible_absorptance_col]
-          h['gas_type'] = row[gas_type_col]
-          h['u_factor'] = row[u_factor_col]
-          h['solar_heat_gain_coefficient'] = row[solar_heat_gain_coefficient_col]
-          h['visible_transmittance'] = row[visible_transmittance_col]
-          h['optical_data_type'] = row[optical_data_type_col]
-          h['solar_transmittance_at_normal_incidence'] = row[solar_transmittance_at_normal_incidence_col]
-          h['front_side_solar_reflectance_at_normal_incidence'] = row[front_side_solar_reflectance_at_normal_incidence_col]
-          h['back_side_solar_relectance_at_normal_incidence'] = return_cell_value(row, back_side_solar_relectance_at_normal_incidence_col)
-          h['visible_transmittance_at_normal_incidence'] = return_cell_value(row, visible_transmittance_at_normal_incidence_col)
-          h['front_side_visible_reflectance_at_normal_incidence'] = return_cell_value(row, front_side_visible_reflectance_at_normal_incidence_col)
-          h['back_side_visible_relectance_at_normal_incidence'] = return_cell_value(row, back_side_visible_relectance_at_normal_incidence_col)
-          h['infrared_transmittance_at_normal_incidence'] = return_cell_value(row, infrared_transmittance_at_normal_incidence_col)
-          h['front_side_infrared_hemispherical_emissivity'] = return_cell_value(row, front_side_infrared_hemispherical_emissivity_col)
-          h['back_side_infrared_hemispherical_emissivity'] = return_cell_value(row, back_side_infrared_hemispherical_emissivity_col)
-          h['dirt_correction_factor_for_solar_and_visible_transmittance'] = return_cell_value(row, dirt_correction_factor_for_solar_and_visible_transmittance_col)
-          h['solar_diffusing'] = return_cell_value(row, solar_diffusing_col, 'boolean')
-
-          materials << h
-        end
-      else
-        fail "Don't know how to process #{__method__} for version #{@version}"
-      end
-
-      return materials
-    end
-
-    private
-
-    # Return the value of the cell of a row or null. If not null, then it will convert to float / integer
-    def return_cell_value(row, cell_id, type = 'float')
-      return nil unless row[cell_id]
-
-      r = row[cell_id]
-      case type
-        when 'float'
-          r = row[cell_id].to_f
-        when 'int', 'integer'
-          r = row[cell_id].to_i
-        when 'string'
-          r = row[cell_id].to_s
-        when 'bool', 'boolean'
-          case row[cell_id]
-            when '1', 1, true, /true/i
-              r = true
-            else
-              r = false
+          
+          # Skip recording empty rows
+          next if all_null == true
+          
+          # Store the array of objects
+          # special cases for some types
+          if sheet_name == 'climate_zone_sets'
+            new_obj = {}
+            new_obj['name'] = obj['name']
+            items = []
+            obj.each do |key, val|
+              # Skip the key
+              next if key == 'name'
+              # Skip blank climate zone values
+              next if val.nil?
+              items << val
+            end
+            new_obj['climate_zones'] = items
+            objs << new_obj
+          elsif sheet_name == 'constructions'
+            new_obj = {}
+            new_obj['name'] = obj['name']
+            items = []
+            obj.each do |key, val|
+              # Skip the key
+              next if key == 'name'
+              # Put materials into an array,
+              # record other fields normally
+              if key.include?('material')
+                # Skip blank material values
+                next if val.nil?
+                items << val
+              else
+                new_obj[key] = val
+              end
+            end
+            new_obj['materials'] = items
+            objs << new_obj  
+          elsif sheet_name == 'schedules'
+            new_obj = {}
+            new_obj['name'] = obj['name']
+            items = []
+            obj.each do |key, val|
+              # Skip the key
+              next if key == 'name'
+              # Put materials into an array,
+              # record other fields normally
+              if key.include?('hr')
+                # Skip blank hourly values
+                next if val.nil?
+                items << val
+              else
+                new_obj[key] = val
+              end
+            end
+            new_obj['values'] = items
+            objs << new_obj
+          else
+            objs << obj
           end
+            
+        end
+        
+        # Report how many objects were found
+        puts "--found #{objs.size} rows" 
+        
+        # Save this hash 
+        standards_data[sheet_name] = objs
+
       end
 
-      r
+      # Sort the standard data so it can be diffed easily
+      #standards_data = standards_data.sort_by_key(true) {|x,y| x.to_s <=> y.to_s}
+
+      # Write the hash to a JSON file
+      File.open('build/openstudio_standards.json', 'w') do |file|
+        file << JSON::pretty_generate(standards_data)
+      end
+      puts 'Successfully generated openstudio_standards.json'
+          
     end
+
+    def self.export_templates
+    
+    end
+    
   end
 end
