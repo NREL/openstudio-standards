@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rake', '~> 10.3.2'
+gem 'rake', '~> 10.4.2'
 gem 'rubyXL', '~> 3.2.3'
 
 group :test do
