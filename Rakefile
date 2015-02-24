@@ -6,13 +6,12 @@ require 'rake'
 namespace :build do
 
   desc 'Create Standards JSON'
-  task :standards, :version do |t, args|
-    args.with_defaults(:version => 1)
-    puts "Building standards JSON using Version #{args[:version]}"
+  task :standards do
 
     require_relative 'lib/openstudio_standards_json'
-
-    a = OpenStudio::StandardsJson.create args[:version].to_i
+    
+    OpenStudio::StandardsJson.export_json
+    
   end
 end
 
