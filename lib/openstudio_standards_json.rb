@@ -13,6 +13,50 @@ class String
 
 end
 
+class Hash
+  
+  def sort_by_key_updated(recursive = false, &block)
+    self.keys.sort(&block).reduce({}) do |seed, key|
+      seed[key] = self[key]
+      if recursive && seed[key].is_a?(Hash)
+        seed[key] = seed[key].sort_by_key(true, &block)
+      elsif recursive && seed[key].is_a?(Array) && seed[key][0].is_a?(Hash)
+        # Sort logic depends on the tab
+        frst = seed[key][0]
+        if key == 'space_types' # Don't have names
+          seed[key] = seed[key].sort_by { |hsh| [ hsh['template'], hsh['climate_zone_set'], hsh['building_type'], hsh['space_type'] ] }
+        elsif key == 'schedules' # Names are not unique, sort by name then day types
+          seed[key] = seed[key].sort_by { |hsh| [ hsh['name'], hsh['start_date'], hsh['day_types'] ] }
+        elsif key == 'construction_sets'
+          # Replace nil values with 'zzzz' temorarily for sorting
+          seed[key].each do |item|
+            item.keys.each do |key|
+              if item[key].nil?
+                item[key] = 'zzzz'
+              end
+            end
+          end
+          seed[key] = seed[key].sort_by { |hsh| [ hsh['template'], hsh['building_type'], hsh['climate_zone_set'], hsh['space_type'], hsh['exterior_walls'], hsh['exterior_roofs'], hsh['exterior_floors'] ] }
+          # Replace 'zzzz' back to nil        
+          seed[key].each do |item|
+            item.keys.each do |key|
+              if item[key] == 'zzzz'
+                item[key] = nil
+              end
+            end
+          end
+        elsif frst.has_key?('name') # For all other tabs, names should be unique
+          seed[key] = seed[key].sort_by { |hsh| hsh['name'] }  
+        else
+          seed[key] = seed[key]
+        end
+      end
+      seed
+    end
+  end
+ 
+end
+
 module OpenStudio
   class StandardsJson
   
@@ -218,7 +262,7 @@ module OpenStudio
       end
 
       # Sort the standard data so it can be diffed easily
-      #standards_data = standards_data.sort_by_key(true) {|x,y| x.to_s <=> y.to_s}
+      standards_data = standards_data.sort_by_key_updated(true) {|x,y| x.to_s <=> y.to_s}
 
       # Write the hash to a JSON file
       File.open('build/openstudio_standards.json', 'w') do |file|
@@ -228,9 +272,5 @@ module OpenStudio
           
     end
 
-    def self.export_templates
-    
-    end
-    
   end
 end
