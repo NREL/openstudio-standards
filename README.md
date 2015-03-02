@@ -17,7 +17,6 @@ The current workflow to add information to the OpenStudio standard is to:
 1. Validate the JSON export using the TestScheduleLinks.rb and TestConstructionSets.rb scripts
 1. The files SpaceTypeGenerator.rb and ConstructionSetGenerator.rb contain classes to read OpenStudio_Standards.json
 1. Run CreateTemplateModels.rb this will generate new OSM template files
-1. Run `rake build:standards[2]` to create openstudio_standards_version_2.json
 
 The reference directory is for any reference materials, not used by the scripts in the main workflow
 
