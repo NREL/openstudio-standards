@@ -3,24 +3,20 @@ require 'json'
 
 class OpenStudio::Model::Model
 
-  @standards = {}
+  attr_accessor :standards, :spc_types, :climate_zone_sets, :climate_zones
 
   # Load the openstudio standards dataset and attach it to the model.
   def load_openstudio_standards_json(path_to_standards_json)
     # load the data from the JSON file into a ruby hash
     temp = File.read(path_to_standards_json.to_s)
-    @standards = JSON.parse(temp)
-    @spc_types = @standards['space_types']
-    @climate_zone_sets = @standards['climate_zone_sets']
-    @climate_zones = @standards['climate_zones']
-    if @spc_types.nil? || @climate_zone_sets.nil? || @climate_zones.nil?
+    self.standards = JSON.parse(temp)
+    self.spc_types = self.standards['space_types']
+    self.climate_zone_sets = self.standards['climate_zone_sets']
+    self.climate_zones = self.standards['climate_zones']
+    if self.spc_types.nil? || self.climate_zone_sets.nil? || self.climate_zones.nil?
       puts 'The space types json file did not load correctly.'
       exit
     end
-
-    # TODO check that the data was loaded correctly
-
-    @created_names = []
   end
 
   # Method to search through a hash for the objects that meets the
@@ -135,7 +131,7 @@ class OpenStudio::Model::Model
       desired_object = matching_objects[0]
     else 
       desired_object = matching_objects[0]
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Search criteria: #{search_criteria} Called from #{caller(0)[1]}.  All results: \n #{matching_objects.join("\n")}")
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Search criteria: #{search_criteria} Called from #{caller(0)[1]}.  All results: \n")# #{matching_objects.join("\n")}")
     end
    
     return desired_object
@@ -159,7 +155,7 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding schedule: #{schedule_name}")   
     
     # Find all the schedule rules that match the name
-    rules = self.find_objects(@standards['schedules'], {'name'=>schedule_name})
+    rules = self.find_objects(self.standards['schedules'], {'name'=>schedule_name})
     if rules.size == 0
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
       return false #TODO change to return empty optional schedule:ruleset?
@@ -272,18 +268,18 @@ class OpenStudio::Model::Model
     
   # Create a space type from the openstudio standards dataset.
   # TODO make return an OptionalSpaceType
-  def add_space_type(template, clim, building_type, spc_type)
+  def add_space_type(template, climate_zone_set, building_type, spc_type)
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding space type: #{template}-#{clim}-#{building_type}-#{spc_type}")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding space type: #{template}-#{climate_zone_set}-#{building_type}-#{spc_type}")
 
     # Get the space type data
-    data = self.find_object(@standards['space_types'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type})
+    data = self.find_object(self.standards['space_types'], {'template'=>template, 'climate_zone_set'=>climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type})
     if !data
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for space type: #{template}-#{clim}-#{building_type}-#{spc_type}, will not be created.")
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for space type: #{template}-#{climate_zone_set}-#{building_type}-#{spc_type}, will not be created.")
       return false #TODO change to return empty optional schedule:ruleset?
     end
     
-    name = make_name(template, clim, building_type, spc_type)
+    name = make_name(template, climate_zone_set, building_type, spc_type)
 
     # Create a new space type and name it
     space_type = OpenStudio::Model::SpaceType.new(self)
@@ -591,7 +587,7 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding material: #{material_name}")
 
     # Get the object data
-    data = self.find_object(@standards['materials'], {'name'=>material_name})
+    data = self.find_object(self.standards['materials'], {'name'=>material_name})
     if !data
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
       return false #TODO change to return empty optional material
@@ -673,6 +669,18 @@ class OpenStudio::Model::Model
       exit
     end
 
+    # Set the standards information for this material
+    standards_information = material.standardsInformation
+    standards_information.setMaterialStandard(data['material_standard'].to_s) if data['material_standard']
+    standards_information.setMaterialStandardSource(data['material_standard_source'].to_s) if data['material_standard_source']
+    standards_information.setStandardsCategory(data['code_category'].to_s) if data['code_category']
+    standards_information.setStandardsIdentifier(data['code_identifier'].to_s) if data['code_identifier']
+    standards_information.setCompositeFramingMaterial(data['framing_material'].to_s) if data['framing_material']
+    standards_information.setCompositeFramingConfiguration(data['framing_configuration'].to_s) if data['framing_configuration']
+    standards_information.setCompositeFramingDepth(data['framing_depth'].to_s) if data['framing_depth']
+    standards_information.setCompositeFramingSize(data['framing_size'].to_s) if data['framing_size']
+    standards_information.setCompositeCavityInsulation(data['cavity_insulation'].to_s) if data['cavity_insulation']    
+
     return material
   
   end
@@ -692,7 +700,7 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction: #{construction_name}")  
 
     # Get the object data
-    data = self.find_object(@standards['constructions'], {'name'=>construction_name})
+    data = self.find_object(self.standards['constructions'], {'name'=>construction_name})
     if !data
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for construction: #{construction_name}, will not be created.")
       return false #TODO change to return empty optional material
@@ -732,25 +740,36 @@ class OpenStudio::Model::Model
   
   # Create a construction set from the openstudio standards dataset.
   # Returns an Optional DefaultConstructionSet
-  def add_construction_set(template, clim, building_type, spc_type)
+  def add_construction_set(template, climate_zone_or_climate_zone_set, building_type, spc_type)
 
     construction_set = OpenStudio::Model::OptionalDefaultConstructionSet.new
   
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{climate_zone_or_climate_zone_set}-#{building_type}-#{spc_type}")
 
-    # Find the climate zone set that this climate zone falls into
-    climate_zone_set = find_climate_zone_set(template, clim, building_type, spc_type)
-    if !climate_zone_set
-      return construction_set
+    # Determine whether climate_zone_or_climate_zone_set
+    # is a climate zone or climate_zone_set
+    climate_zone_set = nil
+    # Cross check the climate zone against the 
+    if self.find_object(self.standards['climate_zones'], {'name'=>climate_zone_or_climate_zone_set})
+      # The user input a climate zone, find the climate zone set
+      # that this climate zone falls into.
+      climate_zone_set = find_climate_zone_set(template, climate_zone_or_climate_zone_set, building_type, spc_type)
+      if !climate_zone_set
+        OpenStudio::logFree(OpenStudio::Warning, 'openstudio.standards.Model', "'#{climate_zone_or_climate_zone_set}' is not a valid climate zone name or climate zone set name, cannot create construction set.")
+        return construction_set
+      end
+    else
+      # The user input a climate zone set; use it directly
+      climate_zone_set = climate_zone_or_climate_zone_set
     end
     
     # Get the object data
-    data = self.find_object(@standards['construction_sets'], {'template'=>template, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type})
+    data = self.find_object(self.standards['construction_sets'], {'template'=>template, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type})
     if !data
       return construction_set
     end
 
-    name = make_name(template, clim, building_type, spc_type)
+    name = make_name(template, climate_zone_or_climate_zone_set, building_type, spc_type)
 
     # Create a new construction set and name it
     construction_set = OpenStudio::Model::DefaultConstructionSet.new(self)
@@ -920,8 +939,6 @@ class OpenStudio::Model::Model
 
     result = parts.join(' - ')
 
-    @created_names << result
-
     return result
   end
 
@@ -933,7 +950,7 @@ class OpenStudio::Model::Model
     
     # Find the construction sets that correspond
     # to the specified template, building type, and space type
-    possible_const_sets = self.find_objects(@standards['construction_sets'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type})
+    possible_const_sets = self.find_objects(self.standards['construction_sets'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type})
     if possible_const_sets.size == 0
       #OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for construction sets: #{template}-#{building_type}-#{spc_type}, will not be created.")
       return result
@@ -945,7 +962,7 @@ class OpenStudio::Model::Model
       possible_climate_zone_set_name = possible_const_set['climate_zone_set']
       next if possible_climate_zone_set_name.nil?
       # Get the climate_zone_set with this name
-      possible_climate_zone_set = self.find_object(@standards['climate_zone_sets'], {'name'=>possible_climate_zone_set_name})
+      possible_climate_zone_set = self.find_object(self.standards['climate_zone_sets'], {'name'=>possible_climate_zone_set_name})
       # Skip climate zone sets with no climate zones
       next if possible_climate_zone_set['climate_zones'].nil?
       # Check if this climate zone set includes the specified climate zone 
