@@ -20,7 +20,7 @@ class SpreadSheetMaterial
     return optional.get
   end
 
-  def initialize(model_object=nil)
+  def initialize(model_object = nil)
     @model_object = nil
     if model_object.nil?
       # nothing
@@ -345,7 +345,7 @@ class SpreadSheetConstruction
     return name_parser.name
   end
 
-  def initialize(model_object=nil)
+  def initialize(model_object = nil)
     if model_object
       @model_object = model_object.to_Construction.get
       name_parser = ConstructionNameParser.new(@model_object.name.get)

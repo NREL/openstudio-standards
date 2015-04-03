@@ -81,7 +81,6 @@ sch_st_cols = [occ_col, lts_and_plug_col, hvac_col, swh_col, elev_col]
 
 # loop through all of the schedule types (Occ, LtsAndPlug, HVAC,
 sch_st_cols.each do |sch_st_col|
-
   # get the schedule space type name from the spreadsheet
   # strip off "Occupancy" part because it is confusing
   sch_nm = data[sch_st_col][0].split(' ')[0]
@@ -211,7 +210,6 @@ sch_st_cols.each do |sch_st_col|
   # puts saturday
   # puts sunday_rule
   # puts sunday
-
 end
 
 # Save the osm

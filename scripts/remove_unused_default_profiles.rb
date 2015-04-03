@@ -108,7 +108,6 @@ schedule_rulesets.each do |schedule_ruleset|
     end
 
   end  # end of schedule_ruleset.scheduleTypeLimits.empty?
-
 end  # end of schedule_rulesets.each do |schedule_ruleset|
 
 # reporting final condition of model

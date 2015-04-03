@@ -13,31 +13,31 @@ materials_csv = cbecc_checkout + 'RulesetDev/Rulesets/CEC 2013 Nonres/Rules/Tabl
 standard = 'CEC Title24-2013'
 File.open(materials_csv, 'r') do |file|
   # header
-  6.times {file.readline}
-  
-  # data 
-  while !file.eof?
+  6.times { file.readline }
+
+  # data
+  until file.eof?
     line = file.readline
     parts = line.split(',')
     material = Material.new(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7])
-    
+
     next if material.name.nil? || material.name.empty?
-    
-    material.roughness = nil if material.roughness == "NA"
-    
+
+    material.roughness = nil if material.roughness == 'NA'
+
     material.thickness = material.thickness.to_f
     material.resistance = material.resistance.to_f
-    material.conductivity = 12*material.conductivity.to_f # (BTU/h-ft-F) -> (Btu*in/hr*ft^2*F)
+    material.conductivity = 12 * material.conductivity.to_f # (BTU/h-ft-F) -> (Btu*in/hr*ft^2*F)
     material.density = material.density.to_f
     material.specific_heat = material.specific_heat.to_f
 
     # sanity check
-    calculated_resistance = material.thickness/material.conductivity
+    calculated_resistance = material.thickness / material.conductivity
     diff = (material.resistance - calculated_resistance).abs
-    if (diff > 0.05*material.resistance)
+    if diff > 0.05 * material.resistance
       puts "Resistance values do not match for material '#{material.name}', calculated is #{calculated_resistance}, entered is #{material.resistance}, diff is #{diff}"
     end
-    
+
     spreadsheet_material = SpreadSheetMaterial.new
     spreadsheet_material.material_standard = standard
     spreadsheet_material.material_type = 'StandardOpaqueMaterial'
@@ -66,8 +66,7 @@ standard = 'CEC Title24-2013'
 construction = nil
 materials = nil
 File.open(construction_lib, 'r').readlines.each do |line|
-
-  #ConsAssm   "SteepResWoodFramingAndOtherRoofU034"
+  # ConsAssm   "SteepResWoodFramingAndOtherRoofU034"
   #   CompatibleSurfType = "Roof"
   #   ExtRoughness = "MediumRough"
   #   ExtSolAbs = 0.37
@@ -94,13 +93,13 @@ File.open(construction_lib, 'r').readlines.each do |line|
     construction.compatible_surf_type = data[1]
   elsif data = /SpecMthd = "(.*)"/.match(line)
     construction.spec_mthd = data[1]
-    if construction.spec_mthd == "Layers"
-      materials = []    
+    if construction.spec_mthd == 'Layers'
+      materials = []
     end
   elsif materials && data = /MatRef = "(.*)"/.match(line)
-    materials << data[1]     
+    materials << data[1]
   elsif materials && data = /"(.*)"/.match(line)
-    materials << data[1]          
+    materials << data[1]
   elsif /^  \.\./.match(line)
     if construction
 
@@ -108,15 +107,15 @@ File.open(construction_lib, 'r').readlines.each do |line|
 
       # DLM: may need more mapping
       intended_surface_type = construction.compatible_surf_type
-      if intended_surface_type == "Roof"
-        intended_surface_type = "ExteriorRoof" 
+      if intended_surface_type == 'Roof'
+        intended_surface_type = 'ExteriorRoof'
       end
-      
+
       # DLM: the CEC constructions specify exterior and interior absorbtances as well as crrc parameters
-      # we put absorbtances on material layers and don't have a place for crrc parameters 
+      # we put absorbtances on material layers and don't have a place for crrc parameters
       # ignore for now
-      
-      if construction.spec_mthd == "Layers" # DLM: todo handle FFactor and CFactor constructions
+
+      if construction.spec_mthd == 'Layers' # DLM: todo handle FFactor and CFactor constructions
         spreadsheet_construction = SpreadSheetConstruction.new
         spreadsheet_construction.construction_standard = standard
         spreadsheet_construction.climate_zone_set = nil # DLM: how to get this?
@@ -134,9 +133,9 @@ File.open(construction_lib, 'r').readlines.each do |line|
         spreadsheet_constructions << spreadsheet_construction
       end
     end
-    
+
     construction = nil
-    materials = nil 
+    materials = nil
   end
 end
 
