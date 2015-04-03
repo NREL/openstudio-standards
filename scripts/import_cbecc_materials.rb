@@ -14,7 +14,7 @@ require_relative 'construction_writer_libs'
 spreadsheet_materials = []
 
 # read in regular materials
-Material = Struct.new(:material_category, :name, :thickness, :resistance, :conductivity, :density, :specific_heat, :roughness)
+Material = Struct.new(:material_category, :name, :thickness, :resistance, :conductivity, :density, :specific_heat, :roughness, :source)
 materials_csv = cbecc_checkout + '/RulesetDev/Rulesets/CEC 2013 Nonres/Rules/Tables/MaterialData.csv'
 standard = 'CEC Title24-2013'
 File.open(materials_csv, 'r') do |file|
@@ -23,9 +23,9 @@ File.open(materials_csv, 'r') do |file|
 
   # data
   until file.eof?
-    line = file.readline
+    line = file.readline.chomp
     parts = line.split(',')
-    material = Material.new(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7])
+    material = Material.new(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], parts[8])
 
     next if material.name.nil? || material.name.empty?
 
@@ -46,8 +46,10 @@ File.open(materials_csv, 'r') do |file|
 
     spreadsheet_material = SpreadSheetMaterial.new
     spreadsheet_material.material_standard = standard
+    spreadsheet_material.material_standard_source = material.source
     spreadsheet_material.material_type = 'StandardOpaqueMaterial'
     spreadsheet_material.material_category = material.material_category
+    spreadsheet_material.code_identifier = material.name # for now the code_identifier is the same as the name
     spreadsheet_material.name = material.name
     spreadsheet_material.thickness = material.thickness
     spreadsheet_material.resistance = material.resistance
