@@ -15,13 +15,15 @@ Lint/ParenthesesAsGroupedExpression:
 Lint/RequireParentheses:
   Enabled: true
 
+# Offense count: 1
 Lint/UnreachableCode:
   Enabled: false
 
+# Offense count: 51
 Lint/UselessAssignment:
   Enabled: true
 
-# ==================== Styles / Metrics ====================
+# ==================== Styles / Metrics====================
 # Offense count: 4
 Metrics/BlockNesting:
   Max: 4
@@ -50,45 +52,56 @@ Metrics/ParameterLists:
   Max: 8
 
 # ==================== Disabled on Purpose ====================
+# Offense count: 3
 Style/AccessorMethodName:
   Enabled: true
 
 # Need to allow indented case statements
+# Offense count: 9
 # Configuration parameters: IndentWhenRelativeTo, SupportedStyles, IndentOneStep.
 Style/CaseIndentation:
   Enabled: false
 
+# Offense count: 18
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/ClassAndModuleChildren:
   Enabled: false
 
+# Offense count: 2
 Style/ClassVars:
   Enabled: false
 
+# Offense count: 42
 Style/Documentation:
   Enabled: false
 
+# Offense count: 1
 Style/EachWithObject:
   Enabled: false
 
+# Offense count: 2
 # Configuration parameters: AllowedVariables.
 Style/GlobalVars:
   Enabled: false
 
+# Offense count: 7
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
   Enabled: true
 
+# Offense count: 17
 # Configuration parameters: MaxLineLength.
 Style/IfUnlessModifier:
   Enabled: false
 
 # Do NOT enable.  For some reason this is catchy any next which I feel are okay.
+# Offense count: 18
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/Next:
   Enabled: false
 
 # Do NOT enable this because it appears $? is different than $CHILD_STATUS.
+# Offense count: 7
 # Cop supports --auto-correct.
 Style/SpecialGlobalVars:
   Enabled: false
