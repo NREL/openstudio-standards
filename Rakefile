@@ -13,14 +13,14 @@ namespace :build do
 
   desc 'Create OpenStudio Template Models'
   task :template_models do
-    require_relative 'lib/CreateTemplateModels'
+    require_relative 'lib/create_template_models'
 
     create_template_models
   end
 
   desc 'Create osm with T24/CEC Constructions/Materials'
   task :cec_template do
-    require_relative 'lib/CreateTemplateModels'
+    require_relative 'lib/create_template_models'
 
     generate_cec_template
   end

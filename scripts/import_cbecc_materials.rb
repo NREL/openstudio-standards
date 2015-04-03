@@ -1,4 +1,10 @@
-cbecc_checkout = 'E:/cbecc/'
+cbecc_checkout = File.expand_path '../../cbecc'
+
+if !Dir.exist? cbecc_checkout
+  puts "Could not find CBECC Com checkout in #{cbecc_checkout}"
+  puts "Checkout 'https://code.google.com/p/cbecc/' into cbecc at the same level as the OpenStudio Standards checkout"
+  exit
+end
 
 require 'rubygems'
 require 'rubyXL'
@@ -9,7 +15,7 @@ spreadsheet_materials = []
 
 # read in regular materials
 Material = Struct.new(:material_category, :name, :thickness, :resistance, :conductivity, :density, :specific_heat, :roughness)
-materials_csv = cbecc_checkout + 'RulesetDev/Rulesets/CEC 2013 Nonres/Rules/Tables/MaterialData.csv'
+materials_csv = cbecc_checkout + '/RulesetDev/Rulesets/CEC 2013 Nonres/Rules/Tables/MaterialData.csv'
 standard = 'CEC Title24-2013'
 File.open(materials_csv, 'r') do |file|
   # header
@@ -61,7 +67,7 @@ spreadsheet_constructions = []
 Construction = Struct.new(:name, :compatible_surf_type, :spec_mthd, :mat_ref,
                           :ext_roughness, :ext_sol_abs, :ext_thrml_abs, :ext_vis_abs, :int_sol_abs, :int_thrml_abs, :int_vis_abs,
                           :crrc_initial_refl, :crrc_aged_refl, :crrc_initial_emittance, :crrc_aged_emittance, :crrc_initial_sri, :crrc_aged_sri)
-construction_lib = cbecc_checkout + 'RulesetDev/Rulesets/CEC 2013 Nonres/Rules/Library/Library_BaseConstructions.rule'
+construction_lib = cbecc_checkout + '/RulesetDev/Rulesets/CEC 2013 Nonres/Rules/Library/Library_BaseConstructions.rule'
 standard = 'CEC Title24-2013'
 construction = nil
 materials = nil
@@ -140,14 +146,14 @@ File.open(construction_lib, 'r').readlines.each do |line|
 end
 
 # write materials
-CSV.open('./Materials.csv', 'w') do |csv|
+CSV.open('./materials.csv', 'w') do |csv|
   spreadsheet_materials.each do |spreadsheet_material|
     csv << spreadsheet_material.to_row
   end
 end
 
 # write constructions
-CSV.open('./Constructions.csv', 'w') do |csv|
+CSV.open('./constructions.csv', 'w') do |csv|
   spreadsheet_constructions.each do |spreadsheet_construction|
     csv << spreadsheet_construction.to_row
   end

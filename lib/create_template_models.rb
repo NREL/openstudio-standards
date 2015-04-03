@@ -2,7 +2,7 @@
 # using the information from the openstudio_standards.json file
 # require 'profile'
 require 'openstudio'
-require_relative 'Standards.Model.2'
+require_relative 'standards_model_2'
 
 @path_to_standards_json = './build/openstudio_standards.json'
 
