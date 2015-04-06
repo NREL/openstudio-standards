@@ -30,6 +30,7 @@ File.open(materials_csv, 'r') do |file|
     next if material.name.nil? || material.name.empty?
 
     material.roughness = nil if material.roughness == 'NA'
+    material.source.gsub!(/^\"/,'') if material.source #remove leading " if it has one
 
     material.thickness = material.thickness.to_f
     material.resistance = material.resistance.to_f
