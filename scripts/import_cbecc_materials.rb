@@ -15,52 +15,66 @@ spreadsheet_materials = []
 
 # read in regular materials
 Material = Struct.new(:material_category, :name, :thickness, :resistance, :conductivity, :density, :specific_heat, :roughness, :source)
-materials_csv = cbecc_checkout + '/RulesetDev/Rulesets/CEC 2013 Nonres/Rules/Tables/MaterialData.csv'
+material_files = []
+material_files << cbecc_checkout + '/RulesetDev/Rulesets/CEC 2013 Nonres/Rules/Tables/MaterialData.csv'
+
 standard = 'CEC Title24-2013'
-File.open(materials_csv, 'r') do |file|
-  # header
-  6.times { file.readline }
+material_files.each do |filename|
+  File.open(filename, 'r') do |file|
+    # header
+    6.times { file.readline }
 
-  # data
-  until file.eof?
-    line = file.readline.chomp
-    parts = line.split(',')
-    material = Material.new(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], parts[8])
+    # data
+    until file.eof?
+      line = file.readline.chomp
+      parts = line.split(',')
+      material = Material.new(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], parts[8])
 
-    next if material.name.nil? || material.name.empty?
+      next if material.name.nil? || material.name.empty?
 
-    material.roughness = nil if material.roughness == 'NA'
-    material.source.gsub!(/^\"/,'') if material.source #remove leading " if it has one
+      material.roughness = nil if material.roughness == 'NA'
+      material.source.gsub!(/^\"/, '') if material.source #remove leading " if it has one
+      material.source.gsub!(/^\/\/./, '') if material.source #remove leading " if it has one
 
-    material.thickness = material.thickness.to_f
-    material.resistance = material.resistance.to_f
-    material.conductivity = 12 * material.conductivity.to_f # (BTU/h-ft-F) -> (Btu*in/hr*ft^2*F)
-    material.density = material.density.to_f
-    material.specific_heat = material.specific_heat.to_f
+      material.thickness = material.thickness.to_f
+      material.resistance = material.resistance.to_f
+      material.conductivity = 12 * material.conductivity.to_f # (BTU/h-ft-F) -> (Btu*in/hr*ft^2*F)
+      material.density = material.density.to_f
+      material.specific_heat = material.specific_heat.to_f
 
-    # sanity check
-    calculated_resistance = material.thickness / material.conductivity
-    diff = (material.resistance - calculated_resistance).abs
-    if diff > 0.05 * material.resistance
-      puts "Resistance values do not match for material '#{material.name}', calculated is #{calculated_resistance}, entered is #{material.resistance}, diff is #{diff}"
+      # sanity check
+      calculated_resistance = material.thickness / material.conductivity
+      diff = (material.resistance - calculated_resistance).abs
+      if diff > 0.05 * material.resistance
+        puts "Resistance values do not match for material '#{material.name}', calculated is #{calculated_resistance}, entered is #{material.resistance}, diff is #{diff}"
+      end
+
+      spreadsheet_material = SpreadSheetMaterial.new
+      spreadsheet_material.material_standard = standard
+      spreadsheet_material.material_standard_source = material.source
+      spreadsheet_material.material_type = 'StandardOpaqueMaterial'
+      spreadsheet_material.material_category = material.material_category
+      spreadsheet_material.code_identifier = material.name # for now the code_identifier is the same as the name
+      spreadsheet_material.name = material.name
+      spreadsheet_material.thickness = material.thickness
+      spreadsheet_material.resistance = material.resistance
+      spreadsheet_material.conductivity = material.conductivity
+      spreadsheet_material.density = material.density
+      spreadsheet_material.specific_heat = material.specific_heat
+      spreadsheet_material.roughness = material.roughness
+      spreadsheet_materials << spreadsheet_material
     end
-
-    spreadsheet_material = SpreadSheetMaterial.new
-    spreadsheet_material.material_standard = standard
-    spreadsheet_material.material_standard_source = material.source
-    spreadsheet_material.material_type = 'StandardOpaqueMaterial'
-    spreadsheet_material.material_category = material.material_category
-    spreadsheet_material.code_identifier = material.name # for now the code_identifier is the same as the name
-    spreadsheet_material.name = material.name
-    spreadsheet_material.thickness = material.thickness
-    spreadsheet_material.resistance = material.resistance
-    spreadsheet_material.conductivity = material.conductivity
-    spreadsheet_material.density = material.density
-    spreadsheet_material.specific_heat = material.specific_heat
-    spreadsheet_material.roughness = material.roughness
-    spreadsheet_materials << spreadsheet_material
   end
 end
+
+
+# read in the metal framing layers
+material_files = []
+material_files << cbecc_checkout + '/RulesetDev/Rulesets/CEC 2013 Nonres/Rules/Tables/MetalInsFrameLayers.csv'
+# //Material Category,Material Name,FramingMaterial,Framing Configuration,Framing Depth,FramingSize,CavityInsulation (R-XX),Assembly R Value (h-ft2.F/Btu),Table 2013 JA4-10,
+# do something
+
+
 
 # DLM: do we need to read in framing materials?  I don't see these being used in any example files.
 
@@ -112,10 +126,11 @@ File.open(construction_lib, 'r').readlines.each do |line|
   elsif /^  \.\./.match(line)
     if construction
 
-      puts "construction = '#{construction}'"
+      puts "construction = '#{construction.name}'"
 
       # DLM: may need more mapping
       intended_surface_type = construction.compatible_surf_type
+      # NL: Roof is correct, but I think openstudio wants exterior roof?
       if intended_surface_type == 'Roof'
         intended_surface_type = 'ExteriorRoof'
       end
