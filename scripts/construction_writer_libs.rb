@@ -11,7 +11,12 @@ class MaterialNameParser
 end
 
 class SpreadSheetMaterial
-  attr_accessor :name, :material_type, :roughness, :thickness, :conductivity, :resistance, :density, :specific_heat, :thermal_absorptance, :solar_absorptance, :visible_absorptance, :gas_type, :u_factor, :solar_heat_gain_coefficient, :visible_transmittance, :optical_data_type, :solar_transmittance_at_normal_incidence, :front_side_solar_reflectance_at_normal_incidence, :back_side_solar_reflectance_at_normal_incidence, :visible_transmittance_at_normal_incidence, :front_side_visible_reflectance_at_normal_incidence, :back_side_visible_reflectance_at_normal_incidence, :infrared_transmittance_at_normal_incidence, :front_side_infrared_hemispherical_emissivity, :back_side_infrared_hemispherical_emissivity, :dirt_correction_factor_for_solar_and_visible_transmittance, :solar_diffusing, :material_standard, :material_category
+  attr_accessor :name, :material_type, :roughness, :thickness, :conductivity, :resistance, :density, :specific_heat, :thermal_absorptance, :solar_absorptance,
+                :visible_absorptance, :gas_type, :u_factor, :solar_heat_gain_coefficient, :visible_transmittance, :optical_data_type, :solar_transmittance_at_normal_incidence,
+                :front_side_solar_reflectance_at_normal_incidence, :back_side_solar_reflectance_at_normal_incidence, :visible_transmittance_at_normal_incidence,
+                :front_side_visible_reflectance_at_normal_incidence, :back_side_visible_reflectance_at_normal_incidence, :infrared_transmittance_at_normal_incidence,
+                :front_side_infrared_hemispherical_emissivity, :back_side_infrared_hemispherical_emissivity, :dirt_correction_factor_for_solar_and_visible_transmittance,
+                :solar_diffusing, :material_standard, :material_standard_source, :material_category, :code_identifier
 
   def getOptional(optional)
     if optional.empty?
@@ -20,7 +25,7 @@ class SpreadSheetMaterial
     return optional.get
   end
 
-  def initialize(model_object=nil)
+  def initialize(model_object = nil)
     @model_object = nil
     if model_object.nil?
       # nothing
@@ -104,7 +109,13 @@ class SpreadSheetMaterial
   end
 
   def to_row
-    return [@name, @material_type, @roughness, @thickness, @conductivity, @resistance, @density, @specific_heat, @thermal_absorptance, @solar_absorptance, @visible_absorptance, @gas_type, @u_factor, @solar_heat_gain_coefficient, @visible_transmittance, @optical_data_type, @solar_transmittance_at_normal_incidence, @front_side_solar_reflectance_at_normal_incidence, @back_side_solar_reflectance_at_normal_incidence, @visible_transmittance_at_normal_incidence, @front_side_visible_reflectance_at_normal_incidence, @back_side_visible_reflectance_at_normal_incidence, @infrared_transmittance_at_normal_incidence, @front_side_infrared_hemispherical_emissivity, @back_side_infrared_hemispherical_emissivity, @dirt_correction_factor_for_solar_and_visible_transmittance, @solar_diffusing, @material_standard, @material_category]
+    return [@name, @material_type, @roughness, @thickness, @conductivity, @resistance, @density, @specific_heat, @thermal_absorptance,
+            @solar_absorptance, @visible_absorptance, @gas_type, @u_factor, @solar_heat_gain_coefficient, @visible_transmittance,
+            @optical_data_type, @solar_transmittance_at_normal_incidence, @front_side_solar_reflectance_at_normal_incidence,
+            @back_side_solar_reflectance_at_normal_incidence, @visible_transmittance_at_normal_incidence, @front_side_visible_reflectance_at_normal_incidence,
+            @back_side_visible_reflectance_at_normal_incidence, @infrared_transmittance_at_normal_incidence, @front_side_infrared_hemispherical_emissivity,
+            @back_side_infrared_hemispherical_emissivity, @dirt_correction_factor_for_solar_and_visible_transmittance, @solar_diffusing,
+            @material_standard, @material_standard_source, @material_category, @code_identifier]
   end
 end
 
@@ -345,7 +356,7 @@ class SpreadSheetConstruction
     return name_parser.name
   end
 
-  def initialize(model_object=nil)
+  def initialize(model_object = nil)
     if model_object
       @model_object = model_object.to_Construction.get
       name_parser = ConstructionNameParser.new(@model_object.name.get)
