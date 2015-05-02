@@ -41,7 +41,13 @@ def check_validity
     num_names = names.size
     num_unique_names = names.uniq.size
     if num_names > num_unique_names
+      name_counts = names.group_by{ |i| i }.each_with_object({}) { |(k,v), h| h[k] = v.size }
       @errors << "ERROR - #{key} - #{num_names - num_unique_names} non-unique names in the #{names.size} rows."
+      name_counts.each do |name, num|
+        if num > 1
+          @errors << "---#{name} occurs #{num} times."
+        end
+      end
     end
     
   end 
