@@ -117,7 +117,7 @@ def check_validity
     left_layers = left_construction['materials']
     right_layers = right_construction['materials']
     unless (left_layers.join(',') == right_layers.reverse.join(','))
-      @errors << "ERROR - Layers are not reverse equal, '#{left}' vs '#{right}' from #{construction_set}."
+      @errors << "ERROR - Layers are not reverse equal, '#{left}' vs '#{right}'." # from #{construction_set}."
       return false
     end
 

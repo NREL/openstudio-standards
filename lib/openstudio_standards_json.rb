@@ -18,6 +18,7 @@ class Hash
       if recursive && seed[key].is_a?(Hash)
         seed[key] = seed[key].sort_by_key(true, &block)
       elsif recursive && seed[key].is_a?(Array) && seed[key][0].is_a?(Hash)
+        puts "sorting #{key}"
         # Sort logic depends on the tab
         frst = seed[key][0]
         if key == 'space_types' # Don't have names
@@ -33,7 +34,7 @@ class Hash
               end
             end
           end
-          seed[key] = seed[key].sort_by { |hsh| [hsh['template'], hsh['building_type'], hsh['climate_zone_set'], hsh['space_type'], hsh['exterior_walls'], hsh['exterior_roofs'], hsh['exterior_floors']] }
+          seed[key] = seed[key].sort_by { |hsh| [hsh['template'], hsh['building_type'], hsh['space_type']] } #, hsh['exterior_walls'], hsh['exterior_roofs'], hsh['exterior_floors']] }
           # Replace 'zzzz' back to nil
           seed[key].each do |item|
             item.keys.each do |key|
@@ -257,7 +258,8 @@ module OpenStudio
       standards_data = standards_data.sort_by_key_updated(true) { |x, y| x.to_s <=> y.to_s }
 
       # Write the hash to a JSON file
-      File.open('build/openstudio_standards.json', 'w') do |file|
+      #File.open('build/openstudio_standards.json', 'w') do |file|
+      File.open('C:/GitRepos/OpenStudio-Prototype-Buildings/create_DOE_prototype_building/resources/openstudio_standards.json', 'w') do |file|
         file << JSON.pretty_generate(standards_data)
       end
       puts 'Successfully generated openstudio_standards.json'
