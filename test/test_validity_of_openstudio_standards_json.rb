@@ -3,7 +3,7 @@
 require 'json'
 
 def check_validity
-  @path_to_standards_json = './build/openstudio_standards.json'
+  @path_to_standards_json = './resources/openstudio_standards.json'
 
   @errors = []
 
@@ -12,7 +12,7 @@ def check_validity
   standards = JSON.parse(temp)
 
   # Check for name duplication
-  puts '****Check that the names are unique in each array****'
+  puts '**** Check that the names are unique in each array ****'
   standards.each do |key, data|
     # Skip sheets not stored as hashes
     unless data[0].is_a?(Hash)
@@ -26,7 +26,7 @@ def check_validity
     end
     # Skip schedules sheet; rows are non-unique by design
     if key == 'schedules'
-      puts "Skipping #{key} because rows are non-unique by design"
+      puts "Skipping #{ key } because rows are non-unique by design"
       next
     end
     # Put the names into an array
