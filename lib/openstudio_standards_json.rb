@@ -324,7 +324,7 @@ module OpenStudio
 
       # Write the hash to a JSON file
       #File.open('build/openstudio_standards.json', 'w') do |file|
-      File.open( File.join( File.dirname( __FILE__ ).gsub( /lib$/ , '' ) , 'resources/openstudio_standards.json' ) , 'w' ) do | file |
+      File.open( File.join( File.dirname( __FILE__ ).gsub( /lib$/ , '' ) , 'build/openstudio_standards.json' ) , 'w' ) do | file |
         file << JSON.pretty_generate(standards_data)
       end
 

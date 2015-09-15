@@ -3,7 +3,7 @@
 require 'json'
 
 def check_validity
-  @path_to_standards_json = './resources/openstudio_standards.json'
+  @path_to_standards_json = './build/openstudio_standards.json'
 
   @errors = []
 
