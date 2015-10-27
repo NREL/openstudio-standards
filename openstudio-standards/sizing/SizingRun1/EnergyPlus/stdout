@@ -1,0 +1,337 @@
+EnergyPlus Starting
+EnergyPlus, Version 8.3.0-6d97d074ea, YMD=2015.10.27 17:19
+Processing Data Dictionary
+Processing Input File
+Initializing Response Factors
+Calculating CTFs for "000 ATTICROOF CLIMATEZONE 1-8", Construction # 1
+Calculating CTFs for "000 EXTERIOR DOOR", Construction # 2
+Calculating CTFs for "000 EXTERIOR FLOOR", Construction # 3
+Calculating CTFs for "000 EXTERIOR ROOF", Construction # 4
+Calculating CTFs for "000 EXTERIOR WALL", Construction # 5
+Calculating CTFs for "000 EXTSLAB 4IN CLIMATEZONE 1-8", Construction # 7
+Calculating CTFs for "000 EXTSLAB 8IN CLIMATEZONE 1-8", Construction # 8
+Calculating CTFs for "000 EXTSLABCARPET 4IN CLIMATEZONE 1-8", Construction # 9
+Calculating CTFs for "000 EXTSLABCARPET 8IN CLIMATEZONE 1-8", Construction # 10
+Calculating CTFs for "000 INTERIOR CEILING", Construction # 11
+Calculating CTFs for "000 INTERIOR DOOR", Construction # 12
+Calculating CTFs for "000 INTERIOR WALL", Construction # 15
+Calculating CTFs for "AIR WALL", Construction # 17
+Calculating CTFs for "ASHRAE 189.1-2009 ATTICFLOOR CLIMATEZONE 1-8", Construction # 18
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF IEAD CLIMATEZONE 1", Construction # 19
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF IEAD CLIMATEZONE 2-5", Construction # 20
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF IEAD CLIMATEZONE 6", Construction # 21
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF IEAD CLIMATEZONE 6", Construction # 21
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF IEAD CLIMATEZONE 7-8", Construction # 22
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF METAL CLIMATEZONE 1", Construction # 23
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF METAL CLIMATEZONE 2-5", Construction # 24
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF METAL CLIMATEZONE 2-5", Construction # 24
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF METAL CLIMATEZONE 6", Construction # 25
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF METAL CLIMATEZONE 6", Construction # 25
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF METAL CLIMATEZONE 7-8", Construction # 26
+Calculating CTFs for "ASHRAE 189.1-2009 EXTROOF METAL CLIMATEZONE 7-8", Construction # 26
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE 1", Construction # 27
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE 2", Construction # 28
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE 3", Construction # 29
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE 4", Construction # 30
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE 5", Construction # 31
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE 6", Construction # 32
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE 7-8", Construction # 33
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE ALT-RES 1", Construction # 34
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE ALT-RES 2", Construction # 35
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE ALT-RES 3", Construction # 36
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE ALT-RES 4", Construction # 37
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE ALT-RES 5", Construction # 38
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE ALT-RES 6", Construction # 39
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE ALT-RES 7", Construction # 40
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL MASS CLIMATEZONE ALT-RES 8", Construction # 41
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL METAL CLIMATEZONE 1-3", Construction # 42
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL METAL CLIMATEZONE 4-8", Construction # 43
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL STEELFRAME CLIMATEZONE 1-3", Construction # 44
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL STEELFRAME CLIMATEZONE 4-8", Construction # 45
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL WOODFRAME CLIMATEZONE 1-4", Construction # 46
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL WOODFRAME CLIMATEZONE 5", Construction # 47
+Calculating CTFs for "ASHRAE 189.1-2009 EXTWALL WOODFRAME CLIMATEZONE 6-8", Construction # 48
+Calculating CTFs for "ASHRAE 90.1-2004 ATTICFLOOR CLIMATEZONE 1-5", Construction # 56
+Calculating CTFs for "ASHRAE 90.1-2004 ATTICFLOOR CLIMATEZONE 6-8", Construction # 57
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF IEAD CLIMATEZONE 1-4", Construction # 58
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF IEAD CLIMATEZONE 5-6", Construction # 59
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF IEAD CLIMATEZONE 7", Construction # 60
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF IEAD CLIMATEZONE 8", Construction # 61
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF METAL CLIMATEZONE 1", Construction # 62
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF METAL CLIMATEZONE 2", Construction # 63
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF METAL CLIMATEZONE 3-4", Construction # 64
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF METAL CLIMATEZONE 5-6", Construction # 65
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF METAL CLIMATEZONE 7", Construction # 66
+Calculating CTFs for "ASHRAE 90.1-2004 EXTROOF METAL CLIMATEZONE 8", Construction # 67
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE 1-2", Construction # 68
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE 3-4", Construction # 69
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE 5", Construction # 70
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE 6", Construction # 71
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE 7", Construction # 72
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE 8", Construction # 73
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE ALT-RES 1-2", Construction # 74
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE ALT-RES 3", Construction # 75
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE ALT-RES 4", Construction # 76
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE ALT-RES 5-6", Construction # 77
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE ALT-RES 7", Construction # 78
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL MASS CLIMATEZONE ALT-RES 8", Construction # 79
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL METAL CLIMATEZONE 1", Construction # 80
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL METAL CLIMATEZONE 2-3", Construction # 81
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL METAL CLIMATEZONE 4", Construction # 82
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL METAL CLIMATEZONE 5", Construction # 83
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL METAL CLIMATEZONE 6-8", Construction # 84
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL STEELFRAME CLIMATEZONE 1-4", Construction # 85
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL STEELFRAME CLIMATEZONE 5-6", Construction # 86
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL STEELFRAME CLIMATEZONE 7-8", Construction # 87
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL STEELFRAME CLIMATEZONE ALT-RES 3", Construction # 88
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL STEELFRAME CLIMATEZONE ALT-RES 4-6", Construction # 89
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL STEELFRAME CLIMATEZONE ALT-RES 8", Construction # 90
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL WOODFRAME CLIMATEZONE 1-7", Construction # 91
+Calculating CTFs for "ASHRAE 90.1-2004 EXTWALL WOODFRAME CLIMATEZONE 8", Construction # 92
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 1", Construction # 106
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 2A", Construction # 107
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 2B", Construction # 108
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 3A", Construction # 109
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 3B LAS", Construction # 110
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 3B LAX", Construction # 111
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 3C", Construction # 112
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 4A", Construction # 113
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 4B", Construction # 114
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 4C", Construction # 115
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 5A", Construction # 116
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 5B", Construction # 117
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 6A", Construction # 118
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 6B", Construction # 119
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 7", Construction # 120
+Calculating CTFs for "CBECS 1980-2004 EXTROOF ATTICFLOOR CLIMATEZONE 8", Construction # 121
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 1", Construction # 122
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 2A", Construction # 123
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 2B", Construction # 124
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 3A", Construction # 125
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 3B LAS", Construction # 126
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 3B LAX", Construction # 127
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 3C", Construction # 128
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 4A", Construction # 129
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 4B", Construction # 130
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 4C", Construction # 131
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 5A", Construction # 132
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 5B", Construction # 133
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 6A", Construction # 134
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 6B", Construction # 135
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 7", Construction # 136
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 8", Construction # 137
+Calculating CTFs for "CBECS 1980-2004 EXTROOF IEAD CLIMATEZONE 8", Construction # 137
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 1", Construction # 138
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 2A", Construction # 139
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 2B", Construction # 140
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 3A", Construction # 141
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 3B LAS", Construction # 142
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 3B LAX", Construction # 143
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 3C", Construction # 144
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 4A", Construction # 145
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 4B", Construction # 146
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 4C", Construction # 147
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 5A", Construction # 148
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 5B", Construction # 149
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 6A", Construction # 150
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 6B", Construction # 151
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 7", Construction # 152
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 8", Construction # 153
+Calculating CTFs for "CBECS 1980-2004 EXTROOF METAL CLIMATEZONE 8", Construction # 153
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 1", Construction # 154
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 2A", Construction # 155
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 2B", Construction # 156
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 3A", Construction # 157
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 3B LAS", Construction # 158
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 3B LAX", Construction # 159
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 3C", Construction # 160
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 4A", Construction # 161
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 4B", Construction # 162
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 4C-5A", Construction # 163
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 5B", Construction # 164
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 6A", Construction # 165
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 6B", Construction # 166
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 7", Construction # 167
+Calculating CTFs for "CBECS 1980-2004 EXTWALL MASS CLIMATEZONE 8", Construction # 168
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 1", Construction # 169
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 2A", Construction # 170
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 2B", Construction # 171
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 3A", Construction # 172
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 3B LAS", Construction # 173
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 3B LAX", Construction # 174
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 3C", Construction # 175
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 4A", Construction # 176
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 4B", Construction # 177
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 4C", Construction # 178
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 5", Construction # 179
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 6A", Construction # 180
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 6B", Construction # 181
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 7", Construction # 182
+Calculating CTFs for "CBECS 1980-2004 EXTWALL METAL CLIMATEZONE 8", Construction # 183
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 1", Construction # 184
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 2A", Construction # 185
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 2B", Construction # 186
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 3A", Construction # 187
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 3B LAS", Construction # 188
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 3B LAX", Construction # 189
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 3C", Construction # 190
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 4A", Construction # 191
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 4B", Construction # 192
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 4C", Construction # 193
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 5", Construction # 194
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 6A", Construction # 195
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 6B", Construction # 196
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 7", Construction # 197
+Calculating CTFs for "CBECS 1980-2004 EXTWALL STEELFRAME CLIMATEZONE 8", Construction # 198
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 1", Construction # 199
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 2A", Construction # 200
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 2B", Construction # 201
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 3A", Construction # 202
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 3B LAS", Construction # 203
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 3B LAX", Construction # 204
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 3C", Construction # 205
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 4A", Construction # 206
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 4B", Construction # 207
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 4C", Construction # 208
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 5", Construction # 209
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 6A", Construction # 210
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 6B", Construction # 211
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 7", Construction # 212
+Calculating CTFs for "CBECS 1980-2004 EXTWALL WOODFRAME CLIMATEZONE 8", Construction # 213
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF ATTICFLOOR CLIMATEZONE 4A", Construction # 228
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF ATTICFLOOR CLIMATEZONE 4B", Construction # 229
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF ATTICFLOOR CLIMATEZONE 4C", Construction # 230
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF ATTICFLOOR CLIMATEZONE 5A", Construction # 231
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF ATTICFLOOR CLIMATEZONE 5B", Construction # 232
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF ATTICFLOOR CLIMATEZONE 7", Construction # 234
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF IEAD CLIMATEZONE 1-3", Construction # 236
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF IEAD CLIMATEZONE 4A", Construction # 237
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF IEAD CLIMATEZONE 4B", Construction # 238
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF IEAD CLIMATEZONE 4C", Construction # 239
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF IEAD CLIMATEZONE 5A", Construction # 240
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF IEAD CLIMATEZONE 5B", Construction # 241
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF IEAD CLIMATEZONE 6", Construction # 242
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF IEAD CLIMATEZONE 7", Construction # 243
+Calculating CTFs for "CBECS BEFORE-1980 EXTROOF IEAD CLIMATEZONE 8", Construction # 244
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 1-2", Construction # 245
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 3A", Construction # 246
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 3B", Construction # 247
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 3C", Construction # 248
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 4A", Construction # 249
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 4B", Construction # 250
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 4C", Construction # 251
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 5A", Construction # 252
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 5B", Construction # 253
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 6", Construction # 254
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 7", Construction # 255
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL MASS CLIMATEZONE 8", Construction # 256
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 1-2", Construction # 257
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 3A", Construction # 258
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 3B", Construction # 259
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 3C", Construction # 260
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 4A", Construction # 261
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 4B", Construction # 262
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 4C", Construction # 263
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 5A", Construction # 264
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 5B", Construction # 265
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 6", Construction # 266
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 7", Construction # 267
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL METAL CLIMATEZONE 8", Construction # 268
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 1-3B", Construction # 269
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 3C", Construction # 270
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 4A", Construction # 271
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 4B", Construction # 272
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 4C", Construction # 273
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 5A", Construction # 274
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 5B", Construction # 275
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 6", Construction # 276
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 7", Construction # 277
+Calculating CTFs for "CBECS BEFORE-1980 EXTWALL STEELFRAME CLIMATEZONE 8", Construction # 278
+Initializing Window Optical Properties
+Initializing Solar Calculations
+Allocate Solar Module Arrays
+Initializing Zone Report Variables
+Initializing Surface (Shading) Report Variables
+Computing Interior Solar Absorption Factors
+Determining Shadowing Combinations
+Computing Window Shade Absorption Factors
+Proceeding with Initializing Solar Calculations
+Initializing Surfaces
+Initializing Outdoor environment for Surfaces
+Setting up Surface Reporting Variables
+Initializing Temperature and Flux Histories
+Initializing Window Shading
+Computing Interior Absorption Factors
+Computing Interior Diffuse Solar Absorption Factors
+Computing Interior Diffuse Solar Exchange through Interzone Windows
+Initializing Solar Heat Gains
+Initializing Internal Heat Gains
+Initializing Interior Solar Distribution
+Initializing Interior Convection Coefficients
+Gathering Information for Predefined Reporting
+Completed Initializing Surface Heat Balance
+Calculate Outside Surface Heat Balance
+Calculate Inside Surface Heat Balance
+Calculate Air Heat Balance
+Initializing HVAC
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Performing Zone Sizing Simulation
+...for Sizing Period: #1 TORONTO INT'L ANN CLG .4% CONDNS DB=>MWB
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Performing Zone Sizing Simulation
+...for Sizing Period: #2 TORONTO INT'L ANN CLG .4% CONDNS WB=>MDB
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Performing Zone Sizing Simulation
+...for Sizing Period: #3 TORONTO INT'L ANN HTG 99.6% CONDNS DB
+Calculating System sizing
+...for Sizing Period: #1 TORONTO INT'L ANN CLG .4% CONDNS DB=>MWB
+Calculating System sizing
+...for Sizing Period: #2 TORONTO INT'L ANN CLG .4% CONDNS WB=>MDB
+Calculating System sizing
+...for Sizing Period: #3 TORONTO INT'L ANN HTG 99.6% CONDNS DB
+Initializing Simulation
+Reporting Surfaces
+Beginning Primary Simulation
+Initializing New Environment Parameters
+Warming up {1}
+Warming up {2}
+Warming up {3}
+Warming up {4}
+Warming up {5}
+Warming up {6}
+Starting Simulation at 07/21 for TORONTO INT'L ANN CLG .4% CONDNS DB=>MWB
+Initializing New Environment Parameters
+Warming up {1}
+Warming up {2}
+Warming up {3}
+Warming up {4}
+Warming up {5}
+Warming up {6}
+Starting Simulation at 07/21 for TORONTO INT'L ANN CLG .4% CONDNS WB=>MDB
+Initializing New Environment Parameters
+Warming up {1}
+Warming up {2}
+Warming up {3}
+Warming up {4}
+Warming up {5}
+Warming up {6}
+Starting Simulation at 01/21 for TORONTO INT'L ANN HTG 99.6% CONDNS DB
+Writing tabular output file results using HTML format.
+Computing Life Cycle Costs and Reporting
+Writing final SQL reports
+EnergyPlus Run Time=00hr 00min  1.58sec

@@ -1,0 +1,30 @@
+Air Leakage (Infiltration) Rate Assumptions,,,,
+,,,,
+,,,,
+Units are  = m3/s/m2,,,,
+Infiltration Building Type,2005-2014,1980-2004,1960-1979,1959-pre
+Air Terminal,0.0002,0.00035,0.0005,0.0007
+Communications & Control,0.0002,0.00035,0.0005,0.0007
+Control Tower,0.0002,0.00035,0.0005,0.0007
+Fire Hall,0.0003,0.00045,0.00075,0.0008
+Fitness & Rec. - Arena,0.0002,0.00035,0.0005,0.0007
+Fitness & Rec. - Multi-gym,0.0002,0.00035,0.0005,0.0007
+Fitness & Rec. - Pool,0.0002,0.00035,0.0005,0.0007
+Food Services,0.0002,0.00035,0.0005,0.0007
+Hangars,0.0003,0.00045,0.00075,0.0008
+Infrastructure,0.0003,0.00045,0.00075,0.0008
+Medical Facilities,0.0002,0.00035,0.0005,0.0007
+Misc. Bldgs < 100m2,0.0002,0.00035,0.0005,0.0007
+Mobile Prefab Buildings,0.0002,0.00035,0.0005,0.0007
+Motel Type Residences,0.0002,0.00035,0.0005,0.0007
+Museum,0.0002,0.00035,0.0005,0.0007
+Offices,0.0002,0.00035,0.0005,0.0007
+Recreational / Club Bldgs,0.0002,0.00035,0.0005,0.0007
+Religious Bldgs,0.0002,0.00035,0.0005,0.0007
+Retail Bldgs,0.0002,0.00035,0.0005,0.0007
+Sleeping barracks,0.0002,0.00035,0.0005,0.0007
+Storage Bldgs,0.0002,0.00035,0.0005,0.0007
+Training Bldgs,0.0002,0.00035,0.0005,0.0007
+University Dormitory Type,0.0002,0.00035,0.0005,0.0007
+Warehouses,0.0003,0.00045,0.00075,0.0008
+Workshops,0.0003,0.00045,0.00075,0.0008

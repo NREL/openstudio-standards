@@ -1,0 +1,3276 @@
+INPUT ..
+
+
+$ ---------------------------------------------------------
+$              Abort, Diagnostics
+$ ---------------------------------------------------------
+
+
+
+
+$ ---------------------------------------------------------
+$              Global Parameters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Title, Run Periods, Design Days, Holidays
+$ ---------------------------------------------------------
+
+TITLE           
+   LINE-1           = *Triangle*
+   ..
+
+"Entire Year" = RUN-PERIOD-PD
+   BEGIN-MONTH      = 1
+   BEGIN-DAY        = 1
+   BEGIN-YEAR       = 2015
+   END-MONTH        = 12
+   END-DAY          = 31
+   END-YEAR         = 2015
+   ..
+
+"Cooling Design Day" = DESIGN-DAY      
+   TYPE             = COOLING
+   DRYBULB-HIGH     = 91
+   DRYBULB-RANGE    = 14
+   WETBULB-AT-HIGH  = 67
+   MONTH            = 7
+   NUMBER-OF-DAYS   = 120
+   ..
+"Heating Design Day" = DESIGN-DAY      
+   TYPE             = HEATING
+   DRYBULB-HIGH     = 37
+   ..
+
+"Standard US Holidays" = HOLIDAYS        
+   LIBRARY-ENTRY "US"
+   ..
+
+
+$ ---------------------------------------------------------
+$              Compliance Data
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Site and Building Data
+$ ---------------------------------------------------------
+
+"Site Data" = SITE-PARAMETERS 
+   ALTITUDE         = 97
+   ..
+
+"Building Data" = BUILD-PARAMETERS
+   HOLIDAYS         = "Standard US Holidays"
+   ..
+
+
+
+PROJECT-DATA    
+   ..
+
+
+$ ---------------------------------------------------------
+$              Materials / Layers / Constructions
+$ ---------------------------------------------------------
+
+"EWall Cons Mat 2 (8.6)" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 8.6
+   ..
+"Roof Cons Mat 4 (2.8)" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 2.8
+   ..
+"AFlr Cons Mat 1 (14.84)" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 14.84
+   ..
+"UFMat (BB.S1.U2.M1)" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 100
+   ..
+"UWMat (UB.S9.U11.M1)" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 1.45918
+   ..
+"UWMat (UB.S13.U14.M1)" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 0.1
+   ..
+
+"EWall Cons Layers" = LAYERS          
+   MATERIAL         = ( "Plywd 5/8in (PW04)", "Insul Bd 3/4in (IN62)", 
+         "EWall Cons Mat 2 (8.6)", "GypBd 1/2in (GP01)" )
+   ..
+"Roof Cons Layers" = LAYERS          
+   MATERIAL         = ( "Blt-Up Roof 3/8in (BR01)", "Bldg Paper Felt (BP01)", 
+         "Plywd 5/8in (PW04)", "Roof Cons Mat 4 (2.8)" )
+   ..
+"Ceilg Cons Layers" = LAYERS          
+   MATERIAL         = ( "AcousTile 1/2in (AC02)" )
+   ..
+"IFlr Cons Layers" = LAYERS          
+   MATERIAL         = ( "Conc HW 140lb 6in (HF-C13)", "Linoleum Tile (LT01)" )
+   ..
+"AFlr Cons Layers" = LAYERS          
+   MATERIAL         = ( "AFlr Cons Mat 1 (14.84)", "AcousTile 1/2in (AC02)" )
+   ..
+"UFLyrs (BB.S1.U2)" = LAYERS          
+   MATERIAL         = ( "UFMat (BB.S1.U2.M1)", "Light Soil, Damp 12in", 
+         "Conc HW 140lb 6in (HF-C13)", "Linoleum Tile (LT01)" )
+   ..
+"UWLyrs (BB.S1.U2)" = LAYERS          
+   MATERIAL         = ( "UFMat (BB.S1.U2.M1)", "Light Soil, Damp 12in", 
+         "Conc HW 140lb 6in (HF-C13)" )
+   ..
+"UWLyrs (UB.S9.U11)" = LAYERS          
+   MATERIAL         = ( "UWMat (UB.S9.U11.M1)", "Light Soil, Damp 12in", 
+         "Conc HW 140lb 6in (HF-C13)" )
+   ..
+"UWLyrs (UB.S13.U14)" = LAYERS          
+   MATERIAL         = ( "UWMat (UB.S13.U14.M1)", "Light Soil, Damp 12in", 
+         "Conc HW 140lb 6in (HF-C13)" )
+   ..
+
+"EWall Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers"
+   ..
+"Roof Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 1
+   LAYERS           = "Roof Cons Layers"
+   ..
+"Ceilg Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "Ceilg Cons Layers"
+   ..
+"IWall Construction" = CONSTRUCTION    
+   TYPE             = U-VALUE
+   U-VALUE          = 2.7
+   ..
+"IFlr Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "IFlr Cons Layers"
+   ..
+"AFlr Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "AFlr Cons Layers"
+   ..
+"IFlSP Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "IFlr Cons Layers"
+   ..
+"UFCons (BB.S1.U2)" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "UFLyrs (BB.S1.U2)"
+   ..
+"UWCons (BB.S1.U2)" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "UWLyrs (BB.S1.U2)"
+   ..
+"UWCons (UB.S9.U11)" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "UWLyrs (UB.S9.U11)"
+   ..
+"UWCons (UB.S13.U14)" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "UWLyrs (UB.S13.U14)"
+   ..
+
+
+$ ---------------------------------------------------------
+$              Glass Type Codes
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Glass Types
+$ ---------------------------------------------------------
+
+"Window Type #1 GT" = GLASS-TYPE      
+   TYPE             = GLASS-TYPE-CODE
+   GLASS-TYPE-CODE  = "2004"
+   ..
+"Window Type #2 GT" = GLASS-TYPE      
+   TYPE             = GLASS-TYPE-CODE
+   GLASS-TYPE-CODE  = "2203"
+   ..
+"Door Type #1 GT" = GLASS-TYPE      
+   TYPE             = GLASS-TYPE-CODE
+   GLASS-TYPE-CODE  = "1001"
+   ..
+
+
+$ ---------------------------------------------------------
+$              Window Layers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Lamps / Luminaries / Lighting Systems
+$ ---------------------------------------------------------
+
+
+
+
+
+$ ---------------------------------------------------------
+$              Day Schedules
+$ ---------------------------------------------------------
+
+"Undgnd Occ 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, &D, 0.9, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 0 )
+   ..
+"Undgnd Occ 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0 )
+   ..
+"Undgnd Ltg 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.02, &D, &D, &D, &D, &D, &D, 0.46, 0.9, &D, &D, &D, 
+         &D, &D, &D, &D, &D, 0.46, 0.02 )
+   ..
+"Undgnd Ltg 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.02 )
+   ..
+"Undgnd Eqp 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1239, &D, &D, &D, &D, &D, &D, &D, 0.9, &D, &D, &D, 
+         &D, &D, &D, &D, &D, 0.1239 )
+   ..
+"Undgnd Eqp 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1239 )
+   ..
+"Undgnd Sys1 Cool 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 82, &D, &D, &D, &D, &D, &D, &D, 76, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 82 )
+   ..
+"Undgnd Sys1 Cool 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 82 )
+   ..
+"Undgnd Sys1 Heat 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 64, &D, &D, &D, &D, &D, &D, &D, 70, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 64 )
+   ..
+"Undgnd Sys1 Heat 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 64 )
+   ..
+"Undgnd Sys1 Inf 1/0/1 D1" = DAY-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   VALUES           = ( 1, &D, &D, &D, &D, &D, &D, 1.25, &D, 0.5, &D, &D, &D, 
+         &D, &D, &D, 1.25, &D, 1 )
+   ..
+"Undgnd Sys1 Inf 1/0/1 D2" = DAY-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   VALUES           = ( 1 )
+   ..
+"GndCor Ltg 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.0028, &D, &D, &D, &D, &D, &D, 0.4514, 0.9, &D, &D, 
+         &D, &D, &D, &D, &D, &D, 0.4514, 0.0028 )
+   ..
+"GndCor Ltg 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.0028 )
+   ..
+"GndCor Eqp 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1895, &D, &D, &D, &D, &D, &D, &D, 0.9, &D, &D, &D, 
+         &D, &D, &D, &D, &D, 0.1895 )
+   ..
+"GndCor Eqp 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1895 )
+   ..
+"GndPrm Ltg 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.0326, &D, &D, &D, &D, &D, &D, 0.4663, 0.9, &D, &D, 
+         &D, &D, &D, &D, &D, &D, 0.4663, 0.0326 )
+   ..
+"GndPrm Ltg 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.0326 )
+   ..
+"GndPrm Eqp 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1349, &D, &D, &D, &D, &D, &D, &D, 0.9, &D, &D, &D, 
+         &D, &D, &D, &D, &D, 0.1349 )
+   ..
+"GndPrm Eqp 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1349 )
+   ..
+"TypPrm Ltg 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, 0.45, 0.9, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 0.45, 0 )
+   ..
+"TypPrm Ltg 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0 )
+   ..
+"TypPrm Eqp 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.2, &D, &D, &D, &D, &D, &D, &D, 0.9, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 0.2 )
+   ..
+"TypPrm Eqp 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.2 )
+   ..
+"Sys1 (PSZ) Fans D1-1" = DAY-SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, 1, &D, &D, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 0 )
+   ..
+"Sys1 (PSZ) Fans D1-2" = DAY-SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   VALUES           = ( 0 )
+   ..
+"Sys1 (PSZ) Inf D1-1" = DAY-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   VALUES           = ( 1, &D, &D, &D, &D, &D, &D, 0.5, &D, &D, &D, &D, &D, 
+         &D, &D, &D, &D, &D, 1 )
+   ..
+
+$ ---------------------------------------------------------
+$              Week Schedules
+$ ---------------------------------------------------------
+
+"Undgnd Occ 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Undgnd Occ 1/0 D1", &D, &D, &D, &D, 
+         "Undgnd Occ 1/0 D2" )
+   ..
+"Undgnd Ltg 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Undgnd Ltg 1/0 D1", &D, &D, &D, &D, 
+         "Undgnd Ltg 1/0 D2" )
+   ..
+"Undgnd Eqp 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Undgnd Eqp 1/0 D1", &D, &D, &D, &D, 
+         "Undgnd Eqp 1/0 D2" )
+   ..
+"Undgnd Sys1 Cool 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "Undgnd Sys1 Cool 1/0 D1", &D, &D, &D, &D, 
+         "Undgnd Sys1 Cool 1/0 D2" )
+   ..
+"Undgnd Sys1 Heat 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "Undgnd Sys1 Heat 1/0 D1", &D, &D, &D, &D, 
+         "Undgnd Sys1 Heat 1/0 D2" )
+   ..
+"Undgnd Sys1 Infil 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   DAY-SCHEDULES    = ( "Undgnd Sys1 Inf 1/0/1 D1", &D, &D, &D, &D, 
+         "Undgnd Sys1 Inf 1/0/1 D2" )
+   ..
+"GndCor Ltg 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "GndCor Ltg 1/0 D1", &D, &D, &D, &D, 
+         "GndCor Ltg 1/0 D2" )
+   ..
+"GndCor Eqp 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "GndCor Eqp 1/0 D1", &D, &D, &D, &D, 
+         "GndCor Eqp 1/0 D2" )
+   ..
+"GndPrm Ltg 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "GndPrm Ltg 1/0 D1", &D, &D, &D, &D, 
+         "GndPrm Ltg 1/0 D2" )
+   ..
+"GndPrm Eqp 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "GndPrm Eqp 1/0 D1", &D, &D, &D, &D, 
+         "GndPrm Eqp 1/0 D2" )
+   ..
+"TypPrm Ltg 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "TypPrm Ltg 1/0 D1", &D, &D, &D, &D, 
+         "TypPrm Ltg 1/0 D2" )
+   ..
+"TypPrm Eqp 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "TypPrm Eqp 1/0 D1", &D, &D, &D, &D, 
+         "TypPrm Eqp 1/0 D2" )
+   ..
+"Sys1 (PSZ) Fans W1" = WEEK-SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   DAY-SCHEDULES    = ( "Sys1 (PSZ) Fans D1-1", &D, &D, &D, &D, 
+         "Sys1 (PSZ) Fans D1-2" )
+   ..
+"Sys1 (PSZ) Inf W1" = WEEK-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   DAY-SCHEDULES    = ( "Sys1 (PSZ) Inf D1-1", &D, &D, &D, &D, 
+         "Undgnd Sys1 Inf 1/0/1 D2" )
+   ..
+
+$ ---------------------------------------------------------
+$              Annual Schedules
+$ ---------------------------------------------------------
+
+"Undgnd Occ Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Undgnd Occ 1/0 W1" )
+   ..
+"Undgnd Ltg Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Undgnd Ltg 1/0 W1" )
+   ..
+"Undgnd Eqp Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Undgnd Eqp 1/0 W1" )
+   ..
+"Undgnd Sys1 Cool Sch" = SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Undgnd Sys1 Cool 1/0 W1" )
+   ..
+"Undgnd Sys1 Heat Sch" = SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Undgnd Sys1 Heat 1/0 W1" )
+   ..
+"Undgnd Sys1 Infil Sch" = SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Undgnd Sys1 Infil 1/0 W1" )
+   ..
+"GndCor Ltg Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndCor Ltg 1/0 W1" )
+   ..
+"GndCor Eqp Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndCor Eqp 1/0 W1" )
+   ..
+"GndPrm Ltg Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndPrm Ltg 1/0 W1" )
+   ..
+"GndPrm Eqp Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndPrm Eqp 1/0 W1" )
+   ..
+"TypPrm Ltg Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "TypPrm Ltg 1/0 W1" )
+   ..
+"TypPrm Eqp Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "TypPrm Eqp 1/0 W1" )
+   ..
+"Sys1 (PSZ) Fan Sch" = SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Sys1 (PSZ) Fans W1" )
+   ..
+"Sys1 (PSZ) Inf Sch" = SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Sys1 (PSZ) Inf W1" )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Polygons
+$ ---------------------------------------------------------
+
+"Floor Polygon" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 141.4, 0 )
+   V3               = ( 42.45, 70.7 )
+   ..
+"Space Polygon 1" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 141.4, 0 )
+   V3               = ( 94.6, 15 )
+   V4               = ( 26.5, 15 )
+   ..
+"Space Polygon 2" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 121.61, 0 )
+   V3               = ( 105.37, 15 )
+   V4               = ( 46.8, 15 )
+   ..
+"Space Polygon 3" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 82.47, 0 )
+   V3               = ( 55.96, 15 )
+   V4               = ( 16.25, 15 )
+   ..
+"Space Polygon 4" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( -47.66, 34.05 )
+   V3               = ( -68.1, -0 )
+   ..
+"Roof Polygon 1" = POLYGON         
+   V1               = ( -3.53, -2 )
+   V2               = ( 147.64, -2 )
+   V3               = ( 41.85, 73.59 )
+   ..
+"Roof Polygon 1 Wall 1" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 151.17, 0 )
+   V3               = ( 54.66, 34.13 )
+   ..
+"Roof Polygon 1 Wall 2" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 141.4, 0 )
+   V3               = ( 147.64, 2 )
+   V4               = ( -3.53, 2 )
+   ..
+"Roof Polygon 1 Wall 3" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 130.02, 0 )
+   V3               = ( 96.51, 34.13 )
+   ..
+"Roof Polygon 1 Wall 4" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 121.61, 0 )
+   V3               = ( 123.78, 2 )
+   V4               = ( -6.24, 2 )
+   ..
+"Roof Polygon 1 Wall 5" = POLYGON         
+   V1               = ( -0, 0 )
+   V2               = ( 88.16, 0 )
+   V3               = ( 33.5, 34.13 )
+   ..
+"Roof Polygon 1 Wall 6" = POLYGON         
+   V1               = ( -0, 0 )
+   V2               = ( 82.47, 0 )
+   V3               = ( 86, 2 )
+   V4               = ( -2.17, 2 )
+   ..
+"Space Polygon 1 - SMirro" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 15, 26.5 )
+   V3               = ( 15, 94.6 )
+   V4               = ( 0, 141.4 )
+   ..
+"Space Polygon 2 - SMirro" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 15, 46.8 )
+   V3               = ( 15, 105.37 )
+   V4               = ( 0, 121.61 )
+   ..
+"Space Polygon 3 - SMirro" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 15, 16.25 )
+   V3               = ( 15, 55.96 )
+   V4               = ( 0, 82.47 )
+   ..
+"Space Polygon 4 - SMirro" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( -0, -68.1 )
+   V3               = ( 34.05, -47.66 )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Wall Parameters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Fixed and Building Shades
+$ ---------------------------------------------------------
+
+
+
+
+$ ---------------------------------------------------------
+$              Misc Cost Related Objects
+$ ---------------------------------------------------------
+
+
+
+"Baseline Data" = BASELINE        
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **                Performance Curves                   **
+$ **                                                     **
+$ *********************************************************
+
+
+$ *********************************************************
+$ **                                                     **
+$ **      Floors / Spaces / Walls / Windows / Doors      **
+$ **                                                     **
+$ *********************************************************
+
+"Bottom Below-Grade Flr" = FLOOR           
+   Z                = -24
+   AZIMUTH          = 360
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 12
+   SPACE-HEIGHT     = 9
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"South Perim Spc (BB.S1)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"NNE Wall (BB.S1.I1)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Spc (BB.NE2)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (BB.S1.I2)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (BB.C4)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (BB.S1.I3)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (BB.WNW3)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"Ceiling (BB.S1.I4)" = INTERIOR-WALL   
+   NEXT-TO          = "South Perim Plnm (BB.S5)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (BB.S1.U1)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UFCons (BB.S1.U2)"
+   LOCATION         = BOTTOM
+   ..
+"South Wall (BB.S1.U2)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (BB.S1.U2)"
+   LOCATION         = SPACE-V1
+   ..
+"NE Perim Spc (BB.NE2)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"WSW Wall (BB.NE2.I5)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (BB.WNW3)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (BB.NE2.I6)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (BB.C4)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (BB.NE2.I7)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (BB.NE6)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (BB.NE2.U3)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UFCons (BB.S1.U2)"
+   LOCATION         = BOTTOM
+   ..
+"NE Wall (BB.NE2.U4)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (BB.S1.U2)"
+   LOCATION         = SPACE-V1
+   ..
+"WNW Perim Spc (BB.WNW3)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"ESE Wall (BB.WNW3.I8)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (BB.C4)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (BB.WNW3.I9)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (BB.WNW7)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (BB.WNW3.U5)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UFCons (BB.S1.U2)"
+   LOCATION         = BOTTOM
+   ..
+"WNW Wall (BB.WNW3.U6)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (BB.S1.U2)"
+   LOCATION         = SPACE-V1
+   ..
+"Core Spc (BB.C4)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 4"
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"Ceiling (BB.C4.I10)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (BB.C8)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (BB.C4.U7)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UFCons (BB.S1.U2)"
+   LOCATION         = BOTTOM
+   ..
+"South Perim Plnm (BB.S5)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   ..
+"NNE Wall (BB.S5.I11)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (BB.NE6)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (BB.S5.I12)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (BB.C8)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (BB.S5.I13)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (BB.WNW7)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"South Wall (BB.S5.U8)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (BB.S1.U2)"
+   LOCATION         = SPACE-V1
+   ..
+"NE Perim Plnm (BB.NE6)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   ..
+"WSW Wall (BB.NE6.I14)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (BB.WNW7)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (BB.NE6.I15)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (BB.C8)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NE Wall (BB.NE6.U9)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (BB.S1.U2)"
+   LOCATION         = SPACE-V1
+   ..
+"WNW Perim Plnm (BB.WNW7)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   ..
+"ESE Wall (BB.WNW7.I16)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (BB.C8)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"WNW Wall (BB.WNW7.U10)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (BB.S1.U2)"
+   LOCATION         = SPACE-V1
+   ..
+"Core Plnm (BB.C8)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.001
+   POLYGON          = "Space Polygon 4"
+   ..
+"Upper Below-Grade Flr" = FLOOR           
+   Z                = -12
+   AZIMUTH          = 360
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 12
+   SPACE-HEIGHT     = 9
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"South Perim Spc (UB.S9)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"Flr (UB.S9.I17)" = INTERIOR-WALL   
+   NEXT-TO          = "South Perim Plnm (BB.S5)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"NNE Wall (UB.S9.I18)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Spc (UB.NE10)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (UB.S9.I19)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (UB.C12)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (UB.S9.I20)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (UB.WNW11)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"Ceiling (UB.S9.I21)" = INTERIOR-WALL   
+   NEXT-TO          = "South Perim Plnm (UB.S13)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"South Wall (UB.S9.U11)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (UB.S9.U11)"
+   LOCATION         = SPACE-V1
+   ..
+"NE Perim Spc (UB.NE10)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"Flr (UB.NE10.I22)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (BB.NE6)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"WSW Wall (UB.NE10.I23)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (UB.WNW11)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (UB.NE10.I24)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (UB.C12)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (UB.NE10.I25)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (UB.NE14)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"NE Wall (UB.NE10.U12)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (UB.S9.U11)"
+   LOCATION         = SPACE-V1
+   ..
+"WNW Perim Spc (UB.WNW11)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"Flr (UB.WNW11.I26)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (BB.WNW7)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"ESE Wall (UB.WNW11.I27)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (UB.C12)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (UB.WNW11.I28)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (UB.WNW15)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"WNW Wall (UB.WNW11.U13)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (UB.S9.U11)"
+   LOCATION         = SPACE-V1
+   ..
+"Core Spc (UB.C12)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 4"
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"Flr (UB.C12.I29)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (BB.C8)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"Ceiling (UB.C12.I30)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (UB.C16)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"South Perim Plnm (UB.S13)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   ..
+"NNE Wall (UB.S13.I31)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (UB.NE14)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (UB.S13.I32)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (UB.C16)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (UB.S13.I33)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (UB.WNW15)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"South Wall (UB.S13.U14)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (UB.S13.U14)"
+   LOCATION         = SPACE-V1
+   ..
+"NE Perim Plnm (UB.NE14)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   ..
+"WSW Wall (UB.NE14.I34)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (UB.WNW15)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (UB.NE14.I35)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (UB.C16)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NE Wall (UB.NE14.U15)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (UB.S13.U14)"
+   LOCATION         = SPACE-V1
+   ..
+"WNW Perim Plnm (UB.WNW15)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   ..
+"ESE Wall (UB.WNW15.I36)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (UB.C16)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"WNW Wall (UB.WNW15.U16)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UWCons (UB.S13.U14)"
+   LOCATION         = SPACE-V1
+   ..
+"Core Plnm (UB.C16)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.001
+   POLYGON          = "Space Polygon 4"
+   ..
+"Ground Flr" = FLOOR           
+   AZIMUTH          = 360
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 12
+   SPACE-HEIGHT     = 9
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"South Perim Spc (G.S17)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "GndPrm Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "GndPrm Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.030777
+   PEOPLE-HG-LAT    = 220.996
+   PEOPLE-HG-SENS   = 250
+   LIGHTING-W/AREA  = ( 1.2349 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.17449 )
+   AREA/PERSON      = 193.506
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (67%)*
+   ..
+"South Wall (G.S17.E1)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"South Win (G.S17.E1.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 5.79684
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 60.0548
+   FRAME-CONDUCT    = 2.781
+   ..
+"South Win (G.S17.E1.W2)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 75.5483
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 60.0548
+   FRAME-CONDUCT    = 2.781
+   ..
+"South Door (G.S17.E1.D1)" = WINDOW          
+   GLASS-TYPE       = "Door Type #1 GT"
+   FRAME-WIDTH      = 0.25
+   X                = 67.95
+   Y                = 0.25
+   HEIGHT           = 6.5
+   WIDTH            = 5.5
+   FRAME-CONDUCT    = 3.079
+   ..
+"Flr (G.S17.I37)" = INTERIOR-WALL   
+   NEXT-TO          = "South Perim Plnm (UB.S13)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"NNE Wall (G.S17.I38)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Spc (G.NE18)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (G.S17.I39)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (G.C20)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (G.S17.I40)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (G.WNW19)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"Ceiling (G.S17.I41)" = INTERIOR-WALL   
+   NEXT-TO          = "South Perim Plnm (G.S21)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"NE Perim Spc (G.NE18)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "GndPrm Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "GndPrm Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.030777
+   PEOPLE-HG-LAT    = 220.996
+   PEOPLE-HG-SENS   = 250
+   LIGHTING-W/AREA  = ( 1.2349 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.17449 )
+   AREA/PERSON      = 193.506
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (67%)*
+   ..
+"NE Wall (G.NE18.E2)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"NE Win (G.NE18.E2.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 5.00079
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 50.9571
+   FRAME-CONDUCT    = 2.781
+   ..
+"NE Win (G.NE18.E2.W2)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 65.6546
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 50.9571
+   FRAME-CONDUCT    = 2.781
+   ..
+"NE Door (G.NE18.E2.D1)" = WINDOW          
+   GLASS-TYPE       = "Door Type #1 GT"
+   FRAME-WIDTH      = 0.25
+   X                = 58.0562
+   Y                = 0.25
+   HEIGHT           = 6.5
+   WIDTH            = 5.5
+   FRAME-CONDUCT    = 3.079
+   ..
+"Flr (G.NE18.I42)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (UB.NE14)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"WSW Wall (G.NE18.I43)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (G.WNW19)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (G.NE18.I44)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (G.C20)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (G.NE18.I45)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (G.NE22)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"WNW Perim Spc (G.WNW19)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "GndPrm Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "GndPrm Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.030777
+   PEOPLE-HG-LAT    = 220.996
+   PEOPLE-HG-SENS   = 250
+   LIGHTING-W/AREA  = ( 1.2349 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.17449 )
+   AREA/PERSON      = 193.506
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (67%)*
+   ..
+"WNW Wall (G.WNW19.E3)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"WNW Win (G.WNW19.E3.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 3.4259
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 32.9583
+   FRAME-CONDUCT    = 2.781
+   ..
+"WNW Win (G.WNW19.E3.W2)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 46.0809
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 32.9583
+   FRAME-CONDUCT    = 2.781
+   ..
+"WNW Door (G.WNW19.E3.D1)" = WINDOW          
+   GLASS-TYPE       = "Door Type #1 GT"
+   FRAME-WIDTH      = 0.25
+   X                = 38.4825
+   Y                = 0.25
+   HEIGHT           = 6.5
+   WIDTH            = 5.5
+   FRAME-CONDUCT    = 3.079
+   ..
+"Flr (G.WNW19.I46)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (UB.WNW15)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"ESE Wall (G.WNW19.I47)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (G.C20)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (G.WNW19.I48)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (G.WNW23)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Core Spc (G.C20)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "GndCor Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "GndCor Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.001
+   PEOPLE-HG-LAT    = 230.123
+   PEOPLE-HG-SENS   = 249.242
+   LIGHTING-W/AREA  = ( 0.758111 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 0.32807 )
+   AREA/PERSON      = 308.838
+   POLYGON          = "Space Polygon 4"
+   C-ACTIVITY-DESC  = *Mechanical/Electrical Room (86%)*
+   ..
+"Flr (G.C20.I49)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (UB.C16)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"Ceiling (G.C20.I50)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (G.C24)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"South Perim Plnm (G.S21)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   ..
+"South Wall (G.S21.E4)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"NNE Wall (G.S21.I51)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (G.NE22)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (G.S21.I52)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (G.C24)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (G.S21.I53)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (G.WNW23)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"NE Perim Plnm (G.NE22)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   ..
+"NE Wall (G.NE22.E5)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"WSW Wall (G.NE22.I54)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (G.WNW23)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (G.NE22.I55)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (G.C24)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"WNW Perim Plnm (G.WNW23)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   ..
+"WNW Wall (G.WNW23.E6)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"ESE Wall (G.WNW23.I56)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (G.C24)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Core Plnm (G.C24)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.001
+   POLYGON          = "Space Polygon 4"
+   ..
+"Above-Grade Flr" = FLOOR           
+   Z                = 12
+   AZIMUTH          = 360
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 12
+   SPACE-HEIGHT     = 9
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"South Perim Spc (M.S25)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "TypPrm Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "TypPrm Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.030777
+   PEOPLE-HG-LAT    = 200
+   PEOPLE-HG-SENS   = 250
+   LIGHTING-W/AREA  = ( 1.3 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.5 )
+   AREA/PERSON      = 225
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   C-ACTIVITY-DESC  = *Office (Executive/Private)*
+   ..
+"South Wall (M.S25.E7)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"South Win (M.S25.E7.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 5.79684
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 129.806
+   FRAME-CONDUCT    = 2.781
+   ..
+"Flr (M.S25.I57)" = INTERIOR-WALL   
+   NEXT-TO          = "South Perim Plnm (G.S21)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"NNE Wall (M.S25.I58)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Spc (M.NE26)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (M.S25.I59)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (M.C28)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (M.S25.I60)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (M.WNW27)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"Ceiling (M.S25.I61)" = INTERIOR-WALL   
+   NEXT-TO          = "South Perim Plnm (M.S29)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"NE Perim Spc (M.NE26)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "TypPrm Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "TypPrm Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.030777
+   PEOPLE-HG-LAT    = 200
+   PEOPLE-HG-SENS   = 250
+   LIGHTING-W/AREA  = ( 1.3 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.5 )
+   AREA/PERSON      = 225
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   C-ACTIVITY-DESC  = *Office (Executive/Private)*
+   ..
+"NE Wall (M.NE26.E8)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"NE Win (M.NE26.E8.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 5.00079
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 111.611
+   FRAME-CONDUCT    = 2.781
+   ..
+"Flr (M.NE26.I62)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (G.NE22)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"WSW Wall (M.NE26.I63)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (M.WNW27)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (M.NE26.I64)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (M.C28)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (M.NE26.I65)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (M.NE30)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"WNW Perim Spc (M.WNW27)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "TypPrm Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "TypPrm Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.030777
+   PEOPLE-HG-LAT    = 200
+   PEOPLE-HG-SENS   = 250
+   LIGHTING-W/AREA  = ( 1.3 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.5 )
+   AREA/PERSON      = 225
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   C-ACTIVITY-DESC  = *Office (Executive/Private)*
+   ..
+"WNW Wall (M.WNW27.E9)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"WNW Win (M.WNW27.E9.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 3.4259
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 75.6133
+   FRAME-CONDUCT    = 2.781
+   ..
+"Flr (M.WNW27.I66)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (G.WNW23)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"ESE Wall (M.WNW27.I67)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (M.C28)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (M.WNW27.I68)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (M.WNW31)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Core Spc (M.C28)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.001
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 4"
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"Flr (M.C28.I69)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (G.C24)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"Ceiling (M.C28.I70)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (M.C32)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"South Perim Plnm (M.S29)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   ..
+"South Wall (M.S29.E10)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"NNE Wall (M.S29.I71)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (M.NE30)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (M.S29.I72)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (M.C32)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (M.S29.I73)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (M.WNW31)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"NE Perim Plnm (M.NE30)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   ..
+"NE Wall (M.NE30.E11)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"WSW Wall (M.NE30.I74)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (M.WNW31)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (M.NE30.I75)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (M.C32)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"WNW Perim Plnm (M.WNW31)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   ..
+"WNW Wall (M.WNW31.E12)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"ESE Wall (M.WNW31.I76)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (M.C32)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Core Plnm (M.C32)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.001
+   POLYGON          = "Space Polygon 4"
+   ..
+"Top Abv-Grade Flr" = FLOOR           
+   Z                = 24
+   AZIMUTH          = 360
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 12
+   SPACE-HEIGHT     = 9
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"South Perim Spc (T.S33)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "TypPrm Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "TypPrm Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.030777
+   PEOPLE-HG-LAT    = 200
+   PEOPLE-HG-SENS   = 250
+   LIGHTING-W/AREA  = ( 1.3 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.5 )
+   AREA/PERSON      = 225
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   C-ACTIVITY-DESC  = *Office (Executive/Private)*
+   ..
+"South Wall (T.S33.E13)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"South Win (T.S33.E13.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 5.79684
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 129.806
+   FRAME-CONDUCT    = 2.781
+   ..
+"Flr (T.S33.I77)" = INTERIOR-WALL   
+   NEXT-TO          = "South Perim Plnm (M.S29)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"NNE Wall (T.S33.I78)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Spc (T.NE34)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (T.S33.I79)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (T.C36)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (T.S33.I80)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (T.WNW35)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"Ceiling (T.S33.I81)" = INTERIOR-WALL   
+   NEXT-TO          = "South Perim Plnm (T.S37)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"NE Perim Spc (T.NE34)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "TypPrm Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "TypPrm Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.030777
+   PEOPLE-HG-LAT    = 200
+   PEOPLE-HG-SENS   = 250
+   LIGHTING-W/AREA  = ( 1.3 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.5 )
+   AREA/PERSON      = 225
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   C-ACTIVITY-DESC  = *Office (Executive/Private)*
+   ..
+"NE Wall (T.NE34.E14)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"NE Win (T.NE34.E14.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 5.00079
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 111.611
+   FRAME-CONDUCT    = 2.781
+   ..
+"Flr (T.NE34.I82)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (M.NE30)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"WSW Wall (T.NE34.I83)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Spc (T.WNW35)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (T.NE34.I84)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (T.C36)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (T.NE34.I85)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (T.NE38)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"WNW Perim Spc (T.WNW35)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "TypPrm Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "TypPrm Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.030777
+   PEOPLE-HG-LAT    = 200
+   PEOPLE-HG-SENS   = 250
+   LIGHTING-W/AREA  = ( 1.3 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.5 )
+   AREA/PERSON      = 225
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   C-ACTIVITY-DESC  = *Office (Executive/Private)*
+   ..
+"WNW Wall (T.WNW35.E15)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"WNW Win (T.WNW35.E15.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 3.4259
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 75.6133
+   FRAME-CONDUCT    = 2.781
+   ..
+"Flr (T.WNW35.I86)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (M.WNW31)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"ESE Wall (T.WNW35.I87)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Spc (T.C36)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (T.WNW35.I88)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (T.WNW39)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Core Spc (T.C36)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Undgnd Occ Sch"
+   LIGHTING-SCHEDUL = ( "Undgnd Ltg Sch" )
+   TASK-LIGHT-SCH   = "Undgnd Occ Sch"
+   EQUIP-SCHEDULE   = ( "Undgnd Eqp Sch" )
+   INF-SCHEDULE     = "Undgnd Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.001
+   PEOPLE-HG-LAT    = 201.313
+   PEOPLE-HG-SENS   = 248.144
+   LIGHTING-W/AREA  = ( 1.12171 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.12939 )
+   AREA/PERSON      = 104.24
+   POLYGON          = "Space Polygon 4"
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (58%)*
+   ..
+"Flr (T.C36.I89)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (M.C32)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"Ceiling (T.C36.I90)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (T.C40)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"South Perim Plnm (T.S37)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V1
+   ..
+"South Wall (T.S37.E16)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"NNE Wall (T.S37.I91)" = INTERIOR-WALL   
+   NEXT-TO          = "NE Perim Plnm (T.NE38)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"North Wall (T.S37.I92)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (T.C40)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"NNW Wall (T.S37.I93)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (T.WNW39)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"UnderRf (T.S37.I94)" = INTERIOR-WALL   
+   NEXT-TO          = "Under Roof (T.37)"
+   CONSTRUCTION     = "AFlr Construction"
+   LOCATION         = TOP
+   ..
+"NE Perim Plnm (T.NE38)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V2
+   ..
+"NE Wall (T.NE38.E17)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"WSW Wall (T.NE38.I95)" = INTERIOR-WALL   
+   NEXT-TO          = "WNW Perim Plnm (T.WNW39)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"SW Wall (T.NE38.I96)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (T.C40)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"UnderRf (T.NE38.I97)" = INTERIOR-WALL   
+   NEXT-TO          = "Under Roof (T.37)"
+   CONSTRUCTION     = "AFlr Construction"
+   LOCATION         = TOP
+   ..
+"WNW Perim Plnm (T.WNW39)" = SPACE           
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.010259
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V3
+   ..
+"WNW Wall (T.WNW39.E18)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"ESE Wall (T.WNW39.I98)" = INTERIOR-WALL   
+   NEXT-TO          = "Core Plnm (T.C40)"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"UnderRf (T.WNW39.I99)" = INTERIOR-WALL   
+   NEXT-TO          = "Under Roof (T.37)"
+   CONSTRUCTION     = "AFlr Construction"
+   LOCATION         = TOP
+   ..
+"Core Plnm (T.C40)" = SPACE           
+   X                = 94.6046
+   Y                = 15
+   Z                = 9
+   HEIGHT           = 3
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-SCHEDULE     = "Sys1 (PSZ) Inf Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.001
+   POLYGON          = "Space Polygon 4"
+   ..
+"UnderRf (T.C40.I100)" = INTERIOR-WALL   
+   NEXT-TO          = "Under Roof (T.37)"
+   CONSTRUCTION     = "AFlr Construction"
+   LOCATION         = TOP
+   ..
+"Under Roof (T.37)" = SPACE           
+   X                = 0
+   Y                = 0
+   Z                = 12
+   AZIMUTH          = 0
+   HEIGHT           = 14.426
+   VOLUME           = 27507.8
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   INF-METHOD       = AIR-CHANGE
+   AIR-CHANGES/HR   = 5
+   POLYGON          = "Roof Polygon 1"
+   LOCATION         = FLOOR-V1
+   ..
+"Roof (T.37.E19)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof Construction"
+   X                = -3.53367
+   Y                = -2
+   Z                = 0
+   AZIMUTH          = 180
+   TILT             = 25
+   POLYGON          = "Roof Polygon 1 Wall 1"
+   SHADING-SURFACE  = YES
+   ..
+"Soffet (T.37.E20)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   X                = 0
+   Y                = 0
+   Z                = 0
+   AZIMUTH          = 180
+   TILT             = 180
+   POLYGON          = "Roof Polygon 1 Wall 2"
+   ..
+"Roof (T.37.E21)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof Construction"
+   X                = 147.639
+   Y                = -2
+   Z                = 0
+   AZIMUTH          = 35.5459
+   TILT             = 25
+   POLYGON          = "Roof Polygon 1 Wall 3"
+   SHADING-SURFACE  = YES
+   ..
+"Soffet (T.37.E22)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   X                = 141.4
+   Y                = 0
+   Z                = 0
+   AZIMUTH          = 35.5459
+   TILT             = 180
+   POLYGON          = "Roof Polygon 1 Wall 4"
+   ..
+"Roof (T.37.E23)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof Construction"
+   X                = 41.8503
+   Y                = 73.5865
+   Z                = 0
+   AZIMUTH          = -59.0184
+   TILT             = 25
+   POLYGON          = "Roof Polygon 1 Wall 5"
+   SHADING-SURFACE  = YES
+   ..
+"Soffet (T.37.E24)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   X                = 42.45
+   Y                = 70.7
+   Z                = 0
+   AZIMUTH          = -59.0184
+   TILT             = 180
+   POLYGON          = "Roof Polygon 1 Wall 6"
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **              Electric & Fuel Meters                 **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Electric Meters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Fuel Meters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Master Meters
+$ ---------------------------------------------------------
+
+"MASTER-METERS 1" = MASTER-METERS   
+   MSTR-ELEC-METER  = "EM1"
+   MSTR-FUEL-METER  = "FM1"
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **      HVAC Circulation Loops / Plant Equipment       **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Pumps
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Heat Exchangers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Circulation Loops
+$ ---------------------------------------------------------
+
+"DHW Plant 1 Loop (1)" = CIRCULATION-LOOP
+   TYPE             = DHW
+   DESIGN-HEAT-T    = 135
+   PROCESS-FLOW     = ( 0.32568 )
+   PROCESS-SCH      = ( "Undgnd Occ Sch" )
+   PROCESS-T        = ( 135 )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Chillers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Boilers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Domestic Water Heaters
+$ ---------------------------------------------------------
+
+"DHW Plant 1 Wtr Htr (1)" = DW-HEATER       
+   TYPE             = GAS
+   TANK-VOLUME      = 87.9337
+   CAPACITY         = 0.117198
+   HIR-FPLR         = "DW-Gas-Pilotless-HIR-fPLR"
+   TANK-UA          = 3.66391
+   LOCATION         = ZONE
+   ZONE-NAME        = "South Perim Pl Zn (BB.S5)"
+   DHW-LOOP         = "DHW Plant 1 Loop (1)"
+   C-RECOV-EFF      = 0.8
+   C-STBY-LOSS-FRAC = 2.59643
+   C-TANK-EXT-RVAL  = 12
+   ..
+
+
+$ ---------------------------------------------------------
+$              Heat Rejection
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Tower Free Cooling
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Photovoltaic Modules
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Electric Generators
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Thermal Storage
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Ground Loop Heat Exchangers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Compliance DHW (residential dwelling units)
+$ ---------------------------------------------------------
+
+
+
+$ *********************************************************
+$ **                                                     **
+$ **            Steam & Chilled Water Meters             **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Steam Meters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Chilled Water Meters
+$ ---------------------------------------------------------
+
+
+
+$ *********************************************************
+$ **                                                     **
+$ **               HVAC Systems / Zones                  **
+$ **                                                     **
+$ *********************************************************
+
+"Sys1 (PSZ) (BB.C1)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "South Perim Zn (BB.S1)"
+   ..
+"South Perim Zn (BB.S1)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Spc (BB.S1)"
+   ..
+"South Perim Pl Zn (BB.S5)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Plnm (BB.S5)"
+   ..
+"Sys1 (PSZ) (BB.C2)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "NE Perim Zn (BB.NE2)"
+   ..
+"NE Perim Zn (BB.NE2)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Spc (BB.NE2)"
+   ..
+"NE Perim Pl Zn (BB.NE6)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Plnm (BB.NE6)"
+   ..
+"Sys1 (PSZ) (BB.C3)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "WNW Perim Zn (BB.WNW3)"
+   ..
+"WNW Perim Zn (BB.WNW3)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Spc (BB.WNW3)"
+   ..
+"WNW Perim Pl Zn (BB.WNW7)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Plnm (BB.WNW7)"
+   ..
+"Sys1 (PSZ) (BB.C4)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "Core Zn (BB.C4)"
+   ..
+"Core Zn (BB.C4)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Spc (BB.C4)"
+   ..
+"Core Pl Zn (BB.C8)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Plnm (BB.C8)"
+   ..
+"Sys1 (PSZ) (UB.C9)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "South Perim Zn (UB.S9)"
+   ..
+"South Perim Zn (UB.S9)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Spc (UB.S9)"
+   ..
+"South Perim Pl Zn (UB.S13)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Plnm (UB.S13)"
+   ..
+"Sys1 (PSZ) (UB.C10)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "NE Perim Zn (UB.NE10)"
+   ..
+"NE Perim Zn (UB.NE10)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Spc (UB.NE10)"
+   ..
+"NE Perim Pl Zn (UB.NE14)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Plnm (UB.NE14)"
+   ..
+"Sys1 (PSZ) (UB.C11)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "WNW Perim Zn (UB.WNW11)"
+   ..
+"WNW Perim Zn (UB.WNW11)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Spc (UB.WNW11)"
+   ..
+"WNW Perim Pl Zn (UB.WNW15)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Plnm (UB.WNW15)"
+   ..
+"Sys1 (PSZ) (UB.C12)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "Core Zn (UB.C12)"
+   ..
+"Core Zn (UB.C12)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Spc (UB.C12)"
+   ..
+"Core Pl Zn (UB.C16)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Plnm (UB.C16)"
+   ..
+"Sys1 (PSZ) (G.S17)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "South Perim Zn (G.S17)"
+   ..
+"South Perim Zn (G.S17)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 17.9004
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Spc (G.S17)"
+   ..
+"South Perim Pl Zn (G.S21)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Plnm (G.S21)"
+   ..
+"Sys1 (PSZ) (G.NE18)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "NE Perim Zn (G.NE18)"
+   ..
+"NE Perim Zn (G.NE18)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 17.9004
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Spc (G.NE18)"
+   ..
+"NE Perim Pl Zn (G.NE22)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Plnm (G.NE22)"
+   ..
+"Sys1 (PSZ) (G.WNW19)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "WNW Perim Zn (G.WNW19)"
+   ..
+"WNW Perim Zn (G.WNW19)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 17.9004
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Spc (G.WNW19)"
+   ..
+"WNW Perim Pl Zn (G.WNW23)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Plnm (G.WNW23)"
+   ..
+"Sys1 (PSZ) (G.C20)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "Core Zn (G.C20)"
+   ..
+"Core Zn (G.C20)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 23.8754
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Spc (G.C20)"
+   ..
+"Core Pl Zn (G.C24)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Plnm (G.C24)"
+   ..
+"Sys1 (PSZ) (M.S25)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "South Perim Zn (M.S25)"
+   ..
+"South Perim Zn (M.S25)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 20
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Spc (M.S25)"
+   ..
+"South Perim Pl Zn (M.S29)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Plnm (M.S29)"
+   ..
+"Sys1 (PSZ) (M.NE26)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "NE Perim Zn (M.NE26)"
+   ..
+"NE Perim Zn (M.NE26)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 20
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Spc (M.NE26)"
+   ..
+"NE Perim Pl Zn (M.NE30)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Plnm (M.NE30)"
+   ..
+"Sys1 (PSZ) (M.WNW27)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "WNW Perim Zn (M.WNW27)"
+   ..
+"WNW Perim Zn (M.WNW27)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 20
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Spc (M.WNW27)"
+   ..
+"WNW Perim Pl Zn (M.WNW31)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Plnm (M.WNW31)"
+   ..
+"Sys1 (PSZ) (M.C28)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "Core Zn (M.C28)"
+   ..
+"Core Zn (M.C28)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Spc (M.C28)"
+   ..
+"Core Pl Zn (M.C32)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Plnm (M.C32)"
+   ..
+"Sys1 (PSZ) (T.S33)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "South Perim Zn (T.S33)"
+   ..
+"Roof Zone 1" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Under Roof (T.37)"
+   ..
+"South Perim Zn (T.S33)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 20
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Spc (T.S33)"
+   ..
+"South Perim Pl Zn (T.S37)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "South Perim Plnm (T.S37)"
+   ..
+"Sys1 (PSZ) (T.NE34)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "NE Perim Zn (T.NE34)"
+   ..
+"NE Perim Zn (T.NE34)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 20
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Spc (T.NE34)"
+   ..
+"NE Perim Pl Zn (T.NE38)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "NE Perim Plnm (T.NE38)"
+   ..
+"Sys1 (PSZ) (T.WNW35)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "WNW Perim Zn (T.WNW35)"
+   ..
+"WNW Perim Zn (T.WNW35)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 20
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Spc (T.WNW35)"
+   ..
+"WNW Perim Pl Zn (T.WNW39)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WNW Perim Plnm (T.WNW39)"
+   ..
+"Sys1 (PSZ) (T.C36)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "Core Zn (T.C36)"
+   ..
+"Core Zn (T.C36)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 25.8689
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Undgnd Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Undgnd Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Spc (T.C36)"
+   ..
+"Core Pl Zn (T.C40)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 67
+   DESIGN-COOL-T    = 80
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Core Plnm (T.C40)"
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **                Metering & Misc HVAC                 **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Equipment Controls
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Load Management
+$ ---------------------------------------------------------
+
+
+
+$ *********************************************************
+$ **                                                     **
+$ **                    Utility Rates                    **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Ratchets
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Block Charges
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Utility Rates
+$ ---------------------------------------------------------
+
+"SCE GS-2 Elec Rate" = UTILITY-RATE    
+   LIBRARY-ENTRY "SCE GS-2 Elec Rate"
+   ..
+"SoCalGas GN-10 Gas Rate" = UTILITY-RATE    
+   LIBRARY-ENTRY "SoCalGas GN-10 Gas Rate"
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **                 Output Reporting                    **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Loads Non-Hourly Reporting
+$ ---------------------------------------------------------
+
+LOADS-REPORT    
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Systems Non-Hourly Reporting
+$ ---------------------------------------------------------
+
+SYSTEMS-REPORT  
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Plant Non-Hourly Reporting
+$ ---------------------------------------------------------
+
+PLANT-REPORT    
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Economics Non-Hourly Reporting
+$ ---------------------------------------------------------
+
+ECONOMICS-REPORT
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Hourly Reporting
+$ ---------------------------------------------------------
+
+
+
+
+$ ---------------------------------------------------------
+$              THE END
+$ ---------------------------------------------------------
+
+END ..
+COMPUTE ..
+STOP ..

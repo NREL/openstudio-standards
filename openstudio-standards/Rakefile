@@ -1,0 +1,47 @@
+
+require 'bundler/gem_tasks'
+begin
+  Bundler.setup
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts 'Run `bundle install` to install missing gems'
+  exit e.status_code
+end
+
+require 'rake/testtask'
+desc 'Run the tests'
+Rake::TestTask.new do |task|
+  #task.test_files = FileList['../measures/create_DOE_prototype_building/tests/*_test.rb']
+  task.test_files = FileList['../measures/apply_system1/tests/*_test.rb']
+  task.test_files = FileList['../measures/apply_system1/tests/CanadianAddUnitaryAndApplyStandard_test.rb']
+  #puts "Here #{File.expand_path('../measures/**/*_test')}"
+  #task.libs << ['test', 'lib', '../measures/create_DOE_prototype_building/tests']
+  #task.test_files = FileList['../test/*/test*.rb']
+  #task.pattern = 'test/test_*.rb'
+  #task.pattern = test_files
+  #task.verbose = true
+  #puts task.libs
+end
+
+require 'yard'
+desc 'Generate the documentation'
+YARD::Rake::YardocTask.new(:doc) do |task|
+  #task.files   = ['create_DOE_prototype_building/resources/Prototype*.rb', 'create_DOE_prototype_building/resources/Standards*.rb']   # optional
+  #task.options = ['--hide-api private']
+  task.stats_options = ['--list-undoc']
+end
+
+require 'rubocop/rake_task'
+desc 'Check the code for style consistency'
+RuboCop::RakeTask.new(:rubocop) do |task|
+  task.options = ['--no-color', '--out=rubocop-results.xml']
+  task.formatters = ['RuboCop::Formatter::CheckstyleFormatter']
+  task.requires = ['rubocop/formatter/checkstyle_formatter']
+  # don't abort rake on failure
+  task.fail_on_error = false
+end
+
+desc 'Build, install, test'
+task :btest => [:install, :test]
+
+task :default => :btest

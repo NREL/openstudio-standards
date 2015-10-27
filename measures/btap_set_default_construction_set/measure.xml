@@ -1,0 +1,105 @@
+<measure>
+  <schema_version>3.0</schema_version>
+  <name>set_default_construction_set</name>
+  <uid>b7840b31-858b-4d1c-8832-787138c7a52c</uid>
+  <version_id>98f81af1-a81e-4fab-91b3-e6ff9df58a28</version_id>
+  <xml_checksum>11D60F39</xml_checksum>
+  <class_name>SetDefaultConstructionSet</class_name>
+  <display_name>Set Default Construction Set</display_name>
+  <description>Loads and Set the a default construction library from an osm file. </description>
+  <modeler_description>Loads and Set the a default construction library from an osm file.  </modeler_description>
+  <arguments>
+    <argument>
+      <name>lib_file_name</name>
+      <display_name>Lib File Name</display_name>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+    </argument>
+    <argument>
+      <name>construction_set_name</name>
+      <display_name>Construction Set Name</display_name>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+    </argument>
+    <argument>
+      <name>lib_directory</name>
+      <display_name>Lib Directory</display_name>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>../../lib/btap/resources/constructions</default_value>
+    </argument>
+  </arguments>
+  <provenances/>
+  <tags>
+    <tag>Envelope.Construction Sets</tag>
+  </tags>
+  <attributes>
+    <attribute>
+      <name>Measure Type</name>
+      <value>ModelMeasure</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Apply Measure Now</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>OpenStudio Application</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Parametric Analysis Tool</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Analysis Spreadsheet</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Model Articulation</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Calibration</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Sensitivity Analysis</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>New Construction EE</value>
+      <datatype>string</datatype>
+    </attribute>
+  </attributes>
+  <files>
+    <file>
+      <filename>set_default_construction_set_test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>70024F40</checksum>
+    </file>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>1.6.0</identifier>
+        <min_compatible>1.6.0</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>843C4A75</checksum>
+    </file>
+  </files>
+</measure>

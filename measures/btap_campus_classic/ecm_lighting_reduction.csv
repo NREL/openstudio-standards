@@ -1,0 +1,49 @@
+baseline_index,building_type,vintage_name,measure_id,lighting_scaling_factor,lighting_fraction_radiant,lighting_fraction_visible,lighting_return_air_fraction,cost_per_building
+1.0,Barracks,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,92265.0
+2.0,Fire Hall,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,15765.0
+3.0,Food Service,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,111667.0
+4.0,Food Service,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,111667.0
+5.0,Hangar,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,133713.0
+6.0,Hangar,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,133713.0
+7.0,Hangar,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,133713.0
+8.0,Maintenance Shop,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,45581.0
+9.0,Maintenance Shop,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,45581.0
+10.0,Maintenance Shop-Small,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,24169.0
+11.0,Maintenance Shop-Small,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,24169.0
+12.0,Maintenance Shop-Small,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,24169.0
+13.0,Office,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,83176.0
+14.0,Office,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,83176.0
+15.0,Office,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,83176.0
+16.0,Office-Small,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,20189.0
+17.0,Office-Small,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,20189.0
+18.0,Office-Small,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,20189.0
+19.0,Recreation Center,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,232340.0
+20.0,Storage Building,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,24436.0
+21.0,Storage Building,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,24436.0
+22.0,Storage Building,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,24436.0
+23.0,Storage Building,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,24436.0
+24.0,Training Building,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,160307.0
+25.0,Training Building,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,160307.0
+26.0,Training Building,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,160307.0
+27.0,Vehicle Garage,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,26160.0
+28.0,Vehicle Garage,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,26160.0
+NA,Barracks,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,92265.0
+NA,Barracks,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,92265.0
+30.0,Barracks,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,92265.0
+NA,Fire Hall,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,15765.0
+NA,Fire Hall,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,15765.0
+31.0,Fire Hall,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,15765.0
+NA,Food Service,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,111667.0
+NA,Food Service,1980-2004,lights_reduce_70p,0.7,NA,NA,NA,111667.0
+29.0,Hangar,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,133713.0
+NA,Maintenance Shop,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,45581.0
+NA,Maintenance Shop,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,45581.0
+NA,Maintenance Shop-Small,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,24169.0
+NA,Office,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,83176.0
+NA,Office-Small,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,20189.0
+NA,Recreation Center,1959-pre,lights_reduce_70p,0.7,NA,NA,NA,232340.0
+NA,Recreation Center,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,232340.0
+NA,Recreation Center,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,232340.0
+NA,Training Building,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,160307.0
+NA,Vehicle Garage,1960-1979,lights_reduce_70p,0.7,NA,NA,NA,26160.0
+NA,Vehicle Garage,2005-2014,lights_reduce_70p,0.7,NA,NA,NA,26160.0

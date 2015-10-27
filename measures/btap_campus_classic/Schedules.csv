@@ -1,0 +1,97 @@
+schedule_name,schedule_string
+heating_always_21C,"{""sch"":
+  {  ""name"":""always_21C"",
+     ""type"":""TEMPERATURE"",
+     ""period_rules"":
+       [ 
+          {  ""start"":""Jan-31"",
+             ""end"":""Dec-31"",
+             ""day_rules"":
+                [
+                  { ""days"" :""M,T,W,T,F,S,SN"",
+                    ""hour_rules"":
+                        [ 
+                            { 
+                              ""value"":""21.0"", 
+                              ""until"":""24:00""
+                              
+                            }
+                        ]
+                  }
+                ]
+          }
+       ]
+     }     
+  }"
+cooling_always_24C,"{""sch"":
+  {  ""name"":""always_24C"",
+     ""type"":""TEMPERATURE"",
+     ""period_rules"":
+       [ 
+          {  ""start"":""Jan-31"",
+             ""end"":""Dec-31"",
+             ""day_rules"":
+                [
+                  { ""days"" :""M,T,W,T,F,S,SN"",
+                    ""hour_rules"":
+                        [ 
+                            { 
+                              ""value"":""24.0"", 
+                              ""until"":""24:00""
+                              
+                            }
+                        ]
+                  }
+                ]
+          }
+       ]
+     }     
+  }"
+shw_60C,"{""sch"":
+  {  ""name"":""shw_60C"",
+     ""type"":""TEMPERATURE"",
+     ""period_rules"":
+       [ 
+          {  ""start"":""Jan-31"",
+             ""end"":""Dec-31"",
+             ""day_rules"":
+                [
+                  { ""days"" :""M,T,W,T,F,S,SN"",
+                    ""hour_rules"":
+                        [ 
+                            { 
+                              ""value"":""60.0"", 
+                              ""until"":""24:00""
+                              
+                            }
+                        ]
+                  }
+                ]
+          }
+       ]
+     }     
+  }"
+heating_always_20C,"{""sch"":
+  {  ""name"":""always_21C"",
+     ""type"":""TEMPERATURE"",
+     ""period_rules"":
+       [ 
+          {  ""start"":""Jan-31"",
+             ""end"":""Dec-31"",
+             ""day_rules"":
+                [
+                  { ""days"" :""M,T,W,T,F,S,SN"",
+                    ""hour_rules"":
+                        [ 
+                            { 
+                              ""value"":""20.0"", 
+                              ""until"":""24:00""
+                              
+                            }
+                        ]
+                  }
+                ]
+          }
+       ]
+     }     
+  }"
