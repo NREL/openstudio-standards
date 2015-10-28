@@ -60,6 +60,12 @@ class OpenStudio::Model::FanConstantVolume
     
     motor_properties = self.model.find_object(motors, search_criteria, allowed_hp)
 
+    # Check to make sure properties were found
+    if motor_properties.nil?
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.FanConstantVolume', "For #{self.name}, cannot find motor info, cannot apply efficiency standard.")
+      return false
+    end    
+    
     # Get the nominal motor efficiency
     motor_eff = motor_properties['nominal_full_load_efficiency']
   
