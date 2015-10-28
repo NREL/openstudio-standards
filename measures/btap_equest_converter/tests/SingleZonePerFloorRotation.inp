@@ -1,0 +1,1149 @@
+INPUT ..
+
+
+$ ---------------------------------------------------------
+$              Abort, Diagnostics
+$ ---------------------------------------------------------
+
+
+
+
+$ ---------------------------------------------------------
+$              Global Parameters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Title, Run Periods, Design Days, Holidays
+$ ---------------------------------------------------------
+
+TITLE           
+   LINE-1           = *Project 14*
+   ..
+
+"Entire Year" = RUN-PERIOD-PD
+   BEGIN-MONTH      = 1
+   BEGIN-DAY        = 1
+   BEGIN-YEAR       = 2015
+   END-MONTH        = 12
+   END-DAY          = 31
+   END-YEAR         = 2015
+   ..
+
+"Cooling Design Day" = DESIGN-DAY      
+   TYPE             = COOLING
+   DRYBULB-HIGH     = 91
+   DRYBULB-RANGE    = 14
+   WETBULB-AT-HIGH  = 67
+   MONTH            = 7
+   NUMBER-OF-DAYS   = 120
+   ..
+"Heating Design Day" = DESIGN-DAY      
+   TYPE             = HEATING
+   DRYBULB-HIGH     = 37
+   ..
+
+"Standard US Holidays" = HOLIDAYS        
+   LIBRARY-ENTRY "US"
+   ..
+
+
+$ ---------------------------------------------------------
+$              Compliance Data
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Site and Building Data
+$ ---------------------------------------------------------
+
+"Site Data" = SITE-PARAMETERS 
+   ALTITUDE         = 97
+   ..
+
+"Building Data" = BUILD-PARAMETERS
+   HOLIDAYS         = "Standard US Holidays"
+   ..
+
+
+
+PROJECT-DATA    
+   ..
+
+
+$ ---------------------------------------------------------
+$              Materials / Layers / Constructions
+$ ---------------------------------------------------------
+
+"EWall Cons Mat 2 (8.6)" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 8.6
+   ..
+"Roof Cons Mat 4 (2.8)" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 2.8
+   ..
+"UFMat (G.1.U2.M1)" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 26.993
+   ..
+
+"EWall Cons Layers" = LAYERS          
+   MATERIAL         = ( "Plywd 5/8in (PW04)", "Insul Bd 3/4in (IN62)", 
+         "EWall Cons Mat 2 (8.6)", "GypBd 1/2in (GP01)" )
+   ..
+"Roof Cons Layers" = LAYERS          
+   MATERIAL         = ( "Blt-Up Roof 3/8in (BR01)", "Polyurethane 3in (IN46)", 
+         "Plywd 5/8in (PW04)", "Roof Cons Mat 4 (2.8)", 
+         "AcousTile 1/2in (AC02)" )
+   ..
+"Ceilg Cons Layers" = LAYERS          
+   MATERIAL         = ( "AcousTile 1/2in (AC02)" )
+   ..
+"IFlr Cons Layers" = LAYERS          
+   MATERIAL         = ( "Conc HW 140lb 6in (HF-C13)", "Linoleum Tile (LT01)" )
+   ..
+"UFLyrs (G.1.U2)" = LAYERS          
+   MATERIAL         = ( "UFMat (G.1.U2.M1)", "Light Soil, Damp 12in", 
+         "Conc HW 140lb 6in (HF-C13)", "Linoleum Tile (LT01)" )
+   ..
+
+"EWall Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers"
+   ..
+"Roof Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 1
+   LAYERS           = "Roof Cons Layers"
+   ..
+"Ceilg Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "Ceilg Cons Layers"
+   ..
+"IWall Construction" = CONSTRUCTION    
+   TYPE             = U-VALUE
+   U-VALUE          = 2.7
+   ..
+"IFlr Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "IFlr Cons Layers"
+   ..
+"IFlSP Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "IFlr Cons Layers"
+   ..
+"UFCons (G.1.U2)" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "UFLyrs (G.1.U2)"
+   ..
+
+
+$ ---------------------------------------------------------
+$              Glass Type Codes
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Glass Types
+$ ---------------------------------------------------------
+
+"Window Type #1 GT" = GLASS-TYPE      
+   TYPE             = GLASS-TYPE-CODE
+   GLASS-TYPE-CODE  = "2004"
+   ..
+"Window Type #2 GT" = GLASS-TYPE      
+   TYPE             = GLASS-TYPE-CODE
+   GLASS-TYPE-CODE  = "2203"
+   ..
+"Door Type #1 GT" = GLASS-TYPE      
+   TYPE             = GLASS-TYPE-CODE
+   GLASS-TYPE-CODE  = "1001"
+   ..
+
+
+$ ---------------------------------------------------------
+$              Window Layers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Lamps / Luminaries / Lighting Systems
+$ ---------------------------------------------------------
+
+
+
+
+
+$ ---------------------------------------------------------
+$              Day Schedules
+$ ---------------------------------------------------------
+
+"GndFlr Occ 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, &D, 0.9, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 0 )
+   ..
+"GndFlr Occ 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0 )
+   ..
+"GndFlr Ltg 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.023, &D, &D, &D, &D, &D, &D, 0.4615, 0.9, &D, &D, 
+         &D, &D, &D, &D, &D, &D, 0.4615, 0.023 )
+   ..
+"GndFlr Ltg 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.023 )
+   ..
+"GndFlr Eqp 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1395, &D, &D, &D, &D, &D, &D, &D, 0.9, &D, &D, &D, 
+         &D, &D, &D, &D, &D, 0.1395 )
+   ..
+"GndFlr Eqp 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1395 )
+   ..
+"GndFlr Sys1 Cool 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 82, &D, &D, &D, &D, &D, &D, &D, 76, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 82 )
+   ..
+"GndFlr Sys1 Cool 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 82 )
+   ..
+"GndFlr Sys1 Heat 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 64, &D, &D, &D, &D, &D, &D, &D, 70, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 64 )
+   ..
+"GndFlr Sys1 Heat 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 64 )
+   ..
+"GndFlr Sys1 Inf 1/0/1 D1" = DAY-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   VALUES           = ( 1, &D, &D, &D, &D, &D, &D, 1.25, &D, 0.5, &D, &D, &D, 
+         &D, &D, &D, 1.25, &D, 1 )
+   ..
+"GndFlr Sys1 Inf 1/0/1 D2" = DAY-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   VALUES           = ( 1 )
+   ..
+"TypFlr Ltg 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.011, &D, &D, &D, &D, &D, &D, 0.4555, 0.9, &D, &D, 
+         &D, &D, &D, &D, &D, &D, 0.4555, 0.011 )
+   ..
+"TypFlr Ltg 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.011 )
+   ..
+"TypFlr Eqp 1/0 D1" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1582, &D, &D, &D, &D, &D, &D, &D, 0.9, &D, &D, &D, 
+         &D, &D, &D, &D, &D, 0.1582 )
+   ..
+"TypFlr Eqp 1/0 D2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.1582 )
+   ..
+"Sys1 (PSZ) Fans D1-1" = DAY-SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, 1, &D, &D, &D, &D, &D, &D, 
+         &D, &D, &D, &D, 0 )
+   ..
+"Sys1 (PSZ) Fans D1-2" = DAY-SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   VALUES           = ( 0 )
+   ..
+
+$ ---------------------------------------------------------
+$              Week Schedules
+$ ---------------------------------------------------------
+
+"GndFlr Occ 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "GndFlr Occ 1/0 D1", &D, &D, &D, &D, 
+         "GndFlr Occ 1/0 D2" )
+   ..
+"GndFlr Ltg 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "GndFlr Ltg 1/0 D1", &D, &D, &D, &D, 
+         "GndFlr Ltg 1/0 D2" )
+   ..
+"GndFlr Eqp 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "GndFlr Eqp 1/0 D1", &D, &D, &D, &D, 
+         "GndFlr Eqp 1/0 D2" )
+   ..
+"GndFlr Sys1 Cool 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "GndFlr Sys1 Cool 1/0 D1", &D, &D, &D, &D, 
+         "GndFlr Sys1 Cool 1/0 D2" )
+   ..
+"GndFlr Sys1 Heat 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "GndFlr Sys1 Heat 1/0 D1", &D, &D, &D, &D, 
+         "GndFlr Sys1 Heat 1/0 D2" )
+   ..
+"GndFlr Sys1 Infil 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   DAY-SCHEDULES    = ( "GndFlr Sys1 Inf 1/0/1 D1", &D, &D, &D, &D, 
+         "GndFlr Sys1 Inf 1/0/1 D2" )
+   ..
+"TypFlr Ltg 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "TypFlr Ltg 1/0 D1", &D, &D, &D, &D, 
+         "TypFlr Ltg 1/0 D2" )
+   ..
+"TypFlr Eqp 1/0 W1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "TypFlr Eqp 1/0 D1", &D, &D, &D, &D, 
+         "TypFlr Eqp 1/0 D2" )
+   ..
+"Sys1 (PSZ) Fans W1" = WEEK-SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   DAY-SCHEDULES    = ( "Sys1 (PSZ) Fans D1-1", &D, &D, &D, &D, 
+         "Sys1 (PSZ) Fans D1-2" )
+   ..
+
+$ ---------------------------------------------------------
+$              Annual Schedules
+$ ---------------------------------------------------------
+
+"GndFlr Occ Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndFlr Occ 1/0 W1" )
+   ..
+"GndFlr Ltg Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndFlr Ltg 1/0 W1" )
+   ..
+"GndFlr Eqp Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndFlr Eqp 1/0 W1" )
+   ..
+"GndFlr Sys1 Cool Sch" = SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndFlr Sys1 Cool 1/0 W1" )
+   ..
+"GndFlr Sys1 Heat Sch" = SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndFlr Sys1 Heat 1/0 W1" )
+   ..
+"GndFlr Sys1 Infil Sch" = SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "GndFlr Sys1 Infil 1/0 W1" )
+   ..
+"TypFlr Ltg Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "TypFlr Ltg 1/0 W1" )
+   ..
+"TypFlr Eqp Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "TypFlr Eqp 1/0 W1" )
+   ..
+"Sys1 (PSZ) Fan Sch" = SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Sys1 (PSZ) Fans W1" )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Polygons
+$ ---------------------------------------------------------
+
+"Floor Polygon" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 200, 0 )
+   V3               = ( 200, 100 )
+   V4               = ( 0, 100 )
+   ..
+"Floor Polygon - SMirro" = POLYGON         
+   V1               = ( 0, 0 )
+   V2               = ( 100, 0 )
+   V3               = ( 100, 200 )
+   V4               = ( 0, 200 )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Wall Parameters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Fixed and Building Shades
+$ ---------------------------------------------------------
+
+
+
+
+$ ---------------------------------------------------------
+$              Misc Cost Related Objects
+$ ---------------------------------------------------------
+
+
+
+"Baseline Data" = BASELINE        
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **                Performance Curves                   **
+$ **                                                     **
+$ *********************************************************
+
+
+$ *********************************************************
+$ **                                                     **
+$ **      Floors / Spaces / Walls / Windows / Doors      **
+$ **                                                     **
+$ *********************************************************
+
+"Ground Flr" = FLOOR           
+   AZIMUTH          = 360
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 12
+   SPACE-HEIGHT     = 12
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"Spc (G.1)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "GndFlr Occ Sch"
+   LIGHTING-SCHEDUL = ( "GndFlr Ltg Sch" )
+   TASK-LIGHT-SCH   = "GndFlr Occ Sch"
+   EQUIP-SCHEDULE   = ( "GndFlr Eqp Sch" )
+   INF-SCHEDULE     = "GndFlr Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.01368
+   PEOPLE-HG-LAT    = 210.403
+   PEOPLE-HG-SENS   = 248.915
+   LIGHTING-W/AREA  = ( 1.1266 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.04559 )
+   AREA/PERSON      = 152.14
+   POLYGON          = "Floor Polygon"
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (56%)*
+   ..
+"South Wall (G.1.E1)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"South Win (G.1.E1.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 8.15431
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 86.9974
+   FRAME-CONDUCT    = 2.781
+   ..
+"South Win (G.1.E1.W2)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 104.848
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 86.9974
+   FRAME-CONDUCT    = 2.781
+   ..
+"South Door (G.1.E1.D1)" = WINDOW          
+   GLASS-TYPE       = "Door Type #1 GT"
+   FRAME-WIDTH      = 0.25
+   X                = 97.25
+   Y                = 0.25
+   HEIGHT           = 6.5
+   WIDTH            = 5.5
+   FRAME-CONDUCT    = 3.079
+   ..
+"East Wall (G.1.E2)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"East Win (G.1.E2.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 4.13132
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 41.0203
+   FRAME-CONDUCT    = 2.781
+   ..
+"East Win (G.1.E2.W2)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 54.8483
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 41.0203
+   FRAME-CONDUCT    = 2.781
+   ..
+"East Door (G.1.E2.D1)" = WINDOW          
+   GLASS-TYPE       = "Door Type #1 GT"
+   FRAME-WIDTH      = 0.25
+   X                = 47.25
+   Y                = 0.25
+   HEIGHT           = 6.5
+   WIDTH            = 5.5
+   FRAME-CONDUCT    = 3.079
+   ..
+"North Wall (G.1.E3)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"North Win (G.1.E3.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #1 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 8.15431
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 86.9974
+   FRAME-CONDUCT    = 2.781
+   ..
+"North Win (G.1.E3.W2)" = WINDOW          
+   GLASS-TYPE       = "Window Type #1 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 104.848
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 86.9974
+   FRAME-CONDUCT    = 2.781
+   ..
+"North Door (G.1.E3.D1)" = WINDOW          
+   GLASS-TYPE       = "Door Type #1 GT"
+   FRAME-WIDTH      = 0.25
+   X                = 97.25
+   Y                = 0.25
+   HEIGHT           = 6.5
+   WIDTH            = 5.5
+   FRAME-CONDUCT    = 3.079
+   ..
+"West Wall (G.1.E4)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"West Win (G.1.E4.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 4.13132
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 41.0203
+   FRAME-CONDUCT    = 2.781
+   ..
+"West Win (G.1.E4.W2)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 54.8483
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 41.0203
+   FRAME-CONDUCT    = 2.781
+   ..
+"West Door (G.1.E4.D1)" = WINDOW          
+   GLASS-TYPE       = "Door Type #1 GT"
+   FRAME-WIDTH      = 0.25
+   X                = 47.25
+   Y                = 0.25
+   HEIGHT           = 6.5
+   WIDTH            = 5.5
+   FRAME-CONDUCT    = 3.079
+   ..
+"Ceiling (G.1.I1)" = INTERIOR-WALL   
+   NEXT-TO          = "Spc (M.2)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (G.1.U1)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "UFCons (G.1.U2)"
+   LOCATION         = BOTTOM
+   ..
+"Mid Flr" = FLOOR           
+   Z                = 12
+   AZIMUTH          = 45
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 12
+   SPACE-HEIGHT     = 12
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"Spc (M.2)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "GndFlr Occ Sch"
+   LIGHTING-SCHEDUL = ( "TypFlr Ltg Sch" )
+   TASK-LIGHT-SCH   = "GndFlr Occ Sch"
+   EQUIP-SCHEDULE   = ( "TypFlr Eqp Sch" )
+   INF-SCHEDULE     = "GndFlr Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.01368
+   PEOPLE-HG-LAT    = 200.95
+   PEOPLE-HG-SENS   = 248.656
+   LIGHTING-W/AREA  = ( 1.2022 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.2967 )
+   AREA/PERSON      = 137.574
+   POLYGON          = "Floor Polygon"
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (77%)*
+   ..
+"South Wall (M.2.E5)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"South Win (M.2.E5.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 8.15431
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 183.691
+   FRAME-CONDUCT    = 2.781
+   ..
+"East Wall (M.2.E6)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"East Win (M.2.E6.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 4.13132
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 91.7374
+   FRAME-CONDUCT    = 2.781
+   ..
+"North Wall (M.2.E7)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"North Win (M.2.E7.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #1 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 8.15431
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 183.691
+   FRAME-CONDUCT    = 2.781
+   ..
+"West Wall (M.2.E8)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"West Win (M.2.E8.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 4.13132
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 91.7374
+   FRAME-CONDUCT    = 2.781
+   ..
+"Flr (M.2.I2)" = INTERIOR-WALL   
+   NEXT-TO          = "Spc (G.1)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+"Ceiling (M.2.I3)" = INTERIOR-WALL   
+   NEXT-TO          = "Spc (T.3)"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Top Flr" = FLOOR           
+   Z                = 24
+   AZIMUTH          = 90
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 12
+   SPACE-HEIGHT     = 12
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"Spc (T.3)" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "GndFlr Occ Sch"
+   LIGHTING-SCHEDUL = ( "TypFlr Ltg Sch" )
+   TASK-LIGHT-SCH   = "GndFlr Occ Sch"
+   EQUIP-SCHEDULE   = ( "TypFlr Eqp Sch" )
+   INF-SCHEDULE     = "GndFlr Sys1 Infil Sch"
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.01368
+   PEOPLE-HG-LAT    = 200.95
+   PEOPLE-HG-SENS   = 248.656
+   LIGHTING-W/AREA  = ( 1.2022 )
+   TASK-LT-W/AREA   = 0
+   EQUIPMENT-W/AREA = ( 1.2967 )
+   AREA/PERSON      = 137.574
+   POLYGON          = "Floor Polygon"
+   C-ACTIVITY-DESC  = *Office (Executive/Private) (77%)*
+   ..
+"South Wall (T.3.E9)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"South Win (T.3.E9.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 8.15431
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 183.691
+   FRAME-CONDUCT    = 2.781
+   ..
+"East Wall (T.3.E10)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"East Win (T.3.E10.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 4.13132
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 91.7374
+   FRAME-CONDUCT    = 2.781
+   ..
+"North Wall (T.3.E11)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"North Win (T.3.E11.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #1 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 8.15431
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 183.691
+   FRAME-CONDUCT    = 2.781
+   ..
+"West Wall (T.3.E12)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "EWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"West Win (T.3.E12.W1)" = WINDOW          
+   GLASS-TYPE       = "Window Type #2 GT"
+   FRAME-WIDTH      = 0.108333
+   X                = 4.13132
+   Y                = 3.10833
+   HEIGHT           = 5.00333
+   WIDTH            = 91.7374
+   FRAME-CONDUCT    = 2.781
+   ..
+"Roof (T.3.E13)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof Construction"
+   LOCATION         = TOP
+   ..
+"Flr (T.3.I4)" = INTERIOR-WALL   
+   NEXT-TO          = "Spc (M.2)"
+   CONSTRUCTION     = "IFlr Construction"
+   LOCATION         = BOTTOM
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **              Electric & Fuel Meters                 **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Electric Meters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Fuel Meters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Master Meters
+$ ---------------------------------------------------------
+
+"MASTER-METERS 1" = MASTER-METERS   
+   MSTR-ELEC-METER  = "EM1"
+   MSTR-FUEL-METER  = "FM1"
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **      HVAC Circulation Loops / Plant Equipment       **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Pumps
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Heat Exchangers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Circulation Loops
+$ ---------------------------------------------------------
+
+"DHW Plant 1 Loop (1)" = CIRCULATION-LOOP
+   TYPE             = DHW
+   DESIGN-HEAT-T    = 135
+   PROCESS-FLOW     = ( 0.78187 )
+   PROCESS-SCH      = ( "GndFlr Occ Sch" )
+   PROCESS-T        = ( 135 )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Chillers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Boilers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Domestic Water Heaters
+$ ---------------------------------------------------------
+
+"DHW Plant 1 Wtr Htr (1)" = DW-HEATER       
+   TYPE             = GAS
+   TANK-VOLUME      = 211.105
+   CAPACITY         = 0.28136
+   HIR-FPLR         = "DW-Gas-Pilotless-HIR-fPLR"
+   TANK-UA          = 8.79603
+   LOCATION         = ZONE
+   ZONE-NAME        = "Zn (G.1)"
+   DHW-LOOP         = "DHW Plant 1 Loop (1)"
+   C-RECOV-EFF      = 0.8
+   C-STBY-LOSS-FRAC = 1.75001
+   C-TANK-EXT-RVAL  = 12
+   ..
+
+
+$ ---------------------------------------------------------
+$              Heat Rejection
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Tower Free Cooling
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Photovoltaic Modules
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Electric Generators
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Thermal Storage
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Ground Loop Heat Exchangers
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Compliance DHW (residential dwelling units)
+$ ---------------------------------------------------------
+
+
+
+$ *********************************************************
+$ **                                                     **
+$ **            Steam & Chilled Water Meters             **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Steam Meters
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Chilled Water Meters
+$ ---------------------------------------------------------
+
+
+
+$ *********************************************************
+$ **                                                     **
+$ **               HVAC Systems / Zones                  **
+$ **                                                     **
+$ *********************************************************
+
+"Sys1 (PSZ) (G.1)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "Zn (G.1)"
+   ..
+"Zn (G.1)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 22.7708
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "GndFlr Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "GndFlr Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Spc (G.1)"
+   ..
+"Sys1 (PSZ) (M.2)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "Zn (M.2)"
+   ..
+"Zn (M.2)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 24.2489
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "GndFlr Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "GndFlr Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Spc (M.2)"
+   ..
+"Sys1 (PSZ) (T.3)" = SYSTEM          
+   TYPE             = PSZ
+   HEAT-SOURCE      = FURNACE
+   ZONE-HEAT-SOURCE = NONE
+   BASEBOARD-SOURCE = NONE
+   SIZING-RATIO     = 1.15
+   HUMIDIFIER-TYPE  = NONE
+   MAX-SUPPLY-T     = 120
+   MIN-SUPPLY-T     = 55
+   MAX-HUMIDITY     = 100
+   MIN-HUMIDITY     = 0
+   ECONO-LIMIT-T    = 70
+   ENTHALPY-LIMIT   = 30
+   ECONO-LOCKOUT    = NO
+   OA-CONTROL       = OA-TEMP
+   FAN-SCHEDULE     = "Sys1 (PSZ) Fan Sch"
+   SUPPLY-STATIC    = 1.25
+   SUPPLY-EFF       = 0.53
+   RETURN-EFF       = 0.53
+   COOLING-EIR      = 0.263548
+   FURNACE-AUX      = 0
+   FURNACE-HIR      = 1.25
+   HUMIDIFIER-LOC   = IN-AIR-HANDLER
+   CONTROL-ZONE     = "Zn (T.3)"
+   ..
+"Zn (T.3)" = ZONE            
+   TYPE             = CONDITIONED
+   FLOW/AREA        = 0.5
+   OA-FLOW/PER      = 24.2489
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "GndFlr Sys1 Heat Sch"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "GndFlr Sys1 Cool Sch"
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Spc (T.3)"
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **                Metering & Misc HVAC                 **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Equipment Controls
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Load Management
+$ ---------------------------------------------------------
+
+
+
+$ *********************************************************
+$ **                                                     **
+$ **                    Utility Rates                    **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Ratchets
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Block Charges
+$ ---------------------------------------------------------
+
+
+
+$ ---------------------------------------------------------
+$              Utility Rates
+$ ---------------------------------------------------------
+
+"SCE GS-2 Elec Rate TOU-Opt" = UTILITY-RATE    
+   LIBRARY-ENTRY "SCE GS-2 Elec Rate TOU-Opt"
+   ..
+"SoCalGas GN-10 Gas Rate" = UTILITY-RATE    
+   LIBRARY-ENTRY "SoCalGas GN-10 Gas Rate"
+   ..
+
+
+$ *********************************************************
+$ **                                                     **
+$ **                 Output Reporting                    **
+$ **                                                     **
+$ *********************************************************
+
+$ ---------------------------------------------------------
+$              Loads Non-Hourly Reporting
+$ ---------------------------------------------------------
+
+LOADS-REPORT    
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Systems Non-Hourly Reporting
+$ ---------------------------------------------------------
+
+SYSTEMS-REPORT  
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Plant Non-Hourly Reporting
+$ ---------------------------------------------------------
+
+PLANT-REPORT    
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Economics Non-Hourly Reporting
+$ ---------------------------------------------------------
+
+ECONOMICS-REPORT
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+
+
+$ ---------------------------------------------------------
+$              Hourly Reporting
+$ ---------------------------------------------------------
+
+
+
+
+$ ---------------------------------------------------------
+$              THE END
+$ ---------------------------------------------------------
+
+END ..
+COMPUTE ..
+STOP ..

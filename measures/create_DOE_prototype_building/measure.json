@@ -1,0 +1,89 @@
+{
+  "classname": "CreateDOEPrototypeBuilding",
+  "name": "create_doe_prototype_building",
+  "display_name": "Create Doe Prototype Building",
+  "measure_type": "RubyMeasure",
+  "arguments": [
+    {
+      "local_variable": "building_type",
+      "variable_type": "Choice",
+      "name": "building_type",
+      "display_name": "Select a Building Type",
+      "units": null,
+      "description": null,
+      "default_value": "SmallOffice",
+      "choices": [
+        "SecondarySchool",
+        "PrimarySchool",
+        "SmallOffice",
+        "MediumOffice",
+        "LargeOffice",
+        "SmallHotel",
+        "LargeHotel",
+        "Warehouse",
+        "RetailStandalone",
+        "RetailStripmall",
+        "QuickServiceRestaurant",
+        "FullServiceRestaurant",
+        "Hospital",
+        "Outpatient"
+      ]
+    },
+    {
+      "local_variable": "building_vintage",
+      "variable_type": "Choice",
+      "name": "building_vintage",
+      "display_name": "Select a Vintage",
+      "units": null,
+      "description": null,
+      "default_value": "90.1-2010",
+      "choices": [
+        "DOE Ref Pre-1980",
+        "DOE Ref 1980-2004",
+        "90.1-2004",
+        "90.1-2007",
+        "189.1-2009",
+        "90.1-2010",
+        "90.1-2013"
+      ]
+    },
+    {
+      "local_variable": "climate_zone",
+      "variable_type": "Choice",
+      "name": "climate_zone",
+      "display_name": "Select a Climate Zone",
+      "units": null,
+      "description": null,
+      "default_value": "ASHRAE 169-2006-2A",
+      "choices": [
+        "ASHRAE 169-2006-1A",
+        "ASHRAE 169-2006-1B",
+        "ASHRAE 169-2006-2A",
+        "ASHRAE 169-2006-2B",
+        "ASHRAE 169-2006-3A",
+        "ASHRAE 169-2006-3B",
+        "ASHRAE 169-2006-3C",
+        "ASHRAE 169-2006-4A",
+        "ASHRAE 169-2006-4B",
+        "ASHRAE 169-2006-4C",
+        "ASHRAE 169-2006-5A",
+        "ASHRAE 169-2006-5B",
+        "ASHRAE 169-2006-5C",
+        "ASHRAE 169-2006-6A",
+        "ASHRAE 169-2006-6B",
+        "ASHRAE 169-2006-7A",
+        "ASHRAE 169-2006-7B",
+        "ASHRAE 169-2006-8A",
+        "ASHRAE 169-2006-8B"
+      ]
+    }
+  ],
+  "name_xml": "create_doe_prototype_building",
+  "uid": "be90fd0b-a651-467a-bc8d-29d310b0f937",
+  "version_id": "2de4c908-b63b-40fe-bb81-0b9be5612fcb",
+  "modeler_description": "",
+  "description": "Creates the DOE Reference Building Models as starting points for other analyses.",
+  "tags": [
+    "Whole Building.Space Types"
+  ]
+}

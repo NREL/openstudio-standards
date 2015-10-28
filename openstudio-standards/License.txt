@@ -1,0 +1,65 @@
+Copyright (c) 2008-2013, Alliance for Sustainable Energy.
+All rights reserved.
+
+                                   NOTICE
+
+This computer software (Software) is code in development prepared by the 
+Alliance for Sustainable Energy, (hereinafter the "Contractor"), under 
+Contract DE-AC36-08GO28308 (Contract) with the Department of Energy (DOE).  
+The United States Government has been granted for itself and others acting 
+on its behalf a paid-up, non-exclusive, irrevocable, worldwide license in 
+the Software to reproduce, prepare derivative works, and perform publicly 
+and display publicly.  Beginning five (5) years after the date permission 
+to assert copyright is obtained from the DOE, and subject to any 
+subsequent five (5) year renewals, the United States Government is granted 
+for itself and others acting on its behalf a paid-up, non-exclusive, 
+irrevocable, worldwide license in the Software to reproduce, prepare 
+derivative works, distribute copies to the public, perform publicly and 
+display publicly, and to permit others to do so.  If the Contractor ceases 
+to make this computer software available, it may be obtained from DOE's 
+Office of Scientific and Technical Information's Energy Science and 
+Technology Software Center (ESTSC) at P.O. Box 1020, Oak Ridge, TN 37831-
+1020.
+
+                                 DISCLAIMER
+
+THIS SOFTWARE IS PROVIDED BY THE CONTRACTOR "AS IS" AND ANY EXPRESS OR 
+IMPLIED WARRANTIES, INCLUDING BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN 
+NO EVENT SHALL THE CONTRACTOR OR THE U.S. GOVERNMENT BE LIABLE FOR ANY 
+SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER, 
+INCLUDING BUT NOT LIMITED TO CLAIMS ASSOCIATED WITH THE LOSS OF DATA OR 
+PROFITS, WHICH MAY RESULT FROM AN ACTION IN CONTRACT, NEGLIGENCE OR OTHER 
+TORTIOUS CLAIM THAT ARISES OUT OF OR IN CONNECTION WITH THE ACCESS, USE OR 
+PERFORMANCE OF THIS SOFTWARE.
+
+YOU AGREE TO INDEMNIFY DOE/NREL/ALLIANCE, AND ITS SUBSIDIARIES, 
+AFFILIATES, OFFICERS, AGENTS, AND EMPLOYEES AGAINST ANY CLAIM OR DEMAND, 
+INCLUDING REASONABLE ATTORNEYS' FEES, RELATED TO YOUR USE OF THESE DATA.
+
+DOE/NREL/Alliance is not obligated to provide the user with any support, 
+consulting, training or assistance of any kind with regard to the use of 
+these Data or to provide the user with any updates, revisions or new 
+versions of these Data.
+
+The names DOE/NREL/Alliance may not be used in any advertising or 
+publicity to endorse or promote any products or commercial entities unless 
+specific written permission is obtained from DOE/NREL/Alliance.
+
+
+                            OPEN SOURCE LICENSE
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details here.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+

@@ -1,0 +1,22 @@
+Row Labels,Sum of Net Cost Savings Intensity $/M2
+air_temp_reset_enabled,0.3363889375267453
+baseline,0.0
+boiler_eff_upgrade,0.505691508991773
+boiler_reset,2.0559446715980862
+cooling_cop_3_0,0.8284943443412346
+dcv_enabled,0.8613281845845842
+ecm_cold_deck_reset_control,0.3816002433514173
+economizers_enabled,0.42553423887594494
+envelope_ecm_roof,0.4320463943222966
+envelope_ecm_wall,0.22271765653193767
+envelope_ecm_windows,-0.005280788008447612
+exhaust_fans_occ_control,2.0305326216005213
+fans_to_variable,0.42045987456536343
+hrv_enabled,0.4941636742844307
+infil_reduce,2.6121533704270385
+lights_reduce_70p,1.216550259254572
+occupancy_setback,0.3494527437126572
+plug_loads_90_percent,-0.06515672696886238
+pump_fan_eff_,0.619960676751938
+pumps_to_variable,4.48197643466108
+Grand Total,18.20455832040431

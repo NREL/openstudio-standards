@@ -1,0 +1,70 @@
+<measure>
+  <schema_version>3.0</schema_version>
+  <name>replace_model</name>
+  <uid>55a38c30-4274-46b8-a2d4-6f9529114b71</uid>
+  <version_id>7438211b-508d-41e9-a2be-322ff694cb16</version_id>
+  <xml_checksum>057E8D9D</xml_checksum>
+  <class_name>ReplaceModel</class_name>
+  <display_name>Replaces OpenStudio Model </display_name>
+  <description></description>
+  <modeler_description></modeler_description>
+  <arguments>
+    <argument>
+      <name>alternativeModel</name>
+      <display_name>Alternative Model</display_name>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>FullServiceRestaurant.osm</default_value>
+    </argument>
+    <argument>
+      <name>osm_directory</name>
+      <display_name>OSM Directory</display_name>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>../../lib/btap/resources/models/smart_archetypes</default_value>
+    </argument>
+  </arguments>
+  <provenances/>
+  <tags>
+    <tag>Whole Building.Space Types</tag>
+  </tags>
+  <attributes>
+    <attribute>
+      <name>Measure Type</name>
+      <value>ModelMeasure</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Uses SketchUp API</name>
+      <value>false</value>
+      <datatype>boolean</datatype>
+    </attribute>
+  </attributes>
+  <files>
+    <file>
+      <filename>EnvelopeAndLoadTestModel_01.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>6616E1BE</checksum>
+    </file>
+    <file>
+      <filename>ReplaceModel_Test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>588891E8</checksum>
+    </file>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>0.10.2</identifier>
+        <min_compatible>0.10.2</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>BB4C8709</checksum>
+    </file>
+  </files>
+</measure>

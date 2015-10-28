@@ -1,7 +1,3 @@
-.idea
-.DS_Store
-templates
-Gemfile.lock
-Berksfile.lock
-.vagrant
-~$*
+output/
+# TODO change btap/measures.rb to save in an /output directory
+/measures/**/sample*.csv
