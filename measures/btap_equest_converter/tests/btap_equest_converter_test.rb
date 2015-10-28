@@ -12,8 +12,6 @@ class BtapEquestConverterTest < MiniTest::Unit::TestCase
   # def teardown
   # end
 
-
-
   def import_inp_test(inp_file) 
     
     # create an instance of the measure, a runner and an empty model
@@ -78,9 +76,11 @@ class BtapEquestConverterTest < MiniTest::Unit::TestCase
     
     
     #save file
-    filename = "#{inp_file}.osm"
+    filename = File.basename(inp_file)
     File.delete(filename) if File.exist?(filename)
-    model.save(OpenStudio::Path.new(filename))
+    output_path = "#{File.dirname(__FILE__)}/output/#{filename}.osm"
+    model.save(output_path, true)
+    raise("output_path = #{output_path}")
     puts "File #{filename} saved."
     assert_equal("Success", result.value.valueName)
   end
