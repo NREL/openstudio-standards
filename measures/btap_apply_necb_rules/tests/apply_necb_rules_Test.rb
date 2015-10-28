@@ -34,7 +34,7 @@ class ApplyNECBRules_test < MiniTest::Unit::TestCase
     output_folder = "#{File.dirname(__FILE__)}/output/"
 
     #set weather file. 
-    weatherfile = "#{File.dirname(__FILE__)}/CAN_AB_Calgary.718770_CWEC.epw"
+    weatherfile = "CAN_AB_Calgary.718770_CWEC.epw"
     BTAP::Environment::WeatherFile.new(weatherfile).set_weather_file( model, runner)
 
     #Add default Construction.
@@ -62,52 +62,52 @@ class ApplyNECBRules_test < MiniTest::Unit::TestCase
   end   
   
 
-  def testFullServiceRestaurant 
+  def test_FullServiceRestaurant 
     apply_measure("FullServiceRestaurant.osm") 
   end
-  def testHospital 
+  def test_Hospital 
     apply_measure("Hospital.osm") 
   end
-  def testLargeHotel 
+  def test_LargeHotel 
     apply_measure("LargeHotel.osm") 
   end
-  def testLargeOffice 
+  def test_LargeOffice 
     apply_measure("LargeOffice.osm") 
   end
-  def testMediumOffice 
+  def test_MediumOffice 
     apply_measure("MediumOffice.osm") 
   end
-  def testMidriseApartment 
+  def test_MidriseApartment 
     apply_measure("MidriseApartment.osm") 
   end
-  def testOutPatient 
+  def test_OutPatient 
     apply_measure("OutPatient.osm") 
   end
-  def testPrimarySchool 
+  def test_PrimarySchool 
     apply_measure("PrimarySchool.osm") 
   end
-  def testQuickServiceRestaurant 
+  def test_QuickServiceRestaurant 
     apply_measure("QuickServiceRestaurant.osm") 
   end
-  def testSecondarySchool 
+  def test_SecondarySchool 
     apply_measure("SecondarySchool.osm") 
   end
-  def testSmallHotel 
+  def test_SmallHotel 
     apply_measure("SmallHotel.osm") 
   end
-  def testSmallOffice 
+  def test_SmallOffice 
     apply_measure("SmallOffice.osm") 
   end
-  def testStandaloneRetail 
+  def test_StandaloneRetail 
     apply_measure("Stand-aloneRetail.osm") 
   end
-  def testStripMall 
+  def test_StripMall 
     apply_measure("StripMall.osm") 
   end
-  def testSuperMarket 
+  def test_SuperMarket 
     apply_measure("SuperMarket.osm") 
   end
-  def testWarehouse 
+  def test_Warehouse 
     apply_measure("Warehouse.osm") 
   end
 

@@ -80,7 +80,6 @@ class BtapEquestConverterTest < MiniTest::Unit::TestCase
     File.delete(filename) if File.exist?(filename)
     output_path = "#{File.dirname(__FILE__)}/output/#{filename}.osm"
     model.save(output_path, true)
-    raise("output_path = #{output_path}")
     puts "File #{filename} saved."
     assert_equal("Success", result.value.valueName)
   end

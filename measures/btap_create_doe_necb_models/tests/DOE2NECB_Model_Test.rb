@@ -31,11 +31,7 @@ class ConvertDOEReferenceToNECBOSM_test < MiniTest::Unit::TestCase
     model = OpenStudio::Model::Model.new
     measure = ConvertDOEReferenceToNECBOSM.new
     runner = OpenStudio::Ruleset::OSRunner.new
-    output_folder = "#{File.dirname(__FILE__)}/../../btap_apply_necb_rules/tests"
-    unless File::exist?(output_folder)
-      puts "could not find #{output_folder}"
-      output_folder = "#{File.dirname(__FILE__)}/output/"
-    end
+    output_folder = "#{File.dirname(__FILE__)}/output/"
 
     #Set up arguments in order. 
     argument_values_array = 
@@ -54,52 +50,52 @@ class ConvertDOEReferenceToNECBOSM_test < MiniTest::Unit::TestCase
   end
 
 
-  def testFullServiceRestaurant 
+  def test_FullServiceRestaurant 
     apply_measure("FullServiceRestaurant.idf") 
   end
-  def testHospital 
+  def test_Hospital 
     apply_measure("Hospital.idf") 
   end
-  def testLargeHotel 
+  def test_LargeHotel 
     apply_measure("LargeHotel.idf") 
   end
-  def testLargeOffice 
+  def test_LargeOffice 
     apply_measure("LargeOffice.idf") 
   end
-  def testMediumOffice 
+  def test_MediumOffice 
     apply_measure("MediumOffice.idf") 
   end
-  def testMidriseApartment 
+  def test_MidriseApartment 
     apply_measure("MidriseApartment.idf") 
   end
-  def testOutPatient 
+  def test_OutPatient 
     apply_measure("OutPatient.idf") 
   end
-  def testPrimarySchool 
+  def test_PrimarySchool 
     apply_measure("PrimarySchool.idf") 
   end
-  def testQuickServiceRestaurant 
+  def test_QuickServiceRestaurant 
     apply_measure("QuickServiceRestaurant.idf") 
   end
-  def testSecondarySchool 
+  def test_SecondarySchool 
     apply_measure("SecondarySchool.idf") 
   end
-  def testSmallHotel 
+  def test_SmallHotel 
     apply_measure("SmallHotel.idf") 
   end
-  def testSmallOffice 
+  def test_SmallOffice 
     apply_measure("SmallOffice.idf") 
   end
-  def testStandaloneRetail 
+  def test_StandaloneRetail 
     apply_measure("Stand-aloneRetail.idf") 
   end
-  def testStripMall 
+  def test_StripMall 
     apply_measure("StripMall.idf") 
   end
-  def testSuperMarket 
+  def test_SuperMarket 
     apply_measure("SuperMarket.idf") 
   end
-  def testWarehouse 
+  def test_Warehouse 
     apply_measure("Warehouse.idf") 
   end
 
