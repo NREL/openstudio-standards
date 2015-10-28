@@ -1,23 +1,5 @@
 
-# see the URL below for information on how to write OpenStudio measures
-# http://openstudio.nrel.gov/openstudio-measure-writing-guide
-require 'fileutils'
-require "date"
-
-#some Library management. 
-release_mode = false
-folder = "#{File.dirname(__FILE__)}/../../../../lib/btap/lib/"
-if release_mode == true
-  #Copy BTAP files to measure from lib folder. Use this to create independant measure. 
-  Dir.glob("#{folder}/**/*rb").each do |file|
-    FileUtils.cp(file, File.dirname(__FILE__))
-  end
-  require "#{File.dirname(__FILE__)}/btap.rb"
-else
-  #For only when using git hub development environment.
-  require "#{File.dirname(__FILE__)}/../../../../lib/btap/lib/btap.rb"
-end
-
+require 'openstudio-standards'
 
 class ReplaceModel < BTAP::Measures::OSMeasures::BTAPModelUserScript
 

@@ -76,7 +76,7 @@ class CanadianAddUnitaryAndApplyStandard < OpenStudio::Ruleset::ModelUserScript
       puts "found sizing run #{sizing_dir}/SizingRun1"
     end
 
-    BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
+    BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/tests/output/before.osm")
     
     # need to set prototype assumptions so that HRV added
     model.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
@@ -84,7 +84,7 @@ class CanadianAddUnitaryAndApplyStandard < OpenStudio::Ruleset::ModelUserScript
     model.applyHVACEfficiencyStandard
     #self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
     
-    BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
+    BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/tests/output/after.osm")
     
     log_msgs
     return true

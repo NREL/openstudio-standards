@@ -1,23 +1,8 @@
-# see the URL below for information on how to write OpenStudio measures
-# http://openstudio.nrel.gov/openstudio-measure-writing-guide
-
-require "csv"
-release_mode = false
-folder = "#{File.dirname(__FILE__)}/../../../../lib/btap/lib/"
-
-if release_mode == true
-  #Copy BTAP files to measure from lib folder. Use this to create independant measure. 
-  Dir.glob("#{folder}/**/*rb").each do |file|
-    FileUtils.cp(file, File.dirname(__FILE__))
-  end
-  require "#{File.dirname(__FILE__)}/btap.rb"
-else
-  #For only when using git hub development environment.
-  require "#{File.dirname(__FILE__)}/../../../../lib/btap/lib/btap.rb"
-end
 
 #start the measure
 class UtilityTariffsModelSetup < OpenStudio::Ruleset::WorkspaceUserScript
+
+  require 'openstudio-standards'
 
   # Define the name of the Measure.
   def name
@@ -201,14 +186,18 @@ class UtilityTariffsModelSetup < OpenStudio::Ruleset::WorkspaceUserScript
     end
     
     # save new tariff idf file
-    tariff_file = File.new("#{File.dirname(__FILE__)}/resources/tariff.idf","w")
+    tariff_dir = "#{File.dirname(__FILE__)}/tests/output"
+    if !Dir.exists?(tariff_dir)
+      Dir.mkdir(tariff_dir)
+    end
+    tariff_file = File.new("#{tariff_dir}/tariff.idf","w")
     tariff_file.puts(elec_tariff_template_file_content)
     tariff_file.puts(gas_tariff_template_file_content)
     tariff_file.puts(oil_tariff_template_file_content)
     tariff_file.close
 
     # load the idf file containing the electric tariff
-    tar_path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/resources/tariff.idf")
+    tar_path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/tests/output/tariff.idf")
     tar_file = OpenStudio::IdfFile::load(tar_path)
 
     # in OpenStudio PAT in 1.1.0 and earlier all resource files are moved up a directory.

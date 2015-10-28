@@ -17,28 +17,10 @@
 # *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 # **********************************************************************/
 
-require "singleton"
-require 'fileutils'
-require 'csv'
-require 'fileutils'
-require "date"
-release_mode = false
-folder = "#{File.dirname(__FILE__)}/../../../../lib/btap/lib/"
-
-if release_mode == true
-  #Copy BTAP files to measure from lib folder. Use this to create independant measure. 
-  Dir.glob("#{folder}/**/*rb").each do |file|
-    FileUtils.cp(file, File.dirname(__FILE__))
-  end
-  require "#{File.dirname(__FILE__)}/btap.rb"
-else
-  #For only when using git hub development environment.
-  require "#{File.dirname(__FILE__)}/../../../../lib/btap/lib/btap.rb"
-end
-
-
 # start the measure
 class BtapEquestConverter < OpenStudio::Ruleset::ModelUserScript
+
+  require 'openstudio-standards'
 
   # human readable name
   def name

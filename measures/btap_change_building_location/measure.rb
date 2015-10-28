@@ -17,34 +17,7 @@
 # *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 # **********************************************************************/
 
-# see the URL below for information on how to write OpenStudio measures
-# http://openstudio.nrel.gov/openstudio-measure-writing-guide
-require 'fileutils'
-require "date"
-release_mode = false
-folder = "#{File.dirname(__FILE__)}/../../../../lib/btap/lib/"
-
-if release_mode == true
-  #Copy BTAP files to measure from lib folder. Use this to create independant measure. 
-  Dir.glob("#{folder}/**/*rb").each do |file|
-    FileUtils.cp(file, File.dirname(__FILE__))
-  end
-  require "#{File.dirname(__FILE__)}/btap.rb"
-else
-  #For only when using git hub development environment.
-  require "#{File.dirname(__FILE__)}/../../../../lib/btap/lib/btap.rb"
-end
-
-
-
-#see the URL below for information on how to write OpenStudio measures
-# TODO: Remove this link and replace with the wiki
-# http://openstudio.nrel.gov/openstudio-measure-writing-guide
-
-#see the URL below for access to C++ documentation on model objects (click on "model" in the main window to view model objects)
-# http://openstudio.nrel.gov/sites/openstudio.nrel.gov/files/nv_data/cpp_documentation_it/model/html/namespaces.html
-
-
+require 'openstudio-standards'
 
 class ChangeBuildingLocation < BTAP::Measures::OSMeasures::BTAPModelUserScript
 
