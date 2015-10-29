@@ -26,9 +26,20 @@ end
 require 'yard'
 desc 'Generate the documentation'
 YARD::Rake::YardocTask.new(:doc) do |task|
-  #task.files   = ['create_DOE_prototype_building/resources/Prototype*.rb', 'create_DOE_prototype_building/resources/Standards*.rb']   # optional
-  #task.options = ['--hide-api private']
+  Dir.chdir('../')
   task.stats_options = ['--list-undoc']
+end
+
+desc 'Show the documentation in a web browser'
+task 'doc:show' => [:doc] do
+  link = "#{Dir.pwd}/openstudio-standards/doc/index.html"
+  if RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
+    system "start #{link}"
+  elsif RbConfig::CONFIG['host_os'] =~ /darwin/
+    system "open #{link}"
+  elsif RbConfig::CONFIG['host_os'] =~ /linux|bsd/
+    system "xdg-open #{link}"
+  end
 end
 
 require 'rubocop/rake_task'
