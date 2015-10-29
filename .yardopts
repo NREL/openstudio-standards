@@ -1,3 +1,7 @@
 --output-dir openstudio-standards/doc/
---readme openstudio-standards/README.md
 openstudio-standards/lib/**/*.rb
+-
+openstudio-standards/docs/DeveloperInformation.md
+openstudio-standards/docs/Measures.md
+openstudio-standards/License.txt
+openstudio-standards/LGPL-2.1
