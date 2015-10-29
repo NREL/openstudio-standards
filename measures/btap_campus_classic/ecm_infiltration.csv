@@ -1,0 +1,49 @@
+baseline_index,building_type,vintage_name,measure_id,infiltration_flow_per_exterior_area,cost_per_building
+1.0,Barracks,1959-pre,infil_reduce,0.0002,122012.0
+2.0,Fire Hall,1959-pre,infil_reduce,0.0003,67418.0
+3.0,Food Service,1959-pre,infil_reduce,0.0002,83796.0
+4.0,Food Service,2005-2014,NA,0.0002,0.0
+5.0,Hangar,1959-pre,infil_reduce,0.0003,96777.0
+6.0,Hangar,1960-1979,infil_reduce,0.0003,96777.0
+7.0,Hangar,1980-2004,infil_reduce,0.0003,88824.0
+8.0,Maintenance Shop,1959-pre,infil_reduce,0.0003,74019.0
+9.0,Maintenance Shop,1980-2004,infil_reduce,0.0003,67140.0
+10.0,Maintenance Shop-Small,1959-pre,infil_reduce,0.0003,47106.0
+11.0,Maintenance Shop-Small,1960-1979,infil_reduce,0.0003,47106.0
+12.0,Maintenance Shop-Small,1980-2004,infil_reduce,0.0003,43200.0
+13.0,Office,1959-pre,infil_reduce,0.0002,54491.0
+14.0,Office,1960-1979,infil_reduce,0.0002,54491.0
+15.0,Office,1980-2004,infil_reduce,0.0002,49901.0
+16.0,Office-Small,1960-1979,infil_reduce,0.0002,36956.0
+17.0,Office-Small,1980-2004,infil_reduce,0.0002,33552.0
+18.0,Office-Small,2005-2014,NA,0.0002,0.0
+19.0,Recreation Center,1980-2004,infil_reduce,0.0002,112850.0
+20.0,Storage Building,1959-pre,infil_reduce,0.0003,37359.0
+21.0,Storage Building,1960-1979,infil_reduce,0.0003,37359.0
+22.0,Storage Building,1980-2004,infil_reduce,0.0003,33525.0
+23.0,Storage Building,2005-2014,NA,0.0003,0.0
+24.0,Training Building,1959-pre,infil_reduce,0.0002,116444.0
+25.0,Training Building,1980-2004,infil_reduce,0.0002,103803.0
+26.0,Training Building,2005-2014,NA,0.0002,0.0
+27.0,Vehicle Garage,1959-pre,infil_reduce,0.0003,67248.0
+28.0,Vehicle Garage,1980-2004,infil_reduce,0.0003,62140.0
+NA,Barracks,1960-1979,infil_reduce,0.0002,122012.0
+NA,Barracks,1980-2004,infil_reduce,0.0002,110890.0
+30.0,Barracks,2005-2014,NA,0.0002,0.0
+NA,Fire Hall,1960-1979,infil_reduce,0.0003,67418.0
+NA,Fire Hall,1980-2004,infil_reduce,0.0003,62831.0
+31.0,Fire Hall,2005-2014,infil_reduce,0.0003,0.0
+NA,Food Service,1960-1979,infil_reduce,0.0002,83796.0
+NA,Food Service,1980-2004,infil_reduce,0.0002,76635.0
+29.0,Hangar,2005-2014,NA,0.0003,0.0
+NA,Maintenance Shop,1960-1979,infil_reduce,0.0003,74019.0
+NA,Maintenance Shop,2005-2014,NA,0.0003,0.0
+NA,Maintenance Shop-Small,2005-2014,NA,0.0003,0.0
+NA,Office,2005-2014,NA,0.0002,0.0
+NA,Office-Small,1959-pre,infil_reduce,0.0002,36956.0
+NA,Recreation Center,1959-pre,infil_reduce,0.0002,123257.0
+NA,Recreation Center,1960-1979,infil_reduce,0.0002,123257.0
+NA,Recreation Center,2005-2014,NA,0.0002,0.0
+NA,Training Building,1960-1979,infil_reduce,0.0002,116444.0
+NA,Vehicle Garage,1960-1979,infil_reduce,0.0003,67248.0
+NA,Vehicle Garage,2005-2014,NA,0.0003,0.0

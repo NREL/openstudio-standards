@@ -1,0 +1,88 @@
+<measure>
+  <schema_version>3.0</schema_version>
+  <name>utility_tariffs_model_setup</name>
+  <uid>7353d86e-d166-4f32-a572-27ce8e65ebb5</uid>
+  <version_id>88892097-e82b-4a90-ac16-47c6ae9853fc</version_id>
+  <xml_checksum>4A4E44A5</xml_checksum>
+  <class_name>UtilityTariffsModelSetup</class_name>
+  <display_name>UtilityTariffsModelSetup</display_name>
+  <description>Add the selected utility rate, as well as set the time step and lifecycle costing parameters.</description>
+  <modeler_description>Adds the .idf text for the selected tariffs and sets the time step to 15 minutes so that the demand window and the time step align.</modeler_description>
+  <arguments>
+    <argument>
+      <name>elec_tar</name>
+      <display_name>Select an Electricity Tariff</display_name>
+      <type>Choice</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>HydroQuebec</default_value>
+      <choices>
+        <choice>
+          <value>HydroQuebec</value>
+          <display_name>HydroQuebec</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>gas_tar</name>
+      <display_name>Select a Gas Tariff</display_name>
+      <type>Choice</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>GasMetro</default_value>
+      <choices>
+        <choice>
+          <value>GasMetro</value>
+          <display_name>GasMetro</display_name>
+        </choice>
+      </choices>
+    </argument>
+  </arguments>
+  <provenances/>
+  <tags>
+    <tag>Economics.Life Cycle Cost Analysis</tag>
+  </tags>
+  <attributes>
+    <attribute>
+      <name>Measure Type</name>
+      <value>EnergyPlusMeasure</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Uses SketchUp API</name>
+      <value>false</value>
+      <datatype>boolean</datatype>
+    </attribute>
+  </attributes>
+  <files>
+    <file>
+      <filename>UtilityTariffs_Test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>A8B7E52C</checksum>
+    </file>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>1.4.0</identifier>
+        <min_compatible>1.4.0</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>DF18E41C</checksum>
+    </file>
+    <file>
+      <filename>GasMetro.idf</filename>
+      <filetype>idf</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>B64179B8</checksum>
+    </file>
+    <file>
+      <filename>HydroQuebec.idf</filename>
+      <filetype>idf</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>E302B8B4</checksum>
+    </file>
+  </files>
+</measure>

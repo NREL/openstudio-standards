@@ -1,0 +1,54 @@
+building_type,building_source,model_file_name
+Barracks,B45,barracks.osm
+Fire Hall,Trenton FH B19,fire_hall.osm
+Food Service,B40,food_service.osm
+Hangar,Hangar 4,hangar.osm
+Maintenance Shop,B581,maintenance_shop.osm
+Maintenance Shop-Small,B688,maintenance_shop_small.osm
+Office,B007,office.osm
+Office-Small,B96(Trailer),office_small.osm
+Recreation Center,B720,recreation_center.osm
+Storage Building,B782,storage_building.osm
+Training Building,Trenton Training B34,training_building.osm
+Vehicle Garage,B624,vehicle_garage.osm
+,,
+Cold Lake Vintages,,
+1959-pre,,
+1960-1979,,
+1980-2004,,
+2005-2014,,
+,,
+,,
+BTAP Construction Sets,,
+NA,,
+DND-Concrete,,
+DND-Metal,,
+,,
+Boiler Fuel Types,,
+Coal,,
+Diesel,,
+DistrictHeating,,
+Electricity,,
+FuelOil#1,,
+FuelOil#2,,
+Gasoline,,
+NA,,
+NaturalGas,,
+OtherFuel1,,
+OtherFuel2,,
+PropaneGas,,
+,,
+SHW Fuel Types,,
+Coal,,
+Diesel,,
+DistrictHeating,,
+Electricity,,
+FuelOil#1,,
+FuelOil#2,,
+Gasoline,,
+NA,,
+NaturalGas,,
+OtherFuel1,,
+OtherFuel2,,
+PropaneGas,,
+Stream,,

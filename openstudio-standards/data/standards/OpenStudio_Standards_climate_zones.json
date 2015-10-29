@@ -1,0 +1,274 @@
+{
+  "climate_zones": [
+    {
+      "name": "ASHRAE 169-2006-1A",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-1B",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-2A",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-2B",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-3A",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-3B",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-3C",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-4A",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-4B",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-4C",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-5A",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-5B",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-5C",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-6A",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-6B",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-7A",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-7B",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-8A",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2006-8B",
+      "standard": "ASHRAE 169-2006",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-1",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-10",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-2",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-3",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-4",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-5",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-6",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-7",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-8",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2005-9",
+      "standard": "CEC Title24-2005",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-1",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-10",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-2",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-3",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-4",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-5",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-6",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-7",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-8",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC 2008-9",
+      "standard": "CEC Title24-2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "NECB-CNEB-4",
+      "standard": "NECB 2011",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "NECB-CNEB-5",
+      "standard": "NECB 2011",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "NECB-CNEB-6",
+      "standard": "NECB 2011",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "NECB-CNEB-7a",
+      "standard": "NECB 2011",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "NECB-CNEB-7b",
+      "standard": "NECB 2011",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "NECB-CNEB-8",
+      "standard": "NECB 2011",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    }
+  ]
+}

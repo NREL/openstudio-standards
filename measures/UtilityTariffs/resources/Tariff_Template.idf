@@ -1,0 +1,50 @@
+UtilityCost:Tariff,
+  %utility_tariff_name%,                  !- Name
+  %tariff_output_meter_name%,             !- Output Meter Name
+  %conv_factor%,                          !- Conversion Factor Choice
+  ,                                       !- Energy Conversion Factor
+  ,                                       !- Demand Conversion Factor
+  ,                                       !- Time of Use Period Schedule Name
+  ,                                       !- Season Schedule Name
+  ,                                       !- Month Schedule Name
+  QuarterHour,                            !- Demand Window Length
+  %monthly_charges%;                      !- Monthly Charge or Variable Name
+
+UtilityCost:Charge:Block,
+  %blocks_energy_charges_name%,           ! Name
+  %utility_tariff_name%,                  ! Tariff Name
+  TotalEnergy,                            ! Source Variable
+  Annual,                                 ! Season
+  EnergyCharges,                          ! Category Variable Name
+  ,                                       ! Remaining Into Variable
+  ,                                       ! Block Size Multiplier Value or Variable Name
+  %energy_charges_blk1_limit%,            ! Block Size 1 Value or Variable Name
+  %energy_charges_blk1_rate%,             ! Block 1 Cost per Unit Value or Variable Name
+  %energy_charges_blk2_limit%,            ! Block Size 2 Value or Variable Name
+  %energy_charges_blk2_rate%,             ! Block 2 Cost per Unit Value or Variable Name
+  %energy_charges_blk3_limit%,            ! Block Size 3 Value or Variable Name
+  %energy_charges_blk3_rate%,             ! Block 3 Cost per Unit Value or Variable Name
+  %energy_charges_blk4_limit%,            ! Block Size 4 Value or Variable Name
+  %energy_charges_blk4_rate%,             ! Block 4 Cost per Unit Value or Variable Name
+  remaining,                              ! Block Size 5 Value or Variable Name
+  %energy_charges_blk5_rate%;             ! Block 5 Cost per Unit Value or Variable Name
+
+UtilityCost:Charge:Block,
+  %blocks_demand_charges_name%,           ! Name
+  %utility_tariff_name%,                  ! Tariff Name
+  TotalDemand,                            ! Source Variable
+  Annual,                                 ! Season
+  DemandCharges,                          ! Category Variable Name
+  ,                                       ! Remaining Into Variable
+  ,                                       ! Block Size Multiplier Value or Variable Name
+  %demand_charges_blk1_limit%,            ! Block Size 1 Value or Variable Name
+  %demand_charges_blk1_rate%,             ! Block 1 Cost per Unit Value or Variable Name
+  %demand_charges_blk2_limit%,            ! Block Size 2 Value or Variable Name
+  %demand_charges_blk2_rate%,             ! Block 2 Cost per Unit Value or Variable Name
+  %demand_charges_blk3_limit%,            ! Block Size 3 Value or Variable Name
+  %demand_charges_blk3_rate%,             ! Block 3 Cost per Unit Value or Variable Name
+  %demand_charges_blk4_limit%,            ! Block Size 4 Value or Variable Name
+  %demand_charges_blk4_rate%,             ! Block 4 Cost per Unit Value or Variable Name
+  remaining,                              ! Block Size 5 Value or Variable Name
+  %demand_charges_blk5_rate%;              ! Block 5 Cost per Unit Value or Variable Name
+  

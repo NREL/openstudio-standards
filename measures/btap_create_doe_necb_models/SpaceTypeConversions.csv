@@ -1,0 +1,434 @@
+idf_file,zone_name,necb_space_type
+FullServiceRestaurant.idf,attic Thermal Zone,- undefined -
+FullServiceRestaurant.idf,Dining Thermal Zone,Dining - family space
+FullServiceRestaurant.idf,Kitchen Thermal Zone,Food preparation
+Hospital.idf,Basement Thermal Zone,Electrical/Mechanical
+Hospital.idf,Corridor_Flr_1 Thermal Zone,Corr. >= 2.4m wide
+Hospital.idf,Corridor_Flr_2 Thermal Zone,Corr. >= 2.4m wide
+Hospital.idf,Corridor_Flr_5 Thermal Zone,Corr. >= 2.4m wide
+Hospital.idf,Corridor_NW_Flr_3 Thermal Zone,Corr. >= 2.4m wide
+Hospital.idf,Corridor_NW_Flr_4 Thermal Zone,Corr. >= 2.4m wide
+Hospital.idf,Corridor_SE_Flr_3 Thermal Zone,Corr. >= 2.4m wide
+Hospital.idf,Corridor_SE_Flr_4 Thermal Zone,Corr. >= 2.4m wide
+Hospital.idf,Dining_Flr_5 Thermal Zone,Dining - bar lounge/leisure
+Hospital.idf,ER_Exam1_Mult4_Flr_1 Thermal Zone,Hospital - emergency
+Hospital.idf,ER_Exam3_Mult4_Flr_1 Thermal Zone,Hospital - emergency
+Hospital.idf,ER_NurseStn_Lobby_Flr_1 Thermal Zone,Hospital - nurses' station
+Hospital.idf,ER_Trauma1_Flr_1 Thermal Zone,Hospital - emergency
+Hospital.idf,ER_Trauma2_Flr_1 Thermal Zone,Hospital - emergency
+Hospital.idf,ER_Triage_Mult4_Flr_1 Thermal Zone,Hospital - emergency
+Hospital.idf,IC_PatRoom1_Mult5_Flr_2 Thermal Zone,Hospital - patient room
+Hospital.idf,IC_PatRoom2_Flr_2 Thermal Zone,Hospital - patient room
+Hospital.idf,IC_PatRoom3_Mult6_Flr_2 Thermal Zone,Hospital - patient room
+Hospital.idf,ICU_Flr_2 Thermal Zone,Hospital - recovery
+Hospital.idf,ICU_NurseStn_Lobby_Flr_2 Thermal Zone,Hospital - nurses' station
+Hospital.idf,Kitchen_Flr_5 Thermal Zone,Food preparation
+Hospital.idf,Lab_Flr_3 Thermal Zone,Lab - research
+Hospital.idf,Lab_Flr_4 Thermal Zone,Lab - research
+Hospital.idf,Lobby_Records_Flr_1 Thermal Zone,Office - enclosed
+Hospital.idf,NurseStn_Lobby_Flr_3 Thermal Zone,Hospital - nurses' station
+Hospital.idf,NurseStn_Lobby_Flr_4 Thermal Zone,Hospital - nurses' station
+Hospital.idf,NurseStn_Lobby_Flr_5 Thermal Zone,Hospital - nurses' station
+Hospital.idf,Office1_Flr_5 Thermal Zone,Office - enclosed
+Hospital.idf,Office1_Mult4_Flr_1 Thermal Zone,Office - enclosed
+Hospital.idf,Office2_Mult5_Flr_5 Thermal Zone,Office - enclosed
+Hospital.idf,Office3_Flr_5 Thermal Zone,Office - enclosed
+Hospital.idf,Office4_Mult6_Flr_5 Thermal Zone,Office - enclosed
+Hospital.idf,OR_NurseStn_Lobby_Flr_2 Thermal Zone,Hospital - nurses' station
+Hospital.idf,OR1_Flr_2 Thermal Zone,Hospital - operating room
+Hospital.idf,OR2_Mult5_Flr_2 Thermal Zone,Hospital - operating room
+Hospital.idf,OR3_Flr_2 Thermal Zone,Hospital - operating room
+Hospital.idf,OR4_Flr_2 Thermal Zone,Hospital - operating room
+Hospital.idf,PatRoom1_Mult10_Flr_3 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom1_Mult10_Flr_4 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom2_Flr_3 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom2_Flr_4 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom3_Mult10_Flr_3 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom3_Mult10_Flr_4 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom4_Flr_3 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom4_Flr_4 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom5_Mult10_Flr_3 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom5_Mult10_Flr_4 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom6_Flr_3 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom6_Flr_4 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom7_Mult10_Flr_3 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom7_Mult10_Flr_4 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom8_Flr_3 Thermal Zone,Hospital - patient room
+Hospital.idf,PatRoom8_Flr_4 Thermal Zone,Hospital - patient room
+Hospital.idf,PhysTherapy_Flr_3 Thermal Zone,Hospital - physical therapy
+Hospital.idf,Radiology_Flr_4 Thermal Zone,Hospital - radiology/imaging
+LargeHotel.idf,Banquet_Flr_6 Thermal Zone,Hotel/Motel - dining
+LargeHotel.idf,Basement Thermal Zone,Storage area
+LargeHotel.idf,Cafe_Flr_1 Thermal Zone,Retail - mall concourse
+LargeHotel.idf,Corridor_Flr_3 Thermal Zone,Corr. >= 2.4m wide
+LargeHotel.idf,Corridor_Flr_6 Thermal Zone,Corr. >= 2.4m wide
+LargeHotel.idf,Dining_Flr_6 Thermal Zone,Hotel/Motel - dining
+LargeHotel.idf,Kitchen_Flr_6 Thermal Zone,Food preparation
+LargeHotel.idf,Laundry_Flr_1 Thermal Zone,Hospital - laundry/washing
+LargeHotel.idf,Lobby_Flr_1 Thermal Zone,Hotel/Motel - lobby
+LargeHotel.idf,Mech_Flr_1 Thermal Zone,Electrical/Mechanical
+LargeHotel.idf,Retail_1_Flr_1 Thermal Zone,Retail - sales
+LargeHotel.idf,Retail_2_Flr_1 Thermal Zone,Retail - sales
+LargeHotel.idf,Room_1_Flr_3 Thermal Zone,Hotel/Motel - rooms
+LargeHotel.idf,Room_1_Flr_6 Thermal Zone,Hotel/Motel - rooms
+LargeHotel.idf,Room_2_Flr_3 Thermal Zone,Hotel/Motel - rooms
+LargeHotel.idf,Room_2_Flr_6 Thermal Zone,Hotel/Motel - rooms
+LargeHotel.idf,Room_3_Mult19_Flr_3 Thermal Zone,Hotel/Motel - rooms
+LargeHotel.idf,Room_3_Mult9_Flr_6 Thermal Zone,Hotel/Motel - rooms
+LargeHotel.idf,Room_4_Mult19_Flr_3 Thermal Zone,Hotel/Motel - rooms
+LargeHotel.idf,Room_5_Flr_3 Thermal Zone,Hotel/Motel - rooms
+LargeHotel.idf,Room_6_Flr_3 Thermal Zone,Hotel/Motel - rooms
+LargeHotel.idf,Storage_Flr_1 Thermal Zone,Storage area
+LargeOffice.idf,Basement Thermal Zone,Electrical/Mechanical
+LargeOffice.idf,Core_bottom Thermal Zone,Office - open plan
+LargeOffice.idf,Core_mid Thermal Zone,Office - open plan
+LargeOffice.idf,Core_top Thermal Zone,Office - open plan
+LargeOffice.idf,GroundFloor_Plenum Thermal Zone,- undefined -
+LargeOffice.idf,MidFloor_Plenum Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_bot_ZN_1 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_bot_ZN_2 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_bot_ZN_3 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_bot_ZN_4 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_mid_ZN_1 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_mid_ZN_2 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_mid_ZN_3 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_mid_ZN_4 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_top_ZN_1 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_top_ZN_2 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_top_ZN_3 Thermal Zone,Office - open plan
+LargeOffice.idf,Perimeter_top_ZN_4 Thermal Zone,Office - open plan
+LargeOffice.idf,TopFloor_Plenum Thermal Zone,- undefined -
+MediumOffice.idf,Core_bottom Thermal Zone,Office - open plan
+MediumOffice.idf,Core_mid Thermal Zone,Office - open plan
+MediumOffice.idf,Core_top Thermal Zone,Office - open plan
+MediumOffice.idf,FirstFloor_Plenum Thermal Zone,- undefined -
+MediumOffice.idf,MidFloor_Plenum Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_bot_ZN_1 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_bot_ZN_2 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_bot_ZN_3 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_bot_ZN_4 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_mid_ZN_1 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_mid_ZN_2 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_mid_ZN_3 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_mid_ZN_4 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_top_ZN_1 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_top_ZN_2 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_top_ZN_3 Thermal Zone,Office - open plan
+MediumOffice.idf,Perimeter_top_ZN_4 Thermal Zone,Office - open plan
+MediumOffice.idf,TopFloor_Plenum Thermal Zone,- undefined -
+MidriseApartment.idf,G Corridor Thermal Zone,Corr. < 2.4m wide
+MidriseApartment.idf,G N1 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,G N2 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,G NE Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,G NW Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,G S1 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,G S2 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,G SW Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,M Corridor Thermal Zone,Corr. < 2.4m wide
+MidriseApartment.idf,M N1 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,M N2 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,M NE Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,M NW Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,M S1 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,M S2 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,M SE Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,M SW Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,Office Thermal Zone,Office - enclosed
+MidriseApartment.idf,T Corridor Thermal Zone,Corr. < 2.4m wide
+MidriseApartment.idf,T N1 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,T N2 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,T NE Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,T NW Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,T S1 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,T S2 Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,T SE Apartment Thermal Zone,Dormitory - living quarters
+MidriseApartment.idf,T SW Apartment Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Anesthesia Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Bio Haz Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Cafe Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Clean Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Clean Work Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Dictation Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Dressing Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Electrical Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Elevator Pump Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Operating Room 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Operating Room 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Operating Room 3 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Humid Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 IT Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 IT Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Lobby Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Lobby Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Lobby Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Locker Room Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Locker Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Lounge Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Med Gas Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 MRI Control Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 MRI Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 MRI Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 MRI Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Nourishment Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Nurse Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Nurse Janitor Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Nurse Station Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Nurse Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Office Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 PACU Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Pre-Op Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Pre-Op Room 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Pre-Op Room 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Pre-Op Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Procedure Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Reception Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Reception Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Recovery Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Scheduling Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Scrub Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Soil Hold Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Soil Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Soil Work Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Step Down Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Sterile Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Sterile Storage Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Storage Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Sub-Sterile Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Utility Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Utility Janitor Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Utility Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 1 Vestibule Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Conference Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Conference Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Dictation Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam 3 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam 4 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam 5 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam 6 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam 7 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam 8 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam 9 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam Hall 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam Hall 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam Hall 3 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam Hall 4 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam Hall 5 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Exam Hall 6 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Janitor Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Lounge Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Nurse Station 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Nurse Station 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Office Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Office Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Reception Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Reception Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Reception Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Scheduling 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Scheduling 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Storage 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Storage 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Storage 3 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Utility Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Work Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Work Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 Work Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 2 X-Ray Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Dressing Room Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Elevator Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Humid Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Janitor Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Locker Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Lounge Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Lounge Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Mechanical Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Mechanical Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Office Hall Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Office Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Office Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Physical Therapy 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Physical Therapy 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Physical Therapy Toilet Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Storage 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Storage 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Treatment Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Undeveloped 1 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Undeveloped 2 Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Utility Thermal Zone,Dormitory - living quarters
+OutPatient.idf,Floor 3 Work Thermal Zone,Dormitory - living quarters
+OutPatient.idf,NE Stair Thermal Zone,Dormitory - living quarters
+OutPatient.idf,NW Elevator Thermal Zone,Dormitory - living quarters
+OutPatient.idf,NW Stair Thermal Zone,Dormitory - living quarters
+OutPatient.idf,SW Stair Thermal Zone,Dormitory - living quarters
+PrimarySchool.idf,Bath_ZN_1_FLR_1 Thermal Zone,Washroom
+PrimarySchool.idf,Cafeteria_ZN_1_FLR_1 Thermal Zone,Conf./meet./multi-purpose
+PrimarySchool.idf,Computer_Class_ZN_1_FLR_1 Thermal Zone,Lab - classrooms
+PrimarySchool.idf,Corner_Class_1_Pod_1_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Corner_Class_1_Pod_2_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Corner_Class_1_Pod_3_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Corner_Class_2_Pod_1_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Corner_Class_2_Pod_2_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Corner_Class_2_Pod_3_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Corridor_Pod_1_ZN_1_FLR_1 Thermal Zone,Corr. >= 2.4m wide
+PrimarySchool.idf,Corridor_Pod_2_ZN_1_FLR_1 Thermal Zone,Corr. >= 2.4m wide
+PrimarySchool.idf,Corridor_Pod_3_ZN_1_FLR_1 Thermal Zone,Corr. >= 2.4m wide
+PrimarySchool.idf,Gym_ZN_1_FLR_1 Thermal Zone,Gym - play
+PrimarySchool.idf,Kitchen_ZN_1_FLR_1 Thermal Zone,Food preparation
+PrimarySchool.idf,Library_Media_Center_ZN_1_FLR_1 Thermal Zone,Library - reading
+PrimarySchool.idf,Lobby_ZN_1_FLR_1 Thermal Zone,Lobby - elevator
+PrimarySchool.idf,Main_Corridor_ZN_1_FLR_1 Thermal Zone,Corr. >= 2.4m wide
+PrimarySchool.idf,Mech_ZN_1_FLR_1 Thermal Zone,Electrical/Mechanical
+PrimarySchool.idf,Mult_Class_1_Pod_1_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Mult_Class_1_Pod_2_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Mult_Class_1_Pod_3_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Mult_Class_2_Pod_1_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Mult_Class_2_Pod_2_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Mult_Class_2_Pod_3_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+PrimarySchool.idf,Offices_ZN_1_FLR_1 Thermal Zone,Office - enclosed
+QuickServiceRestaurant.idf,attic Thermal Zone,- undefined -
+QuickServiceRestaurant.idf,Dining Thermal Zone,Dining - bar lounge/leisure
+QuickServiceRestaurant.idf,Kitchen Thermal Zone,Food preparation
+SecondarySchool.idf,Auditorium_ZN_1_FLR_1 Thermal Zone,Audience - auditorium
+SecondarySchool.idf,Aux_Gym_ZN_1_FLR_1 Thermal Zone,Gym - play
+SecondarySchool.idf,Bathrooms_ZN_1_FLR_1 Thermal Zone,Washroom
+SecondarySchool.idf,Bathrooms_ZN_1_FLR_2 Thermal Zone,Washroom
+SecondarySchool.idf,Cafeteria_ZN_1_FLR_1 Thermal Zone,Conf./meet./multi-purpose
+SecondarySchool.idf,Corner_Class_1_Pod_1_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_1_Pod_1_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_1_Pod_2_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_1_Pod_2_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_1_Pod_3_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_1_Pod_3_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_2_Pod_1_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_2_Pod_1_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_2_Pod_2_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_2_Pod_2_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_2_Pod_3_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corner_Class_2_Pod_3_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Corridor_Pod_1_ZN_1_FLR_1 Thermal Zone,Corr. >= 2.4m wide
+SecondarySchool.idf,Corridor_Pod_1_ZN_1_FLR_2 Thermal Zone,Corr. >= 2.4m wide
+SecondarySchool.idf,Corridor_Pod_2_ZN_1_FLR_1 Thermal Zone,Corr. >= 2.4m wide
+SecondarySchool.idf,Corridor_Pod_2_ZN_1_FLR_2 Thermal Zone,Corr. >= 2.4m wide
+SecondarySchool.idf,Corridor_Pod_3_ZN_1_FLR_1 Thermal Zone,Corr. >= 2.4m wide
+SecondarySchool.idf,Corridor_Pod_3_ZN_1_FLR_2 Thermal Zone,Corr. >= 2.4m wide
+SecondarySchool.idf,Gym_ZN_1_FLR_1 Thermal Zone,Gym - play
+SecondarySchool.idf,Kitchen_ZN_1_FLR_1 Thermal Zone,Food preparation
+SecondarySchool.idf,LIBRARY_MEDIA_CENTER_ZN_1_FLR_2 Thermal Zone,Library - reading
+SecondarySchool.idf,Lobby_ZN_1_FLR_1 Thermal Zone,Lobby - elevator
+SecondarySchool.idf,Lobby_ZN_1_FLR_2 Thermal Zone,Lobby - elevator
+SecondarySchool.idf,Main_Corridor_ZN_1_FLR_1 Thermal Zone,Corr. >= 2.4m wide
+SecondarySchool.idf,Main_Corridor_ZN_1_FLR_2 Thermal Zone,Corr. >= 2.4m wide
+SecondarySchool.idf,Mech_ZN_1_FLR_1 Thermal Zone,Electrical/Mechanical
+SecondarySchool.idf,Mech_ZN_1_FLR_2 Thermal Zone,Electrical/Mechanical
+SecondarySchool.idf,Mult_Class_1_Pod_1_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_1_Pod_1_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_1_Pod_2_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_1_Pod_2_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_1_Pod_3_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_1_Pod_3_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_2_Pod_1_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_2_Pod_1_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_2_Pod_2_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_2_Pod_2_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_2_Pod_3_ZN_1_FLR_1 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Mult_Class_2_Pod_3_ZN_1_FLR_2 Thermal Zone,Classroom/lecture/training
+SecondarySchool.idf,Offices_ZN_1_FLR_1 Thermal Zone,Office - enclosed
+SecondarySchool.idf,Offices_ZN_1_FLR_2 Thermal Zone,Office - enclosed
+SmallHotel.idf,CorridorFlr1 Thermal Zone,Corr. >= 2.4m wide
+SmallHotel.idf,CorridorFlr2 Thermal Zone,Corr. >= 2.4m wide
+SmallHotel.idf,CorridorFlr3 Thermal Zone,Corr. >= 2.4m wide
+SmallHotel.idf,CorridorFlr4 Thermal Zone,Corr. >= 2.4m wide
+SmallHotel.idf,ElevatorCoreFlr1 Thermal Zone,Lobby - elevator
+SmallHotel.idf,ElevatorCoreFlr2 Thermal Zone,Lobby - elevator
+SmallHotel.idf,ElevatorCoreFlr3 Thermal Zone,Lobby - elevator
+SmallHotel.idf,ElevatorCoreFlr4 Thermal Zone,Lobby - elevator
+SmallHotel.idf,EmployeeLoungeFlr1 Thermal Zone,Lounge/recreation
+SmallHotel.idf,ExerciseCenterFlr1 Thermal Zone,Gym - fitness
+SmallHotel.idf,FrontLoungeFlr1 Thermal Zone,Hotel/Motel - lobby
+SmallHotel.idf,FrontOfficeFlr1 Thermal Zone,Office - enclosed
+SmallHotel.idf,FrontStairsFlr1 Thermal Zone,Stairway
+SmallHotel.idf,FrontStairsFlr2 Thermal Zone,Stairway
+SmallHotel.idf,FrontStairsFlr3 Thermal Zone,Stairway
+SmallHotel.idf,FrontStairsFlr4 Thermal Zone,Stairway
+SmallHotel.idf,FrontStorageFlr1 Thermal Zone,Storage area
+SmallHotel.idf,FrontStorageFlr2 Thermal Zone,Storage area
+SmallHotel.idf,FrontStorageFlr3 Thermal Zone,Storage area
+SmallHotel.idf,FrontStorageFlr4 Thermal Zone,Storage area
+SmallHotel.idf,GuestRoom101 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom102 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom103 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom104 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom105 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom201 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom202_205 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom206_208 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom209_212 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom213 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom214 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom215_218 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom219 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom220_223 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom224 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom301 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom302_305 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom306_308 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom309_312 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom313 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom314 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom315_318 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom319 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom320_323 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom324 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom401 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom402_405 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom406_408 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom409_412 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom413 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom414 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom415_418 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom419 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom420_423 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,GuestRoom424 Thermal Zone,Hway lodging - rooms
+SmallHotel.idf,LaundryRoomFlr1 Thermal Zone,Storage area
+SmallHotel.idf,MechanicalRoomFlr1 Thermal Zone,Electrical/Mechanical
+SmallHotel.idf,MeetingRoomFlr1 Thermal Zone,Electrical/Mechanical
+SmallHotel.idf,RearStairsFlr1 Thermal Zone,Stairway
+SmallHotel.idf,RearStairsFlr2 Thermal Zone,Stairway
+SmallHotel.idf,RearStairsFlr3 Thermal Zone,Stairway
+SmallHotel.idf,RearStairsFlr4 Thermal Zone,Stairway
+SmallHotel.idf,RearStorageFlr1 Thermal Zone,Storage area
+SmallHotel.idf,RearStorageFlr2 Thermal Zone,Storage area
+SmallHotel.idf,RearStorageFlr3 Thermal Zone,Storage area
+SmallHotel.idf,RearStorageFlr4 Thermal Zone,Storage area
+SmallHotel.idf,RestroomFlr1 Thermal Zone,Washroom
+SmallOffice.idf,Attic Thermal Zone,- undefined -
+SmallOffice.idf,Core_ZN Thermal Zone,Office - enclosed
+SmallOffice.idf,Perimeter_ZN_1 Thermal Zone,Office - enclosed
+SmallOffice.idf,Perimeter_ZN_2 Thermal Zone,Office - enclosed
+SmallOffice.idf,Perimeter_ZN_3 Thermal Zone,Office - enclosed
+SmallOffice.idf,Perimeter_ZN_4 Thermal Zone,Office - enclosed
+Stand-aloneRetail.idf,Back_Space Thermal Zone,Storage area
+Stand-aloneRetail.idf,Core_Retail Thermal Zone,Retail - sales
+Stand-aloneRetail.idf,Front_Entry Thermal Zone,Lobby - elevator
+Stand-aloneRetail.idf,Front_Retail Thermal Zone,Retail - sales
+Stand-aloneRetail.idf,Point_Of_Sale Thermal Zone,Retail - sales
+StripMall.idf,LGstore1 Thermal Zone,Retail - sales
+StripMall.idf,LGstore2 Thermal Zone,Retail - sales
+StripMall.idf,SMstore1 Thermal Zone,Retail - sales
+StripMall.idf,SMstore2 Thermal Zone,Retail - sales
+StripMall.idf,SMstore3 Thermal Zone,Retail - sales
+StripMall.idf,SMstore4 Thermal Zone,Retail - sales
+StripMall.idf,SMstore5 Thermal Zone,Retail - sales
+StripMall.idf,SMstore6 Thermal Zone,Retail - sales
+StripMall.idf,SMstore7 Thermal Zone,Retail - sales
+StripMall.idf,SMstore8 Thermal Zone,Retail - sales
+SuperMarket.idf,Bakery Thermal Zone,Retail - sales
+SuperMarket.idf,Deli Thermal Zone,Retail - sales
+SuperMarket.idf,DryStorage Thermal Zone,Storage area
+SuperMarket.idf,Office Thermal Zone,Office - enclosed
+SuperMarket.idf,Produce Thermal Zone,Retail - sales
+SuperMarket.idf,Sales Thermal Zone,Retail - sales
+Warehouse.idf,BulkStorage Thermal Zone,Warehouse - med/blk
+Warehouse.idf,FineStorage Thermal Zone,Warehouse - fine
+Warehouse.idf,Office Thermal Zone,Office - enclosed

@@ -1,0 +1,49 @@
+baseline_index,building_type,vintage_name,measure_id,lighting_scaling_factor,lighting_fraction_radiant,lighting_fraction_visible,lighting_return_air_fraction,elec_equipment_load_scaling_factor,elec_equipment_fraction_radiant,elec_equipment_fraction_latent,elec_equipment_fraction_lost,,exhaust_fans_occ_control_enabled,dcv_enabled,fan_motor_eff,pump_motor_eff,cost_per_building,cost_per_building_dcv,cost_per_building_exhaustfans,cost_per_building_plugreduce,cost_per_building_lightreduce,cost_per_building_fansandpumps
+1.0,Barracks,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,192544.0,64275.0,4523.0,21281.0,92265.0,10200.0
+2.0,Fire Hall,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,35564.0,8668.0,2261.0,2750.0,15765.0,6120.0
+3.0,Food Service,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,139354.0,7713.0,6784.0,2554.0,111667.0,10636.0
+4.0,Food Service,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,139354.0,7713.0,6784.0,2554.0,111667.0,10636.0
+5.0,Hangar,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,232175.0,65989.0,3769.0,21849.0,133713.0,6855.0
+6.0,Hangar,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,232175.0,65989.0,3769.0,21849.0,133713.0,6855.0
+7.0,Hangar,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,232175.0,65989.0,3769.0,21849.0,133713.0,6855.0
+8.0,Maintenance Shop,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,65656.0,9427.0,2261.0,3121.0,45581.0,5266.0
+9.0,Maintenance Shop,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,65656.0,9427.0,2261.0,3121.0,45581.0,5266.0
+10.0,Maintenance Shop-Small,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,39706.0,7713.0,754.0,2554.0,24169.0,4516.0
+11.0,Maintenance Shop-Small,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,39706.0,7713.0,754.0,2554.0,24169.0,4516.0
+12.0,Maintenance Shop-Small,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,39706.0,7713.0,754.0,2554.0,24169.0,4516.0
+13.0,Office,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,154906.0,43707.0,5276.0,14471.0,83176.0,8276.0
+14.0,Office,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,154906.0,43707.0,5276.0,14471.0,83176.0,8276.0
+15.0,Office,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,154906.0,43707.0,5276.0,14471.0,83176.0,8276.0
+16.0,Office-Small,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,41694.0,13712.0,1508.0,4540.0,20189.0,1745.0
+17.0,Office-Small,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,41694.0,13712.0,1508.0,4540.0,20189.0,1745.0
+18.0,Office-Small,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,41694.0,13712.0,1508.0,4540.0,20189.0,1745.0
+19.0,Recreation Center,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,310272.0,27424.0,6030.0,9080.0,232340.0,35398.0
+20.0,Storage Building,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,46364.0,857.0,754.0,284.0,24436.0,0.0
+21.0,Storage Building,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,46364.0,857.0,754.0,284.0,24436.0,0.0
+22.0,Storage Building,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,46364.0,857.0,754.0,284.0,24436.0,0.0
+23.0,Storage Building,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,29680.0,857.0,754.0,284.0,24436.0,0.0
+24.0,Training Building,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,211935.0,35137.0,1508.0,11634.0,160307.0,20033.0
+25.0,Training Building,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,218786.0,35137.0,1508.0,11634.0,160307.0,20033.0
+26.0,Training Building,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,218786.0,35137.0,1508.0,11634.0,160307.0,20033.0
+27.0,Vehicle Garage,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,48702.0,8750.0,754.0,2838.0,26160.0,3349.0
+28.0,Vehicle Garage,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,44622.0,8750.0,754.0,2838.0,26160.0,3349.0
+NA,Barracks,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,188464.0,64275.0,4523.0,21281.0,92265.0,10200.0
+NA,Barracks,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,188464.0,64275.0,4523.0,21281.0,92265.0,10200.0
+30.0,Barracks,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,192980.0,64275.0,4523.0,21281.0,92265.0,10200.0
+NA,Fire Hall,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,40080.0,8668.0,2261.0,2750.0,15765.0,6120.0
+NA,Fire Hall,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,36299.0,8668.0,2261.0,2750.0,15765.0,6120.0
+31.0,Fire Hall,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,34710.0,8668.0,2261.0,2750.0,15765.0,6120.0
+NA,Food Service,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,133984.0,7713.0,6784.0,2554.0,111667.0,10636.0
+NA,Food Service,1980-2004,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,133234.0,7713.0,6784.0,2554.0,111667.0,10636.0
+29.0,Hangar,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,233596.0,65989.0,3769.0,21849.0,133713.0,6855.0
+NA,Maintenance Shop,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,62135.0,9427.0,2261.0,3121.0,45581.0,5266.0
+NA,Maintenance Shop,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,95788.0,9427.0,2261.0,3121.0,45581.0,5266.0
+NA,Maintenance Shop-Small,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,70588.0,7713.0,754.0,2554.0,24169.0,4516.0
+NA,Office,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,182028.0,43707.0,5276.0,14471.0,83176.0,8276.0
+NA,Office-Small,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,59982.0,13712.0,1508.0,4540.0,20189.0,1745.0
+NA,Recreation Center,1959-pre,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,278223.0,27424.0,6030.0,9080.0,232340.0,35398.0
+NA,Recreation Center,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,278223.0,27424.0,6030.0,9080.0,232340.0,35398.0
+NA,Recreation Center,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,NA,true,0.895,0.895,274874.0,27424.0,6030.0,9080.0,232340.0,35398.0
+NA,Training Building,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,208586.0,35137.0,1508.0,11634.0,160307.0,20033.0
+NA,Vehicle Garage,1960-1979,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,38502.0,8750.0,754.0,2838.0,26160.0,3349.0
+NA,Vehicle Garage,2005-2014,elec_reduce,0.7,NA,NA,NA,0.9,0.3,NA,NA,,true,true,0.895,0.895,38502.0,8750.0,754.0,2838.0,26160.0,3349.0

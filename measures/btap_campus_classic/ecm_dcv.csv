@@ -1,0 +1,49 @@
+baseline_index,building_type,vintage_name,measure_id,dcv_enabled,cost_per_building
+1.0,Barracks,1959-pre,dcv_enabled,true,64275.0
+2.0,Fire Hall,1959-pre,dcv_enabled,true,8668.0
+3.0,Food Service,1959-pre,dcv_enabled,true,7713.0
+4.0,Food Service,2005-2014,dcv_enabled,true,7713.0
+5.0,Hangar,1959-pre,dcv_enabled,true,65989.0
+6.0,Hangar,1960-1979,dcv_enabled,true,65989.0
+7.0,Hangar,1980-2004,dcv_enabled,true,65989.0
+8.0,Maintenance Shop,1959-pre,dcv_enabled,true,9427.0
+9.0,Maintenance Shop,1980-2004,dcv_enabled,true,9427.0
+10.0,Maintenance Shop-Small,1959-pre,dcv_enabled,true,7713.0
+11.0,Maintenance Shop-Small,1960-1979,dcv_enabled,true,7713.0
+12.0,Maintenance Shop-Small,1980-2004,dcv_enabled,true,7713.0
+13.0,Office,1959-pre,dcv_enabled,true,43707.0
+14.0,Office,1960-1979,dcv_enabled,true,43707.0
+15.0,Office,1980-2004,dcv_enabled,true,43707.0
+16.0,Office-Small,1960-1979,dcv_enabled,true,13712.0
+17.0,Office-Small,1980-2004,dcv_enabled,true,13712.0
+18.0,Office-Small,2005-2014,dcv_enabled,true,13712.0
+19.0,Recreation Center,1980-2004,dcv_enabled,true,27424.0
+20.0,Storage Building,1959-pre,dcv_enabled,true,857.0
+21.0,Storage Building,1960-1979,dcv_enabled,true,857.0
+22.0,Storage Building,1980-2004,dcv_enabled,true,857.0
+23.0,Storage Building,2005-2014,dcv_enabled,true,857.0
+24.0,Training Building,1959-pre,dcv_enabled,true,35137.0
+25.0,Training Building,1980-2004,dcv_enabled,true,35137.0
+26.0,Training Building,2005-2014,dcv_enabled,true,35137.0
+27.0,Vehicle Garage,1959-pre,dcv_enabled,true,8750.0
+28.0,Vehicle Garage,1980-2004,dcv_enabled,true,8750.0
+NA,Barracks,1960-1979,dcv_enabled,true,64275.0
+NA,Barracks,1980-2004,dcv_enabled,true,64275.0
+30.0,Barracks,2005-2014,dcv_enabled,true,64275.0
+NA,Fire Hall,1960-1979,dcv_enabled,true,8668.0
+NA,Fire Hall,1980-2004,dcv_enabled,true,8668.0
+31.0,Fire Hall,2005-2014,dcv_enabled,true,8668.0
+NA,Food Service,1960-1979,dcv_enabled,true,7713.0
+NA,Food Service,1980-2004,dcv_enabled,true,7713.0
+29.0,Hangar,2005-2014,dcv_enabled,true,65989.0
+NA,Maintenance Shop,1960-1979,dcv_enabled,true,9427.0
+NA,Maintenance Shop,2005-2014,dcv_enabled,true,9427.0
+NA,Maintenance Shop-Small,2005-2014,dcv_enabled,true,7713.0
+NA,Office,2005-2014,dcv_enabled,true,43707.0
+NA,Office-Small,1959-pre,dcv_enabled,true,13712.0
+NA,Recreation Center,1959-pre,dcv_enabled,true,27424.0
+NA,Recreation Center,1960-1979,dcv_enabled,true,27424.0
+NA,Recreation Center,2005-2014,dcv_enabled,true,27424.0
+NA,Training Building,1960-1979,dcv_enabled,true,35137.0
+NA,Vehicle Garage,1960-1979,dcv_enabled,true,8750.0
+NA,Vehicle Garage,2005-2014,dcv_enabled,true,8750.0

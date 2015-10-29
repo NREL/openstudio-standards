@@ -1,0 +1,32 @@
+{
+  "classname": "ChangeBuildingLocation",
+  "name": "change_building_location",
+  "display_name": "Change Building Location",
+  "measure_type": "RubyMeasure",
+  "arguments": [
+    {
+      "local_variable": "arg",
+      "variable_type": "String",
+      "name": "weather_directory",
+      "display_name": "Weather Directory",
+      "units": null,
+      "description": null
+    },
+    {
+      "local_variable": "arg2",
+      "variable_type": "String",
+      "name": "weather_file_name",
+      "display_name": "Weather File Name",
+      "units": null,
+      "description": null
+    }
+  ],
+  "name_xml": "Change Building Location",
+  "uid": "d4db4971-f5ba-11e3-a3ac-0800200c9a66",
+  "version_id": "df273d60-e271-4d2a-896d-962b46b8a113",
+  "modeler_description": "This will result in a model that links to a weather file on your local machine. If you send the resulting file to someone they will also need access to that weather file at the expected location. The design day and water main information is save within the OSM. The \"Weather File Name\" argument expects the path to an epw. The measure expects a .ddy and optionally a .stat file of the same name. Since this measure uses a string argument to represent a path to a file, it won't run correctly for cloud simulations.",
+  "description": "This will set a weather file for the simulation, add design days, and optionally set water main temperatures for your model.",
+  "tags": [
+    "Whole Building.Space Types"
+  ]
+}

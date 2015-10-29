@@ -1,0 +1,145 @@
+baseline_index,building_type,vintage_name,measure_id,fan_volume_type,fan_motor_eff,pump_speed_type,pump_control_type,pump_motor_eff,cost_per_building
+1.0,Barracks,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,3120.0
+2.0,Fire Hall,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,1088.0
+3.0,Food Service,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,4160.0
+4.0,Food Service,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,4160.0
+5.0,Hangar,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,2255.0
+6.0,Hangar,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,2255.0
+7.0,Hangar,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,2255.0
+8.0,Maintenance Shop,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,1215.0
+9.0,Maintenance Shop,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,1215.0
+10.0,Maintenance Shop-Small,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,2707.0
+11.0,Maintenance Shop-Small,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,2707.0
+12.0,Maintenance Shop-Small,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,2707.0
+13.0,Office,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,5200.0
+14.0,Office,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,5200.0
+15.0,Office,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,5200.0
+16.0,Office-Small,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,4160.0
+17.0,Office-Small,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,4160.0
+18.0,Office-Small,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,4160.0
+19.0,Recreation Center,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,11913.0
+24.0,Training Building,1959-pre,fans_to_variable,NA,NA,NA,NA,NA,7564.0
+25.0,Training Building,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,7564.0
+26.0,Training Building,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,7564.0
+27.0,Vehicle Garage,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,3120.0
+28.0,Vehicle Garage,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,3120.0
+NA,Barracks,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,3120.0
+NA,Barracks,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,3120.0
+30.0,Barracks,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,3120.0
+NA,Fire Hall,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,1088.0
+NA,Fire Hall,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,1088.0
+31.0,Fire Hall,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,1088.0
+NA,Food Service,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,4160.0
+NA,Food Service,1980-2004,fans_to_variable,VariableVolume,NA,NA,NA,NA,4160.0
+29.0,Hangar,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,2255.0
+NA,Maintenance Shop,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,1215.0
+NA,Maintenance Shop,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,1215.0
+NA,Maintenance Shop-Small,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,2707.0
+NA,Office,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,5200.0
+NA,Office-Small,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,4160.0
+NA,Recreation Center,1959-pre,fans_to_variable,VariableVolume,NA,NA,NA,NA,11913.0
+NA,Recreation Center,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,11913.0
+NA,Recreation Center,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,11913.0
+NA,Training Building,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,7564.0
+NA,Vehicle Garage,1960-1979,fans_to_variable,VariableVolume,NA,NA,NA,NA,3120.0
+NA,Vehicle Garage,2005-2014,fans_to_variable,VariableVolume,NA,NA,NA,NA,3120.0
+1.0,Barracks,1959-pre,NA,NA,NA,NA,NA,NA,NA
+2.0,Fire Hall,1959-pre,NA,NA,NA,NA,NA,NA,NA
+3.0,Food Service,1959-pre,NA,NA,NA,NA,NA,NA,NA
+4.0,Food Service,2005-2014,NA,NA,NA,NA,NA,NA,NA
+8.0,Maintenance Shop,1959-pre,NA,NA,NA,NA,NA,NA,NA
+9.0,Maintenance Shop,1980-2004,NA,NA,NA,NA,NA,NA,NA
+10.0,Maintenance Shop-Small,1959-pre,NA,NA,NA,NA,NA,NA,NA
+11.0,Maintenance Shop-Small,1960-1979,NA,NA,NA,NA,NA,NA,NA
+12.0,Maintenance Shop-Small,1980-2004,NA,NA,NA,NA,NA,NA,NA
+16.0,Office-Small,1960-1979,NA,NA,NA,NA,NA,NA,NA
+17.0,Office-Small,1980-2004,NA,NA,NA,NA,NA,NA,NA
+18.0,Office-Small,2005-2014,NA,NA,NA,NA,NA,NA,NA
+20.0,Storage Building,1959-pre,NA,NA,NA,NA,NA,NA,NA
+20.0,Storage Building,1959-pre,NA,NA,NA,NA,NA,NA,NA
+20.0,Storage Building,1959-pre,NA,NA,NA,NA,NA,NA,NA
+21.0,Storage Building,1960-1979,NA,NA,NA,NA,NA,NA,NA
+21.0,Storage Building,1960-1979,NA,NA,NA,NA,NA,NA,NA
+21.0,Storage Building,1960-1979,NA,NA,NA,NA,NA,NA,NA
+22.0,Storage Building,1980-2004,NA,NA,NA,NA,NA,NA,NA
+22.0,Storage Building,1980-2004,NA,NA,NA,NA,NA,NA,NA
+22.0,Storage Building,1980-2004,NA,NA,NA,NA,NA,NA,NA
+23.0,Storage Building,2005-2014,NA,NA,NA,NA,NA,NA,NA
+23.0,Storage Building,2005-2014,NA,NA,NA,NA,NA,NA,NA
+23.0,Storage Building,2005-2014,NA,NA,NA,NA,NA,NA,NA
+27.0,Vehicle Garage,1959-pre,NA,NA,NA,NA,NA,NA,NA
+28.0,Vehicle Garage,1980-2004,NA,NA,NA,NA,NA,NA,NA
+NA,Barracks,1960-1979,NA,NA,NA,NA,NA,NA,NA
+NA,Barracks,1980-2004,NA,NA,NA,NA,NA,NA,NA
+30.0,Barracks,2005-2014,NA,NA,NA,NA,NA,NA,NA
+NA,Fire Hall,1960-1979,NA,NA,NA,NA,NA,NA,NA
+NA,Fire Hall,1980-2004,NA,NA,NA,NA,NA,NA,NA
+31.0,Fire Hall,2005-2014,NA,NA,NA,NA,NA,NA,NA
+NA,Food Service,1960-1979,NA,NA,NA,NA,NA,NA,NA
+NA,Food Service,1980-2004,NA,NA,NA,NA,NA,NA,NA
+29.0,Hangar,2005-2014,NA,NA,NA,NA,NA,NA,NA
+NA,Maintenance Shop,1960-1979,NA,NA,NA,NA,NA,NA,NA
+NA,Maintenance Shop,2005-2014,NA,NA,NA,NA,NA,NA,NA
+NA,Office-Small,1959-pre,NA,NA,NA,NA,NA,NA,NA
+NA,Recreation Center,2005-2014,NA,NA,NA,NA,NA,NA,NA
+NA,Vehicle Garage,1960-1979,NA,NA,NA,NA,NA,NA,NA
+NA,Vehicle Garage,2005-2014,NA,NA,NA,NA,NA,NA,NA
+1.0,Barracks,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,10200.0
+2.0,Fire Hall,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,6120.0
+3.0,Food Service,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,10636.0
+4.0,Food Service,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,10636.0
+5.0,Hangar,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,6855.0
+6.0,Hangar,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,6855.0
+7.0,Hangar,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,6855.0
+8.0,Maintenance Shop,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,5266.0
+9.0,Maintenance Shop,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,5266.0
+10.0,Maintenance Shop-Small,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,4516.0
+11.0,Maintenance Shop-Small,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,4516.0
+12.0,Maintenance Shop-Small,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,4516.0
+13.0,Office,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,8276.0
+14.0,Office,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,8276.0
+15.0,Office,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,8276.0
+16.0,Office-Small,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,1745.0
+17.0,Office-Small,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,1745.0
+18.0,Office-Small,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,1745.0
+19.0,Recreation Center,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,35398.0
+24.0,Training Building,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,20033.0
+25.0,Training Building,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,20033.0
+26.0,Training Building,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,20033.0
+27.0,Vehicle Garage,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,3349.0
+28.0,Vehicle Garage,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,3349.0
+NA,Barracks,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,10200.0
+NA,Barracks,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,10200.0
+30.0,Barracks,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,10200.0
+NA,Fire Hall,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,6120.0
+NA,Fire Hall,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,6120.0
+31.0,Fire Hall,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,6120.0
+NA,Food Service,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,10636.0
+NA,Food Service,1980-2004,pump_fan_eff_,NA,0.895,NA,NA,0.895,10636.0
+29.0,Hangar,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,6855.0
+NA,Maintenance Shop,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,5266.0
+NA,Maintenance Shop,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,5266.0
+NA,Maintenance Shop-Small,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,4516.0
+NA,Office,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,8276.0
+NA,Office-Small,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,1745.0
+NA,Recreation Center,1959-pre,pump_fan_eff_,NA,0.895,NA,NA,0.895,35398.0
+NA,Recreation Center,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,35398.0
+NA,Recreation Center,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,35398.0
+NA,Training Building,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,20033.0
+NA,Vehicle Garage,1960-1979,pump_fan_eff_,NA,0.895,NA,NA,0.895,3349.0
+NA,Vehicle Garage,2005-2014,pump_fan_eff_,NA,0.895,NA,NA,0.895,3349.0
+5.0,Hangar,1959-pre,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,3528.0
+6.0,Hangar,1960-1979,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,3528.0
+7.0,Hangar,1980-2004,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,3528.0
+13.0,Office,1959-pre,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,3528.0
+14.0,Office,1960-1979,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,3528.0
+15.0,Office,1980-2004,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,3528.0
+19.0,Recreation Center,1980-2004,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,14112.0
+24.0,Training Building,1959-pre,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,8311.0
+25.0,Training Building,1980-2004,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,8311.0
+26.0,Training Building,2005-2014,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,8311.0
+NA,Maintenance Shop-Small,2005-2014,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,0.0
+NA,Office,2005-2014,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,3528.0
+NA,Recreation Center,1959-pre,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,14112.0
+NA,Recreation Center,1960-1979,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,14112.0
+NA,Training Building,1960-1979,pumps_to_variable,NA,NA,VariableSpeed,Intermittent,NA,8311.0

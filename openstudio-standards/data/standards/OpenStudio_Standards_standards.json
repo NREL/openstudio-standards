@@ -1,0 +1,55 @@
+{
+  "standards": [
+    {
+      "name": "AIA 2001"
+    },
+    {
+      "name": "ASHRAE 169-2006"
+    },
+    {
+      "name": "ASHRAE 189.1-2009"
+    },
+    {
+      "name": "ASHRAE 62.1-1999"
+    },
+    {
+      "name": "ASHRAE 62.1-2004"
+    },
+    {
+      "name": "ASHRAE 62.1-2007"
+    },
+    {
+      "name": "ASHRAE 90.1-1999"
+    },
+    {
+      "name": "ASHRAE 90.1-2001"
+    },
+    {
+      "name": "ASHRAE 90.1-2004"
+    },
+    {
+      "name": "ASHRAE 90.1-2007"
+    },
+    {
+      "name": "ASHRAE 90.1-2010"
+    },
+    {
+      "name": "ASHRAE 90.1-2013"
+    },
+    {
+      "name": "CEC Title24-2005"
+    },
+    {
+      "name": "CEC Title24-2008"
+    },
+    {
+      "name": "CEC Title24-2013"
+    },
+    {
+      "name": "GGHC v2.2"
+    },
+    {
+      "name": "NECB 2011"
+    }
+  ]
+}

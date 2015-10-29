@@ -1,0 +1,10 @@
+CAN_NF_Battle.Harbour.718170_CWEC.epw
+CAN_PQ_Nitchequon.CAN270_CWEC.epw
+CAN_ON_Simcoe.715270_CWEC.epw
+CAN_ON_Kingston.716200_CWEC.epw
+CAN_PQ_Montreal.Mirabel.716278_CWEC.epw
+CAN_NS_Truro.713980_CWEC.epw
+CAN_PQ_Grindstone.Island_CWEC.epw
+CAN_ON_Muskoka.716300_CWEC.epw
+CAN_PQ_Montreal.Jean.Brebeuf.716278_CWEC.epw
+CAN_PQ_Nitchequon.CAN270_CWEC.epw

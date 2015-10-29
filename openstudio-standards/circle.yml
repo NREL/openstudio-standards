@@ -1,0 +1,17 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+
+test:
+  override:
+    - >
+      docker run -v $(pwd):/var/simdata/openstudio
+      -e "COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN"
+      nrel/docker-test-containers:openstudio-1.8.1-mongo-2.4 /var/simdata/openstudio/test/bin/docker-run.sh
+    - >
+      docker run -v $(pwd):/var/simdata/openstudio -e
+      "COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN"
+      nrel/docker-test-containers:openstudio-1.8.5-mongo-2.4 /var/simdata/openstudio/test/bin/docker-run.sh

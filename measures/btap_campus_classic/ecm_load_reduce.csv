@@ -1,0 +1,49 @@
+baseline_index,building_type,vintage_name,measure_id,infiltration_flow_per_exterior_area,occ_stbck_enabled,occ_stbck_tolerance,occ_stbck_heat_setback,occ_stbck_heat_setpoint,occ_stbck_cool_setback,occ_stbck_cool_setpoint,hw_boiler_nominal_thermal_efficiency,hw_boiler_flow_mode,hw_boiler_curve,hw_boiler_efficiency_curve_temperature_evaluation_variable,hw_boiler_reset_enabled,hw_boiler_reset_highsupplytemp,hw_boiler_reset_outsidehighsupplytemp,hw_boiler_reset_lowsupplytemp,hw_boiler_reset_outsidelowsupplytemp,pump_speed_type,pump_control_type,pump_motor_eff,cost_per_building,infil_cost_per_building,cost_per_building_reset
+1.0,Barracks,1959-pre,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,196581.0,158818.0,957.0
+2.0,Fire Hall,1959-pre,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,73441.0,67418.0,957.0
+3.0,Food Service,1959-pre,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,89170.0,83796.0,957.0
+4.0,Food Service,2005-2014,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,5374.0,0.0,957.0
+5.0,Hangar,1959-pre,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,135522.0,96777.0,957.0
+6.0,Hangar,1960-1979,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,135522.0,96777.0,957.0
+7.0,Hangar,1980-2004,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,127569.0,88824.0,957.0
+8.0,Maintenance Shop,1959-pre,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,80374.0,74019.0,957.0
+9.0,Maintenance Shop,1980-2004,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,73495.0,67140.0,957.0
+10.0,Maintenance Shop-Small,1959-pre,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,52480.0,47106.0,957.0
+11.0,Maintenance Shop-Small,1960-1979,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,52480.0,47106.0,957.0
+12.0,Maintenance Shop-Small,1980-2004,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,48574.0,43200.0,957.0
+13.0,Office,1959-pre,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,80476.0,54491.0,957.0
+14.0,Office,1960-1979,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,80476.0,54491.0,957.0
+15.0,Office,1980-2004,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,75886.0,49901.0,957.0
+16.0,Office-Small,1960-1979,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,45765.0,36956.0,957.0
+17.0,Office-Small,1980-2004,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,42361.0,33552.0,957.0
+18.0,Office-Small,2005-2014,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,8809.0,0.0,957.0
+19.0,Recreation Center,1980-2004,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,129511.0,112850.0,957.0
+20.0,Storage Building,1959-pre,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,NA,atmospheric,NA,NA,NA,NA,NA,NA,NA,NA,NA,37850.0,37359.0,0.0
+21.0,Storage Building,1960-1979,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,NA,atmospheric,NA,NA,NA,NA,NA,NA,NA,NA,NA,37850.0,37359.0,0.0
+22.0,Storage Building,1980-2004,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,NA,atmospheric,NA,NA,NA,NA,NA,NA,NA,NA,NA,34016.0,33525.0,0.0
+23.0,Storage Building,2005-2014,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,NA,atmospheric,NA,NA,NA,NA,NA,NA,NA,NA,NA,491.0,0.0,0.0
+24.0,Training Building,1959-pre,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,NA,atmospheric,NA,NA,NA,NA,NA,NA,NA,NA,NA,136565.0,116444.0,0.0
+25.0,Training Building,1980-2004,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,NA,atmospheric,NA,NA,NA,NA,NA,NA,NA,NA,NA,123924.0,103803.0,0.0
+26.0,Training Building,2005-2014,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,NA,atmospheric,NA,NA,NA,NA,NA,NA,NA,NA,NA,20121.0,0.0,0.0
+27.0,Vehicle Garage,1959-pre,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,VariableSpeed,Intermittent,0.895,73113.0,67248.0,957.0
+28.0,Vehicle Garage,1980-2004,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,VariableSpeed,Intermittent,0.895,68005.0,62140.0,957.0
+NA,Barracks,1960-1979,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,159775.0,122012.0,957.0
+NA,Barracks,1980-2004,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,148653.0,110890.0,957.0
+30.0,Barracks,2005-2014,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,37763.0,0.0,957.0
+NA,Fire Hall,1960-1979,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,73441.0,67418.0,957.0
+NA,Fire Hall,1980-2004,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,68854.0,62831.0,957.0
+31.0,Fire Hall,2005-2014,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,6023.0,0.0,957.0
+NA,Food Service,1960-1979,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,89170.0,83796.0,957.0
+NA,Food Service,1980-2004,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,82009.0,76635.0,957.0
+29.0,Hangar,2005-2014,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,38745.0,0.0,957.0
+NA,Maintenance Shop,1960-1979,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,80374.0,74019.0,957.0
+NA,Maintenance Shop,2005-2014,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,6355.0,0.0,957.0
+NA,Maintenance Shop-Small,2005-2014,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,5374.0,0.0,957.0
+NA,Office,2005-2014,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,25985.0,0.0,957.0
+NA,Office-Small,1959-pre,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,45765.0,36956.0,957.0
+NA,Recreation Center,1959-pre,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,139918.0,123257.0,957.0
+NA,Recreation Center,1960-1979,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,139918.0,123257.0,957.0
+NA,Recreation Center,2005-2014,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,16661.0,0.0,957.0
+NA,Training Building,1960-1979,load_reduce,0.0002,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,137522.0,116444.0,957.0
+NA,Vehicle Garage,1960-1979,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,73113.0,67248.0,957.0
+NA,Vehicle Garage,2005-2014,load_reduce,0.0003,true,0.05,17.0,22.0,99.0,24.0,NA,LeavingSetpointModulated,atmospheric,NA,true,82.0,-25.0,40.0,20.0,NA,NA,NA,5865.0,0.0,957.0

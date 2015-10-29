@@ -1,0 +1,49 @@
+baseline_index,building_type,vintage_name,measure_id,erv_enabled,erv_autosizeNominalSupplyAirFlowRate,erv_NominalSupplyAirFlowRate,erv_HeatExchangerType,erv_SensibleEffectivenessat100CoolingAirFlow,erv_SensibleEffectivenessat75CoolingAirFlow,erv_LatentEffectiveness100Cooling,erv_LatentEffectiveness75Cooling,erv_SensibleEffectiveness100Heating,erv_SensibleEffectiveness75Heating,erv_LatentEffectiveness100Heating,erv_LatentEffectiveness75Heating,erv_SupplyAirOutletTemperatureControl,erv_setFrostControlType,erv_ThresholdTemperature,erv_InitialDefrostTimeFraction,erv_nominal_electric_power,erv_economizer_lockout,cost_per_building
+1.0,Barracks,1959-pre,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,271466.0
+2.0,Fire Hall,1959-pre,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,72910.0
+3.0,Food Service,1959-pre,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,296001.0
+4.0,Food Service,2005-2014,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,296001.0
+5.0,Hangar,1959-pre,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,187064.0
+6.0,Hangar,1960-1979,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,187064.0
+7.0,Hangar,1980-2004,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,187064.0
+8.0,Maintenance Shop,1959-pre,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,138209.0
+9.0,Maintenance Shop,1980-2004,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,138209.0
+10.0,Maintenance Shop-Small,1959-pre,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,48855.0
+11.0,Maintenance Shop-Small,1960-1979,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,48855.0
+12.0,Maintenance Shop-Small,1980-2004,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,48855.0
+13.0,Office,1959-pre,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,313530.0
+14.0,Office,1960-1979,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,313530.0
+15.0,Office,1980-2004,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,313530.0
+16.0,Office-Small,1960-1979,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,167025.0
+17.0,Office-Small,1980-2004,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,167025.0
+18.0,Office-Small,2005-2014,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,167025.0
+19.0,Recreation Center,1980-2004,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,796294.0
+20.0,Storage Building,1959-pre,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,0.0
+21.0,Storage Building,1960-1979,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,0.0
+22.0,Storage Building,1980-2004,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,0.0
+23.0,Storage Building,2005-2014,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,0.0
+24.0,Training Building,1959-pre,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,254281.0
+25.0,Training Building,1980-2004,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,254281.0
+26.0,Training Building,2005-2014,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,254281.0
+27.0,Vehicle Garage,1959-pre,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,163879.0
+28.0,Vehicle Garage,1980-2004,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,163879.0
+NA,Barracks,1960-1979,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,271466.0
+NA,Barracks,1980-2004,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,271466.0
+30.0,Barracks,2005-2014,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,271466.0
+NA,Fire Hall,1960-1979,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,72910.0
+NA,Fire Hall,1980-2004,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,72910.0
+31.0,Fire Hall,2005-2014,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,72910.0
+NA,Food Service,1960-1979,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,296001.0
+NA,Food Service,1980-2004,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,296001.0
+29.0,Hangar,2005-2014,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,187064.0
+NA,Maintenance Shop,1960-1979,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,138209.0
+NA,Maintenance Shop,2005-2014,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,138209.0
+NA,Maintenance Shop-Small,2005-2014,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,48855.0
+NA,Office,2005-2014,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,313530.0
+NA,Office-Small,1959-pre,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,167025.0
+NA,Recreation Center,1959-pre,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,796294.0
+NA,Recreation Center,1960-1979,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,796294.0
+NA,Recreation Center,2005-2014,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,796294.0
+NA,Training Building,1960-1979,hrv_enabled,true,YES,NA,Plate,0.76,0.81,0.68,0.73,0.76,0.81,0.68,0.73,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,254281.0
+NA,Vehicle Garage,1960-1979,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,163879.0
+NA,Vehicle Garage,2005-2014,hrv_enabled,true,YES,NA,Plate,0.54,0.59,0.3,0.37,0.58,0.62,0.41,0.45,No,ExhaustAirRecirculation,1.7,0.0,500.0,Yes,163879.0
