@@ -1,3 +1,2 @@
---output-dir openstudio-standards/doc/
 --readme openstudio-standards/README.md
 openstudio-standards/lib/**/*.rb
