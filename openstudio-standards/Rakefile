@@ -12,8 +12,8 @@ require 'rake/testtask'
 desc 'Run the tests'
 Rake::TestTask.new do |task|
   #task.test_files = FileList['../measures/create_DOE_prototype_building/tests/*_test.rb']
-  task.test_files = FileList['../measures/apply_system1/tests/*_test.rb']
-  task.test_files = FileList['../measures/apply_system1/tests/CanadianAddUnitaryAndApplyStandard_test.rb']
+  #task.test_files = FileList['../measures/apply_system1/tests/*_test.rb']
+  task.test_files = FileList['measures/btap_set_default_construction_set/tests/set_default_construction_set_test.rb']  
   #puts "Here #{File.expand_path('../measures/**/*_test')}"
   #task.libs << ['test', 'lib', '../measures/create_DOE_prototype_building/tests']
   #task.test_files = FileList['../test/*/test*.rb']
