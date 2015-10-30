@@ -49,16 +49,16 @@ module BTAP
 
       #This method will take 9 variables and returns the space type.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [Object]
-      #@params space_type_name [String]
-      #@params default_schedule_set [Array]
-      #@params people_load [Array]
-      #@params lighting_load [Array]
-      #@params electric_load [Array]
-      #@params hotwater_load [Array]
-      #@params oa_load [Array]
-      #@params infiltration_load [Array]
-      #@return spacetype [OpenStudio::Model::SpaceType]
+      #@param model [Object]
+      #@param space_type_name [String]
+      #@param default_schedule_set [OpenStudio::Model::DefaultScheduleSet]
+      #@param people_load [Array]
+      #@param lighting_load [Array]
+      #@param electric_load [Array]
+      #@param hotwater_load [Array]
+      #@param oa_load [Array]
+      #@param infiltration_load [Array]
+      #@return [OpenStudio::Model::SpaceType] spacetype
       def self.create_space_type(model,space_type_name,default_schedule_set,people_load,lighting_load,electric_load,hotwater_load,oa_load,infiltration_load)
         raise("SpaceType #{space_type_name} already exists. Please use a different name") unless model.getSpaceTypeByName(space_type_name).empty?
         spacetype = OpenStudio::Model::SpaceType.new(model)
@@ -76,8 +76,8 @@ module BTAP
 
       #This method will take 2 variables and merge the space types.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [Object]
-      #@params spacetype_precentage_array [Array]
+      #@param model [Object]
+      #@param spacetype_precentage_array [Array]
       def self.create_merged_space_type(model,spacetype_precentage_array)
         new_spacetype = OpenStudio::Model::SpaceType.new(model)
         spacetype_precentage_array.each do |spacetype_percentage|
@@ -100,7 +100,7 @@ module BTAP
       
       #This method will take 1 variable this method will attempt to find the dominant schedule of the surround spaces
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [Object] (description)
+      #@param model [Object] (description)
       def self.set_wildcard_spacetype_schedules_to_dominant_schedule(model)
         #1.Find all spaces with wildcard spaces.
         #2.Iterate through spaces

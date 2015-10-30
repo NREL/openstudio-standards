@@ -63,8 +63,8 @@ module BTAP
 
         #This method will scale people loads.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params factor [Float]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param factor [Float]
         def self.scale_people_loads( model, factor )
           model.getPeoples.each do |item|
             item.setMultiplier( item.multiplier * factor )
@@ -73,12 +73,12 @@ module BTAP
         
         #This method will scale people loads schedule.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params a_coef [Float]
-        #@params b_coef [Float]
-        #@params c_coef [Float]
-        #@params time_shift [Float]
-        #@params time_sign [Float]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param a_coef [Float]
+        #@param b_coef [Float]
+        #@param c_coef [Float]
+        #@param time_shift [Float]
+        #@param time_sign [Float]
         def self.scale_people_loads_schedule( model, a_coef, b_coef, c_coef,time_shift = nil, time_sign = nil  )
           model.getPeoples.each do |item|
             #Do an in-place modification of the schedule. 
@@ -88,8 +88,8 @@ module BTAP
 
         #This method will scale lighting loads.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params factor [Float]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param factor [Float]
         def self.scale_lighting_loads( model, factor )
           model.getLightss.each do |item|
             item.setMultiplier( item.multiplier * factor )
@@ -98,12 +98,12 @@ module BTAP
         
         #This method will scale lighting loads schedule.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params a_coef [Float]
-        #@params b_coef [Float]
-        #@params c_coef [Float]
-        #@params time_shift [Float]
-        #@params time_sign [Float]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param a_coef [Float]
+        #@param b_coef [Float]
+        #@param c_coef [Float]
+        #@param time_shift [Float]
+        #@param time_sign [Float]
         def self.scale_lighting_loads_schedule( model, a_coef, b_coef, c_coef,time_shift = nil, time_sign = nil  )
           model.getLightss.each do |item|
             #Do an in-place modification of the schedule. 
@@ -113,8 +113,8 @@ module BTAP
 
         #This method will scale electrical loads.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params factor [Float]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param factor [Float]
         def self.scale_electrical_loads( model, factor )
           model.getElectricEquipments.each do |item|
             item.setMultiplier( item.multiplier * factor )
@@ -123,12 +123,12 @@ module BTAP
 
         #This method will scale electrical loads schedule.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params a_coef [Float]
-        #@params b_coef [Float]
-        #@params c_coef [Float]
-        #@params time_shift [Float]
-        #@params time_sign [Float]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param a_coef [Float]
+        #@param b_coef [Float]
+        #@param c_coef [Float]
+        #@param time_shift [Float]
+        #@param time_sign [Float]
         def self.scale_electrical_loads_schedule( model, a_coef, b_coef, c_coef,time_shift = nil, time_sign = nil  )
           model.getElectricEquipments.each do |item|
             BTAP::Resources::Schedules::modify_schedule!(model, item.schedule, a_coef, b_coef, c_coef, time_shift, time_sign )
@@ -137,8 +137,8 @@ module BTAP
 
         #This method will scale hotwater loads.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params factor [Float]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param factor [Float]
         def self.scale_hot_water_loads( model, factor )
           model.getHotWaterEquipments.each do |item|
             item.setMultiplier( item.multiplier * factor )
@@ -147,8 +147,8 @@ module BTAP
 
         #This method will scale Outdoor Air loads.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params factor [Float]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param factor [Float]
         def self.scale_oa_loads( model, factor )
           model.getDesignSpecificationOutdoorAirs.each do |oa_def|
             oa_def.setOutdoorAirFlowperPerson(oa_def.getOutdoorAirFlowperPerson * factor ) unless oa_def.isOutdoorAirFlowperPersonDefaulted
@@ -160,8 +160,8 @@ module BTAP
 
         #This method will scale infiltration loads.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params factor [Float]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param factor [Float]
         def self.scale_inflitration_loads( model, factor )
           model.getSpaceInfiltrationDesignFlowRates.each do |infiltration_load|
             infiltration_load.setDesignFlowRate( infiltration_load.designFlowRate.get * factor ) unless infiltration_load.designFlowRate.empty?
@@ -173,12 +173,12 @@ module BTAP
   
         #This method will set the infiltration magnitude.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::model::Model] A model object 
-        #@params setDesignFlowRate [Float]
-        #@params setFlowperSpaceFloorArea [Float]
-        #@params setFlowperExteriorSurfaceArea [Float]
-        #@params setAirChangesperHour [Float]
-        #@return table [String]
+        #@param model [OpenStudio::model::Model] A model object 
+        #@param setDesignFlowRate [Float]
+        #@param setFlowperSpaceFloorArea [Float]
+        #@param setFlowperExteriorSurfaceArea [Float]
+        #@param setAirChangesperHour [Float]
+        #@return [String] table
         def self.set_inflitration_magnitude( model, setDesignFlowRate,setFlowperSpaceFloorArea,setFlowperExteriorSurfaceArea,setAirChangesperHour )
 
           table = "name,infiltration_method,infiltration_design_flow_rate,infiltration_flow_per_space,infiltration_flow_per_exterior_area,infiltration_air_changes_per_hour\n"
@@ -202,7 +202,7 @@ module BTAP
 
       #This method removes people loads from the model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object 
       def self.remove_all_people_loads(model)
         model.getPeoples.each {|people| people.remove}
         model.getPeopleDefinitions.each {|people| people.remove}
@@ -211,12 +211,12 @@ module BTAP
 
       #This method created people loads from the model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params people_name [String]
-      #@params floor_area_per_person [Float]
-      #@params multiplier [Float]
-      #@params schedule [Float]
-      #@return people [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param people_name [String]
+      #@param floor_area_per_person [Float]
+      #@param multiplier [Float]
+      #@param schedule [Float]
+      #@return [String] people
       def self.create_people_load(model,people_name,floor_area_per_person = 0.0, multiplier = 1.0 , schedule ="")
         raise("People \"#{people_name}\" already exists. Please use a different name") unless model.getPeopleByName(people_name).empty?
         peopledef = OpenStudio::Model::PeopleDefinition.new(model)
@@ -239,7 +239,7 @@ module BTAP
 
       #This method removes light loads from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object 
       def self.remove_all_light_loads(model)
         model.getLightss.each {|item| item.remove}
         model.getLightsDefinitions.each {|item| item.remove}
@@ -247,12 +247,12 @@ module BTAP
 
       #This method created people loads from the model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params light_name [String]
-      #@params light_watts_per_floor_area= [Float]
-      #@params multiplier [Float]
-      #@params schedule [Float]
-      #@return lights [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param light_name [String]
+      #@param light_watts_per_floor_area [Float]
+      #@param multiplier [Float]
+      #@param schedule [Float]
+      #@return [String] lights
       def self.create_lighting_load(model,light_name,light_watts_per_floor_area= 0.0, multiplier = 1.0 ,schedule ="" )
         raise("Light #{name} already exists. Please use a different name") unless model.getLightsByName(light_name).empty?
         lightsdef = OpenStudio::Model::LightsDefinition.new(model)
@@ -268,7 +268,7 @@ module BTAP
       
       #This method removes elec loads from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object 
       def self.remove_all_electric_loads(model)
         model.getElectricEquipments.each {|item| item.remove}
         model.getElectricEquipmentDefinitions.each {|item| item.remove}
@@ -277,12 +277,12 @@ module BTAP
 
       #This method created people loads from the model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params elec_name [String]
-      #@params elec_watts_per_floor_area [Float]
-      #@params multiplier [Float]
-      #@params schedule [Float]
-      #@return elec [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param elec_name [String]
+      #@param elec_watts_per_floor_area [Float]
+      #@param multiplier [Float]
+      #@param schedule [Float]
+      #@return [String] elec
       def self.create_electric_load(model,elec_name,elec_watts_per_floor_area = 0.0, multiplier = 1.0 ,schedule ="")
         raise("ElectricEquipment #{name} already exists. Please use a different name") unless model.getElectricEquipmentByName(elec_name).empty?
         elecdef = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -297,7 +297,7 @@ module BTAP
 
       #This method removes hot water loads from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_hot_water_loads(model)
         model.getHotWaterEquipments.each {|item| item.remove}
         model.getHotWaterEquipmentDefinitions.each {|item| item.remove}
@@ -305,12 +305,12 @@ module BTAP
 
       #This method creats hot water load.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params hot_water_name [String]
-      #@params hot_water_watts_per_floor_area [Float]
-      #@params multiplier [Float]
-      #@params schedule [Float]
-      #@return hotwater [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param hot_water_name [String]
+      #@param hot_water_watts_per_floor_area [Float]
+      #@param multiplier [Float]
+      #@param schedule [Float]
+      #@return [String] hotwater
       def self.create_hotwater_load(model,hot_water_name,hot_water_watts_per_floor_area = 0.0,multiplier = 1.0 ,schedule ="")
         raise("HotWaterEquipment #{name} already exists. Please use a different name") unless model.getHotWaterEquipmentByName(hot_water_name).empty?
         hotwaterdef = OpenStudio::Model::HotWaterEquipmentDefinition.new(model)
@@ -326,7 +326,7 @@ module BTAP
       
       #This method removes all design specification OA from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_DesignSpecificationOutdoorAir(model)
         model.getDesignSpecificationOutdoorAirs.each { |item| item.remove }
       end
@@ -334,7 +334,7 @@ module BTAP
       
       #This method removes all space infiltration design flow rate OA from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_SpaceInfiltrationDesignFlowRate(model)
         OpenStudio::Model::SpaceInfiltrationDesignFlowRate
         model.getSpaceInfiltrationDesignFlowRates.each { |item| item.remove }
@@ -342,15 +342,15 @@ module BTAP
 
       #This method creats hot water load.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params oa_name [String]
-      #@params oa_person [Fixnum]
-      #@params oa_area [Fixnum]
-      #@params oa_ach [Fixnum]
-      #@params oa_flowrate [Fixnum]
-      #@params method [String]
-      #@params schedule [Float]
-      #@return oa_def [OpenStudio::model::Model]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param oa_name [String]
+      #@param oa_person [Fixnum]
+      #@param oa_area [Fixnum]
+      #@param oa_ach [Fixnum]
+      #@param oa_flowrate [Fixnum]
+      #@param method [String]
+      #@param schedule [Float]
+      #@return [OpenStudio::model::Model] oa_def
       def self.create_oa_load(model,oa_name,oa_person = 0 ,oa_area = 0, oa_ach = 0, oa_flowrate = 0, method = "Maximum",schedule = nil)
         raise("DesignSpecificationOutdoorAir #{name} already exists. Please use a different name") unless model.getDesignSpecificationOutdoorAirByName( oa_name ).empty?
         #units are in m3/s for flow and m2 for area.
@@ -373,7 +373,7 @@ module BTAP
       
       #This method removes infiltration from model..
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_SpaceInfiltrationDesignFlowRates(model)
         model.getSpaceInfiltrationDesignFlowRates.each { |item| item.remove }
       end
@@ -381,8 +381,8 @@ module BTAP
       #This method creates infiltration load.
       #NECB infiltration rate is 0.25L/s/m2  or 0.00025 m3/s/m2
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@return infiltration_load [String]
+      #@param model [OpenStudio::model::Model] A model object
+      #@return [String] infiltration_load
       def self.create_infiltration_load(model,
           infil_name,
           value = 0.00025 ,
@@ -419,7 +419,7 @@ module BTAP
 
       #This method removes all loads from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_casual_loads(model)
         self.remove_all_people_loads(model)
         self.remove_all_light_loads(model)
@@ -429,7 +429,7 @@ module BTAP
 
       #This method removes all space loads from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_SpaceLoads(model)
         model.getSpaceLoads.each { |item| item.remove }
         model.getSpaceLoadDefinitions.each { |item| item.remove }

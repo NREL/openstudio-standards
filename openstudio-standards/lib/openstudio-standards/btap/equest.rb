@@ -1197,8 +1197,6 @@ module BTAP
             end
           end
         end
-        #@materials.print
-        #@layers.print
       end
 
       private
@@ -2066,7 +2064,9 @@ module BTAP
 
 
       # Will read an input file into memory and store all the commands into the
-      # @commands array.
+      # commands array.
+      # param filename
+      # param runner
       def load_inp(filename,runner = nil)
         BTAP::runner_register("Info", "loading file:" + filename, runner)
         #Open the file.

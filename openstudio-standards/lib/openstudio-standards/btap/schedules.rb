@@ -631,10 +631,10 @@ module BTAP
 
 
       # This method will create a detailed schedule using a "compact format"
-      # @params model [OpenStudio::Model::Model]  The building model you wish to add the schedule to.
-      # @params name  [String]                    The name of the schedule (Can be left as a blank string "" if you wish.
-      # @params type  [String] either "TEMPERATURE", "ON_OFF", "FRACTION"
-      # @params schedule_struct [Array<Array>] This is a complex nested array to contain the minimal information required for a detailed schedule.
+      # @param model [OpenStudio::Model::Model]  The building model you wish to add the schedule to.
+      # @param name  [String]                    The name of the schedule (Can be left as a blank string "" if you wish.
+      # @param type  [String] either "TEMPERATURE", "ON_OFF", "FRACTION"
+      # @param schedule_struct [Array<Array>] This is a complex nested array to contain the minimal information required for a detailed schedule.
       [
         [
           #Start and stop date of schedule in gregorian format.
@@ -759,8 +759,8 @@ module BTAP
 
 
       # This method will create a detailed schedule using a "compact format"
-      # @params model [OpenStudio::Model::Model]  The building model you wish to add the schedule to.
-      # @params json_string_data [String] This is a json format to contain the minimal information required for a detailed schedule.
+      # @param model [OpenStudio::Model::Model]  The building model you wish to add the schedule to.
+      # @param json_string_data [String] This is a json format to contain the minimal information required for a detailed schedule.
       #   '{"sch":{"name":"always 21C",
       #                  "type":"TEMPERATURE",
       #                  "period_rules":[ {  "start":"Jan-31","end":"Dec-31",

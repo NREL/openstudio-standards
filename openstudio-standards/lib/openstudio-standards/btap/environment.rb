@@ -109,15 +109,15 @@ module BTAP
     
     #This method will look up the weather data.
     #@author phylroy.lopez@nrcan.gc.ca
-    #@params file [String] 
+    #@param file [String] 
     def self.weather_data_lookup(file)
       
     end
     
     #This method will create a climate index file.
     #@author phylroy.lopez@nrcan.gc.ca
-    #@params folder [String]
-    #@params output_file [String]
+    #@param folder [String]
+    #@param output_file [String]
     def self.create_climate_index_file(folder = '../weather/', output_file = "C:/test/phylroy.csv"  )
       counter = 0
       File.open(output_file, 'w') { |file|
@@ -151,7 +151,7 @@ module BTAP
 
       #This method initializes.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params path [String]
+      #@param path [String]
       def initialize(path)
         @path = Pathname.new(path)
         @valid = false
@@ -225,7 +225,8 @@ module BTAP
 
       #This method  parses text.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params test [String]
+      #@param text [String]
+      #@return [Void]
       def parse(text)
 
         # get lat, lon, gmt
@@ -455,8 +456,8 @@ module BTAP
 
       #This method initializes and returns self.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params weather_file [String]
-      #@return self [String]
+      #@param weather_file [String]
+      #@return [String] self
       def initialize(weather_file)
         # Define the openstudio-standards weather location
         top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
@@ -521,8 +522,8 @@ module BTAP
 
       #This method will set the weather file and returns a log string.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object
+      #@return [String] log
       def set_weather_file(model, runner = nil)
         BTAP::runner_register("Info", "BTAP::Environment::WeatherFile::set_weather",runner)
         OpenStudio::Model::WeatherFile::setWeatherFile(model, @epw_file)
@@ -572,8 +573,8 @@ module BTAP
 
       #This method will sets column to a value.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params column [String]
-      #@params value [Fixnum]
+      #@param column [String]
+      #@param value [Fixnum]
       def setcolumntovalue(column,value)
         @filearray.each do |line|
           unless line.first =~ /\D(.*)/
@@ -584,7 +585,7 @@ module BTAP
 
       #This method will eliminate all radiation and returns self.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@return self [String]
+      #@return  [String] self
       def eliminate_all_radiation()
         self.scan() if @filearray == nil
         setcolumntovalue(Extraterrestrial_Horizontal_Radiation,"0")#not used
@@ -607,7 +608,7 @@ module BTAP
 
       #This method will eliminate solar radiation and returns self.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@return self [String]
+      #@return  [String] self
       def eliminate_only_solar_radiation()
         self.scan() if @filearray == nil
         setcolumntovalue(Global_Horizontal_Radiation,"0")#not used
@@ -618,7 +619,7 @@ module BTAP
 
       #This method will eliminate all radiation except solar and returns self.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@return self [String]
+      #@return [String] self
       def eliminate_all_radiation_except_solar()
         self.scan() if @filearray == nil
         setcolumntovalue(Extraterrestrial_Horizontal_Radiation,"0")#not used
@@ -638,7 +639,7 @@ module BTAP
 
       #This method will eliminate percipitation and returns self.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@return self [String]
+      #@return  [String] self
       def eliminate_percipitation
         self.scan() if @filearray == nil
         setcolumntovalue(Present_Weather_Observation, "0")
@@ -651,7 +652,7 @@ module BTAP
 
       #This method eliminates wind and returns self.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@return self [String]
+      #@return  [String] self
       def eliminate_wind
         self.scan() if @filearray == nil
         setcolumntovalue(Wind_Direction,"0")
@@ -661,11 +662,11 @@ module BTAP
 
       #This method sets Constant Dry and Dew Point Temperature Humidity And Pressure and returns self.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@return dbt [Float] dry bulb temperature
-      #@return dpt [Float] dew point temperature
-      #@return hum [Fixnum] humidity
-      #@return press [Fixnum] pressure
-      #@return self [String]
+      #@param dbt [Float] dry bulb temperature
+      #@param dpt [Float] dew point temperature
+      #@param hum [Fixnum] humidity
+      #@param press [Fixnum] pressure
+      #@return [String] self
       def setConstantDryandDewPointTemperatureHumidityAndPressure(dbt = "0.0",dpt="-1.1",hum="92",press="98500")
         self.scan() if @filearray == nil
         setcolumntovalue(Dry_Bulb_Temperature,dbt)
@@ -677,7 +678,7 @@ module BTAP
 
       #This method writes to a file.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params filename [String]
+      #@param filename [String]
       def writetofile(filename)
         self.scan() if @filearray == nil
 

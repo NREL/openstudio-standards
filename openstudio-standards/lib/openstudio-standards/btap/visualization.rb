@@ -30,8 +30,8 @@ module BTAP
 
       #This method sets the global parameters for the GraphicEmbedder destination file and html file.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params dest_file [String] sets the global parameters for the GraphicEmbedder destination file
-      #@params html_file [String] sets the global parameters for the GraphicEmbedder html file
+      #@param dest_file [String] sets the global parameters for the GraphicEmbedder destination file
+      #@param html_file [String] sets the global parameters for the GraphicEmbedder html file
       def initialize(dest_file,html_file)
         @destination_file = dest_file
         @html_file = html_file
@@ -39,7 +39,7 @@ module BTAP
 
       #This method will create embedding.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params csv_file [String] path to csv file
+      #@param csv_file [String] path to csv file
       def create_embedding(csv_file)
         newfile = File.open(@destination_file, 'w')
         File.open(@html_file,'r').each do |line|
@@ -55,7 +55,7 @@ module BTAP
 
       #This method will return an array as a string.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params csv_file [String] path to csv file
+      #@param csv_file [String] path to csv file
       #@return [string_array<String>]
       def self.get_array_as_string(csv_file)
         csv = CSV.open(csv_file,'r')

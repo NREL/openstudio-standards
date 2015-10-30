@@ -27,8 +27,8 @@ module BTAP
 
       #This method removes all costs from model
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params runner [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param runner [String]
       def self.remove_all_costs(model,runner = nil)
         #Remove all cost items.
         model.getLifeCycleCosts.each  { |cost_item| cost_item.remove }
@@ -39,10 +39,10 @@ module BTAP
 
       #This method will add the costs.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params name [String]
-      #@params cost [Float]
-      #@params unittype [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param name [String]
+      #@param cost [Float]
+      #@param unittype [String]
       #return cost_object [OpenStudio::model::Model] A model object
       def self.object_cost(model,name,cost,unittype)
         unless cost.nil? or cost == 0.0
@@ -57,10 +57,10 @@ module BTAP
       
       #This method will add the cost per building.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params name [String]
-      #@params cost [Float]
-      #@params runner [Float]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param name [String]
+      #@param cost [Float]
+      #@param runner [Float]
       def self.add_cost_per_building(model,name,cost,runner = nil)
         #cost per building and building area
         unless cost.nil? or cost == 0.0
@@ -73,10 +73,10 @@ module BTAP
       
       #This method will add the cost per total area.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params name [String]
-      #@params cost [Float]
-      #@params runner [Float]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param name [String]
+      #@param cost [Float]
+      #@param runner [Float]
       def self.add_cost_per_total_area(model,name,cost,runner = nil)
         #cost per building and building area
         unless cost.nil? or cost == 0.0
@@ -89,52 +89,52 @@ module BTAP
 
       #This method will set the ecm envelope.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params library_file_path [String]
-      #@params default_construction_set_name [String]
-      #@params ext_wall_rsi [Float]
-      #@params ext_floor_rsi [Float]
-      #@params ext_roof_rsi [Float]
-      #@params ground_wall_rsi [Float]
-      #@params ground_floor_rsi [Float]
-      #@params ground_roof_rsi [Float]
-      #@params fixed_window_rsi [Float]
-      #@params fixed_wind_solar_trans [Float]
-      #@params fixed_wind_vis_trans [Float]
-      #@params operable_window_rsi [Float]
-      #@params operable_wind_solar_trans [Float]
-      #@params operable_wind_vis_trans [Float]
-      #@params door_construction_rsi [Float]
-      #@params glass_door_rsi [Float]
-      #@params glass_door_solar_trans [Float]
-      #@params glass_door_vis_trans [Float]
-      #@params overhead_door_rsi [Float]
-      #@params skylight_rsi [Float]
-      #@params skylight_solar_trans [Float]
-      #@params skylight_vis_trans [Float]
-      #@params tubular_daylight_dome_rsi [Float]
-      #@params tubular_daylight_dome_solar_trans [Float]
-      #@params tubular_daylight_dome_vis_trans [Float]
-      #@params tubular_daylight_diffuser_rsi [Float]
-      #@params tubular_daylight_diffuser_solar_trans [Float]
-      #@params tubular_daylight_diffuser_vis_trans [Float]
-      #@params ext_wall_cost_m2 [Float]
-      #@params ext_floor_cost_m2 [Float]
-      #@params ext_roof_cost_m2 [Float]
-      #@params ground_wall_cost_m2 [Float]
-      #@params ground_floor_cost_m2 [Float]
-      #@params ground_roof_cost_m2 [Float]
-      #@params fixed_window_cost_m2 [Float]
-      #@params operable_window_cost_m2 [Float]
-      #@params door_construction_cost_m2 [Float]
-      #@params glass_door_cost_m2 [Float]
-      #@params overhead_door_cost_m2 [Float]
-      #@params skylight_cost_m2 [Float]
-      #@params tubular_daylight_dome_cost_m2 [Float]
-      #@params tubular_daylight_diffuser_cost_m2 [Float]
-      #@params total_building_construction_set_cost [Float]
-      #@params runner [Float]
-      #@return [Boolian]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param library_file_path [String]
+      #@param default_construction_set_name [String]
+      #@param ext_wall_rsi [Float]
+      #@param ext_floor_rsi [Float]
+      #@param ext_roof_rsi [Float]
+      #@param ground_wall_rsi [Float]
+      #@param ground_floor_rsi [Float]
+      #@param ground_roof_rsi [Float]
+      #@param fixed_window_rsi [Float]
+      #@param fixed_wind_solar_trans [Float]
+      #@param fixed_wind_vis_trans [Float]
+      #@param operable_window_rsi [Float]
+      #@param operable_wind_solar_trans [Float]
+      #@param operable_wind_vis_trans [Float]
+      #@param door_construction_rsi [Float]
+      #@param glass_door_rsi [Float]
+      #@param glass_door_solar_trans [Float]
+      #@param glass_door_vis_trans [Float]
+      #@param overhead_door_rsi [Float]
+      #@param skylight_rsi [Float]
+      #@param skylight_solar_trans [Float]
+      #@param skylight_vis_trans [Float]
+      #@param tubular_daylight_dome_rsi [Float]
+      #@param tubular_daylight_dome_solar_trans [Float]
+      #@param tubular_daylight_dome_vis_trans [Float]
+      #@param tubular_daylight_diffuser_rsi [Float]
+      #@param tubular_daylight_diffuser_solar_trans [Float]
+      #@param tubular_daylight_diffuser_vis_trans [Float]
+      #@param ext_wall_cost_m2 [Float]
+      #@param ext_floor_cost_m2 [Float]
+      #@param ext_roof_cost_m2 [Float]
+      #@param ground_wall_cost_m2 [Float]
+      #@param ground_floor_cost_m2 [Float]
+      #@param ground_roof_cost_m2 [Float]
+      #@param fixed_window_cost_m2 [Float]
+      #@param operable_window_cost_m2 [Float]
+      #@param door_construction_cost_m2 [Float]
+      #@param glass_door_cost_m2 [Float]
+      #@param overhead_door_cost_m2 [Float]
+      #@param skylight_cost_m2 [Float]
+      #@param tubular_daylight_dome_cost_m2 [Float]
+      #@param tubular_daylight_diffuser_cost_m2 [Float]
+      #@param total_building_construction_set_cost [Float]
+      #@param runner [Float]
+      #@return [Boolean]
       def ecm_envelope( model,
           library_file_path,
           default_construction_set_name,
@@ -256,15 +256,15 @@ module BTAP
       
       #This method will set the ecm infiltration.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@params infiltration_design_flow_rate [Float]
-      #@params infiltration_flow_per_space [Float]
-      #@params infiltration_flow_per_exterior_area [Float]
-      #@params infiltration_air_changes_per_hour [Float]
-      #@params cost_per_building [Float]
-      #@params cost_per_exterior_area_m2 [Float]
-      #@params runner [Float]
-      #@return [Boolian]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@param infiltration_design_flow_rate [Float]
+      #@param infiltration_flow_per_space [Float]
+      #@param infiltration_flow_per_exterior_area [Float]
+      #@param infiltration_air_changes_per_hour [Float]
+      #@param cost_per_building [Float]
+      #@param cost_per_exterior_area_m2 [Float]
+      #@param runner [Float]
+      #@return [Boolean]
       def ecm_infiltration( model,
           infiltration_design_flow_rate,
           infiltration_flow_per_space,
@@ -318,8 +318,8 @@ module BTAP
       
       #This method will set the ecm fans.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_fans( model )
         measure_values =
           [
@@ -410,8 +410,8 @@ module BTAP
       
       #This method will set the ecm pumps.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_pumps( model )
         measure_values =
           [
@@ -505,7 +505,7 @@ module BTAP
       
       #This method will set the ecm cooling COP.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
+      #@param model [OpenStudio::model::Model] A model object 
       def ecm_cooling_cop( model )
         log = ""
         measure_values =[
@@ -543,8 +543,8 @@ module BTAP
       
       #This method will set the ecm economizers.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_economizers( model )
 
         measure_values =[
@@ -574,8 +574,8 @@ module BTAP
       end
       #This method will set the ecm sizing.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return table [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] table
       def ecm_sizing( model)
         measure_values =[
           "heating_sizing_factor",
@@ -608,8 +608,8 @@ module BTAP
       
       #This method will set the ecm domestic hot water.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_dhw( model )
         log = "shw_setpoint_sched,shw_heater_fuel_type,shw_thermal_eff\n"
         measure_values =[
@@ -638,8 +638,8 @@ module BTAP
       
       #This method will set the ecm chotwater boilers.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return table [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] table
       def ecm_hotwater_boilers( model )
         measure_values = [
           "hw_boiler_design_water_outlet_temperature",
@@ -750,8 +750,8 @@ module BTAP
       
       #This method will set the ecm dcv.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_dcv( model )
         log = ""
         measure_values =[
@@ -767,8 +767,8 @@ module BTAP
       
       #This method will set the ecm heating and cooling setpoints.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_heating_cooling_setpoints(model)
 
         log = ""
@@ -821,8 +821,8 @@ module BTAP
       
       #This method will set the ecm erv.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_erv( model )
         log = ""
         measure_values =[
@@ -895,8 +895,8 @@ module BTAP
       
       #This method will set the ecm cexhaust fans.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_exhaust_fans( model )
         log = ""
         #Exhaust ECM
@@ -916,8 +916,8 @@ module BTAP
       
       #This method will set the ecm lighting.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_lighting( model )
         log = ""
         #Lighting ECM
@@ -943,8 +943,8 @@ module BTAP
       
       #This method will set the ecm temperature setback.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_plugs( model )
         log = ""
         #Plug loads ECM
@@ -974,8 +974,8 @@ module BTAP
       
       #This method will set the ecm cold deck reset control.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_cold_deck_reset_control( model )
         log = ""
         measure_values = [
@@ -1030,8 +1030,8 @@ module BTAP
       
       #This method will reset the sat ecm.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_sat_reset( model )
         log = ""
         measure_values = [
@@ -1070,8 +1070,8 @@ module BTAP
       
       #This method will set the ecm temperature setback.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object 
-      #@return log [String]
+      #@param model [OpenStudio::model::Model] A model object 
+      #@return [String] log
       def ecm_temp_setback( model )
         log = ""
         measure_values = [

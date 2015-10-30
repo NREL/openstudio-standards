@@ -35,11 +35,11 @@ class Utilities
 
   #This method checks the bounds and raise an exception if the value is out of bounds.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params left_value [Number] 
-  #@params left_operator [String] 
-  #@params center_value [Number] 
-  #@params right_operator [String] 
-  #@params right_value [Number] 
+  #@param left_value [Number] 
+  #@param left_operator [String] 
+  #@param center_value [Number] 
+  #@param right_operator [String] 
+  #@param right_value [Number] 
   def self.check_bounds(left_value,left_operator,center_value,right_operator,right_value)
     operation = left_value.to_s + " " + left_operator.to_s + " " + center_value.to_s + " or " + center_value.to_s + " " + right_operator.to_s + " " + right_value.to_s
     raise("Error: in bounds." + operation_1  )  unless eval(operation +" ? true :false")
@@ -49,9 +49,9 @@ class Utilities
   #argument model(s). This is handy for quickly viewing changes to the file during
   #runtime for debugging and QA.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model1 [OpenStudio::model::Model] A model object. 
-  #@params model2 [OpenStudio::model::Model] A model object. 
-  #@params model3 [OpenStudio::model::Model] A model object.
+  #@param model1 [OpenStudio::model::Model] A model object. 
+  #@param model2 [OpenStudio::model::Model] A model object. 
+  #@param model3 [OpenStudio::model::Model] A model object.
   def self.kdiff3_model_osm(model1, model2, model3 = "")
     Dir::mkdir("C:\\kdiff_test") unless File.exists?("C:\\kdiff_test")
     model1.save(OpenStudio::Path.new("c:\\kdiff_test\\diffA.osm"))
@@ -71,9 +71,9 @@ class Utilities
   #argument model(s). This is handy for quickly viewing changes to the file during
   #runtime for debugging and QA.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model1 [OpenStudio::model::Model] A model object. 
-  #@params model2 [OpenStudio::model::Model] A model object.
-  #@params model3 [OpenStudio::model::Model] A model object. 
+  #@param model1 [OpenStudio::model::Model] A model object. 
+  #@param model2 [OpenStudio::model::Model] A model object.
+  #@param model3 [OpenStudio::model::Model] A model object. 
   def self.kdiff3_model_idf(model1, model2, model3 = "")
     Dir::mkdir("C:\\kdiff_test") unless File.exists?("C:\\kdiff_test")
 
@@ -92,7 +92,7 @@ class Utilities
 
   #This method will sort an idf file and produce a sorted idf file. This is helpful for doing diffs on idf files. 
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params idf_file [String] 
+  #@param idf_file [String] 
   def self.sort_idf_file(idf_file)
     idf_model = OpenStudio::IdfFile::load(OpenStudio::Path.new(idf_file), "EnergyPlus".to_IddFileType).get
     save_filename = idf_file + ".sorted"

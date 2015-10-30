@@ -432,8 +432,8 @@ module BTAP
 
       #This method ???.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params hdd [Float]
-      #@return a constant float
+      #@param hdd [Float]
+      #@return [Double] a constant float
       def self.max_fwdr(hdd)
         #NECB 3.2.1.4
 
@@ -450,8 +450,8 @@ module BTAP
       # This method will set the the envelope (wall, roof, glazings) to  values to
       # the default NECB 2011 values based on the heating degree day value (hdd) surface by surface.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@params hdd [Float]
+      #@param model [OpenStudio::model::Model] A model object
+      #@param hdd [Float]
       def self.set_necb_envelope( model, hdd )
 
         #interate Through all surfaces
@@ -468,9 +468,9 @@ module BTAP
 
       # this will create a copy and convert all construction sets to NECB reference conductances.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@params default_surface_construction_set [String]
-      #@scale
+      #@param model [OpenStudio::model::Model] A model object
+      #@param default_surface_construction_set [String]
+      #@return [Boolean] returns true if sucessful, false if not
       def self.set_construction_set_to_necb!(model,default_surface_construction_set,
           runner = nil,
           scale_wall = 1.0,
@@ -526,16 +526,15 @@ module BTAP
 
       # This method will convert in place(over write) a construction set to necb conductances.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@params hdd [Float]
-      #@params scale_wall [Float]
-      #@params scale_floor [Float]
-      #@params scale_roof [Float]
-      #@params scale_ground_wall [Float]
-      #@params scale_ground_floor [Float]
-      #@params scale_ground_roof [Float]
-      #@params scale_door [Float]
-      #@params scale_window [Float]
+      #@param model [OpenStudio::model::Model] A model object
+      #@param scale_wall [Float]
+      #@param scale_floor [Float]
+      #@param scale_roof [Float]
+      #@param scale_ground_wall [Float]
+      #@param scale_ground_floor [Float]
+      #@param scale_ground_roof [Float]
+      #@param scale_door [Float]
+      #@param scale_window [Float]
       def self.set_all_construction_sets_to_necb!(model,
           runner = nil, 
           scale_wall = 1.0,
@@ -566,9 +565,9 @@ module BTAP
       #This method will set the fwdr for a building. It will remove all glazings
       # and hard set the FDWR.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@params hdd [Float]
-      #@params use_max [Boolean]
+      #@param model [OpenStudio::model::Model] A model object
+      #@param runner [Object]
+      #@param [Boolean] use_max
       def self.set_necb_fwdr(model,use_max = false, runner = nil)
         BTAP::runner_register("Info","set_necb_fwdr", runner) 
         if model.weatherFile.empty? or model.weatherFile.get.path.empty? or not File.exists?(model.weatherFile.get.path.get.to_s)
@@ -601,8 +600,8 @@ module BTAP
       #This method will set the fwdr for a building. It will remove all glazings
       # and hard set the FDWR.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@params runner [OpenStudio::Ruleset::OSRunner]
+      #@param model [OpenStudio::model::Model] A model object
+      #@param runner [OpenStudio::Ruleset::OSRunner]
       def self.set_necb_srr(model, runner = nil)
         BTAP::runner_register("Info","Setting NECB Skylight to Roof Ration to 0.05", runner) 
         ratio = 0.05
@@ -624,7 +623,7 @@ module BTAP
 
       #This model gets the climate zone column index from tables 3.2.2.x
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params hdd [Float]
+      #@param hdd [Float]
       #@return [Fixnum] climate zone 4-8
       def self.get_climate_zone_index(hdd)
         #check for climate zone index from NECB 3.2.2.X
@@ -640,7 +639,7 @@ module BTAP
     
       #This model gets the climate zone name and returns the climate zone string.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params hdd [Float]
+      #@param hdd [Float]
       #@return [Fixnum] climate zone 4-8
       def self.get_climate_zone_name(hdd)
         case self.get_climate_zone_index(hdd)
@@ -657,10 +656,10 @@ module BTAP
 
       #Set all external surface conductances to NECB values.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params surface [String]
-      #@params hdd [Float]
-      #@params is_radiant [Boolian]
-      #@params scaling_factor [Float]
+      #@param surface [String]
+      #@param hdd [Float]
+      #@param is_radiant [Boolian]
+      #@param scaling_factor [Float]
       #@return [String] surface as RSI
       def self.set_necb_external_surface_conductance(surface,hdd,is_radiant = false,scaling_factor = 1.0)
         conductance_value = 0
@@ -700,8 +699,8 @@ module BTAP
 
       #Set all external subsurfaces (doors, windows, skylights) to NECB values.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params subsurface [String]
-      #@params hdd [Float]
+      #@param subsurface [String]
+      #@param hdd [Float]
       def self.set_necb_external_subsurface_conductance(subsurface,hdd)
         conductance_value = 0
         climate_zone_index = get_climate_zone_index(hdd)
@@ -721,9 +720,9 @@ module BTAP
       #only have ideal hvac installed. All previous space librairies will be removed 
       #and only NECB libraries will remain. Constructions will remain, even if flawed.   
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params space_type_csv_file [String]
-      #@params idf_filename [String] a idf file
-      #@params model [OpenStudio::model::Model] A model object
+      #@param idf_filename [String] a idf file
+      #@param runner [Object]
+      #@return [OpenStudio::model::Model] A model object
       def self.convert_idf_to_osm_and_map_doe_zones_to_necb_space_types(idf_filename, runner = nil)
                 
         
@@ -803,8 +802,8 @@ module BTAP
 
       #Get Wildcard SpaceTypes
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params type [String]
-      #@return wildcard_space_types<String>
+      #@param type [String]
+      #@return [String] wildcard_space_types
       def self.get_spacetype_names_by_necb_schedule_type(type)
         wildcard_space_types = Array.new()
         BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |spacetype_data|
@@ -817,8 +816,8 @@ module BTAP
 
       #This will create space types from the type_array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@params type_array[array<String>]
+      #@param model [OpenStudio::model::Model] A model object
+      #@param type_array[array<String>]
 
       def self.add_usage_types(model, type_array )
         
@@ -891,8 +890,8 @@ module BTAP
       # This method adds all the NECB 2011 schedules to the model. This was used to
       # generate the NECB.osm file.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@return model[OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
+      #@return [OpenStudio::model::Model] A model object
       def self.add_necb_schedules(model)
 
         #model.add_schedule_type_limits()
@@ -950,8 +949,8 @@ module BTAP
 
       #This method will add all the NECB building types to a model
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@return model[OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
+      #@return [OpenStudio::model::Model] A model object
       def self.add_necb_building_types( model )
         self.add_usage_types(model, BTAP::Compliance::NECB2011::Data::BuildingTypeData )
         return model
@@ -959,8 +958,8 @@ module BTAP
 
       #this method will add all the NECB space types to the model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@return model[OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
+      #@return [OpenStudio::model::Model] A model object
       def self.add_necb_space_types( model )
         self.add_usage_types(model, BTAP::Compliance::NECB2011::Data::SpaceTypeData )
         return model
@@ -969,7 +968,7 @@ module BTAP
       #This method will add the schedules, building types and space types to the
       # model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.add_necb_libraries_to_model(model)
         self.add_necb_schedules(model)
         self.add_necb_building_types( model )
@@ -1005,8 +1004,8 @@ module BTAP
 
       # This model converts all DOE to NECB reference building.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params idf_folder [String]
-      #@return model_array[OpenStudio::model::Model]
+      #@param idf_folder [String]
+      #@return [OpenStudio::model::Model] model_array
       def self.convert_all_doe_to_necb_reference_building(idf_folder, output_folder = 'C:/test/', construction_library_file = nil , construction_set_name = nil , weather_file = nil , set_necb_fdwr = true)
         #iterate through all idf file in Original folder.
         filenames = Array.new()
@@ -1089,8 +1088,10 @@ module BTAP
       
       # This model converts all DOE to NECB reference building.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params idf_folder [String]
-      #@return model [OpenStudio::model::Model]
+      #@param idf_filename [String]
+      #@param model [OpenStudio::Model::Model]
+      #@param runner [Object]
+      #@return  [OpenStudio::model::Model] model
       def self.convert_idf_to_osm_with_necb_space_types(idf_filename,model = nil,runner = nil)
         
         #Load up idf as OSM file and convert spacetypes based on map contained in File.dirname(idf_filename) + "/SpaceTypeConversions.csv"
@@ -1176,8 +1177,8 @@ module BTAP
 
       # This method confirms if the type is the proper space type
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params type [String]
-      #@return item [String]
+      #@param type [String]
+      #@return  [String] item
       def self.is_proper_spacetype(type)
         BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |item|
           if item[0] == type
@@ -1189,9 +1190,10 @@ module BTAP
       
       # This method determines if all the spacetype names match the NECB spacetypes. This is a prerequisite for NECB zoning and system assignment
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params type [String]
-      #@return item [String] 
-      def self.check_all_spacetypes_are_valid_necb_names( model,runner = nil)
+      #@param model [OpenStudio::Model::Model]
+      #@param runner [Object]
+      #@return [String] item
+      def self.check_all_spacetypes_are_valid_necb_names(model,runner = nil)
         #collect space type and building type names. 
         spacetypenames = []
         found = false
@@ -1222,8 +1224,8 @@ module BTAP
       
       # This model gets the building space type info from lookup table. 
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params type [String]
-      #@return item [String]
+      #@param type [String]
+      #@return  [String] item
       def self.lookup_spacetype_info(type)
         BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |item|
           # The optional suffix allows for for defined "wildcard" spacetypes to pass through. 
@@ -1241,7 +1243,7 @@ module BTAP
       end
 
       #This model determines the dominant NECB schedule type
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       #return s.each [String]
       def self.determine_dominant_necb_schedule_type( model )
         # Here is a hash to keep track of the m2 running total of spacetypes for each
@@ -1286,9 +1288,8 @@ module BTAP
       
       #This method determines the spacetype schedule type. This will re
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params space [String]
-      #@retun spacetype [String]:["A","B","C","D","E","F","G","H","I"]
-      
+      #@param space [String]
+      #@return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
       def self.determine_necb_schedule_type(space)
         BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |spacetype|
           spacetype_name = space.spaceType.get.name  unless space.spaceType.empty?
@@ -1324,8 +1325,8 @@ module BTAP
       # Rule4 Wildcard spaces will be associated with the nearest zone of similar schedule type in which is shared most of it's internal surface with.  
       # Rule5 For NECB zones must contain spaces of similar system type only. 
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@return system_zone_array<String>
+      #@param model [OpenStudio::model::Model] A model object
+      #@return [String] system_zone_array
       def self.necb_autozone_and_autosystem(
           model,
           runner,

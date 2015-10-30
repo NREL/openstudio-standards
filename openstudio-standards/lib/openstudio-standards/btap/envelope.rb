@@ -27,7 +27,7 @@ module BTAP
      
       #This method removes all materials from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_materials( model )
         model.getMaterials().each  do |item|
           item.remove
@@ -36,28 +36,28 @@ module BTAP
 
       #This method removes all constructions from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_constructions( model )
         model.getConstructions().each {|item| item.remove}
       end
 
       #This method removes all default surface constructions from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_default_surface_constructions( model )
         model.getDefaultSurfaceConstructionss().each { |item| item.remove }
       end
 
       #This method removes all default subsurface constructions from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_default_subsurface_constructions( model )
         model.getDefaultSubSurfaceConstructionss().each { |item| item.remove }
       end
 
       #This method removes all default construction sets from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_default_construction_sets( model )
         model.getDefaultConstructionSets().each { |item| item.remove }
         model.building.get.resetDefaultConstructionSet()
@@ -66,7 +66,7 @@ module BTAP
 
       #This method assignes interior surface construction to adiabatic surfaces from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.assign_interior_surface_construction_to_adiabatic_surfaces(model, runner = nil)
         BTAP::runner_register("Info","assign_interior_surface_construction_to_adiabatic_surfaces(#{model},#{runner}", runner) 
         unless model.building.get.defaultConstructionSet.empty? or model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.empty? or model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.empty?
@@ -88,7 +88,7 @@ module BTAP
         
       #This method removes all thermal mass definitions from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_thermal_mass_definitions( model )
         model.getInternalMassDefinitions.each { |item| item.remove }
         model.getInternalMasss.each { |item| item.remove }
@@ -96,7 +96,7 @@ module BTAP
 
       #This method removes all envelope information from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_envelope_information( model )
         BTAP::Resources::Envelope::remove_all_materials( model )
         BTAP::Resources::Envelope::remove_all_default_construction_sets( model )
@@ -119,9 +119,9 @@ module BTAP
       module Materials #Resources::Envelope::Materials
         #This method gets conductance.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params material [OpenStudio::Model::StandardOpaqueMaterial]
-        #@params temperature_c [Float]
-        #@return conductance [Float]
+        #@param material [OpenStudio::Model::StandardOpaqueMaterial]
+        #@param temperature_c [Float]
+        #@return [Float] conductance
         def self.get_conductance(material,temperature_c = 0.0)
           conductance = nil
           #this method is a wrapper around OS functions. No testing is required.
@@ -179,17 +179,17 @@ module BTAP
           # This method will create a OpenStudio::Model::StandardOpaqueMaterial material layer.
           # BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material
           # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @params model [OpenStudio::Model::Model]  {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-          # @params name [String] the name of the surface.
-          # @params thickness [Float] meters.
-          # @params conductivity [Float]  W/m*K.
-          # @params density [Float]  kg/m3
-          # @params specific_heat [Float]  J/kg*K
-          # @params roughness [String]  valid values are  = ["VeryRough", "Rough", "MediumRough","Smooth","MediumSmooth","VerySmooth"]
-          # @params thermal_absorptance [Float] range of 0 to 1.0
-          # @params solar_absorptance [Float] range of 0 to 1.0
-          # @params visible_absorptance [Float] range of 0 to 1.0
-          # @return material [OpenStudio::Model::StandardOpaqueMaterial] {http://openstudio.nrel.gov/sites/openstudio.nrel.gov/files/nv_data/cpp_documentation_it/model/html/classopenstudio_1_1model_1_1_standard_opaque_material.html}
+          # @param model [OpenStudio::Model::Model]  {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+          # @param name [String] the name of the surface.
+          # @param thickness [Float] meters.
+          # @param conductivity [Float]  W/m*K.
+          # @param density [Float]  kg/m3
+          # @param specific_heat [Float]  J/kg*K
+          # @param roughness [String]  valid values are  = ["VeryRough", "Rough", "MediumRough","Smooth","MediumSmooth","VerySmooth"]
+          # @param thermal_absorptance [Float] range of 0 to 1.0
+          # @param solar_absorptance [Float] range of 0 to 1.0
+          # @param visible_absorptance [Float] range of 0 to 1.0
+          # @return [OpenStudio::Model::StandardOpaqueMaterial] material {http://openstudio.nrel.gov/sites/openstudio.nrel.gov/files/nv_data/cpp_documentation_it/model/html/classopenstudio_1_1model_1_1_standard_opaque_material.html}
           def self.create_opaque_material( model,name = "opaque material", thickness = 0.1 , conductivity = 0.1 , density = 0.1, specific_heat = 0.1, roughness = "Smooth", thermal_absorptance = 0.9, solar_absorptance = 0.7, visible_absorptance = 0.7 )
             # make sure the roughness value is acceptable.
             raise("Roughness Value \"#{roughness}\" is not a part of accepted values such as: #{OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.join(",")}")  unless OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.include?(roughness)
@@ -207,11 +207,11 @@ module BTAP
 
           # This method will create a new OpenStudio::Model::MasslessOpaqueMaterial material layer
           # @author Phylroy A. Lopez Natural Resources Canada <plopez@nrcan.gc.ca>
-          # @params model [OpenStudio::Model::Model]  {http://openstudio.nrel.gov/latest-c-sdk-documentation/model OpenStudio::Model::Model}
-          # @params name [String] the name of the surface.
-          # @params roughness [String]  valid values are  = ["VeryRough", "Rough", "MediumRough","Smooth","MediumSmooth","VerySmooth"]
-          # @params thermalResistance  [Float]  m*K/W
-          # @return massless OpenStudio::Model::MasslessOpaqueMaterial {http://openstudio.nrel.gov/sites/openstudio.nrel.gov/files/nv_data/cpp_documentation_it/model/html/classopenstudio_1_1model_1_1_massless_opaque_material.html OpenStudio::Model::MasslessOpaqueMaterial}
+          # @param model [OpenStudio::Model::Model]  {http://openstudio.nrel.gov/latest-c-sdk-documentation/model OpenStudio::Model::Model}
+          # @param name [String] the name of the surface.
+          # @param roughness [String]  valid values are  = ["VeryRough", "Rough", "MediumRough","Smooth","MediumSmooth","VerySmooth"]
+          # @param thermalResistance  [Float]  m*K/W
+          # @return [OpenStudio::Model::MasslessOpaqueMaterial] massless {http://openstudio.nrel.gov/sites/openstudio.nrel.gov/files/nv_data/cpp_documentation_it/model/html/classopenstudio_1_1model_1_1_massless_opaque_material.html OpenStudio::Model::MasslessOpaqueMaterial}
           def self.create_massless_opaque_material(model, name = "massless opaque", roughness = "Smooth", thermalResistance = 0.1)
             # make sure the roughness value is acceptable.
             raise("Roughness Value \"#{roughness}\" is not a part of accepted values: #{OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.join(",")}")  unless OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.include?(roughness)
@@ -222,10 +222,10 @@ module BTAP
 
           # This method will create a new OpenStudio::Model::AirGap material layer
           # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @params model [OpenStudio::Model::Model]  {http://openstudio.nrel.gov/latest-c-sdk-documentation/model OpenStudio::Model::Model}
-          # @params name [String] the name of the surface.
-          # @params thermalResistance  [Float]  m2*K/W
-          # @return air [OpenStudio::Model::AirGap]
+          # @param model [OpenStudio::Model::Model]  {http://openstudio.nrel.gov/latest-c-sdk-documentation/model OpenStudio::Model::Model}
+          # @param name [String] the name of the surface.
+          # @param resistance [Float]  m2*K/W
+          # @return [OpenStudio::Model::AirGap] air
           def self.create_air_gap(model,name = "air gap",resistance = 0.1)
             air = OpenStudio::Model::AirGap.new(model,resistance)
             air.setName( name)
@@ -290,13 +290,13 @@ module BTAP
 
           # This method creates a OpenStudio::Model::SimpleGlazing material layer
           # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @params model [OpenStudio::Model::Model]
-          # @params name [String] the name of the material.
-          # @params shgc [Float]  solar heat gain coeff.
-          # @params ufactor [Float]  W/m2*K
-          # @params thickness  [Float] m
-          # @params visible_transmittance [Float]
-          # @return simpleglazing [OpenStudio::Model::SimpleGlazing]
+          # @param model [OpenStudio::Model::Model]
+          # @param name [String] the name of the material.
+          # @param shgc [Float]  solar heat gain coeff.
+          # @param ufactor [Float]  W/m2*K
+          # @param thickness  [Float] m
+          # @param visible_transmittance [Float]
+          # @return [OpenStudio::Model::SimpleGlazing] simpleglazing
           def self.create_simple_glazing(model,name = "simple glazing test",shgc  = 0.10 ,ufactor = 0.10,thickness = 0.005,visible_transmittance = 0.8)
             simpleglazing = OpenStudio::Model::SimpleGlazing.new(model)
             simpleglazing.setSolarHeatGainCoefficient(shgc)
@@ -311,20 +311,20 @@ module BTAP
 
           # This method creates a OpenStudio::Model::StandardGlazing material layer
           # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @params model [OpenStudio::Model::Model]
-          # @params name = "Standard Glazing Test", of the material.
-          # @params thickness [Float] m
-          # @params conductivity [Float] W/m*K
-          # @params solarTransmittanceatNormalIncidence [Float]
-          # @params frontSideSolarReflectanceatNormalIncidence [Float]
-          # @params backSideSolarReflectanceatNormalIncidence = [Float]
-          # @params visibleTransmittance [Float]
-          # @params frontSideVisibleReflectanceatNormalIncidence[Float]
-          # @params backSideVisibleReflectanceatNormalIncidence [Float]
-          # @params infraredTransmittanceatNormalIncidence [Float]
-          # @params frontSideInfraredHemisphericalEmissivity [Float]
-          # @params backSideInfraredHemisphericalEmissivity [Float]
-          # @return stdglazing [OpenStudio::Model::StandardGlazing]
+          # @param model [OpenStudio::Model::Model]
+          # @param name = "Standard Glazing Test", of the material.
+          # @param thickness [Float] m
+          # @param conductivity [Float] W/m*K
+          # @param solarTransmittanceatNormalIncidence [Float]
+          # @param frontSideSolarReflectanceatNormalIncidence [Float]
+          # @param backSideSolarReflectanceatNormalIncidence = [Float]
+          # @param visibleTransmittance [Float]
+          # @param frontSideVisibleReflectanceatNormalIncidence[Float]
+          # @param backSideVisibleReflectanceatNormalIncidence [Float]
+          # @param infraredTransmittanceatNormalIncidence [Float]
+          # @param frontSideInfraredHemisphericalEmissivity [Float]
+          # @param backSideInfraredHemisphericalEmissivity [Float]
+          # @return [OpenStudio::Model::StandardGlazing] stdglazing
           def self.create_standard_glazing(
               model,
               name = "Standard Glazing Test",
@@ -366,11 +366,11 @@ module BTAP
 
           #This method creates an gas material layer. gas_type can be "Air", "Argon","Krypton","Xenon",or "Custom"
           # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @params model [OpenStudio::Model::Model]
-          # @params name [String] = "air test", of the material.
-          # @params gas_type [String] = "Air"
-          # @params thickness [Float] = 0.003
-          # @return gas [OpenStudio::Model::Gas::validGasTypes]
+          # @param model [OpenStudio::Model::Model]
+          # @param name [String] = "air test", of the material.
+          # @param gas_type [String] = "Air"
+          # @param thickness [Float] = 0.003
+          # @return [OpenStudio::Model::Gas::validGasTypes] gas
           def self.create_gas(model,name = "air test",gas_type = "Air", thickness=0.003)
             raise "gas_type #{gas_type} is not part of the allow values: #{OpenStudio::Model::Gas::validGasTypes()}" unless OpenStudio::Model::Gas::validGasTypes().include?(gas_type)
             gas = OpenStudio::Model::Gas.new(model)
@@ -383,16 +383,16 @@ module BTAP
 
           #This method will create a blind layer.
           # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @params model [OpenStudio::Model::Model]
-          # @params name [String] = "blind test"
-          # @params slatWidth [Float] = 0.1
-          # @params slatSeparation [Float] = 0.1
-          # @params frontSideSlatBeamSolarReflectance [Float] = 0.1
-          # @params backSideSlatBeamSolarReflectance [Float] = 0.1
-          # @params frontSideSlatDiffuseSolarReflectance [Float] = 0.1
-          # @params backSideSlatDiffuseSolarReflectance [Float] = 0.1
-          # @params slatBeamVisibleTransmittance [Float] = 0.1
-          # @return blind [OpenStudio::Model::Blind]
+          # @param model [OpenStudio::Model::Model]
+          # @param name [String] = "blind test"
+          # @param slatWidth [Float] = 0.1
+          # @param slatSeparation [Float] = 0.1
+          # @param frontSideSlatBeamSolarReflectance [Float] = 0.1
+          # @param backSideSlatBeamSolarReflectance [Float] = 0.1
+          # @param frontSideSlatDiffuseSolarReflectance [Float] = 0.1
+          # @param backSideSlatDiffuseSolarReflectance [Float] = 0.1
+          # @param slatBeamVisibleTransmittance [Float] = 0.1
+          # @return [OpenStudio::Model::Blind] blind
           def self.create_blind(model,name = "blind test", slatWidth=0.1, slatSeparation=0.1, frontSideSlatBeamSolarReflectance=0.1, backSideSlatBeamSolarReflectance=0.1, frontSideSlatDiffuseSolarReflectance=0.1, backSideSlatDiffuseSolarReflectance=0.1, slatBeamVisibleTransmittance=0.1)
             blind = OpenStudio::Model::Blind.new(model, slatWidth, slatSeparation, frontSideSlatBeamSolarReflectance, backSideSlatBeamSolarReflectance, frontSideSlatDiffuseSolarReflectance, backSideSlatDiffuseSolarReflectance, slatBeamVisibleTransmittance)
             blind.setName(name)
@@ -402,13 +402,13 @@ module BTAP
 
           #This method will create a screen layer.
           # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @params model [OpenStudio::Model::Model]
-          # @params name [String] = "screen test"
-          # @params diffuseSolarReflectance [Float] = 0.1
-          # @params diffuseVisibleReflectance [Float] = 0.1
-          # @params screenMaterialSpacing [Float] = 0.1
-          # @params screenMaterialDiameter [Float] = 0.1
-          # @return screen [OpenStudio::Model::Screen]
+          # @param model [OpenStudio::Model::Model]
+          # @param name [String] = "screen test"
+          # @param diffuseSolarReflectance [Float] = 0.1
+          # @param diffuseVisibleReflectance [Float] = 0.1
+          # @param screenMaterialSpacing [Float] = 0.1
+          # @param screenMaterialDiameter [Float] = 0.1
+          # @return [OpenStudio::Model::Screen] screen
           def self.create_screen(model,name = "screen test", diffuseSolarReflectance=0.1, diffuseVisibleReflectance=0.1, screenMaterialSpacing=0.1, screenMaterialDiameter=0.1)
             screen = OpenStudio::Model::Screen.new(model, diffuseSolarReflectance, diffuseVisibleReflectance, screenMaterialSpacing, screenMaterialDiameter)
             screen.setName(name)
@@ -418,17 +418,17 @@ module BTAP
 
           #This method will create a shade layer.
           # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @params model [OpenStudio::Model::Model]
-          # @params name [String] = "shade test"
-          # @params solarTransmittance [Float] = 0.1
-          # @params solarReflectance [Float] = 0.1
-          # @params visibleTransmittance [Float] = 0.1
-          # @params visibleReflectance [Float] = 0.1
-          # @params thermalHemisphericalEmissivity [Float] = 0.1
-          # @params thermalTransmittance [Float] = 0.1
-          # @params thickness [Float] = 0.1
-          # @params conductivity [Float] = 0.1
-          # @return shade [OpenStudio::Model::Shade.new]
+          # @param model [OpenStudio::Model::Model]
+          # @param name [String] = "shade test"
+          # @param solarTransmittance [Float] = 0.1
+          # @param solarReflectance [Float] = 0.1
+          # @param visibleTransmittance [Float] = 0.1
+          # @param visibleReflectance [Float] = 0.1
+          # @param thermalHemisphericalEmissivity [Float] = 0.1
+          # @param thermalTransmittance [Float] = 0.1
+          # @param thickness [Float] = 0.1
+          # @param conductivity [Float] = 0.1
+          # @return [OpenStudio::Model::Shade.new] shade
           def self.create_shade(model,name ="shade test", solarTransmittance=0.1, solarReflectance=0.1, visibleTransmittance=0.1, visibleReflectance=0.1, thermalHemisphericalEmissivity=0.1, thermalTransmittance=0.1, thickness=0.1, conductivity=0.1)
             shade = OpenStudio::Model::Shade.new(model, solarTransmittance, solarReflectance,visibleTransmittance, visibleReflectance, thermalHemisphericalEmissivity, thermalTransmittance, thickness, conductivity)
             shade.setName(name)
@@ -526,9 +526,9 @@ module BTAP
         #or slabs with no insulation layer but with a carper will see the carpet as the
         #insulation layer.
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@params model [OpenStudio::Model::Model]
-        #@params constructions_array [BTAP::Common::validate_array]
-        #@return insulating_layers <String>
+        #@param model [OpenStudio::Model::Model]
+        #@param constructions_array [BTAP::Common::validate_array]
+        #@return <String> insulating_layers
         def self.find_and_set_insulaton_layer(model,constructions_array)
           constructions_array = BTAP::Common::validate_array(model,constructions_array,"Construction")
           insulating_layers = Array.new()
@@ -573,10 +573,10 @@ module BTAP
         #if so it will return the existing construction. If you wish to keep some of the properties, enter the
         #string "default" instead of a numerical value.
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@params model [OpenStudio::Model::Model]
-        #@params construction <String>
+        #@param model [OpenStudio::Model::Model]
+        #@param construction <String>
         #@param conductance [Fixnum]
-        #@return new_construction [<String]OpenStudio::Model::getConstructionByName]
+        #@return [<String]OpenStudio::Model::getConstructionByName] new_construction
         def self.customize_opaque_construction(model,construction,conductance)
           #Will convert from a string identifier to an object if required.
           construction = BTAP::Common::validate_array(model,construction,"Construction").first
@@ -628,9 +628,9 @@ module BTAP
 
         #This model gets tsol
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@params model [OpenStudio::Model::Model]
-        #@params construction <String>
-        #@return tsol [Float]
+        #@param model [OpenStudio::Model::Model]
+        #@param construction <String>
+        #@return [Float] tsol
         def self.get_tsol(model,construction)
           construction = BTAP::Common::validate_array(model,construction,"Construction").first
           construction = OpenStudio::Model::getConstructionByName(model,construction.name.to_s).get
@@ -649,9 +649,9 @@ module BTAP
 
         #This model gets tvis
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@params model [OpenStudio::Model::Model]
-        #@params construction <String>
-        #@return tvis [Float]
+        #@param model [OpenStudio::Model::Model]
+        #@param construction <String>
+        #@return [Float] tvis
         def self.get_tvis(model,construction)
           construction = BTAP::Common::validate_array(model,construction,"Construction").first
           construction = OpenStudio::Model::getConstructionByName(model,construction.name.to_s).get
@@ -669,9 +669,9 @@ module BTAP
 
         #this method will get the conductance (metric) of the construction.
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@params construction <String>
-        #@params at_temperature_c [Float]  = 0.0
-        #@return 1.0
+        #@param construction <String>
+        #@param at_temperature_c [Float]  = 0.0
+        #@return [Double] 1.0
         def self.get_conductance(construction, at_temperature_c = 0.0)
           #if , by accidnet a construction base was passed...convert it to a construction object.
           construction = OpenStudio::Model::getConstructionByName(construction.model,construction.name.to_s).get unless construction.to_ConstructionBase.empty?
@@ -685,9 +685,9 @@ module BTAP
 
         #this method will get the rsi (metric) of the construction.
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@params construction <String>
-        #@params at_temperature_c [Float] = 0.0
-        #@return 1.0 / self.get_conductance(construction, at_temperature_c
+        #@param construction <String>
+        #@param at_temperature_c [Float] = 0.0
+        #@return [Double] 1.0 / self.get_conductance(construction, at_temperature_c
         def self.get_rsi(construction, at_temperature_c = 0.0)
           return 1.0 / self.get_conductance(construction, at_temperature_c)
         end
@@ -695,9 +695,9 @@ module BTAP
 
         #This will create a deep copy of the construction
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@params model [OpenStudio::Model::Model]
-        #@params construction <String>
-        #@return new_construction <String>
+        #@param model [OpenStudio::Model::Model]
+        #@param construction <String>
+        #@return [String] new_construction
         def self.deep_copy(model, construction)
           construction = BTAP::Common::validate_array(model,construction,"Construction").first
           new_construction = construction.clone.to_Construction.get
@@ -713,11 +713,11 @@ module BTAP
 
         #This will create construction model
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@params model [OpenStudio::Model::Model]
-        #@params name <String>
-        #@params materials <String>
-        #@params insulationLayer = nil
-        #@return construction <String>
+        #@param model [OpenStudio::Model::Model]
+        #@param name <String>
+        #@param materials <String>
+        #@param insulationLayer = nil
+        #@return [String] construction
         def self.create_construction(model, name, materials, insulationLayer = nil)
           construction = OpenStudio::Model::Construction.new(model)
           construction.setName( name)
@@ -737,13 +737,13 @@ module BTAP
 
         #This will customize fenestration construction
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@params model [OpenStudio::Model::Model]
-        #@params construction <String>
-        #@params conductance <String> = nil
-        #@params solarTransmittanceatNormalIncidence [Float] = nil
-        #@params visibleTransmittance [Float] = nil
-        #@params at_temperature_c [Float] = 0.0
-        #@return create_construction <String>
+        #@param model [OpenStudio::Model::Model]
+        #@param construction <String>
+        #@param conductance <String> = nil
+        #@param solarTransmittanceatNormalIncidence [Float] = nil
+        #@param visibleTransmittance [Float] = nil
+        #@param at_temperature_c [Float] = 0.0
+        #@return [String] create_construction
         def self.customize_fenestration_construction(
             model,
             construction,
@@ -992,35 +992,35 @@ module BTAP
         
         #This method customizes default surface construction and sets RSI
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::Model::Model]
-        #@params name [String]
-        #@params default_surface_construction_set <String> 
-        #@params ext_wall_rsi [Float] = nil
-        #@params ext_floor_rsi [Float] = nil
-        #@params ext_roof_rsi [Float] = nil
-        #@params ground_wall_rsi [Float] = nil
-        #@params ground_floor_rsi [Float] = nil
-        #@params ground_roof_rsi [Float] = nil
-        #@params fixed_window_rsi [Float] = nil
-        #@params fixed_wind_solar_trans [Float] = nil
-        #@params fixed_wind_vis_trans [Float] = nil
-        #@params operable_window_rsi [Float] = nil
-        #@params operable_wind_solar_trans [Float] = nil
-        #@params operable_wind_vis_trans [Float] = nil
-        #@params door_construction_rsi [Float] = nil
-        #@params glass_door_rsi [Float] = nil
-        #@params glass_door_solar_trans [Float] = nil
-        #@params glass_door_vis_trans [Float] = nil
-        #@params overhead_door_rsi [Float] = nil
-        #@params skylight_rsi [Float] = nil
-        #@params skylight_solar_trans [Float] = nil
-        #@params skylight_vis_trans [Float] = nil,
-        #@params tubular_daylight_dome_rsi [Float] = nil
-        #@params tubular_daylight_dome_solar_trans [Float] = nil
-        #@params tubular_daylight_dome_vis_trans [Float] = nil,
-        #@params tubular_daylight_diffuser_rsi [Float] = nil
-        #@params tubular_daylight_diffuser_solar_trans [Float] = nil
-        #@params tubular_daylight_diffuser_vis_trans [Float] = nil
+        #@param model [OpenStudio::Model::Model]
+        #@param name [String]
+        #@param default_surface_construction_set <String> 
+        #@param ext_wall_rsi [Float] = nil
+        #@param ext_floor_rsi [Float] = nil
+        #@param ext_roof_rsi [Float] = nil
+        #@param ground_wall_rsi [Float] = nil
+        #@param ground_floor_rsi [Float] = nil
+        #@param ground_roof_rsi [Float] = nil
+        #@param fixed_window_rsi [Float] = nil
+        #@param fixed_wind_solar_trans [Float] = nil
+        #@param fixed_wind_vis_trans [Float] = nil
+        #@param operable_window_rsi [Float] = nil
+        #@param operable_wind_solar_trans [Float] = nil
+        #@param operable_wind_vis_trans [Float] = nil
+        #@param door_construction_rsi [Float] = nil
+        #@param glass_door_rsi [Float] = nil
+        #@param glass_door_solar_trans [Float] = nil
+        #@param glass_door_vis_trans [Float] = nil
+        #@param overhead_door_rsi [Float] = nil
+        #@param skylight_rsi [Float] = nil
+        #@param skylight_solar_trans [Float] = nil
+        #@param skylight_vis_trans [Float] = nil,
+        #@param tubular_daylight_dome_rsi [Float] = nil
+        #@param tubular_daylight_dome_solar_trans [Float] = nil
+        #@param tubular_daylight_dome_vis_trans [Float] = nil,
+        #@param tubular_daylight_diffuser_rsi [Float] = nil
+        #@param tubular_daylight_diffuser_solar_trans [Float] = nil
+        #@param tubular_daylight_diffuser_vis_trans [Float] = nil
         def self.customize_default_surface_construction_set_rsi!(model,name,default_surface_construction_set,
             ext_wall_rsi = nil, ext_floor_rsi = nil, ext_roof_rsi = nil,
             ground_wall_rsi = nil, ground_floor_rsi = nil, ground_roof_rsi = nil,
@@ -1064,23 +1064,22 @@ module BTAP
         #This will remove all associated construction costs for each construction
         #type associated with the construction set. Unless the value is set to nil, in which case it will do nothing.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::Model::Model]
-        #@params default_surface_construction_set <String>
-        #@params ext_wall_cost [Float] = nil
-        #@params ext_floor_cost [Float] = nil
-        #@params ext_roof_cost [Float] = nil
-        #@params ground_wall_cost [Float] = nil
-        #@params ground_floor_cost [Float] = nil
-        #@params ground_roof_cost [Float] = nil
-        #@params fixed_window_cost [Float] = nil
-        #@params operable_window_cost [Float] = nil
-        #@params door_construction_cost [Float] = nil
-        #@params glass_door_cost [Float] = nil
-        #@params overhead_door_cost [Float] = nil
-        #@params skylight_cost [Float] = nil
-        #@params tubular_daylight_dome_cost [Float] = nil
-        #@params tubular_daylight_diffuser_cost [Float] = nil
-        #@params total_building_construction_set_cost [Float] = nil
+        #@param default_surface_construction_set <String>
+        #@param ext_wall_cost [Float] = nil
+        #@param ext_floor_cost [Float] = nil
+        #@param ext_roof_cost [Float] = nil
+        #@param ground_wall_cost [Float] = nil
+        #@param ground_floor_cost [Float] = nil
+        #@param ground_roof_cost [Float] = nil
+        #@param fixed_window_cost [Float] = nil
+        #@param operable_window_cost [Float] = nil
+        #@param door_construction_cost [Float] = nil
+        #@param glass_door_cost [Float] = nil
+        #@param overhead_door_cost [Float] = nil
+        #@param skylight_cost [Float] = nil
+        #@param tubular_daylight_dome_cost [Float] = nil
+        #@param tubular_daylight_diffuser_cost [Float] = nil
+        #@param total_building_construction_set_cost [Float] = nil
         def self.customize_default_surface_construction_set_costs(default_surface_construction_set,
             ext_wall_cost = nil,
             ext_floor_cost = nil,
@@ -1135,29 +1134,29 @@ module BTAP
 
         #This will customize default surface construction.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::Model::Model]
-        #@params name [String]
-        #@params subsurface_set [Float] = nil
-        #@params fixed_window_rsi [Float] = nil
-        #@paramsfixed_wind_solar_trans [Float] = nil
-        #@paramsfixed_wind_vis_trans [Float] = nil,
-        #@paramsoperable_window_rsi [Float] = nil
-        #@params operable_wind_solar_trans [Float] = nil
-        #@params operable_wind_vis_trans [Float] = nil
-        #@params door_construction_rsi [Float] = nil
-        #@params glass_door_rsi [Float] = nil
-        #@params glass_door_solar_trans [Float] = nil
-        #@params glass_door_vis_trans [Float] = nil
-        #@params overhead_door_rsi [Float] = nil
-        #@params skylight_rsi [Float] = nil
-        #@params skylight_solar_trans [Float] = nil
-        #@params skylight_vis_trans [Float] = nil,
-        #@params tubular_daylight_dome_rsi [Float] = nil
-        #@params tubular_daylight_dome_solar_trans [Float] = nil
-        #@params tubular_daylight_dome_vis_trans [Float] = nil
-        #@params tubular_daylight_diffuser_rsi [Float] = nil
-        #@params tubular_daylight_diffuser_solar_trans [Float] = nil
-        #@params tubular_daylight_diffuser_vis_trans [Float] = nil
+        #@param model [OpenStudio::Model::Model]
+        #@param name [String]
+        #@param subsurface_set [Float] = nil
+        #@param fixed_window_rsi [Float] = nil
+        #@param fixed_wind_solar_trans [Float] = nil
+        #@param fixed_wind_vis_trans [Float] = nil,
+        #@param operable_window_rsi [Float] = nil
+        #@param operable_wind_solar_trans [Float] = nil
+        #@param operable_wind_vis_trans [Float] = nil
+        #@param door_construction_rsi [Float] = nil
+        #@param glass_door_rsi [Float] = nil
+        #@param glass_door_solar_trans [Float] = nil
+        #@param glass_door_vis_trans [Float] = nil
+        #@param overhead_door_rsi [Float] = nil
+        #@param skylight_rsi [Float] = nil
+        #@param skylight_solar_trans [Float] = nil
+        #@param skylight_vis_trans [Float] = nil,
+        #@param tubular_daylight_dome_rsi [Float] = nil
+        #@param tubular_daylight_dome_solar_trans [Float] = nil
+        #@param tubular_daylight_dome_vis_trans [Float] = nil
+        #@param tubular_daylight_diffuser_rsi [Float] = nil
+        #@param tubular_daylight_diffuser_solar_trans [Float] = nil
+        #@param tubular_daylight_diffuser_vis_trans [Float] = nil
         def self.customize_default_sub_surface_constructions_rsi(
             model,
             name,
@@ -1200,30 +1199,30 @@ module BTAP
 
         #This will customize default subsurface construction conductances.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::Model::Model]
-        #@params name [String]
-        #@params subsurface_set,
-        #@params fixed_window_conductance [Float] = nil
-        #@params fixed_wind_solar_trans [Float] = nil
-        #@params fixed_wind_vis_trans [Float] = nil
-        #@params operable_window_conductance [Float] = nil
-        #@params operable_wind_solar_trans [Float] = nil
-        #@params  perable_wind_vis_trans [Float] = nil
-        #@params door_construction_conductance [Float] = nil
-        #@params glass_door_conductance [Float] = nil
-        #@params glass_door_solar_trans [Float] = nil
-        #@params glass_door_vis_trans [Float] = nil
-        #@params overhead_door_conductance [Float] = nil
-        #@params skylight_conductance [Float] = nil
-        #@params skylight_solar_trans [Float] = nil
-        #@params skylight_vis_trans [Float] = nil
-        #@params tubular_daylight_dome_conductance [Float] = nil
-        #@params tubular_daylight_dome_solar_trans [Float] = nil
-        #@params tubular_daylight_dome_vis_trans [Float] = nil
-        #@params tubular_daylight_diffuser_conductance [Float] = nil
-        #@params tubular_daylight_diffuser_solar_trans [Float] = nil
-        #@params tubular_daylight_diffuser_vis_trans [Float] = nil
-        #@return set [Object]
+        #@param model [OpenStudio::Model::Model]
+        #@param name [String]
+        #@param subsurface_set [Array]
+        #@param fixed_window_conductance [Float] = nil
+        #@param fixed_wind_solar_trans [Float] = nil
+        #@param fixed_wind_vis_trans [Float] = nil
+        #@param operable_window_conductance [Float] = nil
+        #@param operable_wind_solar_trans [Float] = nil
+        #@param operable_wind_vis_trans [Float] = nil
+        #@param door_construction_conductance [Float] = nil
+        #@param glass_door_conductance [Float] = nil
+        #@param glass_door_solar_trans [Float] = nil
+        #@param glass_door_vis_trans [Float] = nil
+        #@param overhead_door_conductance [Float] = nil
+        #@param skylight_conductance [Float] = nil
+        #@param skylight_solar_trans [Float] = nil
+        #@param skylight_vis_trans [Float] = nil
+        #@param tubular_daylight_dome_conductance [Float] = nil
+        #@param tubular_daylight_dome_solar_trans [Float] = nil
+        #@param tubular_daylight_dome_vis_trans [Float] = nil
+        #@param tubular_daylight_diffuser_conductance [Float] = nil
+        #@param tubular_daylight_diffuser_solar_trans [Float] = nil
+        #@param tubular_daylight_diffuser_vis_trans [Float] = nil
+        #@return [Object] set
         def self.customize_default_sub_surface_constructions_conductance(
             model,
             name,
@@ -1252,12 +1251,12 @@ module BTAP
 
         #This will customize default surface construction rsi.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::Model::Model]
-        #@params name [String] = nil
-        #@params default_surface_constructions [Float] = nil
-        #@params wall_rsi [Float] = nil
-        #@params floor_rsi [Float] = nil
-        #@params roof_rsi [Float] = nil
+        #@param model [OpenStudio::Model::Model]
+        #@param name [String] = nil
+        #@param default_surface_constructions [Float] = nil
+        #@param wall_rsi [Float] = nil
+        #@param floor_rsi [Float] = nil
+        #@param roof_rsi [Float] = nil
         def self.customize_default_surface_constructions_rsi(model,name,default_surface_constructions,wall_rsi = nil, floor_rsi = nil, roof_rsi = nil)
 
           wall_rsi.nil? ? wall_conductance  = nil  : wall_conductance  = 1.0 / wall_rsi
@@ -1269,13 +1268,13 @@ module BTAP
 
         #This will customize default surface construction conductance.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::Model::Model]
-        #@params name [String] = nil
-        #@params default_surface_constructions [Float] = nil
-        #@params wall_conductance [Float] = nil
-        #@params floor_conductance [Float] = nil
-        #@params roof_conductance [Float] = nil
-        #@return set [Object]
+        #@param model [OpenStudio::Model::Model]
+        #@param name [String] = nil
+        #@param default_surface_constructions [Float] = nil
+        #@param wall_conductance [Float] = nil
+        #@param floor_conductance [Float] = nil
+        #@param roof_conductance [Float] = nil
+        #@return [Object] set
         def self.customize_default_surface_constructions_conductance(model,name,default_surface_constructions,wall_conductance = nil, floor_conductance = nil, roof_conductance = nil)
           set = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
           set.setName( name)
@@ -1289,12 +1288,12 @@ module BTAP
 
         #This creates a new construction set of wall, floor and roof/ceiling objects.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::Model::Model]
-        #@params name [String] = nil
-        #@params wall [Float] = nil
-        #@params floor [Float] = nil
-        #@params roof [Float] = nil
-        #@return set [Object]
+        #@param model [OpenStudio::Model::Model]
+        #@param name [String] = nil
+        #@param wall [Float] = nil
+        #@param floor [Float] = nil
+        #@param roof [Float] = nil
+        #@return [Object] set
         def self.create_default_surface_constructions(model,name,wall,floor,roof)
           wall = BTAP::Common::validate_array(model,wall,"Construction").first
           floor = BTAP::Common::validate_array(model,floor,"Construction").first
@@ -1309,16 +1308,16 @@ module BTAP
 
         #This method creates a subsurface construction set (windows, doors, skylights, etc)
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::Model::Model]
-        #@params fixedWindowConstruction <String>
-        #@params operableWindowConstruction <String>
-        #@params setDoorConstruction <String>
-        #@params setGlassDoorConstruction <String>
-        #@params overheadDoorConstruction <String>
-        #@params skylightConstruction <String>
-        #@params tubularDaylightDomeConstruction <String>
-        #@params tubularDaylightDiffuserConstruction <String>
-        #@return set [Object]
+        #@param model [OpenStudio::Model::Model]
+        #@param fixedWindowConstruction <String>
+        #@param operableWindowConstruction <String>
+        #@param setDoorConstruction <String>
+        #@param setGlassDoorConstruction <String>
+        #@param overheadDoorConstruction <String>
+        #@param skylightConstruction <String>
+        #@param tubularDaylightDomeConstruction <String>
+        #@param tubularDaylightDiffuserConstruction <String>
+        #@return [Object] set
         def self.create_subsurface_construction_set(
             model,
             fixedWindowConstruction,
@@ -1352,9 +1351,9 @@ module BTAP
         
         #This method gets construction set object from external library
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params construction_library_file [String]
-        #@params construction_set_name [String]
-        #@return optional_construction_set [Boolean]
+        #@param construction_library_file [String]
+        #@param construction_set_name [String]
+        #@return [Boolean] optional_construction_set
         def self.get_construction_set_from_library( construction_library_file, construction_set_name )
           #Load Contruction osm library.
           if File.exists?(construction_library_file) 
@@ -1377,14 +1376,14 @@ module BTAP
         #exterior, interior,ground and subsurface must be created prior to populate
         #this object.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params model [OpenStudio::Model::Model]
-        #@params name [String]
-        #@params exterior_construction_set
-        #@params interior_construction_set
-        #@params ground_construction_set
-        #@params subsurface_exterior_construction_set
-        #@params subsurface_interior_construction_set
-        #@return set [Object]
+        #@param model [OpenStudio::Model::Model]
+        #@param name [String]
+        #@param exterior_construction_set
+        #@param interior_construction_set
+        #@param ground_construction_set
+        #@param subsurface_exterior_construction_set
+        #@param subsurface_interior_construction_set
+        #@return [Object] set
         def self.create_default_construction_set(
             model,
             name,
@@ -1414,8 +1413,8 @@ module BTAP
         #exterior, interior,ground and subsurface must be created prior to populate
         #this object.
         #@author phylroy.lopez@nrcan.gc.ca
-        #@params default_surface_construction_set [Object]
-        #@return table [String]
+        #@param default_surface_construction_set [Object]
+        #@return [String] table
         def self.get_construction_set_info(default_surface_construction_set)
           #######################
           constructions_and_cost = [

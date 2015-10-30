@@ -24,9 +24,9 @@ require "#{File.dirname(__FILE__)}/btap"
 module OsLib_Schedules
   #This method creates a simple schedule and returns a ruleset schedule with a basic profile.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
-  #@params options [String]
-  #@return result [OpenStudio::Model::ScheduleRuleset] the schedule ruleset
+  #@param model [OpenStudio::model::Model] A model object
+  #@param options [String]
+  #@return [OpenStudio::Model::ScheduleRuleset] the schedule ruleset
   def OsLib_Schedules.createSimpleSchedule(model, options = {})
 
     defaults = {
@@ -83,9 +83,9 @@ module OsLib_Schedules
 
   #This method finds the maximum profile value for a schedule and returns a min and max value.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
-  #@params schedule [Object]
-  #@return min [Float} and max [Float]
+  #@param model [OpenStudio::model::Model] A model object
+  #@param schedule [Object]
+  #@return [Hash] a hash of min an max values "min":5.0, "max":3.0
   def OsLib_Schedules.getMinMaxAnnualProfileValue(model, schedule)
 
     # gather profiles
@@ -122,11 +122,11 @@ module OsLib_Schedules
 
   #This method finds the maximum profile value for a schedule and returns the schedule.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
-  #@params schedule [Object]
-  #@params double [Float] 
-  #@params modificationType [String] 
-  #@return result [Object] a schedule
+  #@param model [OpenStudio::model::Model] A model object
+  #@param schedule [Object]
+  #@param double [Float] 
+  #@param modificationType [String] 
+  #@return [Object] a schedule
   def OsLib_Schedules.simpleScheduleValueAdjust(model,schedule,double, modificationType = "Multiplier")# can increase/decrease by percentage or static value
 
     # todo - add in design days, maybe as optional argument
@@ -163,14 +163,14 @@ module OsLib_Schedules
   end #end of OsLib_Schedules.getMaxAnnualProfileValue
   #This method finds the maximum profile value for a schedule and returns a schedule .
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
-  #@params schedule [Object]
-  #@params valueTestDouble [Float] 
-  #@params passDouble [Float] 
-  #@params failDouble [Float] 
-  #@params floorDouble [Float] 
-  #@params modificationType [String] 
-  #@return result [Object] a schedule
+  #@param model [OpenStudio::model::Model] A model object
+  #@param schedule [Object]
+  #@param valueTestDouble [Float] 
+  #@param passDouble [Float] 
+  #@param failDouble [Float] 
+  #@param floorDouble [Float] 
+  #@param modificationType [String] 
+  #@return [Object] a schedule
   def OsLib_Schedules.conditionalScheduleValueAdjust(model,schedule,valueTestDouble,passDouble,failDouble, floorDouble,modificationType = "Multiplier")# can increase/decrease by percentage or static value
     # todo - add in design days, maybe as optional argument
     # give option to clone or not
@@ -219,14 +219,9 @@ module OsLib_Schedules
  
   #This method merges multiple schedules into one using load or other value to weight each schedules influence on the merge and returns a Merge schedule or denominator.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
-  #@params schedule [Object]
-  #@params valueTestDouble [Float] 
-  #@params passDouble [Float] 
-  #@params failDouble [Float] 
-  #@params floorDouble [Float] 
-  #@params modificationType [String] 
-  #@return mergedSchedule [Object] and denominator [Object]
+  #@param model [OpenStudio::model::Model] A model object
+  #@param scheduleWeighHash [String] 
+  #@return [Hash] a hash of the mergedSchedule [Object] and denominator [Object] "mergedSchedule":sch_ruleset, "denominator":denominator
   def OsLib_Schedules.weightedMergeScheduleRulesets(model, scheduleWeighHash)
 
     # WARNING NOT READY FOR GENERAL USE YET - this doesn't do anything with rules yet, just winter, summer, and default profile
@@ -357,9 +352,9 @@ module OsLib_Schedules
 
   #This method will create a new schedule using absolute velocity of existing schedule and returns a new schedule.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
-  #@params schedule [Object]
-  #@return NewSchedule [Object]
+  #@param model [OpenStudio::model::Model] A model object
+  #@param schedule [Object]
+  #@return [Object] NewSchedule
   def OsLib_Schedules.scheduleFromRateOfChange(model, schedule)
 
     # clone source schedule
@@ -445,9 +440,9 @@ module OsLib_Schedules
   # create a complex ruleset schedule
   #This method will take 4 variables and return them as an array.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
-  #@params options [Object] 
-  #@return result [Object] schedule ruleset
+  #@param model [OpenStudio::model::Model] A model object
+  #@param options [Object] 
+  #@return [Object] schedule ruleset
   def OsLib_Schedules.createComplexSchedule(model, options = {})
 
     defaults = {
@@ -539,7 +534,7 @@ module OsLib_Schedules
 
   #This method will add schedule type limits and return limit types.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
+  #@param model [OpenStudio::model::Model] A model object
    #@return [type_limits<Float>]
   def OsLib_Schedules.addScheduleTypeLimits(model) # todo - make sure to add this new method to cofee when done
 
@@ -651,8 +646,8 @@ module OsLib_Schedules
 
   #This method creates TimeSeries from ScheduleRuleset.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
-  #@params schedule_ruleset [Object] 
+  #@param model [OpenStudio::model::Model] A model object
+  #@param schedule_ruleset [Object] 
   def OsLib_Schedules.create_timeseries_from_schedule_ruleset(model,schedule_ruleset)
 
     yd = model.getYearDescription

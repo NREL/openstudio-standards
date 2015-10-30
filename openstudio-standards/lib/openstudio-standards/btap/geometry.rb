@@ -2113,11 +2113,11 @@ module BTAP
       return model
     end
     # This method will scale the model
-    # @params model [OpenStudio::Model::Model] the model object.
-    # @params x [Float] x scalar multiplier.
-    # @params y [Float] y scalar multiplier.
-    # @params z [Float] z scalar multiplier.
-    # @return model [OpenStudio::Model::Model] the model object.
+    # @param model [OpenStudio::Model::Model] the model object.
+    # @param x [Float] x scalar multiplier.
+    # @param y [Float] y scalar multiplier.
+    # @param z [Float] z scalar multiplier.
+    # @return [OpenStudio::Model::Model] the model object.
     def self.scale_model(model,x,y,z)
       # Identity matrix for setting space origins
       m = OpenStudio::Matrix.new(4,4,0)
@@ -2158,9 +2158,9 @@ module BTAP
 
 
     # This method will rotate the model
-    # @params model [OpenStudio::Model::Model] the model object.
-    # @params degrees [Float] rotation value
-    # @return model [OpenStudio::Model::Model] the model object.
+    # @param model [OpenStudio::Model::Model] the model object.
+    # @param degrees [Float] rotation value
+    # @return [OpenStudio::Model::Model] the model object.
     def self.rotate_model(model, degrees)
       # Identity matrix for setting space origins
       t = OpenStudio::Transformation::rotation(OpenStudio::Vector3d.new(0,0,1),degrees*Math::PI/180)
@@ -2407,7 +2407,7 @@ module BTAP
       # passed spaces. Note: if you wish to avoid to create an array of spaces,
       # simply put the space variable in [] brackets
       # Ex: get_all_surfaces_from_spaces( [space1,space2] )
-      # @params spaces_array an array of type [OpenStudio::Model::Space]
+      # @param spaces_array an array of type [OpenStudio::Model::Space]
       # @return an array of surfaces contained in the passed spaces.
       def self.get_surfaces_from_spaces(model, spaces_array)
         BTAP::Geometry::Surfaces::get_surfaces_from_spaces(spaces_array)
@@ -2417,8 +2417,9 @@ module BTAP
       # passed floors. Note: if you wish to avoid to create an array of spaces,
       # simply put the space variable in [] brackets
       # Ex: get_all_surfaces_from_spaces( [space1,space2] )
-      # @params spaces_array an array of type [OpenStudio::Model::Space]
-      # @return an array of surfaces contained in the passed spaces.
+      # @param model
+      # @param floors
+      # @return [Array<OpenStudio::Model::Space>] an array of spaces
       def self.get_spaces_from_storeys(model,floors)
         floors = BTAP::Common::validate_array(model,floors,"BuildingStory")
         spaces = Array.new()
@@ -2430,7 +2431,7 @@ module BTAP
       # passed floors. Note: if you wish to avoid to create an array of spaces,
       # simply put the space variable in [] brackets
       # Ex: get_all_surfaces_from_spaces( [space1,space2] )
-      # @params spaces_array an array of type [OpenStudio::Model::Space]
+      # @param spaces_array an array of type [OpenStudio::Model::Space]
       # @return an array of spaces.
       def self.filter_perimeter_spaces(model, spaces_array)
         spaces_array = BTAP::Common::validate_array(model,spaces_array,"Space")
@@ -2447,7 +2448,7 @@ module BTAP
       # passed floors. Note: if you wish to avoid to create an array of spaces,
       # simply put the space variable in [] brackets
       # Ex: get_all_surfaces_from_spaces( [space1,space2] )
-      # @params spaces_array an array of type [OpenStudio::Model::Space]
+      # @param spaces_array an array of type [OpenStudio::Model::Space]
       # @return an array of spaces.
       def self.filter_core_spaces(model,spaces_array)
         spaces_array = BTAP::Common::validate_array(model,spaces_array,"Space")
@@ -2497,8 +2498,8 @@ module BTAP
       # passed floors. Note: if you wish to avoid to create an array of spaces,
       # simply put the space variable in [] brackets
       # Ex: get_all_surfaces_from_spaces( [space1,space2] )
-      # @params spaces_array an array of type [OpenStudio::Model::Space]
-      # @return an array of thermal zones.
+      # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] an array of zones 
+      # @return [Array<OpenStudio::Model::ThermalZone] an array of thermal zones.
       def self.filter_perimeter_zones(thermal_zones)
         array = Array.new()
         thermal_zones.each do |zone|
@@ -2517,9 +2518,9 @@ module BTAP
       # passed floors. Note: if you wish to avoid to create an array of spaces,
       # simply put the space variable in [] brackets
       # Ex: ( [space1,space2] )
-      # @params zone_array an array of type [OpenStudio::Model::ThermalZone]
-      # @return an array of thermal zones.
-      def self.filter_core_zones( thermal_zones )
+      # @param thermal_zones [Array<OpenStudio::Model::ThermalZone] an array of zones
+      # @return [Array<OpenStudio::Model::ThermalZone] an array of zones
+      def self.filter_core_zones(thermal_zones)
         array = Array.new()
         thermal_zones.getThermalZones.each do |zone|
           zone.space.each do |space|
@@ -2558,10 +2559,11 @@ module BTAP
       end
 
       # This method will rotate a surface
-      # @params surface [OpenStudio::Model::Surface] the model object.
-      # @params azimuth_degrees [Float] rotation value
-      # @params tilt_degrees [Float] rotation value
-      # @return model [OpenStudio::Model::Model] the model object.
+      # @param planar_surfaces [Array<OpenStudio::Model::Surface>] an array of surfaces
+      # @param azimuth_degrees [Float] rotation value
+      # @param tilt_degrees [Float] rotation value
+      # @param translation_vector [OpenStudio::Vector3d] a vector along which to move all surfaces
+      # @return [OpenStudio::Model::Model] the model object.
       def self.rotate_tilt_translate_surfaces(planar_surfaces, azimuth_degrees, tilt_degrees = 0.0, translation_vector = OpenStudio::Vector3d.new(0.0,0.0,0.0) )
         # Identity matrix for setting space origins
         azimuth_matrix = OpenStudio::Transformation::rotation(OpenStudio::Vector3d.new(0,0,1),azimuth_degrees*Math::PI/180)

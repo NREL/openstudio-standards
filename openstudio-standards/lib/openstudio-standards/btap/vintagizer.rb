@@ -24,20 +24,21 @@ class Vintagizer
   
   #This method loads Vintage database information.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params model [OpenStudio::model::Model] A model object
-  #@params file [String] 
-  #@params selectionHash [???] 
+  #@param model [OpenStudio::model::Model] A model object
+  #@param file [String] 
+  #@param selectionHash [???] 
   def initialize(model,file,selectionHash)
     #Load Vintage database information.
   end
 
   #This method will (????).
   #@author phylroy.lopez@nrcan.gc.ca
-  #@params construction_file [String] 
-  #@params construction_set_name [String] 
-  #@params vintage [String] 
-  #@params building_type [String] 
-  #@return climate_zone [String]
+  #@param construction_file [String] 
+  #@param construction_set_name [String] 
+  #@param vintage [String] 
+  #@param building_type [String]
+  #@param climate_zone [String]
+  #@return [String] climate_zone
   def envelope(construction_file,construction_set_name,vintage,building_type,climate_zone)
 
     #Load Construction Lib set. "C:/OSRuby/Resources/DND/Trenton/TrentonConstructionsLibrary.osm"

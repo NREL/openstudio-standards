@@ -29,9 +29,9 @@ module BTAP
 
       #This method initializes.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model_file [OpenStudio::model::Model] A model object
-      #@params weather_file [String] path to a weather file
-      #@params analysis_folder [String] path to analysis folder
+      #@param model_file [OpenStudio::model::Model] A model object
+      #@param weather_file [String] path to a weather file
+      #@param analysis_folder [String] path to analysis folder
       def initialize (
           model_file,
           weather_file,
@@ -55,7 +55,7 @@ module BTAP
 
       #This method creates the schedules.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def create_schedules(model)
 
         #Create cooling temperature schedule
@@ -126,7 +126,7 @@ module BTAP
 
       #This method sets the output variables.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::model::Model] A model object
       def set_output_variables(model)
         output_variable_array =
           [
@@ -195,7 +195,7 @@ module BTAP
 
       #This method creates the weather file.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params weather_file [String] path to a weather file
+      #@param weather_file [String] path to a weather file
       def create_weather_files(weather_file)
         #no solar file.
         @solar_radiation_off_temp_normal = @analysis_folder + "/solar_radiation_off_temp_normal.epw"
@@ -237,8 +237,8 @@ module BTAP
 
       #This method miso building generation and returns a model array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@params standard_weather_file [String] path to a weather file
+      #@param model [OpenStudio::model::Model] A model object
+      #@param standard_weather_file [String] path to a weather file
       #@return [model_array<String>]
       def miso_building_generation(model,standard_weather_file)
         self.set_output_variables(model)
@@ -385,9 +385,9 @@ module BTAP
 
       #This method miso building analysis.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model_file [OpenStudio::model::Model] A model object
-      #@params folder_name [String] path to a folder
-      #@params standard_weather_file [String] path to a weather file
+      #@param model_file [OpenStudio::model::Model] A model object
+      #@param folder_name [String] path to a folder
+      #@param standard_weather_file [String] path to a weather file
       def miso_building_analysis(folder_name,model_file,standard_weather_file)
         model = BTAP::FileIO::load_osm(model_file)
         BTAP::Geometry::enumerate_spaces_model(model)
@@ -409,9 +409,9 @@ module BTAP
 
       #This method miso zonal analysis.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model_file [OpenStudio::model::Model] A model object
-      #@params folder_name [String] path to a folder
-      #@params standard_weather_file [String] path to a weather file
+      #@param model_file [OpenStudio::model::Model] A model object
+      #@param folder_name [String] path to a folder
+      #@param standard_weather_file [String] path to a weather file
       def miso_zonal_analysis(folder_name,model_file,standard_weather_file)
 
         model = BTAP::FileIO::load_osm(model_file)
@@ -433,9 +433,8 @@ module BTAP
 
       #This method miso zonal generation and returns a model array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model_file [OpenStudio::model::Model] A model object
-      #@params folder_name [String] path to a folder
-      #@params standard_weather_file [String] path to a weather file
+      #@param model[OpenStudio::model::Model] A model object
+      #@param standard_weather_file [String] path to a weather file
       #@return [model_array<String>]
       def miso_zonal_generation(model,standard_weather_file)
         self.create_weather_files(standard_weather_file)

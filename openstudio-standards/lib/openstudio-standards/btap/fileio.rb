@@ -195,7 +195,6 @@ module BTAP
     # This method loads an *Quest file into the model.
     # @author Phylroy A. Lopez
     # @param filepath [String] path to the OSM file.
-    # @param name [String] optional model name to be set to model.
     # @return [OpenStudio::Model::Model] an OpenStudio model object.
     def self.load_e_quest(filepath)
       #load file
@@ -327,7 +326,7 @@ module BTAP
 
     # This method will read a CSV file and return rows as hashes based on the selection given.
     # @author Phylroy Lopez
-    # @param filepath The path to the csv file.
+    # @param file The path to the csv file.
     # @param searchHash
     # @return matches A Array of rows that match the searchHash. The row is a Hash itself.
     def self.csv_look_up_rows(file, searchHash)
@@ -360,7 +359,7 @@ module BTAP
 
     # This method will read a CSV file and return the unique values in a given column header.
     # @author Phylroy Lopez
-    # @param filepath The path to the csv file.
+    # @param file The path to the csv file.
     # @param colHeader The header name in teh csv file. 
     # @return matches A Array of rows that match the searchHash. The row is a Hash itself.
     def self.csv_look_up_unique_col_data(file, colHeader)

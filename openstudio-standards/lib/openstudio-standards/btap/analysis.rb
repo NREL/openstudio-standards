@@ -93,8 +93,8 @@ module BTAP
       
       #This method will do an analysis of the opaque surface conductance sensitivity and returns a string model array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-      #@params choice [String] description
+      #@param model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+      #@param choice [String] description
       #@return [modelArray<String>]
       def self.opaque_surface_conductance_sensitivity_analysis(model,choice )
         
@@ -191,9 +191,9 @@ module BTAP
       
       #This method performs a wall sensitivity analysis and returns a string model array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-      #@params folder_name [String] 
-      #@params values<Fixnum>
+      #@param model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+      #@param folder_name [String] 
+      #@param values<Fixnum>
       #@return [modelArray<String>]
       def self.wall_rvalue_sensitivity_model_analysis(model, folder_name,values = [5,10,15,20,30,50,100])
         #create models
@@ -213,9 +213,9 @@ module BTAP
       
       #This method performs a roof sensitivity analysis and returns a string model array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-      #@params folder_name [String] 
-      #@params values<Fixnum>
+      #@param model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+      #@param folder_name [String] 
+      #@param values<Fixnum>
       #@return [modelArray<String>]
       def self.roof_rvalue_sensitivity_model_analysis(model_in, folder_name,values = [5,10,15,20,30,50,100])
         #create models
@@ -236,8 +236,8 @@ module BTAP
 
       #This method performs a roof sensitivity analysis and returns a string model array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params modelArray<Object> 
-      #@params folder_name [String] 
+      #@param modelArray<Object> 
+      #@param folder_name [String] 
       #@return [modelArray<String>]
       def self.run_models(modelArray,folder_name)
         process_manager = BTAP::SimManager::ProcessManager.new(folder_name)
@@ -249,9 +249,9 @@ module BTAP
 
       #This method performs a glazing solar transmittance sensitivity analysis and returns a model array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-      #@params folder_name [String] 
-      #@params values<Fixnum>
+      #@param model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+      #@param folder_name [String] 
+      #@param values<Fixnum>
       #@return [modelArray<String>]
       def self.solar_trans_sensitivity_model_analysis(model_in, folder_name, values = [0.1,0.2,0.4,0.6,0.8,1.00])
         modelArray = Array.new()
@@ -270,9 +270,9 @@ module BTAP
 
       #This method performs an rvalue sensitivity analysis and returns a model array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-      #@params folder_name [String] 
-      #@params values<Fixnum>
+      #@param model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+      #@param folder_name [String] 
+      #@param values<Fixnum>
       #@return [modelArray<String>]
       def self.window_rvalue_sensitivity_model_analysis(model_in, folder_name, values = [5,10,15,20,30,50,100])
         modelArray = Array.new()
@@ -291,8 +291,8 @@ module BTAP
 
       #This method performs a full sensitivity analysis on the wall, roof, solar-trans,window,and ground surfaces.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-      #@params parent_folder [String]
+      #@param model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+      #@param parent_folder [String]
       def self.full_sensitivity_analysis(model, parent_folder)
         self.wall_rvalue_sensitivity_model_analysis(model, (parent_folder + "/wall-r"))
         self.roof_rvalue_sensitivity_model_analysis(model, (parent_folder + "/roof-r"))
@@ -304,8 +304,8 @@ module BTAP
 
       #This method performs a full analysis (elimination and Sensitivity).
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-      #@params folder [String]
+      #@param model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+      #@param folder [String]
       def self.full_analysis(model, folder)
         FileUtils.rm_rf(folder)
         Dir::mkdir(folder) unless File.exists?(folder)
@@ -318,8 +318,8 @@ module BTAP
 
       #This method performs an elimination analysis ( OA, H&C setpoints,infiltration,occupancy,lighting,plug_loads,gas_equipment, hotwater, steam, other) and returns a model array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-      #@params folder_name [String]
+      #@param model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+      #@param folder_name [String]
       #@return [modelArray<String>]
       def self.full_elimination_analysis(model_in, folder_name)
         modelArray = Array.new()

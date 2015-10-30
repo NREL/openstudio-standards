@@ -26,7 +26,7 @@ module BTAP
   module Reporting
     #This method will take the folder name and write out a result files to the input folder.
     #@author phylroy.lopez@nrcan.gc.ca
-    #@params folder [String] Path too a folder where to write result files to.
+    #@param folder [String] Path too a folder where to write result files to.
     def self.get_all_annual_results_from_runmanger(folder)
       #output file name
       osmfiles = BTAP::FileIO::get_find_files_from_folder_by_extension(folder,".osm")
@@ -35,7 +35,7 @@ module BTAP
 
     #This method will take the folder name and write out a result files to the input folder.
     #@author phylroy.lopez@nrcan.gc.ca
-    #@params folder [String] Path too a folder where to write result files to.
+    #@param folder [String] Path too a folder where to write result files to.
     def self.get_all_annual_results_from_runmanger_by_files(folder,osm_files)
       #output file name
       result_file_path = folder + "/annual_result_table.csv"
@@ -95,8 +95,8 @@ module BTAP
 
     #This method will return an array of common annual data results. With header and unit information and returns an annual results string array.
     #@author phylroy.lopez@nrcan.gc.ca
-    #@params osm_file [String]
-    #@params sql_path [String] 
+    #@param osm_file [String]
+    #@param sql_path [String] 
     #@return [annual_results_array<String>]
     def self.old_get_annual_results_model_results(osm_file,sql_path)
 

@@ -6,12 +6,14 @@ class OpenStudio::Model::Model
   attr_accessor :template
   attr_accessor :climate_zone
  
-  # Loads an .osm as a starting point.  Typically used to load
-  # a model containing only geometry.
+  # Creates a DOE prototype building model and replaces
+  # the current model with this model.
   #
-  # @param geometry_osm_name [String] the name of 
-  #   a .osm file in the /resources directory
-  # @return [Bool] returns true if successful, false if not 
+  # @param building_type [String] the building type
+  # @param building_vintage [String] the building vintage
+  # @param climate_zone [String] the climate zone  
+  # @param debug [Boolean] If true, will report out more detailed debugging output
+  # @return [Bool] returns true if successful, false if not
   def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)  
     
     self.load_openstudio_standards_json
@@ -126,8 +128,9 @@ class OpenStudio::Model::Model
  
   # Loads the library of methods specific to this building type
   #
-  # @param geometry_osm_name [String] the name of 
-  #   a .osm file in the /resources directory
+  # @param building_type [String] the building type
+  # @param building_vintage [String] the building vintage
+  # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not 
   def load_building_type_methods(building_type, building_vintage, climate_zone)
     
@@ -176,9 +179,10 @@ class OpenStudio::Model::Model
  
   # Loads a geometry-only .osm as a starting point.
   #
-  # @param path_to_geometry_osm [String] the path to 
-  #   a .osm file.
-  # @return [Bool] returns true if successful, false if not 
+  # @param building_type [String] the building type
+  # @param building_vintage [String] the building vintage
+  # @param climate_zone [String] the climate zone  
+  # @return [Bool] returns true if successful, false if not
   def load_geometry(building_type, building_vintage, climate_zone)
     
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding geometry')    

@@ -25,7 +25,7 @@ module BTAP
 
     #This method will simulate all files in a folder.
     #@author phylroy.lopez@nrcan.gc.ca
-    #@params folder [String] folder
+    #@param folder [String] folder
     def self.simulate_all_files_in_folder(folder)
       osm_files = BTAP::FileIO::get_find_files_from_folder_by_extension(folder, ".osm")
       self.simulate_files(folder,osm_files)
@@ -33,7 +33,7 @@ module BTAP
     
  #This method will simulate all files in a array.
     #@author phylroy.lopez@nrcan.gc.ca
-    #@params folder Array[String] folder
+    #@param folder Array[String] folder
     def self.simulate_files(folder,osm_files)
 
       co = OpenStudio::Runmanager::ConfigOptions.new()
@@ -70,10 +70,10 @@ module BTAP
     #This method will run the simulation. You must provide a folder where you wish
     #to run the simulation, and if not previously defined, the weather file. This will delete and recreate the folder provided to ensure that it is clean.
     #@author Phylroy A. Lopez
-    #@params model [OpenStudio::model::Model] A model object
-    #@params folder_name [String] a simple string of the simulation folder path, remember to escape the slashes..(i.e. // not / )
-    #@params epw_path [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )
-    #@return model[OpenStudio::Model::Model] the OpenStudio model object (self reference).
+    #@param model [OpenStudio::model::Model] A model object
+    #@param folder_name [String] a simple string of the simulation folder path, remember to escape the slashes..(i.e. // not / )
+    #@param epw_path [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )
+    #@return [OpenStudio::Model::Model] the OpenStudio model object (self reference).
     def self.run_simulation( model, folder_name,epw_path = "" )
 
       if not File.exists?(epw_path) and not File.exists?(model.getWeatherFile.path.get.to_s)
@@ -144,7 +144,7 @@ module BTAP
 
       #This method finds the energyplus folder and returns the path string.
       #@author Phylroy A. Lopez
-      #@return epw_path [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )
+      #@return [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )
       def self.find_energyplus_folder()
         # Find EnergyPlus on this computer.
         ep_hash = OpenStudio::EnergyPlus::find_energyplus(BTAP::ENERGY_PLUS_MAJOR_VERSION,BTAP::ENERGY_PLUS_MINOR_VERSION)
@@ -156,7 +156,7 @@ module BTAP
 
       #This method finds the eReadVarsESO.exe and returns the path string.
       #@author Phylroy A. Lopez
-      #@return readvars_path [String] a simple string of the eReadVarsESO.exe file path, remember to escape the slashes..(i.e. // not / )
+      #@return [String] readvars_path a simple string of the eReadVarsESO.exe file path, remember to escape the slashes..(i.e. // not / )
       def self.find_read_vars_eso()
         #Find the ReadVarsESO.exe
         readvars_path = ""
@@ -177,7 +177,7 @@ module BTAP
 
       #This method initializes the Analysis Folder.
       #@author Phylroy A. Lopez
-      #@params analysisFolder [String] a simple string of the Analysis Folder file path, remember to escape the slashes..(i.e. // not / )
+      #@param analysisFolder [String] a simple string of the Analysis Folder file path, remember to escape the slashes..(i.e. // not / )
       def initialize(analysisFolder)
 
         @model_array = Array
@@ -226,9 +226,9 @@ module BTAP
 
       #This method adds the model to the folder.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params model [OpenStudio::model::Model] A model object
-      #@params folder [String] 
-      #@return self [String]
+      #@param model [OpenStudio::model::Model] A model object
+      #@param folder [String] 
+      #@return [String] self
       def addModel(model, folder = @analysisFolder  )
 
         run_name = model.building.get.getAttribute("name").get.valueAsString
@@ -241,7 +241,7 @@ module BTAP
 
       #This method simulates all files in a folder.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params folder [String]
+      #@param folder [String]
       def simulate_all_files_in_folder(folder)
         co = OpenStudio::Runmanager::ConfigOptions.new()
         co.fastFindEnergyPlus()
@@ -326,8 +326,8 @@ module BTAP
 
       #This method will return an array of common annual data results. With header and unit information and returns an annual results string array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params osm_file [String]
-      #@params sql_path [String] 
+      #@param osm_file [String]
+      #@param sql_path [String] 
       #@return [annual_results_array<String>]
       def self.old_get_annual_results_model_results(osm_file,sql_path)
 
@@ -531,8 +531,8 @@ module BTAP
 
       #This method will return an array of common annual data results. With header and unit information and returns an annual results string array.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params osm_file [String]
-      #@params sql_path [String] 
+      #@param osm_file [String]
+      #@param sql_path [String] 
       #@return [annual_results_array<String>]
       def self.get_annual_results_model_results(osm_file,sql_path)
 
@@ -637,7 +637,7 @@ module BTAP
 
       #This method will convert eso to cvs.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params eso_file_path [String] 
+      #@param eso_file_path [String] 
       def self.convert_eso_to_csv(eso_file_path)
         #Run ESO Vars command must be run in folder.
         root_folder = Dir.getwd()
@@ -663,8 +663,8 @@ module BTAP
 
       #This method will copy results to a folder.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params in_folder [String]
-      #@params out_folder [String]
+      #@param in_folder [String]
+      #@param out_folder [String]
       def copy_results_to_folder(in_folder,out_folder)
         #find all csv hourly output
         BTAP::FILEIO::get_find_files_from_folder_by_extension(in_folder, "_eplusout.csv").each {|file| FileUtils.cp(file,out_folder)}
@@ -676,8 +676,8 @@ module BTAP
 
       #This method copies report files to a single folder for convenience.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@params run_name [String]
-      #@return model [OpenStudio::model::Model] A model object
+      #@param run_name [String]
+      #@return [OpenStudio::model::Model] A model object
       def processResults(run_name)
         #make sql folder
         Dir.mkdir(@outdir.to_s+"\\sqlresults") unless File.exists?(@outdir.to_s+"\\sqlresults")
@@ -730,9 +730,9 @@ module BTAP
       
       #This method will fix underheated hours
       #@author Phylroy A. Lopez
-      #@params model [OpenStudio::model::Model] A model object
-      #@params folder_name [String] a simple string of the simulation folder path, remember to escape the slashes..(i.e. // not / )
-      #@params epw_path [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )    
+      #@param model [OpenStudio::model::Model] A model object
+      #@param folder_name [String] a simple string of the simulation folder path, remember to escape the slashes..(i.e. // not / )
+      #@param epw_path [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )    
       def fix_underheated_hours(model,epw_path,folder_name = "c:/temp/")
 
         #Run model. 
