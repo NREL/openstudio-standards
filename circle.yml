@@ -9,4 +9,4 @@ test:
   override:
     - >
       docker run -v $(pwd):/openstudio-standards
-      nrel/openstudio /openstudio-standards/openstudio-standards/test/bin/docker-run.sh
+      nrel/openstudio /openstudio-standards/test/bin/docker-run.sh
