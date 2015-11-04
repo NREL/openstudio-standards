@@ -74,21 +74,22 @@ Good documentation is critical.  Changes or additions without good documentation
 ### Push branch to GitHub
 
 1. Commit your changes to your branch.
+2. Merge /Master into your branch and resolve any conflicts.
 2. Push your branch to GitHub.
 3. DO NOT push your code to the /Master branch!
 
-### Look at the continuous integration results
-
-1. Go to {https://circleci.com/gh/NREL/openstudio-standards openstudio-standards Circle CI}
-2. Check out the build status.  If it is failing, 
-
 ### Pull request
 
-Once your code is done and all of the tests are passing, go to GitHub and create a Pull Request.  This tells the main developers that you have changes to bring into the main code.
+Once your code is done and the tests are passing locally on your branch with Master merged in, go to GitHub and create a Pull Request.  This tells the main developers that you have changes to bring into the main code.
 
 ### Code Review & Merge
 
 The main developers will review your changes and either approve the pull request or give you some comments.  If they approve the pull request, you are done and your changes are now part of the main code!
+
+### Look at the continuous integration results
+
+1. When a commit is made to /Master, the continuous integration machine will run all the tests.
+2. Go to {https://circleci.com/gh/NREL/openstudio-standards openstudio-standards Circle CI} and look at the NREL/openstudio-standards project to check out the build status.  If it is failing and your commit broke it, please fix it ASAP!  Also, you can follow a project on Circle CI and you will get email updates when someone breaks the build.
 
 ## Issues and New Features
 
