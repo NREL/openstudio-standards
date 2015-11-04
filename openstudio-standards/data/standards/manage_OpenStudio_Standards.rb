@@ -13,6 +13,8 @@ class String
 
 end
 
+# Convert OpenStudio_Standards.xlsx to a series
+# of JSON files for easier consumption.
 class Hash
   
   def sort_by_key_updated(recursive = false, &block)
@@ -57,7 +59,105 @@ class Hash
  
 end
 
-begin
+# Downloads the OpenStudio_Standards.xlsx
+# from Google Drive
+# @note This requires you to have a client_secret.json file saved in your
+# username/.credentials folder.  To get one of these files, please contact
+# andrew.parker@nrel.gov
+def download_google_spreadsheet
+
+  require 'google/api_client'
+  require 'google/api_client/client_secrets'
+  require 'google/api_client/auth/installed_app'
+  require 'google/api_client/auth/storage'
+  require 'google/api_client/auth/storages/file_store'
+  require 'fileutils'
+
+  #APPLICATION_NAME = 'openstudio-standards'
+  #CLIENT_SECRETS_PATH = 'client_secret_857202529887-mlov2utaq9apq699789gh4o1f9u2eipr.apps.googleusercontent.com.json'
+
+  ##
+  # Ensure valid credentials, either by restoring from the saved credentials
+  # files or intitiating an OAuth2 authorization request via InstalledAppFlow.
+  # If authorization is required, the user's default browser will be launched
+  # to approve the request.
+  #
+  # @return [Signet::OAuth2::Client] OAuth2 credentials
+  def authorize(credentials_path, client_secret_path)
+    FileUtils.mkdir_p(File.dirname(credentials_path))
+
+    file_store = Google::APIClient::FileStore.new(credentials_path)
+    storage = Google::APIClient::Storage.new(file_store)
+    auth = storage.authorize
+
+    if auth.nil? || (auth.expired? && auth.refresh_token.nil?)
+      app_info = Google::APIClient::ClientSecrets.load(CLIENT_SECRETS_PATH)
+      flow = Google::APIClient::InstalledAppFlow.new({
+        :client_id => app_info.client_id,
+        :client_secret => app_info.client_secret,
+        :scope => 'https://www.googleapis.com/auth/drive'})
+      auth = flow.authorize(storage)
+      puts "Credentials saved to #{credentials_path}" unless auth.nil?
+    end
+    auth
+  end
+
+  ##
+  # Download a file's content
+  #
+  # @param [Google::APIClient] client
+  #   Authorized client instance
+  # @param [Google::APIClient::Schema::Drive::V2::File]
+  #   Drive File instance
+  # @return 
+  #   File's content if successful, nil otherwise
+  def download_xlsx_spreadsheet(client, google_spreadsheet, path)
+    file_name = google_spreadsheet.title
+    export_url = google_spreadsheet.export_links['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+    #export_url = google_spreadsheet.export_links['text/csv']
+    if export_url
+      result = client.execute(:uri => export_url)
+      if result.status == 200
+        File.open(path, "wb") do |f|
+          f.write(result.body)
+        end
+        puts "Successfully downloaded #{file_name} to .xlsx"
+        return true
+      else
+        puts "An error occurred: #{result.data['error']['message']}"
+        return false
+      end
+    else
+      puts "#{file_name} can't be downloaded as an .xlsx file."
+      return false
+    end
+  end
+
+  # Initialize the API
+  client_secret_path = File.join(Dir.home, '.credentials',"client_secret.json")
+  credentials_path = File.join(Dir.home, '.credentials',"openstudio-standards-google-drive.json")
+  client = Google::APIClient.new(:application_name => 'openstudio-standards')
+  client.authorization = authorize(credentials_path, client_secret_path)
+  drive_api = client.discovered_api('drive', 'v2')
+
+  # List the 100 most recently modified files.
+  results = client.execute!(
+    :api_method => drive_api.files.list,
+    :parameters => { :maxResults => 100 })
+  puts "No files found" if results.data.items.empty?
+
+  # Find the OpenStudio_Standards google spreadsheet
+  # and save it.
+  results.data.items.each do |file|
+    if file.title == 'OpenStudio_Standards'
+      puts "Found OpenStudio_Standards"
+      download_xlsx_spreadsheet(client, file, "#{File.dirname(__FILE__)}/OpenStudio_Standards.xlsx")
+    end
+  end
+
+end
+
+def export_spreadsheet_to_json
 
   # Path to the xlsx file
   xlsx_path = "#{File.dirname(__FILE__)}/OpenStudio_Standards.xlsx"
