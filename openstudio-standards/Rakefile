@@ -9,18 +9,43 @@ rescue Bundler::BundlerError => e
 end
 
 require 'rake/testtask'
-desc 'Run the tests'
-Rake::TestTask.new do |task|
-  #task.test_files = FileList['../measures/create_DOE_prototype_building/tests/*_test.rb']
-  #task.test_files = FileList['../measures/apply_system1/tests/*_test.rb']
-  task.test_files = FileList['measures/btap_set_default_construction_set/tests/set_default_construction_set_test.rb']  
-  #puts "Here #{File.expand_path('../measures/**/*_test')}"
-  #task.libs << ['test', 'lib', '../measures/create_DOE_prototype_building/tests']
-  #task.test_files = FileList['../test/*/test*.rb']
-  #task.pattern = 'test/test_*.rb'
-  #task.pattern = test_files
-  #task.verbose = true
-  #puts task.libs
+desc 'Run the measure tests'
+Rake::TestTask.new('test:gem') do |task|
+  # puts "Here #{Dir.pwd}"
+  task.libs << 'test'
+  task.test_files = FileList['openstudio-standards/test/test_*.rb']
+  #
+  #task.pattern = 'test/test*.rb'
+end
+
+require 'rake/testtask'
+desc 'Run the gem tests'
+Rake::TestTask.new('test:measures') do |task|
+  task.test_files = FileList[
+  # TOO LONG 'measures/apply_system1/tests/full_hvac_test.rb',
+  'measures/btap_apply_necb_rules/tests/apply_necb_rules_Test.rb',
+  # TOO LONG 'measures/btap_campus_classic/tests/btap_coldlake_classic_test.rb',
+  'measures/btap_change_building_location/tests/btap_change_location_test.rb',
+  'measures/btap_create_doe_necb_models/tests/DOE2NECB_Model_Test.rb',
+  'measures/btap_equest_converter/tests/btap_equest_converter_test.rb',
+  'measures/btap_replace_model/tests/ReplaceModel_Test.rb',
+  'measures/btap_set_default_construction_set/tests/set_default_construction_set_test.rb',
+  # TOO Long 'measures/create_DOE_prototype_building/tests/create_DOE_prototype_building_test.rb',
+  'measures/UtilityTariffs/tests/UtilityTariffs_Test.rb'
+  ]
+
+end
+
+desc 'Run all tests'
+task 'test:all' => ['test:gem', 'test:measures']
+
+#require 'openstudio-standards/openstudio-standards/data/standards/manage_OpenStudio_Standards.rb'
+#require "#{Dir.standards/manage_OpenStudio_Standards.rb'
+require "#{File.dirname(__FILE__)}/data/standards/manage_OpenStudio_Standards.rb"
+desc 'Download OpenStudio_Standards from Google & export JSONs'
+task 'data:update' do
+  download_google_spreadsheet
+  export_spreadsheet_to_json
 end
 
 require 'yard'
@@ -52,7 +77,7 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.fail_on_error = false
 end
 
-desc 'Build, install, test'
-task :btest => [:install, :test]
+desc 'Build, install, test gem & measures'
+task :btest => [:install, 'test:all']
 
 task :default => :btest
