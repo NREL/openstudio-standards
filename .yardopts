@@ -1,7 +1,11 @@
 --output-dir openstudio-standards/doc/
 openstudio-standards/lib/**/*.rb
 -
-openstudio-standards/docs/DeveloperInformation.md
+openstudio-standards/docs/UserQuickStartGuide.md
 openstudio-standards/docs/Measures.md
+openstudio-standards/docs/Architecture.md
+openstudio-standards/docs/DeveloperInformation.md
+openstudio-standards/docs/CodeStructure.md
+openstudio-standards/docs/AddingAStandard.md
 openstudio-standards/License.txt
 openstudio-standards/LGPL-2.1
