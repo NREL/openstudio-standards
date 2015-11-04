@@ -563,7 +563,6 @@ class OpenStudio::Model::Model
       # Create the ventilation object and hook it up to the space type
       ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(self)
       ventilation.setName("#{name} Ventilation")
-      puts "#{name}"
       space_type.setDesignSpecificationOutdoorAir(ventilation)
       ventilation.setOutdoorAirMethod('Sum')
       unless ventilation_per_area.nil? || ventilation_per_area.to_f  == 0
