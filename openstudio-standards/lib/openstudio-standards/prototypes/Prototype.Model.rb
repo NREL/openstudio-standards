@@ -14,6 +14,8 @@ class OpenStudio::Model::Model
   # @param climate_zone [String] the climate zone  
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
+  # @example Create a Small Office, 90.1-2010, in ASHRAE Climate Zone 5A (Chicago)
+  #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
   def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)  
     
     self.load_openstudio_standards_json
