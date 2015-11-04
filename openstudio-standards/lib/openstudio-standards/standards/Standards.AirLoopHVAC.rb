@@ -2290,9 +2290,9 @@ class OpenStudio::Model::AirLoopHVAC
     "
     
     # Write the ems out
-    File.open("#{Dir.pwd}/#{snc}_ems.idf", 'w') do |file|  
-      file.puts ems
-    end
+    # File.open("#{Dir.pwd}/#{snc}_ems.idf", 'w') do |file|  
+      # file.puts ems
+    # end
   
     return ems
   
