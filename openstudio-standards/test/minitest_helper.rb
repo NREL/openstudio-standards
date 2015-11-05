@@ -80,7 +80,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
     # Make a run manager and queue up the sizing run
     run_manager_db_path = OpenStudio::Path.new("#{@test_dir}/run.db")
-    run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true)
+    run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true, false, false, false)
 
     # Configure the run manager with the correct versions of Ruby and E+
     config_opts = OpenStudio::Runmanager::ConfigOptions.new

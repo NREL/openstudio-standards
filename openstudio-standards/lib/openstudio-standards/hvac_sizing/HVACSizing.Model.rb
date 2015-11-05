@@ -131,7 +131,7 @@ class OpenStudio::Model::Model
       # Make a run manager and queue up the sizing run
       run_manager_db_path = OpenStudio::Path.new("#{sizing_run_dir}/sizing_run.db")
       # HACK: workaround for Mac with Qt 5.4, need to address in the future.
-      OpenStudio::Application::instance().application(true)
+      OpenStudio::Application::instance().application(false)
       run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true, false, false, false)
       job = OpenStudio::Runmanager::JobFactory::createEnergyPlusJob(ep_tool,
                                                                    idd_path,
