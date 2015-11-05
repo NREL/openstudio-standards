@@ -17,7 +17,7 @@ class OpenStudio::Model::Model
   # @example Create a Small Office, 90.1-2010, in ASHRAE Climate Zone 5A (Chicago)
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
   def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)  
-    
+
     self.load_openstudio_standards_json
     lookup_building_type = self.get_lookup_name(building_type)
     
@@ -34,8 +34,8 @@ class OpenStudio::Model::Model
     if prototype_input.nil?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for #{search_criteria}, cannot create model.")
       return false
-    end    
-    
+    end
+
     self.load_building_type_methods(building_type, building_vintage, climate_zone)
     self.load_geometry(building_type, building_vintage, climate_zone)
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
@@ -60,7 +60,7 @@ class OpenStudio::Model::Model
     end
 
     self.apply_multizone_vav_outdoor_air_sizing
- 
+
     # Perform a sizing run
     if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
       return false
@@ -82,7 +82,7 @@ class OpenStudio::Model::Model
     else
       self.add_daylighting_controls(building_vintage)
     end
-    
+
     if building_type == "QuickServiceRestaurant"
       self.update_exhaust_fan_efficiency(building_vintage)
     end

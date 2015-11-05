@@ -506,7 +506,7 @@ class OpenStudio::Model::Model
       lights_frac_radiant = data['lighting_fraction_radiant']
       lights_frac_visible = data['lighting_fraction_visible']
       unless  lighting_per_area == 0 || lighting_per_area.nil?
-        lights_def.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area, 'W/ft^2', 'W/m^2').get)
+        lights_def.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
         lights_def.setReturnAirFraction(lights_frac_to_return_air)
         lights_def.setFractionRadiant(lights_frac_radiant)
         lights_def.setFractionVisible(lights_frac_visible)
@@ -566,7 +566,7 @@ class OpenStudio::Model::Model
       space_type.setDesignSpecificationOutdoorAir(ventilation)
       ventilation.setOutdoorAirMethod('Sum')
       unless ventilation_per_area.nil? || ventilation_per_area.to_f  == 0
-        ventilation.setOutdoorAirFlowperFloorArea(OpenStudio.convert(ventilation_per_area, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
+        ventilation.setOutdoorAirFlowperFloorArea(OpenStudio.convert(ventilation_per_area.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
       end
       unless  ventilation_per_person.nil? || ventilation_per_person.to_f == 0
         ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person, 'ft^3/min*person', 'm^3/s*person').get)

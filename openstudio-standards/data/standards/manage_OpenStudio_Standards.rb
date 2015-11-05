@@ -91,7 +91,7 @@ def download_google_spreadsheet
     auth = storage.authorize
 
     if auth.nil? || (auth.expired? && auth.refresh_token.nil?)
-      app_info = Google::APIClient::ClientSecrets.load(CLIENT_SECRETS_PATH)
+      app_info = Google::APIClient::ClientSecrets.load(client_secret_path)
       flow = Google::APIClient::InstalledAppFlow.new({
         :client_id => app_info.client_id,
         :client_secret => app_info.client_secret,
@@ -135,6 +135,7 @@ def download_google_spreadsheet
 
   # Initialize the API
   client_secret_path = File.join(Dir.home, '.credentials',"client_secret.json")
+	
   credentials_path = File.join(Dir.home, '.credentials',"openstudio-standards-google-drive.json")
   client = Google::APIClient.new(:application_name => 'openstudio-standards')
   client.authorization = authorize(credentials_path, client_secret_path)

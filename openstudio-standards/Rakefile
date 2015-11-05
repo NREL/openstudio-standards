@@ -48,6 +48,10 @@ task 'data:update' do
   export_spreadsheet_to_json
 end
 
+task 'data:update:manual' do
+  export_spreadsheet_to_json
+end
+
 require 'yard'
 desc 'Generate the documentation'
 YARD::Rake::YardocTask.new(:doc) do |task|
