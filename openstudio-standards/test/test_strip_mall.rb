@@ -1,6 +1,6 @@
 require_relative 'minitest_helper'
 
-class TestOpenstudioStandards < CreateDOEPrototypeBuildingTest
+class TestRetailStripMall < CreateDOEPrototypeBuildingTest
   def test_case
     # RetailStandalone, LargeHotel, RetailStripmall
     bldg_types = ['RetailStripmall']
