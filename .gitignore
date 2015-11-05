@@ -4,3 +4,4 @@ output/
 /.yardoc
 /.idea
 /netbeans
+/test/reports

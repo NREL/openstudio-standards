@@ -9,3 +9,9 @@ test:
   override:
     - >
       docker run -v $(pwd):/openstudio-standards nrel/openstudio /openstudio-standards/openstudio-standards/test/bin/docker-run.sh
+      
+general:
+  artifacts:
+    - "openstudio-standards/test/output/comparison.csv"
+    - "openstudio-standards/test/output/comparison_simple.csv"
+    - "openstudio-standards/test/output/comparison_total.csv"      
