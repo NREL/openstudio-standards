@@ -23,7 +23,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
   def setup
     # Make a directory to save the resulting models
-    @test_dir = "#{File.dirname(__FILE__)}/build"
+    @test_dir = "#{File.dirname(__FILE__)}/output"
     if !Dir.exists?(@test_dir)
       Dir.mkdir(@test_dir)
     end

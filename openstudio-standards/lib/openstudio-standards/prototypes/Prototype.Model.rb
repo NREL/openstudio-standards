@@ -59,11 +59,17 @@ class OpenStudio::Model::Model
       return false
     end
 
-    self.apply_multizone_vav_outdoor_air_sizing
-
-    # Perform a sizing run
-    if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
-      return false
+    # If there are any multizone systems, set damper positions
+    # and perform a second sizing run
+    has_multizone_systems = false
+    self.getAirLoopHVACs.sort.each do |air_loop|
+      if air_loop.is_multizone_vav_system
+        self.apply_multizone_vav_outdoor_air_sizing
+        if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
+          return false
+        end
+        break
+      end
     end
 
     # Apply the prototype HVAC assumptions
