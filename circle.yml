@@ -7,6 +7,7 @@ dependencies:
 
 test:
   override:
+    - mkdir -p $CIRCLE_TEST_REPORTS/andrew
     - >
       docker run -v $(pwd):/openstudio-standards nrel/openstudio /openstudio-standards/openstudio-standards/test/bin/docker-run.sh
       
