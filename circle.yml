@@ -8,10 +8,12 @@ dependencies:
 test:
   override:
     - pwd
+    - ls
     - echo "Home from circle yml:" $HOME
     - mkdir -p $CIRCLE_TEST_REPORTS/minitest
     - >
-      docker run -v $(pwd):/var/openstudio-standards nrel/openstudio /var/openstudio-standards/openstudio-standards/test/bin/docker-run.sh
+      docker run -v $(pwd):/openstudio-standards nrel/openstudio /openstudio-standards/openstudio-standards/test/bin/docker-run.sh
+    - cp openstudio-standards/test/reports/* $CIRCLE_TEST_REPORTS/minitest
       
 general:
   artifacts:
