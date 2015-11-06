@@ -61,6 +61,10 @@ class OpenStudio::Model::Model
       Dir.mkdir(sizing_run_dir)
     end
 
+    puts "Before ***#{sizing_run_dir}***"
+    sizing_run_dir = File.expand_path(sizing_run_dir)
+    puts "After ***#{sizing_run_dir}***"
+    
     # Change the simulation to only run the sizing days
     sim_control = self.getSimulationControl
     sim_control.setRunSimulationforSizingPeriods(true)
