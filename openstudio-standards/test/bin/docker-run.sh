@@ -6,10 +6,9 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
 # install dependencies and run default rake task
-cd /openstudio-standards/openstudio-standards
+cd ~/openstudio-standards/openstudio-standards
 bundle install 
 bundle exec rake
-cd ..
-cp /test/reports/* /$CIRCLE_TEST_REPORTS/minitest
+cp ~/openstudio-standards/test/reports/* $CIRCLE_TEST_REPORTS/minitest
 
 
