@@ -9,3 +9,7 @@ eval "$(rbenv init -)"
 cd /openstudio-standards/openstudio-standards
 bundle install 
 bundle exec rake
+cd ..
+cp openstudio-standards/test/reports/* /$CIRCLE_TEST_REPORTS/minitest
+
+
