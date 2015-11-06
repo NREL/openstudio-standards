@@ -173,10 +173,17 @@ class OpenStudio::Model::Model
     
     end
     
+    # Check if the file exists using Ruby
+    puts "Path: #{sizing_run_dir}/run/eplusout.sql"
+    if File.exist?("#{sizing_run_dir}/run/eplusout.sql")
+      puts "File exists according to Ruby"
+    else
+      puts "File DOES NOT exist according to Ruby"
+    end
+    
     # TODO Delete the eplustbl.htm and other files created
     # by the sizing run for cleanliness.
     
-    # Load the sql file created by the sizing run
     if OpenStudio::exists(sql_path)
       sql = OpenStudio::SqlFile.new(sql_path)
       # Check to make sure the sql file is readable,
