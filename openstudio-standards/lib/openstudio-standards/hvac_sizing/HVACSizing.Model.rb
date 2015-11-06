@@ -60,10 +60,6 @@ class OpenStudio::Model::Model
     if !Dir.exists?(sizing_run_dir)
       Dir.mkdir(sizing_run_dir)
     end
-
-    puts "Before ***#{sizing_run_dir}***"
-    sizing_run_dir = File.expand_path(sizing_run_dir)
-    puts "After ***#{sizing_run_dir}***"
     
     # Change the simulation to only run the sizing days
     sim_control = self.getSimulationControl
@@ -151,7 +147,7 @@ class OpenStudio::Model::Model
         OpenStudio::Application::instance.processEvents
       end
         
-      sql_path = OpenStudio::Path.new("#{sizing_run_dir}/Energyplus/eplusout.sql")
+      sql_path = OpenStudio::Path.new("#{sizing_run_dir}/EnergyPlus/eplusout.sql")
       
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished sizing run.')
       
