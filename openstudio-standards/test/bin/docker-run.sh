@@ -11,6 +11,7 @@ bundle install
 bundle exec rake
 cd ..
 pwd
-cp openstudio-standards/openstudio-standards/test/reports/* /$CIRCLE_TEST_REPORTS/minitest
+ls
+cp /openstudio-standards/test/reports/* /$CIRCLE_TEST_REPORTS/minitest
 
 
