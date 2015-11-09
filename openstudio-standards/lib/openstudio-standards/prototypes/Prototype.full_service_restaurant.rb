@@ -506,12 +506,63 @@ class OpenStudio::Model::Model
     
     # add extra equipment for kitchen
     self.add_extra_equip_kitchen(building_vintage)
+    # add extra infiltration for dining room door and attic
+    self.add_door_infiltration(building_vintage,climate_zone)
+    # add zone_mixing between kitchen and dining
+    self.add_zone_mixing(building_vintage)
+    # Update Sizing Zone
+    self.update_sizing_zone(building_vintage)
+    # adjust the cooling setpoint
+    self.adjust_clg_setpoint(building_vintage,climate_zone)
+    # reset the design OA of kitchen
+    self.reset_kitchen_OA(building_vintage)
     
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
     
     return true
     
   end #add hvac
+
+  def add_door_infiltration(building_vintage,climate_zone)
+    # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
+    unless building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'DOE Ref Pre-1980'
+      dining_space = self.getSpaceByName('Dining').get
+      attic_space = self.getSpaceByName('Attic').get
+      infiltration_diningdoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+      infiltration_attic = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+      infiltration_diningdoor.setName("Dining door Infiltration")
+      infiltration_per_zone_diningdoor = 0
+      infiltration_per_zone_attic = 0.2378
+      if building_vintage == '90.1-2004'
+        infiltration_per_zone_diningdoor = 0.614474994
+        infiltration_diningdoor.setSchedule(add_schedule('RestaurantSitDown DOOR_INFIL_SCH'))
+      elsif building_vintage == '90.1-2007'
+        case climate_zone
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B',
+          'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C'
+          infiltration_per_zone_diningdoor = 0.614474994
+          infiltration_diningdoor.setSchedule(add_schedule('RestaurantSitDown DOOR_INFIL_SCH'))
+        else
+          infiltration_per_zone_diningdoor = 0.389828222
+          infiltration_diningdoor.setSchedule(add_schedule('RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
+        end
+      elsif building_vintage == '90.1-2010' or '90.1-2013'
+        case climate_zone
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C'
+          infiltration_per_zone_diningdoor = 0.614474994
+          infiltration_diningdoor.setSchedule(add_schedule('RestaurantSitDown DOOR_INFIL_SCH'))
+        else
+          infiltration_per_zone_diningdoor = 0.389828222
+          infiltration_diningdoor.setSchedule(add_schedule('RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
+        end
+      end
+      infiltration_diningdoor.setDesignFlowRate(infiltration_per_zone_diningdoor)
+      infiltration_diningdoor.setSpace(dining_space)
+      infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
+      infiltration_attic.setSchedule(add_schedule('Always On'))
+      infiltration_attic.setSpace(attic_space)
+    end
+  end
 
   def update_exhaust_fan_efficiency(building_vintage)
     case building_vintage
@@ -529,6 +580,26 @@ class OpenStudio::Model::Model
         exhaust_fan.setPressureRise(0.000001)
       end
     end
+  end
+
+  def add_zone_mixing(building_vintage)
+    # add zone_mixing between kitchen and dining
+    space_kitchen = self.getSpaceByName('Kitchen').get
+    zone_kitchen = space_kitchen.thermalZone.get
+    space_dining = self.getSpaceByName('Dining').get
+    zone_dining = space_dining.thermalZone.get
+    zone_mixing_kitchen = OpenStudio::Model::ZoneMixing.new(zone_kitchen)
+    zone_mixing_kitchen.setSchedule(add_schedule('RestaurantSitDown Hours_of_operation'))
+    case building_vintage
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      zone_mixing_kitchen.setDesignFlowRate(1.828)
+    when '90.1-2007', '90.1-2010', '90.1-2013'
+      zone_mixing_kitchen.setDesignFlowRate(1.33143208)
+    when '90.1-2004'
+      zone_mixing_kitchen.setDesignFlowRate(2.64397817)
+    end
+    zone_mixing_kitchen.setSourceZone(zone_dining)
+    zone_mixing_kitchen.setDeltaTemperature(0)
   end
 
   # add extra equipment for kitchen
@@ -574,6 +645,62 @@ class OpenStudio::Model::Model
       elec_equip1.setName("Kitchen_ExhFan_Equip")
       elec_equip1.setSpaceType(kitchen_space_type)
       elec_equip1.setSchedule(add_schedule("RestaurantSitDown Kitchen_Exhaust_SCH"))
+    end
+  end
+
+  def update_sizing_zone(building_vintage)
+    case building_vintage
+    when '90.1-2007', '90.1-2010', '90.1-2013'
+      zone_sizing = self.getSpaceByName('Dining').get.thermalZone.get.sizingZone
+      zone_sizing.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+      zone_sizing.setCoolingMinimumAirFlowperZoneFloorArea(0.003581176)
+      zone_sizing = self.getSpaceByName('Kitchen').get.thermalZone.get.sizingZone
+      zone_sizing.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+      zone_sizing.setCoolingMinimumAirFlowperZoneFloorArea(0)
+    when '90.1-2004'
+      zone_sizing = self.getSpaceByName('Dining').get.thermalZone.get.sizingZone
+      zone_sizing.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+      zone_sizing.setCoolingMinimumAirFlowperZoneFloorArea(0.007111554)
+      zone_sizing = self.getSpaceByName('Kitchen').get.thermalZone.get.sizingZone
+      zone_sizing.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+      zone_sizing.setCoolingMinimumAirFlowperZoneFloorArea(0)
+    end
+  end
+
+  def adjust_clg_setpoint(building_vintage,climate_zone)
+    ['Dining','Kitchen'].each do |space_name|
+      space_type_name = self.getSpaceByName(space_name).get.spaceType.get.name.get
+      thermostat_name = space_type_name + ' Thermostat'
+      thermostat = self.getThermostatSetpointDualSetpointByName(thermostat_name).get
+      case building_vintage
+      when '90.1-2004', '90.1-2007', '90.1-2010'
+         if climate_zone == 'ASHRAE 169-2006-2B' || climate_zone == 'ASHRAE 169-2006-1B' || climate_zone == 'ASHRAE 169-2006-3B'
+           case space_name
+           when 'Dining'
+             thermostat.setCoolingSetpointTemperatureSchedule(add_schedule("RestaurantSitDown CLGSETP_SCH_NO_OPTIMUM"))
+           when 'Kitchen'
+             thermostat.setCoolingSetpointTemperatureSchedule(add_schedule("RestaurantSitDown CLGSETP_KITCHEN_SCH_NO_OPTIMUM"))
+           end
+         end
+      end
+    end
+  end
+
+  # In order to provide sufficient OSA to replace exhaust flow through kitchen hoods (3,300 cfm), 
+  # modeled OSA to kitchen is different from OSA determined based on ASHRAE  62.1. 
+  # It takes into account the available OSA in dining as transfer air.
+  def reset_kitchen_OA(building_vintage)
+    space_kitchen = self.getSpaceByName('Kitchen').get
+    ventilation = space_kitchen.designSpecificationOutdoorAir.get
+    ventilation.setOutdoorAirFlowperPerson(0)
+    ventilation.setOutdoorAirFlowperFloorArea(0)
+    case building_vintage
+    when '90.1-2010', '90.1-2013'
+      ventilation.setOutdoorAirFlowRate(1.21708392)
+    when '90.1-2007'
+      ventilation.setOutdoorAirFlowRate(1.50025792)
+    when '90.1-2004'
+      ventilation.setOutdoorAirFlowRate(1.87711831)
     end
   end
   
