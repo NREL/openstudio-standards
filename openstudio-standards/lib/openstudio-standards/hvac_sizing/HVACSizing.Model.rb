@@ -60,7 +60,7 @@ class OpenStudio::Model::Model
     if !Dir.exists?(sizing_run_dir)
       Dir.mkdir(sizing_run_dir)
     end
-
+    
     # Change the simulation to only run the sizing days
     sim_control = self.getSimulationControl
     sim_control.setRunSimulationforSizingPeriods(true)
@@ -131,7 +131,7 @@ class OpenStudio::Model::Model
       # Make a run manager and queue up the sizing run
       run_manager_db_path = OpenStudio::Path.new("#{sizing_run_dir}/sizing_run.db")
       # HACK: workaround for Mac with Qt 5.4, need to address in the future.
-      OpenStudio::Application::instance().application(true)
+      OpenStudio::Application::instance().application(false)
       run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true, false, false, false)
       job = OpenStudio::Runmanager::JobFactory::createEnergyPlusJob(ep_tool,
                                                                    idd_path,
@@ -147,7 +147,7 @@ class OpenStudio::Model::Model
         OpenStudio::Application::instance.processEvents
       end
         
-      sql_path = OpenStudio::Path.new("#{sizing_run_dir}/Energyplus/eplusout.sql")
+      sql_path = OpenStudio::Path.new("#{sizing_run_dir}/EnergyPlus/eplusout.sql")
       
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished sizing run.')
       
@@ -169,10 +169,17 @@ class OpenStudio::Model::Model
     
     end
     
+    # Check if the file exists using Ruby
+    puts "Path: #{sizing_run_dir}/run/eplusout.sql"
+    if File.exist?("#{sizing_run_dir}/run/eplusout.sql")
+      puts "File exists according to Ruby"
+    else
+      puts "File DOES NOT exist according to Ruby"
+    end
+    
     # TODO Delete the eplustbl.htm and other files created
     # by the sizing run for cleanliness.
     
-    # Load the sql file created by the sizing run
     if OpenStudio::exists(sql_path)
       sql = OpenStudio::SqlFile.new(sql_path)
       # Check to make sure the sql file is readable,
