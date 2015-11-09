@@ -2886,7 +2886,7 @@ class OpenStudio::Model::Model
     
     # Water fixture definition
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
-    rated_flow_rate_per_area = data['service_water_heating_peak_flow_per_area']   # gal/h.ft2
+    rated_flow_rate_per_area = data['service_water_heating_peak_flow_per_area'].to_f   # gal/h.ft2
     rated_flow_rate_gal_per_hour = rated_flow_rate_per_area * space_area   # gal/h
     rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour/60  # gal/h to gal/min
     rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get
