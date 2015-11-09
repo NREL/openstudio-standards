@@ -23,7 +23,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
   def setup
     # Make a directory to save the resulting models
-    @test_dir = "#{File.dirname(__FILE__)}/build"
+    @test_dir = "#{File.dirname(__FILE__)}/output"
     if !Dir.exists?(@test_dir)
       Dir.mkdir(@test_dir)
     end
@@ -80,7 +80,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
     # Make a run manager and queue up the sizing run
     run_manager_db_path = OpenStudio::Path.new("#{@test_dir}/run.db")
-    run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true)
+    run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true, false, false, false)
 
     # Configure the run manager with the correct versions of Ruby and E+
     config_opts = OpenStudio::Runmanager::ConfigOptions.new
@@ -409,8 +409,10 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     csv_file_total.write("building_type,template,climate_zone,")
     line2_str =",,,"
     #results_hash=Hash[building_type][template][climate_zone][fuel_type][end_use]['Legacy Val']
-    results_total_hash.values[0].values[0].each_pair do |climate_zone, total_error|
-      csv_file_total.write("#{total_error},")
+    if !results_total_hash.values[0].nil?
+      results_total_hash.values[0].values[0].each_pair do |climate_zone, total_error|
+        csv_file_total.write("#{total_error},")
+      end
     end
     csv_file_total.write("\n")
     # Save the results to CSV
@@ -436,10 +438,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     csv_file_simple.write("building type,building vintage,climate zone,fuel type,end use,legacy val,openstudio val,percent error,absolute error\n")
     line2_str =",,,"
     #results_hash=Hash[building_type][template][climate_zone][fuel_type][end_use]['Legacy Val']
-    all_results_hash.values[0].values[0].values[0].each_pair do |fuel_type, end_users|
-      end_users.keys.each do |end_user|
-        csv_file.write("#{fuel_type}-#{end_user},,,,")
-        line2_str+= "Legacy Val,OSM Val,Diff (%),Absolute Diff,"
+    if !all_results_hash.values[0].nil?
+      all_results_hash.values[0].values[0].values[0].each_pair do |fuel_type, end_users|
+        end_users.keys.each do |end_user|
+          csv_file.write("#{fuel_type}-#{end_user},,,,")
+          line2_str+= "Legacy Val,OSM Val,Diff (%),Absolute Diff,"
+        end
       end
     end
     csv_file.write("\n")
