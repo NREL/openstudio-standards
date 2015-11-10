@@ -214,7 +214,8 @@ class OpenStudio::Model::Model
     completed = self.sqlFile.get.execAndReturnFirstDouble(completed_query)
     if completed.is_initialized
       completed = completed.get
-      if errs.size == 1
+      unless completed == 1
+      # if errs.size == 1
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "The sizing run failed.  See previous severe errors for clues.")
         return false
       end
