@@ -569,7 +569,7 @@ class OpenStudio::Model::Model
         ventilation.setOutdoorAirFlowperFloorArea(OpenStudio.convert(ventilation_per_area.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
       end
       unless  ventilation_per_person.nil? || ventilation_per_person.to_f == 0
-        ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person, 'ft^3/min*person', 'm^3/s*person').get)
+        ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
       end
       unless ventilation_ach.nil? || ventilation_ach.to_f == 0
         ventilation.setOutdoorAirFlowAirChangesperHour(ventilation_ach)
