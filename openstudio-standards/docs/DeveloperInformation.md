@@ -2,16 +2,30 @@
 
 ## Setup
 
-1. On Windows, install {http://rubyinstaller.org/ Ruby 2.0} (`ruby -v` from command prompt to check installed version).
-2. Install the `bundler` ruby gem. (`gem install bundler` from command prompt)
-3. Install {https://git-scm.com/ Git}.
-4. Clone the {https://github.com/NREL/openstudio-standards.git source code} using {https://git-scm.com/ Git}.
-5. Run all commands below from the `/openstudio-standards/openstudio-standards` directory 
-6. On Windows, use the Git Bash instead of the default command prompt.
-7. Navigate to the `openstudio-standards/openstudio-standards` directory.
-8. Command prompt: `bundle install`. This will install all ruby gems necessary to develop this code.
-9. Sign up for an account at {https://circleci.com/ CircleCI} and follow the `NREL/openstudio-standards` project.
-10. That's it, you are ready to make changes!
+1. Install the {https://www.openstudio.net/downloads latest version of OpenStudio}
+2. **On Windows**, install {http://rubyinstaller.org/ Ruby 2.0} (`ruby -v` from command prompt to check installed version).  
+3. **On Mac** Ruby 2.0 is already installed.
+4. Connect Ruby to OpenStudio:
+	1. **On Mac**:
+	2. Create a file called `openstudio.rb`
+	3. Contents: `require "/Applications/OpenStudio\ 1.9.0/Ruby/openstudio.rb"` Modify `1.9.0` to the version you installed.
+	4. Save it here: `/usr/lib/ruby/site_ruby/openstudio.rb`
+	5. **On Windows**:
+	6. Create a file called `openstudio.rb`
+	7. Contents: `require "C:/Program Files/OpenStudio 1.9.3/Ruby/openstudio.rb"`  Modify `1.9.0` to the version you installed.
+	8. Save it here: `C:/MyRuby200/lib/ruby/site_ruby/openstudio.rb`
+
+5. Install the `bundler` ruby gem. (`gem install bundler` from command prompt)
+6. Install the `json` ruby gem. (`gem install json` from command prompt)
+7. Install {https://git-scm.com/ Git}.
+8. Clone the {https://github.com/NREL/openstudio-standards.git source code} using {https://git-scm.com/ Git}.
+9. Run all commands below from the `/openstudio-standards/openstudio-standards` directory 
+10. **On Windows**, use the Git Bash instead of the default command prompt.
+11. **On Mac** the default terminal is fine.
+11. Navigate to the `openstudio-standards/openstudio-standards` directory.
+12. Command prompt: `bundle install`. This will install all ruby gems necessary to develop this code.
+13. Sign up for an account at {https://circleci.com/ CircleCI} and follow the `NREL/openstudio-standards` project.
+14. That's it, you are ready to make changes!
 
 ## Development Process
 

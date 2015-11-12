@@ -2093,8 +2093,7 @@ class OpenStudio::Model::Model
         fan.setFanEfficiency(0.52)
         fan.setMotorEfficiency(0.8)
       else
-        puts "No fan type is found"
-
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "ptac_fan_type of #{prototype_input["ptac_fan_type"]} is not recognized.")
       end
     
     
@@ -2156,8 +2155,7 @@ class OpenStudio::Model::Model
         htg_coil.setName("#{zone.name} PTAC HP Htg Coil")         
         
       else
-        puts "No heating type is found"
-        
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "ptac_heating_type of #{prototype_input["ptac_heating_type"]} is not recognized.")
       end
     
     
@@ -2369,8 +2367,7 @@ class OpenStudio::Model::Model
         #clg_coil.setBasinHeaterSetpointTemperature(2.0)
         
       else
-        puts "No cooling type is found"
-      
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "ptac_cooling_type of #{prototype_input["ptac_heating_type"]} is not recognized.")
       end
 
 
@@ -2876,7 +2873,6 @@ class OpenStudio::Model::Model
       'space_type' => space_type_name
     }
     data = find_object(self.standards['space_types'],search_criteria)
-    puts "#{data}"
     space = self.getSpaceByName(space_name)
     space = space.get
     space_area = OpenStudio.convert(space.floorArea,'m^2','ft^2').get   # ft2

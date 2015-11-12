@@ -1,24 +1,14 @@
 require_relative 'minitest_helper'
 
 class TestQuickServiceRestaurant < CreateDOEPrototypeBuildingTest
-  def test_case
-    # RetailStandalone, LargeHotel, RetailStripmall
-    bldg_types = ['QuickServiceRestaurant']
-    vintages = ['90.1-2010']
-    climate_zones =['ASHRAE 169-2006-2A']
-    all_failures = []
 
-    # Create the models
-    all_failures += create_models(bldg_types, vintages, climate_zones)
-
-    # Run the models
-    # all_failures += run_models(bldg_types, vintages, climate_zones)
-
-    # Compare the results to the legacy idf results
-    # all_failures += compare_results(bldg_types, vintages, climate_zones)
-
-    # Assert if there are any errors
-    puts "There were #{all_failures.size} failures"
-    assert(all_failures.size == 0, "FAILURES: #{all_failures.join("\n")}")
-  end
+  building_types = ['QuickServiceRestaurant']
+  templates = ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010']
+  climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+  create_models = true
+  run_models = false
+  compare_results = false
+  
+  TestQuickServiceRestaurant.create_run_model_tests(building_types, templates, climate_zones, create_models, run_models, compare_results)
+  
 end

@@ -69,7 +69,7 @@ class OpenStudio::Model::Space
     # @api private
     def polygons_set_z(polygons, new_z)
     
-      #puts "### #{polygons}"
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "### #{polygons}")
     
       # Convert the final polygons back to OpenStudio
       new_polygons = []
@@ -91,18 +91,18 @@ class OpenStudio::Model::Space
     # @api private
     def find_duplicate_vertices(ruby_polygon, tol = 0.001)
     
-      puts "***"
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***")
       duplicates = []
       
       combos = ruby_polygon.combination(2).to_a
-      puts "########{combos.size}"
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "########{combos.size}")
       combos.each do |i, j|
         
         i_vertex = OpenStudio::Point3d.new(i[0], i[1], i[2])
         j_vertex = OpenStudio::Point3d.new(j[0], j[1], j[2])
         
         distance = OpenStudio.getDistance(i_vertex, j_vertex)
-        puts "------- #{i.to_s} to #{j.to_s} = #{distance}"
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "------- #{i.to_s} to #{j.to_s} = #{distance}")
         if distance < tol
           duplicates << i
         end
@@ -1272,7 +1272,7 @@ class OpenStudio::Model::Space
       
       areas = self.daylighted_areas(vintage, draw_daylight_areas_for_debugging)
       ###################
-      puts "primary_sidelighted_area = #{areas['primary_sidelighted_area']}"
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "primary_sidelighted_area = #{areas['primary_sidelighted_area']}")
       ###################
       
       # Sidelighting
@@ -1287,7 +1287,7 @@ class OpenStudio::Model::Space
         # Check effective sidelighted aperture
         sidelighted_effective_aperture = self.sidelightingEffectiveAperture(areas['primary_sidelighted_area'])
         ###################
-        puts "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}"
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
         ###################
         if sidelighted_effective_aperture < 0.1
           OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
@@ -1302,7 +1302,7 @@ class OpenStudio::Model::Space
       end
       
       ###################
-      puts "toplighted_area = #{areas['toplighted_area']}"
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "toplighted_area = #{areas['toplighted_area']}")
       ###################
       # Toplighting
       # Check if the toplit area < 900 ft2
@@ -1316,7 +1316,7 @@ class OpenStudio::Model::Space
         # Check effective sidelighted aperture
         sidelighted_effective_aperture = self.skylightEffectiveAperture(areas['toplighted_area'])
         ###################
-        puts "sidelighted_effective_aperture_top = #{sidelighted_effective_aperture}"
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "sidelighted_effective_aperture_top = #{sidelighted_effective_aperture}")
         ###################
         if sidelighted_effective_aperture < 0.006
           OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because skylight effective aperture < 0.006 per 9.4.1.5 Exception b.")

@@ -293,7 +293,6 @@ class OpenStudio::Model::Model
     # Load the geometry .osm
     top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
     geom_dir = "#{top_dir}/data/geometry"
-    puts geom_dir
     self.replace_model("#{geom_dir}/#{geometry_file}")
     
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')    
