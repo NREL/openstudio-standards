@@ -67,7 +67,11 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
       ccoil = heat_pump_comp.coolingCoil
       dxcoil = ccoil.to_CoilCoolingDXSingleSpeed.get
       dxcoil_name = dxcoil.name.to_s
-      dxcoil.setName(sql_db_vars_map[dxcoil_name])
+      if sql_db_vars_map
+        if sql_db_vars_map[dxcoil_name]
+          dxcoil.setName(sql_db_vars_map[dxcoil_name])
+        end
+      end
       if dxcoil.ratedTotalCoolingCapacity.is_initialized
         capacity_w = dxcoil.ratedTotalCoolingCapacity.get
       elsif dxcoil.autosizedRatedTotalCoolingCapacity.is_initialized
