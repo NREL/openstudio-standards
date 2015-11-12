@@ -2886,7 +2886,7 @@ class OpenStudio::Model::Model
     
     # Water fixture definition
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
-    rated_flow_rate_per_area = data['service_water_heating_peak_flow_per_area']   # gal/h.ft2
+    rated_flow_rate_per_area = data['service_water_heating_peak_flow_per_area'].to_f   # gal/h.ft2
     rated_flow_rate_gal_per_hour = rated_flow_rate_per_area * space_area   # gal/h
     rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour/60  # gal/h to gal/min
     rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get
@@ -3257,7 +3257,12 @@ class OpenStudio::Model::Model
       runtime_fraction = 0.4
       fraction_antisweat_to_case = 0.0
       under_case_return_air_fraction = 0.0
-      latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier'
+      case self.template
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+        latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_Pre2004'
+      end
       defrost_type = 'Electric'
     elsif case_type == 'Display Case'
       case_temp = OpenStudio.convert(35.6,'F','C').get
@@ -3282,7 +3287,7 @@ class OpenStudio::Model::Model
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,23,20,0), 1)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0)
     elsif case_type == 'Display Case'
-      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,23,20,0), 1)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,23,20,0), 0)
     end
 
     # Dripdown schedule
@@ -3322,17 +3327,20 @@ class OpenStudio::Model::Model
       ref_case.setCaseDefrostPowerperUnitLength(defrost_pwr_per_length)
       ref_case.setCaseDefrostDripDownSchedule(defrost_dripdown_sch)
     end 
+    ref_case.setUnderCaseHVACReturnAirFraction(under_case_return_air_fraction)
+    ref_case.setFractionofAntiSweatHeaterEnergytoCase(fraction_antisweat_to_case)
     ref_case.resetDesignEvaporatorTemperatureorBrineInletTemperature
     ref_case.setRatedAmbientTemperature(OpenStudio.convert(75,'F','C').get)
     ref_case.setRatedLatentHeatRatio(latent_heat_ratio)
     ref_case.setRatedRuntimeFraction(runtime_fraction)
     #TODO enable ref_case.setLatentCaseCreditCurve(self.add_curve(latent_case_credit_curve_name,standards))
-    ref_case.setFractionofAntiSweatHeaterEnergytoCase(0)
+    ref_case.setLatentCaseCreditCurve(self.add_curve(latent_case_credit_curve_name,standards))
     ref_case.setCaseHeight(0)
-    ref_case.setUnderCaseHVACReturnAirFraction(0)
     # TODO: setRefrigeratedCaseRestockingSchedule is not working
     ref_case.setRefrigeratedCaseRestockingSchedule(self.add_schedule(restocking_sch_name))
-    ref_case.setCaseCreditFractionSchedule(case_credit_sch)
+    if case_type == 'Walkin Freezer'
+      ref_case.setCaseCreditFractionSchedule(case_credit_sch)
+    end
 
     # Compressor
     # TODO set compressor properties since prototypes use simple

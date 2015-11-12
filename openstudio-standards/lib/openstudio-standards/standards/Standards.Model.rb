@@ -463,6 +463,8 @@ class OpenStudio::Model::Model
       return false #TODO change to return empty optional schedule:ruleset?
     end
     
+    puts "adding space type #{spc_type}"
+    
     name = make_name(template, clim, building_type, spc_type)
 
     # Create a new space type and name it
@@ -494,8 +496,8 @@ class OpenStudio::Model::Model
     make_lighting = false
     lighting_per_area = data['lighting_per_area']
     lighting_per_person = data['lighting_per_person']
-    unless lighting_per_area == 0 || lighting_per_area.nil? then make_lighting = true end
-    unless lighting_per_person == 0 || lighting_per_person.nil? then make_lighting = true end
+    unless lighting_per_area.to_f == 0 || lighting_per_area.nil? then make_lighting = true end
+    unless lighting_per_person.to_f == 0 || lighting_per_person.nil? then make_lighting = true end
 
     if make_lighting == true
 
@@ -553,10 +555,9 @@ class OpenStudio::Model::Model
     ventilation_per_area = data['ventilation_per_area']
     ventilation_per_person = data['ventilation_per_person']
     ventilation_ach = data['ventilation_air_changes']
-    unless ventilation_per_area  == 0 || ventilation_per_area.nil? then make_ventilation = true  end
-    unless ventilation_per_person == 0 || ventilation_per_person.nil? then make_ventilation = true end
-    unless ventilation_ach == 0 || ventilation_ach.nil? then make_ventilation = true end
-
+    unless ventilation_per_area.to_f  == 0 || ventilation_per_area.nil? then make_ventilation = true  end
+    unless ventilation_per_person.to_f == 0 || ventilation_per_person.nil? then make_ventilation = true end
+    unless ventilation_ach.to_f == 0 || ventilation_ach.nil? then make_ventilation = true end
 
     if make_ventilation == true
 
@@ -580,7 +581,7 @@ class OpenStudio::Model::Model
 
     make_people = false
     occupancy_per_area = data['occupancy_per_area']
-    unless occupancy_per_area == 0 || occupancy_per_area.nil? then make_people = true end
+    unless occupancy_per_area.to_f == 0 || occupancy_per_area.nil? then make_people = true end
 
     if make_people == true
       # create the people definition
@@ -613,7 +614,7 @@ class OpenStudio::Model::Model
     infiltration_per_area_ext = data['infiltration_per_exterior_area']
     infiltration_per_area_ext_wall = data['infiltration_per_exterior_wall_area']
     infiltration_ach = data['infiltration_air_changes']
-    unless (infiltration_per_area_ext == 0 || infiltration_per_area_ext.nil?) && (infiltration_per_area_ext_wall == 0 || infiltration_per_area_ext_wall.nil?) && (infiltration_ach == 0 || infiltration_ach.nil?) 
+    unless (infiltration_per_area_ext.to_f == 0 || infiltration_per_area_ext.nil?) && (infiltration_per_area_ext_wall.to_f == 0 || infiltration_per_area_ext_wall.nil?) && (infiltration_ach.to_f == 0 || infiltration_ach.nil?) 
       then make_infiltration = true
     end
 
@@ -648,7 +649,7 @@ class OpenStudio::Model::Model
     elec_equip_frac_latent = data['electric_equipment_fraction_latent']
     elec_equip_frac_radiant = data['electric_equipment_fraction_radiant']
     elec_equip_frac_lost = data['electric_equipment_fraction_lost']
-    unless elec_equip_per_area == 0 || elec_equip_per_area.nil? then make_electric_equipment = true end
+    unless elec_equip_per_area.to_f == 0 || elec_equip_per_area.nil? then make_electric_equipment = true end
 
     if make_electric_equipment == true
 
@@ -683,7 +684,7 @@ class OpenStudio::Model::Model
     gas_equip_frac_radiant = data['gas_equipment_fraction_radiant']
     gas_equip_frac_lost = data['gas_equipment_fraction_lost']
 
-    unless  gas_equip_per_area == 0 || gas_equip_per_area.nil? then make_gas_equipment = true end
+    unless  gas_equip_per_area.to_f == 0 || gas_equip_per_area.nil? then make_gas_equipment = true end
 
     if make_gas_equipment == true
 
