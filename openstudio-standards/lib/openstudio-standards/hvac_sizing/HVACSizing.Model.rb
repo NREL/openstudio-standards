@@ -169,14 +169,6 @@ class OpenStudio::Model::Model
     
     end
     
-    # Check if the file exists using Ruby
-    puts "Path: #{sizing_run_dir}/run/eplusout.sql"
-    if File.exist?("#{sizing_run_dir}/run/eplusout.sql")
-      puts "File exists according to Ruby"
-    else
-      puts "File DOES NOT exist according to Ruby"
-    end
-    
     # TODO Delete the eplustbl.htm and other files created
     # by the sizing run for cleanliness.
     
@@ -199,24 +191,29 @@ class OpenStudio::Model::Model
     error_query = "SELECT ErrorMessage 
         FROM Errors 
         WHERE ErrorType='1'"
-
     errs = self.sqlFile.get.execAndReturnVectorOfString(error_query)
     if errs.is_initialized
       errs = errs.get
-      if errs.size > 0
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "The sizing run had the following severe errors: #{errs.join('\n')}.")
-      end
     end
 
     # Check that the sizing run completed
-    completed_query = "SELECT CompletedSuccessfully FROM Simulations"
-
+    completed_query = "SELECT Completed FROM Simulations"
     completed = self.sqlFile.get.execAndReturnFirstDouble(completed_query)
     if completed.is_initialized
       completed = completed.get
-      if errs.size == 1
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "The sizing run failed.  See previous severe errors for clues.")
+      if completed == 0
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "The sizing run failed with the following severe errors: #{errs.join('\n')}")
         return false
+      end
+    end    
+    
+    # Check that the sizing run completed with no severe errors
+    completed_successfully_query = "SELECT completed_successfullySuccessfully FROM Simulations"
+    completed_successfully = self.sqlFile.get.execAndReturnFirstDouble(completed_successfully_query)
+    if completed_successfully.is_initialized
+      completed_successfully = completed_successfully.get
+      if completed_successfully == 0
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "The sizing run had the following severe errors but didn't fail: #{errs.join('\n')}")
       end
     end
     
