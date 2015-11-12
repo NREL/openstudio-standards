@@ -21,5 +21,8 @@ module OpenstudioStandards
  
   # BTAP (Natural Resources Canada)
   require_relative 'openstudio-standards/btap/btap'
- 
+  
+  # Logging
+  require_relative 'openstudio-standards/utilities/logging'
+
 end
