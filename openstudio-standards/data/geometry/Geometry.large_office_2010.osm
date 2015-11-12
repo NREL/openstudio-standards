@@ -3,6 +3,11 @@ OS:Version,
   {c2d25c0e-8a18-498c-8e2a-98046872c6a6}, !- Handle
   1.7.0;                                  !- Version Identifier
 
+OS:YearDescription,
+  {2759562d-6e36-40de-aa86-5c2198a9d34c}, !- Handle
+  ,                                       !- Calendar Year
+  Sunday;                                 !- Day of Week for Start Day  
+  
 OS:Connection,
   {5bae42aa-910b-413c-9bf1-37c522919800}, !- Handle
   {f2bcda2c-f4d6-4279-821f-a49f8887f27c}, !- Name
