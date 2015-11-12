@@ -115,7 +115,7 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     @runner = runner
 
     # Make a directory to save the resulting models for debugging
-    build_dir = "#{File.dirname(__FILE__)}/tests/build"
+    build_dir = "#{Dir.pwd}/tests/output"
     if !Dir.exists?(build_dir)
       Dir.mkdir(build_dir)
     end
