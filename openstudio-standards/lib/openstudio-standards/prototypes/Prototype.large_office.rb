@@ -16,6 +16,56 @@ class OpenStudio::Model::Model
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
+    
+case building_vintage
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+    system_to_space_map = [
+      {
+          'type' => 'VAV',
+          'name' => 'VAV_1',
+          'space_names' =>
+          [
+              'Perimeter_bot_ZN_1',
+              'Perimeter_bot_ZN_2',
+              'Perimeter_bot_ZN_3',
+              'Perimeter_bot_ZN_4',
+              'Core_bottom'
+          ]
+      },
+      {
+          'type' => 'VAV',
+          'name' => 'VAV_2',
+          'space_names' =>
+          [
+              'Perimeter_mid_ZN_1',
+              'Perimeter_mid_ZN_2',
+              'Perimeter_mid_ZN_3',
+              'Perimeter_mid_ZN_4',
+              'Core_mid'
+          ]
+      },
+      {
+          'type' => 'VAV',
+          'name' => 'VAV_3',
+          'space_names' =>
+          [
+              'Perimeter_top_ZN_1',
+              'Perimeter_top_ZN_2',
+              'Perimeter_top_ZN_3',
+              'Perimeter_top_ZN_4',
+              'Core_top'
+          ]
+      },
+      {
+          'type' => 'VAV',
+          'name' => 'VAV_5',
+          'space_names' =>
+          [
+              'Basement'
+          ]
+      }
+    ]    
+    when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
     system_to_space_map = [
       {
           'type' => 'VAV',
@@ -90,6 +140,8 @@ class OpenStudio::Model::Model
           ]
       }
     ]
+    end
+    
     return system_to_space_map
   end
      
