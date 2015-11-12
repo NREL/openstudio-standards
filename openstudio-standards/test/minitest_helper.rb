@@ -9,6 +9,194 @@ require 'fileutils'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new # spec-like progress
 
+class CreateDOEPrototypeBuildingTest < Minitest::Test
+
+  def setup
+    # Make a directory to save the resulting models
+    @test_dir = "#{File.dirname(__FILE__)}/output"
+    if !Dir.exists?(@test_dir)
+      Dir.mkdir(@test_dir)
+    end
+=begin
+    # Find EnergyPlus
+    ep_dir = OpenStudio.getEnergyPlusDirectory
+    ep_path = OpenStudio.getEnergyPlusExecutable
+    @ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
+    @idd_path = OpenStudio::Path.new(ep_dir.to_s + "/Energy+.idd")
+    # Make a run manager
+    run_manager_db_path = OpenStudio::Path.new("#{@test_dir}/run.db")
+    # HACK: workaround for Mac with Qt 5.4, need to address in the future.
+    OpenStudio::Application::instance().application(false)
+    run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true, false, false, false)\\
+=end
+  end
+
+
+  # Dynamically create a test for each building type/template/climate zone
+  # so that if one combo fails the others still run
+  def CreateDOEPrototypeBuildingTest.create_run_model_tests(building_types, 
+                                                            templates, 
+                                                            climate_zones, 
+                                                            create_models = true,
+                                                            run_models = true,
+                                                            compare_results = true)
+
+    building_types.each do |building_type|
+      templates.each do |template|
+        climate_zones.each do |climate_zone|
+
+          method_name = "test_#{building_type}-#{template}-#{climate_zone}".gsub(' ','_')
+          define_method(method_name) do
+            
+            # Paths for this test run
+            model_name = "#{building_type}-#{template}-#{climate_zone}"
+            run_dir = "#{@test_dir}/#{model_name}"
+            if !Dir.exists?(run_dir)
+              Dir.mkdir(run_dir)
+            end
+            idf_path_string = "#{run_dir}/#{model_name}.idf"
+            idf_path = OpenStudio::Path.new(idf_path_string)            
+            osm_path_string = ""
+            
+            model = nil
+            
+            # Create the model, if requested
+            if create_models
+            
+              model = OpenStudio::Model::Model.new
+              model.create_prototype_building(building_type,template,climate_zone,run_dir)
+
+              # Report out errors in model creation
+              # and reset the log for the next test
+              log_messages_to_file("#{run_dir}/openstudio-standards.log")
+              errors = get_logs(OpenStudio::Error)         
+              assert(errors.size == 0, errors)
+              reset_log   
+      
+              # Convert the model to energyplus idf
+              forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+              idf = forward_translator.translateModel(model)
+              idf.save(idf_path,true)  
+            
+            end
+=begin            
+            # Run the simulation, if requested
+            if run_models
+            
+              # Load the model from memory, if not already in memory
+              if model.nil?
+                model_directory = "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}"
+                model_name = "#{building_type}-#{template}-#{climate_zone}"
+                puts "****Run Model: #{model_name}****"
+
+                model_path_string = "#{model_directory}/final.osm"
+                model_path = OpenStudio::Path.new(model_path_string)
+                if OpenStudio::exists(model_path)
+                  version_translator = OpenStudio::OSVersion::VersionTranslator.new
+                  model = version_translator.loadModel(model_path)
+                  if model.empty?
+                    errors << "Error - #{model_name} - Version translation failed"
+                    return errors
+                  else
+                    model = model.get
+                  end
+                else
+                  errors << "Error - #{model_name} - #{model_path_string} couldn't be found"
+                  return errors
+                end
+
+                # Delete the old ModelToIdf and SizingRun1 directories if they exist
+                FileUtils.rm_rf("#{model_directory}/ModelToIdf")
+                FileUtils.rm_rf("#{model_directory}/SizingRun1")
+
+                # Convert the model to energyplus idf
+                forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+                idf = forward_translator.translateModel(model)
+                idf_path_string = "#{model_directory}/#{model_name}.idf"
+                idf_path = OpenStudio::Path.new(idf_path_string)
+                idf.save(idf_path,true)
+              end
+
+              # Find the weather file
+              epw_path = nil
+              if self.weatherFile.is_initialized
+                epw_path = self.weatherFile.get.path
+                if epw_path.is_initialized
+                  if File.exist?(epw_path.get.to_s)
+                    epw_path = epw_path.get
+                  else
+                    # If this is an always-run Measure, need to check a different path
+                    alt_weath_path = File.expand_path(File.join(File.dirname(__FILE__), "../../../resources"))
+                    alt_epw_path = File.expand_path(File.join(alt_weath_path, epw_path.get.to_s))
+                    if File.exist?(alt_epw_path)
+                      epw_path = OpenStudio::Path.new(alt_epw_path)
+                    else
+                      OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Model", "Model has been assigned a weather file, but the file is not in the specified location of '#{epw_path.get}'.")
+                      return false
+                    end
+                  end
+                else
+                  OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Model", "Model has a weather file assigned, but the weather file path has been deleted.")
+                  return false
+                end
+              else
+                OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has not been assigned a weather file.')
+                return false
+              end
+            
+              # Queue up the simulation
+              job = OpenStudio::Runmanager::JobFactory::createEnergyPlusJob(@ep_tool,
+                                                                   @idd_path,
+                                                                   idf_path,
+                                                                   epw_path,
+                                                                   output_path)
+              run_manager.enqueue(job, true)
+            
+            
+            end
+=end            
+            
+            # Compare the results, if requested
+
+            
+
+            
+
+          end
+          
+        end
+      end
+    end  
+  
+  
+  end
+
+end
+
+
+=begin
+class CreateDOEPrototypeBuildingTest < Minitest::Test
+
+  def CreateDOEPrototypeBuildingTest.create_models(building_types, templates, climate_zones, test_dir)
+
+        building_types.each do |method_name|
+          puts "defining method #{method_name}"
+          metaclass.instance_eval do
+            define_method(method_name) do
+              return "hooray"
+            end
+          end
+        end
+        
+        return
+  
+    
+
+  end
+  
+end  
+  
+
 # Add a "dig" method to Hash to check if deeply nested elements exist
 # From: http://stackoverflow.com/questions/1820451/ruby-style-how-to-check-whether-a-nested-hash-element-exists
 class Hash
@@ -29,46 +217,55 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     end
   end
 
-  # Create a set of models, return a list of failures
-  def create_models(bldg_types, vintages, climate_zones)
+  # Create a set of models, return a list of errors
+  def create_model(building_type, template, climate_zone)
 
-    #### Create the prototype building
-    failures = []
+    model_name = "#{building_type}-#{template}-#{climate_zone}"
+    puts "****Create Model: #{model_name}****"
+    # Make an empty model
+    model = OpenStudio::Model::Model.new
 
-    # Loop through all of the given combinations
-    bldg_types.sort.each do |building_type|
-      vintages.sort.each do |template|
-        climate_zones.sort.each do |climate_zone|
-
-          model_name = "#{building_type}-#{template}-#{climate_zone}"
-          puts "****Create Model: #{model_name}****"
-          # Make an empty model
-          model = OpenStudio::Model::Model.new
-
-          osm_directory = "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}"
-          if !Dir.exists?(osm_directory)
-            Dir.mkdir(osm_directory)
-          end
-
-          # Set argument values
-          model.create_prototype_building(building_type,template,climate_zone,osm_directory)
-
-          # Convert the model to energyplus idf
-          forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
-          idf = forward_translator.translateModel(model)
-          idf_path_string = "#{osm_directory}/#{model_name}.idf"
-          idf_path = OpenStudio::Path.new(idf_path_string)
-          idf.save(idf_path,true)
-        end
-      end
+    osm_directory = "#{@test_dir}/#{model_name}"
+    if !Dir.exists?(osm_directory)
+      Dir.mkdir(osm_directory)
     end
 
-    #### Return the list of failures
-    return failures
+    # Create the model
+    model.create_prototype_building(building_type,template,climate_zone,osm_directory)
+
+    # Report out errors
+    errors = []
+    $OPENSTUDIO_LOG.logMessages.each do |msg|
+      if /openstudio.*/.match(msg.logChannel)
+        # Skip certain messages that are irrelevant/misleading
+        next if msg.logMessage.include?("Skipping layer") || # Annoying/bogus "Skipping layer" warnings
+            msg.logChannel.include?("runmanager") || # RunManager messages
+            msg.logChannel.include?("setFileExtension") || # .ddy extension unexpected
+            msg.logChannel.include?("Translator") || # Forward translator and geometry translator
+            msg.logMessage.include?("UseWeatherFile") # 'UseWeatherFile' is not yet a supported option for YearDescription
+        # Only fail on the errors
+        if msg.logLevel == OpenStudio::Error #|| msg.logLevel == OpenStudio::Warn
+          puts "ERROR #{msg.logMessage}"
+          errors << "#{model_name} [#{msg.logChannel}] #{msg.logMessage}"
+        end
+      end
+    end          
+    
+    # Reset the error log for the next run
+    reset_log   
+    
+    # Convert the model to energyplus idf
+    forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+    idf = forward_translator.translateModel(model)
+    idf_path_string = "#{osm_directory}/#{model_name}.idf"
+    idf_path = OpenStudio::Path.new(idf_path_string)
+    idf.save(idf_path,true)
+    
+    return errors
 
   end
 
-  # Create a set of models, return a list of failures
+  # Create a set of models, return a list of errors
   def run_models(bldg_types, vintages, climate_zones)
 
     # Open a channel to log info/warning/error messages
@@ -76,7 +273,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     msg_log.setLogLevel(OpenStudio::Info)
 
     #### Run the specified models
-    failures = []
+    errors = []
 
     # Make a run manager and queue up the sizing run
     run_manager_db_path = OpenStudio::Path.new("#{@test_dir}/run.db")
@@ -103,14 +300,14 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             version_translator = OpenStudio::OSVersion::VersionTranslator.new
             model = version_translator.loadModel(model_path)
             if model.empty?
-              failures << "Error - #{model_name} - Version translation failed"
-              return failures
+              errors << "Error - #{model_name} - Version translation failed"
+              return errors
             else
               model = model.get
             end
           else
-            failures << "Error - #{model_name} - #{model_path_string} couldn't be found"
-            return failures
+            errors << "Error - #{model_name} - #{model_path_string} couldn't be found"
+            return errors
           end
 
           # Delete the old ModelToIdf and SizingRun1 directories if they exist
@@ -132,16 +329,16 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               if File.exist?(epw_path.get.to_s)
                 epw_path = epw_path.get
               else
-                failures << "Error - #{model_name} - Model has not been assigned a weather file."
-                return failures
+                errors << "Error - #{model_name} - Model has not been assigned a weather file."
+                return errors
               end
             else
-              failures << "Error - #{model_name} - Model has a weather file assigned, but the file is not in the specified location."
-              return failures
+              errors << "Error - #{model_name} - Model has a weather file assigned, but the file is not in the specified location."
+              return errors
             end
           else
-            failures << "Error - #{model_name} - Model has not been assigned a weather file."
-            return failures
+            errors << "Error - #{model_name} - Model has not been assigned a weather file."
+            return errors
           end
 
           # Set the output path
@@ -168,17 +365,17 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       OpenStudio::Application::instance.processEvents
     end
 
-    #### Return the list of failures
-    return failures
+    #### Return the list of errors
+    return errors
 
   end
 
-  # Create a set of models, return a list of failures
+  # Create a set of models, return a list of errors
   def compare_results(bldg_types, vintages, climate_zones, file_ext="")
 
     #### Compare results against legacy idf results
     acceptable_error_percentage = 10 # Max 5% error for any end use/fuel type combo
-    failures = []
+    errors = []
 
     # Load the legacy idf results JSON file into a ruby hash
     temp = File.read("#{File.dirname(__FILE__)}/legacy_idf_results.json")
@@ -210,7 +407,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             puts "Found SQL file."
             sql = OpenStudio::SqlFile.new(sql_path)
           else
-            failures << "****Error - #{model_name} - Could not find sql file"
+            errors << "****Error - #{model_name} - Could not find sql file"
             puts "**********no sql here #{sql_path}******************"
             next
           end
@@ -239,7 +436,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
               #legacy_val = legacy_idf_results[building_type][template][climate_zone][fuel_type][end_use]
               if legacy_val.nil?
-                failures << "Error - #{model_name} - #{fuel_type} #{end_use} legacy idf value not found"
+                errors << "Error - #{model_name} - #{fuel_type} #{end_use} legacy idf value not found"
                 next
               end
 
@@ -264,7 +461,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               if osm_val.is_initialized
                 osm_val = osm_val.get
               else
-                failures << "Error - #{model_name} - No sql value found for #{fuel_type}-#{end_use} via #{energy_query}"
+                errors << "Error - #{model_name} - No sql value found for #{fuel_type}-#{end_use} via #{energy_query}"
                 osm_val = 0
               end
 
@@ -278,7 +475,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
                 if osm_val_2.is_initialized
                   osm_val_2 = osm_val_2.get
                 else
-                  failures << "Error - #{model_name} - No sql value found for #{fuel_type}-Exterior Equipment via #{energy_query}"
+                  errors << "Error - #{model_name} - No sql value found for #{fuel_type}-Exterior Equipment via #{energy_query}"
                   osm_val_2 = 0
                 end
                 osm_val += osm_val_2
@@ -299,16 +496,16 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
                 # If both
                 percent_error = ((osm_val - legacy_val)/legacy_val) * 100
                 if percent_error.abs > acceptable_error_percentage
-                  failures << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round}% (#{osm_val}, #{legacy_val})"
+                  errors << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round}% (#{osm_val}, #{legacy_val})"
                 end
               elsif osm_val > 0 && legacy_val.abs < 1e-6
                 # The osm has a fuel/end use that the legacy idf does not
                 percent_error = 1000
-                failures << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = osm has extra fuel/end use that legacy idf does not (#{osm_val})"
+                errors << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = osm has extra fuel/end use that legacy idf does not (#{osm_val})"
               elsif osm_val.abs < 1e-6 && legacy_val > 0
                 # The osm has a fuel/end use that the legacy idf does not
                 percent_error = 1000
-                failures << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = osm is missing a fuel/end use that legacy idf has (#{legacy_val})"
+                errors << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = osm is missing a fuel/end use that legacy idf has (#{legacy_val})"
               else
                 # Both osm and legacy are == 0 for this fuel/end use, no error
                 percent_error = 0
@@ -335,19 +532,19 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           if total_osm_energy_val > 0 && total_legacy_energy_val > 0
             # If both
             total_percent_error = ((total_osm_energy_val - total_legacy_energy_val)/total_legacy_energy_val) * 100
-            failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_percent_error.round}% ***"
+            errors << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_percent_error.round}% ***"
           elsif total_osm_energy_val > 0 && total_legacy_energy_val == 0
             # The osm has a fuel/end use that the legacy idf does not
             total_percent_error = 1000
-            failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm has extra fuel/end use that legacy idf does not (#{total_osm_energy_val})"
+            errors << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm has extra fuel/end use that legacy idf does not (#{total_osm_energy_val})"
           elsif total_osm_energy_val == 0 && total_legacy_energy_val > 0
             # The osm has a fuel/end use that the legacy idf does not
             total_percent_error = 1000
-            failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm is missing a fuel/end use that legacy idf has (#{total_legacy_energy_val})"
+            errors << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm is missing a fuel/end use that legacy idf has (#{total_legacy_energy_val})"
           else
             # Both osm and legacy are == 0 for, no error
             total_percent_error = 0
-            failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = both idf and osm don't use any energy."
+            errors << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = both idf and osm don't use any energy."
           end
 
           results_total_hash[building_type][template][climate_zone] = total_percent_error
@@ -471,7 +668,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
     csv_file.close
     csv_file_simple.close
-    #### Return the list of failures
-    return failures
+    #### Return the list of errors
+    return errors
   end
 end
+=end
