@@ -20,7 +20,8 @@ def log_messages_to_runner(runner)
           msg.logChannel.include?("runmanager") || # RunManager messages
           msg.logChannel.include?("setFileExtension") || # .ddy extension unexpected
           msg.logChannel.include?("Translator") || # Forward translator and geometry translator
-          msg.logMessage.include?("UseWeatherFile") # 'UseWeatherFile' is not yet a supported option for YearDescription
+          msg.logMessage.include?("UseWeatherFile") || # 'UseWeatherFile' is not yet a supported option for YearDescription
+          msg.logMessage.include?("EpwFile") # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
           
       # Report the message in the correct way
       if msg.logLevel == OpenStudio::Info
@@ -52,7 +53,8 @@ def log_messages_to_file(file_path, debug = false)
             msg.logChannel.include?("runmanager") || # RunManager messages
             msg.logChannel.include?("setFileExtension") || # .ddy extension unexpected
             msg.logChannel.include?("Translator") || # Forward translator and geometry translator
-            msg.logMessage.include?("UseWeatherFile") # 'UseWeatherFile' is not yet a supported option for YearDescription
+            msg.logMessage.include?("UseWeatherFile") || # 'UseWeatherFile' is not yet a supported option for YearDescription
+            msg.logMessage.include?("EpwFile") # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
             
         # Report the message in the correct way
         if msg.logLevel == OpenStudio::Info
@@ -84,7 +86,8 @@ def get_logs(log_type = OpenStudio::Error)
           msg.logChannel.include?("runmanager") || # RunManager messages
           msg.logChannel.include?("setFileExtension") || # .ddy extension unexpected
           msg.logChannel.include?("Translator") || # Forward translator and geometry translator
-          msg.logMessage.include?("UseWeatherFile") # 'UseWeatherFile' is not yet a supported option for YearDescription
+          msg.logMessage.include?("UseWeatherFile") || # 'UseWeatherFile' is not yet a supported option for YearDescription
+          msg.logMessage.include?("EpwFile") # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
       # Only fail on the errors
       if msg.logLevel == log_type
         errors << "[#{msg.logChannel}] #{msg.logMessage}"
