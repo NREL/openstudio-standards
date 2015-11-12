@@ -506,7 +506,6 @@ class OpenStudio::Model::Model
        }
       
       # attic only applies to the two DOE vintages.
-      puts "building_vintage = #{building_vintage}"
       if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004'
         building_story_map['AtticStory'] = ['Attic'] 
       end        

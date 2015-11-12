@@ -357,7 +357,7 @@ class OpenStudio::Model::Model
   end #add swh
 
   def add_large_hotel_swh_end_uses(prototype_input, standards, swh_loop, type, water_end_uses)
-    puts "Adding water uses type = '#{type}'"
+    OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Model", "Adding water uses type = '#{type}'")
     water_end_uses.each do |water_end_use|
       space_name = water_end_use[0]
       use_rate = water_end_use[1] # in gal/min

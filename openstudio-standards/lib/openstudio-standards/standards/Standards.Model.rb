@@ -356,7 +356,7 @@ class OpenStudio::Model::Model
           day_sch.addValue(OpenStudio::Time.new(0, i + 1, 0, 0), values[i])     
         end 
       else
-        #OpenStudio::logFree(OpenStudio::Info, "Adding space type: #{template}-#{clim}-#{building_type}-#{spc_type}")
+        OpenStudio::logFree(OpenStudio::Error, "Schedule type: #{sch_type} is not recognized.  Valid choices are 'Constant' and 'Hourly'.")
       end
     end
     
@@ -454,8 +454,7 @@ class OpenStudio::Model::Model
   # Create a space type from the openstudio standards dataset.
   # @todo make return an OptionalSpaceType
   def add_space_type(template, clim, building_type, spc_type)
-    #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding space type: #{template}-#{clim}-#{building_type}-#{spc_type}")
-
+    
     # Get the space type data
     data = self.find_object(self.standards['space_types'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type})
     if !data
@@ -463,7 +462,7 @@ class OpenStudio::Model::Model
       return false #TODO change to return empty optional schedule:ruleset?
     end
     
-    puts "adding space type #{spc_type}"
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding space type: #{template}-#{clim}-#{building_type}-#{spc_type}")
     
     name = make_name(template, clim, building_type, spc_type)
 
@@ -958,7 +957,6 @@ class OpenStudio::Model::Model
     # Modify the R value of the insulation to hit the specified U-value, C-Factor, or F-Factor.
     # Doesn't currently operate on glazing constructions
     if construction_props
-      #puts construction.class #puts construction.methods.sort
       # Determine the target U-value, C-factor, and F-factor
       target_u_value_ip = construction_props['assembly_maximum_u_value']
       target_f_factor_ip = construction_props['assembly_maximum_f_factor']

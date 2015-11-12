@@ -164,8 +164,6 @@ class OpenStudio::Model::Model
 
     space_type_map.each do |space_type_name, space_names|
       space_names.each do |space_name|
-        # puts "#{building_type}, blah #{building_vintage}, blah2 #{climate_zone}, blah3 #{space_type_name}, blah4 #{space_name}"
-          # self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name)
           if building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'DOE Ref Pre-1980'
             if space_name == 'Core_bottom' || space_name == 'Core_mid' || space_name == 'Core_top'
               self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')

@@ -95,7 +95,7 @@ module EnergyPlus
       regex = /\{(N|S)\s*([0-9]*).\s*([0-9]*)'\}\s*\{(E|W)\s*([0-9]*).\s*([0-9]*)'\}\s*\{GMT\s*(.*)\s*Hours\}/
       match_data = text.match(regex)
       if match_data.nil?
-        puts "Can't find lat/lon/gmt"
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Weather.stat_file", "Can't find lat/lon/gmt")
         return
       else
 
@@ -116,7 +116,7 @@ module EnergyPlus
       regex = /Elevation --\s*(.*)m (above|below) sea level/
       match_data = text.match(regex)
       if match_data.nil?
-        puts "Can't find elevation"
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Weather.stat_file", "Can't find elevation")
         return
       else
         @elevation = match_data[1].to_f
@@ -129,7 +129,7 @@ module EnergyPlus
       cdd10Regex = /-\s*(.*) annual \(standard\) cooling degree-days \(10.C baseline\)/
       match_data = text.match(cdd10Regex)
       if match_data.nil?
-        puts "Can't find CDD 10"
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Weather.stat_file", "Can't find CDD 10")
         return
       else
         @cdd10 = match_data[1].to_f
@@ -138,7 +138,7 @@ module EnergyPlus
       hdd10Regex = /-\s*(.*) annual \(standard\) heating degree-days \(10.C baseline\)/
       match_data = text.match(hdd10Regex)
       if match_data.nil?
-        puts "Can't find HDD 10"
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Weather.stat_file", "Can't find HDD 10")
         return
       else
         @hdd10 = match_data[1].to_f
@@ -147,7 +147,7 @@ module EnergyPlus
       cdd18Regex = /-\s*(.*) annual \(standard\) cooling degree-days \(18.3.C baseline\)/
       match_data = text.match(cdd18Regex)
       if match_data.nil?
-        puts "Can't find CDD 18"
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Weather.stat_file", "Can't find CDD 18")
         return
       else
         @cdd18 = match_data[1].to_f
@@ -156,7 +156,7 @@ module EnergyPlus
       hdd18Regex = /-\s*(.*) annual \(standard\) heating degree-days \(18.3.C baseline\)/
       match_data = text.match(hdd18Regex)
       if match_data.nil?
-        puts "Can't find HDD 18"
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Weather.stat_file", "Can't find HDD 18")
         return
       else
         @hdd18 = match_data[1].to_f
@@ -167,7 +167,7 @@ module EnergyPlus
       regex = /Daily Avg(.*)\n/
       match_data = text.match(regex)
       if match_data.nil?
-        puts "Can't find outdoor air temps"
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Weather.stat_file", "Can't find outdoor air temps")
         return
       else
         # first match is outdoor air temps
@@ -175,7 +175,7 @@ module EnergyPlus
 
         # have to be 12 months
         if monthly_temps.size != 12
-          puts "Can't find outdoor air temps"
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.Weather.stat_file", "Can't find outdoor air temps")
           return
         end
 
