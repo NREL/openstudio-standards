@@ -1,16 +1,12 @@
 
 # Open a log for the library
 $OPENSTUDIO_LOG = OpenStudio::StringStreamLogSink.new
-if @debug
-  $OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug)
-else
-  $OPENSTUDIO_LOG.setLogLevel(OpenStudio::Info)
-end
+$OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug)
 
 # Log the info, warning, and error messages to a runner.
 # runner @param [Runner] The Measure runner to add the messages to
 # @return [Runner] The same Measure runner, with messages from the openstudio-standards library added
-def log_messages_to_runner(runner)
+def log_messages_to_runner(runner, debug = false)
 
   $OPENSTUDIO_LOG.logMessages.each do |msg|
     # DLM: you can filter on log channel here for now
@@ -30,7 +26,7 @@ def log_messages_to_runner(runner)
         runner.registerWarning("[#{msg.logChannel}] #{msg.logMessage}")
       elsif msg.logLevel == OpenStudio::Error
         runner.registerError("[#{msg.logChannel}] #{msg.logMessage}")
-      elsif msg.logLevel == OpenStudio::Debug && @debug
+      elsif msg.logLevel == OpenStudio::Debug && debug
         runner.registerInfo("DEBUG - #{msg.logMessage}")
       end
     end
@@ -64,7 +60,7 @@ def log_messages_to_file(file_path, debug = false)
         elsif msg.logLevel == OpenStudio::Error
           file.puts("ERROR [#{msg.logChannel}] #{msg.logMessage}")
         elsif msg.logLevel == OpenStudio::Debug && debug
-          file.puts("DEBUG  #{msg.logMessage}")
+          file.puts("DEBUG #{msg.logMessage}")
         end
       end
     end
