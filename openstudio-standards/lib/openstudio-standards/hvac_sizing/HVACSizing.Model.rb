@@ -190,7 +190,7 @@ class OpenStudio::Model::Model
     # Report severe errors in the sizing run
     error_query = "SELECT ErrorMessage 
         FROM Errors 
-        WHERE ErrorType='1'"
+        WHERE ErrorType in(1,2)"
     errs = self.sqlFile.get.execAndReturnVectorOfString(error_query)
     if errs.is_initialized
       errs = errs.get
@@ -202,19 +202,25 @@ class OpenStudio::Model::Model
     if completed.is_initialized
       completed = completed.get
       if completed == 0
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "The sizing run failed with the following severe errors: #{errs.join('\n')}")
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "The sizing run did not finish and had following errors: #{errs.join('\n')}")
         return false
       end
     end    
     
     # Check that the sizing run completed with no severe errors
-    completed_successfully_query = "SELECT completed_successfullySuccessfully FROM Simulations"
+    completed_successfully_query = "SELECT CompletedSuccessfully FROM Simulations"
     completed_successfully = self.sqlFile.get.execAndReturnFirstDouble(completed_successfully_query)
     if completed_successfully.is_initialized
       completed_successfully = completed_successfully.get
       if completed_successfully == 0
-        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "The sizing run had the following severe errors but didn't fail: #{errs.join('\n')}")
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "The sizing run failed with the following severe or fatal errors: #{errs.join('\n')}")
+        return false
       end
+    end    
+    
+    # Log any severe errors that did not cause simulation to fail
+    if errs.size > 0
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "The sizing run completed but had the following severe errors: #{errs.join('\n')}")
     end
     
     # Change the model back to running the weather file
