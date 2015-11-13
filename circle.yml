@@ -7,12 +7,10 @@ dependencies:
 
 test:
   override:
-    - pwd
-    - ls
-    - echo "Home from circle yml:" $HOME
     - mkdir -p $CIRCLE_TEST_REPORTS/minitest
     - >
-      docker run -v $(pwd):/openstudio-standards nrel/openstudio /openstudio-standards/openstudio-standards/test/bin/docker-run.sh
+      docker run -v $(pwd):/openstudio-standards nrel/openstudio /openstudio-standards/openstudio-standards/test/bin/docker-run.sh:
+        timeout: 21600
     - cp test/reports/* $CIRCLE_TEST_REPORTS/minitest
       
 general:
