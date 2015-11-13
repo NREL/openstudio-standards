@@ -1414,10 +1414,13 @@ class OpenStudio::Model::AirLoopHVAC
       v_ps = self.autosizedDesignSupplyAirFlowRate.get
     else
       v_ps = self.designSupplyAirFlowRate.get
-    end 
+    end
+    v_ps_cfm = OpenStudio.convert(v_ps, 'm^3/s', 'cfm').get
     
     # Average outdoor air fraction
     x_s = v_ou / v_ps
+    
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: v_ou = #{v_ou_cfm.round} cfm, v_ps = #{v_ps_cfm} cfm, x_s = #{x_s.round(2)}.")  
     
     # Determine the zone ventilation effectiveness
     # for every zone on the system.
@@ -1447,6 +1450,8 @@ class OpenStudio::Model::AirLoopHVAC
         if clg_dsn_flow > v_pz
           v_pz = clg_dsn_flow
         end
+      else
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: #{zone.name} clg_dsn_flow could not be found.")
       end
       htg_dsn_flow = zone.autosizedHeatingDesignAirFlowRate
       if htg_dsn_flow.is_initialized
@@ -1454,6 +1459,8 @@ class OpenStudio::Model::AirLoopHVAC
         if htg_dsn_flow > v_pz
           v_pz = htg_dsn_flow
         end
+      else
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: #{zone.name} htg_dsn_flow could not be found.")
       end
       
       # Get the minimum damper position
@@ -1487,6 +1494,8 @@ class OpenStudio::Model::AirLoopHVAC
     
       # Store the ventilation effectiveness
       e_vzs << e_vz
+    
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: Zone #{zone.name} v_oz = #{v_oz} m^3/s, v_pz = #{v_pz} m^3/s, v_dz = #{v_dz}, z_d = #{z_d}.")
     
       # Check the ventilation effectiveness against
       # the minimum limit per PNNL and increase
