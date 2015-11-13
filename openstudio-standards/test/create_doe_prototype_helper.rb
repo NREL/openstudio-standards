@@ -289,14 +289,14 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             
             # Report out errors
             log_file_path = "#{run_dir}/openstudio-standards.log"
-            log_messages_to_file(log_file_path, debug)
+            messages = log_messages_to_file(log_file_path, debug)
             errors = get_logs(OpenStudio::Error)         
             
             # Copy errors to combined log file
             File.open(@combined_results_log, 'a') do |file|
               file.puts "*** #{model_name}, Time: #{run_time} ***"
-              errors.each do |err|
-                file.puts err
+              messages.each do |message|
+                file.puts message
               end
             end
             

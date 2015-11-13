@@ -5,6 +5,7 @@ $OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug)
 
 # Log the info, warning, and error messages to a runner.
 # runner @param [Runner] The Measure runner to add the messages to
+# debug @param [Boolean] If true, include the debug messages in the log
 # @return [Runner] The same Measure runner, with messages from the openstudio-standards library added
 def log_messages_to_runner(runner, debug = false)
 
@@ -34,10 +35,13 @@ def log_messages_to_runner(runner, debug = false)
  
 end
 
-# Log the info, warning, and error messages to a runner.
-# runner @param [Runner] The Measure runner to add the messages to
-# @return [Runner] The same Measure runner, with messages from the openstudio-standards library added
+# Log the info, warning, and error messages to a file.
+# runner @param [file_path] The path to the log file
+# debug @param [Boolean] If true, include the debug messages in the log
+# @return [Array<String>] The array of messages, which can be used elsewhere.
 def log_messages_to_file(file_path, debug = false)
+
+  messages = []
 
   File.open(file_path, 'w') do |file|  
   
@@ -54,19 +58,28 @@ def log_messages_to_file(file_path, debug = false)
             
         # Report the message in the correct way
         if msg.logLevel == OpenStudio::Info
-          file.puts("INFO  #{msg.logMessage}")
+          s = "INFO  #{msg.logMessage}"
+          file.puts(s)
+          messages << s
         elsif msg.logLevel == OpenStudio::Warn
-          file.puts("WARN  [#{msg.logChannel}] #{msg.logMessage}")
+          s = "WARN  [#{msg.logChannel}] #{msg.logMessage}"
+          file.puts(s)
+          messages << s
         elsif msg.logLevel == OpenStudio::Error
-          file.puts("ERROR [#{msg.logChannel}] #{msg.logMessage}")
+          s = "ERROR [#{msg.logChannel}] #{msg.logMessage}"
+          file.puts(s)
+          messages << s
         elsif msg.logLevel == OpenStudio::Debug && debug
-          file.puts("DEBUG #{msg.logMessage}")
+          s = "DEBUG #{msg.logMessage}"
+          file.puts(s)
+          messages << s
         end
       end
     end
     
   end
   
+  return messages
  
 end
 
