@@ -17,6 +17,5 @@ test:
       
 general:
   artifacts:
-    - "openstudio-standards/test/output/comparison.csv"
-    - "openstudio-standards/test/output/comparison_simple.csv"
-    - "openstudio-standards/test/output/comparison_total.csv"      
+    - "openstudio-standards/test/output/prototype_buildings_results.csv"
+    - "openstudio-standards/test/output/prototype_buildings_run.log"
