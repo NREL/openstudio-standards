@@ -72,7 +72,7 @@ Tests prove that your code works as expected, but more importantly they help mak
 
 1. Create a new file called `test_XX.rb` in the `/test` directory.
 2. Put tests into your file.  See other test files for examples.
-2. `rake test TEST=path_to_test_XX.rb` Run your new test file.
+2. `ruby test/test_XX.rb` Run your new test file.
 3. Fix your code and make sure your tests pass.
 4. `rake test:all` Run all the tests to make sure you didn't break existing code.
 5. Fix your code and make sure all tests pass.
