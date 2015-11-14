@@ -2864,7 +2864,7 @@ class OpenStudio::Model::Model
     
   end
 
-  def add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, swh_loop, space_type_name, space_name)
+  def add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil)
     
     # find the specific space_type properties from standard.json
     search_criteria = {
@@ -2876,6 +2876,10 @@ class OpenStudio::Model::Model
     space = self.getSpaceByName(space_name)
     space = space.get
     space_area = OpenStudio.convert(space.floorArea,'m^2','ft^2').get   # ft2
+    puts "#{space_name} space_area = #{space_area}"
+    if space_multiplier.nil?
+      space_multiplier = 1
+    end
     
     # Water use connection
     swh_connection = OpenStudio::Model::WaterUseConnections.new(self)
@@ -2883,7 +2887,8 @@ class OpenStudio::Model::Model
     # Water fixture definition
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
     rated_flow_rate_per_area = data['service_water_heating_peak_flow_per_area'].to_f   # gal/h.ft2
-    rated_flow_rate_gal_per_hour = rated_flow_rate_per_area * space_area   # gal/h
+    puts "rated_flow_rate_per_area = #{rated_flow_rate_per_area}"
+    rated_flow_rate_gal_per_hour = rated_flow_rate_per_area * space_area * space_multiplier   # gal/h
     rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour/60  # gal/h to gal/min
     rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get
     # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
@@ -3094,6 +3099,7 @@ class OpenStudio::Model::Model
     return true if prototype_input['number_of_elevators'].nil? || prototype_input['number_of_elevators'] == 0
     
     vintage = prototype_input['template']
+    building_type = prototype_input['building_type']
     num_elevs = prototype_input['number_of_elevators']
 
     # Lift motor assumptions
@@ -3103,7 +3109,11 @@ class OpenStudio::Model::Model
       if prototype_input['elevator_type'] == 'Traction'
         lift_pwr_w = 18537.0
       elsif prototype_input['elevator_type'] == 'Hydraulic'
-        lift_pwr_w = 14610.0
+        if building_type == 'MidriseApartment'
+          lift_pwr_w = 16055.0
+        else
+          lift_pwr_w = 14610.0
+        end
       else
         lift_pwr_w = 14610.0
         OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "Elevator type '#{prototype_input['elevator_type']}', not recognized, will assume Hydraulic elevator, #{lift_pwr_w} W.")

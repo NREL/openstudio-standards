@@ -1,7 +1,7 @@
 require 'openstudio'
 require_relative 'Prototype.utilities'
 
-full_filename = "QuickServiceRestaurant2004.osm"
+full_filename = "mid_rise_apartment.osm"
 
 if full_filename && (File.file?(full_filename) || File.file?(File.join(Dir.pwd, full_filename)))
 	model = safe_load_model(full_filename)
