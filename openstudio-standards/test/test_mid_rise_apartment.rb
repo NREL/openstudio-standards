@@ -1,12 +1,14 @@
 require_relative 'minitest_helper'
 
-class TestFullServiceRestaurant < CreateDOEPrototypeBuildingTest
+class TestMidRiseApartment < CreateDOEPrototypeBuildingTest
   def test_case
-    # RetailStandalone, LargeHotel, RetailStripmall
-    bldg_types = ['FullServiceRestaurant']
+
+    bldg_types = ['MidriseApartment']
     # vintages = ['90.1-2010']
-    # vintages = ['DOE Ref 1980-2004', 'DOE Ref Pre-1980','90.1-2004'] 
+    # vintages = ['90.1-2007']
+    # vintages = ['DOE Ref 1980-2004', 'DOE Ref Pre-1980','90.1-2007'] 
     # climate_zones =['ASHRAE 169-2006-2A']
+    # vintages = ['90.1-2010', '90.1-2013', '90.1-2004'] 
     vintages = ['DOE Ref 1980-2004', 'DOE Ref Pre-1980', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2004'] 
     climate_zones = ['ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A','ASHRAE 169-2006-2B',
                      'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A',
@@ -16,10 +18,10 @@ class TestFullServiceRestaurant < CreateDOEPrototypeBuildingTest
     all_failures = []
 
     # Create the models
-    all_failures += create_models(bldg_types, vintages, climate_zones)
+    # all_failures += create_models(bldg_types, vintages, climate_zones)
 
     # Run the models
-    all_failures += run_models(bldg_types, vintages, climate_zones)
+    # all_failures += run_models(bldg_types, vintages, climate_zones)
 
     # Compare the results to the legacy idf results
     all_failures += compare_results(bldg_types, vintages, climate_zones)

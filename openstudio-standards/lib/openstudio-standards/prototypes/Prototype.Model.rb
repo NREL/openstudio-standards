@@ -173,6 +173,8 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.hospital'
     when 'Outpatient'
       building_methods = 'Prototype.outpatient'
+    when 'MidriseApartment'
+      building_methods = 'Prototype.mid_rise_apartment'
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
@@ -285,6 +287,8 @@ class OpenStudio::Model::Model
       geometry_file = 'Geometry.hospital.osm'
     when 'Outpatient'
       geometry_file = 'Geometry.outpatient.osm'
+    when 'MidriseApartment'
+      geometry_file = 'Geometry.mid_rise_apartment.osm'
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
@@ -709,8 +713,8 @@ class OpenStudio::Model::Model
 
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type
-    when 'LargeHotel'
-      space_multiplier_map = define_space_multiplier
+    when 'LargeHotel', 'MidriseApartment'
+      space_multiplier_map = self.define_space_multiplier
     else
       space_multiplier_map ={}
     end
