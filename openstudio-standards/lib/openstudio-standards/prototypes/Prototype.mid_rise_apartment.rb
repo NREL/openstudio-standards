@@ -145,9 +145,11 @@ class OpenStudio::Model::Model
       case system['type']
       when 'SAC'
         self.add_split_AC(prototype_input, hvac_standards, thermal_zones)
+      when 'UnitHeater'
+        self.add_unitheater(prototype_input, hvac_standards, thermal_zones)
       else
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Undefined HVAC system type called #{system['type']}")
-        return false  
+        return false
       end
 
     end
