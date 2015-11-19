@@ -8,3 +8,16 @@ eval "$(rbenv init -)"
 # install dependencies and run default rake task
 cd /openstudio-standards/openstudio-standards
 bundle install
+
+echo "In the docker container, then ENV variables are:"
+printenv
+
+i=0
+files=()
+for testfile in $(find test/ -name "test_*.rb" | sort); do
+  if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]
+  then
+    ruby "/openstudio-standards/"$testfile
+  fi
+  ((i=i+1))
+done

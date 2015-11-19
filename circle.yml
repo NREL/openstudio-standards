@@ -7,14 +7,18 @@ dependencies:
 
 test:
   override:
+    - echo "In the Circle server, then ENV variables are:":
+        parallel: true
+    - printenv:
+        parallel: true
     - mkdir -p $CIRCLE_TEST_REPORTS/minitest:
         parallel: true
     - docker run -v $(pwd):/openstudio-standards nrel/openstudio /openstudio-standards/openstudio-standards/test/bin/docker-run.sh:
         parallel: true
-    - chmod +x ./test.sh:
-        parallel: true
-    - ./test.sh:
-        parallel: true
+    # - chmod +x ./test.sh:
+        # parallel: true
+    # - ./test.sh:
+        # parallel: true
     - cp test/reports/* $CIRCLE_TEST_REPORTS/minitest:
         parallel: true
       
