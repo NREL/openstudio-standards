@@ -9,7 +9,9 @@ test:
   override:
     - mkdir -p $CIRCLE_TEST_REPORTS/minitest:
         parallel: true
-    - docker run -v $(pwd):/openstudio-standards nrel/openstudio:
+    - docker run -v $(pwd):/openstudio-standards nrel/openstudio bundle install:
+        parallel: true
+    - chmod +x ./test.sh:
         parallel: true
     - ./test.sh:
         parallel: true
