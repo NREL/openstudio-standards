@@ -7,5 +7,4 @@ eval "$(rbenv init -)"
 
 # install dependencies and run default rake task
 cd /openstudio-standards/openstudio-standards
-bundle install 
-bundle exec rake
+bundle install
