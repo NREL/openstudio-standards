@@ -9,7 +9,7 @@ test:
   override:
     - mkdir -p $CIRCLE_TEST_REPORTS/minitest
     - docker run -v $(pwd):/openstudio-standards nrel/openstudio /openstudio-standards/openstudio-standards/test/bin/docker-run.sh:
-        timeout: 21600
+        timeout: 21
     - cp test/reports/* $CIRCLE_TEST_REPORTS/minitest
       
 general:
