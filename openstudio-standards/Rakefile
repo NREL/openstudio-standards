@@ -57,6 +57,7 @@ end
 require 'rake/testtask'
 desc 'Run the measure tests'
 Rake::TestTask.new('test:measures') do |task|
+=begin
   task.test_files = FileList[
   # TOO LONG 'measures/apply_system1/tests/full_hvac_test.rb',
   'measures/btap_apply_necb_rules/tests/apply_necb_rules_Test.rb',
@@ -69,7 +70,7 @@ Rake::TestTask.new('test:measures') do |task|
   # TOO Long 'measures/create_DOE_prototype_building/tests/create_DOE_prototype_building_test.rb',
   'measures/UtilityTariffs/tests/UtilityTariffs_Test.rb'
   ]
-
+=end
 end
 
 desc 'Run all tests'
