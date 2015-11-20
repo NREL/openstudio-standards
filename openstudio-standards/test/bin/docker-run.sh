@@ -5,14 +5,16 @@ export CIRCLECI=true
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
-# install dependencies and run default rake task
+# Install the openstudio-standards gem
 cd /openstudio-standards/openstudio-standards
 bundle install
 
-echo "In the docker container, then ENV variables are:"
-printenv
-ruby -v
-
+# Loop through the test files and run
+# every nth test, where n is determined
+# by the total number of CI nodes and
+# the index of this particular node.
+# Note: this command is running
+# ON EACH NODE.
 i=0
 files=()
 for testfile in $(find test/ -name "test_*.rb" | sort); do
