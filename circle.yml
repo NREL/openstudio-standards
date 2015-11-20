@@ -14,7 +14,7 @@ test:
     - docker run -e CIRCLE_NODE_TOTAL -e CIRCLE_NODE_INDEX -v $(pwd):/openstudio-standards nrel/openstudio /openstudio-standards/openstudio-standards/test/bin/docker-run.sh:
         parallel: true
         timeout: 7200
-    - [ "$(ls test/reports)" ] && cp test/reports/* $CIRCLE_TEST_REPORTS/minitest || echo "No test reports to copy.":
+    - rsync test/reports $CIRCLE_TEST_REPORTS/minitest/:
         parallel: true
 
 general:
