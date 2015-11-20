@@ -294,7 +294,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             
             # Copy errors to combined log file
             File.open(@combined_results_log, 'a') do |file|
-              file.puts "*** #{model_name}, Time: #{run_time} ***"
+              file.puts "*** #{model_name}, Time: #{run_time.round} sec ***"
               messages.each do |message|
                 file.puts message
               end
