@@ -274,7 +274,7 @@ class OpenStudio::Model::Space
       # when all 4 sides of a space have windows.
       # If an error occurs, attempt to join n-1 polygons,
       # then subtract the
-      if join_errs > 0
+      if join_errs > 0 || inner_loop_errs > 0
         
         # Open a log
         msg_log_2 = OpenStudio::StringStreamLogSink.new
@@ -508,7 +508,7 @@ class OpenStudio::Model::Space
     # Record all floor polygons
     floor_polygons = []
     floor_z = 0.0
-    self.surfaces.each do |surface|
+    self.surfaces.sort.each do |surface|
       if surface.surfaceType == "Floor"
         floor_surface = surface
         floor_z = surface.vertices[0].z
@@ -707,7 +707,7 @@ class OpenStudio::Model::Space
           end
         end
         
-        surface.subSurfaces.each do |sub_surface|
+        surface.subSurfaces.sort.each do |sub_surface|
           next unless sub_surface.outsideBoundaryCondition == "Outdoors" && sub_surface.subSurfaceType == "Skylight"
           
           #OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***#{sub_surface.name}***")
@@ -990,9 +990,9 @@ class OpenStudio::Model::Space
     # Loop through all windows and add up area * VT
     sum_window_area_times_vt = 0
     construction_name_to_vt_map = {}
-    self.surfaces.each do |surface|
+    self.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "Wall"
-      surface.subSurfaces.each do |sub_surface|
+      surface.subSurfaces.sort.each do |sub_surface|
         next unless sub_surface.outsideBoundaryCondition == "Outdoors" && (sub_surface.subSurfaceType == "FixedWindow" || sub_surface.subSurfaceType == "OperableWindow")
         
         num_sub_surfaces += 1
@@ -1106,9 +1106,9 @@ class OpenStudio::Model::Space
     # Loop through all windows and add up area * VT
     sum_85pct_times_skylight_area_times_vt_times_wf = 0
     construction_name_to_vt_map = {}
-    self.surfaces.each do |surface|
+    self.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "RoofCeiling"
-      surface.subSurfaces.each do |sub_surface|
+      surface.subSurfaces.sort.each do |sub_surface|
         next unless sub_surface.outsideBoundaryCondition == "Outdoors" && sub_surface.subSurfaceType == "Skylight"
         
         num_sub_surfaces += 1
@@ -1441,7 +1441,7 @@ class OpenStudio::Model::Space
     
     # Record a floor in the space for later use
     floor_surface = nil
-    self.surfaces.each do |surface|
+    self.surfaces.sort.each do |surface|
       if surface.surfaceType == "Floor"
         floor_surface = surface
         break
@@ -1451,7 +1451,7 @@ class OpenStudio::Model::Space
     # Find all exterior windows/skylights in the space and record their azimuths and areas
     windows = {}
     skylights = {}
-    self.surfaces.each do |surface|
+    self.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == "Outdoors" && (surface.surfaceType == "Wall" || surface.surfaceType == "RoofCeiling")
       
       # Skip non-vertical walls and non-horizontal roofs
@@ -1518,7 +1518,7 @@ class OpenStudio::Model::Space
       end
       
       # Loop through all subsurfaces and 
-      surface.subSurfaces.each do |sub_surface|
+      surface.subSurfaces.sort.each do |sub_surface|
         next unless sub_surface.outsideBoundaryCondition == "Outdoors" && (sub_surface.subSurfaceType == "FixedWindow" || sub_surface.subSurfaceType == "OperableWindow" ||  sub_surface.subSurfaceType == "Skylight")
 
         # Find the area
@@ -1534,7 +1534,7 @@ class OpenStudio::Model::Space
         #OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "---head height = #{head_height_m}m, sill height = #{sill_height_m}m")
         
         # Log the window properties to use when creating daylight sensors
-        properties = {:facade => facade, :area_m2 => net_area_m2, :handle => sub_surface.handle, :head_height_m => head_height_m}
+        properties = {:facade => facade, :area_m2 => net_area_m2, :handle => sub_surface.handle, :head_height_m => head_height_m, :name => sub_surface.name.get.to_s}
         if facade == '0-Up'
           skylights[sub_surface] = properties
         else
@@ -1802,9 +1802,10 @@ Warehouse.Office
       zone = zone.get
     end    
     
-    # Sort by priority; first by facade, then by area
-    sorted_windows = windows.sort_by { |window, vals| [vals[:facade], vals[:area]] }
-    sorted_skylights = skylights.sort_by { |skylight, vals| [vals[:facade], vals[:area]] }
+    # Sort by priority; first by facade, then by area, 
+    # then by name to ensure deterministic in case identical in other ways
+    sorted_windows = windows.sort_by { |window, vals| [vals[:facade], vals[:area], vals[:name]] }
+    sorted_skylights = skylights.sort_by { |skylight, vals| [vals[:facade], vals[:area], vals[:name]] }
     
     # Report out the sorted skylights for debugging
     OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, Skylights:")
@@ -2108,12 +2109,12 @@ Warehouse.Office
     # Calculate the baseline component infiltration rate
     infil_type = 'baseline'
     base_comp_infil_m3_per_s = 0.0
-    self.surfaces.each do |surface|
+    self.surfaces.sort.each do |surface|
       # This surface
       base_comp_infil_m3_per_s += surface.component_infiltration_rate(infil_type)
       # Subsurfaces in this surface
       # TODO make this part of Surface.component_infiltration_rate?
-      surface.subSurfaces.each do |subsurface|
+      surface.subSurfaces.sort.each do |subsurface|
         base_comp_infil_m3_per_s += subsurface.component_infiltration_rate(infil_type)
       end
     end
@@ -2122,12 +2123,12 @@ Warehouse.Office
     # Calculate the advanced component infiltration rate
     infil_type = 'advanced'
     adv_comp_infil_m3_per_s = 0.0
-    self.surfaces.each do |surface|
+    self.surfaces.sort.each do |surface|
       # This surface
       adv_comp_infil_m3_per_s += surface.component_infiltration_rate(infil_type)
       # Subsurfaces in this surface
       # TODO make this part of Surface.component_infiltration_rate?
-      surface.subSurfaces.each do |subsurface|
+      surface.subSurfaces.sort.each do |subsurface|
         adv_comp_infil_m3_per_s += subsurface.component_infiltration_rate(infil_type)
       end
     end
@@ -2162,7 +2163,7 @@ Warehouse.Office
     area_m2 = 0.0
     
     # Loop through all surfaces in this space
-    self.surfaces.each do |surface|
+    self.surfaces.sort.each do |surface|
       # Skip non-outdoor surfaces
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       # Skip non-walls
@@ -2170,7 +2171,7 @@ Warehouse.Office
       # This surface
       area_m2 += surface.netArea
       # Subsurfaces in this surface
-      surface.subSurfaces.each do |subsurface|
+      surface.subSurfaces.sort.each do |subsurface|
         area_m2 += subsurface.netArea
       end
     end
