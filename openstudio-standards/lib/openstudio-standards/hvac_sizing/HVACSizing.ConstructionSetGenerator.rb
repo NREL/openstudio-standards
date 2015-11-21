@@ -42,7 +42,7 @@ def make_name(template, clim, building_type, spc_type)
     building_type = 'LrgOffice'
   elsif building_type == 'MediumOffice'
     building_type = 'MedOffice'
-  elsif building_type == 'Mid-riseApartment'
+  elsif building_type == 'MidriseApartment'
     building_type = 'MidApt'
   elsif building_type == 'Office'
     building_type = 'Office'
