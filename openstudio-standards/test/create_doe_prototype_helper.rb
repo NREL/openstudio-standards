@@ -270,7 +270,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               tot_cumulative_energy_err = (total_cumulative_energy_err/total_legacy_energy_val) * 100
               
               if tot_cumulative_energy_err.abs > 20
-                OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Total Energy cumulative error = #{tot_cumulative_energy_err.round}%.")
+                OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "Total Energy cumulative error = #{tot_cumulative_energy_err.round}%.")
               end
               
               csv_rows << "#{building_type},#{template},#{climate_zone},Total Energy,Total Energy,#{total_legacy_energy_val.round(2)},#{total_osm_energy_val.round(2)},#{total_percent_error.round},#{tot_abs_energy_err.round},#{tot_cumulative_energy_err.round}"
