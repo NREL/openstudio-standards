@@ -56,11 +56,19 @@ class OpenStudio::Model::ThermalZone
     if sql.is_initialized
       sql = sql.get
     
+      # In E+ 8.4, (OS 1.9.3 onward) the table name changed
+      table_name = nil
+      if self.model.version < OpenStudio::VersionString.new('1.9.3')
+        table_name = 'Zone Cooling'
+      else
+        table_name = 'Zone Sensible Cooling'
+      end  
+    
       query = "SELECT Value 
               FROM tabulardatawithstrings
               WHERE ReportName='HVACSizingSummary' 
               AND ReportForString='Entire Facility' 
-              AND TableName='Zone Cooling'
+              AND TableName='#{table_name}'
               AND ColumnName='User Design Air Flow'
               AND RowName='#{name}'
               AND Units='m3/s'"
@@ -93,11 +101,19 @@ class OpenStudio::Model::ThermalZone
     if sql.is_initialized
       sql = sql.get
     
+      # In E+ 8.4, (OS 1.9.3 onward) the table name changed
+      table_name = nil
+      if self.model.version < OpenStudio::VersionString.new('1.9.3')
+        table_name = 'Zone Heating'
+      else
+        table_name = 'Zone Sensible Heating'
+      end    
+    
       query = "SELECT Value 
               FROM tabulardatawithstrings
               WHERE ReportName='HVACSizingSummary' 
               AND ReportForString='Entire Facility' 
-              AND TableName='Zone Heating'
+              AND TableName='#{table_name}'
               AND ColumnName='User Design Air Flow'
               AND RowName='#{name}'
               AND Units='m3/s'"

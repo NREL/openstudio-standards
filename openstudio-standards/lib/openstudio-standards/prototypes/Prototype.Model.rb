@@ -396,7 +396,7 @@ class OpenStudio::Model::Model
 
     # Loop through all the space types currently in the model,
     # which are placeholders, and generate actual space types for them.
-    self.getSpaceTypes.each do |stub_space_type|
+    self.getSpaceTypes.sort.each do |stub_space_type|
 
       # Get the standard building type
       # from the stub
