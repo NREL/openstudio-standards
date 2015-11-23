@@ -3,31 +3,39 @@
 class OpenStudio::Model::Model
  
   def define_space_type_map(building_type, building_vintage, climate_zone)
-    space_type_map = {
-      'Strip mall - type 1' => [
-        'LGstore1', 'SMstore1'
-      ],
-      'Strip mall - type 2' => [
-        'SMstore2', 'SMstore3', 'SMstore4'
-      ],
-      'Strip mall - type 3' => [
-        'LGstore2', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'
-      ]
-    }
+    space_type_map = nil
+    case building_vintage
+    
+    when 'NECB 2011'
+      space_type_map ={
+        "Retail - sales" => ["LGstore1", "LGstore2", "SMstore1", "SMstore2", "SMstore3", "SMstore4", "SMstore5", "SMstore6", "SMstore7", "SMstore8"]
+      }
+      space_type_map = {
+        'Strip mall - type 1' => [
+          'LGstore1', 'SMstore1'
+        ],
+        'Strip mall - type 2' => [
+          'SMstore2', 'SMstore3', 'SMstore4'
+        ],
+        'Strip mall - type 3' => [
+          'LGstore2', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'
+        ]
+      }
+    end
     return space_type_map
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
     system_to_space_map = [
       {
-          'type' => 'CAV',
-          'name' => 'PSZ-AC_1',
-          'space_names' => ['LGSTORE1']
+        'type' => 'CAV',
+        'name' => 'PSZ-AC_1',
+        'space_names' => ['LGSTORE1']
       },
       {
-          'type' => 'CAV',
-          'name' => 'PSZ-AC_2',
-          'space_names' => ['SMstore1']
+        'type' => 'CAV',
+        'name' => 'PSZ-AC_2',
+        'space_names' => ['SMstore1']
       },
       {
         'type' => 'CAV2',
@@ -99,44 +107,44 @@ class OpenStudio::Model::Model
       end
 
       case system['type']
-        when 'CAV'
-          self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones)
-        when 'CAV2'
-          self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones,"DrawThrough",nil,nil,"_2")
-        when 'CAV3'
-          self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones,"DrawThrough",nil,nil,"_3")
-        else
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "HVAC system type (#{system['type']}) was not defined for strip mall.")
-          return false
+      when 'CAV'
+        self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones)
+      when 'CAV2'
+        self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones,"DrawThrough",nil,nil,"_2")
+      when 'CAV3'
+        self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones,"DrawThrough",nil,nil,"_3")
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "HVAC system type (#{system['type']}) was not defined for strip mall.")
+        return false
       end
     end
 
     # Add infiltration door opening
     # Spaces names to design infiltration rates (m3/s)
     case building_vintage
-      when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
-        door_infiltration_map = { ['LGstore1','LGstore2'] => 0.388884328,
-                                  ['SMstore1','SMstore2', 'SMstore3', 'SMstore4','SMstore5', 'SMstore6', 'SMstore7', 'SMstore8']=>0.222287037}
+    when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
+      door_infiltration_map = { ['LGstore1','LGstore2'] => 0.388884328,
+        ['SMstore1','SMstore2', 'SMstore3', 'SMstore4','SMstore5', 'SMstore6', 'SMstore7', 'SMstore8']=>0.222287037}
 
-        door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|
-          space_names.each do |space_name|
-            space = self.getSpaceByName(space_name).get
-            # Create the infiltration object and hook it up to the space type
-            infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
-            infiltration.setName("#{space_name} Door Open Infiltration")
-            infiltration.setSpace(space)
-            infiltration.setDesignFlowRate(infiltration_design_flowrate)
-            infiltration_schedule = self.add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
-            if infiltration_schedule.nil?
-              OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Can't find schedule (RetailStripmall INFIL_Door_Opening_SCH).")
-              return false
-            else
-              infiltration.setSchedule(infiltration_schedule)
-            end
+      door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|
+        space_names.each do |space_name|
+          space = self.getSpaceByName(space_name).get
+          # Create the infiltration object and hook it up to the space type
+          infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+          infiltration.setName("#{space_name} Door Open Infiltration")
+          infiltration.setSpace(space)
+          infiltration.setDesignFlowRate(infiltration_design_flowrate)
+          infiltration_schedule = self.add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
+          if infiltration_schedule.nil?
+            OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Can't find schedule (RetailStripmall INFIL_Door_Opening_SCH).")
+            return false
+          else
+            infiltration.setSchedule(infiltration_schedule)
           end
         end
-      else
-        # do nothing for the old vintage
+      end
+    else
+      # do nothing for the old vintage
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
@@ -149,8 +157,8 @@ class OpenStudio::Model::Model
     # Add the main service hot water loop
     swh_space_names = ["LGstore1","SMstore1","SMstore2","SMstore3","LGstore2","SMstore5","SMstore6"]
     swh_sch_names = ["RetailStripmall Type1_SWH_SCH","RetailStripmall Type1_SWH_SCH","RetailStripmall Type2_SWH_SCH",
-                     "RetailStripmall Type2_SWH_SCH","RetailStripmall Type3_SWH_SCH","RetailStripmall Type3_SWH_SCH",
-                     "RetailStripmall Type3_SWH_SCH"]
+      "RetailStripmall Type2_SWH_SCH","RetailStripmall Type3_SWH_SCH","RetailStripmall Type3_SWH_SCH",
+      "RetailStripmall Type3_SWH_SCH"]
     use_rate = 0.03 # in gal/min
 
     for i in 0...swh_space_names.size

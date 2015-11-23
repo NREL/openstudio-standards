@@ -3,13 +3,27 @@
 class OpenStudio::Model::Model
  
   def define_space_type_map(building_type, building_vintage, climate_zone)
-    space_type_map = {
-      'WholeBuilding - Md Office' => [
-        'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4', 'Core_bottom',
-        'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4', 'Core_mid',
-        'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4', 'Core_top'
-      ]
-    }
+    space_type_map = nil
+    case building_vintage 
+    when 'NECB 2011'
+      space_type_map ={
+        "Office - open plan" => ["Core_bottom", "Core_mid", "Core_top", 
+          "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", 
+          "Perimeter_bot_ZN_4", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", 
+          "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", 
+          "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"],
+        
+        "- undefined -" => ["FirstFloor_Plenum", "TopFloor_Plenum", "MidFloor_Plenum"]
+      }
+    else
+      space_type_map = {
+        'WholeBuilding - Md Office' => [
+          'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4', 'Core_bottom',
+          'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4', 'Core_mid',
+          'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4', 'Core_top'
+        ]
+      }
+    end
     return space_type_map
   end
 
@@ -17,65 +31,65 @@ class OpenStudio::Model::Model
     case building_vintage
     when 'DOE Ref Pre-1980'
       system_to_space_map = [
-      {
+        {
           'type' => 'PSZ',
           'space_names' =>
-          [
-              'Perimeter_bot_ZN_1',
-              'Perimeter_bot_ZN_2',
-              'Perimeter_bot_ZN_3',
-              'Perimeter_bot_ZN_4',
-              'Core_bottom',
-              'Perimeter_mid_ZN_1',
-              'Perimeter_mid_ZN_2',
-              'Perimeter_mid_ZN_3',
-              'Perimeter_mid_ZN_4',
-              'Core_mid',
-              'Perimeter_top_ZN_1',
-              'Perimeter_top_ZN_2',
-              'Perimeter_top_ZN_3',
-              'Perimeter_top_ZN_4',
-              'Core_top'
+            [
+            'Perimeter_bot_ZN_1',
+            'Perimeter_bot_ZN_2',
+            'Perimeter_bot_ZN_3',
+            'Perimeter_bot_ZN_4',
+            'Core_bottom',
+            'Perimeter_mid_ZN_1',
+            'Perimeter_mid_ZN_2',
+            'Perimeter_mid_ZN_3',
+            'Perimeter_mid_ZN_4',
+            'Core_mid',
+            'Perimeter_top_ZN_1',
+            'Perimeter_top_ZN_2',
+            'Perimeter_top_ZN_3',
+            'Perimeter_top_ZN_4',
+            'Core_top'
           ]
-      }
-    ]
+        }
+      ]
     else
       system_to_space_map = [
         {
-            'type' => 'PVAV',
-            'space_names' =>
+          'type' => 'PVAV',
+          'space_names' =>
             [
-                'Perimeter_bot_ZN_1',
-                'Perimeter_bot_ZN_2',
-                'Perimeter_bot_ZN_3',
-                'Perimeter_bot_ZN_4',
-                'Core_bottom'
-            ],
-            'return_plenum' => 'FirstFloor_Plenum'
+            'Perimeter_bot_ZN_1',
+            'Perimeter_bot_ZN_2',
+            'Perimeter_bot_ZN_3',
+            'Perimeter_bot_ZN_4',
+            'Core_bottom'
+          ],
+          'return_plenum' => 'FirstFloor_Plenum'
         },
         {
-            'type' => 'PVAV',
-            'space_names' =>
+          'type' => 'PVAV',
+          'space_names' =>
             [
-                'Perimeter_mid_ZN_1',
-                'Perimeter_mid_ZN_2',
-                'Perimeter_mid_ZN_3',
-                'Perimeter_mid_ZN_4',
-                'Core_mid'
-            ],
-            'return_plenum' => 'MidFloor_Plenum'
+            'Perimeter_mid_ZN_1',
+            'Perimeter_mid_ZN_2',
+            'Perimeter_mid_ZN_3',
+            'Perimeter_mid_ZN_4',
+            'Core_mid'
+          ],
+          'return_plenum' => 'MidFloor_Plenum'
         },
         {
-            'type' => 'PVAV',
-            'space_names' =>
+          'type' => 'PVAV',
+          'space_names' =>
             [
-                'Perimeter_top_ZN_1',
-                'Perimeter_top_ZN_2',
-                'Perimeter_top_ZN_3',
-                'Perimeter_top_ZN_4',
-                'Core_top'
-            ],
-            'return_plenum' => 'TopFloor_Plenum'
+            'Perimeter_top_ZN_1',
+            'Perimeter_top_ZN_2',
+            'Perimeter_top_ZN_3',
+            'Perimeter_top_ZN_4',
+            'Core_top'
+          ],
+          'return_plenum' => 'TopFloor_Plenum'
         }
       ]
     end
@@ -164,14 +178,14 @@ class OpenStudio::Model::Model
 
     space_type_map.each do |space_type_name, space_names|
       space_names.each do |space_name|
-          if building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'DOE Ref Pre-1980'
-            if space_name == 'Core_bottom' || space_name == 'Core_mid' || space_name == 'Core_top'
-              self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-            end
-          else
+        if building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'DOE Ref Pre-1980'
+          if space_name == 'Core_bottom' || space_name == 'Core_mid' || space_name == 'Core_top'
             self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
           end
+        else
+          self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
         end
+      end
     end
 
     # spaces.each do |space|

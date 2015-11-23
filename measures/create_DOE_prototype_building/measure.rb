@@ -53,6 +53,7 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     #template_chs << '189.1-2009'
     template_chs << '90.1-2010'
     template_chs << '90.1-2013'
+    template_chs << 'NECB 2011'
     template = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('template', template_chs, true)
     template.setDisplayName('Template.')
     template.setDefaultValue('90.1-2010')
@@ -79,11 +80,20 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     #climate_zone_chs << 'ASHRAE 169-2006-7B'
     climate_zone_chs << 'ASHRAE 169-2006-8A'
     #climate_zone_chs << 'ASHRAE 169-2006-8B'
+    climate_zone_chs << 'NECB HDD Method'
     climate_zone = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('climate_zone', climate_zone_chs, true)
     climate_zone.setDisplayName('Climate Zone.')
     climate_zone.setDefaultValue('ASHRAE 169-2006-2A')
     args << climate_zone
 
+    #make argument for weatherfile path. 
+    epw_file = OpenStudio::Ruleset::OSArgument::makeStringArgument('epw_file', true)
+    epw_file.setDisplayName('epw_file')
+    epw_file.setDefaultValue('CAN_BC_Vancouver.718920_CWEC.epw')
+    
+    
+    
+    
     return args
   end
 
@@ -100,6 +110,7 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     building_type = runner.getStringArgumentValue('building_type',user_arguments)
     template = runner.getStringArgumentValue('template',user_arguments)
     climate_zone = runner.getStringArgumentValue('climate_zone',user_arguments)
+    epw_file = runner.getStringArgumentValue('epw_file',user_arguments)
 
     # Turn debugging output on/off
     @debug = false    
