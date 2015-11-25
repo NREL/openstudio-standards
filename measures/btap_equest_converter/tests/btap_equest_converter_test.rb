@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FILE__)
 require 'openstudio'
 require 'openstudio/ruleset/ShowRunnerOutput'
 require 'minitest/autorun'
