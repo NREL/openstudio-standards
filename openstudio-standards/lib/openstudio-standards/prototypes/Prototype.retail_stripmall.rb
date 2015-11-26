@@ -10,6 +10,7 @@ class OpenStudio::Model::Model
       space_type_map ={
         "Retail - sales" => ["LGstore1", "LGstore2", "SMstore1", "SMstore2", "SMstore3", "SMstore4", "SMstore5", "SMstore6", "SMstore7", "SMstore8"]
       }
+    else
       space_type_map = {
         'Strip mall - type 1' => [
           'LGstore1', 'SMstore1'
