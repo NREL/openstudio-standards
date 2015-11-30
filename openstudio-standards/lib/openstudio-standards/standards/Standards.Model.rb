@@ -334,7 +334,8 @@ class OpenStudio::Model::Model
         return schedule
       end
     end
- 
+    
+    
     require 'date'
 
     #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding schedule: #{schedule_name}")   
@@ -455,6 +456,12 @@ class OpenStudio::Model::Model
   # @todo make return an OptionalSpaceType
   def add_space_type(template, clim, building_type, spc_type)
     
+    # for debugging (Maria)
+    puts "template = #{template}"
+    puts "clim = #{clim}"
+    puts "building_type = #{building_type}"
+    puts "spc_type = #{spc_type}"
+    
     # Get the space type data
     data = self.find_object(self.standards['space_types'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type})
     if !data
@@ -543,6 +550,16 @@ class OpenStudio::Model::Model
 
       # Get the lighting schedule and set it as the default
       lighting_sch = data['lighting_schedule']
+      # for debugging (Maria)
+      puts "lighting schedule = #{lighting_sch}"
+      
+      if template = 'NECB 2011'
+         # call routine that checks schedule name
+         # this routine would search for schedule that corresponds to the building type and set that as lighting_sch
+         # note building type in this routine = Space Function! 
+        
+      end
+      
       unless lighting_sch.nil?
         default_sch_set.setLightingSchedule(add_schedule(lighting_sch))
       end

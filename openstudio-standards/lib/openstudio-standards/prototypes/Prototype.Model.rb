@@ -36,24 +36,57 @@ class OpenStudio::Model::Model
       return false
     end
 
-    self.load_building_type_methods(building_type, building_vintage, climate_zone)
-    self.load_geometry(building_type, building_vintage, climate_zone)
-    self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
-    space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
-    self.assign_space_type_stubs(lookup_building_type, space_type_map)
-    self.add_loads(building_vintage, climate_zone)
-    self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
-    self.modify_surface_convection_algorithm(building_vintage)
-    self.add_constructions(lookup_building_type, building_vintage, climate_zone)
-    self.create_thermal_zones(building_type,building_vintage, climate_zone)
-    self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)
-    self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
-    self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-    self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
-    self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
-    self.set_sizing_parameters(building_type, building_vintage)
-    self.yearDescription.get.setDayofWeekforStartDay('Sunday')
-
+    case building_vintage 
+      
+    when 'NECB 2011'
+      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
+      self.load_building_type_methods(building_type, building_vintage, climate_zone)
+      self.load_geometry(building_type, building_vintage, climate_zone)
+      self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
+      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
+      self.assign_space_type_stubs("Space Function", space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
+      self.add_loads(building_vintage, climate_zone)
+      
+# TO DO:      
+#      
+#           
+#      
+#      
+#      
+#      self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
+#      self.modify_surface_convection_algorithm(building_vintage)
+#      self.add_constructions(lookup_building_type, building_vintage, climate_zone)
+#      self.create_thermal_zones(building_type,building_vintage, climate_zone)
+#      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)
+#      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
+#      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
+#      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)      
+#      self.set_sizing_parameters(building_type, building_vintage)
+#      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+#      
+      
+    else
+      
+      self.load_building_type_methods(building_type, building_vintage, climate_zone)
+      self.load_geometry(building_type, building_vintage, climate_zone)
+      self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
+      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
+      self.assign_space_type_stubs(lookup_building_type, space_type_map)
+      self.add_loads(building_vintage, climate_zone)
+      self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
+      self.modify_surface_convection_algorithm(building_vintage)
+      self.add_constructions(lookup_building_type, building_vintage, climate_zone)
+      self.create_thermal_zones(building_type,building_vintage, climate_zone)
+      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)
+      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
+      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
+      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
+      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
+      self.set_sizing_parameters(building_type, building_vintage)
+      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+      
+    end
+      
     # Perform a sizing run
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
@@ -199,6 +232,8 @@ class OpenStudio::Model::Model
     
     # Determine which geometry file to use
     # based on building_type and template
+    # NECB 2011 geometry is not explicitly defined; for NECB 2011 vintage, latest ASHRAE 90.1 geometry file is assigned (implicitly)
+    
     case building_type
     when 'SecondarySchool'
       if building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004'
@@ -240,7 +275,7 @@ class OpenStudio::Model::Model
         geometry_file = 'Geometry.small_hotel_pnnl2007.osm'
       when '90.1-2010'
         geometry_file = 'Geometry.small_hotel_pnnl2010.osm'
-      when '90.1-2013'
+      else #'90.1-2013'
         geometry_file = 'Geometry.small_hotel_pnnl2013.osm'
       end
     when 'LargeHotel'
@@ -273,14 +308,14 @@ class OpenStudio::Model::Model
       case building_vintage
       when 'DOE Ref Pre-1980'
         geometry_file = 'Geometry.quick_service_restaurant_pre1980.osm'
-      when 'DOE Ref 1980-2004','90.1-2010','90.1-2007','90.1-2004','90.1-2013'
+      else #'DOE Ref 1980-2004','90.1-2010','90.1-2007','90.1-2004','90.1-2013'
         geometry_file = 'Geometry.quick_service_restaurant_allothers.osm'
       end
     when 'FullServiceRestaurant'
       case building_vintage
       when 'DOE Ref Pre-1980'
         geometry_file = 'Geometry.full_service_restaurant_pre1980.osm'
-      when 'DOE Ref 1980-2004','90.1-2010','90.1-2007','90.1-2004','90.1-2013'
+      else # 'DOE Ref 1980-2004','90.1-2010','90.1-2007','90.1-2004','90.1-2013'
         geometry_file = 'Geometry.full_service_restaurant_allothers.osm'
       end
     when 'Hospital'
@@ -409,6 +444,8 @@ class OpenStudio::Model::Model
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards building type.")
         return false
       end
+      
+      # for debugging
       #puts "stds_building_type = #{stds_building_type}"
       
       # Get the standards space type

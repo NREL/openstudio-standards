@@ -31,7 +31,13 @@ class OpenStudio::Model::Model
       'ASHRAE 169-2006-7A' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
       'ASHRAE 169-2006-7B' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
       'ASHRAE 169-2006-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-      'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw'
+      'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+      'NECB-CNEB-4'  => 'CAN_BC_Vancouver.718920_CWEC.epw',
+      'NECB-CNEB-5'  => 'CAN_ON_Toronto.716240_CWEC.epw',
+      'NECB-CNEB-6'  => 'CAN_ON_Ottawa.716280_CWEC.epw',
+      'NECB-CNEB-7a' => 'CAN_AB_Calgary.718770_CWEC.epw',
+      'NECB-CNEB-7b' => 'CAN_NF_Goose.718160_CWEC.epw',
+      'NECB-CNEB-8'  => 'CAN_NT_Inuvik.719570_CWEC.epw'      
     }
 
     # Define where the weather files live

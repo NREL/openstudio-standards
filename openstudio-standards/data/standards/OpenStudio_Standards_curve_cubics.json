@@ -6,18 +6,18 @@
       "coeff_2": 2.6664,
       "coeff_3": -3.764,
       "coeff_4": 1.82,
-      "min_x": 0.0,
-      "max_x": 1.0,
+      "min_x": 0,
+      "max_x": 1,
       "notes": "From NECB 2011"
     },
     {
       "name": "Boiler Constant Efficiency Curve",
-      "coeff_1": 1.0,
-      "coeff_2": 0.0,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": 0.0,
-      "max_x": 1.0,
+      "coeff_1": 1,
+      "coeff_2": 0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": 0,
+      "max_x": 1,
       "notes": "From DOE Reference Building"
     },
     {
@@ -26,7 +26,7 @@
       "coeff_2": 1.4745,
       "coeff_3": -2.5795,
       "coeff_4": 1.3467,
-      "min_x": 0.0,
+      "min_x": 0,
       "max_x": 1.3,
       "notes": "From Regression of Prototype Building EMS"
     },
@@ -36,38 +36,38 @@
       "coeff_2": 1.3196,
       "coeff_3": -2.2154,
       "coeff_4": 1.1674,
-      "min_x": 0.0,
+      "min_x": 0,
       "max_x": 1.3,
       "notes": "From Regression of Prototype Building EMS"
     },
     {
       "name": "ConstantCubic",
-      "coeff_1": 1.0,
-      "coeff_2": 0.0,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": -100.0,
-      "max_x": 100.0,
+      "coeff_1": 1,
+      "coeff_2": 0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": -100,
+      "max_x": 100,
       "notes": "From Reference Buildings"
     },
     {
       "name": "DOE Ref DX Clg Coil Cool-CAP-fFlow",
-      "coeff_1": 1.0,
-      "coeff_2": 0.0,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": -100.0,
-      "max_x": 100.0,
+      "coeff_1": 1,
+      "coeff_2": 0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": -100,
+      "max_x": 100,
       "notes": "From DOE Pre-1980 Reference Building"
     },
     {
       "name": "DOE Ref DX Clg Coil Cool-EIR-fFlow",
-      "coeff_1": 1.0,
-      "coeff_2": 0.0,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": -100.0,
-      "max_x": 100.0,
+      "coeff_1": 1,
+      "coeff_2": 0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": -100,
+      "max_x": 100,
       "notes": "From DOE Pre-1980 Reference Building"
     },
     {
@@ -77,15 +77,15 @@
       "coeff_3": -8.184,
       "coeff_4": 4.2702,
       "min_x": 0.7,
-      "max_x": 1.0,
+      "max_x": 1,
       "notes": "From NECB, curve modified to take into account how PLF is used in E+, and PLF ranges (> 0.7)"
     },
     {
       "name": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "coeff_1": 0.84,
       "coeff_2": 0.16,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
       "min_x": 0.5,
       "max_x": 1.5,
       "notes": "From NECB 2011"
@@ -96,8 +96,8 @@
       "coeff_2": 0.0319,
       "coeff_3": 0.000136,
       "coeff_4": -8.75e-06,
-      "min_x": -20.0,
-      "max_x": 20.0,
+      "min_x": -20,
+      "max_x": 20,
       "notes": "From NECB 2011"
     },
     {
@@ -106,8 +106,8 @@
       "coeff_2": -0.03612,
       "coeff_3": 0.00142,
       "coeff_4": -2.68e-05,
-      "min_x": -20.0,
-      "max_x": 20.0,
+      "min_x": -20,
+      "max_x": 20,
       "notes": "From NECB 2011"
     },
     {
@@ -117,15 +117,15 @@
       "coeff_3": -2.9577,
       "coeff_4": 1.2596,
       "min_x": 0.7,
-      "max_x": 1.0,
+      "max_x": 1,
       "notes": "From NECB 2011"
     },
     {
       "name": "HPACHeatCapFFF",
       "coeff_1": 0.84,
       "coeff_2": 0.16,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
       "min_x": 0.5,
       "max_x": 1.5,
       "notes": "From Prototype Buildings"
@@ -136,8 +136,8 @@
       "coeff_2": 0.027626,
       "coeff_3": 0.000148716,
       "coeff_4": 3.4992e-06,
-      "min_x": -20.0,
-      "max_x": 20.0,
+      "min_x": -20,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
@@ -146,8 +146,8 @@
       "coeff_2": -0.0300438,
       "coeff_3": 0.00103745,
       "coeff_4": -2.3328e-05,
-      "min_x": -20.0,
-      "max_x": 20.0,
+      "min_x": -20,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
@@ -157,17 +157,17 @@
       "coeff_3": -0.77720685,
       "coeff_4": 0.313806701,
       "min_x": 0.1,
-      "max_x": 1.0,
+      "max_x": 1,
       "notes": "From Prototype Buildings"
     },
     {
       "name": "Hospital Kitchen_Flr_5_Case:1_WALKINFREEZERSingleShelfHorizontal_LatentEnergyMult",
       "coeff_1": 0.0236,
       "coeff_2": 0.0006,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
@@ -176,18 +176,18 @@
       "coeff_2": 0.001078032,
       "coeff_3": 6.02558e-05,
       "coeff_4": 1.23732e-06,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
       "name": "HotelLarge Kitchen_Flr_6_Case:1_WALKINFREEZERSingleShelfHorizontal_LatentEnergyMult",
       "coeff_1": 0.0236,
       "coeff_2": 0.0006,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
@@ -196,8 +196,8 @@
       "coeff_2": 0.001078032,
       "coeff_3": 6.02558e-05,
       "coeff_4": 1.23732e-06,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
@@ -206,38 +206,38 @@
       "coeff_2": 0.001078032,
       "coeff_3": -6.02558e-05,
       "coeff_4": 1.23732e-06,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Reference Buildings"
     },
     {
       "name": "PSZ-Fine Storage Heating Coil PLF-FPLR",
       "coeff_1": 0.8,
       "coeff_2": 0.2,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": 0.0,
-      "max_x": 1.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": 0,
+      "max_x": 1,
       "notes": "From Prototype Buildings"
     },
     {
       "name": "PSZ-Office Heating Coil PLF-FPLR",
       "coeff_1": 0.8,
       "coeff_2": 0.2,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": 0.0,
-      "max_x": 1.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": 0,
+      "max_x": 1,
       "notes": "From Prototype Buildings"
     },
     {
       "name": "RestaurantFastFood Kitchen_Case:1_WALKINFREEZERSingleShelfHorizontal_LatentEnergyMult",
       "coeff_1": 0.0236,
       "coeff_2": 0.0006,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
@@ -246,28 +246,28 @@
       "coeff_2": 0.001078032,
       "coeff_3": 6.02558e-05,
       "coeff_4": 1.23732e-06,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
       "name": "SAC Heating Coil PLF-FPLR",
       "coeff_1": 0.8,
       "coeff_2": 0.2,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": 0.0,
-      "max_x": 1.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": 0,
+      "max_x": 1,
       "notes": "From Prototype Buildings"
     },
     {
       "name": "SchoolPrimary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZERSingleShelfHorizontal_LatentEnergyMult",
       "coeff_1": 0.0236,
       "coeff_2": 0.0006,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
@@ -276,18 +276,18 @@
       "coeff_2": 0.001078032,
       "coeff_3": 6.02558e-05,
       "coeff_4": 1.23732e-06,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Prototype Buildings"
     },
     {
       "name": "Single Shelf Horizontal Latent Energy Multiplier_After2004",
       "coeff_1": 0.0236,
       "coeff_2": 0.0006,
-      "coeff_3": 0.0,
-      "coeff_4": 0.0,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "coeff_3": 0,
+      "coeff_4": 0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Reference Buildings"
     },
     {
@@ -296,18 +296,18 @@
       "coeff_2": 0.00024378,
       "coeff_3": 1.14e-05,
       "coeff_4": 1.811e-07,
-      "min_x": -35.0,
-      "max_x": 20.0,
+      "min_x": -35,
+      "max_x": 20,
       "notes": "From Reference Buildings"
     },
     {
       "name": "Tower_Fan_Curve",
-      "coeff_1": 0.0,
-      "coeff_2": 0.0,
-      "coeff_3": 0.0,
-      "coeff_4": 1.0,
-      "min_x": 0.0,
-      "max_x": 1.0,
+      "coeff_1": 0,
+      "coeff_2": 0,
+      "coeff_3": 0,
+      "coeff_4": 1,
+      "min_x": 0,
+      "max_x": 1,
       "notes": "From Prototype Buildings"
     }
   ]
