@@ -585,17 +585,8 @@ class OpenStudio::Model::Model
     ventilation_ach = data['ventilation_air_changes']
     unless ventilation_per_area.to_f  == 0 || ventilation_per_area.nil? then make_ventilation = true  end
     unless ventilation_per_person.to_f == 0 || ventilation_per_person.nil? then make_ventilation = true end
-    unless ventilation_ach.nil? then make_ventilation = true end
-    #unless ventilation_ach.to_f == 0 || ventilation_ach.nil? then make_ventilation = true end
-    
-    
-    # for debugging (Maria)
-    puts "name = #{name}"
-    puts "ventilation_per_area = #{ventilation_per_area}"
-    puts "ventilation_per_person = #{ventilation_per_person}"
-    puts "ventilation_ach = #{ventilation_ach}"
-    puts "ventilation_ach.to_f = #{ventilation_ach.to_f}"
-    # ventilation_ach = 0.000304977
+    unless ventilation_ach.to_f == 0 || ventilation_ach.nil? then make_ventilation = true end
+        
     
     if make_ventilation == true
 
@@ -610,9 +601,10 @@ class OpenStudio::Model::Model
       unless  ventilation_per_person.nil? || ventilation_per_person.to_f == 0
         ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
       end
-      unless ventilation_ach.nil? 
-        ventilation.setOutdoorAirFlowAirChangesperHour(ventilation_ach)
+      unless ventilation_ach.nil? || ventilation_ach.to_f == 0
+        ventilation.setOutdoorAirFlowAirChangesperHour(OpenStudio.convert(ventilation_ach.to_f, '', '').get)        
       end
+      
     end
 
     # Occupancy
