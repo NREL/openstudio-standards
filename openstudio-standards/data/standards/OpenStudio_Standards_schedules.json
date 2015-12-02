@@ -1667,6 +1667,42 @@
       ]
     },
     {
+      "name": "ApartmentMidRise BLDG_ELEVATORS Pre2004",
+      "category": "Elevator",
+      "units": null,
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.1,
+        0.2,
+        0.4,
+        0.5,
+        0.5,
+        0.35,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.35,
+        0.5,
+        0.5,
+        0.4,
+        0.4,
+        0.3,
+        0.2,
+        0.1
+      ]
+    },
+    {
       "name": "ApartmentMidRise CLGSETP_APT_SCH",
       "category": "Thermostat Setpoint",
       "units": "C",
@@ -2039,7 +2075,7 @@
       ]
     },
     {
-      "name": "ApartmentMidRise EQP_OFF_SCH",
+      "name": "ApartmentMidRise EQP_OFF_SCH_2004_2007",
       "category": "Equipment",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -2052,10 +2088,108 @@
       ]
     },
     {
-      "name": "ApartmentMidRise EQP_OFF_SCH",
+      "name": "ApartmentMidRise EQP_OFF_SCH_2004_2007",
       "category": "Equipment",
       "units": null,
       "day_types": "Wkdy",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.33,
+        0.33,
+        0.33,
+        0.33,
+        0.33,
+        0.33,
+        0.33,
+        0.5,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.94,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.5,
+        0.33,
+        0.33,
+        0.33,
+        0.33,
+        0.33,
+        0.33
+      ]
+    },
+    {
+      "name": "ApartmentMidRise EQP_OFF_SCH_2010_2013",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.218625
+      ]
+    },
+    {
+      "name": "ApartmentMidRise EQP_OFF_SCH_2010_2013",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Wkdy",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.33125,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.870205,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.33125,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625
+      ]
+    },
+    {
+      "name": "ApartmentMidRise EQP_OFF_SCH_Pre2004",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Default|WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.33
+      ]
+    },
+    {
+      "name": "ApartmentMidRise EQP_OFF_SCH_Pre2004",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -23461,6 +23595,19 @@
         18.0,
         18.0,
         18.0
+      ]
+    },
+    {
+      "name": "NECB-Activity",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Reference Buildings ",
+      "values": [
+        130.0
       ]
     },
     {
