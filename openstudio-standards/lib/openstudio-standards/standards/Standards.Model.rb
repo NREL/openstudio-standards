@@ -572,6 +572,9 @@ class OpenStudio::Model::Model
         end   
       end
       
+      # TO DO: another option is to not set the Lighting schedule if name of schedule includes a *
+      # These schedules will be replaced later with Phyl's routine 
+      
       unless lighting_sch.nil?
         default_sch_set.setLightingSchedule(add_schedule(lighting_sch))
       end

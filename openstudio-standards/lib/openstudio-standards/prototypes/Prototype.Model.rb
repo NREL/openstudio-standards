@@ -46,6 +46,9 @@ class OpenStudio::Model::Model
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
       self.assign_space_type_stubs("Space Function", space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
       self.add_loads(building_vintage, climate_zone, building_type)   # pass building_type - required for selecting NECB schedules for common * spaces
+      self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
+      self.modify_surface_convection_algorithm(building_vintage)
+      # self.add_constructions(lookup_building_type, building_vintage, climate_zone)
       
 # TO DO:      
 #      
@@ -53,9 +56,9 @@ class OpenStudio::Model::Model
 #      
 #      
 #      
-#      self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
-#      self.modify_surface_convection_algorithm(building_vintage)
-#      self.add_constructions(lookup_building_type, building_vintage, climate_zone)
+#      
+#      
+#      
 #      self.create_thermal_zones(building_type,building_vintage, climate_zone)
 #      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)  # note exhaust fan schedule for * common spaces.
 #      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
@@ -160,6 +163,8 @@ class OpenStudio::Model::Model
       lookup_name = 'Retail'
     when 'RetailStripmall'
       lookup_name = 'StripMall'
+    when 'Office'
+      lookup_name = 'Office'     # TO DO: add all NECB prototypes
     end
 
     return lookup_name
@@ -464,9 +469,12 @@ class OpenStudio::Model::Model
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards space type.")
         return false
       end
-      # puts "stds_spc_type = #{stds_spc_type}"
+      
       new_space_type = self.add_space_type(building_vintage, 'ClimateZone 1-8', stds_building_type, stds_spc_type, building_type)  #need to pass building_type to get applicable schedules for NECB common space types
 
+      # for debugging (Maria)
+      #puts "new_space_type = #{new_space_type}"
+      
       # Apply the new space type to the building      
       stub_space_type.spaces.each do |space|
         space.setSpaceType(new_space_type)
@@ -1024,7 +1032,7 @@ class OpenStudio::Model::Model
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('DOE-2')     
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('TARP')
     end
