@@ -2578,7 +2578,7 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_COR_SCH",
+      "name": "ApartmentMidRise LTG_COR_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -2591,7 +2591,33 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_OFF_SCH",
+      "name": "ApartmentMidRise LTG_COR_SCH_2010",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.8176
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_COR_SCH_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.53144
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "Default",
@@ -2604,7 +2630,7 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_OFF_SCH",
+      "name": "ApartmentMidRise LTG_OFF_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "SmrDsn",
@@ -2617,7 +2643,82 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_OFF_SCH",
+      "name": "ApartmentMidRise LTG_OFF_SCH_2004_2007",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Wkdy",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.68384,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2004_2007",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2010_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2010_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2010_2013",
       "category": "Unknown",
       "units": null,
       "day_types": "Wkdy",
@@ -2653,7 +2754,7 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_OFF_SCH",
+      "name": "ApartmentMidRise LTG_OFF_SCH_2010_2013",
       "category": "Unknown",
       "units": null,
       "day_types": "WntrDsn",
@@ -79453,22 +79554,22 @@
         0.0,
         0.0,
         0.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
         0.0,
-        0.0,
-        0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
         0.0,
         0.0
       ]
@@ -79489,22 +79590,22 @@
         0.0,
         0.0,
         0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
         0.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
+        0.0,
+        0.0,
         0.0,
         0.0
       ]
