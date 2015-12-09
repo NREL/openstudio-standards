@@ -1071,7 +1071,7 @@ class OpenStudio::Model::Model
         economizer_type = nil
         case building_vintage
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
-          economizer_type = 'FixedDryBulb'
+          economizer_type = 'DifferentialDryBulb'
         when '90.1-2010', '90.1-2013'
           case climate_zone
           when 'ASHRAE 169-2006-1A',
@@ -1088,7 +1088,7 @@ class OpenStudio::Model::Model
           # and outside air enthalphy; latter chosen to be consistent with MNECB and CAN-QUEST implementation
           economizer_type = 'DifferentialEnthalpy'
         end
-
+        
         # Set the economizer type
         # Get the OA system and OA controller
         oa_sys = air_loop.airLoopHVACOutdoorAirSystem
@@ -1101,13 +1101,17 @@ class OpenStudio::Model::Model
         oa_control = oa_sys.getControllerOutdoorAir
         oa_control.setEconomizerControlType(economizer_type)
         if (building_vintage != 'NECB 2011') then
-          oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
+          #oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
         else
           #oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_100_pct_oa_sch)     
         end  
         
-       
-        
+        # Check that the economizer type set by the prototypes
+        # is not prohibited by code.  If it is, change to no economizer.
+        unless air_loop.is_economizer_type_allowable(self.template, self.climate_zone)
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.prototype.Model", "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{self.template}, climate zone #{self.climate_zone}.  Economizer type will be switched to No Economizer.")
+          oa_control.setEconomizerControlType('NoEconomizer')
+        end
               
       end
     end
@@ -1320,9 +1324,9 @@ class OpenStudio::Model::Model
    
     vars = []
     # vars << ['Heating Coil Gas Rate', 'detailed']
-    vars << ['Zone Thermostat Air Temperature', 'detailed']
-    vars << ['Zone Thermostat Heating Setpoint Temperature', 'detailed']
-    vars << ['Zone Thermostat Cooling Setpoint Temperature', 'detailed']
+    # vars << ['Zone Thermostat Air Temperature', 'detailed']
+    # vars << ['Zone Thermostat Heating Setpoint Temperature', 'detailed']
+    # vars << ['Zone Thermostat Cooling Setpoint Temperature', 'detailed']
     # vars << ['Zone Air System Sensible Heating Rate', 'detailed']
     # vars << ['Zone Air System Sensible Cooling Rate', 'detailed']
     # vars << ['Fan Electric Power', 'detailed']
@@ -1359,6 +1363,14 @@ class OpenStudio::Model::Model
     vars << ['Boiler Part Load Ratio','timestep']
     vars << ['Boiler Gas Rate','timestep']
     vars << ['Fan Electric Power','timestep']
+ 
+    vars << ['Pump Electric Power','timestep']
+    vars << ['Pump Outlet Temperature','timestep']
+    vars << ['Pump Mass Flow Rate','timestep']  
+    
+    vars << ['Zone Air Terminal VAV Damper Position','timestep']
+    vars << ['Zone Air Terminal Minimum Air Flow Fraction','timestep']
+    vars << ['Zone Air Terminal Outdoor Air Volume Flow Rate','timestep']
     
     vars.each do |var, freq|  
       outputVariable = OpenStudio::Model::OutputVariable.new(var, self)
