@@ -12,6 +12,12 @@ class OpenStudio::Model::AirLoopHVAC
   # return [Bool] returns true if successful, false if not
   def apply_multizone_vav_outdoor_air_sizing()
 
+    # TODO enable damper position adjustment for legacy IDFS
+    if self.model.template == 'DOE Ref Pre-1980' || self.model.template == 'DOE Ref 1980-2004'
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "Damper positions not modified for DOE Ref Pre-1980 or DOE Ref 1980-2004 vintages.")
+      return true
+    end
+  
     # Only applies to multi-zone vav systems
     if self.is_multizone_vav_system
       self.set_minimum_vav_damper_positions
