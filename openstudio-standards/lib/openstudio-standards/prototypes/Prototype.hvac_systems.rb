@@ -2733,7 +2733,7 @@ class OpenStudio::Model::Model
     
     # Water heater depends on the fuel type
     water_heater = OpenStudio::Model::WaterHeaterMixed.new(self)
-    water_heater.setName("#{water_heater_vol_gal}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
+    water_heater.setName("#{water_heater_vol_gal}gal #{water_heater_fuel} Booster Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
     water_heater.setTankVolume(OpenStudio.convert(water_heater_vol_gal,'gal','m^3').get)
     water_heater.setSetpointTemperatureSchedule(swh_temp_sch)
 
@@ -2876,7 +2876,6 @@ class OpenStudio::Model::Model
     space = self.getSpaceByName(space_name)
     space = space.get
     space_area = OpenStudio.convert(space.floorArea,'m^2','ft^2').get   # ft2
-    puts "#{space_name} space_area = #{space_area}"
     if space_multiplier.nil?
       space_multiplier = 1
     end
@@ -2887,7 +2886,6 @@ class OpenStudio::Model::Model
     # Water fixture definition
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
     rated_flow_rate_per_area = data['service_water_heating_peak_flow_per_area'].to_f   # gal/h.ft2
-    puts "rated_flow_rate_per_area = #{rated_flow_rate_per_area}"
     rated_flow_rate_gal_per_hour = rated_flow_rate_per_area * space_area * space_multiplier   # gal/h
     rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour/60  # gal/h to gal/min
     rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get
