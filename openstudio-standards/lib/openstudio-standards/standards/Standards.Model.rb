@@ -454,15 +454,9 @@ class OpenStudio::Model::Model
     
   # Create a space type from the openstudio standards dataset.
   # @todo make return an OptionalSpaceType
-  def add_space_type(template, clim, building_type, spc_type, necb_building_type)
+  def add_space_type(template, clim, building_type, spc_type)
     
-    # for debugging (Maria)
-    puts "template = #{template}"
-    puts "clim = #{clim}"
-    puts "building_type = #{building_type}"
-    puts "spc_type = #{spc_type}"
-    puts "necb building type = #{necb_building_type}"
-    
+       
     # Get the space type data
     data = self.find_object(self.standards['space_types'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type})
     if !data
@@ -470,16 +464,6 @@ class OpenStudio::Model::Model
       return false #TODO change to return empty optional schedule:ruleset?
     end
     
-    if template == 'NECB 2011'
-      # Get the data that corresponds to the prototype building type; required for NECB 2011 standard, to get correct schedules for NECB common * space types
-      whole_building = 'WholeBuilding'
-      necb_building_type_data = self.find_object(self.standards['space_types'], {'template'=>template, 'building_type'=>necb_building_type, 'space_type'=>whole_building}) 
-      if !necb_building_type_data
-        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for space type: #{template}-#{clim}-#{necb_building_type}-#{whole_building}, will not be created.")
-        return false #TODO change to return empty optional schedule:ruleset?
-      end
-    end
-      
     OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding space type: #{template}-#{clim}-#{building_type}-#{spc_type}")
     
     name = make_name(template, clim, building_type, spc_type)
@@ -562,19 +546,9 @@ class OpenStudio::Model::Model
       # Get the lighting schedule and set it as the default
       lighting_sch = data['lighting_schedule']
       # for debugging (Maria)
-      puts "lighting schedule = #{lighting_sch}"
+      #puts "lighting schedule = #{lighting_sch}"
       
-      if template == 'NECB 2011'
-        # if space type has a common schedule (contains * in name),
-        # determine corresponding schedule for building type
-        if lighting_sch.include? "*"
-          lighting_sch = necb_building_type_data['lighting_schedule']
-        end   
-      end
-      
-      # TO DO: another option is to not set the Lighting schedule if name of schedule includes a *
-      # These schedules will be replaced later with Phyl's routine 
-      
+          
       unless lighting_sch.nil?
         default_sch_set.setLightingSchedule(add_schedule(lighting_sch))
       end
@@ -632,28 +606,13 @@ class OpenStudio::Model::Model
       # get the occupancy and occupant activity schedules from the library and set as the default
       occupancy_sch = data['occupancy_schedule']
       
-      if template == 'NECB 2011'
-        # if space type has a common schedule (contains * in name),
-        # determine corresponding schedule for building type
-        if occupancy_sch.include? "*"
-          occupancy_sch = necb_building_type_data['occupancy_schedule']
-        end   
-      end
-              
       unless occupancy_sch.nil?
         default_sch_set.setNumberofPeopleSchedule(add_schedule(occupancy_sch))
       end
       
       occupancy_activity_sch = data['occupancy_activity_schedule']
       
-      if template == 'NECB 2011'
-        # if space type has a common schedule (contains * in name),
-        # determine corresponding schedule for building type
-        if occupancy_activity_sch.include? "*"
-          occupancy_activity_sch = necb_building_type_data['occupancy_activity_schedule']
-        end   
-      end
-           
+               
       
       unless occupancy_activity_sch.nil?
         default_sch_set.setPeopleActivityLevelSchedule(add_schedule(occupancy_activity_sch))
@@ -724,15 +683,6 @@ class OpenStudio::Model::Model
       # Get the electric equipment schedule from the library and set as the default
       elec_equip_sch = data['electric_equipment_schedule']
       
-      if template == 'NECB 2011'
-        # if space type has a common schedule (contains * in name),
-        # determine corresponding schedule for building type
-        if elec_equip_sch.include? "*"
-          elec_equip_sch = necb_building_type_data['electric_equipment_schedule']
-        end   
-      end
-            
-      
       unless elec_equip_sch.nil?
         default_sch_set.setElectricEquipmentSchedule(add_schedule(elec_equip_sch))
       end
@@ -769,14 +719,6 @@ class OpenStudio::Model::Model
       # Get the gas equipment schedule from the library and set as the default
       gas_equip_sch = data['gas_equipment_schedule']
       
-      if template == 'NECB 2011'
-        # if space type has a common schedule (contains * in name),
-        # determine corresponding schedule for building type
-        if gas_equip_sch.include? "*"
-          gas_equip_sch = necb_building_type_data['gas_equipment_schedule']
-        end   
-      end
-      
       unless gas_equip_sch.nil?
         default_sch_set.setGasEquipmentSchedule(add_schedule(gas_equip_sch))
       end
@@ -787,28 +729,12 @@ class OpenStudio::Model::Model
     thermostat.setName("#{name} Thermostat")
 
     heating_setpoint_sch = data['heating_setpoint_schedule']
-    
-    if template == 'NECB 2011'
-      # if space type has a common schedule (contains * in name),
-      # determine corresponding schedule for building type
-      if heating_setpoint_sch.include? "*"
-        heating_setpoint_sch = necb_building_type_data['heating_setpoint_schedule']
-      end   
-    end
-    
+       
     unless heating_setpoint_sch.nil?
       thermostat.setHeatingSetpointTemperatureSchedule(add_schedule(heating_setpoint_sch))
     end
 
     cooling_setpoint_sch = data['cooling_setpoint_schedule']
-    
-    if template == 'NECB 2011'
-      # if space type has a common schedule (contains * in name),
-      # determine corresponding schedule for building type
-      if cooling_setpoint_sch.include? "*"
-        cooling_setpoint_sch = necb_building_type_data['cooling_setpoint_schedule']
-      end   
-    end
     
     unless cooling_setpoint_sch.nil?
       thermostat.setCoolingSetpointTemperatureSchedule(add_schedule(cooling_setpoint_sch))

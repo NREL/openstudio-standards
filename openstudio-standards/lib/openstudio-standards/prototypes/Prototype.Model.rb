@@ -39,34 +39,48 @@ class OpenStudio::Model::Model
     case building_vintage 
       
     when 'NECB 2011'
+      
       self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
       self.assign_space_type_stubs("Space Function", space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
-      self.add_loads(building_vintage, climate_zone, building_type)   # pass building_type - required for selecting NECB schedules for common * spaces
+      self.add_loads(building_vintage, climate_zone)   # pass building_type - required for selecting NECB schedules for common * spaces
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
+      
+      BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR
+      BTAP::Geometry::match_surfaces(self)                                    # set surface if they are out of whack.
+      BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
+      
       # self.add_constructions(lookup_building_type, building_vintage, climate_zone)
       
-# TO DO:      
-#      
-#           
-#      
-#      
-#      
-#      
-#      
-#      
-#      self.create_thermal_zones(building_type,building_vintage, climate_zone)
-#      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)  # note exhaust fan schedule for * common spaces.
-#      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
-#      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-#      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)      
-#      self.set_sizing_parameters(building_type, building_vintage)
-#      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
-#      
+      
+       
+      
+      
+      
+      
+      
+      
+      # TO DO:      
+      #      
+      #           
+      #      
+      #      
+      #      
+      #      
+      #      
+      #      
+      #      self.create_thermal_zones(building_type,building_vintage, climate_zone)
+      #      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)  # note exhaust fan schedule for * common spaces.
+      #      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
+      #      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
+      #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)      
+      #      self.set_sizing_parameters(building_type, building_vintage)
+      #      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+      #      
       
     else
       
@@ -75,7 +89,7 @@ class OpenStudio::Model::Model
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
       self.assign_space_type_stubs(lookup_building_type, space_type_map)
-      self.add_loads(building_vintage, climate_zone, building_type)   # pass building type (required for NECB 2011 implementation- see above
+      self.add_loads(building_vintage, climate_zone)
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
       self.modify_surface_convection_algorithm(building_vintage)
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)
@@ -213,9 +227,7 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.outpatient'
     when 'MidriseApartment'
       building_methods = 'Prototype.mid_rise_apartment'
-    when 'Office'    
-      building_methods = 'Prototype.large_office'
-    # TO DO: add all NECB 2011 building types?
+      # TO DO: add all NECB 2011 building types?
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
@@ -437,7 +449,7 @@ class OpenStudio::Model::Model
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not  
 
-  def add_loads(building_vintage, climate_zone, building_type)
+  def add_loads(building_vintage, climate_zone)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
@@ -470,7 +482,7 @@ class OpenStudio::Model::Model
         return false
       end
       
-      new_space_type = self.add_space_type(building_vintage, 'ClimateZone 1-8', stds_building_type, stds_spc_type, building_type)  #need to pass building_type to get applicable schedules for NECB common space types
+      new_space_type = self.add_space_type(building_vintage, 'ClimateZone 1-8', stds_building_type, stds_spc_type)  
 
       # for debugging (Maria)
       #puts "new_space_type = #{new_space_type}"

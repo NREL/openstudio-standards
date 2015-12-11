@@ -5930,7 +5930,7 @@
       "exterior_operable_window_building_category": null,
       "exterior_door_standards_construction_type": null,
       "exterior_door_building_category": null,
-      "exterior_glass_doors": "",
+      "exterior_glass_doors": "\n",
       "exterior_overhead_door_standards_construction_type": null,
       "exterior_overhead_door_building_category": null,
       "exterior_skylight_standards_construction_type": null,

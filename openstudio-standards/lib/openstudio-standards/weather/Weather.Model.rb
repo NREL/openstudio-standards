@@ -11,6 +11,7 @@ class OpenStudio::Model::Model
     
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Started adding weather file for climate zone: #{climate_zone}.")
     
+       
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = {
       'ASHRAE 169-2006-1A' => 'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
@@ -44,8 +45,10 @@ class OpenStudio::Model::Model
     top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
     weather_dir = "#{top_dir}/data/weather"   
 
+    puts "weather_dir = #{weather_dir}"
+    
     # Get the weather file name from the hash
-    weather_file_name = climate_zone_weather_file_map[climate_zone]
+    weather_file_name = climate_zone_weather_file_map[climate_zone]  
     if weather_file_name.nil?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}.")
       return false
@@ -55,8 +58,17 @@ class OpenStudio::Model::Model
     unless (Pathname.new weather_dir).absolute?
       weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
     end
+    
+    puts "weather_dir = #{weather_dir}"
+    
     weather_file = File.join(weather_dir, weather_file_name)
+    
+    puts "weather_file = #{weather_file}"
+    
     epw_file = OpenStudio::EpwFile.new(weather_file)
+    
+    puts "epw_file = #{epw_file}"
+    
     OpenStudio::Model::WeatherFile.setWeatherFile(self, epw_file).get
 
     weather_name = "#{epw_file.city}_#{epw_file.stateProvinceRegion}_#{epw_file.country}"
@@ -65,6 +77,12 @@ class OpenStudio::Model::Model
     weather_time = epw_file.timeZone
     weather_elev = epw_file.elevation
 
+    puts "weather_name = #{weather_name}"
+    puts "weather_lat = #{weather_lat}"
+    puts "weather_lon = #{weather_lon}"
+    puts "weather_time = #{weather_time}"
+    puts "weather_elev = #{weather_elev}"
+    
     # Add or update site data
     site = self.getSite
     site.setName(weather_name)
@@ -72,6 +90,9 @@ class OpenStudio::Model::Model
     site.setLongitude(weather_lon)
     site.setTimeZone(weather_time)
     site.setElevation(weather_elev)
+    
+    
+    puts "site = #{site}"
 
     #Add or update ground temperature data
     ground_temp_vals = self.find_object(standards["ground_temperatures"], {'template'=>building_vintage, 'climate_zone'=>climate_zone, 'building_type'=>building_type})
@@ -131,7 +152,7 @@ class OpenStudio::Model::Model
       ddy_model.getObjectsByType('OS:SizingPeriod:DesignDay'.to_IddObjectType).each do |d|
         # Import the 99.6% Heating and 0.4% Cooling design days
         ddy_list = /(Htg 99.6. Condns DB)|(Clg .4% Condns DB=>MWB)/
-        if d.name.get =~ ddy_list       
+        if d.name.get =~ ddy_list   
           self.addObject(d.clone)
           #OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Added #{d.name} design day.")
         end
