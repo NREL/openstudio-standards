@@ -15,7 +15,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
     # Minimum damper position is based on prototype
     # assumptions, which are not clearly documented.
     min_damper_position = nil
-    case prototype_input['template']       
+    case building_vintage       
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
       min_damper_position = 0.3
     when '90.1-2007'
@@ -29,16 +29,16 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
     # Cutoff was determined by correlating apparent minimum guesses
     # to OA rates in prototypes since not well documented in papers.
     if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-      case prototype_input['template'] 
+      case building_vintage 
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-        terminal.setConstantMinimumAirFlowFraction(min_damper_position)
+        self.setConstantMinimumAirFlowFraction(min_damper_position)
       else
         # High OA zones
-        terminal.setConstantMinimumAirFlowFraction(0.7)
+        self.setConstantMinimumAirFlowFraction(0.7)
       end
     else
       # Low OA zones
-      terminal.setConstantMinimumAirFlowFraction(min_damper_position)
+      self.setConstantMinimumAirFlowFraction(min_damper_position)
     end
 
     return true

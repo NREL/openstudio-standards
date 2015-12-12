@@ -10,10 +10,10 @@ class OpenStudio::Model::AirLoopHVAC
   # into the sizing:system object.
   #
   # return [Bool] returns true if successful, false if not
-  def apply_multizone_vav_outdoor_air_sizing()
+  def apply_multizone_vav_outdoor_air_sizing(template)
 
     # TODO enable damper position adjustment for legacy IDFS
-    if self.model.template == 'DOE Ref Pre-1980' || self.model.template == 'DOE Ref 1980-2004'
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "Damper positions not modified for DOE Ref Pre-1980 or DOE Ref 1980-2004 vintages.")
       return true
     end
@@ -50,7 +50,7 @@ class OpenStudio::Model::AirLoopHVAC
     if self.is_multizone_vav_system
       
       # VAV Reheat Control
-      self.set_vav_damper_action(template, climate_zone)
+      self.set_vav_damper_action(template)
       
       # Multizone VAV Optimization
       if self.is_multizone_vav_optimization_required(template, climate_zone)
@@ -1426,7 +1426,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Average outdoor air fraction
     x_s = v_ou / v_ps
     
-    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: v_ou = #{v_ou_cfm.round} cfm, v_ps = #{v_ps_cfm} cfm, x_s = #{x_s.round(2)}.")  
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: v_ou = #{v_ou_cfm.round} cfm, v_ps = #{v_ps_cfm.round} cfm, x_s = #{x_s.round(2)}.")  
     
     # Determine the zone ventilation effectiveness
     # for every zone on the system.
@@ -1501,7 +1501,7 @@ class OpenStudio::Model::AirLoopHVAC
       # Store the ventilation effectiveness
       e_vzs << e_vz
     
-      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: Zone #{zone.name} v_oz = #{v_oz} m^3/s, v_pz = #{v_pz} m^3/s, v_dz = #{v_dz}, z_d = #{z_d}.")
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: Zone #{zone.name} v_oz = #{v_oz.round(2)} m^3/s, v_pz = #{v_pz.round(2)} m^3/s, v_dz = #{v_dz.round(2)}, z_d = #{z_d.round(2)}.")
     
       # Check the ventilation effectiveness against
       # the minimum limit per PNNL and increase
@@ -1931,7 +1931,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @return [Bool] Returns true if successful, false if not
   # @todo see if this impacts the sizing run.
-  def set_vav_damper_action(template, climate_zone)
+  def set_vav_damper_action(template)
     damper_action = nil
     case template       
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', 'NECB 2011'

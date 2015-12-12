@@ -2,6 +2,8 @@
 # open the class to add methods to size all HVAC equipment
 class OpenStudio::Model::Model
 
+  require_relative 'Prototype.AirTerminalSingleDuctVAVReheat'
+  
   def add_hw_loop(prototype_input, standards, building_type=nil)
 
     #hot water loop
@@ -594,46 +596,8 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      # Vary the initial minimum damper position based on OA
-      # rate of the space.  Spaces with low OA per area get lower
-      # initial guess.  Final position will be adjusted upward
-      # as necessary by Standards.AirLoopHVAC.set_minimum_vav_damper_positions
-      # Also, set the damper action based on the template.  This will
-      # be double-checked by the standards, but needs to be set correctly
-      # before the sizing run so that subsequent assumptions work right.
-      min_damper_position = nil
-      damper_action = nil
-      case prototype_input['template']       
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
-        min_damper_position = 0.3
-        damper_action = 'Normal'
-      when '90.1-2007'
-        min_damper_position = 0.3
-        damper_action = 'Reverse'
-      when '90.1-2010', '90.1-2013'
-        min_damper_position = 0.2
-        damper_action = 'Reverse'
-      end
-
-      # TODO remove the template conditional; temporarily using it
-      # to see if we can match Reference IDF results
-      # Determine whether or not to use the high minimum guess
-      zone_oa_per_area = zone.outdoor_airflow_rate_per_area
-      if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-        case prototype_input['template'] 
-        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-          terminal.setConstantMinimumAirFlowFraction(min_damper_position)
-        else
-          # High OA zones
-          terminal.setConstantMinimumAirFlowFraction(0.7)
-        end
-      else
-        # Low OA zones
-        terminal.setConstantMinimumAirFlowFraction(min_damper_position)
-      end      
-            
+      terminal.set_initial_prototype_damper_position(prototype_input['template'], zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
-      terminal.setDamperHeatingAction(damper_action)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
       air_loop.addBranchForZone(zone,terminal.to_StraightComponent)
@@ -653,7 +617,10 @@ class OpenStudio::Model::Model
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zone_htg_sa_temp_c)
     
     end
-
+    
+    # Set the damper action based on the template.
+    air_loop.set_vav_damper_action(prototype_input['template'])
+    
     return true
 
   end
@@ -779,39 +746,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      # Vary the initial minimum damper position based on OA
-      # rate of the space.  Spaces with low OA per area get lower
-      # initial guess.  Final position will be adjusted upward
-      # as necessary by Standards.AirLoopHVAC.set_minimum_vav_damper_positions
-      # Also, set the damper action based on the template.  This will
-      # be double-checked by the standards, but needs to be set correctly
-      # before the sizing run so that subsequent assumptions work right.
-      min_damper_position = nil
-      damper_action = nil
-      case prototype_input['template']       
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
-        min_damper_position = 0.3
-        damper_action = 'Normal'
-      when '90.1-2007'
-        min_damper_position = 0.3
-        damper_action = 'Reverse'
-      when '90.1-2010', '90.1-2013'
-        min_damper_position = 0.2
-        damper_action = 'Reverse'
-      end
-
-      # Determine whether or not to use the high minimum guess
-      zone_oa_per_area = zone.outdoor_airflow_rate_per_area
-      if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-        # High OA zones
-        terminal.setConstantMinimumAirFlowFraction(0.7)
-      else
-        # Low OA zones
-        terminal.setConstantMinimumAirFlowFraction(min_damper_position)
-      end
-
-      terminal.setDamperHeatingAction(damper_action)
-      
+      terminal.set_initial_prototype_damper_position(prototype_input['template'], zone.outdoor_airflow_rate_per_area)
       air_loop.addBranchForZone(zone,terminal.to_StraightComponent)
 
       unless return_plenum.nil?
@@ -825,6 +760,9 @@ class OpenStudio::Model::Model
     
     end
 
+    # Set the damper action based on the template.
+    air_loop.set_vav_damper_action(prototype_input['template'])    
+    
     return true
 
   end
@@ -947,46 +885,8 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      # Vary the initial minimum damper position based on OA
-      # rate of the space.  Spaces with low OA per area get lower
-      # initial guess.  Final position will be adjusted upward
-      # as necessary by Standards.AirLoopHVAC.set_minimum_vav_damper_positions
-      # Also, set the damper action based on the template.  This will
-      # be double-checked by the standards, but needs to be set correctly
-      # before the sizing run so that subsequent assumptions work right.
-      min_damper_position = nil
-      damper_action = nil
-      case prototype_input['template']       
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
-        min_damper_position = 0.3
-        damper_action = 'Normal'
-      when '90.1-2007'
-        min_damper_position = 0.3
-        damper_action = 'Reverse'
-      when '90.1-2010', '90.1-2013'
-        min_damper_position = 0.2
-        damper_action = 'Reverse'
-      end
-      
-      # TODO remove the template conditional; temporarily using it
-      # to see if we can match Reference IDF results
-      # Determine whether or not to use the high minimum guess
-      zone_oa_per_area = zone.outdoor_airflow_rate_per_area
-      if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-        case prototype_input['template'] 
-        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-          terminal.setConstantMinimumAirFlowFraction(min_damper_position)
-        else
-          # High OA zones
-          terminal.setConstantMinimumAirFlowFraction(0.7)
-        end
-      else
-        # Low OA zones
-        terminal.setConstantMinimumAirFlowFraction(min_damper_position)
-      end
-
+      terminal.set_initial_prototype_damper_position(prototype_input['template'], zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
-      terminal.setDamperHeatingAction(damper_action)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
       air_loop.addBranchForZone(zone,terminal.to_StraightComponent)
@@ -1007,6 +907,9 @@ class OpenStudio::Model::Model
     
     end
 
+    # Set the damper action based on the template.
+    air_loop.set_vav_damper_action(prototype_input['template'])     
+    
     return true
 
   end  
