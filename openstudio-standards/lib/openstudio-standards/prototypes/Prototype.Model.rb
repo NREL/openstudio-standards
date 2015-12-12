@@ -756,12 +756,16 @@ class OpenStudio::Model::Model
   def add_occupancy_sensors(building_type, building_vintage, climate_zone)
    
     # Only add occupancy sensors for 90.1-2010
-    return true unless building_vintage == '90.1-2010'
+    case building_vintage
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+      return true
+    end
    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Occupancy Sensors')
 
     space_type_reduction_map = {
-      'SecondarySchool' => {'Classroom' => 0.32}
+      'SecondarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22},
+      'PrimarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22}
     }
     
     # Loop through all the space types and reduce lighting operation schedule fractions as-specified
@@ -809,7 +813,9 @@ class OpenStudio::Model::Model
         reduced_lights_schs[lights_sch_name] = new_lights_sch
 
         # Method to multiply the values in a day schedule by a specified value
-        def multiply_schedule(day_sch, multiplier)       
+        # but only when the existing value is higher than a specified lower limit.
+        # This limit prevents occupancy sensors from affecting unoccupied hours.
+        def multiply_schedule(day_sch, multiplier, limit)       
           # Record the original times and values
           times = day_sch.times
           values = day_sch.values
@@ -820,7 +826,11 @@ class OpenStudio::Model::Model
           # Create new values by using the multiplier on the original values
           new_values = []
           for i in 0..(values.length - 1)
-            new_values << values[i] * multiplier
+            if values[i] > limit
+              new_values << values[i] * multiplier
+            else
+              new_values << values[i]
+            end
           end
           
           # Add the revised time/value pairs to the schedule
@@ -830,11 +840,11 @@ class OpenStudio::Model::Model
         end #end reduce schedule
 
         # Reduce default day schedule
-        multiply_schedule(new_lights_sch.defaultDaySchedule, red_multiplier)
+        multiply_schedule(new_lights_sch.defaultDaySchedule, red_multiplier, 0.25)
         
         # Reduce all other rule schedules
         new_lights_sch.scheduleRules.each do |sch_rule|
-          multiply_schedule(sch_rule.daySchedule, red_multiplier)
+          multiply_schedule(sch_rule.daySchedule, red_multiplier, 0.25)
         end
          
       end #end of lights_sch_names.uniq.each do
@@ -1351,26 +1361,30 @@ class OpenStudio::Model::Model
     # vars << ['Water Use Connections Plant Hot Water Energy', 'hourly']
     # vars << ['Water Use Connections Return Water Temperature', 'hourly']
   
-    vars << ['Air System Outdoor Air Economizer Status','timestep']
-    vars << ['Air System Outdoor Air Heat Recovery Bypass Status','timestep']
-    vars << ['Air System Outdoor Air High Humidity Control Status','timestep']
-    vars << ['Air System Outdoor Air Flow Fraction','timestep']
-    vars << ['Air System Outdoor Air Minimum Flow Fraction','timestep']
-    vars << ['Air System Outdoor Air Mass Flow Rate','timestep']
-    vars << ['Air System Mixed Air Mass Flow Rate','timestep']
+    # vars << ['Air System Outdoor Air Economizer Status','timestep']
+    # vars << ['Air System Outdoor Air Heat Recovery Bypass Status','timestep']
+    # vars << ['Air System Outdoor Air High Humidity Control Status','timestep']
+    # vars << ['Air System Outdoor Air Flow Fraction','timestep']
+    # vars << ['Air System Outdoor Air Minimum Flow Fraction','timestep']
+    # vars << ['Air System Outdoor Air Mass Flow Rate','timestep']
+    # vars << ['Air System Mixed Air Mass Flow Rate','timestep']
   
-    vars << ['Heating Coil Gas Rate','timestep']
+    # vars << ['Heating Coil Gas Rate','timestep']
     vars << ['Boiler Part Load Ratio','timestep']
     vars << ['Boiler Gas Rate','timestep']
-    vars << ['Fan Electric Power','timestep']
+    # vars << ['Boiler Gas Rate','timestep']
+    # vars << ['Fan Electric Power','timestep']
  
     vars << ['Pump Electric Power','timestep']
     vars << ['Pump Outlet Temperature','timestep']
     vars << ['Pump Mass Flow Rate','timestep']  
     
-    vars << ['Zone Air Terminal VAV Damper Position','timestep']
-    vars << ['Zone Air Terminal Minimum Air Flow Fraction','timestep']
-    vars << ['Zone Air Terminal Outdoor Air Volume Flow Rate','timestep']
+    # vars << ['Zone Air Terminal VAV Damper Position','timestep']
+    # vars << ['Zone Air Terminal Minimum Air Flow Fraction','timestep']
+    # vars << ['Zone Air Terminal Outdoor Air Volume Flow Rate','timestep']
+    # vars << ['Zone Lights Electric Power','hourly']
+    # vars << ['Daylighting Lighting Power Multiplier','hourly']
+    # vars << ['Schedule Value','hourly']    
     
     vars.each do |var, freq|  
       outputVariable = OpenStudio::Model::OutputVariable.new(var, self)
