@@ -22871,6 +22871,97 @@
       ]
     },
     {
+      "name": "NECB-*-Electric-Equipment",
+      "category": "Equipment",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-FAN",
+      "category": "Fan",
+      "units": "ON_OFF",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Lighting",
+      "category": "Lighting",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Occupancy",
+      "category": "Occupancy",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Service Water Heating",
+      "category": "Service Water Heating",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Thermostat Setpoint-Cooling",
+      "category": "Thermostat Setpoint",
+      "units": "TEMPERATURE",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        35.0
+      ]
+    },
+    {
+      "name": "NECB-*-Thermostat Setpoint-Heating",
+      "category": "Thermostat Setpoint",
+      "units": "TEMPERATURE",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        18.0
+      ]
+    },
+    {
       "name": "NECB-A-Electric-Equipment",
       "category": "Equipment",
       "units": "FRACTION",
@@ -38691,33 +38782,7 @@
       "name": "OfficeSmall BLDG_EQUIP_SCH",
       "category": "Equipment",
       "units": null,
-      "day_types": "Default|WntrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "OfficeSmall BLDG_EQUIP_SCH",
-      "category": "Equipment",
-      "units": null,
-      "day_types": "SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        1.0
-      ]
-    },
-    {
-      "name": "OfficeSmall BLDG_EQUIP_SCH",
-      "category": "Equipment",
-      "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Default|Wkdy",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -38750,21 +38815,8 @@
       ]
     },
     {
-      "name": "OfficeSmall BLDG_LIGHT_SCH",
-      "category": "Lighting",
-      "units": null,
-      "day_types": "Default|WntrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "OfficeSmall BLDG_LIGHT_SCH",
-      "category": "Lighting",
+      "name": "OfficeSmall BLDG_EQUIP_SCH",
+      "category": "Equipment",
       "units": null,
       "day_types": "SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
@@ -38776,10 +38828,36 @@
       ]
     },
     {
+      "name": "OfficeSmall BLDG_EQUIP_SCH",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Wknd",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.2
+      ]
+    },
+    {
+      "name": "OfficeSmall BLDG_EQUIP_SCH",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
       "name": "OfficeSmall BLDG_LIGHT_SCH",
       "category": "Lighting",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Default|Wkdy",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -38809,6 +38887,45 @@
         0.32,
         0.23,
         0.18
+      ]
+    },
+    {
+      "name": "OfficeSmall BLDG_LIGHT_SCH",
+      "category": "Lighting",
+      "units": null,
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "OfficeSmall BLDG_LIGHT_SCH",
+      "category": "Lighting",
+      "units": null,
+      "day_types": "Wknd",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18
+      ]
+    },
+    {
+      "name": "OfficeSmall BLDG_LIGHT_SCH",
+      "category": "Lighting",
+      "units": null,
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
       ]
     },
     {
