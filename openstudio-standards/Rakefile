@@ -20,7 +20,7 @@ require 'rake/testtask'
 desc 'Run test group 1'
 Rake::TestTask.new('test:gem_group_1') do |task|
   task.test_files = FileList[
-  'openstudio-standards/test/test_secondary_school.rb' # 70 min
+  'openstudio-standards/test/test_secondary_school.rb', # 70 min
   'openstudio-standards/test/test_medium_office.rb'
   ]
 end
