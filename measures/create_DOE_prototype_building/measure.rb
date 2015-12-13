@@ -125,7 +125,7 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
       Dir.mkdir(osm_directory)
     end
 
-    model.create_prototype_building(building_type,template,climate_zone,osm_directory)
+    model.create_prototype_building(building_type,template,climate_zone,osm_directory,@debug)
     
     log_msgs
     return true
