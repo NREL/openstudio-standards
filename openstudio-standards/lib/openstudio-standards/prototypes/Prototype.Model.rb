@@ -42,6 +42,7 @@ class OpenStudio::Model::Model
     space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
     self.assign_space_type_stubs(lookup_building_type, space_type_map)
     self.add_loads(building_vintage, climate_zone)
+    self.apply_infiltration_standard
     self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
     self.modify_surface_convection_algorithm(building_vintage)
     self.add_constructions(lookup_building_type, building_vintage, climate_zone)
@@ -1051,9 +1052,9 @@ class OpenStudio::Model::Model
     ##### Apply equipment efficiencies
     
     # Fans
-    self.getFanConstantVolumes.sort.each {|obj| obj.setPrototypeFanPressureRise(building_vintage)}
+    self.getFanConstantVolumes.sort.each {|obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)}
     self.getFanVariableVolumes.sort.each {|obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)}
-    self.getFanOnOffs.sort.each {|obj| obj.setPrototypeFanPressureRise}
+    self.getFanOnOffs.sort.each {|obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)}
     self.getFanZoneExhausts.sort.each {|obj| obj.setPrototypeFanPressureRise}
 
     ##### Add Economizers
