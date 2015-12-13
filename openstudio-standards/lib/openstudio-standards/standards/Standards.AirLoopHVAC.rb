@@ -81,7 +81,14 @@ class OpenStudio::Model::AirLoopHVAC
     if self.is_supply_air_temperature_reset_required(template, climate_zone)
       self.enable_supply_air_temperature_reset
     end
-    
+   
+    # Motorized OA damper
+    if self.is_motorized_oa_damper_required(template, climate_zone)
+      # TODO self.add_motorized_oa_damper
+    else
+      self.remove_motorized_oa_damper
+    end
+   
     # TODO Optimum Start
     # for systems exceeding 10,000 cfm
     # need 1.9.0 for this AVM
@@ -422,16 +429,71 @@ class OpenStudio::Model::AirLoopHVAC
         else
           OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
         end
-        # TODO Handle all cooling coil types for economizer determination
+      elsif sc.to_AirLoopHVACUnitarySystem.is_initialized
+        unitary = sc.to_AirLoopHVACUnitarySystem.get
+        if unitary.coolingCoil.is_initialized
+          clg_coil = unitary.coolingCoil.get
+          # CoilCoolingDXSingleSpeed
+          if clg_coil.to_CoilCoolingDXSingleSpeed.is_initialized
+            coil = clg_coil.to_CoilCoolingDXSingleSpeed.get
+            if coil.ratedTotalCoolingCapacity.is_initialized
+              total_cooling_capacity_w += coil.ratedTotalCoolingCapacity.get
+            elsif coil.autosizedRatedTotalCoolingCapacity.is_initialized
+              total_cooling_capacity_w += coil.autosizedRatedTotalCoolingCapacity.get
+            else
+              OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+            end
+          # CoilCoolingDXTwoSpeed
+          elsif clg_coil.to_CoilCoolingDXTwoSpeed.is_initialized  
+            coil = clg_coil.to_CoilCoolingDXTwoSpeed.get
+            if coil.ratedHighSpeedTotalCoolingCapacity.is_initialized
+              total_cooling_capacity_w += coil.ratedHighSpeedTotalCoolingCapacity.get
+            elsif coil.autosizedRatedHighSpeedTotalCoolingCapacity.is_initialized
+              total_cooling_capacity_w += coil.autosizedRatedHighSpeedTotalCoolingCapacity.get
+            else
+              OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+            end
+          # CoilCoolingWater
+          elsif clg_coil.to_CoilCoolingWater.is_initialized
+            coil = clg_coil.to_CoilCoolingWater.get
+            if coil.autosizedDesignCoilLoad.is_initialized # TODO Change to pull water coil nominal capacity instead of design load
+              total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
+            else
+              OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+            end
+          end
+        end
       elsif sc.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
-        coil = sc.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.coolingCoil
-        dxcoil = coil.to_CoilCoolingDXSingleSpeed.get
-        if dxcoil.ratedTotalCoolingCapacity.is_initialized
-          total_cooling_capacity_w += dxcoil.ratedTotalCoolingCapacity.get
-        elsif dxcoil.autosizedRatedTotalCoolingCapacity.is_initialized
-          total_cooling_capacity_w += dxcoil.autosizedRatedTotalCoolingCapacity.get
-        else
-          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+        unitary = sc.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
+        clg_coil = unitary.coolingCoil
+        # CoilCoolingDXSingleSpeed
+        if clg_coil.to_CoilCoolingDXSingleSpeed.is_initialized
+          coil = clg_coil.to_CoilCoolingDXSingleSpeed.get
+          if coil.ratedTotalCoolingCapacity.is_initialized
+            total_cooling_capacity_w += coil.ratedTotalCoolingCapacity.get
+          elsif coil.autosizedRatedTotalCoolingCapacity.is_initialized
+            total_cooling_capacity_w += coil.autosizedRatedTotalCoolingCapacity.get
+          else
+            OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+          end
+        # CoilCoolingDXTwoSpeed
+        elsif clg_coil.to_CoilCoolingDXTwoSpeed.is_initialized  
+          coil = clg_coil.to_CoilCoolingDXTwoSpeed.get
+          if coil.ratedHighSpeedTotalCoolingCapacity.is_initialized
+            total_cooling_capacity_w += coil.ratedHighSpeedTotalCoolingCapacity.get
+          elsif coil.autosizedRatedHighSpeedTotalCoolingCapacity.is_initialized
+            total_cooling_capacity_w += coil.autosizedRatedHighSpeedTotalCoolingCapacity.get
+          else
+            OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+          end
+        # CoilCoolingWater
+        elsif clg_coil.to_CoilCoolingWater.is_initialized
+          coil = clg_coil.to_CoilCoolingWater.get
+          if coil.autosizedDesignCoilLoad.is_initialized # TODO Change to pull water coil nominal capacity instead of design load
+            total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
+          else
+            OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+          end
         end
       elsif sc.to_CoilCoolingDXMultiSpeed.is_initialized ||
           sc.to_CoilCoolingCooledBeam.is_initialized ||
@@ -1963,6 +2025,53 @@ class OpenStudio::Model::AirLoopHVAC
     
   end
 
+  # Determine if a motorized OA damper is required
+  def is_motorized_oa_damper_required(template, climate_zone)
+  
+    is_motorized_oa_damper_required = false
+  
+    # If the system has an economizer, it is assumed to have
+    # a motorized damper.
+    if self.has_economizer
+      is_motorized_oa_damper_required = false
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: Because the system has an economizer, it is assumed to require a motorized damper.")
+      return is_motorized_oa_damper_required
+    end
+  
+  end
+  
+  # Add a motorized damper by modifying the OA schedule
+  # to require zero OA during unoccupied hours.  This means
+  # that even during morning warmup or nightcyling, no OA will
+  # be brought into the building, lowering heating/cooling load.
+  def add_motorized_oa_damper
+  
+    return true
+    
+  end  
+  
+  # Remove a motorized OA damper by modifying the OA schedule
+  # to require full OA at all times.  Whenever the fan operates,
+  # the damper will be open and OA will be brought into the building.
+  # This increases building loads unnecessarily during unoccupied hours.
+  def remove_motorized_oa_damper
+  
+    # Get the OA system and OA controller
+    oa_sys = self.airLoopHVACOutdoorAirSystem
+    if oa_sys.is_initialized
+      oa_sys = oa_sys.get
+    else
+      return false # No OA system
+    end
+    oa_control = oa_sys.getControllerOutdoorAir
+  
+    # Set the minimum OA schedule to always 1 (100%)
+    oa_control.setMinimumOutdoorAirSchedule(self.model.alwaysOnDiscreteSchedule)
+
+    return true
+  
+  end  
+  
   # Generate the EMS used to implement the economizer
   # and staging controls for packaged single zone units.
   # @note The resulting EMS doesn't actually get added to
