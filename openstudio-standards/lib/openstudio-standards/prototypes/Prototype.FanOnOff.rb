@@ -5,7 +5,7 @@ class OpenStudio::Model::FanOnOff
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def setPrototypeFanPressureRise
+  def setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)
     
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
@@ -41,23 +41,41 @@ class OpenStudio::Model::FanOnOff
     
     # If the fan lives on an airloop
     if self.airLoopHVAC.is_initialized
-      if maximum_flow_rate_cfm < 7487
-        pressure_rise_in_h2o = 2.5
-      elsif maximum_flow_rate_cfm >= 7487 && maximum_flow_rate_cfm < 20000
-        pressure_rise_in_h2o = 4.46
-      else # Over 20,000 cfm
-        pressure_rise_in_h2o = 4.09
+      case building_vintage
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
+        if maximum_flow_rate_cfm < 7437
+          pressure_rise_in_h2o = 2.5
+        elsif maximum_flow_rate_cfm >= 7437 && maximum_flow_rate_cfm < 20000
+          pressure_rise_in_h2o = 4.46
+        else # Over 20,000 cfm
+          pressure_rise_in_h2o = 4.09
+        end
+      when '90.1-2007', '90.1-2010', '90.1-2013'
+        if maximum_flow_rate_cfm < 7437
+          pressure_rise_in_h2o = 2.5
+        else # Over 7,437 cfm
+          pressure_rise_in_h2o = 4.09
+        end
       end
     end
 
     # If the fan lives inside a unitary system
     if self.airLoopHVAC.empty? && self.containingZoneHVACComponent.empty?
-      if maximum_flow_rate_cfm < 7487
-        pressure_rise_in_h2o = 2.5
-      elsif maximum_flow_rate_cfm >= 7487 && maximum_flow_rate_cfm < 20000
-        pressure_rise_in_h2o = 4.46
-      else # Over 20,000 cfm
-        pressure_rise_in_h2o = 4.09
+      case building_vintage
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
+        if maximum_flow_rate_cfm < 7437
+          pressure_rise_in_h2o = 2.5
+        elsif maximum_flow_rate_cfm >= 7437 && maximum_flow_rate_cfm < 20000
+          pressure_rise_in_h2o = 4.46
+        else # Over 20,000 cfm
+          pressure_rise_in_h2o = 4.09
+        end
+      when '90.1-2007', '90.1-2010', '90.1-2013'
+        if maximum_flow_rate_cfm < 7437
+          pressure_rise_in_h2o = 2.5
+        else # Over 7,437 cfm
+          pressure_rise_in_h2o = 4.09
+        end
       end
     end
     
