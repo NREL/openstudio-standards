@@ -40,15 +40,16 @@ class OpenStudio::Model::Model
       
     when 'NECB 2011'
       
-      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
+      
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
       self.assign_space_type_stubs("Space Function", space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
-      self.add_loads(building_vintage, climate_zone)   # pass building_type - required for selecting NECB schedules for common * spaces
+      self.add_loads(building_vintage, climate_zone)   
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
+      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
       
       BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR
       BTAP::Geometry::match_surfaces(self)                                    # set surface if they are out of whack.

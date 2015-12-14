@@ -569,12 +569,16 @@ module BTAP
       #@param runner [Object]
       #@param [Boolean] use_max
       def self.set_necb_fwdr(model,use_max = false, runner = nil)
-        BTAP::runner_register("Info","set_necb_fwdr", runner) 
+        BTAP::runner_register("Info","set_necb_fwdr", runner)         
         if model.weatherFile.empty? or model.weatherFile.get.path.empty? or not File.exists?(model.weatherFile.get.path.get.to_s)
           BTAP::runner_register("Error","Weather file is not defined. Please ensure the weather file is defined and exists.", runner) 
           return false
         end
         hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
+        
+        puts "in routine set_necb_fwdr"
+        puts "weather file found. hdd = #{hdd}"
+        
         old_fwdr = BTAP::Geometry::get_fwdr(model)
         BTAP::runner_register("Info","old FWDR is #{old_fwdr}", runner) 
         outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")

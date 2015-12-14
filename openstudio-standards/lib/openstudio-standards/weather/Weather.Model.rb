@@ -45,8 +45,6 @@ class OpenStudio::Model::Model
     top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
     weather_dir = "#{top_dir}/data/weather"   
 
-    puts "weather_dir = #{weather_dir}"
-    
     # Get the weather file name from the hash
     weather_file_name = climate_zone_weather_file_map[climate_zone]  
     if weather_file_name.nil?
@@ -59,16 +57,8 @@ class OpenStudio::Model::Model
       weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
     end
     
-    puts "weather_dir = #{weather_dir}"
-    
     weather_file = File.join(weather_dir, weather_file_name)
-    
-    puts "weather_file = #{weather_file}"
-    
     epw_file = OpenStudio::EpwFile.new(weather_file)
-    
-    puts "epw_file = #{epw_file}"
-    
     OpenStudio::Model::WeatherFile.setWeatherFile(self, epw_file).get
 
     weather_name = "#{epw_file.city}_#{epw_file.stateProvinceRegion}_#{epw_file.country}"
