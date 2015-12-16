@@ -2712,7 +2712,7 @@ module BTAP
 
       #This method creates a new construction based on the current, changes the rsi and assign the construction to the current surface.
       #Most of the meat of this method is in the construction class. Testing is done there.
-      def self.set_surfaces_construction_conductance(surfaces , conductance)
+      def self.set_surfaces_construction_conductance(surfaces,conductance)
         surfaces.each do |surface|
           #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
           construction = OpenStudio::Model::getConstructionByName(surface.model,surface.construction.get.name.to_s).get

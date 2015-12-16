@@ -452,12 +452,20 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       #@param hdd [Float]
-      def self.set_necb_envelope( model, hdd )
+      def self.set_necb_envelope( model, runner=nil)
 
+        BTAP::runner_register("Info","set_envelope_surfaces_to_necb!", runner) 
+        if model.weatherFile.empty? or model.weatherFile.get.path.empty? or not File.exists?(model.weatherFile.get.path.get.to_s)
+          
+          BTAP::runner_register("Error","Weather file is not defined. Please ensure the weather file is defined and exists.", runner) 
+          return false
+        end
+        hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
+        
         #interate Through all surfaces
         model.getSurfaces.each do |surface|
           #set fenestration to wall ratio.
-          BTAP::Compliance::NECB2011::set_fwdr(surface,hdd)
+          BTAP::Compliance::NECB2011::set_necb_external_surface_conductance(surface,hdd,false,1.0)
 
           #dig into the subsurface and change them as well.
           model.getSubSurfaces.each do |subsurface|
@@ -576,9 +584,6 @@ module BTAP
         end
         hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
         
-        puts "in routine set_necb_fwdr"
-        puts "weather file found. hdd = #{hdd}"
-        
         old_fwdr = BTAP::Geometry::get_fwdr(model)
         BTAP::runner_register("Info","old FWDR is #{old_fwdr}", runner) 
         outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
@@ -667,20 +672,22 @@ module BTAP
       #@return [String] surface as RSI
       def self.set_necb_external_surface_conductance(surface,hdd,is_radiant = false,scaling_factor = 1.0)
         conductance_value = 0
+        climate_zone_index = self.get_climate_zone_index(hdd)
+       
         if surface.outsideBoundaryCondition.downcase == "outdoors"
 
           case surface.surfaceType.downcase
           when "wall"
-            conductance_value =  BTAP::Compliance::NECB2011::Data::Conductances::Wall[BTAP::Compliance::NECB2011::get_climate_zone_index(@hdd)] * scaling_factor
+            conductance_value =  BTAP::Compliance::NECB2011::Data::Conductances::Wall[climate_zone_index] * scaling_factor
           when "floor"
-            conductance_value = BTAP::Compliance::NECB2011::Data::Conductances::Floor[BTAP::Compliance::NECB2011::get_climate_zone_index(@hdd)]  * scaling_factor
+            conductance_value = BTAP::Compliance::NECB2011::Data::Conductances::Floor[climate_zone_index]  * scaling_factor
           when "roofceiling"
-            conductance_value = BTAP::Compliance::NECB2011::Data::Conductances::Roof[BTAP::Compliance::NECB2011::get_climate_zone_index(@hdd)] 
+            conductance_value = BTAP::Compliance::NECB2011::Data::Conductances::Roof[climate_zone_index] 
           end
           if (is_radiant)
             conductance_value = conductance_value * 0.80
           end
-          return surface.setRSI(1/conductance_value)
+          return BTAP::Geometry::Surfaces::set_surfaces_construction_conductance( [surface], conductance_value )
         end
 
 

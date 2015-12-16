@@ -1057,13 +1057,28 @@ class OpenStudio::Model::Model
  
     # Get the object data
     data = self.find_object(self.standards['construction_sets'], {'template'=>template, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type, 'is_residential'=>is_residential})
+    #data = self.find_object(self.standards['construction_sets'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type, 'is_residential'=>is_residential})
+    
+    # for debugging (maria)
+    #puts "data = #{data}"
+    
+    
     if !data
       data = self.find_object(self.standards['construction_sets'], {'template'=>template, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type})
+      #data = self.find_object(self.standards['construction_sets'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type})
       if !data
+    
+        # for debugging (maria)
+        #puts "data = #{data}"
+        
         return construction_set
       end
     end 
   
+    # for debugging (maria)
+    #puts "data = #{data}"
+    
+    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")  
   
     name = make_name(template, clim, building_type, spc_type)
@@ -1438,7 +1453,7 @@ class OpenStudio::Model::Model
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'    
       result = possible_climate_zones.sort.last
-    when '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       result = possible_climate_zones.sort.first
     when '90.1-2004'
       if possible_climate_zones.include? "ClimateZone 3"
@@ -1452,6 +1467,9 @@ class OpenStudio::Model::Model
     if result.nil?
       
     end
+    
+    #for debugging (maria)
+    #puts "result = #{result}"
     
     return result
   

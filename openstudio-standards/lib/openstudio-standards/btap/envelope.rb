@@ -612,14 +612,14 @@ module BTAP
 
             #Check if the requested resistance is smaller than the minimum
             # resistance. If so, use the minimum resistance instead.
-            if minimum_resistance > 1 / conductance
+            if minimum_resistance > ( 1 / conductance )
               #tell user why we are defaulting and set the conductance of the
               # construction.
               raise ("could not set conductance of construction #{new_construction.name.to_s} to because existing layers make this impossible. Change the construction to allow for this conductance to be set." + (conductance).to_s + "setting to closest value possible value:" + (1.0 / minimum_resistance).to_s )
               # new_construction.setConductance((1.0/minimum_resistance))
             else
               unless new_construction.setConductance(conductance)
-                raise("could not set conductance of construction #{new_construction.name.to_s}")
+                raise("could not set conductance of construction #{new_construction.name.to_s}")   
               end
             end
           end
@@ -1040,6 +1040,7 @@ module BTAP
           raise ("Could not customized exterior constructionset") unless default_surface_construction_set.setDefaultExteriorSurfaceConstructions(new_ext_surface_set)
 
           ground_surface_set = default_surface_construction_set.defaultGroundContactSurfaceConstructions.get
+          
           new_ground_surface_set = self.customize_default_surface_constructions_rsi(model, name, ground_surface_set, ground_wall_rsi, ground_floor_rsi, ground_roof_rsi)
           raise ("Could not customized ground constructionset") unless default_surface_construction_set.setDefaultGroundContactSurfaceConstructions(new_ground_surface_set)
 
@@ -1057,7 +1058,7 @@ module BTAP
             tubular_daylight_dome_rsi,  tubular_daylight_dome_solar_trans, tubular_daylight_dome_vis_trans,
             tubular_daylight_diffuser_rsi, tubular_daylight_diffuser_solar_trans, tubular_daylight_diffuser_vis_trans
           )
-          raise ("Could not customized ground constructionset") unless default_surface_construction_set.setDefaultExteriorSubSurfaceConstructions(new_ext_subsurface_set)
+          raise ("Could not customize subsurface constructionset") unless default_surface_construction_set.setDefaultExteriorSubSurfaceConstructions(new_ext_subsurface_set)
         end
 
 
@@ -1276,6 +1277,7 @@ module BTAP
         #@param roof_conductance [Float] = nil
         #@return [Object] set
         def self.customize_default_surface_constructions_conductance(model,name,default_surface_constructions,wall_conductance = nil, floor_conductance = nil, roof_conductance = nil)
+          
           set = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
           set.setName( name)
           set.setFloorConstruction(Resources::Envelope::Constructions::customize_opaque_construction(model, default_surface_constructions.floorConstruction.get, floor_conductance)) unless floor_conductance.nil?

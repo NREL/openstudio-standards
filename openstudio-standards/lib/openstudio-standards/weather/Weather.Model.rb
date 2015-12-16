@@ -67,12 +67,7 @@ class OpenStudio::Model::Model
     weather_time = epw_file.timeZone
     weather_elev = epw_file.elevation
 
-    puts "weather_name = #{weather_name}"
-    puts "weather_lat = #{weather_lat}"
-    puts "weather_lon = #{weather_lon}"
-    puts "weather_time = #{weather_time}"
-    puts "weather_elev = #{weather_elev}"
-    
+   
     # Add or update site data
     site = self.getSite
     site.setName(weather_name)
@@ -82,8 +77,6 @@ class OpenStudio::Model::Model
     site.setElevation(weather_elev)
     
     
-    puts "site = #{site}"
-
     #Add or update ground temperature data
     ground_temp_vals = self.find_object(standards["ground_temperatures"], {'template'=>building_vintage, 'climate_zone'=>climate_zone, 'building_type'=>building_type})
     if ground_temp_vals && ground_temp_vals['jan']
