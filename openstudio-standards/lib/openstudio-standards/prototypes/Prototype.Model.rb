@@ -92,6 +92,11 @@ class OpenStudio::Model::Model
 
     if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant"
       self.update_exhaust_fan_efficiency(building_vintage)
+      self.update_waterheater_loss_coefficient(building_vintage)
+    end
+    
+    if building_type == "MidriseApartment"
+      self.update_waterheater_loss_coefficient(building_vintage)
     end
    
     # Add output variables for debugging
