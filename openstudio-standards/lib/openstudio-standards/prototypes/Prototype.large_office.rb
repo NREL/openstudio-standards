@@ -144,7 +144,18 @@ case building_vintage
     
     return system_to_space_map
   end
-     
+    
+  def define_space_multiplier
+    # This map define the multipliers for spaces with multipliers not equals to 1
+    space_multiplier_map = {
+        'Perimeter_mid_ZN_1' => 10,
+        'Perimeter_mid_ZN_2'=> 10,
+        'Perimeter_mid_ZN_3'=> 10,
+        'Perimeter_mid_ZN_4'=> 10,
+        'Core_mid'=> 10
+    }
+    return space_multiplier_map   
+  end
   def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')

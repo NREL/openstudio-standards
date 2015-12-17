@@ -712,7 +712,7 @@ class OpenStudio::Model::Model
 
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type
-    when 'LargeHotel', 'MidriseApartment'
+    when 'LargeHotel', 'MidriseApartment','LargeOffice'
       space_multiplier_map = self.define_space_multiplier
     else
       space_multiplier_map ={}

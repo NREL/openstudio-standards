@@ -10,46 +10,46 @@
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
         23.9
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        29.4
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        29.4
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        29.4
       ]
     },
     {
@@ -96,9 +96,9 @@
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
+      "notes": "From DOE Reference Buildings ",
       "values": [
-        1.0
+        0.0
       ]
     },
     {
@@ -171,48 +171,9 @@
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
+      "notes": "From DOE Reference Buildings ",
       "values": [
         1.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
       ]
     },
     {
@@ -230,13 +191,39 @@
     },
     {
       "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "Always Off",
       "category": "Unknown",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
-      "notes": "From DOE Reference Buildings ",
+      "notes": "From DOE Prototype Buildings",
       "values": [
         1.0
       ]
@@ -249,15 +236,28 @@
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
-      "notes": "From DOE Reference Buildings ",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
       "values": [
         0.0
       ]
     },
     {
       "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
+      "category": "Unknown",
+      "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
@@ -451,6 +451,81 @@
       ]
     },
     {
+      "name": "ApartmentHighRise APT_DHW_SCH",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.08,
+        0.04,
+        0.01,
+        0.01,
+        0.04,
+        0.27,
+        0.94,
+        1.0,
+        0.96,
+        0.84,
+        0.76,
+        0.61,
+        0.53,
+        0.47,
+        0.41,
+        0.47,
+        0.55,
+        0.73,
+        0.86,
+        0.82,
+        0.75,
+        0.61,
+        0.53,
+        0.29
+      ]
+    },
+    {
+      "name": "ApartmentHighRise CLGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        24.4
+      ]
+    },
+    {
+      "name": "ApartmentHighRise CLGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        24.4
+      ]
+    },
+    {
+      "name": "ApartmentHighRise CLGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        21.7
+      ]
+    },
+    {
       "name": "ApartmentHighRise COMPACT HVAC-ALWAYS 4",
       "category": "Unknown",
       "units": null,
@@ -575,7 +650,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise EQP_OFF_SCH",
+      "name": "ApartmentHighRise EQP_OFF_SCH_2004_2007",
       "category": "Equipment",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -588,7 +663,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise EQP_OFF_SCH",
+      "name": "ApartmentHighRise EQP_OFF_SCH_2004_2007",
       "category": "Equipment",
       "units": null,
       "day_types": "Wkdy",
@@ -621,6 +696,55 @@
         0.33,
         0.33,
         0.33
+      ]
+    },
+    {
+      "name": "ApartmentHighRise EQP_OFF_SCH_2010_2013",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.218625
+      ]
+    },
+    {
+      "name": "ApartmentHighRise EQP_OFF_SCH_2010_2013",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Wkdy",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.33125,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.870205,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.33125,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625
       ]
     },
     {
@@ -676,13 +800,39 @@
       "name": "ApartmentHighRise HTGSETP_APT_SCH",
       "category": "Thermostat Setpoint",
       "units": "C",
-      "day_types": "Default|WntrDsn|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
-        0.0
+        21.7
+      ]
+    },
+    {
+      "name": "ApartmentHighRise HTGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        24.4
+      ]
+    },
+    {
+      "name": "ApartmentHighRise HTGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        21.7
       ]
     },
     {
@@ -846,7 +996,43 @@
       ]
     },
     {
-      "name": "ApartmentHighRise INFIL_Door_Opening_SCH",
+      "name": "ApartmentHighRise INFIL_Door_Opening_SCH_0.131",
+      "category": "Infiltration",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.131,
+        1.0,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        1.0,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "ApartmentHighRise INFIL_Door_Opening_SCH_0.144",
       "category": "Infiltration",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -957,7 +1143,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_COR_SCH",
+      "name": "ApartmentHighRise LTG_COR_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -970,7 +1156,33 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_OFF_SCH",
+      "name": "ApartmentHighRise LTG_COR_SCH_2010",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.8875
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_COR_SCH_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.576875
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "Default",
@@ -983,7 +1195,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_OFF_SCH",
+      "name": "ApartmentHighRise LTG_OFF_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "SmrDsn",
@@ -996,7 +1208,82 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_OFF_SCH",
+      "name": "ApartmentHighRise LTG_OFF_SCH_2004_2007",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Wkdy",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.68384,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2004_2007",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2010_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2010_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2010_2013",
       "category": "Unknown",
       "units": null,
       "day_types": "Wkdy",
@@ -1032,7 +1319,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_OFF_SCH",
+      "name": "ApartmentHighRise LTG_OFF_SCH_2010_2013",
       "category": "Unknown",
       "units": null,
       "day_types": "WntrDsn",
@@ -2467,7 +2754,7 @@
       ]
     },
     {
-      "name": "ApartmentMidRise INFIL_Door_Opening_SCH",
+      "name": "ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007",
       "category": "Infiltration",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -2498,6 +2785,42 @@
         0.144,
         0.144,
         0.144,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "ApartmentMidRise INFIL_Door_Opening_SCH_2010_2013",
+      "category": "Infiltration",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.131,
+        1.0,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        1.0,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
         0.0,
         0.0
       ]
@@ -2578,7 +2901,7 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_COR_SCH",
+      "name": "ApartmentMidRise LTG_COR_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -2591,7 +2914,33 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_OFF_SCH",
+      "name": "ApartmentMidRise LTG_COR_SCH_2010",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.8176
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_COR_SCH_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.53144
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "Default",
@@ -2604,7 +2953,7 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_OFF_SCH",
+      "name": "ApartmentMidRise LTG_OFF_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "SmrDsn",
@@ -2617,7 +2966,82 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_OFF_SCH",
+      "name": "ApartmentMidRise LTG_OFF_SCH_2004_2007",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Wkdy",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.68384,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2004_2007",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2010_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2010_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "ApartmentMidRise LTG_OFF_SCH_2010_2013",
       "category": "Unknown",
       "units": null,
       "day_types": "Wkdy",
@@ -2653,7 +3077,7 @@
       ]
     },
     {
-      "name": "ApartmentMidRise LTG_OFF_SCH",
+      "name": "ApartmentMidRise LTG_OFF_SCH_2010_2013",
       "category": "Unknown",
       "units": null,
       "day_types": "WntrDsn",
@@ -22734,6 +23158,97 @@
       ]
     },
     {
+      "name": "NECB-*-Electric-Equipment",
+      "category": "Equipment",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-FAN",
+      "category": "Fan",
+      "units": "ON_OFF",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Lighting",
+      "category": "Lighting",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Occupancy",
+      "category": "Occupancy",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Service Water Heating",
+      "category": "Service Water Heating",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Thermostat Setpoint-Cooling",
+      "category": "Thermostat Setpoint",
+      "units": "TEMPERATURE",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        35.0
+      ]
+    },
+    {
+      "name": "NECB-*-Thermostat Setpoint-Heating",
+      "category": "Thermostat Setpoint",
+      "units": "TEMPERATURE",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        18.0
+      ]
+    },
+    {
       "name": "NECB-A-Electric-Equipment",
       "category": "Equipment",
       "units": "FRACTION",
@@ -38554,33 +39069,7 @@
       "name": "OfficeSmall BLDG_EQUIP_SCH",
       "category": "Equipment",
       "units": null,
-      "day_types": "Default|WntrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "OfficeSmall BLDG_EQUIP_SCH",
-      "category": "Equipment",
-      "units": null,
-      "day_types": "SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        1.0
-      ]
-    },
-    {
-      "name": "OfficeSmall BLDG_EQUIP_SCH",
-      "category": "Equipment",
-      "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Default|Wkdy",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -38613,21 +39102,8 @@
       ]
     },
     {
-      "name": "OfficeSmall BLDG_LIGHT_SCH",
-      "category": "Lighting",
-      "units": null,
-      "day_types": "Default|WntrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "OfficeSmall BLDG_LIGHT_SCH",
-      "category": "Lighting",
+      "name": "OfficeSmall BLDG_EQUIP_SCH",
+      "category": "Equipment",
       "units": null,
       "day_types": "SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
@@ -38639,10 +39115,36 @@
       ]
     },
     {
+      "name": "OfficeSmall BLDG_EQUIP_SCH",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Wknd",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.2
+      ]
+    },
+    {
+      "name": "OfficeSmall BLDG_EQUIP_SCH",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
       "name": "OfficeSmall BLDG_LIGHT_SCH",
       "category": "Lighting",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Default|Wkdy",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -38672,6 +39174,45 @@
         0.32,
         0.23,
         0.18
+      ]
+    },
+    {
+      "name": "OfficeSmall BLDG_LIGHT_SCH",
+      "category": "Lighting",
+      "units": null,
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "OfficeSmall BLDG_LIGHT_SCH",
+      "category": "Lighting",
+      "units": null,
+      "day_types": "Wknd",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18
+      ]
+    },
+    {
+      "name": "OfficeSmall BLDG_LIGHT_SCH",
+      "category": "Lighting",
+      "units": null,
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
       ]
     },
     {
@@ -74076,7 +74617,7 @@
       "name": "SecondarySchool Auditorium Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -74138,7 +74679,7 @@
       "name": "SecondarySchool Auditorium Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -74285,7 +74826,7 @@
       "name": "SecondarySchool Bldg Equip",
       "category": "Equipment",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -74347,7 +74888,7 @@
       "name": "SecondarySchool Bldg Equip",
       "category": "Equipment",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -74445,7 +74986,7 @@
       "name": "SecondarySchool Bldg Light",
       "category": "Lighting",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -74507,7 +75048,7 @@
       "name": "SecondarySchool Bldg Light",
       "category": "Lighting",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -74605,7 +75146,7 @@
       "name": "SecondarySchool Bldg Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -74667,7 +75208,7 @@
       "name": "SecondarySchool Bldg Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -74765,7 +75306,7 @@
       "name": "SecondarySchool Cafeteria Bldg Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -74827,7 +75368,7 @@
       "name": "SecondarySchool Cafeteria Bldg Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -75160,7 +75701,7 @@
       "name": "SecondarySchool Extend Bldg Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -75222,7 +75763,7 @@
       "name": "SecondarySchool Extend Bldg Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -75369,7 +75910,7 @@
       "name": "SecondarySchool Gym Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -75431,7 +75972,7 @@
       "name": "SecondarySchool Gym Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -75748,7 +76289,7 @@
       "name": "SecondarySchool Kitchen Equip",
       "category": "Equipment",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -75810,7 +76351,7 @@
       "name": "SecondarySchool Kitchen Equip",
       "category": "Equipment",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -75908,7 +76449,7 @@
       "name": "SecondarySchool Kitchen Exhaust",
       "category": "Equipment",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -75957,7 +76498,7 @@
       "name": "SecondarySchool Kitchen Gas",
       "category": "Equipment",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -76019,7 +76560,7 @@
       "name": "SecondarySchool Kitchen Gas",
       "category": "Equipment",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -76117,7 +76658,7 @@
       "name": "SecondarySchool Office Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Default|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -76179,7 +76720,7 @@
       "name": "SecondarySchool Office Occ",
       "category": "Occupancy",
       "units": null,
-      "day_types": "Wkdy",
+      "day_types": "Wkdy|SmrDsn",
       "start_date": "2014-07-01T00:00:00+00:00",
       "end_date": "2014-09-01T00:00:00+00:00",
       "type": "Hourly",
@@ -76313,7 +76854,20 @@
       "name": "SecondarySchool PSZ-AC OA Damper",
       "category": "Operation",
       "units": "Dimensionless",
-      "day_types": "Sat|WntrDsn",
+      "day_types": "Sat|Sun",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "SecondarySchool PSZ-AC OA Damper",
+      "category": "Operation",
+      "units": "Dimensionless",
+      "day_types": "WntrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -76342,19 +76896,6 @@
         0.0,
         0.0,
         0.0,
-        0.0
-      ]
-    },
-    {
-      "name": "SecondarySchool PSZ-AC OA Damper",
-      "category": "Operation",
-      "units": "Dimensionless",
-      "day_types": "Sun",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": null,
-      "values": [
         0.0
       ]
     },
@@ -76398,7 +76939,20 @@
       "name": "SecondarySchool PSZ-AC Operation",
       "category": "Operation",
       "units": "Dimensionless",
-      "day_types": "Sat|WntrDsn",
+      "day_types": "Sat|Sun",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "SecondarySchool PSZ-AC Operation",
+      "category": "Operation",
+      "units": "Dimensionless",
+      "day_types": "WntrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Hourly",
@@ -76427,19 +76981,6 @@
         0.0,
         0.0,
         0.0,
-        0.0
-      ]
-    },
-    {
-      "name": "SecondarySchool PSZ-AC Operation",
-      "category": "Operation",
-      "units": "Dimensionless",
-      "day_types": "Sun",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": null,
-      "values": [
         0.0
       ]
     },
@@ -79453,22 +79994,22 @@
         0.0,
         0.0,
         0.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
         0.0,
-        0.0,
-        0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
         0.0,
         0.0
       ]
@@ -79489,22 +80030,22 @@
         0.0,
         0.0,
         0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
         0.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
+        0.0,
+        0.0,
         0.0,
         0.0
       ]
