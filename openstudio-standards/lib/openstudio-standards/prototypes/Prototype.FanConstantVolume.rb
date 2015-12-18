@@ -5,13 +5,17 @@ class OpenStudio::Model::FanConstantVolume
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def setPrototypeFanPressureRise(building_vintage)
+  def setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)
     
-    return true if self.name.to_s.include?("UnitHeater Fan")
+    # NECB
     if building_vintage == 'NECB 2011' then
       pressure_rise_pa = 640.0
       self.setPressureRise(pressure_rise_pa)
-    else
+      return true
+    end
+    
+    return true if self.name.to_s.include?("UnitHeater Fan")
+    
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if self.maximumFlowRate.is_initialized
@@ -46,27 +50,30 @@ class OpenStudio::Model::FanConstantVolume
     
     # If the fan lives on an airloop
     if self.airLoopHVAC.is_initialized
-      if maximum_flow_rate_cfm < 7487
-        pressure_rise_in_h2o = 2.5
-      elsif maximum_flow_rate_cfm >= 7487 && maximum_flow_rate_cfm < 20000
-        #pressure_rise_in_h2o = 4.46
-        # TODO PTACs in prototypes have pressure rise
-        # of 4.09 in w.c. even when well less than 20,000 cfm.
-        # See secondary school model.  This contradicts documentation.
-        pressure_rise_in_h2o = 4.09
-      else # Over 20,000 cfm
-        pressure_rise_in_h2o = 4.09
+      case building_vintage
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
+        if maximum_flow_rate_cfm < 7437
+          pressure_rise_in_h2o = 2.5
+        elsif maximum_flow_rate_cfm >= 7437 && maximum_flow_rate_cfm < 20000
+          pressure_rise_in_h2o = 4.46
+        else # Over 20,000 cfm
+          pressure_rise_in_h2o = 4.09
+        end
+      when '90.1-2007', '90.1-2010', '90.1-2013'
+        if maximum_flow_rate_cfm < 7437
+          pressure_rise_in_h2o = 2.5
+        else # Over 7,437 cfm
+          pressure_rise_in_h2o = 4.09
+        end
       end
     end
     
     # Set the fan pressure rise
     pressure_rise_pa = OpenStudio.convert(pressure_rise_in_h2o, 'inH_{2}O','Pa').get
-    
-     
     self.setPressureRise(pressure_rise_pa)  
+    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.FanConstantVolume', "For Prototype: #{self.name}: #{maximum_flow_rate_cfm.round}cfm; Pressure Rise = #{pressure_rise_in_h2o}in w.c.")
-   
-    end 
+    
     return true
     
   end
