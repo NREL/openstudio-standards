@@ -4,7 +4,7 @@ class OpenStudio::Model::BoilerHotWater
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   # 
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not 
   def setStandardEfficiencyAndCurves(template, standards)
@@ -51,10 +51,32 @@ class OpenStudio::Model::BoilerHotWater
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
- 
+
+    # for NECB, check if secondary and/or modulating boiler required
+    if (template == 'NECB 2011')      
+      if (capacity_w >= 352000)
+        if (self.name.to_s == "Primary Boiler")
+          boiler_capacity = capacity_w
+          self.setBoilerFlowMode('LeavingSetpointModulated')
+          self.setMinimumPartLoadRatio(0.25)
+        elsif (self.name.to_s == "Secondary Boiler")
+          boiler_capacity = 0.001
+        end
+      elsif ((capacity_w/1000.0) >= 176.0) && ((capacity_w/1000.0) < 352.0)
+        boiler_capacity = capacity_w/2
+      elsif ((capacity_w/1000.0) <= 176.0)
+        if (self.name.to_s == "Primary Boiler")
+          boiler_capacity = capacity_w
+        elsif (self.name.to_s == "Secondary Boiler")
+          boiler_capacity = 0.001
+        end
+      end
+      self.setNominalCapacity(boiler_capacity)
+    end  # NECB 2011
+
     # Convert capacity to Btu/hr
-    capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
-    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, "W", "kBtu/hr").get
+    capacity_btu_per_hr = OpenStudio.convert(boiler_capacity, "W", "Btu/hr").get
+    capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, "W", "kBtu/hr").get
 
     # Get the boiler properties
     blr_props = self.model.find_object(boilers, search_criteria, capacity_btu_per_hr)
@@ -63,7 +85,7 @@ class OpenStudio::Model::BoilerHotWater
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
-    
+
     # Make the EFFFPLR curve
     eff_fplr = self.model.add_curve(blr_props['efffplr'], standards)
     if eff_fplr
@@ -75,7 +97,7 @@ class OpenStudio::Model::BoilerHotWater
 
     # Get the minimum efficiency standards
     thermal_eff = nil
-    
+
     # If specified as AFUE
     unless blr_props['minimum_annual_fuel_utilization_efficiency'].nil?
       min_afue = blr_props['minimum_annual_fuel_utilization_efficiency']
@@ -104,16 +126,6 @@ class OpenStudio::Model::BoilerHotWater
       self.setNominalThermalEfficiency(thermal_eff)
     end   
   
-    #puts "capacity_w = #{capacity_w}"
-    
-   # for NECB, check if modulating boiler required
-   # TO DO: logic for 2 stage boilers when heating cap > 176 kW and < 352 kW
-   if template == 'NECB 2011'      
-      if capacity_w >= 352000 
-        self.setBoilerFlowMode('LeavingSetpointModulated')
-        self.setMinimumPartLoadRatio(0.25)
-      end
-   end  # NECB 2011
   return successfully_set_all_properties
   end
   

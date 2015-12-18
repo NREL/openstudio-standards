@@ -2786,6 +2786,7 @@ module BTAP
               when "DX"
                 htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)  
                 supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
+                
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")
               end
@@ -2817,7 +2818,6 @@ module BTAP
                 air_to_air_heatpump.addToNode(supply_inlet_node)
               else
                 fan.addToNode(supply_inlet_node)
-                supplemental_htg_coil.addToNode(supply_inlet_node) if heating_coil_type == "DX" 
                 htg_coil.addToNode(supply_inlet_node)
                 clg_coil.addToNode(supply_inlet_node)
               end
@@ -2854,6 +2854,7 @@ module BTAP
               end
             
             end  #zone loop
+
 
             return true
           end  #end add_sys3_single_zone_packaged_rooftop_unit_with_baseboard_heating
@@ -3048,12 +3049,12 @@ module BTAP
             # Chilled Water Plant
 
             chw_loop = OpenStudio::Model::PlantLoop.new(model)
-            chiller = BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_chw_loop_with_components(model,chw_loop,chiller_type)
+            chiller1,chiller2 = BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_chw_loop_with_components(model,chw_loop,chiller_type)
 
             # Condenser System
 
             cw_loop = OpenStudio::Model::PlantLoop.new(model)
-            ctower = BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_cw_loop_with_components(model,cw_loop,chiller)
+            ctower = BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_cw_loop_with_components(model,cw_loop,chiller1,chiller2)
             
             # Make a Packaged VAV w/ PFP Boxes for each story of the building
             model.getBuildingStorys.sort.each do |story|
@@ -3190,9 +3191,13 @@ module BTAP
             #            pump.setPumpFlowRateSchedule(pump_flow_sch)
 
             #boiler 
-            boiler = OpenStudio::Model::BoilerHotWater.new(model)                   
-            boiler.setFuelType(boiler_fueltype)
-
+            boiler1 = OpenStudio::Model::BoilerHotWater.new(model)    
+            boiler2 = OpenStudio::Model::BoilerHotWater.new(model)                   
+            boiler1.setFuelType(boiler_fueltype)
+            boiler2.setFuelType(boiler_fueltype)
+            boiler1.setName("Primary Boiler")
+            boiler2.setName("Secondary Boiler")
+     
             #boiler_bypass_pipe 
             boiler_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
     
@@ -3204,7 +3209,8 @@ module BTAP
             hw_supply_outlet_node = hw_loop.supplyOutletNode
             pump.addToNode(hw_supply_inlet_node)
 
-            hw_loop.addSupplyBranchForComponent(boiler)
+            hw_loop.addSupplyBranchForComponent(boiler1)
+            hw_loop.addSupplyBranchForComponent(boiler2)
             hw_loop.addSupplyBranchForComponent(boiler_bypass_pipe)
             supply_outlet_pipe.addToNode(hw_supply_outlet_node)
 
@@ -3231,12 +3237,15 @@ module BTAP
             #pump = OpenStudio::Model::PumpConstantSpeed.new(model)
             chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
 
-            chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
-            chiller.setCondenserType("WaterCooled")
-            # update name so it's in agreement with method used in Standards file
-            chiller_name = chiller.name.to_s + " WaterCooled #{chiller_type}"
-            chiller.setName(chiller_name)
-            
+            chiller1 = OpenStudio::Model::ChillerElectricEIR.new(model)
+            chiller2 = OpenStudio::Model::ChillerElectricEIR.new(model)
+            chiller1.setCondenserType("WaterCooled")
+            chiller2.setCondenserType("WaterCooled")
+            chiller1_name = "Primary Chiller WaterCooled #{chiller_type}"
+            chiller1.setName(chiller1_name)
+            chiller2_name = "Secondary Chiller WaterCooled #{chiller_type}"
+            chiller2.setName(chiller2_name)
+
             chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
             
             chw_supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
@@ -3245,7 +3254,8 @@ module BTAP
             chw_supply_inlet_node = chw_loop.supplyInletNode
             chw_supply_outlet_node = chw_loop.supplyOutletNode
             chw_pump.addToNode(chw_supply_inlet_node)
-            chw_loop.addSupplyBranchForComponent(chiller)
+            chw_loop.addSupplyBranchForComponent(chiller1)
+            chw_loop.addSupplyBranchForComponent(chiller2)
             chw_loop.addSupplyBranchForComponent(chiller_bypass_pipe)
             chw_supply_outlet_pipe.addToNode(chw_supply_outlet_node)
 
@@ -3256,11 +3266,11 @@ module BTAP
             chw_t_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model,chw_t_sch)
             chw_t_stpt_manager.addToNode(chw_supply_outlet_node)
 
-            return chiller
+            return chiller1,chiller2
 
           end #of setup_chw_loop_with_components
 
-          def self.setup_cw_loop_with_components(model,cw_loop,chiller)
+          def self.setup_cw_loop_with_components(model,cw_loop,chiller1,chiller2)
 
             cw_loop.setName("Condenser Water Loop")
             cw_sizing_plant = cw_loop.sizingPlant
@@ -3285,7 +3295,8 @@ module BTAP
             cw_loop.addSupplyBranchForComponent(clg_tower)
             cw_loop.addSupplyBranchForComponent(clg_tower_bypass_pipe)
             cw_supply_outlet_pipe.addToNode(cw_supply_outlet_node)
-            cw_loop.addDemandBranchForComponent(chiller)
+            cw_loop.addDemandBranchForComponent(chiller1)
+            cw_loop.addDemandBranchForComponent(chiller2)
 
             # Add a setpoint manager to control the
             # condenser water to constant temperature
