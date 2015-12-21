@@ -711,23 +711,27 @@ class OpenStudio::Model::Model
       ventilation.setOutdoorAirFlowRate(1.87711831)
     end
   end
+
+  def update_waterheater_loss_coefficient(building_vintage)
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      self.getWaterHeaterMixeds.sort.each do |water_heater|
+        if water_heater.name.to_s.include?("Booster")
+          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
+          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
+        else
+          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(9.643286505)
+          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(9.643286505)
+        end
+      end
+    end      
+  end
   
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
    
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
 
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-    water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
-    
-    water_heaters.each do |water_heater|
-      water_heater = water_heater.to_WaterHeaterMixed.get
-      # water_heater.setAmbientTemperatureIndicator('Zone')
-      # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
-      water_heater.setOffCycleParasiticFuelConsumptionRate(720)
-      water_heater.setOnCycleParasiticFuelConsumptionRate(720)
-      water_heater.setOffCycleLossCoefficienttoAmbientTemperature(7.561562668)
-      water_heater.setOnCycleLossCoefficienttoAmbientTemperature(7.561562668)
-    end
 
     self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
 

@@ -892,7 +892,11 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+<<<<<<< HEAD
       "sort": 98,
+=======
+      "sort": 98.0,
+>>>>>>> remotes/origin/master
       "materials": [
         "ECABS-2 BLEACHED 6MM",
         "AIR 6MM",
@@ -1114,7 +1118,11 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+<<<<<<< HEAD
       "sort": 150,
+=======
+      "sort": 150.0,
+>>>>>>> remotes/origin/master
       "materials": [
         "Glass_2175_LayerAvg",
         "Gap_1_W_0_0032",

@@ -1588,10 +1588,17 @@
       "template": "90.1-2004",
       "building_type": "LargeOffice",
       "chw_pumping_type": "const_pri",
+<<<<<<< HEAD
       "chiller_cooling_type": "AirCooled",
       "chiller_condenser_type": "WithCondenser",
       "chiller_compressor_type": null,
       "chiller_capacity_guess": 470,
+=======
+      "chiller_cooling_type": "WaterCooled",
+      "chiller_condenser_type": null,
+      "chiller_compressor_type": "Centrifugal",
+      "chiller_capacity_guess": 470.0,
+>>>>>>> remotes/origin/master
       "pszac_cooling_type": "Water",
       "pszac_heating_type": "Water",
       "pszac_fan_type": "ConstantVolume",
@@ -1676,10 +1683,17 @@
       "template": "90.1-2007",
       "building_type": "LargeOffice",
       "chw_pumping_type": "const_pri",
+<<<<<<< HEAD
       "chiller_cooling_type": "AirCooled",
       "chiller_condenser_type": "WithCondenser",
       "chiller_compressor_type": null,
       "chiller_capacity_guess": 470,
+=======
+      "chiller_cooling_type": "WaterCooled",
+      "chiller_condenser_type": null,
+      "chiller_compressor_type": "Centrifugal",
+      "chiller_capacity_guess": 470.0,
+>>>>>>> remotes/origin/master
       "pszac_cooling_type": "Water",
       "pszac_heating_type": "Water",
       "pszac_fan_type": "ConstantVolume",
@@ -1766,8 +1780,13 @@
       "chw_pumping_type": "const_pri",
       "chiller_cooling_type": "WaterCooled",
       "chiller_condenser_type": null,
+<<<<<<< HEAD
       "chiller_compressor_type": "Reciprocating",
       "chiller_capacity_guess": 470,
+=======
+      "chiller_compressor_type": "Centrifugal",
+      "chiller_capacity_guess": 470.0,
+>>>>>>> remotes/origin/master
       "pszac_cooling_type": "Water",
       "pszac_heating_type": "Water",
       "pszac_fan_type": "ConstantVolume",
@@ -1817,8 +1836,13 @@
       "booster_water_use_temperature": null,
       "booster_water_temperature": null,
       "booster_service_water_parasitic_fuel_consumption_rate": null,
+<<<<<<< HEAD
       "typical_heating_setpoint": "OfficeLarge HTGSETP_SCH_YES_OPTIMUM",
       "typical_cooling_setpoint": "OfficeLarge CLGSETP_SCH_NO_SETBACK",
+=======
+      "typical_heating_setpoint": "Large Office HtgSetp",
+      "typical_cooling_setpoint": "Large Office ClgSetp",
+>>>>>>> remotes/origin/master
       "ptac_cooling_type": null,
       "ptac_heating_type": null,
       "ptac_fan_type": null,
@@ -1852,10 +1876,17 @@
       "template": "DOE Ref 1980-2004",
       "building_type": "LargeOffice",
       "chw_pumping_type": "const_pri",
+<<<<<<< HEAD
       "chiller_cooling_type": "AirCooled",
       "chiller_condenser_type": "WithCondenser",
       "chiller_compressor_type": null,
       "chiller_capacity_guess": 470,
+=======
+      "chiller_cooling_type": "WaterCooled",
+      "chiller_condenser_type": null,
+      "chiller_compressor_type": "Centrifugal",
+      "chiller_capacity_guess": 470.0,
+>>>>>>> remotes/origin/master
       "pszac_cooling_type": null,
       "pszac_heating_type": null,
       "pszac_fan_type": null,
@@ -1868,21 +1899,35 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
+<<<<<<< HEAD
       "nondimming_exterior_lighting_power": 61595,
+=======
+      "nondimming_exterior_lighting_power": 61595.0,
+>>>>>>> remotes/origin/master
       "nondimming_exterior_lighting_schedule": "Always On",
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
       "exterior_fuel_equipment2_schedule": null,
+<<<<<<< HEAD
       "main_water_heater_volume": 200,
+=======
+      "main_water_heater_volume": 200.0,
+>>>>>>> remotes/origin/master
       "main_water_heater_fuel": "Natural Gas",
       "main_water_heater_capacity": 2883259,
       "main_service_water_temperature": 140,
       "main_service_water_flowrate_schedule": "OfficeLarge BLDG_SWH_SCH",
       "main_service_water_peak_flowrate": 0.58,
+<<<<<<< HEAD
       "main_water_use_temperature": 140,
       "main_service_water_temperature_at_fixture": 140,
       "main_service_water_pump_head": 179352,
+=======
+      "main_water_use_temperature": 140.0,
+      "main_service_water_temperature_at_fixture": 140.0,
+      "main_service_water_pump_head": 179352.0,
+>>>>>>> remotes/origin/master
       "main_service_water_pump_motor_efficiency": 0.3,
       "main_service_water_parasitic_fuel_consumption_rate": 68.24,
       "laundry_water_heater_volume": null,
@@ -1926,7 +1971,11 @@
       "vav_operation_schedule": "OfficeLarge HVACOperationSchd",
       "vav_oa_damper_schedule": "OfficeLarge MinOA_MotorizedDamper_Sched",
       "vav_fan_efficiency": 0.6045,
+<<<<<<< HEAD
       "vav_fan_pressure_rise": 1389,
+=======
+      "vav_fan_pressure_rise": 1389.0,
+>>>>>>> remotes/origin/master
       "vav_fan_motor_efficiency": 0.95,
       "doas_fan_maximum_flow_rate": null,
       "doas_oa_damper_schedule": null,
@@ -1942,8 +1991,13 @@
       "chw_pumping_type": "const_pri",
       "chiller_cooling_type": "WaterCooled",
       "chiller_condenser_type": null,
+<<<<<<< HEAD
       "chiller_compressor_type": "Rotary Screw",
       "chiller_capacity_guess": 470,
+=======
+      "chiller_compressor_type": "Centrifugal",
+      "chiller_capacity_guess": 470.0,
+>>>>>>> remotes/origin/master
       "pszac_cooling_type": null,
       "pszac_heating_type": null,
       "pszac_fan_type": null,
@@ -1956,6 +2010,7 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
+<<<<<<< HEAD
       "nondimming_exterior_lighting_power": 61595,
       "nondimming_exterior_lighting_schedule": "Always On",
       "exterior_fuel_equipment1_power": 244443,
@@ -1963,14 +2018,29 @@
       "exterior_fuel_equipment2_power": null,
       "exterior_fuel_equipment2_schedule": null,
       "main_water_heater_volume": 200,
+=======
+      "nondimming_exterior_lighting_power": 61595.0,
+      "nondimming_exterior_lighting_schedule": "Always On",
+      "exterior_fuel_equipment1_power": 244443.0,
+      "exterior_fuel_equipment1_schedule": "Large Office BLDG ELEVATORS",
+      "exterior_fuel_equipment2_power": null,
+      "exterior_fuel_equipment2_schedule": null,
+      "main_water_heater_volume": 200.0,
+>>>>>>> remotes/origin/master
       "main_water_heater_fuel": "Natural Gas",
       "main_water_heater_capacity": 2883259,
       "main_service_water_temperature": 140,
       "main_service_water_flowrate_schedule": "OfficeLarge BLDG_SWH_SCH",
       "main_service_water_peak_flowrate": 0.58,
+<<<<<<< HEAD
       "main_water_use_temperature": 140,
       "main_service_water_temperature_at_fixture": 140,
       "main_service_water_pump_head": 179352,
+=======
+      "main_water_use_temperature": 140.0,
+      "main_service_water_temperature_at_fixture": 140.0,
+      "main_service_water_pump_head": 179352.0,
+>>>>>>> remotes/origin/master
       "main_service_water_pump_motor_efficiency": 0.3,
       "main_service_water_parasitic_fuel_consumption_rate": 68.24,
       "laundry_water_heater_volume": null,
@@ -3100,12 +3170,17 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
+<<<<<<< HEAD
       "nondimming_exterior_lighting_power": 13580,
+=======
+      "nondimming_exterior_lighting_power": 13580.0,
+>>>>>>> remotes/origin/master
       "nondimming_exterior_lighting_schedule": "ApartmentHighRise Exterior_Lgt_ALWAYS_ON",
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
       "exterior_fuel_equipment2_schedule": null,
+<<<<<<< HEAD
       "main_water_heater_volume": 600,
       "main_water_heater_fuel": "Natural Gas",
       "main_water_heater_capacity": 600000,
@@ -3117,6 +3192,19 @@
       "main_service_water_pump_head": 29891,
       "main_service_water_pump_motor_efficiency": 0.3,
       "main_service_water_parasitic_fuel_consumption_rate": 8742,
+=======
+      "main_water_heater_volume": 600.0,
+      "main_water_heater_fuel": "Natural Gas",
+      "main_water_heater_capacity": 600000.0,
+      "main_service_water_temperature": 140.0,
+      "main_service_water_flowrate_schedule": "ApartmentHighRise APT_DHW_SCH",
+      "main_service_water_peak_flowrate": null,
+      "main_water_use_temperature": 140.0,
+      "main_service_water_temperature_at_fixture": 140.0,
+      "main_service_water_pump_head": 29891.0,
+      "main_service_water_pump_motor_efficiency": 0.3,
+      "main_service_water_parasitic_fuel_consumption_rate": 8742.0,
+>>>>>>> remotes/origin/master
       "laundry_water_heater_volume": null,
       "laundry_water_heater_fuel": null,
       "laundry_water_heater_capacity": null,
@@ -3164,7 +3252,11 @@
       "doas_oa_damper_schedule": null,
       "doas_economizer_control_type": null,
       "elevator_type": "Hydraulic",
+<<<<<<< HEAD
       "number_of_elevators": 1,
+=======
+      "number_of_elevators": 1.0,
+>>>>>>> remotes/origin/master
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
       "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
     },
@@ -3188,12 +3280,17 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
+<<<<<<< HEAD
       "nondimming_exterior_lighting_power": 13580,
+=======
+      "nondimming_exterior_lighting_power": 13580.0,
+>>>>>>> remotes/origin/master
       "nondimming_exterior_lighting_schedule": "ApartmentHighRise Exterior_Lgt_ALWAYS_ON",
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
       "exterior_fuel_equipment2_schedule": null,
+<<<<<<< HEAD
       "main_water_heater_volume": 600,
       "main_water_heater_fuel": "Natural Gas",
       "main_water_heater_capacity": 600000,
@@ -3205,6 +3302,19 @@
       "main_service_water_pump_head": 29891,
       "main_service_water_pump_motor_efficiency": 0.3,
       "main_service_water_parasitic_fuel_consumption_rate": 8742,
+=======
+      "main_water_heater_volume": 600.0,
+      "main_water_heater_fuel": "Natural Gas",
+      "main_water_heater_capacity": 600000.0,
+      "main_service_water_temperature": 140.0,
+      "main_service_water_flowrate_schedule": "ApartmentHighRise APT_DHW_SCH",
+      "main_service_water_peak_flowrate": null,
+      "main_water_use_temperature": 140.0,
+      "main_service_water_temperature_at_fixture": 140.0,
+      "main_service_water_pump_head": 29891.0,
+      "main_service_water_pump_motor_efficiency": 0.3,
+      "main_service_water_parasitic_fuel_consumption_rate": 8742.0,
+>>>>>>> remotes/origin/master
       "laundry_water_heater_volume": null,
       "laundry_water_heater_fuel": null,
       "laundry_water_heater_capacity": null,
@@ -3252,7 +3362,11 @@
       "doas_oa_damper_schedule": null,
       "doas_economizer_control_type": null,
       "elevator_type": "Hydraulic",
+<<<<<<< HEAD
       "number_of_elevators": 1,
+=======
+      "number_of_elevators": 1.0,
+>>>>>>> remotes/origin/master
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
       "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
     },
@@ -3276,12 +3390,17 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
+<<<<<<< HEAD
       "nondimming_exterior_lighting_power": 10364,
+=======
+      "nondimming_exterior_lighting_power": 10364.0,
+>>>>>>> remotes/origin/master
       "nondimming_exterior_lighting_schedule": "ApartmentHighRise Exterior_Lgt_ALWAYS_ON",
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
       "exterior_fuel_equipment2_schedule": null,
+<<<<<<< HEAD
       "main_water_heater_volume": 600,
       "main_water_heater_fuel": "Natural Gas",
       "main_water_heater_capacity": 600000,
@@ -3293,6 +3412,19 @@
       "main_service_water_pump_head": 29891,
       "main_service_water_pump_motor_efficiency": 0.3,
       "main_service_water_parasitic_fuel_consumption_rate": 8742,
+=======
+      "main_water_heater_volume": 600.0,
+      "main_water_heater_fuel": "Natural Gas",
+      "main_water_heater_capacity": 600000.0,
+      "main_service_water_temperature": 140.0,
+      "main_service_water_flowrate_schedule": "ApartmentHighRise APT_DHW_SCH",
+      "main_service_water_peak_flowrate": null,
+      "main_water_use_temperature": 140.0,
+      "main_service_water_temperature_at_fixture": 140.0,
+      "main_service_water_pump_head": 29891.0,
+      "main_service_water_pump_motor_efficiency": 0.3,
+      "main_service_water_parasitic_fuel_consumption_rate": 8742.0,
+>>>>>>> remotes/origin/master
       "laundry_water_heater_volume": null,
       "laundry_water_heater_fuel": null,
       "laundry_water_heater_capacity": null,
@@ -3340,7 +3472,11 @@
       "doas_oa_damper_schedule": null,
       "doas_economizer_control_type": null,
       "elevator_type": "Hydraulic",
+<<<<<<< HEAD
       "number_of_elevators": 1,
+=======
+      "number_of_elevators": 1.0,
+>>>>>>> remotes/origin/master
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
       "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
     },
@@ -3364,12 +3500,17 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
+<<<<<<< HEAD
       "nondimming_exterior_lighting_power": 10364,
+=======
+      "nondimming_exterior_lighting_power": 10364.0,
+>>>>>>> remotes/origin/master
       "nondimming_exterior_lighting_schedule": "ApartmentHighRise Exterior_Lgt_ALWAYS_ON",
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
       "exterior_fuel_equipment2_schedule": null,
+<<<<<<< HEAD
       "main_water_heater_volume": 600,
       "main_water_heater_fuel": "Natural Gas",
       "main_water_heater_capacity": 600000,
@@ -3381,6 +3522,19 @@
       "main_service_water_pump_head": 29891,
       "main_service_water_pump_motor_efficiency": 0.3,
       "main_service_water_parasitic_fuel_consumption_rate": 8742,
+=======
+      "main_water_heater_volume": 600.0,
+      "main_water_heater_fuel": "Natural Gas",
+      "main_water_heater_capacity": 600000.0,
+      "main_service_water_temperature": 140.0,
+      "main_service_water_flowrate_schedule": "ApartmentHighRise APT_DHW_SCH",
+      "main_service_water_peak_flowrate": null,
+      "main_water_use_temperature": 140.0,
+      "main_service_water_temperature_at_fixture": 140.0,
+      "main_service_water_pump_head": 29891.0,
+      "main_service_water_pump_motor_efficiency": 0.3,
+      "main_service_water_parasitic_fuel_consumption_rate": 8742.0,
+>>>>>>> remotes/origin/master
       "laundry_water_heater_volume": null,
       "laundry_water_heater_fuel": null,
       "laundry_water_heater_capacity": null,
@@ -3428,7 +3582,11 @@
       "doas_oa_damper_schedule": null,
       "doas_economizer_control_type": null,
       "elevator_type": "Hydraulic",
+<<<<<<< HEAD
       "number_of_elevators": 1,
+=======
+      "number_of_elevators": 1.0,
+>>>>>>> remotes/origin/master
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
       "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
     },
@@ -3716,7 +3874,11 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
+<<<<<<< HEAD
       "nondimming_exterior_lighting_power": 5406,
+=======
+      "nondimming_exterior_lighting_power": 5406.0,
+>>>>>>> remotes/origin/master
       "nondimming_exterior_lighting_schedule": "SchoolPrimary Exterior_Lgt_ALWAYS_ON",
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
@@ -3804,7 +3966,11 @@
       "pszac_oa_damper_schedule_3": null,
       "occ_sensing_exterior_lighting_power": null,
       "occ_sensing_exterior_lighting_schedule": null,
+<<<<<<< HEAD
       "nondimming_exterior_lighting_power": 5406,
+=======
+      "nondimming_exterior_lighting_power": 5406.0,
+>>>>>>> remotes/origin/master
       "nondimming_exterior_lighting_schedule": "SchoolPrimary Exterior_Lgt_ALWAYS_ON",
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
@@ -6157,6 +6323,94 @@
       "doas_economizer_control_type": null,
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2,
+      "elevator_schedule": "SchoolSecondary BLDG_ELEVATORS",
+      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_ADD_DF"
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "SecondarySchool",
+      "chw_pumping_type": "const_pri_var_sec",
+      "chiller_cooling_type": "AirCooled",
+      "chiller_condenser_type": "WithCondenser",
+      "chiller_compressor_type": null,
+      "chiller_capacity_guess": 470.0,
+      "pszac_cooling_type": "Two Speed DX AC",
+      "pszac_heating_type": "Gas",
+      "pszac_fan_type": "ConstantVolume",
+      "pszac_supplemental_heating_type": null,
+      "pszac_operation_schedule": "SchoolSecondary HVACOperationSchd",
+      "pszac_oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+      "pszac_operation_schedule_2": null,
+      "pszac_oa_damper_schedule_2": null,
+      "pszac_operation_schedule_3": null,
+      "pszac_oa_damper_schedule_3": null,
+      "occ_sensing_exterior_lighting_power": 8427.85,
+      "occ_sensing_exterior_lighting_schedule": "SchoolSecondary Exterior_lighting_schedule_b",
+      "nondimming_exterior_lighting_power": 353.47,
+      "nondimming_exterior_lighting_schedule": "SchoolSecondary Exterior_lighting_schedule_a",
+      "exterior_fuel_equipment1_power": null,
+      "exterior_fuel_equipment1_schedule": null,
+      "exterior_fuel_equipment2_power": null,
+      "exterior_fuel_equipment2_schedule": null,
+      "main_water_heater_volume": 600.0,
+      "main_water_heater_fuel": "Natural Gas",
+      "main_water_heater_capacity": 600000.0,
+      "main_service_water_temperature": 140.0,
+      "main_service_water_flowrate_schedule": "SchoolSecondary BLDG_SWH_SCH",
+      "main_service_water_peak_flowrate": 7.63,
+      "main_water_use_temperature": 140.0,
+      "main_service_water_temperature_at_fixture": 140.0,
+      "main_service_water_pump_head": 34026.0,
+      "main_service_water_pump_motor_efficiency": 0.3,
+      "main_service_water_parasitic_fuel_consumption_rate": 2999.0,
+      "laundry_water_heater_volume": null,
+      "laundry_water_heater_fuel": null,
+      "laundry_water_heater_capacity": null,
+      "laundry_service_water_temperature": null,
+      "laundry_service_water_flowrate_schedule": null,
+      "laundry_service_water_peak_flowrate": null,
+      "laundry_water_use_temperature": null,
+      "laundry_service_water_temperature_at_fixture": null,
+      "laundry_service_water_pump_head": null,
+      "laundry_service_water_pump_motor_efficiency": null,
+      "laundry_service_water_parasitic_fuel_consumption_rate": null,
+      "booster_water_heater_volume": 6.0,
+      "booster_water_heater_fuel": "Electricity",
+      "booster_water_heater_capacity": 47770.0,
+      "booster_inlet_water_temperature": 140.0,
+      "booster_service_water_flowrate_schedule": "SchoolSecondary BLDG_SWH_SCH",
+      "booster_service_water_peak_flowrate": 23.7,
+      "booster_water_use_temperature": 180.0,
+      "booster_water_temperature": 180.0,
+      "booster_service_water_parasitic_fuel_consumption_rate": null,
+      "typical_heating_setpoint": null,
+      "typical_cooling_setpoint": null,
+      "ptac_cooling_type": null,
+      "ptac_heating_type": null,
+      "ptac_fan_type": null,
+      "ptac_operation_schedule": null,
+      "ptac_oa_damper_schedule": null,
+      "sac_cooling_type": null,
+      "sac_heating_type": null,
+      "sac_fan_type": null,
+      "sac_operation_schedule": null,
+      "sac_operation_schedule_meeting": null,
+      "sac_oa_damper_schedule": null,
+      "unitheater_heating_type": null,
+      "unitheater_fan_type": null,
+      "unitheater_fan_control_type": null,
+      "unitheater_fan_static_pressure": null,
+      "unitheater_operation_schedule": null,
+      "vav_operation_schedule": "SchoolSecondary HVACOperationSchd",
+      "vav_oa_damper_schedule": "SchoolSecondary MinOA_MotorizedDamper_Sched",
+      "vav_fan_efficiency": 0.6045,
+      "vav_fan_pressure_rise": 1018.7736419,
+      "vav_fan_motor_efficiency": 0.95,
+      "doas_fan_maximum_flow_rate": null,
+      "doas_oa_damper_schedule": null,
+      "doas_economizer_control_type": null,
+      "elevator_type": "Hydraulic",
+      "number_of_elevators": 2.0,
       "elevator_schedule": "SchoolSecondary BLDG_ELEVATORS",
       "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_ADD_DF"
     },

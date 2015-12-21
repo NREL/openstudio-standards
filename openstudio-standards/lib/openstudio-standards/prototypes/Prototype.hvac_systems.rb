@@ -2,6 +2,8 @@
 # open the class to add methods to size all HVAC equipment
 class OpenStudio::Model::Model
 
+  require_relative 'Prototype.AirTerminalSingleDuctVAVReheat'
+  
   def add_hw_loop(prototype_input, standards, building_type=nil)
 
     #hot water loop
@@ -594,38 +596,8 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      # Vary the initial minimum damper position based on OA
-      # rate of the space.  Spaces with low OA per area get lower
-      # initial guess.  Final position will be adjusted upward
-      # as necessary by Standards.AirLoopHVAC.set_minimum_vav_damper_positions
-      # Also, set the damper action based on the template.  This will
-      # be double-checked by the standards, but needs to be set correctly
-      # before the sizing run so that subsequent assumptions work right.
-      min_damper_position = nil
-      damper_action = nil
-      case prototype_input['template']       
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
-        min_damper_position = 0.3
-        damper_action = 'Normal'
-      when '90.1-2007'
-        min_damper_position = 0.3
-        damper_action = 'Reverse'
-      when '90.1-2010', '90.1-2013'
-        min_damper_position = 0.2
-        damper_action = 'Reverse'
-      end
-      # Determine whether or not to use the high minimum guess
-      zone_oa_per_area = zone.outdoor_airflow_rate_per_area
-      if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-        # High OA zones
-        terminal.setConstantMinimumAirFlowFraction(0.7)
-      else
-        # Low OA zones
-        terminal.setConstantMinimumAirFlowFraction(min_damper_position)
-      end
-
+      terminal.set_initial_prototype_damper_position(prototype_input['template'], zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
-      terminal.setDamperHeatingAction(damper_action)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
       air_loop.addBranchForZone(zone,terminal.to_StraightComponent)
@@ -645,7 +617,10 @@ class OpenStudio::Model::Model
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zone_htg_sa_temp_c)
     
     end
-
+    
+    # Set the damper action based on the template.
+    air_loop.set_vav_damper_action(prototype_input['template'])
+    
     return true
 
   end
@@ -771,39 +746,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      # Vary the initial minimum damper position based on OA
-      # rate of the space.  Spaces with low OA per area get lower
-      # initial guess.  Final position will be adjusted upward
-      # as necessary by Standards.AirLoopHVAC.set_minimum_vav_damper_positions
-      # Also, set the damper action based on the template.  This will
-      # be double-checked by the standards, but needs to be set correctly
-      # before the sizing run so that subsequent assumptions work right.
-      min_damper_position = nil
-      damper_action = nil
-      case prototype_input['template']       
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
-        min_damper_position = 0.3
-        damper_action = 'Normal'
-      when '90.1-2007'
-        min_damper_position = 0.3
-        damper_action = 'Reverse'
-      when '90.1-2010', '90.1-2013'
-        min_damper_position = 0.2
-        damper_action = 'Reverse'
-      end
-
-      # Determine whether or not to use the high minimum guess
-      zone_oa_per_area = zone.outdoor_airflow_rate_per_area
-      if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-        # High OA zones
-        terminal.setConstantMinimumAirFlowFraction(0.7)
-      else
-        # Low OA zones
-        terminal.setConstantMinimumAirFlowFraction(min_damper_position)
-      end
-
-      terminal.setDamperHeatingAction(damper_action)
-      
+      terminal.set_initial_prototype_damper_position(prototype_input['template'], zone.outdoor_airflow_rate_per_area)
       air_loop.addBranchForZone(zone,terminal.to_StraightComponent)
 
       unless return_plenum.nil?
@@ -817,10 +760,160 @@ class OpenStudio::Model::Model
     
     end
 
+    # Set the damper action based on the template.
+    air_loop.set_vav_damper_action(prototype_input['template'])    
+    
     return true
 
   end
 
+  def add_cav(prototype_input, standards, sys_name, hot_water_loop, thermal_zones, building_type=nil)
+
+    # Hot water loop control temperatures
+    hw_temp_f = 152.6 #HW setpoint 152.6F
+    hw_delta_t_r = 20 #20F delta-T    
+    hw_temp_c = OpenStudio.convert(hw_temp_f,'F','C').get
+    hw_delta_t_k = OpenStudio.convert(hw_delta_t_r,'R','K').get
+
+    # HVAC operation schedule
+    hvac_op_sch = self.add_schedule(prototype_input['vav_operation_schedule'])
+    
+    # Motorized oa damper schedule
+    motorized_oa_damper_sch = self.add_schedule(prototype_input['vav_oa_damper_schedule'])
+    
+    # Air handler control temperatures
+    clg_sa_temp_f = 55.04 # Central deck clg temp 55F
+    prehtg_sa_temp_f = 44.6 # Preheat to 44.6F
+    preclg_sa_temp_f = 55.04 # Precool to 55F
+    htg_sa_temp_f = 62.06 # Central deck htg temp 62.06F
+    rht_sa_temp_f = 122 # VAV box reheat to 104F
+    zone_htg_sa_temp_f = 122 # Zone heating design supply air temperature to 122F
+    clg_sa_temp_c = OpenStudio.convert(clg_sa_temp_f,'F','C').get
+    prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f,'F','C').get
+    preclg_sa_temp_c = OpenStudio.convert(preclg_sa_temp_f,'F','C').get
+    htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f,'F','C').get
+    rht_sa_temp_c = OpenStudio.convert(rht_sa_temp_f,'F','C').get
+    zone_htg_sa_temp_c = OpenStudio.convert(zone_htg_sa_temp_f,'F','C').get
+    
+    # Air handler
+    air_loop = OpenStudio::Model::AirLoopHVAC.new(self)
+    if sys_name.nil?
+      air_loop.setName("#{thermal_zones.size} Zone CAV")
+    else
+      air_loop.setName(sys_name)
+    end
+    air_loop.setAvailabilitySchedule(hvac_op_sch)
+    
+    # Air handler supply air setpoint
+    sa_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+    sa_temp_sch.setName("Supply Air Temp - #{clg_sa_temp_f}F")
+    sa_temp_sch.defaultDaySchedule.setName("Supply Air Temp - #{clg_sa_temp_f}F Default")
+    sa_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),clg_sa_temp_c)
+
+    sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,sa_temp_sch)
+    sa_stpt_manager.setName("#{air_loop.name} supply air setpoint manager")
+    sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
+
+    # Air handler sizing
+    sizing_system = air_loop.sizingSystem
+    sizing_system.setPreheatDesignTemperature(prehtg_sa_temp_c)
+    sizing_system.setPrecoolDesignTemperature(preclg_sa_temp_c)
+    sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
+    sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
+    sizing_system.setSizingOption('Coincident')
+    sizing_system.setAllOutdoorAirinCooling(false)
+    sizing_system.setAllOutdoorAirinHeating(false)
+    sizing_system.setSystemOutdoorAirMethod('ZoneSum')
+        
+    # Fan
+    fan = OpenStudio::Model::FanConstantVolume.new(self,self.alwaysOnDiscreteSchedule)
+    fan.setName("#{air_loop.name} Fan")
+    fan.setFanEfficiency(prototype_input['vav_fan_efficiency'].to_f)
+    fan.setMotorEfficiency(prototype_input['vav_fan_motor_efficiency'].to_f)
+    fan.setPressureRise(prototype_input['vav_fan_pressure_rise'].to_f)
+    fan.addToNode(air_loop.supplyInletNode)
+    fan.setEndUseSubcategory("CAV system Fans")
+
+    # Air handler heating coil
+    htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
+    htg_coil.addToNode(air_loop.supplyInletNode)
+    hot_water_loop.addDemandBranchForComponent(htg_coil)
+    htg_coil.setName("#{air_loop.name} Main Htg Coil")
+    htg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Main Htg Coil Controller")
+    htg_coil.setRatedInletWaterTemperature(hw_temp_c)
+    htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
+    htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
+    htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
+
+    # Air handler cooling coil
+    clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(self)
+    clg_coil.setName("#{air_loop.name} Clg Coil")
+    clg_coil.addToNode(air_loop.supplyInletNode)
+
+    # Outdoor air intake system
+    oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
+    oa_intake_controller.setName("#{air_loop.name} OA Controller")
+    oa_intake_controller.setMinimumLimitType('FixedMinimum')
+    #oa_intake_controller.setMinimumOutdoorAirSchedule(motorized_oa_damper_sch)
+    oa_intake_controller.setMinimumFractionofOutdoorAirSchedule(motorized_oa_damper_sch)
+    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
+
+    controller_mv = oa_intake_controller.controllerMechanicalVentilation
+    controller_mv.setName("#{air_loop.name} Vent Controller")
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
+
+    oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
+    oa_intake.setName("#{air_loop.name} OA Sys")
+    oa_intake.addToNode(air_loop.supplyInletNode)
+    
+    # The oa system needs to be added before setting the night cycle control
+    air_loop.setNightCycleControlType('CycleOnAny')
+
+    # Connect the CAV system to each zone
+    thermal_zones.each do |zone|
+    
+      # Reheat coil
+      rht_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
+      rht_coil.setName("#{zone.name} Rht Coil")
+      rht_coil.setRatedInletWaterTemperature(hw_temp_c)
+      rht_coil.setRatedInletAirTemperature(htg_sa_temp_c)
+      rht_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
+      rht_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
+      hot_water_loop.addDemandBranchForComponent(rht_coil)        
+      
+      # VAV terminal
+      terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
+      terminal.setName("#{zone.name} VAV Term")
+      terminal.setZoneMinimumAirFlowMethod('Constant')
+      terminal.set_initial_prototype_damper_position(prototype_input['template'], zone.outdoor_airflow_rate_per_area)
+      terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
+      terminal.setMaximumFlowFractionDuringReheat(0.5)
+      terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
+      air_loop.addBranchForZone(zone,terminal.to_StraightComponent)
+    
+      # Zone sizing
+      # TODO Create general logic for cooling airflow method.
+      # Large hotel uses design day with limit, school uses design day.
+      sizing_zone = zone.sizingZone
+      if prototype_input['building_type'] == 'SecondarySchool'
+        sizing_zone.setCoolingDesignAirFlowMethod('DesignDay')
+      else
+        sizing_zone.setCoolingDesignAirFlowMethod("DesignDayWithLimit")
+      end
+      sizing_zone.setHeatingDesignAirFlowMethod("DesignDay")
+      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
+      #sizing_zone.setZoneHeatingDesignSupplyAirTemperature(rht_sa_temp_c)
+      sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zone_htg_sa_temp_c)
+    
+    end
+
+    # Set the damper action based on the template.
+    air_loop.set_vav_damper_action(prototype_input['template'])     
+    
+    return true
+
+  end  
+  
   def add_psz_ac(prototype_input, standards, sys_name, thermal_zones, fan_location = "DrawThrough", hot_water_loop = nil, chilled_water_loop = nil, schedule_index = "")
 
     unless hot_water_loop.nil? or chilled_water_loop.nil?
@@ -2733,7 +2826,7 @@ class OpenStudio::Model::Model
     
     # Water heater depends on the fuel type
     water_heater = OpenStudio::Model::WaterHeaterMixed.new(self)
-    water_heater.setName("#{water_heater_vol_gal}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
+    water_heater.setName("#{water_heater_vol_gal}gal #{water_heater_fuel} Booster Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
     water_heater.setTankVolume(OpenStudio.convert(water_heater_vol_gal,'gal','m^3').get)
     water_heater.setSetpointTemperatureSchedule(swh_temp_sch)
 
@@ -2876,7 +2969,6 @@ class OpenStudio::Model::Model
     space = self.getSpaceByName(space_name)
     space = space.get
     space_area = OpenStudio.convert(space.floorArea,'m^2','ft^2').get   # ft2
-    puts "#{space_name} space_area = #{space_area}"
     if space_multiplier.nil?
       space_multiplier = 1
     end
@@ -2887,7 +2979,6 @@ class OpenStudio::Model::Model
     # Water fixture definition
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
     rated_flow_rate_per_area = data['service_water_heating_peak_flow_per_area'].to_f   # gal/h.ft2
-    puts "rated_flow_rate_per_area = #{rated_flow_rate_per_area}"
     rated_flow_rate_gal_per_hour = rated_flow_rate_per_area * space_area * space_multiplier   # gal/h
     rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour/60  # gal/h to gal/min
     rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get

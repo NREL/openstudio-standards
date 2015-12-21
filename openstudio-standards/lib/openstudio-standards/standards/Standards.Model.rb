@@ -8,6 +8,7 @@ class OpenStudio::Model::Model
 
   # Load the helper libraries for getting the autosized
   # values for each type of model object.
+  require_relative 'Standards.Fan'
   require_relative 'Standards.FanConstantVolume'
   require_relative 'Standards.FanVariableVolume'
   require_relative 'Standards.FanOnOff'
@@ -35,7 +36,7 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
      
     # Multi-zone VAV outdoor air sizing
-    self.getAirLoopHVACs.sort.each {|obj| obj.apply_multizone_vav_outdoor_air_sizing}  
+    self.getAirLoopHVACs.sort.each {|obj| obj.apply_multizone_vav_outdoor_air_sizing(self.template)}  
 
   end
   
@@ -580,7 +581,11 @@ class OpenStudio::Model::Model
         ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
       end
       unless ventilation_ach.nil? || ventilation_ach.to_f == 0
+<<<<<<< HEAD
         ventilation.setOutdoorAirFlowAirChangesperHour(OpenStudio.convert(ventilation_ach.to_f, '', '').get)        
+=======
+        ventilation.setOutdoorAirFlowAirChangesperHour(ventilation_ach.to_f)
+>>>>>>> remotes/origin/master
       end
       
     end
@@ -619,6 +624,47 @@ class OpenStudio::Model::Model
         default_sch_set.setPeopleActivityLevelSchedule(add_schedule(occupancy_activity_sch))
       end
 
+      # clothing schedule for thermal comfort metrics
+      clothing_sch = self.getScheduleRulesetByName("Clothing Schedule")
+      if clothing_sch.is_initialized
+        clothing_sch = clothing_sch.get
+      else
+        clothing_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+        clothing_sch.setName("Clothing Schedule")
+        clothing_sch.defaultDaySchedule.setName("Clothing Schedule Default Winter Clothes")
+        clothing_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 1.0)
+        sch_rule = OpenStudio::Model::ScheduleRule.new(clothing_sch)
+        sch_rule.daySchedule.setName("Clothing Schedule Summer Clothes")
+        sch_rule.daySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0.5)
+        sch_rule.setStartDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(5), 1))
+        sch_rule.setEndDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(9), 30))      
+      end
+      people.setClothingInsulationSchedule(clothing_sch)
+         
+      # air velocity schedule for thermal comfort metrics
+      air_velo_sch = self.getScheduleRulesetByName("Air Velocity Schedule")
+      if air_velo_sch.is_initialized
+        air_velo_sch = air_velo_sch.get
+      else
+        air_velo_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+        air_velo_sch.setName("Air Velocity Schedule")
+        air_velo_sch.defaultDaySchedule.setName("Air Velocity Schedule Default")
+        air_velo_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0.2)    
+      end
+      people.setAirVelocitySchedule(air_velo_sch)      
+
+      # work efficiency schedule for thermal comfort metrics
+      work_efficiency_sch = self.getScheduleRulesetByName("Work Efficiency Schedule")
+      if work_efficiency_sch.is_initialized
+        work_efficiency_sch = work_efficiency_sch.get
+      else
+        work_efficiency_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+        work_efficiency_sch.setName("Work Efficiency Schedule")
+        work_efficiency_sch.defaultDaySchedule.setName("Work Efficiency Schedule Default")
+        work_efficiency_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0)    
+      end
+      people.setWorkEfficiencySchedule(work_efficiency_sch) 
+      
     end
 
     # Infiltration

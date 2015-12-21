@@ -2826,6 +2826,42 @@
       ]
     },
     {
+      "name": "ApartmentMidRise INFIL_Door_Opening_SCH_2010_2013",
+      "category": "Infiltration",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.131,
+        1.0,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        1.0,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.0,
+        0.0
+      ]
+    },
+    {
       "name": "ApartmentMidRise INF_APT_SCH",
       "category": "Unknown",
       "units": null,
@@ -3011,7 +3047,11 @@
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
+<<<<<<< HEAD
         0
+=======
+        0.0
+>>>>>>> remotes/origin/master
       ]
     },
     {
@@ -3037,7 +3077,11 @@
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
+<<<<<<< HEAD
         1
+=======
+        1.0
+>>>>>>> remotes/origin/master
       ]
     },
     {
@@ -23249,6 +23293,97 @@
       ]
     },
     {
+      "name": "NECB-*-Electric-Equipment",
+      "category": "Equipment",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-FAN",
+      "category": "Fan",
+      "units": "ON_OFF",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Lighting",
+      "category": "Lighting",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Occupancy",
+      "category": "Occupancy",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Service Water Heating",
+      "category": "Service Water Heating",
+      "units": "FRACTION",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "NECB-*-Thermostat Setpoint-Cooling",
+      "category": "Thermostat Setpoint",
+      "units": "TEMPERATURE",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        35.0
+      ]
+    },
+    {
+      "name": "NECB-*-Thermostat Setpoint-Heating",
+      "category": "Thermostat Setpoint",
+      "units": "TEMPERATURE",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        18.0
+      ]
+    },
+    {
       "name": "NECB-A-Electric-Equipment",
       "category": "Equipment",
       "units": "FRACTION",
@@ -39062,7 +39197,11 @@
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
+<<<<<<< HEAD
         1
+=======
+        1.0
+>>>>>>> remotes/origin/master
       ]
     },
     {
@@ -39111,7 +39250,11 @@
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
+<<<<<<< HEAD
         1
+=======
+        1.0
+>>>>>>> remotes/origin/master
       ]
     },
     {
@@ -39137,7 +39280,11 @@
       "type": "Constant",
       "notes": null,
       "values": [
+<<<<<<< HEAD
         0
+=======
+        0.0
+>>>>>>> remotes/origin/master
       ]
     },
     {
@@ -39186,7 +39333,11 @@
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
+<<<<<<< HEAD
         1
+=======
+        1.0
+>>>>>>> remotes/origin/master
       ]
     },
     {
@@ -39212,7 +39363,11 @@
       "type": "Constant",
       "notes": null,
       "values": [
+<<<<<<< HEAD
         0
+=======
+        0.0
+>>>>>>> remotes/origin/master
       ]
     },
     {
@@ -76855,6 +77010,22 @@
       "category": "Operation",
       "units": "Dimensionless",
       "day_types": "Sat|Sun",
+<<<<<<< HEAD
+=======
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "SecondarySchool PSZ-AC OA Damper",
+      "category": "Operation",
+      "units": "Dimensionless",
+      "day_types": "WntrDsn",
+>>>>>>> remotes/origin/master
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
@@ -76864,6 +77035,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "name": "SecondarySchool PSZ-AC OA Damper",
       "category": "Operation",
       "units": "Dimensionless",
@@ -76900,6 +77072,8 @@
       ]
     },
     {
+=======
+>>>>>>> remotes/origin/master
       "name": "SecondarySchool PSZ-AC Operation",
       "category": "Operation",
       "units": "Dimensionless",
@@ -76940,6 +77114,22 @@
       "category": "Operation",
       "units": "Dimensionless",
       "day_types": "Sat|Sun",
+<<<<<<< HEAD
+=======
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "SecondarySchool PSZ-AC Operation",
+      "category": "Operation",
+      "units": "Dimensionless",
+      "day_types": "WntrDsn",
+>>>>>>> remotes/origin/master
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
@@ -76949,6 +77139,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "name": "SecondarySchool PSZ-AC Operation",
       "category": "Operation",
       "units": "Dimensionless",
@@ -76985,6 +77176,8 @@
       ]
     },
     {
+=======
+>>>>>>> remotes/origin/master
       "name": "SecondarySchool VAV OA Damper",
       "category": "Operation",
       "units": "Dimensionless",
@@ -79988,6 +80181,7 @@
       "type": "Hourly",
       "notes": null,
       "values": [
+<<<<<<< HEAD
         0,
         0,
         0,
@@ -80012,6 +80206,32 @@
         1,
         0,
         0
+=======
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0
+>>>>>>> remotes/origin/master
       ]
     },
     {
@@ -80024,6 +80244,7 @@
       "type": "Hourly",
       "notes": null,
       "values": [
+<<<<<<< HEAD
         0,
         0,
         0,
@@ -80048,6 +80269,32 @@
         0,
         0,
         0
+=======
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+>>>>>>> remotes/origin/master
       ]
     },
     {

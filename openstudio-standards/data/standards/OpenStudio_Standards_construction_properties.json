@@ -54846,7 +54846,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": 0.39,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2658
+=======
+      "sort_order": 2658.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -54862,7 +54866,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": 0.4,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2275
+=======
+      "sort_order": 2275.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -54878,7 +54886,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2873
+=======
+      "sort_order": 2873.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -54894,7 +54906,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2874
+=======
+      "sort_order": 2874.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -54910,7 +54926,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2868
+=======
+      "sort_order": 2868.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -54926,7 +54946,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2861
+=======
+      "sort_order": 2861.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -54942,7 +54966,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2863
+=======
+      "sort_order": 2863.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -54958,7 +54986,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2866
+=======
+      "sort_order": 2866.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -54974,7 +55006,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": 0.4,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2878
+=======
+      "sort_order": 2878.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -54990,7 +55026,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2871
+=======
+      "sort_order": 2871.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -55006,7 +55046,11 @@
       "assembly_maximum_c_factor": 0.119,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2867
+=======
+      "sort_order": 2867.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -55015,14 +55059,23 @@
       "standards_construction_type": "Glass with Curb",
       "building_category": "Nonresidential",
       "construction": "U 0.48 SHGC 0.40 Dbl Ref-D Clr 6mm/13mm",
+<<<<<<< HEAD
       "minimum_percent_of_surface": 0,
       "maximum_percent_of_surface": 2,
+=======
+      "minimum_percent_of_surface": 0.0,
+      "maximum_percent_of_surface": 2.0,
+>>>>>>> remotes/origin/master
       "assembly_maximum_u_value": 0.5,
       "assembly_maximum_f_factor": null,
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": 0.19,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2533
+=======
+      "sort_order": 2533.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -55038,7 +55091,11 @@
       "assembly_maximum_c_factor": 0.119,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2867
+=======
+      "sort_order": 2867.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -55054,7 +55111,11 @@
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": 0.4,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2275
+=======
+      "sort_order": 2275.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -55063,14 +55124,23 @@
       "standards_construction_type": "Glass with Curb",
       "building_category": "Nonresidential",
       "construction": "U 0.48 SHGC 0.40 Dbl Ref-D Clr 6mm/13mm",
+<<<<<<< HEAD
       "minimum_percent_of_surface": 0,
       "maximum_percent_of_surface": 2,
+=======
+      "minimum_percent_of_surface": 0.0,
+      "maximum_percent_of_surface": 2.0,
+>>>>>>> remotes/origin/master
       "assembly_maximum_u_value": 0.5,
       "assembly_maximum_f_factor": null,
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": 0.19,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2533
+=======
+      "sort_order": 2533.0
+>>>>>>> remotes/origin/master
     },
     {
       "template": "NECB 2011",
@@ -55079,14 +55149,23 @@
       "standards_construction_type": "Glass with Curb",
       "building_category": "Nonresidential",
       "construction": "U 0.48 SHGC 0.40 Dbl Ref-D Clr 6mm/13mm",
+<<<<<<< HEAD
       "minimum_percent_of_surface": 0,
       "maximum_percent_of_surface": 2,
+=======
+      "minimum_percent_of_surface": 0.0,
+      "maximum_percent_of_surface": 2.0,
+>>>>>>> remotes/origin/master
       "assembly_maximum_u_value": 0.5,
       "assembly_maximum_f_factor": null,
       "assembly_maximum_c_factor": null,
       "assembly_maximum_solar_heat_gain_coefficient": 0.19,
       "assembly_minimum_vt_shgc": null,
+<<<<<<< HEAD
       "sort_order": 2533
+=======
+      "sort_order": 2533.0
+>>>>>>> remotes/origin/master
     }
   ]
 }
