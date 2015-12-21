@@ -1,13 +1,12 @@
-
 # Extend the class to add Medium Office specific stuff
 class OpenStudio::Model::Model
- 
+
   def define_space_type_map(building_type, building_vintage, climate_zone)
     space_type_map = {
       'WholeBuilding - Lg Office' => [
         'Basement', 'Core_bottom', 'Core_mid', 'Core_top', #'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
-        'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4', 
-        'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4', 
+        'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4',
+        'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4',
         'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4',
         'DataCenter_basement_ZN_6', 'DataCenter_bot_ZN_6', 'DataCenter_mid_ZN_6', 'DataCenter_top_ZN_6'
       ]
@@ -16,7 +15,7 @@ class OpenStudio::Model::Model
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
-    
+
 case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
     system_to_space_map = [
@@ -64,7 +63,7 @@ case building_vintage
               'Basement'
           ]
       }
-    ]    
+    ]
     when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
     system_to_space_map = [
       {
@@ -116,35 +115,39 @@ case building_vintage
           'space_names' =>
           [
               'DataCenter_basement_ZN_6'
-          ]
+          ],
+          'load' => 484.423246742185
       },
       {
           'type' => 'DC',
           'space_names' =>
           [
               'DataCenter_bot_ZN_6'
-          ]
+          ],
+          'load' => 215.299220774304
       },
       {
           'type' => 'DC',
           'space_names' =>
           [
               'DataCenter_mid_ZN_6'
-          ]
+          ],
+          'load' => 215.299220774304
       },
       {
           'type' => 'DC',
           'space_names' =>
           [
               'DataCenter_top_ZN_6'
-          ]
+          ],
+          'load' => 215.299220774304
       }
     ]
     end
-    
+
     return system_to_space_map
   end
-    
+
   def define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
     space_multiplier_map = {
@@ -154,22 +157,22 @@ case building_vintage
         'Perimeter_mid_ZN_4'=> 10,
         'Core_mid'=> 10
     }
-    return space_multiplier_map   
+    return space_multiplier_map
   end
   def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
-   
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    
+
     system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
 
     condenser_water_loop = self.add_cw_loop(prototype_input, hvac_standards, 2)
-    
+
     chilled_water_loop = self.add_chw_loop(prototype_input, hvac_standards, condenser_water_loop)
 
     hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
-    
+
     heat_pump_loop = self.add_hp_loop(prototype_input, hvac_standards)
-    
+
     system_to_space_map.each do |system|
 
       #find all zones associated with these spaces
@@ -205,6 +208,15 @@ case building_vintage
           return false
         end
       when 'DC_main'
+        system['space_names'].each do |space_name|
+          space = self.getSpaceByName(space_name)
+          if space.empty?
+            OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
+            return false
+          end
+          space = space.get
+          self.add_data_center_load(space, system['load'])
+        end
         if hot_water_loop && chilled_water_loop
           self.add_data_center_hvac(prototype_input, hvac_standards, thermal_zones, hot_water_loop, heat_pump_loop, true)
         else
@@ -212,6 +224,15 @@ case building_vintage
           return false
         end
       when 'DC'
+        system['space_names'].each do |space_name|
+          space = self.getSpaceByName(space_name)
+          if space.empty?
+            OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
+            return false
+          end
+          space = space.get
+          self.add_data_center_load(space, system['load'])
+        end
         if hot_water_loop && chilled_water_loop
           self.add_data_center_hvac(prototype_input, hvac_standards, thermal_zones, hot_water_loop, heat_pump_loop)
         else
@@ -221,20 +242,20 @@ case building_vintage
       end
 
     end
-    
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
-    
+
     return true
-    
+
   end #add hvac
 
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-   
+
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
 
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
     water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
-    
+
     water_heaters.each do |water_heater|
       water_heater = water_heater.to_WaterHeaterMixed.get
       # water_heater.setAmbientTemperatureIndicator('Zone')
@@ -255,11 +276,11 @@ case building_vintage
       self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
     end
     # self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    
+
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
+
     return true
-    
+
   end #add swh
-  
+
 end
