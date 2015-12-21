@@ -90,8 +90,7 @@ class OpenStudio::Model::Model
       
      
   
-      
-=======
+
     self.load_building_type_methods(building_type, building_vintage, climate_zone)
     self.load_geometry(building_type, building_vintage, climate_zone)
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
