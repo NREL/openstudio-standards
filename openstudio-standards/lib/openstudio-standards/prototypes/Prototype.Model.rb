@@ -36,7 +36,7 @@ class OpenStudio::Model::Model
       return false
     end
 
-<<<<<<< HEAD
+
     case building_vintage 
       
     when 'NECB 2011'
@@ -88,25 +88,8 @@ class OpenStudio::Model::Model
       
     else
       
-      self.load_building_type_methods(building_type, building_vintage, climate_zone)
-      self.load_geometry(building_type, building_vintage, climate_zone)
-      self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
-      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
-      self.assign_space_type_stubs(lookup_building_type, space_type_map)
-      self.add_loads(building_vintage, climate_zone)
-      self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
-      self.modify_surface_convection_algorithm(building_vintage)
-      self.add_constructions(lookup_building_type, building_vintage, climate_zone)
-      self.create_thermal_zones(building_type,building_vintage, climate_zone)
-      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)
-      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
-      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
-      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
-      self.set_sizing_parameters(building_type, building_vintage)
-      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
-      
-    end
+     
+  
       
 =======
     self.load_building_type_methods(building_type, building_vintage, climate_zone)
@@ -128,7 +111,9 @@ class OpenStudio::Model::Model
     self.set_sizing_parameters(building_type, building_vintage)
     self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
->>>>>>> remotes/origin/master
+	  end
+	
+
     # Perform a sizing run
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false

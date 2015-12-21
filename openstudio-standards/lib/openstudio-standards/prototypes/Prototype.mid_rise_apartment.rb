@@ -3,59 +3,9 @@
 class OpenStudio::Model::Model
  
   def define_space_type_map(building_type, building_vintage, climate_zone)
-<<<<<<< HEAD
+
     space_type_map = nil
-    case building_vintage
-    when 'NECB 2011'
-      space_type_map ={
-        "Corr. < 2.4m wide" => ["G Corridor", "M Corridor", "T Corridor"],
         
-        "Dormitory - living quarters" => ["G N1 Apartment", "G N2 Apartment", "G NE Apartment", 
-          "G NW Apartment", "G S1 Apartment", "G S2 Apartment", 
-          "G SW Apartment", "M N1 Apartment", "M N2 Apartment", 
-          "M NE Apartment", "M NW Apartment", "M S1 Apartment", 
-          "M S2 Apartment", "M SE Apartment", "M SW Apartment", 
-          "T N1 Apartment", "T N2 Apartment", "T NE Apartment", 
-          "T NW Apartment", "T S1 Apartment", "T S2 Apartment", 
-          "T SE Apartment", "T SW Apartment"],
-        "Office - enclosed" => ["Office"]
-      }
-      
-    else
-      space_type_map = {
-        'Office' => ['Office'],
-        'Corridor' => ['G Corridor', 'M Corridor', 'T Corridor'],
-        'Apartment' => [
-          'G SW Apartment',
-          'G NW Apartment',
-          'G NE Apartment',
-          'G N1 Apartment',
-          'G N2 Apartment',
-          'G S1 Apartment',
-          'G S2 Apartment',
-          'M SW Apartment',
-          'M NW Apartment',
-          'M SE Apartment',
-          'M NE Apartment',
-          'M N1 Apartment',
-          'M N2 Apartment',
-          'M S1 Apartment',
-          'M S2 Apartment',
-          'T SW Apartment',
-          'T NW Apartment',
-          'T SE Apartment',
-          'T NE Apartment',
-          'T N1 Apartment',
-          'T N2 Apartment',
-          'T S1 Apartment',
-          'T S2 Apartment',
-        ]
-      }
-    end
-      return space_type_map
-    end
-=======
-    
     case building_vintage
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       space_type_map = {
@@ -122,11 +72,26 @@ class OpenStudio::Model::Model
             'T S2 Apartment'
           ]
         }
+		 
+		 when 'NECB 2011'
+      space_type_map ={
+        "Corr. < 2.4m wide" => ["G Corridor", "M Corridor", "T Corridor"],
+        
+        "Dormitory - living quarters" => ["G N1 Apartment", "G N2 Apartment", "G NE Apartment", 
+          "G NW Apartment", "G S1 Apartment", "G S2 Apartment", 
+          "G SW Apartment", "M N1 Apartment", "M N2 Apartment", 
+          "M NE Apartment", "M NW Apartment", "M S1 Apartment", 
+          "M S2 Apartment", "M SE Apartment", "M SW Apartment", 
+          "T N1 Apartment", "T N2 Apartment", "T NE Apartment", 
+          "T NW Apartment", "T S1 Apartment", "T S2 Apartment", 
+          "T SE Apartment", "T SW Apartment"],
+        "Office - enclosed" => ["Office"]
+      }
     end
     
     return space_type_map
   end
->>>>>>> remotes/origin/master
+
 
     def define_hvac_system_map(building_type, building_vintage, climate_zone)
       system_to_space_map = [
