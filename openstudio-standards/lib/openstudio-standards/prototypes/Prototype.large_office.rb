@@ -155,7 +155,9 @@ case building_vintage
         'Perimeter_mid_ZN_2'=> 10,
         'Perimeter_mid_ZN_3'=> 10,
         'Perimeter_mid_ZN_4'=> 10,
-        'Core_mid'=> 10
+        'Core_mid'=> 10,
+		'MidFloor_Plenum ZN' => 10,
+		'DataCenter_mid_ZN_6 ZN' =>10
     }
     return space_multiplier_map
   end
