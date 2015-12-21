@@ -14,8 +14,8 @@
       "coeff_1": 0.141,
       "coeff_2": 0.655,
       "coeff_3": 0.203,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "Based on Dick Lord's study dated January 17, 2010.  EIRFPLR curve is identical for all AirCooled Chillers"
     },
     {
@@ -23,8 +23,8 @@
       "coeff_1": 0.141,
       "coeff_2": 0.655,
       "coeff_3": 0.203,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -32,8 +32,8 @@
       "coeff_1": 0.141,
       "coeff_2": 0.655,
       "coeff_3": 0.203,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -41,8 +41,8 @@
       "coeff_1": 0.141,
       "coeff_2": 0.655,
       "coeff_3": 0.203,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -50,8 +50,8 @@
       "coeff_1": 0.141,
       "coeff_2": 0.655,
       "coeff_3": 0.203,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -59,8 +59,8 @@
       "coeff_1": 0.90949556,
       "coeff_2": 0.09864773,
       "coeff_3": -0.00819488,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From PNNL Prototype FullServiceRestaurant"
     },
     {
@@ -77,35 +77,35 @@
       "coeff_1": 0.90949556,
       "coeff_2": 0.09864773,
       "coeff_3": -0.00819488,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": null
     },
     {
       "name": "DX Coil Cap-FF",
       "coeff_1": 0.8,
       "coeff_2": 0.2,
-      "coeff_3": 0,
+      "coeff_3": 0.0,
       "min_x": 0.5,
       "max_x": 1.5,
       "notes": "From PNNL Prototype Buildings ApartmentMidRise, HotelSmall, OfficeSmall, RetailStandAlone, RetailStripmall, SchoolPrimary, Warehouse"
     },
     {
       "name": "DXCOOL-NECB2011-REF-CAPFFLOW",
-      "coeff_1": 1,
-      "coeff_2": 0,
-      "coeff_3": 0,
-      "min_x": 0,
-      "max_x": 1,
+      "coeff_1": 1.0,
+      "coeff_2": 0.0,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From NECB 2011"
     },
     {
       "name": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
-      "coeff_1": 1,
-      "coeff_2": 0,
-      "coeff_3": 0,
-      "min_x": 0,
-      "max_x": 1,
+      "coeff_1": 1.0,
+      "coeff_2": 0.0,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From NECB 2011"
     },
     {
@@ -113,8 +113,8 @@
       "coeff_1": 1.3824,
       "coeff_2": -0.4336,
       "coeff_3": 0.0512,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From NECB 2011"
     },
     {
@@ -139,16 +139,16 @@
       "name": "HPACCOOLPLFFPLR",
       "coeff_1": 0.85,
       "coeff_2": 0.15,
-      "coeff_3": 0,
-      "min_x": 0,
-      "max_x": 1,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": null
     },
     {
       "name": "HPACCoolCapFFF",
       "coeff_1": 0.8,
       "coeff_2": 0.2,
-      "coeff_3": 0,
+      "coeff_3": 0.0,
       "min_x": 0.5,
       "max_x": 1.5,
       "notes": null
@@ -157,7 +157,7 @@
       "name": "Measured_CoolCStandard10Ton_EIRFFF",
       "coeff_1": 1.192,
       "coeff_2": -0.1917,
-      "coeff_3": 0,
+      "coeff_3": 0.0,
       "min_x": 0.776,
       "max_x": 1.197,
       "notes": "From PNNL Prototype FullServiceRestaurant"
@@ -175,18 +175,18 @@
       "name": "PSZ-AC_CoolCLennoxStandard10Ton_TGA120S2B_PLR",
       "coeff_1": 0.771,
       "coeff_2": 0.229,
-      "coeff_3": 0,
-      "min_x": 0,
-      "max_x": 1,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From PNNL Prototype Buildings OutPatientHealtCare, RestaurantFastFood, RestaurantSitDown, SchoolPrimary, SchoolSecondary"
     },
     {
       "name": "PSZ-AC_Unitary_PackagecoolPLR",
       "coeff_1": 0.75,
       "coeff_2": 0.25,
-      "coeff_3": 0,
-      "min_x": 0,
-      "max_x": 1,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From PNNL Prototype Buildings RetailStandAlone, RetailStripMall, SchoolPrimary"
     },
     {
@@ -199,30 +199,12 @@
       "notes": "From PNNL Prototype Buildings ApartmentMidRise, HotelSmall, Warehouse"
     },
     {
-      "name": "VarVolFan-AFBIFanCurve-NECB2011-FPLR",
-      "coeff_1": 0.8977,
-      "coeff_2": -2.2031,
-      "coeff_3": 2.3129,
-      "min_x": 0.68,
-      "max_x": 1,
-      "notes": "From NECB 2011"
-    },
-    {
-      "name": "VarVolFan-AFBIInletVanes-NECB2011-FPLR",
-      "coeff_1": -1.3102,
-      "coeff_2": 4.4931,
-      "coeff_3": -2.1935,
-      "min_x": 0.5,
-      "max_x": 1,
-      "notes": "From NECB 2011"
-    },
-    {
       "name": "WaterCooled_Centrifugal_EIRFPLR_NECB2011",
       "coeff_1": 0.171493,
       "coeff_2": 0.588202,
       "coeff_3": 0.2373726,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From NECB 2011"
     },
     {
@@ -230,8 +212,8 @@
       "coeff_1": 0.081441,
       "coeff_2": 0.419271,
       "coeff_3": 0.499396,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From NECB 2011"
     },
     {
@@ -239,8 +221,8 @@
       "coeff_1": 0.330188,
       "coeff_2": 0.235543,
       "coeff_3": 0.4607083,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From NECB 2011"
     },
     {
@@ -248,8 +230,8 @@
       "coeff_1": 0.04412,
       "coeff_2": 0.640367,
       "coeff_3": 0.3195553,
-      "min_x": 0,
-      "max_x": 1,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "notes": "From NECB 2011"
     }
   ]
