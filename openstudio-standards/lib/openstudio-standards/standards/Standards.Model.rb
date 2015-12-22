@@ -1327,6 +1327,149 @@ class OpenStudio::Model::Model
     return full_epw_path
   
   end
+
+  # pass in information on building type, tempate, and climate zone, and get back the end use by fuel type and totals by fuel.
+  def process_results_for_datapoint(climate_zone, building_type, template)
+
+    # Combine the data from the JSON files into a single hash
+    top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
+    standards_data_dir = "#{top_dir}/data/standards"
+
+    results_path = File.open("#{standards_data_dir}/legacy_idf_results.json", 'r:UTF-8')
+    results_file = JSON.load(results_path)
+    #legacy_idf_results = JSON.parse(results_path)
+
+    puts "made it past here"
+
+    # Load the legacy idf results JSON file into a ruby hash
+    #temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
+    #legacy_idf_results = JSON.parse(temp)
+
+    # Get legacy idf results
+    legacy_results_hash = {}
+    legacy_results_hash['total_legacy_energy_val'] = 0
+    legacy_results_hash['total_legacy_water_val'] = 0
+    # todo - add hash entry where value is hash of end use totals
+    # todo - add hash entry where value is hash of fuel totals
+    fuel_types.each do |fuel_type|
+      end_uses.each do |end_use|
+        next if end_use == 'Exterior Equipment'
+        # Get the legacy results number
+        legacy_val = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, end_use)
+        # Combine the exterior lighting and exterior equipment
+        if end_use == 'Exterior Lighting'
+          legacy_exterior_equipment = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, 'Exterior Equipment')
+          unless legacy_exterior_equipment.nil?
+            legacy_val += legacy_exterior_equipment
+          end
+        end
+
+        #legacy_val = legacy_idf_results[building_type][template][climate_zone][fuel_type][end_use]
+        if legacy_val.nil?
+          failures << "Error - #{model_name} - #{fuel_type} #{end_use} legacy idf value not found"
+          next
+        end
+
+        # Add the energy to the total
+        if fuel_type == 'Water'
+          legacy_results_hash['total_legacy_water_val'] += legacy_val
+        else
+          legacy_results_hash['total_legacy_energy_val'] += legacy_val
+        end
+
+      end # Next end use
+    end # Next fuel type
+
+    return legacy_results_hash
+
+  end
+
+  # Keep track of floor area for prototype buildings.
+  # This is used to calculate EUI's to compare against non prototype buildings
+  def find_prototype_floor_area(building_type)
+
+    if building_type == 'FullServiceRestaurant'
+      result = 9999
+    elsif building_type == 'Hospital'
+      result = 9999
+    elsif building_type == 'LargeHotel'
+      result = 9999
+    elsif building_type == 'LargeOffice'
+      result = 9999
+    elsif building_type == 'MediumOffice'
+      result = 9999
+    elsif building_type == 'MidriseApartment'
+      result = 9999
+    elsif building_type == 'Office'
+      result = nil # there shouldn't be a prototype building for this
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Measures calling this should choose between SmallOffice, MediumOffice, and LargeOffice")
+    elsif building_type == 'Outpatient'
+      result = 9999
+    elsif building_type == 'PrimarySchool'
+      result = 9999
+    elsif building_type == 'QuickServiceRestaurant'
+      result = 9999
+    elsif building_type == 'Retail'
+      result = 9999
+    elsif building_type == 'SecondarySchool'
+      result = 9999
+    elsif building_type == 'SmallHotel'
+      result = 9999
+    elsif building_type == 'SmallOffice'
+      result = 9999
+    elsif building_type == 'StripMall'
+      result = 9999
+    elsif building_type == 'SuperMarket'
+      result = 9999
+    elsif building_type == 'Warehouse'
+      result = 9999
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine floor prototype floor area")
+      result = nil
+    end
+
+    return result
+
+  end
+
+  # user needs to pass in building_vintage as string. The building type and climate zone will come from the model.
+  # If the building type or ASHRAE climate zone is not set in the model this will return nil
+  # If the lookup doesn't find matching simulation results this wil return nil
+  def find_target_eui(template)
+
+    # get climate zone from model
+    # get ashrae climate zone from model
+    climate_zone = ''
+    climateZones = self.getClimateZones
+    climateZones.climateZones.each do |climateZone|
+      if climateZone.institution == "ASHRAE"
+        climate_zone = climateZone.value
+        next
+      end
+    end
+
+    # get building type from model
+    building_type = ''
+    if self.getBuilding.standardsBuildingType.is_initialized
+      building_type = self.getBuilding.standardsBuildingType.get
+    end
+
+    # look up results
+    target_consumpiton = process_results_for_datapoint(climate_zone, building_type, template)
+    # todo - I don't see floor area in the legacy results, may have to store that by buildng type to calcuate EUI target
+    # todo - there is no 'Office' prototype, only small medimum and large. Should I use building floor area to look up EUI. (this will be relevant for end use check as well)
+    target_floor_area = 9999
+
+    if target_consumpiton['total_legacy_energy_val'] > 0
+      result = target_consumpiton['total_legacy_energy_val']/target_floor_area
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find target results for #{climate_zone},#{building_type},#{template}")
+      result = nil # couldn't calculate EUI consumpiton lookup failed
+    end
+
+    return result
+
+  end
   
   private
 
