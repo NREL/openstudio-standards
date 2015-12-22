@@ -55,28 +55,15 @@ class OpenStudio::Model::Model
       BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR
       BTAP::Geometry::match_surfaces(self)                                    # set surface if they are out of whack.
       BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
-      
-      puts "set constructions to necb."
-      
-      
-      
-      
-       
+      #BTAP::runner_register("INFO", "Applying NECB HVAC", runner)
+      #use_ideal_air_loads = false
+      BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self,runner=nil) 
       
       
       
-      
-      
-      
+     
       # TO DO:      
-      #      
-      #           
-      #      
-      #      
-      #      
-      #      
-      #      
-      #      
+ 
       #      self.create_thermal_zones(building_type,building_vintage, climate_zone)
       #      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)  # note exhaust fan schedule for * common spaces.
       #      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
@@ -91,24 +78,24 @@ class OpenStudio::Model::Model
      
   
 
-    self.load_building_type_methods(building_type, building_vintage, climate_zone)
-    self.load_geometry(building_type, building_vintage, climate_zone)
-    self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
-    space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
-    self.assign_space_type_stubs(lookup_building_type, space_type_map)
-    self.add_loads(building_vintage, climate_zone)
-    self.apply_infiltration_standard
-    self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
-    self.modify_surface_convection_algorithm(building_vintage)
-    self.add_constructions(lookup_building_type, building_vintage, climate_zone)
-    self.create_thermal_zones(building_type,building_vintage, climate_zone)
-    self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)
-    self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
-    self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-    self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
-    self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
-    self.set_sizing_parameters(building_type, building_vintage)
-    self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+      self.load_building_type_methods(building_type, building_vintage, climate_zone)
+      self.load_geometry(building_type, building_vintage, climate_zone)
+      self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
+      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
+      self.assign_space_type_stubs(lookup_building_type, space_type_map)
+      self.add_loads(building_vintage, climate_zone)
+      self.apply_infiltration_standard
+      self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
+      self.modify_surface_convection_algorithm(building_vintage)
+      self.add_constructions(lookup_building_type, building_vintage, climate_zone)
+      self.create_thermal_zones(building_type,building_vintage, climate_zone)
+      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)
+      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
+      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
+      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
+      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
+      self.set_sizing_parameters(building_type, building_vintage)
+      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
 	  end
 	

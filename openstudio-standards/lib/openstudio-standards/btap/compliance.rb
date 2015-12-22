@@ -1240,13 +1240,13 @@ module BTAP
       def self.lookup_spacetype_info(type)
         BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |item|
           # The optional suffix allows for for defined "wildcard" spacetypes to pass through. 
-          if type.strip =~ /NECB-#{item[0]}(\-[ABCDEFGHI])?/
+          if type.strip =~ /NECB 2011 - Space Function - #{item[0]}(\-[ABCDEFGHI])?/
             return item
           end
           
         end
         BTAP::Compliance::NECB2011::Data::BuildingTypeData.each do |item|
-          if type.strip =~ /NECB-#{item[0]}(\-[ABCDEFGHI])?/
+          if type.strip =~ /NECB 2011 - Space Function - #{item[0]}(\-[ABCDEFGHI])?/
             return item
           end
         end
@@ -1278,8 +1278,8 @@ module BTAP
           found_space_type = false
           BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |spacetype|
 
-            #puts "compare #{spacetype_name.to_s}  == #{("NECB-" + spacetype[0]).to_s}"
-            if (spacetype_name.to_s  == ("NECB-" + spacetype[0]).to_s ) 
+            #puts "compare #{spacetype_name.to_s}  == #{("NECB 2011 - Space Function - " + spacetype[0]).to_s}"
+            if (spacetype_name.to_s  == ("NECB 2011 - Space Function - " + spacetype[0]).to_s ) 
               s[ spacetype[2] ] = s[ spacetype[2] ] + space.floorArea() if "*" != spacetype[2]
               #puts "Found #{space.spaceType.get.name} schedule #{spacetype[2]} match with floor area of #{space.floorArea()}"
               found_space_type = true
@@ -1305,11 +1305,11 @@ module BTAP
         BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |spacetype|
           spacetype_name = space.spaceType.get.name  unless space.spaceType.empty?
           #If it is a regular space type.
-          if spacetype_name.to_s  == ("NECB-" + spacetype[0]).to_s
+          if spacetype_name.to_s  == ("NECB 2011 - Space Function - " + spacetype[0]).to_s
             return spacetype[2]
           end
           #if it is a wildcard space type the schedule is in the name ensure that 
-          if spacetype_name.to_s =~ /#{"NECB-" + spacetype[0]}-(\S)$/i
+          if spacetype_name.to_s =~ /#{"NECB 2011 - Space Function - " + spacetype[0]}-(\S)$/i
             return $1
           end
         end
