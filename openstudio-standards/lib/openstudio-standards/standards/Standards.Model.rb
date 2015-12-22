@@ -1429,43 +1429,44 @@ class OpenStudio::Model::Model
 
   # Keep track of floor area for prototype buildings.
   # This is used to calculate EUI's to compare against non prototype buildings
+  # Areas taken from scorcard Excel Files
   def find_prototype_floor_area(building_type)
 
-    if building_type == 'FullServiceRestaurant'
-      result = 9999
-    elsif building_type == 'Hospital'
-      result = 9999
-    elsif building_type == 'LargeHotel'
-      result = 9999
-    elsif building_type == 'LargeOffice'
-      result = 9999
-    elsif building_type == 'MediumOffice'
-      result = 9999
-    elsif building_type == 'MidriseApartment'
-      result = 9999
+    if building_type == 'FullServiceRestaurant' # 5502 ft^2
+      result = 511
+    elsif building_type == 'Hospital' # 241,410 ft^2 (including basement)
+      result = 22422
+    elsif building_type == 'LargeHotel' # 122,132 ft^2
+      result = 11345
+    elsif building_type == 'LargeOffice' # 498,600 ft^2
+      result = 46320
+    elsif building_type == 'MediumOffice' # 53,600 ft^2
+      result = 4982
+    elsif building_type == 'MidriseApartment' # 33,700 ft^2
+      result = 3135
     elsif building_type == 'Office'
       result = nil # todo - there shouldn't be a prototype building for this
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Measures calling this should choose between SmallOffice, MediumOffice, and LargeOffice")
-    elsif building_type == 'Outpatient'
-      result = 9999
-    elsif building_type == 'PrimarySchool'
-      result = 9999
-    elsif building_type == 'QuickServiceRestaurant'
-      result = 9999
-    elsif building_type == 'Retail'
-      result = 9999
-    elsif building_type == 'SecondarySchool'
-      result = 9999
-    elsif building_type == 'SmallHotel'
-      result = 9999
-    elsif building_type == 'SmallOffice'
-      result = 9999
-    elsif building_type == 'StripMall'
-      result = 9999
-    elsif building_type == 'SuperMarket'
-      result = 9999
-    elsif building_type == 'Warehouse'
-      result = 9999
+    elsif building_type == 'Outpatient' #40.950 ft^2
+      result = 3804
+    elsif building_type == 'PrimarySchool' # 73,960 ft^2
+      result = 6871
+    elsif building_type == 'QuickServiceRestaurant' # 2500 ft^2
+      result = 232
+    elsif building_type == 'Retail' # 24,695 ft^2
+      result = 2294
+    elsif building_type == 'SecondarySchool' # 210,900 ft^2
+      result = 19592
+    elsif building_type == 'SmallHotel' # 43,200 ft^2
+      result = 4014
+    elsif building_type == 'SmallOffice' # 5500 ft^2
+      result = 511
+    elsif building_type == 'StripMall' # 22,500 ft^2
+      result = 2090
+    elsif building_type == 'SuperMarket' #45,002 ft2 (from legacy reference idf file)
+      result = 4181
+    elsif building_type == 'Warehouse' # 49,495 ft^2 (legacy ref shows 52,045, but I wil calc using 49,495)
+      result = 4595
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine floor prototype floor area")
       result = nil
@@ -1497,17 +1498,34 @@ class OpenStudio::Model::Model
       building_type = self.getBuilding.standardsBuildingType.get
     end
 
-    # todo - there is no 'Office' prototype, only small medimum and large. Should I use building floor area to look up EUI. (this will be relevant for end use check as well)
-    if building_type == "Office" then building_type = "MediumOffice" end
+    # prototype small office approx 500 m^2
+    # prototype medium office approx 5000 m^2
+    # prototype large office approx 50,000 m^2
+    # map office building type to small medium or large
+    if building_type == "Office"
+    open_studio_area = self.getBuilding.floorArea
+      if open_studio_area < 2750
+        building_type = "SmallOffice"
+      elsif open_studio_area < 25250
+        building_type = "MediumOffice"
+      else
+        building_type = "LargeOffice"
+      end
+    end
 
     # look up results
     target_consumpiton = process_results_for_datapoint(climate_zone, building_type, template)
 
-    # todo - I don't see floor area in the legacy results, may have to store that by buildng type to calcuate EUI target
+    # lookup target floor area for prototype buildings
     target_floor_area = find_prototype_floor_area(building_type)
 
     if target_consumpiton['total_legacy_energy_val'] > 0
-      result = target_consumpiton['total_legacy_energy_val']/target_floor_area
+      if target_floor_area > 0
+        result = target_consumpiton['total_legacy_energy_val']/target_floor_area
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find prototype building floor area")
+        result = nil
+      end
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find target results for #{climate_zone},#{building_type},#{template}")
       result = nil # couldn't calculate EUI consumpiton lookup failed
