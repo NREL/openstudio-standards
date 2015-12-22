@@ -1377,15 +1377,15 @@ class OpenStudio::Model::Model
     top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
     standards_data_dir = "#{top_dir}/data/standards"
 
-    results_path = File.open("#{standards_data_dir}/legacy_idf_results.json", 'r:UTF-8')
-    results_file = JSON.load(results_path)
-    #legacy_idf_results = JSON.parse(results_path)
-
-    puts "made it past here"
-
     # Load the legacy idf results JSON file into a ruby hash
-    #temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
-    #legacy_idf_results = JSON.parse(temp)
+    temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
+    legacy_idf_results = JSON.parse(temp)
+
+    # List of all fuel types
+    fuel_types = ['Electricity', 'Natural Gas', 'Additional Fuel', 'District Cooling', 'District Heating', 'Water']
+
+    # List of all end uses
+    end_uses = ['Heating', 'Cooling', 'Interior Lighting', 'Exterior Lighting', 'Interior Equipment', 'Exterior Equipment', 'Fans', 'Pumps', 'Heat Rejection','Humidification', 'Heat Recovery', 'Water Systems', 'Refrigeration', 'Generators']
 
     # Get legacy idf results
     legacy_results_hash = {}
@@ -1396,8 +1396,10 @@ class OpenStudio::Model::Model
     fuel_types.each do |fuel_type|
       end_uses.each do |end_use|
         next if end_use == 'Exterior Equipment'
+
         # Get the legacy results number
         legacy_val = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, end_use)
+
         # Combine the exterior lighting and exterior equipment
         if end_use == 'Exterior Lighting'
           legacy_exterior_equipment = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, 'Exterior Equipment')
@@ -1406,9 +1408,8 @@ class OpenStudio::Model::Model
           end
         end
 
-        #legacy_val = legacy_idf_results[building_type][template][climate_zone][fuel_type][end_use]
         if legacy_val.nil?
-          failures << "Error - #{model_name} - #{fuel_type} #{end_use} legacy idf value not found"
+          OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "#{fuel_type} #{end_use} legacy idf value not found")
           next
         end
 
@@ -1443,7 +1444,7 @@ class OpenStudio::Model::Model
     elsif building_type == 'MidriseApartment'
       result = 9999
     elsif building_type == 'Office'
-      result = nil # there shouldn't be a prototype building for this
+      result = nil # todo - there shouldn't be a prototype building for this
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Measures calling this should choose between SmallOffice, MediumOffice, and LargeOffice")
     elsif building_type == 'Outpatient'
       result = 9999
@@ -1485,7 +1486,7 @@ class OpenStudio::Model::Model
     climateZones = self.getClimateZones
     climateZones.climateZones.each do |climateZone|
       if climateZone.institution == "ASHRAE"
-        climate_zone = climateZone.value
+        climate_zone = "ASHRAE 169-2006-#{climateZone.value}"
         next
       end
     end
@@ -1496,11 +1497,14 @@ class OpenStudio::Model::Model
       building_type = self.getBuilding.standardsBuildingType.get
     end
 
+    # todo - there is no 'Office' prototype, only small medimum and large. Should I use building floor area to look up EUI. (this will be relevant for end use check as well)
+    if building_type == "Office" then building_type = "MediumOffice" end
+
     # look up results
     target_consumpiton = process_results_for_datapoint(climate_zone, building_type, template)
+
     # todo - I don't see floor area in the legacy results, may have to store that by buildng type to calcuate EUI target
-    # todo - there is no 'Office' prototype, only small medimum and large. Should I use building floor area to look up EUI. (this will be relevant for end use check as well)
-    target_floor_area = 9999
+    target_floor_area = find_prototype_floor_area(building_type)
 
     if target_consumpiton['total_legacy_energy_val'] > 0
       result = target_consumpiton['total_legacy_energy_val']/target_floor_area
