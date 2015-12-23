@@ -1370,7 +1370,12 @@ class OpenStudio::Model::Model
   
   end
 
-  # pass in information on building type, tempate, and climate zone, and get back the end use by fuel type and totals by fuel.
+  # Method to gather prototype simulation results for a specific climate zone, building type, and template
+  #
+  # @param climate_zone [String] string for the ASHRAE climate zone.
+  # @param building_type [String] string for prototype building type.
+  # @param template [String] string for prototype template to target.
+  # @return [Hash] Returns a hash with data presented in various bins.
   def process_results_for_datapoint(climate_zone, building_type, template)
 
     # Combine the data from the JSON files into a single hash
@@ -1429,7 +1434,10 @@ class OpenStudio::Model::Model
 
   # Keep track of floor area for prototype buildings.
   # This is used to calculate EUI's to compare against non prototype buildings
-  # Areas taken from scorcard Excel Files
+  # Areas taken from scorecard Excel Files
+  #
+  # @param [Sting] building type
+  # @return [Double] floor area (m^2) of prototype building for building type passed in
   def find_prototype_floor_area(building_type)
 
     if building_type == 'FullServiceRestaurant' # 5502 ft^2
@@ -1479,6 +1487,9 @@ class OpenStudio::Model::Model
   # user needs to pass in building_vintage as string. The building type and climate zone will come from the model.
   # If the building type or ASHRAE climate zone is not set in the model this will return nil
   # If the lookup doesn't find matching simulation results this wil return nil
+  #
+  # @param [String] target prototype template for eui lookup
+  # @return [Double] EUI (MJ/m^2) for target template for given OSM.
   def find_target_eui(template)
 
     # get climate zone from model
