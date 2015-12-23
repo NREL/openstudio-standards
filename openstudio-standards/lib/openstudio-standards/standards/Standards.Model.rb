@@ -507,13 +507,13 @@ class OpenStudio::Model::Model
       lights_frac_to_return_air = data['lighting_fraction_to_return_air']
       lights_frac_radiant = data['lighting_fraction_radiant']
       lights_frac_visible = data['lighting_fraction_visible']
-      unless  lighting_per_area == 0 || lighting_per_area.nil?
+      unless  lighting_per_area.to_f == 0 || lighting_per_area.nil?
         lights_def.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
         lights_def.setReturnAirFraction(lights_frac_to_return_air)
         lights_def.setFractionRadiant(lights_frac_radiant)
         lights_def.setFractionVisible(lights_frac_visible)
       end
-      unless lighting_per_person == 0 || lighting_per_person.nil?
+      unless lighting_per_person.to_f == 0 || lighting_per_person.nil?
         lights_def.setWattsperPerson(OpenStudio.convert(lighting_per_person, 'W/person', 'W/person').get)
         lights_def.setReturnAirFraction(lights_frac_to_return_air)
         lights_def.setFractionRadiant(lights_frac_radiant)
@@ -1392,6 +1392,8 @@ class OpenStudio::Model::Model
       building_type = 'MedOffice'
     elsif building_type == 'MidriseApartment'
       building_type = 'MidApt'
+    elsif building_type == 'HighriseApartment'
+      building_type = 'HighApt'
     elsif building_type == 'Office'
       building_type = 'Office'
     elsif building_type == 'Outpatient'

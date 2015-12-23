@@ -10,46 +10,46 @@
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
         23.9
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        29.4
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        29.4
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        29.4
       ]
     },
     {
@@ -96,9 +96,9 @@
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
+      "notes": "From DOE Reference Buildings ",
       "values": [
-        1.0
+        0.0
       ]
     },
     {
@@ -171,48 +171,9 @@
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
+      "notes": "From DOE Reference Buildings ",
       "values": [
         1.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
       ]
     },
     {
@@ -230,13 +191,39 @@
     },
     {
       "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "Always Off",
       "category": "Unknown",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
-      "notes": "From DOE Reference Buildings ",
+      "notes": "From DOE Prototype Buildings",
       "values": [
         1.0
       ]
@@ -249,15 +236,28 @@
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
-      "notes": "From DOE Reference Buildings ",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
       "values": [
         0.0
       ]
     },
     {
       "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
+      "category": "Unknown",
+      "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
@@ -451,6 +451,81 @@
       ]
     },
     {
+      "name": "ApartmentHighRise APT_DHW_SCH",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.08,
+        0.04,
+        0.01,
+        0.01,
+        0.04,
+        0.27,
+        0.94,
+        1.0,
+        0.96,
+        0.84,
+        0.76,
+        0.61,
+        0.53,
+        0.47,
+        0.41,
+        0.47,
+        0.55,
+        0.73,
+        0.86,
+        0.82,
+        0.75,
+        0.61,
+        0.53,
+        0.29
+      ]
+    },
+    {
+      "name": "ApartmentHighRise CLGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        24.4
+      ]
+    },
+    {
+      "name": "ApartmentHighRise CLGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        24.4
+      ]
+    },
+    {
+      "name": "ApartmentHighRise CLGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        21.7
+      ]
+    },
+    {
       "name": "ApartmentHighRise COMPACT HVAC-ALWAYS 4",
       "category": "Unknown",
       "units": null,
@@ -575,7 +650,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise EQP_OFF_SCH",
+      "name": "ApartmentHighRise EQP_OFF_SCH_2004_2007",
       "category": "Equipment",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -588,7 +663,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise EQP_OFF_SCH",
+      "name": "ApartmentHighRise EQP_OFF_SCH_2004_2007",
       "category": "Equipment",
       "units": null,
       "day_types": "Wkdy",
@@ -621,6 +696,55 @@
         0.33,
         0.33,
         0.33
+      ]
+    },
+    {
+      "name": "ApartmentHighRise EQP_OFF_SCH_2010_2013",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.218625
+      ]
+    },
+    {
+      "name": "ApartmentHighRise EQP_OFF_SCH_2010_2013",
+      "category": "Equipment",
+      "units": null,
+      "day_types": "Wkdy",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.33125,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.870205,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.92575,
+        0.33125,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625,
+        0.218625
       ]
     },
     {
@@ -676,13 +800,39 @@
       "name": "ApartmentHighRise HTGSETP_APT_SCH",
       "category": "Thermostat Setpoint",
       "units": "C",
-      "day_types": "Default|WntrDsn|SmrDsn",
+      "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
-        0.0
+        21.7
+      ]
+    },
+    {
+      "name": "ApartmentHighRise HTGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        24.4
+      ]
+    },
+    {
+      "name": "ApartmentHighRise HTGSETP_APT_SCH",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        21.7
       ]
     },
     {
@@ -846,7 +996,43 @@
       ]
     },
     {
-      "name": "ApartmentHighRise INFIL_Door_Opening_SCH",
+      "name": "ApartmentHighRise INFIL_Door_Opening_SCH_0.131",
+      "category": "Infiltration",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.131,
+        1.0,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        1.0,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "ApartmentHighRise INFIL_Door_Opening_SCH_0.144",
       "category": "Infiltration",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -957,7 +1143,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_COR_SCH",
+      "name": "ApartmentHighRise LTG_COR_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -970,7 +1156,33 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_OFF_SCH",
+      "name": "ApartmentHighRise LTG_COR_SCH_2010",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.8875
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_COR_SCH_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.576875
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "Default",
@@ -983,7 +1195,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_OFF_SCH",
+      "name": "ApartmentHighRise LTG_OFF_SCH_2004_2007",
       "category": "Unknown",
       "units": null,
       "day_types": "SmrDsn",
@@ -996,7 +1208,82 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_OFF_SCH",
+      "name": "ApartmentHighRise LTG_OFF_SCH_2004_2007",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Wkdy",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.68384,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.76932,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18,
+        0.18
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2004_2007",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "WntrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2010_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.18
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2010_2013",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "ApartmentHighRise LTG_OFF_SCH_2010_2013",
       "category": "Unknown",
       "units": null,
       "day_types": "Wkdy",
@@ -1032,7 +1319,7 @@
       ]
     },
     {
-      "name": "ApartmentHighRise LTG_OFF_SCH",
+      "name": "ApartmentHighRise LTG_OFF_SCH_2010_2013",
       "category": "Unknown",
       "units": null,
       "day_types": "WntrDsn",

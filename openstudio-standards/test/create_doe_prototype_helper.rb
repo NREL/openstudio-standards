@@ -612,4 +612,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     return failures
   end
 
+  def CreateDOEPrototypeBuildingTest.archive(bldg_types, vintages, climate_zones, file_ext="")
+    
+    
+    
+    
+  end
+
 end
