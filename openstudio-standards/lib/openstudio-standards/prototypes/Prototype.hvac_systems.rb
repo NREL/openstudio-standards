@@ -408,9 +408,14 @@ class OpenStudio::Model::Model
         
     # Cooling towers
     # TODO replace with FluidCooler:TwoSpeed when available
-    cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
-    cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
-    heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
+    # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+    # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
+    # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
+    fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(self)
+    fluid_cooler.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
+    fluid_cooler.setDesignSprayWaterFlowRate(0.002208)  # Based on HighRiseApartment
+    fluid_cooler.setPerformanceInputMethod("UFactorTimesAreaAndDesignWaterFlowRate")
+    heat_pump_water_loop.addSupplyBranchForComponent(fluid_cooler)
     
     # Boiler
     boiler = OpenStudio::Model::BoilerHotWater.new(self)
@@ -1038,7 +1043,7 @@ class OpenStudio::Model::Model
       
       supplemental_htg_coil = nil
       if prototype_input['pszac_supplemental_heating_type'] == 'Electric'
-        supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(self,self.alwaysOnDiscreteSchedule)
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} Electric Backup Htg Coil")
       elsif prototype_input['pszac_supplemental_heating_type'] == 'Gas'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(self,self.alwaysOnDiscreteSchedule)
@@ -1266,7 +1271,7 @@ class OpenStudio::Model::Model
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'No chilled water plant loop supplied')
           return false
         end
-        clg_coil = OpenStudio::Model::CoilCoolingingWaterToAirHeatPumpEquationFit.new(self)
+        clg_coil = OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit.new(self)
         clg_coil.setName("#{air_loop.name} Water-to-Air HP Clg Coil")
         clg_coil.setRatedCoolingCoefficientofPerformance(3.4) # TODO add this to standards
 
@@ -1304,22 +1309,41 @@ class OpenStudio::Model::Model
       # Wrap coils in a unitary system or not, depending
       # on the system type.
       if prototype_input['pszac_fan_type'] == 'Cycling'
-      
-        unitary_system = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(self,
-                                                                                  self.alwaysOnDiscreteSchedule,
-                                                                                  fan,
-                                                                                  htg_coil,
-                                                                                  clg_coil,
-                                                                                  supplemental_htg_coil)
-        unitary_system.setName("#{air_loop.name} Unitary HP")
-        unitary_system.setControllingZone(zone)
-        unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40,'F','C').get)
-        unitary_system.setFanPlacement('BlowThrough')
-        unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
-        unitary_system.addToNode(supply_inlet_node)
         
-        setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(OpenStudio.convert(55,'F','C').get)
-        setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(OpenStudio.convert(104,'F','C').get)
+        if prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
+          unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(self)
+          unitary_system.setSupplyFan(fan)
+          unitary_system.setHeatingCoil(htg_coil)
+          unitary_system.setCoolingCoil(clg_coil)
+          unitary_system.setSupplementalHeatingCoil(supplemental_htg_coil)
+          unitary_system.setName("#{zone.name} Unitary HP")
+          unitary_system.setControllingZoneorThermostatLocation(zone)
+          unitary_system.setMaximumSupplyAirTemperature(50)
+          unitary_system.setFanPlacement('BlowThrough')
+          unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation("SupplyAirFlowRate")
+          unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation("SupplyAirFlowRate")
+          unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired("SupplyAirFlowRate")
+          unitary_system.setSupplyAirFanOperatingModeSchedule(self.alwaysOnDiscreteSchedule)
+          unitary_system.addToNode(supply_inlet_node)
+          setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(50)
+        else
+          unitary_system = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(self,
+                                                                                    self.alwaysOnDiscreteSchedule,
+                                                                                    fan,
+                                                                                    htg_coil,
+                                                                                    clg_coil,
+                                                                                    supplemental_htg_coil)
+          unitary_system.setName("#{air_loop.name} Unitary HP")
+          unitary_system.setControllingZone(zone)
+          unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40,'F','C').get)
+          unitary_system.setFanPlacement('BlowThrough')
+          unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
+          unitary_system.addToNode(supply_inlet_node)
+          
+          setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(OpenStudio.convert(55,'F','C').get)
+          setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(OpenStudio.convert(104,'F','C').get)
+        end
+        
       else
         if fan_location == 'DrawThrough'
           # Add the fan
@@ -3147,13 +3171,13 @@ class OpenStudio::Model::Model
     pct_led = 0.3
     incandescent_efficacy_lm_per_w = 10.0
     led_efficacy_lm_per_w = 35.0
-    target_ltg_lm_per_ft2 = design_ltg_lm_per_ft2 / light_loss_factor
-    target_ltg_lm = target_ltg_lm_per_ft2 * area_ft2
-    lm_incandescent = target_ltg_lm * pct_incandescent
-    lm_led = target_ltg_lm * pct_led
-    w_incandescent = lm_incandescent / incandescent_efficacy_lm_per_w
-    w_led = lm_led / led_efficacy_lm_per_w
-    lighting_pwr_w = w_incandescent + w_led
+    target_ltg_lm_per_ft2 = design_ltg_lm_per_ft2 / light_loss_factor   #40
+    target_ltg_lm = target_ltg_lm_per_ft2 * area_ft2  #1132.2
+    lm_incandescent = target_ltg_lm * pct_incandescent  #792.54
+    lm_led = target_ltg_lm * pct_led  #339.66
+    w_incandescent = lm_incandescent / incandescent_efficacy_lm_per_w  #79.254
+    w_led = lm_led / led_efficacy_lm_per_w  #9.7
+    lighting_pwr_w = w_incandescent + w_led 
 
     # Elevator lift motor
     elevator_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)

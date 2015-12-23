@@ -97,6 +97,11 @@ class OpenStudio::Model::Model
     if building_type == "MidriseApartment"
       self.update_waterheater_loss_coefficient(building_vintage)
     end
+    
+    if building_type == "HighriseApartment"
+      self.update_fan_efficiency
+    end
+    
    
     # Add output variables for debugging
     if debug
@@ -180,6 +185,8 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.outpatient'
     when 'MidriseApartment'
       building_methods = 'Prototype.mid_rise_apartment'
+    when 'HighriseApartment'
+      building_methods = 'Prototype.high_rise_apartment'
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
@@ -294,6 +301,8 @@ class OpenStudio::Model::Model
       geometry_file = 'Geometry.outpatient.osm'
     when 'MidriseApartment'
       geometry_file = 'Geometry.mid_rise_apartment.osm'
+    when 'HighriseApartment'
+      geometry_file = 'Geometry.high_rise_apartment.osm'
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
