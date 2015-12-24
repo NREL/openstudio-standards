@@ -1396,8 +1396,8 @@ class OpenStudio::Model::Model
     legacy_results_hash = {}
     legacy_results_hash['total_legacy_energy_val'] = 0
     legacy_results_hash['total_legacy_water_val'] = 0
-    legacy_results_hash['toal_energy_by_fuel'] = {}
-    legacy_results_hash['toal_energy_by_end_use'] = {}
+    legacy_results_hash['total_energy_by_fuel'] = {}
+    legacy_results_hash['total_energy_by_end_use'] = {}
     fuel_types.each do |fuel_type|
 
       end_uses.each do |end_use|
@@ -1426,17 +1426,17 @@ class OpenStudio::Model::Model
           legacy_results_hash['total_legacy_energy_val'] += legacy_val
 
           # add to fuel specific total
-          if legacy_results_hash['toal_energy_by_fuel'][fuel_type]
-            legacy_results_hash['toal_energy_by_fuel'][fuel_type] += legacy_val # add to existing counter
+          if legacy_results_hash['total_energy_by_fuel'][fuel_type]
+            legacy_results_hash['total_energy_by_fuel'][fuel_type] += legacy_val # add to existing counter
           else
-            legacy_results_hash['toal_energy_by_fuel'][fuel_type] = legacy_val # start new counter
+            legacy_results_hash['total_energy_by_fuel'][fuel_type] = legacy_val # start new counter
           end
 
           # add to end use specific total
-          if legacy_results_hash['toal_energy_by_end_use'][end_use]
-            legacy_results_hash['toal_energy_by_end_use'][end_use] += legacy_val # add to existing counter
+          if legacy_results_hash['total_energy_by_end_use'][end_use]
+            legacy_results_hash['total_energy_by_end_use'][end_use] += legacy_val # add to existing counter
           else
-            legacy_results_hash['toal_energy_by_end_use'][end_use] = legacy_val # start new counter
+            legacy_results_hash['total_energy_by_end_use'][end_use] = legacy_val # start new counter
           end
 
         end
@@ -1501,13 +1501,11 @@ class OpenStudio::Model::Model
 
   end
 
-  # user needs to pass in building_vintage as string. The building type and climate zone will come from the model.
-  # If the building type or ASHRAE climate zone is not set in the model this will return nil
-  # If the lookup doesn't find matching simulation results this wil return nil
-  #
-  # @param [String] target prototype template for eui lookup
-  # @return [Double] EUI (MJ/m^2) for target template for given OSM. Returns nil if can't calculate EUI
-  def find_target_eui(template)
+  # this is used by other methods to get the clinzte aone and building type from a model.
+  # it has logic to break office into small, medium or large based on building area that can be turned off
+  # @param [bool] re-map small office or leave it alone
+  # @return [hash] key for climate zone and building type, both values are strings
+  def get_building_climate_zone_and_building_type(remap_office = true)
 
     # get climate zone from model
     # get ashrae climate zone from model
@@ -1530,8 +1528,8 @@ class OpenStudio::Model::Model
     # prototype medium office approx 5000 m^2
     # prototype large office approx 50,000 m^2
     # map office building type to small medium or large
-    if building_type == "Office"
-    open_studio_area = self.getBuilding.floorArea
+    if building_type == "Office" and remap_office
+      open_studio_area = self.getBuilding.floorArea
       if open_studio_area < 2750
         building_type = "SmallOffice"
       elsif open_studio_area < 25250
@@ -1541,15 +1539,72 @@ class OpenStudio::Model::Model
       end
     end
 
+    results = {}
+    results['climate_zone'] = climate_zone
+    results['building_type'] = building_type
+
+    return results
+
+  end
+
+  # user needs to pass in building_vintage as string. The building type and climate zone will come from the model.
+  # If the building type or ASHRAE climate zone is not set in the model this will return nil
+  # If the lookup doesn't find matching simulation results this wil return nil
+  #
+  # @param [String] target prototype template for eui lookup
+  # @return [Double] EUI (MJ/m^2) for target template for given OSM. Returns nil if can't calculate EUI
+  def find_target_eui(template)
+
+    building_data = self.get_building_climate_zone_and_building_type
+    climate_zone = building_data['climate_zone']
+    building_type = building_data['building_type']
+
     # look up results
-    target_consumpiton = process_results_for_datapoint(climate_zone, building_type, template)
+    target_consumption = process_results_for_datapoint(climate_zone, building_type, template)
 
     # lookup target floor area for prototype buildings
     target_floor_area = find_prototype_floor_area(building_type)
 
-    if target_consumpiton['total_legacy_energy_val'] > 0
+    if target_consumption['total_legacy_energy_val'] > 0
       if target_floor_area > 0
-        result = target_consumpiton['total_legacy_energy_val']/target_floor_area
+        result = target_consumption['total_legacy_energy_val']/target_floor_area
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find prototype building floor area")
+        result = nil
+      end
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find target results for #{climate_zone},#{building_type},#{template}")
+      result = nil # couldn't calculate EUI consumpiton lookup failed
+    end
+
+    return result
+
+  end
+
+  # user needs to pass in building_vintage as string. The building type and climate zone will come from the model.
+  # If the building type or ASHRAE climate zone is not set in the model this will return nil
+  # If the lookup doesn't find matching simulation results this wil return nil
+  #
+  # @param [String] target prototype template for eui lookup
+  # @return [Hash] EUI (MJ/m^2) This will return a hash of end uses. key is end use, value is eui
+  def find_target_eui_by_end_use(template)
+
+    building_data = self.get_building_climate_zone_and_building_type
+    climate_zone = building_data['climate_zone']
+    building_type = building_data['building_type']
+
+    # look up results
+    target_consumption = process_results_for_datapoint(climate_zone, building_type, template)
+
+    # lookup target floor area for prototype buildings
+    target_floor_area = find_prototype_floor_area(building_type)
+
+    if target_consumption['total_legacy_energy_val'] > 0
+      if target_floor_area > 0
+        result = {}
+        target_consumption['total_energy_by_end_use'].each do |end_use,consumption|
+          result[end_use] = consumption/target_floor_area
+        end
       else
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find prototype building floor area")
         result = nil

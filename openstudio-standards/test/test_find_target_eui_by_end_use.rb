@@ -1,8 +1,8 @@
 require_relative 'minitest_helper'
 
-class TestFindTargetEui < Minitest::Test
+class TestFindTargetEuiByEndUse < Minitest::Test
 
-  def test_eui_check_large_hotel_2007_2a
+  def test_eui_by_end_use_check_large_hotel_2007_2a
 
     # for now this just runs for single building type and climate zone, but could sweep across larger selection
     building_types = ['LargeHotel']
@@ -19,10 +19,13 @@ class TestFindTargetEui < Minitest::Test
     # todo - create space and zone
     # this is needed to break office into small, medium, or large
 
-    # use find_target_eui method to lookup and calculate the target EUI
+    # use find_target_eui method to lookup and calculate the target EUI by end use
     # this will also test process_results_for_datapoint and find_prototype_floor_area method
-    target_eui = model.find_target_eui(templates.first)
-    puts "target eui is #{target_eui} (GJ/m^2)"
+    target_eui_by_end_use = model.find_target_eui_by_end_use(templates.first)
+    target_eui_int_equip = target_eui_by_end_use['Interior Equipment']
+
+
+    puts "target eui for Interior Equipment #{target_eui_int_equip} (GJ/m^2)"
 
     # below is data from results json for LargeHotel 2007 2A
     electricity = {}
@@ -60,18 +63,14 @@ class TestFindTargetEui < Minitest::Test
     # area for LargeHotel
     large_hotel_area = 11345
 
-    # calculate EUI
+    # calculate Interior Equipent EUI
     consumption = 0.0
-    electricity.each do |end_use,value|
-      consumption += value
-    end
-    natural_gas.each do |end_use,value|
-      consumption += value
-    end
-    calc_eui = consumption/large_hotel_area
-    puts "target eui is #{calc_eui} (GJ/m^2)"
+    consumption += electricity['Interior Equipment']
+    consumption += natural_gas['Interior Equipment']
+    calc_eui_int_equip = consumption/large_hotel_area
+    puts "target eui for Interior Equipment is #{calc_eui_int_equip} (GJ/m^2)"
 
-    assert(target_eui == calc_eui) # todo - if needed add in tolerance for test, but as is, it passes exact match
+    assert(target_eui_int_equip == calc_eui_int_equip) # todo - if needed add in tolerance for test, but as is, it passes exact match
 
   end
 
