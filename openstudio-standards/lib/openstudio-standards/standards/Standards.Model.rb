@@ -1375,7 +1375,7 @@ class OpenStudio::Model::Model
   # @param climate_zone [String] string for the ASHRAE climate zone.
   # @param building_type [String] string for prototype building type.
   # @param template [String] string for prototype template to target.
-  # @return [Hash] Returns a hash with data presented in various bins.
+  # @return [Hash] Returns a hash with data presented in various bins. Returns nil if no search results
   def process_results_for_datapoint(climate_zone, building_type, template)
 
     # Combine the data from the JSON files into a single hash
@@ -1396,9 +1396,10 @@ class OpenStudio::Model::Model
     legacy_results_hash = {}
     legacy_results_hash['total_legacy_energy_val'] = 0
     legacy_results_hash['total_legacy_water_val'] = 0
-    # todo - add hash entry where value is hash of end use totals
-    # todo - add hash entry where value is hash of fuel totals
+    legacy_results_hash['toal_energy_by_fuel'] = {}
+    legacy_results_hash['toal_energy_by_end_use'] = {}
     fuel_types.each do |fuel_type|
+
       end_uses.each do |end_use|
         next if end_use == 'Exterior Equipment'
 
@@ -1423,9 +1424,25 @@ class OpenStudio::Model::Model
           legacy_results_hash['total_legacy_water_val'] += legacy_val
         else
           legacy_results_hash['total_legacy_energy_val'] += legacy_val
+
+          # add to fuel specific total
+          if legacy_results_hash['toal_energy_by_fuel'][fuel_type]
+            legacy_results_hash['toal_energy_by_fuel'][fuel_type] += legacy_val # add to existing counter
+          else
+            legacy_results_hash['toal_energy_by_fuel'][fuel_type] = legacy_val # start new counter
+          end
+
+          # add to end use specific total
+          if legacy_results_hash['toal_energy_by_end_use'][end_use]
+            legacy_results_hash['toal_energy_by_end_use'][end_use] += legacy_val # add to existing counter
+          else
+            legacy_results_hash['toal_energy_by_end_use'][end_use] = legacy_val # start new counter
+          end
+
         end
 
       end # Next end use
+
     end # Next fuel type
 
     return legacy_results_hash
@@ -1437,7 +1454,7 @@ class OpenStudio::Model::Model
   # Areas taken from scorecard Excel Files
   #
   # @param [Sting] building type
-  # @return [Double] floor area (m^2) of prototype building for building type passed in
+  # @return [Double] floor area (m^2) of prototype building for building type passed in. Returns nil if unexpected building type
   def find_prototype_floor_area(building_type)
 
     if building_type == 'FullServiceRestaurant' # 5502 ft^2
@@ -1489,7 +1506,7 @@ class OpenStudio::Model::Model
   # If the lookup doesn't find matching simulation results this wil return nil
   #
   # @param [String] target prototype template for eui lookup
-  # @return [Double] EUI (MJ/m^2) for target template for given OSM.
+  # @return [Double] EUI (MJ/m^2) for target template for given OSM. Returns nil if can't calculate EUI
   def find_target_eui(template)
 
     # get climate zone from model
