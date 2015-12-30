@@ -1,7 +1,7 @@
 
 # Extend the class to add Medium Office specific stuff
 class OpenStudio::Model::Model
- 
+
   def define_space_type_map(building_type, building_vintage, climate_zone)
     space_type_map = {
       'Bulk' => ['Zone3 Bulk Storage'],
@@ -15,28 +15,31 @@ class OpenStudio::Model::Model
     system_to_space_map = [
       {
           'type' => 'CAV',
+          'name' => 'HVAC_1',
           'space_names' => ['Zone1 Office']
       },
       {
           'type' => 'CAV',
+          'name' => 'HVAC_2',
           'space_names' => ['Zone2 Fine Storage']
       },
       {
           'type' => 'Unit_Heater',
+          'name' => 'HVAC_3',
           'space_names' => ['Zone3 Bulk Storage']
       }
     ]
     return system_to_space_map
   end
-     
+
   def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
-   
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    
+
     system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
 
     # hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
-    
+
     system_to_space_map.each do |system|
 
       #find all zones associated with these spaces
@@ -58,26 +61,26 @@ class OpenStudio::Model::Model
 
       case system['type']
       when 'CAV'
-        self.add_psz_ac(prototype_input, hvac_standards, thermal_zones)
+        self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones, 'DrawThrough')
       when 'Unit_Heater'
         self.add_unitheater(prototype_input, hvac_standards, thermal_zones)
       end
 
     end
-    
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
-    
+
     return true
-    
+
   end #add hvac
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
-   
+  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
+
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
 
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
     water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
-    
+
     water_heaters.each do |water_heater|
       water_heater = water_heater.to_WaterHeaterMixed.get
       # water_heater.setAmbientTemperatureIndicator('Zone')
@@ -91,12 +94,12 @@ class OpenStudio::Model::Model
     # for i in 0..13
     #   self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
     # end
-    # self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    
+    self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
+
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
+
     return true
-    
+
   end #add swh
-  
+
 end
