@@ -235,6 +235,36 @@
       "bcl_weather_component_id": null
     },
     {
+      "name": "ECBC Cold",
+      "standard": "ECBC 2011",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ECBC Composite",
+      "standard": "ECBC 2007",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ECBC Hot and Dry",
+      "standard": "ECBC 2008",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ECBC Moderate",
+      "standard": "ECBC 2010",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ECBC Warm and Humid",
+      "standard": "ECBC 2009",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
       "name": "NECB-CNEB-4",
       "standard": "NECB 2011",
       "representative_city": null,

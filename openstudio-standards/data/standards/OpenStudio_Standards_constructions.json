@@ -888,6 +888,18 @@
       ]
     },
     {
+      "name": "U 0.40 SHGC 0.45",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "sort": 98.0,
+      "materials": [
+        "ECABS-2 BLEACHED 6MM",
+        "AIR 6MM",
+        "LoE SPEC SEL CLEAR 6MM Rev"
+      ]
+    },
+    {
       "name": "U 0.42 SHGC 0.35 Dbl LoE (e2-.1) Tint 6mm/6mm Air",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
@@ -1095,6 +1107,18 @@
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
         "CLEAR 6MM"
+      ]
+    },
+    {
+      "name": "U 0.55 SHGC 0.25",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "sort": 150.0,
+      "materials": [
+        "Glass_2175_LayerAvg",
+        "Gap_1_W_0_0032",
+        "Glass_2022F_LayerAvg"
       ]
     },
     {

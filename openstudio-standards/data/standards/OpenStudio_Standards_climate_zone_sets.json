@@ -138,6 +138,36 @@
       ]
     },
     {
+      "name": "ECBC Cold",
+      "climate_zones": [
+        "ECBC Cold"
+      ]
+    },
+    {
+      "name": "ECBC Composite",
+      "climate_zones": [
+        "ECBC Composite"
+      ]
+    },
+    {
+      "name": "ECBC Hot and Dry",
+      "climate_zones": [
+        "ECBC Hot and Dry"
+      ]
+    },
+    {
+      "name": "ECBC Moderate",
+      "climate_zones": [
+        "ECBC Moderate"
+      ]
+    },
+    {
+      "name": "ECBC Warm and Humid",
+      "climate_zones": [
+        "ECBC Warm and Humid"
+      ]
+    },
+    {
       "name": "NECB-CNEB ClimatZone 4-8",
       "climate_zones": [
         "NECB-CNEB-4",
