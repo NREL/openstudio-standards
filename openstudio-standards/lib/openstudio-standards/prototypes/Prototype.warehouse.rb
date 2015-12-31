@@ -75,28 +75,31 @@ class OpenStudio::Model::Model
   end #add hvac
 
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
+    case building_vintage
+    when 'DOE Ref Pre-1980','DOE Ref 1980-2004','DOE Ref 2004'
+      # no SWH system
+    else
 
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
 
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-    water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
+      main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
+      water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
 
-    water_heaters.each do |water_heater|
-      water_heater = water_heater.to_WaterHeaterMixed.get
-      # water_heater.setAmbientTemperatureIndicator('Zone')
-      # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
-      water_heater.setOffCycleParasiticFuelConsumptionRate(481)
-      water_heater.setOnCycleParasiticFuelConsumptionRate(481)
-      water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
-      water_heater.setOnCycleLossCoefficienttoAmbientTemperature(0.798542707)
+      water_heaters.each do |water_heater|
+        water_heater = water_heater.to_WaterHeaterMixed.get
+        # water_heater.setAmbientTemperatureIndicator('Zone')
+        # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
+        water_heater.setOffCycleParasiticFuelConsumptionRate(481)
+        water_heater.setOnCycleParasiticFuelConsumptionRate(481)
+        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
+        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(0.798542707)
+      end
+
+      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
+
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
+
     end
-
-    # for i in 0..13
-    #   self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    # end
-    self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
 
     return true
 
