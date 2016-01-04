@@ -24,7 +24,6 @@ class TestFindTargetEuiByEndUse < Minitest::Test
     target_eui_by_end_use = model.find_target_eui_by_end_use(templates.first)
     target_eui_int_equip = target_eui_by_end_use['Interior Equipment']
 
-
     puts "target eui for Interior Equipment #{target_eui_int_equip} (GJ/m^2)"
 
     # below is data from results json for LargeHotel 2007 2A

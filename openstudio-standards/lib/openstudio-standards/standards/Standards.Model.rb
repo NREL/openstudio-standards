@@ -25,7 +25,8 @@ class OpenStudio::Model::Model
   require_relative 'Standards.ThermalZone'
   require_relative 'Standards.Surface'
   require_relative 'Standards.SubSurface'
-  
+  require_relative 'Standards.SpaceType'
+
   # Applies the multi-zone VAV outdoor air sizing requirements
   # to all applicable air loops in the model.
   #
@@ -260,7 +261,7 @@ class OpenStudio::Model::Model
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
   def find_object(hash_of_objects, search_criteria, capacity = nil)
-    
+
     desired_object = nil
     search_criteria_matching_objects = []
     matching_objects = []
