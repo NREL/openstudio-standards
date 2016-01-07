@@ -82200,7 +82200,7 @@
       "day_types": "Sat",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Hourly",
+      "type": "Constant",
       "notes": "From DOE Reference Buildings ",
       "values": [
         0.0
@@ -82213,7 +82213,7 @@
       "day_types": "SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
+      "type": "Hourly",
       "notes": "From DOE Reference Buildings ",
       "values": [
         0.25,
@@ -82262,7 +82262,7 @@
       "day_types": "WntrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
+      "type": "Hourly",
       "notes": "From DOE Reference Buildings ",
       "values": [
         0.25,

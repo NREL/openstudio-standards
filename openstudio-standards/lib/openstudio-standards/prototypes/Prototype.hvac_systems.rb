@@ -409,9 +409,8 @@ class OpenStudio::Model::Model
     hp_pump.addToNode(heat_pump_water_loop.supplyInletNode)
 
     # Cooling towers
-    # TODO replace with FluidCooler:TwoSpeed when available
-    cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
-    cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
+    cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
+    cooling_tower.setName("#{heat_pump_water_loop.name} Central Tower")
     heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
 
     # Boiler
@@ -1486,18 +1485,21 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_data_center_load(space, dc_watts_per_area)
+  def add_data_center_load(thermal_zone, dc_watts_per_area)
+    thermal_zone.spaces.each do |space|
 
-    # Data center load
-    data_center_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
-    data_center_definition.setName('Data Center Load')
-    data_center_definition.setWattsperSpaceFloorArea(dc_watts_per_area)
+      # Data center load
+      data_center_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
+      data_center_definition.setName('Data Center Load')
+      data_center_definition.setWattsperSpaceFloorArea(dc_watts_per_area)
 
-    data_center_equipment = OpenStudio::Model::ElectricEquipment.new(data_center_definition)
-    data_center_equipment.setName('Data Center Load')
-    data_center_sch = self.alwaysOnDiscreteSchedule
-    data_center_equipment.setSchedule(data_center_sch)
-    data_center_equipment.setSpace(space)
+      data_center_equipment = OpenStudio::Model::ElectricEquipment.new(data_center_definition)
+      data_center_equipment.setName('Data Center Load')
+      data_center_sch = self.alwaysOnDiscreteSchedule
+      data_center_equipment.setSchedule(data_center_sch)
+      data_center_equipment.setSpace(space)
+
+    end
 
     return true
 
@@ -2937,7 +2939,7 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_swh_end_uses(prototype_input, standards, swh_loop, type)
+  def add_swh_end_uses(prototype_input, standards, swh_loop, type, space_name = nil)
 
     schedules = standards['schedules']
 
@@ -2971,6 +2973,13 @@ class OpenStudio::Model::Model
     schedule = self.add_schedule(prototype_input["#{type}_service_water_flowrate_schedule"])
     water_fixture.setFlowRateFractionSchedule(schedule)
     water_fixture.setName("#{type.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+
+    unless space_name.nil?
+      space = self.getSpaceByName(space_name)
+      space = space.get
+      water_fixture.setSpace(space)
+    end
+
     swh_connection.addWaterUseEquipment(water_fixture)
 
     # Connect the water use connection to the SWH loop
