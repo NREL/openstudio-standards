@@ -1045,15 +1045,51 @@ module BTAP
 
 
       def self.set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)
+        
+        #TO DO: remove all debug puts statements
+        
         BTAP::runner_register("Info", "set_wildcard_schedules_to_dominant_building_schedule", runner)
         #Set wildcard schedules based on dominant schedule type in building.
         dominant_sched_type = BTAP::Compliance::NECB2011::determine_dominant_necb_schedule_type(model)
+        puts "dominant_sched_type = #{dominant_sched_type}"
+        # find schedule set that corresponds to dominant schedule type
+        model.getDefaultScheduleSets.each do |sched_ruleset| 
+          puts " sched_ruleset = #{sched_ruleset}"
+          # just check people schedule
+          # TO DO: should make this smarter: check all schedules
+          people_sched = sched_ruleset.numberofPeopleSchedule
+          people_sched_name = people_sched.get.name.to_s unless people_sched.empty?
+          puts "people_sched_name = #{people_sched_name}" unless people_sched.empty?
+        
+          
+          search_string = "NECB-#{dominant_sched_type}"
+          puts "search_string = #{search_string}"
+          
+          new_sched_ruleset = OpenStudio::Model::DefaultScheduleSet.new(model)  #initialize
+          if people_sched.empty? == false         
+            if people_sched_name.include? search_string
+              puts "found match"
+              new_sched_ruleset = sched_ruleset    
+              puts "new_sched_ruleset = #{new_sched_ruleset}"
+            end
+          end
+        end
+        
+        # see if the above works
+        
+        
+        
+        # TO DO
+        # replace the default schedule set for the space type with * to schedule ruleset with dominant schedule type
+        
         model.getSpaces.each do |space|
           #check to see if space space type has a "*" wildcard schedule.
           spacetype_name = space.spaceType.get.name.to_s unless space.spaceType.empty?
+          puts "spacetype_name = #{spacetype_name}"
           if determine_necb_schedule_type( space ).to_s == "*".to_s
-            new_sched = (spacetype_name + "-" + dominant_sched_type).to_s
-            optional_spacetype = model.getSpaceTypeByName(new_sched)
+            # new_sched = (spacetype_name + "-" + dominant_sched_type).to_s   # TO DO: there is an error here.
+            new_sched = (spacetype_name).to_s                                  # This routine resets the space type but does not assign the proper schedule type!!!
+            optional_spacetype = model.getSpaceTypeByName(new_sched)      
             if optional_spacetype.empty?
               BTAP::runner_register("Error", "Cannot find NECB spacetype #{new_sched}" , runner )
             else
@@ -1066,6 +1102,7 @@ module BTAP
       end
       
       def self.set_zones_thermostat_schedule_based_on_space_type_schedules(model,runner = nil)
+        puts "in set_zones_thermostat_schedule_based_on_space_type_schedules"
         BTAP::runner_register("DEBUG","Start-set_zones_thermostat_schedule_based_on_space_type_schedules" , runner)
         model.getThermalZones.each do |zone|
           BTAP::runner_register("DEBUG","\tThermalZone:#{zone.name}" , runner)
