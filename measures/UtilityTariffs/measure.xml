@@ -1,8 +1,9 @@
 <measure>
   <schema_version>3.0</schema_version>
+  <error>cannot load such file -- openstudio-standards</error>
   <name>utility_tariffs_model_setup</name>
   <uid>7353d86e-d166-4f32-a572-27ce8e65ebb5</uid>
-  <version_id>88892097-e82b-4a90-ac16-47c6ae9853fc</version_id>
+  <version_id>2d71e57c-c513-48ea-85e5-e4de0abe5e96</version_id>
   <xml_checksum>4A4E44A5</xml_checksum>
   <class_name>UtilityTariffsModelSetup</class_name>
   <display_name>UtilityTariffsModelSetup</display_name>
@@ -59,7 +60,7 @@
       <filename>UtilityTariffs_Test.rb</filename>
       <filetype>rb</filetype>
       <usage_type>test</usage_type>
-      <checksum>A8B7E52C</checksum>
+      <checksum>BDF6DE1E</checksum>
     </file>
     <file>
       <version>
@@ -70,19 +71,61 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>DF18E41C</checksum>
+      <checksum>E630D3DD</checksum>
     </file>
     <file>
-      <filename>GasMetro.idf</filename>
+      <filename>system_2.idf</filename>
       <filetype>idf</filetype>
-      <usage_type>resource</usage_type>
-      <checksum>B64179B8</checksum>
+      <usage_type>test</usage_type>
+      <checksum>C3B50C03</checksum>
     </file>
     <file>
-      <filename>HydroQuebec.idf</filename>
+      <filename>system_2.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>C5124CE9</checksum>
+    </file>
+    <file>
+      <filename>Energy rates_2015.xls</filename>
+      <filetype>xls</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>843F0E1E</checksum>
+    </file>
+    <file>
+      <filename>Tariff_Template.idf</filename>
       <filetype>idf</filetype>
       <usage_type>resource</usage_type>
-      <checksum>E302B8B4</checksum>
+      <checksum>8203120D</checksum>
+    </file>
+    <file>
+      <filename>utility_electricity_tariffs.csv</filename>
+      <filetype>csv</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>65F252B0</checksum>
+    </file>
+    <file>
+      <filename>utility_gas_tariffs.csv</filename>
+      <filetype>csv</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>7273A364</checksum>
+    </file>
+    <file>
+      <filename>utility_oil_tariffs.csv</filename>
+      <filetype>csv</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>013ABACD</checksum>
+    </file>
+    <file>
+      <filename>utility_tariffs.xlsx</filename>
+      <filetype>xlsx</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>2F9D12DA</checksum>
+    </file>
+    <file>
+      <filename>xls2csv.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>4829124D</checksum>
     </file>
   </files>
 </measure>

@@ -1,8 +1,9 @@
 <measure>
   <schema_version>3.0</schema_version>
+  <error>cannot load such file -- openstudio-standards</error>
   <name>set_default_construction_set</name>
   <uid>b7840b31-858b-4d1c-8832-787138c7a52c</uid>
-  <version_id>98f81af1-a81e-4fab-91b3-e6ff9df58a28</version_id>
+  <version_id>bf057604-3211-474b-8304-9a8e70488a9d</version_id>
   <xml_checksum>11D60F39</xml_checksum>
   <class_name>SetDefaultConstructionSet</class_name>
   <display_name>Set Default Construction Set</display_name>
@@ -88,7 +89,7 @@
       <filename>set_default_construction_set_test.rb</filename>
       <filetype>rb</filetype>
       <usage_type>test</usage_type>
-      <checksum>70024F40</checksum>
+      <checksum>1B04C6B3</checksum>
     </file>
     <file>
       <version>
@@ -99,7 +100,19 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>843C4A75</checksum>
+      <checksum>3E663F80</checksum>
+    </file>
+    <file>
+      <filename>5ZoneNoHVAC.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>B5BF926A</checksum>
+    </file>
+    <file>
+      <filename>BTAP_Construction_Library.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>42038EB0</checksum>
     </file>
   </files>
 </measure>
