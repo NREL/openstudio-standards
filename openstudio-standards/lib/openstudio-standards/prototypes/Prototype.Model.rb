@@ -5,26 +5,26 @@ class OpenStudio::Model::Model
   # Let the model store and access its own template and climate zone
   attr_accessor :template
   attr_accessor :climate_zone
- 
+
   # Creates a DOE prototype building model and replaces
   # the current model with this model.
   #
   # @param building_type [String] the building type
   # @param building_vintage [String] the building vintage
-  # @param climate_zone [String] the climate zone  
+  # @param climate_zone [String] the climate zone
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
   # @example Create a Small Office, 90.1-2010, in ASHRAE Climate Zone 5A (Chicago)
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
-  def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)  
+  def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)
 
     self.load_openstudio_standards_json
     lookup_building_type = self.get_lookup_name(building_type)
-    
+
     # Assign the standards to the model
     self.template = building_vintage
-    self.climate_zone = climate_zone    
-    
+    self.climate_zone = climate_zone
+
     # Retrieve the Prototype Inputs from JSON
     search_criteria = {
       'template' => building_vintage,
@@ -77,10 +77,10 @@ class OpenStudio::Model::Model
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
-    
+
     # Apply the HVAC efficiency standard
     self.applyHVACEfficiencyStandard
-    
+
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
@@ -94,7 +94,7 @@ class OpenStudio::Model::Model
       self.update_exhaust_fan_efficiency(building_vintage)
       self.update_waterheater_loss_coefficient(building_vintage)
     end
-    
+
     if building_type == "MidriseApartment"
       self.update_waterheater_loss_coefficient(building_vintage)
     end
@@ -102,21 +102,20 @@ class OpenStudio::Model::Model
     if building_type == "HighriseApartment"
       self.update_fan_efficiency
     end
-    
-   
+
     # Add output variables for debugging
     if debug
       self.request_timeseries_outputs
     end
-    
+
     # Finished
     model_status = 'final'
     self.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
 
-    return true    
+    return true
 
   end
- 
+
   # Get the name of the building type used in lookups
   #
   # @param building_type [String] the building type
@@ -124,9 +123,9 @@ class OpenStudio::Model::Model
   # @return [String] returns the lookup name as a string
   # @todo Unify the lookup names and eliminate this method
   def get_lookup_name(building_type)
-    
+
     lookup_name = building_type
-    
+
     case building_type
     when 'SmallOffice'
       lookup_name = 'Office'
@@ -142,22 +141,22 @@ class OpenStudio::Model::Model
 
     return lookup_name
 
-  end 
- 
- 
+  end
+
+
   # Loads the library of methods specific to this building type
   #
   # @param building_type [String] the building type
   # @param building_vintage [String] the building vintage
   # @param climate_zone [String] the climate zone
-  # @return [Bool] returns true if successful, false if not 
+  # @return [Bool] returns true if successful, false if not
   def load_building_type_methods(building_type, building_vintage, climate_zone)
-    
+
     building_methods = nil
-    
+
     case building_type
     when 'SecondarySchool'
-      building_methods = 'Prototype.secondary_school'    
+      building_methods = 'Prototype.secondary_school'
     when 'PrimarySchool'
       building_methods = 'Prototype.primary_school'
     when 'SmallOffice'
@@ -192,24 +191,24 @@ class OpenStudio::Model::Model
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
     end
-    
+
     lib_dir = File.expand_path( '../../..',File.dirname(__FILE__))
     require "#{lib_dir}/lib/openstudio-standards/prototypes/#{building_methods}"
-    
+
     return true
 
-  end 
- 
+  end
+
   # Loads a geometry-only .osm as a starting point.
   #
   # @param building_type [String] the building type
   # @param building_vintage [String] the building vintage
-  # @param climate_zone [String] the climate zone  
+  # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
   def load_geometry(building_type, building_vintage, climate_zone)
-    
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding geometry')    
-    
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding geometry')
+
     # Determine which geometry file to use
     # based on building_type and template
     case building_type
@@ -218,13 +217,13 @@ class OpenStudio::Model::Model
         geometry_file = 'Geometry.secondary_school_pre_1980_to_2004.osm'
       else
         geometry_file = 'Geometry.secondary_school.osm'
-      end      
+      end
     when 'PrimarySchool'
       if building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004'
         geometry_file = 'Geometry.primary_school_pre_1980_to_2004.osm'
       else
         geometry_file = 'Geometry.primary_school.osm'
-      end 
+      end
     when 'SmallOffice'
       if building_vintage == 'DOE Ref Pre-1980'
         geometry_file = 'Geometry.small_office_pre_1980.osm'
@@ -268,7 +267,12 @@ class OpenStudio::Model::Model
         geometry_file = 'Geometry.large_hotel.2013.osm'
       end
     when 'Warehouse'
-      geometry_file = 'Geometry.warehouse.osm'
+      case building_vintage
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004','DOE Ref 2004'
+        geometry_file = 'Geometry.warehouse_pre_1980_to_2004.osm'
+      else
+        geometry_file = 'Geometry.warehouse.osm'
+      end
     when 'RetailStandalone'
       case building_vintage
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004','DOE Ref 2004'
@@ -308,27 +312,27 @@ class OpenStudio::Model::Model
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
     end
-    
+
     # Load the geometry .osm
     top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
     geom_dir = "#{top_dir}/data/geometry"
     self.replace_model("#{geom_dir}/#{geometry_file}")
-    
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')    
-    
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
+
     return true
-    
-  end 
- 
+
+  end
+
   # Replaces all objects in the current model
   # with the objects in the .osm.  Typically used to
   # load a model as a starting point.
   #
   # @param path_to_osm [String] the path to a .osm file.
-  # @return [Bool] returns true if successful, false if not 
+  # @return [Bool] returns true if successful, false if not
   def replace_model(path_to_osm)
-    
-    # Take the existing model and remove all the objects 
+
+    # Take the existing model and remove all the objects
     # (this is cheesy), but need to keep the same memory block
     handles = OpenStudio::UUIDVector.new
     self.objects.each {|o| handles << o.handle}
@@ -341,12 +345,12 @@ class OpenStudio::Model::Model
     self.addObjects(geom_model.toIdfFile.objects)
 
     return true
-    
+
   end
 
   # Reads in a mapping between names of space types and
   # names of spaces in the model, creates an empty OpenStudio::Model::SpaceType
-  # (no loads, occupants, schedules, etc.) for each space type, and assigns this 
+  # (no loads, occupants, schedules, etc.) for each space type, and assigns this
   # space type to the list of spaces named.  Later on, these empty space types
   # can be used as keys in a lookup to add loads, schedules, and
   # other inputs that are either typical or governed by a standard.
@@ -356,7 +360,7 @@ class OpenStudio::Model::Model
   #   and the value is a vector of space names that should be assigned this space type.
   #   The hash for each building is defined inside the Prototype.building_name
   #   e.g. (Prototype.secondary_school.rb) file.
-  # @return [Bool] returns true if successful, false if not  
+  # @return [Bool] returns true if successful, false if not
   def assign_space_type_stubs(building_type, space_type_map)
 
     space_type_map.each do |space_type_name, space_names|
@@ -364,7 +368,7 @@ class OpenStudio::Model::Model
       stub_space_type = OpenStudio::Model::SpaceType.new(self)
       stub_space_type.setStandardsBuildingType(building_type)
       stub_space_type.setStandardsSpaceType(space_type_name)
-        
+
       space_names.each do |space_name|
         space = self.getSpaceByName(space_name)
         next if space.empty?
@@ -382,7 +386,7 @@ class OpenStudio::Model::Model
     building_story_map.each do |building_story_name, space_names|
       stub_building_story = OpenStudio::Model::BuildingStory.new(self)
       stub_building_story.setName(building_story_name)
-      
+
       space_names.each do |space_name|
         space = self.getSpaceByName(space_name)
         next if space.empty?
@@ -390,7 +394,7 @@ class OpenStudio::Model::Model
         space.setBuildingStory(stub_building_story)
       end
     end
-    
+
     return true
   end
 
@@ -403,7 +407,7 @@ class OpenStudio::Model::Model
   #
   # @param building_vintage [String] the template/standard to draw data from
   # @param climate_zone [String] the name of the climate zone the building is in
-  # @return [Bool] returns true if successful, false if not  
+  # @return [Bool] returns true if successful, false if not
 
   def add_loads(building_vintage, climate_zone)
 
@@ -416,7 +420,7 @@ class OpenStudio::Model::Model
       # Get the standard building type
       # from the stub
       # puts "stub_space_type = #{stub_space_type}"
-      
+
       stds_building_type = nil
       if stub_space_type.standardsBuildingType.is_initialized
         stds_building_type = stub_space_type.standardsBuildingType.get
@@ -425,7 +429,7 @@ class OpenStudio::Model::Model
         return false
       end
       #puts "stds_building_type = #{stds_building_type}"
-      
+
       # Get the standards space type
       # from the stub
       stds_spc_type = nil
@@ -438,33 +442,33 @@ class OpenStudio::Model::Model
       # puts "stds_spc_type = #{stds_spc_type}"
       new_space_type = self.add_space_type(building_vintage, 'ClimateZone 1-8', stds_building_type, stds_spc_type)
 
-      # Apply the new space type to the building      
+      # Apply the new space type to the building
       stub_space_type.spaces.each do |space|
         space.setSpaceType(new_space_type)
         #OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.Model", "Setting #{space.name} to #{new_space_type.name.get}")
       end
-        
+
       # Remove the stub space type
       stub_space_type.remove
 
     end
-    
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
-    
+
     return true
 
   end
 
   # Adds code-minimum constructions based on the building type
   # as defined in the OpenStudio_Standards_construction_sets.json file.
-  # Where there is a separate construction set specified for the 
+  # Where there is a separate construction set specified for the
   # individual space type, this construction set will be created and applied
   # to this space type, overriding the whole-building construction set.
   #
   # @param building_type [String] the type of building
   # @param building_vintage [String] the template/standard to draw data from
   # @param climate_zone [String] the name of the climate zone the building is in
-  # @return [Bool] returns true if successful, false if not   
+  # @return [Bool] returns true if successful, false if not
   def add_constructions(building_type, building_vintage, climate_zone)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
@@ -571,10 +575,10 @@ class OpenStudio::Model::Model
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not create default construction set for the building.')
       return false
     end
-    
+
     # Make a construction set for each space type, if one is specified
     self.getSpaceTypes.each do |space_type|
-    
+
       # Get the standards building type
       stds_building_type = nil
       if space_type.standardsBuildingType.is_initialized
@@ -582,15 +586,15 @@ class OpenStudio::Model::Model
       else
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{space_type.name}' has no standards building type.")
       end
-      
+
       # Get the standards space type
       stds_spc_type = nil
       if space_type.standardsSpaceType.is_initialized
         stds_spc_type = space_type.standardsSpaceType.get
       else
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{space_type.name}' has no standards space type.")
-      end    
-    
+      end
+
       # If the standards space type is Attic,
       # the building type should be blank.
       if stds_spc_type == 'Attic'
@@ -603,9 +607,9 @@ class OpenStudio::Model::Model
       if spc_type_const_set.is_initialized
         space_type.setDefaultConstructionSet(spc_type_const_set.get)
       end
-    
+
     end
-    
+
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
     if building_type == 'SmallHotel'
       self.getBuildingStorys.each do |story|
@@ -614,7 +618,7 @@ class OpenStudio::Model::Model
         is_residential = "No"  #default for building story level
         exterior_spaces_area = 0
         story_exterior_residential_area = 0
-        
+
         # calculate the propotion of residential area in exterior spaces, see if this story is residential or not
         story::spaces.each do |space|
           next if space.exteriorWallArea == 0
@@ -628,7 +632,7 @@ class OpenStudio::Model::Model
         end
         is_residential = "Yes" if story_exterior_residential_area/exterior_spaces_area >= 0.5
         next if is_residential == "No"
-        
+
         # if the story is identified as residential, assign residential construction set to the spaces on this story.
         building_story_const_set = self.add_construction_set(building_vintage, climate_zone, building_type, nil, is_residential)
         if building_story_const_set.is_initialized
@@ -638,9 +642,9 @@ class OpenStudio::Model::Model
         end
       end
       # Standars: For whole buildings or floors where 50% or more of the spaces adjacent to exterior walls are used primarily for living and sleeping quarters
-      
-    end    
-    
+
+    end
+
     # Make skylights have the same construction as fixed windows
     # sub_surface = self.getBuilding.defaultConstructionSet.get.defaultExteriorSubSurfaceConstructions.get
     # window_construction = sub_surface.fixedWindowConstruction.get
@@ -674,7 +678,7 @@ class OpenStudio::Model::Model
 
     # get all the space types that are conditioned
     conditioned_space_names = find_conditioned_space_names(building_type, building_vintage, climate_zone)
-    
+
     # add internal mass
     unless (building_type == 'SmallHotel') &&
         (building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013')
@@ -686,24 +690,24 @@ class OpenStudio::Model::Model
         if space.is_initialized
           space = space.get
           internal_mass = OpenStudio::Model::InternalMass.new(internal_mass_def)
-          internal_mass.setName("#{space.name} Mass")  
+          internal_mass.setName("#{space.name} Mass")
           internal_mass.setSpace(space)
         end
       end
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
-    
+
     return true
 
-  end  
-  
+  end
+
   # Get the list of all conditioned spaces, as defined for each building in the
   # system_to_space_map inside the Prototype.building_name
   # e.g. (Prototype.secondary_school.rb) file.
   #
   # @param (see #add_constructions)
-  # @return [Array<String>] returns an array of space names as strings   
+  # @return [Array<String>] returns an array of space names as strings
   def find_conditioned_space_names(building_type, building_vintage, climate_zone)
     system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
     conditioned_space_names = OpenStudio::StringVector.new
@@ -720,14 +724,14 @@ class OpenStudio::Model::Model
   # e.g. (Prototype.secondary_school.rb) file.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not  
+  # @return [Bool] returns true if successful, false if not
   def create_thermal_zones(building_type,building_vintage, climate_zone)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
 
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type
-    when 'LargeHotel', 'MidriseApartment'
+    when 'LargeHotel', 'MidriseApartment','LargeOffice'
       space_multiplier_map = self.define_space_multiplier
     else
       space_multiplier_map ={}
@@ -741,10 +745,10 @@ class OpenStudio::Model::Model
         zone.setMultiplier(space_multiplier_map[space.name.to_s])
       end
       space.setThermalZone(zone)
-      
+
       # Skip thermostat for spaces with no space type
       next if space.spaceType.empty?
-      
+
       # Add a thermostat
       space_type_name = space.spaceType.get.name.get
       thermostat_name = space_type_name + ' Thermostat'
@@ -757,7 +761,7 @@ class OpenStudio::Model::Model
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
-    
+
     return true
 
   end
@@ -766,40 +770,40 @@ class OpenStudio::Model::Model
   # the PNNL documentation.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not   
-  # @todo genericize and move this method to Standards.Space 
+  # @return [Bool] returns true if successful, false if not
+  # @todo genericize and move this method to Standards.Space
   def add_occupancy_sensors(building_type, building_vintage, climate_zone)
-   
+
     # Only add occupancy sensors for 90.1-2010
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
       return true
     end
-   
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Occupancy Sensors')
 
     space_type_reduction_map = {
       'SecondarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22},
       'PrimarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22}
     }
-    
+
     # Loop through all the space types and reduce lighting operation schedule fractions as-specified
     self.getSpaceTypes.each do |space_type|
       # Skip space types with no standards building type
       next if space_type.standardsBuildingType.empty?
       stds_bldg_type = space_type.standardsBuildingType.get
-      
+
       # Skip space types with no standards space type
       next if space_type.standardsSpaceType.empty?
       stds_spc_type = space_type.standardsSpaceType.get
-      
+
       # Skip building types and space types that aren't listed in the hash
       next unless space_type_reduction_map.has_key?(stds_bldg_type)
       next unless space_type_reduction_map[stds_bldg_type].has_key?(stds_spc_type)
-      
+
       # Get the reduction fraction multiplier
       red_multiplier = 1 - space_type_reduction_map[stds_bldg_type][stds_spc_type]
-      
+
       lights_sch_names = []
       lights_schs = {}
       reduced_lights_schs = {}
@@ -811,7 +815,7 @@ class OpenStudio::Model::Model
         next if light.schedule.empty?
         lights_sch = light.schedule.get
         lights_schs[lights_sch.name.to_s] = lights_sch
-        lights_sch_names << lights_sch.name.to_s    
+        lights_sch_names << lights_sch.name.to_s
       end
 
       # Loop through the unique list of lighting schedules, cloning
@@ -830,14 +834,14 @@ class OpenStudio::Model::Model
         # Method to multiply the values in a day schedule by a specified value
         # but only when the existing value is higher than a specified lower limit.
         # This limit prevents occupancy sensors from affecting unoccupied hours.
-        def multiply_schedule(day_sch, multiplier, limit)       
+        def multiply_schedule(day_sch, multiplier, limit)
           # Record the original times and values
           times = day_sch.times
           values = day_sch.values
-          
+
           # Remove the original times and values
           day_sch.clearValues
-          
+
           # Create new values by using the multiplier on the original values
           new_values = []
           for i in 0..(values.length - 1)
@@ -847,7 +851,7 @@ class OpenStudio::Model::Model
               new_values << values[i]
             end
           end
-          
+
           # Add the revised time/value pairs to the schedule
           for i in 0..(new_values.length - 1)
             day_sch.addValue(times[i], new_values[i])
@@ -856,12 +860,12 @@ class OpenStudio::Model::Model
 
         # Reduce default day schedule
         multiply_schedule(new_lights_sch.defaultDaySchedule, red_multiplier, 0.25)
-        
+
         # Reduce all other rule schedules
         new_lights_sch.scheduleRules.each do |sch_rule|
           multiply_schedule(sch_rule.daySchedule, red_multiplier, 0.25)
         end
-         
+
       end #end of lights_sch_names.uniq.each do
 
       # Loop through all lights instances, replacing old lights
@@ -875,23 +879,23 @@ class OpenStudio::Model::Model
           OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Occupancy sensor reduction added to '#{light.name}'")
         end
       end
-    
+
     end
-    
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished Adding Occupancy Sensors')
-    
+
     return true
-    
+
   end #add occupancy sensors
 
   # Adds exterior lights to the building, as specified
   # in OpenStudio_Standards_prototype_inputs
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not   
+  # @return [Bool] returns true if successful, false if not
   # @todo translate w/linear foot of facade, door, parking, etc
   #   into lookup table and implement that way instead of hard-coding as
-  #   inputs in the spreadsheet.   
+  #   inputs in the spreadsheet.
   def add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
     # TODO Standards - translate w/linear foot of facade, door, parking, etc
     # into lookup table and implement that way instead of hard-coding as
@@ -958,21 +962,21 @@ class OpenStudio::Model::Model
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding exterior lights')
-    
+
     return true
-  end #add exterior lights  
-  
+  end #add exterior lights
+
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not   
+  # @return [Bool] returns true if successful, false if not
   # @todo Consistency - make prototype and reference vintages consistent
   # @todo Add 90.1-2013?
   def modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
-  
+
     # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
-    return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013' 
-  
+    return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013'
+
     # The pre-1980 and 1980-2004 buildings have this:
     # 1.0000,                  !- Constant Term Coefficient
     # 0.0000,                  !- Temperature Term Coefficient
@@ -994,33 +998,33 @@ class OpenStudio::Model::Model
   # Sets the inside and outside convection algorithms for different vintages
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not   
+  # @return [Bool] returns true if successful, false if not
   # @todo Consistency - make prototype and reference vintages consistent
   def modify_surface_convection_algorithm(building_vintage)
-  
+
     inside = self.getInsideSurfaceConvectionAlgorithm
     outside = self.getOutsideSurfaceConvectionAlgorithm
-  
+
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       inside.setAlgorithm('TARP')
-      outside.setAlgorithm('DOE-2')     
+      outside.setAlgorithm('DOE-2')
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('TARP')
     end
-    
-  end  
-  
-  
+
+  end
+
+
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not   
-  # @todo Consistency - make sizing factors consistent 
+  # @return [Bool] returns true if successful, false if not
+  # @todo Consistency - make sizing factors consistent
   #   between building types, climate zones, and vintages?
   def set_sizing_parameters(building_type, building_vintage)
-    
+
     # Default unless otherwise specified
     clg = 1.2
     htg = 1.2
@@ -1040,18 +1044,18 @@ class OpenStudio::Model::Model
         clg = 1.0
         htg = 1.0
       end
-    end 
-  
+    end
+
     sizing_params = self.getSizingParameters
     sizing_params.setHeatingSizingFactor(htg)
-    sizing_params.setCoolingSizingFactor(clg) 
-  
+    sizing_params.setCoolingSizingFactor(clg)
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{htg} for heating and #{clg} for cooling.")
-  
+
   end
-  
+
   def applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
-    
+
     # Load the helper libraries for getting the autosized
     # values for each type of model object.
     require_relative 'Prototype.FanConstantVolume'
@@ -1060,11 +1064,11 @@ class OpenStudio::Model::Model
     require_relative 'Prototype.FanZoneExhaust'
     require_relative 'Prototype.HeatExchangerAirToAirSensibleAndLatent'
     require_relative 'Prototype.ControllerWaterCoil'
-    
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying prototype HVAC assumptions.')
-    
+
     ##### Apply equipment efficiencies
-    
+
     # Fans
     self.getFanConstantVolumes.sort.each {|obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)}
     self.getFanVariableVolumes.sort.each {|obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)}
@@ -1072,22 +1076,22 @@ class OpenStudio::Model::Model
     self.getFanZoneExhausts.sort.each {|obj| obj.setPrototypeFanPressureRise}
 
     ##### Add Economizers
-    
+
     if (building_vintage != 'NECB 2011') then
       # Create an economizer maximum OA fraction of 70%
-      # to reflect damper leakage per PNNL        
+      # to reflect damper leakage per PNNL
       econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(self)
       econ_max_70_pct_oa_sch.setName("Economizer Max OA Fraction 70 pct")
       econ_max_70_pct_oa_sch.defaultDaySchedule.setName("Economizer Max OA Fraction 70 pct Default")
-      econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0.7)   
+      econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0.7)
     else
-      # NECB 2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)  
+      # NECB 2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
       econ_max_100_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(self)
       econ_max_100_pct_oa_sch.setName("Economizer Max OA Fraction 100 pct")
       econ_max_100_pct_oa_sch.defaultDaySchedule.setName("Economizer Max OA Fraction 100 pct Default")
-      econ_max_100_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 1.0)         
-    end  
-    
+      econ_max_100_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 1.0)
+    end
+
     # Check each airloop
     self.getAirLoopHVACs.each do |air_loop|
       if air_loop.is_economizer_required(self.template, self.climate_zone) == true
@@ -1113,7 +1117,7 @@ class OpenStudio::Model::Model
           # and outside air enthalphy; latter chosen to be consistent with MNECB and CAN-QUEST implementation
           economizer_type = 'DifferentialEnthalpy'
         end
-        
+
         # Set the economizer type
         # Get the OA system and OA controller
         oa_sys = air_loop.airLoopHVACOutdoorAirSystem
@@ -1128,35 +1132,35 @@ class OpenStudio::Model::Model
         if (building_vintage != 'NECB 2011') then
           #oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
         else
-          #oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_100_pct_oa_sch)     
-        end  
-        
+          #oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_100_pct_oa_sch)
+        end
+
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.
         unless air_loop.is_economizer_type_allowable(self.template, self.climate_zone)
           OpenStudio::logFree(OpenStudio::Warn, "openstudio.prototype.Model", "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{self.template}, climate zone #{self.climate_zone}.  Economizer type will be switched to No Economizer.")
           oa_control.setEconomizerControlType('NoEconomizer')
         end
-              
+
       end
     end
 
     # TODO What is the logic behind hard-sizing
     # hot water coil convergence tolerances?
     self.getControllerWaterCoils.sort.each {|obj| obj.set_convergence_limits}
-    
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
-    
-  end 
+
+  end
 
   def add_debugging_variables(type)
-  
+
     # 'detailed'
     # 'timestep'
     # 'hourly'
     # 'daily'
     # 'monthly'
-  
+
     vars = []
     case type
     when 'service_water_heating'
@@ -1174,33 +1178,33 @@ class OpenStudio::Model::Model
       var_names << ['Water Heater Water Volume Flow Rate','timestep']
       var_names << ['Water Heater Water Volume','timestep']
     end
-  
+
     var_names.each do |var_name, reporting_frequency|
       outputVariable = OpenStudio::Model::OutputVariable.new(var_name,self)
       outputVariable.setReportingFrequency(reporting_frequency)
     end
-  
-  
+
+
   end
 
   def run(run_dir = "#{Dir.pwd}/Run")
-    
+
     # If the run directory is not specified
     # run in the current working directory
-    
+
     # Make the directory if it doesn't exist
     if !Dir.exists?(run_dir)
       Dir.mkdir(run_dir)
     end
-    
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Started simulation in '#{run_dir}'")
-    
+
     # Change the simulation to only run the weather file
     # and not run the sizing day simulations
     sim_control = self.getSimulationControl
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
-    
+
     # Save the model to energyplus idf
     idf_name = 'in.idf'
     osm_name = 'in.osm'
@@ -1210,7 +1214,7 @@ class OpenStudio::Model::Model
     osm_path = OpenStudio::Path.new("#{run_dir}/#{osm_name}")
     idf.save(idf_path,true)
     self.save(osm_path,true)
-    
+
     # Set up the sizing simulation
     # Find the weather file
     epw_path = nil
@@ -1238,12 +1242,12 @@ class OpenStudio::Model::Model
       OpenStudio::logFree(OpenStudio::Error, "openstudio.prototype.Model", "Model has not been assigned a weather file.")
       return false
     end
-    
+
     # If running on a regular desktop, use RunManager.
     # If running on OpenStudio Server, use WorkFlowMananger
-    # to avoid slowdown from the sizing run.   
+    # to avoid slowdown from the sizing run.
     use_runmanager = true
-    
+
     begin
       require 'openstudio-workflow'
       use_runmanager = false
@@ -1261,7 +1265,7 @@ class OpenStudio::Model::Model
       ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
       idd_path = OpenStudio::Path.new(ep_dir.to_s + "/Energy+.idd")
       output_path = OpenStudio::Path.new("#{run_dir}/")
-      
+
       # Make a run manager and queue up the sizing run
       run_manager_db_path = OpenStudio::Path.new("#{run_dir}/run.db")
       run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true, false, false, false)
@@ -1270,7 +1274,7 @@ class OpenStudio::Model::Model
         idf_path,
         epw_path,
         output_path)
-      
+
       run_manager.enqueue(job, true)
 
       # Start the sizing run and wait for it to finish.
@@ -1278,14 +1282,14 @@ class OpenStudio::Model::Model
         sleep 1
         OpenStudio::Application::instance.processEvents
       end
-        
+
       sql_path = OpenStudio::Path.new("#{run_dir}/Energyplus/eplusout.sql")
-      
+
       OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.Model", "Finished sizing run in #{(Time.new - start_time).round}sec.")
-      
+
     else # Use the openstudio-workflow gem
       OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.Model", "Running sizing run with openstudio-workflow gem.")
-      
+
       # Copy the weather file to this directory
       FileUtils.copy(epw_path.to_s, run_dir)
 
@@ -1296,11 +1300,11 @@ class OpenStudio::Model::Model
       if final_state == :finished
         OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.Model", "Finished sizing run in #{(Time.new - start_time).round}sec.")
       end
-    
+
       sql_path = OpenStudio::Path.new("#{run_dir}/run/eplusout.sql")
-    
+
     end
-    
+
     # Load the sql file created by the sizing run
     sql_path = OpenStudio::Path.new("#{run_dir}/Energyplus/eplusout.sql")
     if OpenStudio::exists(sql_path)
@@ -1313,14 +1317,14 @@ class OpenStudio::Model::Model
       end
       # Attach the sql file from the run to the sizing model
       self.setSqlFile(sql)
-    else 
+    else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Results for the sizing run couldn't be found here: #{sql_path}.")
       return false
     end
 
     # Check that the run finished without severe errors
-    error_query = "SELECT ErrorMessage 
-        FROM Errors 
+    error_query = "SELECT ErrorMessage
+        FROM Errors
         WHERE ErrorType='1'"
 
     errs = self.sqlFile.get.execAndReturnVectorOfString(error_query)
@@ -1332,21 +1336,21 @@ class OpenStudio::Model::Model
         return false
       end
     end
-    
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Finished simulation in '#{run_dir}'")
-    
+
     return true
 
   end
 
   def request_timeseries_outputs
-   
+
     # "detailed"
     # "timestep"
     # "hourly"
     # "daily"
     # "monthly"
-   
+
     vars = []
     # vars << ['Heating Coil Gas Rate', 'detailed']
     # vars << ['Zone Thermostat Air Temperature', 'detailed']
@@ -1359,7 +1363,7 @@ class OpenStudio::Model::Model
     # vars << ['Air System Outdoor Air Mass Flow Rate', 'detailed']
     # vars << ['Air System Outdoor Air Flow Fraction', 'detailed']
     # vars << ['Air System Outdoor Air Minimum Flow Fraction', 'detailed']
-    
+
     # vars << ['Water Use Equipment Hot Water Volume Flow Rate', 'hourly']
     # vars << ['Water Use Equipment Cold Water Volume Flow Rate', 'hourly']
     # vars << ['Water Use Equipment Total Volume Flow Rate', 'hourly']
@@ -1367,7 +1371,7 @@ class OpenStudio::Model::Model
     # vars << ['Water Use Equipment Cold Water Temperature', 'hourly']
     # vars << ['Water Use Equipment Target Water Temperature', 'hourly']
     # vars << ['Water Use Equipment Mixed Water Temperature', 'hourly']
-    
+
     # vars << ['Water Use Connections Hot Water Volume Flow Rate', 'hourly']
     # vars << ['Water Use Connections Cold Water Volume Flow Rate', 'hourly']
     # vars << ['Water Use Connections Total Volume Flow Rate', 'hourly']
@@ -1375,7 +1379,7 @@ class OpenStudio::Model::Model
     # vars << ['Water Use Connections Cold Water Temperature', 'hourly']
     # vars << ['Water Use Connections Plant Hot Water Energy', 'hourly']
     # vars << ['Water Use Connections Return Water Temperature', 'hourly']
-  
+
     # vars << ['Air System Outdoor Air Economizer Status','timestep']
     # vars << ['Air System Outdoor Air Heat Recovery Bypass Status','timestep']
     # vars << ['Air System Outdoor Air High Humidity Control Status','timestep']
@@ -1383,29 +1387,29 @@ class OpenStudio::Model::Model
     # vars << ['Air System Outdoor Air Minimum Flow Fraction','timestep']
     # vars << ['Air System Outdoor Air Mass Flow Rate','timestep']
     # vars << ['Air System Mixed Air Mass Flow Rate','timestep']
-  
+
     # vars << ['Heating Coil Gas Rate','timestep']
     vars << ['Boiler Part Load Ratio','timestep']
     vars << ['Boiler Gas Rate','timestep']
     # vars << ['Boiler Gas Rate','timestep']
     # vars << ['Fan Electric Power','timestep']
- 
+
     vars << ['Pump Electric Power','timestep']
     vars << ['Pump Outlet Temperature','timestep']
-    vars << ['Pump Mass Flow Rate','timestep']  
-    
+    vars << ['Pump Mass Flow Rate','timestep']
+
     # vars << ['Zone Air Terminal VAV Damper Position','timestep']
     # vars << ['Zone Air Terminal Minimum Air Flow Fraction','timestep']
     # vars << ['Zone Air Terminal Outdoor Air Volume Flow Rate','timestep']
     # vars << ['Zone Lights Electric Power','hourly']
     # vars << ['Daylighting Lighting Power Multiplier','hourly']
-    # vars << ['Schedule Value','hourly']    
-    
-    vars.each do |var, freq|  
+    # vars << ['Schedule Value','hourly']
+
+    vars.each do |var, freq|
       outputVariable = OpenStudio::Model::OutputVariable.new(var, self)
       outputVariable.setReportingFrequency(freq)
     end
-    
-  end  
+
+  end
 
 end
