@@ -406,43 +406,18 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
     # Loop through all the space types currently in the model,
-    # which are placeholders, and generate actual space types for them.
-    self.getSpaceTypes.sort.each do |stub_space_type|
+    # which are placeholders, and give them appropriate loads and schedules
+    self.getSpaceTypes.sort.each do |space_type|
 
-      # Get the standard building type
-      # from the stub
-      # puts "stub_space_type = #{stub_space_type}"
-
-      stds_building_type = nil
-      if stub_space_type.standardsBuildingType.is_initialized
-        stds_building_type = stub_space_type.standardsBuildingType.get
-      else
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards building type.")
-        return false
-      end
-      #puts "stds_building_type = #{stds_building_type}"
-
-      # Get the standards space type
-      # from the stub
-      stds_spc_type = nil
-      if stub_space_type.standardsSpaceType.is_initialized
-        stds_spc_type = stub_space_type.standardsSpaceType.get
-      else
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards space type.")
-        return false
-      end
-      # puts "stds_spc_type = #{stds_spc_type}"
-      new_space_type = self.add_space_type(building_vintage, 'ClimateZone 1-8', stds_building_type, stds_spc_type)
-
-      # Apply the new space type to the building
-      stub_space_type.spaces.each do |space|
-        space.setSpaceType(new_space_type)
-        #OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.Model", "Setting #{space.name} to #{new_space_type.name.get}")
-      end
-
-      # Remove the stub space type
-      stub_space_type.remove
-
+      # Rendering color
+      space_type.set_rendering_color(building_vintage)
+    
+      # Loads
+      space_type.set_internal_loads(building_vintage, true, true, true, true, true, true)
+      
+      # Schedules
+      space_type.set_internal_load_schedules(building_vintage, true, true, true, true, true, true, true)
+      
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
