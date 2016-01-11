@@ -2182,4 +2182,32 @@ Warehouse.Office
   
   end
   
+  # Determine if the space is residential based on the
+  # space type properties for the space.
+  # For spaces with no space type, assume nonresidential.
+  #
+  # return [Bool] true if residential, false if nonresidential
+  def is_residential
+  
+    is_res = false
+  
+    space_type = self.spaceType
+    if space_type.is_initialized
+      space_type = space_type.get
+      # Get the space type data
+      space_type_properties = space_type.get_standards_data
+      if space_type_properties['is_residential'] == "Yes"
+        is_res = true
+      else
+        is_res = false
+      end
+    else
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{self.name}, assuming nonresidential.")
+      is_res = false
+    end  
+  
+    return is_res
+  
+  end 
+  
 end
