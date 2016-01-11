@@ -133,5 +133,79 @@ class OpenStudio::Model::ThermalZone
     return result
 
   end
+
+  # returns the calculated cooling design load as an optional double
+  def coolingDesignLoad
   
+    result = OpenStudio::OptionalDouble.new
+
+    name = self.name.get.upcase
+
+    sql = self.model.sqlFile
+    
+    if sql.is_initialized
+      sql = sql.get
+    
+      query = "SELECT Value 
+              FROM tabulardatawithstrings
+              WHERE ReportName='HVACSizingSummary' 
+              AND ReportForString='Entire Facility' 
+              AND TableName='Zone Cooling'
+              AND ColumnName='User Design Load per Area'
+              AND RowName='#{name}'
+              AND Units='W/m2'"
+
+      val = sql.execAndReturnFirstDouble(query)
+      
+      if val.is_initialized
+        result = OpenStudio::OptionalDouble.new(val.get)
+      else
+        #OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
+      end
+
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return result  
+  
+  end
+  
+  # returns the calculated heating design load as an optional double
+  def heatingDesignLoad
+  
+    result = OpenStudio::OptionalDouble.new
+
+    name = self.name.get.upcase
+
+    sql = self.model.sqlFile
+    
+    if sql.is_initialized
+      sql = sql.get
+    
+      query = "SELECT Value 
+              FROM tabulardatawithstrings
+              WHERE ReportName='HVACSizingSummary' 
+              AND ReportForString='Entire Facility' 
+              AND TableName='Zone Heating'
+              AND ColumnName='User Design Load per Area'
+              AND RowName='#{name}'
+              AND Units='W/m2'"
+
+      val = sql.execAndReturnFirstDouble(query)
+      
+      if val.is_initialized
+        result = OpenStudio::OptionalDouble.new(val.get)
+      else
+        #OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
+      end
+
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return result  
+  
+  end
+
 end
