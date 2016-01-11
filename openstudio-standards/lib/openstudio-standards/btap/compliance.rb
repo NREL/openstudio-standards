@@ -1131,16 +1131,19 @@ module BTAP
           
           name = "NECB-#{array[0]}-Thermostat Dual Setpoint Schedule"
           
-          # TO DO: do we create one for each zone? Make this better. -- stopped here.         
-          ds = BTAP::Resources::Schedules::create_annual_thermostat_setpoint_dual_setpoint(model, name, htg_sched, clg_sched)
+          # If dual setpoint already exists, use that one, else create one       
+          if model.getThermostatSetpointDualSetpointByName(name).empty? == false 
+            ds = model.getThermostatSetpointDualSetpointByName(name).get 
+          else
+            ds = BTAP::Resources::Schedules::create_annual_thermostat_setpoint_dual_setpoint(model, name, htg_sched, clg_sched)
+          end
+          
           zone.setThermostatSetpointDualSetpoint(ds)
-          
-          
-          BTAP::runner_register("Info","Created DualSetpoint Schedule NECB-#{array[0]}",runner)
           BTAP::runner_register("Info","ThermalZone #{zone.name} set to DualSetpoint Schedule NECB-#{array[0]}",runner)
-          BTAP::runner_register("DEBUG","END-set_zones_thermostat_schedule_based_on_space_type_schedules" , runner)
-                 
+                         
         end
+        
+        BTAP::runner_register("DEBUG","END-set_zones_thermostat_schedule_based_on_space_type_schedules" , runner)
         return true
       end
       
