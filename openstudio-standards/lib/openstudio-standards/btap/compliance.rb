@@ -1111,17 +1111,22 @@ module BTAP
             return false
           end
 
-          #TO DO: incorporate error messages, similar to BTAP runner register messages below
-          # CHECK THAT THIS WORKS - stopped here.
+          
           htg_search_string = "NECB-#{array[0]}-Thermostat Setpoint-Heating"
           clg_search_string = "NECB-#{array[0]}-Thermostat Setpoint-Cooling"
           
           if model.getScheduleRulesetByName(htg_search_string).empty? == false
-            htg_sched = model.getScheduleRulesetByName(htg_search_string).get                        
+            htg_sched = model.getScheduleRulesetByName(htg_search_string).get     
+          else
+            BTAP::runner_register("ERROR","heating_thermostat_setpoint_schedule NECB-#{array[0]} does not exist" , runner)
+            return false
           end
           
           if model.getScheduleRulesetByName(clg_search_string).empty? == false
             clg_sched = model.getScheduleRulesetByName(clg_search_string).get
+          else
+            BTAP::runner_register("ERROR","cooling_thermostat_setpoint_schedule NECB-#{array[0]} does not exist" , runner)
+            return false
           end
           
           name = "NECB-#{array[0]}-Thermostat Dual Setpoint Schedule"
@@ -1135,19 +1140,6 @@ module BTAP
           BTAP::runner_register("Info","ThermalZone #{zone.name} set to DualSetpoint Schedule NECB-#{array[0]}",runner)
           BTAP::runner_register("DEBUG","END-set_zones_thermostat_schedule_based_on_space_type_schedules" , runner)
                  
-          
-          #          if model.getThermostatSetpointDualSetpointByName("NECB-#{array[0]}").empty? == false
-          #            ds = model.getThermostatSetpointDualSetpointByName("NECB-#{array[0]}").get
-          #            zone.setThermostatSetpointDualSetpoint(ds)
-          #
-          #            BTAP::runner_register("Info","Found DualSetpoint Schedule NECB-#{array[0]}",runner)
-          #            BTAP::runner_register("Info","ThermalZone #{zone.name} set to DualSetpoint Schedule NECB-#{array[0]}",runner)
-          #            BTAP::runner_register("DEBUG","END-set_zones_thermostat_schedule_based_on_space_type_schedules" , runner)
-          #          else
-          #            BTAP::runner_register("ERROR","set_zones_thermostat_schedule NECB-#{array[0]} does not exist" , runner)
-          #            puts model.getThermostatSetpointDualSetpoints
-          #            return false
-          #          end
         end
         return true
       end
