@@ -1,5 +1,5 @@
 
-# Extend the class to add Medium Office specific stuff
+
 class OpenStudio::Model::Model
  
   def define_space_type_map(building_type, building_vintage, climate_zone)
@@ -250,7 +250,12 @@ class OpenStudio::Model::Model
       elec_equip1.setSpace(corridor_ground_space)
       elec_equip2.setSpace(corridor_ground_space)
       elec_equip1.setSchedule(add_schedule("ApartmentMidRise BLDG_ELEVATORS"))
-      elec_equip2.setSchedule(add_schedule("ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF"))
+      case building_vintage
+      when '90.1-2004', '90.1-2007'
+        elec_equip2.setSchedule(add_schedule("ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"))
+      when '90.1-2010', '90.1-2013'
+        elec_equip2.setSchedule(add_schedule("ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF"))
+      end
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       elec_equip_def1.setDesignLevel(16055)
       elec_equip_def1.setFractionLatent(0)
@@ -289,10 +294,20 @@ class OpenStudio::Model::Model
         infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
         infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
       when '90.1-2007'
-        infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
+        case climate_zone
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+          infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
+        else
+          infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
+        end
         infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
       when '90.1-2010', '90.1-2013'
-        infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
+        case climate_zone
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+          infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
+        else
+          infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
+        end
         infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2010_2013'))
       end
     end
