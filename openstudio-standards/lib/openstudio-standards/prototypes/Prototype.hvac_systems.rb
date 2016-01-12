@@ -409,21 +409,21 @@ class OpenStudio::Model::Model
     hp_pump.addToNode(heat_pump_water_loop.supplyInletNode)
 
     # Cooling towers
-<<<<<<< HEAD
-    cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
-    cooling_tower.setName("#{heat_pump_water_loop.name} Central Tower")
-    heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
-=======
-    # TODO replace with FluidCooler:TwoSpeed when available
-    # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
-    # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
-    # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
-    fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(self)
-    fluid_cooler.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
-    fluid_cooler.setDesignSprayWaterFlowRate(0.002208)  # Based on HighRiseApartment
-    fluid_cooler.setPerformanceInputMethod("UFactorTimesAreaAndDesignWaterFlowRate")
-    heat_pump_water_loop.addSupplyBranchForComponent(fluid_cooler)
->>>>>>> master
+    if building_type == 'LargeOffice'
+      cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
+      cooling_tower.setName("#{heat_pump_water_loop.name} Central Tower")
+      heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
+    else
+      # TODO replace with FluidCooler:TwoSpeed when available
+      # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+      # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
+      # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
+      fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(self)
+      fluid_cooler.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
+      fluid_cooler.setDesignSprayWaterFlowRate(0.002208)  # Based on HighRiseApartment
+      fluid_cooler.setPerformanceInputMethod("UFactorTimesAreaAndDesignWaterFlowRate")
+      heat_pump_water_loop.addSupplyBranchForComponent(fluid_cooler)
+    end
 
     # Boiler
     boiler = OpenStudio::Model::BoilerHotWater.new(self)
@@ -1412,7 +1412,7 @@ class OpenStudio::Model::Model
       # Wrap coils in a unitary system or not, depending
       # on the system type.
       if prototype_input['pszac_fan_type'] == 'Cycling'
-        
+
         if prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
           unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(self)
           unitary_system.setSupplyFan(fan)
@@ -1442,11 +1442,11 @@ class OpenStudio::Model::Model
           unitary_system.setFanPlacement('BlowThrough')
           unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
           unitary_system.addToNode(supply_inlet_node)
-          
+
           setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(OpenStudio.convert(55,'F','C').get)
           setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(OpenStudio.convert(104,'F','C').get)
         end
-        
+
       else
         if fan_location == 'DrawThrough'
           # Add the fan
@@ -3307,7 +3307,7 @@ class OpenStudio::Model::Model
     lm_led = target_ltg_lm * pct_led  #339.66
     w_incandescent = lm_incandescent / incandescent_efficacy_lm_per_w  #79.254
     w_led = lm_led / led_efficacy_lm_per_w  #9.7
-    lighting_pwr_w = w_incandescent + w_led 
+    lighting_pwr_w = w_incandescent + w_led
 
     # Elevator lift motor
     elevator_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
