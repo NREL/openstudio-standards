@@ -210,14 +210,16 @@ case building_vintage
           return false
         end
       when 'DC_main'
-        system['space_names'].each do |space_name|
-          space = self.getSpaceByName(space_name)
-          if space.empty?
-            OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-            return false
+        thermal_zones.each do |thermal_zone|
+          thermostat = thermal_zone.thermostatSetpointDualSetpoint
+          unless thermal_zone.nil?
+            thermostat = thermostat.get
+            # self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
           end
-          space = space.get
-          self.add_data_center_load(space, system['load'])
+          sizine_zone = thermal_zone.sizingZone
+          sizine_zone.setZoneHeatingSizingFactor(0)
+          sizine_zone.setZoneCoolingSizingFactor(1.2)
+          self.add_data_center_load(thermal_zone, system['load'])
         end
         if hot_water_loop && chilled_water_loop
           self.add_data_center_hvac(prototype_input, hvac_standards, thermal_zones, hot_water_loop, heat_pump_loop, true)
@@ -226,14 +228,16 @@ case building_vintage
           return false
         end
       when 'DC'
-        system['space_names'].each do |space_name|
-          space = self.getSpaceByName(space_name)
-          if space.empty?
-            OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-            return false
+        thermal_zones.each do |thermal_zone|
+          thermostat = thermal_zone.thermostatSetpointDualSetpoint
+          unless thermal_zone.nil?
+            thermostat = thermostat.get
+            # self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
           end
-          space = space.get
-          self.add_data_center_load(space, system['load'])
+          sizine_zone = thermal_zone.sizingZone
+          sizine_zone.setZoneHeatingSizingFactor(0)
+          sizine_zone.setZoneCoolingSizingFactor(1.2)
+          self.add_data_center_load(thermal_zone, system['load'])
         end
         if hot_water_loop && chilled_water_loop
           self.add_data_center_hvac(prototype_input, hvac_standards, thermal_zones, hot_water_loop, heat_pump_loop)
@@ -251,6 +255,14 @@ case building_vintage
 
   end #add hvac
 
+  def adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      thermostat.setCoolingSetpointTemperatureSchedule(add_schedule("OfficeLarge CLGSETP_DC_SCH"))
+      thermostat.setHeatingSetpointTemperatureSchedule(add_schedule("OfficeLarge HTGSETP_DC_SCH"))
+    end
+  end
+
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
 
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
@@ -261,7 +273,7 @@ case building_vintage
     water_heaters.each do |water_heater|
       water_heater = water_heater.to_WaterHeaterMixed.get
       # water_heater.setAmbientTemperatureIndicator('Zone')
-      # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
+      # water_heater.setAmbientTemperatureThermalZone()
       water_heater.setOffCycleParasiticFuelConsumptionRate(2771)
       water_heater.setOnCycleParasiticFuelConsumptionRate(2771)
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
@@ -270,13 +282,13 @@ case building_vintage
 
     # spaces = define_space_type_map(building_type, building_vintage, climate_zone)['WholeBuilding - Lg Office']
 
-    # spaces.each do |space|
+    ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
+      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main', space_name)
+    end
+
+    # for i in 0..2
     #   self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
     # end
-
-    for i in 0..2
-      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    end
     # self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
 
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
@@ -286,4 +298,3 @@ case building_vintage
   end #add swh
 
 end
-

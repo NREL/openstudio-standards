@@ -29,16 +29,16 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     building_type_chs << 'PrimarySchool'
     building_type_chs << 'SmallOffice'
     building_type_chs << 'MediumOffice'
-    building_type_chs << 'LargeOffice'
+    #building_type_chs << 'LargeOffice'
     building_type_chs << 'SmallHotel'
     building_type_chs << 'LargeHotel'
-    building_type_chs << 'Warehouse'
+    #building_type_chs << 'Warehouse'
     building_type_chs << 'RetailStandalone'
     building_type_chs << 'RetailStripmall'
     building_type_chs << 'QuickServiceRestaurant'
     building_type_chs << 'FullServiceRestaurant'
-    building_type_chs << 'Hospital'
-    building_type_chs << 'Outpatient'
+    #building_type_chs << 'Hospital'
+    #building_type_chs << 'Outpatient'
     building_type = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('building_type', building_type_chs, true)
     building_type.setDisplayName('Building Type.')
     building_type.setDefaultValue('SmallOffice')
@@ -125,7 +125,7 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
       Dir.mkdir(osm_directory)
     end
 
-    model.create_prototype_building(building_type,template,climate_zone,osm_directory)
+    model.create_prototype_building(building_type,template,climate_zone,osm_directory,@debug)
     
     log_msgs
     return true

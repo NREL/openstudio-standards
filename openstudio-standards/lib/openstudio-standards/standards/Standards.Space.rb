@@ -2049,7 +2049,7 @@ Warehouse.Office
       end
     end
 
-    if infil_sch.class.to_s == 'NilClass' and self.spaceType.get
+    if infil_sch.nil? && self.spaceType.is_initialized 
       space_type = self.spaceType.get
       if space_type.spaceInfiltrationDesignFlowRates.size > 0
         old_infil = space_type.spaceInfiltrationDesignFlowRates[0]
@@ -2059,8 +2059,10 @@ Warehouse.Office
       end
     end
 
-    infil_sch = self.model.alwaysOnDiscreteSchedule if infil_sch.class.to_s == 'NilClass'
-
+    if infil_sch.nil?
+      infil_sch = self.model.alwaysOnDiscreteSchedule
+    end
+      
     # Create an infiltration rate object for this space
     infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self.model)
     infiltration.setName("#{self.name} Infiltration")

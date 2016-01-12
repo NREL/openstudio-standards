@@ -8,6 +8,7 @@ class OpenStudio::Model::Model
 
   # Load the helper libraries for getting the autosized
   # values for each type of model object.
+  require_relative 'Standards.Fan'
   require_relative 'Standards.FanConstantVolume'
   require_relative 'Standards.FanVariableVolume'
   require_relative 'Standards.FanOnOff'
@@ -24,6 +25,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.ThermalZone'
   require_relative 'Standards.Surface'
   require_relative 'Standards.SubSurface'
+  require_relative 'Standards.SpaceType'
 
   # Applies the multi-zone VAV outdoor air sizing requirements
   # to all applicable air loops in the model.
@@ -35,7 +37,7 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
 
     # Multi-zone VAV outdoor air sizing
-    self.getAirLoopHVACs.sort.each {|obj| obj.apply_multizone_vav_outdoor_air_sizing}
+    self.getAirLoopHVACs.sort.each {|obj| obj.apply_multizone_vav_outdoor_air_sizing(self.template)}
 
   end
 
@@ -506,13 +508,13 @@ class OpenStudio::Model::Model
       lights_frac_to_return_air = data['lighting_fraction_to_return_air']
       lights_frac_radiant = data['lighting_fraction_radiant']
       lights_frac_visible = data['lighting_fraction_visible']
-      unless  lighting_per_area == 0 || lighting_per_area.nil?
+      unless  lighting_per_area.to_f == 0 || lighting_per_area.nil?
         lights_def.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
         lights_def.setReturnAirFraction(lights_frac_to_return_air)
         lights_def.setFractionRadiant(lights_frac_radiant)
         lights_def.setFractionVisible(lights_frac_visible)
       end
-      unless lighting_per_person == 0 || lighting_per_person.nil?
+      unless lighting_per_person.to_f == 0 || lighting_per_person.nil?
         lights_def.setWattsperPerson(OpenStudio.convert(lighting_per_person, 'W/person', 'W/person').get)
         lights_def.setReturnAirFraction(lights_frac_to_return_air)
         lights_def.setFractionRadiant(lights_frac_radiant)
@@ -604,6 +606,47 @@ class OpenStudio::Model::Model
       unless occupancy_activity_sch.nil?
         default_sch_set.setPeopleActivityLevelSchedule(add_schedule(occupancy_activity_sch))
       end
+
+      # clothing schedule for thermal comfort metrics
+      clothing_sch = self.getScheduleRulesetByName("Clothing Schedule")
+      if clothing_sch.is_initialized
+        clothing_sch = clothing_sch.get
+      else
+        clothing_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+        clothing_sch.setName("Clothing Schedule")
+        clothing_sch.defaultDaySchedule.setName("Clothing Schedule Default Winter Clothes")
+        clothing_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 1.0)
+        sch_rule = OpenStudio::Model::ScheduleRule.new(clothing_sch)
+        sch_rule.daySchedule.setName("Clothing Schedule Summer Clothes")
+        sch_rule.daySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0.5)
+        sch_rule.setStartDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(5), 1))
+        sch_rule.setEndDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(9), 30))
+      end
+      people.setClothingInsulationSchedule(clothing_sch)
+
+      # air velocity schedule for thermal comfort metrics
+      air_velo_sch = self.getScheduleRulesetByName("Air Velocity Schedule")
+      if air_velo_sch.is_initialized
+        air_velo_sch = air_velo_sch.get
+      else
+        air_velo_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+        air_velo_sch.setName("Air Velocity Schedule")
+        air_velo_sch.defaultDaySchedule.setName("Air Velocity Schedule Default")
+        air_velo_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0.2)
+      end
+      people.setAirVelocitySchedule(air_velo_sch)
+
+      # work efficiency schedule for thermal comfort metrics
+      work_efficiency_sch = self.getScheduleRulesetByName("Work Efficiency Schedule")
+      if work_efficiency_sch.is_initialized
+        work_efficiency_sch = work_efficiency_sch.get
+      else
+        work_efficiency_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+        work_efficiency_sch.setName("Work Efficiency Schedule")
+        work_efficiency_sch.defaultDaySchedule.setName("Work Efficiency Schedule Default")
+        work_efficiency_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0)
+      end
+      people.setWorkEfficiencySchedule(work_efficiency_sch)
 
     end
 
@@ -1323,11 +1366,259 @@ class OpenStudio::Model::Model
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has not been assigned a weather file.')
     end
-
+  
     return full_epw_path
+  
+  end
+
+  # Method to gather prototype simulation results for a specific climate zone, building type, and template
+  #
+  # @param climate_zone [String] string for the ASHRAE climate zone.
+  # @param building_type [String] string for prototype building type.
+  # @param template [String] string for prototype template to target.
+  # @return [Hash] Returns a hash with data presented in various bins. Returns nil if no search results
+  def process_results_for_datapoint(climate_zone, building_type, template)
+
+    # Combine the data from the JSON files into a single hash
+    top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
+    standards_data_dir = "#{top_dir}/data/standards"
+
+    # Load the legacy idf results JSON file into a ruby hash
+    temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
+    legacy_idf_results = JSON.parse(temp)
+
+    # List of all fuel types
+    fuel_types = ['Electricity', 'Natural Gas', 'Additional Fuel', 'District Cooling', 'District Heating', 'Water']
+
+    # List of all end uses
+    end_uses = ['Heating', 'Cooling', 'Interior Lighting', 'Exterior Lighting', 'Interior Equipment', 'Exterior Equipment', 'Fans', 'Pumps', 'Heat Rejection','Humidification', 'Heat Recovery', 'Water Systems', 'Refrigeration', 'Generators']
+
+    # Get legacy idf results
+    legacy_results_hash = {}
+    legacy_results_hash['total_legacy_energy_val'] = 0
+    legacy_results_hash['total_legacy_water_val'] = 0
+    legacy_results_hash['total_energy_by_fuel'] = {}
+    legacy_results_hash['total_energy_by_end_use'] = {}
+    fuel_types.each do |fuel_type|
+
+      end_uses.each do |end_use|
+        next if end_use == 'Exterior Equipment'
+
+        # Get the legacy results number
+        legacy_val = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, end_use)
+
+        # Combine the exterior lighting and exterior equipment
+        if end_use == 'Exterior Lighting'
+          legacy_exterior_equipment = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, 'Exterior Equipment')
+          unless legacy_exterior_equipment.nil?
+            legacy_val += legacy_exterior_equipment
+          end
+        end
+
+        if legacy_val.nil?
+          OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "#{fuel_type} #{end_use} legacy idf value not found")
+          next
+        end
+
+        # Add the energy to the total
+        if fuel_type == 'Water'
+          legacy_results_hash['total_legacy_water_val'] += legacy_val
+        else
+          legacy_results_hash['total_legacy_energy_val'] += legacy_val
+
+          # add to fuel specific total
+          if legacy_results_hash['total_energy_by_fuel'][fuel_type]
+            legacy_results_hash['total_energy_by_fuel'][fuel_type] += legacy_val # add to existing counter
+          else
+            legacy_results_hash['total_energy_by_fuel'][fuel_type] = legacy_val # start new counter
+          end
+
+          # add to end use specific total
+          if legacy_results_hash['total_energy_by_end_use'][end_use]
+            legacy_results_hash['total_energy_by_end_use'][end_use] += legacy_val # add to existing counter
+          else
+            legacy_results_hash['total_energy_by_end_use'][end_use] = legacy_val # start new counter
+          end
+
+        end
+
+      end # Next end use
+
+    end # Next fuel type
+
+    return legacy_results_hash
 
   end
 
+  # Keep track of floor area for prototype buildings.
+  # This is used to calculate EUI's to compare against non prototype buildings
+  # Areas taken from scorecard Excel Files
+  #
+  # @param [Sting] building type
+  # @return [Double] floor area (m^2) of prototype building for building type passed in. Returns nil if unexpected building type
+  def find_prototype_floor_area(building_type)
+
+    if building_type == 'FullServiceRestaurant' # 5502 ft^2
+      result = 511
+    elsif building_type == 'Hospital' # 241,410 ft^2 (including basement)
+      result = 22422
+    elsif building_type == 'LargeHotel' # 122,132 ft^2
+      result = 11345
+    elsif building_type == 'LargeOffice' # 498,600 ft^2
+      result = 46320
+    elsif building_type == 'MediumOffice' # 53,600 ft^2
+      result = 4982
+    elsif building_type == 'MidriseApartment' # 33,700 ft^2
+      result = 3135
+    elsif building_type == 'Office'
+      result = nil # todo - there shouldn't be a prototype building for this
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Measures calling this should choose between SmallOffice, MediumOffice, and LargeOffice")
+    elsif building_type == 'Outpatient' #40.950 ft^2
+      result = 3804
+    elsif building_type == 'PrimarySchool' # 73,960 ft^2
+      result = 6871
+    elsif building_type == 'QuickServiceRestaurant' # 2500 ft^2
+      result = 232
+    elsif building_type == 'Retail' # 24,695 ft^2
+      result = 2294
+    elsif building_type == 'SecondarySchool' # 210,900 ft^2
+      result = 19592
+    elsif building_type == 'SmallHotel' # 43,200 ft^2
+      result = 4014
+    elsif building_type == 'SmallOffice' # 5500 ft^2
+      result = 511
+    elsif building_type == 'StripMall' # 22,500 ft^2
+      result = 2090
+    elsif building_type == 'SuperMarket' #45,002 ft2 (from legacy reference idf file)
+      result = 4181
+    elsif building_type == 'Warehouse' # 49,495 ft^2 (legacy ref shows 52,045, but I wil calc using 49,495)
+      result = 4595
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine floor prototype floor area")
+      result = nil
+    end
+
+    return result
+
+  end
+
+  # this is used by other methods to get the clinzte aone and building type from a model.
+  # it has logic to break office into small, medium or large based on building area that can be turned off
+  # @param [bool] re-map small office or leave it alone
+  # @return [hash] key for climate zone and building type, both values are strings
+  def get_building_climate_zone_and_building_type(remap_office = true)
+
+    # get climate zone from model
+    # get ashrae climate zone from model
+    climate_zone = ''
+    climateZones = self.getClimateZones
+    climateZones.climateZones.each do |climateZone|
+      if climateZone.institution == "ASHRAE"
+        climate_zone = "ASHRAE 169-2006-#{climateZone.value}"
+        next
+      end
+    end
+
+    # get building type from model
+    building_type = ''
+    if self.getBuilding.standardsBuildingType.is_initialized
+      building_type = self.getBuilding.standardsBuildingType.get
+    end
+
+    # prototype small office approx 500 m^2
+    # prototype medium office approx 5000 m^2
+    # prototype large office approx 50,000 m^2
+    # map office building type to small medium or large
+    if building_type == "Office" and remap_office
+      open_studio_area = self.getBuilding.floorArea
+      if open_studio_area < 2750
+        building_type = "SmallOffice"
+      elsif open_studio_area < 25250
+        building_type = "MediumOffice"
+      else
+        building_type = "LargeOffice"
+      end
+    end
+
+    results = {}
+    results['climate_zone'] = climate_zone
+    results['building_type'] = building_type
+
+    return results
+
+  end
+
+  # user needs to pass in building_vintage as string. The building type and climate zone will come from the model.
+  # If the building type or ASHRAE climate zone is not set in the model this will return nil
+  # If the lookup doesn't find matching simulation results this wil return nil
+  #
+  # @param [String] target prototype template for eui lookup
+  # @return [Double] EUI (MJ/m^2) for target template for given OSM. Returns nil if can't calculate EUI
+  def find_target_eui(template)
+
+    building_data = self.get_building_climate_zone_and_building_type
+    climate_zone = building_data['climate_zone']
+    building_type = building_data['building_type']
+
+    # look up results
+    target_consumption = process_results_for_datapoint(climate_zone, building_type, template)
+
+    # lookup target floor area for prototype buildings
+    target_floor_area = find_prototype_floor_area(building_type)
+
+    if target_consumption['total_legacy_energy_val'] > 0
+      if target_floor_area > 0
+        result = target_consumption['total_legacy_energy_val']/target_floor_area
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find prototype building floor area")
+        result = nil
+      end
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find target results for #{climate_zone},#{building_type},#{template}")
+      result = nil # couldn't calculate EUI consumpiton lookup failed
+    end
+
+    return result
+
+  end
+
+  # user needs to pass in building_vintage as string. The building type and climate zone will come from the model.
+  # If the building type or ASHRAE climate zone is not set in the model this will return nil
+  # If the lookup doesn't find matching simulation results this wil return nil
+  #
+  # @param [String] target prototype template for eui lookup
+  # @return [Hash] EUI (MJ/m^2) This will return a hash of end uses. key is end use, value is eui
+  def find_target_eui_by_end_use(template)
+
+    building_data = self.get_building_climate_zone_and_building_type
+    climate_zone = building_data['climate_zone']
+    building_type = building_data['building_type']
+
+    # look up results
+    target_consumption = process_results_for_datapoint(climate_zone, building_type, template)
+
+    # lookup target floor area for prototype buildings
+    target_floor_area = find_prototype_floor_area(building_type)
+
+    if target_consumption['total_legacy_energy_val'] > 0
+      if target_floor_area > 0
+        result = {}
+        target_consumption['total_energy_by_end_use'].each do |end_use,consumption|
+          result[end_use] = consumption/target_floor_area
+        end
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find prototype building floor area")
+        result = nil
+      end
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find target results for #{climate_zone},#{building_type},#{template}")
+      result = nil # couldn't calculate EUI consumpiton lookup failed
+    end
+
+    return result
+
+  end
+  
   private
 
   # Helper method to make a shortened version of a name
@@ -1350,6 +1641,8 @@ class OpenStudio::Model::Model
       building_type = 'MedOffice'
     elsif building_type == 'MidriseApartment'
       building_type = 'MidApt'
+    elsif building_type == 'HighriseApartment'
+      building_type = 'HighApt'
     elsif building_type == 'Office'
       building_type = 'Office'
     elsif building_type == 'Outpatient'
@@ -1430,14 +1723,14 @@ class OpenStudio::Model::Model
         result = possible_climate_zones.sort.first
       end
     end
-
+        
     # Check that a climate zone set was found
     if result.nil?
-
+      
     end
-
+    
     return result
-
+  
   end
 
 end

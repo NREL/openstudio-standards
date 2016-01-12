@@ -20,7 +20,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
 
   def setup
     # Make a directory to save the resulting models
-    @test_dir = "#{File.dirname(__FILE__)}/build"
+    @test_dir = "#{File.dirname(__FILE__)}/output"
     if !Dir.exists?(@test_dir)
       Dir.mkdir(@test_dir)
     end
@@ -244,6 +244,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
           total_osm_energy_val = 0
           total_legacy_water_val = 0
           total_osm_water_val = 0
+          total_cumulative_energy_err = 0
+          total_cumulative_water_err = 0
           fuel_types.each do |fuel_type|
             end_uses.each do |end_use|
               next if end_use == 'Exterior Equipment'
@@ -311,6 +313,15 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
                total_osm_energy_val += osm_val
               end
 
+              # Add the absolute error to the total
+              abs_err = (legacy_val-osm_val).abs
+              
+              if fuel_type == 'Water'
+                total_cumulative_water_err += abs_err
+              else                    
+                total_cumulative_energy_err += abs_err
+              end 
+              
               # Calculate the error and check if less than
               # acceptable_error_percentage
               percent_error = nil
@@ -349,28 +360,31 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
 
             end # Next end use
           end # Next fuel type
-
+         
           # Calculate the overall energy error
           total_percent_error = nil
           if total_osm_energy_val > 0 && total_legacy_energy_val > 0
             # If both
             total_percent_error = ((total_osm_energy_val - total_legacy_energy_val)/total_legacy_energy_val) * 100
-            failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_percent_error.round}% ***"
+            #failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_percent_error.round}% ***"
           elsif total_osm_energy_val > 0 && total_legacy_energy_val == 0
             # The osm has a fuel/end use that the legacy idf does not
             total_percent_error = 1000
-            failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm has extra fuel/end use that legacy idf does not (#{total_osm_energy_val})"
+            #failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm has extra fuel/end use that legacy idf does not (#{total_osm_energy_val})"
           elsif total_osm_energy_val == 0 && total_legacy_energy_val > 0
             # The osm has a fuel/end use that the legacy idf does not
             total_percent_error = 1000
-            failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm is missing a fuel/end use that legacy idf has (#{total_legacy_energy_val})"
+            #failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm is missing a fuel/end use that legacy idf has (#{total_legacy_energy_val})"
           else
             # Both osm and legacy are == 0 for, no error
             total_percent_error = 0
-            failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = both idf and osm don't use any energy."
-          end
+            #failures << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = both idf and osm don't use any energy."
+          end         
           
-          results_total_hash[building_type][template][climate_zone] = total_percent_error
+          tot_cumulative_energy_err = (total_cumulative_energy_err/total_legacy_energy_val) * 100
+          failures << "#{building_type}-#{template}-#{climate_zone} ****** Absolute Energy Error = #{tot_cumulative_energy_err.round}%."
+          
+          results_total_hash[building_type][template][climate_zone] = tot_cumulative_energy_err
 
           # Save the results to JSON
           File.open("#{@test_dir}/#{model_name}/comparison#{file_ext}.json", 'w') do |file|
@@ -496,11 +510,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
   # For Andrew Parker in NREL
   if hostname == "aparker-26487s"
     # Test the Secondary School in the PTool vintages and climate zones
-    def test_secondary_school
+    def dont_test_secondary_school
 
       bldg_types = ['SecondarySchool']
-      vintages = ['90.1-2010'] #['DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2010']
-      climate_zones = ['ASHRAE 169-2006-5A']#'ASHRAE 169-2006-2A']#, 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
+      vintages = ['DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010']#, '90.1-2013']
+      climate_zones = ['ASHRAE 169-2006-2A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
 
       all_failures = []
 
@@ -527,16 +541,16 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
     # Test the Small Office in the PTool vintages and climate zones
     def dont_test_small_office
       bldg_types = ['SmallOffice']
-      vintages = ['DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2010']
-      climate_zones = ['ASHRAE 169-2006-2A']#, 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
+      vintages = ['DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+      climate_zones = ['ASHRAE 169-2006-5A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-2A']
 
       all_failures = []
 
       # Create the models
-      #all_failures += create_models(bldg_types, vintages, climate_zones)
+      all_failures += create_models(bldg_types, vintages, climate_zones)
 
       # Run the models
-      #all_failures += run_models(bldg_types, vintages, climate_zones)
+      all_failures += run_models(bldg_types, vintages, climate_zones)
 
       # Compare the results to the legacy idf results
       all_failures += compare_results(bldg_types, vintages, climate_zones)
@@ -549,8 +563,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
     def dont_test_primary_school
 
       bldg_types = ['PrimarySchool']
-      vintages = ['90.1-2004', '90.1-2007', '90.1-2010'] # '90.1-2013'] 'DOE Ref Pre-1980', 'DOE Ref 1980-2004',
-      climate_zones = ['ASHRAE 169-2006-2A']#, 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
+      vintages = ['DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+     climate_zones = ['ASHRAE 169-2006-2A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
 
       all_failures = []
 
@@ -569,11 +583,57 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
 
     end
     
-    def dont_test_large_office
+    def test_large_office
 
       bldg_types = ['LargeOffice']
-      vintages = ['90.1-2010'] #['DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2010']
+      vintages = ['DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2010']
       climate_zones = ['ASHRAE 169-2006-5A', 'ASHRAE 169-2006-2A']#, 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
+
+      all_failures = []
+
+      # Create the models
+      #all_failures += create_models(bldg_types, vintages, climate_zones)
+
+      # Run the models
+      all_failures += run_models(bldg_types, vintages, climate_zones)
+
+      # Compare the results to the legacy idf results
+      all_failures += compare_results(bldg_types, vintages, climate_zones)
+
+      # Assert if there are any errors
+      puts "There were #{all_failures.size} failures"
+      assert(all_failures.size == 0, "FAILURES: #{all_failures.join("\n")}")
+
+    end    
+
+    
+    def test_medium_office
+
+      bldg_types = ['MediumOffice']
+      vintages = ['DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2010']
+      climate_zones = ['ASHRAE 169-2006-5A', 'ASHRAE 169-2006-2A']#, 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
+
+      all_failures = []
+
+      # Create the models
+      #all_failures += create_models(bldg_types, vintages, climate_zones)
+
+      # Run the models
+      all_failures += run_models(bldg_types, vintages, climate_zones)
+
+      # Compare the results to the legacy idf results
+      all_failures += compare_results(bldg_types, vintages, climate_zones)
+
+      # Assert if there are any errors
+      puts "There were #{all_failures.size} failures"
+      assert(all_failures.size == 0, "FAILURES: #{all_failures.join("\n")}")
+
+    end  
+    
+    def dont_test_retail_stripmall
+      bldg_types = ['RetailStripmall']
+      vintages = ['90.1-2010'] #'DOE Ref 1980-2004', 'DOE Ref Pre-1980', ']
+      climate_zones = ['ASHRAE 169-2006-2A']# 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
 
       all_failures = []
 
@@ -589,17 +649,16 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
       # Assert if there are any errors
       puts "There were #{all_failures.size} failures"
       assert(all_failures.size == 0, "FAILURES: #{all_failures.join("\n")}")
-
-    end    
-       
+    end
+  
   end
 
   # For David Goldwasser in NREL
-  if hostname == "MLEACH-19193S" || hostname == "Anns-iMac.local"
+  if hostname == "MLEACH-19193S" || hostname == "Anns-iMac.local" || hostname == "dgoldwas-28761s"
     # Test the Medium Office in the QTR vintages and climate zones
     def test_medium_office
       bldg_types = ['MediumOffice']
-      vintages = ['90.1-2010'] #'DOE Ref 1980-2004', 'DOE Ref Pre-1980', ']
+      vintages = ['90.1-2013'] #'DOE Ref 1980-2004', 'DOE Ref Pre-1980', ']
       climate_zones = ['ASHRAE 169-2006-2A']# 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
 
       all_failures = []
