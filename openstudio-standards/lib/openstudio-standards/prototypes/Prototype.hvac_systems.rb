@@ -358,7 +358,7 @@ class OpenStudio::Model::Model
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
   # @todo replace cooling tower with fluid cooler once added to OS 1.9.0
-  def add_hp_loop(prototype_input, standards)
+  def add_hp_loop(prototype_input, standards, building_type=nil)
 
     # Heat Pump loop
     heat_pump_water_loop = OpenStudio::Model::PlantLoop.new(self)

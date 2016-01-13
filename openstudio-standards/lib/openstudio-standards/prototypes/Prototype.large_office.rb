@@ -173,7 +173,7 @@ case building_vintage
 
     hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
 
-    heat_pump_loop = self.add_hp_loop(prototype_input, hvac_standards)
+    heat_pump_loop = self.add_hp_loop(prototype_input, hvac_standards, building_type)
 
     system_to_space_map.each do |system|
 
