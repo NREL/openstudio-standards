@@ -2652,7 +2652,6 @@ module BTAP
             htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
 
             # Add DX or hydronic cooling coil
-            # TODO: set proper cooling DX COP when sizing data is available
             if(mua_cooling_type == "DX")
               clg_coil = BTAP::Resources::HVAC::Plant::add_onespeed_DX_coil(model,tpfc_clg_availability_sch)
             elsif(mua_cooling_type == "Hydronic")
@@ -3035,10 +3034,6 @@ module BTAP
             # "baseboard_type": "Electric" and "Hot Water"
             # "chiller_type": "Scroll";"Centrifugal";""Screw";"Reciprocating"
             # "fan_type": "AF_or_BI_rdg_fancurve";"AF_or_BI_inletvanes";"fc_inletvanes";"var_speed_drive"  
-
-           
-           
-            
             
             always_on = model.alwaysOnDiscreteSchedule
 
@@ -3072,30 +3067,6 @@ module BTAP
                 sizingSystem.setCentralHeatingDesignSupplyAirTemperature(13.0)
 
                 fan = OpenStudio::Model::FanVariableVolume.new(model,always_on)
-                fan.setFanPowerMinimumFlowRateInputMethod("Fraction")
-                fan.setFanPowerCoefficient4(0.0)
-                fan.setFanPowerCoefficient5(0.0)
-                if(fan_type == "AF_or_BI_rdg_fancurve")
-                  fan.setFanPowerMinimumFlowFraction(0.47)
-                  fan.setFanPowerCoefficient1(0.227143)
-                  fan.setFanPowerCoefficient2(1.178929)
-                  fan.setFanPowerCoefficient3(-0.41071)
-                elsif(fan_type == "AF_or_BI_inletvanes")
-                  fan.setFanPowerMinimumFlowFraction(0.35)
-                  fan.setFanPowerCoefficient1(0.584345)
-                  fan.setFanPowerCoefficient2(-0.57917)
-                  fan.setFanPowerCoefficient3(0.970238)
-                elsif(fan_type == "fc_inletvanes")
-                  fan.setFanPowerMinimumFlowFraction(0.25)
-                  fan.setFanPowerCoefficient1(0.339619)
-                  fan.setFanPowerCoefficient2(-0.84814)
-                  fan.setFanPowerCoefficient3(1.495671)
-                elsif(fan_type == "var_speed_drive")
-                  fan.setFanPowerMinimumFlowFraction(0.20)
-                  fan.setFanPowerCoefficient1(0.00153028)
-                  fan.setFanPowerCoefficient2(0.00520806)
-                  fan.setFanPowerCoefficient3(1.0086242)
-                end
 
                 if(heating_coil_type == "Hot Water")
                   htg_coil = OpenStudio::Model::CoilHeatingWater.new(model,always_on)
