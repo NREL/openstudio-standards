@@ -1439,8 +1439,13 @@ module BTAP
           return false
         end
         
-        unless ["Electric", "Gas", "DX"].include?(heating_coil_types_sys3)
-          BTAP::runner_register("ERROR","heating_coil_types_sys4and6 = #{heating_coil_types_sys4and6}",runner)
+        unless ["Electric", "Gas", "DX"].include?(heating_coil_types_sys4)
+          BTAP::runner_register("ERROR","heating_coil_types_sys4 = #{heating_coil_types_sys4}",runner)
+          return false
+        end
+        
+        unless ["Hot Water", "Electric"].include?(heating_coil_types_sys6)
+          BTAP::runner_register("ERROR","heating_coil_types_sys6 = #{heating_coil_types_sys6}",runner)
           return false
         end
         
@@ -1628,7 +1633,11 @@ module BTAP
                   end
                   
                   #default it to ideal air system. 
-                  thermal_zone.setUseIdealAirLoads(true)
+                  #thermal_zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+                  #thermal_zone_ideal_loads.addToThermalZone(thermal_zone)
+                  
+                  # thermal_zone.setUseIdealAirLoads(true) - this uses HVACTemplateObject
+                  
                   #store zone in 
                   system_zone_array[system_number] << thermal_zone
 
@@ -1643,30 +1652,36 @@ module BTAP
         unless use_ideal_air_loads == true
           
 
-          puts boiler_fueltype
-
+          puts "boiler_fueltype = #{boiler_fueltype}"                     
+           
           system_zone_array.each_with_index do |zones,system_index|
             #skip if no thermal zones for this system.
             next if zones.size == 0
             puts "Zone Names for System #{system_index}"
+            puts "system_index = #{system_index}"
             case system_index
+            when 0 
+              zones.each do |thermal_zone|
+              thermal_zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+              thermal_zone_ideal_loads.addToThermalZone(thermal_zone)
+              end
             when 1
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(model, zones, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type)
+              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(model, zones, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type)            
             when 2
               BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(model, zones, boiler_fueltype, chiller_type, mua_cooling_type)
             when 3
               BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(model, zones, boiler_fueltype, heating_coil_types_sys3, baseboard_type)
             when 4
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys4(model, zones, boiler_fueltype, heating_coil_types_sys4and6, baseboard_type)
+              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys4(model, zones, boiler_fueltype, heating_coil_types_sys4, baseboard_type)
             when 5
               BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys5(model, zones, boiler_fueltype, chiller_type, mua_cooling_type)
             when 6
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(model, zones, boiler_fueltype, heating_coil_types_sys6, baseboard_type, chiller_type, fan_type)
+              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(model, zones, boiler_fueltype, heating_coil_types_sys6, baseboard_type, chiller_type, fan_type)              
             when 7
               BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(model, zones, boiler_fueltype, chiller_type, mua_cooling_type)
             end
           end
-        end
+        end               
       end
     end
   end #Compliance

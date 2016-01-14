@@ -1474,10 +1474,15 @@ class OpenStudio::Model::AirLoopHVAC
     self.thermalZones.each do |zone|
       v_ou += zone.outdoor_airflow_rate
     end
+    
+    # for debugging
+    puts "v_ou = #{v_ou}"
+    
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
     
     # System primary airflow rate (whether autosized or hard-sized)
     v_ps = 0.0
+            
     if self.autosizedDesignSupplyAirFlowRate.is_initialized
       v_ps = self.autosizedDesignSupplyAirFlowRate.get
     else

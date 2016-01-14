@@ -57,8 +57,11 @@ class OpenStudio::Model::Model
       BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
       #BTAP::runner_register("INFO", "Applying NECB HVAC", runner)
       #use_ideal_air_loads = false
+      #TO DO: Need to pass heating coil type, baseboard type etc to necb_autozone_and_autosystem - right now, set in routine
+      # Will these come from template inputs in spreadsheet?
       BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self,runner=nil) 
-      
+      self.set_sizing_parameters(building_type, building_vintage)
+      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
       
       
      
@@ -69,8 +72,7 @@ class OpenStudio::Model::Model
       #      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
       #      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
       #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)      
-      #      self.set_sizing_parameters(building_type, building_vintage)
-      #      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+
       #      
       
     else
@@ -105,17 +107,22 @@ class OpenStudio::Model::Model
       return false
     end
 
+    
+    # THIS IS THE CODE THAT IS CAUSING ERROR- STOPPED HERE
     # If there are any multizone systems, set damper positions
     # and perform a second sizing run
     has_multizone_systems = false
+    
+    
     self.getAirLoopHVACs.sort.each do |air_loop|
+            
       if air_loop.is_multizone_vav_system
         self.apply_multizone_vav_outdoor_air_sizing
         if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
           return false
         end
         break
-      end
+      end            
     end
 
     # Apply the prototype HVAC assumptions
@@ -1095,6 +1102,9 @@ class OpenStudio::Model::Model
         clg = 1.0
         htg = 1.0
       end
+    when 'NECB 2011'
+      clg = 1.3
+      htg = 1.3
     end 
   
     sizing_params = self.getSizingParameters
@@ -1103,6 +1113,10 @@ class OpenStudio::Model::Model
   
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{htg} for heating and #{clg} for cooling.")
   
+    # for debugging
+    puts "end set_sizing_parameters"
+    
+    
   end
   
   def applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)

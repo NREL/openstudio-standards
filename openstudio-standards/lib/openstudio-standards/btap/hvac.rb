@@ -2323,6 +2323,7 @@ module BTAP
           #To do: must unravel story vav assignment. 
           def self.assign_zones_sys6( model ,zones,  boiler_fueltype, heating_coil_type, baseboard_type, chiller_type, fan_type )
             self.add_sys6_multi_zone_built_up_system_with_baseboard_heating( model ,zones,  boiler_fueltype, heating_coil_type, baseboard_type, chiller_type, fan_type )
+            puts "end assign_zones_sys6"
           end
           
           def self.assign_zones_sys7(model, zones, boiler_fueltype,chiller_type,mua_cooling_type)
@@ -3035,6 +3036,10 @@ module BTAP
             # "chiller_type": "Scroll";"Centrifugal";""Screw";"Reciprocating"
             # "fan_type": "AF_or_BI_rdg_fancurve";"AF_or_BI_inletvanes";"fc_inletvanes";"var_speed_drive"  
 
+           
+           
+            
+            
             always_on = model.alwaysOnDiscreteSchedule
 
             #Create hot water loop if baseboard or heating coil type is hydronic
@@ -3169,6 +3174,9 @@ module BTAP
               end
             end # next story
 
+            #for debugging
+            puts "end add_sys6_multi_zone_built_up_with_baseboard_heating"
+            
             return true
 
           end

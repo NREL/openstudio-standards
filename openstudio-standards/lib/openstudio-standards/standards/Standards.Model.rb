@@ -35,8 +35,9 @@ class OpenStudio::Model::Model
     
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
      
-    # Multi-zone VAV outdoor air sizing
+    # Multi-zone VAV outdoor air sizing  
     self.getAirLoopHVACs.sort.each {|obj| obj.apply_multizone_vav_outdoor_air_sizing(self.template)}  
+    
 
   end
   
