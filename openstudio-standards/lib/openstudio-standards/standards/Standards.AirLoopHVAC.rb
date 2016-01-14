@@ -1475,9 +1475,6 @@ class OpenStudio::Model::AirLoopHVAC
       v_ou += zone.outdoor_airflow_rate
     end
     
-    # for debugging
-    puts "v_ou = #{v_ou}"
-    
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
     
     # System primary airflow rate (whether autosized or hard-sized)
