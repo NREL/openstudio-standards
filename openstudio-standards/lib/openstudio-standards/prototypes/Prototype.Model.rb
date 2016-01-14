@@ -52,8 +52,9 @@ class OpenStudio::Model::Model
       self.modify_surface_convection_algorithm(building_vintage)
       self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)           #set "dummy construction set
-      BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR
-      BTAP::Geometry::match_surfaces(self)                                    # set surface if they are out of whack.
+      #BTAP::Geometry::intersect_surfaces(self)                                
+      #BTAP::Geometry::match_surfaces(self)  
+      BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR                                  
       BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
       #BTAP::runner_register("INFO", "Applying NECB HVAC", runner)
       #use_ideal_air_loads = false

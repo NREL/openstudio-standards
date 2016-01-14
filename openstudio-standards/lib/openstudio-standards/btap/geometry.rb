@@ -2112,6 +2112,16 @@ module BTAP
       end
       return model
     end
+
+    def self.intersect_surfaces(model)
+      model.getSpaces.each do |space1|
+        model.getSpaces.each do |space2|
+          space1.intersectSurfaces(space2)
+        end
+      end
+      return model
+    end    
+    
     # This method will scale the model
     # @param model [OpenStudio::Model::Model] the model object.
     # @param x [Float] x scalar multiplier.
