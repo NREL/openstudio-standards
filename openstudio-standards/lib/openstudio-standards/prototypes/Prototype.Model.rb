@@ -64,12 +64,6 @@ class OpenStudio::Model::Model
       self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
       
-      
-     
-      # TO DO:      
- 
-      #      self.create_thermal_zones(building_type,building_vintage, climate_zone)
-      #      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)  # note exhaust fan schedule for * common spaces.
       #      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
       #      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
       #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)      
