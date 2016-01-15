@@ -36,6 +36,10 @@ class OpenStudio::Model::SpaceType
     # lookup space type properties
     space_type_properties = self.model.find_object(@standards["space_types"], search_criteria)
 
+    if space_type_properties.nil?
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
+    end
+    
     return space_type_properties
 
   end
