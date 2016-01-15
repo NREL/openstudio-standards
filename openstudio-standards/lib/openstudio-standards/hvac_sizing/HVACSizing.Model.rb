@@ -49,6 +49,9 @@ class OpenStudio::Model::Model
   require_relative 'HVACSizing.FanVariableVolume'
   require_relative 'HVACSizing.FanOnOff'  
 
+  # Heating and cooling fuel methods
+  require_relative 'HVACSizing.HeatingCoolingFuels'
+  
   # A helper method to run a sizing run and pull any values calculated during
   # autosizing back into the self.
   def runSizingRun(sizing_run_dir = "#{Dir.pwd}/SizingRun")
