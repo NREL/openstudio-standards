@@ -10,7 +10,7 @@ class OpenStudio::Model::ScheduleRuleset
   # return [Double] The total number of full load hours for this schedule.
   def annual_equivalent_full_load_hrs()
 
-    OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating total annual EFLH for schedule: #{self.name}")
+    #OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating total annual EFLH for schedule: #{self.name}")
 
     # Define the start and end date
     year_start_date = nil
@@ -29,9 +29,9 @@ class OpenStudio::Model::ScheduleRuleset
     # Get the ordered list of all the day schedules
     # that are used by this schedule ruleset
     day_schs = self.getDaySchedules(year_start_date, year_end_date)
-    OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "***Day Schedules Used***")
+    #OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "***Day Schedules Used***")
     day_schs.uniq.each do |day_sch|
-      OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{day_sch.name.get}")
+      #OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{day_sch.name.get}")
     end
     
     # Get a 365-value array of which schedule is used on each day of the year,
@@ -71,7 +71,7 @@ class OpenStudio::Model::ScheduleRuleset
       else
         day_sch = schedule_index_to_day[sch_index]
       end
-      OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating EFLH for: #{day_sch.name}")
+      #OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating EFLH for: #{day_sch.name}")
       
       # Determine the full load hours for just one day
       daily_flh = 0
@@ -86,13 +86,13 @@ class OpenStudio::Model::ScheduleRuleset
         time_seconds = times[i].seconds
         time_decimal = (time_days*24) + time_hours + (time_minutes/60) + (time_seconds/3600)
         duration_of_value = time_decimal - previous_time_decimal
-        OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Value of #{values[i]} for #{duration_of_value} hours")
+        #OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Value of #{values[i]} for #{duration_of_value} hours")
         daily_flh += values[i]*duration_of_value
         previous_time_decimal = time_decimal
       end
 
-      OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{daily_flh.round(2)} EFLH per day")
-      OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Used #{number_of_days_sch_used} days per year")
+      #OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{daily_flh.round(2)} EFLH per day")
+      #OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Used #{number_of_days_sch_used} days per year")
 
       # Multiply the daily EFLH by the number
       # of days this schedule is used per year
