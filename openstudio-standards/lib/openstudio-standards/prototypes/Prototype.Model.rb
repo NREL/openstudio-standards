@@ -56,8 +56,6 @@ class OpenStudio::Model::Model
       #BTAP::Geometry::match_surfaces(self)  
       BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR                                  
       BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
-      #BTAP::runner_register("INFO", "Applying NECB HVAC", runner)
-      #use_ideal_air_loads = false
       #TO DO: Need to pass heating coil type, baseboard type etc to necb_autozone_and_autosystem - right now, set in routine
       # Will these come from template inputs in spreadsheet?
       BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self,runner=nil) 
