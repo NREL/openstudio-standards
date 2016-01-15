@@ -533,7 +533,7 @@ class OpenStudio::Model::Model
 
   def add_door_infiltration(building_vintage,climate_zone)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
-    unless building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'DOE Ref Pre-1980'
+    unless building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'NECB 2011'
       dining_space = self.getSpaceByName('Dining').get
       attic_space = self.getSpaceByName('Attic').get
       infiltration_diningdoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
@@ -554,7 +554,7 @@ class OpenStudio::Model::Model
           infiltration_per_zone_diningdoor = 0.389828222
           infiltration_diningdoor.setSchedule(add_schedule('RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
         end
-      elsif building_vintage == '90.1-2010' or '90.1-2013'
+      elsif building_vintage == '90.1-2010' or '90.1-2013' 
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C'
           infiltration_per_zone_diningdoor = 0.614474994
