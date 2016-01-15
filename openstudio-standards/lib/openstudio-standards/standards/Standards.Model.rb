@@ -51,9 +51,12 @@ class OpenStudio::Model::Model
     # Assign the standards to the model
     self.template = building_vintage
     self.climate_zone = climate_zone
-
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
+    # Assign building stories to spaces in the building
+    # where stories are not yet assigned.
+    self.assign_spaces_to_stories
+    
     # Modify the internal loads in each space type, 
     # keeping user-defined schedules.
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Changing Lighting and Ventilation Rates")
@@ -61,25 +64,31 @@ class OpenStudio::Model::Model
       space_type.set_internal_loads(building_vintage, false, true, false, false, true, false) 
     end
 
-=begin
-    self.apply_infiltration_standard
-    #self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
-    #self.modify_surface_convection_algorithm(building_vintage)
-    
-    self.add_constructions(lookup_building_type, building_vintage, climate_zone)
-    
-    self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)
-    self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
-    self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-    self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
-    self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
-    self.set_sizing_parameters(building_type, building_vintage)
-    self.yearDescription.get.setDayofWeekforStartDay('Sunday')
-
-    # Perform a sizing run
-    if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
+    # Add ideal loads to every zone and run
+    # a sizing run to determine heating/cooling loads,
+    # which will impact which zones go onto secondary
+    # HVAC systems.
+    self.getThermalZones.each do |zone|
+      zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
+      zone_ideal_loads.addToThermalZone(zone)
+    end
+    # Run sizing run
+    if self.runSizingRun("#{sizing_run_dir}/SizingRunIdeal") == false
       return false
     end
+    # Remove ideal loads
+    self.getZoneHVACIdealLoadsAirSystems.each do |ideal|
+      ideal.remove
+    end
+    
+    # Determine the baseline HVAC system type
+    self.performance_rating_method_baseline_hvac(building_vintage)
+
+=begin    
+    # Run sizing run
+    if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
+      return false
+    end    
 
     # If there are any multizone systems, set damper positions
     # and perform a second sizing run
@@ -94,37 +103,9 @@ class OpenStudio::Model::Model
       end
     end
 
-    # Apply the prototype HVAC assumptions
-    # which include sizing the fan pressure rises based
-    # on the flow rate of the system.
-    self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
-
     # Apply the HVAC efficiency standard
     self.applyHVACEfficiencyStandard
-
-    # Add daylighting controls per standard
-    # only four zones in large hotel have daylighting controls
-    # todo: YXC to merge to the main function
-    if building_type != "LargeHotel"
-      self.addDaylightingControls
-    else
-      self.add_daylighting_controls(building_vintage)
-    end
-
-    if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant"
-      self.update_exhaust_fan_efficiency(building_vintage)
-      self.update_waterheater_loss_coefficient(building_vintage)
-    end
-
-    if building_type == "MidriseApartment"
-      self.update_waterheater_loss_coefficient(building_vintage)
-    end
-
-    # Add output variables for debugging
-    if debug
-      self.request_timeseries_outputs
-    end
-=end
+=end   
      
     model_status = 'final'
     self.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
@@ -132,6 +113,7 @@ class OpenStudio::Model::Model
     return true
 
   end  
+
 =begin
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.  
@@ -216,22 +198,726 @@ class OpenStudio::Model::Model
   # For spaces with no space type, assume nonresidential.
   #
   # @return [Hash] keys are 'residential' and 'nonresidential', units are m^2
-  def residential_and_nonresidential_floor_areas
+  def residential_and_nonresidential_floor_areas(standard)
 
     res_area_m2 = 0
     nonres_area_m2 = 0
     self.getSpaces.each do |space|
-      if space.is_residential
+      if space.is_residential(standard)
         res_area_m2 += space.floorArea
       else
         nonres_area_m2 += space.floorArea
       end
     end
       
-    return {residential => res_area_m2, nonresidential => nonres_area_m2}
+    return {'residential' => res_area_m2, 'nonresidential' => nonres_area_m2}
   
   end
 
+  # Determine the number of residential and nonresidential stories.
+  # If a story has both types, add it to both counts.
+  #
+  # @return [Hash] keys are 'residential' and 'nonresidential'
+  def residential_and_nonresidential_story_counts(standard)
+    
+    res_stories = 0
+    nonres_stories = 0
+    self.getBuildingStorys.each do |story|
+      has_res = false
+      has_nonres = false
+      story.spaces.each do |space|
+        if space.is_residential(standard)
+          has_res = true
+        else
+          has_nonres = true
+        end
+      end
+      res_stories += 1 if has_res
+      nonres_stories += 1 if has_nonres
+      if has_res && has_nonres
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Story #{story.name} is mixed use (residential and nonresidential).")
+      end
+    end
+
+    return {'residential' => res_stories, 'nonresidential' => nonres_stories} 
+
+  end  
+  
+  # Determine the baseline HVAC system for the
+  # performance rating method.
+  #
+  def performance_rating_method_baseline_hvac(standard)
+  
+    # Get the residential and nonresidential
+    # fossil and electric zones and their areas
+    res_fossil = {'area_ft2'=>0, 'type'=>'residential', 'fuel'=>'fossil', 'zones'=>[]}
+    res_elec = {'area_ft2'=>0, 'type'=>'residential', 'fuel'=>'electric', 'zones'=>[]}
+    nonres_fossil = {'area_ft2'=>0, 'type'=>'nonresidential', 'fuel'=>'fossil', 'zones'=>[]}
+    nonres_elec = {'area_ft2'=>0, 'type'=>'nonresidential', 'fuel'=>'electric', 'zones'=>[]}
+    [res_fossil, res_elec, nonres_fossil, nonres_elec].each do |data|
+      # If the zone meets the criteria, add it
+      self.getThermalZones.each do |zone|
+        area_m2 = zone.floorArea
+        area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+        # Residential Fossil
+        if data['type'] == 'residential' && data['fuel'] == 'fossil'
+          if zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
+            data['area_ft2'] += area_ft2
+            data['zones'] << zone
+          end
+        # Residential Electric
+        elsif data['type'] == 'residential' && data['fuel'] == 'electric'
+          if zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
+            data['area_ft2'] += area_ft2
+            data['zones'] << zone
+          end
+        # Nonresidential Fossil
+        elsif data['type'] == 'nonresidential' && data['fuel'] == 'fossil'
+          if !zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
+            data['area_ft2'] += area_ft2
+            data['zones'] << zone
+          end
+        # Nonresidential Fossil
+        elsif data['type'] == 'nonresidential' && data['fuel'] == 'fossil'
+          if !zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
+            data['area_ft2'] += area_ft2
+            data['zones'] << zone
+          end
+        end
+      end
+    end
+      
+    # Determine the number of stories of each type
+    stories = self.residential_and_nonresidential_story_counts(standard)
+    res_stories = stories['residential']
+    nonres_stories = stories['nonresidential']       
+
+    res_fossil['stories'] = res_stories
+    res_elec['stories'] = res_stories
+    nonres_fossil['stories'] = nonres_stories
+    nonres_elec['stories'] = nonres_stories
+     
+    # Determine the dominant area type.
+    # In the event of a tie, choose nonresidential.
+    dom_type = nil
+    if res_fossil['area_ft2'] + res_elec['area_ft2'] > nonres_fossil['area_ft2'] + nonres_elec['area_ft2']
+      dom_type = 'residential'
+    else
+      dom_type = 'nonresidential'
+    end
+  
+    # Determine the dominant fuel type
+    # in the dominant area type.
+    # In the event of a tie, choose fossil.
+    dom_fuel = nil
+    if dom_type == 'residential'
+      if res_elec['area_ft2'] > res_fossil['area_ft2']
+        dom_fuel = 'electric'
+      else
+        dom_fuel = 'fossil'
+      end
+    elsif dom_type == 'nonresidential'
+      if nonres_elec['area_ft2'] > nonres_fossil['area_ft2']
+        dom_fuel = 'electric'
+      else
+        dom_fuel = 'fossil'
+      end
+    end
+    
+    # Categorize the hashes
+    dom_type_dom_fuel = nil
+    dom_type_sec_fuel = nil
+    sec_type_dom_fuel = nil
+    sec_type_sec_fuel = nil
+    [res_fossil, res_elec, nonres_fossil, nonres_elec].each do |data|
+      if data['type'] == dom_type && data['fuel'] == dom_fuel
+        dom_type_dom_fuel = data
+      elsif data['type'] == dom_type && data['fuel'] != dom_fuel
+        dom_type_sec_fuel = data
+      elsif data['type'] != dom_type && data['fuel'] == dom_fuel
+        sec_type_dom_fuel = data    
+      elsif data['type'] != dom_type && data['fuel'] != dom_fuel
+        sec_type_sec_fuel = data
+      end
+    end
+    
+    # Define the minimum area for the 
+    # exception that allows a different
+    # system type in part of the building.
+    # This is common across different versions
+    # of 90.1
+    exception_min_area_ft2 = nil
+    case standard
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      exception_min_area_ft2 = 20000
+    end    
+
+    # There are four possible categories of data
+    # dom is the dominant zones, or zones that don't fall into an exception
+    # exc_fuel is any group of zones that meet the fuel type exception
+    # exc_occ is any group of zones that meet the occ type exception
+    # exc_fuel_occ is any group of zones that meet both the fuel and occ typ exceptions
+    dom = dom_type_dom_fuel
+    exc_fuel = nil
+    exc_occ = nil
+    exc_fuel_occ = nil
+    # Exception for fuel type
+    if dom_type_sec_fuel['area_ft2'] > exception_min_area_ft2
+      exc_fuel = dom_type_sec_fuel
+    else
+      dom['area_ft2'] += dom_type_sec_fuel['area_ft2']
+      dom['zones'] += dom_type_sec_fuel['zones']
+    end
+    # Exception for occupancy type
+    if sec_type_dom_fuel['area_ft2'] > exception_min_area_ft2
+      exc_fuel = sec_type_dom_fuel
+    else
+      dom['area_ft2'] += sec_type_dom_fuel['area_ft2']
+      dom['zones'] += sec_type_dom_fuel['zones']
+    end    
+    # Exception for fuel type and occupancy type
+    if sec_type_sec_fuel['area_ft2'] > exception_min_area_ft2
+      exc_fuel = sec_type_sec_fuel
+    else
+      dom['area_ft2'] += sec_type_sec_fuel['area_ft2']
+      dom['zones'] += sec_type_sec_fuel['zones']
+    end     
+
+    # Determine the baseline type for each of
+    # the possible groups of zones.
+    [dom, exc_fuel, exc_occ, exc_fuel_occ].each do |data|
+      # Skip zone groups that don't exist
+      # (if that exception was not triggered)
+      next if data.nil?
+      # Determine the primary baseline system type
+      system_type = performance_rating_method_baseline_system_type(standard, 
+                                                                data['type'], 
+                                                                data['fuel'],
+                                                                data['area_ft2'],
+                                                                data['stories'])
+                                                                
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type} for #{data['zones'].size} zones.")
+      data['zones'].each do |zone|
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "---#{zone.name}")
+      end
+      
+      # Add the system type for these zones
+      self.add_performance_rating_method_baseline_system(standard, system_type, data['zones'])
+    
+    end
+    
+  
+  end
+  
+  # Determine the baseline system type given the
+  # inputs.  Logic is different for different standards.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param area_type [String] Valid choices are residential,
+  # nonresidential, and heatedonly
+  # @param heating_fuel_type [String] Valid choices are
+  # electric and fossil
+  # @param area_ft2 [Double] Area in ft^2
+  # @param num_stories [Integer] Number of stories
+  # @return [String] The system type.  Possibilities are
+  # PTHP, PTAC, PSZ_HP, PSZ_AC, PVAV_PFP_Boxes, PVAV_Reheat
+  # VAV_PFP_Boxes, VAV_Reheat, Electric_Furnace, Gas_Furnace
+  def performance_rating_method_baseline_system_type(standard, area_type, heating_fuel_type, area_ft2, num_stories)
+  
+    system_type = nil
+  
+    case standard
+    when '90.1-2004', '90.1-2007', '90.1-2010' 
+      # Set the limit differently for
+      # different codes
+      limit_ft2 = 25000
+      limit_ft2 = 75000 if standard == '90.1-2004'
+
+      case area_type
+      when 'residential'
+        if heating_fuel_type == 'electric'
+          system_type = 'PTHP' # sys 2
+        else
+          system_type = 'PTAC' # sys 1
+        end
+      when 'nonresidential'
+        # nonresidential and 3 floors or less and <75,000 ft2
+        if num_stories <= 3 && area_ft2 < limit_ft2
+          if heating_fuel_type == 'electric'
+            system_type = 'PSZ_HP' # sys 4
+          else
+            system_type = 'PSZ_AC' # sys 3
+          end
+        # nonresidential and 4 or 5 floors or 5 floors or less and 75,000 ft2 to 150,000 ft2
+        elsif ( ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000)) )
+          if heating_fuel_type == 'electric'
+            system_type = 'PVAV_PFP_Boxes' # sys 6
+          else
+            system_type = 'PVAV_Reheat' # sys 5
+          end
+        # nonresidential and more than 5 floors or >150,000 ft2
+        elsif (num_stories >= 5 || area_ft2 > 150000)
+          if heating_fuel_type == 'electric'
+            system_type = 'VAV_PFP_Boxes' # sys 8
+          else
+            system_type = 'VAV_Reheat' # sys 7
+          end
+        end
+      when 'heatedonly'
+        if heating_fuel_type == 'electric'
+          sys_num = 'Electric_Furnace' # sys 9
+        else
+          sys_num = 'Gas_Furnace' # sys 10
+        end
+      end
+      
+    when '90.1-2013'
+    
+      limit_ft2 = 25000
+    
+      # Fuel type is determined based on climate zone
+      # for 90.1-2013
+      case climate_zone
+      when 'ASHRAE 169-2006-1A',
+            'ASHRAE 169-2006-2A',
+            'ASHRAE 169-2006-3A'
+        heating_fuel_type = 'electric'
+      else
+        heating_fuel_type = 'electric'
+      end
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Heating fuel is #{heating_fuel_type} for 90.1-2013, climate zone #{climate_zone}.  This is independent of the heating fuel type in the proposed building.")
+    
+      case area_type
+      when 'residential'
+        if heating_fuel_type == 'electric'
+          system_type = 'PTHP' # sys 2
+        else
+          system_type = 'PTAC' # sys 1
+        end
+      when 'nonresidential'
+        # nonresidential and 3 floors or less and <75,000 ft2
+        if num_stories <= 3 && area_ft2 < limit_ft2
+          if heating_fuel_type == 'electric'
+            system_type = 'PSZ_HP' # sys 4
+          else
+            system_type = 'PSZ_AC' # sys 3
+          end
+        # nonresidential and 4 or 5 floors or 5 floors or less and 75,000 ft2 to 150,000 ft2
+        elsif ( ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000)) )
+          if heating_fuel_type == 'electric'
+            system_type = 'PVAV_PFP_Boxes' # sys 6
+          else
+            system_type = 'PVAV_Reheat' # sys 5
+          end
+        # nonresidential and more than 5 floors or >150,000 ft2
+        elsif (num_stories >= 5 || area_ft2 > 150000)
+          if heating_fuel_type == 'electric'
+            system_type = 'VAV_PFP_Boxes' # sys 8
+          else
+            system_type = 'VAV_Reheat' # sys 7
+          end
+        end
+      when 'heatedonly'
+        if heating_fuel_type == 'electric'
+          sys_num = 'Electric_Furnace' # sys 9
+        else
+          sys_num = 'Gas_Furnace' # sys 10
+        end
+      end
+
+    end
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type} for #{standard}, #{area_type}, #{heating_fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
+  
+    return system_type
+    
+  end
+  
+  # Add the specified baseline system type to the
+  # specified zons based on the specified standard.
+  # For some multi-zone system types, the standards require
+  # identifying zones whose loads or schedules
+  # are outliers and putting these systems on separate
+  # single-zone systems.  This method does that.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param area_type [String] Valid choices are residential,
+  # nonresidential, and heatedonly
+  # @param heating_fuel_type [String] Valid choices are
+  # electric and fossil
+  # @param area_ft2 [Double] Area in ft^2
+  # @param num_stories [Integer] Number of stories
+  # @param system_type [String] The system type.  Valid choices are 
+  # PTHP, PTAC, PSZ_HP, PSZ_AC, PVAV_PFP_Boxes, PVAV_Reheat
+  # VAV_PFP_Boxes, VAV_Reheat, Electric_Furnace, Gas_Furnace,
+  # which are also returned by the method
+  # OpenStudio::Model::Model.performance_rating_method_baseline_system_type.
+  def add_performance_rating_method_baseline_system(standard, system_type, zones)
+  
+    case standard
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+     
+      case system_type
+      when 'VAV_Reheat', 'VAV_PFP_Boxes' # TODO remove; temporary for testing
+      
+        # Retrieve the existing hot water loop
+        # or add a new one if necessary.
+        hot_water_loop = nil
+        if self.getPlantLoopByName('Hot Water Loop').is_initialized
+          hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
+        else
+          hot_water_loop = self.add_hw_loop('NaturalGas')
+        end
+
+        # Retrieve the existing chilled water loop
+        # or add a new one if necessary.
+        chilled_water_loop = nil
+        if self.getPlantLoopByName('Chilled Water Loop').is_initialized
+          chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
+        else
+          condenser_water_loop = self.add_cw_loop()
+          chilled_water_loop = self.add_chw_loop(standard,
+                                                'const_pri_var_sec',
+                                                'WaterCooled',
+                                                nil,
+                                                'Rotary Screw',
+                                                175.0,
+                                                condenser_water_loop)
+        end
+        
+        # Separate the zones by story
+        story_zone_lists = []
+        self.getBuildingStorys.each do |story|
+          
+          # Get all the spaces on this story
+          spaces = story.spaces
+          
+          # Get all the thermal zones that serve these spaces
+          all_zones_on_story = []
+          spaces.each do |space|
+            if space.thermalZone.is_initialized
+              all_zones_on_story << space.thermalZone.get
+            else
+              OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "Space #{space.name} has no thermal zone, it is not included in the simulation.")
+            end
+          end
+        
+          # Find zones in the list that are on this story
+          zones_on_story = []
+          zones.each do |zone|
+            if all_zones_on_story.include?(zone)
+              zones_on_story << zone
+            end
+          end
+          
+          story_zone_lists << zones_on_story
+
+        end
+        
+        # For the array of zones on each story,
+        # separate the primary zones from the secondary zones.
+        # Add the baseline system type to the primary zones
+        # and add the suplemental system type to the secondary zones.
+        story_zone_lists.each do |zones|
+        
+          # Differentiate primary and secondary zones
+          pri_sec_zone_lists = self.differentiate_primary_secondary_thermal_zones(zones)
+          pri_zones = pri_sec_zone_lists['primary']
+          sec_zones = pri_sec_zone_lists['secondary']
+          
+          # Add an VAV for the primary zones
+          story_name = zones[0].spaces[0].buildingStory.get.name.get
+          self.add_vav(standard, 
+                      nil, 
+                      hot_water_loop, 
+                      chilled_water_loop,
+                      pri_zones,
+                      nil,
+                      nil,
+                      0.62,
+                      0.9,
+                      OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+          
+          # Add a PSZ_AC for each secondary zone
+          # Creates a PSZ-AC system for each zone and adds it to the model.
+          self.add_psz_ac(standard, 
+                      nil, 
+                      nil, 
+                      nil,
+                      sec_zones,
+                      nil,
+                      nil,
+                      'DrawThrough', 
+                      'ConstantVolume',
+                      'NaturalGas',
+                      'NaturalGas',
+                      'Single Speed DX AC',
+                      building_type=nil)
+
+      end
+ 
+    
+      end
+    
+    end
+
+  end
+  
+  # Determine which of the zones
+  # should be served by the primary HVAC system.
+  # First, eliminate zones that differ by more
+  # than 40 full load hours per week.  In this case,
+  # lighting schedule is used as the proxy for operation
+  # instead of occupancy to avoid accidentally removing
+  # transition spaces.  Second, eliminate zones whose
+  # heating or cooling loads differ from the 
+  # area-weighted average of all other zones
+  # on the system by more than 10 Btu/hr*ft^2.
+  #
+  # @todo Improve load-based exception algorithm.
+  # Current algorithm is faithful to 90.1, but can
+  # lead to nonsensical results in some cases.
+  # @return [Hash] A hash of two arrays of ThermalZones,
+  # where the keys are 'primary' and 'secondary'
+  def differentiate_primary_secondary_thermal_zones(zones)
+    
+    # Determine the operational hours (proxy is annual
+    # full load lighting hours) for all zones
+    zone_data_1 = []
+    zones.each do |zone|    
+      data = {}
+      data['zone'] = zone
+      # Get the area
+      area_ft2 = OpenStudio.convert(zone.floorArea, 'm^2', 'ft^2').get
+      data['area_ft2'] = area_ft2      
+      #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "#{zone.name}")
+      zone.spaces.each do |space|
+        #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "***#{space.name}")
+        # Get all lights from either the space
+        # or the space type.
+        all_lights = []
+        all_lights += space.lights
+        if space.spaceType.is_initialized
+          all_lights += space.spaceType.get.lights
+        end
+        # Base the annual operational hours
+        # on the first lights schedule with hours
+        # greater than zero.
+        ann_op_hrs = 0
+        all_lights.sort.each do |lights|
+          #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "******#{lights.name}")
+          # Get the fractional lighting schedule
+          lights_sch = lights.schedule
+          full_load_hrs = 0.0
+          # Skip lights with no schedule
+          next if lights_sch.empty?
+          lights_sch = lights_sch.get
+          if lights_sch.to_ScheduleRuleset.is_initialized 
+            lights_sch = lights_sch.to_ScheduleRuleset.get
+            full_load_hrs = lights_sch.annual_equivalent_full_load_hrs
+            if full_load_hrs > 0
+              ann_op_hrs = full_load_hrs
+              break # Stop after the first schedule with more than 0 hrs
+            end
+          elsif lights_sch.to_ScheduleConstant.is_initialized
+            lights_sch = lights_sch.to_ScheduleConstant.get
+            full_load_hrs = lights_sch.annual_equivalent_full_load_hrs
+            if full_load_hrs > 0
+              ann_op_hrs = full_load_hrs
+              break # Stop after the first schedule with more than 0 hrs
+            end
+          end
+        end
+        wk_op_hrs = ann_op_hrs / 52.0
+        data['wk_op_hrs'] = wk_op_hrs
+        #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "******wk_op_hrs = #{wk_op_hrs.round}")
+
+      end
+      
+      zone_data_1 << data
+
+    end        
+
+    # Filter out any zones that operate differently by more
+    # than 40hrs/wk.  This will be determined by a difference of more
+    # than (40 hrs/wk * 52 wks/yr) = 2080 annual full load hrs.
+    zones_same_hrs = []
+    zone_data_1.each_with_index do |data, i|
+    
+      # Eliminate the data from this zone
+      other_zone_data_1 = Array.new(zone_data_1)
+      other_zone_data_1.delete_at(i)
+      
+      # Calculate the area-weighted
+      # average operating hours
+      area_hrs = 1
+      tot_area = 1
+      other_zone_data_1.each do |other_data|
+        area_hrs += other_data['area_ft2'] * other_data['wk_op_hrs']
+        tot_area += other_data['area_ft2']
+      end
+      avg_wk_op_hrs = area_hrs / tot_area
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name} average of #{avg_wk_op_hrs.round} hrs/wk for other zones on the system.")
+      
+      # Compare avg to this zone
+      wk_op_hrs = data['wk_op_hrs']
+      if wk_op_hrs < avg_wk_op_hrs - 40.0
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the weekly full load operating hrs of #{wk_op_hrs.round} hrs is more than 40 hrs lower than the average of #{avg_wk_op_hrs.round} hrs for other zones on the system, zone will not be attached to the primary system.")
+        next
+      elsif wk_op_hrs > avg_wk_op_hrs + 40.0
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the weekly full load operating hrs of #{wk_op_hrs.round} hrs is more than 40 hrs higher than the average of #{avg_wk_op_hrs.round} hrs for other zones on the system, zone will not be attached to the primary system.")
+        next
+      end
+    
+      # Operating hours are same
+      zones_same_hrs << data['zone']  
+    
+    end
+        
+    # Get the heating and cooling loads and areas for
+    # all remaining zones.
+    zone_data_2 = []
+    zones_same_hrs.each do |zone|    
+      data = {}
+      data['zone'] = zone
+      # Get the area
+      area_ft2 = OpenStudio.convert(zone.floorArea, 'm^2', 'ft^2').get
+      data['area_ft2'] = area_ft2
+      # Get the heating load
+      htg_load_w_per_m2 = zone.heatingDesignLoad
+      if htg_load_w_per_m2.is_initialized
+        htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get,'W/m^2','Btu/hr*ft^2').get
+        data['htg_load_btu_per_ft2'] = htg_load_btu_per_ft2
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, could not determine the design heating load.")
+      end
+      # Get the cooling load
+      clg_load_w_per_m2 = zone.coolingDesignLoad
+      if clg_load_w_per_m2.is_initialized
+        clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get,'W/m^2','Btu/hr*ft^2').get
+        data['clg_load_btu_per_ft2'] = clg_load_btu_per_ft2
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, could not determine the design cooling load.")
+      end
+      zone_data_2 << data
+    end    
+   
+    # Filter out any zones that are +/- 10 Btu/hr*ft^2 from the
+    # area-weighted average.
+    primary_zones = []
+    zone_data_2.each_with_index do |data, i|
+
+      # Eliminate the data from this zone
+      other_zone_data_2 = Array.new(zone_data_2)
+      other_zone_data_2.delete_at(i)
+      
+      # Calculate the area-weighted
+      # average heating and cooling loads    
+      htg_load_hrs = 0
+      clg_load_hrs = 0
+      area_hrs = 1
+      htg_area = 1
+      clg_area = 1
+      other_zone_data_2.each do |other_data|
+        # Don't include nil or zero loads in average
+        unless other_data['htg_load_btu_per_ft2'].nil? || other_data['htg_load_btu_per_ft2'] == 0.0
+          htg_load_hrs += other_data['area_ft2'] * other_data['htg_load_btu_per_ft2']
+          htg_area += other_data['area_ft2']
+        end
+        # Don't include nil or zero loads in average
+        unless other_data['clg_load_btu_per_ft2'].nil? || other_data['clg_load_btu_per_ft2'] == 0.0
+          clg_load_hrs += other_data['area_ft2'] * other_data['clg_load_btu_per_ft2']
+          clg_area += other_data['area_ft2']
+        end        
+      end
+      avg_htg_load_btu_per_ft2 = htg_load_hrs / htg_area
+      avg_clg_load_btu_per_ft2 = clg_load_hrs / clg_area
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name} heating = #{data['htg_load_btu_per_ft2'].round} Btu/hr*ft^2, average heating = #{avg_htg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones. Cooling = #{data['clg_load_btu_per_ft2'].round} Btu/hr*ft^2, average cooling = #{avg_clg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones.")
+    
+      # Filter on heating load
+      htg_load_btu_per_ft2 = data['htg_load_btu_per_ft2']
+      if htg_load_btu_per_ft2 < avg_htg_load_btu_per_ft2 - 10.0
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 is more than 10 Btu/hr*ft^2 lower than the average of #{avg_htg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones on the system, zone will be assigned a secondary system.")
+        next
+      elsif htg_load_btu_per_ft2 > avg_htg_load_btu_per_ft2 + 10.0
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 is more than 10 Btu/hr*ft^2 higher than the average of #{avg_htg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones on the system, zone will be assigned a secondary system.")
+        next
+      end
+      
+      # Filter on cooling load
+      clg_load_btu_per_ft2 = data['clg_load_btu_per_ft2']
+      if clg_load_btu_per_ft2 < avg_clg_load_btu_per_ft2 - 10.0
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the cooling load of #{clg_load_btu_per_ft2.round} Btu/hr*ft^2 is more than 10 Btu/hr*ft^2 lower than the average of #{avg_clg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones on the system, zone will be assigned a secondary system.")
+        next
+      elsif clg_load_btu_per_ft2 > avg_clg_load_btu_per_ft2 + 10.0
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the cooling load of #{clg_load_btu_per_ft2.round} Btu/hr*ft^2 is more than 10 Btu/hr*ft^2 higher than the average of #{avg_clg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones on the system, zone will be assigned a secondary system.")
+        next
+      end
+      
+      # It is a primary zone!
+      primary_zones << data['zone']
+      
+    end
+    
+    # Secondary zones are all other zones
+    secondary_zones = []
+    zones.each do |zone|
+      unless primary_zones.include?(zone)
+        secondary_zones << zone
+      end
+    end
+    
+    return {'primary'=>primary_zones, 'secondary'=>secondary_zones}
+  
+  end
+
+  # Assign each space in the model to a building story
+  # based on common z (height) values.  If no story  
+  # object is found for a particular height, create a new one
+  # and assign it to the space.  Does not assign a story
+  # to plenum spaces.
+  #
+  # @return [Bool] returns true if successful, false if not.
+  def assign_spaces_to_stories()
+
+    # Make hash of spaces and minz values
+    sorted_spaces = {}
+    self.getSpaces.each do |space|
+      # Skip plenum spaces
+      next if space.is_plenum
+      
+      # loop through space surfaces to find min z value
+      z_points = []
+      space.surfaces.each do |surface|
+        surface.vertices.each do |vertex|
+          z_points << vertex.z
+        end
+      end
+      minz = z_points.min + space.zOrigin
+      sorted_spaces[space] = minz
+    end
+
+    # Pre-sort spaces
+    sorted_spaces = sorted_spaces.sort{|a,b| a[1]<=>b[1]}
+
+    # Take the sorted list and assign/make stories
+    sorted_spaces.each do |space|
+      space_obj = space[0]
+      space_minz = space[1]
+      if space_obj.buildingStory.empty?
+
+        story = get_story_for_nominal_z_coordinate(space_minz)
+        space_obj.setBuildingStory(story)
+
+      end
+    end
+
+    return true
+    
+  end
+  
   # Creates a construction set with the construction types specified in the
   # Performance Rating Method (aka Appendix G aka LEED) and adds it to the model.
   # This method creates and adds the constructions and their materials as well.
@@ -1382,6 +2068,31 @@ class OpenStudio::Model::Model
 
   private
 
+  # Helper method to get the story object that
+  # cooresponds to a specific minimum z value.
+  # Makes a new story if none found at this height.
+  #
+  # @param minz [Double] the z value (height) of the
+  # desired story, in meters.
+  # @return [OpenStudio::Model::BuildingStory] the story
+  def get_story_for_nominal_z_coordinate(minz)
+
+    self.getBuildingStorys.each do |story|
+      z = story.nominalZCoordinate
+      if z.is_initialized
+        if minz == z.get
+          return story
+        end
+      end
+    end
+
+    story = OpenStudio::Model::BuildingStory.new(self)
+    story.setNominalZCoordinate(minz)
+    
+    return story
+    
+  end  
+  
   # Helper method to make a shortened version of a name
   # that will be readable in a GUI.
   def make_name(template, clim, building_type, spc_type)
