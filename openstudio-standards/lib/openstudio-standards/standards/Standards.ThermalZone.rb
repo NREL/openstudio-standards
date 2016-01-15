@@ -337,13 +337,13 @@ class OpenStudio::Model::ThermalZone
   # it will be assumed nonresidential.
   #
   # return [Bool] true if residential, false if nonresidential
-  def is_residential
+  def is_residential(standard)
   
     # Determine the respective areas
     res_area_m2 = 0
     nonres_area_m2 = 0
     self.spaces.each do |space|
-      if space.is_residential
+      if space.is_residential(standard)
         res_area_m2 += space.floorArea
       else
         nonres_area_m2 += space.floorArea
@@ -359,5 +359,44 @@ class OpenStudio::Model::ThermalZone
     return is_res
   
   end  
+ 
+  # Determine if the thermal zone is a Fossil Fuel, 
+  # Fossil/Electric Hybrid, and Purchased Heat zone.
+  # If not, it is an Electric or Other Zone.
+  # This is as-defined by 90.1 Appendix G.
+  #
+  # return [Bool] true if Fossil Fuel, 
+  # Fossil/Electric Hybrid, and Purchased Heat zone, 
+  # false if Electric or Other.
+  def is_fossil_hybrid_or_purchased_heat
   
+    is_fossil = false
+  
+    # Get an array of the heating fuels
+    # used by the zone.  Possible values are
+    # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
+    # Coal, Diesel, Gasoline, DistrictHeating, 
+    # and SolarEnergy.
+    htg_fuels = self.heating_fuels
+    if htg_fuels.include?('NaturalGas') ||
+       htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil#1') ||
+       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('Coal') ||
+       htg_fuels.include?('Diesel') ||
+       htg_fuels.include?('Gasoline') ||
+       htg_fuels.include?('DistrictHeating')
+       
+      is_fossil = true
+    end
+  
+    #OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating fuels = #{htg_fuels.join(', ')}; is_fossil_hybrid_or_purchased_heat = #{is_fossil}.")
+  
+    return is_fossil
+  
+  end
+  
+  
+  
+ 
 end
