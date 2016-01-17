@@ -101,6 +101,96 @@ class OpenStudio::Model::AirLoopHVAC
  
   end  
 
+  # @todo Compare minimum flow fraction to OA requirement
+  # @todo Figure out how to split fan power between multiple fans
+  # if the proposed model had multiple fans (supply, return, exhaust, etc.)
+  def set_performance_rating_method_baseline_fan_power(template, standards)
+  
+    # Main AHU fans
+    
+    # Calculate the allowable fan motor bhp
+    # for the entire airloop.
+    allowable_fan_bhp = self.allowable_system_brake_horsepower(template)
+
+    # Divide the allowable power evenly between the fans
+    # on this airloop.
+    all_fans = self.supply_return_exhaust_relief_fans   
+    allowable_fan_bhp = allowable_fan_bhp / all_fans.size    
+    
+    # Set the motor efficiencies
+    # for all fans based on the calculated
+    # allowed brake hp.  Then calculate the allowable
+    # fan power for each fan and adjust
+    # the fan pressure rise accordingly
+    all_fans.each do |fan|
+      fan.set_standard_minimum_motor_efficiency(template, standards, allowable_fan_bhp)
+      allowable_power_w = allowable_fan_bhp * 746 / fan.motorEfficiency
+      fan.adjust_pressure_rise_to_meet_fan_power(allowable_power_w)
+    end
+
+    # Fan powered terminal fans
+    
+    # Determine the fan sizing flow rate, min flow rate,
+    # and W/cfm
+    sec_flow_frac = 0.5
+    min_flow_frac = 0.3
+    fan_efficacy_w_per_cfm = 0.35
+    # case template
+    # when
+    # else
+    # end
+    
+    # Adjust each terminal fan
+    self.demandComponents.each do |dc|
+      next if dc.to_AirTerminalSingleDuctParallelPIUReheat.empty?
+      pfp_term = dc.to_AirTerminalSingleDuctParallelPIUReheat.get
+      
+      # Get the maximum flow rate through the terminal
+      max_primary_air_flow_rate = nil
+      if pfp_term.autosizedMaximumPrimaryAirFlowRate.is_initialized
+        max_primary_air_flow_rate = pfp_term.autosizedMaximumPrimaryAirFlowRate.get
+      elsif pfp_term.maximumPrimaryAirFlowRate.is_initialized
+        max_primary_air_flow_rate = pfp_term.maximumPrimaryAirFlowRate.get
+      end
+      
+      # Set the max secondary air flow rate
+      max_sec_flow_rate_m3_per_s = max_primary_air_flow_rate * sec_flow_frac
+      pfp_term.setMaximumSecondaryAirFlowRate(max_sec_flow_rate_m3_per_s)
+      
+      # Set the minimum flow fraction
+      #TODO Also compare to min OA requirement
+      pfp_term.setMinimumPrimaryAirFlowFraction(min_flow_frac)
+    
+      # Set the fan efficacy
+      fan = pfp_term.fan.to_FanConstantVolume.get
+      fan_rise_pa = fan.pressureRise
+      fan_rise_in_wc = OpenStudio.convert(fan_rise_pa, "Pa", "inH_{2}O")
+      #runner.registerInfo("=> Pressure Rise = #{fan_rise_pa} Pa")
+
+      max_sec_flow_rate_cfm = OpenStudio.convert(max_sec_flow_rate_m3_per_s, "m^3/s", "ft^3/min").get
+      #runner.registerInfo("=> Maximum Fan Flow Rate = #{max_sec_flow_rate_cfm} m3/s")
+      #runner.registerInfo("=> Maximum Secondary Air Flow Rate = #{pfp_box.maximumSecondaryAirFlowRate.get} m3/s")      
+      
+      fan_efficiency = fan.fanEfficiency
+      #runner.registerInfo("=> Fan Total Efficiency = #{fan_efficiency}")
+
+      fan_power_w = fan_rise_pa * max_sec_flow_rate_m3_per_s / fan_efficiency
+      fan_efficacy_calc = fan_power_w / max_sec_flow_rate_m3_per_s
+      #runner.registerInfo("=> fan efficacy calculated = #{fan_efficacy_calc} W-s/m3")
+
+      fan_efficacy_w_per_m3_per_s = fan_efficacy_w_per_cfm * OpenStudio.convert(1, 'm^3/s', 'cfm').get
+
+      fan_rise_new_pa = fan_efficacy_w_per_m3_per_s * fan_efficiency
+      #runner.registerInfo("=> fan pressure rise new = #{fan_rise_new_pa} Pa")
+      fan.setPressureRise(fan_rise_new_pa)
+      fan_power_new_w = fan_rise_new_pa * max_sec_flow_rate_cfm / fan_efficiency
+      fan_efficacy_new_w_per_cfm = fan_power_new_w / max_sec_flow_rate_cfm
+      #runner.registerInfo("=> new fan efficacy calculated = #{fan_efficacy_ip_new.round(2)} W/CFM")    
+    
+    end
+  
+  end
+  
   # Determine the fan power limitation pressure drop adjustment
   # Per Table 6.5.3.1.1B
   #
@@ -116,11 +206,11 @@ class OpenStudio::Model::AirLoopHVAC
     if self.autosizedDesignSupplyAirFlowRate.is_initialized
       dsn_air_flow_m3_per_s = self.autosizedDesignSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, "m^3/s", "cfm").get
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
     else
       dsn_air_flow_m3_per_s = self.designSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, "m^3/s", "cfm").get
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
     end  
   
     # TODO determine the presence of MERV filters and other stuff
@@ -141,7 +231,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Convert the pressure drop adjustment to brake horsepower (bhp)
     # assuming that all supply air passes through all devices
     fan_pwr_adjustment_bhp = fan_pwr_adjustment_in_wc*dsn_air_flow_cfm / 4131
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","#{self.name}-#{(fan_pwr_adjustment_bhp)} bhp = Fan Power Limitation Pressure Drop Adjustment")
+    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: Fan Power Limitation Pressure Drop Adjustment = #{(fan_pwr_adjustment_bhp.round(2))} bhp")
  
     return fan_pwr_adjustment_bhp
  
@@ -161,11 +251,11 @@ class OpenStudio::Model::AirLoopHVAC
     if self.autosizedDesignSupplyAirFlowRate.is_initialized
       dsn_air_flow_m3_per_s = self.autosizedDesignSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, "m^3/s", "cfm").get
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
     else
       dsn_air_flow_m3_per_s = self.designSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, "m^3/s", "cfm").get
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
     end
 
     # Get the fan limitation pressure drop adjustment bhp
@@ -181,20 +271,20 @@ class OpenStudio::Model::AirLoopHVAC
     self.supplyComponents.reverse.each do |comp|
       if comp.to_FanConstantVolume.is_initialized || comp.to_FanOnOff.is_initialized
         fan_pwr_limit_type = "constant volume"
-      elsif comp.to_FanConstantVolume.is_initialized
+      elsif comp.to_FanVariableVolume.is_initialized
         fan_pwr_limit_type = "variable volume"
       elsif comp.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized
         fan = comp.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get.supplyAirFan
         if fan.to_FanConstantVolume.is_initialized || comp.to_FanOnOff.is_initialized
           fan_pwr_limit_type = "constant volume"
-        elsif fan.to_FanConstantVolume.is_initialized
+        elsif fan.to_FanVariableVolume.is_initialized
           fan_pwr_limit_type = "variable volume"
         end
       elsif comp.to_AirLoopHVACUnitarySystem.is_initialized
         fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan
         if fan.to_FanConstantVolume.is_initialized || comp.to_FanOnOff.is_initialized
           fan_pwr_limit_type = "constant volume"
-        elsif fan.to_FanConstantVolume.is_initialized
+        elsif fan.to_FanVariableVolume.is_initialized
           fan_pwr_limit_type = "variable volume"
         end
       end  
@@ -204,7 +294,7 @@ class OpenStudio::Model::AirLoopHVAC
     # constant volume limitation per 6.5.3.1.1
     if template == "ASHRAE 90.1-2010" && fan_pwr_limit_type = "variable volume" && num_zones_served == 1
       fan_pwr_limit_type = "constant volume"
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","#{self.name}-Using the constant volume limitation because single-zone VAV system.")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: Using the constant volume limitation because single-zone VAV system.")
     end
     
     # Calculate the Allowable Fan System brake horsepower per Table G3.1.2.9
@@ -214,7 +304,7 @@ class OpenStudio::Model::AirLoopHVAC
     elsif fan_pwr_limit_type == "variable volume"
       allowable_fan_bhp = dsn_air_flow_cfm*0.00094+fan_pwr_adjustment_bhp
     end
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","#{self.name}-#{(allowable_fan_bhp).round(2)} bhp = Allowable brake horsepower.")
+    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: Allowable brake horsepower = #{(allowable_fan_bhp).round(2)} bhp based on #{dsn_air_flow_cfm.round} cfm and #{fan_pwr_adjustment_bhp.round(2)} bhp of adjustment.")
     
     return allowable_fan_bhp
 
@@ -230,8 +320,10 @@ class OpenStudio::Model::AirLoopHVAC
     sup_and_oa_comps = self.supplyComponents
     sup_and_oa_comps += self.oaComponents
     sup_and_oa_comps.each do |comp|
-      if comp.to_FanConstantVolume.is_initialized || comp.to_FanVariableVolume.is_initialized
-        fans << comp
+      if comp.to_FanConstantVolume.is_initialized 
+        fans << comp.to_FanConstantVolume.get
+      elsif comp.to_FanVariableVolume.is_initialized
+        fans << comp.to_FanVariableVolume.get
       elsif comp.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized
         sup_fan = comp.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get.supplyAirFan
         if sup_fan.to_FanConstantVolume.is_initialized
@@ -360,11 +452,11 @@ class OpenStudio::Model::AirLoopHVAC
       if fan.autosizedDesignSupplyAirFlowRate.is_initialized
         dsn_air_flow_m3_per_s = fan.autosizedDesignSupplyAirFlowRate.get
         dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, "m^3/s", "cfm").get
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
       else
         dsn_air_flow_m3_per_s = fan.designSupplyAirFlowRate.get
         dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, "m^3/s", "cfm").get
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = User entered Design Supply Air Flow Rate.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC", "* #{dsn_air_flow_cfm.round} cfm = User entered Design Supply Air Flow Rate.")
       end
       
       # Determine the fan pressure rise that will result in the target bhp
@@ -1488,7 +1580,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Average outdoor air fraction
     x_s = v_ou / v_ps
     
-    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: v_ou = #{v_ou_cfm.round} cfm, v_ps = #{v_ps_cfm.round} cfm, x_s = #{x_s.round(2)}.")  
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: v_ou = #{v_ou_cfm.round} cfm, v_ps = #{v_ps_cfm.round} cfm, x_s = #{x_s.round(2)}.")  
     
     # Determine the zone ventilation effectiveness
     # for every zone on the system.
@@ -1519,7 +1611,7 @@ class OpenStudio::Model::AirLoopHVAC
           v_pz = clg_dsn_flow
         end
       else
-        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: #{zone.name} clg_dsn_flow could not be found.")
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: #{zone.name} clg_dsn_flow could not be found.")
       end
       htg_dsn_flow = zone.autosizedHeatingDesignAirFlowRate
       if htg_dsn_flow.is_initialized
@@ -1528,7 +1620,7 @@ class OpenStudio::Model::AirLoopHVAC
           v_pz = htg_dsn_flow
         end
       else
-        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: #{zone.name} htg_dsn_flow could not be found.")
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: #{zone.name} htg_dsn_flow could not be found.")
       end
       
       # Get the minimum damper position
@@ -1563,7 +1655,7 @@ class OpenStudio::Model::AirLoopHVAC
       # Store the ventilation effectiveness
       e_vzs << e_vz
     
-      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: Zone #{zone.name} v_oz = #{v_oz.round(2)} m^3/s, v_pz = #{v_pz.round(2)} m^3/s, v_dz = #{v_dz.round(2)}, z_d = #{z_d.round(2)}.")
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Zone #{zone.name} v_oz = #{v_oz.round(2)} m^3/s, v_pz = #{v_pz.round(2)} m^3/s, v_dz = #{v_dz.round(2)}, z_d = #{z_d.round(2)}.")
     
       # Check the ventilation effectiveness against
       # the minimum limit per PNNL and increase
@@ -1609,7 +1701,7 @@ class OpenStudio::Model::AirLoopHVAC
         
         num_zones_adj += 1
         
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For: #{self.name}: Zone #{zone.name} has a ventilation effectiveness of #{e_vz.round(2)}.  Increasing to #{e_vz_adj.round(2)} by increasing minimum damper position from #{mdp.round(2)} to #{mdp_adj.round(2)}.")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Zone #{zone.name} has a ventilation effectiveness of #{e_vz.round(2)}.  Increasing to #{e_vz_adj.round(2)} by increasing minimum damper position from #{mdp.round(2)} to #{mdp_adj.round(2)}.")
 
       else
         # Store the unadjusted value
@@ -1634,9 +1726,9 @@ class OpenStudio::Model::AirLoopHVAC
     
     # Report out the results of the multizone calculations
     if num_zones_adj > 0
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For:  #{self.name}: the multizone outdoor air calculation method was applied.  A simple summation of the zone outdoor air requirements gives a value of #{v_ou_cfm.round} cfm.  Applying the multizone method gives a value of #{v_ot_cfm.round} cfm, with an original system ventilation effectiveness of #{e_v.round(2)}.  After increasing the minimum damper position in #{num_zones_adj} critical zones, the resulting requirement is #{v_ot_adj_cfm.round} cfm with a system ventilation effectiveness of #{e_v_adj.round(2)}.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: the multizone outdoor air calculation method was applied.  A simple summation of the zone outdoor air requirements gives a value of #{v_ou_cfm.round} cfm.  Applying the multizone method gives a value of #{v_ot_cfm.round} cfm, with an original system ventilation effectiveness of #{e_v.round(2)}.  After increasing the minimum damper position in #{num_zones_adj} critical zones, the resulting requirement is #{v_ot_adj_cfm.round} cfm with a system ventilation effectiveness of #{e_v_adj.round(2)}.")
     else
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For:  #{self.name}: the multizone outdoor air calculation method was applied.  A simple summation of the zone requirements gives a value of #{v_ou_cfm.round} cfm.  However, applying the multizone method requires #{v_ot_adj_cfm.round} cfm based on the ventilation effectiveness of the system.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: the multizone outdoor air calculation method was applied.  A simple summation of the zone requirements gives a value of #{v_ou_cfm.round} cfm.  However, applying the multizone method requires #{v_ot_adj_cfm.round} cfm based on the ventilation effectiveness of the system.")
     end
    
     # Hard-size the sizing:system
