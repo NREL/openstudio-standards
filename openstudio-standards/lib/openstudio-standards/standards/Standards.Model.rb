@@ -8,6 +8,7 @@ class OpenStudio::Model::Model
 
   # Load the helper libraries for getting the autosized
   # values for each type of model object.
+  require_relative 'Standards.AirTerminalSingleDuctParallelPIUReheat'
   require_relative 'Standards.BuildingStory'
   require_relative 'Standards.Fan'
   require_relative 'Standards.FanConstantVolume'
@@ -64,28 +65,54 @@ class OpenStudio::Model::Model
       space_type.set_internal_loads(building_vintage, false, true, false, false, true, false) 
     end
 
+    # Get the groups of zones that define the
+    # baseline HVAC systems for later use.
+    # This must be done before removing the HVAC systems
+    # because it requires knowledge of proposed HVAC fuels.
+    sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage)    
+    
+    # Remove all HVAC from model
+    BTAP::Resources::HVAC.clear_all_hvac_from_model(self)
+    
     # Add ideal loads to every zone and run
     # a sizing run to determine heating/cooling loads,
     # which will impact which zones go onto secondary
     # HVAC systems.
     self.getThermalZones.each do |zone|
-      zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
-      zone_ideal_loads.addToThermalZone(zone)
+      ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
+      ideal_loads.addToThermalZone(zone)
     end
     # Run sizing run
     if self.runSizingRun("#{sizing_run_dir}/SizingRunIdeal") == false
       return false
     end
     # Remove ideal loads
-    self.getZoneHVACIdealLoadsAirSystems.each do |ideal|
-      ideal.remove
+    self.getZoneHVACIdealLoadsAirSystems.each do |ideal_loads|
+      ideal_loads.remove
     end
-    
-    # Determine the baseline HVAC system type
-    self.performance_rating_method_baseline_hvac(building_vintage)
 
-=begin    
-    # Run sizing run
+    # Determine the baseline HVAC system type for each of
+    # the groups of zones and add that system type.
+    sys_groups.each do |sys_group|
+
+      # Determine the primary baseline system type
+      system_type = performance_rating_method_baseline_system_type(building_vintage, 
+                                                                sys_group['type'], 
+                                                                sys_group['fuel'],
+                                                                sys_group['area_ft2'],
+                                                                sys_group['stories'])
+                                                                
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type} for #{sys_group['zones'].size} zones.")
+      sys_group['zones'].each do |zone|
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "---#{zone.name}")
+      end
+      
+      # Add the system type for these zones
+      self.add_performance_rating_method_baseline_system(building_vintage, system_type, sys_group['zones'])
+    
+    end
+  
+    # Run sizing run with the HVAC equipment
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
     end    
@@ -103,9 +130,18 @@ class OpenStudio::Model::Model
       end
     end
 
+    # Set the baseline fan power for all airloops
+    self.getAirLoopHVACs.sort.each do |air_loop|
+      air_loop.set_performance_rating_method_baseline_fan_power(building_vintage, @standards)
+    end
+    
     # Apply the HVAC efficiency standard
-    self.applyHVACEfficiencyStandard
-=end   
+    self.applyHVACEfficiencyStandard   
+    
+    # Add daylighting controls to each space
+    self.getSpaces.sort.each do |space|
+      added = space.addDaylightingControls(self.template, false, true)
+    end
      
     model_status = 'final'
     self.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
@@ -113,85 +149,6 @@ class OpenStudio::Model::Model
     return true
 
   end  
-
-=begin
-  # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
-  # based on the inputs currently in the model.  
-  # the current model with this model.
-  #
-  # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative
-  # compliance path for minimum standard compliance."  This means you can't use
-  # this method for code compliance to get a permit.
-  # @param building_type [String] the building type
-  # @param building_vintage [String] the building vintage.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
-  # @param climate_zone [String] the climate zone
-  # @param sizing_run_dir [String] the directory where the sizing runs will be performed
-  # @param debug [Boolean] If true, will report out more detailed debugging output
-  # @return [Bool] returns true if successful, false if not
-  def identify_primary_and_secondary_zones
-  
-  end
-  
-  def apply_doe_prototype_building_constructions
-  
-  
-  
-  end
-  
-  def apply_performance_rating_method_constructions
-  
-    # loop through all spaces
-      # loop through all surfaces
-        # assign the standard-specified construction types to each surface metadata
-    
-        # loop through all sub-surfaces
-          # assign the standard-specified construction types to each sub surface metadata
-    
-    # create a dummy construction for each type to be modified
-    
-    
-    # apply the standard to just the types of surfaces
-    # that are governed by the PRM.  Construction types
-    # have already been set by the previous step.
-    apply_construction_standards(true, true, false, etc)
-
-  end  
-  
-  def apply_construction_standards(ext_walls, int_walls, ext_windows)
-  
-    # loop through all spaces
-      # loop through all surfaces
-      surface.apply_standard_construction_properties # 
-        # loop through all sub-surfaces
-        sub_surface.apply_standard_construction_properties(category) # Nonres, Res, Semiheated
-  
-  
-  end
-  
-  def surface.apply_standard_construction_properties
-  
-    # Determine Nonres, Res, Semiheated from the Space/SpaceType
-  
-    # Determine the type of surface ExteriorFloor, ExteriorWall, etc.
-    
-    # Determine the standards construction type SteelFramed, Mass, etc. 
-    
-    # Create the construction (or find if it already has been added)
-
-  end
-  
-  def sub_surface.apply_standard_construction_properties
-  
-    # Determine Nonres, Res, Semiheated from the Space/SpaceType
-  
-    # Determine the type of surface ExteriorFloor, ExteriorWall, etc.
-    
-    # Determine the standards construction type SteelFramed, Mass, etc. 
-    
-    # Create the construction (or find if it already has been added)
-  
-  end
-=end
 
   # Determine the residential and nonresidential floor areas
   # based on the space type properties for each space.
@@ -243,10 +200,13 @@ class OpenStudio::Model::Model
 
   end  
   
-  # Determine the baseline HVAC system for the
-  # performance rating method.
+  # Determine the dominant and exceptional areas of the
+  # building based on fuel types and occupancy types.
   #
-  def performance_rating_method_baseline_hvac(standard)
+  # @param standard [String] the standard.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
+  # @return [Array<Hash>] an array of hashes of area information,
+  # with keys area_ft2, type, fuel, and zones (an array of zones)
+  def performance_rating_method_baseline_system_groups(standard)
   
     # Get the residential and nonresidential
     # fossil and electric zones and their areas
@@ -383,29 +343,15 @@ class OpenStudio::Model::Model
       dom['zones'] += sec_type_sec_fuel['zones']
     end     
 
-    # Determine the baseline type for each of
-    # the possible groups of zones.
+    # Put all the non-nil groups into an array. 
+    # A group will be nil if the exception was not triggered.
+    sys_groups = []
     [dom, exc_fuel, exc_occ, exc_fuel_occ].each do |data|
-      # Skip zone groups that don't exist
-      # (if that exception was not triggered)
       next if data.nil?
-      # Determine the primary baseline system type
-      system_type = performance_rating_method_baseline_system_type(standard, 
-                                                                data['type'], 
-                                                                data['fuel'],
-                                                                data['area_ft2'],
-                                                                data['stories'])
-                                                                
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type} for #{data['zones'].size} zones.")
-      data['zones'].each do |zone|
-        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "---#{zone.name}")
-      end
-      
-      # Add the system type for these zones
-      self.add_performance_rating_method_baseline_system(standard, system_type, data['zones'])
-    
+      sys_groups << data
     end
     
+    return sys_groups
   
   end
   
@@ -421,8 +367,9 @@ class OpenStudio::Model::Model
   # @param area_ft2 [Double] Area in ft^2
   # @param num_stories [Integer] Number of stories
   # @return [String] The system type.  Possibilities are
-  # PTHP, PTAC, PSZ_HP, PSZ_AC, PVAV_PFP_Boxes, PVAV_Reheat
-  # VAV_PFP_Boxes, VAV_Reheat, Electric_Furnace, Gas_Furnace
+  # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes, 
+  # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
+  # @todo add 90.1-2013 systems 11-13
   def performance_rating_method_baseline_system_type(standard, area_type, heating_fuel_type, area_ft2, num_stories)
   
     system_type = nil
@@ -549,18 +496,98 @@ class OpenStudio::Model::Model
   # electric and fossil
   # @param area_ft2 [Double] Area in ft^2
   # @param num_stories [Integer] Number of stories
-  # @param system_type [String] The system type.  Valid choices are 
-  # PTHP, PTAC, PSZ_HP, PSZ_AC, PVAV_PFP_Boxes, PVAV_Reheat
-  # VAV_PFP_Boxes, VAV_Reheat, Electric_Furnace, Gas_Furnace,
+  # @param system_type [String] The system type.  Valid choices are
+  # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes, 
+  # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace,
   # which are also returned by the method
   # OpenStudio::Model::Model.performance_rating_method_baseline_system_type.
+  # @todo add 90.1-2013 systems 11-13    
   def add_performance_rating_method_baseline_system(standard, system_type, zones)
   
     case standard
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
      
       case system_type
-      when 'VAV_Reheat', 'VAV_PFP_Boxes' # TODO remove; temporary for testing
+      when 'PTAC'
+      
+      when 'PTHP'
+      
+      when 'PSZ_AC'
+      
+        # Creates a PSZ-AC system for each zone and adds it to the model.
+        self.add_psz_ac(standard, 
+                    nil, 
+                    nil, 
+                    nil,
+                    zones,
+                    nil,
+                    nil,
+                    'DrawThrough', 
+                    'ConstantVolume',
+                    'NaturalGas',
+                    'NaturalGas',
+                    'Single Speed DX AC',
+                    building_type=nil)      
+      
+      when 'PSZ_HP'
+      
+        # Creates a PSZ-HP system for each zone and adds it to the model.
+        self.add_psz_ac(standard, 
+                    'PSZ-HP', 
+                    nil, 
+                    nil,
+                    zones,
+                    nil,
+                    nil,
+                    'DrawThrough', 
+                    'ConstantVolume',
+                    'Single Speed Heat Pump',
+                    'Electric',
+                    'Single Speed Heat Pump',
+                    building_type=nil)       
+      
+      when 'PVAV_Reheat'
+      
+        # Retrieve the existing hot water loop
+        # or add a new one if necessary.
+        hot_water_loop = nil
+        if self.getPlantLoopByName('Hot Water Loop').is_initialized
+          hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
+        else
+          hot_water_loop = self.add_hw_loop('NaturalGas')
+        end
+        
+        # Group zones by story
+        story_zone_lists = self.group_zones_by_story(zones)
+        
+        # For the array of zones on each story,
+        # separate the primary zones from the secondary zones.
+        # Add the baseline system type to the primary zones
+        # and add the suplemental system type to the secondary zones.
+        story_zone_lists.each do |zones|
+        
+          # Differentiate primary and secondary zones
+          pri_sec_zone_lists = self.differentiate_primary_secondary_thermal_zones(zones)
+          pri_zones = pri_sec_zone_lists['primary']
+          sec_zones = pri_sec_zone_lists['secondary']
+          
+          # Add an VAV for the primary zones
+          story_name = zones[0].spaces[0].buildingStory.get.name.get
+          self.add_pvav(standard, 
+              nil, 
+              pri_zones, 
+              nil,
+              nil,
+              hot_water_loop)
+          
+          # Add a PSZ_AC for each secondary zone
+          self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)
+
+        end      
+      
+      when 'PVAV_PFP_Boxes'
+
+      when 'VAV_Reheat'
       
         # Retrieve the existing hot water loop
         # or add a new one if necessary.
@@ -587,34 +614,8 @@ class OpenStudio::Model::Model
                                                 condenser_water_loop)
         end
         
-        # Separate the zones by story
-        story_zone_lists = []
-        self.getBuildingStorys.each do |story|
-          
-          # Get all the spaces on this story
-          spaces = story.spaces
-          
-          # Get all the thermal zones that serve these spaces
-          all_zones_on_story = []
-          spaces.each do |space|
-            if space.thermalZone.is_initialized
-              all_zones_on_story << space.thermalZone.get
-            else
-              OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "Space #{space.name} has no thermal zone, it is not included in the simulation.")
-            end
-          end
-        
-          # Find zones in the list that are on this story
-          zones_on_story = []
-          zones.each do |zone|
-            if all_zones_on_story.include?(zone)
-              zones_on_story << zone
-            end
-          end
-          
-          story_zone_lists << zones_on_story
-
-        end
+        # Group zones by story
+        story_zone_lists = self.group_zones_by_story(zones)
         
         # For the array of zones on each story,
         # separate the primary zones from the secondary zones.
@@ -629,7 +630,7 @@ class OpenStudio::Model::Model
           
           # Add an VAV for the primary zones
           story_name = zones[0].spaces[0].buildingStory.get.name.get
-          self.add_vav(standard, 
+          self.add_vav_reheat(standard, 
                       nil, 
                       hot_water_loop, 
                       chilled_water_loop,
@@ -641,24 +642,67 @@ class OpenStudio::Model::Model
                       OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
           
           # Add a PSZ_AC for each secondary zone
-          # Creates a PSZ-AC system for each zone and adds it to the model.
-          self.add_psz_ac(standard, 
-                      nil, 
-                      nil, 
-                      nil,
-                      sec_zones,
-                      nil,
-                      nil,
-                      'DrawThrough', 
-                      'ConstantVolume',
-                      'NaturalGas',
-                      'NaturalGas',
-                      'Single Speed DX AC',
-                      building_type=nil)
+          self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)
 
-      end
- 
+        end
     
+      when 'VAV_PFP_Boxes'
+      
+        # Retrieve the existing chilled water loop
+        # or add a new one if necessary.
+        chilled_water_loop = nil
+        if self.getPlantLoopByName('Chilled Water Loop').is_initialized
+          chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
+        else
+          condenser_water_loop = self.add_cw_loop()
+          chilled_water_loop = self.add_chw_loop(standard,
+                                                'const_pri_var_sec',
+                                                'WaterCooled',
+                                                nil,
+                                                'Rotary Screw',
+                                                175.0,
+                                                condenser_water_loop)
+        end
+        
+        # Group zones by story
+        story_zone_lists = self.group_zones_by_story(zones)
+        
+        # For the array of zones on each story,
+        # separate the primary zones from the secondary zones.
+        # Add the baseline system type to the primary zones
+        # and add the suplemental system type to the secondary zones.
+        story_zone_lists.each do |zones|
+        
+          # Differentiate primary and secondary zones
+          pri_sec_zone_lists = self.differentiate_primary_secondary_thermal_zones(zones)
+          pri_zones = pri_sec_zone_lists['primary']
+          sec_zones = pri_sec_zone_lists['secondary']
+          
+          # Add an VAV for the primary zones
+          story_name = zones[0].spaces[0].buildingStory.get.name.get
+          self.add_vav_pfp_boxes(standard, 
+                                nil, 
+                                chilled_water_loop,
+                                pri_zones,
+                                nil,
+                                nil,
+                                0.62,
+                                0.9,
+                                OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+          
+          # Add a PSZ_HP for each secondary zone
+          self.add_performance_rating_method_baseline_system(standard, 'PSZ_HP', sec_zones)
+
+        end      
+
+      when 'Gas_Furnace'
+      
+      when 'Electric_Furnace'
+      
+      else
+      
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "System type #{system_type} is not a valid choice, nothing will be added to the model.")
+
       end
     
     end
@@ -873,6 +917,44 @@ class OpenStudio::Model::Model
   
   end
 
+  # Group an array of zones into multiple arrays, one
+  # for each story in the building.
+  #
+  # @return [Array<Array<OpenStudio::Model::ThermalZone>>] array of arrays of zones
+  def group_zones_by_story(zones)
+  
+    story_zone_lists = []
+    self.getBuildingStorys.each do |story|
+      
+      # Get all the spaces on this story
+      spaces = story.spaces
+      
+      # Get all the thermal zones that serve these spaces
+      all_zones_on_story = []
+      spaces.each do |space|
+        if space.thermalZone.is_initialized
+          all_zones_on_story << space.thermalZone.get
+        else
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "Space #{space.name} has no thermal zone, it is not included in the simulation.")
+        end
+      end
+    
+      # Find zones in the list that are on this story
+      zones_on_story = []
+      zones.each do |zone|
+        if all_zones_on_story.include?(zone)
+          zones_on_story << zone
+        end
+      end
+      
+      story_zone_lists << zones_on_story
+
+    end
+    
+    return story_zone_lists
+    
+  end
+  
   # Assign each space in the model to a building story
   # based on common z (height) values.  If no story  
   # object is found for a particular height, create a new one
@@ -1121,11 +1203,13 @@ class OpenStudio::Model::Model
   # it impacts component sizes, which in turn impact efficiencies.
   def apply_multizone_vav_outdoor_air_sizing()
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying multizone vav OA sizing.')
 
     # Multi-zone VAV outdoor air sizing
     self.getAirLoopHVACs.sort.each {|obj| obj.apply_multizone_vav_outdoor_air_sizing(self.template)}
 
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying multizone vav OA sizing.')
+    
   end
 
   # Applies the HVAC parts of the standard to all objects in the model
@@ -1142,10 +1226,10 @@ class OpenStudio::Model::Model
     ##### Apply equipment efficiencies
 
     # Fans
-    self.getFanVariableVolumes.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
-    self.getFanConstantVolumes.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
-    self.getFanOnOffs.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
-    self.getFanZoneExhausts.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
+    # self.getFanVariableVolumes.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
+    # self.getFanConstantVolumes.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
+    # self.getFanOnOffs.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
+    # self.getFanZoneExhausts.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
 
     # Unitary ACs
     self.getCoilCoolingDXTwoSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
