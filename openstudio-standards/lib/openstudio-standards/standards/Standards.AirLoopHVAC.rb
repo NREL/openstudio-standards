@@ -101,9 +101,17 @@ class OpenStudio::Model::AirLoopHVAC
  
   end  
 
-  # @todo Compare minimum flow fraction to OA requirement
+  # Calculate and apply the performance rating method
+  # baseline fan power to this air loop.
+  # Fan motor efficiency will be set, and then
+  # fan pressure rise adjusted so that the
+  # fan power is the maximum allowable.
+  # Also adjusts the fan power and flow rates
+  # of any parallel PIU terminals on the system.
+  #
   # @todo Figure out how to split fan power between multiple fans
   # if the proposed model had multiple fans (supply, return, exhaust, etc.)
+  # return [Bool] true if successful, false if not.
   def set_performance_rating_method_baseline_fan_power(template, standards)
   
     # Main AHU fans
@@ -130,64 +138,14 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Fan powered terminal fans
     
-    # Determine the fan sizing flow rate, min flow rate,
-    # and W/cfm
-    sec_flow_frac = 0.5
-    min_flow_frac = 0.3
-    fan_efficacy_w_per_cfm = 0.35
-    # case template
-    # when
-    # else
-    # end
-    
     # Adjust each terminal fan
     self.demandComponents.each do |dc|
       next if dc.to_AirTerminalSingleDuctParallelPIUReheat.empty?
       pfp_term = dc.to_AirTerminalSingleDuctParallelPIUReheat.get
-      
-      # Get the maximum flow rate through the terminal
-      max_primary_air_flow_rate = nil
-      if pfp_term.autosizedMaximumPrimaryAirFlowRate.is_initialized
-        max_primary_air_flow_rate = pfp_term.autosizedMaximumPrimaryAirFlowRate.get
-      elsif pfp_term.maximumPrimaryAirFlowRate.is_initialized
-        max_primary_air_flow_rate = pfp_term.maximumPrimaryAirFlowRate.get
-      end
-      
-      # Set the max secondary air flow rate
-      max_sec_flow_rate_m3_per_s = max_primary_air_flow_rate * sec_flow_frac
-      pfp_term.setMaximumSecondaryAirFlowRate(max_sec_flow_rate_m3_per_s)
-      
-      # Set the minimum flow fraction
-      #TODO Also compare to min OA requirement
-      pfp_term.setMinimumPrimaryAirFlowFraction(min_flow_frac)
-    
-      # Set the fan efficacy
-      fan = pfp_term.fan.to_FanConstantVolume.get
-      fan_rise_pa = fan.pressureRise
-      fan_rise_in_wc = OpenStudio.convert(fan_rise_pa, "Pa", "inH_{2}O")
-      #runner.registerInfo("=> Pressure Rise = #{fan_rise_pa} Pa")
-
-      max_sec_flow_rate_cfm = OpenStudio.convert(max_sec_flow_rate_m3_per_s, "m^3/s", "ft^3/min").get
-      #runner.registerInfo("=> Maximum Fan Flow Rate = #{max_sec_flow_rate_cfm} m3/s")
-      #runner.registerInfo("=> Maximum Secondary Air Flow Rate = #{pfp_box.maximumSecondaryAirFlowRate.get} m3/s")      
-      
-      fan_efficiency = fan.fanEfficiency
-      #runner.registerInfo("=> Fan Total Efficiency = #{fan_efficiency}")
-
-      fan_power_w = fan_rise_pa * max_sec_flow_rate_m3_per_s / fan_efficiency
-      fan_efficacy_calc = fan_power_w / max_sec_flow_rate_m3_per_s
-      #runner.registerInfo("=> fan efficacy calculated = #{fan_efficacy_calc} W-s/m3")
-
-      fan_efficacy_w_per_m3_per_s = fan_efficacy_w_per_cfm * OpenStudio.convert(1, 'm^3/s', 'cfm').get
-
-      fan_rise_new_pa = fan_efficacy_w_per_m3_per_s * fan_efficiency
-      #runner.registerInfo("=> fan pressure rise new = #{fan_rise_new_pa} Pa")
-      fan.setPressureRise(fan_rise_new_pa)
-      fan_power_new_w = fan_rise_new_pa * max_sec_flow_rate_cfm / fan_efficiency
-      fan_efficacy_new_w_per_cfm = fan_power_new_w / max_sec_flow_rate_cfm
-      #runner.registerInfo("=> new fan efficacy calculated = #{fan_efficacy_ip_new.round(2)} W/CFM")    
-    
+      pfp_term.set_performance_rating_method_baseline_fan_power(template)
     end
+  
+    return true
   
   end
   
@@ -231,7 +189,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Convert the pressure drop adjustment to brake horsepower (bhp)
     # assuming that all supply air passes through all devices
     fan_pwr_adjustment_bhp = fan_pwr_adjustment_in_wc*dsn_air_flow_cfm / 4131
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: Fan Power Limitation Pressure Drop Adjustment = #{(fan_pwr_adjustment_bhp.round(2))} bhp")
+    OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC","For #{self.name}: Fan Power Limitation Pressure Drop Adjustment = #{(fan_pwr_adjustment_bhp.round(2))} bhp")
  
     return fan_pwr_adjustment_bhp
  
@@ -300,9 +258,9 @@ class OpenStudio::Model::AirLoopHVAC
     # Calculate the Allowable Fan System brake horsepower per Table G3.1.2.9
     allowable_fan_bhp = 0
     if fan_pwr_limit_type == "constant volume"
-      allowable_fan_bhp = dsn_air_flow_cfm*0.0013+fan_pwr_adjustment_bhp
-    elsif fan_pwr_limit_type == "variable volume"
       allowable_fan_bhp = dsn_air_flow_cfm*0.00094+fan_pwr_adjustment_bhp
+    elsif fan_pwr_limit_type == "variable volume"
+      allowable_fan_bhp = dsn_air_flow_cfm*0.0013+fan_pwr_adjustment_bhp
     end
     OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: Allowable brake horsepower = #{(allowable_fan_bhp).round(2)} bhp based on #{dsn_air_flow_cfm.round} cfm and #{fan_pwr_adjustment_bhp.round(2)} bhp of adjustment.")
     
@@ -797,13 +755,13 @@ class OpenStudio::Model::AirLoopHVAC
       if drybulb_limit_f
         drybulb_limit_c = OpenStudio.convert(drybulb_limit_f, 'F', 'C').get
         oa_control.setEconomizerMaximumLimitDryBulbTemperature(drybulb_limit_c)
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: Economizer type = #{economizer_type}, dry bulb limit = #{drybulb_limit_f}F")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Economizer type = #{economizer_type}, dry bulb limit = #{drybulb_limit_f}F")
       end
     when 'FixedEnthalpy'
       if enthalpy_limit_btu_per_lb
         enthalpy_limit_j_per_kg = OpenStudio.convert(enthalpy_limit_btu_per_lb, 'Btu/lb', 'J/kg').get
         oa_control.setEconomizerMaximumLimitEnthalpy(enthalpy_limit_j_per_kg)
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: Economizer type = #{economizer_type}, enthalpy limit = #{enthalpy_limit_btu_per_lb}Btu/lb")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Economizer type = #{economizer_type}, enthalpy limit = #{enthalpy_limit_btu_per_lb}Btu/lb")
       end
     when 'FixedDewPointAndDryBulb'
       if drybulb_limit_f && dewpoint_limit_f
@@ -811,7 +769,7 @@ class OpenStudio::Model::AirLoopHVAC
         dewpoint_limit_c = OpenStudio.convert(dewpoint_limit_f, 'F', 'C').get
         oa_control.setEconomizerMaximumLimitDryBulbTemperature(drybulb_limit_c)
         oa_control.setEconomizerMaximumLimitDewpointTemperature(dewpoint_limit_c)
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: Economizer type = #{economizer_type}, dry bulb limit = #{drybulb_limit_f}F, dew-point limit = #{dewpoint_limit_f}F")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Economizer type = #{economizer_type}, dry bulb limit = #{drybulb_limit_f}F, dew-point limit = #{dewpoint_limit_f}F")
       end
     end 
 
@@ -866,11 +824,11 @@ class OpenStudio::Model::AirLoopHVAC
       # Exception a, DX VAV systems
       if is_vav == true && num_zones_served > 1
         integrated_economizer_required = false
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: non-integrated economizer per 6.5.1.3 exception a, DX VAV system.")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: non-integrated economizer per 6.5.1.3 exception a, DX VAV system.")
         # Exception b, DX units less than 65,000 Btu/hr
       elsif self.total_cooling_capacity < minimum_capacity_w
         integrated_economizer_required = false
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: non-integrated economizer per 6.5.1.3 exception b, DX system less than #{minimum_capacity_btu_per_hr}Btu/hr.")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: non-integrated economizer per 6.5.1.3 exception b, DX system less than #{minimum_capacity_btu_per_hr}Btu/hr.")
       else
         # Exception c, Systems in climate zones 1,2,3a,4a,5a,5b,6,7,8
         case climate_zone
@@ -889,7 +847,7 @@ class OpenStudio::Model::AirLoopHVAC
             'ASHRAE 169-2006-8A',
             'ASHRAE 169-2006-8B'
           integrated_economizer_required = false
-          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: non-integrated economizer per 6.5.1.3 exception c, climate zone #{climate_zone}.")
+          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: non-integrated economizer per 6.5.1.3 exception c, climate zone #{climate_zone}.")
         when 'ASHRAE 169-2006-3B',
             'ASHRAE 169-2006-3C',
             'ASHRAE 169-2006-4B',
@@ -1062,11 +1020,11 @@ class OpenStudio::Model::AirLoopHVAC
       controller_oa = oa_system.getControllerOutdoorAir      
       controller_mv = controller_oa.controllerMechanicalVentilation
       if controller_mv.demandControlledVentilation == true
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, ERV not applicable because DCV enabled.")
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV not applicable because DCV enabled.")
         return false
       end
     else
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, ERV not applicable because it has no OA intake.")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV not applicable because it has no OA intake.")
       return false
     end
 
@@ -1077,7 +1035,7 @@ class OpenStudio::Model::AirLoopHVAC
     elsif self.autosizedDesignSupplyAirFlowRate.is_initialized
       dsn_flow_m3_per_s = self.autosizedDesignSupplyAirFlowRate.get
     else
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name} design supply air flow rate is not available, cannot apply efficiency standard.")
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{self.name} design supply air flow rate is not available, cannot apply efficiency standard.")
       return false
     end
     dsn_flow_cfm = OpenStudio.convert(dsn_flow_m3_per_s, 'm^3/s', 'cfm').get
@@ -1089,7 +1047,7 @@ class OpenStudio::Model::AirLoopHVAC
     elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
       min_oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
     else
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{template} #{controller_oa.name} minimum OA flow rate is not available, cannot apply efficiency standard.")
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: minimum OA flow rate is not available, cannot apply efficiency standard.")
       return false
     end
     min_oa_flow_cfm = OpenStudio.convert(min_oa_flow_m3_per_s, 'm^3/s', 'cfm').get
@@ -1246,13 +1204,13 @@ class OpenStudio::Model::AirLoopHVAC
     # Determine if an ERV is required
     erv_required = nil
     if erv_cfm.nil?
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, ERV not required based on #{(pct_oa*100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}.")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV not required based on #{(pct_oa*100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}.")
       erv_required = false 
     elsif dsn_flow_cfm < erv_cfm
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, ERV not required based on #{(pct_oa*100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Does not exceed minimum flow requirement of #{erv_cfm}cfm.")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV not required based on #{(pct_oa*100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Does not exceed minimum flow requirement of #{erv_cfm}cfm.")
       erv_required = false 
     else
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, ERV required based on #{(pct_oa*100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Exceeds minimum flow requirement of #{erv_cfm}cfm.")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV required based on #{(pct_oa*100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Exceeds minimum flow requirement of #{erv_cfm}cfm.")
       erv_required = true 
     end
   
@@ -1328,10 +1286,10 @@ class OpenStudio::Model::AirLoopHVAC
       # Modify erv_required based on exhaust heat content
       if ( exhaust_heat_content > 150.0 ) then
         erv_required = true
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, ERV required based on exhaust heat content.") 
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV required based on exhaust heat content.") 
       else
         erv_required = false
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, ERV not required based on exhaust heat content.") 
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV not required based on exhaust heat content.") 
       end
        
       
@@ -1358,7 +1316,7 @@ class OpenStudio::Model::AirLoopHVAC
     if self.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = self.airLoopHVACOutdoorAirSystem.get
     else
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, ERV cannot be added because the system has no OA intake.")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV cannot be added because the system has no OA intake.")
       return false
     end
   
@@ -1442,13 +1400,13 @@ class OpenStudio::Model::AirLoopHVAC
         end
       end
       if num_fan_powered_terminals > 0
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{template} #{climate_zone}:  #{self.name}, multizone vav optimization is not required because the system has #{num_fan_powered_terminals} fan-powered terminals.")
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{self.name}, multizone vav optimization is not required because the system has #{num_fan_powered_terminals} fan-powered terminals.")
         return multizone_opt_required
       end
       
       # Not required for systems that require an ERV
       if self.has_energy_recovery
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: multizone vav optimization is not required because the system has Energy Recovery.")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: multizone vav optimization is not required because the system has Energy Recovery.")
         return multizone_opt_required
       end
       
@@ -1461,7 +1419,7 @@ class OpenStudio::Model::AirLoopHVAC
         controller_oa = oa_system.getControllerOutdoorAir      
         controller_mv = controller_oa.controllerMechanicalVentilation
       else
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, multizone optimization is not applicable because system has no OA intake.")
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, multizone optimization is not applicable because system has no OA intake.")
         return multizone_opt_required
       end
       
@@ -1472,7 +1430,7 @@ class OpenStudio::Model::AirLoopHVAC
       elsif self.autosizedDesignSupplyAirFlowRate.is_initialized
         dsn_flow_m3_per_s = self.autosizedDesignSupplyAirFlowRate.get
       else
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name} design supply air flow rate is not available, cannot apply efficiency standard.")
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{self.name} design supply air flow rate is not available, cannot apply efficiency standard.")
         return multizone_opt_required
       end
       dsn_flow_cfm = OpenStudio.convert(dsn_flow_m3_per_s, 'm^3/s', 'cfm').get
@@ -1484,7 +1442,7 @@ class OpenStudio::Model::AirLoopHVAC
       elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
         min_oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
       else
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{template} #{controller_oa.name} minimum OA flow rate is not available, cannot apply efficiency standard.")
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: minimum OA flow rate is not available, cannot apply efficiency standard.")
         return multizone_opt_required
       end
       min_oa_flow_cfm = OpenStudio.convert(min_oa_flow_m3_per_s, 'm^3/s', 'cfm').get
@@ -1495,13 +1453,13 @@ class OpenStudio::Model::AirLoopHVAC
       # Not required for systems where
       # exhaust is more than 70% of the total OA intake.
       if pct_oa > 0.7
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{template} #{controller_oa.name} multizone optimization is not applicable because system is more than 70% OA.")
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because system is more than 70% OA.")
         return multizone_opt_required
       end
 
       # TODO Not required for dual-duct systems
       # if self.isDualDuct
-        # OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{template} #{controller_oa.name} multizone optimization is not applicable because it is a dual duct system")
+        # OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because it is a dual duct system")
         # return multizone_opt_required
       # end
       
@@ -1753,13 +1711,13 @@ class OpenStudio::Model::AirLoopHVAC
    
     # Not required by the old vintages
     if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required for any system.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required for any system.")
       return dcv_required
     end
    
     # Not required for systems that require an ERV
     if self.has_energy_recovery
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required since the system has Energy Recovery.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required since the system has Energy Recovery.")
       return dcv_required
     end
    
@@ -1799,7 +1757,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Check the minimum area
     area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
     if area_served_ft2 < min_area_ft2
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required since the system serves #{area_served_ft2.round} ft2, but the minimum size is #{min_area_ft2.round} ft2.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required since the system serves #{area_served_ft2.round} ft2, but the minimum size is #{min_area_ft2.round} ft2.")
       return dcv_required
     end
     
@@ -1807,7 +1765,7 @@ class OpenStudio::Model::AirLoopHVAC
     occ_per_ft2 = num_people / area_served_ft2
     occ_per_1000_ft2 = occ_per_ft2*1000
     if occ_per_1000_ft2 < min_occ_per_1000_ft2
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required since the system occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required since the system occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
       return dcv_required
     end
     
@@ -1822,7 +1780,7 @@ class OpenStudio::Model::AirLoopHVAC
         oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
       end
     else
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{template} #{self.name}, DCV not applicable because it has no OA intake.")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, DCV not applicable because it has no OA intake.")
       return dcv_required
     end
     oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
@@ -1832,18 +1790,18 @@ class OpenStudio::Model::AirLoopHVAC
     if oa_flow_cfm < min_oa_without_economizer_cfm && self.has_economizer == false
       # Message if doesn't pass OA limit
       if oa_flow_cfm < min_oa_without_economizer_cfm
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required since the system min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_without_economizer_cfm.round} cfm.")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required since the system min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_without_economizer_cfm.round} cfm.")
       end
       # Message if doesn't have economizer
       if self.has_economizer == false
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required since the system does not have an economizer.")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required since the system does not have an economizer.")
       end
       return dcv_required
     end
 
     # If has economizer, cfm limit is lower
     if oa_flow_cfm < min_oa_with_economizer_cfm && self.has_economizer
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required since the system has an economizer, but the min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_with_economizer_cfm.round} cfm for systems with an economizer.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required since the system has an economizer, but the min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_with_economizer_cfm.round} cfm for systems with an economizer.")
       return dcv_required
     end
    
@@ -1906,7 +1864,7 @@ class OpenStudio::Model::AirLoopHVAC
       when 'ASHRAE 169-2006-1A',
         'ASHRAE 169-2006-2A',
         'ASHRAE 169-2006-3A'
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: Supply air temperature reset is not required per 6.5.3.4 Exception 1, the system is located in climate zone #{climate_zone}.")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Supply air temperature reset is not required per 6.5.3.4 Exception 1, the system is located in climate zone #{climate_zone}.")
       when 'ASHRAE 169-2006-1B',
         'ASHRAE 169-2006-2B',
         'ASHRAE 169-2006-3B',
@@ -1924,7 +1882,7 @@ class OpenStudio::Model::AirLoopHVAC
         'ASHRAE 169-2006-8A',
         'ASHRAE 169-2006-8B'
         is_sat_reset_required = true
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: Supply air temperature reset is required.") 
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Supply air temperature reset is required.") 
         return is_sat_reset_required
       end
     end
@@ -2126,7 +2084,7 @@ class OpenStudio::Model::AirLoopHVAC
     # a motorized damper.
     if self.has_economizer
       is_motorized_oa_damper_required = false
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: Because the system has an economizer, it is assumed to require a motorized damper.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Because the system has an economizer, it is assumed to require a motorized damper.")
       return is_motorized_oa_damper_required
     end
   
