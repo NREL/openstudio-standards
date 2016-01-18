@@ -2,6 +2,14 @@
 # open the class to add methods to size all HVAC equipment
 class OpenStudio::Model::Model
 
+  # Load the helper libraries for 
+  require_relative 'Prototype.FanConstantVolume'
+  require_relative 'Prototype.FanVariableVolume'
+  require_relative 'Prototype.FanOnOff'
+  require_relative 'Prototype.FanZoneExhaust'
+  require_relative 'Prototype.HeatExchangerAirToAirSensibleAndLatent'
+  require_relative 'Prototype.ControllerWaterCoil'
+
   # Let the model store and access its own template and climate zone
   attr_accessor :template
   attr_accessor :climate_zone
@@ -1022,15 +1030,6 @@ class OpenStudio::Model::Model
   end
 
   def applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
-
-    # Load the helper libraries for getting the autosized
-    # values for each type of model object.
-    require_relative 'Prototype.FanConstantVolume'
-    require_relative 'Prototype.FanVariableVolume'
-    require_relative 'Prototype.FanOnOff'
-    require_relative 'Prototype.FanZoneExhaust'
-    require_relative 'Prototype.HeatExchangerAirToAirSensibleAndLatent'
-    require_relative 'Prototype.ControllerWaterCoil'
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying prototype HVAC assumptions.')
 
