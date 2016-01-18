@@ -51,23 +51,23 @@ class OpenStudio::Model::BoilerHotWater
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
-
+    
     # for NECB, check if secondary and/or modulating boiler required
     if (template == 'NECB 2011')      
-      if (capacity_w >= 352000)
-        if (self.name.to_s == "Primary Boiler")
+      if (capacity_w/1000.0 >= 352.0)
+        if (self.name.to_s.include?("Primary Boiler"))
           boiler_capacity = capacity_w
           self.setBoilerFlowMode('LeavingSetpointModulated')
           self.setMinimumPartLoadRatio(0.25)
-        elsif (self.name.to_s == "Secondary Boiler")
+        elsif (self.name.to_s.include?("Secondary Boiler"))
           boiler_capacity = 0.001
         end
       elsif ((capacity_w/1000.0) >= 176.0) && ((capacity_w/1000.0) < 352.0)
         boiler_capacity = capacity_w/2
       elsif ((capacity_w/1000.0) <= 176.0)
-        if (self.name.to_s == "Primary Boiler")
+        if (self.name.to_s.include?("Primary Boiler"))
           boiler_capacity = capacity_w
-        elsif (self.name.to_s == "Secondary Boiler")
+        elsif (self.name.to_s.include?("Secondary Boiler"))
           boiler_capacity = 0.001
         end
       end
