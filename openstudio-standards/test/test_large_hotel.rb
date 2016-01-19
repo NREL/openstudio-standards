@@ -14,7 +14,7 @@ class TestLargeHotel < CreateDOEPrototypeBuildingTest
   
   create_models = true
   run_models = true
-  compare_results = true
+  compare_results = false
   
   debug = false
   
