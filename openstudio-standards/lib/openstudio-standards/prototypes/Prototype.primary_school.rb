@@ -2,9 +2,10 @@
 # Extend the class to add Secondary School specific stuff
 class OpenStudio::Model::Model
  
-  def define_space_type_map(building_type, building_vintage, climate_zone)
+  def define_space_type_map(building_type, building_vintage, climate_zone)    
+    
     space_type_map = nil
-    case building_type
+    case building_vintage
     when 'NECB 2011'
       space_type_map ={
         "Washroom" => ["Bath_ZN_1_FLR_1"],
