@@ -138,6 +138,36 @@
       ]
     },
     {
+      "name": "India ECBC Cold",
+      "climate_zones": [
+        "India ECBC Cold"
+      ]
+    },
+    {
+      "name": "India ECBC Composite",
+      "climate_zones": [
+        "India ECBC Composite"
+      ]
+    },
+    {
+      "name": "India ECBC Hot and Dry",
+      "climate_zones": [
+        "India ECBC Hot and Dry"
+      ]
+    },
+    {
+      "name": "India ECBC Moderate",
+      "climate_zones": [
+        "India ECBC Moderate"
+      ]
+    },
+    {
+      "name": "India ECBC Warm and Humid",
+      "climate_zones": [
+        "India ECBC Warm and Humid"
+      ]
+    },
+    {
       "name": "NECB-CNEB ClimatZone 4-8",
       "climate_zones": [
         "NECB-CNEB-4",

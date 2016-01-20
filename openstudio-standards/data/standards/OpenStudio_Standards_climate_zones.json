@@ -235,6 +235,36 @@
       "bcl_weather_component_id": null
     },
     {
+      "name": "India ECBC Cold",
+      "standard": "India ECBC 2007",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "India ECBC Composite",
+      "standard": "India ECBC 2007",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "India ECBC Hot and Dry",
+      "standard": "India ECBC 2007",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "India ECBC Moderate",
+      "standard": "India ECBC 2007",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "India ECBC Warm and Humid",
+      "standard": "India ECBC 2007",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
       "name": "NECB-CNEB-4",
       "standard": "NECB 2011",
       "representative_city": null,

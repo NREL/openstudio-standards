@@ -29,6 +29,10 @@
       "notes": "Numbers taken from the DOE Pre-1980 reference buildings, with values mapped back to the original data source (standards, etc) where possible.  The infiltration numbers were taken from the reference buildings but converted to cfm/ft^2 of exterior surface area.  Color scheme is based on redder for more public spaces, bluer for more private spaces.  Occupancy from ventilation standards was not used by reference buildings because numbers were generally found to be too high for modeling, representing very conservative design scenarios."
     },
     {
+      "name": "ECBC 2007",
+      "notes": "Indian Energy Conservation Building Code 2007"
+    },
+    {
       "name": "NECB 2011",
       "notes": "Taken from the Canadian NECB 2011"
     }
