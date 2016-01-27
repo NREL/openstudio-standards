@@ -2776,25 +2776,65 @@ module BTAP
 
               fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
                            
-              case heating_coil_type
-              when "Electric"           # electric coil
-                htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
+              #TODO: Heating and cooling temperature set point schedules are set somewhere else
+              #TODO: For now fetch the schedules and use them in setting up the heat pump system
+              #TODO: Later on these schedules need to be passed on to this method
+              schedules = model.getSchedules
+              htg_temp_sch = schedules[2]
+              clg_temp_sch = schedules[9]
+              staged_thermostat = OpenStudio::Model::ZoneControlThermostatStagedDualSetpoint.new(model)
+              staged_thermostat.setHeatingTemperatureSetpointSchedule(htg_temp_sch)
+              staged_thermostat.setNumberofHeatingStages(4)
+              staged_thermostat.setCoolingTemperatureSetpointBaseSchedule(clg_temp_sch)
+              staged_thermostat.setNumberofCoolingStages(4)
+              zone.setThermostat(staged_thermostat)
 
-              when "Gas"
-                htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+              # Multi-stage gas heating coil
+              if(heating_coil_type == "Gas")
+                htg_coil = OpenStudio::Model::CoilHeatingGasMultiStage.new(model)
+                htg_stage_1 = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
+                htg_stage_2 = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
+                htg_stage_3 = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
+                htg_stage_4 = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
+                supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model,always_on)
 
-              when "DX"
-                htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)  
+               # Multi-Stage DX or Electric heating coil
+              elsif(heating_coil_type == "DX" || heating_coil_type == "Electric")
+                htg_coil = OpenStudio::Model::CoilHeatingDXMultiSpeed.new(model)
+                htg_stage_1 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
+                htg_stage_2 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
+                htg_stage_3 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
+                htg_stage_4 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
                 supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
+                if(heating_coil_type == "Electric")
+                  htg_stage_1.setGrossRatedHeatingCOP(1.001)
+                  htg_stage_2.setGrossRatedHeatingCOP(1.001)
+                  htg_stage_3.setGrossRatedHeatingCOP(1.001)
+                  htg_stage_4.setGrossRatedHeatingCOP(1.001)
+                end
                 
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")
               end
 
-              #TO DO: other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)
+              # Add stages to heating coil
+              htg_coil.addStage(htg_stage_1)
+              htg_coil.addStage(htg_stage_2)
+              htg_coil.addStage(htg_stage_3)
+              htg_coil.addStage(htg_stage_4)
+              
+              #TODO: other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)
 
-              # Set up DX coil with NECB performance curve characteristics;
-              clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
+              # Set up DX cooling coil 
+              clg_coil = OpenStudio::Model::CoilCoolingDXMultiSpeed.new(model)
+              clg_stage_1 = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
+              clg_stage_2 = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
+              clg_stage_3 = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
+              clg_stage_4 = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
+              clg_coil.addStage(clg_stage_1)
+              clg_coil.addStage(clg_stage_2)
+              clg_coil.addStage(clg_stage_3)
+              clg_coil.addStage(clg_stage_4)
 
               #oa_controller 
               oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -2805,30 +2845,15 @@ module BTAP
               # Add the components to the air loop
               # in order from closest to zone to furthest from zone
               supply_inlet_node = air_loop.supplyInletNode
-              #              fan.addToNode(supply_inlet_node)
-              #              supplemental_htg_coil.addToNode(supply_inlet_node) if heating_coil_type == "DX" 
-              #              htg_coil.addToNode(supply_inlet_node)
-              #              clg_coil.addToNode(supply_inlet_node)
-              #              oa_system.addToNode(supply_inlet_node)
-              if(heating_coil_type == 'DX')
-                air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model,always_on,fan,htg_coil,clg_coil,supplemental_htg_coil)
-                air_to_air_heatpump.setName("#{zone.name} ASHP")
-                air_to_air_heatpump.setControllingZone(zone)
-                air_to_air_heatpump.setSupplyAirFanOperatingModeSchedule(always_on)
-                air_to_air_heatpump.addToNode(supply_inlet_node)
-              else
-                fan.addToNode(supply_inlet_node)
-                htg_coil.addToNode(supply_inlet_node)
-                clg_coil.addToNode(supply_inlet_node)
-              end
-              oa_system.addToNode(supply_inlet_node)
+              air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.new(model,fan,htg_coil,clg_coil,supplemental_htg_coil)
+              air_to_air_heatpump.setName("#{zone.name} ASHP")
+              air_to_air_heatpump.setControllingZoneorThermostatLocation(zone)
+              air_to_air_heatpump.setSupplyAirFanOperatingModeSchedule(always_on)
+              air_to_air_heatpump.addToNode(supply_inlet_node)
+              air_to_air_heatpump.setNumberofSpeedsforHeating(4)
+              air_to_air_heatpump.setNumberofSpeedsforCooling(4)
 
-              # Add a setpoint manager single zone reheat to control the
-              # supply air temperature based on the needs of this zone
-              setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
-              setpoint_mgr_single_zone_reheat.setControlZone(zone)
-              setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(13.0)
-              setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
+              oa_system.addToNode(supply_inlet_node)
 
               # Create a diffuser and attach the zone/diffuser pair to the air loop
               #diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model,always_on)
@@ -2852,7 +2877,7 @@ module BTAP
                 #add zone_baseboard to zone
                 zone_baseboard.addToThermalZone(zone)
               end
-            
+
             end  #zone loop
 
 
