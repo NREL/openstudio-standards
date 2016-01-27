@@ -25,6 +25,8 @@ class OpenStudio::Model::Model
   require_relative 'Standards.ThermalZone'
   require_relative 'Standards.Surface'
   require_relative 'Standards.SubSurface'
+  require_relative 'Standards.ScheduleRuleset'
+  require_relative 'Standards.ScheduleConstant'
   require_relative 'Standards.SpaceType'
 
   # Applies the multi-zone VAV outdoor air sizing requirements
