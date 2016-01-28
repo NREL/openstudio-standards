@@ -11,6 +11,7 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
 
     # make an empty model
     model = OpenStudio::Model::Model.new
+    model.load_openstudio_standards_json
 
     # create space type and set standards info
     space_type = OpenStudio::Model::SpaceType.new(model)
