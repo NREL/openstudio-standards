@@ -105,47 +105,35 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
       flow_rate4 = self.autosizedSpeed4RatedAirFlowRate.get
     end
 
-    # Get the sensible heat ratio
-    shr4 = nil
-    if clg_stages.last.grossRatedSensibleHeatRatio.is_initialized
-      shr4 = clg_stages.last.grossRatedSensibleHeatRatio.get
-    elsif self.autosizedSpeed4RatedSensibleHeatRatio.is_initialized
-      shr4 = self.autosizedSpeed4RatedSensibleHeatRatio.get
-    end
-    
     # Set number of stages for NECB 2011
     if(template == 'NECB 2011')
       num_stages = (capacity_w/(66.0*1000.0)+0.5).round
       num_stages = [num_stages,4].min
-      if(num_stages == 1 || num_stages == 2)
-        stage1_cap = capacity_w/2.0
-        stage2_cap = 2.0*stage1_cap
-        stage3_cap = stage2_cap+0.1
-        stage4_cap = stage3_cap+0.1        
-      elsif(num_stages == 3)
-        stage1_cap = capacity_w/3.0
-        stage2_cap = 2.0*stage1_cap
-        stage3_cap = 3.0*stage1_cap
-        stage4_cap = stage3_cap+0.1
-      elsif(num_stages == 4)
-        stage1_cap = capacity_w/4.0
-        stage2_cap = 2.0*stage1_cap
-        stage3_cap = 3.0*stage1_cap
-        stage4_cap = 4.0*stage1_cap
+      stage_cap = []
+      if(num_stages == 1)
+        stage_cap[0] = capacity_w/2.0
+        stage_cap[1] = 2.0*stage_cap[0]
+        stage_cap[2] = stage_cap[1]+0.1
+        stage_cap[3] = stage_cap[2]+0.1
+      else
+        stage_cap[0] = 66.0*1000.0
+        stage_cap[1] = 2.0*stage_cap[0]
+        if(num_stages == 2)
+          stage_cap[2] = stage_cap[1]+0.1
+          stage_cap[3] = stage_cap[2]+0.1         
+        elsif(num_stages == 3)
+          stage_cap[2] = 3.0*stage_cap[0]
+          stage_cap[3] = stage_cap[2]+0.1
+        elsif(num_stages == 4)
+          stage_cap[2] = 3.0*stage_cap[0]
+          stage_cap[3] = 4.0*stage_cap[0]
+        end
       end
       # set capacities, flow rates, and sensible heat ratio for stages
-      clg_stages[0].setGrossRatedTotalCoolingCapacity(stage1_cap)
-      clg_stages[1].setGrossRatedTotalCoolingCapacity(stage2_cap)
-      clg_stages[2].setGrossRatedTotalCoolingCapacity(stage3_cap)
-      clg_stages[3].setGrossRatedTotalCoolingCapacity(stage4_cap)
-      clg_stages[0].setRatedAirFlowRate(flow_rate4*stage1_cap/capacity_w)
-      clg_stages[1].setRatedAirFlowRate(flow_rate4*stage2_cap/capacity_w)
-      clg_stages[2].setRatedAirFlowRate(flow_rate4*stage3_cap/capacity_w)
-      clg_stages[3].setRatedAirFlowRate(flow_rate4*stage4_cap/capacity_w)
-      clg_stages[0].setGrossRatedSensibleHeatRatio(shr4)
-      clg_stages[1].setGrossRatedSensibleHeatRatio(shr4)
-      clg_stages[2].setGrossRatedSensibleHeatRatio(shr4)
-      clg_stages[3].setGrossRatedSensibleHeatRatio(shr4)
+      for istage in 0..3
+        clg_stages[istage].setGrossRatedTotalCoolingCapacity(stage_cap[istage])
+        clg_stages[istage].setRatedAirFlowRate(flow_rate4*stage_cap[istage]/capacity_w)
+      end
     end
     
     # Convert capacity to Btu/hr

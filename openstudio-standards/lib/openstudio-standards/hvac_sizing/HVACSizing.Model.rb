@@ -27,7 +27,6 @@ class OpenStudio::Model::Model
   require_relative 'HVACSizing.CoilCoolingDXSingleSpeed'
   require_relative 'HVACSizing.CoilCoolingDXMultiSpeed'
   require_relative 'HVACSizing.CoilCoolingDXTwoSpeed'
-#  require_relative 'HVACSizing.CoilCoolingDXMultiSpeedStageData'
   require_relative 'HVACSizing.CoilCoolingWater'
   require_relative 'HVACSizing.ControllerOutdoorAir'
   require_relative 'HVACSizing.HeatExchangerAirToAirSensibleAndLatent'
