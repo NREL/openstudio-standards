@@ -63,6 +63,9 @@ class OpenStudio::Model::Model
     self.set_sizing_parameters(building_type, building_vintage)
     self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
+    puts "From create_prototype_building after adding bunch of stuff:"
+    puts self.standards.keys    
+    
     # Perform a sizing run
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
@@ -418,13 +421,13 @@ class OpenStudio::Model::Model
     self.getSpaceTypes.sort.each do |space_type|
 
       # Rendering color
-      space_type.set_rendering_color(building_vintage)
+      space_type.set_rendering_color(building_vintage, self.standards)
     
       # Loads
-      space_type.set_internal_loads(building_vintage, true, true, true, true, true, true)
+      space_type.set_internal_loads(building_vintage, self.standards, true, true, true, true, true, true)
       
       # Schedules
-      space_type.set_internal_load_schedules(building_vintage, true, true, true, true, true, true, true)
+      space_type.set_internal_load_schedules(building_vintage, self.standards, true, true, true, true, true, true, true)
       
     end
 
