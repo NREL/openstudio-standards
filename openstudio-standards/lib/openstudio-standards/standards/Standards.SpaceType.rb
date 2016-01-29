@@ -6,7 +6,7 @@ class OpenStudio::Model::SpaceType
   #
   # @param [string] target template for lookup
   # @return [hash] hash of internal loads for different load types
-  def get_standards_data(template)
+  def get_standards_data(template, standards)
 
     if self.standardsBuildingType.is_initialized
       standards_building_type = self.standardsBuildingType.get
@@ -18,14 +18,7 @@ class OpenStudio::Model::SpaceType
     else
       standards_space_type = nil
     end
-
-    #load the data from the JSON file into a ruby hash
-    top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
-    standards_data_dir = "#{top_dir}/data/standards"
-    temp = File.read("#{standards_data_dir}/OpenStudio_Standards_space_types.json")
-    @standards = {}
-    @standards = JSON.parse(temp)
-
+    
     # populate search hash
     search_criteria = {
         "template" => template,
@@ -34,7 +27,7 @@ class OpenStudio::Model::SpaceType
     }
 
     # lookup space type properties
-    space_type_properties = self.model.find_object(@standards["space_types"], search_criteria)
+    space_type_properties = self.model.find_object(standards["space_types"], search_criteria)
 
     if space_type_properties.nil?
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
@@ -49,10 +42,10 @@ class OpenStudio::Model::SpaceType
   #
   # @param [string] target template for lookup
   # @return [Bool] returns true if successful, false if not.
-  def set_rendering_color(template)
+  def set_rendering_color(template, standards)
  
     # Get the standards data
-    space_type_properties = self.get_standards_data(template)
+    space_type_properties = self.get_standards_data(template, standards)
  
     # Set the rendering color of the space type
     rgb = space_type_properties['rgb']
@@ -87,10 +80,10 @@ class OpenStudio::Model::SpaceType
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
   # @param set_infiltration [Bool] if true, set the infiltration rates
   # @return [Bool] returns true if successful, false if not  
-  def set_internal_loads(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+  def set_internal_loads(template, standards, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
   
     # Get the standards data
-    space_type_properties = self.get_standards_data(template)
+    space_type_properties = self.get_standards_data(template, standards)
 
     # People
     people_have_info = false
@@ -444,10 +437,10 @@ class OpenStudio::Model::SpaceType
   # schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
   # but may be found and used later.
   # @return [Bool] returns true if successful, false if not  
-  def set_internal_load_schedules(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
+  def set_internal_load_schedules(template, standards, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
   
     # Get the standards data
-    space_type_properties = self.get_standards_data(template)
+    space_type_properties = self.get_standards_data(template, standards)
     
     # Get the default schedule set
     # or create a new one if none exists.
@@ -503,6 +496,7 @@ class OpenStudio::Model::SpaceType
     # Gas Equipment
     if set_gas_equipment
     
+      gas_equip_sch = space_type_properties['gas_equip_sch']
       unless gas_equip_sch.nil?
         default_sch_set.setGasEquipmentSchedule(model.add_schedule(gas_equip_sch))
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set gas equipment schedule to #{gas_equip_sch}.")
