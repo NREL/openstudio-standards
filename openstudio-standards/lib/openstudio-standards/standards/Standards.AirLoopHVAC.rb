@@ -264,6 +264,15 @@ class OpenStudio::Model::AirLoopHVAC
     end
     OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: Allowable brake horsepower = #{(allowable_fan_bhp).round(2)} bhp based on #{dsn_air_flow_cfm.round} cfm and #{fan_pwr_adjustment_bhp.round(2)} bhp of adjustment.")
     
+    # Calculate and report the total area for debugging/testing
+    floor_area_served_m2 = self.floor_area_served
+    floor_area_served_ft2 = OpenStudio.convert(floor_area_served_m2, 'm^2', 'ft^2').get
+    cfm_per_ft2 = dsn_air_flow_cfm / floor_area_served_ft2
+    cfm_per_hp = dsn_air_flow_cfm / allowable_fan_bhp
+    OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC","For #{self.name}: area served = #{floor_area_served_ft2.round} ft^2.")
+    OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC","For #{self.name}: flow per area = #{cfm_per_ft2.round} cfm/ft^2.")
+    OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC","For #{self.name}: flow per hp = #{cfm_per_hp.round} cfm/hp.")
+    
     return allowable_fan_bhp
 
   end
@@ -2717,5 +2726,23 @@ class OpenStudio::Model::AirLoopHVAC
   
   end
   
+  
+  # Calculate the total floor area of all zones attached
+  # to the air loop, in m^2.
+  #
+  # return [Double] the total floor area of all zones attached
+  # to the air loop, in m^2.
+  def floor_area_served()
+  
+    total_area = 0.0
+  
+    self.thermalZones.each do |zone|
+      total_area += zone.floorArea
+    end
+
+    return total_area
+  
+  end
+
   
 end
