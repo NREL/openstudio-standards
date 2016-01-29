@@ -11,7 +11,6 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
 
     # make an empty model
     model = OpenStudio::Model::Model.new
-    model.load_openstudio_standards_json
 
     # create space type and set standards info
     space_type = OpenStudio::Model::SpaceType.new(model)
@@ -20,8 +19,6 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
 
     # lookup standards data for space type
     data = space_type.get_standards_data(template)
-    # uncomment to view data for this space type
-    #puts data
 
     # gather specific internal load values for testing
     lighting_per_area = data['lighting_per_area']
@@ -35,13 +32,13 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
     infiltration_air_changes = data['infiltration_air_changes']
 
     # check various internal loads. This has ip values
-    assert(lighting_per_area == 0.91)
-    assert(electric_equipment_per_area == 0.627)
+    assert(lighting_per_area.to_f == 0.91)
+    assert(electric_equipment_per_area.to_f  == 0.627)
     assert(gas_equipment_per_area == nil)
-    assert(occupancy_per_area == 3.57)
-    assert(ventilation_per_area == 0.06)
-    assert(ventilation_per_person == 5)
-    assert(infiltration_per_exterior_area == 0.112)
+    assert(occupancy_per_area.to_f  == 3.57)
+    assert(ventilation_per_area.to_f  == 0.06)
+    assert(ventilation_per_person.to_f  == 5)
+    assert(infiltration_per_exterior_area.to_f  == 0.112)
     assert(infiltration_per_exterior_wall_area == nil)
     assert(infiltration_air_changes == nil)
 

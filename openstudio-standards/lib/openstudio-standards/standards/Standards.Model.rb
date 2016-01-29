@@ -169,6 +169,9 @@ class OpenStudio::Model::Model
     # TODO check that the data was loaded correctly
 
     @created_names = []
+
+    return standards
+
   end
 
   # Method to search through a hash for the objects that meets the
@@ -1620,6 +1623,51 @@ class OpenStudio::Model::Model
     return result
 
   end
+
+  # Helper method to find out which climate zone set contains a specific climate zone.
+  # Returns climate zone set name as String if success, nil if not found.
+  def find_climate_zone_set(clim, building_vintage, standards = self.standards) # todo - remove standards from arg before merge
+    result = nil
+
+    possible_climate_zones = []
+    standards['climate_zone_sets'].each do |climate_zone_set|
+      if climate_zone_set['climate_zones'].include?(clim)
+        possible_climate_zones << climate_zone_set['name']
+      end
+    end
+
+    # Check the results
+    if possible_climate_zones.size == 0
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
+    elsif possible_climate_zones.size > 2
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
+    end
+
+    # For Pre-1980 and 1980-2004, use the most specific climate zone set.
+    # For example, 2A and 2 both contain 2A, so use 2A.
+    # For 2004-2013, use least specific climate zone set.
+    # For example, 2A and 2 both contain 2A, so use 2.
+    case building_vintage
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+        result = possible_climate_zones.sort.last
+      when '90.1-2007', '90.1-2010', '90.1-2013'
+        result = possible_climate_zones.sort.first
+      when '90.1-2004'
+        if possible_climate_zones.include? "ClimateZone 3"
+          result = possible_climate_zones.sort.last
+        else
+          result = possible_climate_zones.sort.first
+        end
+    end
+
+    # Check that a climate zone set was found
+    if result.nil?
+
+    end
+
+    return result
+
+  end
   
   private
 
@@ -1686,51 +1734,6 @@ class OpenStudio::Model::Model
     @created_names << result
 
     return result
-  end
-
-  # Helper method to find out which climate zone set contains a specific climate zone.
-  # Returns climate zone set name as String if success, nil if not found.
-  def find_climate_zone_set(clim, building_vintage)
-    result = nil
-
-    possible_climate_zones = []
-    self.standards['climate_zone_sets'].each do |climate_zone_set|
-      if climate_zone_set['climate_zones'].include?(clim)
-        possible_climate_zones << climate_zone_set['name']
-      end
-    end
-
-    # Check the results
-    if possible_climate_zones.size == 0
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
-    elsif possible_climate_zones.size > 2
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
-    end
-
-    # For Pre-1980 and 1980-2004, use the most specific climate zone set.
-    # For example, 2A and 2 both contain 2A, so use 2A.
-    # For 2004-2013, use least specific climate zone set.
-    # For example, 2A and 2 both contain 2A, so use 2.
-    case building_vintage
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      result = possible_climate_zones.sort.last
-    when '90.1-2007', '90.1-2010', '90.1-2013'
-      result = possible_climate_zones.sort.first
-    when '90.1-2004'
-      if possible_climate_zones.include? "ClimateZone 3"
-        result = possible_climate_zones.sort.last
-      else
-        result = possible_climate_zones.sort.first
-      end
-    end
-        
-    # Check that a climate zone set was found
-    if result.nil?
-      
-    end
-    
-    return result
-  
   end
 
 end

@@ -18,12 +18,8 @@ class OpenStudio::Model::SpaceType
       standards_space_type = nil
     end
 
-    #load the data from the JSON file into a ruby hash
-    top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
-    standards_data_dir = "#{top_dir}/data/standards"
-    temp = File.read("#{standards_data_dir}/OpenStudio_Standards_space_types.json")
-    @standards = {}
-    @standards = JSON.parse(temp)
+    # todo - remove loading standards before merge
+    standards = self.model.load_openstudio_standards_json
 
     # populate search hash
     search_criteria = {
@@ -33,51 +29,48 @@ class OpenStudio::Model::SpaceType
     }
 
     # lookup space type properties
-    space_type_properties = self.model.find_object(@standards["space_types"], search_criteria)
-
-    # switch to use this but update test in standards and measures to load this outside of the method
-    #space_type_properties = self.model.find_object(self.model.standards["space_types"], search_criteria)
+    space_type_properties = self.model.find_object(standards["space_types"], search_criteria)
 
     return space_type_properties
 
   end
 
-
-  # this returns standards data for selected space type and template
+  # this returns standards data for selected construction
   # @param [string] target template for lookup
-  # @return [hash] hash of internal loads for different load types
-  def get_standards_data(template)
+  # @param [string] intended_surface_type template for lookup
+  # @param [string] standards_construction_type template for lookup
+  # @return [hash] hash of construction properties
+  def get_construction_properties(template,intended_surface_type,standards_construction_type)
 
-    if self.standardsBuildingType.is_initialized
-      standards_building_type = self.standardsBuildingType.get
+    # get building_category value
+    is_residential = self.get_standards_data(template)['is_residential']
+    if is_residential == "Yes"
+      building_category = "Residential"
     else
-      standards_building_type = nil
-    end
-    if self.standardsSpaceType.is_initialized
-      standards_space_type = self.standardsSpaceType.get
-    else
-      standards_space_type = nil
+      building_category = "Nonresidential"
     end
 
-    # lookup if space type is residential in space types standards
+    # todo - remove loading standards before merge
+    standards = self.model.load_openstudio_standards_json
 
-    # standard.Model has find_climate_zone_set method. pass in climate zone and template
+    # get climate_zone_set
+    climate_zone = self.model.get_building_climate_zone_and_building_type['climate_zone']
+    climate_zone_set = self.model.find_climate_zone_set(climate_zone, template,standards)
 
     # populate search hash
     search_criteria = {
         "template" => template,
         "climate_zone_set" => climate_zone_set,
-        "is_residential" => standards_building_type,
+        "intended_surface_type" => intended_surface_type,
+        "standards_construction_type" => standards_construction_type,
+        "building_category" => building_category,
     }
 
-    # lookup space type properties
-
     # switch to use this but update test in standards and measures to load this outside of the method
-    space_type_properties = self.model.find_object(self.model.standards["construction_properties"], search_criteria)
+    construction_properties = self.model.find_object(standards["construction_properties"], search_criteria)
 
-    return space_type_properties
+    return construction_properties
 
   end
-
 
 end
