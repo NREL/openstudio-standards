@@ -62,7 +62,7 @@ class OpenStudio::Model::Model
     # keeping user-defined schedules.
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Changing Lighting and Ventilation Rates")
     self.getSpaceTypes.sort.each do |space_type|
-      space_type.set_internal_loads(building_vintage, false, true, false, false, true, false) 
+      space_type.set_internal_loads(building_vintage, self.standards, false, true, false, false, true, false) 
     end
 
     # Get the groups of zones that define the
@@ -510,41 +510,70 @@ class OpenStudio::Model::Model
       case system_type
       when 'PTAC'
       
+        # Retrieve the existing hot water loop
+        # or add a new one if necessary.
+        hot_water_loop = nil
+        if self.getPlantLoopByName('Hot Water Loop').is_initialized
+          hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
+        else
+          hot_water_loop = self.add_hw_loop('NaturalGas')
+        end      
+      
+        # Add a hot water PTAC to each zone
+        self.add_ptac(standard,
+                      nil,
+                      hot_water_loop,
+                      zones,
+                      'ConstantVolume',
+                      'Water',
+                      'NaturalGas',
+                      'Single Speed DX AC')
+ 
       when 'PTHP'
       
+        # Add an air-source packaged terminal
+        # heat pump with electric supplemental heat
+        # to each zone.
+        self.add_pthp(standard, 
+                nil,
+                zones,
+                'ConstantVolume')
+
       when 'PSZ_AC'
       
-        # Creates a PSZ-AC system for each zone and adds it to the model.
+        # Add a gas-fired PSZ-AC to each zone
         self.add_psz_ac(standard, 
-                    nil, 
-                    nil, 
-                    nil,
-                    zones,
-                    nil,
-                    nil,
-                    'DrawThrough', 
-                    'ConstantVolume',
-                    'NaturalGas',
-                    'NaturalGas',
-                    'Single Speed DX AC',
-                    building_type=nil)      
+                        nil, 
+                        nil, 
+                        nil,
+                        zones,
+                        nil,
+                        nil,
+                        'DrawThrough', 
+                        'ConstantVolume',
+                        'NaturalGas',
+                        'NaturalGas',
+                        'Single Speed DX AC',
+                        building_type=nil)      
       
       when 'PSZ_HP'
-      
-        # Creates a PSZ-HP system for each zone and adds it to the model.
+
+        # Add an air-source packaged single zone
+        # heat pump with electric supplemental heat
+        # to each zone.
         self.add_psz_ac(standard, 
-                    'PSZ-HP', 
-                    nil, 
-                    nil,
-                    zones,
-                    nil,
-                    nil,
-                    'DrawThrough', 
-                    'ConstantVolume',
-                    'Single Speed Heat Pump',
-                    'Electric',
-                    'Single Speed Heat Pump',
-                    building_type=nil)       
+                      'PSZ-HP', 
+                      nil, 
+                      nil,
+                      zones,
+                      nil,
+                      nil,
+                      'DrawThrough', 
+                      'ConstantVolume',
+                      'Single Speed Heat Pump',
+                      'Electric',
+                      'Single Speed Heat Pump',
+                      building_type=nil)       
       
       when 'PVAV_Reheat'
       
@@ -587,6 +616,9 @@ class OpenStudio::Model::Model
       
       when 'PVAV_PFP_Boxes'
 
+      
+      
+      
       when 'VAV_Reheat'
       
         # Retrieve the existing hot water loop
@@ -1337,6 +1369,7 @@ class OpenStudio::Model::Model
 
     # TODO check that the data was loaded correctly
 
+    
     @created_names = []
   end
 
