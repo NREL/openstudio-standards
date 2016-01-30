@@ -114,7 +114,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     end
 
     # Make the HEAT-CAP-FT curve
-    heat_cap_ft = self.model.add_curve(ac_props["heat_cap_ft"], standards)
+    heat_cap_ft = self.model.add_curve(ac_props["heat_cap_ft"])
     if heat_cap_ft
       self.setTotalHeatingCapacityFunctionofTemperatureCurve(heat_cap_ft)
     else
@@ -123,7 +123,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     end
 
     # Make the HEAT-CAP-FFLOW curve
-    heat_cap_fflow = self.model.add_curve(ac_props["heat_cap_fflow"], standards)
+    heat_cap_fflow = self.model.add_curve(ac_props["heat_cap_fflow"])
     if heat_cap_fflow
       self.setTotalHeatingCapacityFunctionofFlowFractionCurve(heat_cap_fflow)
     else
@@ -132,7 +132,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     end
     
     # Make the HEAT-EIR-FT curve
-    heat_eir_ft = self.model.add_curve(ac_props["heat_eir_ft"], standards)
+    heat_eir_ft = self.model.add_curve(ac_props["heat_eir_ft"])
     if heat_eir_ft
       self.setEnergyInputRatioFunctionofTemperatureCurve(heat_eir_ft)  
     else
@@ -141,7 +141,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     end
 
     # Make the HEAT-EIR-FFLOW curve
-    heat_eir_fflow = self.model.add_curve(ac_props["heat_eir_fflow"], standards)
+    heat_eir_fflow = self.model.add_curve(ac_props["heat_eir_fflow"])
     if heat_eir_fflow
       self.setEnergyInputRatioFunctionofFlowFractionCurve(heat_eir_fflow)
     else
@@ -150,7 +150,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     end
     
     # Make the HEAT-PLF-FPLR curve
-    heat_plf_fplr = self.model.add_curve(ac_props["heat_plf_fplr"], standards)
+    heat_plf_fplr = self.model.add_curve(ac_props["heat_plf_fplr"])
     if heat_plf_fplr
       self.setPartLoadFractionCorrelationCurve(heat_plf_fplr)
     else

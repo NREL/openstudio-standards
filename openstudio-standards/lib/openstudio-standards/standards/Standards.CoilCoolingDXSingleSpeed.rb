@@ -7,7 +7,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not 
-  def setStandardEfficiencyAndCurves(template, standards, sql_db_vars_map)
+  def setStandardEfficiencyAndCurves(template, sql_db_vars_map)
   
     successfully_set_all_properties = true
   
@@ -110,7 +110,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-CAP-FT curve
-    cool_cap_ft = self.model.add_curve(ac_props["cool_cap_ft"], standards)
+    cool_cap_ft = self.model.add_curve(ac_props["cool_cap_ft"])
     if cool_cap_ft
       self.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft)
     else
@@ -119,7 +119,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-CAP-FFLOW curve
-    cool_cap_fflow = self.model.add_curve(ac_props["cool_cap_fflow"], standards)
+    cool_cap_fflow = self.model.add_curve(ac_props["cool_cap_fflow"])
     if cool_cap_fflow
       self.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow)
     else
@@ -128,7 +128,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
     
     # Make the COOL-EIR-FT curve
-    cool_eir_ft = self.model.add_curve(ac_props["cool_eir_ft"], standards)
+    cool_eir_ft = self.model.add_curve(ac_props["cool_eir_ft"])
     if cool_eir_ft
       self.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)  
     else
@@ -137,7 +137,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-EIR-FFLOW curve
-    cool_eir_fflow = self.model.add_curve(ac_props["cool_eir_fflow"], standards)
+    cool_eir_fflow = self.model.add_curve(ac_props["cool_eir_fflow"])
     if cool_eir_fflow
       self.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
     else
@@ -146,7 +146,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
     
     # Make the COOL-PLF-FPLR curve
-    cool_plf_fplr = self.model.add_curve(ac_props["cool_plf_fplr"], standards)
+    cool_plf_fplr = self.model.add_curve(ac_props["cool_plf_fplr"])
     if cool_plf_fplr
       self.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
     else

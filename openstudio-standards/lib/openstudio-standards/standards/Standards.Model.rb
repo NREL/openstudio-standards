@@ -2054,16 +2054,16 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_curve(curve_name, standards)
+  def add_curve(curve_name)
 
     #OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
     success = false
 
-    curve_biquadratics = standards["curve_biquadratics"]
-    curve_quadratics = standards["curve_quadratics"]
-    curve_bicubics = standards["curve_bicubics"]
-    curve_cubics = standards["curve_cubics"]
+    curve_biquadratics = $os_standards["curve_biquadratics"]
+    curve_quadratics = $os_standards["curve_quadratics"]
+    curve_bicubics = $os_standards["curve_bicubics"]
+    curve_cubics = $os_standards["curve_cubics"]
 
     # Make biquadratic curves
     curve_data = self.find_object(curve_biquadratics, {"name"=>curve_name})

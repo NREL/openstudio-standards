@@ -7,7 +7,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def setStandardEfficiencyAndCurves(template, standards)
+  def setStandardEfficiencyAndCurves(template)
 
     successfully_set_all_properties = true  
   
@@ -102,7 +102,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
     end
  
     # Make the total COOL-CAP-FT curve
-    tot_cool_cap_ft = self.model.add_curve(ac_props["cool_cap_ft"], standards)
+    tot_cool_cap_ft = self.model.add_curve(ac_props["cool_cap_ft"])
     if tot_cool_cap_ft
       self.setTotalCoolingCapacityFunctionOfTemperatureCurve(tot_cool_cap_ft)
     else
@@ -111,7 +111,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
     end
 
     # Make the total COOL-CAP-FFLOW curve
-    tot_cool_cap_fflow = self.model.add_curve(ac_props["cool_cap_fflow"], standards)
+    tot_cool_cap_fflow = self.model.add_curve(ac_props["cool_cap_fflow"])
     if tot_cool_cap_fflow
       self.setTotalCoolingCapacityFunctionOfFlowFractionCurve(tot_cool_cap_fflow)
     else
@@ -120,7 +120,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
     end
     
     # Make the COOL-EIR-FT curve
-    cool_eir_ft = self.model.add_curve(ac_props["cool_eir_ft"], standards)
+    cool_eir_ft = self.model.add_curve(ac_props["cool_eir_ft"])
     if cool_eir_ft
       self.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)  
     else
@@ -129,7 +129,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
     end
 
     # Make the COOL-EIR-FFLOW curve
-    cool_eir_fflow = self.model.add_curve(ac_props["cool_eir_fflow"], standards)
+    cool_eir_fflow = self.model.add_curve(ac_props["cool_eir_fflow"])
     if cool_eir_fflow
       self.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
     else
@@ -138,7 +138,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
     end
     
     # Make the COOL-PLF-FPLR curve
-    cool_plf_fplr = self.model.add_curve(ac_props["cool_plf_fplr"], standards)
+    cool_plf_fplr = self.model.add_curve(ac_props["cool_plf_fplr"])
     if cool_plf_fplr
       self.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
     else
@@ -147,7 +147,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
     end
     
     # Make the low speed COOL-CAP-FT curve
-    low_speed_cool_cap_ft = self.model.add_curve(ac_props["cool_cap_ft"], standards)
+    low_speed_cool_cap_ft = self.model.add_curve(ac_props["cool_cap_ft"])
     if low_speed_cool_cap_ft
       self.setLowSpeedTotalCoolingCapacityFunctionOfTemperatureCurve(low_speed_cool_cap_ft)
     else
@@ -156,7 +156,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
     end
 
     # Make the low speed COOL-EIR-FT curve
-    low_speed_cool_eir_ft = self.model.add_curve(ac_props["cool_eir_ft"], standards)
+    low_speed_cool_eir_ft = self.model.add_curve(ac_props["cool_eir_ft"])
     if low_speed_cool_eir_ft
       self.setLowSpeedEnergyInputRatioFunctionOfTemperatureCurve(low_speed_cool_eir_ft)  
     else

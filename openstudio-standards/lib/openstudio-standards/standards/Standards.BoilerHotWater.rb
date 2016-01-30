@@ -65,7 +65,7 @@ class OpenStudio::Model::BoilerHotWater
     end
     
     # Make the EFFFPLR curve
-    eff_fplr = self.model.add_curve(blr_props['efffplr'], standards)
+    eff_fplr = self.model.add_curve(blr_props['efffplr'])
     if eff_fplr
       self.setNormalizedBoilerEfficiencyCurve(eff_fplr)
     else
