@@ -153,7 +153,7 @@ class OpenStudio::Model::Model
         self.add_doas(prototype_input, hvac_standards, hot_water_loop, chilled_water_loop, thermal_zones, building_type, building_vintage, climate_zone)
       when 'Refrigeration'
         self.add_refrigeration(prototype_input,
-                              standards,
+                              add_schedule(,
                               system['case_type'],
                               system['cooling_capacity_per_length'],
                               system['length'],
@@ -184,7 +184,7 @@ class OpenStudio::Model::Model
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = self.find_object(self.standards['space_types'], {'template'=>building_vintage, 'building_type'=>building_type, 'space_type'=>space_type_name})
+      space_type_data = self.find_object(add_schedule(['space_types'], {'template'=>building_vintage, 'building_type'=>building_type, 'space_type'=>space_type_name})
       if space_type_data == nil
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{building_vintage}-#{building_type}-#{space_type_name}")
         return false

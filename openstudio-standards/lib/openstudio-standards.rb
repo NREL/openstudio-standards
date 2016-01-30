@@ -3,7 +3,7 @@ require "openstudio-standards/version"
 module OpenstudioStandards
 
   require 'json' # Used to load standards JSON files
-
+  
   # HVAC sizing
   require 'openstudio-standards/hvac_sizing/HVACSizing.Model'
 
@@ -26,4 +26,10 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/logging'
   require_relative 'openstudio-standards/utilities/simulation'
 
+  # Load the Openstudio Standards JSON
+  # and assign to a constant.  This
+  # should never be altered by the gem.
+  $os_standards = load_openstudio_standards_json 
+  
+  
 end

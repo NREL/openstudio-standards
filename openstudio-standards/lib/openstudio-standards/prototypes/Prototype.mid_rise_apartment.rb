@@ -312,7 +312,7 @@ class OpenStudio::Model::Model
         'building_type' => building_type,
         'space_type' => space_type_name
       }
-      data = find_object(self.standards['space_types'],search_criteria)
+      data = find_object($os_standards['space_types'],search_criteria)
       
       if data['service_water_heating_peak_flow_rate'].nil?
         next
