@@ -62,9 +62,9 @@ class OpenStudio::Model::AirLoopHVAC
     end
     
     # Single zone systems
-    if self.thermalZones.size == 1
-      self.apply_single_zone_controls(template, climate_zone)
-    end
+    # if self.thermalZones.size == 1
+      # self.apply_single_zone_controls(template, climate_zone)
+    # end
 
     # DCV
     if self.is_demand_control_ventilation_required(template, climate_zone)
@@ -2423,7 +2423,7 @@ class OpenStudio::Model::AirLoopHVAC
     if oa_control.minimumOutdoorAirSchedule.is_initialized
       min_oa_sch_name = oa_control.minimumOutdoorAirSchedule.get.name.get
     else
-      min_oa_sch_name = self.alwaysOnDiscreteSchedule.name.get
+      min_oa_sch_name = self.model.alwaysOnDiscreteSchedule.name.get
     end
     
     # Get the supply fan

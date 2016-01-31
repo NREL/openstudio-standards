@@ -2,12 +2,12 @@
 # open the class to add methods to return sizing values
 class OpenStudio::Model::CoilHeatingDXSingleSpeed
 
-  def setStandardEfficiencyAndCurves(template, standards, sql_db_vars_map)
+  def setStandardEfficiencyAndCurves(template, sql_db_vars_map)
 
     successfully_set_all_properties = true
   
-    unitary_hps = standards['heat_pumps']
-    heat_pumps = standards['heat_pumps_heating']
+    unitary_hps = $os_standards['heat_pumps']
+    heat_pumps = $os_standards['heat_pumps_heating']
  
     # Define the criteria to find the unitary properties
     # in the hvac standards data set.

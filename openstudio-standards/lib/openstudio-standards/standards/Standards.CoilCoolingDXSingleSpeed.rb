@@ -11,8 +11,8 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
   
     successfully_set_all_properties = true
   
-    unitary_acs = standards['unitary_acs']
-    heat_pumps = standards['heat_pumps']
+    unitary_acs = $os_standards['unitary_acs']
+    heat_pumps = $os_standards['heat_pumps']
   
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.

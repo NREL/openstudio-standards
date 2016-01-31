@@ -164,7 +164,7 @@ class OpenStudio::Model::Model
     has_multizone_systems = false
     self.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.is_multizone_vav_system
-        self.apply_multizone_vav_outdoor_air_sizing
+        self.apply_multizone_vav_outdoor_air_sizing(building_vintage)
         if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
           return false
         end
@@ -1275,7 +1275,7 @@ class OpenStudio::Model::Model
   #
   # @note This must be performed before the sizing run because
   # it impacts component sizes, which in turn impact efficiencies.
-  def apply_multizone_vav_outdoor_air_sizing()
+  def apply_multizone_vav_outdoor_air_sizing(building_vintage)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying multizone vav OA sizing.')
 
@@ -1525,7 +1525,7 @@ class OpenStudio::Model::Model
   # @param schedule_name [String} name of the schedule
   # @return [ScheduleRuleset] the resulting schedule ruleset
   # @todo make return an OptionalScheduleRuleset
-  def add_schedule( schedule_name)
+  def add_schedule(schedule_name)
     return nil if schedule_name == nil or schedule_name == ""
     # First check model and return schedule if it already exists
     self.getSchedules.each do |schedule|

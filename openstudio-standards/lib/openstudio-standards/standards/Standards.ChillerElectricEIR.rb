@@ -9,10 +9,10 @@ class OpenStudio::Model::ChillerElectricEIR
   # @return [Bool] true if successful, false if not
   def setStandardEfficiencyAndCurves(template)
   
-    chillers = standards['chillers']
-    curve_biquadratics = standards['curve_biquadratics']
-    curve_quadratics = standards['curve_quadratics']
-    curve_bicubics = standards['curve_bicubics']
+    chillers = $os_standards['chillers']
+    curve_biquadratics = $os_standards['curve_biquadratics']
+    curve_quadratics = $os_standards['curve_quadratics']
+    curve_bicubics = $os_standards['curve_bicubics']
   
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -96,7 +96,7 @@ class OpenStudio::Model::ChillerElectricEIR
     # which may be either a CurveBicubic or a CurveQuadratic based on chiller type
     cool_plf_fplr = self.model.add_curve(chlr_props['eirfplr'])
     if cool_plf_fplr
-      self.setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
+      #self.setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
     else
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.ChillerElectricEIR", "For #{self.name}, cannot find cool_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false

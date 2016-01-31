@@ -440,7 +440,7 @@ class OpenStudio::Model::SpaceType
   def set_internal_load_schedules(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
   
     # Get the standards data
-    space_type_properties = self.get_standards_data(template)
+    space_type_properties = self.get_standards_data(template)   
     
     # Get the default schedule set
     # or create a new one if none exists.
@@ -452,21 +452,19 @@ class OpenStudio::Model::SpaceType
       default_sch_set.setName("#{self.name} Schedule Set")
       self.setDefaultScheduleSet(default_sch_set)    
     end
-    
-    # Get the model
-    model = self.model
-    
+
     # People
     if set_people
-    
-      occupancy_sch = space_type_properties['occupancy_sch']
+      occupancy_sch = space_type_properties['occupancy_schedule']
       unless occupancy_sch.nil?
         default_sch_set.setNumberofPeopleSchedule(model.add_schedule(occupancy_sch))
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set occupancy schedule to #{occupancy_sch}.")
       end
       
-      occupancy_activity_sch = space_type_properties['occupancy_activity_sch']
+      occupancy_activity_sch = space_type_properties['occupancy_activity_schedule']
       unless occupancy_activity_sch.nil?
         default_sch_set.setPeopleActivityLevelSchedule(model.add_schedule(occupancy_activity_sch))
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set occupant activity schedule to #{occupancy_activity_sch}.")
       end
       
     end
@@ -474,7 +472,7 @@ class OpenStudio::Model::SpaceType
     # Lights
     if set_lights
     
-      lighting_sch = space_type_properties['lighting_sch']
+      lighting_sch = space_type_properties['lighting_schedule']
       unless lighting_sch.nil?
         default_sch_set.setLightingSchedule(model.add_schedule(lighting_sch))
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set lighting schedule to #{lighting_sch}.")
@@ -485,7 +483,7 @@ class OpenStudio::Model::SpaceType
     # Electric Equipment   
     if set_electric_equipment
     
-      elec_equip_sch = space_type_properties['elec_equip_sch']
+      elec_equip_sch = space_type_properties['electric_equipment_schedule']
       unless elec_equip_sch.nil?
         default_sch_set.setElectricEquipmentSchedule(model.add_schedule(elec_equip_sch))
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set electric equipment schedule to #{elec_equip_sch}.")
@@ -496,7 +494,7 @@ class OpenStudio::Model::SpaceType
     # Gas Equipment
     if set_gas_equipment
     
-      gas_equip_sch = space_type_properties['gas_equip_sch']
+      gas_equip_sch = space_type_properties['gas_equipment_schedule']
       unless gas_equip_sch.nil?
         default_sch_set.setGasEquipmentSchedule(model.add_schedule(gas_equip_sch))
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set gas equipment schedule to #{gas_equip_sch}.")

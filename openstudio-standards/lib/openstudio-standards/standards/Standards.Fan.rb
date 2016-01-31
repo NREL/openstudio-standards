@@ -7,7 +7,7 @@ module Fan
   # Assumes 65% fan efficiency and 4-pole, enclosed motor.
   #
   # @return [Bool] true if successful, false if not
-  def setStandardEfficiency(template, standards)
+  def setStandardEfficiency(template)
     
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
@@ -49,7 +49,7 @@ module Fan
     end
     
     # Find the motor efficiency
-    motor_eff = standard_minimum_motor_efficiency(template, standards, allowed_hp)
+    motor_eff = standard_minimum_motor_efficiency(template, standards)
 
     # Calculate the total fan efficiency
     total_fan_eff = fan_impeller_eff * motor_eff
@@ -252,12 +252,12 @@ module Fan
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
   # @return [Double] minimum motor efficiency (0.0 to 1.0)
-  def standard_minimum_motor_efficiency(template, standards, motor_bhp)
+  def standard_minimum_motor_efficiency(template, motor_bhp)
   
     fan_motor_eff = 0.85
   
     # Lookup the minimum motor efficiency
-    motors = standards["motors"]
+    motors = $os_standards["motors"]
     
     # Assuming all fan motors are 4-pole ODP
     search_criteria = {
