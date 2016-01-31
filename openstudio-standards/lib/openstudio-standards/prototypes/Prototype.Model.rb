@@ -9,6 +9,7 @@ class OpenStudio::Model::Model
   require_relative 'Prototype.FanZoneExhaust'
   require_relative 'Prototype.HeatExchangerAirToAirSensibleAndLatent'
   require_relative 'Prototype.ControllerWaterCoil'
+  require_relative 'Prototype.Model.hvac'
 
   # Creates a DOE prototype building model and replaces
   # the current model with this model.
@@ -39,7 +40,7 @@ class OpenStudio::Model::Model
     self.load_geometry(building_type, building_vintage, climate_zone)
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
     space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
-    self.assign_space_type_stubs(lookup_building_type, space_type_map)
+    self.assign_space_type_stubs(lookup_building_type, building_vintage, space_type_map)
     self.add_loads(building_vintage, climate_zone)
     self.apply_infiltration_standard(building_vintage)
     self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
@@ -47,7 +48,8 @@ class OpenStudio::Model::Model
     self.add_constructions(lookup_building_type, building_vintage, climate_zone)
     self.create_thermal_zones(building_type,building_vintage, climate_zone)
     self.add_hvac(building_type, building_vintage, climate_zone, prototype_input)
-    self.add_swh(building_type, building_vintage, climate_zone, prototype_input, space_type_map)
+    self.custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+    #self.add_swh(building_type, building_vintage, climate_zone, prototype_input, space_type_map)
     self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
     self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
     self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone)
@@ -64,7 +66,7 @@ class OpenStudio::Model::Model
     has_multizone_systems = false
     self.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.is_multizone_vav_system
-        self.apply_multizone_vav_outdoor_air_sizing
+        self.apply_multizone_vav_outdoor_air_sizing(building_vintage)
         if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
           return false
         end
@@ -78,7 +80,7 @@ class OpenStudio::Model::Model
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
 
     # Apply the HVAC efficiency standard
-    self.applyHVACEfficiencyStandard
+    self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
 
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
@@ -352,13 +354,15 @@ class OpenStudio::Model::Model
   #   The hash for each building is defined inside the Prototype.building_name
   #   e.g. (Prototype.secondary_school.rb) file.
   # @return [Bool] returns true if successful, false if not
-  def assign_space_type_stubs(building_type, space_type_map)
+  def assign_space_type_stubs(building_type, building_vintage, space_type_map)
 
     space_type_map.each do |space_type_name, space_names|
       # Create a new space type
       stub_space_type = OpenStudio::Model::SpaceType.new(self)
       stub_space_type.setStandardsBuildingType(building_type)
       stub_space_type.setStandardsSpaceType(space_type_name)
+      stub_space_type.setName("#{building_type} #{space_type_name}")
+      stub_space_type.set_rendering_color(building_vintage)
 
       space_names.each do |space_name|
         space = self.getSpaceByName(space_name)
@@ -1094,8 +1098,8 @@ class OpenStudio::Model::Model
 
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.
-        unless air_loop.is_economizer_type_allowable(template, climate_zone)
-          OpenStudio::logFree(OpenStudio::Warn, "openstudio.prototype.Model", "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{template}, climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
+        unless air_loop.is_economizer_type_allowable(building_vintage, climate_zone)
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.prototype.Model", "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{building_vintage}, climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
           oa_control.setEconomizerControlType('NoEconomizer')
         end
 

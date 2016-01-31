@@ -7,7 +7,7 @@ class OpenStudio::Model::Model
   # Creates a hot water loop with one boiler
   # and add it to the model.
   #
-  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2
+  # @param boiler_fuel_type [String] valid choices are Electricity, Gas, PropaneGas, FuelOil#1, FuelOil#2
   # @return [OpenStudio::Model::PlantLoop] the resulting hot water loop  
   def add_hw_loop(boiler_fuel_type, building_type=nil)
 
@@ -197,27 +197,11 @@ class OpenStudio::Model::Model
       sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
       # Change the chilled water loop to have a two-way common pipes
       chilled_water_loop.setCommonPipeSimulation('CommonPipe')
-    else
-
     end
 
-    # Find the initial Chiller properties based on initial inputs
-    search_criteria = {
-      'template' => standard,
-      'cooling_type' => chiller_cooling_type,
-      'condenser_type' => chiller_condenser_type,
-      'compressor_type' => chiller_compressor_type,
-    }
-
-    chillers = @standards['chillers']    
-    chiller_properties = self.find_object(chillers, search_criteria, chiller_capacity_guess_tons)
-    if !chiller_properties
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find chiller with prototype inputs of:  #{search_criteria}")
-      return chilled_water_loop
-    end
-
-    # Make the correct type of chiller based these properties
-    chiller = self.add_chiller(@standards, chiller_properties)
+    # Make the correct type of chiller based these properties 
+    chiller = OpenStudio::Model::ChillerElectricEIR.new(self)
+    chiller.setName("#{standard} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller")
     chilled_water_loop.addSupplyBranchForComponent(chiller)
     chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
     ref_cond_wtr_temp_f = 95
@@ -311,21 +295,6 @@ class OpenStudio::Model::Model
     cw_pump.setCoefficient4ofthePartLoadPerformanceCurve(1.0095)
     cw_pump.setPumpControlType('Intermittent')
     cw_pump.addToNode(condenser_water_loop.supplyInletNode)
-
-    # TODO cooling tower properties
-    # Find the initial Cooling Tower properties based on initial inputs
-    # search_criteria = {
-      # 'template' => prototype_input['template'],
-      # 'cooling_type' => prototype_input['chiller_cooling_type'],
-      # 'condenser_type' => prototype_input['chiller_condenser_type'],
-      # 'compressor_type' => prototype_input['chiller_compressor_type'],
-    # }
-
-    # chiller_properties = self.find_object(chillers, search_criteria, prototype_input['chiller_capacity_guess'])
-    # if !chiller_properties
-      # OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find chiller with prototype inputs of:  #{prototype_input}")
-      # return condenser_water_loop
-    # end
 
     # TODO move cooling tower curve to lookup from spreadsheet
     cooling_tower_fan_curve = OpenStudio::Model::CurveCubic.new(self)
@@ -433,7 +402,7 @@ class OpenStudio::Model::Model
     # Boiler
     boiler = OpenStudio::Model::BoilerHotWater.new(self)
     boiler.setName("#{heat_pump_water_loop.name} Sup Boiler")
-    boiler.setFuelType('NaturalGas')
+    boiler.setFuelType('Gas')
     boiler.setDesignWaterOutletTemperature(boiler_hw_temp_c)
     boiler.setMinimumPartLoadRatio(0)
     boiler.setMaximumPartLoadRatio(1.2)
@@ -978,7 +947,7 @@ class OpenStudio::Model::Model
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA Sys")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
-    oa_intake_controller.setMinimumOutdoorAirSchedule(motorized_oa_damper_sch)
+    oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
     oa_intake.addToNode(air_loop.supplyInletNode)
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Ventilation Controller")
@@ -1227,9 +1196,9 @@ class OpenStudio::Model::Model
   # or nil in which case will be defaulted to always open
   # @param fan_location [Double] valid choices are BlowThrough, DrawThrough
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
-  # @param heating_type [Double] valid choices are NaturalGas, Water, 
+  # @param heating_type [Double] valid choices are Gas, Water, 
   # Single Speed Heat Pump, Water To Air Heat Pump
-  # @param supplemental_heating_type [Double] valid choices are Electric, NaturalGas
+  # @param supplemental_heating_type [Double] valid choices are Electric, Gas
   # @param cooling_type [String] valid choices are Water, Two Speed DX AC,
   # Single Speed DX AC, Single Speed Heat Pump, Water To Air Heat Pump
   # @param building_type [String] the building type
@@ -1293,7 +1262,7 @@ class OpenStudio::Model::Model
         air_loop.setName("#{zone.name} #{sys_name}")
       end
       air_loop.setAvailabilitySchedule(hvac_op_sch)
-      air_loop << air_loops
+      air_loops << air_loop
       
       # When an air_loop is contructed, its constructor creates a sizing:system object
       # the default sizing:system contstructor makes a system:sizing object
@@ -1361,7 +1330,7 @@ class OpenStudio::Model::Model
       end
 
       htg_coil = nil
-      if heating_type == 'NaturalGas'
+      if heating_type == 'Gas'
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(self,self.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} Gas Htg Coil")
 
@@ -1477,7 +1446,7 @@ class OpenStudio::Model::Model
       if supplemental_heating_type == 'Electric'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(self,self.alwaysOnDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} Electric Backup Htg Coil")
-      elsif supplemental_heating_type == 'NaturalGas'
+      elsif supplemental_heating_type == 'Gas'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(self,self.alwaysOnDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} Gas Backup Htg Coil")
       end
@@ -2007,7 +1976,7 @@ class OpenStudio::Model::Model
 
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
       oa_controller.setName("#{air_loop.name} OA Sys Controller")
-      oa_controller.setMinimumOutdoorAirSchedule(motorized_oa_damper_sch)
+      oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self,oa_controller)
       oa_system.setName("#{air_loop.name} OA Sys")
 
@@ -2092,18 +2061,17 @@ class OpenStudio::Model::Model
   # @param oa_damper_sch [Double] name of the oa damper schedule, 
   # or nil in which case will be defaulted to always open
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
-  # @param heating_type [Double] valid choices are NaturalGas, Single Speed Heat Pump
-  # @param supplemental_heating_type [Double] valid choices are Electric, NaturalGas
+  # @param heating_type [Double] valid choices are Gas, Single Speed Heat Pump
+  # @param supplemental_heating_type [Double] valid choices are Electric, Gas
   # @param cooling_type [String] valid choices are Two Speed DX AC,a
   # Single Speed DX AC, Single Speed Heat Pump
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting split AC air loop.
   def add_split_AC(standard, 
-                sys_name, 
-                hot_water_loop, 
-                chilled_water_loop,
+                sys_name,
                 thermal_zones, 
                 hvac_op_sch,
+                alt_hvac_op_sch,
                 oa_damper_sch,
                 fan_type,
                 heating_type,
@@ -2120,6 +2088,13 @@ class OpenStudio::Model::Model
       hvac_op_sch = self.alwaysOnDiscreteSchedule
     else
       hvac_op_sch = self.add_schedule(hvac_op_sch)
+    end
+
+    # alternate hvac operation schedule
+    if alt_hvac_op_sch.nil?
+      alt_hvac_op_sch = self.alwaysOnDiscreteSchedule
+    else
+      alt_hvac_op_sch = self.add_schedule(alt_hvac_op_sch)
     end
     
     # oa damper schedule
@@ -2156,7 +2131,7 @@ class OpenStudio::Model::Model
 
     # Meeting room cycling fan schedule
     if space_type_names.include? 'Meeting'
-      hvac_op_sch = self.add_schedule(prototype_input['sac_operation_schedule_meeting'])
+      hvac_op_sch = alt_hvac_op_sch
     end
 
     air_loop = OpenStudio::Model::AirLoopHVAC.new(self)
@@ -2217,7 +2192,7 @@ class OpenStudio::Model::Model
 
     # Heating Coil
     htg_coil = nil
-    if heating_type == "NaturalGas"
+    if heating_type == "Gas"
       htg_coil = OpenStudio::Model::CoilHeatingGas.new(self,self.alwaysOnDiscreteSchedule)
       htg_coil.setName("#{thermal_zone_name} SAC Gas Htg Coil")
       htg_coil.setGasBurnerEfficiency(0.8)
@@ -2283,10 +2258,10 @@ class OpenStudio::Model::Model
     supplemental_htg_coil = nil
     if supplemental_heating_type == "Electric"
       supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(self,self.alwaysOnDiscreteSchedule)
-      supplemental_htg_coil.setName("#{zone.name} PSZ-AC Electric Backup Htg Coil")
+      supplemental_htg_coil.setName("#{thermal_zone_name} PSZ-AC Electric Backup Htg Coil")
     elsif supplemental_heating_type == "Gas"
       supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(self,self.alwaysOnDiscreteSchedule)
-      supplemental_htg_coil.setName("#{zone.name} PSZ-AC Gas Backup Htg Coil")
+      supplemental_htg_coil.setName("#{thermal_zone_name} PSZ-AC Gas Backup Htg Coil")
     end
 
     # Cooling Coil
@@ -2500,7 +2475,7 @@ class OpenStudio::Model::Model
 
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_controller.setName("#{thermal_zone_name} SAC OA Sys Controller")
-    oa_controller.setMinimumOutdoorAirSchedule(motorized_oa_damper_sch)
+    oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
     oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_MaxOAFrac_Sch)
     oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self,oa_controller)
     oa_system.setName("#{thermal_zone_name} SAC OA Sys")
@@ -2558,7 +2533,7 @@ class OpenStudio::Model::Model
   # @param thermal_zones [String] zones to connect to this system
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
   # @param heating_type [Double] valid choices are 
-  # NaturalGas, Electric
+  # Gas, Electric
   # @param cooling_type [String] valid choices are 
   # Two Speed DX AC, Single Speed DX AC
   # @param building_type [String] the building type
@@ -2620,7 +2595,7 @@ class OpenStudio::Model::Model
 
       # add heating coil
       htg_coil = nil
-      if heating_type == "NaturalGas"
+      if heating_type == "Gas"
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(self,self.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{zone.name} PTAC Gas Htg Coil")
       elsif heating_type == "Electric"
@@ -3015,16 +2990,47 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_unitheater(prototype_input, standards, thermal_zones)
+  # Creates a unit heater for each zone and adds it to the model.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param thermal_zones [String] zones to connect to this system
+  # @param hvac_op_sch [String] name of the HVAC operation schedule
+  # or nil in which case will be defaulted to always on  
+  # @param fan_control_type [Double] valid choices are Continuous, OnOff, Cycling
+  # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa
+  # @param heating_type [Double] valid choices are 
+  # Gas, Electric  
+  # @param building_type [String] the building type
+  # @return [Array<OpenStudio::Model::ZoneHVACUnitHeater>] an 
+  # array of the resulting unit heaters.  
+  def add_unitheater(standard, 
+                    sys_name,
+                    thermal_zones, 
+                    hvac_op_sch,
+                    fan_control_type,
+                    fan_pressure_rise,
+                    heating_type,
+                    building_type=nil)
 
-    fan_schedule = self.add_schedule(prototype_input['unitheater_operation_schedule'])
-    fan_schedule = self.alwaysOnDiscreteSchedule if fan_schedule.class.to_s == "NilClass"
+    thermal_zones.each do |zone|
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding split unit heater for #{zone.name}.")
+    end  
+                  
+    # hvac operation schedule
+    if hvac_op_sch.nil?
+      hvac_op_sch = self.alwaysOnDiscreteSchedule
+    else
+      hvac_op_sch = self.add_schedule(hvac_op_sch)
+    end
 
-    # Make a PTAC for each zone
+    # Make a unit heater for each zone
+    unit_heaters = []
     thermal_zones.each do |zone|
       # Zone sizing
       sizing_zone = zone.sizingZone
-      if prototype_input['building_type']=='RetailStandalone' and prototype_input['template']!='DOE Ref 1980-2004' and prototype_input['template']!='DOE Ref Pre-1980'
+      if building_type == 'RetailStandalone' && standard != 'DOE Ref 1980-2004' && standard != 'DOE Ref Pre-1980'
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(12.8)
       else
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(14)
@@ -3035,115 +3041,113 @@ class OpenStudio::Model::Model
       sizing_zone.setZoneHeatingDesignSupplyAirHumidityRatio(0.008)
 
       # add fan
-      fan = OpenStudio::Model::FanConstantVolume.new(self,fan_schedule)
+      fan = OpenStudio::Model::FanConstantVolume.new(self,hvac_op_sch)
       fan.setName("#{zone.name} UnitHeater Fan")
-      fan_static_pressure_in_h2o = prototype_input["unitheater_fan_static_pressure"]
-      fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, "inH_{2}O","Pa").get
-      fan.setPressureRise(fan_static_pressure_pa)
+      fan.setPressureRise(fan_pressure_rise)
       fan.setFanEfficiency(0.53625)
       fan.setMotorEfficiency(0.825)
 
       # add heating coil
       htg_coil = nil
-      if prototype_input["unitheater_heating_type"] == "Gas"
-        htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, fan_schedule)
+      if heating_type == "Gas"
+        htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, hvac_op_sch)
         htg_coil.setName("#{zone.name} UnitHeater Gas Htg Coil")
-      elsif prototype_input["unitheater_heating_type"] == "Electric"
-        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, fan_schedule)
+      elsif heating_type == "Electric"
+        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, hvac_op_sch)
         htg_coil.setName("#{zone.name} UnitHeater Electric Htg Coil")
       else
         puts "No heating type is found"
         return false
       end
 
-      fan_control_type = prototype_input["unitheater_fan_control_type"]
       unit_heater = OpenStudio::Model::ZoneHVACUnitHeater.new(self,
-                                                              fan_schedule,
+                                                              hvac_op_sch,
                                                               fan,
                                                               htg_coil)
       unit_heater.setName("#{zone.name} UnitHeater")
       unit_heater.setFanControlType(fan_control_type)
       unit_heater.addToThermalZone(zone)
+      unit_heaters << unit_heater
     end
-    return true
+    
+    return unit_heaters
+    
   end
-
-  def add_high_temp_radiant(prototype_input, standards, thermal_zones, fuel_type, control_type, combustion_efficiency)
-
-    # Make a PTAC for each zone
+ 
+  # Creates a high temp radiant heater for each zone and adds it to the model.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param thermal_zones [String] zones to connect to this system
+  # @param heating_type [Double] valid choices are 
+  # Gas, Electric  
+  # @param combustion_efficiency [Double] combustion efficiency as decimal
+  # @param building_type [String] the building type
+  # @return [Array<OpenStudio::Model::ZoneHVACHighTemperatureRadiant>] an 
+  # array of the resulting radiant heaters.    
+  def add_high_temp_radiant(standard,
+                            sys_name,
+                            thermal_zones,
+                            heating_type,
+                            combustion_efficiency,
+                            building_type=nil)
+  
+    # Make a high temp radiant heater for each zone
+    rad_heaters = []
     thermal_zones.each do |zone|
 
       high_temp_radiant = OpenStudio::Model::ZoneHVACHighTemperatureRadiant.new(self)
       high_temp_radiant.setName("#{zone.name} High Temp Radiant")
-      high_temp_radiant.setFuelType(fuel_type)
+      high_temp_radiant.setFuelType(heating_type)
       high_temp_radiant.setCombustionEfficiency(combustion_efficiency)
       high_temp_radiant.setTemperatureControlType(control_type)
       high_temp_radiant.setFractionofInputConvertedtoRadiantEnergy(0.8)
       high_temp_radiant.setHeatingThrottlingRange(2)
       high_temp_radiant.addToThermalZone(zone)
-
+      rad_heaters << high_temp_radiant
+      
     end
 
-    return true
+    return rad_heaters
 
   end
 
-  def add_chiller(standards, chlr_props)
+  # Creates a service water heating loop.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone]
+  # zones to place water heater in.  If nil, will be assumed in 70F air for heat loss.
+  # @param service_water_temperature [Double] service water temperature, in C
+  # @param service_water_pump_head [Double] service water pump head, in Pa
+  # @param service_water_pump_motor_efficiency [Double] 
+  # service water pump motor efficiency, as decimal.
+  # @param building_type [String] the building type
+  # @return [OpenStudio::Model::PlantLoop] 
+  # the resulting service water loop.   
+  def add_swh_loop(standard,
+                  sys_name,
+                  water_heater_thermal_zone,
+                  service_water_temperature,
+                  service_water_pump_head,
+                  service_water_pump_motor_efficiency,
+                  building_type=nil)
 
-    all_curves_found = true
-
-    # Make the CAPFT curve
-    cool_cap_ft = self.add_curve(chlr_props['capft'], standards)
-    if cool_cap_ft.nil?
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "Cannot find cool_cap_ft curve '#{chlr_props['capft']}', will not be set.")
-      all_curves_found = false
-    end
-
-    # Make the EIRFT curve
-    cool_eir_ft = self.add_curve(chlr_props['eirft'], standards)
-    if cool_eir_ft.nil?
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "Cannot find cool_eir_ft curve '#{chlr_props['eirft']}', will not be set.")
-      all_curves_found = false
-    end
-
-    # Make the EIRFPLR curve
-    # which may be either a CurveBicubic or a CurveQuadratic based on chiller type
-    cool_plf_fplr = self.add_curve(chlr_props['eirfplr'], standards)
-    if cool_plf_fplr.nil?
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "Cannot find cool_plf_fplr curve '#{chlr_props['eirfplr']}', will not be set.")
-      all_curves_found = false
-    end
-
-    # Create the chiller
-    chiller = nil
-    if all_curves_found == true
-      chiller = OpenStudio::Model::ChillerElectricEIR.new(self,cool_cap_ft,cool_eir_ft,cool_plf_fplr)
-    else
-      chiller = OpenStudio::Model::ChillerElectricEIR.new(self)
-    end
-
-    chiller.setName("#{chlr_props['template']} #{chlr_props['cooling_type']} #{chlr_props['condenser_type']} #{chlr_props['compressor_type']} Chiller")
-
-    # Set the efficiency value
-    kw_per_ton = chlr_props['minimum_full_load_efficiency']
-    cop = kw_per_ton_to_cop(kw_per_ton)
-    chiller.setReferenceCOP(cop)
-    chiller.setReferenceLeavingChilledWaterTemperature(6.67)
-    chiller.setLeavingChilledWaterLowerTemperatureLimit(2)
-    chiller.setChillerFlowMode('LeavingSetpointModulated')
-
-    return chiller
-
-  end
-
-  def add_swh_loop(prototype_input, standards, type, ambient_temperature_thermal_zone=nil, building_type=nil)
-
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding service water loop.")                  
+                  
     # Service water heating loop
     service_water_loop = OpenStudio::Model::PlantLoop.new(self)
-    service_water_loop.setName("#{type} Service Water Loop")
     service_water_loop.setMinimumLoopTemperature(10)
     service_water_loop.setMaximumLoopTemperature(60)
 
+    if sys_name.nil?
+      service_water_loop.setName("Service Water Loop")
+    else
+      service_water_loop.setName(sys_name)
+    end
+    
     # Temperature schedule type limits
     temp_sch_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(self)
     temp_sch_type_limits.setName('Temperature Schedule Type Limits')
@@ -3153,9 +3157,9 @@ class OpenStudio::Model::Model
     temp_sch_type_limits.setUnitType('Temperature')
 
     # Service water heating loop controls
-    swh_temp_f = prototype_input["#{type}_service_water_temperature"]
+    swh_temp_c = service_water_temperature
+    swh_temp_f = OpenStudio.convert(swh_temp_c,'C','F').get
     swh_delta_t_r = 9 #9F delta-T
-    swh_temp_c = OpenStudio.convert(swh_temp_f,'F','C').get
     swh_delta_t_k = OpenStudio.convert(swh_delta_t_r,'R','K').get
     swh_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     swh_temp_sch.setName("Service Water Loop Temp - #{swh_temp_f}F")
@@ -3171,15 +3175,15 @@ class OpenStudio::Model::Model
     sizing_plant.setLoopDesignTemperatureDifference(swh_delta_t_k)
 
     # Service water heating pump
-    swh_pump_head_press_pa = prototype_input["#{type}_service_water_pump_head"]
-    swh_pump_motor_efficiency = prototype_input["#{type}_service_water_pump_motor_efficiency"]
+    swh_pump_head_press_pa = service_water_pump_head
+    swh_pump_motor_efficiency = service_water_pump_motor_efficiency
     if swh_pump_head_press_pa.nil?
       # As if there is no circulation pump
       swh_pump_head_press_pa = 0.001
       swh_pump_motor_efficiency = 1
     end
 
-    if building_type.nil? and ( prototype_input['template'] == 'DOE Ref 1980-2004' or prototype_input['template'] == 'DOE Ref Pre-1980' )
+    if building_type.nil? && ( 'template' == 'DOE Ref 1980-2004' || 'template' == 'DOE Ref Pre-1980' )
       if building_type == 'Medium Office'
         swh_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
       else
@@ -3194,7 +3198,19 @@ class OpenStudio::Model::Model
     swh_pump.setPumpControlType('Intermittent')
     swh_pump.addToNode(service_water_loop.supplyInletNode)
 
-    water_heater = add_water_heater(prototype_input, standards, type, false, temp_sch_type_limits, swh_temp_sch, ambient_temperature_thermal_zone)
+    water_heater = add_water_heater(standard,
+                                    water_heater_capacity,
+                                    water_heater_volume,
+                                    water_heater_fuel,
+                                    service_water_temperature,
+                                    parasitic_fuel_consumption_rate,
+                                    swh_temp_sch,
+                                    false,
+                                    0.0,
+                                    nil,
+                                    water_heater_thermal_zone,
+                                    building_type)
+
     service_water_loop.addSupplyBranchForComponent(water_heater)
 
     # Service water heating loop bypass pipes
@@ -3212,28 +3228,63 @@ class OpenStudio::Model::Model
     return service_water_loop
   end
 
-  def add_water_heater(prototype_input, standards, type, set_peak_use_flowrate = false, temp_sch_type_limits = nil, swh_temp_sch = nil, ambient_temperature_thermal_zone=nil)
+  # Creates a water heater and attaches it to the supplied
+  # service water heating loop.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param water_heater_capacity [Double] water heater capacity, in W
+  # @param water_heater_volume [Double] water heater volume, in m^3
+  # @param water_heater_fuel [Double] valid choices are 
+  # Gas, Electric
+  # @param service_water_temperature [Double] water heater temperature, in C
+  # @param parasitic_fuel_consumption_rate [Double] water heater parasitic
+  # fuel consumption rate, in W
+  # @param swh_temp_sch [OpenStudio::Model::Schedule] the service water heating
+  # schedule. If nil, will be defaulted.
+  # @param set_peak_use_flowrate [Bool] if true, the peak flow rate
+  # and flow rate schedule will be set.
+  # @param peak_flowrate [Double] in m^3/s
+  # @param flowrate_schedule [String] name of the flow rate schedule
+  # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone]
+  # zones to place water heater in.  If nil, will be assumed in 70F air for heat loss.  
+  # @param building_type [String] the building type
+  # @return [OpenStudio::Model::WaterHeaterMixed] 
+  # the resulting water heater.
+  def add_water_heater(standard,
+                      water_heater_capacity,
+                      water_heater_volume,
+                      water_heater_fuel,
+                      service_water_temperature,
+                      parasitic_fuel_consumption_rate,
+                      swh_temp_sch,
+                      set_peak_use_flowrate,
+                      peak_flowrate,
+                      flowrate_schedule,
+                      water_heater_thermal_zone,
+                      building_type = nil)
+    
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water heater.")
+    
     # Water heater
     # TODO Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
-    water_heater_capacity_btu_per_hr = prototype_input["#{type}_water_heater_capacity"]
+    water_heater_capacity_btu_per_hr = OpenStudio.convert(water_heater_capacity, "W", "Btu/hr").get
     water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity_btu_per_hr, "Btu/hr", "kBtu/hr").get
-    water_heater_vol_gal = prototype_input["#{type}_water_heater_volume"]
-    water_heater_fuel = prototype_input["#{type}_water_heater_fuel"]
+    water_heater_vol_gal = OpenStudio.convert(water_heater_volume, "m^3", "gal").get
 
-    if temp_sch_type_limits.nil?
-      # Temperature schedule type limits
-      temp_sch_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(self)
-      temp_sch_type_limits.setName('Temperature Schedule Type Limits')
-      temp_sch_type_limits.setLowerLimitValue(0.0)
-      temp_sch_type_limits.setUpperLimitValue(100.0)
-      temp_sch_type_limits.setNumericType('Continuous')
-      temp_sch_type_limits.setUnitType('Temperature')
-    end
+    # Temperature schedule type limits
+    temp_sch_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(self)
+    temp_sch_type_limits.setName('Temperature Schedule Type Limits')
+    temp_sch_type_limits.setLowerLimitValue(0.0)
+    temp_sch_type_limits.setUpperLimitValue(100.0)
+    temp_sch_type_limits.setNumericType('Continuous')
+    temp_sch_type_limits.setUnitType('Temperature')
 
     if swh_temp_sch.nil?
       # Service water heating loop controls
-      swh_temp_f = prototype_input["#{type}_service_water_temperature"]
+      swh_temp_c = service_water_temperature
+      swh_temp_f = OpenStudio.convert(swh_temp_c,'C','F').get
       swh_delta_t_r = 9 #9F delta-T
       swh_temp_c = OpenStudio.convert(swh_temp_f,'F','C').get
       swh_delta_t_k = OpenStudio.convert(swh_delta_t_r,'R','K').get
@@ -3270,40 +3321,67 @@ class OpenStudio::Model::Model
     water_heater.setHeaterMaximumCapacity(OpenStudio.convert(water_heater_capacity_btu_per_hr,'Btu/hr','W').get)
     water_heater.setOffCycleParasiticHeatFractiontoTank(0.8)
     water_heater.setIndirectWaterHeatingRecoveryTime(1.5) # 1.5hrs
-    if water_heater_fuel == 'Electricity'
+    if water_heater_fuel == 'Electric'
       water_heater.setHeaterFuelType('Electricity')
       water_heater.setHeaterThermalEfficiency(1.0)
-      water_heater.setOffCycleParasiticFuelConsumptionRate(OpenStudio.convert(prototype_input["#{type}_service_water_parasitic_fuel_consumption_rate"],'Btu/hr','W').get)
-      water_heater.setOnCycleParasiticFuelConsumptionRate(OpenStudio.convert(prototype_input["#{type}_service_water_parasitic_fuel_consumption_rate"],'Btu/hr','W').get)
+      water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOnCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
       water_heater.setOffCycleParasiticFuelType('Electricity')
       water_heater.setOnCycleParasiticFuelType('Electricity')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053)
-    elsif water_heater_fuel == 'Natural Gas'
-      water_heater.setHeaterFuelType('NaturalGas')
+    elsif water_heater_fuel == 'Gas'
+      water_heater.setHeaterFuelType('Gas')
       water_heater.setHeaterThermalEfficiency(0.78)
-      water_heater.setOffCycleParasiticFuelConsumptionRate(OpenStudio.convert(prototype_input["#{type}_service_water_parasitic_fuel_consumption_rate"],'Btu/hr','W').get)
-      water_heater.setOnCycleParasiticFuelConsumptionRate(OpenStudio.convert(prototype_input["#{type}_service_water_parasitic_fuel_consumption_rate"],'Btu/hr','W').get)
-      water_heater.setOffCycleParasiticFuelType('NaturalGas')
-      water_heater.setOnCycleParasiticFuelType('NaturalGas')
+      water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOnCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOffCycleParasiticFuelType('Gas')
+      water_heater.setOnCycleParasiticFuelType('Gas')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
     end
 
     if set_peak_use_flowrate
-      rated_flow_rate_gal_per_min = prototype_input["#{type}_service_water_peak_flowrate"]
-      rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get
+      rated_flow_rate_m3_per_s = peak_flowrate
+      rated_flow_rate_gal_per_min = OpenStudio.convert(rated_flow_rate_m3_per_s,'m^3/s','gal/min').get
       water_heater.setPeakUseFlowRate(rated_flow_rate_m3_per_s)
 
-      schedule = self.add_schedule(prototype_input["#{type}_service_water_flowrate_schedule"])
+      schedule = self.add_schedule(flowrate_schedule)
       water_heater.setUseFlowRateFractionSchedule(schedule)
     end
 
     return water_heater
+    
   end
 
-  def add_swh_booster(prototype_input, standards, main_service_water_loop, ambient_temperature_thermal_zone=nil)
-
+  # Creates a booster water heater and attaches it
+  # to the supplied service water heating loop.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param main_service_water_loop [OpenStudio::Model::PlantLoop]
+  # the main service water loop that this booster assists.
+  # @param water_heater_capacity [Double] water heater capacity, in W
+  # @param water_heater_volume [Double] water heater volume, in m^3
+  # @param water_heater_fuel [Double] valid choices are 
+  # Gas, Electric
+  # @param booster_water_temperature [Double] water heater temperature, in C
+  # @param parasitic_fuel_consumption_rate [Double] water heater parasitic
+  # fuel consumption rate, in W
+  # @param building_type [String] the building type
+  # @return [OpenStudio::Model::PlantLoop] 
+  # the resulting booster water loop.  
+  def add_swh_booster(standard,
+                      main_service_water_loop,
+                      water_heater_capacity,
+                      water_heater_volume,
+                      water_heater_fuel,
+                      booster_water_temperature,
+                      parasitic_fuel_consumption_rate,
+                      building_type = nil)
+      
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding booster water heater to #{main_service_water_loop.name}.")
+      
     # Booster water heating loop
     booster_service_water_loop = OpenStudio::Model::PlantLoop.new(self)
     booster_service_water_loop.setName('Service Water Loop')
@@ -3317,9 +3395,9 @@ class OpenStudio::Model::Model
     temp_sch_type_limits.setUnitType('Temperature')
 
     # Service water heating loop controls
-    swh_temp_f = prototype_input['booster_water_temperature']
+    swh_temp_c = booster_water_temperature
+    swh_temp_f = OpenStudio.convert(swh_temp_c,'C','F').get
     swh_delta_t_r = 9 #9F delta-T
-    swh_temp_c = OpenStudio.convert(swh_temp_f,'F','C').get
     swh_delta_t_k = OpenStudio.convert(swh_delta_t_r,'R','K').get
     swh_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     swh_temp_sch.setName("Service Water Booster Temp - #{swh_temp_f}F")
@@ -3346,10 +3424,9 @@ class OpenStudio::Model::Model
     # Water heater
     # TODO Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
-    water_heater_capacity_btu_per_hr = prototype_input['booster_water_heater_capacity']
+    water_heater_capacity_btu_per_hr = OpenStudio.convert(water_heater_capacity, "W", "Btu/hr").get
     water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity_btu_per_hr, "Btu/hr", "kBtu/hr").get
-    water_heater_vol_gal = prototype_input['booster_water_heater_volume']
-    water_heater_fuel = prototype_input['booster_water_heater_fuel']
+    water_heater_vol_gal = OpenStudio.convert(water_heater_vol_gal,'gal','m^3').get
 
     # Water heater depends on the fuel type
     water_heater = OpenStudio::Model::WaterHeaterMixed.new(self)
@@ -3380,23 +3457,19 @@ class OpenStudio::Model::Model
     if water_heater_fuel == 'Electricity'
       water_heater.setHeaterFuelType('Electricity')
       water_heater.setHeaterThermalEfficiency(1.0)
-      unless prototype_input["booster_service_water_parasitic_fuel_consumption_rate"].nil?
-        water_heater.setOffCycleParasiticFuelConsumptionRate(OpenStudio.convert(prototype_input["booster_service_water_parasitic_fuel_consumption_rate"],'Btu/hr','W').get)
-        water_heater.setOnCycleParasiticFuelConsumptionRate(OpenStudio.convert(prototype_input["booster_service_water_parasitic_fuel_consumption_rate"],'Btu/hr','W').get)
-      end
+      water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOnCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
       water_heater.setOffCycleParasiticFuelType('Electricity')
       water_heater.setOnCycleParasiticFuelType('Electricity')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053)
     elsif water_heater_fuel == 'Natural Gas'
-      water_heater.setHeaterFuelType('NaturalGas')
+      water_heater.setHeaterFuelType('Gas')
       water_heater.setHeaterThermalEfficiency(0.8)
-      unless prototype_input["booster_service_water_parasitic_fuel_consumption_rate"].nil?
-        water_heater.setOffCycleParasiticFuelConsumptionRate(OpenStudio.convert(prototype_input["booster_service_water_parasitic_fuel_consumption_rate"],'Btu/hr','W').get)
-        water_heater.setOnCycleParasiticFuelConsumptionRate(OpenStudio.convert(prototype_input["booster_service_water_parasitic_fuel_consumption_rate"],'Btu/hr','W').get)
-      end
-      water_heater.setOffCycleParasiticFuelType('NaturalGas')
-      water_heater.setOnCycleParasiticFuelType('NaturalGas')
+      water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOnCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOffCycleParasiticFuelType('Gas')
+      water_heater.setOnCycleParasiticFuelType('Gas')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
     end
@@ -3406,9 +3479,9 @@ class OpenStudio::Model::Model
       water_heater.setOffCycleParasiticFuelType('Electricity')
       water_heater.setOnCycleParasiticFuelType('Electricity')
     elsif water_heater_fuel == 'Natural Gas'
-      water_heater.setHeaterFuelType('NaturalGas')
-      water_heater.setOffCycleParasiticFuelType('NaturalGas')
-      water_heater.setOnCycleParasiticFuelType('NaturalGas')
+      water_heater.setHeaterFuelType('Gas')
+      water_heater.setOffCycleParasiticFuelType('Gas')
+      water_heater.setOnCycleParasiticFuelType('Gas')
     end
     booster_service_water_loop.addSupplyBranchForComponent(water_heater)
 
@@ -3443,17 +3516,38 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_swh_end_uses(prototype_input, standards, swh_loop, type)
+  # Creates water fixtures and attaches them
+  # to the supplied service water loop.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param use_name [String] The name that will be assigned
+  # to the newly created fixture.
+  # @param swh_loop [OpenStudio::Model::PlantLoop]
+  # the main service water loop to add water fixtures to.
+  # @param peak_flowrate [Double] in m^3/s
+  # @param flowrate_schedule [String] name of the flow rate schedule    
+  # @param water_use_temperature [Double] mixed water use temperature, in C
+  # @param building_type [String] the building type
+  # @return [OpenStudio::Model::WaterUseEquipment] 
+  # the resulting water fixture.    
+  def add_swh_end_uses(standard,
+                      use_name,
+                      swh_loop,
+                      peak_flowrate,
+                      flowrate_schedule,
+                      water_use_temperature,
+                      building_type=nil)
 
-    schedules = standards['schedules']
-
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_loop.name}.")
+                      
     # Water use connection
     swh_connection = OpenStudio::Model::WaterUseConnections.new(self)
 
     # Water fixture definition
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
-    rated_flow_rate_gal_per_min = prototype_input["#{type}_service_water_peak_flowrate"]
-    rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get
+    rated_flow_rate_m3_per_s = peak_flowrate
+    rated_flow_rate_gal_per_min = OpenStudio.convert(rated_flow_rate_m3_per_s,'m^3/s','gal/min').get
     # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
     # water_use_sensible_frac_sch.setValue(0.2)
     # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
@@ -3465,22 +3559,24 @@ class OpenStudio::Model::Model
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
-    water_fixture_def.setName("#{type.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    water_fixture_def.setName("#{use_name.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     # Target mixed water temperature
-    mixed_water_temp_f = prototype_input["#{type}_water_use_temperature"]
+    mixed_water_temp_f = OpenStudio.convert(water_use_temperature,'F','C').get
     mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),OpenStudio.convert(mixed_water_temp_f,'F','C').get)
     water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
 
     # Water use equipment
     water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
-    schedule = self.add_schedule(prototype_input["#{type}_service_water_flowrate_schedule"])
+    schedule = self.add_schedule(flowrate_schedule)
     water_fixture.setFlowRateFractionSchedule(schedule)
-    water_fixture.setName("#{type.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    water_fixture.setName("#{use_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     swh_connection.addWaterUseEquipment(water_fixture)
 
     # Connect the water use connection to the SWH loop
     swh_loop.addDemandBranchForComponent(swh_connection)
+    
+    return water_fixture
 
   end
 
@@ -3539,21 +3635,39 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_booster_swh_end_uses(prototype_input, standards, swh_booster_loop)
+  # Creates water fixtures and attaches them
+  # to the supplied booster water loop.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param swh_booster_loop [OpenStudio::Model::PlantLoop]
+  # the booster water loop to add water fixtures to.
+  # @param peak_flowrate [Double] in m^3/s
+  # @param flowrate_schedule [String] name of the flow rate schedule    
+  # @param water_use_temperature [Double] mixed water use temperature, in C
+  # @param building_type [String] the building type
+  # @return [OpenStudio::Model::WaterUseEquipment] 
+  # the resulting water fixture.    
+  def add_booster_swh_end_uses(standard,
+                      swh_booster_loop,
+                      peak_flowrate,
+                      flowrate_schedule,
+                      water_use_temperature,
+                      building_type=nil)  
 
-    schedules = standards['schedules']
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_booster_loop.name}.")
 
     # Water use connection
     swh_connection = OpenStudio::Model::WaterUseConnections.new(self)
 
     # Water fixture definition
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
-    rated_flow_rate_gal_per_min = prototype_input['booster_service_water_peak_flowrate']
-    rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get
+    rated_flow_rate_m3_per_s = peak_flowrate
+    rated_flow_rate_gal_per_min = OpenStudio.convert(rated_flow_rate_m3_per_s,'m^3/s','gal/min').get
     water_fixture_def.setName("Water Fixture Def - #{rated_flow_rate_gal_per_min} gal/min")
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
     # Target mixed water temperature
-    mixed_water_temp_f = prototype_input['booster_water_use_temperature']
+    mixed_water_temp_f = OpenStudio.convert(water_use_temperature,'F','C').get
     mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),OpenStudio.convert(mixed_water_temp_f,'F','C').get)
     water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
@@ -3561,24 +3675,78 @@ class OpenStudio::Model::Model
     # Water use equipment
     water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
     water_fixture.setName("Booster Water Fixture - #{rated_flow_rate_gal_per_min} gal/min at #{mixed_water_temp_f}F")
-    schedule = self.add_schedule(prototype_input['booster_service_water_flowrate_schedule'])
+    schedule = self.add_schedule(flowrate_schedule)
     water_fixture.setFlowRateFractionSchedule(schedule)
     swh_connection.addWaterUseEquipment(water_fixture)
 
     # Connect the water use connection to the SWH loop
     swh_booster_loop.addDemandBranchForComponent(swh_connection)
 
+    return water_fixture
+      
   end
 
-  def add_doas(prototype_input, standards, hot_water_loop, chilled_water_loop, thermal_zones, building_type =nil,building_vintage=nil, climate_zone=nil)
-    hvac_op_sch = self.add_schedule(prototype_input['vav_operation_schedule'])
-    # create new air loop if story contains primary zones
+  
+  
+  # Creates a DOAS system with fan coil units
+  # for each zone.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param hot_water_loop [String] hot water loop to connect heating and zone fan coils to
+  # @param chilled_water_loop [String] chilled water loop to connect cooling coil to
+  # @param thermal_zones [String] zones to connect to this system
+  # @param hvac_op_sch [String] name of the HVAC operation schedule
+  # or nil in which case will be defaulted to always on
+  # @param oa_damper_sch [Double] name of the oa damper schedule, 
+  # or nil in which case will be defaulted to always open
+  # @param fan_max_flow_rate [Double] fan maximum flow rate, in m^3/s.
+  # if nil, this value will be autosized.
+  # @param economizer_control_type [String] valid choices are
+  # FixedDryBulb, 
+  # @param building_type [String] the building type
+  # @return [OpenStudio::Model::AirLoopHVAC] the resulting DOAS air loop
+  def add_doas(standard, 
+              sys_name, 
+              hot_water_loop, 
+              chilled_water_loop,
+              thermal_zones,
+              hvac_op_sch,
+              oa_damper_sch,
+              fan_max_flow_rate,
+              economizer_control_type,
+              building_type=nil) 
+  
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding DOAS system for #{thermal_zones.size} zones.")
+    thermal_zones.each do |zone|
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
+    end
 
-    airloop_primary = OpenStudio::Model::AirLoopHVAC.new(self)
-    airloop_primary.setName("DOAS Air Loop HVAC")
-    airloop_primary.setNightCycleControlType('CycleOnAny')
+    # hvac operation schedule
+    if hvac_op_sch.nil?
+      hvac_op_sch = self.alwaysOnDiscreteSchedule
+    else
+      hvac_op_sch = self.add_schedule(hvac_op_sch)
+    end
+    
+    # oa damper schedule
+    if oa_damper_sch.nil?
+      oa_damper_sch = self.alwaysOnDiscreteSchedule
+    else
+      oa_damper_sch = self.add_schedule(oa_damper_sch)
+    end
+
+    # DOAS
+    air_loop = OpenStudio::Model::AirLoopHVAC.new(self)
+    if sys_name.nil?
+      air_loop.setName("#{thermal_zones.size} DOAS Air Loop HVAC")
+    else
+      air_loop.setName("DOAS Air Loop HVAC")
+    end
+    air_loop.setNightCycleControlType('CycleOnAny')
     # modify system sizing properties
-    sizing_system = airloop_primary.sizingSystem
+    sizing_system = air_loop.sizingSystem
     # set central heating and cooling temperatures for sizing
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(12.8)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(16.7)   #ML OS default is 16.7
@@ -3591,8 +3759,8 @@ class OpenStudio::Model::Model
     sizing_system.setMinimumSystemAirFlowRatio(0.3)         # No DCV
 
     # set availability schedule
-    airloop_primary.setAvailabilitySchedule(hvac_op_sch)
-    airloop_supply_inlet = airloop_primary.supplyInletNode
+    air_loop.setAvailabilitySchedule(hvac_op_sch)
+    airloop_supply_inlet = air_loop.supplyInletNode
 
     # create air loop fan
     # constant speed fan
@@ -3600,9 +3768,8 @@ class OpenStudio::Model::Model
     fan.setName("DOAS fan")
     fan.setFanEfficiency(0.58175)
     fan.setPressureRise(622.5) #Pa
-    fan_maximum_flow_rate = prototype_input['doas_fan_maximum_flow_rate']
-    if fan_maximum_flow_rate != nil
-      fan.setMaximumFlowRate(OpenStudio.convert(prototype_input['doas_fan_maximum_flow_rate'], 'cfm', 'm^3/s').get)
+    if fan_max_flow_rate != nil
+      fan.setMaximumFlowRate(fan_max_flow_rate)
     else
       fan.autosizeMaximumFlowRate
     end
@@ -3626,15 +3793,12 @@ class OpenStudio::Model::Model
     cooling_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
     cooling_coil.addToNode(airloop_supply_inlet)
 
-    # motorized oa damper schedule
-    motorized_oa_damper_sch = self.add_schedule(prototype_input['doas_oa_damper_schedule'])
-
     # create controller outdoor air
     controller_OA = OpenStudio::Model::ControllerOutdoorAir.new(self)
     controller_OA.setName("DOAS OA Controller")
-    controller_OA.setEconomizerControlType(prototype_input['doas_economizer_control_type'])
+    controller_OA.setEconomizerControlType(economizer_control_type)
     controller_OA.setMinimumLimitType('FixedMinimum')
-    controller_OA.setMinimumOutdoorAirSchedule(motorized_oa_damper_sch)
+    controller_OA.setMinimumOutdoorAirSchedule(oa_damper_sch)
     controller_OA.resetEconomizerMaximumLimitDryBulbTemperature
     # TODO: Yixing read the schedule from the Prototype Input
     if building_type == "LargeHotel"
@@ -3664,7 +3828,7 @@ class OpenStudio::Model::Model
     # find the supply inlet node of the airloop
 
     # add setpoint manager to supply equipment outlet node
-    setpoint_manager.addToNode(airloop_primary.supplyOutletNode)
+    setpoint_manager.addToNode(air_loop.supplyOutletNode)
 
     # add thermal zones to airloop
     thermal_zones.each do |zone|
@@ -3708,25 +3872,44 @@ class OpenStudio::Model::Model
       fan_coil.addToThermalZone(zone)
 
       # attach new terminal to the zone and to the airloop
-      airloop_primary.addBranchForZone(zone, air_terminal.to_StraightComponent)
+      air_loop.addBranchForZone(zone, air_terminal.to_StraightComponent)
     end
+    
+    return air_loop
+    
   end
 
-  def add_elevator(prototype_input, standards, space)
-
-    return true if prototype_input['number_of_elevators'].nil? || prototype_input['number_of_elevators'] == 0
-
-    vintage = prototype_input['template']
-    building_type = prototype_input['building_type']
-    num_elevs = prototype_input['number_of_elevators']
+  # Add an elevator the the specified space
+  #
+  # @param standard [String] Valid choices are 
+  # DOE Ref Pre-1980, DOE Ref 1980-2004,
+  # 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013, 
+  # @param space [OpenStudio::Model::Space] the space
+  # to assign the elevators to.
+  # @param number_of_elevators [Integer] the number of elevators
+  # @param elevator_type [String] valid choices are
+  # Traction, Hydraulic
+  # @param elevator_schedule [String] the name of the elevator schedule
+  # @param elevator_fan_schedule [String] the name of the elevator fan schedule
+  # @param elevator_lights_schedule [String] the name of the elevator lights schedule
+  # @param building_type [String] the building type
+  # @return [OpenStudio::Model::ElectricEquipment] the resulting elevator  
+  def add_elevator(standard,
+                   space,
+                   number_of_elevators,
+                   elevator_type,
+                   elevator_schedule,
+                   elevator_fan_schedule,
+                   elevator_lights_schedule,
+                   building_type=nil)
 
     # Lift motor assumptions
     lift_pwr_w = nil
-    case vintage
+    case standard
     when  'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      if prototype_input['elevator_type'] == 'Traction'
+      if elevator_type == 'Traction'
         lift_pwr_w = 18537.0
-      elsif prototype_input['elevator_type'] == 'Hydraulic'
+      elsif elevator_type == 'Hydraulic'
         if building_type == 'MidriseApartment'
           lift_pwr_w = 16055.0
         else
@@ -3734,16 +3917,16 @@ class OpenStudio::Model::Model
         end
       else
         lift_pwr_w = 14610.0
-        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "Elevator type '#{prototype_input['elevator_type']}', not recognized, will assume Hydraulic elevator, #{lift_pwr_w} W.")
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "Elevator type '#{elevator_type}', not recognized, will assume Hydraulic elevator, #{lift_pwr_w} W.")
       end
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      if prototype_input['elevator_type'] == 'Traction'
+      if elevator_type == 'Traction'
         lift_pwr_w = 20370.0
-      elsif prototype_input['elevator_type'] == 'Hydraulic'
+      elsif elevator_type == 'Hydraulic'
         lift_pwr_w = 16055.0
       else
         lift_pwr_w = 16055.0
-        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "Elevator type '#{prototype_input['elevator_type']}', not recognized, will assume Hydraulic elevator, #{lift_pwr_w} W.")
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', "Elevator type '#{elevator_type}', not recognized, will assume Hydraulic elevator, #{lift_pwr_w} W.")
       end
     end
 
@@ -3781,14 +3964,14 @@ class OpenStudio::Model::Model
     elevator_definition.setDesignLevel(lift_pwr_w)
 
     elevator_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_definition)
-    elevator_equipment.setName("#{num_elevs.round} Elevator Lift Motors")
-    elevator_sch = self.add_schedule(prototype_input['elevator_schedule'])
+    elevator_equipment.setName("#{number_of_elevators.round} Elevator Lift Motors")
+    elevator_sch = self.add_schedule(elevator_schedule)
     elevator_equipment.setSchedule(elevator_sch)
     elevator_equipment.setSpace(space)
-    elevator_equipment.setMultiplier(num_elevs)
+    elevator_equipment.setMultiplier(number_of_elevators)
 
     # Pre-1980 and 1980-2004 don't have lights or fans
-    return true if vintage == 'DOE Ref Pre-1980' || vintage == 'DOE Ref 1980-2004'
+    return elevator_equipment if standard == 'DOE Ref Pre-1980' || standard == 'DOE Ref 1980-2004'
 
     # Elevator fan
     elevator_fan_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
@@ -3796,11 +3979,11 @@ class OpenStudio::Model::Model
     elevator_fan_definition.setDesignLevel(vent_pwr_w)
 
     elevator_fan_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_fan_definition)
-    elevator_fan_equipment.setName("#{num_elevs.round} Elevator Fans")
-    elevator_fan_sch = self.add_schedule(prototype_input['elevator_fan_schedule'])
+    elevator_fan_equipment.setName("#{number_of_elevators.round} Elevator Fans")
+    elevator_fan_sch = self.add_schedule(elevator_fan_schedule)
     elevator_fan_equipment.setSchedule(elevator_fan_sch)
     elevator_fan_equipment.setSpace(space)
-    elevator_fan_equipment.setMultiplier(num_elevs)
+    elevator_fan_equipment.setMultiplier(number_of_elevators)
 
     # Elevator lights
     elevator_lights_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
@@ -3808,13 +3991,13 @@ class OpenStudio::Model::Model
     elevator_lights_definition.setDesignLevel(lighting_pwr_w)
 
     elevator_lights_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_lights_definition)
-    elevator_lights_equipment.setName("#{num_elevs.round} Elevator Lights")
-    elevator_lights_sch = self.add_schedule(prototype_input['elevator_fan_schedule'])
+    elevator_lights_equipment.setName("#{number_of_elevators.round} Elevator Lights")
+    elevator_lights_sch = self.add_schedule(elevator_lights_schedule)
     elevator_lights_equipment.setSchedule(elevator_lights_sch)
     elevator_lights_equipment.setSpace(space)
-    elevator_lights_equipment.setMultiplier(num_elevs)
+    elevator_lights_equipment.setMultiplier(number_of_elevators)
 
-    return true
+    return elevator_equipment
 
   end
 
@@ -3864,7 +4047,8 @@ class OpenStudio::Model::Model
   # @todo Set compressor properties since prototypes use simple
   # refrigeration rack instead of detailed
   # @todo fix latent case credit curve setter
-  def add_refrigeration(case_type,
+  def add_refrigeration(standard,
+                      case_type,
                       cooling_capacity_per_length,
                       length,
                       evaporator_fan_pwr_per_length,
@@ -3893,7 +4077,7 @@ class OpenStudio::Model::Model
       runtime_fraction = 0.4
       fraction_antisweat_to_case = 0.0
       under_case_return_air_fraction = 0.0
-      case self.template
+      case standard
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -3969,7 +4153,7 @@ class OpenStudio::Model::Model
     ref_case.setRatedAmbientTemperature(OpenStudio.convert(75,'F','C').get)
     ref_case.setRatedLatentHeatRatio(latent_heat_ratio)
     ref_case.setRatedRuntimeFraction(runtime_fraction)
-    #TODO enable ref_case.setLatentCaseCreditCurve(self.add_curve(latent_case_credit_curve_name,standards))
+    #TODO enable ref_case.setLatentCaseCreditCurve(self.add_curve(latent_case_credit_curve_name))
     ref_case.setLatentCaseCreditCurve(self.add_curve(latent_case_credit_curve_name))
     ref_case.setCaseHeight(0)
     # TODO: setRefrigeratedCaseRestockingSchedule is not working

@@ -111,80 +111,22 @@ class OpenStudio::Model::Model
     return space_multiplier_map
   end
 
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
-    #simulation_control =  self.getSimulationControl
-    #simulation_control.setLoadsConvergenceToleranceValue(0.4)
-    #simulation_control.setTemperatureConvergenceToleranceValue(0.5)
-
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
-
-    #VAV system; hot water reheat, water-cooled chiller
-    chilled_water_loop = self.add_chw_loop(prototype_input, hvac_standards, nil, building_type)
-    hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards, building_type)
-
-    system_to_space_map.each do |system|
-      #find all zones associated with these spaces
-      thermal_zones = []
-      system['space_names'].each do |space_name|
-        space = self.getSpaceByName(space_name)
-        if space.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-          return false
-        end
-        space = space.get
-        zone = space.thermalZone
-        if zone.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No thermal zone was created for the space called #{space_name}")
-          return false
-        end
-        thermal_zones << zone.get
-      end
-
-      case system['type']
-      when 'VAV'
-        if hot_water_loop && chilled_water_loop
-          self.add_vav(prototype_input, hvac_standards, system['name'], hot_water_loop, chilled_water_loop, thermal_zones, building_type)
-        else
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water and chilled water plant loops in model')
-          return false
-        end
-      when 'DOAS'
-        self.add_doas(prototype_input, hvac_standards, hot_water_loop, chilled_water_loop, thermal_zones, building_type, building_vintage, climate_zone)
-      when 'Refrigeration'
-        self.add_refrigeration(prototype_input,
-                              add_schedule(,
-                              system['case_type'],
-                              system['cooling_capacity_per_length'],
-                              system['length'],
-                              system['evaporator_fan_pwr_per_length'],
-                              system['lighting_per_length'],
-                              system['lighting_sch_name'],
-                              system['defrost_pwr_per_length'],
-                              system['restocking_sch_name'],
-                              system['cop'],
-                              system['cop_f_of_t_curve_name'],
-                              system['condenser_fan_pwr'],
-                              system['condenser_fan_pwr_curve_name'],
-                              thermal_zones[0])
-      else
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Undefined HVAC system type called #{system['type']}")
-        return false  
-      end
-      
-    end
-
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+    
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')    
+    
     # Add Exhaust Fan
     space_type_map = define_space_type_map(building_type, building_vintage, climate_zone)
+    exhaust_fan_space_types = []
     case building_vintage
-      when '90.1-2004','90.1-2007'
-        exhaust_fan_space_types =['Kitchen','Laundry']
-      else
-        exhaust_fan_space_types =['Banquet', 'Kitchen','Laundry']
+    when '90.1-2004','90.1-2007'
+      exhaust_fan_space_types =['Kitchen','Laundry']
+    else
+      exhaust_fan_space_types =['Banquet', 'Kitchen','Laundry']
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = self.find_object(add_schedule(['space_types'], {'template'=>building_vintage, 'building_type'=>building_type, 'space_type'=>space_type_name})
+      space_type_data = self.find_object($os_standards['space_types'], {'template'=>building_vintage, 'building_type'=>building_type, 'space_type'=>space_type_name})
       if space_type_data == nil
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{building_vintage}-#{building_type}-#{space_type_name}")
         return false
@@ -242,8 +184,10 @@ class OpenStudio::Model::Model
     zone_sizing = self.getSpaceByName('Laundry_Flr_1').get.thermalZone.get.sizingZone
     zone_sizing.setCoolingMinimumAirFlow(0.23567919336)
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
+    
     return true
+    
   end #add hvac
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
@@ -398,7 +342,7 @@ class OpenStudio::Model::Model
       # Connect the water use connection to the SWH loop
       swh_loop.addDemandBranchForComponent(swh_connection)
     end
+    
   end
-
 
 end

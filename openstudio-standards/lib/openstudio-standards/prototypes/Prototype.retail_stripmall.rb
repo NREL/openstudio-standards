@@ -20,51 +20,60 @@ class OpenStudio::Model::Model
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
     system_to_space_map = [
       {
-          'type' => 'CAV',
-          'name' => 'PSZ-AC_1',
-          'space_names' => ['LGSTORE1']
+        'type' => 'PSZ-AC',
+        'name' => 'PSZ-AC_1',
+        'space_names' => ['LGSTORE1'],
+        'hvac_op_sch_index' => 1
       },
       {
-          'type' => 'CAV',
-          'name' => 'PSZ-AC_2',
-          'space_names' => ['SMstore1']
+        'type' => 'PSZ-AC',
+        'name' => 'PSZ-AC_2',
+        'space_names' => ['SMstore1'],
+        'hvac_op_sch_' => 1
       },
       {
-        'type' => 'CAV2',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_3',
-        'space_names' => ['SMstore2']
+        'space_names' => ['SMstore2'],
+        'hvac_op_sch_index' => 2
       },
       {
-        'type' => 'CAV2',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_4',
-        'space_names' => ['SMstore3']
+        'space_names' => ['SMstore3'],
+        'hvac_op_sch_index' => 2
       },
       {
-        'type' => 'CAV2',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_5',
-        'space_names' => ['SMstore4']
+        'space_names' => ['SMstore4'],
+        'hvac_op_sch_index' => 2
       },{
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_6',
-        'space_names' => ['LGSTORE2']
+        'space_names' => ['LGSTORE2'],
+        'hvac_op_sch_index' => 3
       },
       {
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_7',
-        'space_names' => ['SMstore5']
+        'space_names' => ['SMstore5'],
+        'hvac_op_sch_index' => 3
       },
       {
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_8',
-        'space_names' => ['SMstore6']
+        'space_names' => ['SMstore6'],
+        'hvac_op_sch_index' => 3
       },
       {
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_9',
-        'space_names' => ['SMstore7']
+        'space_names' => ['SMstore7'],
+        'hvac_op_sch_index' => 3
       },
       {
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_10',
         'space_names' => ['SMstore8']
       }
@@ -72,31 +81,16 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
      
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
    
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
     
     system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
 
     # hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
     
     system_to_space_map.each do |system|
-      #find all zones associated with these spaces
-      thermal_zones = []
-      system['space_names'].each do |space_name|
-        space = self.getSpaceByName(space_name)
-        if space.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-          return false
-        end
-        space = space.get
-        zone = space.thermalZone
-        if zone.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No thermal zone was created for the space called #{space_name}")
-          return false
-        end
-        thermal_zones << zone.get
-      end
+
 
       case system['type']
         when 'CAV'
@@ -139,7 +133,7 @@ class OpenStudio::Model::Model
         # do nothing for the old vintage
     end
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
     return true
   end #add hvac
 
