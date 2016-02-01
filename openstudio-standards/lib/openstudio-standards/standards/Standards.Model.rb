@@ -1507,6 +1507,60 @@ class OpenStudio::Model::Model
 
   end
 
+  # Returns average daily hot water consumption by building type
+  # recommendations from 2011 ASHRAE Handobook - HVAC Applications Table 7 section 60.14
+  # Not all building types are included in lookup
+  # some recommendations have multiple values based on number of units. Will return an array of hashes. Many may just hvae one arary entry
+  # all values other than block size are gallons.
+  #
+  # @return [Array] array of hashes. Each array entry based on different capcaity specific to building type. Arrray will be empty for some building types
+  def find_ashrae_hot_water_demand()
+
+    # get building type
+    building_data = self.get_building_climate_zone_and_building_type
+    building_type = building_data['building_type']
+
+    result = []
+    if building_type == 'FullServiceRestaurant'
+      result << {:units => 'meal',:block => nil, :max_hourly => 1.5, :max_daily => 11.0, :avg_day_unit => 2.4}
+    elsif building_type == 'Hospital'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif building_type == 'LargeHotel'||'SmallHotel'
+      result << {:units => 'unit',:block => 20, :max_hourly => 6.0, :max_daily => 35.0, :avg_day_unit => 24.0}
+      result << {:units => 'unit',:block => 60, :max_hourly => 5.0, :max_daily => 25.0, :avg_day_unit => 14.0}
+      result << {:units => 'unit',:block => 100, :max_hourly => 4.0, :max_daily => 15.0, :avg_day_unit => 10.0}
+    elsif building_type == 'MidriseApartment'
+      result << {:units => 'unit',:block => 20, :max_hourly => 12.0, :max_daily => 80.0, :avg_day_unit => 42.0}
+      result << {:units => 'unit',:block => 50, :max_hourly => 10.0, :max_daily => 73.0, :avg_day_unit => 40.0}
+      result << {:units => 'unit',:block => 75, :max_hourly => 8.5, :max_daily => 66.0, :avg_day_unit => 38.0}
+      result << {:units => 'unit',:block => 100, :max_hourly => 7.0, :max_daily => 60.0, :avg_day_unit => 37.0}
+      result << {:units => 'unit',:block => 200, :max_hourly => 5.0, :max_daily => 50.0, :avg_day_unit => 35.0}
+    elsif building_type == 'Office'||'LargeOffice'||'MediumOffice'||'SmallOffice'
+      result << {:units => 'person',:block => 20, :max_hourly => 0.4, :max_daily => 2.0, :avg_day_unit => 1.0}
+    elsif building_type == 'Outpatient'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif building_type == 'PrimarySchool'
+      result << {:units => 'student',:block => nil, :max_hourly => 0.6, :max_daily => 1.5, :avg_day_unit => 0.6}
+    elsif building_type == 'QuickServiceRestaurant'
+      result << {:units => 'meal',:block => nil, :max_hourly => 0.7, :max_daily => 6.0, :avg_day_unit => 0.7}
+    elsif building_type == 'Retail'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif building_type == 'SecondarySchool'
+      result << {:units => 'student',:block => nil, :max_hourly => 1.0, :max_daily => 3.6, :avg_day_unit => 1.8}
+    elsif building_type == 'StripMall'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif building_type == 'SuperMarket'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif building_type == 'Warehouse'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine floor prototype floor area")
+    end
+
+    return result
+
+  end
+
   # this is used by other methods to get the clinzte aone and building type from a model.
   # it has logic to break office into small, medium or large based on building area that can be turned off
   # @param [bool] re-map small office or leave it alone
@@ -1534,6 +1588,8 @@ class OpenStudio::Model::Model
     # prototype medium office approx 5000 m^2
     # prototype large office approx 50,000 m^2
     # map office building type to small medium or large
+    # if mixed use building this may not have desired mapping
+    # if run on model without geometry will map to small office
     if building_type == "Office" and remap_office
       open_studio_area = self.getBuilding.floorArea
       if open_studio_area < 2750

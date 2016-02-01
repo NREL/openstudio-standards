@@ -2,7 +2,7 @@ require_relative 'minitest_helper'
 
 class TestFindSpaceTypeStandardsData < Minitest::Test
 
-  def test_find_space_type_standards_data_valid_standards
+  def test_find_construction_properties_data
 
     # for now this just runs for single building type and climate zone, but could sweep across larger selection
     template = '90.1-2013'
