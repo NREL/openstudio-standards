@@ -68,10 +68,10 @@ module Fan
     
   end
 
-  def set_standard_minimum_motor_efficiency(template, standards, allowed_hp)
+  def set_standard_minimum_motor_efficiency(template, allowed_hp)
     
     # Find the motor efficiency
-    motor_eff = standard_minimum_motor_efficiency(template, standards, allowed_hp)
+    motor_eff = standard_minimum_motor_efficiency(template, allowed_hp)
 
     # Change the motor efficiency
     # but preserve the existing fan impeller

@@ -92,8 +92,6 @@ class OpenStudio::Model::Model
 
     lookup_building_type = self.get_lookup_name(building_type)
 
-    # Assign the standards to the model
-    climate_zone = climate_zone
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
     # Assign building stories to spaces in the building
@@ -138,7 +136,8 @@ class OpenStudio::Model::Model
     sys_groups.each do |sys_group|
 
       # Determine the primary baseline system type
-      system_type = performance_rating_method_baseline_system_type(building_vintage, 
+      system_type = performance_rating_method_baseline_system_type(building_vintage,
+                                                                climate_zone,
                                                                 sys_group['type'], 
                                                                 sys_group['fuel'],
                                                                 sys_group['area_ft2'],
@@ -174,11 +173,11 @@ class OpenStudio::Model::Model
 
     # Set the baseline fan power for all airloops
     self.getAirLoopHVACs.sort.each do |air_loop|
-      air_loop.set_performance_rating_method_baseline_fan_power(building_vintage, @standards)
+      air_loop.set_performance_rating_method_baseline_fan_power(building_vintage)
     end
     
     # Apply the HVAC efficiency standard
-    self.applyHVACEfficiencyStandard   
+    self.applyHVACEfficiencyStandard(building_vintage, climate_zone)  
     
     # Add daylighting controls to each space
     self.getSpaces.sort.each do |space|
@@ -412,7 +411,7 @@ class OpenStudio::Model::Model
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes, 
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
   # @todo add 90.1-2013 systems 11-13
-  def performance_rating_method_baseline_system_type(standard, area_type, heating_fuel_type, area_ft2, num_stories)
+  def performance_rating_method_baseline_system_type(standard, climate_zone, area_type, heating_fuel_type, area_ft2, num_stories)
   
     system_type = nil
   

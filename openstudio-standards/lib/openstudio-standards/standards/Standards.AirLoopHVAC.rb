@@ -112,7 +112,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @todo Figure out how to split fan power between multiple fans
   # if the proposed model had multiple fans (supply, return, exhaust, etc.)
   # return [Bool] true if successful, false if not.
-  def set_performance_rating_method_baseline_fan_power(template, standards)
+  def set_performance_rating_method_baseline_fan_power(template)
   
     # Main AHU fans
     
@@ -131,7 +131,7 @@ class OpenStudio::Model::AirLoopHVAC
     # fan power for each fan and adjust
     # the fan pressure rise accordingly
     all_fans.each do |fan|
-      fan.set_standard_minimum_motor_efficiency(template, standards, allowable_fan_bhp)
+      fan.set_standard_minimum_motor_efficiency(template, allowable_fan_bhp)
       allowable_power_w = allowable_fan_bhp * 746 / fan.motorEfficiency
       fan.adjust_pressure_rise_to_meet_fan_power(allowable_power_w)
     end
