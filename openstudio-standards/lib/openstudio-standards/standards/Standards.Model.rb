@@ -1515,6 +1515,7 @@ class OpenStudio::Model::Model
   #
   # @return [Array] array of hashes. Each array entry based on different capcaity specific to building type. Arrray will be empty for some building types
   def find_ashrae_hot_water_demand()
+    # todo - for types not in table use standards area normalized swh values
 
     # get building type
     building_data = self.get_building_climate_zone_and_building_type
@@ -1525,7 +1526,7 @@ class OpenStudio::Model::Model
       result << {:units => 'meal',:block => nil, :max_hourly => 1.5, :max_daily => 11.0, :avg_day_unit => 2.4}
     elsif building_type == 'Hospital'
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
-    elsif building_type == 'LargeHotel'||'SmallHotel'
+    elsif ['LargeHotel','SmallHotel'].include? building_type
       result << {:units => 'unit',:block => 20, :max_hourly => 6.0, :max_daily => 35.0, :avg_day_unit => 24.0}
       result << {:units => 'unit',:block => 60, :max_hourly => 5.0, :max_daily => 25.0, :avg_day_unit => 14.0}
       result << {:units => 'unit',:block => 100, :max_hourly => 4.0, :max_daily => 15.0, :avg_day_unit => 10.0}
@@ -1535,8 +1536,8 @@ class OpenStudio::Model::Model
       result << {:units => 'unit',:block => 75, :max_hourly => 8.5, :max_daily => 66.0, :avg_day_unit => 38.0}
       result << {:units => 'unit',:block => 100, :max_hourly => 7.0, :max_daily => 60.0, :avg_day_unit => 37.0}
       result << {:units => 'unit',:block => 200, :max_hourly => 5.0, :max_daily => 50.0, :avg_day_unit => 35.0}
-    elsif building_type == 'Office'||'LargeOffice'||'MediumOffice'||'SmallOffice'
-      result << {:units => 'person',:block => 20, :max_hourly => 0.4, :max_daily => 2.0, :avg_day_unit => 1.0}
+    elsif ['Office','LargeOffice','MediumOffice','SmallOffice'].include? building_type
+      result << {:units => 'person',:block => nil, :max_hourly => 0.4, :max_daily => 2.0, :avg_day_unit => 1.0}
     elsif building_type == 'Outpatient'
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'PrimarySchool'
@@ -1554,7 +1555,7 @@ class OpenStudio::Model::Model
     elsif building_type == 'Warehouse'
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     else
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine floor prototype floor area")
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine hot water demand recommendations")
     end
 
     return result

@@ -66,7 +66,8 @@ class OpenStudio::Model::Construction
       next if layer.name.get == insulation_layer_name
       other_layer_r_value_si += layer.to_OpaqueMaterial.get.thermalResistance
     end
-        
+
+    # todo - remove code below and use film_coefficients_u_value method instead
     # Determine the R-value of the air films, if requested
     # Film values from 90.1-2010 A9.4.1 Air Films
     if target_includes_film_coefficients
@@ -360,6 +361,64 @@ class OpenStudio::Model::Construction
     end
 
     return u_factor_w_per_m2_k
+
+  end
+
+  def film_coefficients_u_value(intended_surface_type)
+
+    other_layer_r_value_si = 0.0
+
+    # Determine the R-value of the air films, if requested
+    # Film values from 90.1-2010 A9.4.1 Air Films
+    if target_includes_film_coefficients
+      film_ext_surf_r_ip = 0.17
+      film_semi_ext_surf_r_ip = 0.46
+      film_int_surf_ht_flow_up_r_ip = 0.61
+      film_int_surf_ht_flow_dwn_r_ip = 0.92
+      fil_int_surf_vertical_r_ip = 0.68
+
+      film_ext_surf_r_si = OpenStudio.convert(film_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
+      film_semi_ext_surf_r_si = OpenStudio.convert(film_semi_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
+      film_int_surf_ht_flow_up_r_si = OpenStudio.convert(film_int_surf_ht_flow_up_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
+      film_int_surf_ht_flow_dwn_r_si = OpenStudio.convert(film_int_surf_ht_flow_dwn_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
+      fil_int_surf_vertical_r_si = OpenStudio.convert(fil_int_surf_vertical_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
+
+      case intended_surface_type
+        when 'AtticFloor'
+          other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
+          other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
+        when 'AtticWall', 'AtticRoof'
+          other_layer_r_value_si += film_ext_surf_r_si # Outside
+          other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
+        when 'DemisingFloor', 'InteriorFloor'
+          other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
+          other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
+        when 'InteriorCeiling'
+          other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Outside
+          other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
+        when 'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor'
+          other_layer_r_value_si += fil_int_surf_vertical_r_si # Outside
+          other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
+        when 'DemisingRoof', 'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser'
+          other_layer_r_value_si += film_ext_surf_r_si # Outside
+          other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
+        when 'ExteriorFloor'
+          other_layer_r_value_si += film_ext_surf_r_si # Outside
+          other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
+        when 'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor'
+          other_layer_r_value_si += film_ext_surf_r_si # Outside
+          other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
+        when 'GroundContactFloor'
+          other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
+        when 'GroundContactWall'
+          other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
+        when 'GroundContactRoof'
+          other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
+      end
+    end
+
+
+    return # u value of film coef u (in si units)
 
   end
 

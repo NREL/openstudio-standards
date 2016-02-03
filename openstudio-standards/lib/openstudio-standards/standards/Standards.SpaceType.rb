@@ -43,8 +43,7 @@ class OpenStudio::Model::SpaceType
   def get_construction_properties(template,intended_surface_type,standards_construction_type)
 
     # get building_category value
-    is_residential = self.get_standards_data(template)['is_residential']
-    if is_residential == "Yes"
+    if not self.get_standards_data(template) == nil and self.get_standards_data(template)['is_residential'] == "Yes"
       building_category = "Residential"
     else
       building_category = "Nonresidential"
