@@ -15,7 +15,8 @@ class OpenStudio::Model::Model
       'CleanWork' => ['Floor 1 Clean', 'Floor 1 Clean Work', ],
       'Conference' => ['Floor 2 Conference'],
       'DressingRoom' => ['Floor 1 Dressing Room', 'Floor 3 Dressing Room'],
-      'Elec/MechRoom' => ['Floor 1 Electrical Room', 'Floor 1 Elevator Pump Room', 'Floor 3 Mechanical', 'NW Elevator'],
+      'Elec/MechRoom' => ['Floor 1 Electrical Room', 'Floor 3 Mechanical', 'NW Elevator'],
+      'ElevatorPumpRoom' => ['Floor 1 Elevator Pump Room'],
       # 'Floor 3 Treatment' same as 'Exam'
       'Exam' => ['Floor 2 Exam 1', 'Floor 2 Exam 2', 'Floor 2 Exam 3', 'Floor 2 Exam 4', 'Floor 2 Exam 5', 'Floor 2 Exam 6', 'Floor 2 Exam 7', 
         'Floor 2 Exam 8', 'Floor 2 Exam 9', 'Floor 3 Treatment'],
@@ -181,12 +182,34 @@ class OpenStudio::Model::Model
       end
 
     end
+
+    # add elevator for the elevator pump room (the fan&lights are already added via standard spreadsheet)
+    self.add_extra_equip_elevator_pump_room(building_vintage)
     
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
     
     return true
     
   end #add hvac
+
+  def add_extra_equip_elevator_pump_room(building_vintage)
+    elevator_pump_room = self.getSpaceByName('Floor 1 Elevator Pump Room').get
+    elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
+    elec_equip_def.setName("Elevator Pump Room Electric Equipment Definition")
+    elec_equip_def.setFractionLatent(0)
+    elec_equip_def.setFractionRadiant(0.1)
+    elec_equip_def.setFractionLost(0.9)
+    elec_equip_def.setDesignLevel(48165)
+    elec_equip = OpenStudio::Model::ElectricEquipment.new(elec_equip_def)
+    elec_equip.setName("Elevator Pump Room Elevator Equipment")
+    elec_equip.setSpace(elevator_pump_room)
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      elec_equip.setSchedule(add_schedule("OutPatientHealthCare BLDG_ELEVATORS"))
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      elec_equip.setSchedule(add_schedule("OutPatientHealthCare BLDG_ELEVATORS_Pre2004"))
+    end
+  end
 
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
 
