@@ -467,6 +467,7 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding space type: #{template}-#{clim}-#{building_type}-#{spc_type}")
 
     name = make_name(template, clim, building_type, spc_type)
+    puts "name = #{name}"
 
     # Create a new space type and name it
     space_type = OpenStudio::Model::SpaceType.new(self)

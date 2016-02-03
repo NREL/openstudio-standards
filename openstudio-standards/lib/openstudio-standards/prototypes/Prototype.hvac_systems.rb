@@ -736,7 +736,8 @@ class OpenStudio::Model::Model
 
       # Reheat coil
       rht_coil = nil
-      if hot_water_loop.nil?
+      # sys_name.include? "Outpatient F2 F3"  is only for reheat coil of Outpatient Floor2&3
+      if hot_water_loop.nil? or sys_name.include? "Outpatient F2 F3"
         rht_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
       else
