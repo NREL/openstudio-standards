@@ -216,20 +216,25 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
 
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-    water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
-    
-    water_heaters.each do |water_heater|
-      water_heater = water_heater.to_WaterHeaterMixed.get
-      # water_heater.setAmbientTemperatureIndicator('Zone')
-      # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
-      water_heater.setOffCycleParasiticFuelConsumptionRate(1488)
-      water_heater.setOnCycleParasiticFuelConsumptionRate(1488)
-      water_heater.setOffCycleLossCoefficienttoAmbientTemperature(9.643286184)
-      water_heater.setOnCycleLossCoefficienttoAmbientTemperature(9.643286184)
-    end
 
-    self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    
+    space_type_map.each do |space_type_name, space_names|
+      data = nil
+      search_criteria = {
+        'template' => building_vintage,
+        'building_type' => building_type,
+        'space_type' => space_type_name
+      }
+      data = find_object(self.standards['space_types'],search_criteria)
+      
+      if data['service_water_heating_peak_flow_rate'].nil?
+        next
+      else
+        space_names.each do |space_name|
+          self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name)
+        end
+      end
+    end
+     
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
     
     return true
