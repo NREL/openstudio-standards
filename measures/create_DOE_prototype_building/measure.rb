@@ -37,8 +37,10 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     building_type_chs << 'RetailStripmall'
     building_type_chs << 'QuickServiceRestaurant'
     building_type_chs << 'FullServiceRestaurant'
+    building_type_chs << 'MidriseApartment'
+    building_type_chs << 'HighriseApartment'
     #building_type_chs << 'Hospital'
-    #building_type_chs << 'Outpatient'
+    # building_type_chs << 'Outpatient'
     building_type = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('building_type', building_type_chs, true)
     building_type.setDisplayName('Building Type.')
     building_type.setDefaultValue('SmallOffice')
