@@ -1041,7 +1041,7 @@ class OpenStudio::Model::Model
       end
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       case building_type
-      when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'OutPatientHealthCare', 'PrimarySchool'
+      when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'Outpatient', 'PrimarySchool'
         clg = 1.0
         htg = 1.0
       end
