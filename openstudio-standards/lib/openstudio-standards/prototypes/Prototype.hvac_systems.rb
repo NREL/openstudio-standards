@@ -410,9 +410,18 @@ class OpenStudio::Model::Model
 
     # Cooling towers
     if building_type == 'LargeOffice'
+      # TODO: For some reason the FluidCoolorTwoSpeed is causing simulation failures.
+      # might need to look into the defaults
       cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
+      # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
       cooling_tower.setName("#{heat_pump_water_loop.name} Central Tower")
       heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
+      #### Add SPM Scheduled Dual Setpoint to outlet of Fluid Cooler so correct Plant Operation Scheme is generated
+      hp_stpt_manager_2 = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(self)
+      hp_stpt_manager_2.setHighSetpointSchedule(hp_high_temp_sch)
+      hp_stpt_manager_2.setLowSetpointSchedule(hp_low_temp_sch)
+      hp_stpt_manager_2.addToNode(cooling_tower.outletModelObject.get.to_Node.get)
+
     else
       # TODO replace with FluidCooler:TwoSpeed when available
       # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
@@ -435,6 +444,11 @@ class OpenStudio::Model::Model
     boiler.setOptimumPartLoadRatio(1)
     boiler.setBoilerFlowMode('ConstantFlow')
     heat_pump_water_loop.addSupplyBranchForComponent(boiler)
+    #### Add SPM Scheduled Dual Setpoint to outlet of Boiler so correct Plant Operation Scheme is generated
+    hp_stpt_manager_3 = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(self)
+    hp_stpt_manager_3.setHighSetpointSchedule(hp_high_temp_sch)
+    hp_stpt_manager_3.setLowSetpointSchedule(hp_low_temp_sch)
+    hp_stpt_manager_3.addToNode(boiler.outletModelObject.get.to_Node.get)
 
     # Heat Pump water loop pipes
     supply_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
@@ -1650,7 +1664,7 @@ class OpenStudio::Model::Model
 
       heat_pump_loop.addDemandBranchForComponent(clg_coil)
 
-      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
+      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOffDiscreteSchedule)
       supplemental_htg_coil.setName("#{zone.name} PSZ Data Center Electric Backup Htg Coil")
 
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)

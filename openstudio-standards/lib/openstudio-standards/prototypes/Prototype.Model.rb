@@ -756,7 +756,8 @@ class OpenStudio::Model::Model
       if thermostat.empty?
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
       else
-        zone.setThermostatSetpointDualSetpoint(thermostat.get)
+        thermostatClone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
+        zone.setThermostatSetpointDualSetpoint(thermostatClone)
       end
     end
 

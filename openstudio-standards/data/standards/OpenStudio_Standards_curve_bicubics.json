@@ -19,6 +19,24 @@
       "notes": "From Dick Lord's Chiller Model study for ASHRAE 2007 baseline"
     },
     {
+      "name": "WC Screw GTE 300tons Default 90.1-2004 EIR_fPLR",
+      "coeff_1": -0.2737954,
+      "coeff_2": 0.02822257,
+      "coeff_3": -8.097657e-05,
+      "coeff_4": 0.9612284,
+      "coeff_5": 0.3029741,
+      "coeff_6": -0.02421933,
+      "coeff_7": 0.0,
+      "coeff_8": -0.03885224,
+      "coeff_9": 0.0,
+      "coeff_10": 0.0,
+      "min_x": 18.54,
+      "max_x": 31.63,
+      "min_y": 0.2,
+      "max_y": 1.02,
+      "notes": "From RefBldgLargeOfficePost1980 & Pre1980"
+    },
+    {
       "name": "WaterCooled_Centrifugal_Chiller_150TO300_2004_EIRFPLR",
       "coeff_1": -0.1360532,
       "coeff_2": 0.008642703,

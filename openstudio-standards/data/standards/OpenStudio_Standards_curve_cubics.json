@@ -309,6 +309,46 @@
       "min_x": 0.0,
       "max_x": 1.0,
       "notes": "From Prototype Buildings"
+    },
+    {
+      "name": "VarVolFan-AFBIFanCurve-NECB2011-FPLR",
+      "coeff_1": -2.4176,
+      "coeff_2": 9.5874,
+      "coeff_3": -11.559,
+      "coeff_4": 5.4009,
+      "min_x": 0.68,
+      "max_x": 1.0,
+      "notes": "From NECB 2011"
+    },
+    {
+      "name": "VarVolFan-AFBIInletVanes-NECB2011-FPLR",
+      "coeff_1": -4.1457,
+      "coeff_2": 16.803,
+      "coeff_3": -19.471,
+      "coeff_4": 7.8488,
+      "min_x": 0.5,
+      "max_x": 1.0,
+      "notes": "From NECB 2011"
+    },
+    {
+      "name": "VarVolFan-FCInletVanes-NECB2011-FPLR",
+      "coeff_1": -0.3477,
+      "coeff_2": 4.0976,
+      "coeff_3": -5.0024,
+      "coeff_4": 2.268,
+      "min_x": 0.22,
+      "max_x": 1.0,
+      "notes": "From NECB 2011"
+    },
+    {
+      "name": "VarVolFan-VSD-NECB2011-FPLR",
+      "coeff_1": 0.1389,
+      "coeff_2": 1.7699,
+      "coeff_3": -1.615,
+      "coeff_4": 0.6996,
+      "min_x": 0.04,
+      "max_x": 1.0,
+      "notes": "From NECB 2011"
     }
   ]
 }
