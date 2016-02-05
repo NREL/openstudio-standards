@@ -281,6 +281,34 @@
       "notes": "From DOE Reference Buildings SmallHotel"
     },
     {
+      "name": "WC Screw Default 90.1-2004 Cap_fTWC",
+      "coeff_1": 0.906115,
+      "coeff_2": 0.0292277,
+      "coeff_3": -0.0003647,
+      "coeff_4": -0.0009709,
+      "coeff_5": -9.05e-05,
+      "coeff_6": 0.0002527,
+      "min_x": 0.0,
+      "max_x": 20.0,
+      "min_y": 0.0,
+      "max_y": 50.0,
+      "notes": "From RefBldgLargeOfficePost1980 & Pre1980"
+    },
+    {
+      "name": "WC Screw Default 90.1-2004 EIR_fT",
+      "coeff_1": 0.3617105,
+      "coeff_2": -0.0229833,
+      "coeff_3": -0.0009519,
+      "coeff_4": 0.0131889,
+      "coeff_5": 0.0003752,
+      "coeff_6": -0.0007059,
+      "min_x": 0.0,
+      "max_x": 20.0,
+      "min_y": 0.0,
+      "max_y": 50.0,
+      "notes": "From RefBldgLargeOfficePost1980 % Pre1980"
+    },
+    {
       "name": "WC_PD_2004_CAPFT",
       "coeff_1": 0.906115,
       "coeff_2": 0.0292277,

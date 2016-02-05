@@ -151,13 +151,13 @@ case building_vintage
   def define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
     space_multiplier_map = {
-        'Perimeter_mid_ZN_1' => 10,
+        'DataCenter_mid_ZN_6' =>10,
+		'Perimeter_mid_ZN_1' => 10,
         'Perimeter_mid_ZN_2'=> 10,
         'Perimeter_mid_ZN_3'=> 10,
         'Perimeter_mid_ZN_4'=> 10,
         'Core_mid'=> 10,
-		'MidFloor_Plenum ZN' => 10,
-		'DataCenter_mid_ZN_6 ZN' =>10
+		'MidFloor_Plenum' => 10
     }
     return space_multiplier_map
   end
@@ -173,7 +173,7 @@ case building_vintage
 
     hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
 
-    heat_pump_loop = self.add_hp_loop(prototype_input, hvac_standards, building_type)
+    heat_pump_loop = self.add_hp_loop(prototype_input, hvac_standards)
 
     system_to_space_map.each do |system|
 
