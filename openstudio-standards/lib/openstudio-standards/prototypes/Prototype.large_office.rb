@@ -214,7 +214,7 @@ case building_vintage
           thermostat = thermal_zone.thermostatSetpointDualSetpoint
           unless thermal_zone.nil?
             thermostat = thermostat.get
-            # self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
+            self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
           end
           sizine_zone = thermal_zone.sizingZone
           sizine_zone.setZoneHeatingSizingFactor(0)
@@ -232,7 +232,7 @@ case building_vintage
           thermostat = thermal_zone.thermostatSetpointDualSetpoint
           unless thermal_zone.nil?
             thermostat = thermostat.get
-            # self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
+            self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
           end
           sizine_zone = thermal_zone.sizingZone
           sizine_zone.setZoneHeatingSizingFactor(0)
