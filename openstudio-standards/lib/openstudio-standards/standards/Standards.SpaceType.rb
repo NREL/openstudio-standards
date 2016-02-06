@@ -31,6 +31,7 @@ class OpenStudio::Model::SpaceType
 
     if space_type_properties.nil?
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
+      space_type_properties = {}
     end
     
     return space_type_properties
