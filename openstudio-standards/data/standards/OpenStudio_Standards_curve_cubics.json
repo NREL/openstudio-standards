@@ -8,6 +8,8 @@
       "coeff_4": 1.82,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -18,6 +20,8 @@
       "coeff_4": 0.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From DOE Reference Building"
     },
     {
@@ -28,6 +32,8 @@
       "coeff_4": 1.3467,
       "min_x": 0.0,
       "max_x": 1.3,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Regression of Prototype Building EMS"
     },
     {
@@ -38,7 +44,69 @@
       "coeff_4": 1.1674,
       "min_x": 0.0,
       "max_x": 1.3,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Regression of Prototype Building EMS"
+    },
+    {
+      "name": "CoilClgDXDblEIRRatio_fCFMRatio",
+      "coeff_1": 1.007948,
+      "coeff_2": 0.345441,
+      "coeff_3": -0.692289,
+      "coeff_4": 0.338899,
+      "min_x": null,
+      "max_x": null,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXDblQRatio_fCFMRatio",
+      "coeff_1": 0.472786,
+      "coeff_2": 1.243342,
+      "coeff_3": -1.038706,
+      "coeff_4": 0.322578,
+      "min_x": -100.0,
+      "max_x": 100.0,
+      "min_out": 0.47,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXEIRRatio_fQFrac",
+      "coeff_1": 0.0,
+      "coeff_2": 5.1091,
+      "coeff_3": -8.5515,
+      "coeff_4": 4.4744,
+      "min_x": 0.7,
+      "max_x": 1.0,
+      "min_out": 0.92,
+      "max_out": 1.0,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXSEEREIRRatio_fQFrac",
+      "coeff_1": 1.0,
+      "coeff_2": 0.0,
+      "coeff_3": 0.0,
+      "coeff_4": 0.0,
+      "min_x": 0.7,
+      "max_x": 1.0,
+      "min_out": 1.0,
+      "max_out": 1.0,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgPTACEIRRatio_fQFrac",
+      "coeff_1": 0.85,
+      "coeff_2": 0.15,
+      "coeff_3": 0.0,
+      "coeff_4": 0.0,
+      "min_x": 0.7,
+      "max_x": 1.0,
+      "min_out": 0.96,
+      "max_out": 1.0,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
     },
     {
       "name": "ConstantCubic",
@@ -48,6 +116,8 @@
       "coeff_4": 0.0,
       "min_x": -100.0,
       "max_x": 100.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Reference Buildings"
     },
     {
@@ -58,6 +128,8 @@
       "coeff_4": 0.0,
       "min_x": -100.0,
       "max_x": 100.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From DOE Pre-1980 Reference Building"
     },
     {
@@ -68,6 +140,8 @@
       "coeff_4": 0.0,
       "min_x": -100.0,
       "max_x": 100.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From DOE Pre-1980 Reference Building"
     },
     {
@@ -78,6 +152,8 @@
       "coeff_4": 4.2702,
       "min_x": 0.7,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB, curve modified to take into account how PLF is used in E+, and PLF ranges (> 0.7)"
     },
     {
@@ -88,6 +164,8 @@
       "coeff_4": 0.0,
       "min_x": 0.5,
       "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -98,6 +176,8 @@
       "coeff_4": -8.75e-06,
       "min_x": -20.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -108,6 +188,8 @@
       "coeff_4": -2.68e-05,
       "min_x": -20.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -118,6 +200,8 @@
       "coeff_4": 1.2596,
       "min_x": 0.7,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -128,6 +212,8 @@
       "coeff_4": 0.0,
       "min_x": 0.5,
       "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -138,6 +224,8 @@
       "coeff_4": 3.4992e-06,
       "min_x": -20.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -148,6 +236,8 @@
       "coeff_4": -2.3328e-05,
       "min_x": -20.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -158,6 +248,8 @@
       "coeff_4": 0.313806701,
       "min_x": 0.1,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -168,6 +260,8 @@
       "coeff_4": 0.0,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -178,6 +272,8 @@
       "coeff_4": 1.23732e-06,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -188,6 +284,8 @@
       "coeff_4": 0.0,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -198,6 +296,8 @@
       "coeff_4": 1.23732e-06,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -208,6 +308,8 @@
       "coeff_4": 1.23732e-06,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Reference Buildings"
     },
     {
@@ -218,6 +320,8 @@
       "coeff_4": 0.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -228,6 +332,8 @@
       "coeff_4": 0.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -238,6 +344,8 @@
       "coeff_4": 0.0,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -248,6 +356,8 @@
       "coeff_4": 1.23732e-06,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -258,6 +368,8 @@
       "coeff_4": 0.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -268,6 +380,8 @@
       "coeff_4": 0.0,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -278,6 +392,8 @@
       "coeff_4": 1.23732e-06,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
     },
     {
@@ -288,6 +404,8 @@
       "coeff_4": 0.0,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Reference Buildings"
     },
     {
@@ -298,6 +416,8 @@
       "coeff_4": 1.811e-07,
       "min_x": -35.0,
       "max_x": 20.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Reference Buildings"
     },
     {
@@ -308,7 +428,57 @@
       "coeff_4": 1.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Prototype Buildings"
+    },
+    {
+      "name": "VarVolFan-AFBIFanCurve-NECB2011-FPLR",
+      "coeff_1": -2.4176,
+      "coeff_2": 9.5874,
+      "coeff_3": -11.559,
+      "coeff_4": 5.4009,
+      "min_x": 0.68,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From NECB 2011"
+    },
+    {
+      "name": "VarVolFan-AFBIInletVanes-NECB2011-FPLR",
+      "coeff_1": -4.1457,
+      "coeff_2": 16.803,
+      "coeff_3": -19.471,
+      "coeff_4": 7.8488,
+      "min_x": 0.5,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From NECB 2011"
+    },
+    {
+      "name": "VarVolFan-FCInletVanes-NECB2011-FPLR",
+      "coeff_1": -0.3477,
+      "coeff_2": 4.0976,
+      "coeff_3": -5.0024,
+      "coeff_4": 2.268,
+      "min_x": 0.22,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From NECB 2011"
+    },
+    {
+      "name": "VarVolFan-VSD-NECB2011-FPLR",
+      "coeff_1": 0.1389,
+      "coeff_2": 1.7699,
+      "coeff_3": -1.615,
+      "coeff_4": 0.6996,
+      "min_x": 0.04,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From NECB 2011"
     }
   ]
 }

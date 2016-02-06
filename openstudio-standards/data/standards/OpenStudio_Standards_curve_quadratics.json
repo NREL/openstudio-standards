@@ -7,6 +7,8 @@
       "coeff_3": -0.11088,
       "min_x": 0.75918,
       "max_x": 1.13877,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings OutPatientHealtCare, RestaurantFastFood, RestaurantSitDown, SchoolPrimary, SchoolSecondary"
     },
     {
@@ -16,6 +18,8 @@
       "coeff_3": 0.203,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010.  EIRFPLR curve is identical for all AirCooled Chillers"
     },
     {
@@ -25,6 +29,8 @@
       "coeff_3": 0.203,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -34,6 +40,8 @@
       "coeff_3": 0.203,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -43,6 +51,8 @@
       "coeff_3": 0.203,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -52,7 +62,130 @@
       "coeff_3": 0.203,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
+    },
+    {
+      "name": "ChlrAirRecipEIRRatio_fQRatio",
+      "coeff_1": 0.114437,
+      "coeff_2": 0.545933,
+      "coeff_3": 0.342299,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": 0.11,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrAirScrewEIRRatio_fQRatio",
+      "coeff_1": 0.036487,
+      "coeff_2": 0.734743,
+      "coeff_3": 0.219947,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": 0.04,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrAirScrollEIRRatio_fQRatio",
+      "coeff_1": 0.063691,
+      "coeff_2": 0.584888,
+      "coeff_3": 0.352803,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": 0.06,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathAAllEIRRatio_fQRatio",
+      "coeff_1": 0.222149,
+      "coeff_2": 0.503156,
+      "coeff_3": 0.256905,
+      "min_x": 0.1,
+      "max_x": 1.0,
+      "min_out": 0.28,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathBGtEql300Lt600tonEIRRatio_fQRatio",
+      "coeff_1": 0.055483,
+      "coeff_2": 0.451866,
+      "coeff_3": 0.488242,
+      "min_x": 0.1,
+      "max_x": 1.0,
+      "min_out": 0.11,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathBGtEql600tonEIRRatio_fQRatio",
+      "coeff_1": 0.107426,
+      "coeff_2": 0.156775,
+      "coeff_3": 0.739345,
+      "min_x": 0.1,
+      "max_x": 1.0,
+      "min_out": 0.13,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathBLt300tonEIRRatio_fQRatio",
+      "coeff_1": 0.208389,
+      "coeff_2": -0.121404,
+      "coeff_3": 0.918455,
+      "min_x": 0.1,
+      "max_x": 1.0,
+      "min_out": 0.21,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrPosDispPathAAllEIRRatio_fQRatio",
+      "coeff_1": 0.310965,
+      "coeff_2": 0.322519,
+      "coeff_3": 0.372745,
+      "min_x": 0.1,
+      "max_x": 1.0,
+      "min_out": 0.35,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrPosDispPathBAllEIRRatio_fQRatio",
+      "coeff_1": 0.0,
+      "coeff_2": 0.6206,
+      "coeff_3": 0.3893,
+      "min_x": 0.1,
+      "max_x": 1.0,
+      "min_out": 0.07,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXSnglEIRRatio_fCFMRatio",
+      "coeff_1": 1.156,
+      "coeff_2": -0.1816,
+      "coeff_3": 0.0256,
+      "min_x": null,
+      "max_x": null,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXSnglQRatio_fCFMRatio",
+      "coeff_1": 0.8,
+      "coeff_2": 0.2,
+      "coeff_3": 0.0,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
     },
     {
       "name": "Cool-PLF-fPLR",
@@ -61,6 +194,8 @@
       "coeff_3": -0.00819488,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype FullServiceRestaurant"
     },
     {
@@ -70,6 +205,8 @@
       "coeff_3": 0.12308,
       "min_x": 0.75918,
       "max_x": 1.13877,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings OutPatientHealtCare, RestaurantFastFood, RestaurantSitDown, SchoolPrimary, SchoolSecondary"
     },
     {
@@ -79,6 +216,8 @@
       "coeff_3": -0.00819488,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": null
     },
     {
@@ -88,6 +227,8 @@
       "coeff_3": 0.0,
       "min_x": 0.5,
       "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings ApartmentMidRise, HotelSmall, OfficeSmall, RetailStandAlone, RetailStripmall, SchoolPrimary, Warehouse"
     },
     {
@@ -97,6 +238,8 @@
       "coeff_3": 0.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -106,6 +249,8 @@
       "coeff_3": 0.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -115,6 +260,8 @@
       "coeff_3": 0.0512,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -124,6 +271,8 @@
       "coeff_3": 0.110973,
       "min_x": 0.75,
       "max_x": 1.25,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL OfficeMedium"
     },
     {
@@ -133,6 +282,8 @@
       "coeff_3": 0.0256,
       "min_x": 0.5,
       "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
       "notes": null
     },
     {
@@ -142,6 +293,8 @@
       "coeff_3": 0.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": null
     },
     {
@@ -151,6 +304,8 @@
       "coeff_3": 0.0,
       "min_x": 0.5,
       "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
       "notes": null
     },
     {
@@ -160,6 +315,8 @@
       "coeff_3": 0.0,
       "min_x": 0.776,
       "max_x": 1.197,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype FullServiceRestaurant"
     },
     {
@@ -169,6 +326,8 @@
       "coeff_3": 0.0256,
       "min_x": 0.5,
       "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings RetailStandAlone, RetailStripMall, SchoolPrimary"
     },
     {
@@ -178,6 +337,8 @@
       "coeff_3": 0.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings OutPatientHealtCare, RestaurantFastFood, RestaurantSitDown, SchoolPrimary, SchoolSecondary"
     },
     {
@@ -187,6 +348,8 @@
       "coeff_3": 0.0,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings RetailStandAlone, RetailStripMall, SchoolPrimary"
     },
     {
@@ -196,6 +359,8 @@
       "coeff_3": 0.0256,
       "min_x": 0.5,
       "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings ApartmentMidRise, HotelSmall, Warehouse"
     },
     {
@@ -205,6 +370,8 @@
       "coeff_3": 0.2373726,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -214,6 +381,8 @@
       "coeff_3": 0.499396,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -223,6 +392,8 @@
       "coeff_3": 0.4607083,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -232,6 +403,8 @@
       "coeff_3": 0.3195553,
       "min_x": 0.0,
       "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     }
   ]
