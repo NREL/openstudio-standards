@@ -74,6 +74,11 @@ class OpenStudio::Model::Model
   require_relative 'Standards.ScheduleRuleset'
   require_relative 'Standards.ScheduleConstant'
   require_relative 'Standards.SpaceType'
+  require_relative 'Standards.PlanarSurface'
+  require_relative 'Standards.PlantLoop'
+  require_relative 'Standards.Pump'
+  require_relative 'Standards.PumpConstantSpeed'
+  require_relative 'Standards.PumpVariableSpeed'
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.  
@@ -105,6 +110,12 @@ class OpenStudio::Model::Model
       space_type.set_internal_loads(building_vintage, false, true, false, false, true, false) 
     end
 
+    # Modify some of the construction types as necessary
+    self.apply_performance_rating_method_construction_types(building_vintage)
+    
+    # Set the construction properties of all the surfaces in the model
+    self.apply_standard_constructions(building_vintage, climate_zone)
+    
     # Get the groups of zones that define the
     # baseline HVAC systems for later use.
     # This must be done before removing the HVAC systems
@@ -153,6 +164,11 @@ class OpenStudio::Model::Model
     
     end
   
+    # Apply the baseline system temperatures
+    self.getPlantLoops.sort.each do |plant_loop|
+      plant_loop.apply_performance_rating_method_baseline_temperatures(building_vintage)
+    end
+    
     # Run sizing run with the HVAC equipment
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
@@ -176,12 +192,27 @@ class OpenStudio::Model::Model
       air_loop.set_performance_rating_method_baseline_fan_power(building_vintage)
     end
     
+    # Set the baseline pumping power for all plant loops
+    # Set the baseline pump control type for all plant loops
+    # Set the baseline number of boilers
+    self.getPlantLoops.sort.each do |plant_loop|
+      plant_loop.apply_performance_rating_method_baseline_pump_power(building_vintage)
+      plant_loop.apply_performance_rating_method_baseline_pumping_type(building_vintage)
+      plant_loop.apply_performance_rating_method_number_of_boilers(building_vintage)
+      plant_loop.apply_performance_rating_method_number_of_chillers(building_vintage)
+    end
+
+    # Run sizing run with the new chillers and boilers to determine capacities
+    if self.runSizingRun("#{sizing_run_dir}/SizingRun3") == false
+      return false
+    end
+    
     # Apply the HVAC efficiency standard
     self.applyHVACEfficiencyStandard(building_vintage, climate_zone)  
     
     # Add daylighting controls to each space
     self.getSpaces.sort.each do |space|
-      added = space.addDaylightingControls(building_vintage, false, true)
+      added = space.addDaylightingControls(building_vintage, false, false)
     end
      
     model_status = 'final'
@@ -1304,6 +1335,10 @@ class OpenStudio::Model::Model
     # self.getFanOnOffs.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
     # self.getFanZoneExhausts.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
 
+    # Pumps
+    self.getPumpConstantSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
+    self.getPumpVariableSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
+    
     # Unitary ACs
     self.getCoilCoolingDXTwoSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
     self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(building_vintage, sql_db_vars_map)}
@@ -1770,7 +1805,7 @@ class OpenStudio::Model::Model
     data = self.find_object($os_standards['constructions'], {'name'=>construction_name})
     if !data
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for construction: #{construction_name}, will not be created.")
-      return false #TODO change to return empty optional material
+      return OpenStudio::Model::OptionalConstruction.new
     end
 
     # Make a new construction and set the standards details
@@ -2079,6 +2114,12 @@ class OpenStudio::Model::Model
       curve.setMaximumValueofx(curve_data["max_x"])
       curve.setMinimumValueofy(curve_data["min_y"])
       curve.setMaximumValueofy(curve_data["max_y"])
+      if curve_data["min_out"]
+        curve.setMinimumCurveOutput(curve_data["min_out"])
+      end
+      if curve_data["max_out"]
+        curve.setMaximumCurveOutput(curve_data["max_out"])
+      end
       success = true
       return curve
     end
@@ -2093,6 +2134,12 @@ class OpenStudio::Model::Model
       curve.setCoefficient3xPOW2(curve_data["coeff_3"])
       curve.setMinimumValueofx(curve_data["min_x"])
       curve.setMaximumValueofx(curve_data["max_x"])
+      if curve_data["min_out"]
+        curve.setMinimumCurveOutput(curve_data["min_out"])
+      end
+      if curve_data["max_out"]
+        curve.setMaximumCurveOutput(curve_data["max_out"])
+      end      
       success = true
       return curve
     end
@@ -2108,6 +2155,12 @@ class OpenStudio::Model::Model
       curve.setCoefficient4xPOW3(curve_data["coeff_4"])
       curve.setMinimumValueofx(curve_data["min_x"])
       curve.setMaximumValueofx(curve_data["max_x"])
+      if curve_data["min_out"]
+        curve.setMinimumCurveOutput(curve_data["min_out"])
+      end
+      if curve_data["max_out"]
+        curve.setMaximumCurveOutput(curve_data["max_out"])
+      end      
       success = true
       return curve
     end
@@ -2131,6 +2184,12 @@ class OpenStudio::Model::Model
       curve.setMaximumValueofx(curve_data["max_x"])
       curve.setMinimumValueofy(curve_data["min_y"])
       curve.setMaximumValueofy(curve_data["max_y"])
+      if curve_data["min_out"]
+        curve.setMinimumCurveOutput(curve_data["min_out"])
+      end
+      if curve_data["max_out"]
+        curve.setMaximumCurveOutput(curve_data["max_out"])
+      end      
       success = true
       return curve
     end
@@ -2176,7 +2235,328 @@ class OpenStudio::Model::Model
 
   end
 
-  private
+
+  # Get a unique list of constructions with given
+  # boundary condition and a given type of surface.
+  # Pulls from both default construction sets and
+  # hard-assigned constructions.
+  #
+  # @param boundary_condition [String] the desired boundary condition
+  # valid choices are:
+  # Adiabatic
+  # Surface
+  # Outdoors
+  # Ground
+  # @param type [String] the type of surface to find
+  # valid choices are:
+  # AtticFloor
+  # AtticWall
+  # AtticRoof
+  # DemisingFloor
+  # DemisingWall
+  # DemisingRoof
+  # ExteriorFloor
+  # ExteriorWall
+  # ExteriorRoof
+  # ExteriorWindow
+  # ExteriorDoor
+  # GlassDoor
+  # GroundContactFloor
+  # GroundContactWall
+  # GroundContactRoof
+  # InteriorFloor
+  # InteriorWall
+  # InteriorCeiling
+  # InteriorPartition
+  # InteriorWindow
+  # InteriorDoor
+  # OverheadDoor
+  # Skylight
+  # TubularDaylightDome
+  # TubularDaylightDiffuser
+  # return [Array<OpenStudio::Model::ConstructionBase>]
+  # an array of all constructions.
+  def find_constructions(boundary_condition, type)
+
+      constructions = []
+
+      # From default construction sets
+      self.getDefaultConstructionSets.each do |const_set|
+        
+        ext_surfs = const_set.defaultExteriorSurfaceConstructions
+        int_surfs = const_set.defaultInteriorSurfaceConstructions
+        gnd_surfs = const_set.defaultGroundContactSurfaceConstructions
+        ext_subsurfs = const_set.defaultExteriorSubSurfaceConstructions
+        int_subsurfs = const_set.defaultInteriorSubSurfaceConstructions
+        
+        # Can't handle incomplete construction sets
+        if ext_surfs.empty? || 
+          int_surfs.empty? ||
+          gnd_surfs.empty? ||
+          ext_subsurfs.empty? ||
+          int_subsurfs.empty?
+          
+          OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Default construction set #{const_set.name} is incomplete; contructions from this set will not be reported.")
+          next
+        end  
+        
+        ext_surfs = ext_surfs.get
+        int_surfs = int_surfs.get
+        gnd_surfs = gnd_surfs.get
+        ext_subsurfs = ext_subsurfs.get
+        int_subsurfs = int_subsurfs.get
+
+        case type
+        # Exterior Surfaces
+        when 'ExteriorWall', 'AtticWall'
+          constructions << ext_surfs.wallConstruction
+        when 'ExteriorFloor'
+          constructions << ext_surfs.floorConstruction
+        when 'ExteriorRoof', 'AtticRoof'
+          constructions << ext_surfs.roofCeilingConstruction       
+        # Interior Surfaces
+        when 'InteriorWall', 'DemisingWall', 'InteriorPartition'
+          constructions << int_surfs.wallConstruction
+        when 'InteriorFloor', 'AtticFloor', 'DemisingFloor'
+          constructions << int_surfs.floorConstruction
+        when 'InteriorCeiling', 'DemisingRoof'
+          constructions << int_surfs.roofCeilingConstruction 
+        # Ground Contact Surfaces
+        when 'GroundContactWall'
+          constructions << gnd_surfs.wallConstruction
+        when 'GroundContactFloor'
+          constructions << gnd_surfs.floorConstruction
+        when 'GroundContactRoof'
+          constructions << gnd_surfs.roofCeilingConstruction
+        # Exterior SubSurfaces
+        when 'ExteriorWindow'
+          constructions << ext_subsurfs.fixedWindowConstruction
+          constructions << ext_subsurfs.operableWindowConstruction
+        when 'ExteriorDoor'
+          constructions << ext_subsurfs.doorConstruction
+        when 'GlassDoor'
+          constructions << ext_subsurfs.glassDoorConstruction
+        when 'OverheadDoor'
+          constructions << ext_subsurfs.overheadDoorConstruction
+        when 'Skylight'
+          constructions << ext_subsurfs.skylightConstruction
+        when 'TubularDaylightDome'
+          constructions << ext_subsurfs.tubularDaylightDomeConstruction
+        when 'TubularDaylightDiffuser'
+          constructions << ext_subsurfs.tubularDaylightDiffuserConstruction
+        # Interior SubSurfaces
+        when 'InteriorWindow'
+          constructions << int_subsurfs.fixedWindowConstruction
+          constructions << int_subsurfs.operableWindowConstruction
+        when 'InteriorDoor'
+          constructions << int_subsurfs.doorConstruction          
+        end
+      end
+      
+      # Hard-assigned surfaces
+      self.getSurfaces.each do |surf|
+        next unless surf.outsideBoundaryCondition == boundary_condition
+        next unless surf.surfaceType == type
+        constructions_to_modify << surf.construction
+      end
+      
+      # Hard-assigned subsurfaces
+      self.getSubSurfaces.each do |surf|
+        next unless surf.outsideBoundaryCondition == boundary_condition
+        next unless surf.subSurfaceType == type
+        constructions_to_modify << surf.construction
+      end
+      
+      # Throw out the empty constructions
+      all_constructions = []
+      constructions.uniq.sort.each do |const|
+        next if const.empty?
+        all_constructions << const.get
+      end
+      
+      # Only return the unique list
+      all_constructions = all_constructions.uniq
+      
+      return all_constructions
+      
+  end
+
+  # Go through the default construction sets and hard-assigned
+  # constructions. Clone the existing constructions and set their
+  # intended surface type and standards construction type per
+  # the PRM.  For some standards, this will involve making
+  # modifications.  For others, it will not.
+  #
+  # @param template [String] valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @return [Bool] returns true if successful, false if not
+  def apply_performance_rating_method_construction_types(template)
+  
+    types_to_modify = []
+    
+    # Possible boundary conditions are
+    # Adiabatic
+    # Surface
+    # Outdoors
+    # Ground
+    
+    # Possible surface types are
+    # AtticFloor
+    # AtticWall
+    # AtticRoof
+    # DemisingFloor
+    # DemisingWall
+    # DemisingRoof
+    # ExteriorFloor
+    # ExteriorWall
+    # ExteriorRoof
+    # ExteriorWindow
+    # ExteriorDoor
+    # GlassDoor
+    # GroundContactFloor
+    # GroundContactWall
+    # GroundContactRoof
+    # InteriorFloor
+    # InteriorWall
+    # InteriorCeiling
+    # InteriorPartition
+    # InteriorWindow
+    # InteriorDoor
+    # OverheadDoor
+    # Skylight
+    # TubularDaylightDome
+    # TubularDaylightDiffuser   
+    
+    # Possible standards construction types
+    # Mass
+    # SteelFramed
+    # WoodFramed
+    # IEAD
+    # View
+    # Daylight
+    # Swinging
+    # NonSwinging
+    # Heated
+    # Unheated
+    # RollUp
+    # Sliding
+    # Metal
+    # Nonmetal framing (all)
+    # Metal framing (curtainwall/storefront)
+    # Metal framing (entrance door)
+    # Metal framing (all other)
+    # Metal Building
+    # Attic and Other
+    # Glass with Curb
+    # Plastic with Curb
+    # Without Curb
+
+    # Create an array of types
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
+      types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
+      types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+      types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
+      types_to_modify << ['Ground', 'GroundContactWall', 'Unheated']
+    end
+    
+    # Modify all constructions of each type
+    types_to_modify.each do |boundary_cond, surf_type, const_type|
+    
+      constructions = self.find_constructions(boundary_cond, surf_type)
+
+      constructions.sort.each do |const|  
+        standards_info = const.standardsInformation
+        standards_info.setIntendedSurfaceType(surf_type)
+        standards_info.setStandardsConstructionType(const_type)
+      end
+      
+    end
+
+    return true
+    
+  end  
+  
+  # Apply the standard construction to each surface in the 
+  # model, based on the construction type currently assigned.
+  #
+  # @return [Bool] true if successful, false if not
+  def apply_standard_constructions(template, climate_zone)  
+  
+    types_to_modify = []
+  
+    # Possible boundary conditions are 
+    # Adiabatic
+    # Surface
+    # Outdoors
+    # Ground    
+    
+    # Possible surface types are
+    # Floor 
+    # Wall
+    # RoofCeiling
+    # FixedWindow
+    # OperableWindow
+    # Door 
+    # GlassDoor
+    # OverheadDoor
+    # Skylight
+    # TubularDaylightDome
+    # TubularDaylightDiffuser
+  
+    # Create an array of surface types
+    # each standard applies to.
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      types_to_modify << ['Outdoors', 'Floor']
+      types_to_modify << ['Outdoors', 'Wall']
+      types_to_modify << ['Outdoors', 'RoofCeiling']
+      types_to_modify << ['Outdoors', 'FixedWindow']
+      types_to_modify << ['Outdoors', 'OperableWindow']
+      types_to_modify << ['Outdoors', 'Door']
+      types_to_modify << ['Outdoors', 'GlassDoor']
+      types_to_modify << ['Outdoors', 'OverheadDoor']
+      types_to_modify << ['Outdoors', 'Skylight']
+      types_to_modify << ['Ground', 'Floor']
+      types_to_modify << ['Ground', 'Wall']
+    end
+
+    # Find just those surfaces
+    surfaces_to_modify = []
+    types_to_modify.each do |boundary_condition, surface_type|
+    
+      # Surfaces
+      self.getSurfaces.each do |surf|
+        next unless surf.outsideBoundaryCondition == boundary_condition
+        next unless surf.surfaceType == surface_type
+        surfaces_to_modify << surf
+      end
+      
+      # SubSurfaces
+      self.getSubSurfaces.each do |surf|
+        next unless surf.outsideBoundaryCondition == boundary_condition
+        next unless surf.subSurfaceType == surface_type
+        surfaces_to_modify << surf
+      end
+   
+    end
+  
+    # Modify these surfaces
+    prev_created_consts = {}
+    surfaces_to_modify.sort.each do |surf|
+      prev_created_consts = surf.apply_standard_construction(template, climate_zone, prev_created_consts)
+    end
+  
+    # List the unique array of constructions
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Applying standard constructions")
+    prev_created_consts.each do |surf_type, construction|
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{surf_type.join(' ')}, applied #{construction.name}.")
+    end
+
+    return true
+  
+  end
 
   # Helper method to get the story object that
   # cooresponds to a specific minimum z value.
