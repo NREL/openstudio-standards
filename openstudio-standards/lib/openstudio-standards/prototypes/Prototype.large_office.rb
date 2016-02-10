@@ -6,7 +6,7 @@ class OpenStudio::Model::Model
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       space_type_map = {
       'WholeBuilding - Lg Office' => [
-        'Basement', 'Core_bottom', 'Core_mid', 'Core_top', 'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
+        'Basement', 'Core_bottom', 'Core_mid', 'Core_top', #'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
         'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4',
         'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4',
         'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4'
@@ -15,11 +15,16 @@ class OpenStudio::Model::Model
     when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
       space_type_map = {
       'WholeBuilding - Lg Office' => [
-        'Basement', 'Core_bottom', 'Core_mid', 'Core_top', 'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
+        'Basement', 'Core_bottom', 'Core_mid', 'Core_top', #'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
         'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4',
         'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4',
-        'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4',
-        'DataCenter_basement_ZN_6', 'DataCenter_bot_ZN_6', 'DataCenter_mid_ZN_6', 'DataCenter_top_ZN_6'
+        'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4'
+      ],
+      'OfficeLarge Data Center' => [
+        'DataCenter_bot_ZN_6', 'DataCenter_mid_ZN_6', 'DataCenter_top_ZN_6'
+      ],
+      'OfficeLarge Main Data Center' => [
+        'DataCenter_basement_ZN_6'
       ]
     }
     end
@@ -133,32 +138,28 @@ class OpenStudio::Model::Model
             'space_names' =>
             [
                 'DataCenter_basement_ZN_6'
-            ],
-            'load' => 484.423246742185
+            ]
         },
         {
             'type' => 'DC',
             'space_names' =>
             [
                 'DataCenter_bot_ZN_6'
-            ],
-            'load' => 215.299220774304
+            ]
         },
         {
             'type' => 'DC',
             'space_names' =>
             [
                 'DataCenter_mid_ZN_6'
-            ],
-            'load' => 215.299220774304
+            ]
         },
         {
             'type' => 'DC',
             'space_names' =>
             [
                 'DataCenter_top_ZN_6'
-            ],
-            'load' => 215.299220774304
+            ]
         }
       ]
     end
@@ -169,13 +170,13 @@ class OpenStudio::Model::Model
   def define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
     space_multiplier_map = {
-        'DataCenter_mid_ZN_6' =>10,
-		'Perimeter_mid_ZN_1' => 10,
-        'Perimeter_mid_ZN_2'=> 10,
-        'Perimeter_mid_ZN_3'=> 10,
-        'Perimeter_mid_ZN_4'=> 10,
-        'Core_mid'=> 10,
-		'MidFloor_Plenum' => 10
+      'DataCenter_mid_ZN_6' => 10,
+      'Perimeter_mid_ZN_1' => 10,
+      'Perimeter_mid_ZN_2' => 10,
+      'Perimeter_mid_ZN_3' => 10,
+      'Perimeter_mid_ZN_4' => 10,
+      'Core_mid' => 10,
+      'MidFloor_Plenum' => 10
     }
     return space_multiplier_map
   end
@@ -250,15 +251,9 @@ class OpenStudio::Model::Model
         end
       when 'DC_main'
         thermal_zones.each do |thermal_zone|
-          thermostat = thermal_zone.thermostatSetpointDualSetpoint
-          unless thermal_zone.nil?
-            thermostat = thermostat.get
-            self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
-          end
           sizine_zone = thermal_zone.sizingZone
           sizine_zone.setZoneHeatingSizingFactor(0)
           sizine_zone.setZoneCoolingSizingFactor(1.2)
-          self.add_data_center_load(thermal_zone, system['load'])
         end
         if hot_water_loop && chilled_water_loop
           self.add_data_center_hvac(prototype_input, hvac_standards, thermal_zones, hot_water_loop, heat_pump_loop, true)
@@ -268,15 +263,9 @@ class OpenStudio::Model::Model
         end
       when 'DC'
         thermal_zones.each do |thermal_zone|
-          thermostat = thermal_zone.thermostatSetpointDualSetpoint
-          unless thermal_zone.nil?
-            thermostat = thermostat.get
-            self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
-          end
           sizine_zone = thermal_zone.sizingZone
           sizine_zone.setZoneHeatingSizingFactor(0)
           sizine_zone.setZoneCoolingSizingFactor(1.2)
-          self.add_data_center_load(thermal_zone, system['load'])
         end
         if hot_water_loop && chilled_water_loop
           self.add_data_center_hvac(prototype_input, hvac_standards, thermal_zones, hot_water_loop, heat_pump_loop)
@@ -293,14 +282,6 @@ class OpenStudio::Model::Model
     return true
 
   end #add hvac
-
-  def adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
-    case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      thermostat.setCoolingSetpointTemperatureSchedule(add_schedule("OfficeLarge CLGSETP_DC_SCH"))
-      thermostat.setHeatingSetpointTemperatureSchedule(add_schedule("OfficeLarge HTGSETP_DC_SCH"))
-    end
-  end
 
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
 
@@ -324,11 +305,6 @@ class OpenStudio::Model::Model
     ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
       self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main', space_name)
     end
-
-    # for i in 0..2
-    #   self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    # end
-    # self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
 
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
 

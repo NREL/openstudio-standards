@@ -1535,26 +1535,6 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_data_center_load(thermal_zone, dc_watts_per_area)
-    thermal_zone.spaces.each do |space|
-
-      # Data center load
-      data_center_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
-      data_center_definition.setName('Data Center Load')
-      data_center_definition.setWattsperSpaceFloorArea(dc_watts_per_area)
-
-      data_center_equipment = OpenStudio::Model::ElectricEquipment.new(data_center_definition)
-      data_center_equipment.setName('Data Center Load')
-      data_center_sch = self.alwaysOnDiscreteSchedule
-      data_center_equipment.setSchedule(data_center_sch)
-      data_center_equipment.setSpace(space)
-
-    end
-
-    return true
-
-  end
-
   def add_data_center_hvac(prototype_input, standards, thermal_zones, hot_water_loop, heat_pump_loop, main_data_center = false)
 
     hw_temp_f = 180 #HW setpoint 180F
