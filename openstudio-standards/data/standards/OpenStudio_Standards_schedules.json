@@ -82695,7 +82695,7 @@
     },
     {
       "name": "Warehouse Bulk Storage Heating Setpoint Schedule",
-      "category": "Unknown",
+      "category": "Thermostat Setpoint",
       "units": "C",
       "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
@@ -82818,6 +82818,19 @@
       ]
     },
     {
+      "name": "Warehouse ClgSetp BulkStorage",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        50.0
+      ]
+    },
+    {
       "name": "Warehouse ClgSetp FineStorage",
       "category": "Thermostat Setpoint",
       "units": "C",
@@ -82880,6 +82893,91 @@
       "notes": "From DOE Reference Buildings ",
       "values": [
         1.0
+      ]
+    },
+    {
+      "name": "Warehouse Cooling Setpoint",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Reference Buildings ",
+      "values": [
+        30.0
+      ]
+    },
+    {
+      "name": "Warehouse Cooling Setpoint",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Sat",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Reference Buildings ",
+      "values": [
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0
+      ]
+    },
+    {
+      "name": "Warehouse Cooling Setpoint",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Wkdy|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Reference Buildings ",
+      "values": [
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        24.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0
       ]
     },
     {
@@ -83080,7 +83178,7 @@
     },
     {
       "name": "Warehouse Fine Storage Cooling Setpoint Schedule",
-      "category": "Unknown",
+      "category": "Thermostat Setpoint",
       "units": "C",
       "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
@@ -83093,7 +83191,7 @@
     },
     {
       "name": "Warehouse Fine Storage Heating Setpoint Schedule",
-      "category": "Unknown",
+      "category": "Thermostat Setpoint",
       "units": "C",
       "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
@@ -83248,7 +83346,7 @@
       "type": "Constant",
       "notes": "From DOE Reference Buildings ",
       "values": [
-        10.0
+        7.2
       ]
     },
     {

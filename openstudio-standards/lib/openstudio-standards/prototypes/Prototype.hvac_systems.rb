@@ -412,8 +412,8 @@ class OpenStudio::Model::Model
     if building_type == 'LargeOffice'
       # TODO: For some reason the FluidCoolorTwoSpeed is causing simulation failures.
       # might need to look into the defaults
-      cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
-      # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+      # cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
+      cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
       cooling_tower.setName("#{heat_pump_water_loop.name} Central Tower")
       heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
       #### Add SPM Scheduled Dual Setpoint to outlet of Fluid Cooler so correct Plant Operation Scheme is generated
@@ -475,7 +475,7 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_vav(prototype_input, standards, sys_name, hot_water_loop, chilled_water_loop, thermal_zones, building_type=nil)
+  def add_vav(prototype_input, standards, sys_name, hot_water_loop, chilled_water_loop, thermal_zones, building_type=nil, return_plenum = nil)
 
     hw_temp_f = 180 #HW setpoint 180F
     hw_delta_t_r = 20 #20F delta-T
@@ -642,6 +642,10 @@ class OpenStudio::Model::Model
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
       #sizing_zone.setZoneHeatingDesignSupplyAirTemperature(rht_sa_temp_c)
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zone_htg_sa_temp_c)
+
+      unless return_plenum.nil?
+        zone.setReturnPlenum(return_plenum)
+      end
 
     end
 
