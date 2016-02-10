@@ -29,7 +29,7 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     building_type_chs << 'PrimarySchool'
     building_type_chs << 'SmallOffice'
     building_type_chs << 'MediumOffice'
-    #building_type_chs << 'LargeOffice'
+    building_type_chs << 'LargeOffice'
     building_type_chs << 'SmallHotel'
     building_type_chs << 'LargeHotel'
     #building_type_chs << 'Warehouse'
