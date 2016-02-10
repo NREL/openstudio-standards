@@ -37,7 +37,9 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
           if(htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized) 
             heat_pump = true
             heating_type = 'Electric Resistance or None'
-          end
+          elsif(htg_coil.to_CoilHeatingGasMultiStage.is_initialized)
+            heating_type = 'All Other'
+          end            
         end # TODO Add other unitary systems
       elsif self.containingZoneHVACComponent.is_initialized
         containing_comp = containingZoneHVACComponent.get
@@ -46,7 +48,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
           htg_coil = containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.get.heatingCoil
           if htg_coil.to_CoilHeatingElectric.is_initialized
             heating_type = 'Electric Resistance or None'          
-          elsif htg_coil.to_CoilHeatingWater.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized
+          elsif htg_coil.to_CoilHeatingWater.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized || htg_col.to_CoilHeatingGasMultiStage
             heating_type = 'All Other'
           end 
         end # TODO Add other zone hvac systems
@@ -135,7 +137,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
         clg_stages[istage].setRatedAirFlowRate(flow_rate4*stage_cap[istage]/capacity_w)
       end
     end
-    
+ 
     # Convert capacity to Btu/hr
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, "W", "kBtu/hr").get

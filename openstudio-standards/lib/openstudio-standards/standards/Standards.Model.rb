@@ -18,6 +18,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.CoilCoolingDXSingleSpeed'
   require_relative 'Standards.CoilCoolingDXMultiSpeed'
   require_relative 'Standards.CoilHeatingDXSingleSpeed'
+  require_relative 'Standards.CoilHeatingGasMultiStage'
   require_relative 'Standards.BoilerHotWater'
   require_relative 'Standards.AirLoopHVAC'
   require_relative 'Standards.WaterHeaterMixed'
@@ -78,6 +79,9 @@ class OpenStudio::Model::Model
     # Water Heaters
     self.getWaterHeaterMixeds.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
 
+    # Heating coils
+    self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
+    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   
   end

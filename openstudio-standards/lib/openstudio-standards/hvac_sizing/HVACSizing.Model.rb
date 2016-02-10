@@ -22,6 +22,7 @@ class OpenStudio::Model::Model
   require_relative 'HVACSizing.FanOnOff'
   require_relative 'HVACSizing.CoilHeatingElectric'
   require_relative 'HVACSizing.CoilHeatingGas'
+  require_relative 'HVACSizing.CoilHeatingGasMultiStage'
   require_relative 'HVACSizing.CoilHeatingWater'
   require_relative 'HVACSizing.CoilHeatingDXSingleSpeed'
   require_relative 'HVACSizing.CoilCoolingDXSingleSpeed'
@@ -95,7 +96,6 @@ class OpenStudio::Model::Model
     self.getCoilCoolingDXVariableRefrigerantFlows.sort.each {|obj| obj.applySizingValues}
     self.getCoilCoolingWaterToAirHeatPumpEquationFits.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingWaterToAirHeatPumpEquationFits.sort.each {|obj| obj.applySizingValues}
-    self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingDesuperheaters.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingDXVariableRefrigerantFlows.sort.each {|obj| obj.applySizingValues}
     self.getCoilWaterHeatingDesuperheaters.sort.each {|obj| obj.applySizingValues}
@@ -138,6 +138,7 @@ class OpenStudio::Model::Model
     # Heating coils
     self.getCoilHeatingElectrics.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingGass.sort.each {|obj| obj.applySizingValues}
+    self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingWaters.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingDXSingleSpeeds.sort.each {|obj| obj.applySizingValues}
     
@@ -287,24 +288,25 @@ class OpenStudio::Model::Model
     result = OpenStudio::OptionalDouble.new
 
     name = object.name.get.upcase
-    
+
     object_type = object.iddObject.type.valueDescription.gsub('OS:','')
-      
+    if(object_type == 'Coil:Heating:Gas:MultiStage') then object_type = 'Coil:Heating:GasMultiStage' end
+
     sql = self.sqlFile
-    
+
     if sql.is_initialized
       sql = sql.get
-    
+
       #SELECT * FROM ComponentSizes WHERE CompType = 'Coil:Heating:Gas' AND CompName = "COIL HEATING GAS 3" AND Description = "Design Size Nominal Capacity"
       query = "SELECT Value 
               FROM ComponentSizes 
               WHERE CompType='#{object_type}' 
               AND CompName='#{name}' 
-              AND Description='#{value_name}' 
+              AND Description='#{value_name.strip}' 
               AND Units='#{units}'"
               
       val = sql.execAndReturnFirstDouble(query)
-      
+
       if val.is_initialized
         result = OpenStudio::OptionalDouble.new(val.get)
       else
