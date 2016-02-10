@@ -358,7 +358,7 @@ class OpenStudio::Model::Model
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
   # @todo replace cooling tower with fluid cooler once added to OS 1.9.0
-  def add_hp_loop(prototype_input, standards)
+  def add_hp_loop(prototype_input, standards, building_type=nil)
 
     # Heat Pump loop
     heat_pump_water_loop = OpenStudio::Model::PlantLoop.new(self)
@@ -409,15 +409,30 @@ class OpenStudio::Model::Model
     hp_pump.addToNode(heat_pump_water_loop.supplyInletNode)
 
     # Cooling towers
-    # TODO replace with FluidCooler:TwoSpeed when available
-    # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
-    # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
-    # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
-    fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(self)
-    fluid_cooler.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
-    fluid_cooler.setDesignSprayWaterFlowRate(0.002208)  # Based on HighRiseApartment
-    fluid_cooler.setPerformanceInputMethod("UFactorTimesAreaAndDesignWaterFlowRate")
-    heat_pump_water_loop.addSupplyBranchForComponent(fluid_cooler)
+    if building_type == 'LargeOffice'
+      # TODO: For some reason the FluidCoolorTwoSpeed is causing simulation failures.
+      # might need to look into the defaults
+      # cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
+      cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+      cooling_tower.setName("#{heat_pump_water_loop.name} Central Tower")
+      heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
+      #### Add SPM Scheduled Dual Setpoint to outlet of Fluid Cooler so correct Plant Operation Scheme is generated
+      hp_stpt_manager_2 = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(self)
+      hp_stpt_manager_2.setHighSetpointSchedule(hp_high_temp_sch)
+      hp_stpt_manager_2.setLowSetpointSchedule(hp_low_temp_sch)
+      hp_stpt_manager_2.addToNode(cooling_tower.outletModelObject.get.to_Node.get)
+
+    else
+      # TODO replace with FluidCooler:TwoSpeed when available
+      # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+      # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
+      # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
+      fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(self)
+      fluid_cooler.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
+      fluid_cooler.setDesignSprayWaterFlowRate(0.002208)  # Based on HighRiseApartment
+      fluid_cooler.setPerformanceInputMethod("UFactorTimesAreaAndDesignWaterFlowRate")
+      heat_pump_water_loop.addSupplyBranchForComponent(fluid_cooler)
+    end
 
     # Boiler
     boiler = OpenStudio::Model::BoilerHotWater.new(self)
@@ -429,6 +444,11 @@ class OpenStudio::Model::Model
     boiler.setOptimumPartLoadRatio(1)
     boiler.setBoilerFlowMode('ConstantFlow')
     heat_pump_water_loop.addSupplyBranchForComponent(boiler)
+    #### Add SPM Scheduled Dual Setpoint to outlet of Boiler so correct Plant Operation Scheme is generated
+    hp_stpt_manager_3 = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(self)
+    hp_stpt_manager_3.setHighSetpointSchedule(hp_high_temp_sch)
+    hp_stpt_manager_3.setLowSetpointSchedule(hp_low_temp_sch)
+    hp_stpt_manager_3.addToNode(boiler.outletModelObject.get.to_Node.get)
 
     # Heat Pump water loop pipes
     supply_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
@@ -455,7 +475,7 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_vav(prototype_input, standards, sys_name, hot_water_loop, chilled_water_loop, thermal_zones, building_type=nil)
+  def add_vav(prototype_input, standards, sys_name, hot_water_loop, chilled_water_loop, thermal_zones, building_type=nil, return_plenum = nil)
 
     hw_temp_f = 180 #HW setpoint 180F
     hw_delta_t_r = 20 #20F delta-T
@@ -622,6 +642,10 @@ class OpenStudio::Model::Model
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
       #sizing_zone.setZoneHeatingDesignSupplyAirTemperature(rht_sa_temp_c)
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zone_htg_sa_temp_c)
+
+      unless return_plenum.nil?
+        zone.setReturnPlenum(return_plenum)
+      end
 
     end
 
@@ -1407,7 +1431,7 @@ class OpenStudio::Model::Model
       # Wrap coils in a unitary system or not, depending
       # on the system type.
       if prototype_input['pszac_fan_type'] == 'Cycling'
-        
+
         if prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
           unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(self)
           unitary_system.setSupplyFan(fan)
@@ -1437,11 +1461,11 @@ class OpenStudio::Model::Model
           unitary_system.setFanPlacement('BlowThrough')
           unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
           unitary_system.addToNode(supply_inlet_node)
-          
+
           setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(OpenStudio.convert(55,'F','C').get)
           setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(OpenStudio.convert(104,'F','C').get)
         end
-        
+
       else
         if fan_location == 'DrawThrough'
           # Add the fan
@@ -1511,18 +1535,21 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_data_center_load(space, dc_watts_per_area)
+  def add_data_center_load(thermal_zone, dc_watts_per_area)
+    thermal_zone.spaces.each do |space|
 
-    # Data center load
-    data_center_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
-    data_center_definition.setName('Data Center Load')
-    data_center_definition.setWattsperSpaceFloorArea(dc_watts_per_area)
+      # Data center load
+      data_center_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
+      data_center_definition.setName('Data Center Load')
+      data_center_definition.setWattsperSpaceFloorArea(dc_watts_per_area)
 
-    data_center_equipment = OpenStudio::Model::ElectricEquipment.new(data_center_definition)
-    data_center_equipment.setName('Data Center Load')
-    data_center_sch = self.alwaysOnDiscreteSchedule
-    data_center_equipment.setSchedule(data_center_sch)
-    data_center_equipment.setSpace(space)
+      data_center_equipment = OpenStudio::Model::ElectricEquipment.new(data_center_definition)
+      data_center_equipment.setName('Data Center Load')
+      data_center_sch = self.alwaysOnDiscreteSchedule
+      data_center_equipment.setSchedule(data_center_sch)
+      data_center_equipment.setSpace(space)
+
+    end
 
     return true
 
@@ -1642,7 +1669,7 @@ class OpenStudio::Model::Model
 
       heat_pump_loop.addDemandBranchForComponent(clg_coil)
 
-      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
+      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOffDiscreteSchedule)
       supplemental_htg_coil.setName("#{zone.name} PSZ Data Center Electric Backup Htg Coil")
 
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
@@ -2962,7 +2989,7 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_swh_end_uses(prototype_input, standards, swh_loop, type)
+  def add_swh_end_uses(prototype_input, standards, swh_loop, type, space_name = nil)
 
     schedules = standards['schedules']
 
@@ -2996,6 +3023,13 @@ class OpenStudio::Model::Model
     schedule = self.add_schedule(prototype_input["#{type}_service_water_flowrate_schedule"])
     water_fixture.setFlowRateFractionSchedule(schedule)
     water_fixture.setName("#{type.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+
+    unless space_name.nil?
+      space = self.getSpaceByName(space_name)
+      space = space.get
+      water_fixture.setSpace(space)
+    end
+
     swh_connection.addWaterUseEquipment(water_fixture)
 
     # Connect the water use connection to the SWH loop
@@ -3292,7 +3326,7 @@ class OpenStudio::Model::Model
     lm_led = target_ltg_lm * pct_led  #339.66
     w_incandescent = lm_incandescent / incandescent_efficacy_lm_per_w  #79.254
     w_led = lm_led / led_efficacy_lm_per_w  #9.7
-    lighting_pwr_w = w_incandescent + w_led 
+    lighting_pwr_w = w_incandescent + w_led
 
     # Elevator lift motor
     elevator_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)

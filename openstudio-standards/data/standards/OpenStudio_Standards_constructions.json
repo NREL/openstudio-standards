@@ -2001,7 +2001,7 @@
     {
       "name": "ext-slab",
       "intended_surface_type": "GroundContactFloor",
-      "standards_construction_type": "Unheated",
+      "standards_construction_type": "Mass",
       "insulation_layer": null,
       "sort": null,
       "materials": [

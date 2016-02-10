@@ -12,6 +12,8 @@
       "max_x": 10.0,
       "min_y": 12.7,
       "max_y": 51.67,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -26,6 +28,8 @@
       "max_x": 10.0,
       "min_y": 12.7,
       "max_y": 51.67,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -40,6 +44,8 @@
       "max_x": 10.0,
       "min_y": 12.7,
       "max_y": 51.67,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -54,6 +60,8 @@
       "max_x": 10.0,
       "min_y": 12.7,
       "max_y": 51.67,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -68,6 +76,8 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Dick Lord's Chiller Model study for ASHRAE 2007 baseline"
     },
     {
@@ -82,7 +92,457 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From Dick Lord's Chiller Model study for ASHRAE 2007 baseline"
+    },
+    {
+      "name": "ChlrAirRecipEIRRatio_fTchwsToadbSI",
+      "coeff_1": 0.542784,
+      "coeff_2": -0.013907,
+      "coeff_3": 0.000476,
+      "coeff_4": 0.012197,
+      "coeff_5": 0.000149,
+      "coeff_6": -0.000334,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.72,
+      "max_out": 1.3,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrAirRecipQRatio_fTchwsToadbSI",
+      "coeff_1": 1.12603,
+      "coeff_2": 0.041571,
+      "coeff_3": 0.000253,
+      "coeff_4": -0.010526,
+      "coeff_5": 1.0e-05,
+      "coeff_6": -0.000256,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.82,
+      "max_out": 1.3,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrAirScrewEIRRatio_fTchwsToadbSI",
+      "coeff_1": 0.570624,
+      "coeff_2": 0.011954,
+      "coeff_3": -0.000522,
+      "coeff_4": -3.2e-05,
+      "coeff_5": 0.000421,
+      "coeff_6": -0.000606,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.7,
+      "max_out": 1.38,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrAirScrewQRatio_fTchwsToadbSI",
+      "coeff_1": 0.985959,
+      "coeff_2": 0.049487,
+      "coeff_3": -0.000298,
+      "coeff_4": -0.003737,
+      "coeff_5": -4.5e-05,
+      "coeff_6": -0.000502,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.82,
+      "max_out": 1.3,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrAirScrollEIRRatio_fTchwsToadbSI",
+      "coeff_1": 0.702194,
+      "coeff_2": -0.004466,
+      "coeff_3": 0.000535,
+      "coeff_4": -0.005506,
+      "coeff_5": 0.000544,
+      "coeff_6": -0.000729,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.69,
+      "max_out": 1.45,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrAirScrollQRatio_fTchwsToadbSI",
+      "coeff_1": 1.02138,
+      "coeff_2": 0.037021,
+      "coeff_3": 0.000233,
+      "coeff_4": -0.003893,
+      "coeff_5": -6.5e-05,
+      "coeff_6": -0.000269,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.82,
+      "max_out": 1.3,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathAAllEIRRatio_fTchwsTcwsSI",
+      "coeff_1": 0.658643,
+      "coeff_2": -0.025339,
+      "coeff_3": 0.000991,
+      "coeff_4": 0.012801,
+      "coeff_5": 0.000171,
+      "coeff_6": -0.000301,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.68,
+      "max_out": 1.05,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathAAllQRatio_fTchwsTcwsSI",
+      "coeff_1": 0.364691,
+      "coeff_2": -0.030521,
+      "coeff_3": -0.00193,
+      "coeff_4": 0.066374,
+      "coeff_5": -0.001892,
+      "coeff_6": 0.003111,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.87,
+      "max_out": 0.91,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathBGtEql300Lt600tonEIRRatio_fTchwsTcwsSI",
+      "coeff_1": 0.756376,
+      "coeff_2": -0.015019,
+      "coeff_3": 0.000156,
+      "coeff_4": 0.00246,
+      "coeff_5": 0.000515,
+      "coeff_6": -0.000687,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.63,
+      "max_out": 1.12,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathBGtEql300Lt600tonQRatio_fTchwsTcwsSI",
+      "coeff_1": 1.35608,
+      "coeff_2": 0.04875,
+      "coeff_3": -0.000888,
+      "coeff_4": -0.014525,
+      "coeff_5": -0.000286,
+      "coeff_6": -4.0e-05,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.87,
+      "max_out": 1.52,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathBGtEql600tonEIRRatio_fTchwsTcwsSI",
+      "coeff_1": 0.737625,
+      "coeff_2": 0.001456,
+      "coeff_3": -0.000223,
+      "coeff_4": 0.007116,
+      "coeff_5": 0.000267,
+      "coeff_6": -0.000735,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.76,
+      "max_out": 1.08,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathBGtEql600tonQRatio_fTchwsTcwsSI",
+      "coeff_1": 0.854454,
+      "coeff_2": 0.042526,
+      "coeff_3": -0.000185,
+      "coeff_4": 0.011697,
+      "coeff_5": -0.000497,
+      "coeff_6": -0.000412,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.9,
+      "max_out": 1.33,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathBLt300tonEIRRatio_fTchwsTcwsSI",
+      "coeff_1": 0.711108,
+      "coeff_2": -0.023515,
+      "coeff_3": 0.001194,
+      "coeff_4": 0.017737,
+      "coeff_5": 0.000152,
+      "coeff_6": -0.001159,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.69,
+      "max_out": 1.13,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrCentPathBLt300tonQRatio_fTchwsTcwsSI",
+      "coeff_1": 1.15508,
+      "coeff_2": 0.036503,
+      "coeff_3": -0.000499,
+      "coeff_4": -0.001455,
+      "coeff_5": -0.000439,
+      "coeff_6": -0.000172,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.86,
+      "max_out": 1.37,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrPosDispPathAAllEIRRatio_fTchwsTcwsSI",
+      "coeff_1": 0.665307,
+      "coeff_2": -0.009339,
+      "coeff_3": 0.000483,
+      "coeff_4": 0.009492,
+      "coeff_5": 0.000544,
+      "coeff_6": -0.000864,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.74,
+      "max_out": 1.27,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrPosDispPathAAllQRatio_fTchwsTcwsSI",
+      "coeff_1": 0.96744,
+      "coeff_2": 0.037082,
+      "coeff_3": 0.000434,
+      "coeff_4": -0.005837,
+      "coeff_5": -4.9e-05,
+      "coeff_6": -0.000274,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.89,
+      "max_out": 1.33,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrPosDispPathBAllEIRRatio_fTchwsTcwsSI",
+      "coeff_1": 0.428265,
+      "coeff_2": -0.024071,
+      "coeff_3": 0.000849,
+      "coeff_4": 0.016416,
+      "coeff_5": 0.000381,
+      "coeff_6": -0.00059,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.5,
+      "max_out": 1.07,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "ChlrWtrPosDispPathBAllQRatio_fTchwsTcwsSI",
+      "coeff_1": 0.899926,
+      "coeff_2": 0.030102,
+      "coeff_3": -0.000332,
+      "coeff_4": -0.001743,
+      "coeff_5": -9.2e-05,
+      "coeff_6": 0.000229,
+      "min_x": 4.44,
+      "max_x": 12.22,
+      "min_y": 15.56,
+      "max_y": 29.44,
+      "min_out": 0.93,
+      "max_out": 1.21,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXEIRRatio_fTwbToadbSI",
+      "coeff_1": 0.116709,
+      "coeff_2": 0.028458,
+      "coeff_3": -0.000411,
+      "coeff_4": 0.021422,
+      "coeff_5": 0.000162,
+      "coeff_6": -0.00068,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.77,
+      "max_out": 1.33,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXQRatio_fTwbToadbSI",
+      "coeff_1": 0.86779,
+      "coeff_2": 0.014245,
+      "coeff_3": 0.000554,
+      "coeff_4": -0.007569,
+      "coeff_5": 3.2e-05,
+      "coeff_6": -0.000191,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.77,
+      "max_out": 1.29,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXSEER13EER11EIRRatio_fTwbToadbSI",
+      "coeff_1": -0.199992,
+      "coeff_2": -0.035686,
+      "coeff_3": 0.000787,
+      "coeff_4": 0.074834,
+      "coeff_5": -0.000516,
+      "coeff_6": -0.000573,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.55,
+      "max_out": 1.44,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXSEER15EER11EIRRatio_fTwbToadbSI",
+      "coeff_1": -1.790474,
+      "coeff_2": -0.028777,
+      "coeff_3": 0.000763,
+      "coeff_4": 0.153391,
+      "coeff_5": -0.001482,
+      "coeff_6": -0.000721,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.35,
+      "max_out": 1.42,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXSEER16EER13EIRRatio_fTwbToadbSI",
+      "coeff_1": 0.686684,
+      "coeff_2": -0.035826,
+      "coeff_3": 0.000781,
+      "coeff_4": 0.025564,
+      "coeff_5": 0.000163,
+      "coeff_6": -0.000559,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.65,
+      "max_out": 1.51,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXSEER17EER11EIRRatio_fTwbToadbSI",
+      "coeff_1": -3.060538,
+      "coeff_2": -0.023207,
+      "coeff_3": 0.000744,
+      "coeff_4": 0.216093,
+      "coeff_5": -0.002253,
+      "coeff_6": -0.000839,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.2,
+      "max_out": 1.4,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXSEER18EER13EIRRatio_fTwbToadbSI",
+      "coeff_1": -1.247121,
+      "coeff_2": -0.027513,
+      "coeff_3": 0.000752,
+      "coeff_4": 0.121123,
+      "coeff_5": -0.001013,
+      "coeff_6": -0.000736,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.41,
+      "max_out": 1.48,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgDXSEER20EER13EIRRatio_fTwbToadbSI",
+      "coeff_1": -2.72492,
+      "coeff_2": -0.02112,
+      "coeff_3": 0.00073,
+      "coeff_4": 0.194128,
+      "coeff_5": -0.001911,
+      "coeff_6": -0.000872,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.23,
+      "max_out": 1.45,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgPTACEIRRatio_fTwbToadbSI",
+      "coeff_1": 0.341434,
+      "coeff_2": 0.03481,
+      "coeff_3": -0.000625,
+      "coeff_4": 0.004941,
+      "coeff_5": 0.000437,
+      "coeff_6": -0.000729,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.75,
+      "max_out": 1.4,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
+    },
+    {
+      "name": "CoilClgPTACQRatio_fTwbToadbSI",
+      "coeff_1": 0.942879,
+      "coeff_2": 0.009538,
+      "coeff_3": 0.000684,
+      "coeff_4": -0.011002,
+      "coeff_5": 6.0e-06,
+      "coeff_6": -1.0e-05,
+      "min_x": 13.89,
+      "max_x": 25.0,
+      "min_y": 23.89,
+      "max_y": 46.11,
+      "min_out": 0.71,
+      "max_out": 1.34,
+      "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
     },
     {
       "name": "DOE Ref DX Clg Coil Cool-Cap-fT",
@@ -96,6 +556,8 @@
       "max_x": 100.0,
       "min_y": -100.0,
       "max_y": 100.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From DOE Pre-1980 Reference Building"
     },
     {
@@ -110,6 +572,8 @@
       "max_x": 100.0,
       "min_y": -100.0,
       "max_y": 100.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From DOE Pre-1980 Reference Building"
     },
     {
@@ -124,6 +588,8 @@
       "max_x": 24.0,
       "min_y": 24.0,
       "max_y": 46.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -138,6 +604,8 @@
       "max_x": 24.0,
       "min_y": 24.0,
       "max_y": 46.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -152,6 +620,8 @@
       "max_x": 22.1111,
       "min_y": 23.7778,
       "max_y": 47.66,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings OfficeMedium"
     },
     {
@@ -166,6 +636,8 @@
       "max_x": 23.88889,
       "min_y": 21.11111,
       "max_y": 46.11111,
+      "min_out": null,
+      "max_out": null,
       "notes": null
     },
     {
@@ -180,6 +652,8 @@
       "max_x": 23.88889,
       "min_y": 21.11111,
       "max_y": 46.11111,
+      "min_out": null,
+      "max_out": null,
       "notes": null
     },
     {
@@ -194,6 +668,8 @@
       "max_x": 23.88889,
       "min_y": 23.88889,
       "max_y": 46.11111,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings HotelSmall, Warehouse"
     },
     {
@@ -208,6 +684,8 @@
       "max_x": 23.88889,
       "min_y": 21.11111,
       "max_y": 46.11111,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings RetailStandAlone, RetailStripMall,SchoolPrimary"
     },
     {
@@ -222,6 +700,8 @@
       "max_x": 22.0,
       "min_y": 29.0,
       "max_y": 46.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings OutPatientHealtCare, RestaurantFastFood, RestaurantSitDown, SchoolPrimary, SchoolSecondary"
     },
     {
@@ -236,6 +716,8 @@
       "max_x": 22.0,
       "min_y": 29.0,
       "max_y": 46.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings OutPatientHealtCare, RestaurantFastFood, RestaurantSitDown, SchoolPrimary, SchoolSecondary"
     },
     {
@@ -250,6 +732,8 @@
       "max_x": 23.88889,
       "min_y": 21.11111,
       "max_y": 46.11111,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings RetailStandalone, RetailStripMall, SchoolPrimary"
     },
     {
@@ -264,6 +748,8 @@
       "max_x": 23.88889,
       "min_y": 23.88889,
       "max_y": 46.11111,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Buildings HotelSmall, Warehouse"
     },
     {
@@ -278,6 +764,8 @@
       "max_x": 23.88889,
       "min_y": 18.3,
       "max_y": 46.11111,
+      "min_out": null,
+      "max_out": null,
       "notes": "From DOE Reference Buildings SmallHotel"
     },
     {
@@ -292,6 +780,8 @@
       "max_x": 20.0,
       "min_y": 0.0,
       "max_y": 50.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From RefBldgLargeOfficePost1980 & Pre1980"
     },
     {
@@ -306,6 +796,8 @@
       "max_x": 20.0,
       "min_y": 0.0,
       "max_y": 50.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From RefBldgLargeOfficePost1980 % Pre1980"
     },
     {
@@ -320,6 +812,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype Hospital"
     },
     {
@@ -334,6 +828,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype OfficeLarge"
     },
     {
@@ -348,6 +844,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "From PNNL Prototype OfficeLarge"
     },
     {
@@ -362,6 +860,8 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -376,6 +876,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -390,6 +892,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -404,6 +908,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -418,6 +924,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -432,6 +940,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -446,6 +956,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -460,6 +972,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -474,6 +988,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -488,6 +1004,8 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -502,6 +1020,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -516,6 +1036,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -530,6 +1052,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -544,6 +1068,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -558,6 +1084,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -572,6 +1100,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -586,6 +1116,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -600,6 +1132,8 @@
       "max_x": 10.0,
       "min_y": 17.78,
       "max_y": 46.11,
+      "min_out": null,
+      "max_out": null,
       "notes": "Based on Dick Lord's study dated January 17, 2010."
     },
     {
@@ -614,6 +1148,8 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -628,6 +1164,8 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -642,6 +1180,8 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -656,6 +1196,8 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -670,6 +1212,8 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     },
     {
@@ -684,6 +1228,8 @@
       "max_x": 10.0,
       "min_y": 24.0,
       "max_y": 35.0,
+      "min_out": null,
+      "max_out": null,
       "notes": "From NECB 2011"
     }
   ]

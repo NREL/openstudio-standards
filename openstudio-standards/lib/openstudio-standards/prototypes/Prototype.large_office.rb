@@ -2,147 +2,165 @@
 class OpenStudio::Model::Model
 
   def define_space_type_map(building_type, building_vintage, climate_zone)
-    space_type_map = {
+    case building_vintage
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      space_type_map = {
       'WholeBuilding - Lg Office' => [
-        'Basement', 'Core_bottom', 'Core_mid', 'Core_top', #'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
+        'Basement', 'Core_bottom', 'Core_mid', 'Core_top', 'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
+        'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4',
+        'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4',
+        'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4'
+      ]
+    }
+    when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
+      space_type_map = {
+      'WholeBuilding - Lg Office' => [
+        'Basement', 'Core_bottom', 'Core_mid', 'Core_top', 'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
         'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4',
         'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4',
         'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4',
         'DataCenter_basement_ZN_6', 'DataCenter_bot_ZN_6', 'DataCenter_mid_ZN_6', 'DataCenter_top_ZN_6'
       ]
     }
+    end
     return space_type_map
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
 
-case building_vintage
+    case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-    system_to_space_map = [
-      {
-          'type' => 'VAV',
-          'name' => 'VAV_1',
-          'space_names' =>
-          [
-              'Perimeter_bot_ZN_1',
-              'Perimeter_bot_ZN_2',
-              'Perimeter_bot_ZN_3',
-              'Perimeter_bot_ZN_4',
-              'Core_bottom'
-          ]
-      },
-      {
-          'type' => 'VAV',
-          'name' => 'VAV_2',
-          'space_names' =>
-          [
-              'Perimeter_mid_ZN_1',
-              'Perimeter_mid_ZN_2',
-              'Perimeter_mid_ZN_3',
-              'Perimeter_mid_ZN_4',
-              'Core_mid'
-          ]
-      },
-      {
-          'type' => 'VAV',
-          'name' => 'VAV_3',
-          'space_names' =>
-          [
-              'Perimeter_top_ZN_1',
-              'Perimeter_top_ZN_2',
-              'Perimeter_top_ZN_3',
-              'Perimeter_top_ZN_4',
-              'Core_top'
-          ]
-      },
-      {
-          'type' => 'VAV',
-          'name' => 'VAV_5',
-          'space_names' =>
-          [
-              'Basement'
-          ]
-      }
-    ]
+      system_to_space_map = [
+        {
+            'type' => 'VAV',
+            'name' => 'VAV_1',
+            'space_names' =>
+            [
+                'Perimeter_bot_ZN_1',
+                'Perimeter_bot_ZN_2',
+                'Perimeter_bot_ZN_3',
+                'Perimeter_bot_ZN_4',
+                'Core_bottom'
+            ],
+            'return_plenum' => 'GroundFloor_Plenum'
+        },
+        {
+            'type' => 'VAV',
+            'name' => 'VAV_2',
+            'space_names' =>
+            [
+                'Perimeter_mid_ZN_1',
+                'Perimeter_mid_ZN_2',
+                'Perimeter_mid_ZN_3',
+                'Perimeter_mid_ZN_4',
+                'Core_mid'
+            ],
+            'return_plenum' => 'MidFloor_Plenum'
+        },
+        {
+            'type' => 'VAV',
+            'name' => 'VAV_3',
+            'space_names' =>
+            [
+                'Perimeter_top_ZN_1',
+                'Perimeter_top_ZN_2',
+                'Perimeter_top_ZN_3',
+                'Perimeter_top_ZN_4',
+                'Core_top'
+            ],
+            'return_plenum' => 'TopFloor_Plenum'
+        },
+        {
+            'type' => 'VAV',
+            'name' => 'VAV_5',
+            'space_names' =>
+            [
+                'Basement'
+            ]
+        }
+      ]
     when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
-    system_to_space_map = [
-      {
-          'type' => 'VAV',
-          'name' => 'VAV_bot WITH REHEAT',
-          'space_names' =>
-          [
-              'Perimeter_bot_ZN_1',
-              'Perimeter_bot_ZN_2',
-              'Perimeter_bot_ZN_3',
-              'Perimeter_bot_ZN_4',
-              'Core_bottom'
-          ]
-      },
-      {
-          'type' => 'VAV',
-          'name' => 'VAV_mid WITH REHEAT',
-          'space_names' =>
-          [
-              'Perimeter_mid_ZN_1',
-              'Perimeter_mid_ZN_2',
-              'Perimeter_mid_ZN_3',
-              'Perimeter_mid_ZN_4',
-              'Core_mid'
-          ]
-      },
-      {
-          'type' => 'VAV',
-          'name' => 'VAV_top WITH REHEAT',
-          'space_names' =>
-          [
-              'Perimeter_top_ZN_1',
-              'Perimeter_top_ZN_2',
-              'Perimeter_top_ZN_3',
-              'Perimeter_top_ZN_4',
-              'Core_top'
-          ]
-      },
-      {
-          'type' => 'CAV',
-          'name' => 'CAV_bas',
-          'space_names' =>
-          [
-              'Basement'
-          ]
-      },
-      {
-          'type' => 'DC_main',
-          'space_names' =>
-          [
-              'DataCenter_basement_ZN_6'
-          ],
-          'load' => 484.423246742185
-      },
-      {
-          'type' => 'DC',
-          'space_names' =>
-          [
-              'DataCenter_bot_ZN_6'
-          ],
-          'load' => 215.299220774304
-      },
-      {
-          'type' => 'DC',
-          'space_names' =>
-          [
-              'DataCenter_mid_ZN_6'
-          ],
-          'load' => 215.299220774304
-      },
-      {
-          'type' => 'DC',
-          'space_names' =>
-          [
-              'DataCenter_top_ZN_6'
-          ],
-          'load' => 215.299220774304
-      }
-    ]
+      system_to_space_map = [
+        {
+            'type' => 'VAV',
+            'name' => 'VAV_bot WITH REHEAT',
+            'space_names' =>
+            [
+                'Perimeter_bot_ZN_1',
+                'Perimeter_bot_ZN_2',
+                'Perimeter_bot_ZN_3',
+                'Perimeter_bot_ZN_4',
+                'Core_bottom'
+            ],
+            'return_plenum' => 'GroundFloor_Plenum'
+        },
+        {
+            'type' => 'VAV',
+            'name' => 'VAV_mid WITH REHEAT',
+            'space_names' =>
+            [
+                'Perimeter_mid_ZN_1',
+                'Perimeter_mid_ZN_2',
+                'Perimeter_mid_ZN_3',
+                'Perimeter_mid_ZN_4',
+                'Core_mid'
+            ],
+            'return_plenum' => 'MidFloor_Plenum'
+        },
+        {
+            'type' => 'VAV',
+            'name' => 'VAV_top WITH REHEAT',
+            'space_names' =>
+            [
+                'Perimeter_top_ZN_1',
+                'Perimeter_top_ZN_2',
+                'Perimeter_top_ZN_3',
+                'Perimeter_top_ZN_4',
+                'Core_top'
+            ],
+            'return_plenum' => 'TopFloor_Plenum'
+        },
+        {
+            'type' => 'CAV',
+            'name' => 'CAV_bas',
+            'space_names' =>
+            [
+                'Basement'
+            ]
+        },  
+        {
+            'type' => 'DC_main',
+            'space_names' =>
+            [
+                'DataCenter_basement_ZN_6'
+            ],
+            'load' => 484.423246742185
+        },
+        {
+            'type' => 'DC',
+            'space_names' =>
+            [
+                'DataCenter_bot_ZN_6'
+            ],
+            'load' => 215.299220774304
+        },
+        {
+            'type' => 'DC',
+            'space_names' =>
+            [
+                'DataCenter_mid_ZN_6'
+            ],
+            'load' => 215.299220774304
+        },
+        {
+            'type' => 'DC',
+            'space_names' =>
+            [
+                'DataCenter_top_ZN_6'
+            ],
+            'load' => 215.299220774304
+        }
+      ]
     end
 
     return system_to_space_map
@@ -151,11 +169,13 @@ case building_vintage
   def define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
     space_multiplier_map = {
-        'Perimeter_mid_ZN_1' => 10,
+        'DataCenter_mid_ZN_6' =>10,
+		'Perimeter_mid_ZN_1' => 10,
         'Perimeter_mid_ZN_2'=> 10,
         'Perimeter_mid_ZN_3'=> 10,
         'Perimeter_mid_ZN_4'=> 10,
-        'Core_mid'=> 10
+        'Core_mid'=> 10,
+		'MidFloor_Plenum' => 10
     }
     return space_multiplier_map
   end
@@ -171,7 +191,12 @@ case building_vintage
 
     hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
 
-    heat_pump_loop = self.add_hp_loop(prototype_input, hvac_standards)
+    case building_vintage
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      # no heat pump loop
+    else
+      heat_pump_loop = self.add_hp_loop(prototype_input, hvac_standards, building_type)
+    end
 
     system_to_space_map.each do |system|
 
@@ -192,10 +217,26 @@ case building_vintage
         thermal_zones << zone.get
       end
 
+      return_plenum = nil
+      unless system['return_plenum'].nil?
+        return_plenum_space = self.getSpaceByName(system['return_plenum'])
+        if return_plenum_space.empty?
+          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{system['return_plenum']} was found in the model")
+          return false
+        end
+        return_plenum_space = return_plenum_space.get
+        return_plenum = return_plenum_space.thermalZone
+        if return_plenum.empty?
+          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No thermal zone was created for the space called #{system['return_plenum']}")
+          return false
+        end
+        return_plenum = return_plenum.get
+      end
+
       case system['type']
       when 'VAV'
         if hot_water_loop && chilled_water_loop
-          self.add_vav(prototype_input, hvac_standards, system['name'], hot_water_loop, chilled_water_loop, thermal_zones)
+          self.add_vav(prototype_input, hvac_standards, system['name'], hot_water_loop, chilled_water_loop, thermal_zones, building_type, return_plenum)
         else
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water and chilled water plant loops in model')
           return false
@@ -208,14 +249,16 @@ case building_vintage
           return false
         end
       when 'DC_main'
-        system['space_names'].each do |space_name|
-          space = self.getSpaceByName(space_name)
-          if space.empty?
-            OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-            return false
+        thermal_zones.each do |thermal_zone|
+          thermostat = thermal_zone.thermostatSetpointDualSetpoint
+          unless thermal_zone.nil?
+            thermostat = thermostat.get
+            self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
           end
-          space = space.get
-          self.add_data_center_load(space, system['load'])
+          sizine_zone = thermal_zone.sizingZone
+          sizine_zone.setZoneHeatingSizingFactor(0)
+          sizine_zone.setZoneCoolingSizingFactor(1.2)
+          self.add_data_center_load(thermal_zone, system['load'])
         end
         if hot_water_loop && chilled_water_loop
           self.add_data_center_hvac(prototype_input, hvac_standards, thermal_zones, hot_water_loop, heat_pump_loop, true)
@@ -224,14 +267,16 @@ case building_vintage
           return false
         end
       when 'DC'
-        system['space_names'].each do |space_name|
-          space = self.getSpaceByName(space_name)
-          if space.empty?
-            OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-            return false
+        thermal_zones.each do |thermal_zone|
+          thermostat = thermal_zone.thermostatSetpointDualSetpoint
+          unless thermal_zone.nil?
+            thermostat = thermostat.get
+            self.adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
           end
-          space = space.get
-          self.add_data_center_load(space, system['load'])
+          sizine_zone = thermal_zone.sizingZone
+          sizine_zone.setZoneHeatingSizingFactor(0)
+          sizine_zone.setZoneCoolingSizingFactor(1.2)
+          self.add_data_center_load(thermal_zone, system['load'])
         end
         if hot_water_loop && chilled_water_loop
           self.add_data_center_hvac(prototype_input, hvac_standards, thermal_zones, hot_water_loop, heat_pump_loop)
@@ -249,6 +294,14 @@ case building_vintage
 
   end #add hvac
 
+  def adjust_dc_setpoint(building_vintage, climate_zone, thermostat)
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      thermostat.setCoolingSetpointTemperatureSchedule(add_schedule("OfficeLarge CLGSETP_DC_SCH"))
+      thermostat.setHeatingSetpointTemperatureSchedule(add_schedule("OfficeLarge HTGSETP_DC_SCH"))
+    end
+  end
+
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
 
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
@@ -259,7 +312,7 @@ case building_vintage
     water_heaters.each do |water_heater|
       water_heater = water_heater.to_WaterHeaterMixed.get
       # water_heater.setAmbientTemperatureIndicator('Zone')
-      # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
+      # water_heater.setAmbientTemperatureThermalZone()
       water_heater.setOffCycleParasiticFuelConsumptionRate(2771)
       water_heater.setOnCycleParasiticFuelConsumptionRate(2771)
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
@@ -268,13 +321,13 @@ case building_vintage
 
     # spaces = define_space_type_map(building_type, building_vintage, climate_zone)['WholeBuilding - Lg Office']
 
-    # spaces.each do |space|
+    ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
+      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main', space_name)
+    end
+
+    # for i in 0..2
     #   self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
     # end
-
-    for i in 0..2
-      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    end
     # self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
 
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
@@ -284,4 +337,3 @@ case building_vintage
   end #add swh
 
 end
-

@@ -238,7 +238,7 @@ class OpenStudio::Model::Model
       alt_search_name = 'Office'
       case building_vintage
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004','DOE Ref 2004'
-        geometry_file = 'Geometry.large_office.osm'
+        geometry_file = 'Geometry.large_office_reference.osm'
       else
         geometry_file = 'Geometry.large_office_2010.osm'
       end
@@ -756,7 +756,8 @@ class OpenStudio::Model::Model
       if thermostat.empty?
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
       else
-        zone.setThermostatSetpointDualSetpoint(thermostat.get)
+        thermostatClone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
+        zone.setThermostatSetpointDualSetpoint(thermostatClone)
       end
     end
 
