@@ -79,17 +79,17 @@ module Fan
     
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
-    if self.autosizedDesignSupplyAirFlowRate.is_initialized
-      dsn_air_flow_m3_per_s = self.autosizedDesignSupplyAirFlowRate.get
+    if self.autosizedMaximumFlowRate.is_initialized
+      dsn_air_flow_m3_per_s = self.autosizedMaximumFlowRate.get
     else
-      dsn_air_flow_m3_per_s = self.designSupplyAirFlowRate.get
+      dsn_air_flow_m3_per_s = self.maximumFlowRate.get
     end
   
     # Get the total fan efficiency
-    fan_total_eff = fan.fanEfficiency
+    fan_total_eff = self.fanEfficiency
     
     # Get the pressure rise (Pa)
-    pressure_rise_pa = fan.pressureRise
+    pressure_rise_pa = self.pressureRise
     
     # Calculate the fan power (W)
     fan_power_w = pressure_rise_pa * dsn_air_flow_m3_per_s / fan_total_eff
@@ -115,7 +115,7 @@ module Fan
     fan_power_w = self.fanPower
     
     # Calculate the brake horsepower (bhp)
-    fan_bhp = fan_power_w * fan_motor_eff / 746
+    fan_bhp = fan_power_w * existing_motor_eff / 746
     
     return fan_bhp
 
