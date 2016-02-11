@@ -205,8 +205,11 @@ class OpenStudio::Model::Model
   end
 
   # Get the heating fuels for a zone
+  # @ return fuels [Array]
+  # @ return hardcode_elec [Bool] if a PTAC or VRF is used, you want to make sure this fuel is used
   def zone_equipment_heating_fuels(zone)
     fuels = []
+    hardcode_elec = false
     # Get the heating fuels for all zone HVAC equipment
     zone.equipment.each do |equipment|
       # Get the object type
@@ -268,19 +271,29 @@ class OpenStudio::Model::Model
         fuels << 'Electricity'
       when 'OS_ZoneHVAC_PackagedTerminalAirConditioner'
         equipment = equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
+        fuel_coil = self.coil_heating_fuels(equipment.heatingCoil)
+        # That might be a bad idea, because you might have an elec heating coil but with zero capacity
+        # and your heating might be baseboards...
         fuels += self.coil_heating_fuels(equipment.heatingCoil)
+        if fuel_coil == 'Electricity'
+          hardcode_elec=true
+        end
+          
       when 'OS_ZoneHVAC_PackagedTerminalHeatPump'
         fuels << 'Electricity'
+        hardcode_elec=true
       when 'OS_ZoneHVAC_TerminalUnit_VariableRefrigerantFlow'
         fuels << 'Electricity'
+        hardcode_elec=true
       when 'OS_ZoneHVAC_WaterToAirHeatPump'
         fuels << 'Electricity'
+        #hardcode_elec=true
       else
         #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
       end
     end
     
-    return fuels.uniq.sort
+    return fuels.uniq.sort, hardcode_elec
     
   end
 

@@ -102,6 +102,8 @@ class OpenStudio::Model::Model
     # keeping user-defined schedules.
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Changing Lighting and Ventilation Rates")
     self.getSpaceTypes.sort.each do |space_type|
+      #space_type.set_internal_loads(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+      # Only modify lights and ventilation)
       space_type.set_internal_loads(building_vintage, false, true, false, false, true, false) 
     end
 
@@ -138,18 +140,18 @@ class OpenStudio::Model::Model
       # Determine the primary baseline system type
       system_type = performance_rating_method_baseline_system_type(building_vintage,
                                                                 climate_zone,
-                                                                sys_group['type'], 
-                                                                sys_group['fuel'],
-                                                                sys_group['area_ft2'],
-                                                                sys_group['stories'])
+                                                                sys_group[:type], 
+                                                                sys_group[:fuel],
+                                                                sys_group[:area_ft2],
+                                                                sys_group[:stories])
                                                                 
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type} for #{sys_group['zones'].size} zones.")
-      sys_group['zones'].each do |zone|
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type} for #{sys_group[:zones].size} zones.")
+      sys_group[:zones].each do |zone|
         OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "---#{zone.name}")
       end
       
       # Add the system type for these zones
-      self.add_performance_rating_method_baseline_system(building_vintage, system_type, sys_group['zones'])
+      self.add_performance_rating_method_baseline_system(building_vintage, system_type, sys_group[:zones])
     
     end
   
@@ -244,46 +246,161 @@ class OpenStudio::Model::Model
   # Determine the dominant and exceptional areas of the
   # building based on fuel types and occupancy types.
   #
+  # It determines if it is heated only by looking at the defaultDay of the thermostat schedulerulesets
+  # For heating if the max value is more than 5C / 41F then it is considered heated
+  # For cooling if the min value is below below 33C / 91.4F, then it is considered cooling
+  # if has_heat && !has_cool then it is heated only
+  #
+  # Todo if no equipment is provided then it should be considered as electric for the determination of the predominant fuel type (for the entire building I guess
+  # Todo: how do you classify the nonheated space between residential, nonresidential and heated only?
+  # Todo: For now, I'm capturing it separately
+  # Todo but it shouldn't necesarilly warrant creating a secondary type...
+  # Todo: for the heated only case, any zone with NO HEATING will be classified
+  #
   # @param standard [String] the standard.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, fuel, and zones (an array of zones)
   def performance_rating_method_baseline_system_groups(standard)
   
-    # Get the residential and nonresidential
+    # Get the residential and nonresidential and heatedonly
     # fossil and electric zones and their areas
-    res_fossil = {'area_ft2'=>0, 'type'=>'residential', 'fuel'=>'fossil', 'zones'=>[]}
-    res_elec = {'area_ft2'=>0, 'type'=>'residential', 'fuel'=>'electric', 'zones'=>[]}
-    nonres_fossil = {'area_ft2'=>0, 'type'=>'nonresidential', 'fuel'=>'fossil', 'zones'=>[]}
-    nonres_elec = {'area_ft2'=>0, 'type'=>'nonresidential', 'fuel'=>'electric', 'zones'=>[]}
-    [res_fossil, res_elec, nonres_fossil, nonres_elec].each do |data|
-      # If the zone meets the criteria, add it
-      self.getThermalZones.each do |zone|
-        area_m2 = zone.floorArea
-        area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-        # Residential Fossil
-        if data['type'] == 'residential' && data['fuel'] == 'fossil'
-          if zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
-            data['area_ft2'] += area_ft2
-            data['zones'] << zone
-          end
-        # Residential Electric
-        elsif data['type'] == 'residential' && data['fuel'] == 'electric'
-          if zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
-            data['area_ft2'] += area_ft2
-            data['zones'] << zone
-          end
-        # Nonresidential Fossil
-        elsif data['type'] == 'nonresidential' && data['fuel'] == 'fossil'
-          if !zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
-            data['area_ft2'] += area_ft2
-            data['zones'] << zone
-          end
-        # Nonresidential Fossil
-        elsif data['type'] == 'nonresidential' && data['fuel'] == 'fossil'
-          if !zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
-            data['area_ft2'] += area_ft2
-            data['zones'] << zone
-          end
+    # Note: while systems (9 and 10) and exception relative to heated only storage spaces were not part of ASHRAE 2007 initially, they were later incorporated in an addenda (addenda dn)
+    # A lot of programs either force you to use use (eg ESTAR MFHR, NYSERDA MPP) or mention that you can (LEED)
+    unconditioned = {:area_ft2=>0, :type=>'unconditioned', :fuel=>'electric', :zones=>[]}
+    heated_only_fossil = {:area_ft2=>0, :type=>'heatedonly', :fuel=>'fossil', :zones=>[]}
+    heated_only_elec = {:area_ft2=>0, :type=>'heatedonly', :fuel=>'electric', :zones=>[]}
+    res_fossil = {:area_ft2=>0, :type=>'residential', :fuel=>'fossil', :zones=>[]}
+    res_elec = {:area_ft2=>0, :type=>'residential', :fuel=>'electric', :zones=>[]}
+    nonres_fossil = {:area_ft2=>0, :type=>'nonresidential', :fuel=>'fossil', :zones=>[]}
+    nonres_elec = {:area_ft2=>0, :type=>'nonresidential', :fuel=>'electric', :zones=>[]}
+    
+    # Note I revamped the double loop (uneeded and slowing things down)
+    # If the zone meets the criteria, add it
+    self.getThermalZones.each do |zone|
+    
+      # Exclude unconditioned zones and move heated only into another bucket
+      # Hum, that might actually be done later by querying the sql file?
+      
+      # Exclude based on heating fuels? No, ASHRAE does say that would fall into the Electric and Other bucket...
+
+
+      tstat =  zone.thermostatSetpointDualSetpoint
+      next if tstat.empty?
+      tstat = tstat.get
+      # If not heating thermostat schedule, it is unconditioned
+      # Note: you need both a heating and cooling tstat in OS, but I'll check both...
+      next if tstat.heatingSetpointTemperatureSchedule.empty?
+      htg_sch = tstat.heatingSetpointTemperatureSchedule.get
+      next if tstat.coolingSetpointTemperatureSchedule.empty?
+      clg_sch = tstat.coolingSetpointTemperatureSchedule.get
+      
+      
+      if !htg_sch.to_ScheduleRuleset.empty?
+         htg_sch_ruleset = htg_sch.to_ScheduleRuleset.get
+         htg_default_day = htg_sch_ruleset.defaultDaySchedule
+         # get max (heating)
+         htg_sp = htg_default_day.values.max
+         has_heat = false
+         # If over 5C / 41F
+         if htg_sp > 5
+          has_heat = true
+         end
+      end
+      
+      if !clg_sch.to_ScheduleRuleset.empty?
+         clg_sch_ruleset = clg_sch.to_ScheduleRuleset.get
+         clg_default_day = clg_sch_ruleset.defaultDaySchedule
+         # Get min value (cooling)
+         clg_sp = clg_default_day.values.min
+         has_cool = false
+         # If below 33C / 91.4F
+         if clg_sp < 32
+          has_cool = true
+         end
+      end
+
+
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "\n================= Zone #{zone.name} ====================")
+
+      # If unconditioned
+      if zone.equipment.size == 0
+        # Also takes the zone multiplier into account
+        area_m2 = zone.get_net_area
+        # We check if the zone as a whole if part of the floor area or not. If not, discard
+        if area_m2 > 0
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone #{zone.name} has no equipment")
+          area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+          unconditioned[:area_ft2] += area_ft2
+          unconditioned[:zones] << zone
+        end
+
+      # Heated-Only Fossil
+      elsif has_heat && !has_cool && zone.is_fossil_hybrid_or_purchased_heat
+        area_m2 = zone.get_net_area
+        # We check if the zone as a whole if part of the floor area or not. If not, discard
+        if area_m2 > 0
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{zone.name} - heated only - fossil")
+          area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+          heated_only_fossil[:area_ft2] += area_ft2
+          heated_only_fossil[:zones] << zone
+        end
+        
+      # Heated-only elec
+      elsif has_heat && !has_cool && !zone.is_fossil_hybrid_or_purchased_heat
+        area_m2 = zone.get_net_area
+        # We check if the zone as a whole if part of the floor area or not. If not, discard
+        if area_m2 > 0
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{zone.name} - heated only - elec")
+          area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+          heated_only_elec[:area_ft2] += area_ft2
+          heated_only_elec[:zones] << zone
+        end
+          
+
+      # If not heated only
+      # Residential Fossil
+      elsif !(has_heat && !has_cool) && zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
+        area_m2 = zone.get_net_area
+        # We check if the zone as a whole if part of the floor area or not. If not, discard
+        # Also take the zone multiplier into account
+        if area_m2 > 0
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{zone.name} - residential - fossil")
+          area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+          res_fossil[:area_ft2] += area_ft2
+          res_fossil[:zones] << zone
+        end
+        
+      # Residential Electric
+      elsif !(has_heat && !has_cool) && zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
+        area_m2 = zone.get_net_area
+        # We check if the zone as a whole if part of the floor area or not. If not, discard
+        if area_m2 > 0
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{zone.name} - residential - elec")
+          area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+          res_elec[:area_ft2] += area_ft2
+          res_elec[:zones] << zone
+        end
+        
+      # Nonresidential Fossil
+      elsif !(has_heat && !has_cool) && !zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
+        area_m2 = zone.get_net_area
+        # We check if the zone as a whole if part of the floor area or not. If not, discard
+        if area_m2 > 0
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{zone.name} - Non Residential - fossil")
+          area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+          nonres_fossil[:area_ft2] += area_ft2
+          nonres_fossil[:zones] << zone
+        end
+
+      # Nonresidential Fossil
+      elsif !(has_heat && !has_cool) && !zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
+        area_m2 = zone.get_net_area
+        # We check if the zone as a whole if part of the floor area or not. If not, discard
+        if area_m2 > 0
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{zone.name} - Non Residential - elec")
+          area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+          nonres_elec[:area_ft2] += area_ft2
+          nonres_elec[:zones] << zone
         end
       end
     end
@@ -293,95 +410,188 @@ class OpenStudio::Model::Model
     res_stories = stories['residential']
     nonres_stories = stories['nonresidential']       
 
-    res_fossil['stories'] = res_stories
-    res_elec['stories'] = res_stories
-    nonres_fossil['stories'] = nonres_stories
-    nonres_elec['stories'] = nonres_stories
-     
-    # Determine the dominant area type.
-    # In the event of a tie, choose nonresidential.
-    dom_type = nil
-    if res_fossil['area_ft2'] + res_elec['area_ft2'] > nonres_fossil['area_ft2'] + nonres_elec['area_ft2']
-      dom_type = 'residential'
+    res_fossil[:stories] = res_stories
+    res_elec[:stories] = res_stories
+    nonres_fossil[:stories] = nonres_stories
+    nonres_elec[:stories] = nonres_stories
+
+    # start of not really used
+    total_res = res_fossil[:area_ft2] + res_elec[:area_ft2]
+    total_nonres = nonres_fossil[:area_ft2] + nonres_elec[:area_ft2]
+    total_heatedonly = heated_only_fossil[:area_ft2] + heated_only_elec[:area_ft2]
+    
+    if res_elec[:area_ft2] > res_fossil[:area_ft2]
+      res_dom_fuel = 'electric'
+      res_dom_zones = res_elec[:zones]
+      res_sec_zones = res_fossil[:zones]
     else
-      dom_type = 'nonresidential'
+      res_dom_fuel = 'fossil'
+      res_dom_zones = res_fossil[:zones]
+      res_sec_zones = res_elec[:zones]
     end
-  
-    # Determine the dominant fuel type
-    # in the dominant area type.
-    # In the event of a tie, choose fossil.
-    dom_fuel = nil
-    if dom_type == 'residential'
-      if res_elec['area_ft2'] > res_fossil['area_ft2']
-        dom_fuel = 'electric'
-      else
-        dom_fuel = 'fossil'
-      end
-    elsif dom_type == 'nonresidential'
-      if nonres_elec['area_ft2'] > nonres_fossil['area_ft2']
-        dom_fuel = 'electric'
-      else
-        dom_fuel = 'fossil'
-      end
+    
+    if nonres_elec[:area_ft2] > nonres_fossil[:area_ft2]
+      nonres_dom_fuel = 'electric'
+      nonres_dom_zones = nonres_elec[:zones]
+      nonres_sec_zones = nonres_fossil[:zones]
+    else
+      nonres_dom_fuel = 'fossil'
+      nonres_dom_zones = nonres_fossil[:zones]
+      nonres_sec_zones = nonres_elec[:zones]
     end
+    
+    if heated_only_elec[:area_ft2] > heated_only_fossil[:area_ft2]
+      heatedonly_dom_fuel = 'electric'
+      heatedonly_dom_zones = heated_only_elec[:zones]
+      heatedonly_sec_zones = heated_only_fossil[:zones]
+    else
+      heatedonly_dom_fuel = 'fossil'
+      heatedonly_dom_zones = heated_only_fossil[:zones]
+      heatedonly_sec_zones = heated_only_elec[:zones]
+      end
+    # end of not really used
+    
+    
+    all_types = [unconditioned, heated_only_fossil, heated_only_elec, res_fossil, res_elec, nonres_fossil, nonres_elec]
+    
+    h_groupby_fuels = all_types.group_by{|h| h[:fuel]}
+    # [1] (main)> h_groupby_fuels.keys
+    # => ["fossil", "electric"]
+    # either or..
+    #fossil_area_ft2 = h_groupby_fuels['fossil'].map {|h| h[:area_ft2]}.inject(:+)
+    fossil_area_ft2 = h_groupby_fuels['fossil'].inject(0) {|sum, h| sum + h[:area_ft2]}
+    # This will take the actual electric equipment and the unconditioned zones, which are supposed to be categorized as Electric/other per note on table G3.1.1A
+    # Where no heating system is to be provided or no heating energy source is specified, use the “Electric and Other” heating source classification
+    electric_area_ft2 = h_groupby_fuels['electric'].inject(0) {|sum, h| sum + h[:area_ft2]}
+
+    if fossil_area_ft2 > electric_area_ft2
+      dom_fuel = 'electric'
+    else
+      dom_fuel = 'fossil'
+    end
+
+
+    h_groupby_type = all_types.group_by{|h| h[:type]}
+    # [1] (main)> h_groupby_type.keys
+    # => ["heatedonly", "residential", "nonresidential"]
+
+    # Heated only is a special case, it applies even if less than 20000ft²
+    unconditioned_area_ft2 = h_groupby_type['unconditioned'].inject(0) {|sum, h| sum + h[:area_ft2]}
+    heatedonly_area_ft2 = h_groupby_type['heatedonly'].inject(0) {|sum, h| sum + h[:area_ft2]}
+    res_area_ft2 = h_groupby_type['residential'].inject(0) {|sum, h| sum + h[:area_ft2]}
+    nonres_area_ft2 = h_groupby_type['nonresidential'].inject(0) {|sum, h| sum + h[:area_ft2]}
+
+
+    # Todo I kinda stopped here, too late to continue
+
+    
+    areas_by_type = [ {:dom_type => 'residential',
+                   :area_ft2 => total_res,
+                   :dom_fuel => res_dom_fuel,
+                   :dom_zones => res_dom_zones,
+                   :sec_zones => res_sec_zones},
+                   
+                   {:dom_type => 'nonresidential',
+                   :area_ft2 => total_nonres,
+                   :dom_fuel => nonres_dom_fuel,
+                   :dom_zones => nonres_dom_zones,
+                   :sec_zones => nonres_sec_zones},
+                   
+                   {:dom_type => 'heatedonly',
+                   :area_ft2 => total_heatedonly,
+                   :dom_fuel => heatedonly_dom_fuel,
+                   :dom_zones => heatedonly_dom_zones,
+                   :sec_zones => heatedonly_sec_zones},
+                  ]
+                  
+    # Determine the dominant type and fuel by areas
+    # First element will be the one with the largest area
+    areas_by_type = areas_by_type.sort_by{|hsh| hsh[:area_ft2]}.reverse
+    
+=begin    
+    areas_by_type.each do |type|
+      puts "\ndom_type=>#{type[:dom_type]},
+area_ft2=>#{'%.0f' % type[:area_ft2]},
+dom_fuel=>#{type[:dom_fuel]},
+# of dominant zones: #{type[:dom_zones].size},
+# of secondary zones: #{type[:sec_zones].size}\n"
+    end
+=end
+    
+    # Get the dominant condition
+    dom_type = areas_by_type[0][:dom_type]
+    dom_fuel = areas_by_type[0][:dom_fuel]
     
     # Categorize the hashes
     dom_type_dom_fuel = nil
     dom_type_sec_fuel = nil
     sec_type_dom_fuel = nil
     sec_type_sec_fuel = nil
-    [res_fossil, res_elec, nonres_fossil, nonres_elec].each do |data|
-      if data['type'] == dom_type && data['fuel'] == dom_fuel
+    [heated_only_fossil, heated_only_elec, res_fossil, res_elec, nonres_fossil, nonres_elec].each do |data|
+      if data[:type] == dom_type && data[:fuel] == dom_fuel
         dom_type_dom_fuel = data
-      elsif data['type'] == dom_type && data['fuel'] != dom_fuel
+      elsif data[:type] == dom_type && data[:fuel] != dom_fuel
         dom_type_sec_fuel = data
-      elsif data['type'] != dom_type && data['fuel'] == dom_fuel
+      elsif data[:type] != dom_type && data[:fuel] == dom_fuel
         sec_type_dom_fuel = data    
-      elsif data['type'] != dom_type && data['fuel'] != dom_fuel
+      elsif data[:type] != dom_type && data[:fuel] != dom_fuel
         sec_type_sec_fuel = data
       end
     end
+
+    
     
     # Define the minimum area for the 
     # exception that allows a different
     # system type in part of the building.
     # This is common across different versions
     # of 90.1
+    # G3.1.1, exception a
     exception_min_area_ft2 = nil
     case standard
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       exception_min_area_ft2 = 20000
-    end    
+    end
+
+ 
+    
+    
+    
+    
+    # Jmarrec to @asparke2: Not sure about the way it's currently done.
+    # Shouldn't you do:
+    # * Occupancy: sec_type_dom_fuel + sec_type_sec_fuel > exception_min_area_ft2
+    # * Fuel :and dom_type_sec_fuel + sec_type_sec_fuel > exception_min_area_ft2
 
     # There are four possible categories of data
     # dom is the dominant zones, or zones that don't fall into an exception
-    # exc_fuel is any group of zones that meet the fuel type exception
-    # exc_occ is any group of zones that meet the occ type exception
+    # exc_fuel is any group of zones that meet the fuel type exception (G3.1.1, exception a)
+    # exc_occ is any group of zones that meet the occ type exception (G3.1.1, exception b?)
     # exc_fuel_occ is any group of zones that meet both the fuel and occ typ exceptions
     dom = dom_type_dom_fuel
     exc_fuel = nil
     exc_occ = nil
     exc_fuel_occ = nil
     # Exception for fuel type
-    if dom_type_sec_fuel['area_ft2'] > exception_min_area_ft2
+    if dom_type_sec_fuel[:area_ft2] > exception_min_area_ft2
       exc_fuel = dom_type_sec_fuel
     else
-      dom['area_ft2'] += dom_type_sec_fuel['area_ft2']
-      dom['zones'] += dom_type_sec_fuel['zones']
+      dom[:area_ft2] += dom_type_sec_fuel[:area_ft2]
+      dom[:zones] += dom_type_sec_fuel[:zones]
     end
     # Exception for occupancy type
-    if sec_type_dom_fuel['area_ft2'] > exception_min_area_ft2
+    if sec_type_dom_fuel[:area_ft2] > exception_min_area_ft2
       exc_fuel = sec_type_dom_fuel
     else
-      dom['area_ft2'] += sec_type_dom_fuel['area_ft2']
-      dom['zones'] += sec_type_dom_fuel['zones']
+      dom[:area_ft2] += sec_type_dom_fuel[:area_ft2]
+      dom[:zones] += sec_type_dom_fuel[:zones]
     end    
     # Exception for fuel type and occupancy type
-    if sec_type_sec_fuel['area_ft2'] > exception_min_area_ft2
+    if sec_type_sec_fuel[:area_ft2] > exception_min_area_ft2
       exc_fuel = sec_type_sec_fuel
     else
-      dom['area_ft2'] += sec_type_sec_fuel['area_ft2']
-      dom['zones'] += sec_type_sec_fuel['zones']
+      dom[:area_ft2] += sec_type_sec_fuel[:area_ft2]
+      dom[:zones] += sec_type_sec_fuel[:zones]
     end     
 
     # Put all the non-nil groups into an array. 
@@ -472,6 +682,7 @@ class OpenStudio::Model::Model
             'ASHRAE 169-2006-3A'
         heating_fuel_type = 'electric'
       else
+        # @asparke2: If doubt this when/else statement should have the same outcome
         heating_fuel_type = 'electric'
       end
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Heating fuel is #{heating_fuel_type} for 90.1-2013, climate zone #{climate_zone}.  This is independent of the heating fuel type in the proposed building.")
@@ -808,7 +1019,7 @@ class OpenStudio::Model::Model
       data['zone'] = zone
       # Get the area
       area_ft2 = OpenStudio.convert(zone.floorArea, 'm^2', 'ft^2').get
-      data['area_ft2'] = area_ft2      
+      data[:area_ft2] = area_ft2      
       #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "#{zone.name}")
       zone.spaces.each do |space|
         #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "***#{space.name}")
@@ -872,8 +1083,8 @@ class OpenStudio::Model::Model
       area_hrs = 1
       tot_area = 1
       other_zone_data_1.each do |other_data|
-        area_hrs += other_data['area_ft2'] * other_data['wk_op_hrs']
-        tot_area += other_data['area_ft2']
+        area_hrs += other_data[:area_ft2] * other_data['wk_op_hrs']
+        tot_area += other_data[:area_ft2]
       end
       avg_wk_op_hrs = area_hrs / tot_area
       OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name} average of #{avg_wk_op_hrs.round} hrs/wk for other zones on the system.")
@@ -901,7 +1112,7 @@ class OpenStudio::Model::Model
       data['zone'] = zone
       # Get the area
       area_ft2 = OpenStudio.convert(zone.floorArea, 'm^2', 'ft^2').get
-      data['area_ft2'] = area_ft2
+      data[:area_ft2] = area_ft2
       # Get the heating load
       htg_load_w_per_m2 = zone.heatingDesignLoad
       if htg_load_w_per_m2.is_initialized
@@ -940,17 +1151,21 @@ class OpenStudio::Model::Model
       other_zone_data_2.each do |other_data|
         # Don't include nil or zero loads in average
         unless other_data['htg_load_btu_per_ft2'].nil? || other_data['htg_load_btu_per_ft2'] == 0.0
-          htg_load_hrs += other_data['area_ft2'] * other_data['htg_load_btu_per_ft2']
-          htg_area += other_data['area_ft2']
+          htg_load_hrs += other_data[:area_ft2] * other_data['htg_load_btu_per_ft2']
+          htg_area += other_data[:area_ft2]
         end
         # Don't include nil or zero loads in average
         unless other_data['clg_load_btu_per_ft2'].nil? || other_data['clg_load_btu_per_ft2'] == 0.0
-          clg_load_hrs += other_data['area_ft2'] * other_data['clg_load_btu_per_ft2']
-          clg_area += other_data['area_ft2']
+          clg_load_hrs += other_data[:area_ft2] * other_data['clg_load_btu_per_ft2']
+          clg_area += other_data[:area_ft2]
         end        
       end
       avg_htg_load_btu_per_ft2 = htg_load_hrs / htg_area
       avg_clg_load_btu_per_ft2 = clg_load_hrs / clg_area
+      # This is throwing an error: undefined method `round' for nil:NilClass
+      # So I'll assign zero if nil for now
+      data['htg_load_btu_per_ft2'] ||= 0
+      data['clg_load_btu_per_ft2'] ||= 0
       OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name} heating = #{data['htg_load_btu_per_ft2'].round} Btu/hr*ft^2, average heating = #{avg_htg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones. Cooling = #{data['clg_load_btu_per_ft2'].round} Btu/hr*ft^2, average cooling = #{avg_clg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones.")
     
       # Filter on heating load
@@ -1454,7 +1669,7 @@ class OpenStudio::Model::Model
   #   search_criteria = {
   #   'template' => template,
   #   'number_of_poles' => 4.0,
-  #   'type' => 'Enclosed',
+  #   :type => 'Enclosed',
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
   def find_object(hash_of_objects, search_criteria, capacity = nil)
@@ -1568,7 +1783,7 @@ class OpenStudio::Model::Model
       day_types = rule['day_types']
       start_date = DateTime.parse(rule['start_date'])
       end_date = DateTime.parse(rule['end_date'])
-      sch_type = rule['type']
+      sch_type = rule[:type]
       values = rule['values']
 
       #Day Type choices: Wkdy, Wknd, Mon, Tue, Wed, Thu, Fri, Sat, Sun, WntrDsn, SmrDsn, Hol

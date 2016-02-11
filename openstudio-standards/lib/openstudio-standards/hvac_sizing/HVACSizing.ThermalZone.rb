@@ -224,6 +224,8 @@ class OpenStudio::Model::ThermalZone
   
   end
 
+  
+  
   # Determine the zone heating fuels, including
   # any fuels used by zone equipment, reheat terminals,
   # the air loops serving the zone, and any plant loops
@@ -233,17 +235,29 @@ class OpenStudio::Model::ThermalZone
   # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
   # Coal, Diesel, Gasoline, DistrictCooling, DistrictHeating, 
   # and SolarEnergy.
+  # return [Bool] Whether to hardcode it as electricity
   def heating_fuels
   
     fuels = []
     
     # Check the zone hvac heating fuels
-    fuels += self.model.zone_equipment_heating_fuels(self)
-
+    zonefuels, hardcode_elec = self.model.zone_equipment_heating_fuels(self)   
+    fuels += zonefuels
+    
     # Check the zone airloop heating fuels
-    fuels += self.model.zone_airloop_heating_fuels(self)
+    airloopfuels = self.model.zone_airloop_heating_fuels(self)
+    fuels += airloopfuels
+    
+    fuels = fuels.uniq.sort
 
-    return fuels.uniq.sort
+    # if Hardcode electricity
+    if hardcode_elec
+      fuels = ['Electricity']
+      # This message doesn't work => string formatting 
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Zone #{self.name} had a VRF or a PTAC with an elec heating coil and was deemed electrically heated. If you have a PTAC with a heating coil with a capacity of zero, pick a water coil or gas coil please")
+    end
+    
+    return fuels
     
   end
  

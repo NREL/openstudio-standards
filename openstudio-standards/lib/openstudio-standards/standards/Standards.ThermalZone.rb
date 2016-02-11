@@ -343,6 +343,8 @@ class OpenStudio::Model::ThermalZone
     res_area_m2 = 0
     nonres_area_m2 = 0
     self.spaces.each do |space|
+      # Ignore space if not part of total area
+      next if !space.partofTotalFloorArea
       if space.is_residential(standard)
         res_area_m2 += space.floorArea
       else
@@ -368,6 +370,8 @@ class OpenStudio::Model::ThermalZone
   # return [Bool] true if Fossil Fuel, 
   # Fossil/Electric Hybrid, and Purchased Heat zone, 
   # false if Electric or Other.
+  # To-do: It's not doing it properly right now. If you have a zone with a VRF + a DOAS (via an ATU SingleDUct Uncontrolled)
+  # it'll pick up both natural gas and electricity and classify it as fossil fuel, when I would definitely classify it as electricity
   def is_fossil_hybrid_or_purchased_heat
   
     is_fossil = false
@@ -378,6 +382,7 @@ class OpenStudio::Model::ThermalZone
     # Coal, Diesel, Gasoline, DistrictHeating, 
     # and SolarEnergy.
     htg_fuels = self.heating_fuels
+    
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('PropaneGas') ||
        htg_fuels.include?('FuelOil#1') ||
@@ -396,7 +401,25 @@ class OpenStudio::Model::ThermalZone
   
   end
   
-  
+    # Determine the net area of the zone
+  # Loops on each space, and checks if part of total floor area or not
+  # If not part of total floor area, it is not added to the zone floor area
+  # Will multiply it by the ZONE MULTIPLIER as well!
+  #
+  # @return [Double] the zone net floor area in m^2 (with multiplier taken into account)
+  #   @units square meters (m^2)
+  def get_net_area
+    area_m2 = 0
+    zone_mult = self.multiplier
+    self.spaces.each do |space|
+      # If space is not part of floor area, we don't add it
+      next if !space.partofTotalFloorArea
+      area_m2 += space.floorArea
+    end
+    
+    return area_m2 * zone_mult
+    
+  end
   
  
 end
