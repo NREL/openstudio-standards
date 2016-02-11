@@ -28,6 +28,9 @@ class OpenStudio::Model::Model
   require_relative 'Standards.ScheduleRuleset'
   require_relative 'Standards.ScheduleConstant'
   require_relative 'Standards.SpaceType'
+  require_relative 'Standards.Pump'
+  require_relative 'Standards.PumpConstantSpeed'
+  require_relative 'Standards.PumpVariableSpeed'
 
   # Applies the multi-zone VAV outdoor air sizing requirements
   # to all applicable air loops in the model.
