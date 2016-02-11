@@ -20,7 +20,7 @@ class OpenStudio::Model::AirLoopHVAC
   
     # Only applies to multi-zone vav systems
     if self.is_multizone_vav_system
-      self.set_minimum_vav_damper_positions
+      self.adjust_minimum_vav_damper_positions
     end
     
     return true
@@ -57,6 +57,19 @@ class OpenStudio::Model::AirLoopHVAC
         self.enable_multizone_vav_optimization
       else
         self.disable_multizone_vav_optimization
+      end
+      
+      # VAV Static Pressure Reset
+      # assume all systems have DDC control of VAV terminals
+      has_ddc = true
+      if self.is_static_pressure_reset_required(template, has_ddc)
+        self.supply_return_exhaust_relief_fans.each do |fan|
+          if fan.to_FanVariableVolume.is_initialized
+            fan.set_control_type('Multi Zone VAV with Static Pressure Reset')
+          else
+            OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.AirLoopHVAC","For #{self.name}: there is a constant volume fan on a multizone vav system.  Cannot apply static pressure reset controls.")
+          end
+        end
       end
       
     end
@@ -1521,12 +1534,31 @@ class OpenStudio::Model::AirLoopHVAC
    
   end 
 
-  # Set the minimum VAV damper positions to the values
+  # Set the minimum VAV damper positions
+  #
+  # 
+  def set_minimum_vav_damper_positions(template)
+  
+    self.thermalZones.each do |zone|
+      zone.equipment.each do |equip|
+        if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+          zone_oa_per_area = zone.outdoor_airflow_rate_per_area
+          vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
+          vav_terminal.set_minimum_damper_position(template, zone_oa_per_area)
+        end
+      end
+    end
+  
+    return true
+  
+  end
+  
+  # Adjust minimum VAV damper positions to the values
   #
   # @param (see #is_economizer_required)
   # @return [Bool] Returns true if required, false if not.  
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def set_minimum_vav_damper_positions
+  def adjust_minimum_vav_damper_positions
    
     # Total uncorrected outdoor airflow rate
     v_ou = 0.0
@@ -1706,7 +1738,7 @@ class OpenStudio::Model::AirLoopHVAC
     return true
    
   end
-   
+     
   # Determine if demand control ventilation (DCV) is
   # required for this air loop.
   #
@@ -2726,7 +2758,46 @@ class OpenStudio::Model::AirLoopHVAC
   
   end
   
+  # Determine if static pressure reset is required for this
+  # system.  For 90.1, this determination needs information
+  # about whether or not the system has DDC control over the 
+  # VAV terminals.
+  #
+  # @todo Instead of requiring the input of whether a system
+  #   has DDC control of VAV terminals or not, determine this
+  #   from the system itself.  This may require additional information
+  #   be added to the OpenStudio data model.
+  # @param template [String] the standard
+  # @param has_ddc [Bool] whether or not the system has DDC control
+  # over VAV terminals.
+  # return [Bool] returns true if static pressure reset is required, false if not
+  def is_static_pressure_reset_required(template, has_ddc)
+
+    sp_reset_required = false
+    
+    # A big number of btu per hr as the minimum requirement
+    infinity_btu_per_hr = 999999999999
+    minimum_capacity_btu_per_hr = infinity_btu_per_hr
+    
+    # Determine the minimum capacity that requires an economizer
+    case template
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      # static pressure reset not required
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      if has_ddc
+        sp_reset_required = true
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}: static pressure reset is required because the system has DDC control of VAV terminals.")
+      else
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}: static pressure reset not required because the system does not have DDC control of VAV terminals.")
+      end
+    when 'NECB 2011'
+      # static pressure reset not required
+    end
   
+    return sp_reset_required
+  
+  end
+
   # Calculate the total floor area of all zones attached
   # to the air loop, in m^2.
   #
