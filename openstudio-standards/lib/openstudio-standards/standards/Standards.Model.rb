@@ -79,6 +79,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.Pump'
   require_relative 'Standards.PumpConstantSpeed'
   require_relative 'Standards.PumpVariableSpeed'
+  require_relative 'Standards.AirTerminalSingleDuctVAVReheat'
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.  
@@ -164,6 +165,11 @@ class OpenStudio::Model::Model
     
     end
   
+    # Apply the minimum damper positions
+    self.getAirLoopHVACs.sort.each do |air_loop|
+      air_loop.set_minimum_vav_damper_positions(building_vintage)
+    end
+
     # Apply the baseline system temperatures
     self.getPlantLoops.sort.each do |plant_loop|
       plant_loop.apply_performance_rating_method_baseline_temperatures(building_vintage)
@@ -214,9 +220,23 @@ class OpenStudio::Model::Model
     self.getSpaces.sort.each do |space|
       added = space.addDaylightingControls(building_vintage, false, false)
     end
-     
+
+    # Delete all the unused curves
+    self.getCurves.sort.each do |curve|
+      if curve.parent.empty?
+        #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
+        curve.remove
+      end
+    end
+    
     model_status = 'final'
     self.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
+
+    # Translate to IDF and save for debugging
+    forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+    idf = forward_translator.translateModel(self)
+    idf_path = OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.idf")  
+    idf.save(idf_path,true)    
 
     return true
 
