@@ -2829,6 +2829,7 @@ module BTAP
 
               # Set up DX cooling coil 
               clg_coil = OpenStudio::Model::CoilCoolingDXMultiSpeed.new(model)
+              clg_coil.setFuelType('Electricity')
               clg_stage_1 = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
               clg_stage_2 = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
               clg_stage_3 = OpenStudio::Model::CoilCoolingDXMultiSpeedStageData.new(model)
