@@ -18,6 +18,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.CoilCoolingDXSingleSpeed'
   require_relative 'Standards.CoilCoolingDXMultiSpeed'
   require_relative 'Standards.CoilHeatingDXSingleSpeed'
+  require_relative 'Standards.CoilHeatingDXMultiSpeed'
   require_relative 'Standards.CoilHeatingGasMultiStage'
   require_relative 'Standards.BoilerHotWater'
   require_relative 'Standards.AirLoopHVAC'
@@ -68,6 +69,7 @@ class OpenStudio::Model::Model
 
     # Unitary HPs
     self.getCoilHeatingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
+    self.getCoilHeatingDXMultiSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
   
     # Chillers
     clg_tower_objs = self.getCoolingTowerSingleSpeeds
@@ -81,7 +83,7 @@ class OpenStudio::Model::Model
 
     # Heating coils
     self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-    
+   
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   
   end

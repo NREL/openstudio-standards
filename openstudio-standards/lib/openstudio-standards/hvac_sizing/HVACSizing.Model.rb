@@ -26,6 +26,7 @@ class OpenStudio::Model::Model
   require_relative 'HVACSizing.CoilHeatingWater'
   require_relative 'HVACSizing.CoilHeatingDXSingleSpeed'
   require_relative 'HVACSizing.CoilCoolingDXSingleSpeed'
+  require_relative 'HVACSizing.CoilHeatingDXMultiSpeed'
   require_relative 'HVACSizing.CoilCoolingDXMultiSpeed'
   require_relative 'HVACSizing.CoilCoolingDXTwoSpeed'
   require_relative 'HVACSizing.CoilCoolingWater'
@@ -141,6 +142,7 @@ class OpenStudio::Model::Model
     self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingWaters.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingDXSingleSpeeds.sort.each {|obj| obj.applySizingValues}
+    self.getCoilHeatingDXMultiSpeeds.sort.each {|obj| obj.applySizingValues}
     
     # Cooling coils
     self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.applySizingValues}

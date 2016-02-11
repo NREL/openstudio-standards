@@ -2790,28 +2790,30 @@ module BTAP
               zone.setThermostat(staged_thermostat)
 
               # Multi-stage gas heating coil
-              if(heating_coil_type == "Gas")
+              if(heating_coil_type == "Gas" || heating_coil_type == "Electric")
                 htg_coil = OpenStudio::Model::CoilHeatingGasMultiStage.new(model)
                 htg_stage_1 = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
                 htg_stage_2 = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
                 htg_stage_3 = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
                 htg_stage_4 = OpenStudio::Model::CoilHeatingGasMultiStageStageData.new(model)
-                supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model,always_on)
-
+                if(heating_coil_type == "Gas")
+                  supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model,always_on)
+                elsif(heating_coil_type == "Electric")
+                  supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
+                  htg_stage_1.setNominalCapacity(0.1)
+                  htg_stage_2.setNominalCapacity(0.2)
+                  htg_stage_3.setNominalCapacity(0.3)
+                  htg_stage_4.setNominalCapacity(0.4)
+                end
+                
                # Multi-Stage DX or Electric heating coil
-              elsif(heating_coil_type == "DX" || heating_coil_type == "Electric")
+              elsif(heating_coil_type == "DX")
                 htg_coil = OpenStudio::Model::CoilHeatingDXMultiSpeed.new(model)
                 htg_stage_1 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
                 htg_stage_2 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
                 htg_stage_3 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
                 htg_stage_4 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
                 supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
-                if(heating_coil_type == "Electric")
-                  htg_stage_1.setGrossRatedHeatingCOP(1.001)
-                  htg_stage_2.setGrossRatedHeatingCOP(1.001)
-                  htg_stage_3.setGrossRatedHeatingCOP(1.001)
-                  htg_stage_4.setGrossRatedHeatingCOP(1.001)
-                end
                 
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")

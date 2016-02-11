@@ -10,7 +10,7 @@ class OpenStudio::Model::CoilHeatingGasMultiStage
     capacity_w = nil
     htg_stages = self.stages
     if htg_stages.last.nominalCapacity.is_initialized
-      capacity_w = clg_stages.last.nominalCapacity.get
+      capacity_w = htg_stages.last.nominalCapacity.get
     elsif self.autosizedStage4NominalCapacity.is_initialized
       capacity_w = self.autosizedStage4NominalCapacity.get
     else

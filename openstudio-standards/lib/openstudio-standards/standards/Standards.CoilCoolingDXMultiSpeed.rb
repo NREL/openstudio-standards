@@ -55,30 +55,6 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
       end
     end
 
-    # Determine the heating type if on an airloop
-    if self.airLoopHVAC.is_initialized
-      air_loop = self.airLoopHVAC.get
-      if air_loop.supplyComponents('Coil:Heating:Electric'.to_IddObjectType).size > 0
-        heating_type = 'Electric Resistance or None'
-      elsif air_loop.supplyComponents('Coil:Heating:Gas'.to_IddObjectType).size > 0
-        heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Water'.to_IddObjectType).size > 0
-        heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:DX:SingleSpeed'.to_IddObjectType).size > 0
-        heating_type = 'Electric Resistance or None'
-      elsif air_loop.supplyComponents('Coil:Heating:DX:MultiSpeed'.to_IddObjectType).size > 0
-        heating_type = 'Electric Resistance or None'        
-      elsif air_loop.supplyComponents('Coil:Heating:Gas:MultiStage'.to_IddObjectType).size > 0
-        heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Desuperheater'.to_IddObjectType).size > 0
-        heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).size > 0
-        heating_type = 'All Other'  
-      else
-        heating_type = 'Electric Resistance or None'
-      end
-    end
-
     # Add the heating type to the search criteria
     unless heating_type.nil?
       search_criteria['heating_type'] = heating_type
@@ -109,33 +85,40 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
 
     # Set number of stages for NECB 2011
     if(template == 'NECB 2011')
-      num_stages = (capacity_w/(66.0*1000.0)+0.5).round
-      num_stages = [num_stages,4].min
       stage_cap = []
-      if(num_stages == 1)
-        stage_cap[0] = capacity_w/2.0
-        stage_cap[1] = 2.0*stage_cap[0]
+      if(not heat_pump)
+        num_stages = (capacity_w/(66.0*1000.0)+0.5).round
+        num_stages = [num_stages,4].min
+        if(num_stages == 1)
+          stage_cap[0] = capacity_w/2.0
+          stage_cap[1] = 2.0*stage_cap[0]
+          stage_cap[2] = stage_cap[1]+0.1
+          stage_cap[3] = stage_cap[2]+0.1
+        else
+          stage_cap[0] = 66.0*1000.0
+          stage_cap[1] = 2.0*stage_cap[0]
+          if(num_stages == 2)
+            stage_cap[2] = stage_cap[1]+0.1
+            stage_cap[3] = stage_cap[2]+0.1         
+          elsif(num_stages == 3)
+            stage_cap[2] = 3.0*stage_cap[0]
+            stage_cap[3] = stage_cap[2]+0.1
+          elsif(num_stages == 4)
+            stage_cap[2] = 3.0*stage_cap[0]
+            stage_cap[3] = 4.0*stage_cap[0]
+          end
+        end
+      else
+        stage_cap[0] = capacity_w
+        stage_cap[1] = stage_cap[0]+0.1
         stage_cap[2] = stage_cap[1]+0.1
         stage_cap[3] = stage_cap[2]+0.1
-      else
-        stage_cap[0] = 66.0*1000.0
-        stage_cap[1] = 2.0*stage_cap[0]
-        if(num_stages == 2)
-          stage_cap[2] = stage_cap[1]+0.1
-          stage_cap[3] = stage_cap[2]+0.1         
-        elsif(num_stages == 3)
-          stage_cap[2] = 3.0*stage_cap[0]
-          stage_cap[3] = stage_cap[2]+0.1
-        elsif(num_stages == 4)
-          stage_cap[2] = 3.0*stage_cap[0]
-          stage_cap[3] = 4.0*stage_cap[0]
-        end
       end
       # set capacities, flow rates, and sensible heat ratio for stages
       for istage in 0..3
         clg_stages[istage].setGrossRatedTotalCoolingCapacity(stage_cap[istage])
         clg_stages[istage].setRatedAirFlowRate(flow_rate4*stage_cap[istage]/capacity_w)
-      end
+      end        
     end
  
     # Convert capacity to Btu/hr
