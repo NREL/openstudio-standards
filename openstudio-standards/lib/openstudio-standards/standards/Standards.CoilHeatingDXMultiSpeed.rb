@@ -140,9 +140,7 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
       if htg_stages.last.grossRatedHeatingCapacity.is_initialized
         htg_capacity = htg_stages.last.grossRatedHeatingCapacity.get
       elsif self.autosizedSpeed4GrossRatedHeatingCapacity.is_initialized
-        puts 'test12'
         htg_capacity = self.autosizedSpeed4GrossRatedHeatingCapacity.get
-        puts 'test13'
       else
         OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
         successfully_set_all_properties = false
@@ -157,16 +155,6 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
         successfully_set_all_properties = false
         return successfully_set_all_properties
       end   
-      stage_cap = []
-      stage_cap[0] = htg_capacity
-      stage_cap[1] = stage_cap[0]+0.1
-      stage_cap[2] = stage_cap[1]+0.1
-      stage_cap[3] = stage_cap[2]+0.1 
-      # set capacities, flow rates, and sensible heat ratio for stages
-      for istage in 0..3
-        htg_stages[istage].setGrossRatedHeatingCapacity(stage_cap[istage])
-        htg_stages[istage].setRatedAirFlowRate(flow_rate4*stage_cap[istage]/htg_capacity)
-      end 
     end
     
     # Convert capacity to Btu/hr

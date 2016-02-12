@@ -86,33 +86,26 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Set number of stages for NECB 2011
     if(template == 'NECB 2011')
       stage_cap = []
-      if(not heat_pump)
-        num_stages = (capacity_w/(66.0*1000.0)+0.5).round
-        num_stages = [num_stages,4].min
-        if(num_stages == 1)
-          stage_cap[0] = capacity_w/2.0
-          stage_cap[1] = 2.0*stage_cap[0]
-          stage_cap[2] = stage_cap[1]+0.1
-          stage_cap[3] = stage_cap[2]+0.1
-        else
-          stage_cap[0] = 66.0*1000.0
-          stage_cap[1] = 2.0*stage_cap[0]
-          if(num_stages == 2)
-            stage_cap[2] = stage_cap[1]+0.1
-            stage_cap[3] = stage_cap[2]+0.1         
-          elsif(num_stages == 3)
-            stage_cap[2] = 3.0*stage_cap[0]
-            stage_cap[3] = stage_cap[2]+0.1
-          elsif(num_stages == 4)
-            stage_cap[2] = 3.0*stage_cap[0]
-            stage_cap[3] = 4.0*stage_cap[0]
-          end
-        end
-      else
-        stage_cap[0] = capacity_w
-        stage_cap[1] = stage_cap[0]+0.1
+      num_stages = (capacity_w/(66.0*1000.0)+0.5).round
+      num_stages = [num_stages,4].min
+      if(num_stages == 1)
+        stage_cap[0] = capacity_w/2.0
+        stage_cap[1] = 2.0*stage_cap[0]
         stage_cap[2] = stage_cap[1]+0.1
         stage_cap[3] = stage_cap[2]+0.1
+      else
+        stage_cap[0] = 66.0*1000.0
+        stage_cap[1] = 2.0*stage_cap[0]
+        if(num_stages == 2)
+          stage_cap[2] = stage_cap[1]+0.1
+          stage_cap[3] = stage_cap[2]+0.1         
+        elsif(num_stages == 3)
+          stage_cap[2] = 3.0*stage_cap[0]
+          stage_cap[3] = stage_cap[2]+0.1
+        elsif(num_stages == 4)
+          stage_cap[2] = 3.0*stage_cap[0]
+          stage_cap[3] = 4.0*stage_cap[0]
+        end
       end
       # set capacities, flow rates, and sensible heat ratio for stages
       for istage in 0..3

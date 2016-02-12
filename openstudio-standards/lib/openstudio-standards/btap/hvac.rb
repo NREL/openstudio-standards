@@ -2719,7 +2719,7 @@ module BTAP
 
           end  # add_sys2_FPFC_sys5_TPFC
 
-          def self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
+          def self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
             # System Type 3: PSZ-AC
             # This measure creates:
             # -a constant volume packaged single-zone A/C unit
