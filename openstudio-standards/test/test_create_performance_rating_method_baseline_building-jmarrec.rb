@@ -104,4 +104,35 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
   end
 
+
+  def test_btap_cleaning
+
+    model_name = 'jmarrec'
+    standard = '90.1-2007'
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/performance_rating_method/#{model_name}.osm")
+    model = translator.loadModel(path)
+    assert(model.is_initialized, "Could not load test model '#{model_name}.osm' from test_models/performance_rating_method.  Check name for typos.")
+    model = model.get
+
+    initial_outdoor_vrf = model.getAirConditionerVariableRefrigerantFlows.size
+    initial_zone_vrf = model.getZoneHVACTerminalUnitVariableRefrigerantFlows.size
+    puts "Initial outdoor VRF #{initial_outdoor_vrf} and number of indoor #{initial_zone_vrf}"
+
+    # Remove all HVAC from model
+    BTAP::Resources::HVAC.clear_all_hvac_from_model(model)
+
+    final_outdoor_vrf = model.getAirConditionerVariableRefrigerantFlows.size
+    final_zone_vrf = model.getZoneHVACTerminalUnitVariableRefrigerantFlows.size
+    puts "Final outdoor VRF #{final_outdoor_vrf} and number of indoor #{final_zone_vrf}"
+
+    assert_equal(0, model.getAirConditionerVariableRefrigerantFlows.size)
+    assert_equal(0, model.getZoneHVACTerminalUnitVariableRefrigerantFlows.size)
+
+
+
+  end
+
 end
