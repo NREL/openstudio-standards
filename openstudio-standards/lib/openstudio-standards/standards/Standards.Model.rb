@@ -950,18 +950,27 @@ class OpenStudio::Model::Model
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
           
-          # Add an VAV for the primary zones
-          story_name = zones[0].spaces[0].buildingStory.get.name.get
-          self.add_pvav(standard, 
-              nil, 
-              pri_zones, 
-              nil,
-              nil,
-              hot_water_loop)
-          
-          # Add a PSZ_AC for each secondary zone
-          self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)
 
+          # Add a PVAV with Reheat for the primary zones
+          story_name = zones[0].spaces[0].buildingStory.get.name.get
+          sys_name = "#{story_name} PVAV_Reheat (Sys5)"
+
+          # If and only if there are primary zones to attach to the loop
+          # counter example: floor with only one elevator machine room that get classified as sec_zones
+          if pri_zones.size > 0
+
+            self.add_pvav(standard,
+                          sys_name,
+                          pri_zones,
+                          nil,
+                          nil,
+                          hot_water_loop)
+          end
+
+          # Add a PSZ_AC for each secondary zone
+          if sec_zones.size > 0
+            self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)
+          end
         end      
       
       when 'PVAV_PFP_Boxes'
@@ -1007,29 +1016,38 @@ class OpenStudio::Model::Model
 
           # The group_zones_by_story NO LONGER returns empty lists when a given floor doesn't have any of the zones
           # So NO need to filter it out otherwise you get an error undefined method `spaces' for nil:NilClass
-          next if zones.empty?
+          #next if zones.empty?
         
           # Differentiate primary and secondary zones
           pri_sec_zone_lists = self.differentiate_primary_secondary_thermal_zones(zones)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
           
-          # Add an VAV for the primary zones
+          # Add a VAV for the primary zones
           story_name = zones[0].spaces[0].buildingStory.get.name.get
           sys_name = "#{story_name} VAV_Reheat (Sys7)"
-          self.add_vav_reheat(standard, 
-                      sys_name,
-                      hot_water_loop, 
-                      chilled_water_loop,
-                      pri_zones,
-                      nil,
-                      nil,
-                      0.62,
-                      0.9,
-                      OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+
+          # If and only if there are primary zones to attach to the loop
+          # counter example: floor with only one elevator machine room that get classified as sec_zones
+          if pri_zones.size > 0
+            self.add_vav_reheat(standard,
+                        sys_name,
+                        hot_water_loop,
+                        chilled_water_loop,
+                        pri_zones,
+                        nil,
+                        nil,
+                        0.62,
+                        0.9,
+                        OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+          end
+
           
           # Add a PSZ_AC for each secondary zone
-          self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)
+          if sec_zones.size > 0
+            self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)
+          end
+
 
         end
     
@@ -1068,18 +1086,22 @@ class OpenStudio::Model::Model
           # Add an VAV for the primary zones
           story_name = zones[0].spaces[0].buildingStory.get.name.get
           sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
-          self.add_vav_pfp_boxes(standard,
-                                 sys_name,
-                                chilled_water_loop,
-                                pri_zones,
-                                nil,
-                                nil,
-                                0.62,
-                                0.9,
-                                OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
-          
+          # If and only if there are primary zones to attach to the loop
+          if pri_zones.size > 0
+            self.add_vav_pfp_boxes(standard,
+                                   sys_name,
+                                  chilled_water_loop,
+                                  pri_zones,
+                                  nil,
+                                  nil,
+                                  0.62,
+                                  0.9,
+                                  OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+          end
           # Add a PSZ_HP for each secondary zone
-          self.add_performance_rating_method_baseline_system(standard, 'PSZ_HP', sec_zones)
+          if sec_zones.size > 0
+            self.add_performance_rating_method_baseline_system(standard, 'PSZ_HP', sec_zones)
+          end
 
         end      
 
