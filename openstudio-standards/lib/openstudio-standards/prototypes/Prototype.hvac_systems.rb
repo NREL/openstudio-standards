@@ -1710,7 +1710,6 @@ class OpenStudio::Model::Model
       # Wrap coils in a unitary system or not, depending
       # on the system type.
       if fan_type == 'Cycling'
-
         unitary_system = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(self,
                                                                                   self.alwaysOnDiscreteSchedule,
                                                                                   fan,
