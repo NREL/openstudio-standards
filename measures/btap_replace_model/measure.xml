@@ -1,11 +1,11 @@
 <measure>
   <schema_version>3.0</schema_version>
   <name>replace_model</name>
-  <uid>55a38c30-4274-46b8-a2d4-6f9529114b71</uid>
-  <version_id>7438211b-508d-41e9-a2be-322ff694cb16</version_id>
+  <uid>2b5abde0-82d3-46a5-a43c-1a463ffcd9fa</uid>
+  <version_id>00660de7-3a9f-490f-a0c1-576b6a2d9b6b</version_id>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>ReplaceModel</class_name>
-  <display_name>Replaces OpenStudio Model </display_name>
+  <display_name>Replaces OpenStudio Model with one loaded. </display_name>
   <description></description>
   <modeler_description></modeler_description>
   <arguments>
@@ -53,7 +53,7 @@
       <filename>ReplaceModel_Test.rb</filename>
       <filetype>rb</filetype>
       <usage_type>test</usage_type>
-      <checksum>588891E8</checksum>
+      <checksum>FF8C2ACB</checksum>
     </file>
     <file>
       <version>
@@ -64,7 +64,13 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>BB4C8709</checksum>
+      <checksum>53053AF9</checksum>
+    </file>
+    <file>
+      <filename>5ZoneNoHVAC.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>B5BF926A</checksum>
     </file>
   </files>
 </measure>

@@ -2,7 +2,7 @@
   <schema_version>3.0</schema_version>
   <name>btap_equest_converter</name>
   <uid>ca793d90-fbc6-4f3d-9021-24a204e1b380</uid>
-  <version_id>b8c7b404-b6b0-43b2-a690-796d945f76fb</version_id>
+  <version_id>fdc23df1-62c5-459f-a45d-7a9fc880a4d1</version_id>
   <xml_checksum>68F3FD42</xml_checksum>
   <class_name>BtapEquestConverter</class_name>
   <display_name>btap equest converter</display_name>
@@ -124,12 +124,6 @@
       <checksum>38EFFD21</checksum>
     </file>
     <file>
-      <filename>btap_equest_converter_test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>9F3BAA3E</checksum>
-    </file>
-    <file>
       <filename>basic_2storey_with_basement_wizard_geometry.inp</filename>
       <filetype>inp</filetype>
       <usage_type>test</usage_type>
@@ -172,6 +166,12 @@
       <checksum>7EBF0737</checksum>
     </file>
     <file>
+      <filename>btap_equest_converter_test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>C50561A6</checksum>
+    </file>
+    <file>
       <version>
         <software_program>OpenStudio</software_program>
         <identifier>1.6.0</identifier>
@@ -180,7 +180,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>ED649CF2</checksum>
+      <checksum>1BCB8649</checksum>
     </file>
   </files>
 </measure>
