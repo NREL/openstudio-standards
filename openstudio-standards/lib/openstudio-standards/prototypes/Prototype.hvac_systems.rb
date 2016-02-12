@@ -3010,12 +3010,13 @@ class OpenStudio::Model::Model
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on  
   # @param fan_control_type [Double] valid choices are Continuous, OnOff, Cycling
-  # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa
+  # @param fan_pressure_rise [Double] fan pressure rise, in Pa
   # @param heating_type [Double] valid choices are 
-  # Gas, Electric  
+  # Gas, Electric
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACUnitHeater>] an 
-  # array of the resulting unit heaters.  
+  # array of the resulting unit heaters.
+  # Todo: to leverage this method for proposed model creation, might be useful to add 'Water' to heating type with an optional hot_water_loop to tie it to
   def add_unitheater(standard, 
                     sys_name,
                     thermal_zones, 

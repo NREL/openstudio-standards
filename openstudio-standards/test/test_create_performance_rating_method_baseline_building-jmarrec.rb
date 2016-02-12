@@ -6,7 +6,6 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
   def test_jmarrec
 
-
     model = create_baseline_model('jmarrec', '90.1-2007', 'ASHRAE 169-2006-4A', 'MediumOffice', false)
 
   end

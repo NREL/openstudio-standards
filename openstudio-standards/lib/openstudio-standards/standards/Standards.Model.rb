@@ -138,7 +138,7 @@ class OpenStudio::Model::Model
     sys_groups.each do |sys_group|
 
       # Determine the primary baseline system type
-      system_type = performance_rating_method_baseline_system_type(building_vintage,
+      system_type = self.performance_rating_method_baseline_system_type(building_vintage,
                                                                 climate_zone,
                                                                 sys_group[:occtype], 
                                                                 sys_group[:fueltype],
@@ -504,6 +504,7 @@ class OpenStudio::Model::Model
 
     # Deal with heated only, I assume it takes the fuel type of the dominant space type
     group = {}
+    # Heated only doesn't need stories (actually on nonres does..)
     group[:occtype] = 'heatedonly'
     group[:fueltype]= dom_fuel
     # Add unconditioned to area
@@ -514,7 +515,7 @@ class OpenStudio::Model::Model
 
 
     # Case where you have two different occupancy type
-    if (res_area_ft2 > nonres_area_ft2 && nonres_area_ft2 > exception_min_area_ft2) || (nonres_area_ft2 > res_area_ft2 && res_area_ft2 > exception_min_area_ft2)
+    if ((res_area_ft2 > nonres_area_ft2) && (nonres_area_ft2 > exception_min_area_ft2)) || ((nonres_area_ft2 > res_area_ft2)&& (res_area_ft2 > exception_min_area_ft2))
       # =============  Residential Portion  =============
       # Find the predominant fuel for residential
       # We try to find the fuel exception for the residential portion
@@ -529,13 +530,13 @@ class OpenStudio::Model::Model
           sys_groups << res_fossil
         else
           # All residential is electric, and we sum the area and zones
-          dom = {}
-          dom[:occtype] = 'residential'
-          dom[:fueltype]= 'electric'
-          # Add unconditioned to area
-          dom[:area_ft2]= res_elec[:area_ft2] + res_fossil[:area_ft2]
-          dom[:zones] = res_elec[:zones] + res_fossil[:zones]
-          sys_groups << dom
+          # We put all of res_electric in 'group' (stories get carried over etc)
+          group = res_elec
+          # Todo: Add unconditioned to area?!
+          # Add the residential fossil area and zones
+          group[:area_ft2] += res_fossil[:area_ft2]
+          group[:zones] += res_fossil[:zones]
+          sys_groups << group
         end
       # The residential portion is predominantly fossil
       else
@@ -546,13 +547,13 @@ class OpenStudio::Model::Model
           sys_groups << res_fossil
         else
           # All residential is fossil, and we sum the area and zones, and add that to sys_groups
-          dom = {}
-          dom[:occtype] = 'residential'
-          dom[:fueltype]= 'fossil'
-          # Add unconditioned to area
-          dom[:area_ft2]= res_fossil[:area_ft2] + res_elec[:area_ft2]
-          dom[:zones] = res_fossil[:zones] + res_elec[:zones]
-          sys_groups << dom
+          # We put all of res_electric in 'group' (stories, occtype, fuel gets carried over etc)
+          group = res_fossil
+          # Todo: Add unconditioned to area?!
+          # Add the residential elec area and zones
+          group[:area_ft2] += res_elec[:area_ft2]
+          group[:zones] += res_elec[:zones]
+          sys_groups << group
         end
       end  # =============  End of Residential Portion  =============
 
@@ -569,14 +570,13 @@ class OpenStudio::Model::Model
           sys_groups << nonres_fossil
         else
           # All non residential (sec) is electric, and we sum the area and zones
-          dom = {}
-          dom[:occtype] = 'nonresidential'
-          dom[:fueltype]= 'electric'
-          # Add unconditioned to area
-          dom[:area_ft2]= nonres_elec[:area_ft2] + nonres_fossil[:area_ft2]
-          dom[:zones] = nonres_elec[:zones] + nonres_fossil[:zones]
+          # We clone the nonres elec (attributes such as occtype fueltype and stories are carried over)
+          group = nonres_elec
+          # Add fossil fuel area and zones
+          group[:area_ft2]= nonres_fossil[:area_ft2]
+          group[:zones] = nonres_fossil[:zones]
           # add to sys_groups
-          sys_groups << dom
+          sys_groups << group
         end
         # The nonresidential (sec) portion is predominantly fossil
       else
@@ -587,14 +587,13 @@ class OpenStudio::Model::Model
           sys_groups << nonres_elec
         else
           # All residential is fossil, and we sum the area and zones, and add that to sys_groups
-          dom = {}
-          dom[:occtype] = 'nonresidential'
-          dom[:fueltype]= 'fossil'
-          # Add unconditioned to area
-          dom[:area_ft2]= nonres_fossil[:area_ft2] + nonres_elec[:area_ft2]
-          dom[:zones] = nonres_fossil[:zones] + nonres_elec[:zones]
+          # We clone the nonres fossil (attributes such as occtype fueltype and stories are carried over)
+          group = nonres_fossil
+          # Add nonres elec area and zones
+          group[:area_ft2]+= nonres_elec[:area_ft2]
+          group[:zones] += nonres_elec[:zones]
           # add to sys_groups
-          sys_groups << dom
+          sys_groups << group
         end
       end # =============  End of NON Residential Portion  =============
 
@@ -607,32 +606,39 @@ class OpenStudio::Model::Model
         if res_fossil[:area_ft2] + nonres_fossil[:area_ft2] > exception_min_area_ft2
           # So we add two groups
           # Combined electric (primary fuel)
-          dom = {}
-          dom[:occtype] = dom_occtype
-          dom[:fueltype]= 'electric'
-          dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
-          dom[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
+          # Todo: technically you would classify stories differently too?
+          group = {}
+          group[:occtype] = dom_occtype
+          group[:fueltype]= 'electric'
+          # Combine the stories too (is that right?)
+          group[:stories] = res_stories + nonres_stories
+          group[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
+          group[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
           # add to sys_groups
-          sys_groups << dom
+          sys_groups << group
 
           # Combined fossil (secondary fuel)
-          dom = {}
-          dom[:occtype] = dom_occtype
-          dom[:fueltype]= 'fossil'
-          dom[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          dom[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
+          group = {}
+          group[:occtype] = dom_occtype
+          group[:fueltype]= 'fossil'
+          # Combine the stories too (is that right?)
+          group[:stories] = res_stories + nonres_stories
+          group[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
+          group[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
           # add to sys_groups
-          sys_groups << dom
+          sys_groups << group
 
         else
           # We only have one group
-          dom = {}
-          dom[:occtype] = dom_occtype
-          dom[:fueltype]= 'electric'
-          dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          dom[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
+          group = {}
+          group[:occtype] = dom_occtype
+          group[:fueltype]= 'electric'
+          # Combine the stories too (here it's definitely fine)
+          group[:stories] = res_stories + nonres_stories
+          group[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
+          group[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
           # add to sys_groups
-          sys_groups << dom
+          sys_groups << group
 
         end
 
@@ -642,503 +648,44 @@ class OpenStudio::Model::Model
         if res_elec[:area_ft2] + nonres_elec[:area_ft2] + unconditioned[:area_ft2] > exception_min_area_ft2
           # So we add two groups
           # Combined fossil (primary fuel)
-          dom = {}
-          dom[:occtype] = dom_occtype
-          dom[:fueltype]= 'fossil'
-          dom[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          dom[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
+          group = {}
+          group[:occtype] = dom_occtype
+          group[:fueltype]= 'fossil'
+          # Combine the stories too (is that right?)
+          group[:stories] = res_stories + nonres_stories
+          group[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
+          group[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
           # add to sys_groups
-          sys_groups << dom
+          sys_groups << group
 
           # Combined electric (secondary fuel)
-          dom = {}
-          dom[:occtype] = dom_occtype
-          dom[:fueltype]= 'electric'
-          dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
-          dom[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
+          group = {}
+          group[:occtype] = dom_occtype
+          group[:fueltype]= 'electric'
+          # Combine the stories too (is that right?)
+          group[:stories] = res_stories + nonres_stories
+          group[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
+          group[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
           # add to sys_groups
-          sys_groups << dom
+          sys_groups << group
 
         else
           # We only have one group
-          dom = {}
-          dom[:occtype] = dom_occtype
-          dom[:fueltype]= 'fossil'
-          dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          dom[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
+          group = {}
+          group[:occtype] = dom_occtype
+          group[:fueltype]= 'fossil'
+          # Combine the stories too (here it's fine)
+          group[:stories] = res_stories + nonres_stories
+          group[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
+          group[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
           # add to sys_groups
-          sys_groups << dom
+          sys_groups << group
 
         end
 
       end
 
     end
-
-
-=begin
-
-    if res_area_ft2 > nonres_area_ft2
-      dom_occtype = 'residential'
-
-      # If the nonres is over the exception, then go for it
-      if nonres_area_ft2 > exception_min_area_ft2
-        sec_occtype = 'nonresidential'
-
-        # =============  Residential Portion  =============
-        # Find the predominant fuel for residential
-        # We try to find the fuel exception for the residential portion
-        # We add the unconditioned (=elec) to the predominant type so here
-
-        # If the predominant fuel of the residential portion is electricity
-        if res_elec[:area_ft2] + unconditioned[:area_ft2] > res_fossil[:area_ft2]
-          # We check if the fossil fuel warrants an exception
-          if res_fossil[:area_ft2] > exception_min_area_ft2
-            # If so, we add both res to the sys_group
-            sys_groups << res_elec
-            sys_groups << res_fossil
-          else
-            # All residential is electric, and we sum the area and zones
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            # Add unconditioned to area
-            dom[:area_ft2]= res_elec[:area_ft2] + res_fossil[:area_ft2]
-            dom[:zones] = res_elec[:zones] + res_fossil[:zones]
-            sys_groups << dom
-          end
-        # The residential portion is predominantly fossil
-        else
-          # We check if the electricity warrants an exception
-          if res_elec[:area_ft2] > exception_min_area_ft2
-            # If so, we add both res to the sys_group
-            sys_groups << res_elec
-            sys_groups << res_fossil
-          else
-            # All residential is fossil, and we sum the area and zones, and add that to sys_groups
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'fossil'
-            # Add unconditioned to area
-            dom[:area_ft2]= res_fossil[:area_ft2] + res_elec[:area_ft2]
-            dom[:zones] = res_fossil[:zones] + res_elec[:zones]
-            sys_groups << dom
-          end
-        end  # =============  End of Residential Portion  =============
-
-
-
-        # =============  Non Residential Portion  =============
-        # Find the predominant fuel for non residential
-        # If the predominant fuel of the nonresidential portion is electricity
-        if nonres_elec[:area_ft2] > nonres_fossil[:area_ft2]
-          # We check if the fossil fuel warrants an exception
-          if nonres_fossil[:area_ft2] > exception_min_area_ft2
-            # If so, we add both res to the sys_group
-            sys_groups << nonres_elec
-            sys_groups << nonres_fossil
-          else
-            # All non residential (sec) is electric, and we sum the area and zones
-            dom = {}
-            dom[:occtype] = 'nonresidential'
-            dom[:fueltype]= 'electric'
-            # Add unconditioned to area
-            dom[:area_ft2]= nonres_elec[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] = nonres_elec[:zones] + nonres_fossil[:zones]
-            sys_groups << dom
-          end
-          # The nonresidential (sec) portion is predominantly fossil
-        else
-          # We check if the electricity warrants an exception
-          if nonres_elec[:area_ft2] > exception_min_area_ft2
-            # If so, we add both res to the sys_group
-            sys_groups << nonres_elec
-            sys_groups << nonres_elec
-          else
-            # All residential is fossil, and we sum the area and zones, and add that to sys_groups
-            dom = {}
-            dom[:occtype] = 'nonresidential'
-            dom[:fueltype]= 'fossil'
-            # Add unconditioned to area
-            dom[:area_ft2]= nonres_fossil[:area_ft2] + nonres_elec[:area_ft2]
-            dom[:zones] = nonres_fossil[:zones] + nonres_elec[:zones]
-            sys_groups << dom
-          end
-        end # =============  End of NON Residential Portion  =============
-
-
-
-
-      # if there is no secondary occupancy type, we find the combined predominant fuel type
-      else
-        # unconditioned is assumed electric/other per ASHRAE
-        if res_elec[:area_ft2] + nonres_elec[:area_ft2] + unconditioned[:area_ft2] > res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          dom_fuel_type = 'electric'
-          # Then we try to find if the combined fossil warrants the fuel source exception
-          if res_fossil[:area_ft2] + nonres_fossil[:area_ft2] > exception_min_area_ft2
-            # So we add two groups
-            # Combined electric (primary fuel)
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
-            dom[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
-            sys_groups << dom
-
-            # Combined fossil (secondary fuel)
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'fossil'
-            dom[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
-
-          else
-            # We only have one group
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
-
-          end
-
-        # Else the building predominant fuel type is fossil fuel, we check if the electric one is an exception
-        else
-          # if if warrants an exception
-          if res_elec[:area_ft2] + nonres_elec[:area_ft2] + unconditioned[:area_ft2] > exception_min_area_ft2
-            # So we add two groups
-            # Combined fossil (primary fuel)
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'fossil'
-            dom[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
-
-            # Combined electric (secondary fuel)
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
-            dom[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
-            sys_groups << dom
-
-          else
-            # We only have one group
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
-
-
-          end
-
-        end
-      end
-
-    # ================= START CASE WHERE PRIMARY OCCUPANCY IS NON RESIDENTIAL ============================
-    # else if the predominant occupancy type is Non residential
-    else
-      dom_occtype = 'nonresidential'
-
-      # If the res is over the exception, then go for it
-      if res_area_ft2 > exception_min_area_ft2
-        sec_occtype = 'nonresidential'
-
-        # =============  Residential Portion (Secondary)  =============
-        # Find the predominant fuel for residential
-        # We try to find the fuel exception for the residential portion
-        # We add the unconditioned (=elec) to the predominant type so here
-
-        # If the predominant fuel of the residential portion is electricity
-        if res_elec[:area_ft2] + unconditioned[:area_ft2] > res_fossil[:area_ft2]
-          # We check if the fossil fuel warrants an exception
-          if res_fossil[:area_ft2] > exception_min_area_ft2
-            # If so, we add both res to the sys_group
-            sys_groups << res_elec
-            sys_groups << res_fossil
-          else
-            # All residential is electric, and we sum the area and zones
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            # Add unconditioned to area
-            dom[:area_ft2]= res_elec[:area_ft2] + res_fossil[:area_ft2]
-            dom[:zones] = res_elec[:zones] + res_fossil[:zones]
-            sys_groups << dom
-          end
-          # The residential portion is predominantly fossil
-        else
-          # We check if the electricity warrants an exception
-          if res_elec[:area_ft2] > exception_min_area_ft2
-            # If so, we add both res to the sys_group
-            sys_groups << res_elec
-            sys_groups << res_fossil
-          else
-            # All residential is fossil, and we sum the area and zones, and add that to sys_groups
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'fossil'
-            # Add unconditioned to area
-            dom[:area_ft2]= res_fossil[:area_ft2] + res_elec[:area_ft2]
-            dom[:zones] = res_fossil[:zones] + res_elec[:zones]
-            sys_groups << dom
-          end
-        end  # =============  End of Residential Portion  =============
-
-
-
-        # =============  Non Residential Portion  =============
-        # Find the predominant fuel for non residential
-        # If the predominant fuel of the nonresidential portion is electricity
-        if nonres_elec[:area_ft2] > nonres_fossil[:area_ft2]
-          # We check if the fossil fuel warrants an exception
-          if nonres_fossil[:area_ft2] > exception_min_area_ft2
-            # If so, we add both res to the sys_group
-            sys_groups << nonres_elec
-            sys_groups << nonres_fossil
-          else
-            # All non residential (pri) is electric, and we sum the area and zones
-            dom = {}
-            dom[:occtype] = 'nonresidential'
-            dom[:fueltype]= 'electric'
-            # Add unconditioned to area
-            dom[:area_ft2]= nonres_elec[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] = nonres_elec[:zones] + nonres_fossil[:zones]
-            sys_groups << dom
-          end
-          # The residential (pri) portion is predominantly fossil
-        else
-          # We check if the electricity warrants an exception
-          if nonres_elec[:area_ft2] > exception_min_area_ft2
-            # If so, we add both res to the sys_group
-            sys_groups << nonres_elec
-            sys_groups << nonres_elec
-          else
-            # All residential is fossil, and we sum the area and zones, and add that to sys_groups
-            dom = {}
-            dom[:occtype] = 'nonresidential'
-            dom[:fueltype]= 'fossil'
-            # Add unconditioned to area
-            dom[:area_ft2]= nonres_fossil[:area_ft2] + nonres_elec[:area_ft2]
-            dom[:zones] = nonres_fossil[:zones] + nonres_elec[:zones]
-            sys_groups << dom
-          end
-        end # =============  End of NON Residential Portion  =============
-
-
-
-
-        # if there is no secondary occupancy type, we find the combined predominant fuel type
-      else
-        # unconditioned is assumed electric/other per ASHRAE
-        if res_elec[:area_ft2] + nonres_elec[:area_ft2] + unconditioned[:area_ft2] > res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          dom_fuel_type = 'electric'
-          # Then we try to find if the combined fossil warrants the fuel source exception
-          if res_fossil[:area_ft2] + nonres_fossil[:area_ft2] > exception_min_area_ft2
-            # So we add two groups
-            # Combined electric (primary fuel)
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
-            dom[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
-            sys_groups << dom
-
-            # Combined fossil (secondary fuel)
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'fossil'
-            dom[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
-
-          else
-            # We only have one group
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
-
-          end
-
-          # Else the building predominant fuel type is fossil fuel, we check if the electric one is an exception
-        else
-          # if if warrants an exception
-          if res_elec[:area_ft2] + nonres_elec[:area_ft2] + unconditioned[:area_ft2] > exception_min_area_ft2
-            # So we add two groups
-            # Combined fossil (primary fuel)
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'fossil'
-            dom[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
-
-            # Combined electric (secondary fuel)
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
-            dom[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
-            sys_groups << dom
-
-          else
-            # We only have one group
-            dom = {}
-            dom[:occtype] = 'residential'
-            dom[:fueltype]= 'electric'
-            dom[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-            dom[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
-
-
-          end
-
-        end
-      end
-    end
-
-
-      # Step 2: Determine Predominant Fuel Type for each of the occupancy types (that's my interpretation)
-    # Question: where do you count the unconditioned spaces?
-    # Either you assume it's non residential, or you assume it's in the predominant type
-    # I'll assume it's in nonresidential
-
-    # My interpretation is that occupancy trumps fuel type.
-    # You start by categorizing on occupancy
-    # Then, WITHIN (PNNL says "for each") the occupancy, you check if there's ALSO a fuel exception
-
-    if dom_occtype == 'residential'
-      # Determine dominant fuel type
-      if res_elec[:area_ft2] > res_fossil[:area_ft2]
-        dom_occtype_dom_fuel = 'electric'
-      else
-        dom_occtype_dom_fuel = 'fossil'
-      end
-      # Determine secondary fuel type
-      if nonres_elec[:area_ft2] + unconditioned[:area_ft2] > nonres_fossil[:area_ft2]
-        sec_occtype_dom_fuel = 'electric'
-      else
-        sec_occtype_dom_fuel = 'fossil'
-      end
-
-    elsif dom_occtype == 'nonresidential'
-      # If occupancy is nonres, and the dominant fuel type for it is electricity
-      if nonres_elec[:area_ft2] + unconditioned[:area_ft2] > nonres_fossil[:area_ft2]
-        dom_occtype_dom_fuel = 'electric'
-        # if for non res, fossil fuel warrants an exception
-        if nonres_fossil[:area_ft2] > exception_min_area_ft2
-          dom_occtype_sec_fuel = 'fossil'
-        end
-
-      else
-        dom_occtype_dom_fuel = 'fossil'
-        # if for non res, electricity warrants an exception
-        if nonres_fossil[:area_ft2] > exception_min_area_ft2
-          dom_occtype_sec_fuel = 'fossil'
-        end
-      end
-      # Determine secondary fuel type
-      if res_elec[:area_ft2] > res_fossil[:area_ft2]
-        sec_occtype_dom_fuel = 'electric'
-        # Check if the other fuel warrants an exception
-        if res_fossil[:area_ft2] > exception_min_area_ft2
-          sec_occtype_sec_fuel = 'fossil'
-        end
-      else
-        sec_occtype_dom_fuel = 'fossil'
-        # Check if the other fuel warrants an exception
-        if res_elec[:area_ft2] > exception_min_area_ft2
-          sec_occtype_sec_fuel = 'electric'
-        end
-      end
-    end
-
-
-    h_groupby_fuels = all_types.group_by{|h| h[:fueltype]}
-    # [1] (main)> h_groupby_fuels.keys
-    # => ["fossil", "electric"]
-    # either or..
-    #fossil_area_ft2 = h_groupby_fuels['fossil'].map {|h| h[:area_ft2]}.inject(:+)
-    fossil_area_ft2 = h_groupby_fuels['fossil'].inject(0) {|sum, h| sum + h[:area_ft2]}
-    # This will take the actual electric equipment and the unconditioned zones, which are supposed to be categorized as Electric/other per note on table G3.1.1A
-    # Where no heating system is to be provided or no heating energy source is specified, use the “Electric and Other” heating source classification
-    electric_area_ft2 = h_groupby_fuels['electric'].inject(0) {|sum, h| sum + h[:area_ft2]}
-
-    if electric_area_ft2 > fossil_area_ft2
-      dom_fuel = 'electric'
-    else
-      dom_fuel = 'fossil'
-    end
-
-    # Categorize the hashes
-    dom_type_dom_fuel = nil
-    dom_type_sec_fuel = nil
-    sec_type_dom_fuel = nil
-    sec_type_sec_fuel = nil
-    [heatedonly_fossil, heatedonly_elec, res_fossil, res_elec, nonres_fossil, nonres_elec].each do |data|
-      if data[:occtype] == dom_type && data[:fueltype] == dom_fuel
-        dom_type_dom_fuel = data
-      elsif data[:occtype] == dom_type && data[:fueltype] != dom_fuel
-        dom_type_sec_fuel = data
-      elsif data[:occtype] != dom_type && data[:fueltype] == dom_fuel
-        sec_type_dom_fuel = data
-      elsif data[:occtype] != dom_type && data[:fueltype] != dom_fuel
-        sec_type_sec_fuel = data
-      end
-    end
-
-
-
-
- 
-    
-    
-    
-    
-    # Jmarrec to @asparke2: Not sure about the way it's currently done.
-    # Shouldn't you do:
-    # * Occupancy: sec_type_dom_fuel + sec_type_sec_fuel > exception_min_area_ft2
-    # * Fuel :and dom_type_sec_fuel + sec_type_sec_fuel > exception_min_area_ft2
-
-    # There are four possible categories of data
-    # dom is the dominant zones, or zones that don't fall into an exception
-    # exc_fuel is any group of zones that meet the fuel type exception (G3.1.1, exception a)
-    # exc_occ is any group of zones that meet the occ type exception (G3.1.1, exception b?)
-    # exc_fuel_occ is any group of zones that meet both the fuel and occ typ exceptions
-    dom = dom_type_dom_fuel
-    exc_fuel = nil
-    exc_occ = nil
-    exc_fuel_occ = nil
-    # Exception for fuel type
-    if dom_type_sec_fuel[:area_ft2] > exception_min_area_ft2
-      exc_fuel = dom_type_sec_fuel
-    else
-      dom[:area_ft2] += dom_type_sec_fuel[:area_ft2]
-      dom[:zones] += dom_type_sec_fuel[:zones]
-    end
-    # Exception for occupancy type
-    if sec_type_dom_fuel[:area_ft2] > exception_min_area_ft2
-      exc_fuel = sec_type_dom_fuel
-    else
-      dom[:area_ft2] += sec_type_dom_fuel[:area_ft2]
-      dom[:zones] += sec_type_dom_fuel[:zones]
-    end    
-    # Exception for fuel type and occupancy type
-    if sec_type_sec_fuel[:area_ft2] > exception_min_area_ft2
-      exc_fuel = sec_type_sec_fuel
-    else
-      dom[:area_ft2] += sec_type_sec_fuel[:area_ft2]
-      dom[:zones] += sec_type_sec_fuel[:zones]
-    end     
-
-    # Put all the non-nil groups into an array. 
-    # A group will be nil if the exception was not triggered.
-    sys_groups = []
-    [dom, exc_fuel, exc_occ, exc_fuel_occ].each do |data|
-      next if data.nil?
-      sys_groups << data
-    end
-=end
 
 
     
@@ -1204,9 +751,9 @@ class OpenStudio::Model::Model
         end
       when 'heatedonly'
         if heating_fuel_type == 'electric'
-          sys_num = 'Electric_Furnace' # sys 9
+          system_type = 'Electric_Furnace' # sys 9
         else
-          sys_num = 'Gas_Furnace' # sys 10
+          system_type = 'Gas_Furnace' # sys 10
         end
       end
       
@@ -1259,9 +806,9 @@ class OpenStudio::Model::Model
         end
       when 'heatedonly'
         if heating_fuel_type == 'electric'
-          sys_num = 'Electric_Furnace' # sys 9
+          system_type = 'Electric_Furnace' # sys 9
         else
-          sys_num = 'Gas_Furnace' # sys 10
+          system_type = 'Gas_Furnace' # sys 10
         end
       end
 
@@ -1421,7 +968,7 @@ class OpenStudio::Model::Model
 
       
       
-      
+      # Sys7
       when 'VAV_Reheat'
       
         # Retrieve the existing hot water loop
@@ -1457,6 +1004,10 @@ class OpenStudio::Model::Model
         # Add the baseline system type to the primary zones
         # and add the suplemental system type to the secondary zones.
         story_zone_lists.each do |zones|
+
+          # The group_zones_by_story NO LONGER returns empty lists when a given floor doesn't have any of the zones
+          # So NO need to filter it out otherwise you get an error undefined method `spaces' for nil:NilClass
+          next if zones.empty?
         
           # Differentiate primary and secondary zones
           pri_sec_zone_lists = self.differentiate_primary_secondary_thermal_zones(zones)
@@ -1465,8 +1016,9 @@ class OpenStudio::Model::Model
           
           # Add an VAV for the primary zones
           story_name = zones[0].spaces[0].buildingStory.get.name.get
+          sys_name = "#{story_name} VAV_Reheat (Sys7)"
           self.add_vav_reheat(standard, 
-                      nil, 
+                      sys_name,
                       hot_water_loop, 
                       chilled_water_loop,
                       pri_zones,
@@ -1515,8 +1067,9 @@ class OpenStudio::Model::Model
           
           # Add an VAV for the primary zones
           story_name = zones[0].spaces[0].buildingStory.get.name.get
-          self.add_vav_pfp_boxes(standard, 
-                                nil, 
+          sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
+          self.add_vav_pfp_boxes(standard,
+                                 sys_name,
                                 chilled_water_loop,
                                 pri_zones,
                                 nil,
@@ -1530,9 +1083,27 @@ class OpenStudio::Model::Model
 
         end      
 
-      when 'Gas_Furnace'
-      
+        when 'Gas_Furnace'
+          # Add a System 9 - Gas Unit Heater to each zone
+          self.add_unitheater(standard,
+                             nil,
+                             zones,
+                             nil,
+                             'ConstantVolume',
+                             OpenStudio::convert(0.2, "inH_{2}O", "Pa").get,
+                             'Gas',
+                             nil)
+
       when 'Electric_Furnace'
+        # Add a System 10 - Electric Unit Heater to each zone
+        self.add_unitheater(standard,
+                              nil,
+                              zones,
+                              nil,
+                              'ConstantVolume',
+                              OpenStudio::convert(0.2, "inH_{2}O", "Pa").get,
+                              'Electric',
+                              nil)
       
       else
       
@@ -1758,7 +1329,7 @@ class OpenStudio::Model::Model
 
   # Group an array of zones into multiple arrays, one
   # for each story in the building.
-  #
+  # Removes empty array (when the story doesn't contain any of the zones)
   # @return [Array<Array<OpenStudio::Model::ThermalZone>>] array of arrays of zones
   def group_zones_by_story(zones)
   
@@ -1785,8 +1356,13 @@ class OpenStudio::Model::Model
           zones_on_story << zone
         end
       end
-      
-      story_zone_lists << zones_on_story
+
+      # Todo: Not sure if we want to return a an empty list if a given floor doesn't contain of the specified zones (and need to filter it out later) or not
+      # But this is causing problems on several locations, so I'm filtering it now
+
+      if zones_on_story.size > 0
+        story_zone_lists << zones_on_story
+      end
 
     end
     
