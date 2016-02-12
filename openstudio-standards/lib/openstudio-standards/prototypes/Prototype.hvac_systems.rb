@@ -1326,7 +1326,9 @@ class OpenStudio::Model::Model
         fan.setPressureRise(fan_static_pressure_pa)
         fan.setFanEfficiency(0.54)
         fan.setMotorEfficiency(0.90)
-
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.Model.Model', "Fan type '#{fan_type}' not recognized, cannot add PSZ-AC.")
+        return []
       end
 
       htg_coil = nil
@@ -3055,7 +3057,7 @@ class OpenStudio::Model::Model
         htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, hvac_op_sch)
         htg_coil.setName("#{zone.name} UnitHeater Electric Htg Coil")
       else
-        puts "No heating type is found"
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.Model.Model', "No heating type was found when adding unit heater; no unit heater will be created.")
         return false
       end
 
