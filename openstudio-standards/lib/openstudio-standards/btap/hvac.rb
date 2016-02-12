@@ -2790,6 +2790,7 @@ module BTAP
               when "DX"
                 htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)  
                 supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
+                htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-10.0)
                 
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")
