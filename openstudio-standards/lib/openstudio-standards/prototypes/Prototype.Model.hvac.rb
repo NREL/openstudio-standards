@@ -87,14 +87,35 @@ class OpenStudio::Model::Model
         
       when 'PSZ-AC'
       
+        # Special logic to differentiate between operation schedules
+        # that vary even inside of a system type for stripmall.
+        hvac_op_sch = nil
+        oa_sch = nil
+        if system['hvac_op_sch_index'].nil? || system['hvac_op_sch_index'] == 1
+          hvac_op_sch = prototype_input['pszac_operation_schedule']
+          oa_sch = prototype_input['pszac_oa_damper_schedule']
+        elsif system['hvac_op_sch_index'] == 2
+          hvac_op_sch = prototype_input['pszac_operation_schedule_2']
+          oa_sch = prototype_input['pszac_oa_damper_schedule_2']
+        elsif system['hvac_op_sch_index'] == 3
+          hvac_op_sch = prototype_input['pszac_operation_schedule_3']
+          oa_sch = prototype_input['pszac_oa_damper_schedule_3']
+        end
+      
+        # Special logic to make unitary heat pumps all blow-through
+        fan_position = 'DrawThrough'
+        if prototype_input['pszac_heating_type'] == 'Single Speed Heat Pump'
+          fan_position = 'BlowThrough'
+        end
+      
         self.add_psz_ac(building_vintage, 
                         system['name'], 
                         nil, 
                         nil,
                         thermal_zones, 
-                        prototype_input['pszac_operation_schedule'],
-                        prototype_input['pszac_oa_damper_schedule'],
-                        'DrawThrough', 
+                        hvac_op_sch,
+                        oa_sch,
+                        fan_position, 
                         prototype_input['pszac_fan_type'],
                         prototype_input['pszac_heating_type'],
                         prototype_input['pszac_supplemental_heating_type'],
