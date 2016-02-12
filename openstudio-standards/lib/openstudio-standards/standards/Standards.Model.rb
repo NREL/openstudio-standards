@@ -772,15 +772,26 @@ dom_fuel=>#{type[:dom_fuel]},
         end      
       
         # Add a hot water PTAC to each zone
+        # Don't think this call is right... from Prototype.Model.hvac.add_ptac
+=begin
+        def add_ptac(standard,
+                     sys_name,
+                     hot_water_loop,
+                     thermal_zones,
+                     fan_type,
+                     heating_type,
+                     cooling_type,
+                     building_type=nil)
+
+=end
         self.add_ptac(standard,
                       nil,
                       hot_water_loop,
                       zones,
                       'ConstantVolume',
                       'Water',
-                      'NaturalGas',
                       'Single Speed DX AC')
- 
+
       when 'PTHP'
       
         # Add an air-source packaged terminal

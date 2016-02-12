@@ -2533,7 +2533,7 @@ class OpenStudio::Model::Model
   # @param thermal_zones [String] zones to connect to this system
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
   # @param heating_type [Double] valid choices are 
-  # Gas, Electric
+  # Gas, Electric, Water
   # @param cooling_type [String] valid choices are 
   # Two Speed DX AC, Single Speed DX AC
   # @param building_type [String] the building type
@@ -2606,8 +2606,19 @@ class OpenStudio::Model::Model
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
           return false
         end
+
+        hw_sizing = hot_water_loop.sizingPlant
+        hw_temp_c = hw_sizing.designLoopExitTemperature
+        hw_delta_t_k = hw_sizing.loopDesignTemperatureDifference
+
+        # Using openstudio defaults for now...
+        prehtg_sa_temp_c = 16.6
+        htg_sa_temp_c = 32.2
+
+
         htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-        htg_coil.setName("#{air_loop.name} Water Htg Coil")
+        htg_coil.setName("#{hot_water_loop.name} Water Htg Coil")
+        # None of these temperatures are defined
         htg_coil.setRatedInletWaterTemperature(hw_temp_c)
         htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
         htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
