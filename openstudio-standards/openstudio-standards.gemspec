@@ -27,5 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest-reporters"
   spec.add_development_dependency "rubyXL", "~> 3.3.0" # install rubyXL gem to export excel files to json
   spec.add_development_dependency "google-api-client" # to download Openstudio_Standards Google Spreadsheet
+  spec.add_development_dependency "coveralls" # to perform code coverage checking
   
 end
