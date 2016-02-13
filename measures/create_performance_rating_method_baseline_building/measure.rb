@@ -27,7 +27,7 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
     standard_chs = OpenStudio::StringVector.new
     #standard_chs << '90.1-2004'
     #standard_chs << '90.1-2007'
-    #standard_chs << '90.1-2010'
+    standard_chs << '90.1-2010'
     standard_chs << '90.1-2013'
     standard_chs << 'India ECBC 2007'
     standard = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('standard', standard_chs, true)

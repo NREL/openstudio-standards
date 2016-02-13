@@ -40,7 +40,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Unit::TestCa
     "standard" => standard,
     "building_type" => building_type,
     "climate_zone" => climate_zone,
-    "debug" => true
+    "debug" => false
     }
     
     i = 0
@@ -59,22 +59,30 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Unit::TestCa
     # Ensure the measure finished as expected
     assert(result.value.valueName == "Success")
   
+    model.save(OpenStudio::Path.new("output/#{model_name}_baseline.osm"), true)  
+  
     return model
   
   end
   
-  def test_901_2013_sec_school
+  def dont_test_901_2013_sec_school
   
     model = apply_measure_to_model('SecondarySchool-DOE Ref Pre-1980-ASHRAE 169-2006-2A.osm', '90.1-2013', 'ASHRAE 169-2006-2A', 'SecondarySchool')
   
     # Conditions expected to be true in the baseline model
+    
+    # Lighting power densities
 
   end
   
-  def dont_test_india_ecbc_2007_sec_school
+  def test_901_2010_sec_school
   
+    model = apply_measure_to_model('SecondarySchool-DOE Ref Pre-1980-ASHRAE 169-2006-2A.osm', '90.1-2010', 'ASHRAE 169-2006-2A', 'SecondarySchool')
+  
+    # Conditions expected to be true in the baseline model
     
-  
-  end
+    # Lighting power densities
+
+  end   
   
 end
