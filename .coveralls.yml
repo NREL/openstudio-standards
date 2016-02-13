@@ -1,2 +1,5 @@
 service_name: circleci
 repo_token: eSSTEMIukghhVxNNkJ7Wp3pWDzgGQhowV
+notify:
+  webhooks:
+    - url: https://coveralls.io/webhook?repo_token=eSSTEMIukghhVxNNkJ7Wp3pWDzgGQhowV
