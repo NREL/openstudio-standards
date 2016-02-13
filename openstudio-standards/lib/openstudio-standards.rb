@@ -25,6 +25,7 @@ module OpenstudioStandards
   # Utilities
   require_relative 'openstudio-standards/utilities/logging'
   require_relative 'openstudio-standards/utilities/simulation'
+  require_relative 'openstudio-standards/utilities/hash'
 
   # Load the Openstudio Standards JSON
   # and assign to a constant.  This

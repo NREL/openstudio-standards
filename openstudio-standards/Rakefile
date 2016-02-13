@@ -12,7 +12,8 @@ require 'rake/testtask'
 desc 'Run test group 0'
 Rake::TestTask.new('test:gem_group_0') do |task|
   task.test_files = FileList[
-  'openstudio-standards/test/test_primary_school.rb'
+  'openstudio-standards/test/test_primary_school.rb',
+  'openstudio-standards/test/test_warehouse.rb'
   ]
 end
 
@@ -44,7 +45,8 @@ Rake::TestTask.new('test:gem_group_3') do |task|
   'openstudio-standards/test/test_retail_standalone.rb', # 6 min
   'openstudio-standards/test/test_full_service_restaurant.rb', # 10 min
   'openstudio-standards/test/test_small_office.rb', # 7 min
-  'openstudio-standards/test/test_mid_rise_apartment.rb' # 7 min
+  'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
+  'openstudio-standards/test/test_high_rise_apartment.rb' # 7 min
   ]
 end
 

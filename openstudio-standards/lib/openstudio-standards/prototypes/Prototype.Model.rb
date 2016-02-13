@@ -99,6 +99,10 @@ class OpenStudio::Model::Model
     if building_type == "MidriseApartment"
       self.update_waterheater_loss_coefficient(building_vintage)
     end
+    
+    if building_type == "HighriseApartment"
+      self.update_fan_efficiency
+    end
 
     # Add output variables for debugging
     if debug
@@ -182,6 +186,8 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.outpatient'
     when 'MidriseApartment'
       building_methods = 'Prototype.mid_rise_apartment'
+    when 'HighriseApartment'
+      building_methods = 'Prototype.high_rise_apartment'
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
@@ -233,7 +239,7 @@ class OpenStudio::Model::Model
       alt_search_name = 'Office'
       case building_vintage
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004','DOE Ref 2004'
-        geometry_file = 'Geometry.large_office.osm'
+        geometry_file = 'Geometry.large_office_reference.osm'
       else
         geometry_file = 'Geometry.large_office_2010.osm'
       end
@@ -301,6 +307,8 @@ class OpenStudio::Model::Model
       geometry_file = 'Geometry.outpatient.osm'
     when 'MidriseApartment'
       geometry_file = 'Geometry.mid_rise_apartment.osm'
+    when 'HighriseApartment'
+      geometry_file = 'Geometry.high_rise_apartment.osm'
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
@@ -726,7 +734,8 @@ class OpenStudio::Model::Model
       if thermostat.empty?
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
       else
-        zone.setThermostatSetpointDualSetpoint(thermostat.get)
+        thermostatClone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
+        zone.setThermostatSetpointDualSetpoint(thermostatClone)
       end
     end
 
@@ -1010,7 +1019,7 @@ class OpenStudio::Model::Model
       end
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       case building_type
-      when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'OutPatientHealthCare', 'PrimarySchool'
+      when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'Outpatient', 'PrimarySchool'
         clg = 1.0
         htg = 1.0
       end
