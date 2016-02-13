@@ -329,8 +329,8 @@ class OpenStudio::Model::Model
             data['area_ft2'] += area_ft2
             data['zones'] << zone
           end
-        # Nonresidential Fossil
-        elsif data['type'] == 'nonresidential' && data['fuel'] == 'fossil'
+        # Nonresidential Electric
+        elsif data['type'] == 'nonresidential' && data['fuel'] == 'electric'
           if !zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
             data['area_ft2'] += area_ft2
             data['zones'] << zone
