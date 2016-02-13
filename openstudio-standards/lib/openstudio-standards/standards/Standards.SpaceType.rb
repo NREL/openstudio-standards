@@ -89,7 +89,7 @@ class OpenStudio::Model::SpaceType
     # People
     people_have_info = false
     occupancy_per_area = space_type_properties['occupancy_per_area'].to_f
-    people_have_info = true unless(occupancy_per_area == 0 || occupancy_per_area.nil?)
+    people_have_info = true unless occupancy_per_area == 0
 
     if set_people && people_have_info
     
@@ -116,7 +116,7 @@ class OpenStudio::Model::SpaceType
       # Modify the definition of the instance
       instances.each do |instance|
         definition = instance.peopleDefinition
-        unless  occupancy_per_area == 0 || occupancy_per_area.nil?
+        unless occupancy_per_area == 0
           definition.setPeopleperSpaceFloorArea(OpenStudio.convert(occupancy_per_area/1000,'people/ft^2','people/m^2').get)
           OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set occupancy to #{occupancy_per_area} people/1000 ft^2.")
         end
@@ -221,8 +221,8 @@ class OpenStudio::Model::SpaceType
       end
  
       # If additional lights are specified, add those too
-      additional_lighting_per_area = space_type_properties['additional_lighting_per_area']
-      unless additional_lighting_per_area.nil?
+      additional_lighting_per_area = space_type_properties['additional_lighting_per_area'].to_f
+      unless additional_lighting_per_area == 0
         # Create the lighting definition
         additional_lights_def = OpenStudio::Model::LightsDefinition.new(model)
         additional_lights_def.setName("#{name} Additional Lights Definition")
@@ -241,11 +241,11 @@ class OpenStudio::Model::SpaceType
     
     # Electric Equipment
     elec_equip_have_info = false
-    elec_equip_per_area = space_type_properties['elec_equip_per_area']
-    elec_equip_frac_latent = space_type_properties['electric_equipment_fraction_latent']
-    elec_equip_frac_radiant = space_type_properties['electric_equipment_fraction_radiant']
-    elec_equip_frac_lost = space_type_properties['electric_equipment_fraction_lost']
-    elec_equip_have_info = true unless (elec_equip_per_area == 0 || elec_equip_per_area.nil?)
+    elec_equip_per_area = space_type_properties['electric_equipment_per_area'].to_f
+    elec_equip_frac_latent = space_type_properties['electric_equipment_fraction_latent'].to_f
+    elec_equip_frac_radiant = space_type_properties['electric_equipment_fraction_radiant'].to_f
+    elec_equip_frac_lost = space_type_properties['electric_equipment_fraction_lost'].to_f
+    elec_equip_have_info = true unless elec_equip_per_area == 0
 
     if set_electric_equipment && elec_equip_have_info
     
@@ -271,17 +271,17 @@ class OpenStudio::Model::SpaceType
       # Modify the definition of the instance
       instances.each do |instance|
         definition = instance.electricEquipmentDefinition
-        unless elec_equip_per_area == 0 || elec_equip_per_area.nil?
+        unless elec_equip_per_area == 0
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(elec_equip_per_area.to_f,'W/ft^2','W/m^2').get)
           OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set electric EPD to #{elec_equip_per_area} W/ft^2.")
         end
-        unless elec_equip_frac_latent == 0 || elec_equip_frac_latent.nil?
+        unless elec_equip_frac_latent == 0
           definition.setFractionLatent(elec_equip_frac_latent)
         end
-        unless elec_equip_frac_radiant == 0 || elec_equip_frac_radiant.nil?
+        unless elec_equip_frac_radiant == 0
           definition.setFractionRadiant(elec_equip_frac_radiant)
         end
-        unless elec_equip_frac_lost == 0 || elec_equip_frac_lost.nil?
+        unless elec_equip_frac_lost == 0
           definition.setFractionLost(elec_equip_frac_lost)
         end
       end
@@ -290,11 +290,11 @@ class OpenStudio::Model::SpaceType
 
     # Gas Equipment
     gas_equip_have_info = false
-    gas_equip_per_area = space_type_properties['gas_equip_per_area']
-    gas_equip_frac_latent = space_type_properties['gas_equipment_fraction_latent']
-    gas_equip_frac_radiant = space_type_properties['gas_equipment_fraction_radiant']
-    gas_equip_frac_lost = space_type_properties['gas_equipment_fraction_lost']
-    gas_equip_have_info = true unless (gas_equip_per_area == 0 || gas_equip_per_area.nil?)
+    gas_equip_per_area = space_type_properties['gas_equipment_per_area'].to_f
+    gas_equip_frac_latent = space_type_properties['gas_equipment_fraction_latent'].to_f
+    gas_equip_frac_radiant = space_type_properties['gas_equipment_fraction_radiant'].to_f
+    gas_equip_frac_lost = space_type_properties['gas_equipment_fraction_lost'].to_f
+    gas_equip_have_info = true unless gas_equip_per_area == 0
 
     if set_gas_equipment && gas_equip_have_info
     
@@ -320,17 +320,17 @@ class OpenStudio::Model::SpaceType
       # Modify the definition of the instance
       instances.each do |instance|
         definition = instance.gasEquipmentDefinition
-        unless gas_equip_per_area == 0 or gas_equip_per_area.nil?
+        unless gas_equip_per_area == 0
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(gas_equip_per_area.to_f,'Btu/hr*ft^2','W/m^2').get)
           OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set gas EPD to #{elec_equip_per_area} Btu/hr*ft^2.")
         end
-        unless gas_equip_frac_latent == 0 or gas_equip_frac_latent.nil?
+        unless gas_equip_frac_latent == 0
           definition.setFractionLatent(gas_equip_frac_latent)
         end
-        unless gas_equip_frac_radiant == 0 or gas_equip_frac_radiant.nil?
+        unless gas_equip_frac_radiant == 0
           definition.setFractionRadiant(gas_equip_frac_radiant)
         end
-        unless gas_equip_frac_lost == 0 or gas_equip_frac_lost.nil?
+        unless gas_equip_frac_lost == 0
           definition.setFractionLost(gas_equip_frac_lost)
         end
       end
@@ -339,12 +339,12 @@ class OpenStudio::Model::SpaceType
     
     # Ventilation
     ventilation_have_info = false
-    ventilation_per_area = space_type_properties['ventilation_per_area']
-    ventilation_per_person = space_type_properties['ventilation_per_person']
-    ventilation_ach = space_type_properties['ventilation_ach']
-    ventilation_have_info = true unless (ventilation_per_area  == 0 || ventilation_per_area.nil?)
-    ventilation_have_info = true unless (ventilation_per_person == 0 || ventilation_per_person.nil?)
-    ventilation_have_info = true unless (ventilation_ach == 0 || ventilation_ach.nil?)
+    ventilation_per_area = space_type_properties['ventilation_per_area'].to_f
+    ventilation_per_person = space_type_properties['ventilation_per_person'].to_f
+    ventilation_ach = space_type_properties['ventilation_air_changes'].to_f
+    ventilation_have_info = true unless ventilation_per_area == 0
+    ventilation_have_info = true unless ventilation_per_person == 0
+    ventilation_have_info = true unless ventilation_ach == 0
 
     if set_ventilation && ventilation_have_info
     
@@ -361,15 +361,15 @@ class OpenStudio::Model::SpaceType
 
       # Modify the ventilation properties
       ventilation.setOutdoorAirMethod("Sum")
-      unless ventilation_per_area == 0 || ventilation_per_area.nil?
+      unless ventilation_per_area == 0
         ventilation.setOutdoorAirFlowperFloorArea(OpenStudio.convert(ventilation_per_area.to_f,'ft^3/min*ft^2','m^3/s*m^2').get)
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set ventilation per area to #{ventilation_per_area} cfm/ft^2.")
       end
-      unless ventilation_per_person == 0 || ventilation_per_person.nil?
+      unless ventilation_per_person == 0
         ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person.to_f,'ft^3/min*person','m^3/s*person').get)
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set ventilation per person to #{ventilation_per_person} cfm/person.")
       end
-      unless ventilation_ach == 0 || ventilation_ach.nil?
+      unless ventilation_ach == 0
         ventilation.setOutdoorAirFlowAirChangesperHour(ventilation_ach)
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set ventilation to #{ventilation_ach} ACH.")
       end
@@ -378,10 +378,10 @@ class OpenStudio::Model::SpaceType
 
     # Infiltration
     infiltration_have_info = false
-    infiltration_per_area_ext = space_type_properties['infiltration_per_exterior_area']
-    infiltration_per_area_ext_wall = space_type_properties['infiltration_per_exterior_wall_area']
-    infiltration_ach = space_type_properties['infiltration_air_changes']
-    make_infiltration = true unless(infiltration_per_area_ext == 0 || infiltration_per_area_ext.nil?)
+    infiltration_per_area_ext = space_type_properties['infiltration_per_exterior_area'].to_f
+    infiltration_per_area_ext_wall = space_type_properties['infiltration_per_exterior_wall_area'].to_f
+    infiltration_ach = space_type_properties['infiltration_air_changes'].to_f
+    make_infiltration = true unless infiltration_per_area_ext == 0
 
     if set_infiltration && infiltration_have_info
     
@@ -404,15 +404,15 @@ class OpenStudio::Model::SpaceType
       
       # Modify each instance
       instances.each do |instance|
-        unless infiltration_per_area_ext == 0 || infiltration_per_area_ext.nil?
+        unless infiltration_per_area_ext == 0
           instance.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
           OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")
         end
-        unless infiltration_per_area_ext_wall == 0 || infiltration_per_area_ext_wall.nil?
+        unless infiltration_per_area_ext_wall == 0
           instance.setFlowperExteriorWallArea(OpenStudio.convert(infiltration_per_area_ext_wall.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
           OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set infiltration to #{infiltration_per_area_ext_wall} per ft^2 exterior wall area.")
         end
-        unless infiltration_ach == 0 || infiltration_ach.nil?
+        unless infiltration_ach == 0
           instance.setAirChangesperHour(infiltration_ach)
           OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set infiltration to #{ventilation_ach} ACH.")
         end
