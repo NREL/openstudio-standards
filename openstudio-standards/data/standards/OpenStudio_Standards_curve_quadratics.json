@@ -170,8 +170,8 @@
       "coeff_1": 1.156,
       "coeff_2": -0.1816,
       "coeff_3": 0.0256,
-      "min_x": null,
-      "max_x": null,
+      "min_x": 0.0,
+      "max_x": 1.0,
       "min_out": null,
       "max_out": null,
       "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
