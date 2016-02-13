@@ -25,3 +25,7 @@ general:
   artifacts:
     - "openstudio-standards/test/output/prototype_buildings_results.csv"
     - "openstudio-standards/test/output/prototype_buildings_run.log"
+    
+notify:
+  webhooks:
+    - url: https://coveralls.io/webhook?repo_token=eSSTEMIukghhVxNNkJ7Wp3pWDzgGQhowV    
