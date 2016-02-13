@@ -87,24 +87,6 @@ class OpenStudio::Model::Model
     
     system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
 
-    # hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
-    
-    system_to_space_map.each do |system|
-
-
-      case system['type']
-        when 'CAV'
-          self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones)
-        when 'CAV2'
-          self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones,"DrawThrough",nil,nil,"_2")
-        when 'CAV3'
-          self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones,"DrawThrough",nil,nil,"_3")
-        else
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "HVAC system type (#{system['type']}) was not defined for strip mall.")
-          return false
-      end
-    end
-
     # Add infiltration door opening
     # Spaces names to design infiltration rates (m3/s)
     case building_vintage
