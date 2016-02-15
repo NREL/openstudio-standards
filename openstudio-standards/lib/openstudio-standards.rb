@@ -29,7 +29,10 @@ module OpenstudioStandards
   # Load the Openstudio Standards JSON
   # and assign to a constant.  This
   # should never be altered by the gem.
-  $os_standards = load_openstudio_standards_json 
+  $os_standards = load_openstudio_standards_json
+
+
+  puts "Local openstudio standards!"
   
   
 end

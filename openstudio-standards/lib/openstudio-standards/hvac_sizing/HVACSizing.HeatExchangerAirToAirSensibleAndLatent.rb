@@ -22,7 +22,7 @@ class OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent
   # returns the autosized nominal supply air flow rate as an optional double
   def autosizedNominalSupplyAirFlowRate
 
-    return self.model.getAutosizedValue(self, 'Nominal Supply Air Flow Rate', 'm3/s')
+    return self.model.getAutosizedValue(self, 'Design Size Nominal Supply Air Flow Rate', 'm3/s')
     
   end
    

@@ -39,8 +39,15 @@ class OpenStudio::Model::Model
   require_relative 'HVACSizing.SizingSystem'
   require_relative 'HVACSizing.ThermalZone'
 
-  # Methods not yet implemented
+  # Recently added and not fully tested
+  require_relative 'HVACSizing.ZoneHVACPackagedTerminalAirConditioner'
+  require_relative 'HVACSizing.ZoneHVACPackagedTerminalHeatPump'
+  require_relative 'HVACSizing.ZoneHVACTerminalUnitVariableRefrigerantFlow'
   require_relative 'HVACSizing.AirConditionerVariableRefrigerantFlow'
+  require_relative 'HVACSizing.CoilCoolingDXVariableRefrigerantFlow'
+  require_relative 'HVACSizing.CoilHeatingDXVariableRefrigerantFlow'
+
+  # Methods not yet implemented
   require_relative 'HVACSizing.AirTerminalSingleDuctVAVReheat'
   require_relative 'HVACSizing.AirTerminalSingleDuctUncontrolled'
   require_relative 'HVACSizing.AirLoopHVAC'
@@ -311,7 +318,8 @@ class OpenStudio::Model::Model
       if val.is_initialized
         result = OpenStudio::OptionalDouble.new(val.get)
       else
-        #OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
+        # Todo: comment following line (debugging new HVACsizing objects right now)
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "QUERY ERROR: Data not found for query: #{query}")
       end
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
