@@ -104,7 +104,7 @@ class OpenStudio::Model::Model
     self.getSpaceTypes.sort.each do |space_type|
       #space_type.set_internal_loads(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
       # Only modify lights and ventilation)
-      space_type.set_internal_loads(building_vintage, false, true, false, false, true, false) 
+      space_type.set_internal_loads(building_vintage, false, true, false, false, true, false)
     end
 
     # Get the groups of zones that define the
@@ -890,20 +890,23 @@ class OpenStudio::Model::Model
                 'ConstantVolume')
 
       when 'PSZ_AC'
+
       
         # Add a gas-fired PSZ-AC to each zone
-        self.add_psz_ac(standard, 
-                        nil, 
-                        nil, 
-                        nil,
+        # hvac_op_sch=nil means always on
+        # oa_damper_sch to nil means always open
+        self.add_psz_ac(standard,
+                        sys_name=nil,
+                        hot_water_loop=nil,
+                        chilled_water_loop=nil,
                         zones,
-                        nil,
-                        nil,
-                        'DrawThrough', 
-                        'ConstantVolume',
-                        'NaturalGas',
-                        'NaturalGas',
-                        'Single Speed DX AC',
+                        hvac_op_sch=nil,
+                        oa_damper_sch=nil,
+                        fan_location='DrawThrough',
+                        fan_type='ConstantVolume',
+                        heating_type='Gas',
+                        supplemental_heating_type='Gas',  # Should we really add supplemental heating here?
+                        cooling_type='Single Speed DX AC',
                         building_type=nil)      
       
       when 'PSZ_HP'
