@@ -1202,7 +1202,9 @@ class OpenStudio::Model::Model
   # @param cooling_type [String] valid choices are Water, Two Speed DX AC,
   # Single Speed DX AC, Single Speed Heat Pump, Water To Air Heat Pump
   # @param building_type [String] the building type
-  # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting PSZ-AC air loops 
+  # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting PSZ-AC air loops
+  # Todo: clarify where these default curves coefficients are coming from
+  # Todo: I (jmarrec) believe it is the DOE Ref curves ("DOE Ref DX Clg Coil Cool-Cap-fT")
   def add_psz_ac(standard, 
                 sys_name, 
                 hot_water_loop, 
@@ -1548,7 +1550,7 @@ class OpenStudio::Model::Model
         clg_coil.setBasinHeaterSetpointTemperature(2.0)
 
       elsif cooling_type == 'Single Speed DX AC'
-
+        # Defaults to "DOE Ref DX Clg Coil Cool-Cap-fT"
         clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(self)
         clg_cap_f_of_temp.setCoefficient1Constant(0.9712123)
         clg_cap_f_of_temp.setCoefficient2x(-0.015275502)
@@ -1568,6 +1570,7 @@ class OpenStudio::Model::Model
         clg_cap_f_of_flow.setMinimumValueofx(-100.0)
         clg_cap_f_of_flow.setMaximumValueofx(100.0)
 
+        # "DOE Ref DX Clg Coil Cool-EIR-fT",
         clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(self)
         clg_energy_input_ratio_f_of_temp.setCoefficient1Constant(0.28687133)
         clg_energy_input_ratio_f_of_temp.setCoefficient2x(0.023902164)
@@ -1587,6 +1590,7 @@ class OpenStudio::Model::Model
         clg_energy_input_ratio_f_of_flow.setMinimumValueofx(-100.0)
         clg_energy_input_ratio_f_of_flow.setMaximumValueofx(100.0)
 
+        # "DOE Ref DX Clg Coil Cool-PLF-fPLR"
         clg_part_load_ratio = OpenStudio::Model::CurveQuadratic.new(self)
         clg_part_load_ratio.setCoefficient1Constant(0.90949556)
         clg_part_load_ratio.setCoefficient2x(0.09864773)
@@ -1607,7 +1611,7 @@ class OpenStudio::Model::Model
         clg_coil.setName("#{air_loop.name} 1spd DX AC Clg Coil")
 
       elsif cooling_type == 'Single Speed Heat Pump'
-
+        # "PSZ-AC_Unitary_PackagecoolCapFT"
         clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(self)
         clg_cap_f_of_temp.setCoefficient1Constant(0.766956)
         clg_cap_f_of_temp.setCoefficient2x(0.0107756)
