@@ -171,7 +171,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     # Get the minimum efficiency standards
     cop = nil
 
-    # Todo: remove this temporary hack once/if PTHP implemented
+    # Todo: remove/revamp this temporary hack once/if PTHP implemented in Openstudio Standards spreadsheet
     if is_pthp
       case template
         when '90.1-2007'
@@ -185,7 +185,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
 
 
       # TABLE 6.8.1D
-      # EER = ptac_eer_coeff_1 + ptac_eer_coeff_2 * Cap
+      # EER = pthp_eer_coeff_1 + pthp_eer_coeff_2 * Cap
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
       # If the unit’s capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
       # If the unit’s capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
