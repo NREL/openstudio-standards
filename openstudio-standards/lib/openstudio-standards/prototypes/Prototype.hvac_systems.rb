@@ -134,6 +134,7 @@ class OpenStudio::Model::Model
     chw_temp_f = 44 #CHW setpoint 44F
     chw_delta_t_r = 10.1 #10.1F delta-T
     # TODO: Yixing check the CHW Setpoint from standards
+    # TODO: Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_performance_rating_method_baseline_temperatures
     if building_type == 'LargeHotel'
       chw_temp_f = 45 #CHW setpoint 45F
       chw_delta_t_r = 12 #12F delta-T

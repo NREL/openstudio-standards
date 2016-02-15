@@ -181,7 +181,7 @@ class OpenStudio::Model::PlantLoop
       hw_oareset_stpt_manager.setOutdoorLowTemperature(oat_low_si)
       hw_oareset_stpt_manager.setSetpointatOutdoorHighTemperature(sp_high_si)
       hw_oareset_stpt_manager.setOutdoorHighTemperature(oat_high_si)
-      hw_stpt_manager.setName("HW Loop SetpointManager OA Reset App G")
+      hw_oareset_stpt_manager.setName("HW Loop SetpointManager OA Reset App G")
       # Add to Loop supply outlet node
       hw_oareset_stpt_manager.addToNode(self.supplyOutletNode)
       ##################  End of SetpointManagerOutdoorAirReset ##################

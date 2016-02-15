@@ -134,4 +134,29 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
   end
 
+
+  def test_debug_failing_find_constructions
+
+    model_name = 'jmarrec'
+    standard = '90.1-2007'
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/performance_rating_method/#{model_name}.osm")
+    model = translator.loadModel(path)
+    assert(model.is_initialized, "Could not load test model '#{model_name}.osm' from test_models/performance_rating_method.  Check name for typos.")
+    model = model.get
+
+    boundary_cond = 'Outdoors'
+    surf_type = 'ExteriorWall'
+    model.find_constructions(boundary_cond, surf_type)
+    # Minitest::UnexpectedError: ArgumentError: comparison of OpenStudio::Model::OptionalConstructionBase with OpenStudio::Model::OptionalConstructionBase failed
+
+
+
+
+  end
+
+
+
 end

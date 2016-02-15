@@ -2675,18 +2675,18 @@ class OpenStudio::Model::Model
         gnd_surfs = const_set.defaultGroundContactSurfaceConstructions
         ext_subsurfs = const_set.defaultExteriorSubSurfaceConstructions
         int_subsurfs = const_set.defaultInteriorSubSurfaceConstructions
-        
+
         # Can't handle incomplete construction sets
-        if ext_surfs.empty? || 
+        if ext_surfs.empty? ||
           int_surfs.empty? ||
           gnd_surfs.empty? ||
           ext_subsurfs.empty? ||
           int_subsurfs.empty?
-          
+
           OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Default construction set #{const_set.name} is incomplete; contructions from this set will not be reported.")
           next
-        end  
-        
+        end
+
         ext_surfs = ext_surfs.get
         int_surfs = int_surfs.get
         gnd_surfs = gnd_surfs.get
@@ -2744,25 +2744,31 @@ class OpenStudio::Model::Model
       self.getSurfaces.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.surfaceType == type
-        constructions_to_modify << surf.construction
+        constructions << surf.construction
       end
       
       # Hard-assigned subsurfaces
       self.getSubSurfaces.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.subSurfaceType == type
-        constructions_to_modify << surf.construction
+        constructions << surf.construction
       end
       
       # Throw out the empty constructions
       all_constructions = []
-      constructions.uniq.sort.each do |const|
+      # calling .sort here = ArgumentError: comparison of OpenStudio::Model::OptionalConstructionBase with OpenStudio::Model::OptionalConstructionBase failed
+      # Cannot sort OPTIONALConstructionBase
+      constructions.uniq.each do |const|
         next if const.empty?
         all_constructions << const.get
       end
       
-      # Only return the unique list
+      # Only return the unique list (should already be uniq)
       all_constructions = all_constructions.uniq
+
+      # ConstructionBase can be sorted
+      all_constructions = all_constructions.sort
+
       
       return all_constructions
       
@@ -2850,7 +2856,6 @@ class OpenStudio::Model::Model
     
     # Modify all constructions of each type
     types_to_modify.each do |boundary_cond, surf_type, const_type|
-    
       constructions = self.find_constructions(boundary_cond, surf_type)
 
       constructions.sort.each do |const|  
@@ -2858,7 +2863,7 @@ class OpenStudio::Model::Model
         standards_info.setIntendedSurfaceType(surf_type)
         standards_info.setStandardsConstructionType(const_type)
       end
-      
+
     end
 
     return true
@@ -2895,7 +2900,7 @@ class OpenStudio::Model::Model
     # Create an array of surface types
     # each standard applies to.
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', template, '90.1-2010', '90.1-2013'
       types_to_modify << ['Outdoors', 'Floor']
       types_to_modify << ['Outdoors', 'Wall']
       types_to_modify << ['Outdoors', 'RoofCeiling']
@@ -2937,8 +2942,12 @@ class OpenStudio::Model::Model
   
     # List the unique array of constructions
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Applying standard constructions")
-    prev_created_consts.each do |surf_type, construction|
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{surf_type.join(' ')}, applied #{construction.name}.")
+    if prev_created_consts.size == 0
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "None of the constructions in your proposed model have both Intended Surface Type and Standards Construction Type")
+    else
+      prev_created_consts.each do |surf_type, construction|
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{surf_type.join(' ')}, applied #{construction.name}.")
+      end
     end
 
     return true
