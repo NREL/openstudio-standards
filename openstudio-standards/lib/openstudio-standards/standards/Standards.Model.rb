@@ -104,7 +104,8 @@ class OpenStudio::Model::Model
     self.getSpaceTypes.sort.each do |space_type|
       #space_type.set_internal_loads(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
       # Only modify lights and ventilation)
-      space_type.set_internal_loads(building_vintage, false, true, false, false, true, false)
+      # Todo: Remove temporary hack (do not change ventilation)
+      space_type.set_internal_loads(building_vintage, false, true, false, false, false, false)
     end
 
     # Get the groups of zones that define the
