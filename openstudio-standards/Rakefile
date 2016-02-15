@@ -13,7 +13,7 @@ desc 'Run test group 0'
 Rake::TestTask.new('test:gem_group_0') do |task|
   task.test_files = FileList[
   'openstudio-standards/test/test_primary_school.rb',
-  'openstudio-standards/test/test_warehouse.rb'
+  # 'openstudio-standards/test/test_warehouse.rb'
   ]
 end
 
