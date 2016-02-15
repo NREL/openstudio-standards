@@ -974,6 +974,20 @@ class OpenStudio::Model::Model
   # @todo Consistency - make prototype and reference vintages consistent
   # @todo Add 90.1-2013?
   def modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
+  # Select the terrain type, which
+  # impacts wind speed, and in turn infiltration
+  terrain = 'City'
+  case building_vintage
+  when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    case building_type
+    when 'Warehouse'
+    terrain = 'Urban'
+    when 'SmallHotel'
+    terrain = 'Suburbs'
+  end
+end
+# Set the terrain type
+self.getSite.setTerrain(terrain)
 
     # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
     return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013'
