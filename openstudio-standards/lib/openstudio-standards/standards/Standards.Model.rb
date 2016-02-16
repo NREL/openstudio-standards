@@ -100,6 +100,11 @@ class OpenStudio::Model::Model
 
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
+    # Todo: Implement resize windows to wwr = 0.4 if wwr is above 0.4
+    # @jmarrec: I've got a measure that resizes windows around the centroid, so you know you don't have problems with windows not fitting and you preserve the WWR by orientation
+    # Question is: do you count adiabatic surfaces into the gross above-ground exterior wall area?
+    # PNNL seems to say that you need to calculate WWR separately for each space condition category (Non Res, Res and semi-heated, which would enclose)
+
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
     self.assign_spaces_to_stories
@@ -231,6 +236,11 @@ class OpenStudio::Model::Model
         curve.remove
       end
     end
+
+
+    # Todo: turn off self shading
+    # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
+    # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
     
     model_status = 'final'
     self.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
