@@ -2016,7 +2016,7 @@ class OpenStudio::Model::Model
       day_types = rule['day_types']
       start_date = DateTime.parse(rule['start_date'])
       end_date = DateTime.parse(rule['end_date'])
-      sch_type = rule[:occtype]
+      sch_type = rule['type']
       values = rule['values']
 
       #Day Type choices: Wkdy, Wknd, Mon, Tue, Wed, Thu, Fri, Sat, Sun, WntrDsn, SmrDsn, Hol
