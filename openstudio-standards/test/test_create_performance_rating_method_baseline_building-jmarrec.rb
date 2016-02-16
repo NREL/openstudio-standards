@@ -102,7 +102,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
       assert(unmet_heating_hours<300,"Unmet heating hours are above 300: #{unmet_heating_hours}")
       assert(unmet_cooling_hours<300,"Unmet cooling hours are above 300: #{unmet_cooling_hours}")
-      
+
     end
 
   end

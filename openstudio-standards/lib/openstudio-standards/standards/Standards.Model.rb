@@ -2003,7 +2003,7 @@ class OpenStudio::Model::Model
           day_sch.addValue(OpenStudio::Time.new(0, i + 1, 0, 0), values[i])
         end
       else
-        OpenStudio::logFree(OpenStudio::Error, "Schedule type: #{sch_type} is not recognized.  Valid choices are 'Constant' and 'Hourly'.")
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Schedule type: #{sch_type} is not recognized.  Valid choices are 'Constant' and 'Hourly'.")
       end
     end
 
