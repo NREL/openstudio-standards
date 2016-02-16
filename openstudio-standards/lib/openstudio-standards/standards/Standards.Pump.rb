@@ -81,12 +81,12 @@ module Pump
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
   # @return [Double] minimum motor efficiency (0.0 to 1.0)
-  def standard_minimum_motor_efficiency(template, motor_bhp)
+  def standard_minimum_motor_efficiency(template, standards, motor_bhp)
   
     motor_eff = 0.85
   
     # Lookup the minimum motor efficiency
-    motors = $os_standards["motors"]
+    motors = standards["motors"]
     
     # Assuming all fan motors are 4-pole ODP
     search_criteria = {
