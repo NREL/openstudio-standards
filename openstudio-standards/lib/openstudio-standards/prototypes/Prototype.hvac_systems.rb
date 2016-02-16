@@ -474,7 +474,9 @@ class OpenStudio::Model::Model
   # or nil in which case will be defaulted to always open
   # @param vav_fan_efficiency [Double] fan total efficiency, including motor and impeller
   # @param vav_fan_motor_efficiency [Double] fan motor efficiency
-  # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa  
+  # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa
+  # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as
+  # the supply plenum, or nil, in which case no return plenum will be used.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
   def add_vav_reheat(standard, 
@@ -487,6 +489,7 @@ class OpenStudio::Model::Model
               vav_fan_efficiency,
               vav_fan_motor_efficiency,
               vav_fan_pressure_rise,
+              return_plenum,
               building_type=nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding VAV system for #{thermal_zones.size} zones.")
@@ -1845,7 +1848,6 @@ class OpenStudio::Model::Model
     return air_loops
 
   end
-<<<<<<< HEAD
  
   # Adds a data center load to a given space.
   #

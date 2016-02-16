@@ -15,6 +15,8 @@ class OpenStudio::Model::Model
 
       thermal_zones = get_zones_from_spaces_on_system(system)
 
+      return_plenum = get_return_plenum_from_system(system)
+      
       # Add the HVAC systems
       case system['type']
       when 'VAV'
@@ -60,6 +62,7 @@ class OpenStudio::Model::Model
             prototype_input['vav_fan_efficiency'],
             prototype_input['vav_fan_motor_efficiency'],
             prototype_input['vav_fan_pressure_rise'],
+            return_plenum,
             building_type)
           
       when 'CAV'
@@ -138,7 +141,8 @@ class OpenStudio::Model::Model
                       thermal_zones, 
                       prototype_input['vav_operation_schedule'],
                       prototype_input['vav_oa_damper_schedule'],
-                      hot_water_loop)
+                      hot_water_loop,
+                      return_plenum)
       
       when 'DOAS'
       
@@ -307,6 +311,33 @@ class OpenStudio::Model::Model
     end  
 
     return thermal_zones
+  
+  end
+  
+  def get_return_plenum_from_system(system)
+
+    # Find the zone associated with the return plenum space name
+    return_plenum = nil
+    
+    # Return nil if no return plenum
+    return return_plenum if system['return_plenum'].nil?
+    
+    # Get the space
+    space = self.getSpaceByName(system['return_plenum'])
+    if space.empty?
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
+      return return_plenum
+    end
+    space = space.get
+    
+    # Get the space's zone
+    zone = space.thermalZone
+    if zone.empty?
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Space #{space_name} has no thermal zone; cannot be a return plenum.")   
+      return return_plenum
+    end  
+
+    return zone.get
   
   end
   

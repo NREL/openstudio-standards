@@ -699,7 +699,8 @@ class OpenStudio::Model::Model
               pri_zones, 
               nil,
               nil,
-              hot_water_loop)
+              hot_water_loop,
+              nil)
           
           # Add a PSZ_AC for each secondary zone
           self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)
@@ -763,7 +764,8 @@ class OpenStudio::Model::Model
                       nil,
                       0.62,
                       0.9,
-                      OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+                      OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                      nil)
           
           # Add a PSZ_AC for each secondary zone
           self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)

@@ -97,7 +97,7 @@ class OpenStudio::Model::Model
               'Perimeter_bot_ZN_4',
               'Core_bottom'
           ],
-           'return_plenum' => 'GroundFloor_Plenum'
+          'return_plenum' => 'GroundFloor_Plenum'
       },
       {
           'type' => 'VAV',
@@ -110,7 +110,7 @@ class OpenStudio::Model::Model
               'Perimeter_mid_ZN_4',
               'Core_mid'
           ],
-            'return_plenum' => 'MidFloor_Plenum'
+          'return_plenum' => 'MidFloor_Plenum'
       },
       {
           'type' => 'VAV',
@@ -122,8 +122,8 @@ class OpenStudio::Model::Model
               'Perimeter_top_ZN_3',
               'Perimeter_top_ZN_4',
               'Core_top'
-          ]
-            'return_plenum' => 'TopFloor_Plenum'
+          ],
+          'return_plenum' => 'TopFloor_Plenum'
       },
       {
           'type' => 'CAV',
