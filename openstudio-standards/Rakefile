@@ -9,6 +9,14 @@ rescue Bundler::BundlerError => e
 end
 
 require 'rake/testtask'
+desc 'Run test PRM'
+Rake::TestTask.new('test:prm') do |task|
+  task.test_files = FileList[
+  'openstudio-standards/test/test_create_prm_dummy_office.rb' # Takes about a minute for me
+  ]
+end
+
+require 'rake/testtask'
 desc 'Run test group 0'
 Rake::TestTask.new('test:gem_group_0') do |task|
   task.test_files = FileList[
@@ -80,7 +88,7 @@ Rake::TestTask.new('test:measures') do |task|
 end
 
 desc 'Run all tests'
-task 'test:all' => ['test:gem', 'test:measures']
+task 'test:all' => ['test:prm', 'test:gem', 'test:measures']
 
 require "#{File.dirname(__FILE__)}/data/standards/manage_OpenStudio_Standards.rb"
 desc 'Download OpenStudio_Standards from Google & export JSONs'

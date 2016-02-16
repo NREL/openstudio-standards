@@ -5,11 +5,11 @@ OS:Version,
 
 OS:Site,
   {879c14aa-a21c-4049-8658-029440de2df5}, !- Handle
-  New York J F Kennedy IntL Ar,           !- Name
-  40.65,                                  !- Latitude {deg}
-  -73.8,                                  !- Longitude {deg}
+  Baltimore Blt Washngtn IntL,            !- Name
+  39.17,                                  !- Latitude {deg}
+  -76.68,                                 !- Longitude {deg}
   -5,                                     !- Time Zone {hr}
-  5,                                      !- Elevation {m}
+  45,                                     !- Elevation {m}
   ;                                       !- Terrain
 
 OS:YearDescription,
@@ -63,19 +63,6 @@ OS:LifeCycleCost:Parameters,
   ,                                       !- Service Date Year
   ;                                       !- Length of Study Period in Years
 
-OS:WeatherFile,
-  {82a01de0-e9bc-4a6e-872e-d080425ae145}, !- Handle
-  New York J F Kennedy IntL Ar,           !- City
-  NY,                                     !- State Province Region
-  USA,                                    !- Country
-  TMY3,                                   !- Data Source
-  744860,                                 !- WMO Number
-  40.65,                                  !- Latitude {deg}
-  -73.8,                                  !- Longitude {deg}
-  -5,                                     !- Time Zone {hr}
-  5,                                      !- Elevation {m}
-  file:///D:/Projects/Turkevi/Turkevi/files/USA_NY_New.York-J.F.Kennedy.Intl.AP.744860_TMY3.epw, !- Url
-  76DE1CD4;                               !- Checksum
 
 OS:RunPeriod,
   {c2b9cb53-65f8-45a9-936d-721975507231}, !- Handle
@@ -90,54 +77,6 @@ OS:RunPeriod,
   ,                                       !- Use Weather File Rain Indicators
   ,                                       !- Use Weather File Snow Indicators
   ;                                       !- Number of Times Runperiod to be Repeated
-
-OS:SizingPeriod:DesignDay,
-  {3e326083-877d-4fb5-ac17-35aa49823b6f}, !- Handle
-  New York J F Kennedy IntL Ar Ann Htg 99.6% Condns DB, !- Name
-  -10.7,                                  !- Maximum Dry-Bulb Temperature {C}
-  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -10.7,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
-  101265,                                 !- Barometric Pressure {Pa}
-  7.5,                                    !- Wind Speed {m/s}
-  320,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  1,                                      !- Month
-  WinterDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAEClearSky;                         !- Solar Model Indicator
-
-OS:SizingPeriod:DesignDay,
-  {577f0151-2158-417e-938f-76ede4a80d1d}, !- Handle
-  New York J F Kennedy IntL Ar Ann Clg .4% Condns DB=>MWB, !- Name
-  32.1,                                   !- Maximum Dry-Bulb Temperature {C}
-  7.4,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
-  23.1,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
-  101265,                                 !- Barometric Pressure {Pa}
-  5.6,                                    !- Wind Speed {m/s}
-  230,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  7,                                      !- Month
-  SummerDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAETau,                              !- Solar Model Indicator
-  ,                                       !- Beam Solar Day Schedule Name
-  ,                                       !- Diffuse Solar Day Schedule Name
-  0.541,                                  !- ASHRAE Taub {dimensionless}
-  1.8;                                    !- ASHRAE Taud {dimensionless}
 
 OS:Curve:Cubic,
   {14f60054-cfdc-4123-b222-1c126bac8556}, !- Handle
@@ -17972,4 +17911,3 @@ OS:Connection,
   3,                                      !- Outlet Port
   {727db9ef-48d0-49b1-9fba-8a1c2ad9c31b}, !- Target Object
   30;                                     !- Inlet Port
-
