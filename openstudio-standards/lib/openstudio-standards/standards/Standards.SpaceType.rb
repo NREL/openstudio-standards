@@ -346,18 +346,18 @@ class OpenStudio::Model::SpaceType
     ventilation_have_info = true unless ventilation_per_person == 0
     ventilation_have_info = true unless ventilation_ach == 0
 
-    if set_ventilation && ventilation_have_info
+    # Get the design OA or create a new one if none exists
+    ventilation = self.designSpecificationOutdoorAir
+    if ventilation.is_initialized
+      ventilation = ventilation.get
+    else
+      ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(model)
+      ventilation.setName("#{name} Ventilation")
+      self.setDesignSpecificationOutdoorAir(ventilation)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} had no ventilation specification, one has been created.")
+    end    
     
-      # Get the design OA or create a new one if none exists
-      ventilation = self.designSpecificationOutdoorAir
-      if ventilation.is_initialized
-        ventilation = ventilation.get
-      else
-        ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(model)
-        ventilation.setName("#{name} Ventilation")
-        self.setDesignSpecificationOutdoorAir(ventilation)
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} had no ventilation specification, one has been created.")
-      end
+    if set_ventilation && ventilation_have_info
 
       # Modify the ventilation properties
       ventilation.setOutdoorAirMethod("Sum")
@@ -374,6 +374,15 @@ class OpenStudio::Model::SpaceType
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{self.name} set ventilation to #{ventilation_ach} ACH.")
       end
  
+    elsif set_ventilation && !ventilation_have_info
+    
+      # All space types must have a design spec OA 
+      # object for ventilation controls to work correctly,
+      # even if the values are all zero.
+      ventilation.setOutdoorAirFlowperFloorArea(0)
+      ventilation.setOutdoorAirFlowperPerson(0)
+      ventilation.setOutdoorAirFlowAirChangesperHour(0) 
+    
     end
 
     # Infiltration
