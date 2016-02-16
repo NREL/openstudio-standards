@@ -5,7 +5,7 @@ class OpenStudio::Model::ChillerElectricEIR
   # Finds the search criteria
   #
   # @return [hash] has for search criteria to be used for find object
-  def findSearchCriteria(template)
+  def find_search_criteria(template)
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -51,7 +51,7 @@ class OpenStudio::Model::ChillerElectricEIR
   # Finds capacity in tons
   #
   # @return [Double] capacity in tons to be used for find object
-  def findCapacity()
+  def find_capacity()
 
     # Get the chiller capacity
     capacity_w = nil
@@ -74,12 +74,14 @@ class OpenStudio::Model::ChillerElectricEIR
 
   # Finds lookup object in standards and return full load efficiency
   #
+  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+  # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Double] full load efficiency (COP)
   def standard_minimum_full_load_efficiency(template,standards)
 
     # Get the chiller properties
-    search_criteria = self.findSearchCriteria(template)
-    capacity_tons = self.findCapacity
+    search_criteria = self.find_search_criteria(template)
+    capacity_tons = self.find_capacity
     chlr_props = self.model.find_object(standards['chillers'], search_criteria, capacity_tons)
 
     # lookup the efficiency value
