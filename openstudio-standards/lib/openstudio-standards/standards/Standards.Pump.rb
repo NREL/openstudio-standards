@@ -175,7 +175,7 @@ module Pump
   # Determines the rated watts per GPM of the pump
   #
   # @return [Double] rated power consumption per flow
-  #   @units Watts per GPM (W*s/m^3)
+  #   @units Watts per GPM (W*min/gal)
   def rated_w_per_gpm()
 
     # Get design power (whether autosized or hard-sized)

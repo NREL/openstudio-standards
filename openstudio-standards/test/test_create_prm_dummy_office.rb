@@ -6,8 +6,21 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
   def test_dummy_office_building
 
+    model_name = 'dummy_office_building'
+    standard = '90.1-2007'
+    climate_zone = 'ASHRAE 169-2006-4A'
+    model = create_baseline_model(model_name, standard, climate_zone, 'MediumOffice', false)
 
-    model = create_baseline_model('dummy_office_building', '90.1-2007', 'ASHRAE 169-2006-4A', 'MediumOffice', false)
+    # Do another sizing run just to check that the final values are actually correct
+    # I realized when testing the pump power that it was fine per the previous sizing run, but the code was actually changing the values again, leading to wrong pumping power
+    test_dir = "#{File.dirname(__FILE__)}/output"
+    sizing_run_dir = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}"
+
+    # Run sizing run with the HVAC equipment
+    if model.runSizingRun("#{sizing_run_dir}/SizingRunFinalCheckOnly") == false
+      return false
+    end
+
 
     model.getPlantLoops.each do |loop|
 
@@ -32,18 +45,16 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
     end
 
 
+    # Output fan rated w per cfm for each fan
+    model.output_fan_report("#{sizing_run_dir}/fan_report.csv")
+
     sql = model.sqlFile
 
     if sql.is_initialized
       sql = sql.get
 
-      # Check unmet hours
-      unmet_query = "SELECT Value FROM TabularDataWithStrings WHERE
-    ReportName='AnnualBuildingUtilityPerformanceSummary' AND
-    TableName='Comfort and Setpoint Not Met Summary' AND
-    RowName='%{row_name}'"
-      unmet_heating_hours = sql.execAndReturnFirstDouble(unmet_query % {:row_name => 'Time Setpoint Not Met During Occupied Heating'}).get
-      unmet_cooling_hours = sql.execAndReturnFirstDouble(unmet_query % {:row_name => 'Time Setpoint Not Met During Occupied Cooling'}).get
+      unmet_heating_hours = sql.hoursHeatingSetpointNotMet.get
+      unmet_cooling_hours = sql.hoursCoolingSetpointNotMet.get
 
 
       puts "Unmet heating hours: #{unmet_heating_hours}"
@@ -53,6 +64,9 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
       assert(unmet_cooling_hours<300,"Unmet cooling hours are above 300: #{unmet_cooling_hours}")
 
     end
+
+
+
   end
 
 end

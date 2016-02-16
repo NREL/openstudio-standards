@@ -143,7 +143,8 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
       capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
       pthp_cop = pthp_cop_coeff_1 + (pthp_cop_coeff_2 * capacity_btu_per_hr)
-      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_cop}COP"
+      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_cop.round(1)}COP"
+      self.setName(new_comp_name)
       self.setRatedCOP(pthp_cop)
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "HACK: For #{template}: #{self.name}: #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_cop.round(2)}COP")
     end

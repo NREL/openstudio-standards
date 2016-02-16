@@ -193,7 +193,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
       pthp_eer = pthp_eer_coeff_1 + (pthp_eer_coeff_2 * capacity_btu_per_hr)
       cop = eer_to_cop(pthp_eer)
-      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_eer}EER"
+      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_eer.round(1)}EER"
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed',  "HACK: For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_eer.round(2)}EER")
 
     elsif subcategory == 'PTAC'
@@ -209,8 +209,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
       ptac_eer = ptac_eer_coeff_1 + (ptac_eer_coeff_2 * capacity_btu_per_hr)
       cop = eer_to_cop(ptac_eer)
-      #self.setName("#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer}EER")
-      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer}EER"
+      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer.round(1)}EER"
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed',  "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{ptac_eer}")      
     end
     

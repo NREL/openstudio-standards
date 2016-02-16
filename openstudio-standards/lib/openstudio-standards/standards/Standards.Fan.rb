@@ -311,5 +311,40 @@ module Fan
     return is_small
   
   end
+
+
+  # Find the actual rated fan power per flow (W/CFM)
+  # by querying the sql file
+  #
+  # @return [Double] rated power consumption per flow
+  #   @units Watts per CFM (W*min/ft^3)
+  def rated_w_per_cfm()
+
+    # Get design power (whether autosized or hard-sized)
+    rated_power_w = self.model.getAutosizedValueFromEquipmentSummary(self, 'Fans', 'Rated Electric Power', 'W')
+    if rated_power_w.is_initialized
+      rated_power_w = rated_power_w.get
+    else
+      rated_power_w = self.fanPower
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Pump", "For #{self.name}, could not find rated fan power from Equipment Summary. Will calculate it based on current pressure rise and total fan efficiency")
+    end
+
+    if self.autosizedMaximumFlowRate.is_initialized
+      max_m3_per_s = self.autosizedMaximumFlowRate.get
+    elsif self.maximumFlowRate.is_initialized
+      max_m3_per_s = self.ratedFlowRate.get
+    else
+      OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Pump", "For #{self.name}, could not find fan Maximum Flow Rate, cannot determine w per cfm correctly.")
+      return false
+    end
+
+    rated_w_per_m3s = rated_power_w / max_m3_per_s
+
+    rated_w_per_gpm = OpenStudio::convert(rated_w_per_m3s, 'W*s/m^3', 'W*min/ft^3').get
+
+    return rated_w_per_gpm
+
+
+  end
   
 end
