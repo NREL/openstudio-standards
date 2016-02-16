@@ -17,6 +17,14 @@ class OpenStudio::Model::Model
   # @example Create a Small Office, 90.1-2010, in ASHRAE Climate Zone 5A (Chicago)
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
   def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)
+    
+    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004. This is a quick check.
+    if building_type == "HighriseApartment"
+      if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004'
+        OpenStudio::logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{building_type} at vintage #{building_vintage} are not available, the measure is disabled for this specific type.")
+        return false
+      end
+    end
 
     self.load_openstudio_standards_json
     lookup_building_type = self.get_lookup_name(building_type)
