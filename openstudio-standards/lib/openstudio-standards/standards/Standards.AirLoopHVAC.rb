@@ -48,6 +48,15 @@ class OpenStudio::Model::AirLoopHVAC
     
     # Multizone VAV Systems
     if self.is_multizone_vav_system
+
+      # In this case it's a system 5-8, SAT reset is necessary
+      case template
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+          self.enable_supply_air_temperature_reset_appG(template)
+        else
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: no SAT reset implemented, template was not in list: '#{template}'.")
+      end
+
       
       # VAV Reheat Control
       self.set_vav_damper_action(template)
@@ -89,11 +98,7 @@ class OpenStudio::Model::AirLoopHVAC
       # not convinced that this is actually necessary with current E+
       # capabilities.
     end
-    
-    # SAT reset
-    if self.is_supply_air_temperature_reset_required(template, climate_zone)
-      self.enable_supply_air_temperature_reset
-    end
+
    
     # Motorized OA damper
     if self.is_motorized_oa_damper_required(template, climate_zone)
@@ -1897,6 +1902,7 @@ class OpenStudio::Model::AirLoopHVAC
     return is_sat_reset_required unless self.is_multizone_vav_system
   
     # Not required until 90.1-2010
+    # Todo: per App G it's required since in 90.1-2004 (10F) and 90.1-2007 (5F)
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
       return is_sat_reset_required
@@ -1904,9 +1910,10 @@ class OpenStudio::Model::AirLoopHVAC
       case climate_zone
       when 'ASHRAE 169-2006-1A',
         'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-3A'
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Supply air temperature reset is not required per 6.5.3.4 Exception 1, the system is located in climate zone #{climate_zone}.")
-      when 'ASHRAE 169-2006-1B',
+        'ASHRAE 169-2006-3A',
+        # Todo: clarify whether these two lines are actually necessary. See issue #48
+        #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Supply air temperature reset is not required per 6.5.3.4 Exception 1, the system is located in climate zone #{climate_zone}.")
+      #when 'ASHRAE 169-2006-1B',
         'ASHRAE 169-2006-2B',
         'ASHRAE 169-2006-3B',
         'ASHRAE 169-2006-3C',
@@ -1929,6 +1936,61 @@ class OpenStudio::Model::AirLoopHVAC
     end
     
   end
+
+
+
+
+
+  # Enable supply air temperature (SAT) reset based
+  # on outdoor air conditions.
+  # Uses a SPM Warmest, and ask for template because 2004 is different
+
+  # @param template [String] valid choices: '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+  # @return [Bool] Returns true if successful, false if not.
+  def enable_supply_air_temperature_reset_appG(template)
+
+    # Get the current setpoint and calculate
+    # the new setpoint.
+    sizing_system = self.sizingSystem
+    design_sat_c = sizing_system.centralCoolingDesignSupplyAirTemperature
+    design_sat_f = OpenStudio::convert(design_sat_c, 'C','F').get
+
+
+    case template
+      when '90.1-2004'
+        # 2004 has a 10F sat reset
+        sat_reset_r = 10
+      when '90.1-2007', '90.1-2010', '90.1-2013'
+        sat_reset_r = 5
+    end
+
+    sat_reset_k = OpenStudio.convert(sat_reset_r, 'R', 'K').get
+
+    max_sat_f = design_sat_f + sat_reset_r
+    max_sat_c = design_sat_c + sat_reset_k
+
+
+
+
+    # Create a setpoint manager
+    sat_warmest_reset = OpenStudio::Model::SetpointManagerWarmest.new(model)
+    sat_warmest_reset.setName("#{self.name} SAT Warmest Reset")
+    sat_warmest_reset.setStrategy('MaximumTemperature')
+    sat_warmest_reset.setMinimumSetpointTemperature(design_sat_c)
+    sat_warmest_reset.setMaximumSetpointTemperature(max_sat_c)
+
+
+    # Attach the setpoint manager to the
+    # supply outlet node of the system.
+    sat_warmest_reset.addToNode(self.supplyOutletNode)
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Supply air temperature reset was enabled using a SPM Warmest with a min SAT of #{design_sat_c}C // #{design_sat_f}F and a max SAT of #{max_sat_c}C // #{max_sat_f}.")
+
+    return true
+
+  end
+
+
 
   # Enable supply air temperature (SAT) reset based
   # on outdoor air conditions.  SAT will be kept at the

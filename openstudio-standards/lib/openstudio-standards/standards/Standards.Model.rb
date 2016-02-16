@@ -172,6 +172,22 @@ class OpenStudio::Model::Model
       self.add_performance_rating_method_baseline_system(building_vintage, system_type, sys_group[:zones])
     
     end
+
+    # Todo: Potential space for adding the SPM Warmest for SAT Reset
+    # Apply the Supply Reset Temperatures to Systems 5-8
+    # air_loop.is_multizone_vav_system <=> airloop is a system 5-8
+=begin
+    self.getAirLoopHVACs.sort.each do |air_loop|
+      if air_loop.is_multizone_vav_system
+        # In this case it's a system 5-8, SAT reset is necessary
+        case template
+          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+            air_loop.enable_supply_air_temperature_reset_appG
+          else
+            OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: no SAT reset implemented, template was not in list: '#{template}'.")
+        end
+    end
+=end
   
     # Apply the minimum damper positions
     self.getAirLoopHVACs.sort.each do |air_loop|
@@ -634,8 +650,8 @@ class OpenStudio::Model::Model
           # We clone the nonres elec (attributes such as occtype fueltype and stories are carried over)
           group = nonres_elec
           # Add fossil fuel area and zones
-          group[:area_ft2]= nonres_fossil[:area_ft2]
-          group[:zones] = nonres_fossil[:zones]
+          group[:area_ft2] += nonres_fossil[:area_ft2]
+          group[:zones] += nonres_fossil[:zones]
           # add to sys_groups
           sys_groups << group
         end
@@ -651,7 +667,7 @@ class OpenStudio::Model::Model
           # We clone the nonres fossil (attributes such as occtype fueltype and stories are carried over)
           group = nonres_fossil
           # Add nonres elec area and zones
-          group[:area_ft2]+= nonres_elec[:area_ft2]
+          group[:area_ft2] += nonres_elec[:area_ft2]
           group[:zones] += nonres_elec[:zones]
           # add to sys_groups
           sys_groups << group
@@ -674,7 +690,7 @@ class OpenStudio::Model::Model
           # Combine the stories too (is that right?)
           group[:stories] = res_stories + nonres_stories
           group[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
-          group[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
+          group[:zones] = nonres_elec[:zones] + nonres_elec[:zones]
           # add to sys_groups
           sys_groups << group
 
@@ -685,7 +701,7 @@ class OpenStudio::Model::Model
           # Combine the stories too (is that right?)
           group[:stories] = res_stories + nonres_stories
           group[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          group[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
+          group[:zones] = res_fossil[:zones] + nonres_fossil[:zones]
           # add to sys_groups
           sys_groups << group
 
@@ -697,7 +713,7 @@ class OpenStudio::Model::Model
           # Combine the stories too (here it's definitely fine)
           group[:stories] = res_stories + nonres_stories
           group[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          group[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
+          group[:zones] = res_elec[:zones] + nonres_elec[:zones] + res_fossil[:zones] + nonres_fossil[:zones]
           # add to sys_groups
           sys_groups << group
 
@@ -715,7 +731,7 @@ class OpenStudio::Model::Model
           # Combine the stories too (is that right?)
           group[:stories] = res_stories + nonres_stories
           group[:area_ft2] = res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          group[:zones] << res_fossil[:zones] + nonres_fossil[:zones]
+          group[:zones] = res_fossil[:zones] + nonres_fossil[:zones]
           # add to sys_groups
           sys_groups << group
 
@@ -726,7 +742,7 @@ class OpenStudio::Model::Model
           # Combine the stories too (is that right?)
           group[:stories] = res_stories + nonres_stories
           group[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2]
-          group[:zones] << nonres_elec[:zones] + nonres_elec[:zones]
+          group[:zones] = nonres_elec[:zones] + nonres_elec[:zones]
           # add to sys_groups
           sys_groups << group
 
@@ -738,7 +754,7 @@ class OpenStudio::Model::Model
           # Combine the stories too (here it's fine)
           group[:stories] = res_stories + nonres_stories
           group[:area_ft2] = res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:area_ft2] + nonres_fossil[:area_ft2]
-          group[:zones] << res_elec[:area_ft2] + nonres_elec[:area_ft2] + res_fossil[:zones] + nonres_fossil[:zones]
+          group[:zones] = res_elec[:zones] + nonres_elec[:zones] + res_fossil[:zones] + nonres_fossil[:zones]
           # add to sys_groups
           sys_groups << group
 
@@ -908,7 +924,7 @@ class OpenStudio::Model::Model
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
      
       case system_type
-      when 'PTAC'
+      when 'PTAC' # System 1
       
         # Retrieve the existing hot water loop
         # or add a new one if necessary.
@@ -940,7 +956,7 @@ class OpenStudio::Model::Model
                       'Water',
                       'Single Speed DX AC')
 
-      when 'PTHP'
+      when 'PTHP' # System 2
       
         # Add an air-source packaged terminal
         # heat pump with electric supplemental heat
@@ -950,7 +966,7 @@ class OpenStudio::Model::Model
                 zones,
                 'ConstantVolume')
 
-      when 'PSZ_AC'
+      when 'PSZ_AC' # System 3
 
       
         # Add a gas-fired PSZ-AC to each zone
@@ -970,7 +986,7 @@ class OpenStudio::Model::Model
                         cooling_type='Single Speed DX AC',
                         building_type=nil)      
       
-      when 'PSZ_HP'
+      when 'PSZ_HP'  # System 4
 
         # Add an air-source packaged single zone
         # heat pump with electric supplemental heat
@@ -989,7 +1005,7 @@ class OpenStudio::Model::Model
                       'Single Speed Heat Pump',
                       building_type=nil)       
       
-      when 'PVAV_Reheat'
+      when 'PVAV_Reheat' # System 5
       
         # Retrieve the existing hot water loop
         # or add a new one if necessary.
@@ -1037,12 +1053,11 @@ class OpenStudio::Model::Model
           end
         end      
       
-      when 'PVAV_PFP_Boxes'
+      when 'PVAV_PFP_Boxes' # System 6
 
       
-      
-      # Sys7
-      when 'VAV_Reheat'
+
+      when 'VAV_Reheat' # System 7
       
         # Retrieve the existing hot water loop
         # or add a new one if necessary.
@@ -1115,7 +1130,7 @@ class OpenStudio::Model::Model
 
         end
     
-      when 'VAV_PFP_Boxes'
+      when 'VAV_PFP_Boxes' # System 8
       
         # Retrieve the existing chilled water loop
         # or add a new one if necessary.
@@ -1169,7 +1184,7 @@ class OpenStudio::Model::Model
 
         end      
 
-        when 'Gas_Furnace'
+        when 'Gas_Furnace' # System 9
           # Add a System 9 - Gas Unit Heater to each zone
           self.add_unitheater(standard,
                              nil,
@@ -1180,7 +1195,7 @@ class OpenStudio::Model::Model
                              'Gas',
                              nil)
 
-      when 'Electric_Furnace'
+      when 'Electric_Furnace'  # System 10
         # Add a System 10 - Electric Unit Heater to each zone
         self.add_unitheater(standard,
                               nil,
@@ -1733,6 +1748,7 @@ class OpenStudio::Model::Model
     # self.getFanZoneExhausts.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
 
     # Pumps
+    # Todo: remove? I'm doing it somewhere else now, when calling apply_performance_rating_method_baseline_pump_power
     self.getPumpConstantSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
     self.getPumpVariableSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
     

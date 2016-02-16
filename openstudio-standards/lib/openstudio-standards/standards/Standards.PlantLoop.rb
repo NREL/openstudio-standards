@@ -45,7 +45,10 @@ class OpenStudio::Model::PlantLoop
     return variable_flow
   
   end
-  
+
+
+  # Todo: I think it makes more sense to sense the motor efficiency right there...
+  # But actually it's completely irrelevant... you could set at 0.9 and just calculate the pressurise rise to have your 19 W/GPM or whatever
   def apply_performance_rating_method_baseline_pump_power(template)
     
     # Determine the pumping power per
@@ -115,10 +118,12 @@ class OpenStudio::Model::PlantLoop
     self.supplyComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
+        #pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
+        pump.set_pump_head_and_motor_eff(pri_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
+        #pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
+        pump.set_pump_head_and_motor_eff(pri_w_per_gpm, template)
       end
     end
     
@@ -126,10 +131,12 @@ class OpenStudio::Model::PlantLoop
     self.demandComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
+        #pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
+        pump.set_pump_head_and_motor_eff(sec_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
+        #pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
+        pump.set_pump_head_and_motor_eff(sec_w_per_gpm, template)
       end
     end
   
@@ -824,14 +831,11 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
     final_boilers = [first_boiler, second_boiler]
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, added a second boiler.")
 
-    # Set the sizing factor for all boilers evenly
+
+    # Set the sizing factor for all boilers evenly and Rename the boilers
     sizing_factor = (1.0/final_boilers.size).round(2)
-    final_boilers.each do |boiler|
-      boiler.setSizingFactor(sizing_factor)
-    end
-    
-    # Rename the boilers
     final_boilers.each_with_index do |boiler, i|
+      boiler.setSizingFactor(sizing_factor)
       boiler.setName("#{first_boiler.name} #{i+1} of #{final_boilers.size}")
     end
     
@@ -898,21 +902,25 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
     
     # Determine the per-chiller capacity
     # and sizing factor
-    per_chiller_sizing_factor = (1.0/num_chillers.size).round(2)
+    per_chiller_sizing_factor = (1.0/num_chillers).round(2)
+    # This is unused
     per_chiller_cap_tons = cap_tons / num_chillers
+
+    # Set the sizing factor and the chiller type: could do it on the first chiller before cloning it, but renaming warrants looping on chillers anyways
     
     # Add any new chillers
     final_chillers = [first_chiller]
     (num_chillers-1).times do
-      new_chiller = OpenStudio::Model::ChillerElectricEIR.new(self.model)
+      #new_chiller = OpenStudio::Model::ChillerElectricEIR.new(self.model)
       # TODO renable the cloning of the chillers after curves are shared resources
-      # new_chiller = first_chiller.clone(self.model)
-      # if new_chiller.to_ChillerElectricEIR.is_initialized
-        # new_chiller = new_chiller.to_ChillerElectricEIR.get
-      # else
-        # OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, could not clone chiller #{first_chiller.name}, cannot apply the performance rating method number of chillers.")
-        # return false
-      # end
+      # Should be good to go since 1.10.2 (?)
+      new_chiller = first_chiller.clone(self.model)
+      if new_chiller.to_ChillerElectricEIR.is_initialized
+        new_chiller = new_chiller.to_ChillerElectricEIR.get
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, could not clone chiller #{first_chiller.name}, cannot apply the performance rating method number of chillers.")
+        return false
+      end
       self.addSupplyBranchForComponent(new_chiller)
       final_chillers << new_chiller
     end
@@ -930,7 +938,64 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
   
     return true
   
-  end  
+  end
+
+
+  # Determines the total rated watts per GPM of the loop
+  #
+  # @return [Double] rated power consumption per flow
+  #   @units Watts per GPM (W*s/m^3)
+  def total_rated_w_per_gpm()
+    sizing_plant = self.sizingPlant
+    loop_type = sizing_plant.loopType
+
+    # Supply W/GPM
+    supply_w_per_gpm = 0
+    demand_w_per_gpm = 0
+
+    self.supplyComponents.each do |component|
+      if component.to_PumpConstantSpeed.is_initialized
+        pump = component.to_PumpConstantSpeed.get
+        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Pump", "'#{loop_type}' Loop #{self.name} - Primary (Supply) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        supply_w_per_gpm += pump_rated_w_per_gpm
+      elsif component.to_PumpVariableSpeed.is_initialized
+        pump = component.to_PumpVariableSpeed.get
+        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Pump", "'#{loop_type}' Loop #{self.name} - Primary (Supply) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        supply_w_per_gpm += pump_rated_w_per_gpm
+      end
+    end
+
+    # Determine if primary only or primary-secondary
+    # IF there's a pump on the demand side it's primary-secondary
+    demandPumps = self.demandComponents('OS_Pump_VariableSpeed'.to_IddObjectType) + self.demandComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
+    demandPumps.each do |component|
+      if component.to_PumpConstantSpeed.is_initialized
+        pump = component.to_PumpConstantSpeed.get
+        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Pump", "'#{loop_type}' Loop #{self.name} - Secondary (Demand) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        demand_w_per_gpm += pump_rated_w_per_gpm
+      elsif component.to_PumpVariableSpeed.is_initialized
+        pump = component.to_PumpVariableSpeed.get
+        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Pump", "'#{loop_type}' Loop #{self.name} - Secondary (Demand) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        demand_w_per_gpm += pump_rated_w_per_gpm
+      end
+    end
+
+
+    total_rated_w_per_gpm = supply_w_per_gpm + demand_w_per_gpm
+
+    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Loop", "'#{loop_type}' Loop #{self.name} - Total #{total_rated_w_per_gpm} W/GPM - Supply #{supply_w_per_gpm} W/GPM - Demand #{demand_w_per_gpm} W/GPM")
+
+    return total_rated_w_per_gpm
+
+  end
+
+
+
+
   
 end
 
