@@ -44,6 +44,7 @@ class OpenStudio::Model::BoilerHotWater
 
     # Get the capacity
     capacity_w = nil
+    capacity_btu_per_hr = nil
     if self.nominalCapacity.is_initialized
       capacity_w = self.nominalCapacity.get
     elsif self.autosizedNominalCapacity.is_initialized

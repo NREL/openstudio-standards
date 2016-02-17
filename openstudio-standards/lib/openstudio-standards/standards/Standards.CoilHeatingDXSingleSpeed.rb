@@ -2,6 +2,147 @@
 # open the class to add methods to return sizing values
 class OpenStudio::Model::CoilHeatingDXSingleSpeed
 
+  # Finds the search criteria
+  #
+  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+  # @return [hash] has for search criteria to be used for find object
+  def find_search_criteria(template)
+
+    # Define the criteria to find the chiller properties
+    # in the hvac standards data set.
+    search_criteria = {}
+    search_criteria['template'] = template
+
+    # TODO Standards - add split system vs single package to model
+    # For now, assume single package
+    subcategory = 'Single Package'
+    search_criteria['subcategory'] = subcategory
+
+    return search_criteria
+
+  end
+
+  # Finds capacity in tons
+  #
+  # @return [Double] capacity in tons to be used for find object
+  def find_capacity()
+
+    # Determine supplemental heating type if unitary
+    heat_pump = false
+    if self.airLoopHVAC.empty?
+      if self.containingHVACComponent.is_initialized
+        containing_comp = containingHVACComponent.get
+        if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+          heat_pump = true
+        end
+      end
+    end
+
+    # Get the coil capacity
+    capacity_w = nil
+    if(heat_pump == true)
+      containing_comp = self.containingHVACComponent.get
+      heat_pump_comp = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
+      ccoil = heat_pump_comp.coolingCoil
+      dxcoil = ccoil.to_CoilCoolingDXSingleSpeed.get
+      dxcoil_name = dxcoil.name.to_s
+      if sql_db_vars_map
+        if sql_db_vars_map[dxcoil_name]
+          dxcoil.setName(sql_db_vars_map[dxcoil_name])
+        end
+      end
+      if dxcoil.ratedTotalCoolingCapacity.is_initialized
+        capacity_w = dxcoil.ratedTotalCoolingCapacity.get
+      elsif dxcoil.autosizedRatedTotalCoolingCapacity.is_initialized
+        capacity_w = dxcoil.autosizedRatedTotalCoolingCapacity.get
+      else
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
+        successfully_set_all_properties = false
+        return successfully_set_all_properties
+      end
+      dxcoil.setName(dxcoil_name)
+    else
+      if self.ratedTotalHeatingCapacity.is_initialized
+        capacity_w = self.ratedTotalHeatingCapacity.get
+      elsif self.autosizedRatedTotalHeatingCapacity.is_initialized
+        capacity_w = self.autosizedRatedTotalHeatingCapacity.get
+      else
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
+        successfully_set_all_properties = false
+        return successfully_set_all_properties
+      end
+    end
+
+    # Convert capacity to Btu/hr
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
+
+    return capacity_btu_per_hr
+
+  end
+
+  # Finds lookup object in standards and return efficiency
+  #
+  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+  # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
+  # @return [Double] full load efficiency (COP)
+  def standard_minimum_cop(template,standards)
+
+    # find ac properties
+    search_criteria = self.find_search_criteria(template)
+    cooling_type = search_criteria["cooling_type"]
+    heating_type = search_criteria["heating_type"]
+    subcategory = search_criteria["subcategory"]
+    capacity_btu_per_hr = self.find_capacity
+    capacity_kbtu_per_hr = OpenStudio.convert(capacity_btu_per_hr, "Btu/hr", "kBtu/hr").get
+
+    # Determine supplemental heating type if unitary
+    heat_pump = false
+    if self.airLoopHVAC.empty?
+      if self.containingHVACComponent.is_initialized
+        containing_comp = containingHVACComponent.get
+        if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+          heat_pump = true
+        end
+      end
+    end
+
+    # find object
+    unitary_hps = standards['heat_pumps']
+    heat_pumps = standards['heat_pumps_heating']
+    ac_props = nil
+    if heat_pump == true
+      ac_props = self.model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
+    else
+      ac_props = self.model.find_object(unitary_hps, search_criteria, capacity_btu_per_hr)
+    end
+
+    # Get the minimum efficiency standards
+    cop = nil
+
+    # Check to make sure properties were found
+    if ac_props.nil?
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{self.name}, cannot find efficiency info, cannot apply efficiency standard.")
+      return cop # value of nil
+    end
+
+    # If specified as SEER
+    unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
+      min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
+      cop = seer_to_cop(min_seer)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+    end
+
+    # If specified as EER
+    unless ac_props['minimum_energy_efficiency_ratio'].nil?
+      min_eer = ac_props['minimum_energy_efficiency_ratio']
+      cop = eer_to_cop(min_eer)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{self.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    return cop
+
+  end
+
   def setStandardEfficiencyAndCurves(template, standards, sql_db_vars_map)
 
     successfully_set_all_properties = true
