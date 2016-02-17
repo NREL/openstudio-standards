@@ -1977,8 +1977,8 @@
     },
     {
       "name": "U 1.98 SHGC 0.61 Simple Glazing Skylight",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
+      "intended_surface_type": "Skylight",
+      "standards_construction_type": "Glass with Curb",
       "insulation_layer": null,
       "sort": null,
       "materials": [
@@ -2001,11 +2001,11 @@
     {
       "name": "ext-slab",
       "intended_surface_type": "GroundContactFloor",
-      "standards_construction_type": "Unheated",
+      "standards_construction_type": "Mass",
       "insulation_layer": null,
       "sort": null,
       "materials": [
-        "HW CONCRETE"
+        "6 in. Normalweight Concrete Floor"
       ]
     },
     {
