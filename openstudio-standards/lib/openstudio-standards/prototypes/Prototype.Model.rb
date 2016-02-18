@@ -10,6 +10,7 @@ class OpenStudio::Model::Model
   require_relative 'Prototype.HeatExchangerAirToAirSensibleAndLatent'
   require_relative 'Prototype.ControllerWaterCoil'
   require_relative 'Prototype.Model.hvac'
+  require_relative 'Prototype.Model.swh'
 
   # Creates a DOE prototype building model and replaces
   # the current model with this model.
@@ -49,7 +50,8 @@ class OpenStudio::Model::Model
     self.create_thermal_zones(building_type,building_vintage, climate_zone)
     self.add_hvac(building_type, building_vintage, climate_zone, prototype_input)
     self.custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-    #self.add_swh(building_type, building_vintage, climate_zone, prototype_input, space_type_map)
+    self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
+    self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
     self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
     self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
     self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone)
@@ -93,11 +95,6 @@ class OpenStudio::Model::Model
 
     if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant"
       self.update_exhaust_fan_efficiency(building_vintage)
-      self.update_waterheater_loss_coefficient(building_vintage)
-    end
-
-    if building_type == "MidriseApartment"
-      self.update_waterheater_loss_coefficient(building_vintage)
     end
     
     if building_type == "HighriseApartment"
