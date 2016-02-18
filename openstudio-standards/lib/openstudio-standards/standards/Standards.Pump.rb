@@ -85,6 +85,11 @@ module Pump
   
     motor_eff = 0.85
   
+    # Don't attempt to look up motor efficiency
+    # for zero-hp pumps (required for circulation-pump-free
+    # service water heating systems).
+    return 1.0 if motor_bhp == 0.0
+  
     # Lookup the minimum motor efficiency
     motors = $os_standards["motors"]
     
