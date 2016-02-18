@@ -2,7 +2,7 @@
   <schema_version>3.0</schema_version>
   <name>create_doe_prototype_building</name>
   <uid>be90fd0b-a651-467a-bc8d-29d310b0f937</uid>
-  <version_id>50147e20-c28b-4d1b-bd29-b4bc996b0788</version_id>
+  <version_id>21bc1623-3fbe-4db2-95a2-c6ca599fdd38</version_id>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>CreateDOEPrototypeBuilding</class_name>
   <display_name>Create DOE Prototype Building</display_name>
@@ -64,6 +64,14 @@
         <choice>
           <value>FullServiceRestaurant</value>
           <display_name>FullServiceRestaurant</display_name>
+        </choice>
+        <choice>
+          <value>MidriseApartment</value>
+          <display_name>MidriseApartment</display_name>
+        </choice>
+        <choice>
+          <value>HighriseApartment</value>
+          <display_name>HighriseApartment</display_name>
         </choice>
       </choices>
     </argument>
@@ -202,18 +210,6 @@
       <checksum>D6C32D5E</checksum>
     </file>
     <file>
-      <filename>primary_school_results.txt</filename>
-      <filetype>txt</filetype>
-      <usage_type>test</usage_type>
-      <checksum>1FC3C2A8</checksum>
-    </file>
-    <file>
-      <filename>school_smoff_results.txt</filename>
-      <filetype>txt</filetype>
-      <usage_type>test</usage_type>
-      <checksum>31E4F0C3</checksum>
-    </file>
-    <file>
       <version>
         <software_program>OpenStudio</software_program>
         <identifier>1.6.0</identifier>
@@ -222,13 +218,13 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>85979E2E</checksum>
+      <checksum>56805923</checksum>
     </file>
     <file>
       <filename>create_DOE_prototype_building_test.rb</filename>
       <filetype>rb</filetype>
       <usage_type>test</usage_type>
-      <checksum>689BFE8B</checksum>
+      <checksum>ACF690FB</checksum>
     </file>
   </files>
 </measure>
