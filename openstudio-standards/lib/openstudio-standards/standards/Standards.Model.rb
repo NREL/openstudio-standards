@@ -16,7 +16,10 @@ class OpenStudio::Model::Model
   require_relative 'Standards.ChillerElectricEIR'
   require_relative 'Standards.CoilCoolingDXTwoSpeed'
   require_relative 'Standards.CoilCoolingDXSingleSpeed'
+  require_relative 'Standards.CoilCoolingDXMultiSpeed'
   require_relative 'Standards.CoilHeatingDXSingleSpeed'
+  require_relative 'Standards.CoilHeatingDXMultiSpeed'
+  require_relative 'Standards.CoilHeatingGasMultiStage'
   require_relative 'Standards.BoilerHotWater'
   require_relative 'Standards.AirLoopHVAC'
   require_relative 'Standards.WaterHeaterMixed'
@@ -35,9 +38,8 @@ class OpenStudio::Model::Model
     
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
      
-    # Multi-zone VAV outdoor air sizing  
+    # Multi-zone VAV outdoor air sizing
     self.getAirLoopHVACs.sort.each {|obj| obj.apply_multizone_vav_outdoor_air_sizing(self.template)}  
-    
 
   end
   
@@ -63,9 +65,11 @@ class OpenStudio::Model::Model
     # Unitary ACs
     self.getCoilCoolingDXTwoSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
     self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
+    self.getCoilCoolingDXMultiSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
 
     # Unitary HPs
     self.getCoilHeatingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
+    self.getCoilHeatingDXMultiSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
   
     # Chillers
     clg_tower_objs = self.getCoolingTowerSingleSpeeds
@@ -77,6 +81,9 @@ class OpenStudio::Model::Model
     # Water Heaters
     self.getWaterHeaterMixeds.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
 
+    # Heating coils
+    self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
+   
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   
   end
@@ -771,7 +778,7 @@ class OpenStudio::Model::Model
 
     thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(self)
     thermostat.setName("#{name} Thermostat")
-
+ 
     heating_setpoint_sch = data['heating_setpoint_schedule']
        
     unless heating_setpoint_sch.nil?

@@ -9,7 +9,7 @@ class OpenStudio::Model::Model
   if OpenStudio::Model::Model.new.version < OpenStudio::VersionString.new(min_os_version)
     OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Model", "This measure requires a minimum OpenStudio version of #{min_os_version} because the HVACSizing .autosizedFoo methods expect EnergyPlus 8.2 output variable names.")
   end
-  
+
   # Load the helper libraries for getting the autosized
   # values for each type of model object.
   require_relative 'HVACSizing.AirTerminalSingleDuctParallelPIUReheat'
@@ -22,9 +22,12 @@ class OpenStudio::Model::Model
   require_relative 'HVACSizing.FanOnOff'
   require_relative 'HVACSizing.CoilHeatingElectric'
   require_relative 'HVACSizing.CoilHeatingGas'
+  require_relative 'HVACSizing.CoilHeatingGasMultiStage'
   require_relative 'HVACSizing.CoilHeatingWater'
   require_relative 'HVACSizing.CoilHeatingDXSingleSpeed'
   require_relative 'HVACSizing.CoilCoolingDXSingleSpeed'
+  require_relative 'HVACSizing.CoilHeatingDXMultiSpeed'
+  require_relative 'HVACSizing.CoilCoolingDXMultiSpeed'
   require_relative 'HVACSizing.CoilCoolingDXTwoSpeed'
   require_relative 'HVACSizing.CoilCoolingWater'
   require_relative 'HVACSizing.ControllerOutdoorAir'
@@ -44,7 +47,6 @@ class OpenStudio::Model::Model
   require_relative 'HVACSizing.AirTerminalSingleDuctVAVReheat'
   require_relative 'HVACSizing.AirTerminalSingleDuctUncontrolled'
   require_relative 'HVACSizing.AirLoopHVAC'
-  require_relative 'HVACSizing.AirLoopHVACUnitaryHeatPumpAirToAir'
   require_relative 'HVACSizing.FanConstantVolume'
   require_relative 'HVACSizing.FanVariableVolume'
   require_relative 'HVACSizing.FanOnOff'  
@@ -52,7 +54,7 @@ class OpenStudio::Model::Model
   # A helper method to run a sizing run and pull any values calculated during
   # autosizing back into the self.
   def runSizingRun(sizing_run_dir = "#{Dir.pwd}/SizingRun")
-    
+
     # Change the simulation to only run the sizing days
     sim_control = self.getSimulationControl
     sim_control.setRunSimulationforSizingPeriods(true)
@@ -79,7 +81,7 @@ class OpenStudio::Model::Model
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Failed to apply sizing values because model is missing sql file containing sizing results.')
       return false
     end
-  
+
     # TODO Sizing methods for these types of equipment are
     # currently only stubs that need to be filled in.
     self.getAirConditionerVariableRefrigerantFlows.sort.each {|obj| obj.applySizingValues}
@@ -92,11 +94,9 @@ class OpenStudio::Model::Model
     self.getAirTerminalSingleDuctVAVHeatAndCoolNoReheats.sort.each {|obj| obj.applySizingValues}
     self.getAirTerminalSingleDuctVAVHeatAndCoolReheats.sort.each {|obj| obj.applySizingValues}
     self.getBoilerSteams.sort.each {|obj| obj.applySizingValues}
-    self.getCoilCoolingDXMultiSpeeds.sort.each {|obj| obj.applySizingValues}
     self.getCoilCoolingDXVariableRefrigerantFlows.sort.each {|obj| obj.applySizingValues}
     self.getCoilCoolingWaterToAirHeatPumpEquationFits.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingWaterToAirHeatPumpEquationFits.sort.each {|obj| obj.applySizingValues}
-    self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingDesuperheaters.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingDXVariableRefrigerantFlows.sort.each {|obj| obj.applySizingValues}
     self.getCoilWaterHeatingDesuperheaters.sort.each {|obj| obj.applySizingValues}
@@ -139,13 +139,16 @@ class OpenStudio::Model::Model
     # Heating coils
     self.getCoilHeatingElectrics.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingGass.sort.each {|obj| obj.applySizingValues}
+    self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingWaters.sort.each {|obj| obj.applySizingValues}
     self.getCoilHeatingDXSingleSpeeds.sort.each {|obj| obj.applySizingValues}
+    self.getCoilHeatingDXMultiSpeeds.sort.each {|obj| obj.applySizingValues}
     
     # Cooling coils
     self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.applySizingValues}
     self.getCoilCoolingDXTwoSpeeds.sort.each {|obj| obj.applySizingValues}
     self.getCoilCoolingWaters.sort.each {|obj| obj.applySizingValues}
+    self.getCoilCoolingDXMultiSpeeds.sort.each {|obj| obj.applySizingValues}
     
     # Outdoor air
     self.getControllerOutdoorAirs.sort.each {|obj| obj.applySizingValues}
@@ -169,7 +172,7 @@ class OpenStudio::Model::Model
     
     # Controls
     self.getControllerWaterCoils.sort.each {|obj| obj.applySizingValues}
-    
+
     # VRF components
     
     # Refrigeration components
@@ -287,24 +290,25 @@ class OpenStudio::Model::Model
     result = OpenStudio::OptionalDouble.new
 
     name = object.name.get.upcase
-    
+
     object_type = object.iddObject.type.valueDescription.gsub('OS:','')
-      
+    if(object_type == 'Coil:Heating:Gas:MultiStage') then object_type = 'Coil:Heating:GasMultiStage' end
+
     sql = self.sqlFile
-    
+
     if sql.is_initialized
       sql = sql.get
-    
+
       #SELECT * FROM ComponentSizes WHERE CompType = 'Coil:Heating:Gas' AND CompName = "COIL HEATING GAS 3" AND Description = "Design Size Nominal Capacity"
       query = "SELECT Value 
               FROM ComponentSizes 
               WHERE CompType='#{object_type}' 
               AND CompName='#{name}' 
-              AND Description='#{value_name}' 
+              AND Description='#{value_name.strip}' 
               AND Units='#{units}'"
               
       val = sql.execAndReturnFirstDouble(query)
-      
+
       if val.is_initialized
         result = OpenStudio::OptionalDouble.new(val.get)
       else

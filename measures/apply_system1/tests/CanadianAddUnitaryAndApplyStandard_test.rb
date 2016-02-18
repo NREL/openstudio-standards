@@ -53,7 +53,7 @@ class CanadianAddUnitaryAndApplyStandardTest < MiniTest::Unit::TestCase
   end
 =end
   
-=begin
+begin
     def test_system_3()
       boiler_fueltypes = ["NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"]
       mau_types = [true, false]
@@ -70,9 +70,9 @@ class CanadianAddUnitaryAndApplyStandardTest < MiniTest::Unit::TestCase
       BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
       BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(model, model.getThermalZones, boiler_fueltypes[0], heating_coil_types_sys3[2], baseboard_types[0])
       run_the_measure(model)
-      BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/output/system_3.osm")
+      BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/system_3.osm")
     end
-=end
+end
   
 =begin  
   def test_system_4()
@@ -112,7 +112,7 @@ class CanadianAddUnitaryAndApplyStandardTest < MiniTest::Unit::TestCase
   end
 =end
 
-begin
+=begin
   def test_system_6()
     boiler_fueltypes = ["NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"]
     mau_types = [true, false]
@@ -132,7 +132,7 @@ begin
     run_the_measure(model)
     BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/system_6.osm")
   end
-end
+=end
 
 =begin  
   def test_system_7()
