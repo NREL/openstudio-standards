@@ -2982,6 +2982,7 @@ class OpenStudio::Model::Model
     rated_flow_rate_gal_per_hour = rated_flow_rate_per_area * space_area * space_multiplier   # gal/h
     rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour/60  # gal/h to gal/min
     rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get
+    
     # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
     # water_use_sensible_frac_sch.setValue(0.2)
     # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
