@@ -107,14 +107,21 @@ class OpenStudio::Model::Model
       
         # Special logic to make unitary heat pumps all blow-through
         fan_position = 'DrawThrough'
-        if prototype_input['pszac_heating_type'] == 'Single Speed Heat Pump'
+        if prototype_input['pszac_heating_type'] == 'Single Speed Heat Pump' ||
+          prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
           fan_position = 'BlowThrough'
+        end
+      
+        # Special logic to make a heat pump loop if necessary
+        heat_pump_loop = nil
+        if prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
+          heat_pump_loop = add_hp_loop(prototype_input)
         end
       
         self.add_psz_ac(building_vintage, 
                         system['name'], 
-                        nil, 
-                        nil,
+                        heat_pump_loop, # Typically nil unless water source hp
+                        heat_pump_loop, # Typically nil unless water source hp
                         thermal_zones, 
                         hvac_op_sch,
                         oa_sch,
