@@ -21,13 +21,13 @@ class OpenStudio::Model::PlanarSurface
   # and the value is the newly created construction.  This can be
   # used to avoid creating duplicate constructions.
   def apply_standard_construction(template, climate_zone, previous_construction_map = {})
-  
+
     # Skip surfaces not in a space
-    return false if self.space.empty?
+    return previous_construction_map if self.space.empty?
     space = self.space.get
    
     # Skip surfaces that don't have a construction
-    return false if self.construction.empty?
+    return previous_construction_map if self.construction.empty?
     construction = self.construction.get
     
     # Determine if residential or nonresidential
@@ -50,7 +50,7 @@ class OpenStudio::Model::PlanarSurface
     standards_construction_type = standards_info.standardsConstructionType
     if intended_surface_type.empty? || standards_construction_type.empty?
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine one or more of the intended surface type or the standards construction type for #{self.name}.  This surface will not have the standard applied.")
-      return false
+      return previous_construction_map
     end
 
     # Check if the construction type was already created.
@@ -65,7 +65,9 @@ class OpenStudio::Model::PlanarSurface
                                                   intended_surface_type.get,
                                                   standards_construction_type.get,
                                                   occ_type)
-      previous_construction_map[type] = new_construction
+      if !new_construction == false
+        previous_construction_map[type] = new_construction
+      end
     end
     
     # Assign the new construction to the surface

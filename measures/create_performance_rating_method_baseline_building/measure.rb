@@ -26,7 +26,7 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
     # Make an argument for the standard
     standard_chs = OpenStudio::StringVector.new
     #standard_chs << '90.1-2004'
-    #standard_chs << '90.1-2007'
+    standard_chs << '90.1-2007'
     standard_chs << '90.1-2010'
     standard_chs << '90.1-2013'
     standard_chs << 'India ECBC 2007'
@@ -37,6 +37,7 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
     
     # Make an argument for the building type
     building_type_chs = OpenStudio::StringVector.new
+    building_type_chs << 'MidriseApartment'
     building_type_chs << 'SecondarySchool'
     building_type_chs << 'PrimarySchool'
     building_type_chs << 'SmallOffice'

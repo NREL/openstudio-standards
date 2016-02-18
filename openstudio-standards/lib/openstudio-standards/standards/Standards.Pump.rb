@@ -3,6 +3,45 @@
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
 module Pump
 
+
+
+
+  def set_pump_head_and_motor_eff(target_w_per_gpm, template)
+    # Todo: @jmarrec's implementation. I tested it and it does work unlike set_pump_power_per_flow
+    # Eplus assumes an impeller efficiency of 0.78 to determine the total efficiency
+    # http://bigladdersoftware.com/epx/docs/8-4/engineering-reference/component-sizing.html#pump-sizing
+    # Rated_Power_Use = Rated_Volume_Flow_Rate * Rated_Pump_Head / Total_Efficiency
+    # Rated_Power_Use / Rated_Volume_Flow_Rate =  Rated_Pump_Head / Total_Efficiency
+    # Total_Efficiency = Motor_Efficiency * Impeler_Efficiency
+
+    impeller_efficiency = 0.78
+
+    # Get the horsepower
+    hp = self.horsepower
+
+    # Find the motor efficiency
+    motor_efficiency = standard_minimum_motor_efficiency(template, hp)
+
+    # Change the motor efficiency
+    self.setMotorEfficiency(motor_efficiency)
+
+    total_efficiency = impeller_efficiency * motor_efficiency
+
+    desired_power_per_m3_s = OpenStudio::convert(target_w_per_gpm,'W*min/gal', 'W*s/m^3').get
+
+    pressure_rise_pa = desired_power_per_m3_s * total_efficiency
+    pressure_rise_ft_h2O = OpenStudio::convert(pressure_rise_pa,'Pa','ftH_{2}O').get
+
+    # Change pressure rise
+    self.setRatedPumpHead(pressure_rise_pa)
+
+    # Report
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{self.name}: allowed hp = #{hp.round(2)}HP; motor eff = #{(motor_efficiency*100).round(2)}%; Pressure drop = #{pressure_rise_pa.round(0)} Pa // #{pressure_rise_ft_h2O.round(2)} ftH_{2}O")
+
+    return true
+
+  end
+
   # Set the pressure rise that cooresponds to the
   # target power per flow number, given a specified 
   # pump efficiency and optionally a water type (to determine density).
@@ -16,7 +55,7 @@ module Pump
     
     # Get the pressure rise
     pressure_rise_pa = self.pressure_for_target_power_per_flow(target_w_per_gpm, pump_eff, water_type)
-    
+
     # Set the pressure rise
     self.setRatedPumpHead(pressure_rise_pa)
 
@@ -33,6 +72,7 @@ module Pump
   # @param water_type [String] valid choices are Cooling, Heating, Condenser.
   #   This argument modifies the density of the water, changing the result slightly.
   # @return [Double] the pressure rise, in Pa
+  # Todo: this implementation doesn't appear correct to me, and rated W/GPM outputed for my test model seems to confirm that
   def pressure_for_target_power_per_flow(target_w_per_gpm, pump_eff, water_type='Cooling')
     
     # Determine the density of water in lb/gal
@@ -136,5 +176,41 @@ module Pump
     return hp
 
   end
+
+  # Determines the rated watts per GPM of the pump
+  #
+  # @return [Double] rated power consumption per flow
+  #   @units Watts per GPM (W*min/gal)
+  def rated_w_per_gpm()
+
+    # Get design power (whether autosized or hard-sized)
+    rated_power_w = 0
+    if self.autosizedRatedPowerConsumption.is_initialized
+      rated_power_w = self.autosizedRatedPowerConsumption.get
+    elsif self.ratedPowerConsumption.is_initialized
+      rated_power_w = self.ratedPowerConsumption.get
+    else
+      OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Pump", "For #{self.name}, could not find rated pump power consumption, cannot determine w per gpm correctly.")
+      return 0.0
+    end
+
+    rated_m3_per_s = 0
+    if self.autosizedRatedFlowRate.is_initialized
+      rated_m3_per_s = self.autosizedRatedFlowRate.get
+    elsif self.ratedFlowRate.is_initialized
+      rated_m3_per_s = self.ratedFlowRate.get
+    else
+      OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Pump", "For #{self.name}, could not find rated pump Flow Rate, cannot determine w per gpm correctly.")
+      return 0.0
+    end
+
+    rated_w_per_m3s = rated_power_w / rated_m3_per_s
+
+    rated_w_per_gpm = OpenStudio::convert(rated_w_per_m3s, 'W*s/m^3', 'W*min/gal').get
+
+    return rated_w_per_gpm
+
+  end
+
  
 end

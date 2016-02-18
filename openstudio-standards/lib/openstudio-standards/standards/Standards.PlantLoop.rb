@@ -45,7 +45,10 @@ class OpenStudio::Model::PlantLoop
     return variable_flow
   
   end
-  
+
+
+  # Todo: I think it makes more sense to sense the motor efficiency right there...
+  # But actually it's completely irrelevant... you could set at 0.9 and just calculate the pressurise rise to have your 19 W/GPM or whatever
   def apply_performance_rating_method_baseline_pump_power(template)
     
     # Determine the pumping power per
@@ -115,10 +118,12 @@ class OpenStudio::Model::PlantLoop
     self.supplyComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
+        #pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
+        pump.set_pump_head_and_motor_eff(pri_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
+        #pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
+        pump.set_pump_head_and_motor_eff(pri_w_per_gpm, template)
       end
     end
     
@@ -126,10 +131,12 @@ class OpenStudio::Model::PlantLoop
     self.demandComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
+        #pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
+        pump.set_pump_head_and_motor_eff(sec_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
+        #pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
+        pump.set_pump_head_and_motor_eff(sec_w_per_gpm, template)
       end
     end
   
@@ -145,6 +152,7 @@ class OpenStudio::Model::PlantLoop
     when 'Heating'
 
       # Loop properties
+      # G3.1.3.3 - HW Supply at 180°F, return at 130°F
       hw_temp_f = 180
       hw_delta_t_r = 50
       min_temp_f = 50
@@ -152,17 +160,38 @@ class OpenStudio::Model::PlantLoop
       hw_temp_c = OpenStudio.convert(hw_temp_f,'F','C').get
       hw_delta_t_k = OpenStudio.convert(hw_delta_t_r,'R','K').get
       min_temp_c = OpenStudio.convert(min_temp_f,'F','C').get
-      
-      hw_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self.model)
-      hw_temp_sch.setName("HW Temp - #{hw_temp_f}F")
-      hw_temp_sch.defaultDaySchedule.setName("HW Temp - #{hw_temp_f}F Default")
-      hw_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),hw_temp_c)
-      hw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self.model,hw_temp_sch)
-      hw_stpt_manager.setName("#{self.name} HW Setpoint")
-      hw_stpt_manager.addToNode(self.supplyOutletNode)
+
       sizing_plant.setDesignLoopExitTemperature(hw_temp_c)
       sizing_plant.setLoopDesignTemperatureDifference(hw_delta_t_k)
       self.setMinimumLoopTemperature(min_temp_c)
+
+
+      ##################  SetpointManagerOutdoorAirReset #########################
+      # ASHRAE Appendix G - G3.1.3.4 (I checked for ASHRAE 90.1-2004, 2007 and 2010)
+      # HW reset: 180°F at 20°F and below, 150°F at 50°F and above
+
+      # Low OAT = 20°F, HWST = 180°F
+      oat_low_ip = 20
+      sp_low_ip = 180
+      oat_low_si = OpenStudio::convert(oat_low_ip,'F','C').get
+      sp_low_si = OpenStudio::convert(sp_low_ip,'F','C').get
+
+      # High OAT = 50°F, HWST = 150°F
+      oat_high_ip = 50
+      sp_high_ip = 150
+      oat_high_si = OpenStudio::convert(oat_high_ip,'F','C').get
+      sp_high_si = OpenStudio::convert(sp_high_ip,'F','C').get
+
+      hw_oareset_stpt_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(self.model)
+      hw_oareset_stpt_manager.setControlVariable("Temperature")
+      hw_oareset_stpt_manager.setSetpointatOutdoorLowTemperature(sp_low_si)
+      hw_oareset_stpt_manager.setOutdoorLowTemperature(oat_low_si)
+      hw_oareset_stpt_manager.setSetpointatOutdoorHighTemperature(sp_high_si)
+      hw_oareset_stpt_manager.setOutdoorHighTemperature(oat_high_si)
+      hw_oareset_stpt_manager.setName("HW Loop SetpointManager OA Reset App G")
+      # Add to Loop supply outlet node
+      hw_oareset_stpt_manager.addToNode(self.supplyOutletNode)
+      ##################  End of SetpointManagerOutdoorAirReset ##################
 
       # Boiler properties
       self.supplyComponents.each do |sc|
@@ -175,29 +204,53 @@ class OpenStudio::Model::PlantLoop
     when 'Cooling'
     
       # Loop properties
+      # G3.1.3.8 - LWT 44 / EWT 56
       chw_temp_f = 44
       chw_delta_t_r = 12
       min_temp_f = 34
       max_temp_f = 200
-      ref_cond_wtr_temp_f = 95
-   
+      # For water-cooled chillers this is the water temperature entering the condenser (e.g., leaving the cooling tower).
+      ref_cond_wtr_temp_f = 85
+
       chw_temp_c = OpenStudio.convert(chw_temp_f,'F','C').get
       chw_delta_t_k = OpenStudio.convert(chw_delta_t_r,'R','K').get
       min_temp_c = OpenStudio.convert(min_temp_f,'F','C').get
       max_temp_c = OpenStudio.convert(max_temp_f,'F','C').get
       ref_cond_wtr_temp_c = OpenStudio.convert(ref_cond_wtr_temp_f,'F','C').get
-      
-      chw_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self.model)
-      chw_temp_sch.setName("CHW Temp - #{chw_temp_f}F")
-      chw_temp_sch.defaultDaySchedule.setName("CHW Temp - #{chw_temp_f}F Default")
-      chw_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),chw_temp_c)
-      chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self.model,chw_temp_sch)
-      chw_stpt_manager.setName("#{self.name} CHW Setpoint")
-      chw_stpt_manager.addToNode(self.supplyOutletNode)
+
       sizing_plant.setDesignLoopExitTemperature(chw_temp_c)
       sizing_plant.setLoopDesignTemperatureDifference(chw_delta_t_k)
       self.setMinimumLoopTemperature(min_temp_c)
       self.setMaximumLoopTemperature(max_temp_c)
+
+
+      ##################  SetpointManagerOutdoorAirReset #########################
+      # ASHRAE Appendix G - G3.1.3.9 (I checked for ASHRAE 90.1-2004, 2007 and 2010)
+      # ChW reset: 44°F at 80°F and above, 54°F at 60°F and below
+
+      # Low OAT = 60°F, LWT = 54°F
+      oat_low_ip = 60
+      sp_low_ip =  54
+      oat_low_si = OpenStudio::convert(oat_low_ip,'F','C').get
+      sp_low_si = OpenStudio::convert(sp_low_ip,'F','C').get
+
+      # High OAT = 80°F, LWT = 44°F
+      oat_high_ip = 80
+      sp_high_ip = 44
+      oat_high_si = OpenStudio::convert(oat_high_ip,'F','C').get
+      sp_high_si = OpenStudio::convert(sp_high_ip,'F','C').get
+
+      chw_oareset_stpt_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(self.model)
+      chw_oareset_stpt_manager.setControlVariable("Temperature")
+      chw_oareset_stpt_manager.setSetpointatOutdoorLowTemperature(sp_low_si)
+      chw_oareset_stpt_manager.setOutdoorLowTemperature(oat_low_si)
+      chw_oareset_stpt_manager.setSetpointatOutdoorHighTemperature(sp_high_si)
+      chw_oareset_stpt_manager.setOutdoorHighTemperature(oat_high_si)
+      chw_oareset_stpt_manager.setName("ChW Loop SetpointManager OA Reset App G")
+      # Add to Loop supply outlet node
+      chw_oareset_stpt_manager.addToNode(self.supplyOutletNode)
+      ##################  End of SetpointManagerOutdoorAirReset ##################
+
       
       # Chiller properties
       self.supplyComponents.each do |sc|
@@ -211,7 +264,120 @@ class OpenStudio::Model::PlantLoop
     when 'Condenser'
     
       # TODO prm condenser loop temp settings
-    
+      # G3.1.3.11 - LCnWT 85°F or 10°F approaching design wet bulb temperature, whichever is lower
+      # Design Temperature rise of 10°F => Range: 10°F
+      lcnwt_f = 85   # See my notes and propsoed alternative below, if we want to actually check the design days...
+      range_t_r = 10
+      lcnwt_c = OpenStudio.convert(lcnwt_f,'F','C').get
+      range_t_k = OpenStudio.convert(range_t_r,'R','K').get
+
+      # Typical design of min temp is really around 40°F (that's what basin heaters, when used, are sized for usually)
+      min_temp_f = 34
+      max_temp_f = 200
+      min_temp_c = OpenStudio.convert(min_temp_f,'F','C').get
+      max_temp_c = OpenStudio.convert(max_temp_f,'F','C').get
+
+
+      sizing_plant.setDesignLoopExitTemperature(lcnwt_c)
+      sizing_plant.setLoopDesignTemperatureDifference(range_t_k)
+      self.setMinimumLoopTemperature(min_temp_c)
+      self.setMaximumLoopTemperature(max_temp_c)
+
+
+      ##################  SetpointManagerFollowOutdoorAirTemperature #########################
+      # G3.1.3.11 - Tower shall be controlled to maintain a 70°F LCnWT where weather permits
+      # Use a SetpointManager:FollowOutdoorAirTemperature
+      float_down_to_f = 70
+      float_down_to_c = OpenStudio.convert(float_down_to_f,'F','C').get
+
+
+      # Todo: Problem is what to set for Offset Temperature Difference (=approach):
+      # * if unreasonably low approach, fan runs full blast and energy consumption is penalized
+      # * if too high, you don't get as much energy savings...
+      # "LCnWT 85°F or 10°F approaching design wet bulb temperature, whichever is lower" ==> approach is maximum 10, could be less depending on design conditions
+      # In most cases in the US a tower will be sized on CTI conditions, 78°F WB, so usually 7°F approach.
+      # Todo: I'll use that for now.
+      # Todo: Could also check the design days, but begs the question of finding the right one to begin with if you have several...
+      # todo: you'll need to deal with potentially different 'Humidity Indicating Type'
+      #
+      # see my answer here https://unmethours.com/question/12530/appendix-g-condenser-water-temperature-reset-in-energyplus/
+      # See also: http://www.comnet.org/mgp/content/cooling-towers?purpose=0#footnote1_do6jpuh
+
+      # Todo: this is an example of how I'd implement the case where we check the design days
+=begin
+summer_dday_wbs = []
+model.getDesignDays.each do |dd|
+  model.getDesignDays.each do |dd|
+    if dd.dayType == 'SummerDesignDay' && dd.humidityIndicatingType == 'Wetbulb'
+      summer_dday_wbs << dd.humidityIndicatingConditionsAtMaximumDryBulb
+    end
+  end
+end
+
+# Then take worst case condition (max), or the average?
+design_inlet_wb_c = summer_dday_wbs.max
+design_inlet_wb_f = OpenStudio.convert(design_inlet_wb_c,'C','F').get
+lcnwt_f = 85
+lcnwt_10f_approach = design_inlet_wb_f+10
+lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
+
+
+
+=end
+
+
+
+      design_inlet_wb_f = 78
+      design_approach_r = 7
+      design_inlet_wb_c = OpenStudio.convert(design_inlet_wb_f,'F','C').get
+      design_approach_k = OpenStudio.convert(design_approach_r,'R','K').get
+
+      cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(self.model)
+
+      # Already default, but better safe than sorry
+      cw_t_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
+      cw_t_stpt_manager.setMaximumSetpointTemperature(lcnwt_c)
+      cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
+      cw_t_stpt_manager.setOffsetTemperatureDifference(design_approach_k)
+      cw_t_stpt_manager.addToNode(self.supplyOutletNode)
+      ##################  End of SetpointManagerFollowOutdoorAirTemperature #####################
+
+      # Cooling Tower properties
+      self.supplyComponents.each do |sc|
+        if sc.to_CoolingTowerSingleSpeed.is_initialized
+          ct = sc.to_CoolingTowerSingleSpeed.get
+          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
+          ct.setDesignApproachTemperature(design_approach_k)
+          ct.setDesignRangeTemperature(range_t_k)
+        end
+        if sc.to_CoolingTowerTwoSpeed.is_initialized
+          ct = sc.to_CoolingTowerTwoSpeed.get
+          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
+          ct.setDesignApproachTemperature(design_approach_k)
+          ct.setDesignRangeTemperature(range_t_k)
+        end
+        if sc.to_CoolingTowerVariableSpeed.is_initialized
+          ct = sc.to_CoolingTowerVariableSpeed.get
+          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
+          ct.setDesignApproachTemperature(design_approach_k)
+          ct.setDesignRangeTemperature(range_t_k)
+        end
+        if sc.to_CoolingTowerPerformanceYorkCalc.is_initialized
+          ct = sc.to_CoolingTowerPerformanceYorkCalc.get
+          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
+          ct.setDesignApproachTemperature(design_approach_k)
+          ct.setDesignRangeTemperature(range_t_k)
+        end
+        if sc.to_CoolingTowerPerformanceCoolTools.is_initialized
+          ct = sc.to_CoolingTowerPerformanceCoolTools.get
+          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
+          ct.setDesignApproachTemperature(design_approach_k)
+          ct.setDesignRangeTemperature(range_t_k)
+        end
+
+      end
+
+
     end
   
     return true
@@ -665,14 +831,11 @@ class OpenStudio::Model::PlantLoop
     final_boilers = [first_boiler, second_boiler]
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, added a second boiler.")
 
-    # Set the sizing factor for all boilers evenly
+
+    # Set the sizing factor for all boilers evenly and Rename the boilers
     sizing_factor = (1.0/final_boilers.size).round(2)
-    final_boilers.each do |boiler|
-      boiler.setSizingFactor(sizing_factor)
-    end
-    
-    # Rename the boilers
     final_boilers.each_with_index do |boiler, i|
+      boiler.setSizingFactor(sizing_factor)
       boiler.setName("#{first_boiler.name} #{i+1} of #{final_boilers.size}")
     end
     
@@ -739,21 +902,25 @@ class OpenStudio::Model::PlantLoop
     
     # Determine the per-chiller capacity
     # and sizing factor
-    per_chiller_sizing_factor = (1.0/num_chillers.size).round(2)
+    per_chiller_sizing_factor = (1.0/num_chillers).round(2)
+    # This is unused
     per_chiller_cap_tons = cap_tons / num_chillers
+
+    # Set the sizing factor and the chiller type: could do it on the first chiller before cloning it, but renaming warrants looping on chillers anyways
     
     # Add any new chillers
     final_chillers = [first_chiller]
     (num_chillers-1).times do
-      new_chiller = OpenStudio::Model::ChillerElectricEIR.new(self.model)
+      #new_chiller = OpenStudio::Model::ChillerElectricEIR.new(self.model)
       # TODO renable the cloning of the chillers after curves are shared resources
-      # new_chiller = first_chiller.clone(self.model)
-      # if new_chiller.to_ChillerElectricEIR.is_initialized
-        # new_chiller = new_chiller.to_ChillerElectricEIR.get
-      # else
-        # OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, could not clone chiller #{first_chiller.name}, cannot apply the performance rating method number of chillers.")
-        # return false
-      # end
+      # Should be good to go since 1.10.2 (?)
+      new_chiller = first_chiller.clone(self.model)
+      if new_chiller.to_ChillerElectricEIR.is_initialized
+        new_chiller = new_chiller.to_ChillerElectricEIR.get
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, could not clone chiller #{first_chiller.name}, cannot apply the performance rating method number of chillers.")
+        return false
+      end
       self.addSupplyBranchForComponent(new_chiller)
       final_chillers << new_chiller
     end
@@ -771,7 +938,64 @@ class OpenStudio::Model::PlantLoop
   
     return true
   
-  end  
+  end
+
+
+  # Determines the total rated watts per GPM of the loop
+  #
+  # @return [Double] rated power consumption per flow
+  #   @units Watts per GPM (W*s/m^3)
+  def total_rated_w_per_gpm()
+    sizing_plant = self.sizingPlant
+    loop_type = sizing_plant.loopType
+
+    # Supply W/GPM
+    supply_w_per_gpm = 0
+    demand_w_per_gpm = 0
+
+    self.supplyComponents.each do |component|
+      if component.to_PumpConstantSpeed.is_initialized
+        pump = component.to_PumpConstantSpeed.get
+        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Pump", "'#{loop_type}' Loop #{self.name} - Primary (Supply) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        supply_w_per_gpm += pump_rated_w_per_gpm
+      elsif component.to_PumpVariableSpeed.is_initialized
+        pump = component.to_PumpVariableSpeed.get
+        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Pump", "'#{loop_type}' Loop #{self.name} - Primary (Supply) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        supply_w_per_gpm += pump_rated_w_per_gpm
+      end
+    end
+
+    # Determine if primary only or primary-secondary
+    # IF there's a pump on the demand side it's primary-secondary
+    demandPumps = self.demandComponents('OS_Pump_VariableSpeed'.to_IddObjectType) + self.demandComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
+    demandPumps.each do |component|
+      if component.to_PumpConstantSpeed.is_initialized
+        pump = component.to_PumpConstantSpeed.get
+        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Pump", "'#{loop_type}' Loop #{self.name} - Secondary (Demand) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        demand_w_per_gpm += pump_rated_w_per_gpm
+      elsif component.to_PumpVariableSpeed.is_initialized
+        pump = component.to_PumpVariableSpeed.get
+        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Pump", "'#{loop_type}' Loop #{self.name} - Secondary (Demand) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        demand_w_per_gpm += pump_rated_w_per_gpm
+      end
+    end
+
+
+    total_rated_w_per_gpm = supply_w_per_gpm + demand_w_per_gpm
+
+    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Loop", "'#{loop_type}' Loop #{self.name} - Total #{total_rated_w_per_gpm} W/GPM - Supply #{supply_w_per_gpm} W/GPM - Demand #{demand_w_per_gpm} W/GPM")
+
+    return total_rated_w_per_gpm
+
+  end
+
+
+
+
   
 end
 

@@ -134,6 +134,7 @@ class OpenStudio::Model::Model
     chw_temp_f = 44 #CHW setpoint 44F
     chw_delta_t_r = 10.1 #10.1F delta-T
     # TODO: Yixing check the CHW Setpoint from standards
+    # TODO: Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_performance_rating_method_baseline_temperatures
     if building_type == 'LargeHotel'
       chw_temp_f = 45 #CHW setpoint 45F
       chw_delta_t_r = 12 #12F delta-T
@@ -1236,7 +1237,9 @@ class OpenStudio::Model::Model
   # @param cooling_type [String] valid choices are Water, Two Speed DX AC,
   # Single Speed DX AC, Single Speed Heat Pump, Water To Air Heat Pump
   # @param building_type [String] the building type
-  # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting PSZ-AC air loops 
+  # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting PSZ-AC air loops
+  # Todo: clarify where these default curves coefficients are coming from
+  # Todo: I (jmarrec) believe it is the DOE Ref curves ("DOE Ref DX Clg Coil Cool-Cap-fT")
   def add_psz_ac(standard, 
                 sys_name, 
                 hot_water_loop, 
@@ -1584,7 +1587,7 @@ class OpenStudio::Model::Model
         clg_coil.setBasinHeaterSetpointTemperature(2.0)
 
       elsif cooling_type == 'Single Speed DX AC'
-
+        # Defaults to "DOE Ref DX Clg Coil Cool-Cap-fT"
         clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(self)
         clg_cap_f_of_temp.setCoefficient1Constant(0.9712123)
         clg_cap_f_of_temp.setCoefficient2x(-0.015275502)
@@ -1604,6 +1607,7 @@ class OpenStudio::Model::Model
         clg_cap_f_of_flow.setMinimumValueofx(-100.0)
         clg_cap_f_of_flow.setMaximumValueofx(100.0)
 
+        # "DOE Ref DX Clg Coil Cool-EIR-fT",
         clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(self)
         clg_energy_input_ratio_f_of_temp.setCoefficient1Constant(0.28687133)
         clg_energy_input_ratio_f_of_temp.setCoefficient2x(0.023902164)
@@ -1623,6 +1627,7 @@ class OpenStudio::Model::Model
         clg_energy_input_ratio_f_of_flow.setMinimumValueofx(-100.0)
         clg_energy_input_ratio_f_of_flow.setMaximumValueofx(100.0)
 
+        # "DOE Ref DX Clg Coil Cool-PLF-fPLR"
         clg_part_load_ratio = OpenStudio::Model::CurveQuadratic.new(self)
         clg_part_load_ratio.setCoefficient1Constant(0.90949556)
         clg_part_load_ratio.setCoefficient2x(0.09864773)
@@ -1643,7 +1648,7 @@ class OpenStudio::Model::Model
         clg_coil.setName("#{air_loop.name} 1spd DX AC Clg Coil")
 
       elsif cooling_type == 'Single Speed Heat Pump'
-
+        # "PSZ-AC_Unitary_PackagecoolCapFT"
         clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(self)
         clg_cap_f_of_temp.setCoefficient1Constant(0.766956)
         clg_cap_f_of_temp.setCoefficient2x(0.0107756)
@@ -2589,7 +2594,7 @@ class OpenStudio::Model::Model
   # @param thermal_zones [String] zones to connect to this system
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
   # @param heating_type [Double] valid choices are 
-  # Gas, Electric
+  # Gas, Electric, Water
   # @param cooling_type [String] valid choices are 
   # Two Speed DX AC, Single Speed DX AC
   # @param building_type [String] the building type
@@ -2662,8 +2667,19 @@ class OpenStudio::Model::Model
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
           return false
         end
+
+        hw_sizing = hot_water_loop.sizingPlant
+        hw_temp_c = hw_sizing.designLoopExitTemperature
+        hw_delta_t_k = hw_sizing.loopDesignTemperatureDifference
+
+        # Using openstudio defaults for now...
+        prehtg_sa_temp_c = 16.6
+        htg_sa_temp_c = 32.2
+
+
         htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-        htg_coil.setName("#{air_loop.name} Water Htg Coil")
+        htg_coil.setName("#{hot_water_loop.name} Water Htg Coil")
+        # None of these temperatures are defined
         htg_coil.setRatedInletWaterTemperature(hw_temp_c)
         htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
         htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
@@ -3055,12 +3071,13 @@ class OpenStudio::Model::Model
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on  
   # @param fan_control_type [Double] valid choices are Continuous, OnOff, Cycling
-  # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa
+  # @param fan_pressure_rise [Double] fan pressure rise, in Pa
   # @param heating_type [Double] valid choices are 
-  # Gas, Electric  
+  # Gas, Electric
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACUnitHeater>] an 
-  # array of the resulting unit heaters.  
+  # array of the resulting unit heaters.
+  # Todo: to leverage this method for proposed model creation, might be useful to add 'Water' to heating type with an optional hot_water_loop to tie it to
   def add_unitheater(standard, 
                     sys_name,
                     thermal_zones, 
