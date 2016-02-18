@@ -1114,11 +1114,11 @@ class OpenStudio::Model::Model
                         hot_water_loop,
                         chilled_water_loop,
                         pri_zones,
-                        nil,
-                        nil,
-                        0.62,
-                        0.9,
-                        OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+                        hvac_op_sch=nil,
+                        oa_damper_sch=nil,
+                        vav_fan_efficiency=0.62,
+                        vav_fan_motor_efficiency=0.9,
+                        vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
           end
 
           
