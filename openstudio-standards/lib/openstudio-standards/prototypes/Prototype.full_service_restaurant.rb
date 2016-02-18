@@ -662,30 +662,12 @@ class OpenStudio::Model::Model
     end      
   end
   
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, space_type_map)
-   
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-
-    self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-
-    case building_vintage
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004' 
-      # No dishwasher booster water heaters
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      booster_water_heater_space_name = "Kitchen"
-      booster_water_heater_thermal_zone = self.getSpaceByName(booster_water_heater_space_name).get.thermalZone.get
-      # self.add_swh_booster_no_loop(prototype_input, hvac_standards, main_swh_loop, booster_water_heater_thermal_zone)
-      swh_booster_loop = self.add_swh_booster(prototype_input, hvac_standards, main_swh_loop, booster_water_heater_thermal_zone)
-      self.add_booster_swh_end_uses(prototype_input, hvac_standards, swh_booster_loop)
-    end
-    
-        
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  
+    self.update_waterheater_loss_coefficient(building_vintage)
+  
     return true
     
-  end #add swh
+  end
   
 end

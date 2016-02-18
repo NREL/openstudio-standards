@@ -107,52 +107,22 @@ class OpenStudio::Model::Model
     
   end #add hvac
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-   
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main', nil, building_type)
-    water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
-
-    unless building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'DOE Ref Pre-1980'
-      water_heaters.each do |water_heater|
-        water_heater = water_heater.to_WaterHeaterMixed.get
-        # water_heater.setAmbientTemperatureIndicator('Zone')
-        # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
-        water_heater.setOffCycleParasiticFuelConsumptionRate(1277)
-        water_heater.setOnCycleParasiticFuelConsumptionRate(1277)
+  def update_waterheater_loss_coefficient(building_vintage)
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      self.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(7.561562668)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(7.561562668)
       end
-    end
-
-    # spaces = define_space_type_map(building_type, building_vintage, climate_zone)['WholeBuilding - Md Office']
-
-    space_type_map.each do |space_type_name, space_names|
-      space_names.each do |space_name|
-          if building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'DOE Ref Pre-1980'
-            if space_name == 'Core_bottom' || space_name == 'Core_mid' || space_name == 'Core_top'
-              self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-            end
-          else
-            self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-          end
-        end
-    end
-
-    # spaces.each do |space|
-    #   self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    # end
-
-    # for i in 0..13
-    #   self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    # end
-    # self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
+    end      
+  end  
+   
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+   
+    self.update_waterheater_loss_coefficient(building_vintage)
     
     return true
     
-  end #add swh
+  end
 
 end

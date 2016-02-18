@@ -68,17 +68,10 @@ class OpenStudio::Model::Model
     
   end
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
    
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-    self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
     return true
     
-  end #add swh
+  end
   
 end

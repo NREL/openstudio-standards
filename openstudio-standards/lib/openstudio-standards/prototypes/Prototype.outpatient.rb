@@ -181,34 +181,10 @@ class OpenStudio::Model::Model
     end
   end
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-
-    space_type_map.each do |space_type_name, space_names|
-      data = nil
-      search_criteria = {
-        'template' => building_vintage,
-        'building_type' => building_type,
-        'space_type' => space_type_name
-      }
-      data = find_object(self.standards['space_types'],search_criteria)
-      
-      if data['service_water_heating_peak_flow_rate'].nil?
-        next
-      else
-        space_names.each do |space_name|
-          self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name)
-        end
-      end
-    end
-     
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
     return true
     
-  end #add swh    
+  end    
 
 end

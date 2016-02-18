@@ -236,33 +236,22 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
+  def update_waterheater_loss_coefficient(building_vintage)
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      self.getWaterHeaterMixeds.sort.each do |water_heater|
+        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
+        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.25413987)
+      end
+    end      
+  end  
+  
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-    water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
-
-    water_heaters.each do |water_heater|
-      water_heater = water_heater.to_WaterHeaterMixed.get
-      # water_heater.setAmbientTemperatureIndicator('Zone')
-      # water_heater.setAmbientTemperatureThermalZone()
-      water_heater.setOffCycleParasiticFuelConsumptionRate(2771)
-      water_heater.setOnCycleParasiticFuelConsumptionRate(2771)
-      water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
-      water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.25413987)
-    end
-
-    # spaces = define_space_type_map(building_type, building_vintage, climate_zone)['WholeBuilding - Lg Office']
-
-    ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
-      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main', space_name)
-    end
-
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-
+    self.update_waterheater_loss_coefficient(building_vintage)
+    
     return true
 
-  end #add swh
+  end
 
 end

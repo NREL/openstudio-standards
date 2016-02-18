@@ -278,39 +278,12 @@ class OpenStudio::Model::Model
     end
   end
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-   
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
-    # the main service water loop except laundry
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-    
-    space_type_map.each do |space_type_name, space_names|
-      data = nil
-      search_criteria = {
-        'template' => building_vintage,
-        'building_type' => building_type,
-        'space_type' => space_type_name
-      }
-      data = find_object($os_standards['space_types'],search_criteria)
-      
-      if data['service_water_heating_peak_flow_rate'].nil?
-        next
-      else
-        space_names.each do |space_name|
-          space = self.getSpaceByName(space_name).get
-          space_multiplier = space.multiplier
-          self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
-        end
-      end
-    end
-
-
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
+    self.update_waterheater_loss_coefficient(building_vintage)
+  
     return true
     
-  end #add swh    
+  end 
 
-  
 end

@@ -517,18 +517,12 @@ class OpenStudio::Model::Model
     end      
   end
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-   
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-
-    self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  
+    self.update_waterheater_loss_coefficient(building_vintage)
+  
     return true
     
-  end #add swh
+  end
   
 end

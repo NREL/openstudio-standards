@@ -55,38 +55,23 @@ class OpenStudio::Model::Model
     
   end
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-   
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    # water_heater = add_water_heater(prototype_input, hvac_standards, 'main', true)
-    # water_heater.setOffCycleParasiticFuelConsumptionRate(1860)
-    # water_heater.setOnCycleParasiticFuelConsumptionRate(1860)
-    # water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
-    # water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
-    # water_heater.setOffCycleParasiticHeatFractiontoTank(0)
+  def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-      when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
-        main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-        self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-        water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      self.getWaterHeaterMixeds.sort.each do |water_heater|
+        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
+        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
+      end
+    end      
+  end 
+  
+  
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
-        water_heaters.each do |water_heater|
-          water_heater = water_heater.to_WaterHeaterMixed.get
-          # water_heater.setAmbientTemperatureIndicator('Zone')
-          # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
-          water_heater.setOffCycleParasiticFuelConsumptionRate(1860)
-          water_heater.setOnCycleParasiticFuelConsumptionRate(1860)
-          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
-          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
-        end
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-      else
-        # No Water heater for pre1980 and post1980-2004 vintages
-    end
+    self.update_waterheater_loss_coefficient(building_vintage)
 
     return true
     
-  end #add swh
+  end
   
 end
