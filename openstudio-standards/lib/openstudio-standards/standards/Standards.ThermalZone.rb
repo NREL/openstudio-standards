@@ -94,7 +94,7 @@ class OpenStudio::Model::ThermalZone
     # Calculate the per-area value
     tot_oa_flow_rate_per_area = tot_oa_flow_rate / sum_floor_area
 
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.Model", "For #{self.name}, OA per area = #{tot_oa_flow_rate_per_area.round(8)} m^3/s*m^2.")
+    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, OA per area = #{tot_oa_flow_rate_per_area.round(8)} m^3/s*m^2.")
 
     return tot_oa_flow_rate_per_area
 
