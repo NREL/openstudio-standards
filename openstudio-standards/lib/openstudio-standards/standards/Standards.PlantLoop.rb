@@ -55,7 +55,6 @@ class OpenStudio::Model::PlantLoop
     # flow based on loop type.
     pri_w_per_gpm = nil
     sec_w_per_gpm = nil
-    pump_eff = nil
 
     sizing_plant = self.sizingPlant
     loop_type = sizing_plant.loopType    
@@ -72,10 +71,8 @@ class OpenStudio::Model::PlantLoop
 
       if has_district_heating # District HW
         pri_w_per_gpm = 14.0
-        pump_eff = 0.6
       else # HW 
         pri_w_per_gpm = 19.0
-        pump_eff = 0.6
       end
 
     when 'Cooling'
@@ -96,21 +93,17 @@ class OpenStudio::Model::PlantLoop
 
       if has_district_cooling # District CHW
         pri_w_per_gpm = 16.0
-        pump_eff = 0.65
       elsif has_secondary_pump # Primary/secondary CHW
         pri_w_per_gpm = 9.0
         sec_w_per_gpm = 13.0
-        pump_eff = 0.6
       else # Primary only CHW
         pri_w_per_gpm = 22.0
-        pump_eff = 0.6
       end
 
     when 'Condenser'
     
       # TODO prm condenser loop pump power
       pri_w_per_gpm = 19.0
-      pump_eff = 0.6
 
     end
   
@@ -118,12 +111,10 @@ class OpenStudio::Model::PlantLoop
     self.supplyComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        #pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
-        pump.set_pump_head_and_motor_eff(pri_w_per_gpm, template)
+        pump.set_performance_rating_method_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        #pump.set_pump_power_per_flow(pri_w_per_gpm, pump_eff, loop_type)
-        pump.set_pump_head_and_motor_eff(pri_w_per_gpm, template)
+        pump.set_performance_rating_method_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       end
     end
     
@@ -131,12 +122,10 @@ class OpenStudio::Model::PlantLoop
     self.demandComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        #pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
-        pump.set_pump_head_and_motor_eff(sec_w_per_gpm, template)
+        pump.set_performance_rating_method_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        #pump.set_pump_power_per_flow(sec_w_per_gpm, pump_eff, loop_type)
-        pump.set_pump_head_and_motor_eff(sec_w_per_gpm, template)
+        pump.set_performance_rating_method_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
       end
     end
   
@@ -165,33 +154,9 @@ class OpenStudio::Model::PlantLoop
       sizing_plant.setLoopDesignTemperatureDifference(hw_delta_t_k)
       self.setMinimumLoopTemperature(min_temp_c)
 
-
-      ##################  SetpointManagerOutdoorAirReset #########################
-      # ASHRAE Appendix G - G3.1.3.4 (I checked for ASHRAE 90.1-2004, 2007 and 2010)
+      # ASHRAE Appendix G - G3.1.3.4 (for ASHRAE 90.1-2004, 2007 and 2010)
       # HW reset: 180°F at 20°F and below, 150°F at 50°F and above
-
-      # Low OAT = 20°F, HWST = 180°F
-      oat_low_ip = 20
-      sp_low_ip = 180
-      oat_low_si = OpenStudio::convert(oat_low_ip,'F','C').get
-      sp_low_si = OpenStudio::convert(sp_low_ip,'F','C').get
-
-      # High OAT = 50°F, HWST = 150°F
-      oat_high_ip = 50
-      sp_high_ip = 150
-      oat_high_si = OpenStudio::convert(oat_high_ip,'F','C').get
-      sp_high_si = OpenStudio::convert(sp_high_ip,'F','C').get
-
-      hw_oareset_stpt_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(self.model)
-      hw_oareset_stpt_manager.setControlVariable("Temperature")
-      hw_oareset_stpt_manager.setSetpointatOutdoorLowTemperature(sp_low_si)
-      hw_oareset_stpt_manager.setOutdoorLowTemperature(oat_low_si)
-      hw_oareset_stpt_manager.setSetpointatOutdoorHighTemperature(sp_high_si)
-      hw_oareset_stpt_manager.setOutdoorHighTemperature(oat_high_si)
-      hw_oareset_stpt_manager.setName("HW Loop SetpointManager OA Reset App G")
-      # Add to Loop supply outlet node
-      hw_oareset_stpt_manager.addToNode(self.supplyOutletNode)
-      ##################  End of SetpointManagerOutdoorAirReset ##################
+      self.enable_supply_water_temperature_reset
 
       # Boiler properties
       self.supplyComponents.each do |sc|
@@ -223,34 +188,9 @@ class OpenStudio::Model::PlantLoop
       self.setMinimumLoopTemperature(min_temp_c)
       self.setMaximumLoopTemperature(max_temp_c)
 
-
-      ##################  SetpointManagerOutdoorAirReset #########################
-      # ASHRAE Appendix G - G3.1.3.9 (I checked for ASHRAE 90.1-2004, 2007 and 2010)
+      # ASHRAE Appendix G - G3.1.3.9 (for ASHRAE 90.1-2004, 2007 and 2010)
       # ChW reset: 44°F at 80°F and above, 54°F at 60°F and below
-
-      # Low OAT = 60°F, LWT = 54°F
-      oat_low_ip = 60
-      sp_low_ip =  54
-      oat_low_si = OpenStudio::convert(oat_low_ip,'F','C').get
-      sp_low_si = OpenStudio::convert(sp_low_ip,'F','C').get
-
-      # High OAT = 80°F, LWT = 44°F
-      oat_high_ip = 80
-      sp_high_ip = 44
-      oat_high_si = OpenStudio::convert(oat_high_ip,'F','C').get
-      sp_high_si = OpenStudio::convert(sp_high_ip,'F','C').get
-
-      chw_oareset_stpt_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(self.model)
-      chw_oareset_stpt_manager.setControlVariable("Temperature")
-      chw_oareset_stpt_manager.setSetpointatOutdoorLowTemperature(sp_low_si)
-      chw_oareset_stpt_manager.setOutdoorLowTemperature(oat_low_si)
-      chw_oareset_stpt_manager.setSetpointatOutdoorHighTemperature(sp_high_si)
-      chw_oareset_stpt_manager.setOutdoorHighTemperature(oat_high_si)
-      chw_oareset_stpt_manager.setName("ChW Loop SetpointManager OA Reset App G")
-      # Add to Loop supply outlet node
-      chw_oareset_stpt_manager.addToNode(self.supplyOutletNode)
-      ##################  End of SetpointManagerOutdoorAirReset ##################
-
+      self.enable_supply_water_temperature_reset
       
       # Chiller properties
       self.supplyComponents.each do |sc|
@@ -263,10 +203,9 @@ class OpenStudio::Model::PlantLoop
       
     when 'Condenser'
     
-      # TODO prm condenser loop temp settings
       # G3.1.3.11 - LCnWT 85°F or 10°F approaching design wet bulb temperature, whichever is lower
       # Design Temperature rise of 10°F => Range: 10°F
-      lcnwt_f = 85   # See my notes and propsoed alternative below, if we want to actually check the design days...
+      lcnwt_f = 85   # See notes and proposed alternative below, if we want to actually check the design days...
       range_t_r = 10
       lcnwt_c = OpenStudio.convert(lcnwt_f,'F','C').get
       range_t_k = OpenStudio.convert(range_t_r,'R','K').get
@@ -277,33 +216,28 @@ class OpenStudio::Model::PlantLoop
       min_temp_c = OpenStudio.convert(min_temp_f,'F','C').get
       max_temp_c = OpenStudio.convert(max_temp_f,'F','C').get
 
-
       sizing_plant.setDesignLoopExitTemperature(lcnwt_c)
       sizing_plant.setLoopDesignTemperatureDifference(range_t_k)
       self.setMinimumLoopTemperature(min_temp_c)
       self.setMaximumLoopTemperature(max_temp_c)
 
-
-      ##################  SetpointManagerFollowOutdoorAirTemperature #########################
       # G3.1.3.11 - Tower shall be controlled to maintain a 70°F LCnWT where weather permits
       # Use a SetpointManager:FollowOutdoorAirTemperature
       float_down_to_f = 70
       float_down_to_c = OpenStudio.convert(float_down_to_f,'F','C').get
-
 
       # Todo: Problem is what to set for Offset Temperature Difference (=approach):
       # * if unreasonably low approach, fan runs full blast and energy consumption is penalized
       # * if too high, you don't get as much energy savings...
       # "LCnWT 85°F or 10°F approaching design wet bulb temperature, whichever is lower" ==> approach is maximum 10, could be less depending on design conditions
       # In most cases in the US a tower will be sized on CTI conditions, 78°F WB, so usually 7°F approach.
-      # Todo: I'll use that for now.
-      # Todo: Could also check the design days, but begs the question of finding the right one to begin with if you have several...
-      # todo: you'll need to deal with potentially different 'Humidity Indicating Type'
+      # Could also check the design days, but begs the question of finding the right one to begin with if you have several...
+      # You'll need to deal with potentially different 'Humidity Indicating Type'
       #
-      # see my answer here https://unmethours.com/question/12530/appendix-g-condenser-water-temperature-reset-in-energyplus/
-      # See also: http://www.comnet.org/mgp/content/cooling-towers?purpose=0#footnote1_do6jpuh
+      # See https://unmethours.com/question/12530/appendix-g-condenser-water-temperature-reset-in-energyplus/
+      # See http://www.comnet.org/mgp/content/cooling-towers?purpose=0#footnote1_do6jpuh
 
-      # Todo: this is an example of how I'd implement the case where we check the design days
+      # This is an example of how jmarrec would implement checking the design days
 =begin
 summer_dday_wbs = []
 model.getDesignDays.each do |dd|
@@ -325,22 +259,17 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
 
 =end
 
-
-
       design_inlet_wb_f = 78
       design_approach_r = 7
       design_inlet_wb_c = OpenStudio.convert(design_inlet_wb_f,'F','C').get
       design_approach_k = OpenStudio.convert(design_approach_r,'R','K').get
 
       cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(self.model)
-
-      # Already default, but better safe than sorry
       cw_t_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
       cw_t_stpt_manager.setMaximumSetpointTemperature(lcnwt_c)
       cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
       cw_t_stpt_manager.setOffsetTemperatureDifference(design_approach_k)
       cw_t_stpt_manager.addToNode(self.supplyOutletNode)
-      ##################  End of SetpointManagerFollowOutdoorAirTemperature #####################
 
       # Cooling Tower properties
       self.supplyComponents.each do |sc|
@@ -349,26 +278,22 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
           ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
           ct.setDesignApproachTemperature(design_approach_k)
           ct.setDesignRangeTemperature(range_t_k)
-        end
-        if sc.to_CoolingTowerTwoSpeed.is_initialized
+        elsif sc.to_CoolingTowerTwoSpeed.is_initialized
           ct = sc.to_CoolingTowerTwoSpeed.get
           ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
           ct.setDesignApproachTemperature(design_approach_k)
           ct.setDesignRangeTemperature(range_t_k)
-        end
-        if sc.to_CoolingTowerVariableSpeed.is_initialized
+        elsif sc.to_CoolingTowerVariableSpeed.is_initialized
           ct = sc.to_CoolingTowerVariableSpeed.get
           ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
           ct.setDesignApproachTemperature(design_approach_k)
           ct.setDesignRangeTemperature(range_t_k)
-        end
-        if sc.to_CoolingTowerPerformanceYorkCalc.is_initialized
+        elsif sc.to_CoolingTowerPerformanceYorkCalc.is_initialized
           ct = sc.to_CoolingTowerPerformanceYorkCalc.get
           ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
           ct.setDesignApproachTemperature(design_approach_k)
           ct.setDesignRangeTemperature(range_t_k)
-        end
-        if sc.to_CoolingTowerPerformanceCoolTools.is_initialized
+        elsif sc.to_CoolingTowerPerformanceCoolTools.is_initialized
           ct = sc.to_CoolingTowerPerformanceCoolTools.get
           ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
           ct.setDesignApproachTemperature(design_approach_k)
@@ -376,7 +301,6 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
         end
 
       end
-
 
     end
   
@@ -386,44 +310,44 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
    
   def is_supply_water_temperature_reset_required(template)
 
-      reset_required = false
-  
-      case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-        
-        # Not required before 90.1-2004
-        return reset_required
-        
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        
-        # Not required for variable flow systems
-        if is_variable_flow_system
-          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset not required for variable flow systems per 6.5.4.3 Exception b.")
-          return reset_required
-        end
-        
-        # Determine the capacity of the system
-        heating_capacity_w = self.total_heating_capacity
-        cooling_capacity_w = self.total_cooling_capacity
-        
-        heating_capacity_btu_per_hr = OpenStudio.convert(heating_capacity_w,'W','Btu/hr').get
-        cooling_capacity_btu_per_hr = OpenStudio.convert(cooling_capacity_w,'W','Btu/hr').get
-       
-        # Compare against capacity minimum requirement
-        min_cap_btu_per_hr = 300000
-        if heating_capacity_btu_per_hr > min_cap_btu_per_hr 
-          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset is required because heating capacity of #{heating_capacity_btu_per_hr.round} Btu/hr exceeds the minimum threshold of #{min_cap_btu_per_hr.round} Btu/hr.")
-          reset_required = true
-        elsif cooling_capacity_btu_per_hr > min_cap_btu_per_hr
-          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset is required because cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum threshold of #{min_cap_btu_per_hr.round} Btu/hr.")
-          reset_required = true
-        else
-          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset is not required because capacity is less than minimum of #{min_cap_btu_per_hr.round} Btu/hr.")
-        end
+    reset_required = false
+
+    case template
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       
-      end
-  
+      # Not required before 90.1-2004
       return reset_required
+      
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      
+      # Not required for variable flow systems
+      if is_variable_flow_system
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset not required for variable flow systems per 6.5.4.3 Exception b.")
+        return reset_required
+      end
+      
+      # Determine the capacity of the system
+      heating_capacity_w = self.total_heating_capacity
+      cooling_capacity_w = self.total_cooling_capacity
+      
+      heating_capacity_btu_per_hr = OpenStudio.convert(heating_capacity_w,'W','Btu/hr').get
+      cooling_capacity_btu_per_hr = OpenStudio.convert(cooling_capacity_w,'W','Btu/hr').get
+     
+      # Compare against capacity minimum requirement
+      min_cap_btu_per_hr = 300000
+      if heating_capacity_btu_per_hr > min_cap_btu_per_hr 
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset is required because heating capacity of #{heating_capacity_btu_per_hr.round} Btu/hr exceeds the minimum threshold of #{min_cap_btu_per_hr.round} Btu/hr.")
+        reset_required = true
+      elsif cooling_capacity_btu_per_hr > min_cap_btu_per_hr
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset is required because cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum threshold of #{min_cap_btu_per_hr.round} Btu/hr.")
+        reset_required = true
+      else
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset is not required because capacity is less than minimum of #{min_cap_btu_per_hr.round} Btu/hr.")
+      end
+    
+    end
+
+    return reset_required
   
   end
   

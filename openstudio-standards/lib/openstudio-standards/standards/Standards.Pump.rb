@@ -1,26 +1,30 @@
 
-# A variety of fan calculation methods that are the same regardless of fan type.
-# These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
+# A variety of pump calculation methods that are the same regardless of pump type.
+# These methods are available to PumpConstantSpeed, PumpVariableSpeed
 module Pump
 
+  # Set the pressure rise that cooresponds to the
+  # target power per flow number, given the standard
+  # pump efficiency and the default EnergyPlus pump impeller efficiency
+  # of 0.78.
+  #
+  # @param target_w_per_gpm [Double] the target power per flow, in W/gpm
+  # @return [Bool] return true if successful, false if not
+  # @author jmarrec
+  def set_performance_rating_method_pressure_rise_and_motor_efficiency(target_w_per_gpm, template)
 
-
-
-  def set_pump_head_and_motor_eff(target_w_per_gpm, template)
-    # Todo: @jmarrec's implementation. I tested it and it does work unlike set_pump_power_per_flow
     # Eplus assumes an impeller efficiency of 0.78 to determine the total efficiency
     # http://bigladdersoftware.com/epx/docs/8-4/engineering-reference/component-sizing.html#pump-sizing
     # Rated_Power_Use = Rated_Volume_Flow_Rate * Rated_Pump_Head / Total_Efficiency
     # Rated_Power_Use / Rated_Volume_Flow_Rate =  Rated_Pump_Head / Total_Efficiency
     # Total_Efficiency = Motor_Efficiency * Impeler_Efficiency
-
     impeller_efficiency = 0.78
 
-    # Get the horsepower
-    hp = self.horsepower
+    # Get the brake horsepower
+    brake_hp = self.brakeHorsepower
 
     # Find the motor efficiency
-    motor_efficiency = standard_minimum_motor_efficiency(template, hp)
+    motor_efficiency, nominal_hp = self.standard_minimum_motor_efficiency_and_size(template, brake_hp)
 
     # Change the motor efficiency
     self.setMotorEfficiency(motor_efficiency)
@@ -36,65 +40,24 @@ module Pump
     self.setRatedPumpHead(pressure_rise_pa)
 
     # Report
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{self.name}: allowed hp = #{hp.round(2)}HP; motor eff = #{(motor_efficiency*100).round(2)}%; Pressure drop = #{pressure_rise_pa.round(0)} Pa // #{pressure_rise_ft_h2O.round(2)} ftH_{2}O")
-
-    return true
-
-  end
-
-  # Set the pressure rise that cooresponds to the
-  # target power per flow number, given a specified 
-  # pump efficiency and optionally a water type (to determine density).
-  #
-  # @param target_w_per_gpm [Double] the target power per flow, in W/gpm
-  # @param pump_eff [Double] the pump efficieny as a decimal
-  # @param water_type [String] valid choices are Cooling, Heating, Condenser.
-  #   This argument modifies the density of the water, changing the result slightly.
-  # @return [Bool] return true if successful, false if not
-  def set_pump_power_per_flow(target_w_per_gpm, pump_eff, water_type='Cooling')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{self.name}: brake hp = #{brake_hp.round(2)}HP; motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_efficiency*100).round(2)}%; #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_pa.round(0)} Pa // #{pressure_rise_ft_h2O.round(2)} ftH2O.")
     
-    # Get the pressure rise
-    pressure_rise_pa = self.pressure_for_target_power_per_flow(target_w_per_gpm, pump_eff, water_type)
-
-    # Set the pressure rise
-    self.setRatedPumpHead(pressure_rise_pa)
-
-    return true
+    # Calculate the W/gpm for verification
+    calculated_w = self.pumpPower
     
-  end
-
-  # Determine the pressure rise that cooresponds to the
-  # target power per flow number, given a specified 
-  # pump efficiency and optionally a water type (to determine density).
-  #
-  # @param target_w_per_gpm [Double] the target power per flow, in W/gpm
-  # @param pump_eff [Double] the pump efficieny as a decimal
-  # @param water_type [String] valid choices are Cooling, Heating, Condenser.
-  #   This argument modifies the density of the water, changing the result slightly.
-  # @return [Double] the pressure rise, in Pa
-  # Todo: this implementation doesn't appear correct to me, and rated W/GPM outputed for my test model seems to confirm that
-  def pressure_for_target_power_per_flow(target_w_per_gpm, pump_eff, water_type='Cooling')
-    
-    # Determine the density of water in lb/gal
-    density_water_lb_per_gal = nil
-    case water_type
-    when 'Cooling'
-      density_water_lb_per_gal = 8.345 # at 44F
-    when 'Condenser'
-      density_water_lb_per_gal = 8.31 # at 85F
-    when 'Heating'
-      density_water_lb_per_gal = 8.098 # at 180F
+    # Get flow rate (whether autosized or hard-sized)
+    flow_m3_per_s = 0
+    if self.autosizedRatedFlowRate.is_initialized
+      flow_m3_per_s = self.autosizedRatedFlowRate.get
+    else
+      flow_m3_per_s = self.ratedFlowRate.get
     end
-
-    # Calculate the pressure rise that achieves the
-    # target power per flow.
-    pressure_rise_ft = target_w_per_gpm * (33000.0 * pump_eff)/(745.7 * density_water_lb_per_gal)
-
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{self.name}: #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_ft.round} ft of water at pump eff = #{(pump_eff*100).round(2)}% .")
+    flow_gpm = OpenStudio.convert(flow_m3_per_s, 'm^3/s', 'gal/min').get
+    calculated_w_per_gpm = calculated_w/flow_gpm
     
-    pressure_rise_pa = OpenStudio.convert(pressure_rise_ft, 'ftH_{2}O', 'Pa').get
-    
-    return pressure_rise_pa
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{self.name}: calculated W/gpm = #{calculated_w_per_gpm.round(1)}.")
+
+    return true
 
   end
   
@@ -104,12 +67,12 @@ module Pump
     hp = self.horsepower
     
     # Find the motor efficiency
-    motor_eff = standard_minimum_motor_efficiency(template, hp)
+    motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, hp)
 
     # Change the motor efficiency
     self.setMotorEfficiency(motor_eff)
     
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{self.name}: allowed hp = #{hp.round(2)}HP; motor eff = #{(motor_eff*100).round(2)}%.")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{self.name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_eff*100).round(2)}%.")
     
     return true    
   
@@ -121,19 +84,20 @@ module Pump
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
   # @return [Double] minimum motor efficiency (0.0 to 1.0)
-  def standard_minimum_motor_efficiency(template, motor_bhp)
+  def standard_minimum_motor_efficiency_and_size(template, motor_bhp)
   
     motor_eff = 0.85
+    nominal_hp = motor_bhp
   
     # Don't attempt to look up motor efficiency
     # for zero-hp pumps (required for circulation-pump-free
     # service water heating systems).
-    return 1.0 if motor_bhp == 0.0
+    return [1.0, 0] if motor_bhp == 0.0
   
     # Lookup the minimum motor efficiency
     motors = $os_standards["motors"]
     
-    # Assuming all fan motors are 4-pole ODP
+    # Assuming all pump motors are 4-pole ODP
     search_criteria = {
       "template" => template,
       "number_of_poles" => 4.0,
@@ -143,40 +107,107 @@ module Pump
     motor_properties = self.model.find_object(motors, search_criteria, motor_bhp)
     if motor_properties.nil?
       OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Pump", "For #{self.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
-      return motor_eff
+      return [motor_eff, nominal_hp]
     end
  
     motor_eff = motor_properties["nominal_full_load_efficiency"]
+    nominal_hp = motor_properties["maximum_capacity"].to_f.round(1)
+    # Round to nearest whole HP for niceness
+    if nominal_hp >= 2
+      nominal_hp = nominal_hp.round
+    end
     
-    return motor_eff
+    return [motor_eff, nominal_hp]
   
   end 
  
-  # Determines the horsepower of the pump
-  # based on fan power and fan motor efficiency.
+  # Determines the pump power (W) based on 
+  # flow rate, pressure rise, and total pump efficiency(impeller eff * motor eff).
+  # Uses the E+ default assumption of 0.78 impeller efficiency.
+  # 
+  # @return [Double] pump power
+  #   @units Watts (W)
+  def pumpPower()
+    
+    # Get flow rate (whether autosized or hard-sized)
+    flow_m3_per_s = 0
+    if self.autosizedRatedFlowRate.is_initialized
+      flow_m3_per_s = self.autosizedRatedFlowRate.get
+    else
+      flow_m3_per_s = self.ratedFlowRate.get
+    end
+  
+    # E+ default impeller efficiency
+    #http://bigladdersoftware.com/epx/docs/8-4/engineering-reference/component-sizing.html#pump-sizing
+    impeller_eff = 0.78
+
+    # Get the motor efficiency
+    motor_eff = self.motorEfficiency
+    
+    # Calculate the total efficiency
+    # which includes both motor and
+    # impeller efficiency.
+    pump_total_eff = impeller_eff * motor_eff
+    
+    # Get the pressure rise (Pa)
+    pressure_rise_pa = self.ratedPumpHead
+    
+    # Calculate the pump power (W)
+    pump_power_w = pressure_rise_pa * flow_m3_per_s / pump_total_eff
+    
+    return pump_power_w
+  
+  end
+
+  # Determines the brake horsepower of the pump
+  # based on flow rate, pressure rise, and impeller efficiency.
   # 
   # @return [Double] brake horsepower
   #   @units horsepower (hp)  
-  def horsepower()
+  def brakeHorsepower()
   
-    # Get design power (whether autosized or hard-sized)
-    rated_power_w = 0
-    if self.autosizedRatedPowerConsumption.is_initialized
-      rated_power_w = self.autosizedRatedPowerConsumption.get
-    elsif self.ratedPowerConsumption.is_initialized
-      rated_power_w = self.ratedPowerConsumption.get
+    # Get flow rate (whether autosized or hard-sized)
+    flow_m3_per_s = 0
+    if self.autosizedRatedFlowRate.is_initialized
+      flow_m3_per_s = self.autosizedRatedFlowRate.get
     else
-      OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Pump", "For #{self.name}, could not find rated pump power consumption, cannot determine horsepower correctly.")
-      return 0.0
+      flow_m3_per_s = self.ratedFlowRate.get
     end
+  
+    # E+ default impeller efficiency
+    #http://bigladdersoftware.com/epx/docs/8-4/engineering-reference/component-sizing.html#pump-sizing
+    impeller_eff = 0.78
     
-    # Convert to horsepower (bhp)
-    hp = rated_power_w / 745.7
+    # Get the pressure rise (Pa)
+    pressure_rise_pa = self.ratedPumpHead
     
-    return hp
+    # Calculate the pump power (W)
+    pump_power_w = pressure_rise_pa * flow_m3_per_s / impeller_eff
+    
+    # Convert to HP
+    pump_power_hp = pump_power_w / 745.7 # 745.7 W/HP
+    
+    return pump_power_hp
 
-  end
+  end  
+  
+  # Determines the horsepower of the pump
+  # motor, including motor efficiency and
+  # pump impeller efficiency.
+  # 
+  # @return [Double] horsepower
+  def motorHorsepower()
+  
+    # Get the pump power
+    pump_power_w = self.pumpPower
+    
+    # Convert to HP
+    pump_hp = pump_power_w / 745.7 # 745.7 W/HP
+    
+    return pump_hp
 
+  end  
+  
   # Determines the rated watts per GPM of the pump
   #
   # @return [Double] rated power consumption per flow
@@ -211,6 +242,5 @@ module Pump
     return rated_w_per_gpm
 
   end
-
  
 end
