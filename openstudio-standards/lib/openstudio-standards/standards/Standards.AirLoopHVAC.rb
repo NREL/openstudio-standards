@@ -2,7 +2,6 @@
 # Reopen the OpenStudio class to add methods to apply standards to this object
 class OpenStudio::Model::AirLoopHVAC
 
-
   # Apply multizone vav outdoor air method and
   # adjust multizone VAV damper positions
   # to achieve a system minimum ventilation effectiveness
@@ -48,15 +47,6 @@ class OpenStudio::Model::AirLoopHVAC
     
     # Multizone VAV Systems
     if self.is_multizone_vav_system
-
-      # In this case it's a system 5-8, SAT reset is necessary
-      case template
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          self.enable_supply_air_temperature_reset_appG(template)
-        else
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: no SAT reset implemented, template was not in list: '#{template}'.")
-      end
-
       
       # VAV Reheat Control
       self.set_vav_damper_action(template)
@@ -99,7 +89,14 @@ class OpenStudio::Model::AirLoopHVAC
       # capabilities.
     end
 
-   
+    # SAT reset
+    # TODO Prototype buildings use OAT-based SAT reset,
+    # but PRM RM suggests Warmest zone based SAT reset.
+    if self.is_supply_air_temperature_reset_required(template, climate_zone)
+      self.enable_supply_air_temperature_reset_outdoor_temperature
+      # self.enable_supply_air_temperature_reset_warmest_zone(template)
+    end    
+    
     # Motorized OA damper
     if self.is_motorized_oa_damper_required(template, climate_zone)
       # TODO self.add_motorized_oa_damper
@@ -116,6 +113,37 @@ class OpenStudio::Model::AirLoopHVAC
     # TODO night cycle
     
     # TODO night fan shutoff > 0.75 hp
+ 
+  end  
+
+  # Apply all PRM baseline required controls to the airloop.
+  # Only applies those controls that differ from the normal
+  # prescriptive controls, which are added via
+  # AirLoopHVAC.apply_standard_controls
+  #
+  # @param (see #is_economizer_required)
+  # @return [Bool] returns true if successful, false if not
+  def apply_performance_rating_method_baseline_controls(template, climate_zone)
+    
+    # Economizers
+    if self.is_performance_rating_method_baseline_economizer_required(template, climate_zone)
+      self.apply_performance_rating_method_baseline_economizer(template, climate_zone)
+    end
+
+    # Multizone VAV Systems
+    if self.is_multizone_vav_system
+
+      # SAT Reset 
+      # G3.1.3.12 SAT reset required for all Multizone VAV systems,
+      # even if not required by prescriptive section.
+      case template
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        self.enable_supply_air_temperature_reset_warmest_zone(template)
+      end
+
+    end
+ 
+    return true
  
   end  
 
@@ -280,7 +308,7 @@ class OpenStudio::Model::AirLoopHVAC
     elsif fan_pwr_limit_type == "variable volume"
       allowable_fan_bhp = dsn_air_flow_cfm*0.0013+fan_pwr_adjustment_bhp
     end
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: Allowable brake horsepower = #{(allowable_fan_bhp).round(2)} bhp based on #{dsn_air_flow_cfm.round} cfm and #{fan_pwr_adjustment_bhp.round(2)} bhp of adjustment.")
+    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","For #{self.name}: Allowable brake horsepower = #{(allowable_fan_bhp).round(2)}HP based on #{dsn_air_flow_cfm.round} cfm and #{fan_pwr_adjustment_bhp.round(2)} bhp of adjustment.")
     
     # Calculate and report the total area for debugging/testing
     floor_area_served_m2 = self.floor_area_served
@@ -911,13 +939,184 @@ class OpenStudio::Model::AirLoopHVAC
     
   end
   
-  # Add economizer to the airloop per Appendix G baseline
+  # Determine if an economizer is required per the PRM.
+  #
+  # @param (see #is_economizer_required)
+  # @return [Bool] returns true if required, false if not
+  def is_performance_rating_method_baseline_economizer_required(template, climate_zone)
+  
+    economizer_required = false
+    
+    # A big number of ft2 as the minimum requirement
+    infinity_ft2 = 999999999999
+    min_int_area_served_ft2 = infinity_ft2
+    min_ext_area_served_ft2 = infinity_ft2
+    
+    # Determine the minimum capacity that requires an economizer
+    case template
+    when '90.1-2004'
+      case climate_zone
+      when 'ASHRAE 169-2006-1A',
+          'ASHRAE 169-2006-1B',
+          'ASHRAE 169-2006-2A',
+          'ASHRAE 169-2006-3A',
+          'ASHRAE 169-2006-4A'
+        min_int_area_served_ft2 = infinity_ft2 # No requirement
+        min_ext_area_served_ft2 = infinity_ft2 # No requirement
+      when 'ASHRAE 169-2006-2B',
+          'ASHRAE 169-2006-5A',
+          'ASHRAE 169-2006-6A',
+          'ASHRAE 169-2006-7A',
+          'ASHRAE 169-2006-7B',
+          'ASHRAE 169-2006-8A',
+          'ASHRAE 169-2006-8B'
+        min_int_area_served_ft2 = 15000
+        min_ext_area_served_ft2 = infinity_ft2 # No requirement
+      when 'ASHRAE 169-2006-3B',
+          'ASHRAE 169-2006-3C',
+          'ASHRAE 169-2006-4B',
+          'ASHRAE 169-2006-4C',
+          'ASHRAE 169-2006-5B',
+          'ASHRAE 169-2006-5C',
+          'ASHRAE 169-2006-6B'
+        min_int_area_served_ft2 = 10000
+        min_ext_area_served_ft2 = 25000
+      end
+    when '90.1-2007', '90.1-2010', '90.1-2013'
+      case climate_zone
+      when 'ASHRAE 169-2006-1A',
+          'ASHRAE 169-2006-1B',
+          'ASHRAE 169-2006-2A',
+          'ASHRAE 169-2006-3A',
+          'ASHRAE 169-2006-4A'
+        min_int_area_served_ft2 = infinity_ft2 # No requirement
+        min_ext_area_served_ft2 = infinity_ft2 # No requirement
+      else 
+        min_int_area_served_ft2 = 0 # Always required
+        min_ext_area_served_ft2 = 0 # Always required
+      end
+    end
+  
+    # Check whether the system requires an economizer by comparing
+    # the system capacity to the minimum capacity.
+    min_int_area_served_m2 = OpenStudio.convert(min_int_area_served_ft2, "ft^2", "m^2").get
+    min_ext_area_served_m2 = OpenStudio.convert(min_ext_area_served_ft2, "ft^2", "m^2").get
+    
+    if self.floor_area_served_interior_zones >= min_int_area_served_m2 ||
+      self.floor_area_served_exterior_zones >= min_ext_area_served_m2
+      economizer_required = true
+    end
+    
+    return economizer_required    
+
+  end
+  
+  # Apply the PRM economizer type and set temperature limits
   #
   # @param (see #is_economizer_required)
   # @return [Bool] returns true if successful, false if not
-  # @todo This method is not yet functional
-  def add_baseline_economizer(template, climate_zone)
+  def apply_performance_rating_method_baseline_economizer(template, climate_zone)
   
+    # EnergyPlus economizer types
+    # 'NoEconomizer'
+    # 'FixedDryBulb'
+    # 'FixedEnthalpy'
+    # 'DifferentialDryBulb'
+    # 'DifferentialEnthalpy'
+    # 'FixedDewPointAndDryBulb'
+    # 'ElectronicEnthalpy'
+    # 'DifferentialDryBulbAndEnthalpy'  
+
+    # Determine the type and limits
+    economizer_type = nil
+    drybulb_limit_f = nil
+    enthalpy_limit_btu_per_lb = nil
+    dewpoint_limit_f = nil
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010'
+      case climate_zone
+      when 'ASHRAE 169-2006-1B',
+          'ASHRAE 169-2006-2B',
+          'ASHRAE 169-2006-3B',
+          'ASHRAE 169-2006-3C',
+          'ASHRAE 169-2006-4B',
+          'ASHRAE 169-2006-4C',
+          'ASHRAE 169-2006-5B',
+          'ASHRAE 169-2006-5C',
+          'ASHRAE 169-2006-6B',
+          'ASHRAE 169-2006-7B',
+          'ASHRAE 169-2006-8A',
+          'ASHRAE 169-2006-8B'
+        economizer_type = 'DifferentialDryBulb'
+        drybulb_limit_f = 75
+      when 'ASHRAE 169-2006-5A',
+          'ASHRAE 169-2006-6A',
+          'ASHRAE 169-2006-7A'
+        economizer_type = 'DifferentialDryBulb'
+        drybulb_limit_f = 70
+      else
+        economizer_type = 'DifferentialDryBulb'
+        drybulb_limit_f = 65
+      end
+    when  '90.1-2013'
+      case climate_zone
+      when 'ASHRAE 169-2006-1B',
+          'ASHRAE 169-2006-2B',
+          'ASHRAE 169-2006-3B',
+          'ASHRAE 169-2006-3C',
+          'ASHRAE 169-2006-4B',
+          'ASHRAE 169-2006-4C',
+          'ASHRAE 169-2006-5B',
+          'ASHRAE 169-2006-5C',
+          'ASHRAE 169-2006-6B',
+          'ASHRAE 169-2006-7A',
+          'ASHRAE 169-2006-7B',
+          'ASHRAE 169-2006-8A',
+          'ASHRAE 169-2006-8B'
+        economizer_type = 'DifferentialDryBulb'  
+        drybulb_limit_f = 75
+      when 'ASHRAE 169-2006-2A',
+          'ASHRAE 169-2006-3A',
+          'ASHRAE 169-2006-4A'
+        economizer_type = 'FixedEnthalpy'
+        enthalpy_limit_btu_per_lb = 28
+      when 'ASHRAE 169-2006-5A',
+          'ASHRAE 169-2006-6A',
+          'ASHRAE 169-2006-7A'
+        economizer_type = 'DifferentialDryBulb'  
+        drybulb_limit_f = 70
+      else
+        economizer_type = 'DifferentialDryBulb'  
+        drybulb_limit_f = 65
+      end
+    end
+ 
+    # Set the limits
+    case economizer_type
+    when 'FixedDryBulb'
+      if drybulb_limit_f
+        drybulb_limit_c = OpenStudio.convert(drybulb_limit_f, 'F', 'C').get
+        oa_control.setEconomizerMaximumLimitDryBulbTemperature(drybulb_limit_c)
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Economizer type = #{economizer_type}, dry bulb limit = #{drybulb_limit_f}F")
+      end
+    when 'FixedEnthalpy'
+      if enthalpy_limit_btu_per_lb
+        enthalpy_limit_j_per_kg = OpenStudio.convert(enthalpy_limit_btu_per_lb, 'Btu/lb', 'J/kg').get
+        oa_control.setEconomizerMaximumLimitEnthalpy(enthalpy_limit_j_per_kg)
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Economizer type = #{economizer_type}, enthalpy limit = #{enthalpy_limit_btu_per_lb}Btu/lb")
+      end
+    when 'FixedDewPointAndDryBulb'
+      if drybulb_limit_f && dewpoint_limit_f
+        drybulb_limit_c = OpenStudio.convert(drybulb_limit_f, 'F', 'C').get
+        dewpoint_limit_c = OpenStudio.convert(dewpoint_limit_f, 'F', 'C').get
+        oa_control.setEconomizerMaximumLimitDryBulbTemperature(drybulb_limit_c)
+        oa_control.setEconomizerMaximumLimitDewpointTemperature(dewpoint_limit_c)
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Economizer type = #{economizer_type}, dry bulb limit = #{drybulb_limit_f}F, dew-point limit = #{dewpoint_limit_f}F")
+      end
+    end 
+
+    return true
+
   end
   
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
@@ -1902,7 +2101,6 @@ class OpenStudio::Model::AirLoopHVAC
     return is_sat_reset_required unless self.is_multizone_vav_system
   
     # Not required until 90.1-2010
-    # Todo: per App G it's required since in 90.1-2004 (10F) and 90.1-2007 (5F)
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
       return is_sat_reset_required
@@ -1910,10 +2108,9 @@ class OpenStudio::Model::AirLoopHVAC
       case climate_zone
       when 'ASHRAE 169-2006-1A',
         'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-3A',
-        # Todo: clarify whether these two lines are actually necessary. See issue #48
-        #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Supply air temperature reset is not required per 6.5.3.4 Exception 1, the system is located in climate zone #{climate_zone}.")
-      #when 'ASHRAE 169-2006-1B',
+        'ASHRAE 169-2006-3A'
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Supply air temperature reset is not required per 6.5.3.4 Exception 1, the system is located in climate zone #{climate_zone}.")
+      when 'ASHRAE 169-2006-1B',
         'ASHRAE 169-2006-2B',
         'ASHRAE 169-2006-3B',
         'ASHRAE 169-2006-3C',
@@ -1937,17 +2134,12 @@ class OpenStudio::Model::AirLoopHVAC
     
   end
 
-
-
-
-
   # Enable supply air temperature (SAT) reset based
-  # on outdoor air conditions.
-  # Uses a SPM Warmest, and ask for template because 2004 is different
-
+  # on the cooling demand of the warmest zone.
+  #
   # @param template [String] valid choices: '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Bool] Returns true if successful, false if not.
-  def enable_supply_air_temperature_reset_appG(template)
+  def enable_supply_air_temperature_reset_warmest_zone(template)
 
     # Get the current setpoint and calculate
     # the new setpoint.
@@ -1969,9 +2161,6 @@ class OpenStudio::Model::AirLoopHVAC
     max_sat_f = design_sat_f + sat_reset_r
     max_sat_c = design_sat_c + sat_reset_k
 
-
-
-
     # Create a setpoint manager
     sat_warmest_reset = OpenStudio::Model::SetpointManagerWarmest.new(model)
     sat_warmest_reset.setName("#{self.name} SAT Warmest Reset")
@@ -1979,18 +2168,15 @@ class OpenStudio::Model::AirLoopHVAC
     sat_warmest_reset.setMinimumSetpointTemperature(design_sat_c)
     sat_warmest_reset.setMaximumSetpointTemperature(max_sat_c)
 
-
     # Attach the setpoint manager to the
     # supply outlet node of the system.
     sat_warmest_reset.addToNode(self.supplyOutletNode)
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Supply air temperature reset was enabled using a SPM Warmest with a min SAT of #{design_sat_c}C // #{design_sat_f}F and a max SAT of #{max_sat_c}C // #{max_sat_f}.")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Supply air temperature reset was enabled using a SPM Warmest with a min SAT of #{design_sat_c.round}C // #{design_sat_f.round}F and a max SAT of #{max_sat_c.round}C // #{max_sat_f.round}F.")
 
     return true
 
   end
-
-
 
   # Enable supply air temperature (SAT) reset based
   # on outdoor air conditions.  SAT will be kept at the
@@ -1999,7 +2185,7 @@ class OpenStudio::Model::AirLoopHVAC
   # linearly when outdoor air is between 50F and 70F.
   #
   # @return [Bool] Returns true if successful, false if not.  
-  def enable_supply_air_temperature_reset()
+  def enable_supply_air_temperature_reset_outdoor_temperature()
   
     # Get the current setpoint and calculate 
     # the new setpoint.
@@ -2036,30 +2222,6 @@ class OpenStudio::Model::AirLoopHVAC
     return true
   
   end
-  
-  # Determine if the system has an economizer
-  #
-  # @return [Bool] Returns true if required, false if not.  
-  def has_economizer()
-  
-    # Get the OA system and OA controller
-    oa_sys = self.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
-    oa_control = oa_sys.getControllerOutdoorAir
-    economizer_type = oa_control.getEconomizerControlType
-    
-    # Return false if no economizer is present
-    if economizer_type == 'NoEconomizer'
-      return false
-    else
-      return true
-    end
-    
-  end  
   
   # Determine if the system has an economizer
   #
@@ -2877,5 +3039,42 @@ class OpenStudio::Model::AirLoopHVAC
   
   end
 
+  # Calculate the total floor area of all zones attached
+  # to the air loop that have no exterior surfaces, in m^2.
+  #
+  # return [Double] the total floor area of all zones attached
+  # to the air loop, in m^2.
+  def floor_area_served_interior_zones()
+  
+    total_area = 0.0
+  
+    self.thermalZones.each do |zone|
+      # Skip zones that have exterior surface area
+      next if zone.exteriorSurfaceArea > 0
+      total_area += zone.floorArea
+    end
+
+    return total_area
+  
+  end  
+  
+  # Calculate the total floor area of all zones attached
+  # to the air loop that have at least one exterior surface, in m^2.
+  #
+  # return [Double] the total floor area of all zones attached
+  # to the air loop, in m^2.
+  def floor_area_served_exterior_zones()
+  
+    total_area = 0.0
+  
+    self.thermalZones.each do |zone|
+      # Skip zones that have no exterior surface area
+      next if zone.exteriorSurfaceArea == 0
+      total_area += zone.floorArea
+    end
+
+    return total_area
+  
+  end
   
 end
