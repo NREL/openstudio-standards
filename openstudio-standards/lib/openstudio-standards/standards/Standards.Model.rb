@@ -834,9 +834,9 @@ class OpenStudio::Model::Model
                         nil,
                         0.62,
                         0.9,
-                        OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+                        OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                        nil)
           end
-
           
           # Add a PSZ_AC for each secondary zone
           if sec_zones.size > 0
