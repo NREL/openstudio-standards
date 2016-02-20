@@ -318,8 +318,8 @@ class OpenStudio::Model::Model
       if val.is_initialized
         result = OpenStudio::OptionalDouble.new(val.get)
       else
-        # Todo: comment following line (debugging new HVACsizing objects right now)
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "QUERY ERROR: Data not found for query: #{query}")
+        # TODO: comment following line (debugging new HVACsizing objects right now)
+        # OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "QUERY ERROR: Data not found for query: #{query}")
       end
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
@@ -354,8 +354,8 @@ class OpenStudio::Model::Model
       if val.is_initialized
         result = OpenStudio::OptionalDouble.new(val.get)
       else
-        # Todo: comment following line (debugging new HVACsizing objects right now)
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "QUERY ERROR: Data not found for query: #{query}")
+        # TODO: comment following line (debugging new HVACsizing objects right now)
+        # OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "QUERY ERROR: Data not found for query: #{query}")
       end
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
