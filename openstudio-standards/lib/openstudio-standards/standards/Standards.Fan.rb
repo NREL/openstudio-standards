@@ -49,7 +49,7 @@ module Fan
     end
     
     # Find the motor efficiency
-    motor_eff = standard_minimum_motor_efficiency(template, standards)
+    motor_eff, nominal_hp = standard_minimum_motor_efficiency(template, allowed_hp)
 
     # Calculate the total fan efficiency
     total_fan_eff = fan_impeller_eff * motor_eff
@@ -68,17 +68,20 @@ module Fan
     
   end
 
-  def set_standard_minimum_motor_efficiency(template, allowed_hp)
+  def set_standard_minimum_motor_efficiency(template, allowed_bhp)
     
     # Find the motor efficiency
-    motor_eff = standard_minimum_motor_efficiency(template, allowed_hp)
+    motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, allowed_bhp)
 
     # Change the motor efficiency
     # but preserve the existing fan impeller
     # efficiency.
     self.changeMotorEfficiency(motor_eff)
     
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{self.name}: allowed hp = #{allowed_hp.round(2)}HP; motor eff = #{(motor_eff*100).round(2)}%.")
+    # Calculate the total motor HP
+    motor_hp = self.motorHorsepower
+    
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{self.name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_eff*100).round(2)}%.")
     
     return true    
   
@@ -118,7 +121,7 @@ module Fan
     # Calculate the new power
     new_power_w = self.fanPower
     
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Fan", "For #{self.name}, new pressure rise = #{new_pressure_rise_in_h2o.round(1)} in w.c., new power = #{new_power_w.round} W.")
+    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Fan", "For #{self.name}: pressure rise = #{new_pressure_rise_in_h2o.round(1)} in w.c., power = #{new_power_w.round} W // #{self.motorHorsepower.round(2)}HP.")
     
     return true
   
@@ -139,7 +142,9 @@ module Fan
       dsn_air_flow_m3_per_s = self.maximumFlowRate.get
     end
   
-    # Get the total fan efficiency
+    # Get the total fan efficiency,
+    # which in E+ includes both motor and
+    # impeller efficiency.
     fan_total_eff = self.fanEfficiency
     
     # Get the pressure rise (Pa)
@@ -174,6 +179,23 @@ module Fan
     return fan_bhp
 
   end
+
+  # Determines the horsepower of the fan
+  # motor, including motor efficiency and
+  # fan impeller efficiency.
+  # 
+  # @return [Double] horsepower
+  def motorHorsepower()
+  
+    # Get the fan power
+    fan_power_w = self.fanPower
+    
+    # Convert to HP
+    fan_hp = fan_power_w / 745.7 # 745.7 W/HP
+    
+    return fan_hp
+
+  end  
 
   # Changes the fan motor efficiency and also the fan total efficiency
   # at the same time, preserving the impeller efficiency.
@@ -251,10 +273,11 @@ module Fan
   # any desired safety factor already included.  This method
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
-  # @return [Double] minimum motor efficiency (0.0 to 1.0)
-  def standard_minimum_motor_efficiency(template, motor_bhp)
+  # @return [Double] minimum motor efficiency (0.0 to 1.0), nominal HP
+  def standard_minimum_motor_efficiency_and_size(template, motor_bhp)
   
     fan_motor_eff = 0.85
+    nominal_hp = motor_bhp
   
     # Lookup the minimum motor efficiency
     motors = $os_standards["motors"]
@@ -269,16 +292,19 @@ module Fan
     motor_properties = self.model.find_object(motors, search_criteria, motor_bhp)
     if motor_properties.nil?
       OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Fan", "For #{self.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
-      return fan_motor_eff
+      return [fan_motor_eff, nominal_hp]
     end
  
     fan_motor_eff = motor_properties["nominal_full_load_efficiency"]  
+    nominal_hp = motor_properties["maximum_capacity"].to_f.round(1)
+    # Round to nearest whole HP for niceness
+    if nominal_hp >= 2
+      nominal_hp = nominal_hp.round
+    end
 
-    # Add exception for small 
-    
-    
-    
-    return fan_motor_eff
+    # TODO Add exception for small 
+
+    return [fan_motor_eff, nominal_hp]
   
   end
 
@@ -311,7 +337,6 @@ module Fan
     return is_small
   
   end
-
 
   # Find the actual rated fan power per flow (W/CFM)
   # by querying the sql file
