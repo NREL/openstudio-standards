@@ -100,11 +100,9 @@ class OpenStudio::Model::Model
 
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
-    # Todo: Implement resize windows to wwr = 0.4 if wwr is above 0.4
-    # @jmarrec: I've got a measure that resizes windows around the centroid, so you know you don't have problems with windows not fitting and you preserve the WWR by orientation
-    # Question is: do you count adiabatic surfaces into the gross above-ground exterior wall area?
-    # PNNL seems to say that you need to calculate WWR separately for each space condition category (Non Res, Res and semi-heated, which would enclose)
-
+    # Reduce the WWR, if necessary
+    self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage)
+    
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
     self.assign_spaces_to_stories
@@ -2945,6 +2943,137 @@ class OpenStudio::Model::Model
   
   end
 
+  # Reduces the WWR to the values specified by the PRM. WWR reduction
+  # will be done by raising sill height.  This causes the least impact
+  # on the daylighting area calculations and controls placement.
+  #
+  # @todo add proper support for 90.1-2013 with all those building
+  # type specific values
+  # @todo support semiheated spaces as a separate WWR category
+  # @todo add window frame area to calculation of WWR
+  def apply_performance_rating_method_baseline_window_to_wall_ratio(template)
+  
+    # Loop through all spaces in the model, and 
+    # per the PNNL PRM Reference Manual, find the areas
+    # of each space conditioning category (res, nonres, semi-heated)
+    # separately.  Include space multipliers.
+    nr_wall_m2 = 0.001 # Avoids divide by zero errors later
+    nr_wind_m2 = 0  
+    res_wall_m2 = 0.001
+    res_wind_m2 = 0
+    sh_wall_m2 = 0.001
+    sh_wind_m2 = 0
+    self.getSpaces.each do |space|
+      
+      # Loop through all surfaces in this space
+      wall_area_m2 = 0
+      wind_area_m2 = 0
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'Wall'
+        # This wall's gross area (including window area)
+        wall_area_m2 += surface.grossArea * space.multiplier
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+          wind_area_m2 += ss.netArea * space.multiplier
+        end
+      end
+      
+      # Determine the space category
+      cat = 'NonRes'
+      if space.is_residential(template)
+        cat = 'Res'
+      end
+      # if space.is_semiheated
+        # cat = 'Semiheated'
+      # end
+      
+      # Add to the correct category
+      case cat
+      when 'NonRes'
+        nr_wall_m2 += wall_area_m2
+        nr_wind_m2 += wind_area_m2
+      when 'Res'
+        res_wall_m2 += wall_area_m2
+        res_wind_m2 += wind_area_m2
+      when 'Semiheated'
+        sh_wall_m2 += wall_area_m2
+        sh_wind_m2 += wind_area_m2
+      end
+      
+    end
+      
+    # Calculate the WWR of each category
+    wwr_nr = ((nr_wind_m2 / nr_wall_m2)*100).round(1)
+    wwr_res = ((res_wind_m2 / res_wall_m2)*100).round(1)
+    wwr_sh = ((sh_wind_m2 / sh_wall_m2)*100).round(1)
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The WWRs are: NonRes: #{wwr_nr.round}%, Res: #{wwr_res.round}%.")
+    
+    # WWR limit
+    wwr_lim = 40.0
+    
+    # Check against WWR limit
+    wwr_nr > wwr_lim ? red_nr = true : red_nr = false
+    wwr_res > wwr_lim ? red_res = true : red_res = false
+    wwr_sh > wwr_lim ? red_sh = true : red_sh = false
+
+    # Stop here unless windows need reducing
+    return true unless red_nr || red_res || red_sh
+    
+    # Determine the factors by which to reduce the window area
+    mult_nr_red = wwr_lim / wwr_nr 
+    mult_res_red = wwr_lim / wwr_res
+    #mult_sh_red = wwr_lim / wwr_sh
+    
+    # Reduce the window area if any of the categories necessary
+    self.getSpaces.each do |space|
+      
+      # Determine the space category
+      cat = 'NonRes'
+      if space.is_residential(template)
+        cat = 'Res'
+      end
+      # if space.is_semiheated
+        # cat = 'Semiheated'
+      # end
+      
+      # Skip spaces whose windows don't need to be reduced
+      case cat
+      when 'NonRes'
+        next unless red_nr
+        mult = mult_nr_red
+      when 'Res'
+        next unless red_res
+        mult = mult_res_red
+      when 'Semiheated'
+        next unless red_sh
+        # mult = mult_sh_red
+      end
+      
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'Wall'
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+          # Reduce the size of the window
+          red = 1.0 - mult
+          ss.reduce_area_by_percent_by_raising_sill(red)
+        end
+      end
+
+    end    
+    
+    return true
+  
+  end
+  
   # Helper method to get the story object that
   # cooresponds to a specific minimum z value.
   # Makes a new story if none found at this height.
