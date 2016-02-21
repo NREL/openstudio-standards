@@ -8,8 +8,8 @@ class TestStripMall < CreateDOEPrototypeBuildingTest
   climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
   
   create_models = true
-  run_models = false
-  compare_results = false
+  run_models = true
+  compare_results = true
   
   debug = false
   

@@ -76,4 +76,58 @@ class OpenStudio::Model::SubSurface
     
   end
   
+  # Reduce the area of the subsurface by raising the
+  # sill height.
+  #
+  # @param percent_reduction [Double] the fractional amount
+  # to reduce the area.
+  def reduce_area_by_percent_by_raising_sill(percent_reduction)
+  
+    mult = 1-percent_reduction
+    
+    # Calculate the original area
+    area_original = self.netArea
+
+    # Find the min and max z values
+    min_z_val = 99999
+    max_z_val = -99999
+    self.vertices.each do |vertex|
+      # Min x value
+      if vertex.z < min_z_val
+        min_z_val = vertex.z
+      end
+      # Max x value
+      if vertex.z > max_z_val
+        max_z_val = vertex.z
+      end
+    end
+    
+    # Calculate the window height
+    height = max_z_val - min_z_val
+    
+    # Calculate the new sill height
+    new_sill_z = max_z_val - (height * mult)    
+    
+    # Reset the z value of the lowest points
+    new_vertices = []
+    self.vertices.each do |vertex|
+      new_x = vertex.x
+      new_y = vertex.y
+      new_z = vertex.z
+      if new_z == min_z_val
+        new_z = new_sill_z
+      end
+      new_vertices << OpenStudio::Point3d.new(new_x, new_y, new_z)
+    end
+    
+    # Reset the vertices
+    self.setVertices(new_vertices)
+    
+    # Compare the new area to the old for validation
+    act_pct_red = 1.0 - (self.netArea / area_original)
+    
+    return true
+  
+  end
+  
 end

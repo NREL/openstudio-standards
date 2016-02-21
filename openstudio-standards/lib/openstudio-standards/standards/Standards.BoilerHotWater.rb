@@ -7,11 +7,11 @@ class OpenStudio::Model::BoilerHotWater
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not 
-  def setStandardEfficiencyAndCurves(template, standards)
+  def setStandardEfficiencyAndCurves(template)
   
     successfully_set_all_properties = false
   
-    boilers = standards['boilers']
+    boilers = $os_standards['boilers']
 
     # Define the criteria to find the boiler properties
     # in the hvac standards data set.
@@ -65,7 +65,7 @@ class OpenStudio::Model::BoilerHotWater
     end
     
     # Make the EFFFPLR curve
-    eff_fplr = self.model.add_curve(blr_props['efffplr'], standards)
+    eff_fplr = self.model.add_curve(blr_props['efffplr'])
     if eff_fplr
       self.setNormalizedBoilerEfficiencyCurve(eff_fplr)
     else

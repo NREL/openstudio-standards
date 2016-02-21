@@ -133,5 +133,141 @@ class OpenStudio::Model::ThermalZone
     return result
 
   end
+
+  # returns the calculated cooling design load as an optional double
+  def coolingDesignLoad
+  
+    result = OpenStudio::OptionalDouble.new
+
+    name = self.name.get.upcase
+
+    sql = self.model.sqlFile
+    
+    if sql.is_initialized
+      sql = sql.get
+    
+      # In E+ 8.4, (OS 1.9.3 onward) the table name changed
+      table_name = nil
+      if self.model.version < OpenStudio::VersionString.new('1.9.3')
+        table_name = 'Zone Cooling'
+      else
+        table_name = 'Zone Sensible Cooling'
+      end    
+    
+      query = "SELECT Value 
+              FROM tabulardatawithstrings
+              WHERE ReportName='HVACSizingSummary' 
+              AND ReportForString='Entire Facility' 
+              AND TableName='#{table_name}'
+              AND ColumnName='User Design Load per Area'
+              AND RowName='#{name}'
+              AND Units='W/m2'"
+
+      val = sql.execAndReturnFirstDouble(query)
+      
+      if val.is_initialized
+        result = OpenStudio::OptionalDouble.new(val.get)
+      else
+        #OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
+      end
+
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return result  
+  
+  end
+  
+  # returns the calculated heating design load as an optional double
+  def heatingDesignLoad
+  
+    result = OpenStudio::OptionalDouble.new
+
+    name = self.name.get.upcase
+
+    sql = self.model.sqlFile
+    
+    if sql.is_initialized
+      sql = sql.get
+      
+      # In E+ 8.4, (OS 1.9.3 onward) the table name changed
+      table_name = nil
+      if self.model.version < OpenStudio::VersionString.new('1.9.3')
+        table_name = 'Zone Heating'
+      else
+        table_name = 'Zone Sensible Heating'
+      end
+      
+      query = "SELECT Value 
+              FROM tabulardatawithstrings
+              WHERE ReportName='HVACSizingSummary' 
+              AND ReportForString='Entire Facility' 
+              AND TableName='#{table_name}'
+              AND ColumnName='User Design Load per Area'
+              AND RowName='#{name}'
+              AND Units='W/m2'"
+
+      val = sql.execAndReturnFirstDouble(query)
+      
+      if val.is_initialized
+        result = OpenStudio::OptionalDouble.new(val.get)
+      else
+        #OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
+      end
+
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return result  
+  
+  end
+
+  # Determine the zone heating fuels, including
+  # any fuels used by zone equipment, reheat terminals,
+  # the air loops serving the zone, and any plant loops
+  # serving those air loops.
+  #
+  # return [Array<String>] An array. Possible values are 
+  # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
+  # Coal, Diesel, Gasoline, DistrictCooling, DistrictHeating, 
+  # and SolarEnergy.
+  def heating_fuels
+  
+    fuels = []
+    
+    # Check the zone hvac heating fuels
+    fuels += self.model.zone_equipment_heating_fuels(self)
+
+    # Check the zone airloop heating fuels
+    fuels += self.model.zone_airloop_heating_fuels(self)
+
+    return fuels.uniq.sort
+    
+  end
+ 
+  # Determine the zone cooling fuels, including
+  # any fuels used by zone equipment, reheat terminals,
+  # the air loops serving the zone, and any plant loops
+  # serving those air loops.
+  #
+  # return [Array<String>] An array. Possible values are
+  # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
+  # Coal, Diesel, Gasoline, DistrictCooling, DistrictHeating, 
+  # and SolarEnergy.
+  def cooling_fuels
+  
+    fuels = []
+    
+    # Check the zone hvac cooling fuels
+    fuels += self.model.zone_equipment_cooling_fuels(self)
+
+    # Check the zone airloop cooling fuels
+    fuels += self.model.zone_airloop_cooling_fuels(self)
+
+    return fuels.uniq.sort
+    
+  end  
   
 end

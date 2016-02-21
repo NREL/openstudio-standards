@@ -2,9 +2,15 @@
 # open the class to add methods to size all HVAC equipment
 class OpenStudio::Model::Model
 
-  # Let the model store and access its own template and climate zone
-  attr_accessor :template
-  attr_accessor :climate_zone
+  # Load the helper libraries for 
+  require_relative 'Prototype.FanConstantVolume'
+  require_relative 'Prototype.FanVariableVolume'
+  require_relative 'Prototype.FanOnOff'
+  require_relative 'Prototype.FanZoneExhaust'
+  require_relative 'Prototype.HeatExchangerAirToAirSensibleAndLatent'
+  require_relative 'Prototype.ControllerWaterCoil'
+  require_relative 'Prototype.Model.hvac'
+  require_relative 'Prototype.Model.swh'
 
   # Creates a DOE prototype building model and replaces
   # the current model with this model.
@@ -18,19 +24,14 @@ class OpenStudio::Model::Model
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
   def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)
 
-    self.load_openstudio_standards_json
     lookup_building_type = self.get_lookup_name(building_type)
-
-    # Assign the standards to the model
-    self.template = building_vintage
-    self.climate_zone = climate_zone
 
     # Retrieve the Prototype Inputs from JSON
     search_criteria = {
       'template' => building_vintage,
       'building_type' => building_type
     }
-    prototype_input = self.find_object(self.standards['prototype_inputs'], search_criteria)
+    prototype_input = self.find_object($os_standards['prototype_inputs'], search_criteria)
     if prototype_input.nil?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for #{search_criteria}, cannot create model.")
       return false
@@ -40,21 +41,23 @@ class OpenStudio::Model::Model
     self.load_geometry(building_type, building_vintage, climate_zone)
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
     space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
-    self.assign_space_type_stubs(lookup_building_type, space_type_map)
+    self.assign_space_type_stubs(lookup_building_type, building_vintage, space_type_map)
     self.add_loads(building_vintage, climate_zone)
-    self.apply_infiltration_standard
+    self.apply_infiltration_standard(building_vintage)
     self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
     self.modify_surface_convection_algorithm(building_vintage)
     self.add_constructions(lookup_building_type, building_vintage, climate_zone)
     self.create_thermal_zones(building_type,building_vintage, climate_zone)
-    self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)
-    self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
+    self.add_hvac(building_type, building_vintage, climate_zone, prototype_input)
+    self.custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+    self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
+    self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
     self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
     self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
-    self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
+    self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone)
     self.set_sizing_parameters(building_type, building_vintage)
-    self.yearDescription.get.setDayofWeekforStartDay('Sunday')
-
+    self.yearDescription.get.setDayofWeekforStartDay('Sunday')  
+    
     # Perform a sizing run
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
@@ -65,7 +68,7 @@ class OpenStudio::Model::Model
     has_multizone_systems = false
     self.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.is_multizone_vav_system
-        self.apply_multizone_vav_outdoor_air_sizing
+        self.apply_multizone_vav_outdoor_air_sizing(building_vintage)
         if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
           return false
         end
@@ -79,24 +82,19 @@ class OpenStudio::Model::Model
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
 
     # Apply the HVAC efficiency standard
-    self.applyHVACEfficiencyStandard
+    self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
 
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
     if building_type != "LargeHotel"
-      self.addDaylightingControls
+      self.addDaylightingControls(building_vintage)
     else
       self.add_daylighting_controls(building_vintage)
     end
 
     if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant"
       self.update_exhaust_fan_efficiency(building_vintage)
-      self.update_waterheater_loss_coefficient(building_vintage)
-    end
-
-    if building_type == "MidriseApartment"
-      self.update_waterheater_loss_coefficient(building_vintage)
     end
     
     if building_type == "HighriseApartment"
@@ -361,13 +359,15 @@ class OpenStudio::Model::Model
   #   The hash for each building is defined inside the Prototype.building_name
   #   e.g. (Prototype.secondary_school.rb) file.
   # @return [Bool] returns true if successful, false if not
-  def assign_space_type_stubs(building_type, space_type_map)
+  def assign_space_type_stubs(building_type, building_vintage, space_type_map)
 
     space_type_map.each do |space_type_name, space_names|
       # Create a new space type
       stub_space_type = OpenStudio::Model::SpaceType.new(self)
       stub_space_type.setStandardsBuildingType(building_type)
       stub_space_type.setStandardsSpaceType(space_type_name)
+      stub_space_type.setName("#{building_type} #{space_type_name}")
+      stub_space_type.set_rendering_color(building_vintage)
 
       space_names.each do |space_name|
         space = self.getSpaceByName(space_name)
@@ -414,43 +414,18 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
     # Loop through all the space types currently in the model,
-    # which are placeholders, and generate actual space types for them.
-    self.getSpaceTypes.sort.each do |stub_space_type|
+    # which are placeholders, and give them appropriate loads and schedules
+    self.getSpaceTypes.sort.each do |space_type|
 
-      # Get the standard building type
-      # from the stub
-      # puts "stub_space_type = #{stub_space_type}"
-
-      stds_building_type = nil
-      if stub_space_type.standardsBuildingType.is_initialized
-        stds_building_type = stub_space_type.standardsBuildingType.get
-      else
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards building type.")
-        return false
-      end
-      #puts "stds_building_type = #{stds_building_type}"
-
-      # Get the standards space type
-      # from the stub
-      stds_spc_type = nil
-      if stub_space_type.standardsSpaceType.is_initialized
-        stds_spc_type = stub_space_type.standardsSpaceType.get
-      else
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards space type.")
-        return false
-      end
-      # puts "stds_spc_type = #{stds_spc_type}"
-      new_space_type = self.add_space_type(building_vintage, 'ClimateZone 1-8', stds_building_type, stds_spc_type)
-
-      # Apply the new space type to the building
-      stub_space_type.spaces.each do |space|
-        space.setSpaceType(new_space_type)
-        #OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.Model", "Setting #{space.name} to #{new_space_type.name.get}")
-      end
-
-      # Remove the stub space type
-      stub_space_type.remove
-
+      # Rendering color
+      space_type.set_rendering_color(building_vintage)
+    
+      # Loads
+      space_type.set_internal_loads(building_vintage, true, true, true, true, true, true)
+      
+      # Schedules
+      space_type.set_internal_load_schedules(building_vintage, true, true, true, true, true, true, true)
+      
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
@@ -626,7 +601,7 @@ class OpenStudio::Model::Model
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = self.find_object(self.standards['space_types'], {'template'=>building_vintage, 'building_type'=>building_type, 'space_type'=>space_type_name})
+          data = self.find_object($os_standards['space_types'], {'template'=>building_vintage, 'building_type'=>building_type, 'space_type'=>space_type_name})
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == "Yes"   # "Yes" is residential, "No" or nil is nonresidential
         end
@@ -1071,15 +1046,6 @@ self.getSite.setTerrain(terrain)
 
   def applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
 
-    # Load the helper libraries for getting the autosized
-    # values for each type of model object.
-    require_relative 'Prototype.FanConstantVolume'
-    require_relative 'Prototype.FanVariableVolume'
-    require_relative 'Prototype.FanOnOff'
-    require_relative 'Prototype.FanZoneExhaust'
-    require_relative 'Prototype.HeatExchangerAirToAirSensibleAndLatent'
-    require_relative 'Prototype.ControllerWaterCoil'
-
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying prototype HVAC assumptions.')
 
     ##### Apply equipment efficiencies
@@ -1109,7 +1075,7 @@ self.getSite.setTerrain(terrain)
 
     # Check each airloop
     self.getAirLoopHVACs.each do |air_loop|
-      if air_loop.is_economizer_required(self.template, self.climate_zone) == true
+      if air_loop.is_economizer_required(building_vintage, climate_zone) == true
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
         economizer_type = nil
@@ -1152,8 +1118,8 @@ self.getSite.setTerrain(terrain)
 
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.
-        unless air_loop.is_economizer_type_allowable(self.template, self.climate_zone)
-          OpenStudio::logFree(OpenStudio::Warn, "openstudio.prototype.Model", "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{self.template}, climate zone #{self.climate_zone}.  Economizer type will be switched to No Economizer.")
+        unless air_loop.is_economizer_type_allowable(building_vintage, climate_zone)
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.prototype.Model", "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{building_vintage}, climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
           oa_control.setEconomizerControlType('NoEconomizer')
         end
 

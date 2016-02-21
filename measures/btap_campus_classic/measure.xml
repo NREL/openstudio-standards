@@ -1,11 +1,10 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <error>cannot load such file -- openstudio-standards</error>
-  <name>ColdLakeVintageMaker</name>
+  <name>cold_lake_classic</name>
   <uid>e63d5314-2873-4ff6-ae7d-21462d3d2781</uid>
-  <version_id>c974182f-323d-496d-ab14-1f5d313e79e4</version_id>
+  <version_id>39f1bbd3-662e-41e5-92f2-abb6c8f2fe2a</version_id>
   <xml_checksum>1E1F8B97</xml_checksum>
-  <class_name></class_name>
+  <class_name>ColdLakeClassic</class_name>
   <display_name>ColdLakeVintageMaker</display_name>
   <description>Replace this text with an explanation of what the measure does in terms that can be understood by a general building professional audience (building owners, architects, engineers, contractors, etc.).  This description will be used to create reports aimed at convincing the owner and/or design team to implement the measure in the actual building design.  For this reason, the description may include details about how the measure would be implemented, along with explanations of qualitative benefits associated with the measure.  It is good practice to include citations in the measure if the description is taken from a known source or if specific benefits are listed.</description>
   <modeler_description>Replace this text with an explanation for the energy modeler specifically.  It should explain how the measure is modeled, including any requirements about how the baseline model must be set up, major assumptions, citations of references to applicable modeling resources, etc.  The energy modeler should be able to read this description and understand what changes the measure is making to the model and why these changes are being made.  Because the Modeler Description is written for an expert audience, using common abbreviations for brevity is good practice.</modeler_description>

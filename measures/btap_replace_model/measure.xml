@@ -1,12 +1,11 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <error>cannot load such file -- openstudio-standards</error>
   <name>replace_model</name>
-  <uid>cc096e18-e645-4931-babd-93481326cb4c</uid>
-  <version_id>1334fcec-0502-4902-89d7-b47c628f763e</version_id>
+  <uid>2b5abde0-82d3-46a5-a43c-1a463ffcd9fa</uid>
+  <version_id>00660de7-3a9f-490f-a0c1-576b6a2d9b6b</version_id>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>ReplaceModel</class_name>
-  <display_name>Replaces OpenStudio Model </display_name>
+  <display_name>Replaces OpenStudio Model with one loaded. </display_name>
   <description></description>
   <modeler_description></modeler_description>
   <arguments>

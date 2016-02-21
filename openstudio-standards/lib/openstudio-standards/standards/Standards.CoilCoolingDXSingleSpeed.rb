@@ -7,12 +7,12 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not 
-  def setStandardEfficiencyAndCurves(template, standards, sql_db_vars_map)
+  def setStandardEfficiencyAndCurves(template, sql_db_vars_map)
   
     successfully_set_all_properties = true
   
-    unitary_acs = standards['unitary_acs']
-    heat_pumps = standards['heat_pumps']
+    unitary_acs = $os_standards['unitary_acs']
+    heat_pumps = $os_standards['heat_pumps']
   
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -24,19 +24,23 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     # TODO Standards - add split system vs single package to model
     # For now, assume single package as default
     subcategory = 'Single Package'
-    
+
+    # todo: remove this temporary hack
+    is_pthp = false
+
     # Determine the heating type if unitary or zone hvac
     heat_pump = false
     heating_type = nil
     if self.airLoopHVAC.empty?
       if self.containingHVACComponent.is_initialized
-        containing_comp = containingHVACComponent.get
+        containing_comp = self.containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
           heat_pump = true
           heating_type = 'Electric Resistance or None'
         end # TODO Add other unitary systems
       elsif self.containingZoneHVACComponent.is_initialized
-        containing_comp = containingZoneHVACComponent.get
+        containing_comp = self.containingZoneHVACComponent.get
+        # PTAC
         if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
           subcategory = 'PTAC'
           htg_coil = containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.get.heatingCoil
@@ -44,27 +48,37 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
             heating_type = 'Electric Resistance or None'          
           elsif htg_coil.to_CoilHeatingWater.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized
             heating_type = 'All Other'
-          end 
+          end
+        # PTHP
+        elsif containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+          #heat_pump = true
+          # Todo: Change subcategory to PTHP once/if implemented
+          subcategory = 'PTAC'
+          # Todo: remove this temporary hack
+          is_pthp = true
+          heating_type = 'Electric Resistance or None'
+
         end # TODO Add other zone hvac systems
+
       end
     end
 
     # Determine the heating type if on an airloop
     if self.airLoopHVAC.is_initialized
       air_loop = self.airLoopHVAC.get
-      if air_loop.supplyComponents('Coil:Heating:Electric'.to_IddObjectType).size > 0
+      if air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).size > 0
         heating_type = 'Electric Resistance or None'
-      elsif air_loop.supplyComponents('Coil:Heating:Gas'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).size > 0
         heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Water'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).size > 0
         heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:DX:SingleSpeed'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).size > 0
         heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Gas:MultiStage'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Gas:MultiStage'.to_IddObjectType).size > 0
         heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Desuperheater'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Desuperheater'.to_IddObjectType).size > 0
         heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).size > 0
         heating_type = 'All Other'  
       else
         heating_type = 'Electric Resistance or None'
@@ -110,7 +124,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-CAP-FT curve
-    cool_cap_ft = self.model.add_curve(ac_props["cool_cap_ft"], standards)
+    cool_cap_ft = self.model.add_curve(ac_props["cool_cap_ft"])
     if cool_cap_ft
       self.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft)
     else
@@ -119,7 +133,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-CAP-FFLOW curve
-    cool_cap_fflow = self.model.add_curve(ac_props["cool_cap_fflow"], standards)
+    cool_cap_fflow = self.model.add_curve(ac_props["cool_cap_fflow"])
     if cool_cap_fflow
       self.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow)
     else
@@ -128,7 +142,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
     
     # Make the COOL-EIR-FT curve
-    cool_eir_ft = self.model.add_curve(ac_props["cool_eir_ft"], standards)
+    cool_eir_ft = self.model.add_curve(ac_props["cool_eir_ft"])
     if cool_eir_ft
       self.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)  
     else
@@ -137,7 +151,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-EIR-FFLOW curve
-    cool_eir_fflow = self.model.add_curve(ac_props["cool_eir_fflow"], standards)
+    cool_eir_fflow = self.model.add_curve(ac_props["cool_eir_fflow"])
     if cool_eir_fflow
       self.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
     else
@@ -146,7 +160,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
     
     # Make the COOL-PLF-FPLR curve
-    cool_plf_fplr = self.model.add_curve(ac_props["cool_plf_fplr"], standards)
+    cool_plf_fplr = self.model.add_curve(ac_props["cool_plf_fplr"])
     if cool_plf_fplr
       self.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
     else
@@ -156,16 +170,46 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
  
     # Get the minimum efficiency standards
     cop = nil
-    
-    if subcategory == 'PTAC'
+
+    # Todo: remove/revamp this temporary hack once/if PTHP implemented in Openstudio Standards spreadsheet
+    if is_pthp
+      case template
+        when '90.1-2007'
+          pthp_eer_coeff_1 = 12.3
+          pthp_eer_coeff_2 = -0.000213
+        when '90.1-2010'
+          # As of 10/08/2012
+          pthp_eer_coeff_1 = 14
+          pthp_eer_coeff_2 = -0.0003
+      end
+
+
+      # TABLE 6.8.1D
+      # EER = pthp_eer_coeff_1 + pthp_eer_coeff_2 * Cap
+      # Note c: Cap means the rated cooling capacity of the product in Btu/h.
+      # If the unit’s capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
+      # If the unit’s capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
+      capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
+      capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
+      pthp_eer = pthp_eer_coeff_1 + (pthp_eer_coeff_2 * capacity_btu_per_hr)
+      cop = eer_to_cop(pthp_eer)
+      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_eer.round(1)}EER"
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed',  "HACK: For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_eer.round(2)}EER")
+
+    elsif subcategory == 'PTAC'
       ptac_eer_coeff_1 = ac_props['ptac_eer_coefficient_1']
+      # This second coefficient is already negative in the json standards
       ptac_eer_coeff_2 = ac_props['ptac_eer_coefficient_2']
+      # TABLE 6.8.1D
+      # EER = ptac_eer_coeff_1 + ptac_eer_coeff_2 * Cap
+      # Note c: Cap means the rated cooling capacity of the product in Btu/h.
+      # If the unit’s capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
+      # If the unit’s capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
       capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
       ptac_eer = ptac_eer_coeff_1 + (ptac_eer_coeff_2 * capacity_btu_per_hr)
       cop = eer_to_cop(ptac_eer)
-      #self.setName("#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer}EER")
-      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer}EER"
+      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer.round(1)}EER"
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed',  "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{ptac_eer}")      
     end
     

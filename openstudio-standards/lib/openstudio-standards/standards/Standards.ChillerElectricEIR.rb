@@ -7,12 +7,12 @@ class OpenStudio::Model::ChillerElectricEIR
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def setStandardEfficiencyAndCurves(template, standards)
+  def setStandardEfficiencyAndCurves(template)
   
-    chillers = standards['chillers']
-    curve_biquadratics = standards['curve_biquadratics']
-    curve_quadratics = standards['curve_quadratics']
-    curve_bicubics = standards['curve_bicubics']
+    chillers = $os_standards['chillers']
+    curve_biquadratics = $os_standards['curve_biquadratics']
+    curve_quadratics = $os_standards['curve_quadratics']
+    curve_bicubics = $os_standards['curve_bicubics']
   
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -75,7 +75,7 @@ class OpenStudio::Model::ChillerElectricEIR
     end
 
     # Make the CAPFT curve
-    cool_cap_ft = self.model.add_curve(chlr_props['capft'], standards)
+    cool_cap_ft = self.model.add_curve(chlr_props['capft'])
     if cool_cap_ft
       self.setCoolingCapacityFunctionOfTemperature(cool_cap_ft)
     else
@@ -84,7 +84,7 @@ class OpenStudio::Model::ChillerElectricEIR
     end    
     
     # Make the EIRFT curve
-    cool_eir_ft = self.model.add_curve(chlr_props['eirft'], standards)
+    cool_eir_ft = self.model.add_curve(chlr_props['eirft'])
     if cool_eir_ft
       self.setElectricInputToCoolingOutputRatioFunctionOfTemperature(cool_eir_ft)  
     else
@@ -94,9 +94,9 @@ class OpenStudio::Model::ChillerElectricEIR
     
     # Make the EIRFPLR curve
     # which may be either a CurveBicubic or a CurveQuadratic based on chiller type
-    cool_plf_fplr = self.model.add_curve(chlr_props['eirfplr'], standards)
+    cool_plf_fplr = self.model.add_curve(chlr_props['eirfplr'])
     if cool_plf_fplr
-      self.setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
+      #self.setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
     else
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.ChillerElectricEIR", "For #{self.name}, cannot find cool_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false

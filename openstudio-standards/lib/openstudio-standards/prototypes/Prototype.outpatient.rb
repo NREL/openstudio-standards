@@ -147,41 +147,11 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
      
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
     
     system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
-
-    # chilled_water_loop = self.add_chw_loop(prototype_input, hvac_standards)
-
-    hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
-    
-    system_to_space_map.each do |system|
-
-      #find all zones associated with these spaces
-      thermal_zones = []
-      system['space_names'].each do |space_name|
-        space = self.getSpaceByName(space_name)
-        if space.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-          return false
-        end
-        space = space.get
-        zone = space.thermalZone
-        if zone.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No thermal zone was created for the space called #{space_name}")
-          return false
-        end
-        thermal_zones << zone.get
-      end
-
-      case system['type']
-      when 'PVAV'
-        self.add_pvav(prototype_input, hvac_standards, system['name'], thermal_zones, hot_water_loop)
-      end
-
-    end
 
     # add elevator for the elevator pump room (the fan&lights are already added via standard spreadsheet)
     self.add_extra_equip_elevator_pump_room(building_vintage)
@@ -190,7 +160,7 @@ class OpenStudio::Model::Model
     
     return true
     
-  end #add hvac
+  end
 
   def add_extra_equip_elevator_pump_room(building_vintage)
     elevator_pump_room = self.getSpaceByName('Floor 1 Elevator Pump Room').get
@@ -211,34 +181,10 @@ class OpenStudio::Model::Model
     end
   end
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-
-    space_type_map.each do |space_type_name, space_names|
-      data = nil
-      search_criteria = {
-        'template' => building_vintage,
-        'building_type' => building_type,
-        'space_type' => space_type_name
-      }
-      data = find_object(self.standards['space_types'],search_criteria)
-      
-      if data['service_water_heating_peak_flow_rate'].nil?
-        next
-      else
-        space_names.each do |space_name|
-          self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name)
-        end
-      end
-    end
-     
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
     return true
     
-  end #add swh    
+  end    
 
 end
