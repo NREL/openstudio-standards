@@ -115,11 +115,11 @@ class OpenStudio::Model::AirLoopHVAC
    
     # TODO Optimum Start
     # for systems exceeding 10,000 cfm
-    # need 1.9.0 for this AVM
-    
-    # TODO night cycle
-    
-    # TODO night fan shutoff > 0.75 hp
+    # Don't think that OS will be able to do this.
+    # OS currently only allows 1 availability manager
+    # at a time on an AirLoopHVAC.  If we add an 
+    # AvailabilityManager:OptimumStart, it 
+    # will replace the AvailabilityManager:NightCycle.
  
   end  
 
