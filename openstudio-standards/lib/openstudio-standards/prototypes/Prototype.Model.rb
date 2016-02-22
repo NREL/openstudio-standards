@@ -61,8 +61,7 @@ class OpenStudio::Model::Model
       BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self,runner=nil) 
       self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
-      
-      #      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
+      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
       #      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
       #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)      
 
