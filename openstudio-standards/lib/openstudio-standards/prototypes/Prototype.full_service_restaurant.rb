@@ -733,8 +733,10 @@ class OpenStudio::Model::Model
 
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
 
-    self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-
+    unless building_vintage == 'NECB 2011' 
+      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
+    end
+    
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004' 
       # No dishwasher booster water heaters
@@ -744,6 +746,26 @@ class OpenStudio::Model::Model
       # self.add_swh_booster_no_loop(prototype_input, hvac_standards, main_swh_loop, booster_water_heater_thermal_zone)
       swh_booster_loop = self.add_swh_booster(prototype_input, hvac_standards, main_swh_loop, booster_water_heater_thermal_zone)
       self.add_booster_swh_end_uses(prototype_input, hvac_standards, swh_booster_loop)
+    when 'NECB 2011'
+       # this code not for booster water heater, but to add SWH loads by space
+            
+        space_type_map.each do |space_type_name, space_names|
+        data = nil
+        search_criteria = {
+          'template' => building_vintage,
+          'building_type' => building_type,
+          'space_type' => space_type_name
+        }
+        data = find_object(self.standards['space_types'],search_criteria)
+      
+     
+        space_names.each do |space_name|
+          space = self.getSpaceByName(space_name).get
+          space_multiplier = space.multiplier
+          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
+        end   
+      end
+      
     end
     
         
