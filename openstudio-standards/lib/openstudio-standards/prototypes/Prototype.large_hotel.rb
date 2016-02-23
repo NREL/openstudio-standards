@@ -280,98 +280,129 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
 
     # Add the main service hot water loop
-    swh_space_name = "Basement"
+    
+    if building_vintage == 'NECB 2011'
+      swh_space_name = "Electrical/Mechanical"
+    else
+      swh_space_name = "Basement"
+    end
+    
     swh_thermal_zone = self.getSpaceByName(swh_space_name).get.thermalZone.get
     swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main',swh_thermal_zone)
 
-    guess_room_water_use_schedule = "HotelLarge GuestRoom_SWH_Sch"
-    kitchen_water_use_schedule = "HotelLarge BLDG_SWH_SCH"
+    unless building_vintage == 'NECB 2011'
+    
+      guess_room_water_use_schedule = "HotelLarge GuestRoom_SWH_Sch"
+      kitchen_water_use_schedule = "HotelLarge BLDG_SWH_SCH"
 
-    water_end_uses = []
-    space_type_map = define_space_type_map(building_type, building_vintage, climate_zone)
-    space_multipliers = define_space_multiplier
+      water_end_uses = []
+      space_type_map = define_space_type_map(building_type, building_vintage, climate_zone)
+      space_multipliers = define_space_multiplier
 
-    # Add the water use equipment
+      # Add the water use equipment
 
-    kitchen_space_types = ['Kitchen']
-    kitchen_space_use_rate = 2.22 # gal/min, from PNNL prototype building
+      kitchen_space_types = ['Kitchen']
+      kitchen_space_use_rate = 2.22 # gal/min, from PNNL prototype building
 
-    guess_room_water_use_rate = 0.020833333 # gal/min, Reference: NREL Reference building report 5.1.6
+      guess_room_water_use_rate = 0.020833333 # gal/min, Reference: NREL Reference building report 5.1.6
 
-    if building_vintage == "90.1-2004" or building_vintage == "90.1-2007" or building_vintage == "90.1-2010" or building_vintage == "90.1-2013"
-      guess_room_space_types =['GuestRoom','GuestRoom2','GuestRoom3','GuestRoom4']
-    else
-      guess_room_space_types =['GuestRoom','GuestRoom3']
-      guess_room_space_types1 = ['GuestRoom2']
-      guess_room_space_types2 = ['GuestRoom4']
-      guess_room_water_use_rate1 = 0.395761032 # gal/min, Reference building
-      guess_room_water_use_rate2 = 0.187465752 # gal/min, Reference building
+      if building_vintage == "90.1-2004" or building_vintage == "90.1-2007" or building_vintage == "90.1-2010" or building_vintage == "90.1-2013"
+        guess_room_space_types =['GuestRoom','GuestRoom2','GuestRoom3','GuestRoom4']
+      else
+        guess_room_space_types =['GuestRoom','GuestRoom3']
+        guess_room_space_types1 = ['GuestRoom2']
+        guess_room_space_types2 = ['GuestRoom4']
+        guess_room_water_use_rate1 = 0.395761032 # gal/min, Reference building
+        guess_room_water_use_rate2 = 0.187465752 # gal/min, Reference building
 
-      laundry_water_use_schedule = "HotelLarge LaundryRoom_Eqp_Elec_Sch"
-      laundry_space_types = ['Laundry']
-      laundry_room_water_use_rate = 2.6108244 # gal/min, Reference building
+        laundry_water_use_schedule = "HotelLarge LaundryRoom_Eqp_Elec_Sch"
+        laundry_space_types = ['Laundry']
+        laundry_room_water_use_rate = 2.6108244 # gal/min, Reference building
 
-      guess_room_space_types1.each do |space_type|
+        guess_room_space_types1.each do |space_type|
+          space_names = space_type_map[space_type]
+          space_names.each do |space_name|
+            space_multiplier = 1
+            space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
+            water_end_uses.push([space_name, guess_room_water_use_rate1 * space_multiplier,guess_room_water_use_schedule])
+          end
+        end
+
+        guess_room_space_types2.each do |space_type|
+          space_names = space_type_map[space_type]
+          space_names.each do |space_name|
+            space_multiplier = 1
+            space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
+            water_end_uses.push([space_name, guess_room_water_use_rate2 * space_multiplier,guess_room_water_use_schedule])
+          end
+        end
+
+        laundry_space_types.each do |space_type|
+          space_names = space_type_map[space_type]
+          space_names.each do |space_name|
+            space_multiplier = 1
+            space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
+            water_end_uses.push([space_name, laundry_room_water_use_rate * space_multiplier,laundry_water_use_schedule])
+          end
+        end
+      end
+
+      guess_room_space_types.each do |space_type|
         space_names = space_type_map[space_type]
         space_names.each do |space_name|
           space_multiplier = 1
           space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-          water_end_uses.push([space_name, guess_room_water_use_rate1 * space_multiplier,guess_room_water_use_schedule])
+          water_end_uses.push([space_name, guess_room_water_use_rate * space_multiplier,guess_room_water_use_schedule])
         end
       end
 
-      guess_room_space_types2.each do |space_type|
+      kitchen_space_types.each do |space_type|
         space_names = space_type_map[space_type]
         space_names.each do |space_name|
           space_multiplier = 1
           space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-          water_end_uses.push([space_name, guess_room_water_use_rate2 * space_multiplier,guess_room_water_use_schedule])
+          water_end_uses.push([space_name, kitchen_space_use_rate * space_multiplier,kitchen_water_use_schedule])
         end
       end
 
-      laundry_space_types.each do |space_type|
-        space_names = space_type_map[space_type]
+      self.add_large_hotel_swh_end_uses(prototype_input, hvac_standards, swh_loop, 'main', water_end_uses)
+
+      if building_vintage == "90.1-2004" or building_vintage == "90.1-2007" or building_vintage == "90.1-2010" or building_vintage == "90.1-2013"
+        # Add the laundry water heater
+        laundry_water_heater_space_name = "Basement"
+        laundry_water_heater_thermal_zone = self.getSpaceByName(laundry_water_heater_space_name).get.thermalZone.get
+        laundry_water_heater_loop = self.add_swh_loop(prototype_input, hvac_standards, 'laundry', laundry_water_heater_thermal_zone)
+        self.add_swh_end_uses(prototype_input, hvac_standards, laundry_water_heater_loop,'laundry')
+
+        booster_water_heater_space_name = "KITCHEN_FLR_6"
+        booster_water_heater_thermal_zone = self.getSpaceByName(booster_water_heater_space_name).get.thermalZone.get
+        swh_booster_loop = self.add_swh_booster(prototype_input, hvac_standards, swh_loop, booster_water_heater_thermal_zone)
+        self.add_booster_swh_end_uses(prototype_input, hvac_standards, swh_booster_loop)
+      end
+
+    end
+
+    if building_vintage == 'NECB 2011'  
+      space_type_map.each do |space_type_name, space_names|
+        data = nil
+        search_criteria = {
+          'template' => building_vintage,
+          'building_type' => building_type,
+          'space_type' => space_type_name
+        }
+        data = find_object(self.standards['space_types'],search_criteria)
+      
+     
         space_names.each do |space_name|
-          space_multiplier = 1
-          space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-          water_end_uses.push([space_name, laundry_room_water_use_rate * space_multiplier,laundry_water_use_schedule])
-        end
+          space = self.getSpaceByName(space_name).get
+          space_multiplier = space.multiplier
+          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, swh_loop, space_type_name, space_name, space_multiplier)
+        end   
       end
     end
-
-    guess_room_space_types.each do |space_type|
-      space_names = space_type_map[space_type]
-      space_names.each do |space_name|
-        space_multiplier = 1
-        space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-        water_end_uses.push([space_name, guess_room_water_use_rate * space_multiplier,guess_room_water_use_schedule])
-      end
-    end
-
-    kitchen_space_types.each do |space_type|
-      space_names = space_type_map[space_type]
-      space_names.each do |space_name|
-        space_multiplier = 1
-        space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-        water_end_uses.push([space_name, kitchen_space_use_rate * space_multiplier,kitchen_water_use_schedule])
-      end
-    end
-
-    self.add_large_hotel_swh_end_uses(prototype_input, hvac_standards, swh_loop, 'main', water_end_uses)
-
-    if building_vintage == "90.1-2004" or building_vintage == "90.1-2007" or building_vintage == "90.1-2010" or building_vintage == "90.1-2013"
-      # Add the laundry water heater
-      laundry_water_heater_space_name = "Basement"
-      laundry_water_heater_thermal_zone = self.getSpaceByName(laundry_water_heater_space_name).get.thermalZone.get
-      laundry_water_heater_loop = self.add_swh_loop(prototype_input, hvac_standards, 'laundry', laundry_water_heater_thermal_zone)
-      self.add_swh_end_uses(prototype_input, hvac_standards, laundry_water_heater_loop,'laundry')
-
-      booster_water_heater_space_name = "KITCHEN_FLR_6"
-      booster_water_heater_thermal_zone = self.getSpaceByName(booster_water_heater_space_name).get.thermalZone.get
-      swh_booster_loop = self.add_swh_booster(prototype_input, hvac_standards, swh_loop, booster_water_heater_thermal_zone)
-      self.add_booster_swh_end_uses(prototype_input, hvac_standards, swh_booster_loop)
-    end
-
+    
+    
+    
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
     return true
   end #add swh
