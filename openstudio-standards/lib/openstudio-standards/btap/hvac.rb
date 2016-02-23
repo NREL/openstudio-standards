@@ -2579,9 +2579,9 @@ module BTAP
               schedules = model.getSchedules
               htg_temp_sch,clg_temp_sch = nil,nil
               schedules.each do |isch|
-                if(isch.name.to_s.include?("HtgSetp"))
+                if(isch.name.to_s.include?("Thermostat Setpoint-Heating"))
                   htg_temp_sch = isch
-                elsif(isch.name.to_s.include?("ClgSetp"))
+                elsif(isch.name.to_s.include?("Thermostat Setpoint-Cooling"))
                   clg_temp_sch = isch
                 end
               end
@@ -3165,9 +3165,9 @@ module BTAP
               schedules = model.getSchedules
               htg_temp_sch,clg_temp_sch = nil,nil
               schedules.each do |isch|
-                if(isch.name.to_s.include?("HtgSetp"))
+                if(isch.name.to_s.include?("Thermostat Setpoint-Heating"))
                   htg_temp_sch = isch
-                elsif(isch.name.to_s.include?("ClgSetp"))
+                elsif(isch.name.to_s.include?("Thermostat Setpoint-Cooling"))
                   clg_temp_sch = isch
                 end
               end
