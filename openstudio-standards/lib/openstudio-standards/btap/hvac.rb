@@ -2558,6 +2558,22 @@ module BTAP
             # define always off schedule for ptac heating coil
             always_off = BTAP::Resources::Schedules::StandardSchedules::ON_OFF::always_off(model)
             
+            #TODO: Heating and cooling temperature set point schedules are set somewhere else
+            #TODO: For now fetch the schedules and use them in setting up the heat pump system
+            #TODO: Later on these schedules need to be passed on to this method
+            htg_temp_sch,clg_temp_sch = nil,nil
+            zones.each do |izone|
+              if(izone.thermostat.is_initialized)
+                zone_thermostat = izone.thermostat.get
+                if zone_thermostat.to_ThermostatSetpointDualSetpoint.is_initialized
+                  dual_thermostat = zone_thermostat.to_ThermostatSetpointDualSetpoint.get
+                  htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
+                  clg_temp_sch = dual_thermostat.coolingSetpointTemperatureSchedule.get
+                  break
+                end
+              end
+            end
+
             # Create a hot water loop; MAU hydronic heating coil and hot water baseboards will be
             # connected to this loop (if MAU and its heating coil is hydronic or if baseboard type is hydronic)
 
@@ -2572,19 +2588,7 @@ module BTAP
             # TO DO: MAU sizing, characteristics (fan operation schedules, temperature setpoints, outdoor air, etc)
            
             if ( mau == true) then
-
-              # TODO: Heating and cooling temperature set point schedules are set somewhere else
-              # TODO: For now fetch the schedules and use them in setting up the heat pump system
-              # TODO: Later on these schedules need to be passed on to this method
-              schedules = model.getSchedules
-              htg_temp_sch,clg_temp_sch = nil,nil
-              schedules.each do |isch|
-                if(isch.name.to_s.include?("Thermostat Setpoint-Heating"))
-                  htg_temp_sch = isch
-                elsif(isch.name.to_s.include?("Thermostat Setpoint-Cooling"))
-                  clg_temp_sch = isch
-                end
-              end
+            
               staged_thermostat = OpenStudio::Model::ZoneControlThermostatStagedDualSetpoint.new(model)
               staged_thermostat.setHeatingTemperatureSetpointSchedule(htg_temp_sch)
               staged_thermostat.setNumberofHeatingStages(4)
@@ -3125,6 +3129,22 @@ module BTAP
 
             end  #of if statement
 
+            #TODO: Heating and cooling temperature set point schedules are set somewhere else
+            #TODO: For now fetch the schedules and use them in setting up the heat pump system
+            #TODO: Later on these schedules need to be passed on to this method
+            htg_temp_sch,clg_temp_sch = nil,nil
+            zones.each do |izone|
+              if(izone.thermostat.is_initialized)
+                zone_thermostat = izone.thermostat.get
+                if zone_thermostat.to_ThermostatSetpointDualSetpoint.is_initialized
+                  dual_thermostat = zone_thermostat.to_ThermostatSetpointDualSetpoint.get
+                  htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
+                  clg_temp_sch = dual_thermostat.coolingSetpointTemperatureSchedule.get
+                  break
+                end
+              end
+            end
+
             zones.each do |zone|
 
               air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
@@ -3158,19 +3178,7 @@ module BTAP
               air_loop_sizing.setSystemOutdoorAirMethod("ZoneSum")
 
               fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
-                           
-              #TODO: Heating and cooling temperature set point schedules are set somewhere else
-              #TODO: For now fetch the schedules and use them in setting up the heat pump system
-              #TODO: Later on these schedules need to be passed on to this method
-              schedules = model.getSchedules
-              htg_temp_sch,clg_temp_sch = nil,nil
-              schedules.each do |isch|
-                if(isch.name.to_s.include?("Thermostat Setpoint-Heating"))
-                  htg_temp_sch = isch
-                elsif(isch.name.to_s.include?("Thermostat Setpoint-Cooling"))
-                  clg_temp_sch = isch
-                end
-              end
+
               staged_thermostat = OpenStudio::Model::ZoneControlThermostatStagedDualSetpoint.new(model)
               staged_thermostat.setHeatingTemperatureSetpointSchedule(htg_temp_sch)
               staged_thermostat.setNumberofHeatingStages(4)
