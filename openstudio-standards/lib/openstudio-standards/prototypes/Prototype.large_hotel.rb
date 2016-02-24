@@ -282,13 +282,15 @@ class OpenStudio::Model::Model
     # Add the main service hot water loop
     
     if building_vintage == 'NECB 2011'
-      swh_space_name = "Electrical/Mechanical"
+      # TO DO: define space where swh equipment located
+      swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')        
     else
       swh_space_name = "Basement"
+      swh_thermal_zone = self.getSpaceByName(swh_space_name).get.thermalZone.get
+      swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main',swh_thermal_zone)
     end
     
-    swh_thermal_zone = self.getSpaceByName(swh_space_name).get.thermalZone.get
-    swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main',swh_thermal_zone)
+    
 
     unless building_vintage == 'NECB 2011'
     
