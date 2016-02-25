@@ -362,17 +362,32 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
 
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-    self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    
+    unless building_vintage = 'NECB 2011'
+      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
+    end
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004' 
       # No dishwasher booster water heaters
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       swh_booster_loop = self.add_swh_booster(prototype_input, hvac_standards, main_swh_loop)
       self.add_booster_swh_end_uses(prototype_input, hvac_standards, swh_booster_loop)
+    when 'NECB 2011'
+        
+      space_type_map.each do |space_type_name, space_names|
+
+      
+        space_names.each do |space_name|
+          space = self.getSpaceByName(space_name).get
+          space_multiplier = space.multiplier
+          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
+        end   
+      end
+      
+      
     end
     
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
+    
     
     return true
     
