@@ -89,8 +89,6 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
 
     # find ac properties
     search_criteria = self.find_search_criteria(template)
-    cooling_type = search_criteria["cooling_type"]
-    heating_type = search_criteria["heating_type"]
     subcategory = search_criteria["subcategory"]
     capacity_btu_per_hr = self.find_capacity
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_btu_per_hr, "Btu/hr", "kBtu/hr").get
@@ -107,13 +105,11 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     end
 
     # find object
-    unitary_hps = standards['heat_pumps']
-    heat_pumps = standards['heat_pumps_heating']
     ac_props = nil
     if heat_pump == true
-      ac_props = self.model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
+      ac_props = self.model.find_object(standards['heat_pumps_heating'], search_criteria, capacity_btu_per_hr)
     else
-      ac_props = self.model.find_object(unitary_hps, search_criteria, capacity_btu_per_hr)
+      ac_props = self.model.find_object(standards['heat_pumps'], search_criteria, capacity_btu_per_hr)
     end
 
     # Get the minimum efficiency standards

@@ -2421,6 +2421,23 @@ class OpenStudio::Model::AirLoopHVAC
     return ems
   
   end
+
+  # Calculate the total floor area of all zones attached
+  # to the air loop, in m^2.
+  #
+  # return [Double] the total floor area of all zones attached
+  # to the air loop, in m^2.
+  def floor_area_served()
+
+    total_area = 0.0
+
+    self.thermalZones.each do |zone|
+      total_area += zone.floorArea
+    end
+
+    return total_area
+
+  end
   
   
 end
