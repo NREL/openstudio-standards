@@ -28,6 +28,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.ScheduleRuleset'
   require_relative 'Standards.ScheduleConstant'
   require_relative 'Standards.SpaceType'
+  require_relative 'Standards.PlantLoop'
   require_relative 'Standards.Pump'
   require_relative 'Standards.PumpConstantSpeed'
   require_relative 'Standards.PumpVariableSpeed'
