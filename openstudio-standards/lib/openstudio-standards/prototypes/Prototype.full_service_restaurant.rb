@@ -750,15 +750,6 @@ class OpenStudio::Model::Model
        # this code not for booster water heater, but to add SWH loads by space
             
         space_type_map.each do |space_type_name, space_names|
-        data = nil
-        search_criteria = {
-          'template' => building_vintage,
-          'building_type' => building_type,
-          'space_type' => space_type_name
-        }
-        data = find_object(self.standards['space_types'],search_criteria)
-      
-     
         space_names.each do |space_name|
           space = self.getSpaceByName(space_name).get
           space_multiplier = space.multiplier

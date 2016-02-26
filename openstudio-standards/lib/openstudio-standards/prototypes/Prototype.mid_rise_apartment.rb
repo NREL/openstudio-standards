@@ -326,6 +326,12 @@ class OpenStudio::Model::Model
     # the main service water loop except laundry
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
     
+    # For NECB 2011, building_type entry in Standards spreadsheet set to Space Function
+    # reset here
+    if building_vintage == 'NECB 2011'
+      building_type = 'Space Function'
+    end
+    
     space_type_map.each do |space_type_name, space_names|
       data = nil
       search_criteria = {
@@ -335,22 +341,26 @@ class OpenStudio::Model::Model
       }
       data = find_object(self.standards['space_types'],search_criteria)
       
-
-      if data['service_water_heating_peak_flow_rate'].nil?
-        next
-      else
+       
+      case building_vintage
+      when 'NECB 2011'                     # NECB 2011 peak flow rate entries in Standards spreadsheet allowed to have nil entry
         space_names.each do |space_name|
           space = self.getSpaceByName(space_name).get
-          space_multiplier = space.multiplier
-          if building_vintage == 'NECB 2011'
-            self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)  
-          else
-            self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
+          space_multiplier = space.multiplier          
+          self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)       
+        end  
+      else
+        if data['service_water_heating_peak_flow_rate'].nil? 
+          next
+        else
+          space_names.each do |space_name|
+            space = self.getSpaceByName(space_name).get
+            space_multiplier = space.multiplier          
+            self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)       
           end
         end
       end
     end
-
 
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
     
