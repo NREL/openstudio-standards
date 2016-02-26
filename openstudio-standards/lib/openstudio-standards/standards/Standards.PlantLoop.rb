@@ -917,9 +917,25 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
 
   end
 
+  # find maximum_loop_flow_rate
+  #
+  # @return [Double]  maximum_loop_flow_rate m^3/s
+  def find_maximum_loop_flow_rate()
+
+    # Get the maximum_loop_flow_rate
+    maximum_loop_flow_rate = nil
+    if self.maximumLoopFlowRate.is_initialized
+      maximum_loop_flow_rate = self.maximumLoopFlowRate.get
+    elsif self.autosizedMaximumLoopFlowRate.is_initialized
+      maximum_loop_flow_rate = self.autosizedMaximumLoopFlowRate.get
+    else
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} maximum loop flow rate is not available.")
+    end
+
+    return maximum_loop_flow_rate
+
+  end
 
 
-
-  
 end
 
