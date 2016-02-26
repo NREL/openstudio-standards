@@ -155,19 +155,21 @@ class OpenStudio::Model::Model
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
     return true if building_vintage == "DOE Ref Pre-1980" or building_vintage == "DOE Ref 1980-2004"
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-    # Add the main service hot water loop
-    swh_space_names = ["LGstore1","SMstore1","SMstore2","SMstore3","LGstore2","SMstore5","SMstore6"]
-    swh_sch_names = ["RetailStripmall Type1_SWH_SCH","RetailStripmall Type1_SWH_SCH","RetailStripmall Type2_SWH_SCH",
-      "RetailStripmall Type2_SWH_SCH","RetailStripmall Type3_SWH_SCH","RetailStripmall Type3_SWH_SCH",
-      "RetailStripmall Type3_SWH_SCH"]
-    use_rate = 0.03 # in gal/min
+    
+    case building_vintage
+    when 'NECB 2011'
+      swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
+      
+      space_type_map.each do |space_type_name, space_names|
 
-    for i in 0...swh_space_names.size
-      swh_space_name = swh_space_names[i]
-      swh_sch_name = swh_sch_names[i]
-      swh_thermal_zone = self.getSpaceByName(swh_space_name).get.thermalZone.get
-      swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main', swh_thermal_zone)
-
+      
+        space_names.each do |space_name|
+          space = self.getSpaceByName(space_name).get
+          space_multiplier = space.multiplier
+          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
+        end   
+      end
+      
       water_heaters = swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
 
       water_heaters.each do |water_heater|
@@ -178,45 +180,71 @@ class OpenStudio::Model::Model
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.205980747)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.205980747)
       end
+      
+    else   
+      # Add the main service hot water loop
+      swh_space_names = ["LGstore1","SMstore1","SMstore2","SMstore3","LGstore2","SMstore5","SMstore6"]
+      swh_sch_names = ["RetailStripmall Type1_SWH_SCH","RetailStripmall Type1_SWH_SCH","RetailStripmall Type2_SWH_SCH",
+        "RetailStripmall Type2_SWH_SCH","RetailStripmall Type3_SWH_SCH","RetailStripmall Type3_SWH_SCH",
+        "RetailStripmall Type3_SWH_SCH"]
+      use_rate = 0.03 # in gal/min
 
-      # Water use connection
-      swh_connection = OpenStudio::Model::WaterUseConnections.new(self)
-      swh_connection.setName(swh_space_name + "Water Use Connections")
-      # Water fixture definition
-      water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
-      rated_flow_rate_m3_per_s = OpenStudio.convert(use_rate,'gal/min','m^3/s').get
-      water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
-      water_fixture_def.setName("#{swh_space_name} Service Water Use Def #{use_rate.round(2)}gal/min")
+      for i in 0...swh_space_names.size
+        swh_space_name = swh_space_names[i]
+        swh_sch_name = swh_sch_names[i]
+        swh_thermal_zone = self.getSpaceByName(swh_space_name).get.thermalZone.get
+        swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main', swh_thermal_zone)
 
-      sensible_fraction = 0.2
-      latent_fraction = 0.05
+        water_heaters = swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
 
-      # Target mixed water temperature
-      mixed_water_temp_f = prototype_input["main_water_use_temperature"]
-      mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-      mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),OpenStudio.convert(mixed_water_temp_f,'F','C').get)
-      water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
+        water_heaters.each do |water_heater|
+          water_heater = water_heater.to_WaterHeaterMixed.get
+          water_heater.setOffCycleParasiticFuelConsumptionRate(173)
+          water_heater.setOffCycleParasiticHeatFractiontoTank(0)
+          water_heater.setOnCycleParasiticFuelConsumptionRate(173)
+          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.205980747)
+          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.205980747)
+        end
 
-      sensible_fraction_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-      sensible_fraction_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),sensible_fraction)
-      water_fixture_def.setSensibleFractionSchedule(sensible_fraction_sch)
+        # Water use connection
+        swh_connection = OpenStudio::Model::WaterUseConnections.new(self)
+        swh_connection.setName(swh_space_name + "Water Use Connections")
+        # Water fixture definition
+        water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
+        rated_flow_rate_m3_per_s = OpenStudio.convert(use_rate,'gal/min','m^3/s').get
+        water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
+        water_fixture_def.setName("#{swh_space_name} Service Water Use Def #{use_rate.round(2)}gal/min")
 
-      latent_fraction_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-      latent_fraction_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),latent_fraction)
-      water_fixture_def.setSensibleFractionSchedule(latent_fraction_sch)
+        sensible_fraction = 0.2
+        latent_fraction = 0.05
 
-      # Water use equipment
-      water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
-      schedule = self.add_schedule(swh_sch_name)
-      water_fixture.setFlowRateFractionSchedule(schedule)
-      water_fixture.setName("#{swh_space_name} Service Water Use #{use_rate.round(2)}gal/min")
-      swh_connection.addWaterUseEquipment(water_fixture)
+        # Target mixed water temperature
+        mixed_water_temp_f = prototype_input["main_water_use_temperature"]
+        mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+        mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),OpenStudio.convert(mixed_water_temp_f,'F','C').get)
+        water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
 
-      # Connect the water use connection to the SWH loop
-      swh_loop.addDemandBranchForComponent(swh_connection)
+        sensible_fraction_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+        sensible_fraction_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),sensible_fraction)
+        water_fixture_def.setSensibleFractionSchedule(sensible_fraction_sch)
 
-    end
+        latent_fraction_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+        latent_fraction_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),latent_fraction)
+        water_fixture_def.setSensibleFractionSchedule(latent_fraction_sch)
 
+        # Water use equipment
+        water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
+        schedule = self.add_schedule(swh_sch_name)
+        water_fixture.setFlowRateFractionSchedule(schedule)
+        water_fixture.setName("#{swh_space_name} Service Water Use #{use_rate.round(2)}gal/min")
+        swh_connection.addWaterUseEquipment(water_fixture)
+
+        # Connect the water use connection to the SWH loop
+        swh_loop.addDemandBranchForComponent(swh_connection)
+
+      end
+
+    end  
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
     return true
     
