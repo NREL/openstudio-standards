@@ -82,44 +82,44 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               model = OpenStudio::Model::Model.new
               model.create_prototype_building(building_type,template,climate_zone,run_dir)  
       
-#              output_variable_array =
-#          [
-#          "Facility Total Electric Demand Power",
-#          "Water Heater Gas Rate",
-#          "Plant Supply Side Heating Demand Rate",
-#          "Heating Coil Gas Rate",
-#          "Cooling Coil Electric Power",
-#          "Boiler Gas Rate",
-#          "Heating Coil Air Heating Rate",
-#          "Heating Coil Electric Power",
-#          "Cooling Coil Total Cooling Rate",
-#          "Water Heater Heating Rate",
-#          #          "Facility Total HVAC Electric Demand Power",
-#          #          "Facility Total Electric Demand Power",
-#          "Zone Air Temperature",
-#          "Water Heater Electric Power"
-#          #          "Baseboard Air Inlet Temperature",
-#          #          "Baseboard Air Outlet Temperature",
-#          #          "Baseboard Water Inlet Temperature",
-#          #          "Baseboard Water Outlet Temperature",
-#          #          "Boiler Inlet Temperature",
-#          #          "Boiler Outlet Temperature",
-#          #          "Plant Supply Side Inlet Temperature",
-#          #          "Plant Supply Side Outlet Temperature",
-#          #          "People Radiant Heating Rate",
-#          #          "People Sensible Heating Rate",
-#          #          "People Latent Gain Rate",
-#          #          "People Total Heating Rate",
-#          #          "Lights Total Heating Rate",
-#          #          "Electric Equipment Total Heating Rate",
-#          #          "Other Equipment Total Heating Rate",
-#          #          "District Heating Hot Water Rate",
-#          #          "District Heating Rate",
-#          #          "Air System Outdoor Air Flow Fraction",
-#          #          "Air System Outdoor Air Minimum Flow Fraction",
-#          #          "Air System Fan Electric Energy"
-#        ]
-#        BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
+              output_variable_array =
+          [
+          "Facility Total Electric Demand Power",
+          "Water Heater Gas Rate",
+          "Plant Supply Side Heating Demand Rate",
+          "Heating Coil Gas Rate",
+          "Cooling Coil Electric Power",
+          "Boiler Gas Rate",
+          "Heating Coil Air Heating Rate",
+          "Heating Coil Electric Power",
+          "Cooling Coil Total Cooling Rate",
+          "Water Heater Heating Rate",
+          #          "Facility Total HVAC Electric Demand Power",
+          #          "Facility Total Electric Demand Power",
+          "Zone Air Temperature",
+          "Water Heater Electric Power"
+          #          "Baseboard Air Inlet Temperature",
+          #          "Baseboard Air Outlet Temperature",
+          #          "Baseboard Water Inlet Temperature",
+          #          "Baseboard Water Outlet Temperature",
+          #          "Boiler Inlet Temperature",
+          #          "Boiler Outlet Temperature",
+          #          "Plant Supply Side Inlet Temperature",
+          #          "Plant Supply Side Outlet Temperature",
+          #          "People Radiant Heating Rate",
+          #          "People Sensible Heating Rate",
+          #          "People Latent Gain Rate",
+          #          "People Total Heating Rate",
+          #          "Lights Total Heating Rate",
+          #          "Electric Equipment Total Heating Rate",
+          #          "Other Equipment Total Heating Rate",
+          #          "District Heating Hot Water Rate",
+          #          "District Heating Rate",
+          #          "Air System Outdoor Air Flow Fraction",
+          #          "Air System Outdoor Air Minimum Flow Fraction",
+          #          "Air System Fan Electric Energy"
+        ]
+        BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
               
               # Convert the model to energyplus idf
               forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
