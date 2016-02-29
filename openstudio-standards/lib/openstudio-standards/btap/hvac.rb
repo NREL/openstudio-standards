@@ -2308,11 +2308,11 @@ module BTAP
           end
 
           def self.assign_zones_sys3(model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
-            if(heating_coil_type == "DX")
+            #if(heating_coil_type == "DX")
               self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
-            else
-              self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
-            end              
+            #else
+              #self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
+            #end              
           end
           
           def self.assign_zones_sys4( model, zones, boiler_fueltype, heating_coil_type, baseboard_type)
@@ -2470,7 +2470,7 @@ module BTAP
             
             
             zones.each do |zone|
-            
+
               # Set up PTAC heating coil; apply always off schedule            
  
               # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
@@ -3245,6 +3245,7 @@ module BTAP
               # Add the components to the air loop
               # in order from closest to zone to furthest from zone
               supply_inlet_node = air_loop.supplyInletNode
+              
               air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.new(model,fan,htg_coil,clg_coil,supplemental_htg_coil)
               air_to_air_heatpump.setName("#{zone.name} ASHP")
               air_to_air_heatpump.setControllingZoneorThermostatLocation(zone)
@@ -3252,7 +3253,7 @@ module BTAP
               air_to_air_heatpump.addToNode(supply_inlet_node)
               air_to_air_heatpump.setNumberofSpeedsforHeating(4)
               air_to_air_heatpump.setNumberofSpeedsforCooling(4)
-
+              
               oa_system.addToNode(supply_inlet_node)
 
               # Create a diffuser and attach the zone/diffuser pair to the air loop
@@ -3279,8 +3280,7 @@ module BTAP
               end
 
             end  #zone loop
-
-
+            
             return true
           end  #end add_sys3_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed
 
