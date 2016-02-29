@@ -1570,12 +1570,30 @@ class OpenStudio::Model::Model
   # gal/day from ICC IECC 2015 Residential Standard Reference Design
   # from Table R405.5.2(1)
   #
-  # @return [Array] array of hashes. Each array entry based on different capcaity specific to building type. Arrray will be empty for some building types
+  # @return [Double] gal/day
   def find_icc_iecc_2015_hot_water_demand(units_per_bldg,bedrooms_per_unit)
-    
-    swh_gal = units_per_bldg * (30.0 + (10.0 * bedrooms_per_unit))
 
-    return swh_gal
+    swh_gal_per_day = units_per_bldg * (30.0 + (10.0 * bedrooms_per_unit))
+
+    return swh_gal_per_day
+
+  end
+
+  # Returns average daily internal gains for residential buildings
+  # Btu/day from ICC IECC 2015 Residential Standard Reference Design
+  # from Table R405.5.2(1)
+  #
+  # @return [Double] Btu/day
+  def find_icc_iecc_2015_internal_gains(units_per_bldg,bedrooms_per_unit)
+
+    # todo - update this to also calc mech vent and infiltration, return hash vs. double.
+
+    # todo - update so only gets conditioned floor area
+    condictioned_floor_area = self.getBuilding.floorArea
+
+    igain_btu_per_day = units_per_bldg * (17900.0 + 23.8 * condictioned_floor_area + 4104.0 * bedrooms_per_unit)
+
+    return igain_btu_per_day
 
   end
 
