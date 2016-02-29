@@ -125,6 +125,31 @@ class OpenStudio::Model::Model
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
       end
       OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
+    when 'NECB 2011'
+      main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
+      
+      space_type_map.each do |space_type_name, space_names|
+
+      
+        space_names.each do |space_name|
+          space = self.getSpaceByName(space_name).get
+          space_multiplier = space.multiplier
+          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
+        end   
+      end
+      
+      water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
+
+      water_heaters.each do |water_heater|
+        water_heater = water_heater.to_WaterHeaterMixed.get
+        # water_heater.setAmbientTemperatureIndicator('Zone')
+        # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
+        water_heater.setOffCycleParasiticFuelConsumptionRate(1860)
+        water_heater.setOnCycleParasiticFuelConsumptionRate(1860)
+        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
+        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
+      end
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
     else
       # No Water heater for pre1980 and post1980-2004 vintages
     end
