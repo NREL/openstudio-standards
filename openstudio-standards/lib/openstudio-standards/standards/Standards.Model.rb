@@ -1566,6 +1566,19 @@ class OpenStudio::Model::Model
 
   end
 
+  # Returns average daily hot water consumption for residential buildings
+  # gal/day from ICC IECC 2015 Residential Standard Reference Design
+  # from Table R405.5.2(1)
+  #
+  # @return [Array] array of hashes. Each array entry based on different capcaity specific to building type. Arrray will be empty for some building types
+  def find_icc_iecc_2015_hot_water_demand(units_per_bldg,bedrooms_per_unit)
+    
+    swh_gal = units_per_bldg * (30.0 + (10.0 * bedrooms_per_unit))
+
+    return swh_gal
+
+  end
+
   # this is used by other methods to get the clinzte aone and building type from a model.
   # it has logic to break office into small, medium or large based on building area that can be turned off
   # @param [bool] re-map small office or leave it alone
