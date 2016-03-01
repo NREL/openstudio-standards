@@ -1579,11 +1579,11 @@ class OpenStudio::Model::Model
 
   end
 
-  # Returns average daily internal gains for residential buildings
+  # Returns average daily internal loads for residential buildings
   # from Table R405.5.2(1)
   #
   # @return [Hash] mech_vent_cfm, infiltration_ach, igain_btu_per_day, internal_mass_lbs
-  def find_icc_iecc_2015_internal_gains(units_per_bldg,bedrooms_per_unit)
+  def find_icc_iecc_2015_internal_loads(units_per_bldg,bedrooms_per_unit)
 
     # get total and conditioned floor area
     total_floor_area = self.getBuilding.floorArea
