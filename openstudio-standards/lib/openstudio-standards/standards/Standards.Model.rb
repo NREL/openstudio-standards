@@ -1587,8 +1587,8 @@ class OpenStudio::Model::Model
 
     # get total and conditioned floor area
     total_floor_area = self.getBuilding.floorArea
-    if self.building.conditionedFloorArea.is_initialized
-      conditioned_floor_area = self.building.conditionedFloorArea.get
+    if self.getBuilding.conditionedFloorArea.is_initialized
+      conditioned_floor_area = self.getBuilding.conditionedFloorArea.get
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find conditioned floor area, will use total floor area.")
       conditioned_floor_area = total_floor_area
