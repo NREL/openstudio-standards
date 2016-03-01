@@ -1580,20 +1580,41 @@ class OpenStudio::Model::Model
   end
 
   # Returns average daily internal gains for residential buildings
-  # Btu/day from ICC IECC 2015 Residential Standard Reference Design
   # from Table R405.5.2(1)
   #
-  # @return [Double] Btu/day
+  # @return [Hash] mech_vent_cfm, infiltration_ach, igain_btu_per_day, internal_mass_lbs
   def find_icc_iecc_2015_internal_gains(units_per_bldg,bedrooms_per_unit)
 
-    # todo - update this to also calc mech vent and infiltration, return hash vs. double.
+    # get total and conditioned floor area
+    total_floor_area = self.getBuilding.floorArea
+    if self.building.conditionedFloorArea.is_initialized
+      conditioned_floor_area = self.building.conditionedFloorArea.get
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find conditioned floor area, will use total floor area.")
+      conditioned_floor_area = total_floor_area
+    end
 
-    # todo - update so only gets conditioned floor area
-    condictioned_floor_area = self.getBuilding.floorArea
+      # get climate zone value
+    climate_zone_value = ''
+    climateZones = self.getClimateZones
+    climateZones.climateZones.each do |climateZone|
+      if climateZone.institution == "ASHRAE"
+        climate_zone_value = climateZone.value
+        next
+      end
+    end
 
-    igain_btu_per_day = units_per_bldg * (17900.0 + 23.8 * condictioned_floor_area + 4104.0 * bedrooms_per_unit)
+    internal_loads = {}
+    internal_loads['mech_vent_cfm'] = units_per_bldg * (0.01 * conditioned_floor_area + 7.5 * (bedrooms_per_unit + 1.0))
+    if ['1A','1B','2A','2B'].include? climate_zone_value
+      internal_loads['infiltration_ach'] = 5.0
+    else
+      internal_loads['infiltration_ach'] = 3.0
+    end
+    internal_loads['igain_btu_per_day'] = units_per_bldg * (17900.0 + 23.8 * conditioned_floor_area + 4104.0 * bedrooms_per_unit)
+    internal_loads['internal_mass_lbs'] = total_floor_area * 8.0
 
-    return igain_btu_per_day
+    return internal_loads
 
   end
 
