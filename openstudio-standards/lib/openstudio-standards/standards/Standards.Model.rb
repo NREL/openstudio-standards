@@ -1771,11 +1771,14 @@ class OpenStudio::Model::Model
         else
           result = possible_climate_zones.sort.first
         end
+      when 'ICC IECC 2015'
+        result = possible_climate_zones.sort.first
+
     end
 
     # Check that a climate zone set was found
     if result.nil?
-
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{building_vintage}")
     end
 
     return result
