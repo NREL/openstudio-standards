@@ -207,5 +207,63 @@ module Pump
 
   end
 
- 
+
+  # Reporting methods, once SQL file is initialized
+  # Will look in the TabularDataWithStrings
+
+  def report_head()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Pumps', 'Head', 'pa')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
+  def report_head_ip()
+    head_pa = self.model.getAutosizedValueFromEquipmentSummary(self, 'Pumps', 'Head', 'pa')
+    if head_pa.is_initialized
+      head_pa = head_pa.get
+      return OpenStudio::convert(head_pa, 'Pa', 'ftH_{2}O').get
+    else
+      return false
+    end
+  end
+
+  def report_water_flow_rate()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Pumps', 'Water Flow', 'm3/s')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
+  def report_rated_electric_power()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Pumps', 'Electric Power', 'W')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
+  def report_power_per_water_flow_rate()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Pumps', 'Power Per Water Flow Rate', 'W-s/m3')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
+  def report_motor_efficiency()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Fans', 'Motor Efficiency', 'W/W')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
 end

@@ -174,6 +174,8 @@ class OpenStudio::Model::AirLoopHVAC
   # @return [Double] fan power limitation pressure drop adjustment
   #   units = horsepower
   # @todo Determine the presence of MERV filters and other stuff in Table 6.5.3.1.1B.  May need to extend AirLoopHVAC data model
+  # Todo: actually the added bhp depends on the airflow through the equipment... so if you have a supply of 10000CFM, but with a zone exhaust fan pulling 4000 CFM
+  # then to calculate the pdrop due for fully ducted exhaust: 6000 * 0.5 / 4131
   def fan_power_limitation_pressure_drop_adjustment_brake_horsepower(template = "ASHRAE 90.1-2007")
   
     # Get design supply air flow rate (whether autosized or hard-sized)
@@ -215,6 +217,7 @@ class OpenStudio::Model::AirLoopHVAC
 
   # Determine the allowable fan system brake horsepower
   # Per Table 6.5.3.1.1A
+  # Logic: find the max airflow,
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] allowable fan system brake horsepower
@@ -241,7 +244,7 @@ class OpenStudio::Model::AirLoopHVAC
     num_zones_served = self.thermalZones.size
     
     # Get the supply air fan and determine whether VAV or CAV system.
-    # Assume that supply air fan is fan closest to the demand outlet node.
+    # Assume that supply air fan is fan closest to the demand outlet node (hence the supplyComponents.reverse).
     # The fan may be inside of a piece of unitary equipment.
     fan_pwr_limit_type = nil
     self.supplyComponents.reverse.each do |comp|

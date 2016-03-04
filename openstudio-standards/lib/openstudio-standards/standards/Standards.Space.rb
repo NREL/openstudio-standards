@@ -21,7 +21,8 @@ class OpenStudio::Model::Space
   def daylighted_areas(vintage, draw_daylight_areas_for_debugging = false)
 
     # A series of methods to modify polygons.  Most are 
-    # wrappers of native OpenStudio methods, but with
+    # wrappers of native OpenStudio methods,
+    # but with
     # workarounds for known issues or limitations.
 
     # Check the z coordinates of a polygon
@@ -236,7 +237,7 @@ class OpenStudio::Model::Space
     # Wrapper to catch errors in joinAll method
     # [utilities.geometry.joinAll] <1> Expected polygons to join together
     # @api private
-    def join_polygons(polygons, tol, name)
+    def join_polygons(polygons, tol=0.01, name)
     
       OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "Joining #{name} from #{self.name}")
   
@@ -253,7 +254,7 @@ class OpenStudio::Model::Space
       msg_log.setLogLevel(OpenStudio::Info)
       
       # Combine the polygons
-      combined_polygons = OpenStudio.joinAll(polygons, 0.01)
+      combined_polygons = OpenStudio.joinAll(polygons, tol)
 
       # Count logged errors
       join_errs = 0
@@ -344,7 +345,7 @@ class OpenStudio::Model::Space
       
     end
         
-    # Returns an array of resulting polygons.
+    # Returns the area of polygons_a that overlaps polygons_b
     # Assumes that a_polygons don't overlap one another, and that b_polygons don't overlap one another
     # @api private
     def area_a_polygons_overlap_b_polygons(a_polygons, b_polygons, a_name, b_name)
@@ -831,7 +832,7 @@ class OpenStudio::Model::Space
     
     # Join floor polygons into a single set
     combined_floor_polygons = join_polygons(floor_polygons, 0.01, 'floor_polygons')
-    
+
     # Check the joined polygons
     check_z_zero(combined_floor_polygons, 'combined_floor_polygons', self.name.get)
     check_z_zero(combined_toplit_polygons, 'combined_toplit_polygons', self.name.get)
@@ -876,14 +877,57 @@ class OpenStudio::Model::Space
       # daylt_surf.setSpace(dummy_space)
       # daylt_surf.setName("Flr")
     # end  
-    
+
+    # Temporary fix: intersect polygons with floor_polygons...
+    OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "***Intersecting polygons with the floor polygons***")
+    if combined_toplit_polygons.size == 1 && floor_polygons.size == 1
+      intersection = OpenStudio.intersect(combined_toplit_polygons[0], combined_floor_polygons[0], 0.01)
+      if intersection.empty?
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "***Intersection failed for combined_pri_sidelit_polygons***")
+      else
+        polygon = intersection.get.polygon1
+        combined_toplit_polygons = [polygon]
+        centroid = OpenStudio::getCentroid(polygon).get
+        result['toplighted_centroid'] = centroid
+      end
+    else
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "***Space #{self.name} - combined_toplit_polygons (#{combined_toplit_polygons.size}) or combined_floor_polygons (#{combined_floor_polygons.size}) size isn't 1***")
+    end
+
+    if combined_pri_sidelit_polygons.size == 1 && floor_polygons.size == 1
+      intersection = OpenStudio.intersect(combined_pri_sidelit_polygons[0], combined_floor_polygons[0], 0.01)
+      if intersection.empty?
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "***Intesection failed for combined_pri_sidelit_polygons***")
+      else
+        polygon = intersection.get.polygon1
+        combined_pri_sidelit_polygons = [polygon]
+        centroid = OpenStudio::getCentroid(polygon).get
+        result['pri_centroid'] = centroid
+      end
+    else
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "***Space #{self.name} - combined_pri_sidelit_polygons (#{combined_pri_sidelit_polygons.size}) or combined_floor_polygons (#{combined_floor_polygons.size}) size isn't 1***")
+    end
+
+    if combined_sec_sidelit_polygons.size == 1 && floor_polygons.size == 1
+      intersection = OpenStudio.intersect(combined_sec_sidelit_polygons[0], combined_floor_polygons[0], 0.01)
+      if intersection.empty?
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "***Intesection failed for combined_pri_sidelit_polygons***")
+      else
+        polygon = intersection.get.polygon1
+        combined_sec_sidelit_polygons = [polygon]
+        centroid = OpenStudio::getCentroid(polygon).get
+        result['sec_centroid'] = centroid
+      end
+    else
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "***Space #{self.name} - combined_toplit_polygons (#{combined_sec_sidelit_polygons.size}) or combined_floor_polygons (#{combined_floor_polygons.size}) size isn't 1***")
+    end
+
+
     OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***Subtracting overlapping areas***")
 
     # Subtract lower-priority daylighting areas from higher priority ones
     pri_minus_top_polygons = a_polygons_minus_b_polygons(combined_pri_sidelit_polygons, combined_toplit_polygons, 'combined_pri_sidelit_polygons', 'combined_toplit_polygons')
-    
     sec_minus_top_polygons = a_polygons_minus_b_polygons(combined_sec_sidelit_polygons, combined_toplit_polygons, 'combined_sec_sidelit_polygons', 'combined_toplit_polygons')
-    
     sec_minus_top_minus_pri_polygons = a_polygons_minus_b_polygons(sec_minus_top_polygons, combined_pri_sidelit_polygons, 'sec_minus_top_polygons', 'combined_pri_sidelit_polygons')
 
     # Check the subtracted polygons
@@ -1364,7 +1408,7 @@ class OpenStudio::Model::Space
       # Check if the primary and secondary sidelit areas contains less than 300W of lighting
       if areas['secondary_sidelighted_area'] == 0.0
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
-        req_pri_ctrl = false      
+        req_sec_ctrl = false
       elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 300
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, secondary sidelighting control not required because less than 300W of lighting are present in the combined primary and secondary daylighted areas per 9.4.1.1(e).")
         req_sec_ctrl = false
@@ -1386,10 +1430,10 @@ class OpenStudio::Model::Space
       # Check if the toplit area contains less than 150W of lighting
       if areas['toplighted_area'] == 0.0
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
-        req_pri_ctrl = false 
+        req_top_ctrl = false
       elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
-        req_sec_ctrl = false
+        req_top_ctrl = false
       else
         # TODO exception 2 for skylights with VT < 0.4
         # TODO exception 3 for CZ 8 where lighting < 200W
@@ -1891,7 +1935,7 @@ Warehouse.Office
         sensor_1_window = sorted_windows[0]    
       elsif !req_top_ctrl && !req_pri_ctrl && req_sec_ctrl
         # Sensor 1 controls secondary area
-        sensor_1_frac = areas['secondary_sidelighted_area']/space_area_m2
+        sensor_1_frac = areas['secondary_sidelixghted_area']/space_area_m2
         sensor_1_window = sorted_windows[0]    
       end
     
@@ -1931,17 +1975,26 @@ Warehouse.Office
         outward_normal.setLength(sensor_1_window[1][:head_height_m] - ht_above_flr)
         sensor_vertex = centroid + outward_normal.reverseVector
       else
-        sub_surface = sensor_1_window[0]
-        window_outward_normal = sub_surface.outwardNormal
-        window_centroid = OpenStudio::getCentroid(sub_surface.vertices).get
-        window_outward_normal.setLength(sensor_1_window[1][:head_height_m])
-        vertex = window_centroid + window_outward_normal.reverseVector
+
+        if !areas["pri_centroid"].nil?
+          vertex = areas["pri_centroid"]
+        else
+          sub_surface = sensor_1_window[0]
+          window_outward_normal = sub_surface.outwardNormal
+          window_centroid = OpenStudio::getCentroid(sub_surface.vertices).get
+          # TODO: should be the smaller of one window head_heigh or the distance to any 5ft or higher vertical obstruction
+          # Currently this could lead to a sensor placed outside of the space. For example case where you have a narrow corridor (eg: 8ft) and a high head_height (10 ft)
+          window_outward_normal.setLength(sensor_1_window[1][:head_height_m])
+          vertex = window_centroid + window_outward_normal.reverseVector
+        end
         vertex_on_floorplane = floor_surface.plane.project(vertex)
         floor_outward_normal = floor_surface.outwardNormal
         floor_outward_normal.setLength(OpenStudio::convert(3.0, "ft", "m").get)
         sensor_vertex = vertex_on_floorplane + floor_outward_normal.reverseVector
       end
       sensor_1.setPosition(sensor_vertex)
+
+
       #TODO rotate sensor to face window (only needed for glare calcs)
       zone.setPrimaryDaylightingControl(sensor_1)
       zone.setFractionofZoneControlledbyPrimaryDaylightingControl(sensor_1_frac)
@@ -1967,17 +2020,27 @@ Warehouse.Office
         outward_normal.setLength(sensor_2_window[1][:head_height_m] - ht_above_flr)
         sensor_vertex = centroid + outward_normal.reverseVector
       else
-        sub_surface = sensor_2_window[0]
-        window_outward_normal = sub_surface.outwardNormal
-        window_centroid = OpenStudio::getCentroid(sub_surface.vertices).get
-        window_outward_normal.setLength(sensor_2_window[1][:head_height_m])
-        vertex = window_centroid + window_outward_normal.reverseVector
+        # Todo: temp override
+
+        if !areas["sec_centroid"].nil?
+          vertex = areas["sec_centroid"]
+        else
+          sub_surface = sensor_2_window[0]
+          window_outward_normal = sub_surface.outwardNormal
+          window_centroid = OpenStudio::getCentroid(sub_surface.vertices).get
+          # Todo: This sensor will ends up placed exactly like sensor 1... (sensor_1_window and sensor_2_window are the same)
+          # Should be primary sidelighted area + smaller of 1 window head head or the distance to any 5ft or higher vertical obstructions
+          window_outward_normal.setLength(sensor_2_window[1][:head_height_m])
+          vertex = window_centroid + window_outward_normal.reverseVector
+        end
         vertex_on_floorplane = floor_surface.plane.project(vertex)
         floor_outward_normal = floor_surface.outwardNormal
         floor_outward_normal.setLength(OpenStudio::convert(3.0, "ft", "m").get)
         sensor_vertex = vertex_on_floorplane + floor_outward_normal.reverseVector
       end
       sensor_2.setPosition(sensor_vertex)
+
+      #sensor_2.setPosition(sensor_vertex)
       #TODO rotate sensor to face window (only needed for glare calcs)
       zone.setSecondaryDaylightingControl(sensor_2)
       zone.setFractionofZoneControlledbySecondaryDaylightingControl(sensor_2_frac)

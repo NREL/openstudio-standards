@@ -27,7 +27,7 @@ module Fan
     pressure_rise_pa = self.pressureRise
     pressure_rise_in_h2o = OpenStudio.convert(pressure_rise_pa, 'Pa','inH_{2}O').get
     
-    # Get the default impeller efficiency
+    # Get the default impeller efficiency (0.55 for a small fan, 0.65 otherwise)
     fan_impeller_eff = self.baselineImpellerEfficiency(template)
     
     # Calculate the Brake Horsepower
@@ -160,6 +160,7 @@ module Fan
   def brakeHorsepower()
   
     # Get the fan motor efficiency
+    # Assume 0.7 if it's a zone exhaust fan (there's no Motor efficiency field for it)
     existing_motor_eff = 0.7
     if self.to_FanZoneExhaust.empty?
       existing_motor_eff = self.motorEfficiency
@@ -292,6 +293,7 @@ module Fan
     is_small = false
 
     # Exhaust fan
+    # Todo: ZoneExhaust fans are not necesarilly small. Kitchen, garage: these can be several dozen HPS.
     if self.to_FanZoneExhaust.is_initialized
       is_small = true
     # Fan coil unit
@@ -346,5 +348,64 @@ module Fan
 
 
   end
+
+
+  # Reporting methods, once SQL file is initialized
+  # Will look in the TabularDataWithStrings
+
+  def report_fan_rated_power_per_max_air_flow_rate()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Fans', 'Rated Power Per Max Air Flow Rate', 'W-s/m3')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
+  def report_max_air_flow_rate()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Fans', 'Max Air Flow Rate', 'm3/s')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
+  def report_rated_electric_power()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Fans', 'Rated Electric Power', 'W')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
+  def report_pressure_rise()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Fans', 'Delta Pressure', 'pa')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
+  def report_total_efficiency()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Fans', 'Total Efficiency', 'W/W')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
+  def report_motor_in_heat_fraction()
+    x = self.model.getAutosizedValueFromEquipmentSummary(self, 'Fans', 'Motor Heat In Air Fraction', '')
+    if x.is_initialized
+      return x.get
+    else
+      return false
+    end
+  end
+
   
 end
