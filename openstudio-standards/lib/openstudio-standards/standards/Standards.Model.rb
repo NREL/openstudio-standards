@@ -940,7 +940,115 @@ class OpenStudio::Model::Model
     end
 
   end
+ 
+  # Looks through the model and creates an hash of what the baseline
+  # system type should be for each zone.
+  #
+  # @note This method modifies the model by removing the existing
+  # HVAC and adding ideal loads in order to perform a sizing
+  # run to determine primary vs. secondary zones.
+  # @return [Hash] keys are zones, values are system type strings
+  # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes, 
+  # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
+  def get_baseline_system_type_by_zone(building_vintage, climate_zone)
+
+    zone_to_sys_type = {}
   
+    # Get the groups of zones that define the
+    # baseline HVAC systems for later use.
+    # This must be done before removing the HVAC systems
+    # because it requires knowledge of proposed HVAC fuels.
+    sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage)    
+    
+    # Remove all HVAC from model
+    BTAP::Resources::HVAC.clear_all_hvac_from_model(self)
+    
+    # Add ideal loads to every zone and run
+    # a sizing run to determine heating/cooling loads,
+    # which will impact which zones go onto secondary
+    # HVAC systems.
+    self.getThermalZones.each do |zone|
+      ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
+      ideal_loads.addToThermalZone(zone)
+    end
+    # Run sizing run
+    if self.runSizingRun("#{Dir.pwd}/SizingRunIdeal") == false
+      return false
+    end
+    # Remove ideal loads
+    self.getZoneHVACIdealLoadsAirSystems.each do |ideal_loads|
+      ideal_loads.remove
+    end
+
+    # Assign building stories to spaces in the building
+    # where stories are not yet assigned.
+    self.assign_spaces_to_stories    
+    
+    # Determine the baseline HVAC system type for each of
+    # the groups of zones and add that system type.
+    sys_groups.each do |sys_group|
+      # Determine the primary baseline system type
+      pri_system_type = performance_rating_method_baseline_system_type(building_vintage,
+                                                                climate_zone,
+                                                                sys_group['type'], 
+                                                                sys_group['fuel'],
+                                                                sys_group['area_ft2'],
+                                                                sys_group['stories'])
+                                                                
+      # Record the zone-by-zone system type assignments
+      case building_vintage
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+       
+        case pri_system_type
+        when 'PTAC', 'PTHP', 'PSZ_AC', 'PSZ_HP', 'Gas_Furnace', 'Electric_Furnace'
+
+          sys_group['zones'].each do |zone|
+            zone_to_sys_type[zone] = pri_system_type
+          end
+        
+        when 'PVAV_Reheat', 'PVAV_PFP_Boxes', 'VAV_Reheat', 'VAV_PFP_Boxes'
+        
+          # Determine the secondary system type
+          sec_system_type = nil
+          case pri_system_type
+          when 'PVAV_Reheat', 'VAV_Reheat'
+            sec_system_type = 'PSZ_AC'
+          when 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'
+            sec_system_type = 'PSZ_HP'
+          end
+          
+          # Group zones by story
+          story_zone_lists = self.group_zones_by_story(sys_group['zones'])
+          # For the array of zones on each story,
+          # separate the primary zones from the secondary zones.
+          # Add the baseline system type to the primary zones
+          # and add the suplemental system type to the secondary zones.
+          story_zone_lists.each do |zones|
+            # Differentiate primary and secondary zones
+            pri_sec_zone_lists = self.differentiate_primary_secondary_thermal_zones(zones)
+            # Record the primary zone system types
+            pri_sec_zone_lists['primary'].each do |zone|
+              zone_to_sys_type[zone] = pri_system_type
+            end
+            # Record the secondary zone system types
+            pri_sec_zone_lists['secondary'].each do |zone|
+              zone_to_sys_type[zone] = sec_system_type
+            end
+
+          end      
+        
+        end 
+
+      end
+
+    end
+      
+    puts zone_to_sys_type
+    
+    return zone_to_sys_type
+    
+  end
+ 
   # Determine which of the zones
   # should be served by the primary HVAC system.
   # First, eliminate zones that differ by more

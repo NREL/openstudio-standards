@@ -401,7 +401,7 @@ class OpenStudio::Model::ThermalZone
   
   end
   
-    # Determine the net area of the zone
+  # Determine the net area of the zone
   # Loops on each space, and checks if part of total floor area or not
   # If not part of total floor area, it is not added to the zone floor area
   # Will multiply it by the ZONE MULTIPLIER as well!
@@ -421,5 +421,149 @@ class OpenStudio::Model::ThermalZone
     
   end
   
- 
+  # Infers the baseline system type based on the equipment
+  # serving the zone and their heating/cooling fuels.
+  # Only does a high-level inference; does not look for the
+  # presence/absence of required controls, etc.
+  #
+  # @return [String] Possible system types are 
+  # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes, 
+  # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
+  def infer_system_type
+
+    # Determine the characteristics
+    # of the equipment serving the zone
+    has_air_loop = false
+    air_loop_num_zones = 0
+    air_loop_is_vav = false
+    air_loop_has_chw = false
+    has_ptac = false
+    has_pthp = false
+    has_unitheater = false
+    self.equipment.each do |equip|
+      # Skip HVAC components
+      next unless equip.to_HVACComponent.is_initialized
+      equip = equip.to_HVACComponent.get
+      if equip.airLoopHVAC.is_initialized
+        has_air_loop = true
+        air_loop = equip.airLoopHVAC.get
+        air_loop_num_zones = air_loop.thermalZones.size
+        air_loop.supplyComponents.each do |sc|
+          if sc.to_FanVariableVolume.is_initialized
+            air_loop_is_vav = true
+          elsif sc.to_CoilCoolingWater.is_initialized
+            air_loop_has_chw = true
+          end
+        end
+      elsif equip.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+        has_ptac = true
+      elsif equip.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+        has_pthp = true
+      elsif equip.to_ZoneHVACUnitHeater.is_initialized
+        has_unitheater = true
+      end
+    end
+  
+    # Get the zone heating and cooling fuels
+    htg_fuels = self.heating_fuels
+    clg_fuels = self.cooling_fuels
+    is_fossil = self.is_fossil_hybrid_or_purchased_heat
+  
+    # Infer the HVAC type
+    sys_type = 'Unknown'
+  
+    # Single zone
+    if air_loop_num_zones < 2
+      # Gas
+      if is_fossil
+        # Air Loop
+        if has_air_loop
+          # Gas_Furnace (as air loop)
+          if cooling_fuels.size == 0
+            sys_type = 'Gas_Furnace'
+          # PSZ_AC 
+          else
+            sys_type = 'PSZ_AC'
+          end
+        # Zone Equipment
+        else
+          # Gas_Furnace (as unit heater)
+          if has_unitheater
+            sys_type = 'Gas_Furnace'
+          end
+          # PTAC
+          if has_ptac
+            sys_type = 'PTAC'
+          end
+        end 
+      # Electric
+      else
+        # Air Loop
+        if has_air_loop
+          # Electric_Furnace (as air loop)
+          if cooling_fuels.size == 0
+            sys_type = 'Electric_Furnace'
+          # PSZ_HP
+          else
+            sys_type = 'PSZ_HP'
+          end
+        # Zone Equipment
+        else
+          # Electric_Furnace (as unit heater)
+          if has_unitheater
+            sys_type = 'Electric_Furnace'
+          end
+          # PTHP
+          if has_pthp
+            sys_type = 'PTHP'
+          end
+        end
+      end
+    # Multi-zone
+    else    
+      # Gas
+      if is_fossil
+        # VAV_Reheat
+        if air_loop_has_chw && air_loop_is_vav
+          sys_type = 'VAV_Reheat'
+        end
+        # PVAV_Reheat
+        if !air_loop_has_chw && air_loop_is_vav
+          sys_type = 'PVAV_Reheat'
+        end
+      # Electric
+      else
+        # VAV_PFP_Boxes
+        if air_loop_has_chw && air_loop_is_vav
+          sys_type = 'VAV_PFP_Boxes'
+        end
+        # PVAV_PFP_Boxes
+        if !air_loop_has_chw && air_loop_is_vav
+          sys_type = 'PVAV_PFP_Boxes'
+        end
+      end
+    end
+  
+    # Report out the characteristics for debugging if
+    # the system type cannot be inferred.
+    if sys_type == 'Unknown'
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, the baseline system type could not be inferred.")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "***#{self.name}***")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "system type = #{sys_type}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "has_air_loop = #{has_air_loop}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "air_loop_num_zones = #{air_loop_num_zones}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "air_loop_is_vav = #{air_loop_is_vav}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "air_loop_has_chw = #{air_loop_has_chw}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "has_ptac = #{has_ptac}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "has_pthp = #{has_pthp}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "has_unitheater = #{has_unitheater}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "htg_fuels = #{htg_fuels}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "clg_fuels = #{clg_fuels}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "is_fossil = #{is_fossil}")
+    end
+  
+    return sys_type
+
+  end
+
 end
