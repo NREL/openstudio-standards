@@ -244,7 +244,7 @@
       "density": 115.991150750477,
       "specific_heat": 0.199914015477214,
       "thermal_absorptance": 0.9,
-      "solar_absorptance": 0.92,
+      "solar_absorptance": 0.7,
       "visible_absorptance": 0.92,
       "gas_type": null,
       "u_factor": null,

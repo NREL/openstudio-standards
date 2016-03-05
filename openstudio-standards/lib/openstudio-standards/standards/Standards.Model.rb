@@ -2944,6 +2944,35 @@ class OpenStudio::Model::Model
   
   end
 
+  # Returns standards data for selected construction
+  #
+  # @param [string] target template for lookup
+  # @param [string] intended_surface_type template for lookup
+  # @param [string] standards_construction_type template for lookup
+  # @param [string] building_category template for lookup
+  # @return [hash] hash of construction properties
+  def get_construction_properties(template,intended_surface_type,standards_construction_type,building_category = 'Nonresidential')
+
+    # get climate_zone_set
+    climate_zone = self.get_building_climate_zone_and_building_type['climate_zone']
+    climate_zone_set = self.find_climate_zone_set(climate_zone, template)
+
+    # populate search hash
+    search_criteria = {
+        "template" => template,
+        "climate_zone_set" => climate_zone_set,
+        "intended_surface_type" => intended_surface_type,
+        "standards_construction_type" => standards_construction_type,
+        "building_category" => building_category,
+    }
+
+    # switch to use this but update test in standards and measures to load this outside of the method
+    construction_properties = self.find_object($os_standards["construction_properties"], search_criteria)
+
+    return construction_properties
+
+  end  
+
   # Reduces the WWR to the values specified by the PRM. WWR reduction
   # will be done by raising sill height.  This causes the least impact
   # on the daylighting area calculations and controls placement.
@@ -3240,7 +3269,116 @@ class OpenStudio::Model::Model
     return story
     
   end  
-  
+ 
+  # Returns average daily hot water consumption by building type
+  # recommendations from 2011 ASHRAE Handobook - HVAC Applications Table 7 section 60.14
+  # Not all building types are included in lookup
+  # some recommendations have multiple values based on number of units. 
+  # Will return an array of hashes. Many may have one array entry.
+  # all values other than block size are gallons.
+  #
+  # @return [Array] array of hashes. Each array entry based on different capacity
+  # specific to building type. Array will be empty for some building types.
+  def find_ashrae_hot_water_demand()
+    # todo - for types not in table use standards area normalized swh values
+
+    # get building type
+    building_data = self.get_building_climate_zone_and_building_type
+    building_type = building_data['building_type']
+
+    result = []
+    if building_type == 'FullServiceRestaurant'
+      result << {:units => 'meal',:block => nil, :max_hourly => 1.5, :max_daily => 11.0, :avg_day_unit => 2.4}
+    elsif building_type == 'Hospital'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif ['LargeHotel','SmallHotel'].include? building_type
+      result << {:units => 'unit',:block => 20, :max_hourly => 6.0, :max_daily => 35.0, :avg_day_unit => 24.0}
+      result << {:units => 'unit',:block => 60, :max_hourly => 5.0, :max_daily => 25.0, :avg_day_unit => 14.0}
+      result << {:units => 'unit',:block => 100, :max_hourly => 4.0, :max_daily => 15.0, :avg_day_unit => 10.0}
+    elsif building_type == 'MidriseApartment'
+      result << {:units => 'unit',:block => 20, :max_hourly => 12.0, :max_daily => 80.0, :avg_day_unit => 42.0}
+      result << {:units => 'unit',:block => 50, :max_hourly => 10.0, :max_daily => 73.0, :avg_day_unit => 40.0}
+      result << {:units => 'unit',:block => 75, :max_hourly => 8.5, :max_daily => 66.0, :avg_day_unit => 38.0}
+      result << {:units => 'unit',:block => 100, :max_hourly => 7.0, :max_daily => 60.0, :avg_day_unit => 37.0}
+      result << {:units => 'unit',:block => 200, :max_hourly => 5.0, :max_daily => 50.0, :avg_day_unit => 35.0}
+    elsif ['Office','LargeOffice','MediumOffice','SmallOffice'].include? building_type
+      result << {:units => 'person',:block => nil, :max_hourly => 0.4, :max_daily => 2.0, :avg_day_unit => 1.0}
+    elsif building_type == 'Outpatient'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif building_type == 'PrimarySchool'
+      result << {:units => 'student',:block => nil, :max_hourly => 0.6, :max_daily => 1.5, :avg_day_unit => 0.6}
+    elsif building_type == 'QuickServiceRestaurant'
+      result << {:units => 'meal',:block => nil, :max_hourly => 0.7, :max_daily => 6.0, :avg_day_unit => 0.7}
+    elsif building_type == 'Retail'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif building_type == 'SecondarySchool'
+      result << {:units => 'student',:block => nil, :max_hourly => 1.0, :max_daily => 3.6, :avg_day_unit => 1.8}
+    elsif building_type == 'StripMall'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif building_type == 'SuperMarket'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif building_type == 'Warehouse'
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine hot water demand recommendations")
+    end
+
+    return result
+
+  end
+
+  # Returns average daily hot water consumption for residential buildings
+  # gal/day from ICC IECC 2015 Residential Standard Reference Design
+  # from Table R405.5.2(1)
+  #
+  # @return [Double] gal/day
+  def find_icc_iecc_2015_hot_water_demand(units_per_bldg,bedrooms_per_unit)
+
+    swh_gal_per_day = units_per_bldg * (30.0 + (10.0 * bedrooms_per_unit))
+
+    return swh_gal_per_day
+
+  end
+
+  # Returns average daily internal loads for residential buildings
+  # from Table R405.5.2(1)
+  #
+  # @return [Hash] mech_vent_cfm, infiltration_ach, igain_btu_per_day, internal_mass_lbs
+  def find_icc_iecc_2015_internal_loads(units_per_bldg,bedrooms_per_unit)
+
+    # get total and conditioned floor area
+    total_floor_area = self.getBuilding.floorArea
+    if self.getBuilding.conditionedFloorArea.is_initialized
+      conditioned_floor_area = self.getBuilding.conditionedFloorArea.get
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find conditioned floor area, will use total floor area.")
+      conditioned_floor_area = total_floor_area
+    end
+
+      # get climate zone value
+    climate_zone_value = ''
+    climateZones = self.getClimateZones
+    climateZones.climateZones.each do |climateZone|
+      if climateZone.institution == "ASHRAE"
+        climate_zone_value = climateZone.value
+        next
+      end
+    end
+
+    internal_loads = {}
+    internal_loads['mech_vent_cfm'] = units_per_bldg * (0.01 * conditioned_floor_area + 7.5 * (bedrooms_per_unit + 1.0))
+    if ['1A','1B','2A','2B'].include? climate_zone_value
+      internal_loads['infiltration_ach'] = 5.0
+    else
+      internal_loads['infiltration_ach'] = 3.0
+    end
+    internal_loads['igain_btu_per_day'] = units_per_bldg * (17900.0 + 23.8 * conditioned_floor_area + 4104.0 * bedrooms_per_unit)
+    internal_loads['internal_mass_lbs'] = total_floor_area * 8.0
+
+    return internal_loads
+
+  end
+ 
   # Helper method to make a shortened version of a name
   # that will be readable in a GUI.
   def make_name(building_vintage, clim, building_type, spc_type)

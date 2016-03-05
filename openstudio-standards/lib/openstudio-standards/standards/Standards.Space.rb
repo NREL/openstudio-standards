@@ -2181,6 +2181,37 @@ Warehouse.Office
     return area_m2
   
   end
+
+  # Determine if the space is a plenum.
+  # Assume it is a plenum if it is a supply
+  # or return plenum for an AirLoop, or
+  # if it is not part of the total floor area.
+  #
+  # return [Bool] returns true if plenum, false if not
+  def is_plenum
+
+    plenum_status = false
+
+    # Check if it is part of a zone
+    # that is a supply/return plenum
+    zone = self.thermalZone
+    if zone.is_initialized
+      if zone.get.isPlenum
+        plenum_status = true
+      end
+    end
+
+    # Check if it is designated
+    # as not part of the building
+    # floor area.
+    # todo - update to check if it has internal loads
+    unless self.partofTotalFloorArea
+      plenum_status = true
+    end
+
+    return plenum_status
+
+  end
   
   # Determine if the space is residential based on the
   # space type properties for the space.

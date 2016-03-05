@@ -205,6 +205,18 @@
       "notes": "From NECB 2011"
     },
     {
+      "name": "FURNACE-EFFPLR-NECB2011",
+      "coeff_1": 0.7277,
+      "coeff_2": 1.0667,
+      "coeff_3": -1.5174,
+      "coeff_4": 0.7282,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From NECB 2011"
+    },
+    {
       "name": "HPACHeatCapFFF",
       "coeff_1": 0.84,
       "coeff_2": 0.16,
