@@ -1035,7 +1035,7 @@ class OpenStudio::Model::Model
         tot_area += other_data['area_ft2']
       end
       avg_wk_op_hrs = area_hrs / tot_area
-      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name} average of #{avg_wk_op_hrs.round} hrs/wk for other zones on the system.")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name} weekly operating hours = #{data['wk_op_hrs'].round} hrs/wk, average of #{avg_wk_op_hrs.round} hrs/wk for other zones on the system.")
       
       # Compare avg to this zone
       wk_op_hrs = data['wk_op_hrs']
