@@ -8,8 +8,8 @@ class TestMidRiseApartment < CreateDOEPrototypeBuildingTest
   climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
   
   create_models = true
-  run_models = true
-  compare_results = true
+  run_models = false
+  compare_results = false
   
   TestMidRiseApartment.create_run_model_tests(building_types, templates, climate_zones, create_models, run_models, compare_results)
      
