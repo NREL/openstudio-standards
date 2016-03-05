@@ -100,8 +100,9 @@ class OpenStudio::Model::Model
 
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
-    # Reduce the WWR, if necessary
+    # Reduce the WWR and SRR, if necessary
     self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage)
+    self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)
     
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
@@ -2949,6 +2950,9 @@ class OpenStudio::Model::Model
   #
   # @todo add proper support for 90.1-2013 with all those building
   # type specific values
+  # @todo support 90.1-2004 requirement that windows be modeled as
+  # horizontal bands.  Currently just using existing window geometry,
+  # and shrinking vertically as necessary if WWR is above limit.
   # @todo support semiheated spaces as a separate WWR category
   # @todo add window frame area to calculation of WWR
   def apply_performance_rating_method_baseline_window_to_wall_ratio(template)
@@ -3023,6 +3027,8 @@ class OpenStudio::Model::Model
     # Stop here unless windows need reducing
     return true unless red_nr || red_res || red_sh
     
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{wwr_lim.round}%.")    
+    
     # Determine the factors by which to reduce the window area
     mult_nr_red = wwr_lim / wwr_nr 
     mult_res_red = wwr_lim / wwr_res
@@ -3073,6 +3079,142 @@ class OpenStudio::Model::Model
     return true
   
   end
+  
+  # Reduces the SRR to the values specified by the PRM. SRR reduction
+  # will be done by shrinking in the x direction toward the center.
+  #
+  # @todo support semiheated spaces as a separate SRR category
+  # @todo add skylight frame area to calculation of SRR
+  def apply_performance_rating_method_baseline_skylight_to_roof_ratio(template)
+  
+    # Loop through all spaces in the model, and 
+    # per the PNNL PRM Reference Manual, find the areas
+    # of each space conditioning category (res, nonres, semi-heated)
+    # separately.  Include space multipliers.
+    nr_wall_m2 = 0.001 # Avoids divide by zero errors later
+    nr_sky_m2 = 0  
+    res_wall_m2 = 0.001
+    res_sky_m2 = 0
+    sh_wall_m2 = 0.001
+    sh_sky_m2 = 0
+    self.getSpaces.each do |space|
+      
+      # Loop through all surfaces in this space
+      wall_area_m2 = 0
+      sky_area_m2 = 0
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'RoofCeiling'
+        # This wall's gross area (including skylight area)
+        wall_area_m2 += surface.grossArea * space.multiplier
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'Skylight'
+          sky_area_m2 += ss.netArea * space.multiplier
+        end
+      end
+      
+      # Determine the space category
+      cat = 'NonRes'
+      if space.is_residential(template)
+        cat = 'Res'
+      end
+      # if space.is_semiheated
+        # cat = 'Semiheated'
+      # end
+      
+      # Add to the correct category
+      case cat
+      when 'NonRes'
+        nr_wall_m2 += wall_area_m2
+        nr_sky_m2 += sky_area_m2
+      when 'Res'
+        res_wall_m2 += wall_area_m2
+        res_sky_m2 += sky_area_m2
+      when 'Semiheated'
+        sh_wall_m2 += wall_area_m2
+        sh_sky_m2 += sky_area_m2
+      end
+      
+    end
+      
+    # Calculate the SRR of each category
+    srr_nr = ((nr_sky_m2 / nr_wall_m2)*100).round(1)
+    srr_res = ((res_sky_m2 / res_wall_m2)*100).round(1)
+    srr_sh = ((sh_sky_m2 / sh_wall_m2)*100).round(1)
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
+    
+    # SRR limit
+    srr_lim = nil
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010'
+      srr_lim = 5.0
+    when '90.1-2013'
+      srr_lim = 3.0
+    end
+    
+    # Check against SRR limit
+    srr_nr > srr_lim ? red_nr = true : red_nr = false
+    srr_res > srr_lim ? red_res = true : red_res = false
+    srr_sh > srr_lim ? red_sh = true : red_sh = false
+
+    # Stop here unless skylights need reducing
+    return true unless red_nr || red_res || red_sh
+    
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all skylights equally down to the limit of #{srr_lim.round}%.")
+    
+    # Determine the factors by which to reduce the skylight area
+    mult_nr_red = srr_lim / srr_nr 
+    mult_res_red = srr_lim / srr_res
+    #mult_sh_red = srr_lim / srr_sh
+    
+    # Reduce the skylight area if any of the categories necessary
+    self.getSpaces.each do |space|
+      
+      # Determine the space category
+      cat = 'NonRes'
+      if space.is_residential(template)
+        cat = 'Res'
+      end
+      # if space.is_semiheated
+        # cat = 'Semiheated'
+      # end
+      
+      # Skip spaces whose skylights don't need to be reduced
+      case cat
+      when 'NonRes'
+        next unless red_nr
+        mult = mult_nr_red
+      when 'Res'
+        next unless red_res
+        mult = mult_res_red
+      when 'Semiheated'
+        next unless red_sh
+        # mult = mult_sh_red
+      end
+      
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'RoofCeiling'
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'Skylight'
+          # Reduce the size of the skylight
+          red = 1.0 - mult
+          ss.reduce_area_by_percent_by_shrinking_x(red)
+        end
+      end
+
+    end    
+    
+    return true
+  
+  end  
   
   # Helper method to get the story object that
   # cooresponds to a specific minimum z value.

@@ -92,11 +92,11 @@ class OpenStudio::Model::SubSurface
     min_z_val = 99999
     max_z_val = -99999
     self.vertices.each do |vertex|
-      # Min x value
+      # Min z value
       if vertex.z < min_z_val
         min_z_val = vertex.z
       end
-      # Max x value
+      # Max z value
       if vertex.z > max_z_val
         max_z_val = vertex.z
       end
@@ -129,5 +129,59 @@ class OpenStudio::Model::SubSurface
     return true
   
   end
+
+  # Reduce the area of the subsurface by shrinking it
+  # in the x direction.  Designed to work on skylights.
+  #
+  # @param percent_reduction [Double] the fractional amount
+  # to reduce the area.
+  def reduce_area_by_percent_by_shrinking_x(percent_reduction)
   
+    mult = 1-percent_reduction
+    
+    # Calculate the original area
+    area_original = self.netArea
+
+    # Find the min and max x values
+    min_x_val = 99999
+    max_x_val = -99999
+    self.vertices.each do |vertex|
+      # Min x value
+      if vertex.x < min_x_val
+        min_x_val = vertex.x
+      end
+      # Max x value
+      if vertex.x > max_x_val
+        max_x_val = vertex.x
+      end
+    end
+    
+    # Calculate the skylight width
+    width = max_x_val - min_x_val
+    
+    # Calculate the new sill width
+    new_width_x = max_x_val - (width * mult)    
+    
+    # Reset the z value of the lowest points
+    new_vertices = []
+    self.vertices.each do |vertex|
+      new_x = vertex.x
+      if new_x == min_x_val
+        new_x = new_width_x
+      end
+      new_y = vertex.y
+      new_z = vertex.z
+      new_vertices << OpenStudio::Point3d.new(new_x, new_y, new_z)
+    end
+    
+    # Reset the vertices
+    self.setVertices(new_vertices)
+    
+    # Compare the new area to the old for validation
+    act_pct_red = 1.0 - (self.netArea / area_original)
+    
+    return true
+  
+  end
+ 
 end
