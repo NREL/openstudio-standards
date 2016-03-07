@@ -27,7 +27,6 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
     puts hot_water_recommendations
     avg_hot_water_office = nil
     hot_water_recommendations.each do |hash|
-      next if not hash[:block] == 20.0
       avg_hot_water_office = hash[:avg_day_unit]
     end
 
