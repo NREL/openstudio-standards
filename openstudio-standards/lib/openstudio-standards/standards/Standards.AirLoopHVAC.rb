@@ -3294,5 +3294,24 @@ class OpenStudio::Model::AirLoopHVAC
     return total_area
   
   end
+
+  # find design_supply_air_flow_rate
+  #
+  # @return [Double]  design_supply_air_flow_rate m^3/s
+  def find_design_supply_air_flow_rate()
+
+    # Get the design_supply_air_flow_rate
+    design_supply_air_flow_rate = nil
+    if self.designSupplyAirFlowRate.is_initialized
+      design_supply_air_flow_rate = self.designSupplyAirFlowRate.get
+    elsif self.autosizedDesignSupplyAirFlowRate.is_initialized
+      design_supply_air_flow_rate = self.autosizedDesignSupplyAirFlowRate.get
+    else
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} design sypply air flow rate is not available.")
+    end
+
+    return design_supply_air_flow_rate
+
+  end
   
 end
