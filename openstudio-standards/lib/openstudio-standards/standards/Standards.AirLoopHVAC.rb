@@ -356,6 +356,8 @@ class OpenStudio::Model::AirLoopHVAC
         end
       elsif comp.to_AirLoopHVACUnitarySystem.is_initialized
         sup_fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan
+        next if sup_fan.empty?
+        sup_fan = sup_fan.get
         if sup_fan.to_FanConstantVolume.is_initialized
           fans << sup_fan.to_FanConstantVolume.get
         elsif sup_fan.to_FanOnOff.is_initialized
