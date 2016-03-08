@@ -86,14 +86,14 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     climate_zone.setDefaultValue('ASHRAE 169-2006-2A')
     args << climate_zone
 
-    #make argument for weatherfile path. 
-    epw_file = OpenStudio::Ruleset::OSArgument::makeStringArgument('epw_file', true)
-    epw_file.setDisplayName('epw_file')
-    epw_file.setDefaultValue('CAN_BC_Vancouver.718920_CWEC.epw')
-    
-    
-    
-    
+	#Drop down selector for Canadian weather files. 
+	epw_files = OpenStudio::StringVector.new
+    BTAP::Environment::get_canadian_weather_file_names().each {|file| epw_files << file }
+    epw_file = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('epw_file', canadian_weather_files, true)
+    epw_file.setDisplayName('Climate File (NECB only)')
+    epw_file.setDefaultValue('CAN_AB_Calgary.718770_CWEC.epw')
+    args << epw_file
+   
     return args
   end
 
@@ -131,12 +131,23 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
       Dir.mkdir(build_dir)
     end
 
-    osm_directory = "#{build_dir}/#{building_type}-#{template}-#{climate_zone}"
+	#Set OSM folder
+	osm_directory = ""
+	if template == 'NECB 2011'
+    osm_directory = "#{build_dir}/#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
+	else
+	osm_directory = "#{build_dir}/#{building_type}-#{template}-#{climate_zone}"
+	end
     if !Dir.exists?(osm_directory)
       Dir.mkdir(osm_directory)
     end
 
-    model.create_prototype_building(building_type,template,climate_zone,osm_directory,@debug)
+    model.create_prototype_building(building_type,
+									template,
+									climate_zone,
+									epw_file,
+									osm_directory,
+									@debug)
     
     log_msgs
     return true

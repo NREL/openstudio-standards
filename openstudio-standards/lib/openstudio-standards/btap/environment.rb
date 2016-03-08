@@ -19,7 +19,7 @@
 
 
 
-require 'open-uri'
+
 module BTAP
   module Environment
     WeatherData =  
@@ -103,16 +103,16 @@ module BTAP
       "CAN_SK_Saskatoon.718660_CWEC.epw" => { "country" => "CAN", "state_province" => "SK", "city" => "Saskatoon","hdd18" => 5812.0,"cdd18" => 84.0,"latitude" => 52.17, "longitude" => -106.68, "elevation" => 504.0, "monthly_dry_bulb" => "[-15.6, -12.8, -7.8, 3.8, 11.8, 16.2, 18.8, 16.5, 10.5, 4.9, -5.9, -13.7]", "delta_dry_bulb" => 34.4 },
       "CAN_SK_Swift.Current.718700_CWEC.epw" => { "country" => "CAN", "state_province" => "SK", "city" => "Swift Current","hdd18" => 5227.0,"cdd18" => 96.0,"latitude" => 50.28, "longitude" => -107.68, "elevation" => 818.0, "monthly_dry_bulb" => "[-12.6, -9.1, -5.1, 4.9, 11.2, 15.9, 18.2, 17.4, 11.2, 6.5, -3.3, -8.8]", "delta_dry_bulb" => 30.799999999999997 },
       "CAN_YT_Whitehorse.719640_CWEC.epw" => { "country" => "CAN", "state_province" => "YT", "city" => "Whitehorse","hdd18" => 6946.0,"cdd18" => 2.0,"latitude" => 60.72, "longitude" => -135.07, "elevation" => 703.0, "monthly_dry_bulb" => "[-20.5, -11.3, -6.3, 0.1, 6.7, 11.5, 14.0, 11.6, 7.1, 0.2, -10.3, -15.8]", "delta_dry_bulb" => 34.5 },
-      "USA_CO_Denver.Intl.AP.725650_TMY3.epw" => { "country" => "USA", "state_province" => "CO", "city" => "Denver Intl Ap","hdd18" => 3131.0,"cdd18" => 528.0,"latitude" => 39.83, "longitude" => -104.65, "elevation" => 1650.0, "monthly_dry_bulb" => "[0.8, -0.1, 6.1, 5.8, 15.5, 23.1, 22.3, 22.6, 19.2, 10.0, 2.9, 1.4]", "delta_dry_bulb" => 23.200000000000003 },
-      "USA_MA_Boston-Logan.Intl.AP.725090_TMY3.epw" => { "country" => "USA", "state_province" => "MA", "city" => "Boston Logan IntL Arpt","hdd18" => 3121.0,"cdd18" => 420.0,"latitude" => 42.37, "longitude" => -71.02, "elevation" => 6.0, "monthly_dry_bulb" => "[-3.0, -0.5, 3.8, 8.6, 14.9, 18.9, 23.4, 21.7, 18.1, 12.2, 6.3, 2.2]", "delta_dry_bulb" => 26.4 },
     }
     
-    #This method will look up the weather data.
-    #@author phylroy.lopez@nrcan.gc.ca
-    #@param file [String] 
-    def self.weather_data_lookup(file)
-      
+    def self.get_canadian_weather_file_names()
+      canadian_file_names = []
+      BTAP::Environment::WeatherData.each { |hash| canadian_file_names << hash[0] }
+      return canadian_file_names
     end
+    
+    
+
     
     #This method will create a climate index file.
     #@author phylroy.lopez@nrcan.gc.ca
@@ -124,7 +124,7 @@ module BTAP
         file.write( "file,country,state_province_region,city,hdd18,cdd18,latitude,longitude,elevation, monthlyDB, deltaDB\n" )
         BTAP::FileIO::get_find_files_from_folder_by_extension(folder, 'epw').each do |wfile|
           wf = BTAP::Environment::WeatherFile.new(wfile)
-          file.write( "\"#{File.basename(wfile)}\" => { \"country\" => \"#{wf.country}\", \"state_province\" => \"#{wf.state_province_region}\", \"city\" => \"#{wf.city}\",\"hdd18\" => #{wf.hdd18},\"cdd18\" => #{wf.cdd18},\"latitude\" => #{wf.latitude}, \"longitude\" => #{wf.longitude}, \"elevation\" => #{wf.elevation}, \"monthly_dry_bulb\" => \"#{wf.monthly_dry_bulb}\", \"delta_dry_bulb\" => #{wf.delta_dry_bulb} },\n" )
+          file.write( "\"#{File.basename(wfile)}\" => { \"country\" => \"#{wf.country}\", \"state_province\" => \"#{wf.state_province_region}\", \"city\" => \"#{wf.city}\",\"hdd18\" => #{wf.hdd18},\"cdd18\" => #{wf.cdd18},\"latitude\" => #{wf.latitude}, \"longitude\" => #{wf.longitude}, \"elevation\" => #{wf.elevation}, \"monthly_dry_bulb\" => \"#{wf.monthly_dry_bulb}\", \"delta_dry_bulb\" => #{wf.delta_dry_bulb} },\"a90_1_2004_climate_zone\" => #{wf.a90_1_2004_climate_zone},\n" )
           counter += 1
         end
         
@@ -148,6 +148,7 @@ module BTAP
       attr_accessor :heating_design_info
       attr_accessor :cooling_design_info
       attr_accessor :extremes_design_info
+      attr_accessor :a90_1_2004_climate_zone
 
       #This method initializes.
       #@author phylroy.lopez@nrcan.gc.ca
@@ -168,6 +169,7 @@ module BTAP
         @heating_design_info = []
         @cooling_design_info  = []
         @extremes_design_info = []
+        @a90_1_2004_climate_zone = []
         init
       end
 
@@ -263,7 +265,16 @@ module BTAP
           end
         end
 
-
+        # - Climate type "7" (ASHRAE Standards 90.1-2004 and 90.2-2004 Climate Zone)**
+        # get elevation
+        regex = /- Climate type \"(.*)\" \(ASHRAE Standards 90\.1\-2004 and 90\.2\-2004 Climate Zone\)\*\*/
+        match_data = text.match(regex)
+        if match_data.nil?
+          puts "Can't find climate zone"
+          return
+        else
+          @a90_1_2004_climate_zone  = "#ASHRAE 90_1-{match_data[1].strip}"
+        end
 
 
 
@@ -515,6 +526,7 @@ module BTAP
         @heating_design_info = @stat_file.heating_design_info 
         @cooling_design_info  = @stat_file.cooling_design_info
         @extremes_design_info = @stat_file.extremes_design_info
+        @a90_1_2004_climate_zone = @stat_file.a90_1_2004_climate_zone
         
 
         return self
@@ -716,3 +728,5 @@ module BTAP
   end
 end
 
+#BTAP::Environment::create_climate_index_file('./data/weather/', "C:/test/phylroy.csv"  )
+puts BTAP::Environment::get_canadian_weather_file_names

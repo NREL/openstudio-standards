@@ -1405,6 +1405,7 @@ class OpenStudio::Model::Model
       end
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has not been assigned a weather file.')
+	  
     end
   
     return full_epw_path

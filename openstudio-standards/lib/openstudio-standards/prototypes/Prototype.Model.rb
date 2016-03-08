@@ -16,7 +16,12 @@ class OpenStudio::Model::Model
   # @return [Bool] returns true if successful, false if not
   # @example Create a Small Office, 90.1-2010, in ASHRAE Climate Zone 5A (Chicago)
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
-  def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)  
+  def create_prototype_building(building_type, 
+      building_vintage, 
+      climate_zone,
+      epw_file,								
+      sizing_run_dir = Dir.pwd, 
+      debug = false)  
 
     self.load_openstudio_standards_json
     lookup_building_type = self.get_lookup_name(building_type)
@@ -44,13 +49,16 @@ class OpenStudio::Model::Model
       
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
-      self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
+      self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
       self.assign_space_type_stubs("Space Function", space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
       self.add_loads(building_vintage, climate_zone)   
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
-      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
+	  
+      #Should this be the first thing done Maria?
+      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone, epw_file)
+      puts self.get_full_weather_file_path
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)           #set "dummy construction set
       #BTAP::Geometry::intersect_surfaces(self)                                
       #BTAP::Geometry::match_surfaces(self)  
@@ -87,7 +95,7 @@ class OpenStudio::Model::Model
       self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
       self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
       self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
-      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone)
+      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone, epw_file)
       self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
@@ -1296,7 +1304,7 @@ class OpenStudio::Model::Model
         return false
       end
     else
-      OpenStudio::logFree(OpenStudio::Error, "openstudio.prototype.Model", "Model has not been assigned a weather file.")
+      OpenStudio::logFree(OpenStudio::Error, "openstudio.prototype.Model", "Model has not been assigned a weather file.3")
       return false
     end
     

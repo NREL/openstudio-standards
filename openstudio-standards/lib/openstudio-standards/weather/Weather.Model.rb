@@ -5,7 +5,7 @@ class OpenStudio::Model::Model
   # Helper method to set the weather file, import the design days, set
   # water mains temperature, and set ground temperature.
   # Based on ChangeBuildingLocation measure by Nicholas Long
-  def add_design_days_and_weather_file(hvac_standards, building_type, building_vintage, climate_zone)
+  def add_design_days_and_weather_file(hvac_standards, building_type, building_vintage, climate_zone, epw_file)
 
     require_relative 'Weather.stat_file'
     
@@ -33,12 +33,14 @@ class OpenStudio::Model::Model
       'ASHRAE 169-2006-7B' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
       'ASHRAE 169-2006-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
       'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-      'NECB-CNEB-4'  => 'CAN_BC_Vancouver.718920_CWEC.epw',
-      'NECB-CNEB-5'  => 'CAN_ON_Toronto.716240_CWEC.epw',
-      'NECB-CNEB-6'  => 'CAN_ON_Ottawa.716280_CWEC.epw',
-      'NECB-CNEB-7a' => 'CAN_AB_Calgary.718770_CWEC.epw',
-      'NECB-CNEB-7b' => 'CAN_NF_Goose.718160_CWEC.epw',
-      'NECB-CNEB-8'  => 'CAN_NT_Inuvik.719570_CWEC.epw'      
+      #For measure input
+      'NECB HDD Method'  => "#{epw_file}",
+      #For testing
+      'NECB-CNEB-5'  => "#{epw_file}",
+      'NECB-CNEB-6'  => "#{epw_file}",
+      'NECB-CNEB-7a' => "#{epw_file}",
+      'NECB-CNEB-7b' => "#{epw_file}",
+      'NECB-CNEB-8'  => "#{epw_file}"      
     }
 
     # Define where the weather files live
@@ -142,10 +144,12 @@ class OpenStudio::Model::Model
       end
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .stat file for: #{stat_filename}.")
+      puts "Could not find .stat file for: #{stat_filename}."
       return false
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Finished adding weather file for climate zone: #{climate_zone}.")
+    puts "Could not find .stat file for: #{stat_filename}."
     
     return true
       
