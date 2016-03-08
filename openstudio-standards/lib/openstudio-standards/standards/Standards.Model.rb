@@ -2131,7 +2131,10 @@ class OpenStudio::Model::Model
                                                                     })
     if !props
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{building_vintage}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
-      return false
+      # Return an empty construction
+      construction = OpenStudio::Model::Construction.new(self)
+      construction.setName("Could not find construction properties")
+      return construction
     else
       OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{building_vintage}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
     end
@@ -2139,7 +2142,10 @@ class OpenStudio::Model::Model
     # Make sure that a construction is specified
     if props['construction'].nil?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No typical construction is specified for construction properties of: #{building_vintage}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.  Make sure it is entered in the spreadsheet.")
-      return false
+      # Return an empty construction
+      construction = OpenStudio::Model::Construction.new(self)
+      construction.setName("No typical construction was specified")
+      return construction
     end
 
     # Add the construction, modifying properties as necessary

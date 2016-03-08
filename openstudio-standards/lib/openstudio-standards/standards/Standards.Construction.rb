@@ -28,7 +28,9 @@ class OpenStudio::Model::Construction
     end
     
     # Make sure an insulation layer was specified
-    if insulation_layer_name.nil?
+    if insulation_layer_name.nil? && target_u_value_ip == 0.0
+      # Do nothing if the construction already doesn't have an insulation layer
+    elsif insulation_layer_name.nil?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{self.name}, but this construction has no insulation layer specified.  Requested U-value will not be set.")
       return false
     else
