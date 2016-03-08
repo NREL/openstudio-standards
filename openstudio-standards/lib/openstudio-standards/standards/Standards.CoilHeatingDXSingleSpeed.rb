@@ -139,7 +139,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
 
   end
 
-  def setStandardEfficiencyAndCurves(template, standards, sql_db_vars_map)
+  def setStandardEfficiencyAndCurves(template, sql_db_vars_map)
 
     successfully_set_all_properties = true
   
