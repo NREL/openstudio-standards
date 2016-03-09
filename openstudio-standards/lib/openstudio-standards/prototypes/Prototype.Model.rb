@@ -64,9 +64,11 @@ class OpenStudio::Model::Model
       #BTAP::Geometry::match_surfaces(self)  
       BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR                                  
       BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
-      #TO DO: Need to pass heating coil type, baseboard type etc to necb_autozone_and_autosystem - right now, set in routine
-      # Will these come from template inputs in spreadsheet?
-      BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self,runner=nil) 
+      #Getting System Fuel type types from BTAP::Environment. 
+      boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_type_sys4and6, fan_type = BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
+      heating_coil_types_sys6 = heating_coil_types_sys4 = heating_coil_type_sys4and6
+      BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self, runner=nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type )
+      
       self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
       self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
