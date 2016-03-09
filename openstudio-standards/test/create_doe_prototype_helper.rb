@@ -83,7 +83,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     
     case template
     when 'NECB 2011'
+
       method_name = "test_#{building_type}-#{template}-#{climate_zone}-#{epw_file}".gsub(' ','_').gsub('.','_')
+      
     else
       method_name = "test_#{building_type}-#{template}-#{climate_zone}".gsub(' ','_')
     end
@@ -98,7 +100,15 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       reset_log
             
       # Paths for this test run
+      
+    case template
+    when 'NECB 2011'
+      model_name = "test_#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
+    else
       model_name = "#{building_type}-#{template}-#{climate_zone}"
+    end
+      
+      
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exists?(run_dir)
         Dir.mkdir(run_dir)

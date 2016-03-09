@@ -9,7 +9,7 @@ class TestLargeHotel < CreateDOEPrototypeBuildingTest
   #templates = ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010']
   #climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
   templates = [ 'NECB 2011']
-  climate_zones = ['NECB-CNEB-5']
+  climate_zones = ['NECB HDD Method']
   epw_files = ['CAN_AB_Calgary.718770_CWEC.epw']
   
 
