@@ -17,7 +17,7 @@ In the future, this gem will be included with the OpenStudio installer.  All you
 5. {https://github.com/NREL/openstudio-standards/archive/master.zip Download the source code} or {https://github.com/NREL/openstudio-standards.git clone the source code} using {https://git-scm.com/ Git}.
 5. In a command prompt, navigate to the `openstudio-standards/openstudio-standards` directory of the source code.
 5. `gem build openstudio-standards.gemspec`   ENTER to build the gem.
-6. `gem install --user-install openstudio-standards-0.1.0.gem`   ENTER to install the gem.
+6. `gem install --user-install openstudio-standards-0.1.0.gem`   ENTER to install the gem.  NOTE: You will get a warning message about the path in this step.  Ignore this message.  
 
 Now, your installed versions of OpenStudio will have access to this gem.  If you install new versions of OpenStudio, they will also have access to this gem.
 

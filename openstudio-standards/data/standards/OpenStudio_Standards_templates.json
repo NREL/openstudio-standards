@@ -33,6 +33,10 @@
       "notes": "Indian Energy Conservation Building Code 2007"
     },
     {
+      "name": "ICC IECC 2015",
+      "notes": "International Code Council 2015 International \nEnergy Conservation Code"
+    },
+    {
       "name": "NECB 2011",
       "notes": "Taken from the Canadian NECB 2011"
     }

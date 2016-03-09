@@ -2181,5 +2181,99 @@ Warehouse.Office
     return area_m2
   
   end
+
+  # Determine if the space is a plenum.
+  # Assume it is a plenum if it is a supply
+  # or return plenum for an AirLoop, or
+  # if it is not part of the total floor area.
+  #
+  # return [Bool] returns true if plenum, false if not
+  def is_plenum
+
+    plenum_status = false
+
+    # Check if it is part of a zone
+    # that is a supply/return plenum
+    zone = self.thermalZone
+    if zone.is_initialized
+      if zone.get.isPlenum
+        plenum_status = true
+      end
+    end
+
+    # Check if it is designated
+    # as not part of the building
+    # floor area.
+    # todo - update to check if it has internal loads
+    unless self.partofTotalFloorArea
+      plenum_status = true
+    end
+
+    return plenum_status
+
+  end
+  
+  # Determine if the space is residential based on the
+  # space type properties for the space.
+  # For spaces with no space type, assume nonresidential.
+  #
+  # return [Bool] true if residential, false if nonresidential
+  def is_residential(standard)
+  
+    is_res = false
+  
+    space_type = self.spaceType
+    if space_type.is_initialized
+      space_type = space_type.get
+      # Get the space type data
+      space_type_properties = space_type.get_standards_data(standard)
+      if space_type_properties.nil?
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{self.name}, assuming nonresidential.")
+        is_res = false
+      else
+        if space_type_properties['is_residential'] == "Yes"
+          is_res = true
+        else
+          is_res = false
+        end
+      end
+    else
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{self.name}, assuming nonresidential.")
+      is_res = false
+    end  
+  
+    return is_res
+  
+  end 
+  
+  # Determine if the space is a plenum.
+  # Assume it is a plenum if it is a supply
+  # or return plenum for an AirLoop, or
+  # if it is not part of the total floor area.
+  #
+  # return [Bool] returns true if plenum, false if not
+  def is_plenum
+  
+    plenum_status = false
+  
+    # Check if it is part of a zone
+    # that is a supply/return plenum
+    zone = self.thermalZone
+    if zone.is_initialized
+      if zone.get.isPlenum
+        plenum_status = true
+      end
+    end
+    
+    # Check if it is designated
+    # as not part of the building
+    # floor area.
+    unless self.partofTotalFloorArea
+      plenum_status = true
+    end
+  
+    return plenum_status
+  
+  end
   
 end

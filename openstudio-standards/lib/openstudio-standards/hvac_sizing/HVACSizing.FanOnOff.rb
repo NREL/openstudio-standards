@@ -21,9 +21,7 @@ class OpenStudio::Model::FanOnOff
   
   # returns the autosized maximum flow rate as an optional double
   def autosizedMaximumFlowRate
-
     return self.model.getAutosizedValue(self, 'Design Size Maximum Flow Rate', 'm3/s')
-    
   end
-
+  
 end

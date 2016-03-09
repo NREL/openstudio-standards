@@ -1,9 +1,8 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <error>cannot load such file -- openstudio-standards</error>
   <name>create_doe_prototype_building</name>
   <uid>be90fd0b-a651-467a-bc8d-29d310b0f937</uid>
-  <version_id>1c504194-1e58-48d6-8106-2e4d9e6cbc1f</version_id>
+  <version_id>21bc1623-3fbe-4db2-95a2-c6ca599fdd38</version_id>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>CreateDOEPrototypeBuilding</class_name>
   <display_name>Create DOE Prototype Building</display_name>
@@ -12,7 +11,7 @@
   <arguments>
     <argument>
       <name>building_type</name>
-      <display_name>Select a Building Type.</display_name>
+      <display_name>Building Type.</display_name>
       <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -67,18 +66,18 @@
           <display_name>FullServiceRestaurant</display_name>
         </choice>
         <choice>
-          <value>Hospital</value>
-          <display_name>Hospital</display_name>
+          <value>MidriseApartment</value>
+          <display_name>MidriseApartment</display_name>
         </choice>
         <choice>
-          <value>Outpatient</value>
-          <display_name>Outpatient</display_name>
+          <value>HighriseApartment</value>
+          <display_name>HighriseApartment</display_name>
         </choice>
       </choices>
     </argument>
     <argument>
-      <name>building_vintage</name>
-      <display_name>Select a Vintage.</display_name>
+      <name>template</name>
+      <display_name>Template.</display_name>
       <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -112,7 +111,7 @@
     </argument>
     <argument>
       <name>climate_zone</name>
-      <display_name>Select a Climate Zone.</display_name>
+      <display_name>Climate Zone.</display_name>
       <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -219,7 +218,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>D983D712</checksum>
+      <checksum>56805923</checksum>
     </file>
     <file>
       <filename>create_DOE_prototype_building_test.rb</filename>
