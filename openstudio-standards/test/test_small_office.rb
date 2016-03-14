@@ -9,7 +9,8 @@ class TestSmallOffice < CreateDOEPrototypeBuildingTest
   # templates = ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010']
   templates = [ 'NECB 2011']
   # climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-  climate_zones = ['NECB-CNEB-4']
+  climate_zones = ['NECB HDD Method']
+  epw_files = ['CAN_AB_Calgary.718770_CWEC.epw']
   
   
   create_models = true
@@ -18,6 +19,6 @@ class TestSmallOffice < CreateDOEPrototypeBuildingTest
   
   debug = false
   
-  TestSmallOffice.create_run_model_tests(building_types, templates, climate_zones, create_models, run_models, compare_results, debug)
+  TestSmallOffice.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   
 end

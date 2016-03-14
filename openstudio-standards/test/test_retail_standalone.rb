@@ -10,7 +10,8 @@ class TestRetailStandalone < CreateDOEPrototypeBuildingTest
   #climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
  
   templates = [ 'NECB 2011']
-  climate_zones = ['NECB-CNEB-4']
+  climate_zones = ['NECB HDD Method']
+  epw_files = ['CAN_AB_Calgary.718770_CWEC.epw']
   
   create_models = true
   run_models = true
@@ -18,6 +19,6 @@ class TestRetailStandalone < CreateDOEPrototypeBuildingTest
   
   debug = false
   
-  TestRetailStandalone.create_run_model_tests(building_types, templates, climate_zones, create_models, run_models, compare_results, debug)
+  TestRetailStandalone.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   
 end

@@ -166,7 +166,7 @@ class OpenStudio::Model::Model
         space_names.each do |space_name|
           space = self.getSpaceByName(space_name).get
           space_multiplier = space.multiplier
-          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
+          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, swh_loop, space_type_name, space_name, space_multiplier)
         end   
       end
       

@@ -17,13 +17,16 @@ class TestMidRiseApartment < CreateDOEPrototypeBuildingTest
                    # 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-8A'] 
                    
   templates = [ 'NECB 2011']
-  climate_zones = ['NECB-CNEB-4']
+  climate_zones = ['NECB HDD Method']
+  epw_files = ['CAN_AB_Calgary.718770_CWEC.epw']
   
   create_models = true
   run_models = true
   compare_results = false
   
-  TestMidRiseApartment.create_run_model_tests(building_types, templates, climate_zones, create_models, run_models, compare_results)
+  debug = false
+  
+  TestMidRiseApartment.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   
   # TestMidRiseApartment.compare_test_results(building_types, templates, climate_zones, file_ext="")
      
