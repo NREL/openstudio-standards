@@ -170,12 +170,7 @@
     {
       "name": "NECB-CNEB ClimatZone 4-8",
       "climate_zones": [
-        "NECB-CNEB-4",
-        "NECB-CNEB-5",
-        "NECB-CNEB-6",
-        "NECB-CNEB-7a",
-        "NECB-CNEB-7b",
-        "NECB-CNEB-8"
+        "NECB HDD Method"
       ]
     }
   ]

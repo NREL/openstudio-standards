@@ -650,9 +650,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-
-      terminal.set_initial_prototype_damper_position(standard, zone.outdoor_airflow_rate_per_area)
-
+      terminal.set_initial_prototype_damper_position(prototype_input['building_type'], prototype_input['template'], zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
@@ -911,7 +909,11 @@ class OpenStudio::Model::Model
     zn_dsn_htg_sa_temp_f = 122 # Design VAV box to reheat to 122F
     rht_rated_air_in_temp_f = 62 # Reheat coils designed to receive 62F
     rht_rated_air_out_temp_f = 90 # Reheat coils designed to supply 90F...but zone expects 122F...?
-    clg_sa_temp_f = 55 # Central deck clg temp operates at 55F
+    if sys_name == 'PVAV Outpatient F1'
+      clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
+    else
+      clg_sa_temp_f = 55 # Central deck clg temp operates at 55F
+    end
 
     sys_dsn_prhtg_temp_c = OpenStudio.convert(sys_dsn_prhtg_temp_f,'F','C').get
     sys_dsn_clg_sa_temp_c = OpenStudio.convert(sys_dsn_clg_sa_temp_f,'F','C').get
@@ -985,6 +987,7 @@ class OpenStudio::Model::Model
     oa_intake.addToNode(air_loop.supplyInletNode)
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Ventilation Controller")
+    controller_mv.setAvailabilitySchedule(motorized_oa_damper_sch)
 
     # Hook the VAV system to each zone
     thermal_zones.each do |zone|
@@ -1009,9 +1012,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-
-      terminal.set_initial_prototype_damper_position(standard, zone.outdoor_airflow_rate_per_area)
-
+      terminal.set_initial_prototype_damper_position(prototype_input['building_type'], prototype_input['template'], zone.outdoor_airflow_rate_per_area)
       air_loop.addBranchForZone(zone,terminal.to_StraightComponent)
 
       unless return_plenum.nil?
@@ -1188,7 +1189,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      terminal.set_initial_prototype_damper_position(standard, zone.outdoor_airflow_rate_per_area)
+      terminal.set_initial_prototype_damper_position(prototype_input['building_type'], prototype_input['template'], zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
@@ -3686,7 +3687,7 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil)
+  def add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
 
     # find the specific space_type properties from standard.json
     search_criteria = {
@@ -3708,7 +3709,11 @@ class OpenStudio::Model::Model
     # Water fixture definition
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
     rated_flow_rate_per_area = data['service_water_heating_peak_flow_per_area'].to_f   # gal/h.ft2
-    rated_flow_rate_gal_per_hour = rated_flow_rate_per_area * space_area * space_multiplier   # gal/h
+    if is_flow_per_area
+      rated_flow_rate_gal_per_hour = rated_flow_rate_per_area * space_area * space_multiplier   # gal/h
+    else
+      rated_flow_rate_gal_per_hour = data['service_water_heating_peak_flow_rate'].to_f
+    end
     rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour/60  # gal/h to gal/min
     rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min,'gal/min','m^3/s').get
     # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)

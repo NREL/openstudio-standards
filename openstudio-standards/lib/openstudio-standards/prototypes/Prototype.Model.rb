@@ -88,6 +88,14 @@ class OpenStudio::Model::Model
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
+        
+    # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
+    # AHU1 doesn't have economizer
+    if building_type == "Outpatient"
+      self.modify_OAcontroller(building_vintage)
+      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+      self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
+    end
 
     # Apply the HVAC efficiency standard
     self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
@@ -967,10 +975,10 @@ class OpenStudio::Model::Model
     terrain = 'Urban'
     when 'SmallHotel'
     terrain = 'Suburbs'
+    end
   end
-end
-# Set the terrain type
-self.getSite.setTerrain(terrain)
+  # Set the terrain type
+  self.getSite.setTerrain(terrain)
 
     # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
     return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013'
@@ -1029,7 +1037,7 @@ self.getSite.setTerrain(terrain)
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       case building_type
-      when 'PrimarySchool', 'SecondarySchool'
+      when 'PrimarySchool', 'SecondarySchool', 'Outpatient'
         clg = 1.5
         htg = 1.5
       when 'LargeHotel'
