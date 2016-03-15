@@ -1475,7 +1475,7 @@ class OpenStudio::Model::AirLoopHVAC
       v_ou += zone.outdoor_airflow_rate
     end
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
-    
+     
     # System primary airflow rate (whether autosized or hard-sized)
     v_ps = 0.0
     if self.autosizedDesignSupplyAirFlowRate.is_initialized
@@ -1847,6 +1847,9 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @return [Bool] Returns true if successful, false if not.  
   def enable_supply_air_temperature_reset()
+    
+    # for AHU1 in Outpatient, SAT is 52F constant, no reset
+    return true if self.name.get == 'PVAV Outpatient F1'
   
     # Get the current setpoint and calculate 
     # the new setpoint.
@@ -2033,10 +2036,12 @@ class OpenStudio::Model::AirLoopHVAC
     # If the system has an economizer, it is assumed to have
     # a motorized damper.
     if self.has_economizer
-      is_motorized_oa_damper_required = false
+      is_motorized_oa_damper_required = true  # KS: change false to true
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: Because the system has an economizer, it is assumed to require a motorized damper.")
       return is_motorized_oa_damper_required
     end
+    
+    return is_motorized_oa_damper_required
   
   end
   
