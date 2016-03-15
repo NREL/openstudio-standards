@@ -792,7 +792,7 @@
       "minimum_integrated_part_load_value": 0.549,
       "capft": "WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_CAPFT",
       "eirft": "WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_EIRFT",
-      "eirfplr": "ChlrWtrCentPathBGtEql300Lt600tonEIRRatio_fQRatio",
+      "eirfplr": "ChlrWtrCentPathAAllEIRRatio_fQRatio",
       "notes": "Path A Minimum Efficiencies"
     },
     {
@@ -807,7 +807,7 @@
       "minimum_integrated_part_load_value": 0.539,
       "capft": "WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_CAPFT",
       "eirft": "WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_EIRFT",
-      "eirfplr": "ChlrWtrCentPathBGtEql600tonEIRRatio_fQRatio",
+      "eirfplr": "ChlrWtrCentPathAAllEIRRatio_fQRatio",
       "notes": "Path A Minimum Efficiencies"
     },
     {

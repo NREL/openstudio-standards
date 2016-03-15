@@ -1,30 +1,20 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <error>cannot load such file -- openstudio-standards</error>
-  <name>replace_model</name>
-  <uid>eb22ed44-0840-46b0-b90a-d7cf0b2e2ed3</uid>
-  <version_id>7fd7b37c-ee96-41d9-9426-ea6f1f5cf4a0</version_id>
+  <name>convert_doe_reference_to_necbosm</name>
+  <uid>a87039f4-d7b2-40ac-9e97-80745f6c7c32</uid>
+  <version_id>b600a399-8189-45b3-abd1-5ebae057278c</version_id>
   <xml_checksum>057E8D9D</xml_checksum>
-  <class_name>ReplaceModel</class_name>
-  <display_name>Replaces OpenStudio Model </display_name>
+  <class_name>ConvertDOEReferenceToNECBOSM</class_name>
+  <display_name>ConvertDOEReferenceToNECBOSM</display_name>
   <description></description>
   <modeler_description></modeler_description>
   <arguments>
     <argument>
-      <name>alternativeModel</name>
-      <display_name>Alternative Model</display_name>
+      <name>idf_file_path</name>
+      <display_name>IDF File Path</display_name>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>FullServiceRestaurant.osm</default_value>
-    </argument>
-    <argument>
-      <name>osm_directory</name>
-      <display_name>OSM Directory</display_name>
-      <type>String</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>../../lib/btap/resources/models/smart_archetypes</default_value>
     </argument>
   </arguments>
   <provenances/>
