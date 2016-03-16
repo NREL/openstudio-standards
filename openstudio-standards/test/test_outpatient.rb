@@ -16,8 +16,8 @@ class TestOutpatient < CreateDOEPrototypeBuildingTest
                    # 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B',
                    # 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-8A'] 
   create_models = true
-  run_models = true
-  compare_results = true
+  run_models = false
+  compare_results = false
   
   TestOutpatient.create_run_model_tests(building_types, templates, climate_zones, create_models, run_models, compare_results)
   
