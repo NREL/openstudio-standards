@@ -28,14 +28,30 @@ class OpenStudio::Model::PumpConstantSpeed
   # returns the autosized rated flow rate as an optional double
   def autosizedRatedFlowRate
 
-    return self.model.getAutosizedValue(self, 'Rated Flow Rate', 'm3/s')
+    # In E+ 8.5, (OS 1.10.5 onward) the column name changed
+    col_name = nil
+    if self.model.version < OpenStudio::VersionString.new('1.10.5')
+      col_name = 'Rated Flow Rate'
+    else
+      col_name = 'Design Flow Rate'
+    end  
+   
+    return self.model.getAutosizedValue(self, col_name, 'm3/s')
     
   end
 
   # returns the autosized rated power consumption as an optional double
   def autosizedRatedPowerConsumption
 
-    return self.model.getAutosizedValue(self, 'Rated Power Consumption', 'W')
+    # In E+ 8.5, (OS 1.10.5 onward) the column name changed
+    col_name = nil
+    if self.model.version < OpenStudio::VersionString.new('1.10.5')
+      col_name = 'Rated Power Consumption'
+    else
+      col_name = 'Design Power Consumption'
+    end  
+   
+    return self.model.getAutosizedValue(self, col_name, 'm3/s')
     
   end  
   
