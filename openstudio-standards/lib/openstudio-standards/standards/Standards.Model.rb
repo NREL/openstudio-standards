@@ -3593,7 +3593,7 @@ class OpenStudio::Model::Model
       else
         result = possible_climate_zones.sort.first
       end
-    when 'ICC IECC 2015'
+    when 'ICC IECC 2015', 'OEESC 2014'
       result = possible_climate_zones.sort.first
     end
         
