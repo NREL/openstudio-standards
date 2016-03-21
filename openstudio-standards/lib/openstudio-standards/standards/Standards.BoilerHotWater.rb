@@ -75,8 +75,14 @@ class OpenStudio::Model::BoilerHotWater
     end  # NECB 2011
 
     # Convert capacity to Btu/hr
-    capacity_btu_per_hr = OpenStudio.convert(boiler_capacity, "W", "Btu/hr").get
-    capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, "W", "kBtu/hr").get
+    if template == 'NECB 2011'
+      capacity_btu_per_hr = OpenStudio.convert(boiler_capacity, "W", "Btu/hr").get
+      capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, "W", "kBtu/hr").get
+    else
+      capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
+      capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, "W", "kBtu/hr").get
+    end
+      
 
     # Get the boiler properties
     blr_props = self.model.find_object(boilers, search_criteria, capacity_btu_per_hr)
@@ -126,7 +132,7 @@ class OpenStudio::Model::BoilerHotWater
       self.setNominalThermalEfficiency(thermal_eff)
     end   
   
-  return successfully_set_all_properties
+    return successfully_set_all_properties
   end
   
 end

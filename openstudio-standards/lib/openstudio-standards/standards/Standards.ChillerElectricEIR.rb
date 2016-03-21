@@ -81,8 +81,12 @@ class OpenStudio::Model::ChillerElectricEIR
     end  # NECB 2011
 
     # Convert capacity to tons
-    capacity_tons = OpenStudio.convert(chiller_capacity, "W", "ton").get
-
+    if template == 'NECB 2011'
+      capacity_tons = OpenStudio.convert(chiller_capacity, "W", "ton").get
+    else
+      capacity_tons = OpenStudio.convert(capacity_w, "W", "ton").get
+    end
+    
     # Get the chiller properties
     chlr_props = self.model.find_object(chillers, search_criteria, capacity_tons)
     if !chlr_props
