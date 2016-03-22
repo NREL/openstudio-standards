@@ -138,7 +138,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           "Cooling Coil Total Cooling Rate",
           "Water Heater Heating Rate",
           "Zone Air Temperature",
-          "Water Heater Electric Power"
+          "Water Heater Electric Power",
+          "Chiller Electric Power",
+          "Chiller Electric Energy",
+          "Cooling Tower Heat Transfer Rate",
+          "Cooling Tower Fan Electric Power",
+          "Cooling Tower Fan Electric Energy"
         ]
         BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
               
