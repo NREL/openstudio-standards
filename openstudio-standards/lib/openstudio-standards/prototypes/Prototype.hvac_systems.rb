@@ -226,9 +226,10 @@ class OpenStudio::Model::Model
     if condenser_water_loop
       condenser_water_loop.addDemandBranchForComponent(chiller)
       chiller.setCondenserType('WaterCooled')
-    end
+	end
+	
 
-    #chilled water loop pipes
+	#chilled water loop pipes
     chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
     chilled_water_loop.addSupplyBranchForComponent(chiller_bypass_pipe)
     coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
