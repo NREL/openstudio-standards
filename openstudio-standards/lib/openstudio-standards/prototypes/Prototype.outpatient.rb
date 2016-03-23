@@ -161,8 +161,20 @@ class OpenStudio::Model::Model
     self.add_extra_equip_elevator_pump_room(building_vintage)
     # adjust cooling setpoint at vintages 1B,2B,3B
     self.adjust_clg_setpoint(building_vintage,climate_zone)
+    # Get the hot water loop
+    hot_water_loop = nil
+    self.getPlantLoops.each do |loop|
+      # If it has a boiler:hotwater, it is the correct loop
+      if loop.supplyComponents('Boiler:HotWater'.to_IddObjectType).size > 0
+        hot_water_loop = loop
+      end
+    end
     # add humidifier to AHU1 (contains operating room 1)
-    self.add_humidifier(building_vintage, hot_water_loop)
+    if hot_water_loop
+      self.add_humidifier(building_vintage, hot_water_loop)
+    else
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find hot water loop to attach humidifier to.')
+    end
     # adjust infiltration for vintages 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
     self.adjust_infiltration(building_vintage)
     # add door infiltration for vertibule
@@ -372,7 +384,6 @@ class OpenStudio::Model::Model
     when '90.1-2010', '90.1-2013'
       self.getAirTerminalSingleDuctVAVReheats.sort.each do |airterminal|
         airterminal_name = airterminal.name.get
-        puts "airterminal_name = #{airterminal_name.inspect}"
         if airterminal_name.include? "Floor 1 Operating Room 1" or airterminal_name.include? "Floor 1 Operating Room 2"
           airterminal.setZoneMinimumAirFlowMethod('Scheduled')
           airterminal.setMinimumAirFlowFractionSchedule(add_schedule("OutPatientHealthCare OR_MinSA_Sched"))
@@ -385,36 +396,6 @@ class OpenStudio::Model::Model
     self.getBoilerHotWaters.sort.each do |boiler|
       boiler.setSizingFactor(0.3)
     end
-  end
-  
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-
-    space_type_map.each do |space_type_name, space_names|
-      data = nil
-      search_criteria = {
-        'template' => building_vintage,
-        'building_type' => building_type,
-        'space_type' => space_type_name
-      }
-      data = find_object(self.standards['space_types'],search_criteria)
-      
-      if data['service_water_heating_peak_flow_rate'].nil?
-        next
-      else
-        space_names.each do |space_name|
-          self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, nil, false)
-        end
-      end
-    end
-     
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
-    return true
-    
-  end    
+  end  
 
 end

@@ -651,7 +651,7 @@ class OpenStudio::Model::Model
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
       
-      terminal.set_initial_prototype_damper_position(prototype_input['building_type'], prototype_input['template'], zone.outdoor_airflow_rate_per_area)
+      terminal.set_initial_prototype_damper_position(building_type, standard, zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
@@ -872,7 +872,8 @@ class OpenStudio::Model::Model
               hvac_op_sch,
               oa_damper_sch,
               hot_water_loop = nil, 
-              return_plenum = nil)
+              return_plenum = nil,
+              building_type = nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding Packaged VAV for #{thermal_zones.size} zones.")
     thermal_zones.each do |zone|
@@ -988,7 +989,7 @@ class OpenStudio::Model::Model
     oa_intake.addToNode(air_loop.supplyInletNode)
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Ventilation Controller")
-    controller_mv.setAvailabilitySchedule(motorized_oa_damper_sch)
+    controller_mv.setAvailabilitySchedule(oa_damper_sch)
 
     # Hook the VAV system to each zone
     thermal_zones.each do |zone|
@@ -1013,7 +1014,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      terminal.set_initial_prototype_damper_position(prototype_input['building_type'], prototype_input['template'], zone.outdoor_airflow_rate_per_area)
+      terminal.set_initial_prototype_damper_position(building_type, standard, zone.outdoor_airflow_rate_per_area)
       air_loop.addBranchForZone(zone,terminal.to_StraightComponent)
 
       unless return_plenum.nil?
@@ -1190,7 +1191,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      terminal.set_initial_prototype_damper_position(prototype_input['building_type'], prototype_input['template'], zone.outdoor_airflow_rate_per_area)
+      terminal.set_initial_prototype_damper_position(building_type, standard, zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)

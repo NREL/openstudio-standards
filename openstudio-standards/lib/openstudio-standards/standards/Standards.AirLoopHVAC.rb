@@ -2390,9 +2390,7 @@ class OpenStudio::Model::AirLoopHVAC
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Because the system has an economizer, it requires a motorized OA damper.")
       return motorized_oa_damper_required
     end
-    
-    return is_motorized_oa_damper_required
-  
+
     # Determine the exceptions based on
     # number of stories, climate zone, and 
     # outdoor air intake rates.
