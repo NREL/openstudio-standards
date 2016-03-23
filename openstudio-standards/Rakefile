@@ -59,7 +59,7 @@ Rake::TestTask.new('test:gem_group_3') do |task|
   'openstudio-standards/test/test_full_service_restaurant.rb', # 10 min
   'openstudio-standards/test/test_small_office.rb', # 7 min
   'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
-  'openstudio-standards/test/test_high_rise_apartment.rb' # 7 min
+  'openstudio-standards/test/test_high_rise_apartment.rb', # 7 min
   'openstudio-standards/test/test_outpatient.rb' # 
   ]
 end

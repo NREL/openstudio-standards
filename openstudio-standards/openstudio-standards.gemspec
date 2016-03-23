@@ -6,11 +6,11 @@ require 'openstudio-standards/version'
 Gem::Specification.new do |spec|
   spec.name          = "openstudio-standards"
   spec.version       = OpenstudioStandards::VERSION
-  spec.authors       = ["Andrew Parker","Yixing Chen", "Mark Adams", "Kaiyu Sun", "Mini Maholtra", "David Goldwasser", "Phylroy Lopez", "Maria Mottillo", "Kamel Haddad"]
+  spec.authors       = ["Andrew Parker","Yixing Chen", "Mark Adams", "Kaiyu Sun", "Mini Maholtra", "David Goldwasser", "Phylroy Lopez", "Maria Mottillo", "Kamel Haddad", "Julien Marrec", "Matt Leach", "Matt Steen", "Eric Ringold"]
   spec.email         = ["andrew.parker@nrel.gov"]
   spec.homepage = 'http://openstudio.net'
-  spec.summary = 'Applies energy standards like ASHRAE 90.1 and the Canadian NECB to OpenStudio energy models'
-  spec.description = 'Custom classes for configuring clusters for OpenStudio & EnergyPlus analyses'
+  spec.summary = 'Creates DOE Prototype building models and transforms proposed OpenStudio models to baseline OpenStudio models.'
+  spec.description = 'Creates DOE Prototype building models and transforms proposed models to baseline models for energy codes like ASHRAE 90.1 and the Canadian NECB.'
   spec.license = 'LGPL'
 
   spec.required_ruby_version = '>= 2.0.0'
