@@ -6811,7 +6811,11 @@
       "building_type": "MidriseApartment",
       "space_type": null,
       "is_residential": "Yes",
+<<<<<<< HEAD
       "exterior_wall_standards_construction_type": "WoodFramed",
+=======
+      "exterior_wall_standards_construction_type": "SteelFramed",
+>>>>>>> refs/remotes/origin/data_center_economizer
       "exterior_wall_building_category": "Residential",
       "exterior_floor_standards_construction_type": "Mass",
       "exterior_floor_building_category": "Residential",

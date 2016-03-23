@@ -126,6 +126,7 @@ class OpenStudio::Model::Model
     ]
     return system_to_space_map
   end
+<<<<<<< HEAD
     
   def define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
@@ -212,9 +213,14 @@ class OpenStudio::Model::Model
   
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
     
+=======
+     
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+   
+>>>>>>> refs/remotes/origin/data_center_economizer
     return true
     
-  end #add hvac
+  end
 
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
    

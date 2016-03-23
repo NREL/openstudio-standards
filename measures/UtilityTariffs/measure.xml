@@ -1,44 +1,14 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <error>cannot load such file -- openstudio-standards</error>
   <name>utility_tariffs_model_setup</name>
   <uid>7353d86e-d166-4f32-a572-27ce8e65ebb5</uid>
-  <version_id>2d71e57c-c513-48ea-85e5-e4de0abe5e96</version_id>
+  <version_id>6cb4e071-cc24-43f4-897d-f0c2a9e6d8ea</version_id>
   <xml_checksum>4A4E44A5</xml_checksum>
   <class_name>UtilityTariffsModelSetup</class_name>
-  <display_name>UtilityTariffsModelSetup</display_name>
+  <display_name>Utility Tariffs Model Setup</display_name>
   <description>Add the selected utility rate, as well as set the time step and lifecycle costing parameters.</description>
   <modeler_description>Adds the .idf text for the selected tariffs and sets the time step to 15 minutes so that the demand window and the time step align.</modeler_description>
-  <arguments>
-    <argument>
-      <name>elec_tar</name>
-      <display_name>Select an Electricity Tariff</display_name>
-      <type>Choice</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>HydroQuebec</default_value>
-      <choices>
-        <choice>
-          <value>HydroQuebec</value>
-          <display_name>HydroQuebec</display_name>
-        </choice>
-      </choices>
-    </argument>
-    <argument>
-      <name>gas_tar</name>
-      <display_name>Select a Gas Tariff</display_name>
-      <type>Choice</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>GasMetro</default_value>
-      <choices>
-        <choice>
-          <value>GasMetro</value>
-          <display_name>GasMetro</display_name>
-        </choice>
-      </choices>
-    </argument>
-  </arguments>
+  <arguments/>
   <provenances/>
   <tags>
     <tag>Economics.Life Cycle Cost Analysis</tag>

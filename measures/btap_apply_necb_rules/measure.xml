@@ -1,32 +1,14 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <error>cannot load such file -- openstudio-standards</error>
-  <name>replace_model</name>
+  <name>apply_necb_rules</name>
   <uid>55a38c30-4274-46b8-a2d4-6f9529114b71</uid>
-  <version_id>5d347e68-52ef-4526-8948-503d6e7100fd</version_id>
+  <version_id>bc74c0c4-8f4b-4a48-ba44-1822808dc8fe</version_id>
   <xml_checksum>057E8D9D</xml_checksum>
-  <class_name>ReplaceModel</class_name>
-  <display_name>Replaces OpenStudio Model </display_name>
+  <class_name>ApplyNECBRules</class_name>
+  <display_name>ApplyNECBRules</display_name>
   <description></description>
   <modeler_description></modeler_description>
-  <arguments>
-    <argument>
-      <name>alternativeModel</name>
-      <display_name>Alternative Model</display_name>
-      <type>String</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>FullServiceRestaurant.osm</default_value>
-    </argument>
-    <argument>
-      <name>osm_directory</name>
-      <display_name>OSM Directory</display_name>
-      <type>String</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>../../lib/btap/resources/models/smart_archetypes</default_value>
-    </argument>
-  </arguments>
+  <arguments/>
   <provenances/>
   <tags>
     <tag>Whole Building.Space Types</tag>

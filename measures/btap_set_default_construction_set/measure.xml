@@ -1,9 +1,8 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <error>cannot load such file -- openstudio-standards</error>
   <name>set_default_construction_set</name>
   <uid>b7840b31-858b-4d1c-8832-787138c7a52c</uid>
-  <version_id>bf057604-3211-474b-8304-9a8e70488a9d</version_id>
+  <version_id>274bab6a-6fc1-41b0-ba41-8acf291a2afc</version_id>
   <xml_checksum>11D60F39</xml_checksum>
   <class_name>SetDefaultConstructionSet</class_name>
   <display_name>Set Default Construction Set</display_name>

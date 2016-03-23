@@ -1,9 +1,8 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <error>cannot load such file -- openstudio-standards</error>
   <name>btap_equest_converter</name>
   <uid>ca793d90-fbc6-4f3d-9021-24a204e1b380</uid>
-  <version_id>f2d98b69-50b6-401f-a79b-4c404ac2c1ea</version_id>
+  <version_id>fdc23df1-62c5-459f-a45d-7a9fc880a4d1</version_id>
   <xml_checksum>68F3FD42</xml_checksum>
   <class_name>BtapEquestConverter</class_name>
   <display_name>btap equest converter</display_name>

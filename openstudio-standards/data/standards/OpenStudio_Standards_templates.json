@@ -39,6 +39,10 @@
     {
       "name": "NECB 2011",
       "notes": "Taken from the Canadian NECB 2011"
+    },
+    {
+      "name": "OEESC 2014",
+      "notes": "Oregon Efficiency Energy Specialty Code (created by modifying copy of 90.1 2013). Lighting came from Tables 505.5.2(a) and (b) in the 2014 Oregon Energy Efficiency Specialty Code"
     }
   ]
 }
