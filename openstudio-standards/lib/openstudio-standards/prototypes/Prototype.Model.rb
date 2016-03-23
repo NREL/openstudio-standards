@@ -56,8 +56,14 @@ class OpenStudio::Model::Model
     self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
     self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone)
     self.set_sizing_parameters(building_type, building_vintage)
-    self.yearDescription.get.setDayofWeekforStartDay('Sunday')  
-    
+    self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+
+    # set climate zone and building type
+    self.getBuilding.setStandardsBuildingType(building_type)
+    if climate_zone.include? 'ASHRAE 169-2006-'
+      self.getClimateZones.setClimateZone("ASHRAE",climate_zone.gsub('ASHRAE 169-2006-',''))
+    end
+
     # Perform a sizing run
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
