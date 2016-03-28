@@ -965,40 +965,40 @@ class OpenStudio::Model::Model
   # @todo Consistency - make prototype and reference vintages consistent
   # @todo Add 90.1-2013?
   def modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
-  # Select the terrain type, which
-  # impacts wind speed, and in turn infiltration
-  terrain = 'City'
-  case building_vintage
-  when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-    case building_type
-    when 'Warehouse'
-    terrain = 'Urban'
-    when 'SmallHotel'
-    terrain = 'Suburbs'
+    # Select the terrain type, which
+    # impacts wind speed, and in turn infiltration
+    terrain = 'City'
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      case building_type
+      when 'Warehouse'
+      terrain = 'Urban'
+      when 'SmallHotel'
+      terrain = 'Suburbs'
+      end
     end
-  end
-  # Set the terrain type
-  self.getSite.setTerrain(terrain)
-
-    # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
-    return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013'
-
-    # The pre-1980 and 1980-2004 buildings have this:
-    # 1.0000,                  !- Constant Term Coefficient
-    # 0.0000,                  !- Temperature Term Coefficient
-    # 0.0000,                  !- Velocity Term Coefficient
-    # 0.0000;                  !- Velocity Squared Term Coefficient
-    # The 90.1-2010 buildings have this:
-    # 0.0000,                  !- Constant Term Coefficient
-    # 0.0000,                  !- Temperature Term Coefficient
-    # 0.224,                   !- Velocity Term Coefficient
-    # 0.0000;                  !- Velocity Squared Term Coefficient
-    self.getSpaceInfiltrationDesignFlowRates.each do |infiltration|
-      infiltration.setConstantTermCoefficient(0.0)
-      infiltration.setTemperatureTermCoefficient(0.0)
-      infiltration.setVelocityTermCoefficient(0.224)
-      infiltration.setVelocitySquaredTermCoefficient(0.0)
-    end
+    # Set the terrain type
+    self.getSite.setTerrain(terrain)
+  
+      # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
+      return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013'
+  
+      # The pre-1980 and 1980-2004 buildings have this:
+      # 1.0000,                  !- Constant Term Coefficient
+      # 0.0000,                  !- Temperature Term Coefficient
+      # 0.0000,                  !- Velocity Term Coefficient
+      # 0.0000;                  !- Velocity Squared Term Coefficient
+      # The 90.1-2010 buildings have this:
+      # 0.0000,                  !- Constant Term Coefficient
+      # 0.0000,                  !- Temperature Term Coefficient
+      # 0.224,                   !- Velocity Term Coefficient
+      # 0.0000;                  !- Velocity Squared Term Coefficient
+      self.getSpaceInfiltrationDesignFlowRates.each do |infiltration|
+        infiltration.setConstantTermCoefficient(0.0)
+        infiltration.setTemperatureTermCoefficient(0.0)
+        infiltration.setVelocityTermCoefficient(0.224)
+        infiltration.setVelocitySquaredTermCoefficient(0.0)
+      end
   end
 
   # Sets the inside and outside convection algorithms for different vintages

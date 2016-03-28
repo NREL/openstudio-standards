@@ -20,4 +20,6 @@ class TestQuickServiceRestaurant < CreateDOEPrototypeBuildingTest
   
   TestQuickServiceRestaurant.create_run_model_tests(building_types, templates, climate_zones, create_models, run_models, compare_results, debug)
 
+  # TestQuickServiceRestaurant.compare_test_results(building_types, templates, climate_zones, file_ext="")
+
 end

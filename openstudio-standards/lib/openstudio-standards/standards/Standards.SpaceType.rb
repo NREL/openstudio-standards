@@ -18,7 +18,7 @@ class OpenStudio::Model::SpaceType
     else
       standards_space_type = nil
     end
-    
+       
     # populate search hash
     search_criteria = {
         "template" => template,
@@ -395,7 +395,9 @@ class OpenStudio::Model::SpaceType
     infiltration_per_area_ext = space_type_properties['infiltration_per_exterior_area'].to_f
     infiltration_per_area_ext_wall = space_type_properties['infiltration_per_exterior_wall_area'].to_f
     infiltration_ach = space_type_properties['infiltration_air_changes'].to_f
-    make_infiltration = true unless infiltration_per_area_ext == 0
+    unless infiltration_per_area_ext == 0 && infiltration_per_area_ext_wall == 0 && infiltration_ach == 0
+      infiltration_have_info = true
+    end
 
     if set_infiltration && infiltration_have_info
     

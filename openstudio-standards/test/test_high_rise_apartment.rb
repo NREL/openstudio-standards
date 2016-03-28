@@ -16,5 +16,7 @@ class TestHighRiseApartment < CreateDOEPrototypeBuildingTest
   compare_results = false
   
   TestHighRiseApartment.create_run_model_tests(building_types, templates, climate_zones, create_models, run_models, compare_results)
+
+  # TestHighRiseApartment.compare_test_results(building_types, templates, climate_zones, file_ext="")
      
 end
