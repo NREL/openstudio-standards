@@ -59845,6 +59845,19 @@
       ]
     },
     {
+      "name": "RetailStandalone PSZ_Econ_MaxOAFrac_Sch",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": null,
+      "values": [
+        0.7
+      ]
+    },
+    {
       "name": "RetailStandalone PlantOnSched",
       "category": "Unknown",
       "units": null,

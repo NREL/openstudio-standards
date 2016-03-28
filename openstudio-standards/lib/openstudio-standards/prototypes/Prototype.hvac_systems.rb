@@ -622,7 +622,6 @@ class OpenStudio::Model::Model
       oa_intake_controller.setEconomizerControlType("DifferentialEnthalpy")
       oa_intake_controller.setHeatRecoveryBypassControlType("BypassWhenOAFlowGreaterThanMinimum")
       oa_intake_controller.resetMaximumFractionofOutdoorAirSchedule
-      oa_intake_controller.resetMaximumFractionofOutdoorAirSchedule
       oa_intake_controller.resetEconomizerMinimumLimitDryBulbTemperature
     end
 
@@ -1746,7 +1745,15 @@ class OpenStudio::Model::Model
       oa_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self,oa_controller)
       oa_system.setName("#{air_loop.name} OA Sys")
-
+      econ_eff_sch = self.add_schedule('RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
+      
+      case standard
+      when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
+        oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_eff_sch) if building_type == "RetailStandalone" || building_type == "RetailStripmall"
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004'
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'No maximum fraction outdoor air schedule in PSZ for building types except RetailStandalone')
+      end
+      
       # Add the components to the air loop
       # in order from closest to zone to furthest from zone
       supply_inlet_node = air_loop.supplyInletNode
@@ -3882,7 +3889,7 @@ class OpenStudio::Model::Model
     fan.setFanEfficiency(0.58175)
     fan.setPressureRise(622.5) #Pa
     if fan_max_flow_rate != nil
-      fan.setMaximumFlowRate(fan_max_flow_rate)
+      fan.setMaximumFlowRate(OpenStudio.convert(fan_max_flow_rate, 'cfm', 'm^3/s').get)  # unit of fan_max_flow_rate is cfm
     else
       fan.autosizeMaximumFlowRate
     end

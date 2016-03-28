@@ -78,7 +78,8 @@ class OpenStudio::Model::Model
                                 building_type)
 
         end
-      
+
+=begin      
       elsif building_type == 'LargeHotel'
       
         # Add water use equipment to each space
@@ -170,6 +171,7 @@ class OpenStudio::Model::Model
                               space_name,
                               building_type)
         end
+=end
  
       elsif prototype_input['main_service_water_peak_flowrate']
         
