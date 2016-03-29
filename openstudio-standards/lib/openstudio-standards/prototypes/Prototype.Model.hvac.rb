@@ -115,7 +115,7 @@ class OpenStudio::Model::Model
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
         if prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
-          heat_pump_loop = add_hp_loop(prototype_input)
+          heat_pump_loop = add_hp_loop(building_type)
         end
       
         self.add_psz_ac(building_vintage, 
@@ -210,7 +210,7 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Heat Pump Loop').is_initialized
           heat_pump_loop = self.getPlantLoopByName('Heat Pump Loop').get
         else
-          heat_pump_loop = self.add_hp_loop()
+          heat_pump_loop = self.add_hp_loop(building_type)
         end
       
         self.add_data_center_hvac(building_vintage,
