@@ -3008,7 +3008,7 @@ module BTAP
               air_loop_sizing.setPrecoolDesignTemperature(12.8)
               air_loop_sizing.setPrecoolDesignHumidityRatio(0.008)
               air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(12.8)
-              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(40.0)
+              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(40)
               air_loop_sizing.setSizingOption("NonCoincident")
               air_loop_sizing.setAllOutdoorAirinCooling(false)
               air_loop_sizing.setAllOutdoorAirinHeating(false)
@@ -3074,7 +3074,8 @@ module BTAP
               # supply air temperature based on the needs of this zone
               setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
               setpoint_mgr_single_zone_reheat.setControlZone(zone)
-              setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(13.0)
+              setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(12.8)
+              setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(13.0)
               setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
 
               # Create a diffuser and attach the zone/diffuser pair to the air loop
