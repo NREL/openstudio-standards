@@ -110,6 +110,45 @@ class OpenStudio::Model::ScheduleRuleset
     
     return annual_flh
 
-  end		
+  end
+
+  # Returns the min and max value for this schedule.
+  # It doesn't evaluate design days only run-period conditions
+  #
+  # @author David Goldwasser, NREL.
+  # return [Hash] Hash has two keys, min and max.
+  def annual_min_max_value()
+
+    # gather profiles
+    profiles = []
+    defaultProfile = self.defaultDaySchedule
+    profiles << defaultProfile
+    rules = self.scheduleRules
+    rules.each do |rule|
+      profiles << rule.daySchedule
+    end
+
+    # test profiles
+    min = nil
+    max = nil
+    profiles.each do |profile|
+      profile.values.each do |value|
+        if min.nil?
+          min = value
+        else
+          if min > value then min = value end
+        end
+        if max.nil?
+          max = value
+        else
+          if max < value then max = value end
+        end
+      end
+    end
+    result = { 'min' => min, 'max' => max }
+
+    return result
+
+  end
 
 end
