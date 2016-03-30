@@ -24,6 +24,8 @@ class OpenStudio::Model::Model
   require_relative 'HVACSizing.CoilHeatingGas'
   require_relative 'HVACSizing.CoilHeatingWater'
   require_relative 'HVACSizing.CoilHeatingDXSingleSpeed'
+  require_relative 'HVACSizing.CoilHeatingWaterToAirHeatPumpEquationFit'
+  require_relative 'HVACSizing.CoilCoolingWaterToAirHeatPumpEquationFit'
   require_relative 'HVACSizing.CoilCoolingDXSingleSpeed'
   require_relative 'HVACSizing.CoilCoolingDXTwoSpeed'
   require_relative 'HVACSizing.CoilCoolingWater'
@@ -299,6 +301,11 @@ class OpenStudio::Model::Model
     name = object.name.get.upcase
     
     object_type = object.iddObject.type.valueDescription.gsub('OS:','')
+      
+    # Special logic for two coil types which are inconsistently
+    # uppercase in the sqlfile:
+    object_type = object_type.upcase if object_type == 'Coil:Cooling:WaterToAirHeatPump:EquationFit'
+    object_type = object_type.upcase if object_type == 'Coil:Heating:WaterToAirHeatPump:EquationFit'
       
     sql = self.sqlFile
     

@@ -546,6 +546,16 @@ class OpenStudio::Model::AirLoopHVAC
         else
           OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
         end
+        # CoilCoolingWaterToAirHeatPumpEquationFit
+      elsif sc.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized  
+        coil = sc.to_CoilCoolingWaterToAirHeatPumpEquationFit.get
+        if coil.ratedTotalCoolingCapacity.is_initialized
+          total_cooling_capacity_w += coil.ratedTotalCoolingCapacity.get
+        elsif coil.autosizedRatedTotalCoolingCapacity.is_initialized
+          total_cooling_capacity_w += coil.autosizedRatedTotalCoolingCapacity.get
+        else
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+        end
       elsif sc.to_AirLoopHVACUnitarySystem.is_initialized
         unitary = sc.to_AirLoopHVACUnitarySystem.get
         if unitary.coolingCoil.is_initialized
@@ -575,6 +585,16 @@ class OpenStudio::Model::AirLoopHVAC
             coil = clg_coil.to_CoilCoolingWater.get
             if coil.autosizedDesignCoilLoad.is_initialized # TODO Change to pull water coil nominal capacity instead of design load
               total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
+            else
+              OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+            end
+          # CoilCoolingWaterToAirHeatPumpEquationFit
+          elsif clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized  
+            coil = clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.get
+            if coil.ratedTotalCoolingCapacity.is_initialized
+              total_cooling_capacity_w += coil.ratedTotalCoolingCapacity.get
+            elsif coil.autosizedRatedTotalCoolingCapacity.is_initialized
+              total_cooling_capacity_w += coil.autosizedRatedTotalCoolingCapacity.get
             else
               OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
             end
@@ -614,7 +634,6 @@ class OpenStudio::Model::AirLoopHVAC
         end
       elsif sc.to_CoilCoolingDXMultiSpeed.is_initialized ||
           sc.to_CoilCoolingCooledBeam.is_initialized ||
-          sc.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized ||
           sc.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized ||
           sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized ||
           sc.to_AirLoopHVACUnitarySystem.is_initialized
