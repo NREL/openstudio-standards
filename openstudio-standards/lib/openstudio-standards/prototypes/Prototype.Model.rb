@@ -23,6 +23,14 @@ class OpenStudio::Model::Model
   # @example Create a Small Office, 90.1-2010, in ASHRAE Climate Zone 5A (Chicago)
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
   def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)
+    
+    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004. This is a quick check.
+    if building_type == "HighriseApartment"
+      if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004'
+        OpenStudio::logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{building_type} at vintage #{building_vintage} are not available, the measure is disabled for this specific type.")
+        return false
+      end
+    end
 
     lookup_building_type = self.get_lookup_name(building_type)
 
@@ -80,6 +88,14 @@ class OpenStudio::Model::Model
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
+        
+    # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
+    # AHU1 doesn't have economizer
+    if building_type == "Outpatient"
+      self.modify_OAcontroller(building_vintage)
+      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+      self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
+    end
 
     # Apply the HVAC efficiency standard
     self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
@@ -949,6 +965,7 @@ class OpenStudio::Model::Model
   # @todo Consistency - make prototype and reference vintages consistent
   # @todo Add 90.1-2013?
   def modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
+<<<<<<< HEAD
   # Select the terrain type, which
   # impacts wind speed, and in turn infiltration
   terrain = 'City'
@@ -997,7 +1014,42 @@ self.getSite.setTerrain(terrain)
       infiltration.setTemperatureTermCoefficient(0.0)
       infiltration.setVelocityTermCoefficient(0.224)
       infiltration.setVelocitySquaredTermCoefficient(0.0)
+=======
+    # Select the terrain type, which
+    # impacts wind speed, and in turn infiltration
+    terrain = 'City'
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      case building_type
+      when 'Warehouse'
+      terrain = 'Urban'
+      when 'SmallHotel'
+      terrain = 'Suburbs'
+      end
+>>>>>>> master
     end
+    # Set the terrain type
+    self.getSite.setTerrain(terrain)
+  
+      # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
+      return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013'
+  
+      # The pre-1980 and 1980-2004 buildings have this:
+      # 1.0000,                  !- Constant Term Coefficient
+      # 0.0000,                  !- Temperature Term Coefficient
+      # 0.0000,                  !- Velocity Term Coefficient
+      # 0.0000;                  !- Velocity Squared Term Coefficient
+      # The 90.1-2010 buildings have this:
+      # 0.0000,                  !- Constant Term Coefficient
+      # 0.0000,                  !- Temperature Term Coefficient
+      # 0.224,                   !- Velocity Term Coefficient
+      # 0.0000;                  !- Velocity Squared Term Coefficient
+      self.getSpaceInfiltrationDesignFlowRates.each do |infiltration|
+        infiltration.setConstantTermCoefficient(0.0)
+        infiltration.setTemperatureTermCoefficient(0.0)
+        infiltration.setVelocityTermCoefficient(0.224)
+        infiltration.setVelocitySquaredTermCoefficient(0.0)
+      end
   end
 
   # Sets the inside and outside convection algorithms for different vintages
@@ -1036,7 +1088,7 @@ self.getSite.setTerrain(terrain)
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       case building_type
-      when 'PrimarySchool', 'SecondarySchool'
+      when 'PrimarySchool', 'SecondarySchool', 'Outpatient'
         clg = 1.5
         htg = 1.5
       when 'LargeHotel'

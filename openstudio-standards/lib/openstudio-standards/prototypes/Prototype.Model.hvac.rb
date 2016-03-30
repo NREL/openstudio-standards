@@ -149,7 +149,8 @@ class OpenStudio::Model::Model
                       prototype_input['vav_operation_schedule'],
                       prototype_input['vav_oa_damper_schedule'],
                       hot_water_loop,
-                      return_plenum)
+                      return_plenum, 
+                      building_type)
       
       when 'DOAS'
       
