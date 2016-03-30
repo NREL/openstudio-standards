@@ -7720,11 +7720,7 @@
       "ventilation_secondary_space_type": "ER Waiting Room",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 1.333,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -7889,11 +7885,7 @@
       "ventilation_secondary_space_type": "Critical and Intensive Care",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 1.333,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -7948,11 +7940,7 @@
       "ventilation_secondary_space_type": "Critical and Intensive Care",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 5.0,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -10865,11 +10853,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Treatment / Examination",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.3",
-=======
       "ventilation_per_area": 0.3,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
@@ -11199,13 +11183,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -11259,13 +11238,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -11419,11 +11393,7 @@
       "lighting_standard": "ASHRAE 90.1-2004",
       "lighting_primary_space_type": "Corridor/Transition",
       "lighting_secondary_space_type": "For Hospital",
-<<<<<<< HEAD
-      "lighting_per_area": "1",
-=======
       "lighting_per_area": 1,
->>>>>>> refs/remotes/origin/data_center_economizer
       "lighting_per_person": null,
       "additional_lighting_per_area": null,
       "lighting_fraction_to_return_air": 0.0,
@@ -11433,13 +11403,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Corridors and utilities",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.05",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.05,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -11658,13 +11623,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hotels, Motels, Resorts, Dormitories",
       "ventilation_secondary_space_type": "Lobbies",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "15",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 15,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 15.01,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -11938,13 +11898,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Physical therapy",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "15",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 15,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -11998,13 +11953,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Operating rooms outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.5",
-      "ventilation_per_person": "30",
-=======
       "ventilation_per_area": 0.5,
       "ventilation_per_person": 30,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -12113,13 +12063,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.533",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.533,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -12228,13 +12173,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.533",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.533,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 10.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -12288,13 +12228,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Procedure Room Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.8",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.8,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -12403,11 +12338,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Clean Linen Storage",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.3",
-=======
       "ventilation_per_area": 0.3,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
@@ -12517,13 +12448,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -16649,11 +16575,7 @@
       "ventilation_secondary_space_type": "ER Waiting Room",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 1.333,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -16818,11 +16740,7 @@
       "ventilation_secondary_space_type": "Critical and Intensive Care",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 1.333,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -16877,11 +16795,7 @@
       "ventilation_secondary_space_type": "Critical and Intensive Care",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 5.0,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -17029,64 +16943,6 @@
     {
       "template": "90.1-2007",
       "building_type": "Hospital",
-<<<<<<< HEAD
-      "space_type": "Lab",
-      "rgb": "204_120_230",
-      "lighting_standard": "ASHRAE 90.1-2007",
-      "lighting_primary_space_type": "Laboratory",
-      "lighting_secondary_space_type": "General",
-      "lighting_per_area": "1.4",
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "Hospital BLDG_LIGHT_SCH",
-      "ventilation_standard": "ASHRAE 62.1-2004",
-      "ventilation_primary_space_type": "Educational Facilities",
-      "ventilation_secondary_space_type": "Science laboratories",
-      "ventilation_per_area": "0.18",
-      "ventilation_per_person": "10",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 5.0,
-      "occupancy_schedule": "Hospital BLDG_OCC_SCH",
-      "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
-      "infiltration_per_exterior_area": 0.0446,
-      "infiltration_per_exterior_wall_area": null,
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "Hospital INFIL_SCH_PNNL",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 4.0,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.5,
-      "electric_equipment_fraction_lost": 0.0,
-      "electric_equipment_schedule": "Hospital BLDG_EQUIP_SCH",
-      "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-      "cooling_setpoint_schedule": "Hospital CLGSETP_SCH",
-      "service_water_heating_peak_flow_rate": 2.0,
-      "service_water_heating_area": 2850.0,
-      "service_water_heating_peak_flow_per_area": "0.000701754386",
-      "service_water_heating_target_temperature": 49.0,
-      "service_water_heating_fraction_sensible": 0.2,
-      "service_water_heating_fraction_latent": 0.05,
-      "service_water_heating_schedule": "Hospital BLDG_SWH_SCH",
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "90.1-2007",
-      "building_type": "Hospital",
-=======
->>>>>>> refs/remotes/origin/data_center_economizer
       "space_type": "Lobby",
       "rgb": "31_162_169",
       "lighting_standard": "ASHRAE 90.1-2007",
@@ -17142,64 +16998,6 @@
     {
       "template": "90.1-2007",
       "building_type": "Hospital",
-<<<<<<< HEAD
-      "space_type": "NurseStn",
-      "rgb": "31_162_169",
-      "lighting_standard": "ASHRAE 90.1-2007",
-      "lighting_primary_space_type": "Hospital",
-      "lighting_secondary_space_type": "Nurse Station",
-      "lighting_per_area": "1",
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "Hospital BLDG_LIGHT_NURSEFLR234_SCH",
-      "ventilation_standard": "ASHRAE 62.1-2004",
-      "ventilation_primary_space_type": "Office Buildings",
-      "ventilation_secondary_space_type": "Office space",
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 1.333,
-      "occupancy_schedule": "Hospital BLDG_OCC_SCH",
-      "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
-      "infiltration_per_exterior_area": 0.0446,
-      "infiltration_per_exterior_wall_area": null,
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "Hospital INFIL_SCH_PNNL",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 2.0,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.5,
-      "electric_equipment_fraction_lost": 0.0,
-      "electric_equipment_schedule": "Hospital BLDG_EQUIP_SCH",
-      "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-      "cooling_setpoint_schedule": "Hospital CLGSETP_SCH",
-      "service_water_heating_peak_flow_rate": null,
-      "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
-      "service_water_heating_target_temperature": null,
-      "service_water_heating_fraction_sensible": null,
-      "service_water_heating_fraction_latent": null,
-      "service_water_heating_schedule": null,
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "90.1-2007",
-      "building_type": "Hospital",
-=======
->>>>>>> refs/remotes/origin/data_center_economizer
       "space_type": "OR",
       "rgb": "169_31_159",
       "lighting_standard": "ASHRAE 90.1-2007",
@@ -19800,11 +19598,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Treatment / Examination",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.3",
-=======
       "ventilation_per_area": 0.3,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
@@ -19859,11 +19653,7 @@
       "ventilation_standard": "ASHRAE 62.1-2004",
       "ventilation_primary_space_type": "General",
       "ventilation_secondary_space_type": "Storage rooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.12",
-=======
       "ventilation_per_area": 0.12,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
@@ -20138,13 +19928,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -20198,13 +19983,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -20335,8 +20115,6 @@
       "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
       "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
       "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_NO_SETBACK",
-<<<<<<< HEAD
-=======
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
       "service_water_heating_peak_flow_per_area": "",
@@ -20392,76 +20170,6 @@
       "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
       "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
       "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_NO_SETBACK",
->>>>>>> refs/remotes/origin/data_center_economizer
-      "service_water_heating_peak_flow_rate": null,
-      "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
-      "service_water_heating_target_temperature": null,
-      "service_water_heating_fraction_sensible": null,
-      "service_water_heating_fraction_latent": null,
-      "service_water_heating_schedule": null,
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "90.1-2007",
-      "building_type": "Outpatient",
-      "space_type": "Hall_infil",
-      "rgb": "169_31_31",
-      "lighting_standard": "ASHRAE 90.1-2007",
-<<<<<<< HEAD
-      "lighting_primary_space_type": "Corridor/Transition",
-      "lighting_secondary_space_type": "For Hospital",
-      "lighting_per_area": "1",
-=======
-      "lighting_primary_space_type": "Office-Enclosed",
-      "lighting_secondary_space_type": "General",
-      "lighting_per_area": 1.1,
->>>>>>> refs/remotes/origin/data_center_economizer
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "OutPatientHealthCare BLDG_LIGHT_CORRIDOR_SCH",
-      "ventilation_standard": "ASHRAE 62.1-2004",
-<<<<<<< HEAD
-      "ventilation_primary_space_type": "General",
-      "ventilation_secondary_space_type": "Corridors",
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "",
-=======
-      "ventilation_primary_space_type": "Office Buildings",
-      "ventilation_secondary_space_type": "Telephone/data entry",
-      "ventilation_per_area": 0.06,
-      "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 0.0,
-      "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
-      "occupancy_activity_schedule": "OutPatientHealthCare ACTIVITY_SCH",
-      "infiltration_per_exterior_area": 0.0446,
-      "infiltration_per_exterior_wall_area": null,
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "OutPatientHealthCare INFIL_SCH",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 0.4,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.5,
-      "electric_equipment_fraction_lost": 0.0,
-      "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
-      "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-      "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_NO_SETBACK",
-<<<<<<< HEAD
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
       "service_water_heating_peak_flow_per_area": "",
@@ -20485,7 +20193,7 @@
       "lighting_standard": "ASHRAE 90.1-2007",
       "lighting_primary_space_type": "Office-Enclosed",
       "lighting_secondary_space_type": "General",
-      "lighting_per_area": "1.1",
+      "lighting_per_area": 1.1,
       "lighting_per_person": null,
       "additional_lighting_per_area": null,
       "lighting_fraction_to_return_air": 0.0,
@@ -20495,8 +20203,8 @@
       "ventilation_standard": "ASHRAE 62.1-2004",
       "ventilation_primary_space_type": "Office Buildings",
       "ventilation_secondary_space_type": "Telephone/data entry",
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
+      "ventilation_per_area": 0.06,
+      "ventilation_per_person": 5,
       "ventilation_air_changes": "",
       "occupancy_per_area": 5.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -20517,8 +20225,6 @@
       "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
       "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
       "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_NO_SETBACK",
-=======
->>>>>>> refs/remotes/origin/data_center_economizer
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
       "service_water_heating_peak_flow_per_area": "",
@@ -20662,13 +20368,8 @@
       "ventilation_standard": "ASHRAE 62.1-2004",
       "ventilation_primary_space_type": "Office Buildings",
       "ventilation_secondary_space_type": "Main entry lobbies",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.06,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 15.01,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -20722,13 +20423,8 @@
       "ventilation_standard": "ASHRAE 62.1-2004",
       "ventilation_primary_space_type": "Office Buildings",
       "ventilation_secondary_space_type": "Main entry lobbies",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.06,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 15.01,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -21002,13 +20698,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Operating rooms outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.5",
-      "ventilation_per_person": "30",
-=======
       "ventilation_per_area": 0.5,
       "ventilation_per_person": 30,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -21117,13 +20808,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.533",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.533,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -21232,13 +20918,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.533",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.533,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 10.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -21292,13 +20973,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Procedure Room Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.8",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.8,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -21407,11 +21083,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Clean Linen Storage",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.3",
-=======
       "ventilation_per_area": 0.3,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
@@ -21521,13 +21193,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -25653,11 +25320,7 @@
       "ventilation_secondary_space_type": "ER Waiting Room",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 1.333,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -25822,11 +25485,7 @@
       "ventilation_secondary_space_type": "Critical and Intensive Care",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 1.333,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -25881,11 +25540,7 @@
       "ventilation_secondary_space_type": "Critical and Intensive Care",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 5.0,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -28798,11 +28453,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Treatment / Examination",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.3",
-=======
       "ventilation_per_area": 0.3,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
@@ -28857,11 +28508,7 @@
       "ventilation_standard": "ASHRAE 62.1-2007",
       "ventilation_primary_space_type": "General",
       "ventilation_secondary_space_type": "Storage rooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.12",
-=======
       "ventilation_per_area": 0.12,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
@@ -29136,13 +28783,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -29196,13 +28838,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -29388,64 +29025,6 @@
       "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
       "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
       "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_NO_SETBACK",
-<<<<<<< HEAD
-      "service_water_heating_peak_flow_rate": null,
-      "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
-      "service_water_heating_target_temperature": null,
-      "service_water_heating_fraction_sensible": null,
-      "service_water_heating_fraction_latent": null,
-      "service_water_heating_schedule": null,
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "90.1-2010",
-      "building_type": "Outpatient",
-      "space_type": "Hall_infil",
-      "rgb": "169_31_31",
-      "lighting_standard": "ASHRAE 90.1-2010",
-      "lighting_primary_space_type": "MidriseApartment",
-      "lighting_secondary_space_type": "Corridor",
-      "lighting_per_area": "0.792",
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "OutPatientHealthCare BLDG_LIGHT_CORRIDOR_SCH",
-      "ventilation_standard": "ASHRAE 62.1-2007",
-      "ventilation_primary_space_type": "General",
-      "ventilation_secondary_space_type": "Corridors",
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 0.0,
-      "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
-      "occupancy_activity_schedule": "OutPatientHealthCare ACTIVITY_SCH",
-      "infiltration_per_exterior_area": 0.0446,
-      "infiltration_per_exterior_wall_area": null,
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "OutPatientHealthCare INFIL_SCH",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 0.4,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.5,
-      "electric_equipment_fraction_lost": 0.0,
-      "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
-      "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-      "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_NO_SETBACK",
-=======
->>>>>>> refs/remotes/origin/data_center_economizer
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
       "service_water_heating_peak_flow_per_area": "",
@@ -29644,13 +29223,8 @@
       "ventilation_standard": "ASHRAE 62.1-2007",
       "ventilation_primary_space_type": "Office Buildings",
       "ventilation_secondary_space_type": "Main entry lobbies",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.06,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 15.01,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -29704,13 +29278,8 @@
       "ventilation_standard": "ASHRAE 62.1-2007",
       "ventilation_primary_space_type": "Office Buildings",
       "ventilation_secondary_space_type": "Main entry lobbies",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.06,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 15.01,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -29984,13 +29553,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Operating rooms outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.5",
-      "ventilation_per_person": "30",
-=======
       "ventilation_per_area": 0.5,
       "ventilation_per_person": 30,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -30099,13 +29663,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.533",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.533,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -30214,13 +29773,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.533",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.533,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 10.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -30274,13 +29828,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Procedure Room Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.8",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.8,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -30389,11 +29938,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Clean Linen Storage",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.3",
-=======
       "ventilation_per_area": 0.3,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
@@ -30503,13 +30048,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -34635,11 +34175,7 @@
       "ventilation_secondary_space_type": "ER Waiting Room",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 1.333,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -34804,11 +34340,7 @@
       "ventilation_secondary_space_type": "Critical and Intensive Care",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 1.333,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -34863,11 +34395,7 @@
       "ventilation_secondary_space_type": "Critical and Intensive Care",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "2",
-=======
       "ventilation_air_changes": 2,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 5.0,
       "occupancy_schedule": "Hospital BLDG_OCC_EXTD_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
@@ -37679,7 +37207,7 @@
       "infiltration_per_exterior_area": 0.0595,
       "infiltration_per_exterior_wall_area": null,
       "infiltration_air_changes": null,
-      "infiltration_schedule": "OfficeMedium INFIL_SCH_PNNL",
+      "infiltration_schedule": "OfficeLarge INFIL_SCH_PNNL",
       "gas_equipment_per_area": null,
       "gas_equipment_fraction_latent": null,
       "gas_equipment_fraction_radiant": null,
@@ -37835,11 +37363,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Treatment / Examination",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.3",
-=======
       "ventilation_per_area": 0.3,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
@@ -37894,11 +37418,7 @@
       "ventilation_standard": "ASHRAE 62.1-2007",
       "ventilation_primary_space_type": "General",
       "ventilation_secondary_space_type": "Storage rooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.12",
-=======
       "ventilation_per_area": 0.12,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
@@ -38173,13 +37693,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -38233,13 +37748,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -38370,64 +37880,6 @@
       "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
       "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
       "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM",
-<<<<<<< HEAD
-      "service_water_heating_peak_flow_rate": null,
-      "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
-      "service_water_heating_target_temperature": null,
-      "service_water_heating_fraction_sensible": null,
-      "service_water_heating_fraction_latent": null,
-      "service_water_heating_schedule": null,
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "Outpatient",
-      "space_type": "Hall_infil",
-      "rgb": "169_31_31",
-      "lighting_standard": "ASHRAE 90.1-2010",
-      "lighting_primary_space_type": "MidriseApartment",
-      "lighting_secondary_space_type": "Corridor",
-      "lighting_per_area": "0.792",
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "OutPatientHealthCare BLDG_LIGHT_CORRIDOR_SCH",
-      "ventilation_standard": "ASHRAE 62.1-2007",
-      "ventilation_primary_space_type": "General",
-      "ventilation_secondary_space_type": "Corridors",
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 0.0,
-      "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
-      "occupancy_activity_schedule": "OutPatientHealthCare ACTIVITY_SCH",
-      "infiltration_per_exterior_area": 0.0446,
-      "infiltration_per_exterior_wall_area": null,
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "OutPatientHealthCare INFIL_SCH",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 0.4,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.5,
-      "electric_equipment_fraction_lost": 0.0,
-      "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
-      "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-      "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM",
-=======
->>>>>>> refs/remotes/origin/data_center_economizer
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
       "service_water_heating_peak_flow_per_area": "",
@@ -38459,64 +37911,6 @@
       "lighting_fraction_visible": 0.2,
       "lighting_schedule": "OutPatientHealthCare BLDG_LIGHT_CORRIDOR_SCH",
       "ventilation_standard": "ASHRAE 62.1-2007",
-<<<<<<< HEAD
-      "ventilation_primary_space_type": "Office Buildings",
-      "ventilation_secondary_space_type": "Telephone/data entry",
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 5.0,
-      "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
-      "occupancy_activity_schedule": "OutPatientHealthCare ACTIVITY_SCH",
-      "infiltration_per_exterior_area": 0.0446,
-      "infiltration_per_exterior_wall_area": null,
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "OutPatientHealthCare INFIL_SCH",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 1.1,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.5,
-      "electric_equipment_fraction_lost": 0.0,
-      "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
-      "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-      "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM",
-      "service_water_heating_peak_flow_rate": null,
-      "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
-      "service_water_heating_target_temperature": null,
-      "service_water_heating_fraction_sensible": null,
-      "service_water_heating_fraction_latent": null,
-      "service_water_heating_schedule": null,
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "Outpatient",
-      "space_type": "Janitor",
-      "rgb": "120_149_230",
-      "lighting_standard": "ASHRAE 90.1-2013",
-      "lighting_primary_space_type": "Storage",
-      "lighting_secondary_space_type": "General",
-      "lighting_per_area": "0.63",
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "OutPatientHealthCare BLDG_LIGHT_STORAGE_SCH_20102013",
-      "ventilation_standard": "ASHRAE 62.1-2004",
-=======
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_primary_space_type": "General",
       "ventilation_secondary_space_type": "Corridors",
       "ventilation_per_area": 0.06,
@@ -38534,74 +37928,13 @@
       "gas_equipment_fraction_radiant": null,
       "gas_equipment_fraction_lost": null,
       "gas_equipment_schedule": null,
-<<<<<<< HEAD
-      "electric_equipment_per_area": 0.1,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.3,
-      "electric_equipment_fraction_lost": 0.7,
-      "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
-      "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-      "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM",
-      "service_water_heating_peak_flow_rate": null,
-      "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
-      "service_water_heating_target_temperature": null,
-      "service_water_heating_fraction_sensible": null,
-      "service_water_heating_fraction_latent": null,
-      "service_water_heating_schedule": null,
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "Outpatient",
-      "space_type": "Lobby",
-      "rgb": "230_157_120",
-      "lighting_standard": "ASHRAE 90.1-2013",
-      "lighting_primary_space_type": "Lobby",
-      "lighting_secondary_space_type": "General",
-      "lighting_per_area": "0.9",
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "OutPatientHealthCare BLDG_LIGHT_SCH",
-      "ventilation_standard": "ASHRAE 62.1-2007",
-      "ventilation_primary_space_type": "Office Buildings",
-      "ventilation_secondary_space_type": "Main entry lobbies",
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 10.0,
-      "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
-      "occupancy_activity_schedule": "OutPatientHealthCare ACTIVITY_SCH",
-      "infiltration_per_exterior_area": 0.0446,
-      "infiltration_per_exterior_wall_area": null,
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "OutPatientHealthCare INFIL_SCH",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 1.1,
-=======
       "electric_equipment_per_area": 0.4,
->>>>>>> refs/remotes/origin/data_center_economizer
       "electric_equipment_fraction_latent": 0.0,
       "electric_equipment_fraction_radiant": 0.5,
       "electric_equipment_fraction_lost": 0.0,
       "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
       "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
       "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM",
-<<<<<<< HEAD
-=======
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
       "service_water_heating_peak_flow_per_area": "",
@@ -38675,6 +38008,61 @@
     {
       "template": "90.1-2013",
       "building_type": "Outpatient",
+      "space_type": "Janitor",
+      "rgb": "120_149_230",
+      "lighting_standard": "ASHRAE 90.1-2010",
+      "lighting_primary_space_type": "Storage",
+      "lighting_secondary_space_type": "General",
+      "lighting_per_area": 0.63,
+      "lighting_per_person": null,
+      "additional_lighting_per_area": null,
+      "lighting_fraction_to_return_air": 0.0,
+      "lighting_fraction_radiant": 0.7,
+      "lighting_fraction_visible": 0.2,
+      "lighting_schedule": "OutPatientHealthCare BLDG_LIGHT_STORAGE_SCH_20102013",
+      "ventilation_standard": "ASHRAE 62.1-2004",
+      "ventilation_primary_space_type": "General",
+      "ventilation_secondary_space_type": "Storage rooms",
+      "ventilation_per_area": 0.12,
+      "ventilation_per_person": "",
+      "ventilation_air_changes": "",
+      "occupancy_per_area": 0.0,
+      "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
+      "occupancy_activity_schedule": "OutPatientHealthCare ACTIVITY_SCH",
+      "infiltration_per_exterior_area": 0.0446,
+      "infiltration_per_exterior_wall_area": null,
+      "infiltration_air_changes": null,
+      "infiltration_schedule": "OutPatientHealthCare INFIL_SCH",
+      "gas_equipment_per_area": null,
+      "gas_equipment_fraction_latent": null,
+      "gas_equipment_fraction_radiant": null,
+      "gas_equipment_fraction_lost": null,
+      "gas_equipment_schedule": null,
+      "electric_equipment_per_area": 0.1,
+      "electric_equipment_fraction_latent": 0.0,
+      "electric_equipment_fraction_radiant": 0.3,
+      "electric_equipment_fraction_lost": 0.7,
+      "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
+      "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
+      "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_NO_SETBACK",
+      "service_water_heating_peak_flow_rate": null,
+      "service_water_heating_area": null,
+      "service_water_heating_peak_flow_per_area": "",
+      "service_water_heating_target_temperature": null,
+      "service_water_heating_fraction_sensible": null,
+      "service_water_heating_fraction_latent": null,
+      "service_water_heating_schedule": null,
+      "exhaust_fan_efficiency": null,
+      "exhaust_fan_power": null,
+      "exhaust_fan_pressure_rise": null,
+      "exhaust_fan_maximum_flow_rate": null,
+      "exhaust_schedule": null,
+      "balanced_exhaust_fraction_schedule": null,
+      "is_residential": null
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "Outpatient",
       "space_type": "Lobby",
       "rgb": "230_157_120",
       "lighting_standard": "ASHRAE 90.1-2013",
@@ -38712,7 +38100,6 @@
       "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
       "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
       "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM",
->>>>>>> refs/remotes/origin/data_center_economizer
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
       "service_water_heating_peak_flow_per_area": "",
@@ -38746,13 +38133,8 @@
       "ventilation_standard": "ASHRAE 62.1-2007",
       "ventilation_primary_space_type": "Office Buildings",
       "ventilation_secondary_space_type": "Main entry lobbies",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.06,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 15.01,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -38806,13 +38188,8 @@
       "ventilation_standard": "ASHRAE 62.1-2007",
       "ventilation_primary_space_type": "Office Buildings",
       "ventilation_secondary_space_type": "Main entry lobbies",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.06",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.06,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 15.01,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -39086,13 +38463,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Operating rooms outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.5",
-      "ventilation_per_person": "30",
-=======
       "ventilation_per_area": 0.5,
       "ventilation_per_person": 30,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -39201,13 +38573,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.533",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.533,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -39316,13 +38683,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.533",
-      "ventilation_per_person": "5",
-=======
       "ventilation_per_area": 0.533,
       "ventilation_per_person": 5,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 10.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -39376,13 +38738,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Procedure Room Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.8",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.8,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -39491,11 +38848,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Clean Linen Storage",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.3",
-=======
       "ventilation_per_area": 0.3,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 20.02,
@@ -39605,13 +38958,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "OutPatientHealthCare BLDG_OCC_SCH",
@@ -39650,13 +38998,12 @@
     {
       "template": "90.1-2013",
       "building_type": "Outpatient",
-<<<<<<< HEAD
       "space_type": "Undeveloped",
       "rgb": "120_149_230",
-      "lighting_standard": "ASHRAE 90.1-2013",
+      "lighting_standard": "ASHRAE 90.1-2010",
       "lighting_primary_space_type": "Storage",
       "lighting_secondary_space_type": "General",
-      "lighting_per_area": "0.63",
+      "lighting_per_area": 0.63,
       "lighting_per_person": null,
       "additional_lighting_per_area": null,
       "lighting_fraction_to_return_air": 0.0,
@@ -39666,7 +39013,7 @@
       "ventilation_standard": "ASHRAE 62.1-2004",
       "ventilation_primary_space_type": "General",
       "ventilation_secondary_space_type": "Storage rooms",
-      "ventilation_per_area": "0.12",
+      "ventilation_per_area": 0.12,
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
@@ -39687,7 +39034,7 @@
       "electric_equipment_fraction_lost": 0.7,
       "electric_equipment_schedule": "OutPatientHealthCare BLDG_EQUIP_SCH_BASE",
       "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-      "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM",
+      "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_NO_SETBACK",
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
       "service_water_heating_peak_flow_per_area": "",
@@ -39706,8 +39053,6 @@
     {
       "template": "90.1-2013",
       "building_type": "Outpatient",
-=======
->>>>>>> refs/remotes/origin/data_center_economizer
       "space_type": "Xray",
       "rgb": "169_31_159",
       "lighting_standard": "ASHRAE 90.1-2013",
@@ -46268,11 +45613,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Nursery, Exam",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.45",
-=======
       "ventilation_per_area": 0.45,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
@@ -46602,13 +45943,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -46662,13 +45998,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -46785,64 +46116,6 @@
       "occupancy_activity_schedule": "Outpatient Activity",
       "infiltration_per_exterior_area": null,
       "infiltration_per_exterior_wall_area": null,
-<<<<<<< HEAD
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "Outpatient Infil",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 0.4,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.5,
-      "electric_equipment_fraction_lost": 0.0,
-      "electric_equipment_schedule": "Outpatient Bldg Equip",
-      "heating_setpoint_schedule": "Outpatient HtgSetp",
-      "cooling_setpoint_schedule": "Outpatient ClgSetp",
-      "service_water_heating_peak_flow_rate": null,
-      "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
-      "service_water_heating_target_temperature": null,
-      "service_water_heating_fraction_sensible": null,
-      "service_water_heating_fraction_latent": null,
-      "service_water_heating_schedule": null,
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "DOE Ref 1980-2004",
-      "building_type": "Outpatient",
-      "space_type": "Hall_infil",
-      "rgb": "169_31_31",
-      "lighting_standard": "DOE Ref 1980-2004",
-      "lighting_primary_space_type": "Outpatient",
-      "lighting_secondary_space_type": "Hall",
-      "lighting_per_area": 0.8000000000000002,
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "Outpatient Bldg Light",
-      "ventilation_standard": "ASHRAE 62.1-1999",
-      "ventilation_primary_space_type": "Public Spaces",
-      "ventilation_secondary_space_type": "Corridors and utilities",
-      "ventilation_per_area": "0.05",
-      "ventilation_per_person": "0",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 0.0,
-      "occupancy_schedule": "Outpatient Bldg Occ",
-      "occupancy_activity_schedule": "Outpatient Activity",
-      "infiltration_per_exterior_area": null,
-      "infiltration_per_exterior_wall_area": 0.2232,
-=======
->>>>>>> refs/remotes/origin/data_center_economizer
       "infiltration_air_changes": null,
       "infiltration_schedule": "Outpatient Infil",
       "gas_equipment_per_area": null,
@@ -46943,21 +46216,12 @@
       "lighting_fraction_visible": 0.2,
       "lighting_schedule": "Outpatient Bldg Light",
       "ventilation_standard": "ASHRAE 62.1-1999",
-<<<<<<< HEAD
-      "ventilation_primary_space_type": "Public Spaces",
-      "ventilation_secondary_space_type": "Public restrooms",
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 0.0,
-=======
       "ventilation_primary_space_type": "Offices",
       "ventilation_secondary_space_type": "Telecommunication centers and data entry areas",
       "ventilation_per_area": 0,
       "ventilation_per_person": 20,
       "ventilation_air_changes": "",
       "occupancy_per_area": 4.65,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_schedule": "Outpatient Bldg Occ",
       "occupancy_activity_schedule": "Outpatient Activity",
       "infiltration_per_exterior_area": null,
@@ -47119,13 +46383,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hotels, Motels, Resorts, Dormitories",
       "ventilation_secondary_space_type": "Lobbies",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "15",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 15,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 13.93,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -47454,13 +46713,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Patient rooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "25",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 25,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 18.58,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -47569,13 +46823,8 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.333",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.333,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 18.58,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -47684,13 +46933,8 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.333",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.333,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 9.29,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -47744,13 +46988,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Patient rooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "25",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 25,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 18.58,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -47859,13 +47098,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Soil work Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.556",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.556,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 18.58,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -47919,13 +47153,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -47979,13 +47208,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -48039,13 +47263,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -54259,11 +53478,7 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Health Care",
       "ventilation_secondary_space_type": "Nursery, Exam",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.45",
-=======
       "ventilation_per_area": 0.45,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_per_person": "",
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
@@ -54593,13 +53808,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -54653,13 +53863,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -54776,64 +53981,6 @@
       "occupancy_activity_schedule": "Outpatient Activity",
       "infiltration_per_exterior_area": null,
       "infiltration_per_exterior_wall_area": null,
-<<<<<<< HEAD
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "Outpatient Infil",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 0.4,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.5,
-      "electric_equipment_fraction_lost": 0.0,
-      "electric_equipment_schedule": "Outpatient Bldg Equip",
-      "heating_setpoint_schedule": "Outpatient HtgSetp",
-      "cooling_setpoint_schedule": "Outpatient ClgSetp",
-      "service_water_heating_peak_flow_rate": null,
-      "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
-      "service_water_heating_target_temperature": null,
-      "service_water_heating_fraction_sensible": null,
-      "service_water_heating_fraction_latent": null,
-      "service_water_heating_schedule": null,
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "DOE Ref Pre-1980",
-      "building_type": "Outpatient",
-      "space_type": "Hall_infil",
-      "rgb": "169_31_31",
-      "lighting_standard": "DOE Ref Pre-1980",
-      "lighting_primary_space_type": "Outpatient",
-      "lighting_secondary_space_type": "Hall",
-      "lighting_per_area": "0.8",
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "Outpatient Bldg Light",
-      "ventilation_standard": "ASHRAE 62.1-1999",
-      "ventilation_primary_space_type": "Public Spaces",
-      "ventilation_secondary_space_type": "Corridors and utilities",
-      "ventilation_per_area": "0.05",
-      "ventilation_per_person": "0",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 0.0,
-      "occupancy_schedule": "Outpatient Bldg Occ",
-      "occupancy_activity_schedule": "Outpatient Activity",
-      "infiltration_per_exterior_area": null,
-      "infiltration_per_exterior_wall_area": 0.2232,
-=======
->>>>>>> refs/remotes/origin/data_center_economizer
       "infiltration_air_changes": null,
       "infiltration_schedule": "Outpatient Infil",
       "gas_equipment_per_area": null,
@@ -54921,68 +54068,8 @@
     {
       "template": "DOE Ref Pre-1980",
       "building_type": "Outpatient",
-<<<<<<< HEAD
-      "space_type": "Janitor",
-      "rgb": "120_149_230",
-      "lighting_standard": "DOE Ref Pre-1980",
-      "lighting_primary_space_type": "Outpatient",
-      "lighting_secondary_space_type": "Janitor",
-      "lighting_per_area": "1",
-      "lighting_per_person": null,
-      "additional_lighting_per_area": null,
-      "lighting_fraction_to_return_air": 0.0,
-      "lighting_fraction_radiant": 0.7,
-      "lighting_fraction_visible": 0.2,
-      "lighting_schedule": "Outpatient Bldg Light",
-      "ventilation_standard": "ASHRAE 62.1-1999",
-      "ventilation_primary_space_type": "Public Spaces",
-      "ventilation_secondary_space_type": "Public restrooms",
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-      "ventilation_air_changes": "",
-      "occupancy_per_area": 0.0,
-      "occupancy_schedule": "Outpatient Bldg Occ",
-      "occupancy_activity_schedule": "Outpatient Activity",
-      "infiltration_per_exterior_area": null,
-      "infiltration_per_exterior_wall_area": 0.2232,
-      "infiltration_air_changes": null,
-      "infiltration_schedule": "Outpatient Infil",
-      "gas_equipment_per_area": null,
-      "gas_equipment_fraction_latent": null,
-      "gas_equipment_fraction_radiant": null,
-      "gas_equipment_fraction_lost": null,
-      "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 0.0,
-      "electric_equipment_fraction_latent": 0.0,
-      "electric_equipment_fraction_radiant": 0.3,
-      "electric_equipment_fraction_lost": 0.7,
-      "electric_equipment_schedule": "Outpatient Bldg Equip",
-      "heating_setpoint_schedule": "Outpatient HtgSetp",
-      "cooling_setpoint_schedule": "Outpatient ClgSetp",
-      "service_water_heating_peak_flow_rate": null,
-      "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
-      "service_water_heating_target_temperature": null,
-      "service_water_heating_fraction_sensible": null,
-      "service_water_heating_fraction_latent": null,
-      "service_water_heating_schedule": null,
-      "exhaust_fan_efficiency": null,
-      "exhaust_fan_power": null,
-      "exhaust_fan_pressure_rise": null,
-      "exhaust_fan_maximum_flow_rate": null,
-      "exhaust_schedule": null,
-      "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
-    },
-    {
-      "template": "DOE Ref Pre-1980",
-      "building_type": "Outpatient",
-      "space_type": "Lobby",
-      "rgb": "230_157_120",
-=======
       "space_type": "IT_Room",
       "rgb": "41_31_169",
->>>>>>> refs/remotes/origin/data_center_economizer
       "lighting_standard": "DOE Ref Pre-1980",
       "lighting_primary_space_type": "Outpatient",
       "lighting_secondary_space_type": "IT_Room",
@@ -55049,17 +54136,10 @@
       "lighting_fraction_visible": 0.2,
       "lighting_schedule": "Outpatient Bldg Light",
       "ventilation_standard": "ASHRAE 62.1-1999",
-<<<<<<< HEAD
-      "ventilation_primary_space_type": "Hotels, Motels, Resorts, Dormitories",
-      "ventilation_secondary_space_type": "Lobbies",
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "15",
-=======
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -55498,13 +54578,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Patient rooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "25",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 25,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 18.58,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -55613,13 +54688,8 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.333",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.333,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 18.58,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -55728,13 +54798,8 @@
       "ventilation_standard": "GGHC v2.2",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "PACU/Pre-Op Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.333",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.333,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 9.29,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -55788,13 +54853,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Patient rooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "25",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 25,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 18.58,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -55903,13 +54963,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Soil work Outpatient",
-<<<<<<< HEAD
-      "ventilation_per_area": "0.556",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0.556,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 18.58,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -55963,13 +55018,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -56023,13 +55073,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -56083,13 +55128,8 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Public Spaces",
       "ventilation_secondary_space_type": "Public restrooms",
-<<<<<<< HEAD
-      "ventilation_per_area": "0",
-      "ventilation_per_person": "0",
-=======
       "ventilation_per_area": 0,
       "ventilation_per_person": 0,
->>>>>>> refs/remotes/origin/data_center_economizer
       "ventilation_air_changes": "",
       "occupancy_per_area": 0.0,
       "occupancy_schedule": "Outpatient Bldg Occ",
@@ -59883,8 +58923,8 @@
       "ventilation_standard": "NECB 2011",
       "ventilation_primary_space_type": "Hospital",
       "ventilation_secondary_space_type": "WholeBuilding",
-      "ventilation_per_area": 0.0,
-      "ventilation_per_person": 0.0,
+      "ventilation_per_area": "",
+      "ventilation_per_person": "",
       "ventilation_air_changes": 0.002287331,
       "occupancy_per_area": 4.65,
       "occupancy_schedule": "NECB-H-Occupancy",
@@ -59907,7 +58947,7 @@
       "cooling_setpoint_schedule": "NECB-H-Thermostat Setpoint-Cooling",
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": null,
+      "service_water_heating_peak_flow_per_area": "",
       "service_water_heating_target_temperature": null,
       "service_water_heating_fraction_sensible": null,
       "service_water_heating_fraction_latent": null,
@@ -59938,8 +58978,8 @@
       "ventilation_standard": "NECB 2011",
       "ventilation_primary_space_type": "Hospital",
       "ventilation_secondary_space_type": "WholeBuilding",
-      "ventilation_per_area": "",
-      "ventilation_per_person": "",
+      "ventilation_per_area": 0.0,
+      "ventilation_per_person": 0.0,
       "ventilation_air_changes": 0.002287331,
       "occupancy_per_area": 4.65,
       "occupancy_schedule": "NECB-H-Occupancy",
@@ -59962,7 +59002,7 @@
       "cooling_setpoint_schedule": "NECB-H-Thermostat Setpoint-Cooling",
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
+      "service_water_heating_peak_flow_per_area": null,
       "service_water_heating_target_temperature": null,
       "service_water_heating_fraction_sensible": null,
       "service_water_heating_fraction_latent": null,
@@ -60378,13 +59418,9 @@
       "ventilation_standard": "NECB 2011",
       "ventilation_primary_space_type": "Office",
       "ventilation_secondary_space_type": "WholeBuilding",
-      "ventilation_per_area": "",
-      "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "0.000399422",
-=======
+      "ventilation_per_area": 0.0,
+      "ventilation_per_person": 0.0,
       "ventilation_air_changes": 0.000399422,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 3.72,
       "occupancy_schedule": "NECB-A-Occupancy",
       "occupancy_activity_schedule": "NECB-Activity",
@@ -60406,7 +59442,7 @@
       "cooling_setpoint_schedule": "NECB-A-Thermostat Setpoint-Cooling",
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
+      "service_water_heating_peak_flow_per_area": null,
       "service_water_heating_target_temperature": null,
       "service_water_heating_fraction_sensible": null,
       "service_water_heating_fraction_latent": null,
@@ -60437,8 +59473,8 @@
       "ventilation_standard": "NECB 2011",
       "ventilation_primary_space_type": "Office",
       "ventilation_secondary_space_type": "WholeBuilding",
-      "ventilation_per_area": 0.0,
-      "ventilation_per_person": 0.0,
+      "ventilation_per_area": "",
+      "ventilation_per_person": "",
       "ventilation_air_changes": 0.000399422,
       "occupancy_per_area": 3.72,
       "occupancy_schedule": "NECB-A-Occupancy",
@@ -60461,7 +59497,7 @@
       "cooling_setpoint_schedule": "NECB-A-Thermostat Setpoint-Cooling",
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": null,
+      "service_water_heating_peak_flow_per_area": "",
       "service_water_heating_target_temperature": null,
       "service_water_heating_fraction_sensible": null,
       "service_water_heating_fraction_latent": null,
@@ -60879,11 +59915,7 @@
       "ventilation_secondary_space_type": "WholeBuilding",
       "ventilation_per_area": "",
       "ventilation_per_person": "",
-<<<<<<< HEAD
-      "ventilation_air_changes": "0.000423033",
-=======
       "ventilation_air_changes": 0.000423033,
->>>>>>> refs/remotes/origin/data_center_economizer
       "occupancy_per_area": 3.1,
       "occupancy_schedule": "NECB-C-Occupancy",
       "occupancy_activity_schedule": "NECB-Activity",

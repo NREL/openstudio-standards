@@ -58604,15 +58604,9 @@
       "climate_zone_set": "ClimateZone 2",
       "operation_type": null,
       "intended_surface_type": "ExteriorRoof",
-<<<<<<< HEAD
-      "standards_construction_type": null,
-      "building_category": "Residential",
-      "construction": null,
-=======
       "standards_construction_type": "IEAD",
       "building_category": "Residential",
       "construction": "Typical IEAD Roof",
->>>>>>> refs/remotes/origin/data_center_economizer
       "minimum_percent_of_surface": null,
       "maximum_percent_of_surface": null,
       "assembly_maximum_u_value": 0.03,
@@ -58678,11 +58672,7 @@
       "climate_zone_set": "ClimateZone 2",
       "operation_type": null,
       "intended_surface_type": "ExteriorFloor",
-<<<<<<< HEAD
-      "standards_construction_type": null,
-=======
       "standards_construction_type": "Mass",
->>>>>>> refs/remotes/origin/data_center_economizer
       "building_category": "Residential",
       "construction": null,
       "minimum_percent_of_surface": null,
@@ -58699,11 +58689,7 @@
       "climate_zone_set": "ClimateZone 2",
       "operation_type": null,
       "intended_surface_type": "ExteriorWindow",
-<<<<<<< HEAD
-      "standards_construction_type": null,
-=======
       "standards_construction_type": "Metal framing (all other)",
->>>>>>> refs/remotes/origin/data_center_economizer
       "building_category": "Residential",
       "construction": null,
       "minimum_percent_of_surface": null,
@@ -58719,10 +58705,6 @@
       "template": "ICC IECC 2015",
       "climate_zone_set": "ClimateZone 2",
       "operation_type": null,
-<<<<<<< HEAD
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": null,
-=======
       "intended_surface_type": "ExteriorDoor",
       "standards_construction_type": "Swinging",
       "building_category": "Residential",
@@ -58742,7 +58724,6 @@
       "operation_type": null,
       "intended_surface_type": "Skylight",
       "standards_construction_type": "Glass with Curb",
->>>>>>> refs/remotes/origin/data_center_economizer
       "building_category": "Residential",
       "construction": null,
       "minimum_percent_of_surface": null,
@@ -60405,8 +60386,6 @@
     },
     {
       "template": "DOE Ref 1980-2004",
-<<<<<<< HEAD
-=======
       "climate_zone_set": "ClimateZone 2A",
       "operation_type": null,
       "intended_surface_type": "ExteriorDoor",
@@ -60441,7 +60420,6 @@
     },
     {
       "template": "DOE Ref 1980-2004",
->>>>>>> refs/remotes/origin/data_center_economizer
       "climate_zone_set": "ClimateZone 3A",
       "operation_type": null,
       "intended_surface_type": "ExteriorDoor",
@@ -60680,8 +60658,6 @@
     },
     {
       "template": "DOE Ref Pre-1980",
-<<<<<<< HEAD
-=======
       "climate_zone_set": "ClimateZone 2A",
       "operation_type": null,
       "intended_surface_type": "ExteriorDoor",
@@ -60716,7 +60692,6 @@
     },
     {
       "template": "DOE Ref Pre-1980",
->>>>>>> refs/remotes/origin/data_center_economizer
       "climate_zone_set": "ClimateZone 3A",
       "operation_type": null,
       "intended_surface_type": "ExteriorDoor",
