@@ -227,7 +227,7 @@ def export_spreadsheet_to_json
 
     # Get all data
     all_data = worksheet.extract_data
-    puts 'test1'
+
     # Get the header row data
     header_data = all_data[header_row]
 
