@@ -139,6 +139,8 @@ class OpenStudio::Model::Model
         hot_water_loop = nil
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
+        elsif building_type == 'MediumOffice'
+          hot_water_loop = nil
         else
           hot_water_loop = self.add_hw_loop('NaturalGas')
         end      
@@ -266,6 +268,13 @@ class OpenStudio::Model::Model
                             system['flow_fraction_schedule_name'],
                             system['balanced_exhaust_fraction_schedule_name'],
                             thermal_zones)
+
+      when 'Zone Ventilation'
+      
+        self.add_zone_ventilation(system['availability_sch_name'],
+                                  system['flow_rate'],
+                                  system['ventilation_type'],
+                                  thermal_zones)
 
       when 'Refrigeration'
       

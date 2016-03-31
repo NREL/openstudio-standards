@@ -4158,6 +4158,70 @@ class OpenStudio::Model::Model
 
   end
 
+  # Adds a zone ventilation design flow rate to each zone.
+  #
+  # @param availability_sch_name [String] the name of the fan availability schedule
+  # @param flow_rate [Double] the ventilation design flow rate in m^3/s for Exhaust/Natural or
+  # Flow Rate per Zone Floor Area in m^3/s-m^2 for Intake
+  # @param ventilation_type [String] the zone ventilation type either Exhaust, Natural, or Intake
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] an array of thermal zones
+  # @return [Array<OpenStudio::Model::ZoneVentilationDesignFlowRate>] an array of zone ventilation objects created
+  def add_zone_ventilation(availability_sch_name,
+                           flow_rate,
+                           ventilation_type,
+                           thermal_zones)
+
+    # Make an exhaust fan for each zone
+    zone_ventilations = []
+    thermal_zones.each do |zone|
+      ventilation = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(self)
+      ventilation.setName("#{zone.name} Ventilation")
+      ventilation.setSchedule(self.add_schedule(availability_sch_name))
+      ventilation.setDesignFlowRate(flow_rate)
+      ventilation.setVentilationType(ventilation_type)
+
+      ventilation.setAirChangesperHour(0)
+      ventilation.setTemperatureTermCoefficient(0)
+
+      if ventilation_type == 'Exhaust'
+        ventilation.setDesignFlowRateCalculationMethod("Flow/Zone")
+        ventilation.setFanPressureRise(31.1361206455786)
+        ventilation.setFanTotalEfficiency(0.51)
+        ventilation.setConstantTermCoefficient(1)
+        ventilation.setVelocityTermCoefficient(0)
+        ventilation.setMinimumIndoorTemperature(29.4444452244559)
+        ventilation.setMaximumIndoorTemperature(100)
+        ventilation.setDeltaTemperature(-100)
+      elsif ventilation_type == 'Natural'
+        ventilation.setDesignFlowRateCalculationMethod("Flow/Zone")
+        ventilation.setFanPressureRise(0)
+        ventilation.setFanTotalEfficiency(1)
+        ventilation.setConstantTermCoefficient(0)
+        ventilation.setVelocityTermCoefficient(0.224)
+        ventilation.setMinimumIndoorTemperature(-73.3333352760033)
+        ventilation.setMaximumIndoorTemperature(29.4444452244559)
+        ventilation.setDeltaTemperature(-100)
+      elsif ventilation_type == 'Intake'
+        ventilation.setDesignFlowRateCalculationMethod("Flow/Area")
+        ventilation.setFanPressureRise(49.8)
+        ventilation.setFanTotalEfficiency(0.53625)
+        ventilation.setConstantTermCoefficient(1)
+        ventilation.setVelocityTermCoefficient(0)
+        ventilation.setMinimumIndoorTemperature(7.5)
+        ventilation.setMaximumIndoorTemperature(35)
+        ventilation.setDeltaTemperature(-27.5)
+        ventilation.setMinimumOutdoorTemperature(-30.0)
+        ventilation.setMaximumOutdoorTemperature(50.0)
+        ventilation.setMaximumWindSpeed(6.0)
+      end      
+      ventilation.addToThermalZone(zone)
+      zone_ventilations << ventilation
+    end
+
+    return zone_ventilations
+
+  end
+
   # Adds a single refrigerated case connected to a rack composed
   # of a single compressor and a single air-cooled condenser.
   #
