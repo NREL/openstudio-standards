@@ -58,7 +58,7 @@ class OpenStudio::Model::Model
     self.create_thermal_zones(building_type,building_vintage, climate_zone)
     self.add_hvac(building_type, building_vintage, climate_zone, prototype_input)
     self.custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-    self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
+    self.add_swh(lookup_building_type, building_vintage, climate_zone, prototype_input)
     self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
     self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
     self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
