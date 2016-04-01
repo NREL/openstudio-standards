@@ -4177,7 +4177,6 @@ class OpenStudio::Model::Model
       ventilation = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(self)
       ventilation.setName("#{zone.name} Ventilation")
       ventilation.setSchedule(self.add_schedule(availability_sch_name))
-      ventilation.setDesignFlowRate(flow_rate)
       ventilation.setVentilationType(ventilation_type)
 
       ventilation.setAirChangesperHour(0)
@@ -4185,6 +4184,7 @@ class OpenStudio::Model::Model
 
       if ventilation_type == 'Exhaust'
         ventilation.setDesignFlowRateCalculationMethod("Flow/Zone")
+        ventilation.setDesignFlowRate(flow_rate)
         ventilation.setFanPressureRise(31.1361206455786)
         ventilation.setFanTotalEfficiency(0.51)
         ventilation.setConstantTermCoefficient(1)
@@ -4194,6 +4194,7 @@ class OpenStudio::Model::Model
         ventilation.setDeltaTemperature(-100)
       elsif ventilation_type == 'Natural'
         ventilation.setDesignFlowRateCalculationMethod("Flow/Zone")
+        ventilation.setDesignFlowRate(flow_rate)
         ventilation.setFanPressureRise(0)
         ventilation.setFanTotalEfficiency(1)
         ventilation.setConstantTermCoefficient(0)
@@ -4203,6 +4204,7 @@ class OpenStudio::Model::Model
         ventilation.setDeltaTemperature(-100)
       elsif ventilation_type == 'Intake'
         ventilation.setDesignFlowRateCalculationMethod("Flow/Area")
+        ventilation.setFlowRateperZoneFloorArea(flow_rate)
         ventilation.setFanPressureRise(49.8)
         ventilation.setFanTotalEfficiency(0.53625)
         ventilation.setConstantTermCoefficient(1)
