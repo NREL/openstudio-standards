@@ -3489,9 +3489,25 @@ module BTAP
                 air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
                 air_loop.setName("VAV with Reheat")
                 sizingSystem = air_loop.sizingSystem
-                sizingSystem.setCentralCoolingDesignSupplyAirTemperature(13.0)
-                sizingSystem.setCentralHeatingDesignSupplyAirTemperature(13.0)
-
+                sizingSystem.setCentralCoolingDesignSupplyAirTemperature(14.0)
+                sizingSystem.setCentralHeatingDesignSupplyAirTemperature(14.0)
+                sizingSystem.autosizeDesignOutdoorAirFlowRate
+                sizingSystem.setMinimumSystemAirFlowRatio(0.3)
+                sizingSystem.setPreheatDesignTemperature(7.0)
+                sizingSystem.setPreheatDesignHumidityRatio(0.008)
+                sizingSystem.setPrecoolDesignTemperature(14.0)
+                sizingSystem.setPrecoolDesignHumidityRatio(0.008)
+                sizingSystem.setSizingOption("NonCoincident")
+                sizingSystem.setAllOutdoorAirinCooling(false)
+                sizingSystem.setAllOutdoorAirinHeating(false)
+                sizingSystem.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
+                sizingSystem.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
+                sizingSystem.setCoolingDesignAirFlowMethod("DesignDay")
+                sizingSystem.setCoolingDesignAirFlowRate(0.0)
+                sizingSystem.setHeatingDesignAirFlowMethod("DesignDay")
+                sizingSystem.setHeatingDesignAirFlowRate(0.0)
+                sizingSystem.setSystemOutdoorAirMethod("ZoneSum")
+                
                 fan = OpenStudio::Model::FanVariableVolume.new(model,always_on)
 
                 if(heating_coil_type == "Hot Water")
@@ -3525,7 +3541,7 @@ module BTAP
 
                 # Add a setpoint manager to control the
                 # supply air to a constant temperature
-                sat_c = 13.0
+                sat_c = 14.0
                 sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
                 sat_sch.setName("Supply Air Temp")
                 sat_sch.defaultDaySchedule().setName("Supply Air Temp Default")
@@ -3552,6 +3568,7 @@ module BTAP
                   #TODO: schedule based on whether the zone is occupied or not as stipulated in 8.4.4.22 of NECB2011
                   min_flow_rate = 0.002*zone.floorArea
                   vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate) 
+	                vav_terminal.setMaximumReheatAirTemperature(40)
 
                   #Set zone baseboards
                   if ( baseboard_type == "Electric") then
