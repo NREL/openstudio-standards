@@ -137,8 +137,13 @@ class TestRun12 < Minitest::Test
 	#The prototype model is Medium_Office, CZ2, with the following variations:
 	#	- Perimeter Zones are Lobby with LPD 0.5W/ft^2
 	#	- Core Zones are Breakroom with LPD 0.75W/ft^2
+	
+	model_name = 'Run12_Prototype'
+	standard = '90.1-2010'
+	climate_zone = 'ASHRAE 169-2006-2A'
+	building_type = 'MediumOffice'
 
-	@@model = create_baseline_model('Run12_Prototype', '90.1-2010', 'ASHRAE 169-2006-2A', 'MediumOffice', false)
+	@@model = create_baseline_model(model_name, standard, climate_zone, building_type, false)
 	
 	def setup
 		assert_instance_of OpenStudio::Model::Model, @@model
@@ -171,8 +176,13 @@ class TestRun01 < Minitest::Test
 	#	- Low-Slope Concrete Roof with U-Value 0.065 IP, solar reflectance 0.75 and thermal emittance 0.78
 	#	- Wood-framed wall with U-Value 0.095 IP
 	#	- Windows with U-Value 0.25 IP, SHGC 0.2 and VT 0.45
+	
+	model_name = 'Run01_Prototype'
+	standard = '90.1-2010'
+	climate_zone = 'ASHRAE 169-2006-2A'
+	building_type = 'SmallOffice'
 
-	@@model = create_baseline_model('Run01_Prototype', '90.1-2010', 'ASHRAE 169-2006-2A', 'SmallOffice', false)
+	@@model = create_baseline_model(model_name, standard, climate_zone, building_type, false)
 	
 	def setup
 		assert_instance_of OpenStudio::Model::Model, @@model
@@ -219,27 +229,33 @@ class TestRun01 < Minitest::Test
 	def test_901_2010_run01_test05
 		#Testing the baseline windows U-Value, SHGC and VT.
 		
-		window = @@model.getSubSurfaceByName('Perimeter_ZN_3_wall_north_Window_1').get
+		window_name = 'Perimeter_ZN_3_wall_north_Window_1'.upcase
 		
-		puts "#{window}"
+		sql = @@model.sqlFile.get
 		
-		window_uFactor_SI = window.uFactor
-		window_uFactor_IP = OpenStudio.convert(window_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
+		uFactor_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Glass U-Factor') AND (RowName = '#{window_name}')"		
+		glass_uFactor_SI = sql.execAndReturnFirstDouble(uFactor_query).get
 		
-		assert_in_delta(0.75, window_uFactor_IP, 0.001, "Window has a U-Value of #{window_uFactor_IP} BTU/h.ft^2.R when 0.75 BTU/h.ft^2.R was expected (CZ2)")
-		
-		window_cons_name = window.construction.get.name.get
-		window_cons = @@model.getConstructionByName(window_cons_name).get
-		
-		puts "#{window_cons}"		
-		
-		glazing_name = window_cons.getLayer(0).name.get
-		
-		puts "#{glazing_name}"		
-		
-		glazing = @model.getSimpleGlazingByName(glazing_name).get
-		
-		puts "#{glazing}"		
+		shgc_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Glass SHGC') AND (RowName = '#{window_name}')"
+    glass_SHGC = sql.execAndReturnFirstDouble(shgc_query).get
+    
+    glass_area_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Glass Area') AND (RowName = '#{window_name}')"
+    glass_area = sql.execAndReturnFirstDouble(glass_area_query).get
+    
+    frame_area_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Frame Area') AND (RowName = '#{window_name}')"
+    frame_area = sql.execAndReturnFirstDouble(frame_area_query).get
+    
+    frame_uFactor_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Frame Conductance') AND (RowName = '#{window_name}')"
+    frame_uFactor_SI = sql.execAndReturnFirstDouble(frame_uFactor_query).get
+    
+    window_uFactor_SI = (glass_uFactor_SI * glass_area + frame_uFactor_SI * frame_area) / (glass_area + frame_area)
+    window_uFactor_IP = OpenStudio.convert(window_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
+    
+    window_SHGC = glass_SHGC
+    #Have to find a way to get to the whole-window SHGC...    
+    
+    assert_in_delta(0.75, window_uFactor_IP, 0.001, "Window has a U-Value of #{window_uFactor_IP} BTU/h.ft^2.R when 0.75 BTU/h.ft^2.R was expected (CZ2)")
+		assert_in_delta(0.25, window_SHGC, 0.001, "Window has a SHGC of #{window_SHGC} when 0.25 was expected (CZ2")
 	end
 
 end
@@ -249,7 +265,12 @@ class TestRun18 < Minitest::Test
 	#The prototype model is Small_Office, CZ2, with the following variations:
 	#	- Single Air Loop with DX Cooling Coil with COP 3.84, Heat Furnace with Efficiency 0.8 and constant volume fan.
 
-	@@model = create_baseline_model('Run18_Prototype', '90.1-2010', 'ASHRAE 169-2006-2A', 'SmallOffice', false)
+	model_name = 'Run18_Prototype'
+	standard = '90.1-2010'
+	climate_zone = 'ASHRAE 169-2006-2A'
+	building_type = 'SmallOffice'
+	
+	@@model = create_baseline_model(model_name, standard, climate_zone, building_type, false)
 	
 	def setup
 		assert_instance_of OpenStudio::Model::Model, @@model
@@ -269,25 +290,33 @@ class TestRun18 < Minitest::Test
 	
 	def test_901_2010_run18_test03
 		#Testing the cooling and heating equipment efficiency
-		#Fail to catch capacity (set to autosize in the model... to be fixed)
+		
+		sql = @@model.sqlFile.get
+		
 		cooling_coils = @@model.getCoilCoolingDXSingleSpeeds
-		cooling_coils.each do |cooling_coil|
-			puts "#{cooling_coil}"
-			coil_capacity_SI = cooling_coil.getRatedTotalCoolingCapacity.get
+		cooling_coils.each do |cooling_coil|			
+			coil_name = cooling_coil.name.get
 			
-			puts "#{coil_capacity_SI}"
+			coils_query = "SELECT RowName FROM TabularDataWithStrings WHERE (ReportName='ComponentSizingSummary') AND (ColumnName='Design Size Gross Rated Total Cooling Capacity')"
+			sql_coils = sql.execAndReturnVectorOfString(coils_query).get
 			
-			coil_capacity_SI = coil_capacity_SI.split(" ").first.to_f
-			
-			puts "#{coil_capacity_SI}"
-			
+			# The coil names are different between the SQL and the model. I take under assumption that the model coils contains the sql coil (i.e. that it has been appended)
+			sql_coils.each do |sql_coil|
+			  if coil_name.upcase.include? sql_coil
+			    @coil_name_in_sql = sql_coil
+			  end
+			end
+						
+			capacity_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='ComponentSizingSummary') AND (ColumnName='Design Size Gross Rated Total Cooling Capacity') AND (RowName = '"+@coil_name_in_sql+"')"
+
+			coil_capacity_SI = sql.execAndReturnFirstDouble(capacity_query).get
 			coil_capacity_IP = OpenStudio.convert(coil_capacity_SI, 'W','Btu/h').get
 			
 			coil_name = cooling_coil.name.get
 			
 			coil_COP = cooling_coil.getRatedCOP.get
 			coil_EER = OpenStudio.convert(coil_COP, 'W/W', 'Btu/h*W').get
-			coil_SEER = coil_EER / 0.875			
+			coil_SEER = (1.12-(1.2544-0.08*coil_EER)**0.5) / 0.04
 			
 			case
 			when coil_capacity_IP < 65000
@@ -303,7 +332,70 @@ class TestRun18 < Minitest::Test
 			end
 		end			
 	end
-		
 	
+end
+
+class TestRun06 < Minitest::Test
+	#Standard Design Fenestration Test
+	#The prototype model is Large_Office, CZ2, with the following variations:
+	#WWR per orientation: North 50%, West 50%, South 40%, East 45% (Total of 46%)
+	#South facade have overhangs with projection factor or 0.5
+	
+	model_name = 'Run06_Prototype'
+	standard = '90.1-2010'
+	climate_zone = 'ASHRAE 169-2006-2A'
+	building_type = 'LargeOffice'
+	
+	@@model = create_baseline_model(model_name, standard, climate_zone, building_type, false)
+	
+	def setup
+		assert_instance_of OpenStudio::Model::Model, @@model
+	end
+	
+	def test_901_2010_run06_test01
+		#Testing the WWR per orientation by checking the area of 4 windows (N/S/E/W)
+		#This could be more explicit but here is the reasoning behind the area test
+		#North and South Facade are 289.52m2. East and West Facade are 193.01m2.
+		#WWR in baseline, to keep the same proportion should be: WWR_baseline = WWR_initial * 40/46
+		
+		north_window_name = "Perimeter_mid_ZN_3_Wall_North_Window"
+		east_window_name = "Perimeter_mid_ZN_2_Wall_East_Window"
+		south_window_name = "Perimeter_mid_ZN_1_Wall_South_Window"
+		west_window_name = "Perimeter_mid_ZN_4_Wall_West_Window"
+		
+		north_window = @@model.getSubSurfaceByName(north_window_name).get
+		east_window = @@model.getSubSurfaceByName(east_window_name).get
+		south_window = @@model.getSubSurfaceByName(south_window_name).get
+		west_window = @@model.getSubSurfaceByName(west_window_name).get
+		
+		north_window_WWR = north_window.grossArea / 289.52
+		east_window_WWR = east_window.grossArea / 193.01
+		south_window_WWR = south_window.grossArea / 289.52
+		west_window_WWR = west_window.grossArea / 193.01
+		
+		puts "North: #{north_window_WWR}"
+		puts "East: #{east_window_WWR}"
+		puts "South: #{south_window_WWR}"
+		puts "West: #{west_window_WWR}"
+		
+		north_required_WWR = 0.5 * 40/46
+		east_required_WWR = 0.45 * 40/46
+		south_required_WWR = 0.4 * 40/46
+		west_required_WWR = 0.5 * 40/46
+		
+		assert_in_delta(north_required_WWR, north_window_WWR, 0.01, "North facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
+		assert_in_delta(east_required_WWR, east_window_WWR, 0.01, "East facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
+		assert_in_delta(south_required_WWR, south_window_WWR, 0.01, "South facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
+		assert_in_delta(west_required_WWR, west_window_WWR, 0.01, "West facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
+	
+	end
+	
+	def test_901_2010_run06_test02
+		#Testing that the overhangs on southern facade have been removed
+		shadings = @@model.getShadingSurfaces
+		number_of_shading = shadings.count
+
+		assert_empty(shadings, "There is/are #{number_of_shadings} shading objects when 0 was expected.")
+	end
 	
 end
