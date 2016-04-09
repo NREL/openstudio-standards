@@ -159,14 +159,17 @@ class OpenStudio::Model::ThermalZone
               WHERE ReportName='HVACSizingSummary' 
               AND ReportForString='Entire Facility' 
               AND TableName='#{table_name}'
-              AND ColumnName='User Design Load per Area'
+              AND ColumnName='User Design Load'
               AND RowName='#{name}'
-              AND Units='W/m2'"
+              AND Units='W'"
 
       val = sql.execAndReturnFirstDouble(query)
       
       if val.is_initialized
-        result = OpenStudio::OptionalDouble.new(val.get)
+        floor_area_no_multiplier_m2 = self.floorArea
+        floor_area_m2 = floor_area_no_multiplier_m2 * self.multiplier
+        w_per_m2 = val.get/floor_area_m2
+        result = OpenStudio::OptionalDouble.new(w_per_m2)
       else
         #OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
       end
@@ -204,14 +207,17 @@ class OpenStudio::Model::ThermalZone
               WHERE ReportName='HVACSizingSummary' 
               AND ReportForString='Entire Facility' 
               AND TableName='#{table_name}'
-              AND ColumnName='User Design Load per Area'
+              AND ColumnName='User Design Load'
               AND RowName='#{name}'
-              AND Units='W/m2'"
+              AND Units='W'"
 
       val = sql.execAndReturnFirstDouble(query)
       
       if val.is_initialized
-        result = OpenStudio::OptionalDouble.new(val.get)
+        floor_area_no_multiplier_m2 = self.floorArea
+        floor_area_m2 = floor_area_no_multiplier_m2 * self.multiplier
+        w_per_m2 = val.get/floor_area_m2
+        result = OpenStudio::OptionalDouble.new(w_per_m2)
       else
         #OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Data not found for query: #{query}")
       end
