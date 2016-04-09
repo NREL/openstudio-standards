@@ -1262,13 +1262,15 @@ class OpenStudio::Model::Model
   end
 
   # Group an array of zones into multiple arrays, one
-  # for each story in the building.
+  # for each story in the building.  Zones with spaces on multiple stories
+  # will be assigned to only one of the stories.
   # Removes empty array (when the story doesn't contain any of the zones)
   # @return [Array<Array<OpenStudio::Model::ThermalZone>>] array of arrays of zones
   def group_zones_by_story(zones)
   
     story_zone_lists = []
-    self.getBuildingStorys.each do |story|
+    zones_already_assigned = []
+    self.getBuildingStorys.sort.each do |story|
       
       # Get all the spaces on this story
       spaces = story.spaces
@@ -1287,7 +1289,12 @@ class OpenStudio::Model::Model
       zones_on_story = []
       zones.each do |zone|
         if all_zones_on_story.include?(zone)
+          # Skip zones that were already assigned to a story.
+          # This can happen if a zone has multiple spaces on multiple stories.
+          # Stairwells and atriums are typical scenarios.
+          next if zones_already_assigned.include?(zone)
           zones_on_story << zone
+          zones_already_assigned << zone
         end
       end
       
@@ -2133,7 +2140,9 @@ class OpenStudio::Model::Model
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{building_vintage}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
       # Return an empty construction
       construction = OpenStudio::Model::Construction.new(self)
-      construction.setName("Could not find construction properties")
+      construction.setName("Could not find construction properties set to Adiabatic ")
+      almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(self, "Smooth", 500)
+      construction.insertLayer(0, almost_adiabatic)
       return construction
     else
       OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{building_vintage}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
