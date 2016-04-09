@@ -69,13 +69,13 @@ class OpenStudio::Model::Model
     sim_control.setRunSimulationforWeatherFileRunPeriods(false)
     
     # Run the sizing run
-    self.run_simulation_and_log_errors(sizing_run_dir)
+    success = self.run_simulation_and_log_errors(sizing_run_dir)
     
     # Change the model back to running the weather file
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
     
-    return true
+    return success
 
   end
 
