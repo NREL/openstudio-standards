@@ -48,11 +48,15 @@ class OpenStudio::Model::PlanarSurface
     standards_info = construction.standardsInformation
     intended_surface_type = standards_info.intendedSurfaceType
     standards_construction_type = standards_info.standardsConstructionType
-    if intended_surface_type.empty? || standards_construction_type.empty?
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine one or more of the intended surface type or the standards construction type for #{self.name}.  This surface will not have the standard applied.")
+    if intended_surface_type.empty?
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the intended surface type for #{self.name}.  This surface will not have the standard applied.")
       return previous_construction_map
     end
-
+    if standards_construction_type.empty?
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the standards construction type for #{self.name}.  This surface will not have the standard applied.")
+      return previous_construction_map
+    end
+    
     # Check if the construction type was already created.
     # If yes, use that construction.  If no, make a new one.
     new_construction = nil
