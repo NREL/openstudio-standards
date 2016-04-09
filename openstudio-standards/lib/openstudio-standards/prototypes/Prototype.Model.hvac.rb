@@ -37,7 +37,7 @@ class OpenStudio::Model::Model
           chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
         else
           condenser_water_loop = nil
-          if prototype_input['chiller_condenser_type'] == 'WaterCooled'
+          if prototype_input['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = self.add_cw_loop()
           end
           
