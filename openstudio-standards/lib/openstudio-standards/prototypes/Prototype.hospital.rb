@@ -126,7 +126,6 @@ class OpenStudio::Model::Model
     ]
     return system_to_space_map
   end
-<<<<<<< HEAD
     
   def define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
@@ -152,99 +151,33 @@ class OpenStudio::Model::Model
     return space_multiplier_map
   end
     
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
-   
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
     
-    system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
-
-    condenser_water_loop = self.add_cw_loop(prototype_input, hvac_standards)
-	
-	chilled_water_loop = self.add_chw_loop(prototype_input, hvac_standards, condenser_water_loop)
-
-    hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
-    
-    system_to_space_map.each do |system|
-
-      #find all zones associated with these spaces
-      thermal_zones = []
-      system['space_names'].each do |space_name|
-        space = self.getSpaceByName(space_name)
-        if space.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-          return false
-        end
-        space = space.get
-        zone = space.thermalZone
-        if zone.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No thermal zone was created for the space called #{space_name}")
-          return false
-        end
-        thermal_zones << zone.get
-      end
-
-      case system['type']
-      when 'VAV'
-        self.add_vav(prototype_input, hvac_standards, system['name'], hot_water_loop, chilled_water_loop, thermal_zones, building_type)
-      when 'CAV'
-        self.add_psz_ac(prototype_input, hvac_standards, system ['name'], thermal_zones, 'DrawThrough', hot_water_loop, chilled_water_loop)
-      when 'Refrigeration'
-        self.add_refrigeration(prototype_input,
-                              standards,
-                              system['case_type'],
-                              system['cooling_capacity_per_length'],
-                              system['length'],
-                              system['evaporator_fan_pwr_per_length'],
-                              system['lighting_per_length'],
-                              system['lighting_sch_name'],
-                              system['defrost_pwr_per_length'],
-                              system['restocking_sch_name'],
-                              system['cop'],
-                              system['cop_f_of_t_curve_name'],
-                              system['condenser_fan_pwr'],
-                              system['condenser_fan_pwr_curve_name'],
-                              thermal_zones[0])
-	   else
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Undefined HVAC system type called #{system['type']}")
-        return false  
-      end
-	  
-	end
-  
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
-    
-=======
-     
+ 
   def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
    
->>>>>>> refs/remotes/origin/data_center_economizer
+    return true
+    
+  end
+  
+  def update_waterheater_loss_coefficient(building_vintage)
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      self.getWaterHeaterMixeds.sort.each do |water_heater|
+        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
+        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(0.798542707)
+      end
+    end      
+  end  
+  
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+    
+    self.update_waterheater_loss_coefficient(building_vintage)
+  
     return true
     
   end
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-   
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-    water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
-    
-    water_heaters.each do |water_heater|
-      water_heater = water_heater.to_WaterHeaterMixed.get
-      # water_heater.setAmbientTemperatureIndicator('Zone')
-      # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
-      water_heater.setOffCycleParasiticFuelConsumptionRate(720)
-      water_heater.setOnCycleParasiticFuelConsumptionRate(720)
-      water_heater.setOffCycleLossCoefficienttoAmbientTemperature(7.561562668)
-      water_heater.setOnCycleLossCoefficienttoAmbientTemperature(7.561562668)
-    end
-
-    self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
-    return true
-    
-  end #add swh    
-
 end
+ 
+
+
