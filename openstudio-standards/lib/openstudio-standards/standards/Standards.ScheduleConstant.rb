@@ -14,6 +14,19 @@ class OpenStudio::Model::ScheduleConstant
 
     return annual_flh = self.value * 8760
 
-  end		
+  end
+
+  # Returns the min and max value for this schedule.
+  # It doesn't evaluate design days only run-period conditions
+  #
+  # @author David Goldwasser, NREL.
+  # return [Hash] Hash has two keys, min and max.
+  def annual_min_max_value()
+
+    result = { 'min' => self.value, 'max' => self.value }
+
+    return result
+
+  end
 
 end

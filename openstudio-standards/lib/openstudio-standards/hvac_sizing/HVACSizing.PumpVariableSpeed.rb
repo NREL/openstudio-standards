@@ -51,7 +51,7 @@ class OpenStudio::Model::PumpVariableSpeed
       col_name = 'Design Power Consumption'
     end  
    
-    return self.model.getAutosizedValue(self, col_name, 'm3/s')
+    return self.model.getAutosizedValue(self, col_name, 'W')
     
   end  
   
