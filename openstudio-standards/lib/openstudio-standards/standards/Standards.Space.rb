@@ -1278,7 +1278,7 @@ class OpenStudio::Model::Space
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
@@ -1307,7 +1307,7 @@ class OpenStudio::Model::Space
       # Toplighting
       # Check if the toplit area < 900 ft2
       if areas['toplighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
         req_top_ctrl = false
       elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
@@ -1341,7 +1341,7 @@ class OpenStudio::Model::Space
       # Primary Sidelighting
       # Check if the primary sidelit area contains less than 150W of lighting
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] * space_lpd_w_per_m2 < 150.0
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because less than 150W of lighting are present in the primary daylighted area per 9.4.1.1(e).")
@@ -1363,7 +1363,7 @@ class OpenStudio::Model::Space
       # Secondary Sidelighting
       # Check if the primary and secondary sidelit areas contains less than 300W of lighting
       if areas['secondary_sidelighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
         req_pri_ctrl = false      
       elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 300
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, secondary sidelighting control not required because less than 300W of lighting are present in the combined primary and secondary daylighted areas per 9.4.1.1(e).")
@@ -1385,7 +1385,7 @@ class OpenStudio::Model::Space
       # Toplighting
       # Check if the toplit area contains less than 150W of lighting
       if areas['toplighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
         req_pri_ctrl = false 
       elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
@@ -1408,7 +1408,7 @@ class OpenStudio::Model::Space
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
@@ -1418,7 +1418,7 @@ class OpenStudio::Model::Space
       # Toplighting
       # Check if the toplit area < 900 ft2
       if areas['toplighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
         req_top_ctrl = false
       elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
@@ -1908,8 +1908,12 @@ Warehouse.Office
     end
     
     # Sensors
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 1 fraction = #{sensor_1_frac.round(2)}.")
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 2 fraction = #{sensor_2_frac.round(2)}.")
+    if sensor_1_frac > 0.0
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 1 controls #{sensor_1_frac.round(2)} of the zone lighting.")
+    end
+    if sensor_2_frac > 0.0
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 2 controls #{sensor_2_frac.round(2)} of the zone lighting.")
+    end
     
     # First sensor
     if sensor_1_window
