@@ -363,6 +363,20 @@
       ]
     },
     {
+      "name": "Typical Insulated Steel Framed Exterior Floor",
+      "intended_surface_type": "ExteriorFloor",
+      "standards_construction_type": "SteelFramed",
+      "insulation_layer": "Typical Insulation",
+      "sort": null,
+      "materials": [
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board",
+        "Typical Carpet Pad"
+      ]
+    },
+    {
       "name": "Typical Insulated Steel Framed Exterior Wall",
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "SteelFramed",
@@ -373,6 +387,20 @@
         "5/8 in. Gypsum Board",
         "Typical Insulation",
         "5/8 in. Gypsum Board"
+      ]
+    },
+    {
+      "name": "Typical Insulated Wood Framed Exterior Floor",
+      "intended_surface_type": "ExteriorFloor",
+      "standards_construction_type": "WoodFramed",
+      "insulation_layer": "Typical Insulation",
+      "sort": null,
+      "materials": [
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board",
+        "Typical Carpet Pad"
       ]
     },
     {
