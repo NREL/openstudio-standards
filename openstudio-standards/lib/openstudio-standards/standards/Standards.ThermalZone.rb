@@ -566,4 +566,132 @@ class OpenStudio::Model::ThermalZone
 
   end
 
+  # Determines heating status.  If the zone has a thermostat
+  # with a maximum heating setpoint above 5C (41F),
+  # counts as heated.
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if heated, false if not
+  def is_heated
+  
+    temp_f = 41
+    temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
+  
+    htd = false
+    
+    # Unheated if no thermostat present
+    if self.thermostat.empty?
+      return htd
+    end
+    
+    # Check the heating setpoint
+    tstat = self.thermostat.get
+    if tstat.to_ThermostatSetpointDualSetpoint
+      tstat = tstat.to_ThermostatSetpointDualSetpoint.get
+      htg_sch = tstat.getHeatingSchedule
+      if htg_sch.is_initialized
+        htg_sch = htg_sch.get
+        if htg_sch.to_ScheduleRuleset.is_initialized
+          htg_sch = htg_sch.to_ScheduleRuleset.get
+          max_c = htg_sch.annual_min_max_value['max']
+          if max_c > temp_c
+            htd = true
+          end
+        end
+      end
+    elsif tstat.to_ZoneControlThermostatStagedDualSetpoint
+      tstat = tstat.to_ZoneControlThermostatStagedDualSetpoint.get
+      htg_sch = tstat.heatingTemperatureSetpointSchedule
+      if htg_sch.is_initialized
+        htg_sch = htg_sch.get
+        if htg_sch.to_ScheduleRuleset.is_initialized
+          htg_sch = htg_sch.to_ScheduleRuleset.get
+          max_c = htg_sch.annual_min_max_value['max']
+          if max_c > temp_c
+            htd = true
+          end
+        end
+      end
+    end
+    
+    return htd
+  
+  end
+  
+  # Determines cooling status.  If the zone has a thermostat
+  # with a minimum cooling setpoint below 33C (91F),
+  # counts as cooled.
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if cooled, false if not
+  def is_cooled
+  
+    temp_f = 91
+    temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
+  
+    cld = false
+    
+    # Unheated if no thermostat present
+    if self.thermostat.empty?
+      return cld
+    end
+    
+    # Check the cooling setpoint
+    tstat = self.thermostat.get
+    if tstat.to_ThermostatSetpointDualSetpoint
+      tstat = tstat.to_ThermostatSetpointDualSetpoint.get
+      clg_sch = tstat.getCoolingSchedule
+      if clg_sch.is_initialized
+        clg_sch = clg_sch.get
+        if clg_sch.to_ScheduleRuleset.is_initialized
+          clg_sch = clg_sch.to_ScheduleRuleset.get
+          min_c = clg_sch.annual_min_max_value['min']
+          if min_c < temp_c
+            cld = true
+          end
+        end
+      end
+    elsif tstat.to_ZoneControlThermostatStagedDualSetpoint
+      tstat = tstat.to_ZoneControlThermostatStagedDualSetpoint.get
+      clg_sch = tstat.coolingTemperatureSetpointSchedule
+      if clg_sch.is_initialized
+        clg_sch = clg_sch.get
+        if clg_sch.to_ScheduleRuleset.is_initialized
+          clg_sch = clg_sch.to_ScheduleRuleset.get
+          min_c = clg_sch.annual_min_max_value['min']
+          if min_c < temp_c
+            cld = true
+          end
+        end
+      end
+    end
+    
+    return cld
+  
+  end
+  
+  # Determines whether the zone is conditioned based on thermostats,
+  # not HVAC equipment.  This is to handle situations like parking
+  # garages where zone equipment like exhaust fans are considered
+  # conditioning equipment by E+.
+  # Instead, if a zone has no thermostat, or if the heating is below
+  # 41F (5C) and the cooling is below 91F (33C), it is unconditioned.
+  # @author Andrew Parker, Julien Marrec
+  
+  def is_unconditioned
+  
+    uncond = true
+    
+    if self.is_heated
+      uncond = false
+      return uncond
+    end
+    
+    if self.is_cooled
+      uncond = false
+      return uncond
+    end
+  
+    return uncond
+
+  end
+  
 end
