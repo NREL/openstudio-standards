@@ -66,6 +66,13 @@ end
 
 require 'rake/testtask'
 desc 'Run the measure tests'
+Rake::TestTask.new('test:large_office') do |task|
+  task.libs << 'test'
+  task.test_files = FileList['openstudio-standards/test/test_one_building_office_2010.rb']
+end
+
+require 'rake/testtask'
+desc 'Run the measure tests'
 Rake::TestTask.new('test:one_building') do |task|
   task.libs << 'test'
   task.test_files = FileList['openstudio-standards/test/test_one_building.rb']

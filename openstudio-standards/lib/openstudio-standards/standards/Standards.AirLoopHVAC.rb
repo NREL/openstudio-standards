@@ -546,6 +546,16 @@ class OpenStudio::Model::AirLoopHVAC
         else
           OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
         end
+        # CoilCoolingWaterToAirHeatPumpEquationFit
+      elsif sc.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized  
+        coil = sc.to_CoilCoolingWaterToAirHeatPumpEquationFit.get
+        if coil.ratedTotalCoolingCapacity.is_initialized
+          total_cooling_capacity_w += coil.ratedTotalCoolingCapacity.get
+        elsif coil.autosizedRatedTotalCoolingCapacity.is_initialized
+          total_cooling_capacity_w += coil.autosizedRatedTotalCoolingCapacity.get
+        else
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+        end
       elsif sc.to_AirLoopHVACUnitarySystem.is_initialized
         unitary = sc.to_AirLoopHVACUnitarySystem.get
         if unitary.coolingCoil.is_initialized
@@ -575,6 +585,16 @@ class OpenStudio::Model::AirLoopHVAC
             coil = clg_coil.to_CoilCoolingWater.get
             if coil.autosizedDesignCoilLoad.is_initialized # TODO Change to pull water coil nominal capacity instead of design load
               total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
+            else
+              OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
+            end
+          # CoilCoolingWaterToAirHeatPumpEquationFit
+          elsif clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized  
+            coil = clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.get
+            if coil.ratedTotalCoolingCapacity.is_initialized
+              total_cooling_capacity_w += coil.ratedTotalCoolingCapacity.get
+            elsif coil.autosizedRatedTotalCoolingCapacity.is_initialized
+              total_cooling_capacity_w += coil.autosizedRatedTotalCoolingCapacity.get
             else
               OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{coil.name} is not available, total cooling capacity of air loop will be incorrect when applying standard.")
             end
@@ -614,7 +634,6 @@ class OpenStudio::Model::AirLoopHVAC
         end
       elsif sc.to_CoilCoolingDXMultiSpeed.is_initialized ||
           sc.to_CoilCoolingCooledBeam.is_initialized ||
-          sc.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized ||
           sc.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized ||
           sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized ||
           sc.to_AirLoopHVACUnitarySystem.is_initialized
@@ -650,6 +669,13 @@ class OpenStudio::Model::AirLoopHVAC
     infinity_btu_per_hr = 999999999999
     minimum_capacity_btu_per_hr = infinity_btu_per_hr
     
+    # Determine if the airloop serves any computer rooms
+    # / data centers, which changes the economizer.
+    is_dc = false
+    if self.data_center_area_served > 0
+      is_dc = true
+    end
+    
     # Determine the minimum capacity that requires an economizer
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
@@ -678,28 +704,55 @@ class OpenStudio::Model::AirLoopHVAC
         minimum_capacity_btu_per_hr = 65000
       end
     when '90.1-2010', '90.1-2013'
-      case climate_zone
-      when 'ASHRAE 169-2006-1A',
-          'ASHRAE 169-2006-1B'
-        minimum_capacity_btu_per_hr = infinity_btu_per_hr # No requirement
-      when 'ASHRAE 169-2006-2A',
-          'ASHRAE 169-2006-3A',
-          'ASHRAE 169-2006-4A',
-          'ASHRAE 169-2006-2B',
-          'ASHRAE 169-2006-5A',
-          'ASHRAE 169-2006-6A',
-          'ASHRAE 169-2006-7A',
-          'ASHRAE 169-2006-7B',
-          'ASHRAE 169-2006-8A',
-          'ASHRAE 169-2006-8B',
-          'ASHRAE 169-2006-3B',
-          'ASHRAE 169-2006-3C',
-          'ASHRAE 169-2006-4B',
-          'ASHRAE 169-2006-4C',
-          'ASHRAE 169-2006-5B',
-          'ASHRAE 169-2006-5C',
-          'ASHRAE 169-2006-6B'
-        minimum_capacity_btu_per_hr = 54000
+      if is_dc # data center / computer room
+        case climate_zone
+        when 'ASHRAE 169-2006-1A',
+            'ASHRAE 169-2006-1B',
+            'ASHRAE 169-2006-2A',
+            'ASHRAE 169-2006-3A',
+            'ASHRAE 169-2006-4A'
+          minimum_capacity_btu_per_hr = infinity_btu_per_hr # No requirement
+        when 'ASHRAE 169-2006-2B',
+            'ASHRAE 169-2006-5A',
+            'ASHRAE 169-2006-6A',
+            'ASHRAE 169-2006-7A',
+            'ASHRAE 169-2006-7B',
+            'ASHRAE 169-2006-8A',
+            'ASHRAE 169-2006-8B'
+          minimum_capacity_btu_per_hr = 135000  
+        when 'ASHRAE 169-2006-3B',
+            'ASHRAE 169-2006-3C',
+            'ASHRAE 169-2006-4B',
+            'ASHRAE 169-2006-4C',
+            'ASHRAE 169-2006-5B',
+            'ASHRAE 169-2006-5C',
+            'ASHRAE 169-2006-6B'
+          minimum_capacity_btu_per_hr = 65000
+        end
+      else   
+        case climate_zone
+        when 'ASHRAE 169-2006-1A',
+            'ASHRAE 169-2006-1B'
+          minimum_capacity_btu_per_hr = infinity_btu_per_hr # No requirement
+        when 'ASHRAE 169-2006-2A',
+            'ASHRAE 169-2006-3A',
+            'ASHRAE 169-2006-4A',
+            'ASHRAE 169-2006-2B',
+            'ASHRAE 169-2006-5A',
+            'ASHRAE 169-2006-6A',
+            'ASHRAE 169-2006-7A',
+            'ASHRAE 169-2006-7B',
+            'ASHRAE 169-2006-8A',
+            'ASHRAE 169-2006-8B',
+            'ASHRAE 169-2006-3B',
+            'ASHRAE 169-2006-3C',
+            'ASHRAE 169-2006-4B',
+            'ASHRAE 169-2006-4C',
+            'ASHRAE 169-2006-5B',
+            'ASHRAE 169-2006-5C',
+            'ASHRAE 169-2006-6B'
+          minimum_capacity_btu_per_hr = 54000
+        end
       end
     when 'NECB 2011'
       minimum_capacity_btu_per_hr =  68243      # NECB requires economizer for cooling cap > 20 kW
@@ -707,9 +760,21 @@ class OpenStudio::Model::AirLoopHVAC
   
     # Check whether the system requires an economizer by comparing
     # the system capacity to the minimum capacity.
-    minimum_capacity_w = OpenStudio.convert(minimum_capacity_btu_per_hr, "Btu/hr", "W").get
-    if self.total_cooling_capacity >= minimum_capacity_w
+    total_cooling_capacity_w = self.total_cooling_capacity
+    total_cooling_capacity_btu_per_hr = OpenStudio.convert(total_cooling_capacity_w, "W", "Btu/hr").get
+    if total_cooling_capacity_btu_per_hr >= minimum_capacity_btu_per_hr
+      if is_dc
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{self.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for data centers.")
+      else
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{self.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
+      end
       economizer_required = true
+    else
+      if is_dc
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{self.name} does not require an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr is less than the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for data centers.")
+      else
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{self.name} does not require an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr is less than the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
+      end    
     end
     
     return economizer_required
@@ -3318,6 +3383,36 @@ class OpenStudio::Model::AirLoopHVAC
 
     return design_supply_air_flow_rate
 
+  end
+  
+  # Determine how much data center
+  # area the airloop serves.
+  #
+  # @return [Double] the area of data center is served,
+  # in m^2.
+  # @todo Add an is_data_center field to the
+  # standards space type spreadsheet instead
+  # of relying on the standards space type name to
+  # identify a data center.
+  def data_center_area_served()
+  
+    dc_area_m2 = 0.0
+    
+    self.thermalZones.each do |zone|
+      zone.spaces.each do |space|
+        # Skip spaces with no space type
+        next if space.spaceType.empty?
+        space_type = space.spaceType.get
+        next if space_type.standardsSpaceType.empty?
+        standards_space_type = space_type.standardsSpaceType.get
+        # Counts as a data center if the name includes 'data'
+        next unless standards_space_type.downcase.include?('data')
+        dc_area_m2 += space.floorArea
+      end
+    end
+    
+    return dc_area_m2
+  
   end
   
 end
