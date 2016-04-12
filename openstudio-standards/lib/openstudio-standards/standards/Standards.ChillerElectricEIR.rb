@@ -193,7 +193,7 @@ class OpenStudio::Model::ChillerElectricEIR
     # which may be either a CurveBicubic or a CurveQuadratic based on chiller type
     cool_plf_fplr = self.model.add_curve(chlr_props['eirfplr'])
     if cool_plf_fplr
-      #self.setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
+      self.setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
     else
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.ChillerElectricEIR", "For #{self.name}, cannot find cool_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false

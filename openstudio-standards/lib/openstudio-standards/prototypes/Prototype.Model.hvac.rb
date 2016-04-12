@@ -115,7 +115,7 @@ class OpenStudio::Model::Model
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
         if prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
-          heat_pump_loop = add_hp_loop(prototype_input)
+          heat_pump_loop = add_hp_loop(building_type)
         end
       
         self.add_psz_ac(building_vintage, 
@@ -139,6 +139,8 @@ class OpenStudio::Model::Model
         hot_water_loop = nil
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
+        elsif building_type == 'MediumOffice'
+          hot_water_loop = nil
         else
           hot_water_loop = self.add_hw_loop('NaturalGas')
         end      
@@ -170,7 +172,7 @@ class OpenStudio::Model::Model
           chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
         else
           condenser_water_loop = nil
-          if prototype_input['chiller_condenser_type'] == 'WaterCooled'
+          if prototype_input['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = self.add_cw_loop()
           end
           
@@ -211,7 +213,7 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Heat Pump Loop').is_initialized
           heat_pump_loop = self.getPlantLoopByName('Heat Pump Loop').get
         else
-          heat_pump_loop = self.add_hp_loop()
+          heat_pump_loop = self.add_hp_loop(building_type)
         end
       
         self.add_data_center_hvac(building_vintage,
@@ -266,6 +268,13 @@ class OpenStudio::Model::Model
                             system['flow_fraction_schedule_name'],
                             system['balanced_exhaust_fraction_schedule_name'],
                             thermal_zones)
+
+      when 'Zone Ventilation'
+      
+        self.add_zone_ventilation(system['availability_sch_name'],
+                                  system['flow_rate'],
+                                  system['ventilation_type'],
+                                  thermal_zones)
 
       when 'Refrigeration'
       
