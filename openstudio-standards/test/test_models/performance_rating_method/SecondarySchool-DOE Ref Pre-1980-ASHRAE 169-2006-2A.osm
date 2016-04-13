@@ -5,7 +5,7 @@ OS:Version,
 
 OS:Site,
   {3a27a255-658f-47b0-8d41-98c3904cebc3}, !- Handle
-  Houston Bush Intercontinental_TX_USA,   !- Name
+  Houston Bush Intercontinental,          !- Name
   30,                                     !- Latitude {deg}
   -95.37,                                 !- Longitude {deg}
   -6,                                     !- Time Zone {hr}
@@ -32451,4 +32451,45 @@ OS:Curve:Cubic,
   0,                                      !- Coefficient4 x**3
   0,                                      !- Minimum Value of x {BasedOnField A2}
   1;                                      !- Maximum Value of x {BasedOnField A2}
+
+OS:ClimateZones,
+  {01659e3a-5e34-44c3-9d87-fb9f887c8779}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ASHRAE,                                 !- Climate Zone Institution Name 1
+  ANSI/ASHRAE Standard 169,               !- Climate Zone Document Name 1
+  2006,                                   !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:LifeCycleCost:Parameters,
+  {23ac2504-c7ab-4a4d-86c1-8097b490eaf0}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
+
+OS:WeatherFile,
+  {159b1da8-b29f-479e-8683-a248a210a3e5}, !- Handle
+  Houston Bush Intercontinental,          !- City
+  TX,                                     !- State Province Region
+  USA,                                    !- Country
+  TMY3,                                   !- Data Source
+  722430,                                 !- WMO Number
+  30,                                     !- Latitude {deg}
+  -95.37,                                 !- Longitude {deg}
+  -6,                                     !- Time Zone {hr}
+  29,                                     !- Elevation {m}
+  file:files/USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw, !- Url
+  EE565FCC;                               !- Checksum
 
