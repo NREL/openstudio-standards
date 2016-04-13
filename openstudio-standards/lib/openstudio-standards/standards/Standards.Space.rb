@@ -267,6 +267,9 @@ class OpenStudio::Model::Space
           end
         end
       end
+      
+      # Disable the log sink to prevent memory hogging
+      msg_log.disable
      
       # TODO remove this workaround, which is tried if there
       # are any join errors.  This handles the case of polygons
@@ -296,6 +299,9 @@ class OpenStudio::Model::Space
             end
           end
         end
+      
+        # Disable the log sink to prevent memory hogging
+        msg_log_2.disable      
       
         if join_errs_2 > 0 || inner_loop_errs_2 > 0
           OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "For #{self.name}, the workaround for joining polygons failed.")
@@ -448,11 +454,11 @@ class OpenStudio::Model::Space
 
     OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{self.name}, calculating daylighted areas.")
     
-    result = {'toplighted_area' => nil,
-              'primary_sidelighted_area' => nil,
-              'secondary_sidelighted_area' => nil,
-              'total_window_area' => nil,
-              'total_skylight_area' => nil
+    result = {'toplighted_area' => 0.0,
+              'primary_sidelighted_area' => 0.0,
+              'secondary_sidelighted_area' => 0.0,
+              'total_window_area' => 0.0,
+              'total_skylight_area' => 0.0
               }
     
     total_window_area = 0
@@ -524,7 +530,7 @@ class OpenStudio::Model::Space
     
     # Make sure there is one floor surface
     if floor_surface.nil?
-      OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Could not find a floor in space #{self.name.get}, cannot determine daylighted areas.")
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Could not find a floor in space #{self.name.get}, cannot determine daylighted areas.")
       return result
     end
     
@@ -2277,6 +2283,75 @@ Warehouse.Office
     end
   
     return plenum_status
+  
+  end
+
+  # Determines whether the space is conditioned per 90.1,
+  # which is based on heating and cooling loads.
+  #
+  # @param climate_zone [String] climate zone
+  # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
+  # @todo add logic to detect indirectly-conditioned spaces
+  def conditioning_category(standard, climate_zone)
+  
+    # Get the zone this space is inside
+    zone = self.thermalZone
+    
+    # Assume unconditioned if not assigned to a zone
+    if zone.empty?
+      return 'Unconditioned'
+    end
+  
+    # Get the category from the zone
+    cond_cat = zone.get.conditioning_category(standard, climate_zone)
+
+    return cond_cat
+  
+  end  
+  
+  # Determines heating status.  If the space's 
+  # zone has a thermostat with a maximum heating
+  # setpoint above 5C (41F), counts as heated.
+  #
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if heated, false if not
+  def is_heated
+
+    # Get the zone this space is inside
+    zone = self.thermalZone
+    
+    # Assume unheated if not assigned to a zone
+    if zone.empty?
+      return false
+    end
+  
+    # Get the category from the zone
+    htd = zone.get.is_heated
+
+    return htd
+  
+  end
+  
+  # Determines cooling status.  If the space's 
+  # zone has a thermostat with a minimum cooling
+  # setpoint above 33C (91F), counts as cooled.
+  #
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if cooled, false if not
+  def is_cooled
+  
+    # Get the zone this space is inside
+    zone = self.thermalZone
+    
+    # Assume uncooled if not assigned to a zone
+    if zone.empty?
+      return false
+    end
+  
+    # Get the category from the zone
+    cld = zone.get.is_cooled
+
+    return cld
   
   end
   
