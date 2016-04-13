@@ -448,11 +448,11 @@ class OpenStudio::Model::Space
 
     OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{self.name}, calculating daylighted areas.")
     
-    result = {'toplighted_area' => nil,
-              'primary_sidelighted_area' => nil,
-              'secondary_sidelighted_area' => nil,
-              'total_window_area' => nil,
-              'total_skylight_area' => nil
+    result = {'toplighted_area' => 0.0,
+              'primary_sidelighted_area' => 0.0,
+              'secondary_sidelighted_area' => 0.0,
+              'total_window_area' => 0.0,
+              'total_skylight_area' => 0.0
               }
     
     total_window_area = 0
@@ -509,7 +509,7 @@ class OpenStudio::Model::Space
     floor_polygons = []
     floor_z = 0.0
     self.surfaces.sort.each do |surface|
-      if surface.surfaceType == "Floor"
+      if surface.surfaceType.downcase == "floor"
         floor_surface = surface
         floor_z = surface.vertices[0].z
         # floor_polygons << surface.vertices
@@ -524,7 +524,7 @@ class OpenStudio::Model::Space
     
     # Make sure there is one floor surface
     if floor_surface.nil?
-      OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Could not find a floor in space #{self.name.get}, cannot determine daylighted areas.")
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Could not find a floor in space #{self.name.get}, cannot determine daylighted areas.")
       return result
     end
     
@@ -534,7 +534,7 @@ class OpenStudio::Model::Space
     pri_sidelit_polygons = []
     sec_sidelit_polygons = []
     self.surfaces.sort.each do |surface|
-      if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "Wall"
+      if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType.downcase == "wall"
         
         # TODO stop skipping non-vertical walls
         surface_normal = surface.outwardNormal
@@ -547,7 +547,7 @@ class OpenStudio::Model::Space
         end
         
         surface.subSurfaces.sort.each do |sub_surface|
-          next unless sub_surface.outsideBoundaryCondition == "Outdoors" && (sub_surface.subSurfaceType == "FixedWindow" || sub_surface.subSurfaceType == "OperableWindow")
+          next unless sub_surface.outsideBoundaryCondition == "Outdoors" && (sub_surface.subSurfaceType.downcase == "fixedwindow" || sub_surface.subSurfaceType.downcase == "operablewindow")
           
           #OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***#{sub_surface.name}***"
           total_window_area += sub_surface.netArea
@@ -565,7 +565,7 @@ class OpenStudio::Model::Space
           # Find the width of the window
           rot_origin = nil
           if not sub_surface.vertices.size == 4
-            OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "A sub-surface in space #{self.name} has other than 4 vertices; this sub-surface will not be included in the daylighted area calculation.")
+            OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Sub-surface #{sub_surface.name} in space #{self.name} has other than 4 vertices; this sub-surface will not be included in the daylighted area calculation.")
             next
           end
           prev_vertex_on_floorplane = nil
@@ -694,7 +694,7 @@ class OpenStudio::Model::Space
           sec_sidelit_polygons << sec_sidelit_sub_polygon
           
         end # Next subsurface
-      elsif surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "RoofCeiling"
+      elsif surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType.downcase == "roofceiling"
         
         # TODO stop skipping non-horizontal roofs
         surface_normal = surface.outwardNormal
@@ -708,7 +708,7 @@ class OpenStudio::Model::Space
         end
         
         surface.subSurfaces.sort.each do |sub_surface|
-          next unless sub_surface.outsideBoundaryCondition == "Outdoors" && sub_surface.subSurfaceType == "Skylight"
+          next unless sub_surface.outsideBoundaryCondition == "Outdoors" && sub_surface.subSurfaceType.downcase == "skylight"
           
           #OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***#{sub_surface.name}***")
           total_skylight_area += sub_surface.netArea
@@ -991,9 +991,9 @@ class OpenStudio::Model::Space
     sum_window_area_times_vt = 0
     construction_name_to_vt_map = {}
     self.surfaces.sort.each do |surface|
-      next unless surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "Wall"
+      next unless surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType.downcase == "wall"
       surface.subSurfaces.sort.each do |sub_surface|
-        next unless sub_surface.outsideBoundaryCondition == "Outdoors" && (sub_surface.subSurfaceType == "FixedWindow" || sub_surface.subSurfaceType == "OperableWindow")
+        next unless sub_surface.outsideBoundaryCondition == "Outdoors" && (sub_surface.subSurfaceType.downcase == "fixedwindow" || sub_surface.subSurfaceType.downcase == "operablewindow")
         
         num_sub_surfaces += 1
         
@@ -1107,9 +1107,9 @@ class OpenStudio::Model::Space
     sum_85pct_times_skylight_area_times_vt_times_wf = 0
     construction_name_to_vt_map = {}
     self.surfaces.sort.each do |surface|
-      next unless surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "RoofCeiling"
+      next unless surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType.downcase == "roofceiling"
       surface.subSurfaces.sort.each do |sub_surface|
-        next unless sub_surface.outsideBoundaryCondition == "Outdoors" && sub_surface.subSurfaceType == "Skylight"
+        next unless sub_surface.outsideBoundaryCondition == "Outdoors" && sub_surface.subSurfaceType.downcase == "skylight"
         
         num_sub_surfaces += 1
         
@@ -1442,7 +1442,7 @@ class OpenStudio::Model::Space
     # Record a floor in the space for later use
     floor_surface = nil
     self.surfaces.sort.each do |surface|
-      if surface.surfaceType == "Floor"
+      if surface.surfaceType.downcase == "floor"
         floor_surface = surface
         break
       end
@@ -1452,12 +1452,12 @@ class OpenStudio::Model::Space
     windows = {}
     skylights = {}
     self.surfaces.sort.each do |surface|
-      next unless surface.outsideBoundaryCondition == "Outdoors" && (surface.surfaceType == "Wall" || surface.surfaceType == "RoofCeiling")
+      next unless surface.outsideBoundaryCondition == "Outdoors" && (surface.surfaceType.downcase == "wall" || surface.surfaceType.downcase == "roofceiling")
       
       # Skip non-vertical walls and non-horizontal roofs
       straight_upward = OpenStudio::Vector3d.new(0, 0, 1)
       surface_normal = surface.outwardNormal
-      if surface.surfaceType == "Wall"
+      if surface.surfaceType.downcase == "wall"
         # TODO stop skipping non-vertical walls
         unless surface_normal.z.abs < 0.001 
           if surface.subSurfaces.size > 0
@@ -1465,7 +1465,7 @@ class OpenStudio::Model::Space
             next
           end
         end
-      elsif surface.surfaceType == "RoofCeiling"
+      elsif surface.surfaceType.downcase == "roofceiling"
         # TODO stop skipping non-horizontal roofs
         unless surface_normal.to_s == straight_upward.to_s
           if surface.subSurfaces.size > 0
@@ -1519,7 +1519,7 @@ class OpenStudio::Model::Space
       
       # Loop through all subsurfaces and 
       surface.subSurfaces.sort.each do |sub_surface|
-        next unless sub_surface.outsideBoundaryCondition == "Outdoors" && (sub_surface.subSurfaceType == "FixedWindow" || sub_surface.subSurfaceType == "OperableWindow" ||  sub_surface.subSurfaceType == "Skylight")
+        next unless sub_surface.outsideBoundaryCondition == "Outdoors" && (sub_surface.subSurfaceType.downcase == "fixedwindow" || sub_surface.subSurfaceType.downcase == "operablewindow" ||  sub_surface.subSurfaceType.downcase == "skylight")
 
         # Find the area
         net_area_m2 = sub_surface.netArea
@@ -2173,7 +2173,7 @@ Warehouse.Office
       # Skip non-outdoor surfaces
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       # Skip non-walls
-      next unless surface.surfaceType == 'Wall'
+      next unless surface.surfaceType.downcase == 'wall'
       # This surface
       area_m2 += surface.netArea
       # Subsurfaces in this surface
@@ -2279,5 +2279,75 @@ Warehouse.Office
     return plenum_status
   
   end
+  
+  # Determines whether the space is conditioned per 90.1,
+  # which is based on heating and cooling loads.
+  #
+  # @param climate_zone [String] climate zone
+  # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
+  # @todo add logic to detect indirectly-conditioned spaces
+  def conditioning_category(standard, climate_zone)
+  
+    # Get the zone this space is inside
+    zone = self.thermalZone
+    
+    # Assume unconditioned if not assigned to a zone
+    if zone.empty?
+      return 'Unconditioned'
+    end
+  
+    # Get the category from the zone
+    cond_cat = zone.get.conditioning_category(standard, climate_zone)
+
+    return cond_cat
+  
+  end  
+  
+  # Determines heating status.  If the space's 
+  # zone has a thermostat with a maximum heating
+  # setpoint above 5C (41F), counts as heated.
+  #
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if heated, false if not
+  def is_heated
+
+    # Get the zone this space is inside
+    zone = self.thermalZone
+    
+    # Assume unheated if not assigned to a zone
+    if zone.empty?
+      return false
+    end
+  
+    # Get the category from the zone
+    htd = zone.get.is_heated
+
+    return htd
+  
+  end
+  
+  # Determines cooling status.  If the space's 
+  # zone has a thermostat with a minimum cooling
+  # setpoint above 33C (91F), counts as cooled.
+  #
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if cooled, false if not
+  def is_cooled
+  
+    # Get the zone this space is inside
+    zone = self.thermalZone
+    
+    # Assume uncooled if not assigned to a zone
+    if zone.empty?
+      return false
+    end
+  
+    # Get the category from the zone
+    cld = zone.get.is_cooled
+
+    return cld
+  
+  end
+    
   
 end
