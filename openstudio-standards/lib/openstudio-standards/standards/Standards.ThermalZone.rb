@@ -668,30 +668,93 @@ class OpenStudio::Model::ThermalZone
   
   end
   
-  # Determines whether the zone is conditioned based on thermostats,
-  # not HVAC equipment.  This is to handle situations like parking
-  # garages where zone equipment like exhaust fans are considered
-  # conditioning equipment by E+.
-  # Instead, if a zone has no thermostat, or if the heating is below
-  # 41F (5C) and the cooling is below 91F (33C), it is unconditioned.
-  # @author Andrew Parker, Julien Marrec
+  # Determines whether the zone is conditioned per 90.1,
+  # which is based on heating and cooling loads.
+  #
+  # @param climate_zone [String] climate zone
+  # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
+  # @todo add logic to detect indirectly-conditioned spaces
+  def conditioning_category(standard, climate_zone)
   
-  def is_unconditioned
+    # Get the heating load
+    htg_load_btu_per_ft2 = 0.0
+    htg_load_w_per_m2 = self.heatingDesignLoad
+    if htg_load_w_per_m2.is_initialized
+      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get,'W/m^2','Btu/hr*ft^2').get
+    end  
   
-    uncond = true
-    
-    if self.is_heated
-      uncond = false
-      return uncond
+    # Get the cooling load
+    clg_load_btu_per_ft2 = 0.0
+    clg_load_w_per_m2 = self.coolingDesignLoad
+    if clg_load_w_per_m2.is_initialized
+      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get,'W/m^2','Btu/hr*ft^2').get
     end
-    
-    if self.is_cooled
-      uncond = false
-      return uncond
-    end
-  
-    return uncond
 
-  end
+    # Determine the heating limit based on climate zone
+    # From Table 3.1 Heated Space Criteria
+    htg_lim_btu_per_ft2 = 0.0
+      case climate_zone
+      when 'ASHRAE 169-2006-1A',
+          'ASHRAE 169-2006-1B',
+          'ASHRAE 169-2006-2A',
+          'ASHRAE 169-2006-2B'
+        htg_lim_btu_per_ft2 = 5
+      when 'ASHRAE 169-2006-3A',
+          'ASHRAE 169-2006-3B',
+          'ASHRAE 169-2006-3C'
+        htg_lim_btu_per_ft2 = 10
+      when 'ASHRAE 169-2006-4A',
+          'ASHRAE 169-2006-4B',
+          'ASHRAE 169-2006-4C',
+          'ASHRAE 169-2006-5A',
+          'ASHRAE 169-2006-5B',
+          'ASHRAE 169-2006-5C',
+        htg_lim_btu_per_ft2 = 15
+      when 'ASHRAE 169-2006-6A',
+          'ASHRAE 169-2006-6B',
+          'ASHRAE 169-2006-7A',
+          'ASHRAE 169-2006-7B',
+        htg_lim_btu_per_ft2 = 20
+      when 
+          'ASHRAE 169-2006-8A',
+          'ASHRAE 169-2006-8B'
+        htg_lim_btu_per_ft2 = 25
+      end
+    
+    # Cooling limit is climate-independent
+    clg_lim_btu_per_ft2 = 5
+    
+    # Semiheated limit is climate-independent
+    semihtd_lim_btu_per_ft2 = 3.4
+    
+    # Determine if residential
+    res = false
+    if self.is_residential(standard)
+      res = true
+    end
+    
+    cond_cat = 'Unconditioned'
+    if htg_load_btu_per_ft2 > htg_lim_btu_per_ft2
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} is conditioned because heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{htg_lim_btu_per_ft2.round} Btu/hr*ft^2.")
+      if res
+        cond_cat = 'ResConditioned'
+      else
+        cond_cat = 'NonResConditioned'
+      end
+    elsif clg_load_btu_per_ft2 > clg_lim_btu_per_ft2
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} is conditioned because cooling load of #{clg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{clg_lim_btu_per_ft2.round} Btu/hr*ft^2.")
+      if res
+        cond_cat = 'ResConditioned'
+      else
+        cond_cat = 'NonResConditioned'
+      end
+    elsif htg_load_btu_per_ft2 > semihtd_lim_btu_per_ft2
+      cond_cat = 'Semiheated'
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} is semiheated because heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{semihtd_lim_btu_per_ft2.round} Btu/hr*ft^2.")
+    end
   
+    return cond_cat
+  
+  end
+
 end
