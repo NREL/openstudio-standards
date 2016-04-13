@@ -14,14 +14,10 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
   assert(model.is_initialized, "Could not load test model '#{model_name}.osm' from test_models/performance_rating_method.  Check name for typos.")
   model = model.get
 
-  # Check if there's a need to set the weather
-
-
-  # 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
-  # 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
+  # Fix up the weather file paths
+  base_rel_path = '../../data/weather/'
   if model.weatherFile.empty?
     epw_name = nil
-    base_rel_path = '../../data/weather/'
     case climate_zone
       when 'ASHRAE 169-2006-1A'
         epw_name = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
@@ -63,7 +59,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
         epw_name = nil
       else
         puts "No Weather file set, and CANNOT locate #{climate_zone}"
-        return false
+        return [false, ["No Weather file set, and CANNOT locate #{climate_zone}"]]
     end
     if epw_name.nil?
       puts "No Weather file set, and CANNOT locate #{climate_zone}"
@@ -77,11 +73,31 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
         puts "Set Weather file to '#{weather_file}'"
       else
         puts "Failed to set the weather file"
-        return false
+        return [false, ["Failed to set the weather file"]]
+      end
+    end
+  else # Weather file is set
+    # Make sure the weather file is where it says
+    epw_path = model.weatherFile.get.path
+    if epw_path.is_initialized
+      epw_path_string = epw_path.get.to_s
+      puts "path string = #{epw_path_string}"
+      unless File.exist?(epw_path_string)
+        epw_name = File.basename(epw_path_string)
+        rel_path = base_rel_path + epw_name
+        weather_file = File.expand_path(rel_path, __FILE__)
+        weather = BTAP::Environment::WeatherFile.new(weather_file)
+        #Set Weather file to model.
+        success = weather.set_weather_file(model)
+        if success
+          puts "Set Weather file to '#{weather_file}'"
+        else
+          puts "Failed to set the weather file"
+          return [false, ["Failed to set the weather file"]]
+        end
       end
     end
   end
-
 
   # Create a directory for the test result
   osm_directory = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}"
@@ -102,6 +118,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
   model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,osm_directory,debug = false)
 
   # Show the output messages
+  errs = []
   msg_log.logMessages.each do |msg|
     # DLM: you can filter on log channel here for now
     if /openstudio.*/.match(msg.logChannel) #/openstudio\.model\..*/
@@ -119,6 +136,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
         puts("WARNING - [#{msg.logChannel}] #{msg.logMessage}")
       elsif msg.logLevel == OpenStudio::Error
         puts("ERROR - [#{msg.logChannel}] #{msg.logMessage}")
+        errs << "ERROR - [#{msg.logChannel}] #{msg.logMessage}"
       elsif msg.logLevel == OpenStudio::Debug && debug
         puts("DEBUG - #{msg.logMessage}")
       end
@@ -128,7 +146,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
   # Save the test model
   model.save(OpenStudio::Path.new("#{osm_directory}/#{model_name}_baseline.osm"), true)
 
-  return model
+  return [model, errs]
 
 end
   
