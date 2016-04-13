@@ -101,7 +101,7 @@ class OpenStudio::Model::Model
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
     # Reduce the WWR and SRR, if necessary
-    self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage)
+    self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage, climate_zone)
     self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)
     
     # Assign building stories to spaces in the building
@@ -342,34 +342,60 @@ class OpenStudio::Model::Model
     res_elec = {'area_ft2'=>0, 'type'=>'residential', 'fuel'=>'electric', 'zones'=>[]}
     nonres_fossil = {'area_ft2'=>0, 'type'=>'nonresidential', 'fuel'=>'fossil', 'zones'=>[]}
     nonres_elec = {'area_ft2'=>0, 'type'=>'nonresidential', 'fuel'=>'electric', 'zones'=>[]}
-    [res_fossil, res_elec, nonres_fossil, nonres_elec].each do |data|
+    fossil_ho = {'area_ft2'=>0, 'type'=>'heatedonly', 'fuel'=>'fossil', 'zones'=>[]}
+    elec_ho = {'area_ft2'=>0, 'type'=>'heatedonly', 'fuel'=>'electric', 'zones'=>[]}  
+    [res_fossil, res_elec, nonres_fossil, nonres_elec, fossil_ho, elec_ho].each do |data|
       # If the zone meets the criteria, add it
       self.getThermalZones.each do |zone|
         area_m2 = zone.floorArea
         area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-        # Residential Fossil
-        if data['type'] == 'residential' && data['fuel'] == 'fossil'
-          if zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
-            data['area_ft2'] += area_ft2
-            data['zones'] << zone
+        heated = zone.is_heated
+        cooled = zone.is_cooled
+        # Unconditioned
+        if !heated && !cooled
+          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Zone #{zone.name} is unconditioned.  It will not be assigned a baseline system.")
+          next # Skip this zone
+        # Heated-Only
+        elsif heated && !cooled 
+          # Heated-Only Fossil
+          if data['type'] == 'heatedonly' && data['fuel'] == 'fossil'
+            if zone.is_fossil_hybrid_or_purchased_heat
+              data['area_ft2'] += area_ft2
+              data['zones'] << zone
+            end
+          # Heated-Only Electric
+          elsif data['type'] == 'heatedonly' && data['fuel'] == 'electric'
+            if !zone.is_fossil_hybrid_or_purchased_heat
+              data['area_ft2'] += area_ft2
+              data['zones'] << zone
+            end
           end
-        # Residential Electric
-        elsif data['type'] == 'residential' && data['fuel'] == 'electric'
-          if zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
-            data['area_ft2'] += area_ft2
-            data['zones'] << zone
-          end
-        # Nonresidential Fossil
-        elsif data['type'] == 'nonresidential' && data['fuel'] == 'fossil'
-          if !zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
-            data['area_ft2'] += area_ft2
-            data['zones'] << zone
-          end
-        # Nonresidential Electric
-        elsif data['type'] == 'nonresidential' && data['fuel'] == 'electric'
-          if !zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
-            data['area_ft2'] += area_ft2
-            data['zones'] << zone
+        # Heated and Cooled
+        else
+          # Residential Fossil
+          if data['type'] == 'residential' && data['fuel'] == 'fossil'
+            if zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
+              data['area_ft2'] += area_ft2
+              data['zones'] << zone
+            end
+          # Residential Electric
+          elsif data['type'] == 'residential' && data['fuel'] == 'electric'
+            if zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
+              data['area_ft2'] += area_ft2
+              data['zones'] << zone
+            end
+          # Nonresidential Fossil
+          elsif data['type'] == 'nonresidential' && data['fuel'] == 'fossil'
+            if !zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
+              data['area_ft2'] += area_ft2
+              data['zones'] << zone
+            end
+          # Nonresidential Electric
+          elsif data['type'] == 'nonresidential' && data['fuel'] == 'electric'
+            if !zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
+              data['area_ft2'] += area_ft2
+              data['zones'] << zone
+            end
           end
         end
       end
@@ -474,8 +500,9 @@ class OpenStudio::Model::Model
     # Put all the non-nil groups into an array. 
     # A group will be nil if the exception was not triggered.
     sys_groups = []
-    [dom, exc_fuel, exc_occ, exc_fuel_occ].each do |data|
+    [dom, exc_fuel, exc_occ, exc_fuel_occ, fossil_ho, elec_ho].each do |data|
       next if data.nil?
+      next if data['zones'].size == 0
       sys_groups << data
     end
     
@@ -1049,6 +1076,70 @@ class OpenStudio::Model::Model
     
   end
  
+  # @param array_of_zones [Array] an array of Hashes for each zone,
+  # with the keys 'zone', 
+  def eliminate_outlier_zones(array_of_zones, key_to_inspect, tolerance, field_name, units)
+    
+    # Sort the zones by the desired key
+    array_of_zones = array_of_zones.sort_by { |hsh| hsh[key_to_inspect] }
+ 
+    # Calculate the area-weighted average
+    total = 0.0
+    total_area = 0.0
+    all_vals = []
+    all_areas = []
+    all_zn_names = []
+    array_of_zones.each do |zn|
+      val = zn[key_to_inspect]
+      area = zn['area_ft2']
+      total += val*area
+      total_area += area
+      all_vals << val.round(1)
+      all_areas << area.round
+      all_zn_names << zn['zone'].name.get.to_s
+    end
+    avg = total / total_area
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Values for #{field_name}, tol = #{tolerance} #{units}, area ft2:")
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "vals  #{all_vals.join(', ')}")
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "areas #{all_areas.join(', ')}")
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "names #{all_zn_names.join(', ')}")
+
+    # Calculate the biggest delta
+    # and the index of the biggest delta
+    biggest_delta_i = nil
+    biggest_delta = 0.0
+    worst = nil
+    array_of_zones.each_with_index do |zn, i|
+      val = zn[key_to_inspect]
+      delta = (val - avg).abs
+      if delta >= biggest_delta
+        biggest_delta = delta
+        biggest_delta_i = i
+        worst = val
+      end
+    end
+    
+    #puts "   #{worst} - #{avg.round} = #{biggest_delta.round} biggest delta"  
+
+    # Compare the biggest delta
+    # against the difference and
+    # eliminate that zone if higher
+    # than the limit.
+    if biggest_delta > tolerance
+      zn_name = array_of_zones[biggest_delta_i]['zone'].name.get.to_s
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "For zone #{zn_name}, the #{field_name} of #{worst.round(1)} #{units} is more than #{tolerance} #{units} outside the area-weighted average of #{avg.round(1)} #{units}; it will be placed on its own secondary system.")
+      array_of_zones.delete_at(biggest_delta_i)
+      # Call method recursively if something was eliminated
+      array_of_zones = eliminate_outlier_zones(array_of_zones, key_to_inspect, tolerance, field_name, units)
+    else
+      #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{worst.round(1)} - #{avg.round(1)} = #{biggest_delta.round(1)} #{units} < tolerance of #{tolerance} #{units}, stopping elimination process.")
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{worst} - #{avg} = #{biggest_delta} #{units} < tolerance of #{tolerance} #{units}, stopping elimination process.")
+    end
+    
+    return array_of_zones    
+
+  end
+ 
   # Determine which of the zones
   # should be served by the primary HVAC system.
   # First, eliminate zones that differ by more
@@ -1066,7 +1157,7 @@ class OpenStudio::Model::Model
   # @return [Hash] A hash of two arrays of ThermalZones,
   # where the keys are 'primary' and 'secondary'
   def differentiate_primary_secondary_thermal_zones(zones)
-    
+
     # Determine the operational hours (proxy is annual
     # full load lighting hours) for all zones
     zone_data_1 = []
@@ -1074,7 +1165,7 @@ class OpenStudio::Model::Model
       data = {}
       data['zone'] = zone
       # Get the area
-      area_ft2 = OpenStudio.convert(zone.floorArea, 'm^2', 'ft^2').get
+      area_ft2 = OpenStudio.convert(zone.floorArea * zone.multiplier, 'm^2', 'ft^2').get
       data['area_ft2'] = area_ft2      
       #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "#{zone.name}")
       zone.spaces.each do |space|
@@ -1126,48 +1217,18 @@ class OpenStudio::Model::Model
 
     # Filter out any zones that operate differently by more
     # than 40hrs/wk.  This will be determined by a difference of more
-    # than (40 hrs/wk * 52 wks/yr) = 2080 annual full load hrs.
-    zones_same_hrs = []
-    zone_data_1.each_with_index do |data, i|
-    
-      # Eliminate the data from this zone
-      other_zone_data_1 = Array.new(zone_data_1)
-      other_zone_data_1.delete_at(i)
-      
-      # Calculate the area-weighted
-      # average operating hours
-      area_hrs = 1
-      tot_area = 1
-      other_zone_data_1.each do |other_data|
-        area_hrs += other_data['area_ft2'] * other_data['wk_op_hrs']
-        tot_area += other_data['area_ft2']
-      end
-      avg_wk_op_hrs = area_hrs / tot_area
-      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name} weekly operating hours = #{data['wk_op_hrs'].round} hrs/wk, average of #{avg_wk_op_hrs.round} hrs/wk for other zones on the system.")
-      
-      # Compare avg to this zone
-      wk_op_hrs = data['wk_op_hrs']
-      if wk_op_hrs < avg_wk_op_hrs - 40.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the weekly full load operating hrs of #{wk_op_hrs.round} hrs is more than 40 hrs lower than the average of #{avg_wk_op_hrs.round} hrs for other zones on the system, zone will not be attached to the primary system.")
-        next
-      elsif wk_op_hrs > avg_wk_op_hrs + 40.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the weekly full load operating hrs of #{wk_op_hrs.round} hrs is more than 40 hrs higher than the average of #{avg_wk_op_hrs.round} hrs for other zones on the system, zone will not be attached to the primary system.")
-        next
-      end
-    
-      # Operating hours are same
-      zones_same_hrs << data['zone']  
-    
-    end
-        
+    # than (40 hrs/wk * 52 wks/yr) = 2080 annual full load hrs.    
+    zones_same_hrs = eliminate_outlier_zones(zone_data_1, 'wk_op_hrs', 40, 'weekly operating hrs', 'hrs')
+  
     # Get the heating and cooling loads and areas for
     # all remaining zones.
     zone_data_2 = []
-    zones_same_hrs.each do |zone|    
+    zones_same_hrs.each do |zn_data|    
       data = {}
+      zone = zn_data['zone']
       data['zone'] = zone
       # Get the area
-      area_ft2 = OpenStudio.convert(zone.floorArea, 'm^2', 'ft^2').get
+      area_ft2 = OpenStudio.convert(zone.floorArea * zone.multiplier, 'm^2', 'ft^2').get
       data['area_ft2'] = area_ft2
       # Get the heating load
       htg_load_w_per_m2 = zone.heatingDesignLoad
@@ -1188,76 +1249,26 @@ class OpenStudio::Model::Model
       zone_data_2 << data
     end    
    
-    # Filter out any zones that are +/- 10 Btu/hr*ft^2 from the
-    # area-weighted average.
-    primary_zones = []
-    zone_data_2.each_with_index do |data, i|
-
-      # Eliminate the data from this zone
-      other_zone_data_2 = Array.new(zone_data_2)
-      other_zone_data_2.delete_at(i)
-      
-      # Calculate the area-weighted
-      # average heating and cooling loads    
-      htg_load_hrs = 0
-      clg_load_hrs = 0
-      area_hrs = 1
-      htg_area = 1
-      clg_area = 1
-      other_zone_data_2.each do |other_data|
-        # Don't include nil or zero loads in average
-        unless other_data['htg_load_btu_per_ft2'].nil? || other_data['htg_load_btu_per_ft2'] == 0.0
-          htg_load_hrs += other_data['area_ft2'] * other_data['htg_load_btu_per_ft2']
-          htg_area += other_data['area_ft2']
-        end
-        # Don't include nil or zero loads in average
-        unless other_data['clg_load_btu_per_ft2'].nil? || other_data['clg_load_btu_per_ft2'] == 0.0
-          clg_load_hrs += other_data['area_ft2'] * other_data['clg_load_btu_per_ft2']
-          clg_area += other_data['area_ft2']
-        end        
-      end
-      avg_htg_load_btu_per_ft2 = htg_load_hrs / htg_area
-      avg_clg_load_btu_per_ft2 = clg_load_hrs / clg_area
-      # This is throwing an error: undefined method `round' for nil:NilClass
-      # So I'll assign zero if nil for now
-      data['htg_load_btu_per_ft2'] ||= 0
-      data['clg_load_btu_per_ft2'] ||= 0
-      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name} heating = #{data['htg_load_btu_per_ft2'].round} Btu/hr*ft^2, average heating = #{avg_htg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones. Cooling = #{data['clg_load_btu_per_ft2'].round} Btu/hr*ft^2, average cooling = #{avg_clg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones.")
+    # Filter out any zones that are +/- 10 Btu/hr*ft^2 from the heating average
+    pri_zn_data = eliminate_outlier_zones(zone_data_2, 'htg_load_btu_per_ft2', 10, 'heating load', 'Btu/hr*ft^2')
     
-      # Filter on heating load
-      htg_load_btu_per_ft2 = data['htg_load_btu_per_ft2']
-      if htg_load_btu_per_ft2 < avg_htg_load_btu_per_ft2 - 10.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 is more than 10 Btu/hr*ft^2 lower than the average of #{avg_htg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones on the system, zone will be assigned a secondary system.")
-        next
-      elsif htg_load_btu_per_ft2 > avg_htg_load_btu_per_ft2 + 10.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 is more than 10 Btu/hr*ft^2 higher than the average of #{avg_htg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones on the system, zone will be assigned a secondary system.")
-        next
-      end
-      
-      # Filter on cooling load
-      clg_load_btu_per_ft2 = data['clg_load_btu_per_ft2']
-      if clg_load_btu_per_ft2 < avg_clg_load_btu_per_ft2 - 10.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the cooling load of #{clg_load_btu_per_ft2.round} Btu/hr*ft^2 is more than 10 Btu/hr*ft^2 lower than the average of #{avg_clg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones on the system, zone will be assigned a secondary system.")
-        next
-      elsif clg_load_btu_per_ft2 > avg_clg_load_btu_per_ft2 + 10.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, the cooling load of #{clg_load_btu_per_ft2.round} Btu/hr*ft^2 is more than 10 Btu/hr*ft^2 higher than the average of #{avg_clg_load_btu_per_ft2.round} Btu/hr*ft^2 for other zones on the system, zone will be assigned a secondary system.")
-        next
-      end
-      
-      # It is a primary zone!
-      primary_zones << data['zone']
-      
+    # Filter out any zones that are +/- 10 Btu/hr*ft^2 from the cooling average
+    pri_zn_data = eliminate_outlier_zones(pri_zn_data, 'clg_load_btu_per_ft2', 10, 'cooling load', 'Btu/hr*ft^2')    
+    # Get just the primary zones themselves
+    pri_zones = []
+    pri_zn_data.each do |zn_data|
+      pri_zones << zn_data['zone']
     end
     
-    # Secondary zones are all other zones
-    secondary_zones = []
+    # Get the secondary zones
+    sec_zones = []
     zones.each do |zone|
-      unless primary_zones.include?(zone)
-        secondary_zones << zone
+      unless pri_zones.include?(zone)
+        sec_zones << zone
       end
     end
     
-    return {'primary'=>primary_zones, 'secondary'=>secondary_zones}
+    return {'primary'=>pri_zones, 'secondary'=>sec_zones}
   
   end
 
@@ -1298,8 +1309,10 @@ class OpenStudio::Model::Model
         end
       end
       
-      story_zone_lists << zones_on_story
-
+      if zones_on_story.size > 0
+        story_zone_lists << zones_on_story
+      end
+      
     end
     
     return story_zone_lists
@@ -2964,7 +2977,7 @@ class OpenStudio::Model::Model
       types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
       types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
       types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
-      types_to_modify << ['Ground', 'GroundContactWall', 'Unheated']
+      types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
     end
     
     # Modify all constructions of each type
@@ -3097,17 +3110,17 @@ class OpenStudio::Model::Model
   end  
 
   # Reduces the WWR to the values specified by the PRM. WWR reduction
-  # will be done by raising sill height.  This causes the least impact
+  # will be done by moving vertices inward toward centroid.  This causes the least impact
   # on the daylighting area calculations and controls placement.
   #
   # @todo add proper support for 90.1-2013 with all those building
   # type specific values
   # @todo support 90.1-2004 requirement that windows be modeled as
   # horizontal bands.  Currently just using existing window geometry,
-  # and shrinking vertically as necessary if WWR is above limit.
+  # and shrinking as necessary if WWR is above limit.
   # @todo support semiheated spaces as a separate WWR category
   # @todo add window frame area to calculation of WWR
-  def apply_performance_rating_method_baseline_window_to_wall_ratio(template)
+  def apply_performance_rating_method_baseline_window_to_wall_ratio(template, climate_zone)
   
     # Loop through all spaces in the model, and 
     # per the PNNL PRM Reference Manual, find the areas
@@ -3119,6 +3132,8 @@ class OpenStudio::Model::Model
     res_wind_m2 = 0
     sh_wall_m2 = 0.001
     sh_wind_m2 = 0
+    # Store the space conditioning category for later use
+    space_cats = {}
     self.getSpaces.each do |space|
       
       # Loop through all surfaces in this space
@@ -3128,31 +3143,52 @@ class OpenStudio::Model::Model
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
         # Skip non-walls
-        next unless surface.surfaceType == 'Wall'
+        next unless surface.surfaceType.downcase == 'wall'
         # This wall's gross area (including window area)
         wall_area_m2 += surface.grossArea * space.multiplier
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+          next unless ss.subSurfaceType.downcase == 'fixedwindow' || ss.subSurfaceType.downcase == 'operablewindow'
           wind_area_m2 += ss.netArea * space.multiplier
         end
       end
       
       # Determine the space category
-      cat = 'NonRes'
-      if space.is_residential(template)
-        cat = 'Res'
+      # TODO This should really use the heating/cooling loads
+      # from the proposed building.  However, in an attempt
+      # to avoid another sizing run just for this purpose,
+      # conditioned status is based on heating/cooling
+      # setpoints.  If heated-only, will be assumed Semiheated.
+      # The full-bore method is on the next line in case needed.
+      # cat = space.conditioning_category(template, climate_zone)
+      cooled = space.is_cooled
+      heated = space.is_heated
+      cat = 'Unconditioned'
+      # Unconditioned
+      if !heated && !cooled
+        cat = 'Unconditioned'
+      # Heated-Only
+      elsif heated && !cooled 
+        cat = 'Semiheated'
+      # Heated and Cooled
+      else
+        res = space.is_residential(template)
+        if res
+          cat = 'ResConditioned'
+        else
+          cat = 'NonResConditioned'
+        end
       end
-      # if space.is_semiheated
-        # cat = 'Semiheated'
-      # end
+      space_cats[space] = cat
       
       # Add to the correct category
       case cat
-      when 'NonRes'
+      when 'Unconditioned'
+        next # Skip unconditioned spaces
+      when 'NonResConditioned'
         nr_wall_m2 += wall_area_m2
         nr_wind_m2 += wind_area_m2
-      when 'Res'
+      when 'ResConditioned'
         res_wall_m2 += wall_area_m2
         res_wind_m2 += wind_area_m2
       when 'Semiheated'
@@ -3184,31 +3220,28 @@ class OpenStudio::Model::Model
     # Determine the factors by which to reduce the window area
     mult_nr_red = wwr_lim / wwr_nr 
     mult_res_red = wwr_lim / wwr_res
-    #mult_sh_red = wwr_lim / wwr_sh
+    mult_sh_red = wwr_lim / wwr_sh
     
     # Reduce the window area if any of the categories necessary
     self.getSpaces.each do |space|
       
       # Determine the space category
-      cat = 'NonRes'
-      if space.is_residential(template)
-        cat = 'Res'
-      end
-      # if space.is_semiheated
-        # cat = 'Semiheated'
-      # end
+      # from the previously stored values
+      cat = space_cats[space]
       
-      # Skip spaces whose windows don't need to be reduced
+      # Get the correct multiplier
       case cat
-      when 'NonRes'
+      when 'Unconditioned'
+        next # Skip unconditioned spaces
+      when 'NonResConditioned'
         next unless red_nr
         mult = mult_nr_red
-      when 'Res'
+      when 'ResConditioned'
         next unless red_res
         mult = mult_res_red
       when 'Semiheated'
         next unless red_sh
-        # mult = mult_sh_red
+        mult = mult_sh_red
       end
       
       # Loop through all surfaces in this space
@@ -3216,13 +3249,13 @@ class OpenStudio::Model::Model
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
         # Skip non-walls
-        next unless surface.surfaceType == 'Wall'
+        next unless surface.surfaceType.downcase == 'wall'
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
           next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
           # Reduce the size of the window
           red = 1.0 - mult
-          ss.reduce_area_by_percent_by_raising_sill(red)
+          ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
         end
       end
 
@@ -3233,7 +3266,7 @@ class OpenStudio::Model::Model
   end
   
   # Reduces the SRR to the values specified by the PRM. SRR reduction
-  # will be done by shrinking in the x direction toward the center.
+  # will be done by shrinking vertices toward the centroid.
   #
   # @todo support semiheated spaces as a separate SRR category
   # @todo add skylight frame area to calculation of SRR
@@ -3358,7 +3391,7 @@ class OpenStudio::Model::Model
           next unless ss.subSurfaceType == 'Skylight'
           # Reduce the size of the skylight
           red = 1.0 - mult
-          ss.reduce_area_by_percent_by_shrinking_x(red)
+          ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
         end
       end
 
