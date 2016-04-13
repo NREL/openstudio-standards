@@ -95,14 +95,6 @@ class OpenStudio::Model::Model
     # on the flow rate of the system.
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
         
-    # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
-    # AHU1 doesn't have economizer
-    if building_type == "Outpatient"
-      self.modify_OAcontroller(building_vintage)
-      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-      self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
-    end
-
     # Apply the HVAC efficiency standard
     self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
 
@@ -115,12 +107,21 @@ class OpenStudio::Model::Model
       self.add_daylighting_controls(building_vintage)
     end
 
-    if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant"
+    if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant" || building_type == "Outpatient"
       self.update_exhaust_fan_efficiency(building_vintage)
     end
     
     if building_type == "HighriseApartment"
       self.update_fan_efficiency
+    end
+
+    # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
+    # AHU1 doesn't have economizer
+    if building_type == "Outpatient"
+      # remove the controller:mechanical ventilation for AHU1 OA
+      self.modify_OAcontroller(building_vintage)
+      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+      self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
     end
 
     # Add output variables for debugging
