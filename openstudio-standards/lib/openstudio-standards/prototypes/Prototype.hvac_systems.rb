@@ -886,13 +886,6 @@ class OpenStudio::Model::Model
       hvac_op_sch = self.add_schedule(hvac_op_sch)
     end
     
-    # Outpatient two AHU1 and AHU2 have different HVAC schedule
-    if sys_name.include? "PVAV Outpatient F1"
-      hvac_op_sch = self.add_schedule('OutPatientHealthCare AHU1-Fan_Pre2004')
-    elsif sys_name.include? 'PVAV Outpatient F2 F3'
-      hvac_op_sch = self.add_schedule('OutPatientHealthCare AHU2-Fan_Pre2004')
-    end
-    
     # oa damper schedule
     if oa_damper_sch.nil?
       oa_damper_sch = self.alwaysOnDiscreteSchedule
@@ -911,32 +904,13 @@ class OpenStudio::Model::Model
     # Control temps used across all air handlers
     # TODO why aren't design and operational temps coordinated?
     sys_dsn_prhtg_temp_f = 44.6 # Design central deck to preheat to 44.6F
-    # sys_dsn_clg_sa_temp_f = 57.2 # Design central deck to cool to 57.2F
+    sys_dsn_clg_sa_temp_f = 57.2 # Design central deck to cool to 57.2F
     sys_dsn_htg_sa_temp_f = 62 # Central heat to 62F
-    # zn_dsn_clg_sa_temp_f = 55 # Design VAV box for 55F from central deck
-    # zn_dsn_htg_sa_temp_f = 122 # Design VAV box to reheat to 122F
+    zn_dsn_clg_sa_temp_f = 55 # Design VAV box for 55F from central deck
+    zn_dsn_htg_sa_temp_f = 122 # Design VAV box to reheat to 122F
     rht_rated_air_in_temp_f = 62 # Reheat coils designed to receive 62F
     rht_rated_air_out_temp_f = 90 # Reheat coils designed to supply 90F...but zone expects 122F...?
-    if sys_name.include? 'PVAV Outpatient F1'
-      clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
-      if standard == 'DOE Ref 1980-2004' || standard == 'DOE Ref Pre-1980'
-        sys_dsn_clg_sa_temp_f = 52
-      else
-        sys_dsn_clg_sa_temp_f = 45
-      end
-      zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
-      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
-    elsif sys_name.include? 'PVAV Outpatient F2 F3'
-      clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
-      sys_dsn_clg_sa_temp_f = 52
-      zn_dsn_clg_sa_temp_f = 55 # zone cooling design SAT
-      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
-    else
-      clg_sa_temp_f = 55 # Central deck clg temp operates at 55F
-      sys_dsn_clg_sa_temp_f = 57.2 # Design central deck to cool to 57.2F
-      zn_dsn_clg_sa_temp_f = 55 # Design VAV box for 55F from central deck
-      zn_dsn_htg_sa_temp_f = 122 # Design VAV box to reheat to 122F
-    end
+    clg_sa_temp_f = 55 # Central deck clg temp operates at 55F
 
     sys_dsn_prhtg_temp_c = OpenStudio.convert(sys_dsn_prhtg_temp_f,'F','C').get
     sys_dsn_clg_sa_temp_c = OpenStudio.convert(sys_dsn_clg_sa_temp_f,'F','C').get
@@ -961,6 +935,27 @@ class OpenStudio::Model::Model
       air_loop.setName(sys_name)
     end
     air_loop.setAvailabilitySchedule(hvac_op_sch)
+
+    # Some exceptions for the Outpatient
+    if sys_name.include? "PVAV Outpatient F1"
+      # Outpatient two AHU1 and AHU2 have different HVAC schedule
+      hvac_op_sch = self.add_schedule('OutPatientHealthCare AHU1-Fan_Pre2004')
+      # Outpatient has different temperature settings for sizing
+      clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
+      if standard == 'DOE Ref 1980-2004' || standard == 'DOE Ref Pre-1980'
+        sys_dsn_clg_sa_temp_f = 52
+      else
+        sys_dsn_clg_sa_temp_f = 45
+      end
+      zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
+      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT    
+    elsif sys_name.include? 'PVAV Outpatient F2 F3'
+      hvac_op_sch = self.add_schedule('OutPatientHealthCare AHU2-Fan_Pre2004')
+      clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
+      sys_dsn_clg_sa_temp_f = 52
+      zn_dsn_clg_sa_temp_f = 55 # zone cooling design SAT
+      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
+    end
 
     # Air handler controls
     stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,sa_temp_sch)
