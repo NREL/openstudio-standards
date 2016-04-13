@@ -27,7 +27,7 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
         else
-          hot_water_loop = self.add_hw_loop('NaturalGas')
+          hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
         end
 
         # Retrieve the existing chilled water loop
@@ -73,7 +73,7 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
         else
-          hot_water_loop = self.add_hw_loop('NaturalGas')
+          hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
         end
         
         # Add the CAV
@@ -140,7 +140,7 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
         else
-          hot_water_loop = self.add_hw_loop('NaturalGas')
+          hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
         end      
 
         self.add_pvav(building_vintage, 
@@ -160,7 +160,7 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
         else
-          hot_water_loop = self.add_hw_loop('NaturalGas')
+          hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
         end
 
         # Retrieve the existing chilled water loop
@@ -202,7 +202,7 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
         else
-          hot_water_loop = self.add_hw_loop('NaturalGas')
+          hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
         end      
       
         # Retrieve the existing heat pump loop

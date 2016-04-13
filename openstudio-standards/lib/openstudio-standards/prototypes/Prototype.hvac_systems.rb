@@ -42,17 +42,16 @@ class OpenStudio::Model::Model
     sizing_plant.setLoopDesignTemperatureDifference(hw_delta_t_k)
 
     #hot water pump
-    hw_pump = OpenStudio::Model::PumpVariableSpeed.new(self)
+    if building_type == "Outpatient"
+      hw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
+    else
+      hw_pump = OpenStudio::Model::PumpVariableSpeed.new(self)
+    end
     hw_pump.setName('Hot Water Loop Pump')
     hw_pump_head_ft_h2o = 60.0
     hw_pump_head_press_pa = OpenStudio.convert(hw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get
     hw_pump.setRatedPumpHead(hw_pump_head_press_pa)
     hw_pump.setMotorEfficiency(0.9)
-    hw_pump.setFractionofMotorInefficienciestoFluidStream(0)
-    hw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
-    hw_pump.setCoefficient2ofthePartLoadPerformanceCurve(1)
-    hw_pump.setCoefficient3ofthePartLoadPerformanceCurve(0)
-    hw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0)
     hw_pump.setPumpControlType('Intermittent')
     hw_pump.addToNode(hot_water_loop.supplyInletNode)
 
@@ -886,6 +885,13 @@ class OpenStudio::Model::Model
       hvac_op_sch = self.add_schedule(hvac_op_sch)
     end
     
+    # Outpatient two AHU1 and AHU2 have different HVAC schedule
+    if sys_name.include? "PVAV Outpatient F1"
+      hvac_op_sch = self.add_schedule('OutPatientHealthCare AHU1-Fan_Pre2004')
+    elsif sys_name.include? 'PVAV Outpatient F2 F3'
+      hvac_op_sch = self.add_schedule('OutPatientHealthCare AHU2-Fan_Pre2004')
+    end
+    
     # oa damper schedule
     if oa_damper_sch.nil?
       oa_damper_sch = self.alwaysOnDiscreteSchedule
@@ -904,16 +910,31 @@ class OpenStudio::Model::Model
     # Control temps used across all air handlers
     # TODO why aren't design and operational temps coordinated?
     sys_dsn_prhtg_temp_f = 44.6 # Design central deck to preheat to 44.6F
-    sys_dsn_clg_sa_temp_f = 57.2 # Design central deck to cool to 57.2F
+    # sys_dsn_clg_sa_temp_f = 57.2 # Design central deck to cool to 57.2F
     sys_dsn_htg_sa_temp_f = 62 # Central heat to 62F
-    zn_dsn_clg_sa_temp_f = 55 # Design VAV box for 55F from central deck
-    zn_dsn_htg_sa_temp_f = 122 # Design VAV box to reheat to 122F
+    # zn_dsn_clg_sa_temp_f = 55 # Design VAV box for 55F from central deck
+    # zn_dsn_htg_sa_temp_f = 122 # Design VAV box to reheat to 122F
     rht_rated_air_in_temp_f = 62 # Reheat coils designed to receive 62F
     rht_rated_air_out_temp_f = 90 # Reheat coils designed to supply 90F...but zone expects 122F...?
-    if sys_name == 'PVAV Outpatient F1'
+    if sys_name.include? 'PVAV Outpatient F1'
       clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
+      if standard == 'DOE Ref 1980-2004' || standard == 'DOE Ref Pre-1980'
+        sys_dsn_clg_sa_temp_f = 52
+      else
+        sys_dsn_clg_sa_temp_f = 45
+      end
+      zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
+      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
+    elsif sys_name.include? 'PVAV Outpatient F2 F3'
+      clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
+      sys_dsn_clg_sa_temp_f = 52
+      zn_dsn_clg_sa_temp_f = 55 # zone cooling design SAT
+      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
     else
       clg_sa_temp_f = 55 # Central deck clg temp operates at 55F
+      sys_dsn_clg_sa_temp_f = 57.2 # Design central deck to cool to 57.2F
+      zn_dsn_clg_sa_temp_f = 55 # Design VAV box for 55F from central deck
+      zn_dsn_htg_sa_temp_f = 122 # Design VAV box to reheat to 122F
     end
 
     sys_dsn_prhtg_temp_c = OpenStudio.convert(sys_dsn_prhtg_temp_f,'F','C').get
@@ -945,7 +966,7 @@ class OpenStudio::Model::Model
     stpt_manager.addToNode(air_loop.supplyOutletNode)
     sizing_system = air_loop.sizingSystem
     # sizing_system.setPreheatDesignTemperature(sys_dsn_prhtg_temp_c)
-    # sizing_system.setCentralCoolingDesignSupplyAirTemperature(sys_dsn_clg_sa_temp_c)
+    sizing_system.setCentralCoolingDesignSupplyAirTemperature(sys_dsn_clg_sa_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(sys_dsn_htg_sa_temp_c)
     sizing_system.setSizingOption('Coincident')
     sizing_system.setAllOutdoorAirinCooling(false)
@@ -981,10 +1002,10 @@ class OpenStudio::Model::Model
 
     # Outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
-    oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
-    oa_intake.setName("#{air_loop.name} OA Sys")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
+    oa_intake.setName("#{air_loop.name} OA Sys")
     oa_intake.addToNode(air_loop.supplyInletNode)
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Ventilation Controller")
@@ -3276,7 +3297,7 @@ class OpenStudio::Model::Model
       swh_pump_motor_efficiency = 1
     end
 
-    if building_type.nil? && ( 'template' == 'DOE Ref 1980-2004' || 'template' == 'DOE Ref Pre-1980' )
+    if standard == 'DOE Ref 1980-2004' || 'template' == 'DOE Ref Pre-1980'
       if building_type == 'Medium Office'
         swh_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
       else
@@ -4141,7 +4162,17 @@ class OpenStudio::Model::Model
       fan = OpenStudio::Model::FanZoneExhaust.new(self)
       fan.setName("#{zone.name} Exhaust Fan")
       fan.setAvailabilitySchedule(self.add_schedule(availability_sch_name))
-      fan.setMaximumFlowRate(flow_rate)
+      # two ways to input the flow rate: Number of Array.
+      # For number: assign directly. For Array: assign each flow rate to each according zone.
+      if flow_rate.is_a? Numeric
+        fan.setMaximumFlowRate(flow_rate)
+      elsif flow_rate.class.to_s == 'Array'
+        index = thermal_zones.index(zone)
+        flow_rate_zone = flow_rate[index]
+        fan.setMaximumFlowRate(flow_rate_zone)
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Wrong format of flow rate")
+      end
       unless flow_fraction_schedule_name.nil?
         fan.setFlowFractionSchedule(self.add_schedule(flow_fraction_schedule_name))
       end
