@@ -546,14 +546,14 @@ class OpenStudio::Model::Model
 
     self.getSurfaces.each do |surface|
       if surface.outsideBoundaryCondition.to_s == "Adiabatic"
-        if surface.surfaceType.downcase == "wall"
+        if surface.surfaceType.to_s == "Wall"
           surface.setConstruction(wall_adiabatic_construction)
         else
           surface.setConstruction(floor_adiabatic_construction)
         end
       elsif  surface.outsideBoundaryCondition.to_s == "OtherSideCoefficients"
         # Ground
-        if surface.surfaceType.downcase == "wall"
+        if surface.surfaceType.to_s == "Wall"
           surface.setOutsideBoundaryCondition("Ground")
           surface.setConstruction(basement_wall_construction)
         else

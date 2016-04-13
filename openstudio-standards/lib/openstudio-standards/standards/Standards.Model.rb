@@ -2871,14 +2871,14 @@ class OpenStudio::Model::Model
       # Hard-assigned surfaces
       self.getSurfaces.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
-        next unless surf.surfaceType.downcase == type.downcase
+        next unless surf.surfaceType == type
         constructions << surf.construction
       end
       
       # Hard-assigned subsurfaces
       self.getSubSurfaces.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
-        next unless surf.subSurfaceType.downcase == type.downcase
+        next unless surf.subSurfaceType == type
         constructions << surf.construction
       end
       
@@ -3047,14 +3047,14 @@ class OpenStudio::Model::Model
       # Surfaces
       self.getSurfaces.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
-        next unless surf.surfaceType.downcase == surface_type.downcase
+        next unless surf.surfaceType == surface_type
         surfaces_to_modify << surf
       end
       
       # SubSurfaces
       self.getSubSurfaces.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
-        next unless surf.subSurfaceType.downcase == surface_type.downcase
+        next unless surf.subSurfaceType == surface_type
         surfaces_to_modify << surf
       end
    
@@ -3252,7 +3252,7 @@ class OpenStudio::Model::Model
         next unless surface.surfaceType.downcase == 'wall'
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType.downcase == 'fixedwindow' || ss.subSurfaceType.downcase == 'operablewindow'
+          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
           # Reduce the size of the window
           red = 1.0 - mult
           ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
@@ -3291,12 +3291,12 @@ class OpenStudio::Model::Model
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
         # Skip non-walls
-        next unless surface.surfaceType.downcase == 'roofceiling'
+        next unless surface.surfaceType == 'RoofCeiling'
         # This wall's gross area (including skylight area)
         wall_area_m2 += surface.grossArea * space.multiplier
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType.downcase == 'skylight'
+          next unless ss.subSurfaceType == 'Skylight'
           sky_area_m2 += ss.netArea * space.multiplier
         end
       end
@@ -3385,10 +3385,10 @@ class OpenStudio::Model::Model
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
         # Skip non-walls
-        next unless surface.surfaceType.downcase == 'roofceiling'
+        next unless surface.surfaceType == 'RoofCeiling'
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType.downcase == 'skylight'
+          next unless ss.subSurfaceType == 'Skylight'
           # Reduce the size of the skylight
           red = 1.0 - mult
           ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
