@@ -1411,20 +1411,20 @@ class OpenStudio::Model::Model
       interior_surfaces.setRoofCeilingConstruction(add_construction(construction_name))
     end
 
-    # # Ground contact surfaces constructions
+    # Ground contact surfaces constructions
      ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
      construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
-     # ground_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
-                                                                      # climate_zone_set,
-                                                                      # 'GroundContactFloor',
-                                                                      # ground_contact_floor_standards_construction_type,
-                                                                      # category))
+     ground_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
+                                                                       climate_zone_set,
+                                                                       'GroundContactFloor',
+                                                                       ground_contact_floor_standards_construction_type,
+                                                                       category))
 
-     # ground_surfaces.setWallConstruction(find_and_add_construction(building_vintage,
-                                                                      # climate_zone_set,
-                                                                      # 'GroundContactWall',
-                                                                      # ground_contact_wall_standards_construction_type,
-                                                                      # category))
+      ground_surfaces.setWallConstruction(find_and_add_construction(building_vintage,
+                                                                       climate_zone_set,
+                                                                       'GroundContactWall',
+                                                                       ground_contact_wall_standards_construction_type,
+                                                                       category))
 
     # Exterior sub surfaces constructions
     exterior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(self)
@@ -2202,20 +2202,20 @@ class OpenStudio::Model::Model
     # Ground contact surfaces constructions
     ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
     construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
-    ## if data['ground_contact_floor_standards_construction_type'] && data['ground_contact_floor_building_category']
-      # ground_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
-                                                                       # climate_zone_set,
-                                                                       # 'GroundContactFloor',
-                                                                       # data['ground_contact_floor_standards_construction_type'],
-                                                                       # data['ground_contact_floor_building_category']))
-    # end
-    # if data['ground_contact_wall_standards_construction_type'] && data['ground_contact_wall_building_category']
-      # ground_surfaces.setWallConstruction(find_and_add_construction(building_vintage,
-                                                                       # climate_zone_set,
-                                                                       # 'GroundContactWall',
-                                                                       # data['ground_contact_wall_standards_construction_type'],
-                                                                       # data['ground_contact_wall_building_category']))
-    # end
+     if data['ground_contact_floor_standards_construction_type'] && data['ground_contact_floor_building_category']
+       ground_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
+                                                                        climate_zone_set,
+                                                                        'GroundContactFloor',
+                                                                        data['ground_contact_floor_standards_construction_type'],
+                                                                        data['ground_contact_floor_building_category']))
+     end
+     if data['ground_contact_wall_standards_construction_type'] && data['ground_contact_wall_building_category']
+       ground_surfaces.setWallConstruction(find_and_add_construction(building_vintage,
+                                                                        climate_zone_set,
+                                                                        'GroundContactWall',
+                                                                        data['ground_contact_wall_standards_construction_type'],
+                                                                        data['ground_contact_wall_building_category']))
+     end
     if data['ground_contact_ceiling_standards_construction_type'] && data['ground_contact_ceiling_building_category']
       ground_surfaces.setRoofCeilingConstruction(find_and_add_construction(building_vintage,
                                                                        climate_zone_set,
@@ -2441,8 +2441,7 @@ class OpenStudio::Model::Model
           if File.exist?(alt_epw_path)
             full_epw_path = OpenStudio::OptionalPath.new(OpenStudio::Path.new(alt_epw_path))
           else
-		  OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Model", "Model has been assigned a weather file, but the file is not in the specified location of '#{alt_epw_path}'.")
-            OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Model", "Model has been assigned a weather file, but the file is not in the specified location of '#{epw_path.get}'.")
+		    OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Model", "Model has been assigned a weather file, but the file is not in the specified location of '#{epw_path.get}'.")
           end
         end
       else
@@ -2789,14 +2788,14 @@ class OpenStudio::Model::Model
           constructions << int_surfs.floorConstruction
         when 'InteriorCeiling', 'DemisingRoof'
           constructions << int_surfs.roofCeilingConstruction 
-        # Ground Contact Surfaces
+         # Ground Contact Surfaces
         when 'GroundContactWall'
           constructions << gnd_surfs.wallConstruction
-        #when 'GroundContactFloor'
-         # constructions << gnd_surfs.floorConstruction
+        when 'GroundContactFloor'
+          constructions << gnd_surfs.floorConstruction
         when 'GroundContactRoof'
           constructions << gnd_surfs.roofCeilingConstruction
-        # Exterior SubSurfaces
+          # Exterior SubSurfaces
         when 'ExteriorWindow'
           constructions << ext_subsurfs.fixedWindowConstruction
           constructions << ext_subsurfs.operableWindowConstruction
@@ -2929,8 +2928,8 @@ class OpenStudio::Model::Model
       types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
       types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
       types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
-    #  types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
-    #  types_to_modify << ['Ground', 'GroundContactWall', 'Unheated']
+      types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
+      types_to_modify << ['Ground', 'GroundContactWall', 'Unheated']
     end
     
     # Modify all constructions of each type
@@ -3776,7 +3775,7 @@ class OpenStudio::Model::Model
 
     # Set the equipment to stage sequentially
     chilled_water_loop.setLoadDistributionScheme('SequentialLoad')
-
+	chilled_water_loop.apply_performance_rating_method_baseline_temperatures(template)
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Standards.PlantLoop', "Adding condenser water loop.")
   
     # Condenser water loop
