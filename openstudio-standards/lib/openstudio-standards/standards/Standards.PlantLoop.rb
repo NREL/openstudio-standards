@@ -1,4 +1,3 @@
-
 # Reopen the OpenStudio class to add methods to apply standards to this object
 class OpenStudio::Model::PlantLoop
 
@@ -45,8 +44,7 @@ class OpenStudio::Model::PlantLoop
     return variable_flow
   
   end
-
-
+  
   # Todo: I think it makes more sense to sense the motor efficiency right there...
   # But actually it's completely irrelevant... you could set at 0.9 and just calculate the pressurise rise to have your 19 W/GPM or whatever
   def apply_performance_rating_method_baseline_pump_power(template)
@@ -280,9 +278,6 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
           ct.setDesignRangeTemperature(range_t_k)
         elsif sc.to_CoolingTowerTwoSpeed.is_initialized
           ct = sc.to_CoolingTowerTwoSpeed.get
-          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
-          ct.setDesignApproachTemperature(design_approach_k)
-          ct.setDesignRangeTemperature(range_t_k)
         elsif sc.to_CoolingTowerVariableSpeed.is_initialized
           ct = sc.to_CoolingTowerVariableSpeed.get
           ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
@@ -365,9 +360,9 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
 
     # Get the design water temperature
     sizing_plant = self.sizingPlant
-    design_temp_c = sizing_plant.loopDesignExitTemperature
+    design_temp_c = sizing_plant.designLoopExitTemperature 
     design_temp_f = OpenStudio.convert(design_temp_c,'C','F').get
-    loop_type = self.loopType
+    loop_type = sizing_plant.loopType
     
     # Apply the reset, depending on the type of loop.
     case loop_type
@@ -458,13 +453,13 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
         elsif chiller.autosizedReferenceCapacity.is_initialized
           total_cooling_capacity_w += chiller.autosizedReferenceCapacity.get
         else
-          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{self.name} capacity of #{chiller.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of #{chiller.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
         end
       end
     end
 
     total_cooling_capacity_tons = OpenStudio.convert(total_cooling_capacity_w,'W','ton').get
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}, cooling capacity is #{total_cooling_capacity_tons.round} tons of refrigeration.")    
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, cooling capacity is #{total_cooling_capacity_tons.round} tons of refrigeration.")    
     
     return total_cooling_capacity_w
   
@@ -640,7 +635,7 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
         
         # Determine the capacity
         cap_w = self.total_cooling_capacity
-        cap_tons = OpenStudio.convert(cap_w,'m^2','ft^2').get
+        cap_tons = OpenStudio.convert(cap_w,'W','ton').get
       
         # Determine the primary pump type 
         pri_control_type = 'Riding Curve'
@@ -769,101 +764,6 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
     return true
   
   end
-
-  def apply_performance_rating_method_number_of_chillers(template)
-    
-    # Skip non-cooling plants
-    return true unless self.sizingPlant.loopType == 'Cooling'
-
-    # Determine the number and type of chillers
-    num_chillers = nil
-    chiller_cooling_type = nil
-    chiller_compressor_type = nil
-    case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      
-      # Determine the capacity of the loop
-      cap_w = self.total_cooling_capacity
-      cap_tons = OpenStudio.convert(cap_w,'W','ton').get
-    
-      if cap_tons <= 300
-        num_chillers = 1
-        chiller_cooling_type = 'WaterCooled'
-        chiller_compressor_type = 'Rotary Screw'
-      elsif cap_tons > 300 && cap_tons < 600
-        num_chillers = 2
-        chiller_cooling_type = 'WaterCooled'
-        chiller_compressor_type = 'Rotary Screw'
-      else
-        # Max capacity of a single chiller
-        max_cap_ton = 800.0
-        num_chillers = (cap_tons/max_cap_ton).floor + 1
-        # Must be at least 2 chillers
-        num_chillers +=1 if num_chillers == 1
-        chiller_cooling_type = 'WaterCooled'
-        chiller_compressor_type = 'Centrifugal'        
-      end
-  
-    end
-    
-    # Get all existing chillers
-    chillers = []
-    self.supplyComponents.each do |sc|
-      if sc.to_ChillerElectricEIR.is_initialized
-        chillers << sc.to_ChillerElectricEIR.get
-      end
-    end
-
-    # Ensure there is only 1 chiller to start
-    first_chiller = nil
-    if chillers.size == 0
-      return true
-    elsif chillers.size > 1
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
-    else
-      first_chiller = chillers[0]
-    end
-    
-    # Determine the per-chiller capacity
-    # and sizing factor
-    per_chiller_sizing_factor = (1.0/num_chillers).round(2)
-    # This is unused
-    per_chiller_cap_tons = cap_tons / num_chillers
-
-    # Set the sizing factor and the chiller type: could do it on the first chiller before cloning it, but renaming warrants looping on chillers anyways
-    
-    # Add any new chillers
-    final_chillers = [first_chiller]
-    (num_chillers-1).times do
-      #new_chiller = OpenStudio::Model::ChillerElectricEIR.new(self.model)
-      # TODO renable the cloning of the chillers after curves are shared resources
-      # Should be good to go since 1.10.2 (?)
-      new_chiller = first_chiller.clone(self.model)
-      if new_chiller.to_ChillerElectricEIR.is_initialized
-        new_chiller = new_chiller.to_ChillerElectricEIR.get
-      else
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, could not clone chiller #{first_chiller.name}, cannot apply the performance rating method number of chillers.")
-        return false
-      end
-      self.addSupplyBranchForComponent(new_chiller)
-      final_chillers << new_chiller
-    end
-
-    # Set the sizing factor and the chiller types
-    final_chillers.each_with_index do |final_chiller, i|
-      final_chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i+1} of #{final_chillers.size}")
-      final_chiller.setSizingFactor(per_chiller_sizing_factor)
-      final_chiller.setCondenserType(chiller_cooling_type)
-    end
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, there are #{final_chillers.size} #{chiller_cooling_type} #{chiller_compressor_type} chillers.")
-    
-    # Set the equipment to stage sequentially
-    self.setLoadDistributionScheme('SequentialLoad')
-  
-    return true
-  
-  end
-
 
   # Determines the total rated watts per GPM of the loop
   #

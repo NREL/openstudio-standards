@@ -145,8 +145,8 @@ class OpenStudio::Model::Model
     # Remove ideal loads
     self.getZoneHVACIdealLoadsAirSystems.each do |ideal_loads|
       ideal_loads.remove
-    end
-
+    end	
+	
     # Determine the baseline HVAC system type for each of
     # the groups of zones and add that system type.
     sys_groups.each do |sys_group|
@@ -187,7 +187,7 @@ class OpenStudio::Model::Model
     # Run sizing run with the HVAC equipment
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
-    end    
+    end 	
 
     # If there are any multizone systems, set damper positions
     # and perform a second sizing run
@@ -214,7 +214,6 @@ class OpenStudio::Model::Model
       plant_loop.apply_performance_rating_method_baseline_pump_power(building_vintage)
       plant_loop.apply_performance_rating_method_baseline_pumping_type(building_vintage)
       plant_loop.apply_performance_rating_method_number_of_boilers(building_vintage)
-      plant_loop.apply_performance_rating_method_number_of_chillers(building_vintage)
     end
 
     # Run sizing run with the new chillers and boilers to determine capacities
@@ -230,14 +229,13 @@ class OpenStudio::Model::Model
       added = space.addDaylightingControls(building_vintage, false, false)
     end
 
-    # Delete all the unused curves
+	# Delete all the unused curves
     self.getCurves.sort.each do |curve|
       if curve.parent.empty?
         #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
         curve.remove
       end
     end
-
 
     # Todo: turn off self shading
     # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
@@ -632,7 +630,7 @@ class OpenStudio::Model::Model
   # @todo add 90.1-2013 systems 11-13    
   def add_performance_rating_method_baseline_system(standard, system_type, zones)
   
-    case standard
+	case standard
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
      
       case system_type
@@ -783,21 +781,9 @@ class OpenStudio::Model::Model
           hot_water_loop = self.add_hw_loop('NaturalGas')
         end
 
-        # Retrieve the existing chilled water loop
-        # or add a new one if necessary.
+        #add a new chilled water loop
         chilled_water_loop = nil
-        if self.getPlantLoopByName('Chilled Water Loop').is_initialized
-          chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
-        else
-          condenser_water_loop = self.add_cw_loop()
-          chilled_water_loop = self.add_chw_loop(standard,
-                                                'const_pri_var_sec',
-                                                'WaterCooled',
-                                                nil,
-                                                'Rotary Screw',
-                                                175.0,
-                                                condenser_water_loop)
-        end
+        chilled_water_loop = self.add_prm_cw(standard)   
         
         # Group zones by story
         story_zone_lists = self.group_zones_by_story(zones)
@@ -847,21 +833,9 @@ class OpenStudio::Model::Model
     
       when 'VAV_PFP_Boxes' # System 8
       
-        # Retrieve the existing chilled water loop
-        # or add a new one if necessary.
+		#add a new chilled water loop
         chilled_water_loop = nil
-        if self.getPlantLoopByName('Chilled Water Loop').is_initialized
-          chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
-        else
-          condenser_water_loop = self.add_cw_loop()
-          chilled_water_loop = self.add_chw_loop(standard,
-                                                'const_pri_var_sec',
-                                                'WaterCooled',
-                                                nil,
-                                                'Rotary Screw',
-                                                175.0,
-                                                condenser_water_loop)
-        end
+        chilled_water_loop = self.add_prm_cw(standard) 
         
         # Group zones by story
         story_zone_lists = self.group_zones_by_story(zones)
@@ -1437,20 +1411,20 @@ class OpenStudio::Model::Model
       interior_surfaces.setRoofCeilingConstruction(add_construction(construction_name))
     end
 
-    # Ground contact surfaces constructions
-    ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
-    construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
-    ground_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
-                                                                     climate_zone_set,
-                                                                     'GroundContactFloor',
-                                                                     ground_contact_floor_standards_construction_type,
-                                                                     category))
+    # # Ground contact surfaces constructions
+     ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
+     construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
+     # ground_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
+                                                                      # climate_zone_set,
+                                                                      # 'GroundContactFloor',
+                                                                      # ground_contact_floor_standards_construction_type,
+                                                                      # category))
 
-    ground_surfaces.setWallConstruction(find_and_add_construction(building_vintage,
-                                                                     climate_zone_set,
-                                                                     'GroundContactWall',
-                                                                     ground_contact_wall_standards_construction_type,
-                                                                     category))
+     # ground_surfaces.setWallConstruction(find_and_add_construction(building_vintage,
+                                                                      # climate_zone_set,
+                                                                      # 'GroundContactWall',
+                                                                      # ground_contact_wall_standards_construction_type,
+                                                                      # category))
 
     # Exterior sub surfaces constructions
     exterior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(self)
@@ -2228,20 +2202,20 @@ class OpenStudio::Model::Model
     # Ground contact surfaces constructions
     ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
     construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
-    if data['ground_contact_floor_standards_construction_type'] && data['ground_contact_floor_building_category']
-      ground_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
-                                                                       climate_zone_set,
-                                                                       'GroundContactFloor',
-                                                                       data['ground_contact_floor_standards_construction_type'],
-                                                                       data['ground_contact_floor_building_category']))
-    end
-    if data['ground_contact_wall_standards_construction_type'] && data['ground_contact_wall_building_category']
-      ground_surfaces.setWallConstruction(find_and_add_construction(building_vintage,
-                                                                       climate_zone_set,
-                                                                       'GroundContactWall',
-                                                                       data['ground_contact_wall_standards_construction_type'],
-                                                                       data['ground_contact_wall_building_category']))
-    end
+    ## if data['ground_contact_floor_standards_construction_type'] && data['ground_contact_floor_building_category']
+      # ground_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
+                                                                       # climate_zone_set,
+                                                                       # 'GroundContactFloor',
+                                                                       # data['ground_contact_floor_standards_construction_type'],
+                                                                       # data['ground_contact_floor_building_category']))
+    # end
+    # if data['ground_contact_wall_standards_construction_type'] && data['ground_contact_wall_building_category']
+      # ground_surfaces.setWallConstruction(find_and_add_construction(building_vintage,
+                                                                       # climate_zone_set,
+                                                                       # 'GroundContactWall',
+                                                                       # data['ground_contact_wall_standards_construction_type'],
+                                                                       # data['ground_contact_wall_building_category']))
+    # end
     if data['ground_contact_ceiling_standards_construction_type'] && data['ground_contact_ceiling_building_category']
       ground_surfaces.setRoofCeilingConstruction(find_and_add_construction(building_vintage,
                                                                        climate_zone_set,
@@ -2467,6 +2441,7 @@ class OpenStudio::Model::Model
           if File.exist?(alt_epw_path)
             full_epw_path = OpenStudio::OptionalPath.new(OpenStudio::Path.new(alt_epw_path))
           else
+		  OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Model", "Model has been assigned a weather file, but the file is not in the specified location of '#{alt_epw_path}'.")
             OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Model", "Model has been assigned a weather file, but the file is not in the specified location of '#{epw_path.get}'.")
           end
         end
@@ -2817,8 +2792,8 @@ class OpenStudio::Model::Model
         # Ground Contact Surfaces
         when 'GroundContactWall'
           constructions << gnd_surfs.wallConstruction
-        when 'GroundContactFloor'
-          constructions << gnd_surfs.floorConstruction
+        #when 'GroundContactFloor'
+         # constructions << gnd_surfs.floorConstruction
         when 'GroundContactRoof'
           constructions << gnd_surfs.roofCeilingConstruction
         # Exterior SubSurfaces
@@ -2954,8 +2929,8 @@ class OpenStudio::Model::Model
       types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
       types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
       types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
-      types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
-      types_to_modify << ['Ground', 'GroundContactWall', 'Unheated']
+    #  types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
+    #  types_to_modify << ['Ground', 'GroundContactWall', 'Unheated']
     end
     
     # Modify all constructions of each type
@@ -3605,5 +3580,269 @@ class OpenStudio::Model::Model
     return result
   
   end
+  
+  def add_prm_cw(template)
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.PlantLoop.Standard', "Adding chilled water loop.")
+	
+    # Determine the number and type of chillers
+	 num_chillers = nil
+	 chiller_cooling_type = nil
+	 chiller_compressor_type = nil
+     chilled_water_loop = nil
+	 condenser_water_loop = nil
+	 
+	 # size loads based on primary loan loads from ideal load sizing run
+	 # need to call differentiate_primary_secondary_thermal_zones because it hasn't been ran yet
+	 clg_load_w = 0
+	 pri_sec_zone_lists = self.differentiate_primary_secondary_thermal_zones(self.getThermalZones)
+     pri_zones = pri_sec_zone_lists['primary']
+	 pri_zones.each do |zone|
+	 clg_load_w_per_m2 = zone.coolingDesignLoad
+			if clg_load_w_per_m2.is_initialized
+				load = clg_load_w_per_m2.to_f
+				area = zone.floorArea.to_f
+				clg_load_w += area*load
+			end	
+	 end		
+    cap_w = clg_load_w
+	cap_tons = OpenStudio.convert(cap_w,'W','ton').get	 
+	chilled_water_loop = nil
+	condenser_water_loop = nil
+	
+	# Chilled water loop
+    chilled_water_loop = OpenStudio::Model::PlantLoop.new(self)
+    chilled_water_loop.setName('Chilled Water Loop')
+	OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{chilled_water_loop.name}, cooling capacity is #{cap_tons.round} tons of refrigeration.")
+    chilled_water_loop.setMaximumLoopTemperature(98)
+    chilled_water_loop.setMinimumLoopTemperature(1)
+	
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    
+      if cap_tons <= 300
+        num_chillers = 1
+        chiller_cooling_type = 'WaterCooled'
+        chiller_compressor_type = 'Rotary Screw'
+		chw_pumping_type = 'const_pri'
+      elsif cap_tons > 300 && cap_tons < 600
+        num_chillers = 2
+        chiller_cooling_type = 'WaterCooled'
+        chiller_compressor_type = 'Rotary Screw'
+		chw_pumping_type = 'const_pri_var_sec'
+      else
+        # Max capacity of a single chiller
+        max_cap_ton = 800.0
+        num_chillers = (cap_tons/max_cap_ton).floor + 1
+        # Must be at least 2 chillers
+        num_chillers +=1 if num_chillers == 1
+        chiller_cooling_type = 'WaterCooled'
+        chiller_compressor_type = 'Centrifugal'   
+		chw_pumping_type = 'const_pri_var_sec'		
+      end
+  
+    end		
+                  
+    # Chilled water loop controls
+    chw_temp_f = 44 #CHW setpoint 44F
+    chw_delta_t_r = 10.1 #10.1F delta-T
+    # TODO: Yixing check the CHW Setpoint from standards
+    # TODO: Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_performance_rating_method_baseline_temperatures
+
+    chw_temp_c = OpenStudio.convert(chw_temp_f,'F','C').get
+    chw_delta_t_k = OpenStudio.convert(chw_delta_t_r,'R','K').get
+    chw_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+    chw_temp_sch.setName("Chilled Water Loop Temp - #{chw_temp_f}F")
+    chw_temp_sch.defaultDaySchedule.setName("Chilled Water Loop Temp - #{chw_temp_f}F Default")
+    chw_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),chw_temp_c)
+    chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,chw_temp_sch)
+    chw_stpt_manager.setName("Chilled water loop setpoint manager")
+    chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
+
+    sizing_plant = chilled_water_loop.sizingPlant
+    sizing_plant.setLoopType('Cooling')
+    sizing_plant.setDesignLoopExitTemperature(chw_temp_c)
+    sizing_plant.setLoopDesignTemperatureDifference(chw_delta_t_k)
+	sec_chw_pump_head_ft_h2o = 60
+	sec_chw_pump_head_press_pa = OpenStudio.convert(sec_chw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get
+
+    # Chilled water pumps
+    if chw_pumping_type == 'const_pri'
+      # secondary chilled water pump head
+	  sec_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
+      sec_chw_pump.setName('Chilled Water Loop Pump')
+      sec_chw_pump.setRatedPumpHead(sec_chw_pump_head_press_pa)
+      sec_chw_pump.setMotorEfficiency(0.9)
+      sec_chw_pump.setPumpControlType('Intermittent')
+      sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
+    elsif chw_pumping_type == 'const_pri_var_sec'
+      # Secondary chilled water pump
+      sec_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(self)
+      sec_chw_pump.setName('Chilled Water Loop Secondary Pump')
+      sec_chw_pump.setRatedPumpHead(sec_chw_pump_head_press_pa)
+      sec_chw_pump.setMotorEfficiency(0.9)
+      # Curve makes it perform like variable speed pump
+      sec_chw_pump.setFractionofMotorInefficienciestoFluidStream(0)
+      sec_chw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
+      sec_chw_pump.setCoefficient2ofthePartLoadPerformanceCurve(0.0205)
+      sec_chw_pump.setCoefficient3ofthePartLoadPerformanceCurve(0.4101)
+      sec_chw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0.5753)
+      sec_chw_pump.setPumpControlType('Intermittent')
+      sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
+      # Change the chilled water loop to have a two-way common pipes
+      chilled_water_loop.setCommonPipeSimulation('CommonPipe')
+    end
+
+    # Make the correct type of chiller based these properties 
+    chiller = OpenStudio::Model::ChillerElectricEIR.new(self)
+    chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller")
+    chilled_water_loop.addSupplyBranchForComponent(chiller)
+    chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
+    ref_cond_wtr_temp_f = 95
+    ref_cond_wtr_temp_c = OpenStudio.convert(ref_cond_wtr_temp_f,'F','C').get
+    chiller.setReferenceEnteringCondenserFluidTemperature(ref_cond_wtr_temp_c)
+    chiller.setMinimumPartLoadRatio(0.15)
+    chiller.setMaximumPartLoadRatio(1.0)
+    chiller.setOptimumPartLoadRatio(1.0)
+    chiller.setMinimumUnloadingRatio(0.25)
+    chiller.setCondenserType('AirCooled')
+    chiller.setLeavingChilledWaterLowerTemperatureLimit(OpenStudio.convert(36,'F','C').get)
+    chiller.setChillerFlowMode('ConstantFlow')
+	#add dedicated pump for chiller
+	  pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
+      pri_chw_pump.setName('Primary Chiller Pump')
+	  pri_chw_pump_head_ft_h2o = 20
+	  pri_chw_pump_head_press_pa = OpenStudio.convert(sec_chw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get	  
+      pri_chw_pump.setRatedPumpHead(pri_chw_pump_head_press_pa)
+      pri_chw_pump.setMotorEfficiency(0.9)
+      pri_chw_pump.setPumpControlType('Intermittent')
+      pri_chw_pump.addToNode(chiller.supplyInletModelObject.get.to_Node.get)
+	
+    # Skip non-cooling plants
+    return true unless chilled_water_loop.sizingPlant.loopType == 'Cooling'
+    
+    # Get all existing chillers
+    chillers = []
+    chilled_water_loop.supplyComponents.each do |sc|
+      if sc.to_ChillerElectricEIR.is_initialized
+        chillers << sc.to_ChillerElectricEIR.get
+      end
+    end
+
+    # Ensure there is only 1 chiller to start
+    first_chiller = nil
+    if chillers.size == 0
+      return true
+    elsif chillers.size > 1
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "For #{chilled_water_loop.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
+    else
+      first_chiller = chillers[0]
+    end
+    
+    # Determine the per-chiller capacity
+    # and sizing factor
+    per_chiller_sizing_factor = (1.0/num_chillers).round(2)
+    # This is unused
+    per_chiller_cap_tons = cap_tons / num_chillers
+
+    # Set the sizing factor and the chiller type: could do it on the first chiller before cloning it, but renaming warrants looping on chillers anyways
+    
+    # Add any new chillers
+    final_chillers = [first_chiller]
+    (num_chillers-1).times do
+      new_chiller = OpenStudio::Model::ChillerElectricEIR.new(chilled_water_loop.model)
+      # TODO renable the cloning of the chillers after curves are shared resources
+      # Should be good to go since 1.10.2 (?) does not work for 1.11.0
+      #new_chiller = first_chiller.clone(chilled_water_loop.model)
+      if new_chiller.to_ChillerElectricEIR.is_initialized
+        new_chiller = new_chiller.to_ChillerElectricEIR.get
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "For #{chilled_water_loop.name}, could not clone chiller #{first_chiller.name}, cannot apply the performance rating method number of chillers.")
+        return false
+      end
+      chilled_water_loop.addSupplyBranchForComponent(new_chiller)
+	  #add pump for each chiller
+	  pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
+      pri_chw_pump.setName('Primary Chiller Pump')
+	  pri_chw_pump_head_ft_h2o = 20
+	  pri_chw_pump_head_press_pa = OpenStudio.convert(sec_chw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get	  
+      pri_chw_pump.setRatedPumpHead(pri_chw_pump_head_press_pa)
+      pri_chw_pump.setMotorEfficiency(0.9)
+      pri_chw_pump.setPumpControlType('Intermittent')
+      pri_chw_pump.addToNode(new_chiller.supplyInletModelObject.get.to_Node.get)
+	  
+      final_chillers << new_chiller
+    end
+
+    # Set the equipment to stage sequentially
+    chilled_water_loop.setLoadDistributionScheme('SequentialLoad')
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Standards.PlantLoop', "Adding condenser water loop.")
+  
+    # Condenser water loop
+    condenser_water_loop = OpenStudio::Model::PlantLoop.new(self)
+    condenser_water_loop.setName('Condenser Water Loop')	
+	cw_delta_t_r = 10 #10F delta-T
+    cw_delta_t_k = OpenStudio.convert(cw_delta_t_r,'R','K').get
+
+    sizing_plant = condenser_water_loop.sizingPlant
+    sizing_plant.setLoopType('Condenser')
+    sizing_plant.setLoopDesignTemperatureDifference(cw_delta_t_k)
+	condenser_water_loop.apply_performance_rating_method_baseline_temperatures(template)
+    # Cooling towers
+    num_chillers.times do |i|
+      cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+      cooling_tower.setName("#{condenser_water_loop.name} Cooling Tower #{i}")
+      cooling_tower.setNumberofCells(1)
+	  condenser_water_loop.addSupplyBranchForComponent(cooling_tower)
+	  #create dedicated condenser pump for each tower
+	  cw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
+      cw_pump.setName('Condenser Water Loop Pump')
+      cw_pump_head_ft_h2o = 49.7
+      cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get
+      cw_pump.setRatedPumpHead(cw_pump_head_press_pa)
+      cw_pump.setPumpControlType('Intermittent')
+	  #add condenser pump to cooling tower inlet
+      cw_pump.addToNode(cooling_tower.inletModelObject.get.to_Node.get)	  
+    end
+
+    # Condenser water loop pipes
+    cooling_tower_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    condenser_water_loop.addSupplyBranchForComponent(cooling_tower_bypass_pipe)
+    chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    condenser_water_loop.addDemandBranchForComponent(chiller_bypass_pipe)
+    supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    supply_outlet_pipe.addToNode(condenser_water_loop.supplyOutletNode)
+    demand_inlet_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    demand_inlet_pipe.addToNode(condenser_water_loop.demandInletNode)
+    demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    demand_outlet_pipe.addToNode(condenser_water_loop.demandOutletNode)
+
+    # Connect the chiller to the condenser loop if
+    # one was supplied.
+	# Set the sizing factor and the chiller types
+    final_chillers.each_with_index do |final_chiller, i|
+      final_chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i+1} of #{final_chillers.size}")
+      final_chiller.setSizingFactor(per_chiller_sizing_factor)
+      final_chiller.setCondenserType(chiller_cooling_type)
+	  condenser_water_loop.addDemandBranchForComponent(final_chiller)
+    end
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Standards.PlantLoop', "For #{chilled_water_loop.name}, there are #{final_chillers.size} #{chiller_cooling_type} #{chiller_compressor_type} chillers.")
+    
+	#chilled water loop pipes
+    chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    chilled_water_loop.addSupplyBranchForComponent(chiller_bypass_pipe)
+    coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    chilled_water_loop.addDemandBranchForComponent(coil_bypass_pipe)
+    supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    supply_outlet_pipe.addToNode(chilled_water_loop.supplyOutletNode)
+    demand_inlet_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    demand_inlet_pipe.addToNode(chilled_water_loop.demandInletNode)
+    demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
+    demand_outlet_pipe.addToNode(chilled_water_loop.demandOutletNode)
+
+    return chilled_water_loop
+
+  end    
 
 end
