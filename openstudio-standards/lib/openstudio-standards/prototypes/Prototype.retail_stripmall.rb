@@ -29,6 +29,7 @@ class OpenStudio::Model::Model
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
     system_to_space_map = [
       {
+<<<<<<< HEAD
         'type' => 'CAV',
         'name' => 'PSZ-AC_1',
         'space_names' => ['LGSTORE1']
@@ -37,43 +38,62 @@ class OpenStudio::Model::Model
         'type' => 'CAV',
         'name' => 'PSZ-AC_2',
         'space_names' => ['SMstore1']
+=======
+        'type' => 'PSZ-AC',
+        'name' => 'PSZ-AC_1',
+        'space_names' => ['LGSTORE1'],
+        'hvac_op_sch_index' => 1
       },
       {
-        'type' => 'CAV2',
+        'type' => 'PSZ-AC',
+        'name' => 'PSZ-AC_2',
+        'space_names' => ['SMstore1'],
+        'hvac_op_sch_' => 1
+>>>>>>> remotes/origin/master
+      },
+      {
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_3',
-        'space_names' => ['SMstore2']
+        'space_names' => ['SMstore2'],
+        'hvac_op_sch_index' => 2
       },
       {
-        'type' => 'CAV2',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_4',
-        'space_names' => ['SMstore3']
+        'space_names' => ['SMstore3'],
+        'hvac_op_sch_index' => 2
       },
       {
-        'type' => 'CAV2',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_5',
-        'space_names' => ['SMstore4']
+        'space_names' => ['SMstore4'],
+        'hvac_op_sch_index' => 2
       },{
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_6',
-        'space_names' => ['LGSTORE2']
+        'space_names' => ['LGSTORE2'],
+        'hvac_op_sch_index' => 3
       },
       {
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_7',
-        'space_names' => ['SMstore5']
+        'space_names' => ['SMstore5'],
+        'hvac_op_sch_index' => 3
       },
       {
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_8',
-        'space_names' => ['SMstore6']
+        'space_names' => ['SMstore6'],
+        'hvac_op_sch_index' => 3
       },
       {
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_9',
-        'space_names' => ['SMstore7']
+        'space_names' => ['SMstore7'],
+        'hvac_op_sch_index' => 3
       },
       {
-        'type' => 'CAV3',
+        'type' => 'PSZ-AC',
         'name' => 'PSZ-AC_10',
         'space_names' => ['SMstore8']
       }
@@ -81,12 +101,13 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
      
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
    
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
     
     system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
 
+<<<<<<< HEAD
     # hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
     
     system_to_space_map.each do |system|
@@ -120,6 +141,8 @@ class OpenStudio::Model::Model
       end
     end
 
+=======
+>>>>>>> remotes/origin/master
     # Add infiltration door opening
     # Spaces names to design infiltration rates (m3/s)
     case building_vintage
@@ -148,10 +171,11 @@ class OpenStudio::Model::Model
       # do nothing for the old vintage
     end
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
     return true
   end #add hvac
 
+<<<<<<< HEAD
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
     return true if building_vintage == "DOE Ref Pre-1980" or building_vintage == "DOE Ref 1980-2004"
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
@@ -246,8 +270,24 @@ class OpenStudio::Model::Model
 
     end  
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
+=======
+  def update_waterheater_loss_coefficient(building_vintage)
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      self.getWaterHeaterMixeds.sort.each do |water_heater|
+        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.205980747)
+        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.205980747)
+      end
+    end      
+  end
+  
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+
+    self.update_waterheater_loss_coefficient(building_vintage)
+    
+>>>>>>> remotes/origin/master
     return true
     
-  end #add swh
+  end
   
 end

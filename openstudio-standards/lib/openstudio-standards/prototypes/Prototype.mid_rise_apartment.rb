@@ -1,5 +1,5 @@
 
-# Extend the class to add Medium Office specific stuff
+
 class OpenStudio::Model::Model
  
   def define_space_type_map(building_type, building_vintage, climate_zone)
@@ -171,44 +171,9 @@ class OpenStudio::Model::Model
     return space_multiplier_map
   end
      
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
    
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    
-    system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
-
-    # hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
-    
-    system_to_space_map.each do |system|
-
-      #find all zones associated with these spaces
-      thermal_zones = []
-      system['space_names'].each do |space_name|
-        space = self.getSpaceByName(space_name)
-        if space.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-          return false
-        end
-        space = space.get
-        zone = space.thermalZone
-        if zone.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No thermal zone was created for the space called #{space_name}")
-          return false
-        end
-        thermal_zones << zone.get
-      end
-
-      case system['type']
-      when 'SAC'
-        self.add_split_AC(prototype_input, hvac_standards, thermal_zones)
-      when 'UnitHeater'
-        self.add_unitheater(prototype_input, hvac_standards, thermal_zones)
-      else
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Undefined HVAC system type called #{system['type']}")
-        return false
-      end
-
-    end
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
 
     # adjust the cooling setpoint
@@ -219,11 +184,11 @@ class OpenStudio::Model::Model
     self.add_door_infiltration(building_vintage,climate_zone)
 
         
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
     
     return true
     
-  end #add hvac
+  end
 
   def adjust_clg_setpoint(building_vintage,climate_zone)
     space_name = 'Office'
@@ -271,7 +236,12 @@ class OpenStudio::Model::Model
       elec_equip1.setSpace(corridor_ground_space)
       elec_equip2.setSpace(corridor_ground_space)
       elec_equip1.setSchedule(add_schedule("ApartmentMidRise BLDG_ELEVATORS"))
-      elec_equip2.setSchedule(add_schedule("ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF"))
+      case building_vintage
+      when '90.1-2004', '90.1-2007'
+        elec_equip2.setSchedule(add_schedule("ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"))
+      when '90.1-2010', '90.1-2013'
+        elec_equip2.setSchedule(add_schedule("ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF"))
+      end
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       elec_equip_def1.setDesignLevel(16055)
       elec_equip_def1.setFractionLatent(0)
@@ -310,19 +280,28 @@ class OpenStudio::Model::Model
         infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
         infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
       when '90.1-2007'
-        infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
+        case climate_zone
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+          infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
+        else
+          infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
+        end
         infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
       when '90.1-2010', '90.1-2013'
-        infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
+        case climate_zone
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+          infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
+        else
+          infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
+        end
         infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2010_2013'))
       end
     end
   end
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-   
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
+<<<<<<< HEAD
     # the main service water loop except laundry
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
     
@@ -364,9 +343,12 @@ class OpenStudio::Model::Model
 
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
     
+=======
+    self.update_waterheater_loss_coefficient(building_vintage)
+  
+>>>>>>> remotes/origin/master
     return true
     
-  end #add swh    
+  end 
 
-  
 end

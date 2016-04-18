@@ -29,6 +29,8 @@ module BTAP
       def self.clear_all_hvac_from_model(model)
         BTAP::Resources::HVAC::clear_all_zone_equipment_from_model(model)
         BTAP::Resources::HVAC::clear_all_loops(model)
+        # Delete outdoor VRF units (not in zone, not in loops)
+        model.getAirConditionerVariableRefrigerantFlows.each {|vrf| vrf.remove}
       end
 
       def self.enable_demand_control_ventilation(model,is_enabled)

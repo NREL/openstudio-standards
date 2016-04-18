@@ -12,7 +12,7 @@ class OpenStudio::Model::WaterHeaterMixed
   # @return [Bool] true if successful, false if not
   # @todo break parasitic/skin losses into a separate method in
   #   Prototype.WaterHeaterMixed because not governed by standard?
-  def setStandardEfficiency(template, standards)
+  def setStandardEfficiency(template)
   
     # Get the capacity of the water heater
     # TODO add capability to pull autosized water heater capacity

@@ -13,7 +13,11 @@ class TestMediumOffice < CreateDOEPrototypeBuildingTest
   epw_files = ['CAN_AB_Calgary.718770_CWEC.epw']
  
   create_models = true
+<<<<<<< HEAD
   run_models = true
+=======
+  run_models = false
+>>>>>>> remotes/origin/master
   compare_results = false
   
   debug = false

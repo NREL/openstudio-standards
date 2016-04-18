@@ -310,10 +310,11 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
      
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
    
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
     
+<<<<<<< HEAD
     system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
 
     # hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
@@ -370,6 +371,8 @@ class OpenStudio::Model::Model
       end
 
     end    
+=======
+>>>>>>> remotes/origin/master
     # add extra equipment for kitchen
     self.add_extra_equip_kitchen(building_vintage)
     # add extra infiltration for dining room door and attic
@@ -383,11 +386,11 @@ class OpenStudio::Model::Model
     # reset the design OA of kitchen
     self.reset_kitchen_OA(building_vintage)
     
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
     
     return true
-  end #add hvac
-  
+    
+  end  
 
   def add_door_infiltration(building_vintage,climate_zone)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
@@ -429,7 +432,6 @@ class OpenStudio::Model::Model
       infiltration_attic.setSpace(attic_space)
     end
   end
-
 
   # add extra equipment for kitchen
   def add_extra_equip_kitchen(building_vintage)
@@ -580,6 +582,7 @@ class OpenStudio::Model::Model
     end      
   end
 
+<<<<<<< HEAD
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
    
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
@@ -603,8 +606,14 @@ class OpenStudio::Model::Model
     
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
     
+=======
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  
+    self.update_waterheater_loss_coefficient(building_vintage)
+  
+>>>>>>> remotes/origin/master
     return true
     
-  end #add swh
+  end
   
 end

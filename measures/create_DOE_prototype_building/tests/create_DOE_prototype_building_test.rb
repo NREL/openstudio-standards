@@ -661,11 +661,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
   end
 
   # For David Goldwasser in NREL
-  if hostname == "MLEACH-19193S" || hostname == "Anns-iMac.local"
+  if hostname == "MLEACH-19193S" || hostname == "Anns-iMac.local" || hostname == "dgoldwas-28761s"
     # Test the Medium Office in the QTR vintages and climate zones
     def test_medium_office
       bldg_types = ['MediumOffice']
-      vintages = ['90.1-2010'] #'DOE Ref 1980-2004', 'DOE Ref Pre-1980', ']
+      vintages = ['90.1-2013'] #'DOE Ref 1980-2004', 'DOE Ref Pre-1980', ']
       climate_zones = ['ASHRAE 169-2006-2A']# 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A']
 
       all_failures = []

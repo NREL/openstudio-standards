@@ -1,31 +1,14 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>replace_model</name>
+  <name>apply_necb_rules</name>
   <uid>55a38c30-4274-46b8-a2d4-6f9529114b71</uid>
-  <version_id>7438211b-508d-41e9-a2be-322ff694cb16</version_id>
+  <version_id>bc74c0c4-8f4b-4a48-ba44-1822808dc8fe</version_id>
   <xml_checksum>057E8D9D</xml_checksum>
-  <class_name>ReplaceModel</class_name>
-  <display_name>Replaces OpenStudio Model </display_name>
+  <class_name>ApplyNECBRules</class_name>
+  <display_name>ApplyNECBRules</display_name>
   <description></description>
   <modeler_description></modeler_description>
-  <arguments>
-    <argument>
-      <name>alternativeModel</name>
-      <display_name>Alternative Model</display_name>
-      <type>String</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>FullServiceRestaurant.osm</default_value>
-    </argument>
-    <argument>
-      <name>osm_directory</name>
-      <display_name>OSM Directory</display_name>
-      <type>String</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>../../lib/btap/resources/models/smart_archetypes</default_value>
-    </argument>
-  </arguments>
+  <arguments/>
   <provenances/>
   <tags>
     <tag>Whole Building.Space Types</tag>
@@ -44,18 +27,6 @@
   </attributes>
   <files>
     <file>
-      <filename>EnvelopeAndLoadTestModel_01.osm</filename>
-      <filetype>osm</filetype>
-      <usage_type>test</usage_type>
-      <checksum>6616E1BE</checksum>
-    </file>
-    <file>
-      <filename>ReplaceModel_Test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>588891E8</checksum>
-    </file>
-    <file>
       <version>
         <software_program>OpenStudio</software_program>
         <identifier>0.10.2</identifier>
@@ -64,7 +35,115 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>BB4C8709</checksum>
+      <checksum>64DCCC39</checksum>
+    </file>
+    <file>
+      <filename>apply_necb_rules_Test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>AAAF1F5F</checksum>
+    </file>
+    <file>
+      <filename>BTAP_Construction_Library.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>42038EB0</checksum>
+    </file>
+    <file>
+      <filename>FullServiceRestaurant.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>7E727E1E</checksum>
+    </file>
+    <file>
+      <filename>Hospital.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>C7F85991</checksum>
+    </file>
+    <file>
+      <filename>LargeHotel.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>87F97606</checksum>
+    </file>
+    <file>
+      <filename>LargeOffice.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>5046306D</checksum>
+    </file>
+    <file>
+      <filename>MediumOffice.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>ECC2BFB0</checksum>
+    </file>
+    <file>
+      <filename>MidriseApartment.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>8CDD5534</checksum>
+    </file>
+    <file>
+      <filename>OutPatient.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>4DDC6E75</checksum>
+    </file>
+    <file>
+      <filename>PrimarySchool.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>962A2A7D</checksum>
+    </file>
+    <file>
+      <filename>QuickServiceRestaurant.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>F3A0FE09</checksum>
+    </file>
+    <file>
+      <filename>SecondarySchool.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>61EE4815</checksum>
+    </file>
+    <file>
+      <filename>SmallHotel.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>DD5CBB43</checksum>
+    </file>
+    <file>
+      <filename>SmallOffice.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>4D32BCC9</checksum>
+    </file>
+    <file>
+      <filename>Stand-aloneRetail.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>E14F0D12</checksum>
+    </file>
+    <file>
+      <filename>StripMall.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>748C2933</checksum>
+    </file>
+    <file>
+      <filename>SuperMarket.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>73174382</checksum>
+    </file>
+    <file>
+      <filename>Warehouse.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>96AA0F71</checksum>
     </file>
   </files>
 </measure>

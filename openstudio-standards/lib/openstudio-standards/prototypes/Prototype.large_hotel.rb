@@ -131,6 +131,7 @@ class OpenStudio::Model::Model
     return space_multiplier_map
   end
 
+<<<<<<< HEAD
   def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
     #simulation_control =  self.getSimulationControl
     #simulation_control.setLoadsConvergenceToleranceValue(0.4)
@@ -194,8 +195,15 @@ class OpenStudio::Model::Model
       
     end
 
+=======
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+    
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')    
+    
+>>>>>>> remotes/origin/master
     # Add Exhaust Fan
     space_type_map = define_space_type_map(building_type, building_vintage, climate_zone)
+    exhaust_fan_space_types = []
     case building_vintage
     when '90.1-2004','90.1-2007'
       exhaust_fan_space_types =['Kitchen','Laundry']
@@ -204,7 +212,7 @@ class OpenStudio::Model::Model
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = self.find_object(self.standards['space_types'], {'template'=>building_vintage, 'building_type'=>building_type, 'space_type'=>space_type_name})
+      space_type_data = self.find_object($os_standards['space_types'], {'template'=>building_vintage, 'building_type'=>building_type, 'space_type'=>space_type_name})
       if space_type_data == nil
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{building_vintage}-#{building_type}-#{space_type_name}")
         return false
@@ -262,8 +270,10 @@ class OpenStudio::Model::Model
     zone_sizing = self.getSpaceByName('Laundry_Flr_1').get.thermalZone.get.sizingZone
     zone_sizing.setCoolingMinimumAirFlow(0.23567919336)
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
+    
     return true
+    
   end #add hvac
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
@@ -275,6 +285,7 @@ class OpenStudio::Model::Model
     end
   end
 
+<<<<<<< HEAD
   def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
 
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
@@ -397,52 +408,12 @@ class OpenStudio::Model::Model
     
     
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
+=======
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+
+>>>>>>> remotes/origin/master
     return true
-  end #add swh
-
-  def add_large_hotel_swh_end_uses(prototype_input, standards, swh_loop, type, water_end_uses)
-    OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Model", "Adding water uses type = '#{type}'")
-    water_end_uses.each do |water_end_use|
-      space_name = water_end_use[0]
-      use_rate = water_end_use[1] # in gal/min
-
-      # Water use connection
-      swh_connection = OpenStudio::Model::WaterUseConnections.new(self)
-      swh_connection.setName(space_name + "Water Use Connections")
-      # Water fixture definition
-      water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
-      rated_flow_rate_m3_per_s = OpenStudio.convert(use_rate,'gal/min','m^3/s').get
-      water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
-      water_fixture_def.setName("#{space_name} Service Water Use Def #{use_rate.round(2)}gal/min")
-
-      sensible_fraction = 0.2
-      latent_fraction = 0.05
-
-      # Target mixed water temperature
-      mixed_water_temp_f = prototype_input["#{type}_water_use_temperature"]
-      mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-      mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),OpenStudio.convert(mixed_water_temp_f,'F','C').get)
-      water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
-
-      sensible_fraction_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-      sensible_fraction_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),sensible_fraction)
-      water_fixture_def.setSensibleFractionSchedule(sensible_fraction_sch)
-
-      latent_fraction_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-      latent_fraction_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),latent_fraction)
-      water_fixture_def.setSensibleFractionSchedule(latent_fraction_sch)
-
-      # Water use equipment
-      water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
-      schedule = self.add_schedule(water_end_use[2])
-      water_fixture.setFlowRateFractionSchedule(schedule)
-      water_fixture.setName("#{space_name} Service Water Use #{use_rate.round(2)}gal/min")
-      swh_connection.addWaterUseEquipment(water_fixture)
-
-      # Connect the water use connection to the SWH loop
-      swh_loop.addDemandBranchForComponent(swh_connection)
-    end
+    
   end
-
 
 end

@@ -12,8 +12,9 @@
 	4. Save it here: `/usr/lib/ruby/site_ruby/openstudio.rb`
 	5. **On Windows**:
 	6. Create a file called `openstudio.rb`
-	7. Contents: `require "C:/Program Files/OpenStudio 1.9.3/Ruby/openstudio.rb"`  Modify `1.9.0` to the version you installed.
-	8. Save it here: `C:/MyRuby200/lib/ruby/site_ruby/openstudio.rb`
+	7. Contents: `require "C:/Program Files/OpenStudio 1.10.0/Ruby/openstudio.rb"`  Modify `1.9.0` to the version you installed.
+	8. Save it here: `C:/Ruby200-x64/lib/ruby/site_ruby/openstudio.rb`
+	9. Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby200-x64\lib\ruby\gems\2.0.0`.
 
 5. Install the `bundler` ruby gem. (`gem install bundler` from command prompt)
 6. Install the `json` ruby gem. (`gem install json` from command prompt)

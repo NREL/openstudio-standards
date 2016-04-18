@@ -2,7 +2,7 @@
   <schema_version>3.0</schema_version>
   <name>change_building_location</name>
   <uid>d4db4971-f5ba-11e3-a3ac-0800200c9a66</uid>
-  <version_id>541ee4e7-bf0a-419b-b9a2-dcb385863a3f</version_id>
+  <version_id>2bed00fb-68df-40dc-94ca-86a5131e2e2f</version_id>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>ChangeBuildingLocation</class_name>
   <display_name>ChangeBuildingLocation</display_name>
@@ -51,7 +51,37 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>19E7ECFD</checksum>
+      <checksum>FFCFF111</checksum>
+    </file>
+    <file>
+      <filename>5ZoneNoHVAC.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>B5BF926A</checksum>
+    </file>
+    <file>
+      <filename>btap_change_location_test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>7D6F1803</checksum>
+    </file>
+    <file>
+      <filename>CAN_AB_Calgary.718770_CWEC.ddy</filename>
+      <filetype>ddy</filetype>
+      <usage_type>test</usage_type>
+      <checksum>43FFFE98</checksum>
+    </file>
+    <file>
+      <filename>CAN_AB_Calgary.718770_CWEC.epw</filename>
+      <filetype>epw</filetype>
+      <usage_type>test</usage_type>
+      <checksum>A9D1B377</checksum>
+    </file>
+    <file>
+      <filename>CAN_AB_Calgary.718770_CWEC.stat</filename>
+      <filetype>stat</filetype>
+      <usage_type>test</usage_type>
+      <checksum>F31D30A0</checksum>
     </file>
   </files>
 </measure>

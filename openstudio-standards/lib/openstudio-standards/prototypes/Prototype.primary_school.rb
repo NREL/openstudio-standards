@@ -283,19 +283,8 @@ class OpenStudio::Model::Model
     return system_to_space_map
 
   end
-    
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
-   
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    
-    system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
 
-    hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
-     
-    #VAVR system; hot water reheat, water-cooled chiller
-    
-    system_to_space_map.each do |system|
-
+<<<<<<< HEAD
       #find all zones associated with these spaces
       thermal_zones = []
       system['space_names'].each do |space_name|
@@ -353,12 +342,17 @@ class OpenStudio::Model::Model
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
     
+=======
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)  
+  
+>>>>>>> remotes/origin/master
     return true
-    
-  end #add hvac
-
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
+  
+  end  
+  
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
    
+<<<<<<< HEAD
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
 
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
@@ -389,8 +383,10 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
     
     
+=======
+>>>>>>> remotes/origin/master
     return true
     
-  end #add swh  
+  end
   
 end

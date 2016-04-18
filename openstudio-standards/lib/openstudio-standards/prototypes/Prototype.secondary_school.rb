@@ -489,20 +489,13 @@ class OpenStudio::Model::Model
 
   end
 
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, hvac_standards)
-   
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
+  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)  
+  
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')  
+  
+    self.getSpaces.each do |space|
     
-    system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
-
-    unless building_vintage == 'DOE Ref Pre-1980'
-      chilled_water_loop = self.add_chw_loop(prototype_input, hvac_standards)
-    end
-    
-    hot_water_loop = self.add_hw_loop(prototype_input, hvac_standards)
-     
-    #VAVR system; hot water reheat, water-cooled chiller
-    
+<<<<<<< HEAD
     system_to_space_map.each do |system|
 
       #find all zones associated with these spaces
@@ -573,15 +566,30 @@ class OpenStudio::Model::Model
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
+=======
+      if space.name.get.to_s == "Mech_ZN_1_FLR_1"
+        self.add_elevator(building_vintage,
+                         space,
+                         prototype_input['number_of_elevators'],
+                         prototype_input['elevator_type'],
+                         prototype_input['elevator_schedule'],
+                         prototype_input['elevator_fan_schedule'],
+                         prototype_input['elevator_fan_schedule'],
+                         building_type)
+      end    
+>>>>>>> remotes/origin/master
     
+    end  
+  
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
+  
     return true
-    
-  end #add hvac
+  
+  end
+  
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-   
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-
+<<<<<<< HEAD
     main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
     unless building_vintage == 'NECB 2011'
       self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
@@ -604,8 +612,10 @@ class OpenStudio::Model::Model
     
     OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
     
+=======
+>>>>>>> remotes/origin/master
     return true
     
-  end #add swh
+  end
   
 end

@@ -5,7 +5,11 @@ class OpenStudio::Model::Model
   # Helper method to set the weather file, import the design days, set
   # water mains temperature, and set ground temperature.
   # Based on ChangeBuildingLocation measure by Nicholas Long
+<<<<<<< HEAD
   def add_design_days_and_weather_file(hvac_standards, building_type, building_vintage, climate_zone, epw_file)
+=======
+  def add_design_days_and_weather_file(building_type, building_vintage, climate_zone)
+>>>>>>> remotes/origin/master
 
     require_relative 'Weather.stat_file'
     
@@ -80,7 +84,7 @@ class OpenStudio::Model::Model
     
     
     #Add or update ground temperature data
-    ground_temp_vals = self.find_object(standards["ground_temperatures"], {'template'=>building_vintage, 'climate_zone'=>climate_zone, 'building_type'=>building_type})
+    ground_temp_vals = self.find_object($os_standards["ground_temperatures"], {'template'=>building_vintage, 'climate_zone'=>climate_zone, 'building_type'=>building_type})
     if ground_temp_vals && ground_temp_vals['jan']
       groundTemp = self.getSiteGroundTemperatureBuildingSurface
       groundTemp.setJanuaryGroundTemperature(ground_temp_vals['jan'])
