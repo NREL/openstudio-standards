@@ -1237,6 +1237,7 @@ class OpenStudio::Model::Model
         data['htg_load_btu_per_ft2'] = htg_load_btu_per_ft2
       else
         OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, could not determine the design heating load.")
+        data['htg_load_btu_per_ft2'] = 0.0
       end
       # Get the cooling load
       clg_load_w_per_m2 = zone.coolingDesignLoad
@@ -1245,6 +1246,7 @@ class OpenStudio::Model::Model
         data['clg_load_btu_per_ft2'] = clg_load_btu_per_ft2
       else
         OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.BuildingStory", "For zone #{data['zone'].name}, could not determine the design cooling load.")
+        data['clg_load_btu_per_ft2'] = 0.0
       end
       zone_data_2 << data
     end    
@@ -2484,7 +2486,7 @@ class OpenStudio::Model::Model
           full_epw_path = OpenStudio::OptionalPath.new(epw_path.get)
         else
           # If this is an always-run Measure, need to check a different path
-          alt_weath_path = File.expand_path(File.join(File.dirname(__FILE__), "../../../resources"))
+          alt_weath_path = File.expand_path(File.join(Dir.pwd, "../../resources"))
           alt_epw_path = File.expand_path(File.join(alt_weath_path, epw_path.get.to_s))
           if File.exist?(alt_epw_path)
             full_epw_path = OpenStudio::OptionalPath.new(OpenStudio::Path.new(alt_epw_path))
