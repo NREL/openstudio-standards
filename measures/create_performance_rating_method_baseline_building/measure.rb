@@ -139,6 +139,11 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
   # Get all the log messages and put into output
   # for users to see.
   def log_msgs(debug)
+    # Log the messages to file for easier review
+    log_name = "create_baseline.log"
+    log_file_path = "#{Dir.pwd}/#{log_name}"
+    messages = log_messages_to_file(log_file_path, debug)
+    @runner.registerFinalCondition("Messages below saved to <a href='file:///#{log_file_path}'>#{log_name}</a>.")
     @msg_log.logMessages.each do |msg|
       # DLM: you can filter on log channel here for now
       if /openstudio.*/.match(msg.logChannel) #/openstudio\.model\..*/

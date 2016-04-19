@@ -2,7 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>create_performance_rating_method_baseline_building</name>
   <uid>0474f1c8-11cf-477c-9bd6-2091207ddf42</uid>
-  <version_id>15cbcec7-07e4-462e-ac01-784359aa195f</version_id>
+  <version_id>71edd3ef-33ff-4088-ac39-5f2660d70dac</version_id>
+  <version_modified>20160419T173513Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>CreatePerformanceRatingMethodBaselineBuilding</class_name>
   <display_name>Create Performance Rating Method Baseline Building</display_name>
@@ -17,6 +18,10 @@
       <model_dependent>false</model_dependent>
       <default_value>90.1-2013</default_value>
       <choices>
+        <choice>
+          <value>90.1-2007</value>
+          <display_name>90.1-2007</display_name>
+        </choice>
         <choice>
           <value>90.1-2010</value>
           <display_name>90.1-2010</display_name>
@@ -39,6 +44,10 @@
       <model_dependent>false</model_dependent>
       <default_value>SmallOffice</default_value>
       <choices>
+        <choice>
+          <value>MidriseApartment</value>
+          <display_name>MidriseApartment</display_name>
+        </choice>
         <choice>
           <value>SecondarySchool</value>
           <display_name>SecondarySchool</display_name>
@@ -214,17 +223,6 @@
       <checksum>6BED784B</checksum>
     </file>
     <file>
-      <version>
-        <software_program>OpenStudio</software_program>
-        <identifier>1.6.0</identifier>
-        <min_compatible>1.6.0</min_compatible>
-      </version>
-      <filename>measure.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>script</usage_type>
-      <checksum>6A032357</checksum>
-    </file>
-    <file>
       <filename>create_performance_rating_method_baseline_building_test.rb</filename>
       <filetype>rb</filetype>
       <usage_type>test</usage_type>
@@ -235,6 +233,17 @@
       <filetype>osm</filetype>
       <usage_type>test</usage_type>
       <checksum>F8619A70</checksum>
+    </file>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>1.6.0</identifier>
+        <min_compatible>1.6.0</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>00635CEB</checksum>
     </file>
   </files>
 </measure>
