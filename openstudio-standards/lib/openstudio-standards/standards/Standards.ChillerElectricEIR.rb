@@ -212,7 +212,7 @@ class OpenStudio::Model::ChillerElectricEIR
     end
 
     # Append the name with size and kw/ton
-    self.setName("#{name} #{capacity_tons.round}tons #{kw_per_ton.round(1)}kW/ton")
+    self.setName("#{name} #{capacity_tons.round} tons #{kw_per_ton.round(1)}kW/ton")
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.ChillerElectricEIR', "For #{template}: #{self.name}: #{cooling_type} #{condenser_type} #{compressor_type} Capacity = #{capacity_tons.round}tons; COP = #{cop.round(1)} (#{kw_per_ton.round(1)}kW/ton)")
 
     #NECB 2011 requires that all chillers be modulating down to 25% of their capacity

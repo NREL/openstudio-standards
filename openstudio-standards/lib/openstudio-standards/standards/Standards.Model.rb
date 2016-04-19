@@ -3617,8 +3617,6 @@ class OpenStudio::Model::Model
     chilled_water_loop = OpenStudio::Model::PlantLoop.new(self)
     chilled_water_loop.setName('Chilled Water Loop')
 	OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{chilled_water_loop.name}, cooling capacity is #{cap_tons.round} tons of refrigeration.")
-    chilled_water_loop.setMaximumLoopTemperature(98)
-    chilled_water_loop.setMinimumLoopTemperature(1)
 	
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
@@ -3648,24 +3646,25 @@ class OpenStudio::Model::Model
                   
     # Chilled water loop controls
     chw_temp_f = 44 #CHW setpoint 44F
-    chw_delta_t_r = 10.1 #10.1F delta-T
-    # TODO: Yixing check the CHW Setpoint from standards
-    # TODO: Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_performance_rating_method_baseline_temperatures
-
+    chw_delta_t_r = 12
+	min_temp_f = 34
+    max_temp_f = 200
+      # For water-cooled chillers this is the water temperature entering the condenser (e.g., leaving the cooling tower).
+    ref_cond_wtr_temp_f = 85
+	
     chw_temp_c = OpenStudio.convert(chw_temp_f,'F','C').get
     chw_delta_t_k = OpenStudio.convert(chw_delta_t_r,'R','K').get
-    chw_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-    chw_temp_sch.setName("Chilled Water Loop Temp - #{chw_temp_f}F")
-    chw_temp_sch.defaultDaySchedule.setName("Chilled Water Loop Temp - #{chw_temp_f}F Default")
-    chw_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),chw_temp_c)
-    chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,chw_temp_sch)
-    chw_stpt_manager.setName("Chilled water loop setpoint manager")
-    chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
+    min_temp_c = OpenStudio.convert(min_temp_f,'F','C').get
+    max_temp_c = OpenStudio.convert(max_temp_f,'F','C').get
+    ref_cond_wtr_temp_c = OpenStudio.convert(ref_cond_wtr_temp_f,'F','C').get	
 
     sizing_plant = chilled_water_loop.sizingPlant
     sizing_plant.setLoopType('Cooling')
     sizing_plant.setDesignLoopExitTemperature(chw_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(chw_delta_t_k)
+    chilled_water_loop.setMinimumLoopTemperature(min_temp_c)
+    chilled_water_loop.setMaximumLoopTemperature(max_temp_c)	
+	
 	sec_chw_pump_head_ft_h2o = 60
 	sec_chw_pump_head_press_pa = OpenStudio.convert(sec_chw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get
 
@@ -3701,6 +3700,7 @@ class OpenStudio::Model::Model
     chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller")
     chilled_water_loop.addSupplyBranchForComponent(chiller)
     chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
+	chiller.setReferenceCapacity(cap_w.to_f/num_chillers)
     ref_cond_wtr_temp_f = 95
     ref_cond_wtr_temp_c = OpenStudio.convert(ref_cond_wtr_temp_f,'F','C').get
     chiller.setReferenceEnteringCondenserFluidTemperature(ref_cond_wtr_temp_c)
@@ -3711,15 +3711,15 @@ class OpenStudio::Model::Model
     chiller.setCondenserType('AirCooled')
     chiller.setLeavingChilledWaterLowerTemperatureLimit(OpenStudio.convert(36,'F','C').get)
     chiller.setChillerFlowMode('ConstantFlow')
-	#add dedicated pump for chiller
-	  pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
-      pri_chw_pump.setName('Primary Chiller Pump')
-	  pri_chw_pump_head_ft_h2o = 20
-	  pri_chw_pump_head_press_pa = OpenStudio.convert(sec_chw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get	  
-      pri_chw_pump.setRatedPumpHead(pri_chw_pump_head_press_pa)
-      pri_chw_pump.setMotorEfficiency(0.9)
-      pri_chw_pump.setPumpControlType('Intermittent')
-      pri_chw_pump.addToNode(chiller.supplyInletModelObject.get.to_Node.get)
+	# add dedicated pump for chiller
+	pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
+    pri_chw_pump.setName('Primary Chiller Pump')
+	pri_chw_pump_head_ft_h2o = 20
+	pri_chw_pump_head_press_pa = OpenStudio.convert(sec_chw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get	  
+    pri_chw_pump.setRatedPumpHead(pri_chw_pump_head_press_pa)
+    pri_chw_pump.setMotorEfficiency(0.9)
+    pri_chw_pump.setPumpControlType('Intermittent')
+    pri_chw_pump.addToNode(chiller.supplyInletModelObject.get.to_Node.get)
 	
     # Skip non-cooling plants
     return true unless chilled_water_loop.sizingPlant.loopType == 'Cooling'
@@ -3754,6 +3754,7 @@ class OpenStudio::Model::Model
     final_chillers = [first_chiller]
     (num_chillers-1).times do
       new_chiller = OpenStudio::Model::ChillerElectricEIR.new(chilled_water_loop.model)
+	  new_chiller.setReferenceCapacity(cap_w.to_f/num_chillers)
       # TODO renable the cloning of the chillers after curves are shared resources
       # Should be good to go since 1.10.2 (?) does not work for 1.11.0
       #new_chiller = first_chiller.clone(chilled_water_loop.model)

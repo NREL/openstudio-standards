@@ -406,10 +406,10 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
       chwt_at_lo_oat_f = chwt_at_hi_oat_f + increase_f
       chwt_at_lo_oat_c = OpenStudio.convert(chwt_at_lo_oat_f, 'F', 'C').get
       
-      # Define the high and low outdoor air temperatures
-      lo_oat_f = 50
+      # Define the high and low outdoor air temperatures per 90.1 - 2007 G3.1.3.9
+      lo_oat_f = 60
       lo_oat_c = OpenStudio.convert(lo_oat_f, 'F', 'C').get
-      hi_oat_f = 70
+      hi_oat_f = 80
       hi_oat_c = OpenStudio.convert(hi_oat_f, 'F', 'C').get
       
       # Create a setpoint manager
