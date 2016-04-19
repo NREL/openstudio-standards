@@ -257,8 +257,8 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
 
 =end
 
-      design_inlet_wb_f = 78
-      design_approach_r = 7
+      design_inlet_wb_f = 75
+      design_approach_r = 10
       design_inlet_wb_c = OpenStudio.convert(design_inlet_wb_f,'F','C').get
       design_approach_k = OpenStudio.convert(design_approach_r,'R','K').get
 
