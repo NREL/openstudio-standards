@@ -783,7 +783,7 @@ class OpenStudio::Model::Model
 
         #add a new chilled water loop
         chilled_water_loop = nil
-        chilled_water_loop = self.add_prm_cw(standard)   
+        chilled_water_loop = self.add_performance_rating_method_chilled_water_plant(standard)   
         
         # Group zones by story
         story_zone_lists = self.group_zones_by_story(zones)
@@ -835,7 +835,7 @@ class OpenStudio::Model::Model
       
 		#add a new chilled water loop
         chilled_water_loop = nil
-        chilled_water_loop = self.add_prm_cw(standard) 
+        chilled_water_loop = self.add_performance_rating_method_chilled_water_plant(standard) 
         
         # Group zones by story
         story_zone_lists = self.group_zones_by_story(zones)
@@ -3580,7 +3580,11 @@ class OpenStudio::Model::Model
   
   end
   
-  def add_prm_cw(template)
+  # Returns chilled water plant per the PRM
+  #
+  # @param [string] target template for lookup
+  # @return [OpenStudio::Model::PlantLoop] the resulting chilled water loop  
+  def add_performance_rating_method_chilled_water_plant(template)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.PlantLoop.Standard', "Adding chilled water loop.")
 	
