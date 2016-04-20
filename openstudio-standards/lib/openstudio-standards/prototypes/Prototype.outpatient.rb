@@ -48,41 +48,6 @@ class OpenStudio::Model::Model
       space_type_map = {
         # 'Floor 1 Anesthesia', 'Floor 1 Bio Haz', 'Floor 1 Cafe', 'Floor 1 Clean', 'Floor 1 Clean Work', 'Floor 1 Dictation', 'Floor 1 Dressing Room', 'Floor 1 Electrical Room', 'Floor 1 Elevator Pump Room', 'Floor 1 Humid', 'Floor 1 IT Hall', 'Floor 1 IT Room', 'Floor 1 Lobby', 'Floor 1 Lobby Hall', 'Floor 1 Lobby Toilet', 'Floor 1 Locker Room', 'Floor 1 Locker Room Hall', 'Floor 1 Lounge', 'Floor 1 Med Gas', 'Floor 1 MRI Control Room', 'Floor 1 MRI Hall', 'Floor 1 MRI Room', 'Floor 1 MRI Toilet', 'Floor 1 Nourishment', 'Floor 1 Nurse Hall', 'Floor 1 Nurse Janitor', 'Floor 1 Nurse Station', 'Floor 1 Nurse Toilet', 'Floor 1 Office', 'Floor 1 Operating Room 1', 'Floor 1 Operating Room 2', 'Floor 1 Operating Room 3', 'Floor 1 PACU', 'Floor 1 Pre-Op Hall', 'Floor 1 Pre-Op Room 1', 'Floor 1 Pre-Op Room 2', 'Floor 1 Pre-Op Toilet', 'Floor 1 Procedure Room', 'Floor 1 Reception', 'Floor 1 Reception Hall', 'Floor 1 Recovery Room', 'Floor 1 Scheduling', 'Floor 1 Scrub', 'Floor 1 Soil', 'Floor 1 Soil Hold', 'Floor 1 Soil Work', 'Floor 1 Step Down', 'Floor 1 Sterile Hall', 'Floor 1 Sterile Storage', 'Floor 1 Storage', 'Floor 1 Sub-Sterile', 'Floor 1 Utility Hall', 'Floor 1 Utility Janitor', 'Floor 1 Utility Room', 'Floor 1 Vestibule', 'Floor 2 Conference', 'Floor 2 Conference Toilet', 'Floor 2 Dictation', 'Floor 2 Exam 1', 'Floor 2 Exam 2', 'Floor 2 Exam 3', 'Floor 2 Exam 4', 'Floor 2 Exam 5', 'Floor 2 Exam 6', 'Floor 2 Exam 7', 'Floor 2 Exam 8', 'Floor 2 Exam 9', 'Floor 2 Exam Hall 1', 'Floor 2 Exam Hall 2', 'Floor 2 Exam Hall 3', 'Floor 2 Exam Hall 4', 'Floor 2 Exam Hall 5', 'Floor 2 Exam Hall 6', 'Floor 2 Janitor', 'Floor 2 Lounge', 'Floor 2 Nurse Station 1', 'Floor 2 Nurse Station 2', 'Floor 2 Office', 'Floor 2 Office Hall', 'Floor 2 Reception', 'Floor 2 Reception Hall', 'Floor 2 Reception Toilet', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 2 Storage 1', 'Floor 2 Storage 2', 'Floor 2 Storage 3', 'Floor 2 Utility', 'Floor 2 Work', 'Floor 2 Work Hall', 'Floor 2 Work Toilet', 'Floor 2 X-Ray', 'Floor 3 Dressing Room', 'Floor 3 Elevator Hall', 'Floor 3 Humid', 'Floor 3 Janitor', 'Floor 3 Locker', 'Floor 3 Lounge', 'Floor 3 Lounge Toilet', 'Floor 3 Mechanical', 'Floor 3 Mechanical Hall', 'Floor 3 Office', 'Floor 3 Office Hall', 'Floor 3 Office Toilet', 'Floor 3 Physical Therapy 1', 'Floor 3 Physical Therapy 2', 'Floor 3 Physical Therapy Toilet', 'Floor 3 Storage 1', 'Floor 3 Storage 2', 'Floor 3 Treatment', 'Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2', 'Floor 3 Utility', 'Floor 3 Work', 'NE Stair', 'NW Elevator', 'NW Stair', 'SW Stair'
       
-<<<<<<< HEAD
-        # TODO: still need to put these into their space types...
-        # 'Floor 1 Dictation', 'Floor 1 Humid', 'Floor 1 Nourishment', 'Floor 1 Nurse Hall', 'Floor 1 Nurse Janitor', 'Floor 1 Nurse Station', 'Floor 1 Nurse Toilet', 'Floor 1 Office', 'Floor 1 Operating Room 1', 'Floor 1 Operating Room 2', 'Floor 1 Operating Room 3', 'Floor 1 PACU', 'Floor 1 Pre-Op Hall', 'Floor 1 Pre-Op Room 1', 'Floor 1 Pre-Op Room 2', 'Floor 1 Pre-Op Toilet', 'Floor 1 Procedure Room', 'Floor 1 Reception', 'Floor 1 Reception Hall', 'Floor 1 Recovery Room', 'Floor 1 Scheduling', 'Floor 1 Scrub', 'Floor 1 Soil', 'Floor 1 Soil Hold', 'Floor 1 Soil Work', 'Floor 1 Step Down', 'Floor 1 Sterile Hall', 'Floor 1 Sterile Storage', 'Floor 1 Storage', 'Floor 1 Sub-Sterile', 'Floor 1 Utility Hall', 'Floor 1 Utility Janitor', 'Floor 1 Utility Room', 'Floor 1 Vestibule', 'Floor 2 Conference', 'Floor 2 Conference Toilet', 'Floor 2 Dictation', 'Floor 2 Exam 1', 'Floor 2 Exam 2', 'Floor 2 Exam 3', 'Floor 2 Exam 4', 'Floor 2 Exam 5', 'Floor 2 Exam 6', 'Floor 2 Exam 7', 'Floor 2 Exam 8', 'Floor 2 Exam 9', 'Floor 2 Exam Hall 1', 'Floor 2 Exam Hall 2', 'Floor 2 Exam Hall 3', 'Floor 2 Exam Hall 4', 'Floor 2 Exam Hall 5', 'Floor 2 Exam Hall 6', 'Floor 2 Janitor', 'Floor 2 Lounge', 'Floor 2 Nurse Station 1', 'Floor 2 Nurse Station 2', 'Floor 2 Office', 'Floor 2 Office Hall', 'Floor 2 Reception', 'Floor 2 Reception Hall', 'Floor 2 Reception Toilet', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 2 Storage 1', 'Floor 2 Storage 2', 'Floor 2 Storage 3', 'Floor 2 Utility', 'Floor 2 Work', 'Floor 2 Work Hall', 'Floor 2 Work Toilet', 'Floor 2 X-Ray', 'Floor 3 Dressing Room', 'Floor 3 Elevator Hall', 'Floor 3 Humid', 'Floor 3 Janitor', 'Floor 3 Locker', 'Floor 3 Lounge', 'Floor 3 Lounge Toilet', 'Floor 3 Mechanical', 'Floor 3 Mechanical Hall', 'Floor 3 Office', 'Floor 3 Office Hall', 'Floor 3 Office Toilet', 'Floor 3 Physical Therapy 1', 'Floor 3 Physical Therapy 2', 'Floor 3 Physical Therapy Toilet', 'Floor 3 Storage 1', 'Floor 3 Storage 2', 'Floor 3 Treatment', 'Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2', 'Floor 3 Utility', 'Floor 3 Work', 'NE Stair', 'NW Elevator', 'NW Stair', 'SW Stair'
-      
-        'Anesthesia' => ['Floor 1 Anesthesia', ],
-        'BioHazard' => ['Floor 1 Bio Haz', ],
-        'Cafe' => ['Floor 1 Cafe', ],
-        'CleanWork' => ['Floor 1 Clean', 'Floor 1 Clean Work', ],
-        'Conference' => [],
-        'DressingRoom' => ['Floor 1 Dressing Room', ],
-        'Elec/MechRoom' => ['Floor 1 Electrical Room', 'Floor 1 Elevator Pump Room', ],
-        'Exam' => [],
-        'Hall' => [],
-        'IT_Room' => ['Floor 1 IT Hall', 'Floor 1 IT Room', ],
-        'Janitor' => [],
-        'Lobby' => ['Floor 1 Lobby', 'Floor 1 Lobby Hall', ],
-        'LockerRoom' => ['Floor 1 Locker Room', 'Floor 1 Locker Room Hall', ],
-        'Lounge' => ['Floor 1 Lounge', ],
-        'MRI' => ['Floor 1 MRI Hall', 'Floor 1 MRI Room', ],
-        'MRI_Control' => ['Floor 1 MRI Control Room', ],
-        'MedGas' => ['Floor 1 Med Gas', ],
-        'NurseStation' => [],
-        'OR' => [],
-        'Office' => [],
-        'PACU' => [],
-        'PhysicalTherapy' => [],
-        'PreOp' => [],
-        'ProcedureRoom' => [],
-        'Soil Work' => [],
-        'Stair' => [],
-        'Toilet' => ['Floor 1 Lobby Toilet', 'Floor 1 MRI Toilet', ],
-        'Xray' => []
-      }
-    end
-=======
       # TODO: still need to put these into their space types...
       #  all zones mapped
       
@@ -138,48 +103,12 @@ class OpenStudio::Model::Model
       # Add new space type 'Undeveloped'
       'Undeveloped' => ['Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2'] 
     }
->>>>>>> remotes/origin/master
+
     return space_type_map
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
-<<<<<<< HEAD
-    system_to_space_map = [
-      {
-        'type' => 'VAV',
-        'space_names' => [
-          'Floor 1 Anesthesia', 'Floor 1 Bio Haz', 'Floor 1 Cafe', 'Floor 1 Clean', 'Floor 1 Clean Work', 'Floor 1 Dictation', 
-          'Floor 1 Dressing Room', 'Floor 1 Electrical Room', 'Floor 1 Elevator Pump Room', 'Floor 1 Humid', 'Floor 1 IT Hall', 
-          'Floor 1 IT Room', 'Floor 1 Lobby', 'Floor 1 Lobby Hall', 'Floor 1 Lobby Toilet', 'Floor 1 Locker Room', 
-          'Floor 1 Locker Room Hall', 'Floor 1 Lounge', 'Floor 1 Med Gas', 'Floor 1 MRI Control Room', 'Floor 1 MRI Hall', 
-          'Floor 1 MRI Room', 'Floor 1 MRI Toilet', 'Floor 1 Nourishment', 'Floor 1 Nurse Hall', 'Floor 1 Nurse Janitor', 
-          'Floor 1 Nurse Station', 'Floor 1 Nurse Toilet', 'Floor 1 Office', 'Floor 1 Operating Room 1', 'Floor 1 Operating Room 2', 
-          'Floor 1 Operating Room 3', 'Floor 1 PACU', 'Floor 1 Pre-Op Hall', 'Floor 1 Pre-Op Room 1', 'Floor 1 Pre-Op Room 2', 
-          'Floor 1 Pre-Op Toilet', 'Floor 1 Procedure Room', 'Floor 1 Reception', 'Floor 1 Reception Hall', 'Floor 1 Recovery Room', 
-          'Floor 1 Scheduling', 'Floor 1 Scrub', 'Floor 1 Soil', 'Floor 1 Soil Hold', 'Floor 1 Soil Work', 'Floor 1 Step Down', 
-          'Floor 1 Sterile Hall', 'Floor 1 Sterile Storage', 'Floor 1 Storage', 'Floor 1 Sub-Sterile', 'Floor 1 Utility Hall', 
-          'Floor 1 Utility Janitor', 'Floor 1 Utility Room', 'Floor 1 Vestibule'
-        ]
-      },
-      {
-        'type' => 'VAV',
-        'space_names' => [
-          'Floor 2 Conference', 'Floor 2 Conference Toilet', 'Floor 2 Dictation', 'Floor 2 Exam 1', 'Floor 2 Exam 2', 
-          'Floor 2 Exam 3', 'Floor 2 Exam 4', 'Floor 2 Exam 5', 'Floor 2 Exam 6', 'Floor 2 Exam 7', 'Floor 2 Exam 8', 
-          'Floor 2 Exam 9', 'Floor 2 Exam Hall 1', 'Floor 2 Exam Hall 2', 'Floor 2 Exam Hall 3', 'Floor 2 Exam Hall 4', 
-          'Floor 2 Exam Hall 5', 'Floor 2 Exam Hall 6', 'Floor 2 Janitor', 'Floor 2 Lounge', 'Floor 2 Nurse Station 1', 
-          'Floor 2 Nurse Station 2', 'Floor 2 Office', 'Floor 2 Office Hall', 'Floor 2 Reception', 'Floor 2 Reception Hall', 
-          'Floor 2 Reception Toilet', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 2 Storage 1', 'Floor 2 Storage 2', 
-          'Floor 2 Storage 3', 'Floor 2 Utility', 'Floor 2 Work', 'Floor 2 Work Hall', 'Floor 2 Work Toilet', 'Floor 2 X-Ray', 
-          'Floor 3 Dressing Room', 'Floor 3 Elevator Hall', 'Floor 3 Humid', 'Floor 3 Janitor', 'Floor 3 Locker', 'Floor 3 Lounge', 
-          'Floor 3 Lounge Toilet', 'Floor 3 Mechanical', 'Floor 3 Mechanical Hall', 'Floor 3 Office', 'Floor 3 Office Hall', 
-          'Floor 3 Office Toilet', 'Floor 3 Physical Therapy 1', 'Floor 3 Physical Therapy 2', 'Floor 3 Physical Therapy Toilet', 
-          'Floor 3 Storage 1', 'Floor 3 Storage 2', 'Floor 3 Treatment', 'Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2', 
-          'Floor 3 Utility', 'Floor 3 Work', 'NE Stair', 'NW Elevator', 'NW Stair', 'SW Stair'
-        ]
-      }
-    ]
-=======
+
     case building_vintage
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       system_to_space_map = [
@@ -262,8 +191,6 @@ class OpenStudio::Model::Model
       ]      
     end
     
-
->>>>>>> remotes/origin/master
     return system_to_space_map
   end
      
@@ -304,11 +231,6 @@ class OpenStudio::Model::Model
     
   end
 
-<<<<<<< HEAD
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input, hvac_standards, space_type_map)
-   
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-=======
   def add_extra_equip_elevator_pump_room(building_vintage)
     elevator_pump_room = self.getSpaceByName('Floor 1 Elevator Pump Room').get
     elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
@@ -328,7 +250,7 @@ class OpenStudio::Model::Model
     end
     return true
   end
->>>>>>> remotes/origin/master
+
 
   def adjust_clg_setpoint(building_vintage,climate_zone)
     self.getSpaceTypes.sort.each do |space_type|
@@ -385,21 +307,7 @@ class OpenStudio::Model::Model
     end
   end  
 
-<<<<<<< HEAD
-    case building_vintage
-    when 'NECB 2011'
-      space_type_map.each do |space_type_name, space_names|
-        space_names.each do |space_name|
-          space = self.getSpaceByName(space_name).get
-          space_multiplier = space.multiplier
-          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
-        end   
-      end
-    else
-      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    end
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-=======
+
   def add_door_infiltration(building_vintage,climate_zone)
     # add extra infiltration for vestibule door
     case building_vintage
@@ -431,7 +339,7 @@ class OpenStudio::Model::Model
 
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         if water_heater.name.to_s.include?("Booster")
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
@@ -445,7 +353,6 @@ class OpenStudio::Model::Model
   end
   
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
->>>>>>> remotes/origin/master
     
     self.update_waterheater_loss_coefficient(building_vintage)
   
@@ -535,5 +442,7 @@ class OpenStudio::Model::Model
       boiler.setSizingFactor(0.3)
     end
   end  
+
+end
 
 end

@@ -2,34 +2,6 @@
 class OpenStudio::Model::Model
 
   def define_space_type_map(building_type, building_vintage, climate_zone)
-<<<<<<< HEAD
-    space_type_map = nil
-    case building_vintage
-    when 'NECB 2011'
-      space_type_map = {
-        "Electrical/Mechanical" => ["Basement"],
-        
-        "Office - open plan" => [ "Core_bottom", "Core_mid", "Core_top", "MidFloor_Plenum", 
-          "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", 
-          "Perimeter_bot_ZN_4", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", 
-          "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", 
-          "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4",
-          "DataCenter_basement_ZN_6", "DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", 
-          "DataCenter_top_ZN_6"],
-        
-        "- undefined -" => ["GroundFloor_Plenum", "TopFloor_Plenum"]
-      }
-    else
-      space_type_map = {
-        'WholeBuilding - Lg Office' => [
-          'Basement', 'Core_bottom', 'Core_mid', 'Core_top', #'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
-          'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4', 
-          'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4', 
-          'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4',
-          'DataCenter_basement_ZN_6', 'DataCenter_bot_ZN_6', 'DataCenter_mid_ZN_6', 'DataCenter_top_ZN_6'
-        ]
-      }
-=======
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       space_type_map = {
@@ -55,67 +27,30 @@ class OpenStudio::Model::Model
         'DataCenter_basement_ZN_6'
       ]
     }
->>>>>>> remotes/origin/master
+      when 'NECB 2011'
+      space_type_map = {
+        "Electrical/Mechanical" => ["Basement"],
+        
+        "Office - open plan" => [ "Core_bottom", "Core_mid", "Core_top", "MidFloor_Plenum", 
+          "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", 
+          "Perimeter_bot_ZN_4", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", 
+          "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", 
+          "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4",
+          "DataCenter_basement_ZN_6", "DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", 
+          "DataCenter_top_ZN_6"],
+        
+        "- undefined -" => ["GroundFloor_Plenum", "TopFloor_Plenum"]
+      }
     end
     return space_type_map
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> remotes/origin/master
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       system_to_space_map = [
         {
-<<<<<<< HEAD
-          'type' => 'VAV',
-          'name' => 'VAV_1',
-          'space_names' =>
-            [
-            'Perimeter_bot_ZN_1',
-            'Perimeter_bot_ZN_2',
-            'Perimeter_bot_ZN_3',
-            'Perimeter_bot_ZN_4',
-            'Core_bottom'
-          ]
-        },
-        {
-          'type' => 'VAV',
-          'name' => 'VAV_2',
-          'space_names' =>
-            [
-            'Perimeter_mid_ZN_1',
-            'Perimeter_mid_ZN_2',
-            'Perimeter_mid_ZN_3',
-            'Perimeter_mid_ZN_4',
-            'Core_mid'
-          ]
-        },
-        {
-          'type' => 'VAV',
-          'name' => 'VAV_3',
-          'space_names' =>
-            [
-            'Perimeter_top_ZN_1',
-            'Perimeter_top_ZN_2',
-            'Perimeter_top_ZN_3',
-            'Perimeter_top_ZN_4',
-            'Core_top'
-          ]
-        },
-        {
-          'type' => 'VAV',
-          'name' => 'VAV_5',
-          'space_names' =>
-            [
-            'Basement'
-          ]
-        }
-      ]    
-=======
             'type' => 'VAV',
             'name' => 'VAV_1',
             'space_names' =>
@@ -163,48 +98,12 @@ class OpenStudio::Model::Model
             ]
         }
       ]
->>>>>>> remotes/origin/master
     when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
       system_to_space_map = [
         {
           'type' => 'VAV',
           'name' => 'VAV_bot WITH REHEAT',
           'space_names' =>
-<<<<<<< HEAD
-            [
-            'Perimeter_bot_ZN_1',
-            'Perimeter_bot_ZN_2',
-            'Perimeter_bot_ZN_3',
-            'Perimeter_bot_ZN_4',
-            'Core_bottom'
-          ]
-        },
-        {
-          'type' => 'VAV',
-          'name' => 'VAV_mid WITH REHEAT',
-          'space_names' =>
-            [
-            'Perimeter_mid_ZN_1',
-            'Perimeter_mid_ZN_2',
-            'Perimeter_mid_ZN_3',
-            'Perimeter_mid_ZN_4',
-            'Core_mid'
-          ]
-        },
-        {
-          'type' => 'VAV',
-          'name' => 'VAV_top WITH REHEAT',
-          'space_names' =>
-            [
-            'Perimeter_top_ZN_1',
-            'Perimeter_top_ZN_2',
-            'Perimeter_top_ZN_3',
-            'Perimeter_top_ZN_4',
-            'Core_top'
-          ]
-        },
-        {
-=======
           [
               'Perimeter_bot_ZN_1',
               'Perimeter_bot_ZN_2',
@@ -241,45 +140,13 @@ class OpenStudio::Model::Model
           'return_plenum' => 'TopFloor_Plenum'
       },
       {
->>>>>>> remotes/origin/master
+
           'type' => 'CAV',
           'name' => 'CAV_bas',
           'space_names' =>
             [
             'Basement'
           ]
-<<<<<<< HEAD
-        },
-        {
-          'type' => 'DC_main',
-          'space_names' =>
-            [
-            'DataCenter_basement_ZN_6'
-          ]
-        },
-        {
-          'type' => 'DC',
-          'space_names' =>
-            [
-            'DataCenter_bot_ZN_6'
-          ]
-        },
-        {
-          'type' => 'DC',
-          'space_names' =>
-            [
-            'DataCenter_mid_ZN_6'
-          ]
-        },
-        {
-          'type' => 'DC',
-          'space_names' =>
-            [
-            'DataCenter_top_ZN_6'
-          ]
-        }
-      ]
-=======
       },
       {
           'type' => 'DC',
@@ -318,7 +185,7 @@ class OpenStudio::Model::Model
           'main_data_center' => false
       }
     ]
->>>>>>> remotes/origin/master
+
     end
 
     return system_to_space_map
@@ -387,7 +254,7 @@ class OpenStudio::Model::Model
 
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.25413987)
@@ -397,29 +264,8 @@ class OpenStudio::Model::Model
   
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
-<<<<<<< HEAD
-   
-    unless building_vintage == 'NECB 2011'
-      for i in 0..2
-        self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-      end
-      # self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-    end
-      
-    if building_vintage == 'NECB 2011'  
-      space_type_map.each do |space_type_name, space_names|
-        space_names.each do |space_name|
-          space = self.getSpaceByName(space_name).get
-          space_multiplier = space.multiplier
-          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
-        end   
-      end
-    end
-    
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-=======
     self.update_waterheater_loss_coefficient(building_vintage)
->>>>>>> remotes/origin/master
+
     
     return true
 

@@ -31,21 +31,12 @@ class OpenStudio::Model::Model
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
     system_to_space_map = [
       {
-<<<<<<< HEAD
-        'type' => 'CAV',
-        'space_names' => ['Back_Space', 'Core_Retail', 'Point_Of_Sale', 'Front_Retail']
-      },
-      {
-        'type' => 'Unit_Heater',
-        'space_names' => ['Front_Entry']
-=======
           'type' => 'PSZ-AC',
           'space_names' => ['Back_Space', 'Core_Retail', 'Point_Of_Sale', 'Front_Retail']
       },
       {
           'type' => 'UnitHeater',
           'space_names' => ['Front_Entry']
->>>>>>> remotes/origin/master
       }
     ]
     return system_to_space_map
@@ -53,44 +44,8 @@ class OpenStudio::Model::Model
      
   def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
-<<<<<<< HEAD
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    
-    system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
-    
-    system_to_space_map.each do |system|
-
-      #find all zones associated with these spaces
-      thermal_zones = []
-      system['space_names'].each do |space_name|
-        space = self.getSpaceByName(space_name)
-        if space.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
-          return false
-        end
-        space = space.get
-        zone = space.thermalZone
-        if zone.empty?
-          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No thermal zone was created for the space called #{space_name}")
-          return false
-        end
-        thermal_zones << zone.get
-      end
-
-      case system['type']
-      when 'CAV'
-        self.add_psz_ac(prototype_input, hvac_standards, system['name'], thermal_zones, 'BlowThrough')
-      when 'Unit_Heater'
-        self.add_unitheater(prototype_input, hvac_standards, thermal_zones)
-      else
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No HVAC system for #{system['type']}")
-        return false
-      end
-
-    end
-=======
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
->>>>>>> remotes/origin/master
+
 
     # Add the door infiltration for vintage 2004,2007,2010,2013
     case building_vintage
@@ -114,52 +69,7 @@ class OpenStudio::Model::Model
 
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-<<<<<<< HEAD
-    when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
-      main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-      self.add_swh_end_uses(prototype_input, hvac_standards, main_swh_loop, 'main')
-      water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
-
-      water_heaters.each do |water_heater|
-        water_heater = water_heater.to_WaterHeaterMixed.get
-        # water_heater.setAmbientTemperatureIndicator('Zone')
-        # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
-        water_heater.setOffCycleParasiticFuelConsumptionRate(1860)
-        water_heater.setOnCycleParasiticFuelConsumptionRate(1860)
-        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
-        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
-      end
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    when 'NECB 2011'
-      main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-      
-      space_type_map.each do |space_type_name, space_names|
-
-      
-        space_names.each do |space_name|
-          space = self.getSpaceByName(space_name).get
-          space_multiplier = space.multiplier
-          self.add_swh_end_uses_by_space('Space Function', building_vintage, climate_zone, main_swh_loop, space_type_name, space_name, space_multiplier)
-        end   
-      end
-      
-      water_heaters = main_swh_loop.supplyComponents(OpenStudio::Model::WaterHeaterMixed::iddObjectType)
-
-      water_heaters.each do |water_heater|
-        water_heater = water_heater.to_WaterHeaterMixed.get
-        # water_heater.setAmbientTemperatureIndicator('Zone')
-        # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
-        water_heater.setOffCycleParasiticFuelConsumptionRate(1860)
-        water_heater.setOnCycleParasiticFuelConsumptionRate(1860)
-        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
-        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
-      end
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    else
-      # No Water heater for pre1980 and post1980-2004 vintages
-    end
-=======
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
@@ -171,7 +81,6 @@ class OpenStudio::Model::Model
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
     self.update_waterheater_loss_coefficient(building_vintage)
->>>>>>> remotes/origin/master
 
     return true
     

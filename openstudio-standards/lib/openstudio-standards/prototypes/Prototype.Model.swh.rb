@@ -5,7 +5,7 @@ class OpenStudio::Model::Model
   def add_swh(building_type, building_vintage, climate_zone, prototype_input)
    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
-    
+   
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
       
@@ -26,7 +26,7 @@ class OpenStudio::Model::Model
       # TODO remove special logic for large office SWH end uses
       # TODO remove special logic for stripmall SWH end uses and service water loops
       # TODO remove special logic for large hotel SWH end uses
-      if building_type == 'LargeOffice'
+      if building_type == 'LargeOffice' and building_vintage != 'NECB 2011'
           
           # Only the core spaces have service water
           ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
@@ -40,7 +40,7 @@ class OpenStudio::Model::Model
                               building_type)
           end
       
-      elsif building_type == 'RetailStripmall'
+      elsif building_type == 'RetailStripmall' and building_vintage != 'NECB 2011'
 
         return true if building_vintage == "DOE Ref Pre-1980" || building_vintage == "DOE Ref 1980-2004"
 
@@ -187,7 +187,12 @@ class OpenStudio::Model::Model
                               
       else                    
         
-        # Attaches the end uses if specified by space type      
+        # Attaches the end uses if specified by space type 
+        
+        if building_vintage == 'NECB 2011'
+          building_type = 'Space Function'
+        end
+        
         space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
         space_type_map.each do |space_type_name, space_names|
           search_criteria = {

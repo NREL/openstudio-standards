@@ -22,24 +22,16 @@ class OpenStudio::Model::Model
   # @return [Bool] returns true if successful, false if not
   # @example Create a Small Office, 90.1-2010, in ASHRAE Climate Zone 5A (Chicago)
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
-<<<<<<< HEAD
-  def create_prototype_building(building_type, 
-      building_vintage, 
-      climate_zone,
-      epw_file,								
-      sizing_run_dir = Dir.pwd, 
-      debug = false)  
-=======
+
   def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)
     
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004. This is a quick check.
     if building_type == "HighriseApartment"
-      if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004'
+      if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'NECB 2011'
         OpenStudio::logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{building_type} at vintage #{building_vintage} are not available, the measure is disabled for this specific type.")
         return false
       end
     end
->>>>>>> remotes/origin/master
 
     lookup_building_type = self.get_lookup_name(building_type)
 
@@ -54,13 +46,9 @@ class OpenStudio::Model::Model
       return false
     end
 
-<<<<<<< HEAD
 
-    case building_vintage 
-      
-    when 'NECB 2011'
-      
-      
+    case building_vintage       
+    when 'NECB 2011'     
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
@@ -85,7 +73,10 @@ class OpenStudio::Model::Model
       
       self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
-      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)  # note exhaust fan schedule for * common spaces.
+      self.add_swh(building_type, building_vintage, climate_zone, prototype_input)  # note exhaust fan schedule for * common spaces.
+      # TO DO: routine custom_swh_tweaks sets loss coefficient to ambient for water heater, differs for each archetype
+      # NECB 2011 follows ASHRAE 90.1 for now, does this need to change?
+      self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
       #      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
       #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)      
 
@@ -93,22 +84,21 @@ class OpenStudio::Model::Model
       
     else
       
-     
-  
-
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
       self.assign_space_type_stubs(lookup_building_type, space_type_map)
       self.add_loads(building_vintage, climate_zone)
-      self.apply_infiltration_standard
+      self.apply_infiltration_standard(building_vintage)
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
       self.modify_surface_convection_algorithm(building_vintage)
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)
       self.create_thermal_zones(building_type,building_vintage, climate_zone)
-      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, self.standards)
-      self.add_swh(building_type, building_vintage, climate_zone, prototype_input, self.standards, space_type_map)
+      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input)
+      self.custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+      self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
+      self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
       self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
       self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
       self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone, epw_file)
@@ -118,29 +108,7 @@ class OpenStudio::Model::Model
 	  end
 	
 
-=======
-    self.load_building_type_methods(building_type, building_vintage, climate_zone)
-    self.load_geometry(building_type, building_vintage, climate_zone)
-    self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
-    space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
-    self.assign_space_type_stubs(lookup_building_type, building_vintage, space_type_map)
-    self.add_loads(building_vintage, climate_zone)
-    self.apply_infiltration_standard(building_vintage)
-    self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
-    self.modify_surface_convection_algorithm(building_vintage)
-    self.add_constructions(lookup_building_type, building_vintage, climate_zone)
-    self.create_thermal_zones(building_type,building_vintage, climate_zone)
-    self.add_hvac(building_type, building_vintage, climate_zone, prototype_input)
-    self.custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-    self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
-    self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-    self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-    self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
-    self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone)
-    self.set_sizing_parameters(building_type, building_vintage)
-    self.yearDescription.get.setDayofWeekforStartDay('Sunday')  
-    
->>>>>>> remotes/origin/master
+
     # Perform a sizing run
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
@@ -281,12 +249,8 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.outpatient'
     when 'MidriseApartment'
       building_methods = 'Prototype.mid_rise_apartment'
-<<<<<<< HEAD
-      # TO DO: add all NECB 2011 building types?
-=======
     when 'HighriseApartment'
       building_methods = 'Prototype.high_rise_apartment'
->>>>>>> remotes/origin/master
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
@@ -408,15 +372,11 @@ class OpenStudio::Model::Model
       geometry_file = 'Geometry.outpatient.osm'
     when 'MidriseApartment'
       geometry_file = 'Geometry.mid_rise_apartment.osm'
-<<<<<<< HEAD
     when 'Office'    # For NECB 2011 prototypes 
       geometry_file = 'Geometry.large_office_2010.osm'
       alt_search_name = 'Office'
-      # TO DO: Add all NECB 2011 prototypes
-=======
     when 'HighriseApartment'
       geometry_file = 'Geometry.high_rise_apartment.osm'
->>>>>>> remotes/origin/master
     else
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model',"Building Type = #{building_type} not recognized")
       return false
@@ -534,47 +494,46 @@ class OpenStudio::Model::Model
       # Loads
       space_type.set_internal_loads(building_vintage, true, true, true, true, true, true)
       
-<<<<<<< HEAD
-      stds_building_type = nil
-      if stub_space_type.standardsBuildingType.is_initialized
-        stds_building_type = stub_space_type.standardsBuildingType.get
-      else
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards building type.")
-        return false
-      end
+#<<<<<<< HEAD  commented out for now, remove once I know this does not create other problems.
+#      stds_building_type = nil
+#      if stub_space_type.standardsBuildingType.is_initialized
+#        stds_building_type = stub_space_type.standardsBuildingType.get
+#      else
+#        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards building type.")
+#        return false
+#      end
       
       # for debugging
       #puts "stds_building_type = #{stds_building_type}"
       
       # Get the standards space type
       # from the stub
-      stds_spc_type = nil
-      if stub_space_type.standardsSpaceType.is_initialized
-        stds_spc_type = stub_space_type.standardsSpaceType.get
-      else
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards space type.")
-        return false
-      end
+ #     stds_spc_type = nil
+ #     if stub_space_type.standardsSpaceType.is_initialized
+ #       stds_spc_type = stub_space_type.standardsSpaceType.get
+ #     else
+ #       OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards space type.")
+ #       return false
+ #     end
       
-      new_space_type = self.add_space_type(building_vintage, 'ClimateZone 1-8', stds_building_type, stds_spc_type)  
+#    new_space_type = self.add_space_type(building_vintage, 'ClimateZone 1-8', stds_building_type, stds_spc_type)  
 
       # for debugging (Maria)
       #puts "new_space_type = #{new_space_type}"
       
       # Apply the new space type to the building      
-      stub_space_type.spaces.each do |space|
-        space.setSpaceType(new_space_type)
-        #OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.Model", "Setting #{space.name} to #{new_space_type.name.get}")
-      end
+ #     stub_space_type.spaces.each do |space|
+  #      space.setSpaceType(new_space_type)
+   #   end
         
       # Remove the stub space type
-      stub_space_type.remove
+#      stub_space_type.remove
 
-=======
+
       # Schedules
       space_type.set_internal_load_schedules(building_vintage, true, true, true, true, true, true, true)
       
->>>>>>> remotes/origin/master
+
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
@@ -801,16 +760,13 @@ class OpenStudio::Model::Model
     end
 
     # get all the space types that are conditioned
-<<<<<<< HEAD
+
     # not required for NECB 2011
     unless (building_vintage == 'NECB 2011')
       conditioned_space_names = find_conditioned_space_names(building_type, building_vintage, climate_zone)
     end
     
-=======
-    conditioned_space_names = find_conditioned_space_names(building_type, building_vintage, climate_zone)
 
->>>>>>> remotes/origin/master
     # add internal mass
     # not required for NECB 2011
     unless ((building_vintage == 'NECB 2011') or
@@ -1124,7 +1080,7 @@ class OpenStudio::Model::Model
     self.getSite.setTerrain(terrain)
   
       # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
-      return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013'
+      return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013' or building_vintage == 'NECB 2011'
   
       # The pre-1980 and 1980-2004 buildings have this:
       # 1.0000,                  !- Constant Term Coefficient
@@ -1157,13 +1113,8 @@ class OpenStudio::Model::Model
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       inside.setAlgorithm('TARP')
-<<<<<<< HEAD
       outside.setAlgorithm('DOE-2')     
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
-=======
-      outside.setAlgorithm('DOE-2')
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
->>>>>>> remotes/origin/master
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('TARP')
     end
@@ -1198,30 +1149,17 @@ class OpenStudio::Model::Model
         clg = 1.0
         htg = 1.0
       end
-<<<<<<< HEAD
     when 'NECB 2011'
       clg = 1.3
       htg = 1.3
     end 
-  
-=======
-    end
 
->>>>>>> remotes/origin/master
     sizing_params = self.getSizingParameters
     sizing_params.setHeatingSizingFactor(htg)
     sizing_params.setCoolingSizingFactor(clg)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{htg} for heating and #{clg} for cooling.")
-<<<<<<< HEAD
-  
-    # for debugging
-    puts "end set_sizing_parameters"
-    
-    
-=======
 
->>>>>>> remotes/origin/master
   end
 
   def applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)

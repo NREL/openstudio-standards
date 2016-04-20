@@ -572,55 +572,6 @@ class OpenStudio::Model::Model
 
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
    
-<<<<<<< HEAD
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Started Adding SWH")
-    
-    # the main service water loop except laundry
-    main_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'main')
-   
-    # For NECB 2011, building_type entry in Standards spreadsheet set to Space Function
-    # reset here
-    if building_vintage == 'NECB 2011'
-      building_type = 'Space Function'
-    end
-        
-    space_type_map.each do |space_type_name, space_names|
-      data = nil
-      search_criteria = {
-        'template' => building_vintage,
-        'building_type' => building_type,
-        'space_type' => space_type_name
-      }
-      data = find_object(self.standards['space_types'],search_criteria)
-      
-      case building_vintage      
-      when 'NECB 2011'              # NECB 2011 peak flow rate entries in Standards spreadsheet allowed to have nil entry
-        space_names.each do |space_name|
-          self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name)
-        end 
-      else        
-        if data['service_water_heating_peak_flow_rate'].nil?
-          next
-        elsif space_type_name == "Laundry" and building_vintage != 'DOE Ref 1980-2004' and building_vintage != 'DOE Ref Pre-1980'
-          next
-        else
-          space_names.each do |space_name|
-            self.add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, main_swh_loop, space_type_name, space_name)
-          end
-        end
-      end
-    end
-    
-    unless building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'NECB 2011'
-      laundry_swh_loop = self.add_swh_loop(prototype_input, hvac_standards, 'laundry')
-      self.add_swh_end_uses(prototype_input, hvac_standards, laundry_swh_loop, 'laundry')
-    end
-
-    
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Model", "Finished adding SWH")
-    
-=======
->>>>>>> remotes/origin/master
     return true
     
   end 
