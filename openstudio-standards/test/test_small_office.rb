@@ -14,11 +14,7 @@ class TestSmallOffice < CreateDOEPrototypeBuildingTest
   
   
   create_models = true
-<<<<<<< HEAD
   run_models = true
-=======
-  run_models = false
->>>>>>> remotes/origin/master
   compare_results = false
   
   debug = false
