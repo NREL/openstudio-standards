@@ -1374,30 +1374,6 @@ class OpenStudio::Model::Model
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{building_vintage}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
 
-<<<<<<< HEAD
-  # Load the helper libraries for getting the autosized
-  # values for each type of model object.
-  require_relative 'Standards.Fan'
-  require_relative 'Standards.FanConstantVolume'
-  require_relative 'Standards.FanVariableVolume'
-  require_relative 'Standards.FanOnOff'
-  require_relative 'Standards.FanZoneExhaust'
-  require_relative 'Standards.ChillerElectricEIR'
-  require_relative 'Standards.CoilCoolingDXTwoSpeed'
-  require_relative 'Standards.CoilCoolingDXSingleSpeed'
-  require_relative 'Standards.CoilCoolingDXMultiSpeed'
-  require_relative 'Standards.CoilHeatingDXSingleSpeed'
-  require_relative 'Standards.CoilHeatingDXMultiSpeed'
-  require_relative 'Standards.CoilHeatingGasMultiStage'
-  require_relative 'Standards.BoilerHotWater'
-  require_relative 'Standards.AirLoopHVAC'
-  require_relative 'Standards.WaterHeaterMixed'
-  require_relative 'Standards.Space'
-  require_relative 'Standards.Construction'
-  require_relative 'Standards.ThermalZone'
-  require_relative 'Standards.Surface'
-  require_relative 'Standards.SubSurface'
-=======
     name = make_name(building_vintage, clim, building_type, spc_type)
 
     # Create a new construction set and name it
@@ -1563,7 +1539,7 @@ class OpenStudio::Model::Model
   
   
   end
->>>>>>> remotes/origin/master
+
   
   # Applies the multi-zone VAV outdoor air sizing requirements
   # to all applicable air loops in the model.
@@ -1605,20 +1581,7 @@ class OpenStudio::Model::Model
     #self.getPumpVariableSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
     
     # Unitary ACs
-<<<<<<< HEAD
-    self.getCoilCoolingDXTwoSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-    self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
-    self.getCoilCoolingDXMultiSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
 
-    # Unitary HPs
-    self.getCoilHeatingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
-    self.getCoilHeatingDXMultiSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards, sql_db_vars_map)}
-  
-    # Chillers
-    clg_tower_objs = self.getCoolingTowerSingleSpeeds
-    self.getChillerElectricEIRs.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards, clg_tower_objs)}
-  
-=======
     self.getCoilCoolingDXTwoSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
     self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(building_vintage, sql_db_vars_map)}
 
@@ -1628,21 +1591,17 @@ class OpenStudio::Model::Model
     # Chillers
     self.getChillerElectricEIRs.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
 
->>>>>>> remotes/origin/master
+
     # Boilers
     self.getBoilerHotWaters.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
 
     # Water Heaters
-<<<<<<< HEAD
-    self.getWaterHeaterMixeds.sort.each {|obj| obj.setStandardEfficiency(self.template, self.standards)}
-
-    # Heating coils
-    self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-   
-=======
     self.getWaterHeaterMixeds.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
 
->>>>>>> remotes/origin/master
+    # was this added for necb archetypes?
+    # Heating coils
+    #self.getCoilHeatingGasMultiStages.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
+   
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
 
   end
@@ -1676,16 +1635,7 @@ class OpenStudio::Model::Model
       space.set_infiltration_rate(building_vintage)
     end
 
-<<<<<<< HEAD
-    case self.template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      #"For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004', infiltration rates are not defined using this method, no changes have been made to the model.
-    else
-      # Remove infiltration rates set at the space type
-      self.getSpaceTypes.each do |space_type|
-        space_type.spaceInfiltrationDesignFlowRates.each do |infil|
-          infil.remove
-=======
+
     case building_vintage
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         #"For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004', infiltration rates are not defined using this method, no changes have been made to the model.
@@ -1695,61 +1645,11 @@ class OpenStudio::Model::Model
           space_type.spaceInfiltrationDesignFlowRates.each do |infil|
             infil.remove
           end
->>>>>>> remotes/origin/master
         end
       end
     end
   end
-<<<<<<< HEAD
-  
-  # Loads the openstudio standards dataset and attach it to the model
-  # via the :standards instance variable.
-  #
-  # @todo test to verify that standards were loaded properly.
-  def load_openstudio_standards_json()
-    
-    standards_files = []
-    standards_files << 'OpenStudio_Standards_boilers.json'
-    standards_files << 'OpenStudio_Standards_chillers.json'
-    standards_files << 'OpenStudio_Standards_climate_zone_sets.json'
-    standards_files << 'OpenStudio_Standards_climate_zones.json'
-    standards_files << 'OpenStudio_Standards_construction_properties.json'
-    standards_files << 'OpenStudio_Standards_construction_sets.json'
-    standards_files << 'OpenStudio_Standards_constructions.json'
-    standards_files << 'OpenStudio_Standards_curve_bicubics.json'
-    standards_files << 'OpenStudio_Standards_curve_biquadratics.json'
-    standards_files << 'OpenStudio_Standards_curve_cubics.json'
-    standards_files << 'OpenStudio_Standards_curve_quadratics.json'
-    standards_files << 'OpenStudio_Standards_ground_temperatures.json'
-    standards_files << 'OpenStudio_Standards_heat_pumps_heating.json'
-    standards_files << 'OpenStudio_Standards_heat_pumps.json'
-    standards_files << 'OpenStudio_Standards_materials.json'
-    standards_files << 'OpenStudio_Standards_motors.json'
-    standards_files << 'OpenStudio_Standards_prototype_inputs.json'
-    standards_files << 'OpenStudio_Standards_schedules.json'
-    standards_files << 'OpenStudio_Standards_space_types.json'
-    standards_files << 'OpenStudio_Standards_templates.json'
-    standards_files << 'OpenStudio_Standards_unitary_acs.json'
-    #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
 
-    # Combine the data from the JSON files into a single hash
-    top_dir = File.expand_path( '../../..',File.dirname(__FILE__))
-    standards_data_dir = "#{top_dir}/data/standards"
-    standards_hash = {}
-    standards_files.sort.each do |standards_file|
-      temp = File.open("#{standards_data_dir}/#{standards_file}", 'r:UTF-8')
-      file_hash = JSON.load(temp)
-      standards_hash = standards_hash.merge(file_hash)
-    end  
-      
-    self.standards = standards_hash
-
-    # TODO check that the data was loaded correctly
-
-    @created_names = []
-  end
-=======
->>>>>>> remotes/origin/master
 
   # Method to search through a hash for the objects that meets the
   # desired search criteria, as passed via a hash.
@@ -1918,12 +1818,7 @@ class OpenStudio::Model::Model
         return schedule
       end
     end
-<<<<<<< HEAD
-    
-    
-=======
 
->>>>>>> remotes/origin/master
     require 'date'
 
     #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding schedule: #{schedule_name}")
@@ -1990,17 +1885,6 @@ class OpenStudio::Model::Model
 
       # Other days (weekdays, weekends, etc)
       if day_types.include?('Wknd') ||
-<<<<<<< HEAD
-          day_types.include?('Wkdy') ||
-          day_types.include?('Sat') ||
-          day_types.include?('Sun') ||
-          day_types.include?('Mon') ||
-          day_types.include?('Tue') ||
-          day_types.include?('Wed') ||
-          day_types.include?('Thu') ||
-          day_types.include?('Fri')
-      
-=======
         day_types.include?('Wkdy') ||
         day_types.include?('Sat') ||
         day_types.include?('Sun') ||
@@ -2010,7 +1894,7 @@ class OpenStudio::Model::Model
         day_types.include?('Thu') ||
         day_types.include?('Fri')
 
->>>>>>> remotes/origin/master
+
         # Make the Rule
         sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
         day_sch = sch_rule.daySchedule
@@ -2045,260 +1929,6 @@ class OpenStudio::Model::Model
         sch_rule.setApplySunday(true) if day_types.include?('Sun')
 
       end
-<<<<<<< HEAD
-      
-    end # Next rule  
-    
-    return sch_ruleset
-    
-  end
-    
-  # Create a space type from the openstudio standards dataset.
-  # @todo make return an OptionalSpaceType
-  def add_space_type(template, clim, building_type, spc_type)
-    
-       
-    # Get the space type data
-    data = self.find_object(self.standards['space_types'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type})
-    if !data
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for space type: #{template}-#{clim}-#{building_type}-#{spc_type}, will not be created.")
-      return false #TODO change to return empty optional schedule:ruleset?
-    end
-    
-    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding space type: #{template}-#{clim}-#{building_type}-#{spc_type}")
-    
-    name = make_name(template, clim, building_type, spc_type)
-
-    # Create a new space type and name it
-    space_type = OpenStudio::Model::SpaceType.new(self)
-    space_type.setName(name)
-
-    # Set the standards building type and space type for this new space type
-    space_type.setStandardsBuildingType(building_type)
-    space_type.setStandardsSpaceType(spc_type)
-
-    # Set the rendering color of the space type
-    rgb = data['rgb']
-    rgb = rgb.split('_')
-    r = rgb[0].to_i
-    g = rgb[1].to_i
-    b = rgb[2].to_i
-    rendering_color = OpenStudio::Model::RenderingColor.new(self)
-    rendering_color.setRenderingRedValue(r)
-    rendering_color.setRenderingGreenValue(g)
-    rendering_color.setRenderingBlueValue(b)
-    space_type.setRenderingColor(rendering_color)
-
-    # Create the schedule set for the space type
-    default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(self)
-    default_sch_set.setName("#{name} Schedule Set")
-    space_type.setDefaultScheduleSet(default_sch_set)
-
-    # Lighting
-    make_lighting = false
-    lighting_per_area = data['lighting_per_area']
-    lighting_per_person = data['lighting_per_person']
-    unless lighting_per_area.to_f == 0 || lighting_per_area.nil? then make_lighting = true end
-    unless lighting_per_person.to_f == 0 || lighting_per_person.nil? then make_lighting = true end
-
-    if make_lighting == true
-
-      # Create the lighting definition
-      lights_def = OpenStudio::Model::LightsDefinition.new(self)
-      lights_def.setName("#{name} Lights Definition")
-      lights_frac_to_return_air = data['lighting_fraction_to_return_air']
-      lights_frac_radiant = data['lighting_fraction_radiant']
-      lights_frac_visible = data['lighting_fraction_visible']
-      unless  lighting_per_area == 0 || lighting_per_area.nil?
-        lights_def.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
-        lights_def.setReturnAirFraction(lights_frac_to_return_air)
-        lights_def.setFractionRadiant(lights_frac_radiant)
-        lights_def.setFractionVisible(lights_frac_visible)
-      end
-      unless lighting_per_person == 0 || lighting_per_person.nil?
-        lights_def.setWattsperPerson(OpenStudio.convert(lighting_per_person, 'W/person', 'W/person').get)
-        lights_def.setReturnAirFraction(lights_frac_to_return_air)
-        lights_def.setFractionRadiant(lights_frac_radiant)
-        lights_def.setFractionVisible(lights_frac_visible)
-      end
-
-      # Create the lighting instance and hook it up to the space type
-      lights = OpenStudio::Model::Lights.new(lights_def)
-      lights.setName("#{name} Lights")
-      lights.setSpaceType(space_type)
-
-      # Additional Lighting
-      additional_lighting_per_area = data['additional_lighting_per_area']
-      if additional_lighting_per_area != nil
-        # Create the lighting definition
-        additional_lights_def = OpenStudio::Model::LightsDefinition.new(self)
-        additional_lights_def.setName("#{name} Additional Lights Definition")
-        additional_lights_def.setWattsperSpaceFloorArea(OpenStudio.convert(additional_lighting_per_area, 'W/ft^2', 'W/m^2').get)
-        additional_lights_def.setReturnAirFraction(lights_frac_to_return_air)
-        additional_lights_def.setFractionRadiant(lights_frac_radiant)
-        additional_lights_def.setFractionVisible(lights_frac_visible)
-
-        # Create the lighting instance and hook it up to the space type
-        additional_lights = OpenStudio::Model::Lights.new(additional_lights_def)
-        additional_lights.setName("#{name} Additional Lights")
-        additional_lights.setSpaceType(space_type)
-      end
-
-      # Get the lighting schedule and set it as the default
-      lighting_sch = data['lighting_schedule']
-      # for debugging (Maria)
-      #puts "lighting schedule = #{lighting_sch}"
-      
-          
-      unless lighting_sch.nil?
-        default_sch_set.setLightingSchedule(add_schedule(lighting_sch))
-      end
-    end
-
-    # Ventilation
-
-    make_ventilation = false
-    ventilation_per_area = data['ventilation_per_area']
-    ventilation_per_person = data['ventilation_per_person']
-    ventilation_ach = data['ventilation_air_changes']
-    unless ventilation_per_area.to_f  == 0 || ventilation_per_area.nil? then make_ventilation = true  end
-    unless ventilation_per_person.to_f == 0 || ventilation_per_person.nil? then make_ventilation = true end
-    unless ventilation_ach.to_f == 0 || ventilation_ach.nil? then make_ventilation = true end
-        
-    
-    if make_ventilation == true
-
-      # Create the ventilation object and hook it up to the space type
-      ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(self)
-      ventilation.setName("#{name} Ventilation")
-      space_type.setDesignSpecificationOutdoorAir(ventilation)
-      ventilation.setOutdoorAirMethod('Sum')
-      unless ventilation_per_area.nil? || ventilation_per_area.to_f  == 0
-        ventilation.setOutdoorAirFlowperFloorArea(OpenStudio.convert(ventilation_per_area.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-      end
-      unless  ventilation_per_person.nil? || ventilation_per_person.to_f == 0
-        ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
-      end
-      unless ventilation_ach.nil? || ventilation_ach.to_f == 0
-        ventilation.setOutdoorAirFlowAirChangesperHour(OpenStudio.convert(ventilation_ach.to_f, '', '').get)        
-      end
-      
-    end
-
-    # Occupancy
-
-    make_people = false
-    occupancy_per_area = data['occupancy_per_area']
-    unless occupancy_per_area.to_f == 0 || occupancy_per_area.nil? then make_people = true end
-
-    if make_people == true
-      # create the people definition
-      people_def = OpenStudio::Model::PeopleDefinition.new(self)
-      people_def.setName("#{name} People Definition")
-      unless  occupancy_per_area == 0 || occupancy_per_area.nil?
-        people_def.setPeopleperSpaceFloorArea(OpenStudio.convert(occupancy_per_area / 1000.0, 'people/ft^2', 'people/m^2').get)
-      end
-
-      # create the people instance and hook it up to the space type
-      people = OpenStudio::Model::People.new(people_def)
-      people.setName("#{name} People")
-      people.setSpaceType(space_type)
-
-      # get the occupancy and occupant activity schedules from the library and set as the default
-      occupancy_sch = data['occupancy_schedule']
-      
-      unless occupancy_sch.nil?
-        default_sch_set.setNumberofPeopleSchedule(add_schedule(occupancy_sch))
-      end
-      
-      occupancy_activity_sch = data['occupancy_activity_schedule']
-      
-               
-      
-      unless occupancy_activity_sch.nil?
-        default_sch_set.setPeopleActivityLevelSchedule(add_schedule(occupancy_activity_sch))
-      end
-
-      # clothing schedule for thermal comfort metrics
-      clothing_sch = self.getScheduleRulesetByName("Clothing Schedule")
-      if clothing_sch.is_initialized
-        clothing_sch = clothing_sch.get
-      else
-        clothing_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-        clothing_sch.setName("Clothing Schedule")
-        clothing_sch.defaultDaySchedule.setName("Clothing Schedule Default Winter Clothes")
-        clothing_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 1.0)
-        sch_rule = OpenStudio::Model::ScheduleRule.new(clothing_sch)
-        sch_rule.daySchedule.setName("Clothing Schedule Summer Clothes")
-        sch_rule.daySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0.5)
-        sch_rule.setStartDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(5), 1))
-        sch_rule.setEndDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(9), 30))      
-      end
-      people.setClothingInsulationSchedule(clothing_sch)
-         
-      # air velocity schedule for thermal comfort metrics
-      air_velo_sch = self.getScheduleRulesetByName("Air Velocity Schedule")
-      if air_velo_sch.is_initialized
-        air_velo_sch = air_velo_sch.get
-      else
-        air_velo_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-        air_velo_sch.setName("Air Velocity Schedule")
-        air_velo_sch.defaultDaySchedule.setName("Air Velocity Schedule Default")
-        air_velo_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0.2)    
-      end
-      people.setAirVelocitySchedule(air_velo_sch)      
-
-      # work efficiency schedule for thermal comfort metrics
-      work_efficiency_sch = self.getScheduleRulesetByName("Work Efficiency Schedule")
-      if work_efficiency_sch.is_initialized
-        work_efficiency_sch = work_efficiency_sch.get
-      else
-        work_efficiency_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-        work_efficiency_sch.setName("Work Efficiency Schedule")
-        work_efficiency_sch.defaultDaySchedule.setName("Work Efficiency Schedule Default")
-        work_efficiency_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0), 0)    
-      end
-      people.setWorkEfficiencySchedule(work_efficiency_sch) 
-      
-    end
-
-    # Infiltration
-
-    make_infiltration = false
-    infiltration_per_area_ext = data['infiltration_per_exterior_area']
-    infiltration_per_area_ext_wall = data['infiltration_per_exterior_wall_area']
-    infiltration_ach = data['infiltration_air_changes']
-    unless (infiltration_per_area_ext.to_f == 0 || infiltration_per_area_ext.nil?) && (infiltration_per_area_ext_wall.to_f == 0 || infiltration_per_area_ext_wall.nil?) && (infiltration_ach.to_f == 0 || infiltration_ach.nil?) 
-      then make_infiltration = true
-    end
-
-    if make_infiltration == true
-
-      # Create the infiltration object and hook it up to the space type
-      infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
-      infiltration.setName("#{name} Infiltration")
-      infiltration.setSpaceType(space_type)
-      unless infiltration_per_area_ext == 0 || infiltration_per_area_ext.nil?
-        infiltration.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-      end
-      unless infiltration_per_area_ext_wall == 0 || infiltration_per_area_ext_wall.nil?
-        infiltration.setFlowperExteriorWallArea(OpenStudio.convert(infiltration_per_area_ext_wall, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-      end
-      unless infiltration_ach == 0 || infiltration_ach.nil?
-        infiltration.setAirChangesperHour(infiltration_ach)
-      end
-
-      # Get the infiltration schedule from the library and set as the default
-      infiltration_sch = data['infiltration_schedule']
-      unless infiltration_sch.nil?
-        default_sch_set.setInfiltrationSchedule(add_schedule(infiltration_sch))
-      end
-
-    end
-
-    # Electric equipment
-=======
->>>>>>> remotes/origin/master
 
     end # Next rule
 
@@ -2306,148 +1936,6 @@ class OpenStudio::Model::Model
 
   end
 
-<<<<<<< HEAD
-      # Get the electric equipment schedule from the library and set as the default
-      elec_equip_sch = data['electric_equipment_schedule']
-      
-      unless elec_equip_sch.nil?
-        default_sch_set.setElectricEquipmentSchedule(add_schedule(elec_equip_sch))
-      end
-
-    end
-
-    # Gas equipment
-
-    make_gas_equipment = false
-    gas_equip_per_area = data['gas_equipment_per_area']
-    gas_equip_frac_latent = data['gas_equipment_fraction_latent']
-    gas_equip_frac_radiant = data['gas_equipment_fraction_radiant']
-    gas_equip_frac_lost = data['gas_equipment_fraction_lost']
-
-    unless  gas_equip_per_area.to_f == 0 || gas_equip_per_area.nil? then make_gas_equipment = true end
-
-    if make_gas_equipment == true
-
-      # Create the gas equipment definition
-      gas_equip_def = OpenStudio::Model::GasEquipmentDefinition.new(self)
-      gas_equip_def.setName("#{name} Gas Equipment Definition")
-      gas_equip_def.setFractionLatent(gas_equip_frac_latent)
-      gas_equip_def.setFractionRadiant(gas_equip_frac_radiant)
-      gas_equip_def.setFractionLost(gas_equip_frac_lost)
-      unless  gas_equip_per_area == 0 || gas_equip_per_area.nil?
-        gas_equip_def.setWattsperSpaceFloorArea(OpenStudio.convert(gas_equip_per_area, 'Btu/hr*ft^2', 'W/m^2').get)
-      end
-
-      # Create the gas equipment instance and hook it up to the space type
-      gas_equip = OpenStudio::Model::GasEquipment.new(gas_equip_def)
-      gas_equip.setName("#{name} Gas Equipment")
-      gas_equip.setSpaceType(space_type)
-
-      # Get the gas equipment schedule from the library and set as the default
-      gas_equip_sch = data['gas_equipment_schedule']
-      
-      unless gas_equip_sch.nil?
-        default_sch_set.setGasEquipmentSchedule(add_schedule(gas_equip_sch))
-      end
-
-    end
-
-    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(self)
-    thermostat.setName("#{name} Thermostat")
- 
-    heating_setpoint_sch = data['heating_setpoint_schedule']
-       
-    unless heating_setpoint_sch.nil?
-      thermostat.setHeatingSetpointTemperatureSchedule(add_schedule(heating_setpoint_sch))
-    end
-
-    cooling_setpoint_sch = data['cooling_setpoint_schedule']
-    
-    unless cooling_setpoint_sch.nil?
-      thermostat.setCoolingSetpointTemperatureSchedule(add_schedule(cooling_setpoint_sch))
-    end
-
-    # componentize the space type
-    space_type_component = space_type.createComponent
-
-    #   #TODO make this return BCL component space types?
-    #
-    #   #setup the file names and save paths that will be used
-    #   file_name = "nrel_ref_bldg_space_type"
-    #   component_dir = "#{Dir.pwd}/#{component_name}"
-    #   osm_file_path = OpenStudio::Path.new("#{component_dir}/files/#{file_name}.osm")
-    #   osc_file_path = OpenStudio::Path.new("#{component_dir}/files/#{file_name}.osc")
-    #
-    #   #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "component_dir = #{component_dir}")
-    #
-    #   OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "creating directories")
-    #   FileUtils.rm_rf(component_dir) if File.exists?(component_dir) and File.directory?(component_dir)
-    #   FileUtils.mkdir_p(component_dir)
-    #   FileUtils.mkdir_p("#{component_dir}/files/")
-    #
-    #   #save the space type as a .osm
-    #   #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "saving osm to #{osm_file_path}")
-    #   model.toIdfFile().save(osm_file_path,true)
-    #
-    #   #save the componentized space type as a .osc
-    #   #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "saving osc to #{osc_file_path}")
-    #   space_type_component.toIdfFile().save(osc_file_path,true)
-    #
-    #   #make the BCL component
-    #   OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "creating BCL component")
-    #   component = BCL::Component.new(component_dir)
-    #   OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "created uid = #{component.uuid}")
-    #
-    #   #add component information
-    #   component.name = component_name
-    #   component.description = "This space type represent spaces in typical commercial buildings in the United States.  The information to create these space types was taken from the DOE Commercial Reference Building Models, which can be found at http://www1.eere.energy.gov/buildings/commercial_initiative/reference_buildings.html.  These space types include plug loads, gas equipment loads (cooking, etc), occupancy, infiltration, and ventilation rates, as well as schedules.  These space types should be viewed as starting points, and should be reviewed before being used to make decisions."
-    #   component.source_manufacturer = "DOE"
-    #   component.source_url = "http://www1.eere.energy.gov/buildings/commercial_initiative/reference_buildings.html"
-    #   component.add_provenance("dgoldwas", Time.now.gmtime.strftime('%Y-%m-%dT%H:%M:%SZ'), "")
-    #   component.add_tag("Space Types") # todo: what is the taxonomy string for space type? is there one?
-    #
-    #   #add arguments as attributes
-    #   component.add_attribute("NREL_reference_building_vintage", template, "")
-    #   component.add_attribute("Climate_zone", clim, "")
-    #   component.add_attribute("NREL_reference_building_primary_space_type", building_type, "")
-    #   component.add_attribute("NREL_reference_building_secondary_space_type", spc_type, "")
-    #
-    #   #openstudio type attribute
-    #   component.add_attribute("OpenStudio Type", space_type.iddObjectType.valueDescription, "")
-    #
-    #   #add other attributes
-    #   component.add_attribute("Lighting Standard",  data["lighting_standard"], "")
-    #   component.add_attribute("Lighting Primary Space Type",  data["lighting_pri_spc_type"], "")
-    #   component.add_attribute("Lighting Secondary Space Type",  data["lighting_sec_spc_type"], "")
-    #
-    #   component.add_attribute("Ventilation Standard",  data["ventilation_standard"], "")
-    #   component.add_attribute("Ventilation Primary Space Type",  data["ventilation_pri_spc_type"], "")
-    #   component.add_attribute("Ventilation Secondary Space Type",  data["ventilation_sec_spc_type"], "")
-    #
-    #   component.add_attribute("Occupancy Standard",  "NREL reference buildings", "")
-    #   component.add_attribute("Occupancy Primary Space Type",  building_type, "")
-    #   component.add_attribute("Occupancy Secondary Space Type",  spc_type, "")
-    #
-    #   component.add_attribute("Infiltration, Gas Equipment, Electric Equipment, and Schedules Standard",  "NREL reference buildings", "")
-    #   component.add_attribute("Infiltration, Gas Equipment, Electric Equipment, and Schedules Primary Space Type",  building_type, "")
-    #   component.add_attribute("Infiltration, Gas Equipment, Electric Equipment, and Schedules Secondary Space Type",  spc_type, "")
-    #
-    #   #add the osm and osc files to the component
-    #   component.add_file("OpenStudio", "0.9.3",  osm_file_path.to_s, "#{file_name}.osm", "osm")
-    #   component.add_file("OpenStudio", "0.9.3",  osc_file_path.to_s, "#{file_name}.osc", "osc")
-    #
-    #   #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "saving component to #{component_dir}")
-    #   component.save_component_xml(component_dir)
-    #
-    # =e
-    # return the space type and the componentized space type
-    
-    return space_type
-    
-  end # end generate_space_type
-  
-=======
->>>>>>> remotes/origin/master
   # Create a material from the openstudio standards dataset.
   # @todo make return an OptionalMaterial
   def add_material(material_name)
@@ -2646,21 +2134,14 @@ class OpenStudio::Model::Model
     # Get the construction properties,
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
-<<<<<<< HEAD
-    props = self.find_object(self.standards['construction_properties'], {'template'=>template,
-        'climate_zone_set'=> climate_zone_set,
-        'intended_surface_type'=> intended_surface_type,
-        'standards_construction_type'=> standards_construction_type,
-        'building_category' => building_category
-      })
-=======
+
     props = self.find_object($os_standards['construction_properties'], {'template'=>building_vintage,
                                                                     'climate_zone_set'=> climate_zone_set,
                                                                     'intended_surface_type'=> intended_surface_type,
                                                                     'standards_construction_type'=> standards_construction_type,
                                                                     'building_category' => building_category
                                                                     })
->>>>>>> remotes/origin/master
+
     if !props
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{building_vintage}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
       # Return an empty construction
@@ -2700,22 +2181,11 @@ class OpenStudio::Model::Model
     end
 
     # Get the object data
-<<<<<<< HEAD
-    data = self.find_object(self.standards['construction_sets'], {'template'=>template, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type, 'is_residential'=>is_residential})
-    #data = self.find_object(self.standards['construction_sets'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type, 'is_residential'=>is_residential})
-    
-    # for debugging (maria)
-    #puts "data = #{data}"
-    
-    
-    if !data
-      data = self.find_object(self.standards['construction_sets'], {'template'=>template, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type})
-      #data = self.find_object(self.standards['construction_sets'], {'template'=>template, 'building_type'=>building_type, 'space_type'=>spc_type})
-=======
+
     data = self.find_object($os_standards['construction_sets'], {'template'=>building_vintage, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type, 'is_residential'=>is_residential})
     if !data
       data = self.find_object($os_standards['construction_sets'], {'template'=>building_vintage, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type})
->>>>>>> remotes/origin/master
+
       if !data
     
         # for debugging (maria)
@@ -2723,23 +2193,13 @@ class OpenStudio::Model::Model
         
         return construction_set
       end
-<<<<<<< HEAD
-    end 
-  
-    # for debugging (maria)
-    #puts "data = #{data}"
-    
-    
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")  
-  
-    name = make_name(template, clim, building_type, spc_type)
-=======
+
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{building_vintage}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
 
     name = make_name(building_vintage, clim, building_type, spc_type)
->>>>>>> remotes/origin/master
+
 
     # Create a new construction set and name it
     construction_set = OpenStudio::Model::DefaultConstructionSet.new(self)
@@ -2749,27 +2209,7 @@ class OpenStudio::Model::Model
     exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
     construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
     if data['exterior_floor_standards_construction_type'] && data['exterior_floor_building_category']
-<<<<<<< HEAD
-      exterior_surfaces.setFloorConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'ExteriorFloor',
-          data['exterior_floor_standards_construction_type'],
-          data['exterior_floor_building_category']))
-    end
-    if data['exterior_wall_standards_construction_type'] && data['exterior_wall_building_category']
-      exterior_surfaces.setWallConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'ExteriorWall',
-          data['exterior_wall_standards_construction_type'],
-          data['exterior_wall_building_category']))
-    end
-    if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
-      exterior_surfaces.setRoofCeilingConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'ExteriorRoof',
-          data['exterior_roof_standards_construction_type'],
-          data['exterior_roof_building_category']))
-=======
+
       exterior_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
                                                                        climate_zone_set,
                                                                        'ExteriorFloor',
@@ -2789,7 +2229,6 @@ class OpenStudio::Model::Model
                                                                        'ExteriorRoof',
                                                                        data['exterior_roof_standards_construction_type'],
                                                                        data['exterior_roof_building_category']))
->>>>>>> remotes/origin/master
     end
 
     # Interior surfaces constructions
@@ -2812,27 +2251,6 @@ class OpenStudio::Model::Model
     ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
     construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
     if data['ground_contact_floor_standards_construction_type'] && data['ground_contact_floor_building_category']
-<<<<<<< HEAD
-      ground_surfaces.setFloorConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'GroundContactFloor',
-          data['ground_contact_floor_standards_construction_type'],
-          data['ground_contact_floor_building_category']))
-    end
-    if data['ground_contact_wall_standards_construction_type'] && data['ground_contact_wall_building_category']
-      ground_surfaces.setWallConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'GroundContactWall',
-          data['ground_contact_wall_standards_construction_type'],
-          data['ground_contact_wall_building_category']))
-    end
-    if data['ground_contact_ceiling_standards_construction_type'] && data['ground_contact_ceiling_building_category']
-      ground_surfaces.setRoofCeilingConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'GroundContactRoof',
-          data['ground_contact_ceiling_standards_construction_type'],
-          data['ground_contact_ceiling_building_category']))
-=======
       ground_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
                                                                        climate_zone_set,
                                                                        'GroundContactFloor',
@@ -2852,34 +2270,13 @@ class OpenStudio::Model::Model
                                                                        'GroundContactRoof',
                                                                        data['ground_contact_ceiling_standards_construction_type'],
                                                                        data['ground_contact_ceiling_building_category']))
->>>>>>> remotes/origin/master
+
     end
 
     # Exterior sub surfaces constructions
     exterior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(self)
     construction_set.setDefaultExteriorSubSurfaceConstructions(exterior_subsurfaces)
     if data['exterior_fixed_window_standards_construction_type'] && data['exterior_fixed_window_building_category']
-<<<<<<< HEAD
-      exterior_subsurfaces.setFixedWindowConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'ExteriorWindow',
-          data['exterior_fixed_window_standards_construction_type'],
-          data['exterior_fixed_window_building_category']))
-    end
-    if data['exterior_operable_window_standards_construction_type'] && data['exterior_operable_window_building_category']
-      exterior_subsurfaces.setOperableWindowConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'ExteriorWindow',
-          data['exterior_operable_window_standards_construction_type'],
-          data['exterior_operable_window_building_category']))
-    end
-    if data['exterior_door_standards_construction_type'] && data['exterior_door_building_category']
-      exterior_subsurfaces.setDoorConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'ExteriorDoor',
-          data['exterior_door_standards_construction_type'],
-          data['exterior_door_building_category']))
-=======
       exterior_subsurfaces.setFixedWindowConstruction(find_and_add_construction(building_vintage,
                                                                        climate_zone_set,
                                                                        'ExteriorWindow',
@@ -2899,27 +2296,12 @@ class OpenStudio::Model::Model
                                                                        'ExteriorDoor',
                                                                        data['exterior_door_standards_construction_type'],
                                                                        data['exterior_door_building_category']))
->>>>>>> remotes/origin/master
     end
     construction_name = data['exterior_glass_doors']
     if construction_name != nil
       exterior_subsurfaces.setGlassDoorConstruction(add_construction(construction_name))
     end
     if data['exterior_overhead_door_standards_construction_type'] && data['exterior_overhead_door_building_category']
-<<<<<<< HEAD
-      exterior_subsurfaces.setOverheadDoorConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'ExteriorDoor',
-          data['exterior_overhead_door_standards_construction_type'],
-          data['exterior_overhead_door_building_category']))
-    end
-    if data['exterior_skylight_standards_construction_type'] && data['exterior_skylight_building_category']
-      exterior_subsurfaces.setSkylightConstruction(find_and_add_construction(template,
-          climate_zone_set,
-          'Skylight',
-          data['exterior_skylight_standards_construction_type'],
-          data['exterior_skylight_building_category']))
-=======
       exterior_subsurfaces.setOverheadDoorConstruction(find_and_add_construction(building_vintage,
                                                                        climate_zone_set,
                                                                        'ExteriorDoor',
@@ -2932,7 +2314,6 @@ class OpenStudio::Model::Model
                                                                        'Skylight',
                                                                        data['exterior_skylight_standards_construction_type'],
                                                                        data['exterior_skylight_building_category']))
->>>>>>> remotes/origin/master
     end
     if construction_name = data['tubular_daylight_domes']
       exterior_subsurfaces.setTubularDaylightDomeConstruction(add_construction(construction_name))
@@ -3900,11 +3281,7 @@ class OpenStudio::Model::Model
           sky_area_m2 += ss.netArea * space.multiplier
         end
       end
-<<<<<<< HEAD
-    else
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has not been assigned a weather file.')
-	  
-=======
+
       
       # Determine the space category
       cat = 'NonRes'
@@ -3943,7 +3320,6 @@ class OpenStudio::Model::Model
       srr_lim = 5.0
     when '90.1-2013'
       srr_lim = 3.0
->>>>>>> remotes/origin/master
     end
     
     # Check against SRR limit
@@ -4249,9 +3625,6 @@ class OpenStudio::Model::Model
     if result.nil?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{building_vintage}")
     end
-    
-    #for debugging (maria)
-    #puts "result = #{result}"
     
     return result
   

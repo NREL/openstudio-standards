@@ -62,15 +62,12 @@ module Fan
       self.setMotorEfficiency(motor_eff)
     end
     
-<<<<<<< HEAD
+
     if(template == 'NECB 2011')
       fan_power_kw = maximum_flow_rate_m3_per_s*pressure_rise_pa/(fan_impeller_eff*1000.0)
     end
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{template}: #{self.name}: allowed_hp = #{allowed_hp.round(2)}HP; motor eff = #{(motor_eff*100).round(2)}%; total fan eff = #{(total_fan_eff*100).round}%")
-=======
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{self.name}: allowed_hp = #{allowed_hp.round(2)}HP; motor eff = #{(motor_eff*100).round(2)}%; total fan eff = #{(total_fan_eff*100).round}% based on #{maximum_flow_rate_cfm.round} cfm.")
->>>>>>> remotes/origin/master
     
     return true
     
@@ -281,15 +278,10 @@ module Fan
   # any desired safety factor already included.  This method
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
-<<<<<<< HEAD
-  # @return [Double] minimum motor efficiency (0.0 to 1.0)
-  def standard_minimum_motor_efficiency(template, standards, motor_bhp)
 
-=======
   # @return [Double] minimum motor efficiency (0.0 to 1.0), nominal HP
   def standard_minimum_motor_efficiency_and_size(template, motor_bhp)
   
->>>>>>> remotes/origin/master
     fan_motor_eff = 0.85
     nominal_hp = motor_bhp
   

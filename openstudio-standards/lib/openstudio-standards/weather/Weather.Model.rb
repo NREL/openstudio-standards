@@ -5,11 +5,9 @@ class OpenStudio::Model::Model
   # Helper method to set the weather file, import the design days, set
   # water mains temperature, and set ground temperature.
   # Based on ChangeBuildingLocation measure by Nicholas Long
-<<<<<<< HEAD
+
   def add_design_days_and_weather_file(hvac_standards, building_type, building_vintage, climate_zone, epw_file)
-=======
-  def add_design_days_and_weather_file(building_type, building_vintage, climate_zone)
->>>>>>> remotes/origin/master
+
 
     require_relative 'Weather.stat_file'
     

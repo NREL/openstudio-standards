@@ -104,21 +104,13 @@ class OpenStudio::Model::ChillerElectricEIR
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-<<<<<<< HEAD
-  def setStandardEfficiencyAndCurves(template, standards, clg_tower_objs)
-
-    chillers = standards['chillers']
-    curve_biquadratics = standards['curve_biquadratics']
-    curve_quadratics = standards['curve_quadratics']
-    curve_bicubics = standards['curve_bicubics']
-=======
   def setStandardEfficiencyAndCurves(template)
   
     chillers = $os_standards['chillers']
     curve_biquadratics = $os_standards['curve_biquadratics']
     curve_quadratics = $os_standards['curve_quadratics']
     curve_bicubics = $os_standards['curve_bicubics']
->>>>>>> remotes/origin/master
+
   
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
