@@ -1648,7 +1648,7 @@ class OpenStudio::Model::Model
         end
       end
     end
-  end
+ 
 
 
   # Method to search through a hash for the objects that meets the

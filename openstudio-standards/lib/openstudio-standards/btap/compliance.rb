@@ -1290,13 +1290,17 @@ module BTAP
       def self.lookup_spacetype_info(type)
         BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |item|
           # The optional suffix allows for for defined "wildcard" spacetypes to pass through. 
-          if type.strip =~ /NECB 2011 - Space Function - #{item[0]}(\-[ABCDEFGHI])?/
+          # space type names have changed - original commented out below (until i know it works)
+          # if type.strip =~ /NECB 2011 - Space Function - #{item[0]}(\-[ABCDEFGHI])?/         
+          if type.strip =~ /Space Function #{item[0]}(\-[ABCDEFGHI])?/
             return item
           end
           
         end
         BTAP::Compliance::NECB2011::Data::BuildingTypeData.each do |item|
-          if type.strip =~ /NECB 2011 - Space Function - #{item[0]}(\-[ABCDEFGHI])?/
+          # space type names have changed - original commented out below (until i know it works)
+          # if type.strip =~ /NECB 2011 - Space Function - #{item[0]}(\-[ABCDEFGHI])?/
+          if type.strip =~ /Space Function #{item[0]}(\-[ABCDEFGHI])?/
             return item
           end
         end
@@ -1323,14 +1327,29 @@ module BTAP
         #iterate through spaces in building.
         model.getSpaces.each do |space|
           raise ("Space #{space.name} does not have a spacetype defined!") if space.spaceType.empty?
+          
+          # for debugging (Maria)
+          puts "space.name = #{space.name}"          
+          
           spacetype_name = space.spaceType.get.name
-          #iterate throught the NECB spacetypes
+          
+          # for debugging (Maria)
+          puts "spacetype_name = #{spacetype_name}"
+          
+          
+          #iterate through the NECB spacetypes
           found_space_type = false
-          BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |spacetype|
-
-            #puts "compare #{spacetype_name.to_s}  == #{("NECB 2011 - Space Function - " + spacetype[0]).to_s}"
-            if (spacetype_name.to_s  == ("NECB 2011 - Space Function - " + spacetype[0]).to_s ) 
+          BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |spacetype|            
+            
+             # puts "compare #{spacetype_name.to_s}  == #{("Space Function " + spacetype[0]).to_s}"
+             
+            # i think spacetype names have changed, remove NECB 2011 - 
+            #if (spacetype_name.to_s  == ("NECB 2011 - Space Function - " + spacetype[0]).to_s ) 
+            #  s[ spacetype[2] ] = s[ spacetype[2] ] + space.floorArea() if "*" != spacetype[2]
+              
+            if (spacetype_name.to_s  == ("Space Function " + spacetype[0]).to_s ) 
               s[ spacetype[2] ] = s[ spacetype[2] ] + space.floorArea() if "*" != spacetype[2]
+              
               #puts "Found #{space.spaceType.get.name} schedule #{spacetype[2]} match with floor area of #{space.floorArea()}"
               found_space_type = true
             elsif spacetype_name.to_s =~ /NECB-#{spacetype[0].to_s}(\-[ABCDEFGHI])?/
@@ -1355,11 +1374,16 @@ module BTAP
         BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |spacetype|
           spacetype_name = space.spaceType.get.name  unless space.spaceType.empty?
           #If it is a regular space type.
-          if spacetype_name.to_s  == ("NECB 2011 - Space Function - " + spacetype[0]).to_s
+          
+          # space type names have changed - original commented out below
+          # if spacetype_name.to_s  == ("NECB 2011 - Space Function - " + spacetype[0]).to_s          
+          if spacetype_name.to_s  == ("Space Function " + spacetype[0]).to_s
             return spacetype[2]
           end
           #if it is a wildcard space type the schedule is in the name ensure that 
-          if spacetype_name.to_s =~ /#{"NECB 2011 - Space Function - " + spacetype[0]}-(\S)$/i
+          # space type names have changed - original commented out below
+          #  if spacetype_name.to_s =~ /#{"NECB 2011 - Space Function - " + spacetype[0]}-(\S)$/i        
+          if spacetype_name.to_s =~ /#{"Space Function " + spacetype[0]}-(\S)$/i
             return $1
           end
         end

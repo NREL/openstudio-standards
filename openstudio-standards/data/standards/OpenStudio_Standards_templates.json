@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {
   "templates": [
     {
@@ -38,53 +37,4 @@
       "notes": "Taken from the Canadian NECB 2011"
     }
   ]
-=======
-{
-  "templates": [
-    {
-      "name": "189.1-2009",
-      "notes": "Lighting, equipment, infiltration, and ventilation taken from the EnergyPlus example file generator low-energy case.  Schedules and occupancy taken from DOE Ref 2004 template."
-    },
-    {
-      "name": "90.1-2004",
-      "notes": "Numbers taken from the DOE 2004 reference buildings, with values mapped back to the original data source (standards, etc) where possible.  The infiltration numbers were taken from the reference buildings but converted to cfm/ft^2 of exterior surface area.  Color scheme is based on redder for more public spaces, bluer for more private spaces.  Occupancy from ventilation standards was not used by reference buildings because numbers were generally found to be too high for modeling, representing very conservative design scenarios."
-    },
-    {
-      "name": "90.1-2007",
-      "notes": "Lighting and ventilation taken from 90.1-2007.  Equipment and infiltration taken from 189.1-2009 template.  Schedules and occupancy taken from DOE Ref 2004 template."
-    },
-    {
-      "name": "90.1-2010",
-      "notes": "Lighting and ventilation taken from 90.1-2010.  Equipment and infiltration taken from 189.1-2009 template.  Schedules and occupancy taken from DOE Ref 2004 template."
-    },
-    {
-      "name": "90.1-2013",
-      "notes": "Lighting and ventilation taken from 90.1-2013.  Equipment and infiltration taken from 189.1-2009 template.  Schedules and occupancy taken from DOE Ref 2004 template."
-    },
-    {
-      "name": "DOE Ref 1980-2004",
-      "notes": "Numbers taken from the DOE 1980-2004 reference buildings, with values mapped back to the original data source (standards, etc) where possible.  The infiltration numbers were taken from the reference buildings but converted to cfm/ft^2 of exterior surface area.  Color scheme is based on redder for more public spaces, bluer for more private spaces.  Occupancy from ventilation standards was not used by reference buildings because numbers were generally found to be too high for modeling, representing very conservative design scenarios."
-    },
-    {
-      "name": "DOE Ref Pre-1980",
-      "notes": "Numbers taken from the DOE Pre-1980 reference buildings, with values mapped back to the original data source (standards, etc) where possible.  The infiltration numbers were taken from the reference buildings but converted to cfm/ft^2 of exterior surface area.  Color scheme is based on redder for more public spaces, bluer for more private spaces.  Occupancy from ventilation standards was not used by reference buildings because numbers were generally found to be too high for modeling, representing very conservative design scenarios."
-    },
-    {
-      "name": "ECBC 2007",
-      "notes": "Indian Energy Conservation Building Code 2007"
-    },
-    {
-      "name": "ICC IECC 2015",
-      "notes": "International Code Council 2015 International \nEnergy Conservation Code"
-    },
-    {
-      "name": "NECB 2011",
-      "notes": "Taken from the Canadian NECB 2011"
-    },
-    {
-      "name": "OEESC 2014",
-      "notes": "Oregon Efficiency Energy Specialty Code (created by modifying copy of 90.1 2013). Lighting came from Tables 505.5.2(a) and (b) in the 2014 Oregon Energy Efficiency Specialty Code"
-    }
-  ]
->>>>>>> remotes/origin/master
 }

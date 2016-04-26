@@ -11,6 +11,7 @@ class OpenStudio::Model::Model
   require_relative 'Prototype.ControllerWaterCoil'
   require_relative 'Prototype.Model.hvac'
   require_relative 'Prototype.Model.swh'
+  require_relative '../standards/Standards.Model'
 
   # Creates a DOE prototype building model and replaces
   # the current model with this model.
@@ -23,7 +24,7 @@ class OpenStudio::Model::Model
   # @example Create a Small Office, 90.1-2010, in ASHRAE Climate Zone 5A (Chicago)
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
 
-  def create_prototype_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)
+  def create_prototype_building(building_type, building_vintage, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
     
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004. This is a quick check.
     if building_type == "HighriseApartment"
@@ -40,7 +41,11 @@ class OpenStudio::Model::Model
       'template' => building_vintage,
       'building_type' => building_type
     }
-    prototype_input = self.find_object($os_standards['prototype_inputs'], search_criteria)
+    
+    # this differs from master code. find_object no longer part of Model class, if I use self.find_object, get NoMethodError
+    prototype_input = self.find_object($os_standards['prototype_inputs'], search_criteria,nil)
+    
+    
     if prototype_input.nil?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for #{search_criteria}, cannot create model.")
       return false
@@ -53,13 +58,13 @@ class OpenStudio::Model::Model
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
-      self.assign_space_type_stubs("Space Function", space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
+      self.assign_space_type_stubs("Space Function", building_vintage, space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
       self.add_loads(building_vintage, climate_zone)   
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
 	  
       #Should this be the first thing done Maria?
-      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone, epw_file)
+      self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
       puts self.get_full_weather_file_path
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)           #set "dummy construction set
       #BTAP::Geometry::intersect_surfaces(self)                                
@@ -88,7 +93,7 @@ class OpenStudio::Model::Model
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
-      self.assign_space_type_stubs(lookup_building_type, space_type_map)
+      self.assign_space_type_stubs(lookup_building_type, building_vintage, space_type_map)
       self.add_loads(building_vintage, climate_zone)
       self.apply_infiltration_standard(building_vintage)
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)
@@ -101,7 +106,7 @@ class OpenStudio::Model::Model
       self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
       self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
       self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
-      self.add_design_days_and_weather_file(self.standards, building_type, building_vintage, climate_zone, epw_file)
+      self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
       self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
