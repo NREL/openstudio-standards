@@ -205,11 +205,12 @@ class OpenStudio::Model::Model
           # Skip space types with no data
           next if data.nil?
           
-          # Skip space types with no water use
-          next if data['service_water_heating_peak_flow_rate'].nil?
+          # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
+          next if data['service_water_heating_peak_flow_rate'].nil? unless building_vintage == 'NECB 2011'
 
           # Add a service water use for each space
           space_names.each do |space_name|
+            
             space = self.getSpaceByName(space_name).get
             space_multiplier = space.multiplier
             self.add_swh_end_uses_by_space(building_type,
