@@ -1589,7 +1589,8 @@ class OpenStudio::Model::Model
     self.getCoilHeatingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(building_vintage, sql_db_vars_map)}
 
     # Chillers
-    self.getChillerElectricEIRs.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
+    clg_tower_objs = self.getCoolingTowerSingleSpeeds
+    self.getChillerElectricEIRs.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage, clg_tower_objs)}
 
 
     # Boilers
