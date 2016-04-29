@@ -20,7 +20,7 @@ class OpenStudio::Model::Model
                                         OpenStudio.convert(prototype_input['main_water_heater_volume'],'gal','m^3').get,
                                         prototype_input['main_water_heater_fuel'],
                                         OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'],'Btu/hr','W').get,
-                                        building_type) unless building_type == 'RetailStripmall'
+                                        building_type) unless building_type == 'RetailStripmall' and building_vintage != 'NECB 2011'
       
       # Attach the end uses if specified in prototype inputs
       # TODO remove special logic for large office SWH end uses
@@ -192,6 +192,11 @@ class OpenStudio::Model::Model
         if building_vintage == 'NECB 2011'
           building_type = 'Space Function'
         end
+        
+        # for debugging (Maria)
+        puts "in the right swh section"
+        puts "main_swh_loop = #{main_swh_loop}"
+        
         
         space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
         space_type_map.each do |space_type_name, space_names|
