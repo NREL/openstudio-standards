@@ -193,11 +193,6 @@ class OpenStudio::Model::Model
           building_type = 'Space Function'
         end
         
-        # for debugging (Maria)
-        puts "in the right swh section"
-        puts "main_swh_loop = #{main_swh_loop}"
-        
-        
         space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
         space_type_map.each do |space_type_name, space_names|
           search_criteria = {

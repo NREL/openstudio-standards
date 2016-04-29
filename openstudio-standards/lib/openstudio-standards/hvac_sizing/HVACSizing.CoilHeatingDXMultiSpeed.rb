@@ -84,7 +84,7 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
   
   # returns the autosized rated total cooling capacity for stage 4 as an optional double
   def autosizedSpeed4GrossRatedHeatingCapacity
-puts 'test11'
+
     return self.model.getAutosizedValue(self,'Speed 4 Design Size Rated Total Heating Capacity', 'W')
     
   end

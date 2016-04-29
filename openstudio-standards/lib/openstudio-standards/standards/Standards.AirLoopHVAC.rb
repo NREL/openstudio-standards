@@ -1991,8 +1991,8 @@ class OpenStudio::Model::AirLoopHVAC
     dcv_required = false
    
     # Not required by the old vintages
-    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required for any system.")
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011'
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required for any system.")
       return dcv_required
     end
    
