@@ -1328,13 +1328,7 @@ module BTAP
         model.getSpaces.each do |space|
           raise ("Space #{space.name} does not have a spacetype defined!") if space.spaceType.empty?
           
-          # for debugging (Maria)
-          puts "space.name = #{space.name}"          
-          
           spacetype_name = space.spaceType.get.name
-          
-          # for debugging (Maria)
-          puts "spacetype_name = #{spacetype_name}"
           
           
           #iterate through the NECB spacetypes
