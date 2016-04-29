@@ -21,7 +21,7 @@ class TestStripMall < CreateDOEPrototypeBuildingTest
   
   
   create_models = true
-  run_models = false
+  run_models = true
   compare_results = false
   
   debug = false

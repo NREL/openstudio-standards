@@ -15,7 +15,7 @@ class TestLargeOffice < CreateDOEPrototypeBuildingTest
   epw_files = ['CAN_AB_Calgary.718770_CWEC.epw']
   
   create_models = true
-  run_models = false
+  run_models = true
   compare_results = false
 
   debug = false
