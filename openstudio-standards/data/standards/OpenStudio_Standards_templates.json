@@ -33,8 +33,16 @@
       "notes": "Indian Energy Conservation Building Code 2007"
     },
     {
+      "name": "ICC IECC 2015",
+      "notes": "International Code Council 2015 International \nEnergy Conservation Code"
+    },
+    {
       "name": "NECB 2011",
       "notes": "Taken from the Canadian NECB 2011"
+    },
+    {
+      "name": "OEESC 2014",
+      "notes": "Oregon Efficiency Energy Specialty Code (created by modifying copy of 90.1 2013). Lighting came from Tables 505.5.2(a) and (b) in the 2014 Oregon Energy Efficiency Specialty Code"
     }
   ]
 }
