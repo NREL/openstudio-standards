@@ -445,6 +445,18 @@
       "notes": "From Prototype Buildings"
     },
     {
+      "name": "VSD-TWR-FAN-FPLR",
+      "coeff_1": 0.33162901,
+      "coeff_2": -0.88567609,
+      "coeff_3": 0.60556507,
+      "coeff_4": 0.9484823,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From PNNL PRM Reference Manual"
+    },
+    {
       "name": "VarVolFan-AFBIFanCurve-NECB2011-FPLR",
       "coeff_1": -2.4176,
       "coeff_2": 9.5874,
