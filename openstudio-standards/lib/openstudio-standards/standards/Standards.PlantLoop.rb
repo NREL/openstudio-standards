@@ -203,104 +203,145 @@ class OpenStudio::Model::PlantLoop
       
     when 'Condenser'
     
-      # G3.1.3.11 - LCnWT 85°F or 10°F approaching design wet bulb temperature, whichever is lower
-      # Design Temperature rise of 10°F => Range: 10°F
-      lcnwt_f = 85   # See notes and proposed alternative below, if we want to actually check the design days...
-      range_t_r = 10
-      lcnwt_c = OpenStudio.convert(lcnwt_f,'F','C').get
-      range_t_k = OpenStudio.convert(range_t_r,'R','K').get
+      # Much of the thought in this section
+      # came from @jmarrec
+    
+      # Determine the design OATwb from the design days.
+      # Per https://unmethours.com/question/16698/which-cooling-design-day-is-most-common-for-sizing-rooftop-units/
+      # the WB=>MDB day is used to size cooling towers.
+      summer_oat_wbs_f = []
+      model.getDesignDays.each do |dd|
+        next unless dd.dayType == 'SummerDesignDay'
+        next unless dd.name.get.to_s.include?('WB=>MDB')
+        if dd.humidityIndicatingType == 'Wetbulb'
+          summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+          summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c,'C','F').get
+        else
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
+        end
+      end
 
-      # Typical design of min temp is really around 40°F (that's what basin heaters, when used, are sized for usually)
+      # Use the value from the design days or
+      # 78F, the CTI rating condition, if no
+      # design day information is available.
+      design_oat_wb_f = nil
+      if summer_oat_wbs_f.size == 0
+        design_oat_wb_f = 78
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name}, no design day OATwb conditions were found.  CTI rating condition of 78F OATwb will be used for sizing cooling towers.")
+      else 
+        # Take worst case condition
+        design_oat_wb_f = summer_oat_wbs_f.max
+      end
+      
+      # There is an EnergyPlus model limitation
+      # that the design_oat_wb_f < 80F
+      # for cooling towers
+      ep_max_design_oat_wb_f = 80
+      if design_oat_wb_f > ep_max_design_oat_wb_f
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name}, reduced design OATwb from #{design_oat_wb_f} F to E+ model max input of #{ep_max_design_oat_wb_f} F.")
+        design_oat_wb_f = ep_max_design_oat_wb_f
+      end
+      
+      # Determine the design CW temperature, approach, and range
+      leaving_cw_t_f = nil
+      approach_r = nil
+      range_r = nil
+      case template
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
+        # G3.1.3.11 - CW supply temp = 85F or 10F approaching design wet bulb temperature,
+        # whichever is lower.  Design range = 10F
+        # Design Temperature rise of 10F => Range: 10°F
+        range_r = 10
+        
+        # Determine the leaving CW temp
+        max_leaving_cw_t_f = 85
+        leaving_cw_t_10f_approach_f = design_oat_wb_f + 10
+        leaving_cw_t_f = [max_leaving_cw_t_f, leaving_cw_t_10f_approach_f].max
+      
+        # Calculate the approach
+        approach_r = leaving_cw_t_f - design_oat_wb_f
+      
+      when  '90.1-2013'
+        # G3.1.3.11 - CW supply temp shall be evaluated at 0.4% evaporative design OATwb
+        # per the formulat approach_F = 25.72 - (0.24 * OATwb_F)
+        # 55F <= OATwb <= 90F 
+        # Design range = 10F.
+        range_r = 10
+        
+        # Limit the OATwb
+        if design_oat_wb_f < 55
+          design_oat_wb_f = 55
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name}, a design OATwb of 55F will be used for sizing the cooling towers because the actual design value is below the limit in G3.1.3.11.")
+        elsif design_oat_wb_f > 90
+          design_oat_wb_f = 90
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name}, a design OATwb of 90F will be used for sizing the cooling towers because the actual design value is above the limit in G3.1.3.11.")
+        end
+        
+        # Calculate the approach
+        approach_r = 25.72 - (0.24 * design_oat_wb_f)
+
+        # Calculate the leaving CW temp
+        leaving_cw_t_f = design_oat_wb_f + approach_r
+
+      end
+      
+      # Report out design conditions
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, design OATwb = #{design_oat_wb_f.round(1)} F, approach = #{approach_r.round(1)} deltaF, range = #{range_r.round(1)} deltaF, leaving condenser water temperature = #{leaving_cw_t_f.round(1)} F.")
+    
+      # Convert to SI units
+      leaving_cw_t_c = OpenStudio.convert(leaving_cw_t_f,'F','C').get
+      approach_k = OpenStudio.convert(approach_r,'R','K').get
+      range_k = OpenStudio.convert(range_r,'R','K').get
+      design_oat_wb_c = OpenStudio.convert(design_oat_wb_f,'F','C').get
+    
+      # Set the CW sizing parameters
+      sizing_plant.setDesignLoopExitTemperature(leaving_cw_t_c)
+      sizing_plant.setLoopDesignTemperatureDifference(range_k)
+      
+      # Set Cooling Tower sizing parameters.
+      # Only the variable speed cooling tower
+      # in E+ allows you to set the design temperatures.
+      #
+      # Per the documentation
+      # http://bigladdersoftware.com/epx/docs/8-4/input-output-reference/group-condenser-equipment.html#field-design-u-factor-times-area-value
+      # for CoolingTowerSingleSpeed and CoolingTowerTwoSpeed
+      # E+ uses the following values during sizing:
+      # 95F entering water temp
+      # 95F OATdb
+      # 78F OATwb
+      # range = loop design delta-T aka range (specified above)
+      self.supplyComponents.each do |sc|
+        if sc.to_CoolingTowerVariableSpeed.is_initialized
+          ct = sc.to_CoolingTowerVariableSpeed.get
+          ct.setDesignInletAirWetBulbTemperature(design_oat_wb_c)
+          ct.setDesignApproachTemperature(approach_k)
+          ct.setDesignRangeTemperature(range_k)
+        end
+      end      
+      
+      # Set the min and max CW temps
+      # Typical design of min temp is really around 40F
+      # (that's what basin heaters, when used, are sized for usually)
       min_temp_f = 34
       max_temp_f = 200
       min_temp_c = OpenStudio.convert(min_temp_f,'F','C').get
       max_temp_c = OpenStudio.convert(max_temp_f,'F','C').get
-
-      sizing_plant.setDesignLoopExitTemperature(lcnwt_c)
-      sizing_plant.setLoopDesignTemperatureDifference(range_t_k)
       self.setMinimumLoopTemperature(min_temp_c)
       self.setMaximumLoopTemperature(max_temp_c)
-
-      # G3.1.3.11 - Tower shall be controlled to maintain a 70°F LCnWT where weather permits
-      # Use a SetpointManager:FollowOutdoorAirTemperature
-      float_down_to_f = 70
-      float_down_to_c = OpenStudio.convert(float_down_to_f,'F','C').get
-
-      # Todo: Problem is what to set for Offset Temperature Difference (=approach):
-      # * if unreasonably low approach, fan runs full blast and energy consumption is penalized
-      # * if too high, you don't get as much energy savings...
-      # "LCnWT 85°F or 10°F approaching design wet bulb temperature, whichever is lower" ==> approach is maximum 10, could be less depending on design conditions
-      # In most cases in the US a tower will be sized on CTI conditions, 78°F WB, so usually 7°F approach.
-      # Could also check the design days, but begs the question of finding the right one to begin with if you have several...
-      # You'll need to deal with potentially different 'Humidity Indicating Type'
-      #
-      # See https://unmethours.com/question/12530/appendix-g-condenser-water-temperature-reset-in-energyplus/
-      # See http://www.comnet.org/mgp/content/cooling-towers?purpose=0#footnote1_do6jpuh
-
-      # This is an example of how jmarrec would implement checking the design days
-=begin
-summer_dday_wbs = []
-model.getDesignDays.each do |dd|
-  model.getDesignDays.each do |dd|
-    if dd.dayType == 'SummerDesignDay' && dd.humidityIndicatingType == 'Wetbulb'
-      summer_dday_wbs << dd.humidityIndicatingConditionsAtMaximumDryBulb
-    end
-  end
-end
-
-# Then take worst case condition (max), or the average?
-design_inlet_wb_c = summer_dday_wbs.max
-design_inlet_wb_f = OpenStudio.convert(design_inlet_wb_c,'C','F').get
-lcnwt_f = 85
-lcnwt_10f_approach = design_inlet_wb_f+10
-lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
-
-
-
-=end
-
-      design_inlet_wb_f = 78
-      design_approach_r = 7
-      design_inlet_wb_c = OpenStudio.convert(design_inlet_wb_f,'F','C').get
-      design_approach_k = OpenStudio.convert(design_approach_r,'R','K').get
-
+      
+      # Cooling Tower operational controls
+      # G3.1.3.11 - Tower shall be controlled to maintain a 70F
+      # LCnWT where weather permits,
+      # floating up to leaving water at design conditions.
+      float_down_to_f = 70 
+      float_down_to_c = OpenStudio.convert(float_down_to_f,'F','C').get 
       cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(self.model)
+      cw_t_stpt_manager.setName("CW Temp Follows OATwb w/ #{approach_r} deltaF approach min #{float_down_to_f.round(1)} F to max #{leaving_cw_t_f.round(1)}")
       cw_t_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
-      cw_t_stpt_manager.setMaximumSetpointTemperature(lcnwt_c)
+      cw_t_stpt_manager.setMaximumSetpointTemperature(leaving_cw_t_c)
       cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
-      cw_t_stpt_manager.setOffsetTemperatureDifference(design_approach_k)
+      cw_t_stpt_manager.setOffsetTemperatureDifference(approach_k)
       cw_t_stpt_manager.addToNode(self.supplyOutletNode)
-
-      # Cooling Tower properties
-      self.supplyComponents.each do |sc|
-        if sc.to_CoolingTowerSingleSpeed.is_initialized
-          ct = sc.to_CoolingTowerSingleSpeed.get
-          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
-          ct.setDesignApproachTemperature(design_approach_k)
-          ct.setDesignRangeTemperature(range_t_k)
-        elsif sc.to_CoolingTowerTwoSpeed.is_initialized
-          ct = sc.to_CoolingTowerTwoSpeed.get
-          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
-          ct.setDesignApproachTemperature(design_approach_k)
-          ct.setDesignRangeTemperature(range_t_k)
-        elsif sc.to_CoolingTowerVariableSpeed.is_initialized
-          ct = sc.to_CoolingTowerVariableSpeed.get
-          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
-          ct.setDesignApproachTemperature(design_approach_k)
-          ct.setDesignRangeTemperature(range_t_k)
-        elsif sc.to_CoolingTowerPerformanceYorkCalc.is_initialized
-          ct = sc.to_CoolingTowerPerformanceYorkCalc.get
-          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
-          ct.setDesignApproachTemperature(design_approach_k)
-          ct.setDesignRangeTemperature(range_t_k)
-        elsif sc.to_CoolingTowerPerformanceCoolTools.is_initialized
-          ct = sc.to_CoolingTowerPerformanceCoolTools.get
-          ct.setDesignInletAirWetBulbTemperature(design_inlet_wb_c)
-          ct.setDesignApproachTemperature(design_approach_k)
-          ct.setDesignRangeTemperature(range_t_k)
-        end
-
-      end
 
     end
   
@@ -640,7 +681,7 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
         
         # Determine the capacity
         cap_w = self.total_cooling_capacity
-        cap_tons = OpenStudio.convert(cap_w,'m^2','ft^2').get
+        cap_tons = OpenStudio.convert(cap_w,'W','ton').get
       
         # Determine the primary pump type 
         pri_control_type = 'Riding Curve'
@@ -835,9 +876,6 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
     # Add any new chillers
     final_chillers = [first_chiller]
     (num_chillers-1).times do
-      #new_chiller = OpenStudio::Model::ChillerElectricEIR.new(self.model)
-      # TODO renable the cloning of the chillers after curves are shared resources
-      # Should be good to go since 1.10.2 (?)
       new_chiller = first_chiller.clone(self.model)
       if new_chiller.to_ChillerElectricEIR.is_initialized
         new_chiller = new_chiller.to_ChillerElectricEIR.get
@@ -845,7 +883,16 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, could not clone chiller #{first_chiller.name}, cannot apply the performance rating method number of chillers.")
         return false
       end
+      # Connect the new chiller to the same CHW loop
+      # as the old chiller.
       self.addSupplyBranchForComponent(new_chiller)
+      # Connect the new chiller to the same CW loop
+      # as the old chiller, if it was water-cooled.
+      cw_loop = first_chiller.secondaryPlantLoop
+      if cw_loop.is_initialized
+        cw_loop.get.addDemandBranchForComponent(new_chiller)
+      end
+      
       final_chillers << new_chiller
     end
 
@@ -864,7 +911,127 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
   
   end
 
+  def apply_performance_rating_method_number_of_cooling_towers(template)
+    
+    # Skip non-cooling plants
+    return true unless self.sizingPlant.loopType == 'Condenser'
 
+    # Determine the number of chillers
+    # already in the model
+    num_chillers = self.model.getChillerElectricEIRs.size
+
+    # Get all existing cooling towers and pumps
+    clg_twrs = []
+    pumps = []
+    self.supplyComponents.each do |sc|
+      if sc.to_CoolingTowerSingleSpeed.is_initialized
+        clg_twrs << sc.to_CoolingTowerSingleSpeed.get
+      elsif sc.to_CoolingTowerTwoSpeed.is_initialized
+        clg_twrs << sc.to_CoolingTowerTwoSpeed.get
+      elsif sc.to_CoolingTowerVariableSpeed.is_initialized
+        clg_twrs << sc.to_CoolingTowerVariableSpeed.get
+      elsif sc.to_PumpConstantSpeed.is_initialized
+        pumps << sc.to_PumpConstantSpeed.get
+      elsif sc.to_PumpVariableSpeed.is_initialized
+        pumps << sc.to_PumpVariableSpeed.get
+      end
+    end
+
+    # Ensure there is only 1 cooling tower to start
+    orig_twr = nil
+    if clg_twrs.size == 0
+      return true
+    elsif clg_twrs.size > 1
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, found #{clg_twrs.size} cooling towers, cannot split up per performance rating method baseline requirements.")
+      return false
+    else
+      orig_twr = clg_twrs[0]
+    end
+ 
+    # Ensure there is only 1 pump to start
+    orig_pump = nil
+    if pumps.size == 0
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, found #{pumps.size} pumps.  A loop must have at least one pump.")
+      return false
+    elsif pumps.size > 1
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, found #{pumps.size} pumps, cannot split up per performance rating method baseline requirements.")
+      return false
+    else
+      orig_pump = pumps[0]
+    end
+ 
+    # Determine the per-cooling_tower sizing factor
+    clg_twr_sizing_factor = (1.0/num_chillers).round(2)
+
+    # Add a cooling tower for each chiller.
+    # Add an accompanying CW pump for each cooling tower.
+    final_twrs = [orig_twr]
+    new_twr = nil
+    (num_chillers-1).times do      
+      if orig_twr.to_CoolingTowerSingleSpeed.is_initialized
+        new_twr = orig_twr.clone(self.model)
+        new_twr = new_twr.to_CoolingTowerSingleSpeed.get
+      elsif orig_twr.to_CoolingTowerTwoSpeed.is_initialized
+        new_twr = orig_twr.clone(self.model)
+        new_twr = new_twr.to_CoolingTowerTwoSpeed.get
+      elsif orig_twr.to_CoolingTowerVariableSpeed.is_initialized
+        # TODO remove workaround after resolving
+        # https://github.com/NREL/OpenStudio/issues/2212
+        # Workaround is to create a new tower
+        # and replicate all the properties of the first tower.
+        new_twr = OpenStudio::Model::CoolingTowerVariableSpeed.new(model)
+        new_twr.setName(orig_twr.name.get.to_s)
+        new_twr.setDesignInletAirWetBulbTemperature(orig_twr.designInletAirWetBulbTemperature.get)
+        new_twr.setDesignApproachTemperature(orig_twr.designApproachTemperature.get)
+        new_twr.setDesignRangeTemperature(orig_twr.designRangeTemperature.get)
+        new_twr.setFractionofTowerCapacityinFreeConvectionRegime(orig_twr.fractionofTowerCapacityinFreeConvectionRegime.get)
+        if orig_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.is_initialized
+          new_twr.setFanPowerRatioFunctionofAirFlowRateRatioCurve(orig_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get)
+        end
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{self.name}, could not clone cooling tower #{orig_twr.name}, cannot apply the performance rating method number of cooling towers.")
+        return false
+      end
+      final_twrs << new_twr
+      
+      # spit out the curve name
+      # puts new_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get.name
+      # new_curve = OpenStudio::Model::CurveCubic.new(model)
+      # new_curve.setName("Net CT Curve")
+      # new_twr.setFanPowerRatioFunctionofAirFlowRateRatioCurve(new_curve)
+      # puts new_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get.name
+      
+      # Connect the new cooling tower to the CW loop
+      self.addSupplyBranchForComponent(new_twr)
+      new_twr_inlet = new_twr.inletModelObject.get.to_Node.get
+      
+      # Clone the original pump for the new cooling tower
+      new_pump = orig_pump.clone(self.model)
+      if new_pump.to_PumpConstantSpeed.is_initialized
+        new_pump = new_pump.to_PumpConstantSpeed.get
+      elsif new_pump.to_PumpVariableSpeed.is_initialized
+        new_pump = new_pump.to_PumpVariableSpeed.get
+      end
+      new_pump.addToNode(new_twr_inlet)
+      
+    end
+  
+    # Move the original pump onto the
+    # branch of the original cooling tower 
+    orig_twr_inlet_node = orig_twr.inletModelObject.get.to_Node.get
+    orig_pump.addToNode(orig_twr_inlet_node)
+
+    # Set the sizing factors
+    final_twrs.each do |final_cooling_tower|
+      final_cooling_tower.setSizingFactor(clg_twr_sizing_factor)
+    end
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, there are #{final_twrs.size} cooling towers, one for each chiller.")
+    
+    # Set the equipment to stage sequentially
+    self.setLoadDistributionScheme('SequentialLoad')  
+
+  end
+  
   # Determines the total rated watts per GPM of the loop
   #
   # @return [Double] rated power consumption per flow

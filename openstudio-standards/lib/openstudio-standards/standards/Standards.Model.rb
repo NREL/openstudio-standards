@@ -26,6 +26,7 @@ def load_openstudio_standards_json()
   standards_files << 'OpenStudio_Standards_space_types.json'
   standards_files << 'OpenStudio_Standards_templates.json'
   standards_files << 'OpenStudio_Standards_unitary_acs.json'
+  standards_files << 'OpenStudio_Standards_heat_rejection.json'
 #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
 
   # Combine the data from the JSON files into a single hash
@@ -80,6 +81,10 @@ class OpenStudio::Model::Model
   require_relative 'Standards.PumpConstantSpeed'
   require_relative 'Standards.PumpVariableSpeed'
   require_relative 'Standards.AirTerminalSingleDuctVAVReheat'
+  require_relative 'Standards.CoolingTower'
+  require_relative 'Standards.CoolingTowerSingleSpeed'
+  require_relative 'Standards.CoolingTowerTwoSpeed'
+  require_relative 'Standards.CoolingTowerVariableSpeed'
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.  
@@ -209,17 +214,29 @@ class OpenStudio::Model::Model
     
     # Set the baseline pumping power for all plant loops
     # Set the baseline pump control type for all plant loops
-    # Set the baseline number of boilers
+    # Set the baseline number of boilers and chillers
     self.getPlantLoops.sort.each do |plant_loop|
-      plant_loop.apply_performance_rating_method_baseline_pump_power(building_vintage)
-      plant_loop.apply_performance_rating_method_baseline_pumping_type(building_vintage)
       plant_loop.apply_performance_rating_method_number_of_boilers(building_vintage)
       plant_loop.apply_performance_rating_method_number_of_chillers(building_vintage)
     end
 
-    # Run sizing run with the new chillers and boilers to determine capacities
+    # Set the baseline number of cooling towers
+    # Must be done after all chillers are added
+    self.getPlantLoops.sort.each do |plant_loop|
+      plant_loop.apply_performance_rating_method_number_of_cooling_towers(building_vintage)
+    end
+    
+    # Run sizing run with the new chillers, boilers, and
+    # cooling towers to determine capacities
     if self.runSizingRun("#{sizing_run_dir}/SizingRun3") == false
       return false
+    end
+        
+    # Set the pumping control strategy and power
+    # Must be done after sizing components
+    self.getPlantLoops.sort.each do |plant_loop|    
+      plant_loop.apply_performance_rating_method_baseline_pump_power(building_vintage)
+      plant_loop.apply_performance_rating_method_baseline_pumping_type(building_vintage)
     end
     
     # Apply the HVAC efficiency standard
@@ -237,7 +254,6 @@ class OpenStudio::Model::Model
         curve.remove
       end
     end
-
 
     # Todo: turn off self shading
     # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
@@ -816,7 +832,17 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
         else
-          condenser_water_loop = self.add_cw_loop()
+          fan_type = 'TwoSpeed Fan'
+          if standard == '90.1-2013'
+            fan_type = 'Variable Speed Fan'
+          end
+          condenser_water_loop = self.add_cw_loop(standard,
+                                                  'Open Cooling Tower',
+                                                  'Propeller or Axial',
+                                                  fan_type,
+                                                  1,
+                                                  1,
+                                                  nil)
           chilled_water_loop = self.add_chw_loop(standard,
                                                 'const_pri_var_sec',
                                                 'WaterCooled',
@@ -880,7 +906,17 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
         else
-          condenser_water_loop = self.add_cw_loop()
+          fan_type = 'TwoSpeed Fan'
+          if standard == '90.1-2013'
+            fan_type = 'Variable Speed Fan'
+          end
+          condenser_water_loop = self.add_cw_loop(standard,
+                                                  'Open Cooling Tower',
+                                                  'Propeller or Axial',
+                                                  fan_type,
+                                                  1,
+                                                  1,
+                                                  nil)
           chilled_water_loop = self.add_chw_loop(standard,
                                                 'const_pri_var_sec',
                                                 'WaterCooled',
@@ -1617,6 +1653,11 @@ class OpenStudio::Model::Model
     # Water Heaters
     self.getWaterHeaterMixeds.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
 
+    # Cooling Towers
+    self.getCoolingTowerSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
+    self.getCoolingTowerTwoSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
+    self.getCoolingTowerVariableSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
+    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
 
   end

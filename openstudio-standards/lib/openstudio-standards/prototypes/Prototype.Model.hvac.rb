@@ -38,7 +38,13 @@ class OpenStudio::Model::Model
         else
           condenser_water_loop = nil
           if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-            condenser_water_loop = self.add_cw_loop()
+            condenser_water_loop = self.add_cw_loop(building_vintage,
+                                                    'Open Cooling Tower',
+                                                    'Centrifugal',
+                                                    'Fan Cycling',
+                                                    2,
+                                                    1,
+                                                    building_type)
           end
           
           chilled_water_loop = self.add_chw_loop(building_vintage,
@@ -173,7 +179,13 @@ class OpenStudio::Model::Model
         else
           condenser_water_loop = nil
           if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-            condenser_water_loop = self.add_cw_loop()
+            condenser_water_loop = self.add_cw_loop(building_vintage,
+                                                    'Open Cooling Tower',
+                                                    'Centrifugal',
+                                                    'Fan Cycling',
+                                                    2,
+                                                    1,
+                                                    building_type)
           end
           
           chilled_water_loop = self.add_chw_loop(building_vintage,

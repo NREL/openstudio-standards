@@ -251,9 +251,20 @@ class OpenStudio::Model::Model
 
   # Creates a condenser water loop and adds it to the model.
   #
+  # @param cooling_tower_type [String] valid choices are Open Cooling Tower, Closed Cooling Tower
+  # @param cooling_tower_fan_type [String] valid choices are Centrifugal, Propeller or Axial
+  # @param cooling_tower_capacity_control [String] valid choices are Fluid Bypass, Fan Cycling, TwoSpeed Fan, Variable Speed Fan
+  # @param number_of_cells_per_tower [Integer] the number of discrete cells per tower
   # @param number_cooling_towers [Integer] the number of cooling towers to be added (in parallel)
+  # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
-  def add_cw_loop(number_cooling_towers = 1)
+  def add_cw_loop(standard,
+                  cooling_tower_type,
+                  cooling_tower_fan_type,
+                  cooling_tower_capacity_control,
+                  number_of_cells_per_tower,
+                  number_cooling_towers = 1,
+                  building_type=nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding condenser water loop.")
   
@@ -298,28 +309,49 @@ class OpenStudio::Model::Model
     cw_pump.setPumpControlType('Intermittent')
     cw_pump.addToNode(condenser_water_loop.supplyInletNode)
 
-    # TODO move cooling tower curve to lookup from spreadsheet
-    cooling_tower_fan_curve = OpenStudio::Model::CurveCubic.new(self)
-    cooling_tower_fan_curve.setName('Cooling Tower Fan Curve')
-    cooling_tower_fan_curve.setCoefficient1Constant(0)
-    cooling_tower_fan_curve.setCoefficient2x(0)
-    cooling_tower_fan_curve.setCoefficient3xPOW2(0)
-    cooling_tower_fan_curve.setCoefficient4xPOW3(1)
-    cooling_tower_fan_curve.setMinimumValueofx(0)
-    cooling_tower_fan_curve.setMaximumValueofx(1)
-
     # Cooling towers
+    # Per PNNL PRM Reference Manual
     number_cooling_towers.times do |i|
-      cooling_tower = OpenStudio::Model::CoolingTowerVariableSpeed.new(self)
-      cooling_tower.setName("#{condenser_water_loop.name} Cooling Tower #{i}")
-      cooling_tower.setDesignApproachTemperature(cw_approach_delta_t_k)
-      cooling_tower.setDesignRangeTemperature(cw_delta_t_k)
-      cooling_tower.setFanPowerRatioFunctionofAirFlowRateRatioCurve(cooling_tower_fan_curve)
-      cooling_tower.setMinimumAirFlowRateRatio(0.2)
-      cooling_tower.setFractionofTowerCapacityinFreeConvectionRegime(0.125)
-      cooling_tower.setNumberofCells(2)
-      cooling_tower.setCellControl('MaximalCell')
-      condenser_water_loop.addSupplyBranchForComponent(cooling_tower)
+      sizing_factor = 1/number_cooling_towers
+      twr_name = "#{cooling_tower_fan_type} #{cooling_tower_capacity_control} #{cooling_tower_type}"
+      
+      # Tower object depends on the control type
+      cooling_tower = nil
+      case cooling_tower_capacity_control
+      when 'Fluid Bypass', 'Fan Cycling'
+        cooling_tower = OpenStudio::Model::CoolingTowerSingleSpeed.new(self)
+        if cooling_tower_capacity_control == 'Fluid Bypass'
+          cooling_tower.setCellControl('FluidBypass')
+        else
+          cooling_tower.setCellControl('FanCycling')
+        end
+      when 'TwoSpeed Fan'
+        cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+        # TODO expose newer cooling tower sizing fields in API
+        #cooling_tower.setLowFanSpeedAirFlowRateSizingFactor(0.5)
+        #cooling_tower.setLowFanSpeedFanPowerSizingFactor(0.3)
+        #cooling_tower.setLowFanSpeedUFactorTimesAreaSizingFactor
+        #cooling_tower.setLowSpeedNominalCapacitySizingFactor
+      when 'Variable Speed Fan'
+        cooling_tower = OpenStudio::Model::CoolingTowerVariableSpeed.new(self)
+        cooling_tower.setDesignApproachTemperature(cw_approach_delta_t_k)
+        cooling_tower.setDesignRangeTemperature(cw_delta_t_k)
+        cooling_tower.setFractionofTowerCapacityinFreeConvectionRegime(0.125)
+        twr_fan_curve = self.add_curve('VSD-TWR-FAN-FPLR')
+        cooling_tower.setFanPowerRatioFunctionofAirFlowRateRatioCurve(twr_fan_curve)
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{cooling_tower_capacity_control} is not a valid choice of cooling tower capacity control.  Valid choices are Fluid Bypass, Fan Cycling, TwoSpeed Fan, Variable Speed Fan.")
+      end
+
+      # Set the properties that apply to all tower types
+      # and attach to the condenser loop.
+      unless cooling_tower.nil?
+        cooling_tower.setName(twr_name)
+        cooling_tower.setSizingFactor(sizing_factor)
+        cooling_tower.setNumberofCells(number_of_cells_per_tower)
+        condenser_water_loop.addSupplyBranchForComponent(cooling_tower)
+      end
+
     end
 
     # Condenser water loop pipes
