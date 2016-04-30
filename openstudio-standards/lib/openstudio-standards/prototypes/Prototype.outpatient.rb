@@ -165,7 +165,7 @@ class OpenStudio::Model::Model
     hot_water_loop = nil
     self.getPlantLoops.each do |loop|
       # If it has a boiler:hotwater, it is the correct loop
-      if loop.supplyComponents('Boiler:HotWater'.to_IddObjectType).size > 0
+      if loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).size > 0
         hot_water_loop = loop
       end
     end

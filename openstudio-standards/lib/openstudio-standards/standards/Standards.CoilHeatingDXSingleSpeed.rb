@@ -193,19 +193,19 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     # Determine the supplemental heating type if on an airloop
     if self.airLoopHVAC.is_initialized
       air_loop = self.airLoopHVAC.get
-      if air_loop.supplyComponents('Coil:Heating:Electric'.to_IddObjectType).size > 0
+      if air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).size > 0
         suppl_heating_type = 'Electric Resistance or None'
-      elsif air_loop.supplyComponents('Coil:Heating:Gas'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Water'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:DX:SingleSpeed'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Gas:MultiStage'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Gas:MultiStage'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Desuperheater'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Desuperheater'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'  
       else
         suppl_heating_type = 'Electric Resistance or None'
