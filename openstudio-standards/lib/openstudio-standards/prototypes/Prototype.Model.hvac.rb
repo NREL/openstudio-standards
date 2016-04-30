@@ -258,7 +258,7 @@ class OpenStudio::Model::Model
                             thermal_zones, 
                             prototype_input['unitheater_operation_schedule'],
                             prototype_input['unitheater_fan_control_type'],
-                            prototype_input['unitheater_fan_static_pressure'],
+                            OpenStudio.convert(prototype_input['unitheater_fan_static_pressure'], "inH_{2}O", "Pa").get,
                             prototype_input['unitheater_heating_type'],
                             building_type)
 
