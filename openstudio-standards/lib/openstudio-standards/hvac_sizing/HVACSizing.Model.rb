@@ -37,6 +37,8 @@ class OpenStudio::Model::Model
   require_relative 'HVACSizing.BoilerHotWater'
   require_relative 'HVACSizing.ChillerElectricEIR'
   require_relative 'HVACSizing.CoolingTowerSingleSpeed'
+  require_relative 'HVACSizing.CoolingTowerTwoSpeed'
+  require_relative 'HVACSizing.CoolingTowerVariableSpeed'
   require_relative 'HVACSizing.ControllerWaterCoil'
   require_relative 'HVACSizing.SizingSystem'
   require_relative 'HVACSizing.ThermalZone'
