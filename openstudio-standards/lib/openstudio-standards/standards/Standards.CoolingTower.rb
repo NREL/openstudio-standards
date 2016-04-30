@@ -126,7 +126,14 @@ module CoolingTower
     
     # Hard size the design fan power.
     # Leave the water flow and air flow autosized.
-    self.setDesignFanPower(fan_motor_actual_power_w)
+    if self.to_CoolingTowerSingleSpeed.is_initialized
+      self.setFanPoweratDesignAirFlowRate(fan_motor_actual_power_w)
+    elsif self.to_CoolingTowerTwoSpeed.is_initialized
+      self.setHighFanSpeedFanPower(fan_motor_actual_power_w)
+      self.setLowFanSpeedFanPower(0.3 * fan_motor_actual_power_w)
+    elsif self.to_CoolingTowerVariableSpeed.is_initialized
+      self.setDesignFanPower(fan_motor_actual_power_w)
+    end
 
     return true
     
