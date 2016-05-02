@@ -546,11 +546,52 @@ class OpenStudio::Model::Model
     system_type = nil
   
     case standard
-    when '90.1-2004', '90.1-2007', '90.1-2010' 
+    when '90.1-2004', '90.1-2007' 
       # Set the limit differently for
       # different codes
       limit_ft2 = 25000
       limit_ft2 = 75000 if standard == '90.1-2004'
+
+      # Warn about heated only
+      if area_type == 'heatedonly'
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Per Table G3.1.10.d, '(In the proposed building) Where no cooling system exists or no cooling system has been specified, the cooling system shall be identical to the system modeled in the baseline building design.' This requires that you go back and add a cooling system to the proposed model.  This code cannot do that for you; you must do it manually.")
+      end
+      
+      case area_type
+      when 'residential'
+        if heating_fuel_type == 'electric'
+          system_type = 'PTHP' # sys 2
+        else
+          system_type = 'PTAC' # sys 1
+        end
+      when 'nonresidential', 'heatedonly'
+        # nonresidential and 3 floors or less and <75,000 ft2
+        if num_stories <= 3 && area_ft2 < limit_ft2
+          if heating_fuel_type == 'electric'
+            system_type = 'PSZ_HP' # sys 4
+          else
+            system_type = 'PSZ_AC' # sys 3
+          end
+        # nonresidential and 4 or 5 floors or 5 floors or less and 75,000 ft2 to 150,000 ft2
+        elsif ( ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000)) )
+          if heating_fuel_type == 'electric'
+            system_type = 'PVAV_PFP_Boxes' # sys 6
+          else
+            system_type = 'PVAV_Reheat' # sys 5
+          end
+        # nonresidential and more than 5 floors or >150,000 ft2
+        elsif (num_stories >= 5 || area_ft2 > 150000)
+          if heating_fuel_type == 'electric'
+            system_type = 'VAV_PFP_Boxes' # sys 8
+          else
+            system_type = 'VAV_Reheat' # sys 7
+          end
+        end
+      end
+      
+    when '90.1-2010' 
+
+      limit_ft2 = 25000
 
       case area_type
       when 'residential'
@@ -560,14 +601,14 @@ class OpenStudio::Model::Model
           system_type = 'PTAC' # sys 1
         end
       when 'nonresidential'
-        # nonresidential and 3 floors or less and <75,000 ft2
+        # nonresidential and 3 floors or less and <25,000 ft2
         if num_stories <= 3 && area_ft2 < limit_ft2
           if heating_fuel_type == 'electric'
             system_type = 'PSZ_HP' # sys 4
           else
             system_type = 'PSZ_AC' # sys 3
           end
-        # nonresidential and 4 or 5 floors or 5 floors or less and 75,000 ft2 to 150,000 ft2
+        # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
         elsif ( ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000)) )
           if heating_fuel_type == 'electric'
             system_type = 'PVAV_PFP_Boxes' # sys 6
@@ -614,14 +655,14 @@ class OpenStudio::Model::Model
           system_type = 'PTAC' # sys 1
         end
       when 'nonresidential'
-        # nonresidential and 3 floors or less and <75,000 ft2
+        # nonresidential and 3 floors or less and <25,000 ft2
         if num_stories <= 3 && area_ft2 < limit_ft2
           if heating_fuel_type == 'electric'
             system_type = 'PSZ_HP' # sys 4
           else
             system_type = 'PSZ_AC' # sys 3
           end
-        # nonresidential and 4 or 5 floors or 5 floors or less and 75,000 ft2 to 150,000 ft2
+        # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
         elsif ( ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000)) )
           if heating_fuel_type == 'electric'
             system_type = 'PVAV_PFP_Boxes' # sys 6
