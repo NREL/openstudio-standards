@@ -568,7 +568,8 @@ class OpenStudio::Model::ThermalZone
 
   # Determines heating status.  If the zone has a thermostat
   # with a maximum heating setpoint above 5C (41F),
-  # counts as heated.
+  # counts as heated.  Plenums are also assumed to be heated.
+  #
   # @author Andrew Parker, Julien Marrec
   # @return [Bool] true if heated, false if not
   def is_heated
@@ -578,6 +579,23 @@ class OpenStudio::Model::ThermalZone
   
     htd = false
     
+    # Consider plenum zones heated
+    area_plenum = 0
+    area_non_plenum = 0
+    self.spaces.each do |space|
+      if space.is_plenum
+        area_plenum += space.floorArea
+      else
+        area_non_plenum += space.floorArea
+      end
+    end
+
+    # Majority
+    if area_plenum > area_non_plenum
+      htd = true
+      return htd
+    end    
+
     # Unheated if no thermostat present
     if self.thermostat.empty?
       return htd
@@ -612,14 +630,15 @@ class OpenStudio::Model::ThermalZone
         end
       end
     end
-    
+
     return htd
   
   end
   
   # Determines cooling status.  If the zone has a thermostat
   # with a minimum cooling setpoint below 33C (91F),
-  # counts as cooled.
+  # counts as cooled.  Plenums are also assumed to be cooled.
+  #
   # @author Andrew Parker, Julien Marrec
   # @return [Bool] true if cooled, false if not
   def is_cooled
@@ -628,6 +647,23 @@ class OpenStudio::Model::ThermalZone
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
   
     cld = false
+    
+    # Consider plenum zones cooled
+    area_plenum = 0
+    area_non_plenum = 0
+    self.spaces.each do |space|
+      if space.is_plenum
+        area_plenum += space.floorArea
+      else
+        area_non_plenum += space.floorArea
+      end
+    end
+
+    # Majority
+    if area_plenum > area_non_plenum
+      cld = true
+      return cld
+    end     
     
     # Unheated if no thermostat present
     if self.thermostat.empty?

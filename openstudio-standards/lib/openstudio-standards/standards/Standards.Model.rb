@@ -108,7 +108,7 @@ class OpenStudio::Model::Model
     # Reduce the WWR and SRR, if necessary
     self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage, climate_zone)
     self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)
-    
+
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
     self.assign_spaces_to_stories
@@ -3218,7 +3218,7 @@ class OpenStudio::Model::Model
     sh_wind_m2 = 0
     # Store the space conditioning category for later use
     space_cats = {}
-    self.getSpaces.each do |space|
+    self.getSpaces.sort.each do |space|
       
       # Loop through all surfaces in this space
       wall_area_m2 = 0
@@ -3286,8 +3286,21 @@ class OpenStudio::Model::Model
     wwr_nr = ((nr_wind_m2 / nr_wall_m2)*100).round(1)
     wwr_res = ((res_wind_m2 / res_wall_m2)*100).round(1)
     wwr_sh = ((sh_wind_m2 / sh_wall_m2)*100).round(1)
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The WWRs are: NonRes: #{wwr_nr.round}%, Res: #{wwr_res.round}%.")
     
+    # Convert to IP and report
+    nr_wind_ft2 = OpenStudio.convert(nr_wind_m2,'m^2','ft^2').get
+    nr_wall_ft2 = OpenStudio.convert(nr_wall_m2,'m^2','ft^2').get
+    
+    res_wind_ft2 = OpenStudio.convert(res_wind_m2,'m^2','ft^2').get
+    res_wall_ft2 = OpenStudio.convert(res_wall_m2,'m^2','ft^2').get
+    
+    sh_wind_ft2 = OpenStudio.convert(sh_wind_m2,'m^2','ft^2').get
+    sh_wall_ft2 = OpenStudio.convert(sh_wall_m2,'m^2','ft^2').get
+    
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR NonRes = #{wwr_nr.round}%; window = #{nr_wind_ft2.round} ft2, wall = #{nr_wall_ft2.round} ft2.")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Res = #{wwr_res.round}%; window = #{res_wind_ft2.round} ft2, wall = #{res_wall_ft2.round} ft2.")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{wwr_sh.round}%; window = #{sh_wind_ft2.round} ft2, wall = #{sh_wall_ft2.round} ft2.")
+ 
     # WWR limit
     wwr_lim = 40.0
     

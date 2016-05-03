@@ -2194,8 +2194,10 @@ Warehouse.Office
 
   # Determine if the space is a plenum.
   # Assume it is a plenum if it is a supply
-  # or return plenum for an AirLoop, or
-  # if it is not part of the total floor area.
+  # or return plenum for an AirLoop, 
+  # if it is not part of the total floor area,
+  # or if the space type name contains the
+  # word plenum.
   #
   # return [Bool] returns true if plenum, false if not
   def is_plenum
@@ -2207,6 +2209,16 @@ Warehouse.Office
     zone = self.thermalZone
     if zone.is_initialized
       if zone.get.isPlenum
+        plenum_status = true
+      end
+    end
+
+    # Check if the space type name
+    # contains the word plenum.
+    space_type = self.spaceType
+    if space_type.is_initialized
+      space_type = space_type.get
+      if space_type.name.get.to_s.downcase.include?('plenum')
         plenum_status = true
       end
     end
@@ -2253,36 +2265,6 @@ Warehouse.Office
     end  
   
     return is_res
-  
-  end 
-  
-  # Determine if the space is a plenum.
-  # Assume it is a plenum if it is a supply
-  # or return plenum for an AirLoop, or
-  # if it is not part of the total floor area.
-  #
-  # return [Bool] returns true if plenum, false if not
-  def is_plenum
-  
-    plenum_status = false
-  
-    # Check if it is part of a zone
-    # that is a supply/return plenum
-    zone = self.thermalZone
-    if zone.is_initialized
-      if zone.get.isPlenum
-        plenum_status = true
-      end
-    end
-    
-    # Check if it is designated
-    # as not part of the building
-    # floor area.
-    unless self.partofTotalFloorArea
-      plenum_status = true
-    end
-  
-    return plenum_status
   
   end
 
