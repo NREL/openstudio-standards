@@ -42,7 +42,6 @@ class OpenStudio::Model::Model
       'building_type' => building_type
     }
     
-    # this differs from master code. find_object no longer part of Model class, if I use self.find_object, get NoMethodError
     prototype_input = self.find_object($os_standards['prototype_inputs'], search_criteria,nil)
     
     
@@ -120,7 +119,6 @@ class OpenStudio::Model::Model
     end
 
     
-    # THIS IS THE CODE THAT IS CAUSING ERROR- STOPPED HERE
     # If there are any multizone systems, set damper positions
     # and perform a second sizing run
     has_multizone_systems = false
@@ -205,7 +203,7 @@ class OpenStudio::Model::Model
     when 'RetailStripmall'
       lookup_name = 'StripMall'
     when 'Office'
-      lookup_name = 'Office'     # TO DO: add all NECB prototypes
+      lookup_name = 'Office'    
     end
 
     return lookup_name
@@ -498,42 +496,6 @@ class OpenStudio::Model::Model
     
       # Loads
       space_type.set_internal_loads(building_vintage, true, true, true, true, true, true)
-      
-#<<<<<<< HEAD  commented out for now, remove once I know this does not create other problems.
-#      stds_building_type = nil
-#      if stub_space_type.standardsBuildingType.is_initialized
-#        stds_building_type = stub_space_type.standardsBuildingType.get
-#      else
-#        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards building type.")
-#        return false
-#      end
-      
-      # for debugging
-      #puts "stds_building_type = #{stds_building_type}"
-      
-      # Get the standards space type
-      # from the stub
- #     stds_spc_type = nil
- #     if stub_space_type.standardsSpaceType.is_initialized
- #       stds_spc_type = stub_space_type.standardsSpaceType.get
- #     else
- #       OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{stub_space_type.name}' has no standards space type.")
- #       return false
- #     end
-      
-#    new_space_type = self.add_space_type(building_vintage, 'ClimateZone 1-8', stds_building_type, stds_spc_type)  
-
-      # for debugging (Maria)
-      #puts "new_space_type = #{new_space_type}"
-      
-      # Apply the new space type to the building      
- #     stub_space_type.spaces.each do |space|
-  #      space.setSpaceType(new_space_type)
-   #   end
-        
-      # Remove the stub space type
-#      stub_space_type.remove
-
 
       # Schedules
       space_type.set_internal_load_schedules(building_vintage, true, true, true, true, true, true, true)
