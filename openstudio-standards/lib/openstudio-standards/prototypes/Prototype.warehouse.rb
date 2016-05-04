@@ -9,9 +9,9 @@ class OpenStudio::Model::Model
   
     when 'NECB 2011'
       space_type_map ={
-        "Warehouse - med/blk" => ["BulkStorage"],
-        "Warehouse - fine" => ["FineStorage"],
-        "Office - enclosed" => ["Office"]
+        "Warehouse - med/blk" => ["Zone3 Bulk Storage"],
+        "Warehouse - fine" => ["Zone2 Fine Storage"],
+        "Office - enclosed" => ["Zone1 Office"]
       }
     else
       space_type_map = {

@@ -26,7 +26,7 @@ class OpenStudio::Model::Model
 
   def create_prototype_building(building_type, building_vintage, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
     
-    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004. This is a quick check.
+    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == "HighriseApartment"
       if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'NECB 2011'
         OpenStudio::logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{building_type} at vintage #{building_vintage} are not available, the measure is disabled for this specific type.")
@@ -56,7 +56,7 @@ class OpenStudio::Model::Model
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
-      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
+      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)      
       self.assign_space_type_stubs("Space Function", building_vintage, space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
       self.add_loads(building_vintage, climate_zone)   
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
@@ -375,7 +375,7 @@ class OpenStudio::Model::Model
       geometry_file = 'Geometry.outpatient.osm'
     when 'MidriseApartment'
       geometry_file = 'Geometry.mid_rise_apartment.osm'
-    when 'Office'    # For NECB 2011 prototypes 
+    when 'Office'    # For NECB 2011 prototypes (old) 
       geometry_file = 'Geometry.large_office_2010.osm'
       alt_search_name = 'Office'
     when 'HighriseApartment'
@@ -444,12 +444,14 @@ class OpenStudio::Model::Model
       stub_space_type.set_rendering_color(building_vintage)
 
       space_names.each do |space_name|
+        
         space = self.getSpaceByName(space_name)
+        
         next if space.empty?
         space = space.get
         space.setSpaceType(stub_space_type)
 
-        #OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Setting #{space.name} to #{building_type}.#{space_type_name}")
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Setting #{space.name} to #{building_type}.#{space_type_name}")
       end
     end
 
