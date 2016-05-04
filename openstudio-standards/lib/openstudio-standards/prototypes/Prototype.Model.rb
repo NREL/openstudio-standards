@@ -28,8 +28,11 @@ class OpenStudio::Model::Model
     
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == "HighriseApartment"
-      if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004' or building_vintage == 'NECB 2011'
+      if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004'
         OpenStudio::logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{building_type} at vintage #{building_vintage} are not available, the measure is disabled for this specific type.")
+        return false
+      elsif building_vintage == "NECB 2011"
+        OpenStudio::logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at vintage #{building_vintage} is not available, the measure is disabled for this specific type.")
         return false
       end
     end
