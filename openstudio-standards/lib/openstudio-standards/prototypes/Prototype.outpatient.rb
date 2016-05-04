@@ -6,7 +6,7 @@ class OpenStudio::Model::Model
     
     
     space_type_map = nil
-    case building_type
+    case building_vintage
     when 'NECB 2011'
       space_type_map ={
         "Dormitory - living quarters" => ["Floor 1 Anesthesia", "Floor 1 Bio Haz", "Floor 1 Cafe", 
@@ -103,8 +103,10 @@ class OpenStudio::Model::Model
       # Add new space type 'Undeveloped'
       'Undeveloped' => ['Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2'] 
     }
-
+    end
+    
     return space_type_map
+  
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
@@ -445,4 +447,3 @@ class OpenStudio::Model::Model
 
 end
 
-end
