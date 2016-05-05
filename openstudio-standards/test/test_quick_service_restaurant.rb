@@ -6,9 +6,8 @@ $LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FI
 class TestQuickServiceRestaurant < CreateDOEPrototypeBuildingTest
 
   building_types = ['QuickServiceRestaurant']
-
-  # templates = ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010']
-  # climate_zones = ['ASHRAE 169-2006-2A']
+  templates = ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010']
+  climate_zones = ['ASHRAE 169-2006-2A']
   # climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
   # templates = ['DOE Ref 1980-2004', 'DOE Ref Pre-1980', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2004'] 
   # climate_zones = ['ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A','ASHRAE 169-2006-2B',
@@ -16,12 +15,11 @@ class TestQuickServiceRestaurant < CreateDOEPrototypeBuildingTest
                    # 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B',
                    # 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-8A'] 
   
-  templates = [ 'NECB 2011']
-  climate_zones = ['NECB HDD Method']
-  epw_files = ['CAN_AB_Calgary.718770_CWEC.epw']
+  # not used for ASHRAE/DOE archetypes, but required for call
+  epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw']
   
   create_models = true
-  run_models = true
+  run_models = false
   compare_results = false
   
   debug = false

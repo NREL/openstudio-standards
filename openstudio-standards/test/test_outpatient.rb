@@ -12,11 +12,14 @@ class TestOutpatient < CreateDOEPrototypeBuildingTest
                    # 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B',
                    # 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-8A'] 
   
+  # not used for ASHRAE/DOE archetypes, but required for call
+  epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw']
+  
   create_models = true
   run_models = false
   compare_results = false
   
-  TestOutpatient.create_run_model_tests(building_types, templates, climate_zones, create_models, run_models, compare_results)
+  TestOutpatient.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   
   # TestOutpatient.compare_test_results(building_types, templates, climate_zones, file_ext="")
      
