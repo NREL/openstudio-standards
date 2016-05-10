@@ -81,7 +81,7 @@ class OpenStudio::Model::Model
       require 'JSON'
       osw_hash = {
         run_dir: Dir.pwd,
-        seed_model: File.absolute_path(idf_path.to_s),
+        seed_model: File.absolute_path(osm_path.to_s),
         weather_file: File.absolute_path(epw_path.to_s),
         steps: []
       }
