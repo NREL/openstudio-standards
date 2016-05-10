@@ -95,17 +95,43 @@ class OpenStudio::Model::Model
 
       # Run workflow.osw
       run_options = Hash.new
+      
+      # jobs for running IDF
+      #run_options[:jobs] = [
+      #  { state: :queued, next_state: :initialization, options: { initial: true } },
+      #  { state: :initialization, next_state: :preprocess, job: :RunInitialization,
+      #    file: 'openstudio/workflow/jobs/run_initialization.rb', options: {} },
+      #  { state: :preprocess, next_state: :simulation, job: :RunPreprocess,
+      #    file: 'openstudio/workflow/jobs/run_preprocess.rb' , options: {} },
+      #  { state: :simulation, next_state: :finished, job: :RunEnergyPlus,
+      #    file: 'openstudio/workflow/jobs/run_energyplus.rb', options: {} },
+      #  { state: :finished },
+      #  { state: :errored }
+      #]
+      
+      # jobs for running OSM
       run_options[:jobs] = [
-        { state: :queued, next_state: :initialization, options: { initial: true } },
-        { state: :initialization, next_state: :preprocess, job: :RunInitialization,
-          file: 'openstudio/workflow/jobs/run_initialization.rb', options: {} },
-        { state: :preprocess, next_state: :simulation, job: :RunPreprocess,
-          file: 'openstudio/workflow/jobs/run_preprocess.rb' , options: {} },
-        { state: :simulation, next_state: :finished, job: :RunEnergyPlus,
-          file: 'openstudio/workflow/jobs/run_energyplus.rb', options: {} },
-        { state: :finished },
-        { state: :errored }
+          { state: :queued, next_state: :initialization, options: { initial: true } },
+          { state: :initialization, next_state: :os_measures, job: :RunInitialization,
+            file: 'openstudio/workflow/jobs/run_initialization.rb', options: {} },
+          { state: :os_measures, next_state: :translator, job: :RunOpenStudioMeasures,
+            file: 'openstudio/workflow/jobs/run_os_measures.rb', options: {} },
+          { state: :translator, next_state: :ep_measures, job: :RunTranslation,
+            file: 'openstudio/workflow/jobs/run_translation.rb', options: {} },
+          { state: :ep_measures, next_state: :preprocess, job: :RunEnergyPlusMeasures,
+            file: 'openstudio/workflow/jobs/run_ep_measures.rb', options: {} },
+          { state: :preprocess, next_state: :simulation, job: :RunPreprocess,
+            file: 'openstudio/workflow/jobs/run_preprocess.rb' , options: {} },
+          { state: :simulation, next_state: :reporting_measures, job: :RunEnergyPlus,
+            file: 'openstudio/workflow/jobs/run_energyplus.rb', options: {} },
+          { state: :reporting_measures, next_state: :postprocess, job: :RunReportingMeasures,
+            file: 'openstudio/workflow/jobs/run_reporting_measures.rb', options: {} },
+          { state: :postprocess, next_state: :finished, job: :RunPostprocess,
+            file: 'openstudio/workflow/jobs/run_postprocess.rb', options: {} },
+          { state: :finished },
+          { state: :errored }
       ]
+      
       k = OpenStudio::Workflow::Run.new input_adapter, output_adapter, File.dirname(osw_path), run_options
       final_state = k.run
 
