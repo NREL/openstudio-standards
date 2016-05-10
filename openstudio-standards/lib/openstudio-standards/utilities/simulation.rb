@@ -98,11 +98,11 @@ class OpenStudio::Model::Model
       run_options[:jobs] = [
         { state: :queued, next_state: :initialization, options: { initial: true } },
         { state: :initialization, next_state: :preprocess, job: :RunInitialization,
-          file: './jobs/run_initialization.rb', options: {} },
+          file: 'openstudio/workflow/jobs/run_initialization.rb', options: {} },
         { state: :preprocess, next_state: :simulation, job: :RunPreprocess,
-          file: './jobs/run_preprocess.rb' , options: {} },
+          file: 'openstudio/workflow/jobs/run_preprocess.rb' , options: {} },
         { state: :simulation, next_state: :finished, job: :RunEnergyPlus,
-          file: './jobs/run_energyplus.rb', options: {} },
+          file: 'openstudio/workflow/jobs/run_energyplus.rb', options: {} },
         { state: :finished },
         { state: :errored }
       ]
