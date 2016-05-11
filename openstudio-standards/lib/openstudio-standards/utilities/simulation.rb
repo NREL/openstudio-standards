@@ -82,17 +82,18 @@ class OpenStudio::Model::Model
 
       # Write OSW file for the simulation
       require 'JSON'
+      osw_dir = File.dirname(osm_path)
       osw_hash = {
-        run_dir: Dir.pwd,
+        run_dir: File.join(osw_dir, 'run'),
         seed_model: File.absolute_path(osm_path.to_s),
         weather_file: File.absolute_path(epw_path.to_s),
         steps: []
       }
-      osw_path = File.join(Dir.pwd, 'workflow.osw')
+      osw_path = File.join(osw_dir, 'workflow.osw')
       File.open(osw_path, 'wb') { |f| f << JSON.pretty_generate(osw_hash) }
 
       # Create local adapters
-      adapter_options = {workflow_filename: File.basename(osw_path), output_directory: File.join(Dir.pwd, 'run')}
+      adapter_options = {workflow_filename: File.basename(osw_path), output_directory: File.join(osw_dir, 'run')}
       input_adapter = OpenStudio::Workflow.load_input_adapter 'local', adapter_options
       output_adapter = OpenStudio::Workflow.load_output_adapter 'local', adapter_options
 
