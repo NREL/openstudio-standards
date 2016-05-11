@@ -145,7 +145,7 @@ class OpenStudio::Model::Model
       else
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Run completed with errors.')
       end
-      sql_path = OpenStudio::Path.new("#{Dir.pwd}/run/eplusout.sql")
+      sql_path = OpenStudio::Path.new(File.join(osw_dir, 'run/run/eplusout.sql'))
       
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished simulation.')
 
