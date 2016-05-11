@@ -28,6 +28,9 @@ class OpenStudio::Model::Model
     end
     epw_path = epw_path.get
     
+    # close current sql file
+    self.resetSqlFile
+    
     # If running on a regular desktop, use RunManager.
     # If running on OpenStudio Server, use WorkFlowMananger
     # to avoid slowdown from the run.   
