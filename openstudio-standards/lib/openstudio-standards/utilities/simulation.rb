@@ -82,7 +82,7 @@ class OpenStudio::Model::Model
 
       # Write OSW file for the simulation
       require 'JSON'
-      osw_dir = File.dirname(osm_path)
+      osw_dir = File.dirname(osm_path.to_s)
       osw_hash = {
         run_dir: File.join(osw_dir, 'run'),
         seed_model: File.absolute_path(osm_path.to_s),
