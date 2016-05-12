@@ -11,6 +11,7 @@
 class OpenStudio::Model::Model
   
   # Get the heating fuel type of a plant loop
+  # @Todo: If no heating equipment is found, check if there's a heat exchanger, or a WaterHeater:Mixed or stratified that is connected to a heating source on the demand side
   def plant_loop_heating_fuels(plant_loop)
     fuels = []
     # Get the heating fuels for all supply components
@@ -19,29 +20,40 @@ class OpenStudio::Model::Model
        # Get the object type
       obj_type = component.iddObjectType.valueName.to_s
       case obj_type
-      when 'OS_Boiler_HotWater'
-        component = component.to_BoilerHotWater.get
-        fuels << component.fuelType
-      when 'OS_Boiler_Steam' 
-        component = component.to_BoilerHotWater.get
-        fuels << component.fuelType
-      when 'OS_District_Heating'
-        fuels << 'DistrictHeating' 
-      when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
-        fuels << 'Electricity'
-      when 'OS_SolarCollector_FlatPlate_PhotovoltaicThermal'
-        fuels << 'SolarEnergy'
-      when 'OS_SolarCollector_FlatPlate_Water'
-        fuels << 'SolarEnergy'
-      when 'OS_SolarCollector_IntegralCollectorStorage'
-        fuels << 'SolarEnergy'
-      when 'OS_WaterHeater_HeatPump'
-        fuels << 'Electricity'     
-      when 'OS_WaterHeater_Mixed'
-        fuels << 'obj.fuelType'
-      when 'OS_WaterHeater_Stratified'
-        fuels << 'obj.fuelType'
-      when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
+        when 'OS_Boiler_HotWater'
+          component = component.to_BoilerHotWater.get
+          fuels << component.fuelType
+        when 'OS_Boiler_Steam'
+          component = component.to_BoilerHotWater.get
+          fuels << component.fuelType
+        when 'OS_District_Heating'
+          fuels << 'DistrictHeating'
+        when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
+          fuels << 'Electricity'
+        when 'OS_SolarCollector_FlatPlate_PhotovoltaicThermal'
+          fuels << 'SolarEnergy'
+        when 'OS_SolarCollector_FlatPlate_Water'
+          fuels << 'SolarEnergy'
+        when 'OS_SolarCollector_IntegralCollectorStorage'
+          fuels << 'SolarEnergy'
+        when 'OS_WaterHeater_HeatPump'
+          fuels << 'Electricity'
+        when 'OS_WaterHeater_Mixed'
+          # @Todo: check if connected on demand side
+          fuels << 'obj.fuelType'
+        when 'OS_WaterHeater_Stratified'
+          # @Todo: check if connected on demand side
+          fuels << 'obj.fuelType'
+        when 'OS_HeatExchanger_FluidToFluid'
+          hx = component.to_HeatExchangerFluidToFluid.get
+          cooling_hx_control_types = ["CoolingSetpointModulated", "CoolingSetpointOnOff", "CoolingDifferentialOnOff", "CoolingSetpointOnOffWithComponentOverride"]
+          cooling_hx_control_types.each {|x| x.downcase!}
+          if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
+            fuels += self.plant_loop_heating_fuels(hx.secondaryPlantLoop.get)
+          end
+        when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
+
+
         # To avoid extraneous debug messages
       else
         #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
@@ -104,40 +116,49 @@ class OpenStudio::Model::Model
     # Get the object type
     obj_type = heating_coil.iddObjectType.valueName.to_s
     case obj_type
-    when 'OS_Coil_Heating_DX_MultiSpeed'
-      fuels << 'Electricity'
-    when 'OS_Coil_Heating_DX_SingleSpeed'
-      fuels << 'Electricity'
-    when 'OS_Coil_Heating_DX_VariableRefrigerantFlow'
-      fuels << 'Electricity'
-    when 'OS_Coil_Heating_DX_VariableSpeed'
-      fuels << 'Electricity'
-    when 'OS_Coil_Heating_Desuperheater'
-      fuels << 'Electricity'
-    when 'OS_Coil_Heating_Electric'
-      fuels << 'Electricity'
-    when 'OS_Coil_Heating_Gas'
-      fuels << 'NaturalGas'
-    when 'OS_Coil_Heating_Gas_MultiStage'
-      fuels << 'NaturalGas'
-    when 'OS_Coil_Heating_Water'
-      heating_coil = heating_coil.to_CoilHeatingWater.get
-      if heating_coil.plantLoop.is_initialized
-        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
-      end
-    when 'OS_Coil_Heating_Water_BaseboardRadiant'
-      heating_coil = heating_coil.to_CoilHeatingWaterBaseboardRadiant.get
-      if heating_coil.plantLoop.is_initialized
-        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
-      end  
-    when 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit'
-      fuels << 'Electricity'
-    when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit'
-      fuels << 'Electricity'
-    when 'OS_Coil_WaterHeating_AirToWaterHeatPump'
-      fuels << 'Electricity'
-    when 'OS_Coil_WaterHeating_Desuperheater'
-      fuels << 'Electricity'
+      when 'OS_Coil_Heating_DX_MultiSpeed'
+        fuels << 'Electricity'
+      when 'OS_Coil_Heating_DX_SingleSpeed'
+        fuels << 'Electricity'
+      when 'OS_Coil_Heating_DX_VariableRefrigerantFlow'
+        fuels << 'Electricity'
+      when 'OS_Coil_Heating_DX_VariableSpeed'
+        fuels << 'Electricity'
+      when 'OS_Coil_Heating_Desuperheater'
+        fuels << 'Electricity'
+      when 'OS_Coil_Heating_Electric'
+        fuels << 'Electricity'
+      when 'OS_Coil_Heating_Gas'
+        fuels << 'NaturalGas'
+      when 'OS_Coil_Heating_Gas_MultiStage'
+        fuels << 'NaturalGas'
+      when 'OS_Coil_Heating_Water'
+        heating_coil = heating_coil.to_CoilHeatingWater.get
+        if heating_coil.plantLoop.is_initialized
+          fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+        end
+      when 'OS_Coil_Heating_Water_BaseboardRadiant'
+        heating_coil = heating_coil.to_CoilHeatingWaterBaseboardRadiant.get
+        if heating_coil.plantLoop.is_initialized
+          fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+        end
+      # @Todo: These are mostly both electricity and whatever serves the water plant loop
+      when 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit'
+        fuels << 'Electricity'
+        heating_coil = heating_coil.to_CoilHeatingWaterToAirHeatPumpEquationFit.get
+        if heating_coil.plantLoop.is_initialized
+          fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+        end
+      when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit'
+        fuels << 'Electricity'
+        heating_coil = heating_coil.to_CoilHeatingWaterToAirHeatPumpEquationFit.get
+        if heating_coil.plantLoop.is_initialized
+          fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+        end
+      when 'OS_Coil_WaterHeating_AirToWaterHeatPump'
+        fuels << 'Electricity'
+      when 'OS_Coil_WaterHeating_Desuperheater'
+        fuels << 'Electricity'
     else
       #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
     end

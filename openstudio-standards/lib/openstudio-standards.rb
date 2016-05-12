@@ -5,7 +5,7 @@ module OpenstudioStandards
   require 'json' # Used to load standards JSON files
   
   # HVAC sizing
-  require 'openstudio-standards/hvac_sizing/Siz.Model'
+  require_relative 'openstudio-standards/hvac_sizing/Siz.Model'
 
   # Prototype Inputs
   require_relative 'openstudio-standards/prototypes/Prototype.Model'
@@ -30,6 +30,7 @@ module OpenstudioStandards
   # Load the Openstudio Standards JSON
   # and assign to a constant.  This
   # should never be altered by the gem.
+  # @Todo: A constant in ruby is $CONSTANT not $constant
   $os_standards = load_openstudio_standards_json 
   
   
