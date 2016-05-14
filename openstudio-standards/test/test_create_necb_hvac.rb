@@ -1,15 +1,8 @@
 require_relative 'minitest_helper'
 require_relative 'create_doe_prototype_helper'
 $LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FILE__)
-require 'openstudio-standards'
-require 'openstudio/ruleset/ShowRunnerOutput'
-require 'minitest/autorun'
 
 
-require 'fileutils'
-
-require 'json'
-require 'rubygems'
 
 
 #This will run all the combinations possible with the inputs for each system.  The test will.
