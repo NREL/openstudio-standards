@@ -1022,7 +1022,7 @@ class OpenStudio::Model::AirLoopHVAC
   
     # Apply integrated or non-integrated economizer
     if integrated_economizer_required
-      oa_control.setLockoutType('NoLockout')
+      oa_control.setLockoutType('LockoutWithHeating')
     else
       oa_control.setLockoutType('LockoutWithCompressor')
     end
