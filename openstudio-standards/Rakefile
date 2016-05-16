@@ -81,11 +81,20 @@ end
 
 
 require 'rake/testtask'
-desc 'Run the NECB tests'
-Rake::TestTask.new('test:necb') do |task|
+desc 'Run the NECB Building Type Tests'
+Rake::TestTask.new('test:necb-buildings') do |task|
   task.libs << 'test'
   task.test_files = FileList['openstudio-standards/test/test_create_necb_buildings.rb']
 end
+
+require 'rake/testtask'
+desc 'Run the NECB 2011 HVAC Tests'
+Rake::TestTask.new('test:necb-hvac') do |task|
+  task.libs << 'test'
+  task.test_files = FileList['openstudio-standards/test/test_create_necb_hvac.rb']
+
+end
+
 
 require 'rake/testtask'
 desc 'Run the measure tests'
