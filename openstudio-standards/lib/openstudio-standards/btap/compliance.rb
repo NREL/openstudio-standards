@@ -1138,6 +1138,8 @@ module BTAP
             ds = BTAP::Resources::Schedules::create_annual_thermostat_setpoint_dual_setpoint(model, name, htg_sched, clg_sched)
           end
           
+          # TO DO: clone and set; look at the way Andrew does it
+          # look at method create_thermal_zones
           zone.setThermostatSetpointDualSetpoint(ds)
           BTAP::runner_register("Info","ThermalZone #{zone.name} set to DualSetpoint Schedule NECB-#{array[0]}",runner)
                          
