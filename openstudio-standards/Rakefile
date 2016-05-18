@@ -60,24 +60,9 @@ Rake::TestTask.new('test:gem_group_3') do |task|
   'openstudio-standards/test/test_small_office.rb', # 7 min
   'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
   'openstudio-standards/test/test_high_rise_apartment.rb', # 7 min
-#  'openstudio-standards/test/test_outpatient.rb' # comment out to address time-out
+  'openstudio-standards/test/test_outpatient.rb' 
   ]
 end
-
-require 'rake/testtask'
-desc 'Run test group 3'
-Rake::TestTask.new('test:gem_group_3') do |task|
-  task.test_files = FileList[
-  'openstudio-standards/test/test_small_hotel.rb', # 80 min
-  'openstudio-standards/test/test_retail_standalone.rb', # 6 min
-  'openstudio-standards/test/test_full_service_restaurant.rb', # 10 min
-  'openstudio-standards/test/test_small_office.rb', # 7 min
-  'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
-  'openstudio-standards/test/test_high_rise_apartment.rb', # 7 min
-  'openstudio-standards/test/test_outpatient.rb' # 
-  ]
-end
-
 
 
 require 'rake/testtask'
