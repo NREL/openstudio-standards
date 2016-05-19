@@ -249,7 +249,7 @@ class OpenStudio::Model::Model
     self.getPlantLoops.each do |loop|
       # If it has a boiler:hotwater, it is the correct loop
       if loop.supplyComponents(OpenStudio::Model::BoilerHotWater::iddObjectType).size > 0
-      # if loop.supplyComponents('OS_Boiler_HotWater'.to_IddObjectType).size > 0   # Another feasible expression way
+      # if loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).size > 0   # Another feasible expression way
         hot_water_loop = loop
       end
     end

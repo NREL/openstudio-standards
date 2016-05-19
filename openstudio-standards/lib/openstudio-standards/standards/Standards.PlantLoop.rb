@@ -893,7 +893,7 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
 
     # Determine if primary only or primary-secondary
     # IF there's a pump on the demand side it's primary-secondary
-    demandPumps = self.demandComponents('OS_Pump_VariableSpeed'.to_IddObjectType) + self.demandComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
+    demandPumps = self.demandComponents('OS:Pump:VariableSpeed'.to_IddObjectType) + self.demandComponents('OS:Pump:ConstantSpeed'.to_IddObjectType)
     demandPumps.each do |component|
       if component.to_PumpConstantSpeed.is_initialized
         pump = component.to_PumpConstantSpeed.get
