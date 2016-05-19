@@ -244,7 +244,11 @@ class OpenStudio::Model::AirLoopHVAC
     # in Table 6.5.3.1.1B
     # perhaps need to extend AirLoopHVAC data model
     has_fully_ducted_return_and_or_exhaust_air_systems = false
-    
+    has_MERV_9_through_12 = false
+    has_MERV_13_through_15 = false
+    has_MERV_16_and_greater = false
+    hrv_pdrop = nil # nil or value
+
     # Calculate Fan Power Limitation Pressure Drop Adjustment (in wc)
     fan_pwr_adjustment_in_wc = 0
 
@@ -253,6 +257,27 @@ class OpenStudio::Model::AirLoopHVAC
       adj_in_wc = 0.5
       fan_pwr_adjustment_in_wc += adj_in_wc
       OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","--Added #{adj_in_wc} in wc for Fully ducted return and/or exhaust air systems")
+    end
+
+    # MERV 9 through 12
+    if has_MERV_9_through_12
+      adj_in_wc = 0.5
+      fan_pwr_adjustment_in_wc += adj_in_wc
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","--Added #{adj_in_wc} in wc for Particulate Filtration Credit: MERV 9 through 12")
+    end
+
+    # MERV 13 through 15
+    if has_MERV_13_through_15
+      adj_in_wc = 0.9
+      fan_pwr_adjustment_in_wc += adj_in_wc
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","--Added #{adj_in_wc} in wc for Particulate Filtration Credit: MERV 13 through 15")
+    end
+
+    # Heat Recovery Pressure drop at design condition
+    if hrv_pdrop
+      adj_in_wc = hrv_pdrop
+      fan_pwr_adjustment_in_wc += adj_in_wc
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC","--Added #{adj_in_wc} in wc for Heat Recovery Device, user-specified")
     end
     
     # Convert the pressure drop adjustment to brake horsepower (bhp)
