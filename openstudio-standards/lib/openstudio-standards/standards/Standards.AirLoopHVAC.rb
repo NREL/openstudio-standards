@@ -247,7 +247,7 @@ class OpenStudio::Model::AirLoopHVAC
     
     # Calculate Fan Power Limitation Pressure Drop Adjustment (in wc)
     fan_pwr_adjustment_in_wc = 0
-    
+
     # Fully ducted return and/or exhaust air systems
     if has_fully_ducted_return_and_or_exhaust_air_systems
       adj_in_wc = 0.5
@@ -463,8 +463,8 @@ class OpenStudio::Model::AirLoopHVAC
       next if fan.name.to_s.include?("Fan Coil fan")
       next if fan.name.to_s.include?("UnitHeater Fan")
 
-      OpenStudio::logFree(OpenStudio::Info, "#{fan.name}")
-    
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "#{fan.name}")
+
       # Get the bhp of the fan on the proposed system
       proposed_fan_bhp = fan.brakeHorsepower
       
@@ -1133,7 +1133,7 @@ class OpenStudio::Model::AirLoopHVAC
     # 'DifferentialDryBulbAndEnthalpy'  
 
     # Determine the type and limits
-    economizer_type = nil
+    economizer_type = "NoEconomizer"
     drybulb_limit_f = nil
     enthalpy_limit_btu_per_lb = nil
     dewpoint_limit_f = nil
@@ -1204,7 +1204,10 @@ class OpenStudio::Model::AirLoopHVAC
       return false # No OA system
     end
     oa_control = oa_sys.getControllerOutdoorAir
- 
+
+    # Set the Economizer Type
+    oa_control.setEconomizerControlType(economizer_type)
+
     # Set the limits
     case economizer_type
     when 'FixedDryBulb'
@@ -1409,6 +1412,7 @@ class OpenStudio::Model::AirLoopHVAC
       if pct_oa < 0.7
         erv_cfm = nil
       else
+        # @Todo: Add exceptions (eg: e. cooling systems in climate zones 3C, 4C, 5B, 5C, 6B, 7 and 8 | d. Heating systems in climate zones 1 to 3)
         erv_cfm = 5000
       end
     when '90.1-2010'
