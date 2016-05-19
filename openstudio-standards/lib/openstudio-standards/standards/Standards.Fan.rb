@@ -277,8 +277,7 @@ module Fan
   def standard_minimum_motor_efficiency_and_size(template, motor_bhp)
   
     fan_motor_eff = 0.85
-    nominal_hp = motor_bhp
-  
+
     # Lookup the minimum motor efficiency
     motors = $os_standards["motors"]
     
@@ -288,11 +287,15 @@ module Fan
       "number_of_poles" => 4.0,
       "type" => "Enclosed",
     }
-    
-    motor_properties = self.model.find_object(motors, search_criteria, motor_bhp)
+
+    # @Todo: Technically ASHRAE says to look at the next greater motor size in table 10.8
+    # Right now you return 29% eff for motors < 1 HP per "a" PNNL paper that says 29% (which one? PNNL-25130 doesn't mention this)
+    # Problem is, LEED flags you for that in their section 1.4 tables
+    # I don't think we should use this here, we should round up
+    motor_properties = self.model.find_object(motors, search_criteria, motor_bhp.ceil)
     if motor_properties.nil?
       OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Fan", "For #{self.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
-      return [fan_motor_eff, nominal_hp]
+      return [fan_motor_eff, motor_bhp]
     end
  
     fan_motor_eff = motor_properties["nominal_full_load_efficiency"]  
