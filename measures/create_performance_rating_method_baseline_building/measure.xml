@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>create_performance_rating_method_baseline_building</name>
   <uid>0474f1c8-11cf-477c-9bd6-2091207ddf42</uid>
-  <version_id>71edd3ef-33ff-4088-ac39-5f2660d70dac</version_id>
-  <version_modified>20160419T173513Z</version_modified>
+  <version_id>8b4081ff-db9a-499f-bb10-81eeca6ef71d</version_id>
+  <version_modified>20160519T154945Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>CreatePerformanceRatingMethodBaselineBuilding</class_name>
   <display_name>Create Performance Rating Method Baseline Building</display_name>
@@ -181,6 +181,25 @@
       </choices>
     </argument>
     <argument>
+      <name>custom</name>
+      <display_name>Customization</display_name>
+      <description>If selected, some of the standard process will be replaced by custom logic specific to particular programs.  If these do not apply to you, select None.</description>
+      <type>Choice</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>*None*</default_value>
+      <choices>
+        <choice>
+          <value>Xcel Energy CO EDA</value>
+          <display_name>Xcel Energy CO EDA</display_name>
+        </choice>
+        <choice>
+          <value>*None*</value>
+          <display_name>*None*</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
       <name>debug</name>
       <display_name>Show debug messages?</display_name>
       <type>Boolean</type>
@@ -223,16 +242,16 @@
       <checksum>6BED784B</checksum>
     </file>
     <file>
-      <filename>create_performance_rating_method_baseline_building_test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>FDBEE9D3</checksum>
-    </file>
-    <file>
       <filename>SecondarySchool-DOE Ref Pre-1980-ASHRAE 169-2006-2A.osm</filename>
       <filetype>osm</filetype>
       <usage_type>test</usage_type>
       <checksum>F8619A70</checksum>
+    </file>
+    <file>
+      <filename>create_performance_rating_method_baseline_building_test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>AD0078FC</checksum>
     </file>
     <file>
       <version>
@@ -243,7 +262,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>00635CEB</checksum>
+      <checksum>E622870A</checksum>
     </file>
   </files>
 </measure>

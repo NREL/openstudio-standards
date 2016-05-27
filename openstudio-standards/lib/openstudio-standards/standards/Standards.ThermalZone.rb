@@ -401,6 +401,63 @@ class OpenStudio::Model::ThermalZone
   
   end
   
+  # Determine if the thermal zone is
+  # Fossil/Purchased Heat/Electric Hybrid
+  #
+  # return [Bool] true if mixed 
+  # Fossil/Electric Hybrid, and Purchased Heat zone
+  def has_mixed_heating_fuel
+  
+    is_mixed = false
+  
+    # Get an array of the heating fuels
+    # used by the zone.  Possible values are
+    # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
+    # Coal, Diesel, Gasoline, DistrictHeating, 
+    # and SolarEnergy.
+    htg_fuels = self.heating_fuels
+    
+    # Includes fossil
+    fossil = false
+    if htg_fuels.include?('NaturalGas') ||
+       htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil#1') ||
+       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('Coal') ||
+       htg_fuels.include?('Diesel') ||
+       htg_fuels.include?('Gasoline')
+       
+       fossil = true
+    end
+    
+    # Electric and fossil and district
+    if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating') && fossil
+      is_mixed = true
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating mixed electricity, fossil, and district.")
+    end    
+
+    # Electric and fossil
+    if htg_fuels.include?('Electricity') && fossil
+      is_mixed = true
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating mixed electricity and fossil.")
+    end
+    
+    # Electric and district
+    if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating')
+      is_mixed = true
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating mixed electricity and district.")
+    end
+    
+    # Fossil and district
+    if fossil && htg_fuels.include?('DistrictHeating')
+      is_mixed = true
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating mixed fossil and district.")
+    end
+  
+    return is_mixed
+  
+  end
+  
   # Determine the net area of the zone
   # Loops on each space, and checks if part of total floor area or not
   # If not part of total floor area, it is not added to the zone floor area

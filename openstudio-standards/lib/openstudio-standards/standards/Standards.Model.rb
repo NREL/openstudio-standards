@@ -96,10 +96,12 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @param building_vintage [String] the building vintage.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @param climate_zone [String] the climate zone
+  # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are Xcel Energy CO EDA.
+  # If nothing is specified, no custom logic will be applied; the process will follow the building_vintage logic explicitly.
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
-  def create_performance_rating_method_baseline_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)
+  def create_performance_rating_method_baseline_building(building_type, building_vintage, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
 
     lookup_building_type = self.get_lookup_name(building_type)
 
@@ -130,7 +132,7 @@ class OpenStudio::Model::Model
     # baseline HVAC systems for later use.
     # This must be done before removing the HVAC systems
     # because it requires knowledge of proposed HVAC fuels.
-    sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage)    
+    sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage, custom)    
     
     # Remove all HVAC from model
     BTAP::Resources::HVAC.clear_all_hvac_from_model(self)
@@ -162,7 +164,8 @@ class OpenStudio::Model::Model
                                                                 sys_group['type'], 
                                                                 sys_group['fuel'],
                                                                 sys_group['area_ft2'],
-                                                                sys_group['stories'])
+                                                                sys_group['stories'],
+                                                                custom)
                                                                 
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type} for #{sys_group['zones'].size} zones.")
       sys_group['zones'].each do |zone|
@@ -350,7 +353,7 @@ class OpenStudio::Model::Model
   # @param standard [String] the standard.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, fuel, and zones (an array of zones)
-  def performance_rating_method_baseline_system_groups(standard)
+  def performance_rating_method_baseline_system_groups(standard, custom)
   
     # Get the residential and nonresidential
     # fossil and electric zones and their areas
@@ -478,8 +481,16 @@ class OpenStudio::Model::Model
     # of 90.1
     exception_min_area_ft2 = nil
     case standard
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010'
       exception_min_area_ft2 = 20000
+    when '90.1-2013'  
+      exception_min_area_ft2 = 20000
+      # Customization - Xcel EDA Program Manual 2014
+      # 3.2.1 Mechanical System Selection ii
+      if custom == 'Xcel Energy CO EDA'
+        exception_min_area_ft2 = 5000
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
+      end
     end    
 
     # There are four possible categories of data
@@ -541,9 +552,16 @@ class OpenStudio::Model::Model
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes, 
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
   # @todo add 90.1-2013 systems 11-13
-  def performance_rating_method_baseline_system_type(standard, climate_zone, area_type, heating_fuel_type, area_ft2, num_stories)
+  def performance_rating_method_baseline_system_type(standard, climate_zone, area_type, heating_fuel_type, area_ft2, num_stories, custom)
   
     system_type = nil
+    
+    # Customization - Xcel EDA Program Manual 2014
+    # Table 3.2.2 Baseline HVAC System Types
+    if custom == 'Xcel Energy CO EDA'
+      standard = '90.1-2010'
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Customization; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, minimum the 90.1-2010 lookup for HVAC system types shall be used.")
+    end
   
     case standard
     when '90.1-2004', '90.1-2007' 
@@ -1054,7 +1072,7 @@ class OpenStudio::Model::Model
   # @return [Hash] keys are zones, values are system type strings
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes, 
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
-  def get_baseline_system_type_by_zone(building_vintage, climate_zone)
+  def get_baseline_system_type_by_zone(building_vintage, climate_zone, custom = nil)
 
     zone_to_sys_type = {}
   
@@ -1062,7 +1080,7 @@ class OpenStudio::Model::Model
     # baseline HVAC systems for later use.
     # This must be done before removing the HVAC systems
     # because it requires knowledge of proposed HVAC fuels.
-    sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage)    
+    sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage, custom)    
     
     # Remove all HVAC from model
     BTAP::Resources::HVAC.clear_all_hvac_from_model(self)
@@ -1097,7 +1115,8 @@ class OpenStudio::Model::Model
                                                                 sys_group['type'], 
                                                                 sys_group['fuel'],
                                                                 sys_group['area_ft2'],
-                                                                sys_group['stories'])
+                                                                sys_group['stories'],
+                                                                custom)
                                                                 
       # Record the zone-by-zone system type assignments
       case building_vintage

@@ -1,5 +1,5 @@
 
-def create_baseline_model(model_name, standard, climate_zone, building_type, debug)
+def create_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false)
 
   # Make a directory to save the resulting models
   test_dir = "#{File.dirname(__FILE__)}/output"
@@ -115,7 +115,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
 
   # Create the baseline model from the
   # supplied proposed test model
-  model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,osm_directory,debug = false)
+  model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug = false)
 
   # Show the output messages
   errs = []

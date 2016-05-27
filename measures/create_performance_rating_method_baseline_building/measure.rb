@@ -84,6 +84,16 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
     climate_zone.setDefaultValue('ASHRAE 169-2006-2A')
     args << climate_zone   
 
+    # Make an argument for the customization
+    custom_chs = OpenStudio::StringVector.new
+    custom_chs << 'Xcel Energy CO EDA'
+    custom_chs << '*None*'
+    custom = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('custom', custom_chs, true)
+    custom.setDisplayName('Customization')
+    custom.setDescription('If selected, some of the standard process will be replaced by custom logic specific to particular programs.  If these do not apply to you, select None.')
+    custom.setDefaultValue('*None*')
+    args << custom     
+    
     # Make an argument for enabling debug messages
     debug = OpenStudio::Ruleset::OSArgument::makeBoolArgument('debug', true)
     debug.setDisplayName('Show debug messages?')
@@ -106,6 +116,7 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
     building_type = runner.getStringArgumentValue('building_type',user_arguments)
     standard = runner.getStringArgumentValue('standard',user_arguments)
     climate_zone = runner.getStringArgumentValue('climate_zone',user_arguments)
+    custom = runner.getStringArgumentValue('custom',user_arguments)
     debug = runner.getBoolArgumentValue('debug',user_arguments) 
     
     # Open a channel to log info/warning/error messages
