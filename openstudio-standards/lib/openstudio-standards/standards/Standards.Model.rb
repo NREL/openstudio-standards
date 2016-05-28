@@ -117,9 +117,18 @@ class OpenStudio::Model::Model
     
     # Modify the internal loads in each space type, 
     # keeping user-defined schedules.
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Changing Lighting and Ventilation Rates")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Changing Lighting Rates")
     self.getSpaceTypes.sort.each do |space_type|
-      space_type.set_internal_loads(building_vintage, false, true, false, false, true, false) 
+      space_type.set_internal_loads(building_vintage, false, true, false, false, false, false) 
+    end
+
+    # If any of the lights are missing schedules, assign an
+    # always-off schedule to those lights.  This is assumed to
+    # be the user's intent in the proposed model.
+    self.getLightss.each do |lights|
+      if lights.schedule.empty?
+        lights.setSchedule(self.alwaysOffDiscreteSchedule)
+      end
     end
 
     # Modify some of the construction types as necessary
@@ -560,7 +569,7 @@ class OpenStudio::Model::Model
     # Table 3.2.2 Baseline HVAC System Types
     if custom == 'Xcel Energy CO EDA'
       standard = '90.1-2010'
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Customization; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, minimum the 90.1-2010 lookup for HVAC system types shall be used.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 lookup for HVAC system types shall be used.")
     end
   
     case standard
