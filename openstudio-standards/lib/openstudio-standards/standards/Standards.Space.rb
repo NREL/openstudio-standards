@@ -1251,6 +1251,20 @@ class OpenStudio::Model::Space
       end
     end
 
+    # Skip this space if it has no exterior windows or skylights
+    ext_fen_area_m2 = 0
+    self.surfaces.each do |surface|
+      next unless surface.outsideBoundaryCondition == "Outdoors"
+      surface.subSurfaces.each do |sub_surface|
+        next unless sub_surface.subSurfaceType == "FixedWindow" || sub_surface.subSurfaceType == "OperableWindow" ||  sub_surface.subSurfaceType == "Skylight"
+        ext_fen_area_m2 += sub_surface.netArea
+      end
+    end
+    if ext_fen_area_m2 == 0
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{self.name}, daylighting control not applicable because no exterior fenestration is present.")
+      return false    
+    end
+    
     areas = nil
     
     req_top_ctrl = false
@@ -1915,10 +1929,10 @@ Warehouse.Office
     
     # Sensors
     if sensor_1_frac > 0.0
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 1 controls #{sensor_1_frac.round(2)} of the zone lighting.")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 1 controls #{(sensor_1_frac*100).round}% of the zone lighting.")
     end
     if sensor_2_frac > 0.0
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 2 controls #{sensor_2_frac.round(2)} of the zone lighting.")
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 2 controls #{(sensor_2_frac*100).round}% of the zone lighting.")
     end
     
     # First sensor
