@@ -119,6 +119,11 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
     custom = runner.getStringArgumentValue('custom',user_arguments)
     debug = runner.getBoolArgumentValue('debug',user_arguments) 
     
+    # Convert custom to nil if necessary
+    if custom == '*None*'
+      custom = nil
+    end
+    
     # Open a channel to log info/warning/error messages
     @msg_log = OpenStudio::StringStreamLogSink.new
     if debug
@@ -140,7 +145,7 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
       Dir.mkdir(osm_directory)
     end
 
-    success = model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,osm_directory,debug)
+    success = model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug)
 
     log_msgs(debug)
     return success
