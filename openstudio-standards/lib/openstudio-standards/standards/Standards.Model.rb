@@ -186,6 +186,11 @@ class OpenStudio::Model::Model
     
     end
 
+    # Set the zone sizing SAT for each zone in the model
+    self.getThermalZones.each do |zone|
+      zone.set_performance_rating_method_baseline_supply_temperatures
+    end  
+    
     # SAT reset, economizers
     self.getAirLoopHVACs.sort.each do |air_loop|
       air_loop.apply_performance_rating_method_baseline_controls(building_vintage, climate_zone)

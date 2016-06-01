@@ -849,5 +849,116 @@ class OpenStudio::Model::ThermalZone
     return cond_cat
   
   end
+ 
+  # Calculate the heating supply temperature based on the
+  # specified delta-T. Delta-T is calculated based on the
+  # highest value found in the heating setpoint schedule.
+  #
+  # @return [Double] the design heating supply temperature, in C
+  # @todo Exception: 17F delta-T for labs  
+  def performance_rating_method_baseline_heating_design_supply_temperature
+ 
+    setpoint_c = nil
+    
+    # Setpoint schedule
+    tstat = self.thermostatSetpointDualSetpoint
+    if tstat.is_initialized
+      tstat = tstat.get
+      setpoint_sch = tstat.heatingSetpointTemperatureSchedule
+      if setpoint_sch.is_initialized
+        setpoint_sch = setpoint_sch.get
+        if setpoint_sch.to_ScheduleRuleset.get
+          setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
+          setpoint_c = setpoint_sch.annual_min_max_value['max']
+        end
+      end
+    end
+
+    # If the heating setpoint could not be determined
+    # return the current design heating temperature
+    if setpoint_c.nil?
+      setpoint_c = self.sizingZone.zoneHeatingDesignSupplyAirTemperature
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine max heating setpoint.  Design heating supply temperature will refer to current zone setting.")
+    end
+
+    # Add 20F delta-T
+    delta_t_r = 20
+    delta_t_k = OpenStudio.convert(delta_t_r,'R','K').get
+    
+    sat_c = setpoint_c + delta_t_k # Add for heating
+    
+    return sat_c
+    
+  end
+ 
+  # Calculate the cooling supply temperature based on the
+  # specified delta-T. Delta-T is calculated based on the
+  # highest value found in the cooling setpoint schedule.
+  #
+  # @return [Double] the design heating supply temperature, in C
+  # @todo Exception: 17F delta-T for labs   
+  def performance_rating_method_baseline_cooling_design_supply_temperature
+ 
+    setpoint_c = nil
+    
+    # Setpoint schedule
+    tstat = self.thermostatSetpointDualSetpoint
+    if tstat.is_initialized
+      tstat = tstat.get
+      setpoint_sch = tstat.coolingSetpointTemperatureSchedule
+      if setpoint_sch.is_initialized
+        setpoint_sch = setpoint_sch.get
+        if setpoint_sch.to_ScheduleRuleset.get
+          setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
+          setpoint_c = setpoint_sch.annual_min_max_value['min']
+        end
+      end
+    end
+
+    # If the cooling setpoint could not be determined
+    # return the current design cooling temperature
+    if setpoint_c.nil?
+      setpoint_c = self.sizingZone.zoneCoolingDesignSupplyAirTemperature
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine max heating setpoint.  Design cooling supply temperature will refer to current zone setting.")
+    end
+
+    # Subtract 20F delta-T
+    delta_t_r = 20
+    delta_t_k = OpenStudio.convert(delta_t_r,'R','K').get
+    
+    sat_c = setpoint_c - delta_t_k # Subtract for cooling
+    
+    return sat_c
+    
+  end 
+
+  # Set the design delta-T for zone heating and cooling sizing
+  # supply air temperatures.  This value determines zone
+  # air flows, which will be summed during system 
+  # design airflow calculation.
+  # 
+  # @return [Bool] true if successful, false if not
+  def set_performance_rating_method_baseline_supply_temperatures
+
+    # Heating
+    htg_sat_c = self.performance_rating_method_baseline_heating_design_supply_temperature
+    htg_success = self.sizingZone.setZoneHeatingDesignSupplyAirTemperature(htg_sat_c)
+        
+    # Cooling
+    clg_sat_c = self.performance_rating_method_baseline_cooling_design_supply_temperature
+    clg_success = self.sizingZone.setZoneCoolingDesignSupplyAirTemperature(clg_sat_c)
+    
+    htg_sat_f = OpenStudio.convert(htg_sat_c,'C','F').get
+    clg_sat_f = OpenStudio.convert(clg_sat_c,'C','F').get
+    OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.ThermalZone", "For #{self.name}, Htg SAT = #{htg_sat_f.round(1)}F, Clg SAT = #{clg_sat_f.round(1)}F.")
+    
+    result = false
+    if htg_success && clg_success
+      result = true
+    end
+    
+    return result
+
+  end  
 
 end
