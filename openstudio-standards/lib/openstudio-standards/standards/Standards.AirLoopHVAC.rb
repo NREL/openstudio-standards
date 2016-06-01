@@ -1190,6 +1190,9 @@ class OpenStudio::Model::AirLoopHVAC
     end
     oa_control = oa_sys.getControllerOutdoorAir
  
+    # Set the economizer type
+    oa_control.setEconomizerControlType(economizer_type)
+ 
     # Set the limits
     case economizer_type
     when 'FixedDryBulb'
