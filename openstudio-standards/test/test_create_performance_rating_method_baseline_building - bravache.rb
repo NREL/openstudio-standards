@@ -132,44 +132,6 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
 
 end
 
-class TestRun12 < Minitest::Test
-	#Standard Design Space-by-Space Lighting Method Test
-	#The prototype model is Medium_Office, CZ2, with the following variations:
-	#	- Perimeter Zones are Lobby with LPD 0.5W/ft^2
-	#	- Core Zones are Breakroom with LPD 0.75W/ft^2
-	
-	model_name = 'Run12_Prototype'
-	standard = '90.1-2010'
-	climate_zone = 'ASHRAE 169-2006-2A'
-	building_type = 'MediumOffice'
-
-	@@model = create_baseline_model(model_name, standard, climate_zone, building_type, false)
-	
-	def setup
-		assert_instance_of OpenStudio::Model::Model, @@model
-	end
-
-	def test_901_2010_run12_test01	
-		#Testing the baseline LPD in the perimeter zones (lobby)
-		
-		space = @@model.getSpaceByName("Perimeter_mid_ZN_4").get
-		lpd_w_per_m2 = space.lightingPowerPerFloorArea
-		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-		assert_in_delta(0.90, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.90 was expected.")
-	end
-	
-	def test_901_2010_run12_test02
-		#Testing the baseline LPD in the core zones (breakroom)
-		
-		space = @@model.getSpaceByName("Core_bottom").get
-		lpd_w_per_m2 = space.lightingPowerPerFloorArea
-		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-		#(expected, actual, tolerance, message to show if it fails) 
-		assert_in_delta(0.73, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.73 was expected.")	
-	end
-
-end
-
 class TestRun01 < Minitest::Test
 	#Standard Design Exterior Envelope Test
 	#The prototype model is Small_Office, CZ2, with the following variations:
@@ -227,7 +189,7 @@ class TestRun01 < Minitest::Test
 	end
 		
 	def test_901_2010_run01_test05
-		#Testing the baseline windows U-Value, SHGC and VT.
+		#Testing the baseline windows U-Value
 		
 		window_name = 'Perimeter_ZN_3_wall_north_Window_1'.upcase
 		
@@ -236,103 +198,39 @@ class TestRun01 < Minitest::Test
 		uFactor_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Glass U-Factor') AND (RowName = '#{window_name}')"		
 		glass_uFactor_SI = sql.execAndReturnFirstDouble(uFactor_query).get
 		
-		shgc_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Glass SHGC') AND (RowName = '#{window_name}')"
-    glass_SHGC = sql.execAndReturnFirstDouble(shgc_query).get
-    
-    glass_area_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Glass Area') AND (RowName = '#{window_name}')"
-    glass_area = sql.execAndReturnFirstDouble(glass_area_query).get
-    
-    frame_area_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Frame Area') AND (RowName = '#{window_name}')"
-    frame_area = sql.execAndReturnFirstDouble(frame_area_query).get
-    
-    frame_uFactor_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Frame Conductance') AND (RowName = '#{window_name}')"
-    frame_uFactor_SI = sql.execAndReturnFirstDouble(frame_uFactor_query).get
-    
-    window_uFactor_SI = (glass_uFactor_SI * glass_area + frame_uFactor_SI * frame_area) / (glass_area + frame_area)
-    window_uFactor_IP = OpenStudio.convert(window_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
-    
-    window_SHGC = glass_SHGC
-    #Have to find a way to get to the whole-window SHGC...    
-    
-    assert_in_delta(0.75, window_uFactor_IP, 0.001, "Window has a U-Value of #{window_uFactor_IP} BTU/h.ft^2.R when 0.75 BTU/h.ft^2.R was expected (CZ2)")
+		glass_area_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Glass Area') AND (RowName = '#{window_name}')"
+		glass_area = sql.execAndReturnFirstDouble(glass_area_query).get
+		
+		frame_area_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Frame Area') AND (RowName = '#{window_name}')"
+		frame_area = sql.execAndReturnFirstDouble(frame_area_query).get
+		
+		frame_uFactor_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Frame Conductance') AND (RowName = '#{window_name}')"
+		frame_uFactor_SI = sql.execAndReturnFirstDouble(frame_uFactor_query).get
+		
+		window_uFactor_SI = (glass_uFactor_SI * glass_area + frame_uFactor_SI * frame_area) / (glass_area + frame_area)
+		window_uFactor_IP = OpenStudio.convert(window_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
+		
+		assert_in_delta(0.75, window_uFactor_IP, 0.001, "Window has a U-Value of #{window_uFactor_IP} BTU/h.ft^2.R when 0.75 BTU/h.ft^2.R was expected (CZ2)")
 		assert_in_delta(0.25, window_SHGC, 0.001, "Window has a SHGC of #{window_SHGC} when 0.25 was expected (CZ2")
 	end
-
-end
-
-class TestRun18 < Minitest::Test
-	#Standard Design Exterior Envelope Test
-	#The prototype model is Small_Office, CZ2, with the following variations:
-	#	- Single Air Loop with DX Cooling Coil with COP 3.84, Heat Furnace with Efficiency 0.8 and constant volume fan.
-
-	model_name = 'Run18_Prototype'
-	standard = '90.1-2010'
-	climate_zone = 'ASHRAE 169-2006-2A'
-	building_type = 'SmallOffice'
 	
-	@@model = create_baseline_model(model_name, standard, climate_zone, building_type, false)
-	
-	def setup
-		assert_instance_of OpenStudio::Model::Model, @@model
-	end
-	
-	def test_901_2010_run18_test01
-		#Testing if there are one air loop per thermal blocks (G3.1.1, System 3)
-		air_loops = @@model.getLoops
-		assert_equal(5, air_loops.size, "Model has #{air_loops.size} air loops when 5 where expected (one per thermal block)")
-	
-	end
-	
-	def test_901_2010_run18_test02
-		#Testing the type of HVAC System.
+	def test_901_2010_run01_test06
+		#Testing the baseline window SHGC
 		
-	end
-	
-	def test_901_2010_run18_test03
-		#Testing the cooling and heating equipment efficiency
+		window_name = 'Perimeter_ZN_3_wall_north_Window_1'.upcase
 		
 		sql = @@model.sqlFile.get
 		
-		cooling_coils = @@model.getCoilCoolingDXSingleSpeeds
-		cooling_coils.each do |cooling_coil|			
-			coil_name = cooling_coil.name.get
-			
-			coils_query = "SELECT RowName FROM TabularDataWithStrings WHERE (ReportName='ComponentSizingSummary') AND (ColumnName='Design Size Gross Rated Total Cooling Capacity')"
-			sql_coils = sql.execAndReturnVectorOfString(coils_query).get
-			
-			# The coil names are different between the SQL and the model. I take under assumption that the model coils contains the sql coil (i.e. that it has been appended)
-			sql_coils.each do |sql_coil|
-			  if coil_name.upcase.include? sql_coil
-			    @coil_name_in_sql = sql_coil
-			  end
-			end
-						
-			capacity_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='ComponentSizingSummary') AND (ColumnName='Design Size Gross Rated Total Cooling Capacity') AND (RowName = '"+@coil_name_in_sql+"')"
-
-			coil_capacity_SI = sql.execAndReturnFirstDouble(capacity_query).get
-			coil_capacity_IP = OpenStudio.convert(coil_capacity_SI, 'W','Btu/h').get
-			
-			coil_name = cooling_coil.name.get
-			
-			coil_COP = cooling_coil.getRatedCOP.get
-			coil_EER = OpenStudio.convert(coil_COP, 'W/W', 'Btu/h*W').get
-			coil_SEER = (1.12-(1.2544-0.08*coil_EER)**0.5) / 0.04
-			
-			case
-			when coil_capacity_IP < 65000
-				assert_in_delta(13.0, coil_SEER, 0.1, "The Cooling Coil #{coil_name} has a SEER of #{coil_SEER} when 13 was expected (capacity = #{coil_capacity_IP} < 65000 BTU/h)")
-			when coil_capacity_IP >= 65000 && coil_capacity_IP < 135000
-				assert_in_delta(11.0, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 11 was expected (65000 <= capacity = #{coil_capacity_IP} < 135000 BTU/h)")
-			when coil_capacity_IP >= 135000 && coil_capacity_IP < 240000
-				assert_in_delta(10.8, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 10.8 was expected (135000 <= capacity = #{coil_capacity_IP} < 240000 BTU/h)")
-			when coil_capacity_IP >= 240000 && coil_capacity_IP < 760000
-				assert_in_delta(10.0, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 10.0 was expected (240000 <= capacity = #{coil_capacity_IP} < 760000 BTU/h)")
-			else
-				assert_in_delta(9.7, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 9.7 was expected (capacity = #{coil_capacity_IP} >= 760000 BTU/h)")
-			end
-		end			
+		shgc_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='EnvelopeSummary') AND (ColumnName='Glass SHGC') AND (RowName = '#{window_name}')"
+		glass_SHGC = sql.execAndReturnFirstDouble(shgc_query).get
+		
+		window_SHGC = glass_SHGC
+		#Have to find a way to get to the whole-window SHGC, although right now, the frame area is 0 so it might be the same as glass_SHGC.    
+		
+		assert_in_delta(0.25, window_SHGC, 0.001, "Window has a SHGC of #{window_SHGC} when 0.25 was expected (CZ2")
+		
 	end
-	
+
 end
 
 class TestRun06 < Minitest::Test
@@ -378,10 +276,10 @@ class TestRun06 < Minitest::Test
 		puts "South: #{south_window_WWR}"
 		puts "West: #{west_window_WWR}"
 		
-		north_required_WWR = 0.5 * 40/46
-		east_required_WWR = 0.45 * 40/46
-		south_required_WWR = 0.4 * 40/46
-		west_required_WWR = 0.5 * 40/46
+		north_required_WWR = 0.5 * 40/46 #43.48%
+		east_required_WWR = 0.45 * 40/46 #39.13%
+		south_required_WWR = 0.4 * 40/46 #34.78%
+		west_required_WWR = 0.5 * 40/46 #43.48%
 		
 		assert_in_delta(north_required_WWR, north_window_WWR, 0.01, "North facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
 		assert_in_delta(east_required_WWR, east_window_WWR, 0.01, "East facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
@@ -395,7 +293,120 @@ class TestRun06 < Minitest::Test
 		shadings = @@model.getShadingSurfaces
 		number_of_shading = shadings.count
 
-		assert_empty(shadings, "There is/are #{number_of_shadings} shading objects when 0 was expected.")
+		assert_empty(shadings, "There is/are #{number_of_shading} shading objects when 0 was expected.")
+	end
+end
+
+class TestRun12 < Minitest::Test
+	#Standard Design Space-by-Space Lighting Method Test
+	#The prototype model is Medium_Office, CZ2, with the following variations:
+	#	- Perimeter Zones are Lobby with LPD 0.5W/ft^2
+	#	- Core Zones are Breakroom with LPD 0.75W/ft^2
+	
+	model_name = 'Run12_Prototype'
+	standard = '90.1-2010'
+	climate_zone = 'ASHRAE 169-2006-2A'
+	building_type = 'MediumOffice'
+
+	@@model = create_baseline_model(model_name, standard, climate_zone, building_type, false)
+	
+	def setup
+		assert_instance_of OpenStudio::Model::Model, @@model
+	end
+
+	def test_901_2010_run12_test01	
+		#Testing the baseline LPD in the perimeter zones (lobby)
+		
+		space = @@model.getSpaceByName("Perimeter_mid_ZN_4").get
+		lpd_w_per_m2 = space.lightingPowerPerFloorArea
+		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
+		assert_in_delta(0.90, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.90 was expected.")
+	end
+	
+	def test_901_2010_run12_test02
+		#Testing the baseline LPD in the core zones (breakroom)
+		
+		space = @@model.getSpaceByName("Core_bottom").get
+		lpd_w_per_m2 = space.lightingPowerPerFloorArea
+		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
+		#(expected, actual, tolerance, message to show if it fails) 
+		assert_in_delta(0.73, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.73 was expected.")	
+	end
+
+end
+
+class TestRun18 < Minitest::Test
+	#Standard Design Exterior Envelope Test
+	#The prototype model is Small_Office, CZ2, with the following variations:
+	#	- Single Air Loop with DX Cooling Coil with COP 3.84, Heat Furnace with Efficiency 0.8 and constant volume fan.
+
+	model_name = 'Run18_Prototype'
+	standard = '90.1-2010'
+	climate_zone = 'ASHRAE 169-2006-2A'
+	building_type = 'SmallOffice'
+	
+	@@model = create_baseline_model(model_name, standard, climate_zone, building_type, false)
+	
+	def setup
+		assert_instance_of OpenStudio::Model::Model, @@model
+	end
+	
+	def test_901_2010_run18_test01
+		#Testing if there are one air loop per thermal blocks (G3.1.1, System 3)
+		air_loops = @@model.getLoops
+		assert_equal(5, air_loops.size, "Model has #{air_loops.size} air loops when 5 where expected (one per thermal block)")
+	
+	end
+	
+	def test_901_2010_run18_test02
+		#Testing the type of HVAC System.
+		
+	end
+	
+	def test_901_2010_run18_test03
+		#Testing the cooling and heating equipment efficiency
+		
+		sql = @@model.sqlFile.get
+		
+		cooling_coils = @@model.getCoilCoolingDXSingleSpeeds
+		cooling_coils.each do |cooling_coil|			
+			coil_name = cooling_coil.name.get
+			
+			coils_query = "SELECT RowName FROM TabularDataWithStrings WHERE (ReportName='ComponentSizingSummary') AND (ColumnName='Design Size Gross Rated Total Cooling Capacity')"
+			
+			sql_coils = sql.execAndReturnVectorOfString(coils_query).get
+			
+			# The coil names are different between the SQL and the model. I take under assumption that the model coils contains the sql coil (i.e. that it has been appended)
+			sql_coils.each do |sql_coil|
+			  if coil_name.upcase.include? sql_coil
+			    @coil_name_in_sql = sql_coil
+			  end
+			end
+						
+			capacity_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='ComponentSizingSummary') AND (ColumnName='Design Size Gross Rated Total Cooling Capacity') AND (RowName = '"+@coil_name_in_sql+"')"
+
+			coil_capacity_SI = sql.execAndReturnFirstDouble(capacity_query).get
+			coil_capacity_IP = OpenStudio.convert(coil_capacity_SI, 'W','Btu/h').get
+			
+			coil_name = cooling_coil.name.get
+			
+			coil_COP = cooling_coil.getRatedCOP.get
+			coil_EER = OpenStudio.convert(coil_COP, 'W/W', 'Btu/h*W').get
+			coil_SEER = (1.12-(1.2544-0.08*coil_EER)**0.5) / 0.04
+			
+			case
+			when coil_capacity_IP < 65000
+				assert_in_delta(13.0, coil_SEER, 0.1, "The Cooling Coil #{coil_name} has a SEER of #{coil_SEER} when 13 was expected (capacity = #{coil_capacity_IP}  BTU/h < 65000 BTU/h)")
+			when coil_capacity_IP >= 65000 && coil_capacity_IP < 135000
+				assert_in_delta(11.0, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 11 was expected (65000 <= capacity = #{coil_capacity_IP}  BTU/h < 135000 BTU/h)")
+			when coil_capacity_IP >= 135000 && coil_capacity_IP < 240000
+				assert_in_delta(10.8, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 10.8 was expected (135000 <= capacity = #{coil_capacity_IP}  BTU/h < 240000 BTU/h)")
+			when coil_capacity_IP >= 240000 && coil_capacity_IP < 760000
+				assert_in_delta(10.0, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 10.0 was expected (240000 <= capacity = #{coil_capacity_IP}  BTU/h < 760000 BTU/h)")
+			else
+				assert_in_delta(9.7, coil_EER, 0.1, "The Cooling Coil #{coil_name} has a EER of #{coil_EER} when 9.7 was expected (capacity = #{coil_capacity_IP}  BTU/h >= 760000 BTU/h)")
+			end
+		end			
 	end
 	
 end
