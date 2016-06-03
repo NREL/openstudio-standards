@@ -42,17 +42,16 @@ class OpenStudio::Model::Model
     sizing_plant.setLoopDesignTemperatureDifference(hw_delta_t_k)
 
     #hot water pump
-    hw_pump = OpenStudio::Model::PumpVariableSpeed.new(self)
+    if building_type == "Outpatient"
+      hw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
+    else
+      hw_pump = OpenStudio::Model::PumpVariableSpeed.new(self)
+    end
     hw_pump.setName('Hot Water Loop Pump')
     hw_pump_head_ft_h2o = 60.0
     hw_pump_head_press_pa = OpenStudio.convert(hw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get
     hw_pump.setRatedPumpHead(hw_pump_head_press_pa)
     hw_pump.setMotorEfficiency(0.9)
-    hw_pump.setFractionofMotorInefficienciestoFluidStream(0)
-    hw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
-    hw_pump.setCoefficient2ofthePartLoadPerformanceCurve(1)
-    hw_pump.setCoefficient3ofthePartLoadPerformanceCurve(0)
-    hw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0)
     hw_pump.setPumpControlType('Intermittent')
     hw_pump.addToNode(hot_water_loop.supplyInletNode)
 
@@ -230,9 +229,10 @@ class OpenStudio::Model::Model
     if condenser_water_loop
       condenser_water_loop.addDemandBranchForComponent(chiller)
       chiller.setCondenserType('WaterCooled')
-    end
+	end
+	
 
-    #chilled water loop pipes
+	#chilled water loop pipes
     chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
     chilled_water_loop.addSupplyBranchForComponent(chiller_bypass_pipe)
     coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
@@ -910,11 +910,7 @@ class OpenStudio::Model::Model
     zn_dsn_htg_sa_temp_f = 122 # Design VAV box to reheat to 122F
     rht_rated_air_in_temp_f = 62 # Reheat coils designed to receive 62F
     rht_rated_air_out_temp_f = 90 # Reheat coils designed to supply 90F...but zone expects 122F...?
-    if sys_name == 'PVAV Outpatient F1'
-      clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
-    else
-      clg_sa_temp_f = 55 # Central deck clg temp operates at 55F
-    end
+    clg_sa_temp_f = 55 # Central deck clg temp operates at 55F
 
     sys_dsn_prhtg_temp_c = OpenStudio.convert(sys_dsn_prhtg_temp_f,'F','C').get
     sys_dsn_clg_sa_temp_c = OpenStudio.convert(sys_dsn_clg_sa_temp_f,'F','C').get
@@ -940,12 +936,33 @@ class OpenStudio::Model::Model
     end
     air_loop.setAvailabilitySchedule(hvac_op_sch)
 
+    # Some exceptions for the Outpatient
+    if sys_name.include? "PVAV Outpatient F1"
+      # Outpatient two AHU1 and AHU2 have different HVAC schedule
+      hvac_op_sch = self.add_schedule('OutPatientHealthCare AHU1-Fan_Pre2004')
+      # Outpatient has different temperature settings for sizing
+      clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
+      if standard == 'DOE Ref 1980-2004' || standard == 'DOE Ref Pre-1980'
+        sys_dsn_clg_sa_temp_f = 52
+      else
+        sys_dsn_clg_sa_temp_f = 45
+      end
+      zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
+      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT    
+    elsif sys_name.include? 'PVAV Outpatient F2 F3'
+      hvac_op_sch = self.add_schedule('OutPatientHealthCare AHU2-Fan_Pre2004')
+      clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
+      sys_dsn_clg_sa_temp_f = 52
+      zn_dsn_clg_sa_temp_f = 55 # zone cooling design SAT
+      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
+    end
+
     # Air handler controls
     stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,sa_temp_sch)
     stpt_manager.addToNode(air_loop.supplyOutletNode)
     sizing_system = air_loop.sizingSystem
     # sizing_system.setPreheatDesignTemperature(sys_dsn_prhtg_temp_c)
-    # sizing_system.setCentralCoolingDesignSupplyAirTemperature(sys_dsn_clg_sa_temp_c)
+    sizing_system.setCentralCoolingDesignSupplyAirTemperature(sys_dsn_clg_sa_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(sys_dsn_htg_sa_temp_c)
     sizing_system.setSizingOption('Coincident')
     sizing_system.setAllOutdoorAirinCooling(false)
@@ -981,10 +998,10 @@ class OpenStudio::Model::Model
 
     # Outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
-    oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
-    oa_intake.setName("#{air_loop.name} OA Sys")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
+    oa_intake.setName("#{air_loop.name} OA Sys")
     oa_intake.addToNode(air_loop.supplyInletNode)
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Ventilation Controller")
@@ -3276,7 +3293,7 @@ class OpenStudio::Model::Model
       swh_pump_motor_efficiency = 1
     end
 
-    if building_type.nil? && ( 'template' == 'DOE Ref 1980-2004' || 'template' == 'DOE Ref Pre-1980' )
+    if standard == 'DOE Ref 1980-2004' || 'template' == 'DOE Ref Pre-1980'
       if building_type == 'Medium Office'
         swh_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
       else
@@ -4142,7 +4159,17 @@ class OpenStudio::Model::Model
       fan = OpenStudio::Model::FanZoneExhaust.new(self)
       fan.setName("#{zone.name} Exhaust Fan")
       fan.setAvailabilitySchedule(self.add_schedule(availability_sch_name))
-      fan.setMaximumFlowRate(flow_rate)
+      # two ways to input the flow rate: Number of Array.
+      # For number: assign directly. For Array: assign each flow rate to each according zone.
+      if flow_rate.is_a? Numeric
+        fan.setMaximumFlowRate(flow_rate)
+      elsif flow_rate.class.to_s == 'Array'
+        index = thermal_zones.index(zone)
+        flow_rate_zone = flow_rate[index]
+        fan.setMaximumFlowRate(flow_rate_zone)
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Model", "Wrong format of flow rate")
+      end
       unless flow_fraction_schedule_name.nil?
         fan.setFlowFractionSchedule(self.add_schedule(flow_fraction_schedule_name))
       end
@@ -4155,6 +4182,72 @@ class OpenStudio::Model::Model
     end
 
     return fans
+
+  end
+
+  # Adds a zone ventilation design flow rate to each zone.
+  #
+  # @param availability_sch_name [String] the name of the fan availability schedule
+  # @param flow_rate [Double] the ventilation design flow rate in m^3/s for Exhaust/Natural or
+  # Flow Rate per Zone Floor Area in m^3/s-m^2 for Intake
+  # @param ventilation_type [String] the zone ventilation type either Exhaust, Natural, or Intake
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] an array of thermal zones
+  # @return [Array<OpenStudio::Model::ZoneVentilationDesignFlowRate>] an array of zone ventilation objects created
+  def add_zone_ventilation(availability_sch_name,
+                           flow_rate,
+                           ventilation_type,
+                           thermal_zones)
+
+    # Make an exhaust fan for each zone
+    zone_ventilations = []
+    thermal_zones.each do |zone|
+      ventilation = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(self)
+      ventilation.setName("#{zone.name} Ventilation")
+      ventilation.setSchedule(self.add_schedule(availability_sch_name))
+      ventilation.setVentilationType(ventilation_type)
+
+      ventilation.setAirChangesperHour(0)
+      ventilation.setTemperatureTermCoefficient(0)
+
+      if ventilation_type == 'Exhaust'
+        ventilation.setDesignFlowRateCalculationMethod("Flow/Zone")
+        ventilation.setDesignFlowRate(flow_rate)
+        ventilation.setFanPressureRise(31.1361206455786)
+        ventilation.setFanTotalEfficiency(0.51)
+        ventilation.setConstantTermCoefficient(1)
+        ventilation.setVelocityTermCoefficient(0)
+        ventilation.setMinimumIndoorTemperature(29.4444452244559)
+        ventilation.setMaximumIndoorTemperature(100)
+        ventilation.setDeltaTemperature(-100)
+      elsif ventilation_type == 'Natural'
+        ventilation.setDesignFlowRateCalculationMethod("Flow/Zone")
+        ventilation.setDesignFlowRate(flow_rate)
+        ventilation.setFanPressureRise(0)
+        ventilation.setFanTotalEfficiency(1)
+        ventilation.setConstantTermCoefficient(0)
+        ventilation.setVelocityTermCoefficient(0.224)
+        ventilation.setMinimumIndoorTemperature(-73.3333352760033)
+        ventilation.setMaximumIndoorTemperature(29.4444452244559)
+        ventilation.setDeltaTemperature(-100)
+      elsif ventilation_type == 'Intake'
+        ventilation.setDesignFlowRateCalculationMethod("Flow/Area")
+        ventilation.setFlowRateperZoneFloorArea(flow_rate)
+        ventilation.setFanPressureRise(49.8)
+        ventilation.setFanTotalEfficiency(0.53625)
+        ventilation.setConstantTermCoefficient(1)
+        ventilation.setVelocityTermCoefficient(0)
+        ventilation.setMinimumIndoorTemperature(7.5)
+        ventilation.setMaximumIndoorTemperature(35)
+        ventilation.setDeltaTemperature(-27.5)
+        ventilation.setMinimumOutdoorTemperature(-30.0)
+        ventilation.setMaximumOutdoorTemperature(50.0)
+        ventilation.setMaximumWindSpeed(6.0)
+      end      
+      ventilation.addToThermalZone(zone)
+      zone_ventilations << ventilation
+    end
+
+    return zone_ventilations
 
   end
 

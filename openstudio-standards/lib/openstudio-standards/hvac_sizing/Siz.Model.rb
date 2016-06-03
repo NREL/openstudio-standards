@@ -12,54 +12,54 @@ class OpenStudio::Model::Model
 
   # Load the helper libraries for getting the autosized
   # values for each type of model object.
-  require_relative 'HVACSizing.AirTerminalSingleDuctParallelPIUReheat'
-  require_relative 'HVACSizing.AirTerminalSingleDuctVAVReheat'
-  require_relative 'HVACSizing.AirTerminalSingleDuctUncontrolled'
-  require_relative 'HVACSizing.AirLoopHVAC'
-  require_relative 'HVACSizing.AirLoopHVACUnitaryHeatPumpAirToAir'
-  require_relative 'HVACSizing.FanConstantVolume'
-  require_relative 'HVACSizing.FanVariableVolume'
-  require_relative 'HVACSizing.FanOnOff'
-  require_relative 'HVACSizing.CoilHeatingElectric'
-  require_relative 'HVACSizing.CoilHeatingGas'
-  require_relative 'HVACSizing.CoilHeatingGasMultiStage'
-  require_relative 'HVACSizing.CoilHeatingWater'
-  require_relative 'HVACSizing.CoilHeatingDXSingleSpeed'
-  require_relative 'HVACSizing.CoilCoolingDXSingleSpeed'
-  require_relative 'HVACSizing.CoilHeatingDXMultiSpeed'
-  require_relative 'HVACSizing.CoilCoolingDXMultiSpeed'
-  require_relative 'HVACSizing.CoilCoolingDXTwoSpeed'
-  require_relative 'HVACSizing.CoilCoolingWater'
-  require_relative 'HVACSizing.ControllerOutdoorAir'
-  require_relative 'HVACSizing.HeatExchangerAirToAirSensibleAndLatent'
-  require_relative 'HVACSizing.PlantLoop'
-  require_relative 'HVACSizing.PumpConstantSpeed'
-  require_relative 'HVACSizing.PumpVariableSpeed'
-  require_relative 'HVACSizing.BoilerHotWater'
-  require_relative 'HVACSizing.ChillerElectricEIR'
-  require_relative 'HVACSizing.CoolingTowerSingleSpeed'
-  require_relative 'HVACSizing.ControllerWaterCoil'
-  require_relative 'HVACSizing.SizingSystem'
-  require_relative 'HVACSizing.ThermalZone'
+  require_relative 'Siz.AirTermSnglDuctParallelPIUReheat'
+  require_relative 'Siz.AirTermSnglDuctVAVReheat'
+  require_relative 'Siz.AirTermSnglDuctUncontrolled'
+  require_relative 'Siz.AirLoopHVAC'
+  require_relative 'Siz.AirLoopHVACUnitaryHeatPumpAirToAir'
+  require_relative 'Siz.FanConstantVolume'
+  require_relative 'Siz.FanVariableVolume'
+  require_relative 'Siz.FanOnOff'
+  require_relative 'Siz.CoilHeatingElectric'
+  require_relative 'Siz.CoilHeatingGas'
+  require_relative 'Siz.CoilHeatingWater'
+  require_relative 'Siz.CoilHeatingDXSingleSpeed'
+  require_relative 'Siz.CoilHeatingWaterToAirHeatPumpEquationFit'
+  require_relative 'Siz.CoilCoolingWaterToAirHeatPumpEquationFit'
+  require_relative 'Siz.CoilCoolingDXSingleSpeed'
+  require_relative 'Siz.CoilCoolingDXTwoSpeed'
+  require_relative 'Siz.CoilCoolingWater'
+  require_relative 'Siz.ControllerOutdoorAir'
+  require_relative 'Siz.HeatExchangerAirToAirSensibleAndLatent'
+  require_relative 'Siz.PlantLoop'
+  require_relative 'Siz.PumpConstantSpeed'
+  require_relative 'Siz.PumpVariableSpeed'
+  require_relative 'Siz.BoilerHotWater'
+  require_relative 'Siz.ChillerElectricEIR'
+  require_relative 'Siz.CoolingTowerSingleSpeed'
+  require_relative 'Siz.ControllerWaterCoil'
+  require_relative 'Siz.SizingSystem'
+  require_relative 'Siz.ThermalZone'
 
   # Recently added and not fully tested
-  require_relative 'HVACSizing.ZoneHVACPackagedTerminalAirConditioner'
-  require_relative 'HVACSizing.ZoneHVACPackagedTerminalHeatPump'
-  require_relative 'HVACSizing.ZoneHVACTerminalUnitVariableRefrigerantFlow'
-  require_relative 'HVACSizing.AirConditionerVariableRefrigerantFlow'
-  require_relative 'HVACSizing.CoilCoolingDXVariableRefrigerantFlow'
-  require_relative 'HVACSizing.CoilHeatingDXVariableRefrigerantFlow'
+  require_relative 'Siz.ZoneHVACPackagedTerminalAirConditioner'
+  require_relative 'Siz.ZoneHVACPackagedTerminalHeatPump'
+  require_relative 'Siz.ZoneHVACTerminalUnitVariableRefrigerantFlow'
+  require_relative 'Siz.AirConditionerVariableRefrigerantFlow'
+  require_relative 'Siz.CoilCoolingDXVariableRefrigerantFlow'
+  require_relative 'Siz.CoilHeatingDXVariableRefrigerantFlow'
 
   # Methods not yet implemented
-  require_relative 'HVACSizing.AirTerminalSingleDuctVAVReheat'
-  require_relative 'HVACSizing.AirTerminalSingleDuctUncontrolled'
-  require_relative 'HVACSizing.AirLoopHVAC'
-  require_relative 'HVACSizing.FanConstantVolume'
-  require_relative 'HVACSizing.FanVariableVolume'
-  require_relative 'HVACSizing.FanOnOff'  
+  require_relative 'Siz.AirTermSnglDuctVAVReheat'
+  require_relative 'Siz.AirTermSnglDuctUncontrolled'
+  require_relative 'Siz.AirLoopHVAC'
+  require_relative 'Siz.AirLoopHVACUnitaryHeatPumpAirToAir'
+  require_relative 'Siz.FanConstantVolume'
+  require_relative 'Siz.FanVariableVolume'
+  require_relative 'Siz.FanOnOff'  
 
   # Heating and cooling fuel methods
-  require_relative 'HVACSizing.HeatingCoolingFuels'
+  require_relative 'Siz.HeatingCoolingFuels'
   
   # A helper method to run a sizing run and pull any values calculated during
   # autosizing back into the self.
@@ -304,6 +304,11 @@ class OpenStudio::Model::Model
     object_type = object.iddObject.type.valueDescription.gsub('OS:','')
     if(object_type == 'Coil:Heating:Gas:MultiStage') then object_type = 'Coil:Heating:GasMultiStage' end
 
+    # Special logic for two coil types which are inconsistently
+    # uppercase in the sqlfile:
+    object_type = object_type.upcase if object_type == 'Coil:Cooling:WaterToAirHeatPump:EquationFit'
+    object_type = object_type.upcase if object_type == 'Coil:Heating:WaterToAirHeatPump:EquationFit'
+      
     sql = self.sqlFile
 
     if sql.is_initialized

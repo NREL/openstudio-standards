@@ -8894,3 +8894,54 @@ OS:Building,
 OS:Facility,
   {d1ff9ae5-15d4-42ff-ac3d-748c5ced2aa3}; !- Handle
 
+OS:Surface,
+  {7cc98c56-5616-4a32-b92e-903262a9fe10}, !- Handle
+  Surface 1,                              !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {432827a6-9676-48d3-9de8-55f3ed327c07}, !- Space Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  SunExposed,                             !- Sun Exposure
+  WindExposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  9.144, 33.528, 12.8049,                 !- X,Y,Z Vertex 1 {m}
+  9.144, 33.528, 8.5366,                  !- X,Y,Z Vertex 2 {m}
+  9.144, 10.668, 8.5366,                  !- X,Y,Z Vertex 3 {m}
+  9.144, 10.668, 12.8049;                 !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {94ba70f3-f8f7-4f9c-8b0c-eb6ca88d6664}, !- Handle
+  Surface 3,                              !- Name
+  Floor,                                  !- Surface Type
+  ,                                       !- Construction Name
+  {dc66d323-72f5-4969-aebb-d547b4919d13}, !- Space Name
+  Ground,                                 !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  9.144, 15.24, 17.0732,                  !- X,Y,Z Vertex 1 {m}
+  9.144, 7.622, 17.0732,                  !- X,Y,Z Vertex 2 {m}
+  0, 7.622, 17.0732,                      !- X,Y,Z Vertex 3 {m}
+  0, 15.24, 17.0732;                      !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {47b26472-91bd-4320-ba1d-285ec2ff10da}, !- Handle
+  Office2_Mult5_Flr_5_Ceiling,            !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {dc66d323-72f5-4969-aebb-d547b4919d13}, !- Space Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  SunExposed,                             !- Sun Exposure
+  WindExposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  9.144, 7.622, 21.3415,                  !- X,Y,Z Vertex 1 {m}
+  9.144, 15.24, 21.3415,                  !- X,Y,Z Vertex 2 {m}
+  0, 15.24, 21.3415,                      !- X,Y,Z Vertex 3 {m}
+  0, 7.622, 21.3415;                      !- X,Y,Z Vertex 4 {m}
+

@@ -60,13 +60,12 @@ Rake::TestTask.new('test:gem_group_3') do |task|
   'openstudio-standards/test/test_small_office.rb', # 7 min
   'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
   'openstudio-standards/test/test_high_rise_apartment.rb', # 7 min
-  'openstudio-standards/test/test_outpatient.rb' 
+  'openstudio-standards/test/test_outpatient.rb' # 
   ]
 end
 
-
 require 'rake/testtask'
-desc 'Run the NECB Building Type Tests'
+desc 'Run the NECB 2011 Building Type Tests'
 Rake::TestTask.new('test:necb-buildings') do |task|
   task.libs << 'test'
   task.test_files = FileList['openstudio-standards/test/test_create_necb_buildings.rb']
@@ -77,9 +76,21 @@ desc 'Run the NECB 2011 HVAC Tests'
 Rake::TestTask.new('test:necb-hvac') do |task|
   task.libs << 'test'
   task.test_files = FileList['openstudio-standards/test/test_create_necb_hvac.rb']
-
 end
 
+require 'rake/testtask'
+desc 'Run the measure tests'
+Rake::TestTask.new('test:large_office') do |task|
+  task.libs << 'test'
+  task.test_files = FileList['openstudio-standards/test/test_one_building_office_2010.rb']
+end
+
+require 'rake/testtask'
+desc 'Run the measure tests'
+Rake::TestTask.new('test:one_building') do |task|
+  task.libs << 'test'
+  task.test_files = FileList['openstudio-standards/test/test_one_building.rb']
+end
 
 require 'rake/testtask'
 desc 'Run the measure tests'

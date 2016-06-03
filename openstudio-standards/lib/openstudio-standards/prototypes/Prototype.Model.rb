@@ -110,11 +110,14 @@ class OpenStudio::Model::Model
       self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
       self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
       self.set_sizing_parameters(building_type, building_vintage)
-      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+    self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
 	  end
-	
-
+    # set climate zone and building type
+    self.getBuilding.setStandardsBuildingType(building_type)
+    if climate_zone.include? 'ASHRAE 169-2006-'
+      self.getClimateZones.setClimateZone("ASHRAE",climate_zone.gsub('ASHRAE 169-2006-',''))
+    end
 
     # Perform a sizing run
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
@@ -144,14 +147,6 @@ class OpenStudio::Model::Model
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
         
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
-    # AHU1 doesn't have economizer
-    if building_type == "Outpatient"
-      self.modify_OAcontroller(building_vintage)
-      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-      self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
-    end
-
-    # Apply the HVAC efficiency standard
     self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
 
     # Add daylighting controls per standard
@@ -163,12 +158,21 @@ class OpenStudio::Model::Model
       self.add_daylighting_controls(building_vintage)
     end
 
-    if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant"
+    if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant" || building_type == "Outpatient"
       self.update_exhaust_fan_efficiency(building_vintage)
     end
     
     if building_type == "HighriseApartment"
       self.update_fan_efficiency
+    end
+
+    # Add output variables for debugging
+    # AHU1 doesn't have economizer
+    if building_type == "Outpatient"
+      # remove the controller:mechanical ventilation for AHU1 OA
+      self.modify_OAcontroller(building_vintage)
+      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+      self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
     end
 
     # Add output variables for debugging
@@ -793,7 +797,7 @@ class OpenStudio::Model::Model
 
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type
-    when 'LargeHotel', 'MidriseApartment','LargeOffice'
+    when 'LargeHotel', 'MidriseApartment','LargeOffice','Hospital'
       space_multiplier_map = self.define_space_multiplier
     else
       space_multiplier_map ={}

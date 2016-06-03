@@ -74,8 +74,53 @@ class OpenStudio::Model::Model
       
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
       
-    else # Use the openstudio-workflow gem
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Running with openstudio-workflow gem.')
+    elsif OpenStudio::Workflow::VERSION >= '1.0.0' # Use the OS 2.0 openstudio-workflow gem
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Running with OS 2.0 openstudio-workflow gem.')
+
+      # Write OSW file for the simulation
+      require 'JSON'
+      osw_hash = {
+        run_dir: Dir.pwd,
+        seed_model: File.absolute_path(idf_path.to_s),
+        weather_file: File.absolute_path(epw_path.to_s),
+        steps: []
+      }
+      osw_path = File.join(Dir.pwd, 'workflow.osw')
+      File.open(osw_path, 'wb') { |f| f << JSON.pretty_generate(osw_hash) }
+
+      # Create local adapters
+      adapter_options = {workflow_filename: File.basename(osw_path), output_directory: File.join(Dir.pwd, 'run')}
+      input_adapter = OpenStudio::Workflow.load_input_adapter 'local', adapter_options
+      output_adapter = OpenStudio::Workflow.load_output_adapter 'local', adapter_options
+
+      # Run workflow.osw
+      run_options = Hash.new
+      run_options[:jobs] = [
+        { state: :queued, next_state: :initialization, options: { initial: true } },
+        { state: :initialization, next_state: :preprocess, job: :RunInitialization,
+          file: './jobs/run_initialization.rb', options: {} },
+        { state: :preprocess, next_state: :simulation, job: :RunPreprocess,
+          file: './jobs/run_preprocess.rb' , options: {} },
+        { state: :simulation, next_state: :finished, job: :RunEnergyPlus,
+          file: './jobs/run_energyplus.rb', options: {} },
+        { state: :finished },
+        { state: :errored }
+      ]
+      k = OpenStudio::Workflow::Run.new input_adapter, output_adapter, File.dirname(osw_path), run_options
+      final_state = k.run
+
+      # Check run status and return the sql_path
+      if final_state == :finished
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
+      else
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Run completed with errors.')
+      end
+      sql_path = OpenStudio::Path.new("#{Dir.pwd}/run/eplusout.sql")
+      
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished simulation.')
+
+    else # Use the pre OS 2.0 openstudio-workflow gem
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Running with pre OS 2.0 openstudio-workflow gem.')
       
       # Copy the weather file to this directory
       FileUtils.copy(epw_path.to_s, run_dir)

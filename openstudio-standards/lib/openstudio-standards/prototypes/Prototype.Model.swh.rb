@@ -197,7 +197,7 @@ class OpenStudio::Model::Model
         space_type_map.each do |space_type_name, space_names|
           search_criteria = {
             'template' => building_vintage,
-            'building_type' => building_type,
+            'building_type' => get_lookup_name(building_type),
             'space_type' => space_type_name
           }
           data = find_object($os_standards['space_types'],search_criteria)
@@ -213,7 +213,7 @@ class OpenStudio::Model::Model
             
             space = self.getSpaceByName(space_name).get
             space_multiplier = space.multiplier
-            self.add_swh_end_uses_by_space(building_type,
+            self.add_swh_end_uses_by_space(get_lookup_name(building_type),
                                           building_vintage,
                                           climate_zone,
                                           main_swh_loop,
