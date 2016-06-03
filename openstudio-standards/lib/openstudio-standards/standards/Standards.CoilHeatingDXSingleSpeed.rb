@@ -121,17 +121,24 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
       return cop # value of nil
     end
 
-    # If specified as SEER
-    unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
-      min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop(min_seer)
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+    # If specified as HSPF
+    unless ac_props['minimum_heating_seasonal_performance_factor'].nil?
+      min_hspf = ac_props['minimum_heating_seasonal_performance_factor']
+      cop = hspf_to_cop_heating_no_fan(min_hspf)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
     end
 
+    # If specified as COPH
+    unless ac_props['minimum_coefficient_of_performance_heating'].nil?
+      min_coph = ac_props['minimum_coefficient_of_performance_heating']
+      cop = cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph}")
+    end    
+    
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{self.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
@@ -342,22 +349,26 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     # Get the minimum efficiency standards
     cop = nil
     
-    # If specified as SEER
-    unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
-      min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop(min_seer)
-      self.setName("#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+    # If specified as HSPF
+    unless ac_props['minimum_heating_seasonal_performance_factor'].nil?
+      min_hspf = ac_props['minimum_heating_seasonal_performance_factor']
+      cop = hspf_to_cop_heating_no_fan(min_hspf)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
     end
+
+    # If specified as COPH
+    unless ac_props['minimum_coefficient_of_performance_heating'].nil?
+      min_coph = ac_props['minimum_coefficient_of_performance_heating']
+      cop = cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph}")
+    end    
     
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
-      self.setName("#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER")
+      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{self.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
-
 
     # Set the efficiency values
     unless cop.nil?

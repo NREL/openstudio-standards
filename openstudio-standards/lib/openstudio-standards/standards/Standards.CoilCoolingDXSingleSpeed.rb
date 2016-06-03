@@ -128,28 +128,28 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     # If specified as SEER
     unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop(min_seer)
+      cop = seer_to_cop_cooling_no_fan(min_seer)
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # if specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
-      cop = seer_to_cop(min_seer)
+      cop = seer_to_cop_cooling_no_fan(min_seer)
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed',  "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # If specified as EER (heat pump)
     unless ac_props['minimum_full_load_efficiency'].nil?
       min_eer = ac_props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
@@ -371,7 +371,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     # If specified as SEER
     unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop(min_seer)
+      cop = seer_to_cop_cooling_no_fan(min_seer)
       new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
 #      self.setName("#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed',  "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
@@ -380,7 +380,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
       new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -388,7 +388,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     # if specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
-      cop = seer_to_cop(min_seer)
+      cop = seer_to_cop_cooling_no_fan(min_seer)
       new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
 #      self.setName("#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed',  "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
@@ -397,7 +397,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       # If specified as EER (heat pump)
     unless ac_props['minimum_full_load_efficiency'].nil?
       min_eer = ac_props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
       new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end  
