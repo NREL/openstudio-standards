@@ -16,20 +16,34 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
     # assumptions, which are not clearly documented.
     min_damper_position = nil
     vav_name = self.name.get
-    case building_vintage       
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      if building_type == "Outpatient" and vav_name.include? "Floor 1" 
-        min_damper_position = 1
-      else
-        min_damper_position = 0.3
-      end
-    when '90.1-2004', '90.1-2007'
-      min_damper_position = 0.3
-    when '90.1-2010', '90.1-2013'
-      min_damper_position = 0.2
-    end
-    
-    # TODO remove the template conditional; doesn't make sense
+		case building_vintage       
+		when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+		if building_type == "Outpatient" and vav_name.include? "Floor 1" 
+			min_damper_position = 1
+		  elsif building_type == "Hospital" and vav_name.include? "PatRoom"
+		    min_damper_position = 1
+		  elsif building_type == "Hospital" and vav_name.include? "OR"
+		    min_damper_position = 1	
+		  elsif building_type == "Hospital" and vav_name.include? "ICU"
+		    min_damper_position = 1
+		  elsif building_type == "Hospital" and vav_name.include? "Lab"
+		    min_damper_position = 1
+		  elsif building_type == "Hospital" and vav_name.include? "ER"
+		    min_damper_position = 1	
+		  elsif building_type == "Hospital" and vav_name.include? "Kitchen"
+		    min_damper_position = 1		
+		  elsif building_type == "Hospital" and vav_name.include? "NurseStn"
+		    min_damper_position = 0.3	
+		  else
+		  	min_damper_position = 0.3
+		end
+		when '90.1-2004', '90.1-2007'
+			min_damper_position = 0.3
+		when '90.1-2010', '90.1-2013'
+			min_damper_position = 0.2
+		end
+
+	    # TODO remove the template conditional; doesn't make sense
     # Determine whether or not to use the high minimum guess.
     # Cutoff was determined by correlating apparent minimum guesses
     # to OA rates in prototypes since not well documented in papers.
@@ -41,7 +55,19 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
         # High OA zones
         if building_type == "Outpatient"
           self.setConstantMinimumAirFlowFraction(1)
-        else
+        elsif building_type == "Hospital"
+		 case building_vintage
+		   when '90.1-2010', '90.1-2013'
+		     if vav_name.include? "PatRoom"
+		        self.setConstantMinimumAirFlowFraction(0.5)
+		     else
+		       self.setConstantMinimumAirFlowFraction(1)
+			 end  
+		   when '90.1-2004', '90.1-2007'
+		   self.setConstantMinimumAirFlowFraction(1)
+		 end
+          
+		else   
           self.setConstantMinimumAirFlowFraction(0.7)
         end
       end

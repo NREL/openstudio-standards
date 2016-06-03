@@ -1324,7 +1324,30 @@ class OpenStudio::Model::AirLoopHVAC
   # @return [Bool] Returns true if required, false if not.  
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def is_energy_recovery_ventilator_required(template, climate_zone)
-      
+
+    erv_required = nil 
+     # ERV not applicable for medical AHUs, per AIA 2001 - 7.31.D2. 
+    if self.name.to_s.include? "VAV_ER" 
+       erv_required = false
+	   return erv_required
+    elsif self.name.to_s.include? "VAV_OR"   
+       erv_required = false
+	   return erv_required 
+    end
+	case template
+	when '90.1-2004', '90.1-2007'
+	if self.name.to_s.include? "VAV_ICU"
+	erv_required = false
+	   return erv_required
+	elsif self.name.to_s.include? "VAV_PATRMS" 
+	erv_required = false
+	   return erv_required 
+	end
+	end
+	   
+
+    
+  
     # ERV Not Applicable for AHUs that serve 
     # parking garage, warehouse, or multifamily
     # if space_types_served_names.include?('PNNL_Asset_Rating_Apartment_Space_Type') ||
@@ -1352,6 +1375,7 @@ class OpenStudio::Model::AirLoopHVAC
       OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV not applicable because it has no OA intake.")
       return false
     end
+
 
     # Get the AHU design supply air flow rate
     dsn_flow_m3_per_s = nil

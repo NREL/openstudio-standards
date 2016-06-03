@@ -52,22 +52,22 @@ class OpenStudio::Model::ChillerElectricEIR
   # Finds capacity in tons
   #
   # @return [Double] capacity in tons to be used for find object
-  def find_capacity()
+  def find_capacity(building_type)
 
     # Get the chiller capacity
     capacity_w = nil
     if self.referenceCapacity.is_initialized
-      capacity_w = self.referenceCapacity.get
-    elsif self.autosizedReferenceCapacity.is_initialized
-      capacity_w = self.autosizedReferenceCapacity.get
-    else
+	  capacity_w = self.referenceCapacity.get
+	elsif self.autosizedReferenceCapacity.is_initialized
+	  capacity_w = self.autosizedReferenceCapacity.get
+	else
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.ChillerElectricEIR", "For #{self.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
-    # Convert capacity to tons
     capacity_tons = OpenStudio.convert(capacity_w, "W", "ton").get
+    
 
     return capacity_tons
 

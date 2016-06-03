@@ -27,12 +27,94 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
         else
-          hot_water_loop = self.add_hw_loop('NaturalGas')
+          hot_water_loop = self.add_hw_loop('NaturalGas', building_type)
         end
 
         # Retrieve the existing chilled water loop
         # or add a new one if necessary.
         chilled_water_loop = nil
+        if self.getPlantLoopByName('Chilled Water Loop').is_initialized 
+           chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get 
+         else 
+           condenser_water_loop = nil 
+           if prototype_input['chiller_cooling_type'] == 'WaterCooled' 
+		    if building_type == "Hospital" or building_type == "LargeOffice"
+			case building_vintage
+			when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+             condenser_water_loop = self.add_cw_loop(building_type, building_vintage, number_cooling_towers = 2)
+            when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'	
+             condenser_water_loop = self.add_cw_loop(building_type, building_vintage, number_cooling_towers =1)	
+            end
+            else
+			condenser_water_loop = self.add_cw_loop(building_type, building_vintage, number_cooling_towers =1)	
+        end 
+		end
+        
+          
+       if building_type == "Hospital" or building_type == "LargeOffice"
+       case building_vintage
+       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+		  chilled_water_loop = self.add_chw_loop(building_vintage,
+                                                prototype_input['chw_pumping_type'],
+                                                prototype_input['chiller_cooling_type'],
+                                                prototype_input['chiller_condenser_type'],
+                                                prototype_input['chiller_compressor_type'],
+                                                prototype_input['chiller_capacity_guess'],
+                                                condenser_water_loop,
+												building_type,
+												num_chillers = 2)
+        
+        when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
+		   chilled_water_loop = self.add_chw_loop(building_vintage,
+                                                prototype_input['chw_pumping_type'],
+                                                prototype_input['chiller_cooling_type'],
+                                                prototype_input['chiller_condenser_type'],
+                                                prototype_input['chiller_compressor_type'],
+                                                prototype_input['chiller_capacity_guess'],
+                                                condenser_water_loop,
+												building_type,
+												num_chillers = 1)
+		end                     
+          else
+		   chilled_water_loop = self.add_chw_loop(building_vintage,
+                                                prototype_input['chw_pumping_type'],
+                                                prototype_input['chiller_cooling_type'],
+                                                prototype_input['chiller_condenser_type'],
+                                                prototype_input['chiller_compressor_type'],
+                                                prototype_input['chiller_capacity_guess'],
+                                                condenser_water_loop,
+												building_type,
+												num_chillers = 1)
+		 end
+		end 
+      
+        # Add the VAV
+        self.add_vav_reheat(building_vintage, 
+            system['name'], 
+            hot_water_loop, 
+            chilled_water_loop,
+            thermal_zones,
+            prototype_input['vav_operation_schedule'],
+            prototype_input['vav_oa_damper_schedule'],
+            prototype_input['vav_fan_efficiency'],
+            prototype_input['vav_fan_motor_efficiency'],
+            prototype_input['vav_fan_pressure_rise'],
+            return_plenum,
+            building_type)
+      
+  
+      when 'CAV'
+      
+        # Retrieve the existing hot water loop
+        # or add a new one if necessary.
+        hot_water_loop = nil
+        if self.getPlantLoopByName('Hot Water Loop').is_initialized
+          hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
+        else
+          hot_water_loop = self.add_hw_loop('NaturalGas')
+        end
+		
+		chilled_water_loop = nil
         if self.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
         else
@@ -50,42 +132,18 @@ class OpenStudio::Model::Model
                                                 condenser_water_loop)
                                  
         end
-      
-        # Add the VAV
-        self.add_vav_reheat(building_vintage, 
-            system['name'], 
-            hot_water_loop, 
-            chilled_water_loop,
-            thermal_zones,
-            prototype_input['vav_operation_schedule'],
-            prototype_input['vav_oa_damper_schedule'],
-            prototype_input['vav_fan_efficiency'],
-            prototype_input['vav_fan_motor_efficiency'],
-            prototype_input['vav_fan_pressure_rise'],
-            return_plenum,
-            building_type)
-          
-      when 'CAV'
-      
-        # Retrieve the existing hot water loop
-        # or add a new one if necessary.
-        hot_water_loop = nil
-        if self.getPlantLoopByName('Hot Water Loop').is_initialized
-          hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
-        else
-          hot_water_loop = self.add_hw_loop('NaturalGas')
-        end
         
         # Add the CAV
         self.add_cav(building_vintage,
                     system['name'],
                     hot_water_loop,
+					chilled_water_loop,
                     thermal_zones,
-                    prototype_input['vav_operation_schedule'],
-                    prototype_input['vav_oa_damper_schedule'],
-                    prototype_input['vav_fan_efficiency'],
-                    prototype_input['vav_fan_motor_efficiency'],
-                    prototype_input['vav_fan_pressure_rise'],
+                    prototype_input['operation_schedule'],
+                    prototype_input['oa_damper_schedule'],
+                    prototype_input['fan_efficiency'],
+                    prototype_input['fan_motor_efficiency'],
+                    prototype_input['fan_pressure_rise'],
                     building_type)
         
       when 'PSZ-AC'

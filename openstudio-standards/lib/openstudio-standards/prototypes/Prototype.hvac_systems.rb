@@ -120,10 +120,12 @@ class OpenStudio::Model::Model
                   chiller_compressor_type,
                   chiller_capacity_guess_tons,
                   condenser_water_loop = nil,
-                  building_type=nil)
+                  building_type=nil,
+				  num_chillers=1)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding chilled water loop.")
-                  
+    
+
     # Chilled water loop
     chilled_water_loop = OpenStudio::Model::PlantLoop.new(self)
     chilled_water_loop.setName('Chilled Water Loop')
@@ -200,9 +202,11 @@ class OpenStudio::Model::Model
       chilled_water_loop.setCommonPipeSimulation('CommonPipe')
     end
 
-    # Make the correct type of chiller based these properties 
+
+    num_chillers.times do |i|     
+	# Make the correct type of chiller based these properties 
     chiller = OpenStudio::Model::ChillerElectricEIR.new(self)
-    chiller.setName("#{standard} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller")
+    chiller.setName("#{standard} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
     chilled_water_loop.addSupplyBranchForComponent(chiller)
     chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
     ref_cond_wtr_temp_f = 95
@@ -215,7 +219,12 @@ class OpenStudio::Model::Model
     chiller.setCondenserType('AirCooled')
     chiller.setLeavingChilledWaterLowerTemperatureLimit(OpenStudio.convert(36,'F','C').get)
     chiller.setChillerFlowMode('ConstantFlow')
-
+    
+	
+	if building_type == "LargeHotel" or building_type == "Hospital"
+	 chiller.setSizingFactor(0.5)
+    end
+	
     #if building_type == "LargeHotel"
       # TODO: Yixing. Add the temperature setpoint and change the flow mode will cost the simulation with
       # thousands of Severe Errors. Need to figure this out later.
@@ -231,7 +240,7 @@ class OpenStudio::Model::Model
       condenser_water_loop.addDemandBranchForComponent(chiller)
       chiller.setCondenserType('WaterCooled')
 	end
-	
+	end
 
 	#chilled water loop pipes
     chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
@@ -253,7 +262,10 @@ class OpenStudio::Model::Model
   #
   # @param number_cooling_towers [Integer] the number of cooling towers to be added (in parallel)
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
-  def add_cw_loop(number_cooling_towers = 1)
+  
+    
+  def add_cw_loop(building_type, building_vintage, number_cooling_towers = 1)
+    
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding condenser water loop.")
   
@@ -282,7 +294,16 @@ class OpenStudio::Model::Model
     sizing_plant.setLoopType('Condenser')
     sizing_plant.setDesignLoopExitTemperature(cw_temp_sizing_c)
     sizing_plant.setLoopDesignTemperatureDifference(cw_delta_t_k)
-
+    
+	case building_vintage
+	  when 'DOE Ref 1980-2004','DOE Ref Pre-1980'
+       cw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
+       cw_pump.setName('Condenser Water Loop Pump')
+	   cw_pump_head_ft_h2o = 60.0
+       cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get
+       cw_pump.setRatedPumpHead(cw_pump_head_press_pa)
+	   cw_pump.addToNode(condenser_water_loop.supplyInletNode)
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
     # Condenser water pump #TODO make this into a HeaderedPump:VariableSpeed
     cw_pump = OpenStudio::Model::PumpVariableSpeed.new(self)
     cw_pump.setName('Condenser Water Loop Pump')
@@ -297,8 +318,9 @@ class OpenStudio::Model::Model
     cw_pump.setCoefficient4ofthePartLoadPerformanceCurve(1.0095)
     cw_pump.setPumpControlType('Intermittent')
     cw_pump.addToNode(condenser_water_loop.supplyInletNode)
-
-    # TODO move cooling tower curve to lookup from spreadsheet
+	end 
+	
+	# TODO move cooling tower curve to lookup from spreadsheet
     cooling_tower_fan_curve = OpenStudio::Model::CurveCubic.new(self)
     cooling_tower_fan_curve.setName('Cooling Tower Fan Curve')
     cooling_tower_fan_curve.setCoefficient1Constant(0)
@@ -310,7 +332,13 @@ class OpenStudio::Model::Model
 
     # Cooling towers
     number_cooling_towers.times do |i|
-      cooling_tower = OpenStudio::Model::CoolingTowerVariableSpeed.new(self)
+	  case building_vintage
+	  when 'DOE Ref 1980-2004','DOE Ref Pre-1980'
+	        cooling_tower = OpenStudio::Model::CoolingTowerSingleSpeed.new(self)
+            cooling_tower.setName("#{condenser_water_loop.name} Cooling Tower #{i}")
+			condenser_water_loop.addSupplyBranchForComponent(cooling_tower)
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+	  cooling_tower = OpenStudio::Model::CoolingTowerVariableSpeed.new(self)
       cooling_tower.setName("#{condenser_water_loop.name} Cooling Tower #{i}")
       cooling_tower.setDesignApproachTemperature(cw_approach_delta_t_k)
       cooling_tower.setDesignRangeTemperature(cw_delta_t_k)
@@ -320,6 +348,11 @@ class OpenStudio::Model::Model
       cooling_tower.setNumberofCells(2)
       cooling_tower.setCellControl('MaximalCell')
       condenser_water_loop.addSupplyBranchForComponent(cooling_tower)
+	  end
+     #if building_type == "LargeHotel" or building_type == "Hospital"
+	 #   cooling_tower.setSizingFactor(0.5)
+     #end  
+	  
     end
 
     # Condenser water loop pipes
@@ -533,7 +566,9 @@ class OpenStudio::Model::Model
     htg_sa_temp_f = 55.04 # Central deck htg temp 55F
     if building_type == "LargeHotel"
         htg_sa_temp_f = 62 # Central deck htg temp 55F
-    end
+    #elsif building_type == "Hospital"
+    #    htg_sa_temp_f = 104 
+	end
     rht_sa_temp_f = 104 # VAV box reheat to 104F
     clg_sa_temp_c = OpenStudio.convert(clg_sa_temp_f,'F','C').get
     prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f,'F','C').get
@@ -541,12 +576,23 @@ class OpenStudio::Model::Model
     htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f,'F','C').get
     rht_sa_temp_c = OpenStudio.convert(rht_sa_temp_f,'F','C').get
     zone_htg_sa_temp_c = OpenStudio.convert(zone_htg_sa_temp_f,'F','C').get
-
     sa_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     sa_temp_sch.setName("Supply Air Temp - #{clg_sa_temp_f}F")
     sa_temp_sch.defaultDaySchedule.setName("Supply Air Temp - #{clg_sa_temp_f}F Default")
     sa_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),clg_sa_temp_c)
 
+	if building_type == 'Hospital'
+      if sys_name == 'VAV_PATRMS'
+		air_flow_ratio = 0.5
+      elsif sys_name ==  'VAV_1' || sys_name == 'VAV_2'
+        air_flow_ratio = 0.3
+      else 
+       air_flow_ratio = 1
+	 end
+	 else 
+	  air_flow_ratio = 0.3
+    end
+	
     #air handler
     air_loop = OpenStudio::Model::AirLoopHVAC.new(self)
     if sys_name.nil?
@@ -562,12 +608,21 @@ class OpenStudio::Model::Model
 
     #air handler controls
     sizing_system = air_loop.sizingSystem
+	sizing_system.setMinimumSystemAirFlowRatio(air_flow_ratio)
     sizing_system.setPreheatDesignTemperature(prehtg_sa_temp_c)
     sizing_system.setPrecoolDesignTemperature(preclg_sa_temp_c)
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
-    sizing_system.setSizingOption('Coincident')
-    sizing_system.setAllOutdoorAirinCooling(false)
+    if building_type == "Hospital"
+	  if sys_name == 'VAV_2'|| sys_name=='VAV_1'
+	  	  sizing_system.setSizingOption('Coincident')
+	  else
+	      sizing_system.setSizingOption('NonCoincident')
+	  end 
+      else
+	      sizing_system.setSizingOption('Coincident')
+	end
+	sizing_system.setAllOutdoorAirinCooling(false)
     sizing_system.setAllOutdoorAirinHeating(false)
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
@@ -650,7 +705,6 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      
       terminal.set_initial_prototype_damper_position(building_type, standard, zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
@@ -1054,12 +1108,13 @@ class OpenStudio::Model::Model
   def add_cav(standard,
               sys_name,
               hot_water_loop,
+			  chilled_water_loop,
               thermal_zones,
               hvac_op_sch,
               oa_damper_sch,
               fan_efficiency,
               fan_motor_efficiency,
-              fan_pressure_rise,              
+              fan_pressure_rise,  
               building_type=nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding CAV for #{thermal_zones.size} zones.")
@@ -1081,24 +1136,26 @@ class OpenStudio::Model::Model
       oa_damper_sch = self.add_schedule(oa_damper_sch)
     end    
     
+
     # Hot water loop control temperatures
-    hw_temp_f = 152.6 #HW setpoint 152.6F
+    hw_temp_f = 180 #HW setpoint 152.6F
     hw_delta_t_r = 20 #20F delta-T
     hw_temp_c = OpenStudio.convert(hw_temp_f,'F','C').get
     hw_delta_t_k = OpenStudio.convert(hw_delta_t_r,'R','K').get
-
+    air_flow_ratio = 1
+		
     # Air handler control temperatures
     clg_sa_temp_f = 55.04 # Central deck clg temp 55F
-    prehtg_sa_temp_f = 44.6 # Preheat to 44.6F
+    prehtg_sa_temp_f = 55.04 # Preheat to 44.6F
     preclg_sa_temp_f = 55.04 # Precool to 55F
-    htg_sa_temp_f = 62.06 # Central deck htg temp 62.06F
-    rht_sa_temp_f = 122 # VAV box reheat to 104F
-    zone_htg_sa_temp_f = 122 # Zone heating design supply air temperature to 122F
+    htg_sa_temp_f = 104 # Central deck htg temp 104F
+    #rht_sa_temp_f = 122 # VAV box reheat to 104F
+    zone_htg_sa_temp_f = 104 # Zone heating design supply air temperature to 122F
     clg_sa_temp_c = OpenStudio.convert(clg_sa_temp_f,'F','C').get
     prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f,'F','C').get
     preclg_sa_temp_c = OpenStudio.convert(preclg_sa_temp_f,'F','C').get
     htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f,'F','C').get
-    rht_sa_temp_c = OpenStudio.convert(rht_sa_temp_f,'F','C').get
+    #rht_sa_temp_c = OpenStudio.convert(rht_sa_temp_f,'F','C').get
     zone_htg_sa_temp_c = OpenStudio.convert(zone_htg_sa_temp_f,'F','C').get
 
     # Air handler
@@ -1122,11 +1179,16 @@ class OpenStudio::Model::Model
 
     # Air handler sizing
     sizing_system = air_loop.sizingSystem
-    sizing_system.setPreheatDesignTemperature(prehtg_sa_temp_c)
+    sizing_system.setMinimumSystemAirFlowRatio(air_flow_ratio)
+	sizing_system.setPreheatDesignTemperature(prehtg_sa_temp_c)
     sizing_system.setPrecoolDesignTemperature(preclg_sa_temp_c)
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
-    sizing_system.setSizingOption('Coincident')
+    if building_type == 'Hospital'
+	   sizing_system.setSizingOption('NonCoincident')
+	else
+	   sizing_system.setSizingOption('Coincident')
+	end
     sizing_system.setAllOutdoorAirinCooling(false)
     sizing_system.setAllOutdoorAirinHeating(false)
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
@@ -1134,9 +1196,9 @@ class OpenStudio::Model::Model
     # Fan
     fan = OpenStudio::Model::FanConstantVolume.new(self,self.alwaysOnDiscreteSchedule)
     fan.setName("#{air_loop.name} Fan")
-    fan.setFanEfficiency(fan_efficiency)
-    fan.setMotorEfficiency(fan_motor_efficiency)
-    fan.setPressureRise(fan_pressure_rise)
+    fan.setFanEfficiency(0.61425)
+    fan.setMotorEfficiency(0.945)
+    fan.setPressureRise(1018.41)
     fan.addToNode(air_loop.supplyInletNode)
     fan.setEndUseSubcategory("CAV system Fans")
 
@@ -1152,9 +1214,13 @@ class OpenStudio::Model::Model
     htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
 
     # Air handler cooling coil
-    clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(self)
+
+    clg_coil = OpenStudio::Model::CoilCoolingWater.new(self,self.alwaysOnDiscreteSchedule)
     clg_coil.setName("#{air_loop.name} Clg Coil")
     clg_coil.addToNode(air_loop.supplyInletNode)
+    clg_coil.setHeatExchangerConfiguration("CrossFlow")
+    chilled_water_loop.addDemandBranchForComponent(clg_coil)
+    clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
 
     # Outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
@@ -1178,25 +1244,11 @@ class OpenStudio::Model::Model
     # Connect the CAV system to each zone
     thermal_zones.each do |zone|
 
-      # Reheat coil
-      rht_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-      rht_coil.setName("#{zone.name} Rht Coil")
-      rht_coil.setRatedInletWaterTemperature(hw_temp_c)
-      rht_coil.setRatedInletAirTemperature(htg_sa_temp_c)
-      rht_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-      rht_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
-      hot_water_loop.addDemandBranchForComponent(rht_coil)
-
-      # VAV terminal
-      terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
-      terminal.setName("#{zone.name} VAV Term")
-      terminal.setZoneMinimumAirFlowMethod('Constant')
-      terminal.set_initial_prototype_damper_position(building_type, standard, zone.outdoor_airflow_rate_per_area)
-      terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
-      terminal.setMaximumFlowFractionDuringReheat(0.5)
-      terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
+      # CAV terminal
+      terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(self,self.alwaysOnDiscreteSchedule)
+      terminal.setName("#{zone.name} CAV Term")
       air_loop.addBranchForZone(zone,terminal.to_StraightComponent)
-
+	  
       # Zone sizing
       # TODO Create general logic for cooling airflow method.
       # Large hotel uses design day with limit, school uses design day.

@@ -102,6 +102,10 @@ class OpenStudio::Model::Model
       # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
       self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
     end
+	
+	if building_type == "Hospital"
+      self.modify_hospital_OAcontroller(building_vintage)
+    end
 
     # Apply the HVAC efficiency standard
     self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
@@ -109,10 +113,12 @@ class OpenStudio::Model::Model
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
-    if building_type != "LargeHotel"
-      self.addDaylightingControls(building_vintage)
-    else
+    if building_type == "LargeHotel"
       self.add_daylighting_controls(building_vintage)
+	elsif building_type == "Hospital"
+	  self.hospital_add_daylighting_controls(building_vintage)
+	else
+	  self.addDaylightingControls(building_vintage)
     end
 
     if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant"
