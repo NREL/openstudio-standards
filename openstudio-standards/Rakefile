@@ -9,6 +9,14 @@ rescue Bundler::BundlerError => e
 end
 
 require 'rake/testtask'
+desc 'Run the weather file tests'
+Rake::TestTask.new('test:weather') do |task|
+  task.libs << 'test'
+  task.test_files = FileList['openstudio-standards/test/test_weather.rb']
+end
+
+
+require 'rake/testtask'
 desc 'Run test PRM'
 Rake::TestTask.new('test:prm') do |task|
   task.test_files = FileList[
@@ -98,6 +106,9 @@ Rake::TestTask.new('test:gem') do |task|
   task.libs << 'test'
   task.test_files = FileList['openstudio-standards/test/test_*.rb']
 end
+
+
+
 
 require 'rake/testtask'
 desc 'Run the measure tests'
