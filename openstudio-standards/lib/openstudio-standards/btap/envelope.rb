@@ -190,7 +190,16 @@ module BTAP
           # @param solar_absorptance [Float] range of 0 to 1.0
           # @param visible_absorptance [Float] range of 0 to 1.0
           # @return [OpenStudio::Model::StandardOpaqueMaterial] material {http://openstudio.nrel.gov/sites/openstudio.nrel.gov/files/nv_data/cpp_documentation_it/model/html/classopenstudio_1_1model_1_1_standard_opaque_material.html}
-          def self.create_opaque_material( model,name = "opaque material", thickness = 0.1 , conductivity = 0.1 , density = 0.1, specific_heat = 0.1, roughness = "Smooth", thermal_absorptance = 0.9, solar_absorptance = 0.7, visible_absorptance = 0.7 )
+          def self.create_opaque_material( model,
+              name = "opaque material", 
+              thickness = 0.1 , 
+              conductivity = 0.1 , 
+              density = 0.1, 
+              specific_heat = 0.1, 
+              roughness = "Smooth", 
+              thermal_absorptance = 0.9, 
+              solar_absorptance = 0.7, 
+              visible_absorptance = 0.7 )
             # make sure the roughness value is acceptable.
             raise("Roughness Value \"#{roughness}\" is not a part of accepted values such as: #{OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.join(",")}")  unless OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.include?(roughness)
             # I was thinking of adding a suffix to the name to make it more descriptive, but this can be confusing. Keeping it here if I need it later.
@@ -715,7 +724,7 @@ module BTAP
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
         #@param model [OpenStudio::Model::Model]
         #@param name <String>
-        #@param materials <String>
+        #@param materials <Material>
         #@param insulationLayer = nil
         #@return [String] construction
         def self.create_construction(model, name, materials, insulationLayer = nil)
@@ -835,6 +844,16 @@ module BTAP
           puts new_materials_array.size
           return self.create_construction(construction.model, cons_name, new_materials_array)
         end
+        
+        def self.create_default_construction(model, rsi)
+          
+        end
+        
+        def self.create_default_fenestration(model, rsi)
+          
+        end
+        
+        
 
       end #module Constructions
 
