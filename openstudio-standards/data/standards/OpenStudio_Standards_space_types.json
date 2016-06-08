@@ -1062,7 +1062,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "189.1-2009",
@@ -1398,7 +1398,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "189.1-2009",
@@ -1790,7 +1790,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "189.1-2009",
@@ -6270,7 +6270,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "189.1-2009",
@@ -7390,7 +7390,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -7446,7 +7446,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -7502,7 +7502,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -8678,7 +8678,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -9126,7 +9126,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -9182,7 +9182,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -9238,7 +9238,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -9294,7 +9294,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -9742,7 +9742,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -9798,7 +9798,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -9854,7 +9854,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2004",
@@ -16462,7 +16462,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -16518,7 +16518,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -16574,7 +16574,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -17438,7 +17438,7 @@
       "ventilation_per_person": 5,
       "ventilation_air_changes": "",
       "minimum_total_air_changes": null,
-      "occupancy_per_area": 1.33,
+      "occupancy_per_area": 7.14,
       "occupancy_schedule": "Hospital BLDG_OCC_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
       "infiltration_per_exterior_area": 0.0446,
@@ -17494,7 +17494,7 @@
       "ventilation_per_person": 5,
       "ventilation_air_changes": "",
       "minimum_total_air_changes": null,
-      "occupancy_per_area": 7.14,
+      "occupancy_per_area": 1.33,
       "occupancy_schedule": "Hospital BLDG_OCC_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
       "infiltration_per_exterior_area": 0.0446,
@@ -17704,7 +17704,7 @@
       "lighting_standard": "ASHRAE 90.1-2007",
       "lighting_primary_space_type": "Office-Enclosed",
       "lighting_secondary_space_type": "General",
-      "lighting_per_area": 1.0,
+      "lighting_per_area": 1.1,
       "lighting_per_person": null,
       "additional_lighting_per_area": null,
       "lighting_fraction_to_return_air": 0.0,
@@ -17718,7 +17718,7 @@
       "ventilation_per_person": 5,
       "ventilation_air_changes": "",
       "minimum_total_air_changes": null,
-      "occupancy_per_area": 7.0,
+      "occupancy_per_area": 6.99,
       "occupancy_schedule": "Hospital BLDG_OCC_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
       "infiltration_per_exterior_area": 0.0446,
@@ -17730,7 +17730,7 @@
       "gas_equipment_fraction_radiant": null,
       "gas_equipment_fraction_lost": null,
       "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 1.0,
+      "electric_equipment_per_area": 0.73,
       "electric_equipment_fraction_latent": 0.0,
       "electric_equipment_fraction_radiant": 0.5,
       "electric_equipment_fraction_lost": 0.0,
@@ -17760,7 +17760,7 @@
       "lighting_standard": "ASHRAE 90.1-2007",
       "lighting_primary_space_type": "Office-Enclosed",
       "lighting_secondary_space_type": "General",
-      "lighting_per_area": 1.1,
+      "lighting_per_area": 1.0,
       "lighting_per_person": null,
       "additional_lighting_per_area": null,
       "lighting_fraction_to_return_air": 0.0,
@@ -17774,7 +17774,7 @@
       "ventilation_per_person": 5,
       "ventilation_air_changes": "",
       "minimum_total_air_changes": null,
-      "occupancy_per_area": 6.99,
+      "occupancy_per_area": 7.0,
       "occupancy_schedule": "Hospital BLDG_OCC_SCH",
       "occupancy_activity_schedule": "Hospital ACTIVITY_SCH",
       "infiltration_per_exterior_area": 0.0446,
@@ -17786,7 +17786,7 @@
       "gas_equipment_fraction_radiant": null,
       "gas_equipment_fraction_lost": null,
       "gas_equipment_schedule": null,
-      "electric_equipment_per_area": 0.73,
+      "electric_equipment_per_area": 1.0,
       "electric_equipment_fraction_latent": 0.0,
       "electric_equipment_fraction_radiant": 0.5,
       "electric_equipment_fraction_lost": 0.0,
@@ -17974,7 +17974,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -18422,7 +18422,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -18478,7 +18478,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -18534,7 +18534,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -18590,7 +18590,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -19038,7 +19038,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -19094,7 +19094,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -19150,7 +19150,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2007",
@@ -25758,7 +25758,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -25814,7 +25814,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -25870,7 +25870,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -27046,7 +27046,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -27494,7 +27494,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -27550,7 +27550,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -27606,7 +27606,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -27662,7 +27662,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -28110,7 +28110,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -28166,7 +28166,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -28222,7 +28222,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2010",
@@ -34830,7 +34830,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -34886,7 +34886,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -34942,7 +34942,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -36118,7 +36118,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -36566,7 +36566,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -36622,7 +36622,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -36678,7 +36678,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -36734,7 +36734,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -37182,7 +37182,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -37238,7 +37238,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -37294,7 +37294,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "90.1-2013",
@@ -44314,9 +44314,9 @@
       "ventilation_standard": "ASHRAE 62.1-1999",
       "ventilation_primary_space_type": "Hospitals, Nursing and Convalescent Homes",
       "ventilation_secondary_space_type": "Recovery and ICU",
-      "ventilation_per_area": 0.47,
-      "ventilation_per_person": "",
-      "ventilation_air_changes": "",
+      "ventilation_per_area": "#N/A",
+      "ventilation_per_person": "#N/A",
+      "ventilation_air_changes": "#N/A",
       "minimum_total_air_changes": null,
       "occupancy_per_area": 20.0,
       "occupancy_schedule": "Hospital Critical Occ",
@@ -44854,7 +44854,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -45302,7 +45302,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -45358,7 +45358,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -45414,7 +45414,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -45470,7 +45470,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -45918,7 +45918,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -50790,7 +50790,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -52918,7 +52918,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -53366,7 +53366,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -53422,7 +53422,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -53478,7 +53478,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -53534,7 +53534,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -53982,7 +53982,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -58798,7 +58798,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -61531,7 +61531,7 @@
       "cooling_setpoint_schedule": "NECB-C-Thermostat Setpoint-Cooling",
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
+      "service_water_heating_peak_flow_per_area": null,
       "service_water_heating_target_temperature": null,
       "service_water_heating_fraction_sensible": null,
       "service_water_heating_fraction_latent": null,
@@ -61587,7 +61587,7 @@
       "cooling_setpoint_schedule": "NECB-C-Thermostat Setpoint-Cooling",
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": null,
+      "service_water_heating_peak_flow_per_area": "",
       "service_water_heating_target_temperature": null,
       "service_water_heating_fraction_sensible": null,
       "service_water_heating_fraction_latent": null,
@@ -67523,7 +67523,7 @@
       "cooling_setpoint_schedule": "NECB-A-Thermostat Setpoint-Cooling",
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": null,
+      "service_water_heating_peak_flow_per_area": "",
       "service_water_heating_target_temperature": null,
       "service_water_heating_fraction_sensible": null,
       "service_water_heating_fraction_latent": null,
@@ -67579,7 +67579,7 @@
       "cooling_setpoint_schedule": "NECB-A-Thermostat Setpoint-Cooling",
       "service_water_heating_peak_flow_rate": null,
       "service_water_heating_area": null,
-      "service_water_heating_peak_flow_per_area": "",
+      "service_water_heating_peak_flow_per_area": null,
       "service_water_heating_target_temperature": null,
       "service_water_heating_fraction_sensible": null,
       "service_water_heating_fraction_latent": null,
@@ -68766,7 +68766,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "OEESC 2014",
@@ -69158,7 +69158,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "OEESC 2014",
@@ -69550,7 +69550,7 @@
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": null,
       "balanced_exhaust_fraction_schedule": null,
-      "is_residential": null
+      "is_residential": "Yes"
     },
     {
       "template": "OEESC 2014",
