@@ -398,7 +398,7 @@ class OpenStudio::Model::PlantLoop
     # and determine if already has temperature reset
     spms = self.supplyOutletNode.setpointManagers
     spms.each do |spm|
-      if spm.to_SetpointManagerOutdoorAirReset
+      if spm.to_SetpointManagerOutdoorAirReset.is_initialized
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset is already enabled.")
         return false
       end
@@ -406,9 +406,9 @@ class OpenStudio::Model::PlantLoop
 
     # Get the design water temperature
     sizing_plant = self.sizingPlant
-    design_temp_c = sizing_plant.loopDesignExitTemperature
+    design_temp_c = sizing_plant.designLoopExitTemperature
     design_temp_f = OpenStudio.convert(design_temp_c,'C','F').get
-    loop_type = self.loopType
+    loop_type = sizing_plant.loopType
     
     # Apply the reset, depending on the type of loop.
     case loop_type
@@ -421,7 +421,7 @@ class OpenStudio::Model::PlantLoop
       # and therefore less heating capacity is likely required.
       decrease_f = 30.0
       hwt_at_hi_oat_f = hwt_at_lo_oat_f - decrease_f 
-      hwt_at_hi_oat_c = OpenStudio.convert(hwt_at_hi_oat_f, 'C', 'F').get
+      hwt_at_hi_oat_c = OpenStudio.convert(hwt_at_hi_oat_f, 'F', 'C').get
 
       # Define the high and low outdoor air temperatures
       lo_oat_f = 20
@@ -439,7 +439,7 @@ class OpenStudio::Model::PlantLoop
       hwt_oa_reset.setOutdoorHighTemperature(hi_oat_c)
       hwt_oa_reset.addToNode(self.supplyOutletNode)
     
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: hot water temperature reset from #{hwt_at_lo_oat_f.round}F to #{hwt_at_hi_oat_f}F between outdoor air temps of #{lo_oat_f.round}F and #{hi_oat_f}F.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: hot water temperature reset from #{hwt_at_lo_oat_f.round}F to #{hwt_at_hi_oat_f.round}F between outdoor air temps of #{lo_oat_f.round}F and #{hi_oat_f.round}F.")
     
     when 'Cooling'
       
@@ -453,9 +453,9 @@ class OpenStudio::Model::PlantLoop
       chwt_at_lo_oat_c = OpenStudio.convert(chwt_at_lo_oat_f, 'F', 'C').get
       
       # Define the high and low outdoor air temperatures
-      lo_oat_f = 50
+      lo_oat_f = 60
       lo_oat_c = OpenStudio.convert(lo_oat_f, 'F', 'C').get
-      hi_oat_f = 70
+      hi_oat_f = 80
       hi_oat_c = OpenStudio.convert(hi_oat_f, 'F', 'C').get
       
       # Create a setpoint manager
@@ -468,7 +468,7 @@ class OpenStudio::Model::PlantLoop
       chwt_oa_reset.setOutdoorHighTemperature(hi_oat_c)
       chwt_oa_reset.addToNode(self.supplyOutletNode)
 
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: chilled water temperature reset from #{chwt_at_hi_oat_f}F to #{chwt_at_lo_oat_f.round}F between outdoor air temps of #{hi_oat_f}F and #{lo_oat_f.round}F.")      
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: chilled water temperature reset from #{chwt_at_hi_oat_f.round}F to #{chwt_at_lo_oat_f.round}F between outdoor air temps of #{hi_oat_f.round}F and #{lo_oat_f.round}F.")      
       
     else
       
