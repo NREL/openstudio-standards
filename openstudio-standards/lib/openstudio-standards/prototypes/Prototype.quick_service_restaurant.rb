@@ -16,6 +16,12 @@ class OpenStudio::Model::Model
         'Kitchen' => ['Kitchen'],
         'Attic' => ['attic']
       }
+    when 'NECB 2011'
+      space_type_map ={
+        "- undefined -" => ["attic"],
+        "Dining - bar lounge/leisure" => ["Dining"],
+        "Food preparation" => ["Kitchen"]
+      }
     end
     return space_type_map
   end
@@ -26,277 +32,277 @@ class OpenStudio::Model::Model
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       system_to_space_map = [
         {
-            'type' => 'PSZ-AC',
-            'space_names' => ['Dining', 'Kitchen']
+          'type' => 'PSZ-AC',
+          'space_names' => ['Dining', 'Kitchen']
         },
         {
-            'type' => 'Exhaust Fan',
-            'name' => 'Dining Exhaust Fan',
-            'availability_sch_name' => 'RestaurantFastFood HVACOperationSchd',
-            'flow_rate' => 0.834532374,
-            'flow_fraction_schedule_name' => nil,
-            'balanced_exhaust_fraction_schedule_name' => nil,
-            'space_names' =>
+          'type' => 'Exhaust Fan',
+          'name' => 'Dining Exhaust Fan',
+          'availability_sch_name' => 'RestaurantFastFood HVACOperationSchd',
+          'flow_rate' => 0.834532374,
+          'flow_fraction_schedule_name' => nil,
+          'balanced_exhaust_fraction_schedule_name' => nil,
+          'space_names' =>
             [
-                'Dining'
-            ]
+            'Dining'
+          ]
         },
         {
-            'type' => 'Exhaust Fan',
-            'name' => 'Kitchen Exhaust Fan',
-            'availability_sch_name' => 'RestaurantFastFood HVACOperationSchd',
-            'flow_rate' => 0.722467626,
-            'flow_fraction_schedule_name' => nil,
-            'balanced_exhaust_fraction_schedule_name' => nil,
-            'space_names' =>
+          'type' => 'Exhaust Fan',
+          'name' => 'Kitchen Exhaust Fan',
+          'availability_sch_name' => 'RestaurantFastFood HVACOperationSchd',
+          'flow_rate' => 0.722467626,
+          'flow_fraction_schedule_name' => nil,
+          'balanced_exhaust_fraction_schedule_name' => nil,
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         },
         {
-            'type' => 'Refrigeration',
-            'case_type' => 'Walkin Freezer',
-            'cooling_capacity_per_length' => 688,
-            'length' => 2.44,
-            'evaporator_fan_pwr_per_length' => 74,
-            'lighting_per_length' => 33,
-            'lighting_sch_name' => 'QuickServiceRestaurant Bldg Light',
-            'defrost_pwr_per_length' => 1291.7,
-            'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched',
-            'cop' => 1.5,
-            'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
-            'condenser_fan_pwr' => 330,
-            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-            'space_names' =>
+          'type' => 'Refrigeration',
+          'case_type' => 'Walkin Freezer',
+          'cooling_capacity_per_length' => 688,
+          'length' => 2.44,
+          'evaporator_fan_pwr_per_length' => 74,
+          'lighting_per_length' => 33,
+          'lighting_sch_name' => 'QuickServiceRestaurant Bldg Light',
+          'defrost_pwr_per_length' => 1291.7,
+          'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched',
+          'cop' => 1.5,
+          'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
+          'condenser_fan_pwr' => 330,
+          'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         },
         {
-            'type' => 'Refrigeration',
-            'case_type' => 'Display Case',
-            'cooling_capacity_per_length' => 734.0,
-            'length' => 3.05,
-            'evaporator_fan_pwr_per_length' => 66,
-            'lighting_per_length' => 33.0,
-            'lighting_sch_name' => 'QuickServiceRestaurant Bldg Light',
-            'defrost_pwr_per_length' => 0.0,
-            'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
-            'cop' => 3.0,
-            'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
-            'condenser_fan_pwr' => 330,
-            'condenser_fan_pwr_curve_name' => nil,
-            'space_names' =>
+          'type' => 'Refrigeration',
+          'case_type' => 'Display Case',
+          'cooling_capacity_per_length' => 734.0,
+          'length' => 3.05,
+          'evaporator_fan_pwr_per_length' => 66,
+          'lighting_per_length' => 33.0,
+          'lighting_sch_name' => 'QuickServiceRestaurant Bldg Light',
+          'defrost_pwr_per_length' => 0.0,
+          'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
+          'cop' => 3.0,
+          'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
+          'condenser_fan_pwr' => 330,
+          'condenser_fan_pwr_curve_name' => nil,
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         }
       ]
     when '90.1-2004'
       system_to_space_map = [
         {
-            'type' => 'PSZ-AC',
-            'space_names' => ['Dining', 'Kitchen']
+          'type' => 'PSZ-AC',
+          'space_names' => ['Dining', 'Kitchen']
         },
         {
-            'type' => 'Exhaust Fan',
-            'name' => 'Kitchen Exhaust Fan',
-            'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
-            'flow_rate' => 1.557427,
-            'flow_fraction_schedule_name' => nil,
-            'balanced_exhaust_fraction_schedule_name' => 'RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004',
-            'space_names' =>
+          'type' => 'Exhaust Fan',
+          'name' => 'Kitchen Exhaust Fan',
+          'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
+          'flow_rate' => 1.557427,
+          'flow_fraction_schedule_name' => nil,
+          'balanced_exhaust_fraction_schedule_name' => 'RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004',
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         },
         {
-            'type' => 'Exhaust Fan',
-            'name' => 'Dining Exhaust Fan',
-            'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
-            'flow_rate' => 0.826233,
-            'flow_fraction_schedule_name' => nil,
-            'balanced_exhaust_fraction_schedule_name' => nil,
-            'space_names' =>
+          'type' => 'Exhaust Fan',
+          'name' => 'Dining Exhaust Fan',
+          'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
+          'flow_rate' => 0.826233,
+          'flow_fraction_schedule_name' => nil,
+          'balanced_exhaust_fraction_schedule_name' => nil,
+          'space_names' =>
             [
-                'Dining'
-            ]
+            'Dining'
+          ]
         },
         {
-            'type' => 'Refrigeration',
-            'case_type' => 'Walkin Freezer',
-            'cooling_capacity_per_length' => 688,
-            'length' => 2.44,
-            'evaporator_fan_pwr_per_length' => 74,
-            'lighting_per_length' => 33,
-            'lighting_sch_name' => 'RestaurantFastFood BLDG_LIGHT_DINING_SCH_2004_2007',
-            'defrost_pwr_per_length' => 1291.7,
-            'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched',
-            'cop' => 1.5,
-            'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
-            'condenser_fan_pwr' => 330,
-            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-            'space_names' =>
+          'type' => 'Refrigeration',
+          'case_type' => 'Walkin Freezer',
+          'cooling_capacity_per_length' => 688,
+          'length' => 2.44,
+          'evaporator_fan_pwr_per_length' => 74,
+          'lighting_per_length' => 33,
+          'lighting_sch_name' => 'RestaurantFastFood BLDG_LIGHT_DINING_SCH_2004_2007',
+          'defrost_pwr_per_length' => 1291.7,
+          'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched',
+          'cop' => 1.5,
+          'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
+          'condenser_fan_pwr' => 330,
+          'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         },
         {
-            'type' => 'Refrigeration',
-            'case_type' => 'Display Case',
-            'cooling_capacity_per_length' => 734.0,
-            'length' => 3.05,
-            'evaporator_fan_pwr_per_length' => 66,
-            'lighting_per_length' => 33.0,
-            'lighting_sch_name' => 'RestaurantFastFood BLDG_LIGHT_DINING_SCH_2004_2007',
-            'defrost_pwr_per_length' => 0.0,
-            'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
-            'cop' => 3.0,
-            'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
-            'condenser_fan_pwr' => 330,
-            'condenser_fan_pwr_curve_name' => nil,
-            'space_names' =>
+          'type' => 'Refrigeration',
+          'case_type' => 'Display Case',
+          'cooling_capacity_per_length' => 734.0,
+          'length' => 3.05,
+          'evaporator_fan_pwr_per_length' => 66,
+          'lighting_per_length' => 33.0,
+          'lighting_sch_name' => 'RestaurantFastFood BLDG_LIGHT_DINING_SCH_2004_2007',
+          'defrost_pwr_per_length' => 0.0,
+          'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
+          'cop' => 3.0,
+          'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
+          'condenser_fan_pwr' => 330,
+          'condenser_fan_pwr_curve_name' => nil,
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         }        
       ]
     when '90.1-2007', '90.1-2010'
       system_to_space_map = [
         {
-            'type' => 'PSZ-AC',
-            'space_names' => ['Dining', 'Kitchen']
+          'type' => 'PSZ-AC',
+          'space_names' => ['Dining', 'Kitchen']
         },
         {
-            'type' => 'Exhaust Fan',
-            'name' => 'Kitchen Exhaust Fan',
-            'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
-            'flow_rate' => 1.557427,
-            'flow_fraction_schedule_name' => nil,
-            'balanced_exhaust_fraction_schedule_name' => 'RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2007_2010_2013',
-            'space_names' =>
+          'type' => 'Exhaust Fan',
+          'name' => 'Kitchen Exhaust Fan',
+          'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
+          'flow_rate' => 1.557427,
+          'flow_fraction_schedule_name' => nil,
+          'balanced_exhaust_fraction_schedule_name' => 'RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2007_2010_2013',
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         },
         {
-            'type' => 'Exhaust Fan',
-            'name' => 'Dining Exhaust Fan',
-            'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
-            'flow_rate' => 0.416,
-            'flow_fraction_schedule_name' => nil,
-            'balanced_exhaust_fraction_schedule_name' => nil,
-            'space_names' =>
+          'type' => 'Exhaust Fan',
+          'name' => 'Dining Exhaust Fan',
+          'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
+          'flow_rate' => 0.416,
+          'flow_fraction_schedule_name' => nil,
+          'balanced_exhaust_fraction_schedule_name' => nil,
+          'space_names' =>
             [
-                'Dining'
-            ]
+            'Dining'
+          ]
         },
         {
-            'type' => 'Refrigeration',
-            'case_type' => 'Walkin Freezer',
-            'cooling_capacity_per_length' => 688,
-            'length' => 2.44,
-            'evaporator_fan_pwr_per_length' => 74,
-            'lighting_per_length' => 33,
-            'lighting_sch_name' => 'RestaurantFastFood BLDG_LIGHT_DINING_SCH_2004_2007',
-            'defrost_pwr_per_length' => 1291.7,
-            'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched',
-            'cop' => 1.5,
-            'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
-            'condenser_fan_pwr' => 330,
-            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-            'space_names' =>
+          'type' => 'Refrigeration',
+          'case_type' => 'Walkin Freezer',
+          'cooling_capacity_per_length' => 688,
+          'length' => 2.44,
+          'evaporator_fan_pwr_per_length' => 74,
+          'lighting_per_length' => 33,
+          'lighting_sch_name' => 'RestaurantFastFood BLDG_LIGHT_DINING_SCH_2004_2007',
+          'defrost_pwr_per_length' => 1291.7,
+          'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched',
+          'cop' => 1.5,
+          'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
+          'condenser_fan_pwr' => 330,
+          'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         },
         {
-            'type' => 'Refrigeration',
-            'case_type' => 'Display Case',
-            'cooling_capacity_per_length' => 734.0,
-            'length' => 3.05,
-            'evaporator_fan_pwr_per_length' => 66,
-            'lighting_per_length' => 33.0,
-            'lighting_sch_name' => 'RestaurantFastFood BLDG_LIGHT_DINING_SCH_2004_2007',
-            'defrost_pwr_per_length' => 0.0,
-            'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
-            'cop' => 3.0,
-            'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
-            'condenser_fan_pwr' => 330,
-            'condenser_fan_pwr_curve_name' => nil,
-            'space_names' =>
+          'type' => 'Refrigeration',
+          'case_type' => 'Display Case',
+          'cooling_capacity_per_length' => 734.0,
+          'length' => 3.05,
+          'evaporator_fan_pwr_per_length' => 66,
+          'lighting_per_length' => 33.0,
+          'lighting_sch_name' => 'RestaurantFastFood BLDG_LIGHT_DINING_SCH_2004_2007',
+          'defrost_pwr_per_length' => 0.0,
+          'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
+          'cop' => 3.0,
+          'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
+          'condenser_fan_pwr' => 330,
+          'condenser_fan_pwr_curve_name' => nil,
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         }        
       ]
     when '90.1-2013'
       system_to_space_map = [
         {
-            'type' => 'PSZ-AC',
-            'space_names' => ['Dining', 'Kitchen']
+          'type' => 'PSZ-AC',
+          'space_names' => ['Dining', 'Kitchen']
         },
         {
-            'type' => 'Exhaust Fan',
-            'name' => 'Kitchen Exhaust Fan',
-            'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
-            'flow_rate' => 1.557427,
-            'flow_fraction_schedule_name' => nil,
-            'balanced_exhaust_fraction_schedule_name' => 'RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2007_2010_2013',
-            'space_names' =>
+          'type' => 'Exhaust Fan',
+          'name' => 'Kitchen Exhaust Fan',
+          'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
+          'flow_rate' => 1.557427,
+          'flow_fraction_schedule_name' => nil,
+          'balanced_exhaust_fraction_schedule_name' => 'RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2007_2010_2013',
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         },
         {
-            'type' => 'Exhaust Fan',
-            'name' => 'Dining Exhaust Fan',
-            'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
-            'flow_rate' => 0.416,
-            'flow_fraction_schedule_name' => nil,
-            'balanced_exhaust_fraction_schedule_name' => nil,
-            'space_names' =>
+          'type' => 'Exhaust Fan',
+          'name' => 'Dining Exhaust Fan',
+          'availability_sch_name' => 'RestaurantFastFood Hours_of_operation',
+          'flow_rate' => 0.416,
+          'flow_fraction_schedule_name' => nil,
+          'balanced_exhaust_fraction_schedule_name' => nil,
+          'space_names' =>
             [
-                'Dining'
-            ]
+            'Dining'
+          ]
         },
         {
-            'type' => 'Refrigeration',
-            'case_type' => 'Walkin Freezer',
-            'cooling_capacity_per_length' => 688,
-            'length' => 2.44,
-            'evaporator_fan_pwr_per_length' => 21.143,
-            'lighting_per_length' => 33,
-            'lighting_sch_name' => 'RestaurantFastFood walkin_occ_lght_SCH',
-            'defrost_pwr_per_length' => 1291.7,
-            'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched',
-            'cop' => 1.5,
-            'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
-            'condenser_fan_pwr' => 330,
-            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-            'space_names' =>
+          'type' => 'Refrigeration',
+          'case_type' => 'Walkin Freezer',
+          'cooling_capacity_per_length' => 688,
+          'length' => 2.44,
+          'evaporator_fan_pwr_per_length' => 21.143,
+          'lighting_per_length' => 33,
+          'lighting_sch_name' => 'RestaurantFastFood walkin_occ_lght_SCH',
+          'defrost_pwr_per_length' => 1291.7,
+          'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched',
+          'cop' => 1.5,
+          'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
+          'condenser_fan_pwr' => 330,
+          'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         },
         {
-            'type' => 'Refrigeration',
-            'case_type' => 'Display Case',
-            'cooling_capacity_per_length' => 734.0,
-            'length' => 3.05,
-            'evaporator_fan_pwr_per_length' => 18.857,
-            'lighting_per_length' => 33.0,
-            'lighting_sch_name' => 'RestaurantFastFood walkin_occ_lght_SCH',
-            'defrost_pwr_per_length' => 0.0,
-            'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
-            'cop' => 3.0,
-            'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
-            'condenser_fan_pwr' => 330,
-            'condenser_fan_pwr_curve_name' => nil,
-            'space_names' =>
+          'type' => 'Refrigeration',
+          'case_type' => 'Display Case',
+          'cooling_capacity_per_length' => 734.0,
+          'length' => 3.05,
+          'evaporator_fan_pwr_per_length' => 18.857,
+          'lighting_per_length' => 33.0,
+          'lighting_sch_name' => 'RestaurantFastFood walkin_occ_lght_SCH',
+          'defrost_pwr_per_length' => 0.0,
+          'restocking_sch_name' => 'RestaurantFastFood Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
+          'cop' => 3.0,
+          'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
+          'condenser_fan_pwr' => 330,
+          'condenser_fan_pwr_curve_name' => nil,
+          'space_names' =>
             [
-                'Kitchen'
-            ]
+            'Kitchen'
+          ]
         } 
       ]
     end
@@ -343,7 +349,7 @@ class OpenStudio::Model::Model
       elsif building_vintage == '90.1-2007'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B',
-          'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C'
+            'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C'
           infiltration_per_zone_diningdoor = 0.902834611
           infiltration_diningdoor.setSchedule(add_schedule('RestaurantFastFood DOOR_INFIL_SCH'))
         else
@@ -440,14 +446,14 @@ class OpenStudio::Model::Model
       thermostat = self.getThermostatSetpointDualSetpointByName(thermostat_name).get
       case building_vintage
       when '90.1-2004', '90.1-2007', '90.1-2010'
-         if climate_zone == 'ASHRAE 169-2006-2B' || climate_zone == 'ASHRAE 169-2006-1B' || climate_zone == 'ASHRAE 169-2006-3B'
-           case space_name
-           when 'Dining'
-             thermostat.setCoolingSetpointTemperatureSchedule(add_schedule("RestaurantFastFood CLGSETP_SCH_NO_OPTIMUM"))
-           when 'Kitchen'
-             thermostat.setCoolingSetpointTemperatureSchedule(add_schedule("RestaurantFastFood CLGSETP_KITCHEN_SCH_NO_OPTIMUM"))
-           end
-         end
+        if climate_zone == 'ASHRAE 169-2006-2B' || climate_zone == 'ASHRAE 169-2006-1B' || climate_zone == 'ASHRAE 169-2006-3B'
+          case space_name
+          when 'Dining'
+            thermostat.setCoolingSetpointTemperatureSchedule(add_schedule("RestaurantFastFood CLGSETP_SCH_NO_OPTIMUM"))
+          when 'Kitchen'
+            thermostat.setCoolingSetpointTemperatureSchedule(add_schedule("RestaurantFastFood CLGSETP_KITCHEN_SCH_NO_OPTIMUM"))
+          end
+        end
       end
     end
   end
@@ -509,13 +515,14 @@ class OpenStudio::Model::Model
 
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(7.561562668)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(7.561562668)
       end
     end      
   end
+
 
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
   

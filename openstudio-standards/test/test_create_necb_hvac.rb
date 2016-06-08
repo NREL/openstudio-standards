@@ -1,18 +1,9 @@
+require_relative 'minitest_helper'
+require_relative 'create_doe_prototype_helper'
 $LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FILE__)
 
 
-require 'openstudio'
-require 'openstudio/ruleset/ShowRunnerOutput'
-require 'minitest/autorun'
 
-require_relative '../measure.rb'
-
-require 'fileutils'
-
-require 'json'
-require 'rubygems'
-
-$LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FILE__)
 
 #This will run all the combinations possible with the inputs for each system.  The test will.
 #0. Save the baseline file as baseline.osm 
@@ -36,7 +27,7 @@ $LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FI
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class FullHVACTest < MiniTest::Unit::TestCase
+class FullHVACTest < MiniTest::Test
   #set to true to run the standards in the test. 
   PERFORM_STANDARDS = true
   #set to true to run the simulations. 
@@ -412,11 +403,11 @@ class FullHVACTest < MiniTest::Unit::TestCase
       climate_zone = 'NECB'
       #building_vintage = '90.1-2013'
    
-      # Load the Openstudio_Standards JSON files
-      model.load_openstudio_standards_json
+#      # Load the Openstudio_Standards JSON files
+#      model.load_openstudio_standards_json
 
-      # Assign the standards to the model
-      model.template = building_vintage    
+#      # Assign the standards to the model
+#      model.template = building_vintage    
     
       # Make a directory to run the sizing run in
 
@@ -441,7 +432,7 @@ class FullHVACTest < MiniTest::Unit::TestCase
       # need to set prototype assumptions so that HRV added
       model.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
       # Apply the HVAC efficiency standard
-      model.applyHVACEfficiencyStandard
+      model.applyHVACEfficiencyStandard(building_vintage, climate_zone)
       #self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
     
       BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/after.osm")

@@ -27,6 +27,20 @@ class OpenStudio::Model::Model
         'DataCenter_basement_ZN_6'
       ]
     }
+      when 'NECB 2011'
+      space_type_map = {
+        "Electrical/Mechanical" => ["Basement"],
+        
+        "Office - open plan" => [ "Core_bottom", "Core_mid", "Core_top", "MidFloor_Plenum", 
+          "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", 
+          "Perimeter_bot_ZN_4", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", 
+          "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", 
+          "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4",
+          "DataCenter_basement_ZN_6", "DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", 
+          "DataCenter_top_ZN_6"],
+        
+        "- undefined -" => ["GroundFloor_Plenum", "TopFloor_Plenum"]
+      }
     end
     return space_type_map
   end
@@ -85,8 +99,8 @@ class OpenStudio::Model::Model
         }
       ]
     when '90.1-2004','90.1-2007','90.1-2010','90.1-2013'
-    system_to_space_map = [
-      {
+      system_to_space_map = [
+        {
           'type' => 'VAV',
           'name' => 'VAV_bot WITH REHEAT',
           'space_names' =>
@@ -126,11 +140,12 @@ class OpenStudio::Model::Model
           'return_plenum' => 'TopFloor_Plenum'
       },
       {
+
           'type' => 'CAV',
           'name' => 'CAV_bas',
           'space_names' =>
-          [
-              'Basement'
+            [
+            'Basement'
           ]
       },
       {
@@ -170,6 +185,7 @@ class OpenStudio::Model::Model
           'main_data_center' => false
       }
     ]
+
     end
 
     return system_to_space_map
@@ -238,7 +254,7 @@ class OpenStudio::Model::Model
 
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.25413987)
@@ -249,6 +265,7 @@ class OpenStudio::Model::Model
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
     self.update_waterheater_loss_coefficient(building_vintage)
+
     
     return true
 

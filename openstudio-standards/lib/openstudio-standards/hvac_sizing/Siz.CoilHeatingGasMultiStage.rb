@@ -4,7 +4,10 @@ class OpenStudio::Model::CoilHeatingGasMultiStage
 
   # Sets all auto-sizeable fields to autosize
   def autosize
-    OpenStudio::logFree(OpenStudio::Warn, "openstudio.sizing.CoilHeatingGasMultiStage", ".autosize not yet implemented for #{self.iddObject.type.valueDescription}.")
+    autosizeStage1NominalCapacity
+    autosizeStage2NominalCapacity
+    autosizeStage3NominalCapacity
+    autosizeStage4NominalCapacity
   end
 
   # Takes the values calculated by the EnergyPlus sizing routines
@@ -12,16 +15,54 @@ class OpenStudio::Model::CoilHeatingGasMultiStage
   # Must have previously completed a run with sql output for this to work.
   def applySizingValues
 
-    OpenStudio::logFree(OpenStudio::Warn, "openstudio.sizing.CoilHeatingGasMultiStage", ".applySizingValues not yet implemented for #{self.iddObject.type.valueDescription}.")
-        
+    design_size_stage1_nominal_capacity = self.autosizedStage1NominalCapacity
+    if design_size_stage1_nominal_capacity.is_initialized
+      self.setStage1NominalCapacity(design_size_stage1_nominal_capacity.get) 
+    end
+ 
+    design_size_stage2_nominal_capacity = self.autosizedStage2NominalCapacity
+    if design_size_stage2_nominal_capacity.is_initialized
+      self.setStage2NominalCapacity(design_size_stage2_nominal_capacity.get) 
+    end
+    
+    design_size_stage3_nominal_capacity = self.autosizedStage3NominalCapacity
+    if design_size_stage3_nominal_capacity.is_initialized
+      self.setStage3NominalCapacity(design_size_stage3_nominal_capacity.get) 
+    end
+
+    design_size_stage4_nominal_capacity = self.autosizedStage4NominalCapacity
+    if design_size_stage4_nominal_capacity.is_initialized
+      self.setStage4NominalCapacity(design_size_stage4_nominal_capacity.get) 
+    end
+    
   end
 
-  # returns the autosized design supply air flow rate as an optional double
-  # def autosizedDesignSupplyAirFlowRate
+  # returns the autosized design stage 1 capacity
+  def autosizedStage1NominalCapacity
 
-    # return self.model.getAutosizedValue(self, 'Design Supply Air Flow Rate', 'm3/s')
+    return self.model.getAutosizedValue(self,'Design Size Stage 1 Nominal Capacity', 'W')
     
-  # end
+  end
   
+  # returns the autosized design stage 2 capacity
+  def autosizedStage2NominalCapacity
+
+    return self.model.getAutosizedValue(self,'Design Size Stage 2 Nominal Capacity', 'W')
+    
+  end
   
+  # returns the autosized design stage 3 capacity
+  def autosizedStage3NominalCapacity
+
+    return self.model.getAutosizedValue(self,'Design Size Stage 3 Nominal Capacity', 'W')
+    
+  end
+  
+  # returns the autosized design stage 4 capacity
+  def autosizedStage4NominalCapacity
+
+    return self.model.getAutosizedValue(self,'Design Size Stage 4 Nominal Capacity', 'W')
+
+  end
+
 end

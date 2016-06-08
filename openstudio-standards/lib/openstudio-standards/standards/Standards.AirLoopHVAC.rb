@@ -1890,10 +1890,12 @@ class OpenStudio::Model::AirLoopHVAC
     self.thermalZones.each do |zone|
       v_ou += zone.outdoor_airflow_rate
     end
+    
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
      
     # System primary airflow rate (whether autosized or hard-sized)
     v_ps = 0.0
+            
     if self.autosizedDesignSupplyAirFlowRate.is_initialized
       v_ps = self.autosizedDesignSupplyAirFlowRate.get
     else
@@ -2111,8 +2113,8 @@ class OpenStudio::Model::AirLoopHVAC
     dcv_required = false
    
     # Not required by the old vintages
-    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required for any system.")
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011'
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required for any system.")
       return dcv_required
     end
    
@@ -3313,7 +3315,7 @@ class OpenStudio::Model::AirLoopHVAC
     # must turn off when unoccupied.
     minimum_fan_hp = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       minimum_fan_hp = 0.75
     end
   
