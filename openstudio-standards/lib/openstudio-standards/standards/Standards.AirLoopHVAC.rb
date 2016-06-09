@@ -17,9 +17,19 @@ class OpenStudio::Model::AirLoopHVAC
       return true
     end
   
+    # First time adjustment:
     # Only applies to multi-zone vav systems
-    if self.is_multizone_vav_system
+    # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004' 
+    # (2) AHU1 in 2004-2013
+    if self.is_multizone_vav_system && !(self.name.to_s.include? "Outpatient F1")
       self.adjust_minimum_vav_damper_positions
+    end
+    
+    # Second time adjustment:
+    # Only apply to 2010 and 2013 Outpatient (both AHU1 and AHU2)
+    # TODO maybe apply to hospital as well?
+    if (self.name.to_s.include? "Outpatient") && (template == '90.1-2010' || template == '90.1-2013')
+      self.adjust_minimum_vav_damper_positions_outpatient
     end
     
     return true
@@ -52,10 +62,13 @@ class OpenStudio::Model::AirLoopHVAC
       self.set_vav_damper_action(template)
       
       # Multizone VAV Optimization
-      if self.is_multizone_vav_optimization_required(template, climate_zone)
-        self.enable_multizone_vav_optimization
-      else
-        self.disable_multizone_vav_optimization
+      # This rule does not apply to two hospital and one outpatient systems (TODO add hospital two systems as exception)
+      if !(self.name.to_s.include? "Outpatient F1")
+        if self.is_multizone_vav_optimization_required(template, climate_zone)
+          self.enable_multizone_vav_optimization
+        else
+          self.disable_multizone_vav_optimization
+        end
       end
       
       # VAV Static Pressure Reset
@@ -664,6 +677,8 @@ class OpenStudio::Model::AirLoopHVAC
   def is_economizer_required(template, climate_zone)
   
     economizer_required = false
+    
+    return economizer_required if self.name.to_s.include? "Outpatient F1"
     
     # A big number of btu per hr as the minimum requirement
     infinity_btu_per_hr = 999999999999
@@ -1358,6 +1373,13 @@ class OpenStudio::Model::AirLoopHVAC
     # return false
     # end
     
+    erv_required = nil
+    # ERV not applicable for medical AHUs (AHU1 in Outpatient), per AIA 2001 - 7.31.D2.
+    if self.name.to_s.include? "Outpatient F1"
+      erv_required = false
+      return erv_required
+    end
+    
     # ERV Not Applicable for AHUs that have DCV
     # or that have no OA intake.    
     controller_oa = nil
@@ -1551,7 +1573,7 @@ class OpenStudio::Model::AirLoopHVAC
     end
     
     # Determine if an ERV is required
-    erv_required = nil
+    # erv_required = nil
     if erv_cfm.nil?
       OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV not required based on #{(pct_oa*100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}.")
       erv_required = false 
@@ -1892,10 +1914,12 @@ class OpenStudio::Model::AirLoopHVAC
     self.thermalZones.each do |zone|
       v_ou += zone.outdoor_airflow_rate
     end
+    
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
      
     # System primary airflow rate (whether autosized or hard-sized)
     v_ps = 0.0
+            
     if self.autosizedDesignSupplyAirFlowRate.is_initialized
       v_ps = self.autosizedDesignSupplyAirFlowRate.get
     else
@@ -2065,6 +2089,41 @@ class OpenStudio::Model::AirLoopHVAC
     return true
    
   end
+
+  # For critical zones of Outpatient, if the minimum airflow rate required by the accreditation standard (AIA 2001) is significantly
+  # less than the autosized peak design airflow in any of the three climate zones (Houston, Baltimore and Burlington), the minimum
+  # airflow fraction of the terminal units is reduced to the value: "required minimum airflow rate / autosized peak design flow"
+  # Reference: <Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010> Page109-111
+  # For implementation purpose, since it is time-consuming to perform autosizing in three climate zones, just use
+  # the results of the current climate zone
+  def adjust_minimum_vav_damper_positions_outpatient
+    self.model.getSpaces.each do |space|
+      zone = space.thermalZone.get
+      sizingZone = zone.sizingZone
+      space_area = space.floorArea
+      if sizingZone.coolingDesignAirFlowMethod == 'DesignDay'
+        next
+      elsif sizingZone.coolingDesignAirFlowMethod == 'DesignDayWithLimit'
+        minimum_airflow_per_zone_floor_area = sizingZone.coolingMinimumAirFlowperZoneFloorArea
+        minimum_airflow_per_zone = minimum_airflow_per_zone_floor_area * space_area
+        # get the autosized maximum air flow of the VAV terminal
+        zone.equipment.each do |equip|
+          if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+            vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
+            rated_maximum_flow_rate = vav_terminal.autosizedMaximumAirFlowRate.get
+            # compare the VAV autosized maximum airflow with the minimum airflow rate required by the accreditation standard
+            ratio = minimum_airflow_per_zone / rated_maximum_flow_rate
+            if ratio >= 0.95
+              vav_terminal.setConstantMinimumAirFlowFraction(1)
+            elsif ratio < 0.95
+              vav_terminal.setConstantMinimumAirFlowFraction(ratio)
+            end
+          end
+        end
+      end
+    end
+    return true
+  end
      
   # Determine if demand control ventilation (DCV) is
   # required for this air loop.
@@ -2078,8 +2137,8 @@ class OpenStudio::Model::AirLoopHVAC
     dcv_required = false
    
     # Not required by the old vintages
-    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required for any system.")
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011'
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{self.name}: DCV is not required for any system.")
       return dcv_required
     end
    
@@ -2121,7 +2180,7 @@ class OpenStudio::Model::AirLoopHVAC
         num_people += space.numberOfPeople
       end
     end
-
+    
     # Check the minimum area
     area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
     if area_served_ft2 < min_area_ft2
@@ -2131,7 +2190,8 @@ class OpenStudio::Model::AirLoopHVAC
     
     # Check the minimum occupancy density
     occ_per_ft2 = num_people / area_served_ft2
-    occ_per_1000_ft2 = occ_per_ft2*1000
+    occ_per_1000_ft2 = occ_per_ft2*1000    
+  
     if occ_per_1000_ft2 < min_occ_per_1000_ft2
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: DCV is not required since the system occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
       return dcv_required
@@ -2184,7 +2244,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @return [Bool] Returns true if required, false if not.
   def enable_demand_control_ventilation()
-
+    
     # Get the OA intake
     controller_oa = nil
     controller_mv = nil
@@ -2471,7 +2531,13 @@ class OpenStudio::Model::AirLoopHVAC
   def is_motorized_oa_damper_required(template, climate_zone)
   
     motorized_oa_damper_required = false
-  
+
+    if self.name.to_s.include? "Outpatient F1"
+      motorized_oa_damper_required = true
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: always has a damper, the minimum OA schedule is the same as airloop availability schedule.")
+      return motorized_oa_damper_required
+    end
+      
     # If the system has an economizer, it must have
     # a motorized damper.
     if self.has_economizer
@@ -3273,7 +3339,7 @@ class OpenStudio::Model::AirLoopHVAC
     # must turn off when unoccupied.
     minimum_fan_hp = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       minimum_fan_hp = 0.75
     end
   

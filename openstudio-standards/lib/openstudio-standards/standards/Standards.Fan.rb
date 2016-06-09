@@ -19,17 +19,17 @@ module Fan
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{self.name} max flow rate is not hard sized, cannot apply efficiency standard.")
       return false
     end
-    
+
     # Convert max flow rate to cfm
     maximum_flow_rate_cfm = OpenStudio.convert(maximum_flow_rate_m3_per_s, 'm^3/s', 'cfm').get
     
     # Get the pressure rise from the fan
     pressure_rise_pa = self.pressureRise
     pressure_rise_in_h2o = OpenStudio.convert(pressure_rise_pa, 'Pa','inH_{2}O').get
-    
+
     # Get the default impeller efficiency
     fan_impeller_eff = self.baselineImpellerEfficiency(template)
-    
+
     # Calculate the Brake Horsepower
     brake_hp = (pressure_rise_in_h2o * maximum_flow_rate_cfm)/(fan_impeller_eff * 6356) 
     allowed_hp = brake_hp * 1.1 # Per PNNL document #TODO add reference
@@ -38,7 +38,7 @@ module Fan
     elsif allowed_hp < 0.01
       allowed_hp = 0.01
     end
-    
+
     # Minimum motor size for efficiency lookup
     # is 1 HP unless the motor serves an exhaust fan,
     # a powered VAV terminal, or a fan coil unit.
@@ -49,7 +49,7 @@ module Fan
     end
     
     # Find the motor efficiency
-    motor_eff, nominal_hp = standard_minimum_motor_efficiency(template, allowed_hp)
+    motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, allowed_hp)
 
     # Calculate the total fan efficiency
     total_fan_eff = fan_impeller_eff * motor_eff
@@ -62,6 +62,11 @@ module Fan
       self.setMotorEfficiency(motor_eff)
     end
     
+
+    if(template == 'NECB 2011')
+      fan_power_kw = maximum_flow_rate_m3_per_s*pressure_rise_pa/(fan_impeller_eff*1000.0)
+    end
+
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{self.name}: allowed_hp = #{allowed_hp.round(2)}HP; motor eff = #{(motor_eff*100).round(2)}%; total fan eff = #{(total_fan_eff*100).round}% based on #{maximum_flow_rate_cfm.round} cfm.")
     
     return true
@@ -273,6 +278,7 @@ module Fan
   # any desired safety factor already included.  This method
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
+
   # @return [Double] minimum motor efficiency (0.0 to 1.0), nominal HP
   def standard_minimum_motor_efficiency_and_size(template, motor_bhp)
   
@@ -283,12 +289,37 @@ module Fan
     motors = $os_standards["motors"]
     
     # Assuming all fan motors are 4-pole ODP
+    template_mod = template.dup
+    if(template == 'NECB 2011') 
+      if(self.class.name == 'OpenStudio::Model::FanConstantVolume')
+        template_mod = template_mod+'-CONSTANT'
+      elsif(self.class.name == 'OpenStudio::Model::FanVariableVolume')
+        template_mod = template_mod+'-VARIABLE'
+        fan_power_kw = 0.909*0.7457*motor_bhp
+        if(fan_power_kw >= 25.0)
+          power_vs_flow_curve_name = 'VarVolFan-FCInletVanes-NECB2011-FPLR'
+        elsif(fan_power_kw >= 7.5 && fan_power_kw < 25)
+          power_vs_flow_curve_name = 'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
+        else
+          power_vs_flow_curve_name = 'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
+        end
+        power_vs_flow_curve = self.model.add_curve(power_vs_flow_curve_name, standards)
+        self.setFanPowerMinimumFlowRateInputMethod("Fraction")
+        self.setFanPowerCoefficient5(0.0)
+        self.setFanPowerMinimumFlowFraction(power_vs_flow_curve.minimumValueofx)
+        self.setFanPowerCoefficient1(power_vs_flow_curve.coefficient1Constant)
+        self.setFanPowerCoefficient2(power_vs_flow_curve.coefficient2x)
+        self.setFanPowerCoefficient3(power_vs_flow_curve.coefficient3xPOW2)
+        self.setFanPowerCoefficient4(power_vs_flow_curve.coefficient4xPOW3)
+      end
+    end
+ 
     search_criteria = {
-      "template" => template,
+      "template" => template_mod,
       "number_of_poles" => 4.0,
       "type" => "Enclosed",
     }
-    
+ 
     motor_properties = self.model.find_object(motors, search_criteria, motor_bhp)
     if motor_properties.nil?
       OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Fan", "For #{self.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
