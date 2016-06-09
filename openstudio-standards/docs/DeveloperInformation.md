@@ -20,11 +20,10 @@
 6. Install the `json` ruby gem. (`gem install json` from command prompt)
 7. Install {https://git-scm.com/ Git}.
 8. Clone the {https://github.com/NREL/openstudio-standards.git source code} using {https://git-scm.com/ Git}.
-9. Run all commands below from the `/openstudio-standards/openstudio-standards` directory 
-10. **On Windows**, use the Git Bash instead of the default command prompt.
-11. **On Mac** the default terminal is fine.
-11. Navigate to the `openstudio-standards/openstudio-standards` directory.
-12. Command prompt: `bundle install`. This will install all ruby gems necessary to develop this code.
+9. **On Windows**, use the Git Bash instead of the default command prompt.
+10. **On Mac** the default terminal is fine.
+11. In Git Bash/terminal, navigate to the `openstudio-standards/openstudio-standards` directory.
+12. In Git Bash/terminal: `bundle install`. This will install all ruby gems necessary to develop this code.
 13. Sign up for an account at {https://circleci.com/ CircleCI} and follow the `NREL/openstudio-standards` project.
 14. That's it, you are ready to make changes!
 
@@ -40,7 +39,7 @@
 7. Pull request
 8. Code review and merge 
 
-This project uses {http://rake.rubyforge.org/ Rake} to run tasks from the terminal.  
+This project uses {http://rake.rubyforge.org/ Rake} to run tasks from the terminal.  **On Windows** make sure to use Git Bash.  All of the commands listed below should be run in Git Bash/terminal from the `openstudio-standards/openstudio-standards/` directory
 
 `rake -T`: List all available commands
 

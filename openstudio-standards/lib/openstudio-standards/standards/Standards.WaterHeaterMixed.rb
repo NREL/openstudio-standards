@@ -54,54 +54,28 @@ class OpenStudio::Model::WaterHeaterMixed
     ua_btu_per_hr_per_f = nil
     sl_btu_per_hr = nil
     case fuel_type
-    when 'Electricity'  
-      case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004','90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      
-        if capacity_w <= 12000     # I think this should be 12000W, use variable capacity_w instead of capacity_btu_per_hr (as per PNNL doc)
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the minimum Energy Factor (EF)
-          ef = 0.97 - (0.00132 * volume_gal)
-          # Calculate the skin loss coefficient (UA)
-          ua_btu_per_hr_per_f = (41094*(1/ef - 1))/(24*67.5)
-        else
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the max allowable standby loss (SL)
-          sl_btu_per_hr = 20 + (35*Math.sqrt(volume_gal))
-          # Calculate the skin loss coefficient (UA)
-          ua_btu_per_hr_per_f = sl_btu_per_hr/70
-        end
-
-      when 'NECB 2011'
-        volume_l_per_s = volume_m3 * 1000
-        if capacity_w <= 12000     
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the max allowable standby loss (SL)         
-          if volume_l_per_s < 270
-            sl_w = 40 + 0.2 * volume_l_per_s          # assume bottom inlet
-          else
-            sl_w = 0.472 * volume_l_per_s - 33.5   
-          end                                         # assume bottom inlet
-          sl_btu_per_hr = OpenStudio.convert(sl_w, "W", "Btu/hr").get  
-        else
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the max allowable standby loss (SL)   # use this - NECB does not give SL calculation for cap > 12 kW
-          sl_btu_per_hr = 20 + (35*Math.sqrt(volume_gal))          
-        end
+    when 'Electricity'
+      if capacity_btu_per_hr <= 12000  
+        # Fixed water heater efficiency per PNNL
+        water_heater_eff = 1
+        # Calculate the minimum Energy Factor (EF)
+        ef = 0.97 - (0.00132 * volume_gal)
         # Calculate the skin loss coefficient (UA)
-        ua_btu_per_hr_per_f = sl_btu_per_hr/70    
+        ua_btu_per_hr_per_f = (41094*(1/ef - 1))/(24*67.5)
+      else
+        # Fixed water heater efficiency per PNNL
+        water_heater_eff = 1
+        # Calculate the max allowable standby loss (SL)
+        sl_btu_per_hr = 20 + (35*Math.sqrt(volume_gal))
+        # Calculate the skin loss coefficient (UA)
+        ua_btu_per_hr_per_f = sl_btu_per_hr/70
       end
-      
     when 'NaturalGas'
       case template # TODO inconsistency; ref buildings don't calculate water heater UA the same way
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         water_heater_eff = 0.78
         ua_btu_per_hr_per_f = 11.37
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         if capacity_btu_per_hr <= 75000  
           # Fixed water heater efficiency per PNNL
           water_heater_eff = 0.82

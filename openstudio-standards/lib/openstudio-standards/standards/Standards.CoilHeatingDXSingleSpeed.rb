@@ -22,20 +22,55 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
 
   end
 
-  # Finds capacity in Btu/hr
+  # Finds capacity in tons
   #
-  # @return [Double] capacity in Btu/hr to be used for find object
+  # @return [Double] capacity in tons to be used for find object
   def find_capacity()
+
+    # Determine supplemental heating type if unitary
+    heat_pump = false
+    if self.airLoopHVAC.empty?
+      if self.containingHVACComponent.is_initialized
+        containing_comp = containingHVACComponent.get
+        if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+          heat_pump = true
+        end
+      end
+    end
 
     # Get the coil capacity
     capacity_w = nil
-    if self.ratedTotalHeatingCapacity.is_initialized
-      capacity_w = self.ratedTotalHeatingCapacity.get
-    elsif self.autosizedRatedTotalHeatingCapacity.is_initialized
-      capacity_w = self.autosizedRatedTotalHeatingCapacity.get
+    if(heat_pump == true)
+      containing_comp = self.containingHVACComponent.get
+      heat_pump_comp = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
+      ccoil = heat_pump_comp.coolingCoil
+      dxcoil = ccoil.to_CoilCoolingDXSingleSpeed.get
+      dxcoil_name = dxcoil.name.to_s
+      if sql_db_vars_map
+        if sql_db_vars_map[dxcoil_name]
+          dxcoil.setName(sql_db_vars_map[dxcoil_name])
+        end
+      end
+      if dxcoil.ratedTotalCoolingCapacity.is_initialized
+        capacity_w = dxcoil.ratedTotalCoolingCapacity.get
+      elsif dxcoil.autosizedRatedTotalCoolingCapacity.is_initialized
+        capacity_w = dxcoil.autosizedRatedTotalCoolingCapacity.get
+      else
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
+        successfully_set_all_properties = false
+        return successfully_set_all_properties
+      end
+      dxcoil.setName(dxcoil_name)
     else
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
-      return false
+      if self.ratedTotalHeatingCapacity.is_initialized
+        capacity_w = self.ratedTotalHeatingCapacity.get
+      elsif self.autosizedRatedTotalHeatingCapacity.is_initialized
+        capacity_w = self.autosizedRatedTotalHeatingCapacity.get
+      else
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
+        successfully_set_all_properties = false
+        return successfully_set_all_properties
+      end
     end
 
     # Convert capacity to Btu/hr

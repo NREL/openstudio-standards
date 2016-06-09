@@ -1,6 +1,3 @@
-$LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FILE__)
-
-
 require 'openstudio'
 require 'openstudio/ruleset/ShowRunnerOutput'
 require 'minitest/autorun'
@@ -11,8 +8,6 @@ require 'fileutils'
 
 require 'json'
 require 'rubygems'
-
-$LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FILE__)
 
 #This will run all the combinations possible with the inputs for each system.  The test will.
 #0. Save the baseline file as baseline.osm 

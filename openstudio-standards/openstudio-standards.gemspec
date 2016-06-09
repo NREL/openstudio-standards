@@ -16,7 +16,6 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.0.0'
   spec.required_rubygems_version = '>= 1.3.6'  
   
-
   spec.files = Dir['License.txt', 'lib/**/*', 'data/**/*']
   #spec.test_files = Dir['test/**/*']
   spec.require_paths = ["lib"]

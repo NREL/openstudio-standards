@@ -56,10 +56,10 @@ class CanadianAddUnitaryAndApplyStandard < OpenStudio::Ruleset::ModelUserScript
     @runner = runner
    
     # Load the Openstudio_Standards JSON files
-    #model.load_openstudio_standards_json
+    model.load_openstudio_standards_json
     
     # Assign the standards to the model
-    #model.template = building_vintage    
+    model.template = building_vintage    
     
     # Make a directory to run the sizing run in
     sizing_dir = "#{Dir.pwd}/sizing"
@@ -81,7 +81,7 @@ class CanadianAddUnitaryAndApplyStandard < OpenStudio::Ruleset::ModelUserScript
     # need to set prototype assumptions so that HRV added
     model.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
     # Apply the HVAC efficiency standard
-    model.applyHVACEfficiencyStandard(building_vintage, climate_zone)
+    model.applyHVACEfficiencyStandard
     #self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
     
     BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/tests/output/after.osm")

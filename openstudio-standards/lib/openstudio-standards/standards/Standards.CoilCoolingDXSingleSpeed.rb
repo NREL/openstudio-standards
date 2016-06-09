@@ -75,9 +75,9 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
 
   end
 
-  # Finds capacity in Btu/hr
+  # Finds capacity in tons
   #
-  # @return [Double] capacity in Btu/hr to be used for find object
+  # @return [Double] capacity in tons to be used for find object
   def find_capacity()
 
     # Get the coil capacity
@@ -88,7 +88,8 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       capacity_w = self.autosizedRatedTotalCoolingCapacity.get
     else
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
-      return false
+      successfully_set_all_properties = false
+      return successfully_set_all_properties
     end
 
     # Convert capacity to Btu/hr

@@ -61,7 +61,7 @@ module BTAP
         rm.enqueue( workflow.create( OpenStudio::Path.new("#{folder}/#{File.basename(model_path, ".osm")}"), OpenStudio::Path.new(model_path)),false)
         puts "#{model_path} enqueued. #{counter} of #{osm_files.size}"
       end
-      #rm.showStatusDialog()
+      rm.showStatusDialog()
       rm.waitForFinished()
     end
 

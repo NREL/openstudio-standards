@@ -5,7 +5,7 @@ class OpenStudio::Model::Model
   def add_swh(building_type, building_vintage, climate_zone, prototype_input)
    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
-   
+    
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
       
@@ -20,13 +20,13 @@ class OpenStudio::Model::Model
                                         OpenStudio.convert(prototype_input['main_water_heater_volume'],'gal','m^3').get,
                                         prototype_input['main_water_heater_fuel'],
                                         OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'],'Btu/hr','W').get,
-                                        building_type) unless building_type == 'RetailStripmall' and building_vintage != 'NECB 2011'
+                                        building_type) unless building_type == 'RetailStripmall'
       
       # Attach the end uses if specified in prototype inputs
       # TODO remove special logic for large office SWH end uses
       # TODO remove special logic for stripmall SWH end uses and service water loops
       # TODO remove special logic for large hotel SWH end uses
-      if building_type == 'LargeOffice' and building_vintage != 'NECB 2011'
+      if building_type == 'LargeOffice'
           
           # Only the core spaces have service water
           ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
@@ -40,7 +40,7 @@ class OpenStudio::Model::Model
                               building_type)
           end
       
-      elsif building_type == 'RetailStripmall' and building_vintage != 'NECB 2011'
+      elsif building_type == 'RetailStripmall'
 
         return true if building_vintage == "DOE Ref Pre-1980" || building_vintage == "DOE Ref 1980-2004"
 
@@ -187,12 +187,7 @@ class OpenStudio::Model::Model
                               
       else                    
         
-        # Attaches the end uses if specified by space type 
-        
-        if building_vintage == 'NECB 2011'
-          building_type = 'Space Function'
-        end
-        
+        # Attaches the end uses if specified by space type      
         space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
         space_type_map.each do |space_type_name, space_names|
           search_criteria = {
@@ -205,12 +200,11 @@ class OpenStudio::Model::Model
           # Skip space types with no data
           next if data.nil?
           
-          # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-          next if data['service_water_heating_peak_flow_rate'].nil? unless building_vintage == 'NECB 2011'
+          # Skip space types with no water use
+          next if data['service_water_heating_peak_flow_rate'].nil?
 
           # Add a service water use for each space
           space_names.each do |space_name|
-            
             space = self.getSpaceByName(space_name).get
             space_multiplier = space.multiplier
             self.add_swh_end_uses_by_space(get_lookup_name(building_type),

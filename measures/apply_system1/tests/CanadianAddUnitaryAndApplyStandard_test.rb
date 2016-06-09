@@ -1,5 +1,3 @@
-$LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FILE__)
-
 require 'openstudio'
 require 'openstudio/ruleset/ShowRunnerOutput'
 require 'minitest/autorun'
@@ -15,7 +13,7 @@ require 'zip'
 class CanadianAddUnitaryAndApplyStandardTest < MiniTest::Unit::TestCase
 
 
-begin
+=begin
   def test_system_1()
     boiler_fueltypes = ["NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"]
     mau_types = [true, false]
@@ -27,12 +25,12 @@ begin
     heating_coil_types_sys4and6 = ["Electric", "Gas"]
     fan_types = ["AF_or_BI_rdg_fancurve","AF_or_BI_inletvanes","fc_inletvanes","var_speed_drive"]
     model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new("C:/nrel/openstudio-standards/openstudio-standards/data/weather/CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
+    BTAP::Environment::WeatherFile.new("#{File.dirname(__FILE__)}/../../../weather/CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(model, model.getThermalZones, boiler_fueltypes[0], mau_types[0], mau_heating_coil_types[0], baseboard_types[0])
     run_the_measure(model)
     BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/system_1.osm")
   end
-end
+=end
 
 =begin  
   def test_system_2()
@@ -53,27 +51,27 @@ end
   end
 =end
   
-#begin
-#    def test_system_3()
-#      boiler_fueltypes = ["NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"]
-#      mau_types = [true, false]
-#      mau_heating_coil_types = ["Hot Water", "Electric"]
-#      baseboard_types = ["Hot Water" , "Electric"]
-#      chiller_types = ["Scroll","Centrifugal","Rotary Screw","Reciprocating"]
-#      mua_cooling_types = ["DX","Hydronic"]
-#      heating_coil_types_sys3 = ["Electric", "Gas", "DX"]
-#      heating_coil_types_sys4and6 = ["Electric", "Gas"]
-#      fan_types = ["AF_or_BI_rdg_fancurve","AF_or_BI_inletvanes","fc_inletvanes","var_speed_drive"]
-#      model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
-#      weather_file = "CAN_ON_Toronto.716240_CWEC.epw"
-#      puts "in test, weather_file = #{weather_file}"
-#      BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
-#      BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(model, model.getThermalZones, boiler_fueltypes[0], heating_coil_types_sys3[2], baseboard_types[0])
-#      run_the_measure(model)
-#      BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/system_3.osm")
-#    end
-#end
-#  
+begin
+    def test_system_3()
+      boiler_fueltypes = ["NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"]
+      mau_types = [true, false]
+      mau_heating_coil_types = ["Hot Water", "Electric"]
+      baseboard_types = ["Hot Water" , "Electric"]
+      chiller_types = ["Scroll","Centrifugal","Rotary Screw","Reciprocating"]
+      mua_cooling_types = ["DX","Hydronic"]
+      heating_coil_types_sys3 = ["Electric", "Gas", "DX"]
+      heating_coil_types_sys4and6 = ["Electric", "Gas"]
+      fan_types = ["AF_or_BI_rdg_fancurve","AF_or_BI_inletvanes","fc_inletvanes","var_speed_drive"]
+      model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+      weather_file = "CAN_ON_Toronto.716240_CWEC.epw"
+      puts "in test, weather_file = #{weather_file}"
+      BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
+      BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(model, model.getThermalZones, boiler_fueltypes[0], heating_coil_types_sys3[2], baseboard_types[0])
+      run_the_measure(model)
+      BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/output/system_3.osm")
+    end
+end
+  
 =begin  
   def test_system_4()
     boiler_fueltypes = ["NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"]
@@ -124,10 +122,7 @@ end
     heating_coil_types_sys4and6 = ["Electric", "Gas"]
     fan_types = ["AF_or_BI_rdg_fancurve","AF_or_BI_inletvanes","fc_inletvanes","var_speed_drive"]
     model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
-    weather_file = "CAN_ON_Toronto.716240_CWEC.epw"
-    puts "in test, weather_file = #{weather_file}"
-    BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
-#    BTAP::Environment::WeatherFile.new("#{File.dirname(__FILE__)}/../../../weather/CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
+    BTAP::Environment::WeatherFile.new("#{File.dirname(__FILE__)}/../../../weather/CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(model, model.getThermalZones, boiler_fueltypes[0], heating_coil_types_sys4and6[0], baseboard_types[0], chiller_types[0], fan_types[0])
     run_the_measure(model)
     BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/system_6.osm")

@@ -3,23 +3,7 @@
 class OpenStudio::Model::Model
 
   def define_space_type_map(building_type, building_vintage, climate_zone)
-    space_type_map = nil
-    case building_vintage
-    when 'NECB 2011'
-      space_type_map ={
-        "Hotel/Motel - dining" => ["Banquet_Flr_6", "Dining_Flr_6"],
-        "Storage area" => ["Basement", "Storage_Flr_1"],
-        "Retail - mall concourse" => ["Cafe_Flr_1"],
-        "Corr. >= 2.4m wide" => ["Corridor_Flr_3", "Corridor_Flr_6"],
-        "Food preparation" => ["Kitchen_Flr_6"],
-        "Hospital - laundry/washing" => ["Laundry_Flr_1"],
-        "Hotel/Motel - lobby" => ["Lobby_Flr_1"],
-        "Electrical/Mechanical" => ["Mech_Flr_1"],
-        "Retail - sales" => ["Retail_1_Flr_1", "Retail_2_Flr_1"],
-        "Hotel/Motel - rooms" => ["Room_1_Flr_3", "Room_1_Flr_6", "Room_2_Flr_3", "Room_2_Flr_6", "Room_3_Mult19_Flr_3", "Room_3_Mult9_Flr_6", "Room_4_Mult19_Flr_3", "Room_5_Flr_3", "Room_6_Flr_3"]
-      }
-    else
-      space_type_map = {
+    space_type_map = {
         'Banquet' => ['Banquet_Flr_6','Dining_Flr_6'],
         'Basement'=>['Basement'],
         'Cafe' => ['Cafe_Flr_1'],
@@ -36,82 +20,78 @@ class OpenStudio::Model::Model
         'Retail'=> ['Retail_1_Flr_1'],
         'Retail2'=> ['Retail_2_Flr_1'],
         'Storage'=> ['Storage_Flr_1']
-      }
-    end
-    
-    
-
+    }
 
     return space_type_map
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
     system_to_space_map = [
-      {
-        'type' => 'VAV',
-        'name' => 'VAV WITH REHEAT',
-        'space_names' =>
-          [
-          'Basement',
-          'Retail_1_Flr_1',
-          'Retail_2_Flr_1',
-          'Mech_Flr_1',
-          'Storage_Flr_1',
-          'Laundry_Flr_1',
-          'Cafe_Flr_1',
-          'Lobby_Flr_1',
-          'Corridor_Flr_3',
-          'Banquet_Flr_6',
-          'Dining_Flr_6',
-          'Corridor_Flr_6',
-          'Kitchen_Flr_6'
-        ]
-      },
-      {
-        'type' => 'DOAS',
-        'space_names' =>
-          [
-          'Room_1_Flr_3','Room_2_Flr_3','Room_3_Mult19_Flr_3','Room_4_Mult19_Flr_3','Room_5_Flr_3','Room_6_Flr_3','Room_1_Flr_6','Room_2_Flr_6','Room_3_Mult9_Flr_6'
-        ]
-      },
-      {
-        'type' => 'Refrigeration',
-        'case_type' => 'Walkin Freezer',
-        'cooling_capacity_per_length' => 367.0,
-        'length' => 7.32,
-        'evaporator_fan_pwr_per_length' => 34.0,
-        'lighting_per_length' => 16.4,
-        'lighting_sch_name' => 'HotelLarge BLDG_LIGHT_SCH',
-        'defrost_pwr_per_length' => 273.0,
-        'restocking_sch_name' => 'HotelLarge Kitchen_Flr_6_Case:1_WALKINFREEZER_WalkInStockingSched',
-        'cop' => 1.5,
-        'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
-        'condenser_fan_pwr' => 350.0,
-        'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-        'space_names' =>
-          [
-          'Kitchen_Flr_6'
-        ]
-      },
-      {
-        'type' => 'Refrigeration',
-        'case_type' => 'Display Case',
-        'cooling_capacity_per_length' => 734.0,
-        'length' => 3.66,
-        'evaporator_fan_pwr_per_length' => 55.0,
-        'lighting_per_length' => 33.0,
-        'lighting_sch_name' => 'HotelLarge BLDG_LIGHT_SCH',
-        'defrost_pwr_per_length' => 0.0,
-        'restocking_sch_name' => 'HotelLarge Kitchen_Flr_6_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
-        'cop' => 3.0,
-        'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
-        'condenser_fan_pwr' => 750.0,
-        'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-        'space_names' =>
-          [
-          'Kitchen_Flr_6'
-        ]
-      }
+        {
+            'type' => 'VAV',
+            'name' => 'VAV WITH REHEAT',
+            'space_names' =>
+                [
+                    'Basement',
+                    'Retail_1_Flr_1',
+                    'Retail_2_Flr_1',
+                    'Mech_Flr_1',
+                    'Storage_Flr_1',
+                    'Laundry_Flr_1',
+                    'Cafe_Flr_1',
+                    'Lobby_Flr_1',
+                    'Corridor_Flr_3',
+                    'Banquet_Flr_6',
+                    'Dining_Flr_6',
+                    'Corridor_Flr_6',
+                    'Kitchen_Flr_6'
+                ]
+        },
+        {
+            'type' => 'DOAS',
+            'space_names' =>
+                [
+                    'Room_1_Flr_3','Room_2_Flr_3','Room_3_Mult19_Flr_3','Room_4_Mult19_Flr_3','Room_5_Flr_3','Room_6_Flr_3','Room_1_Flr_6','Room_2_Flr_6','Room_3_Mult9_Flr_6'
+                ]
+        },
+        {
+            'type' => 'Refrigeration',
+            'case_type' => 'Walkin Freezer',
+            'cooling_capacity_per_length' => 367.0,
+            'length' => 7.32,
+            'evaporator_fan_pwr_per_length' => 34.0,
+            'lighting_per_length' => 16.4,
+            'lighting_sch_name' => 'HotelLarge BLDG_LIGHT_SCH',
+            'defrost_pwr_per_length' => 273.0,
+            'restocking_sch_name' => 'HotelLarge Kitchen_Flr_6_Case:1_WALKINFREEZER_WalkInStockingSched',
+            'cop' => 1.5,
+            'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
+            'condenser_fan_pwr' => 350.0,
+            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+            'space_names' =>
+            [
+                'Kitchen_Flr_6'
+            ]
+        },
+        {
+            'type' => 'Refrigeration',
+            'case_type' => 'Display Case',
+            'cooling_capacity_per_length' => 734.0,
+            'length' => 3.66,
+            'evaporator_fan_pwr_per_length' => 55.0,
+            'lighting_per_length' => 33.0,
+            'lighting_sch_name' => 'HotelLarge BLDG_LIGHT_SCH',
+            'defrost_pwr_per_length' => 0.0,
+            'restocking_sch_name' => 'HotelLarge Kitchen_Flr_6_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
+            'cop' => 3.0,
+            'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
+            'condenser_fan_pwr' => 750.0,
+            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+            'space_names' =>
+            [
+                'Kitchen_Flr_6'
+            ]
+        }
     ]
     return system_to_space_map
   end
@@ -119,14 +99,14 @@ class OpenStudio::Model::Model
   def define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
     space_multiplier_map = {
-      'Room_1_Flr_3' => 4,
-      'Room_2_Flr_3' => 4,
-      'Room_3_Mult19_Flr_3' => 76,
-      'Room_4_Mult19_Flr_3' => 76,
-      'Room_5_Flr_3' => 4,
-      'Room_6_Flr_3' => 4,
-      'Corridor_Flr_3' => 4,
-      'Room_3_Mult9_Flr_6' => 9
+        'Room_1_Flr_3' => 4,
+        'Room_2_Flr_3' => 4,
+        'Room_3_Mult19_Flr_3' => 76,
+        'Room_4_Mult19_Flr_3' => 76,
+        'Room_5_Flr_3' => 4,
+        'Room_6_Flr_3' => 4,
+        'Corridor_Flr_3' => 4,
+        'Room_3_Mult9_Flr_6' => 9
     }
     return space_multiplier_map
   end
@@ -212,11 +192,11 @@ class OpenStudio::Model::Model
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
   def add_daylighting_controls(building_vintage)
-    space_names = ['Banquet_Flr_6','Dining_Flr_6','Cafe_Flr_1','Lobby_Flr_1']
-    space_names.each do |space_name|
-      space = self.getSpaceByName(space_name).get
-      space.addDaylightingControls(building_vintage, false, false)
-    end
+      space_names = ['Banquet_Flr_6','Dining_Flr_6','Cafe_Flr_1','Lobby_Flr_1']
+      space_names.each do |space_name|
+        space = self.getSpaceByName(space_name).get
+        space.addDaylightingControls(building_vintage, false, false)
+      end
   end
 
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)

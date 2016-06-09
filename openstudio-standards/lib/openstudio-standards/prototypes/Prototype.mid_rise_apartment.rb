@@ -3,147 +3,129 @@
 class OpenStudio::Model::Model
  
   def define_space_type_map(building_type, building_vintage, climate_zone)
-
-    space_type_map = nil
-        
+    
     case building_vintage
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       space_type_map = {
-        'Office' => ['Office'],
-        'Corridor' => ['G Corridor', 'M Corridor'],
-        'Corridor_topfloor' => ['T Corridor'],
-        'Apartment' => [
-          'G SW Apartment',
-          'G NW Apartment',
-          'G NE Apartment',
-          'G N1 Apartment',
-          'G N2 Apartment',
-          'G S1 Apartment',
-          'G S2 Apartment',
-          'M SW Apartment',
-          'M NW Apartment',
-          'M SE Apartment',
-          'M NE Apartment',
-          'M N1 Apartment',
-          'M N2 Apartment',
-          'M S1 Apartment',
-          'M S2 Apartment'
-        ],
-        'Apartment_topfloor_WE' => [
-          'T SW Apartment',
-          'T NW Apartment',
-          'T SE Apartment',
-          'T NE Apartment'
-        ],
-        'Apartment_topfloor_NS' => [
-          'T N1 Apartment',
-          'T N2 Apartment',
-          'T S1 Apartment',
-          'T S2 Apartment'
-        ]
-      }
+          'Office' => ['Office'],
+          'Corridor' => ['G Corridor', 'M Corridor'],
+          'Corridor_topfloor' => ['T Corridor'],
+          'Apartment' => [
+            'G SW Apartment',
+            'G NW Apartment',
+            'G NE Apartment',
+            'G N1 Apartment',
+            'G N2 Apartment',
+            'G S1 Apartment',
+            'G S2 Apartment',
+            'M SW Apartment',
+            'M NW Apartment',
+            'M SE Apartment',
+            'M NE Apartment',
+            'M N1 Apartment',
+            'M N2 Apartment',
+            'M S1 Apartment',
+            'M S2 Apartment'
+          ],
+          'Apartment_topfloor_WE' => [
+            'T SW Apartment',
+            'T NW Apartment',
+            'T SE Apartment',
+            'T NE Apartment'
+          ],
+          'Apartment_topfloor_NS' => [
+            'T N1 Apartment',
+            'T N2 Apartment',
+            'T S1 Apartment',
+            'T S2 Apartment'
+          ]
+        }
     when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
       space_type_map = {
-        'Office' => ['Office'],
-        'Corridor' => ['G Corridor', 'M Corridor', 'T Corridor'],
-        'Apartment' => [
-          'G SW Apartment',
-          'G NW Apartment',
-          'G NE Apartment',
-          'G N1 Apartment',
-          'G N2 Apartment',
-          'G S1 Apartment',
-          'G S2 Apartment',
-          'M SW Apartment',
-          'M NW Apartment',
-          'M SE Apartment',
-          'M NE Apartment',
-          'M N1 Apartment',
-          'M N2 Apartment',
-          'M S1 Apartment',
-          'M S2 Apartment',
-          'T SW Apartment',
-          'T NW Apartment',
-          'T SE Apartment',
-          'T NE Apartment',
-          'T N1 Apartment',
-          'T N2 Apartment',
-          'T S1 Apartment',
-          'T S2 Apartment'
-        ]
-      }
-		 
-    when 'NECB 2011'
-      space_type_map ={
-        "Corr. < 2.4m wide" => ["G Corridor", "M Corridor", "T Corridor"],
-        
-        "Dormitory - living quarters" => ["G N1 Apartment", "G N2 Apartment", "G NE Apartment", 
-          "G NW Apartment", "G S1 Apartment", "G S2 Apartment", 
-          "G SW Apartment", "M N1 Apartment", "M N2 Apartment", 
-          "M NE Apartment", "M NW Apartment", "M S1 Apartment", 
-          "M S2 Apartment", "M SE Apartment", "M SW Apartment", 
-          "T N1 Apartment", "T N2 Apartment", "T NE Apartment", 
-          "T NW Apartment", "T S1 Apartment", "T S2 Apartment", 
-          "T SE Apartment", "T SW Apartment"],
-        "Office - enclosed" => ["Office"]
-      }
+          'Office' => ['Office'],
+          'Corridor' => ['G Corridor', 'M Corridor', 'T Corridor'],
+          'Apartment' => [
+            'G SW Apartment',
+            'G NW Apartment',
+            'G NE Apartment',
+            'G N1 Apartment',
+            'G N2 Apartment',
+            'G S1 Apartment',
+            'G S2 Apartment',
+            'M SW Apartment',
+            'M NW Apartment',
+            'M SE Apartment',
+            'M NE Apartment',
+            'M N1 Apartment',
+            'M N2 Apartment',
+            'M S1 Apartment',
+            'M S2 Apartment',
+            'T SW Apartment',
+            'T NW Apartment',
+            'T SE Apartment',
+            'T NE Apartment',
+            'T N1 Apartment',
+            'T N2 Apartment',
+            'T S1 Apartment',
+            'T S2 Apartment'
+          ]
+        }
     end
     
     return space_type_map
   end
 
-
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
     system_to_space_map = [
       {'type' => 'SAC',
-        'space_names' => ['G SW Apartment']},
+       'space_names' => ['G SW Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['G NW Apartment']},
+       'space_names' => ['G NW Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['G NE Apartment']},
+       'space_names' => ['G NE Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['G N1 Apartment']},
+       'space_names' => ['G N1 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['G N2 Apartment']},
+       'space_names' => ['G N2 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['G S1 Apartment']},
+       'space_names' => ['G S1 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['G S2 Apartment']},
+       'space_names' => ['G S2 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['M SW Apartment']},
+       'space_names' => ['M SW Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['M NW Apartment']},
+       'space_names' => ['M NW Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['M SE Apartment']},
+       'space_names' => ['M SE Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['M NE Apartment']},
+       'space_names' => ['M NE Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['M N1 Apartment']},
+       'space_names' => ['M N1 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['M N2 Apartment']},
+       'space_names' => ['M N2 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['M S1 Apartment']},
+       'space_names' => ['M S1 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['M S2 Apartment']},
+       'space_names' => ['M S2 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['T SW Apartment']},
+       'space_names' => ['T SW Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['T NW Apartment']},
+       'space_names' => ['T NW Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['T SE Apartment']},
+       'space_names' => ['T SE Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['T NE Apartment']},
+       'space_names' => ['T NE Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['T N1 Apartment']},
+       'space_names' => ['T N1 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['T N2 Apartment']},
+       'space_names' => ['T N2 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['T S1 Apartment']},
+       'space_names' => ['T S1 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['T S2 Apartment']},
+       'space_names' => ['T S2 Apartment']},
       {'type' => 'SAC',
-        'space_names' => ['Office']}
-    ]
+       'space_names' => ['Office']}
+      ]
 
     case building_vintage
     when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
@@ -175,14 +157,12 @@ class OpenStudio::Model::Model
    
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-
     # adjust the cooling setpoint
     self.adjust_clg_setpoint(building_vintage,climate_zone)
     # add elevator and lights&fans for the ground floor corridor
     self.add_extra_equip_corridor(building_vintage)
     # add extra infiltration for ground floor corridor
     self.add_door_infiltration(building_vintage,climate_zone)
-
         
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
     
@@ -203,7 +183,6 @@ class OpenStudio::Model::Model
       end
     end
   end
-
 
   # add elevator and lights&fans for the ground floor corridor
   def add_extra_equip_corridor(building_vintage)
@@ -257,7 +236,7 @@ class OpenStudio::Model::Model
 
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(46.288874618)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(46.288874618)

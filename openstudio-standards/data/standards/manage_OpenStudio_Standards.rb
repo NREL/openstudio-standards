@@ -5,6 +5,8 @@ require 'rubygems'
 require 'json'
 require 'rubyXL'
 
+ENV['SSL_CERT_FILE'] = Gem.loaded_specs['google-api-client'].full_gem_path+'/lib/cacerts.pem'
+
 class String
 
   def snake_case
@@ -16,7 +18,7 @@ end
 # Convert OpenStudio_Standards.xlsx to a series
 # of JSON files for easier consumption.
 class Hash
-  
+
   def sort_by_key_updated(recursive = false, &block)
     self.keys.sort(&block).reduce({}) do |seed, key|
       seed[key] = self[key]
@@ -39,7 +41,7 @@ class Hash
             end
           end
           seed[key] = seed[key].sort_by { |hsh| [ hsh['template'], hsh['building_type'], hsh['climate_zone_set'], hsh['space_type'], hsh['exterior_walls'], hsh['exterior_roofs'], hsh['exterior_floors'] ] }
-          # Replace 'zzzz' back to nil        
+          # Replace 'zzzz' back to nil
           seed[key].each do |item|
             item.keys.each do |key2|
               if item[key2] == 'zzzz'
@@ -48,7 +50,7 @@ class Hash
             end
           end
         elsif frst.has_key?('name') # For all other tabs, names should be unique
-          seed[key] = seed[key].sort_by { |hsh| hsh['name'] }  
+          seed[key] = seed[key].sort_by { |hsh| hsh['name'] }
         else
           seed[key] = seed[key]
         end
@@ -56,7 +58,7 @@ class Hash
       seed
     end
   end
- 
+
 end
 
 # Downloads the OpenStudio_Standards.xlsx
@@ -109,7 +111,7 @@ def download_google_spreadsheet
   #   Authorized client instance
   # @param [Google::APIClient::Schema::Drive::V2::File]
   #   Drive File instance
-  # @return 
+  # @return
   #   File's content if successful, nil otherwise
   def download_xlsx_spreadsheet(client, google_spreadsheet, path)
     file_name = google_spreadsheet.title
@@ -135,7 +137,7 @@ def download_google_spreadsheet
 
   # Initialize the API
   client_secret_path = File.join(Dir.home, '.credentials',"client_secret.json")
-	
+
   credentials_path = File.join(Dir.home, '.credentials',"openstudio-standards-google-drive.json")
   client = Google::APIClient.new(:application_name => 'openstudio-standards')
   client.authorization = authorize(credentials_path, client_secret_path)
@@ -198,21 +200,21 @@ def export_spreadsheet_to_json
   cols_to_skip << 'exhaust_per_area'
   cols_to_skip << 'exhaust_per_unit'
   cols_to_skip << 'exhaust_fan_power_per_area'
-  
+
   # List of columns that are boolean
   # (rubyXL returns 0 or 1, will translate to true/false)
   bool_cols = []
-  bool_cols << 'hx'  
-  
+  bool_cols << 'hx'
+
   # Open workbook
   workbook = RubyXL::Parser.parse(xlsx_path)
 
   # Loop through and export each tab to a separate JSON file
   workbook.worksheets.each do |worksheet|
     sheet_name = worksheet.sheet_name.snake_case
-    
+
     standards_data = {}
-    
+
     # Skip the specified worksheets
     if worksheets_to_skip.include?(sheet_name)
       puts "Skipping #{sheet_name}"
@@ -220,7 +222,7 @@ def export_spreadsheet_to_json
     else
       puts "Exporting #{sheet_name}"
     end
-    
+
     # All spreadsheets must have headers in row 3
     # and data from roworksheet 4 onward.
     header_row = 2 # Base 0
@@ -246,7 +248,7 @@ def export_spreadsheet_to_json
       headers << header
     end
     puts "--found #{headers.size} columns"
-    
+
     # Loop through all rows and export
     # data for the row to a hash.
     objs = []
@@ -347,11 +349,11 @@ def export_spreadsheet_to_json
       end
 
     end
-          
+
     # Report how many objects were found
     puts "--found #{objs.size} rows"
-    
-    # Save this hash 
+
+    # Save this hash
     standards_data[sheet_name] = objs
 
     # Sort the standard data so it can be diffed easily
@@ -361,9 +363,9 @@ def export_spreadsheet_to_json
     File.open("#{File.dirname(__FILE__)}/OpenStudio_Standards_#{sheet_name}.json", 'w:UTF-8') do |file|
       file << JSON::pretty_generate(sorted_standards_data)
     end
-    puts "Successfully generated OpenStudio_Standards_#{sheet_name}.json"    
-    
-    
+    puts "Successfully generated OpenStudio_Standards_#{sheet_name}.json"
+
+
   end
 
 end

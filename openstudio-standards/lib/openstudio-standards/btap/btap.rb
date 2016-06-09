@@ -17,7 +17,6 @@
 # *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 # **********************************************************************/
 
-
 require 'openstudio/energyplus/find_energyplus'
 require 'fileutils'
 require 'singleton'
@@ -28,6 +27,7 @@ require_relative 'geometry'
 require_relative 'compliance' 
 require_relative 'analysis' 
 require_relative 'simmanager' 
+require_relative 'environment' 
 require_relative 'mpc' 
 require_relative 'envelope'
 require_relative 'spaceloads'
