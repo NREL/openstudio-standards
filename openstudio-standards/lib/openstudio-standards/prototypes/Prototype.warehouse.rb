@@ -3,11 +3,23 @@
 class OpenStudio::Model::Model
 
   def define_space_type_map(building_type, building_vintage, climate_zone)
-    space_type_map = {
-      'Bulk' => ['Zone3 Bulk Storage'],
-      'Fine' => ['Zone2 Fine Storage'],
-      'Office' => ['Zone1 Office']
-    }
+    space_type_map = nil
+    
+    case building_vintage
+  
+    when 'NECB 2011'
+      space_type_map ={
+        "Warehouse - med/blk" => ["Zone3 Bulk Storage"],
+        "Warehouse - fine" => ["Zone2 Fine Storage"],
+        "Office - enclosed" => ["Zone1 Office"]
+      }
+    else
+      space_type_map = {
+        'Bulk' => ['Zone3 Bulk Storage'],
+        'Fine' => ['Zone2 Fine Storage'],
+        'Office' => ['Zone1 Office']
+      }
+    end
     return space_type_map
   end
 
@@ -87,7 +99,7 @@ class OpenStudio::Model::Model
 
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(0.798542707)
@@ -102,5 +114,6 @@ class OpenStudio::Model::Model
     return true
 
   end
+
 
 end

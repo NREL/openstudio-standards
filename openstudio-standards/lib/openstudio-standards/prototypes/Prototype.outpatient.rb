@@ -3,8 +3,50 @@
 class OpenStudio::Model::Model
  
   def define_space_type_map(building_type, building_vintage, climate_zone)
-    space_type_map = {
-      # 'Floor 1 Anesthesia', 'Floor 1 Bio Haz', 'Floor 1 Cafe', 'Floor 1 Clean', 'Floor 1 Clean Work', 'Floor 1 Dictation', 'Floor 1 Dressing Room', 'Floor 1 Electrical Room', 'Floor 1 Elevator Pump Room', 'Floor 1 Humid', 'Floor 1 IT Hall', 'Floor 1 IT Room', 'Floor 1 Lobby', 'Floor 1 Lobby Hall', 'Floor 1 Lobby Toilet', 'Floor 1 Locker Room', 'Floor 1 Locker Room Hall', 'Floor 1 Lounge', 'Floor 1 Med Gas', 'Floor 1 MRI Control Room', 'Floor 1 MRI Hall', 'Floor 1 MRI Room', 'Floor 1 MRI Toilet', 'Floor 1 Nourishment', 'Floor 1 Nurse Hall', 'Floor 1 Nurse Janitor', 'Floor 1 Nurse Station', 'Floor 1 Nurse Toilet', 'Floor 1 Office', 'Floor 1 Operating Room 1', 'Floor 1 Operating Room 2', 'Floor 1 Operating Room 3', 'Floor 1 PACU', 'Floor 1 Pre-Op Hall', 'Floor 1 Pre-Op Room 1', 'Floor 1 Pre-Op Room 2', 'Floor 1 Pre-Op Toilet', 'Floor 1 Procedure Room', 'Floor 1 Reception', 'Floor 1 Reception Hall', 'Floor 1 Recovery Room', 'Floor 1 Scheduling', 'Floor 1 Scrub', 'Floor 1 Soil', 'Floor 1 Soil Hold', 'Floor 1 Soil Work', 'Floor 1 Step Down', 'Floor 1 Sterile Hall', 'Floor 1 Sterile Storage', 'Floor 1 Storage', 'Floor 1 Sub-Sterile', 'Floor 1 Utility Hall', 'Floor 1 Utility Janitor', 'Floor 1 Utility Room', 'Floor 1 Vestibule', 'Floor 2 Conference', 'Floor 2 Conference Toilet', 'Floor 2 Dictation', 'Floor 2 Exam 1', 'Floor 2 Exam 2', 'Floor 2 Exam 3', 'Floor 2 Exam 4', 'Floor 2 Exam 5', 'Floor 2 Exam 6', 'Floor 2 Exam 7', 'Floor 2 Exam 8', 'Floor 2 Exam 9', 'Floor 2 Exam Hall 1', 'Floor 2 Exam Hall 2', 'Floor 2 Exam Hall 3', 'Floor 2 Exam Hall 4', 'Floor 2 Exam Hall 5', 'Floor 2 Exam Hall 6', 'Floor 2 Janitor', 'Floor 2 Lounge', 'Floor 2 Nurse Station 1', 'Floor 2 Nurse Station 2', 'Floor 2 Office', 'Floor 2 Office Hall', 'Floor 2 Reception', 'Floor 2 Reception Hall', 'Floor 2 Reception Toilet', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 2 Storage 1', 'Floor 2 Storage 2', 'Floor 2 Storage 3', 'Floor 2 Utility', 'Floor 2 Work', 'Floor 2 Work Hall', 'Floor 2 Work Toilet', 'Floor 2 X-Ray', 'Floor 3 Dressing Room', 'Floor 3 Elevator Hall', 'Floor 3 Humid', 'Floor 3 Janitor', 'Floor 3 Locker', 'Floor 3 Lounge', 'Floor 3 Lounge Toilet', 'Floor 3 Mechanical', 'Floor 3 Mechanical Hall', 'Floor 3 Office', 'Floor 3 Office Hall', 'Floor 3 Office Toilet', 'Floor 3 Physical Therapy 1', 'Floor 3 Physical Therapy 2', 'Floor 3 Physical Therapy Toilet', 'Floor 3 Storage 1', 'Floor 3 Storage 2', 'Floor 3 Treatment', 'Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2', 'Floor 3 Utility', 'Floor 3 Work', 'NE Stair', 'NW Elevator', 'NW Stair', 'SW Stair'
+    
+    
+    space_type_map = nil
+    case building_vintage
+    when 'NECB 2011'
+      space_type_map ={
+        "Dormitory - living quarters" => ["Floor 1 Anesthesia", "Floor 1 Bio Haz", "Floor 1 Cafe", 
+          "Floor 1 Clean", "Floor 1 Clean Work", "Floor 1 Dictation", 
+          "Floor 1 Dressing Room", "Floor 1 Electrical Room", "Floor 1 Elevator Pump Room", 
+          "Floor 1 Operating Room 1", "Floor 1 Operating Room 2", "Floor 1 Operating Room 3", 
+          "Floor 1 Humid", "Floor 1 IT Hall", "Floor 1 IT Room", "Floor 1 Lobby Hall", 
+          "Floor 1 Lobby", "Floor 1 Lobby Toilet", "Floor 1 Locker Room Hall", 
+          "Floor 1 Locker Room", "Floor 1 Lounge", "Floor 1 Med Gas", 
+          "Floor 1 MRI Control Room", "Floor 1 MRI Hall", "Floor 1 MRI Room", "Floor 1 MRI Toilet", 
+          "Floor 1 Nourishment", "Floor 1 Nurse Hall", "Floor 1 Nurse Janitor", 
+          "Floor 1 Nurse Station", "Floor 1 Nurse Toilet", "Floor 1 Office", 
+          "Floor 1 PACU", "Floor 1 Pre-Op Hall", "Floor 1 Pre-Op Room 1", "Floor 1 Pre-Op Room 2", 
+          "Floor 1 Pre-Op Toilet", "Floor 1 Procedure Room", "Floor 1 Reception Hall", 
+          "Floor 1 Reception", "Floor 1 Recovery Room", "Floor 1 Scheduling", "Floor 1 Scrub", 
+          "Floor 1 Soil Hold", "Floor 1 Soil", "Floor 1 Soil Work", "Floor 1 Step Down", 
+          "Floor 1 Sterile Hall", "Floor 1 Sterile Storage", "Floor 1 Storage", 
+          "Floor 1 Sub-Sterile", "Floor 1 Utility Hall", "Floor 1 Utility Janitor", 
+          "Floor 1 Utility Room", "Floor 1 Vestibule", "Floor 2 Conference", 
+          "Floor 2 Conference Toilet", "Floor 2 Dictation", "Floor 2 Exam 1", "Floor 2 Exam 2", 
+          "Floor 2 Exam 3", "Floor 2 Exam 4", "Floor 2 Exam 5", "Floor 2 Exam 6", "Floor 2 Exam 7", 
+          "Floor 2 Exam 8", "Floor 2 Exam 9", "Floor 2 Exam Hall 1", "Floor 2 Exam Hall 2", 
+          "Floor 2 Exam Hall 3", "Floor 2 Exam Hall 4", "Floor 2 Exam Hall 5", 
+          "Floor 2 Exam Hall 6", "Floor 2 Janitor", "Floor 2 Lounge", "Floor 2 Nurse Station 1", 
+          "Floor 2 Nurse Station 2", "Floor 2 Office Hall", "Floor 2 Office", "Floor 2 Reception Hall", 
+          "Floor 2 Reception", "Floor 2 Reception Toilet", "Floor 2 Scheduling 1", 
+          "Floor 2 Scheduling 2", "Floor 2 Storage 1", "Floor 2 Storage 2", 
+          "Floor 2 Storage 3", "Floor 2 Utility", "Floor 2 Work Hall", 
+          "Floor 2 Work", "Floor 2 Work Toilet", "Floor 2 X-Ray", "Floor 3 Dressing Room", 
+          "Floor 3 Elevator Hall", "Floor 3 Humid", "Floor 3 Janitor", "Floor 3 Locker", 
+          "Floor 3 Lounge", "Floor 3 Lounge Toilet", "Floor 3 Mechanical Hall", 
+          "Floor 3 Mechanical", "Floor 3 Office Hall", "Floor 3 Office", "Floor 3 Office Toilet", 
+          "Floor 3 Physical Therapy 1", "Floor 3 Physical Therapy 2", "Floor 3 Physical Therapy Toilet", 
+          "Floor 3 Storage 1", "Floor 3 Storage 2", "Floor 3 Treatment", 
+          "Floor 3 Undeveloped 1", "Floor 3 Undeveloped 2", 
+          "Floor 3 Utility", "Floor 3 Work", "NE Stair", "NW Elevator", "NW Stair", "SW Stair"]
+      }
+    else
+      space_type_map = {
+        # 'Floor 1 Anesthesia', 'Floor 1 Bio Haz', 'Floor 1 Cafe', 'Floor 1 Clean', 'Floor 1 Clean Work', 'Floor 1 Dictation', 'Floor 1 Dressing Room', 'Floor 1 Electrical Room', 'Floor 1 Elevator Pump Room', 'Floor 1 Humid', 'Floor 1 IT Hall', 'Floor 1 IT Room', 'Floor 1 Lobby', 'Floor 1 Lobby Hall', 'Floor 1 Lobby Toilet', 'Floor 1 Locker Room', 'Floor 1 Locker Room Hall', 'Floor 1 Lounge', 'Floor 1 Med Gas', 'Floor 1 MRI Control Room', 'Floor 1 MRI Hall', 'Floor 1 MRI Room', 'Floor 1 MRI Toilet', 'Floor 1 Nourishment', 'Floor 1 Nurse Hall', 'Floor 1 Nurse Janitor', 'Floor 1 Nurse Station', 'Floor 1 Nurse Toilet', 'Floor 1 Office', 'Floor 1 Operating Room 1', 'Floor 1 Operating Room 2', 'Floor 1 Operating Room 3', 'Floor 1 PACU', 'Floor 1 Pre-Op Hall', 'Floor 1 Pre-Op Room 1', 'Floor 1 Pre-Op Room 2', 'Floor 1 Pre-Op Toilet', 'Floor 1 Procedure Room', 'Floor 1 Reception', 'Floor 1 Reception Hall', 'Floor 1 Recovery Room', 'Floor 1 Scheduling', 'Floor 1 Scrub', 'Floor 1 Soil', 'Floor 1 Soil Hold', 'Floor 1 Soil Work', 'Floor 1 Step Down', 'Floor 1 Sterile Hall', 'Floor 1 Sterile Storage', 'Floor 1 Storage', 'Floor 1 Sub-Sterile', 'Floor 1 Utility Hall', 'Floor 1 Utility Janitor', 'Floor 1 Utility Room', 'Floor 1 Vestibule', 'Floor 2 Conference', 'Floor 2 Conference Toilet', 'Floor 2 Dictation', 'Floor 2 Exam 1', 'Floor 2 Exam 2', 'Floor 2 Exam 3', 'Floor 2 Exam 4', 'Floor 2 Exam 5', 'Floor 2 Exam 6', 'Floor 2 Exam 7', 'Floor 2 Exam 8', 'Floor 2 Exam 9', 'Floor 2 Exam Hall 1', 'Floor 2 Exam Hall 2', 'Floor 2 Exam Hall 3', 'Floor 2 Exam Hall 4', 'Floor 2 Exam Hall 5', 'Floor 2 Exam Hall 6', 'Floor 2 Janitor', 'Floor 2 Lounge', 'Floor 2 Nurse Station 1', 'Floor 2 Nurse Station 2', 'Floor 2 Office', 'Floor 2 Office Hall', 'Floor 2 Reception', 'Floor 2 Reception Hall', 'Floor 2 Reception Toilet', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 2 Storage 1', 'Floor 2 Storage 2', 'Floor 2 Storage 3', 'Floor 2 Utility', 'Floor 2 Work', 'Floor 2 Work Hall', 'Floor 2 Work Toilet', 'Floor 2 X-Ray', 'Floor 3 Dressing Room', 'Floor 3 Elevator Hall', 'Floor 3 Humid', 'Floor 3 Janitor', 'Floor 3 Locker', 'Floor 3 Lounge', 'Floor 3 Lounge Toilet', 'Floor 3 Mechanical', 'Floor 3 Mechanical Hall', 'Floor 3 Office', 'Floor 3 Office Hall', 'Floor 3 Office Toilet', 'Floor 3 Physical Therapy 1', 'Floor 3 Physical Therapy 2', 'Floor 3 Physical Therapy Toilet', 'Floor 3 Storage 1', 'Floor 3 Storage 2', 'Floor 3 Treatment', 'Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2', 'Floor 3 Utility', 'Floor 3 Work', 'NE Stair', 'NW Elevator', 'NW Stair', 'SW Stair'
       
       # TODO: still need to put these into their space types...
       #  all zones mapped
@@ -61,10 +103,14 @@ class OpenStudio::Model::Model
       # Add new space type 'Undeveloped'
       'Undeveloped' => ['Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2'] 
     }
+    end
+    
     return space_type_map
+  
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
+
     case building_vintage
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       system_to_space_map = [
@@ -102,7 +148,68 @@ class OpenStudio::Model::Model
               'Floor 3 Storage 1', 'Floor 3 Storage 2', 'Floor 3 Treatment', 'Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2', 
               'Floor 3 Utility', 'Floor 3 Work', 'NE Stair', 'NW Elevator', 'NW Stair', 'SW Stair'
             ]
+        },
+        {
+            'type' => 'Exhaust Fan',
+            'name' => 'Outpatient AHU1 Exhaust Fans',
+            'availability_sch_name' => 'OutPatientHealthCare Hours_of_operation',
+            'flow_rate' => 
+            [
+              6.79561743E-02,    # Floor 1 Anesthesia
+              4.24726077E-02,    # Floor 1 Lobby Toilet
+              0.1586,            # Floor 1 MRI Control Room
+              0.4153,            # Floor 1 MRI Room
+              4.24726077E-02,    # Floor 1 MRI Toilet
+              4.24726077E-02,    # Floor 1 Nurse Toilet
+              4.24726077E-02,    # Floor 1 Pre-Op Toilet
+              9.91027512E-02,    # Floor 1 Soil
+              4.40456672E-02,    # Floor 1 Soil Hold
+              1.41575359E-01,    # Floor 1 Soil Work 
+              ],
+            'flow_fraction_schedule_name' => nil,
+            'balanced_exhaust_fraction_schedule_name' => nil,
+            'space_names' =>
+            [
+                'Floor 1 Anesthesia',
+                'Floor 1 Lobby Toilet',
+                'Floor 1 MRI Control Room',
+                'Floor 1 MRI Room',
+                'Floor 1 MRI Toilet',
+                'Floor 1 Nurse Toilet',
+                'Floor 1 Pre-Op Toilet',
+                'Floor 1 Soil',
+                'Floor 1 Soil Hold',
+                'Floor 1 Soil Work'
+            ]
+        },
+        {
+            'type' => 'Exhaust Fan',
+            'name' => 'Outpatient AHU2&3 Exhaust Fans',
+            'availability_sch_name' => 'OutPatientHealthCare BLDG_OA_SCH',
+            'flow_rate' => 
+            [
+              5.03379054E-02,    # Floor 2 Conference Toilet
+              9.91027512E-02,    # Floor 2 Reception Toilet
+              4.24726077E-02,    # Floor 2 Work Toilet
+              0.8495,            # Floor 2 X-Ray
+              1.51013716E-01,    # Floor 3 Lounge Toilet
+              4.24726077E-02,    # Floor 3 Office Toilet
+              6.60685008E-02,    # Floor 3 Physical Therapy Toilet
+            ],
+            'flow_fraction_schedule_name' => nil,
+            'balanced_exhaust_fraction_schedule_name' => nil,
+            'space_names' =>
+            [
+                'Floor 2 Conference Toilet',
+                'Floor 2 Reception Toilet',
+                'Floor 2 Work Toilet',
+                'Floor 2 X-Ray',
+                'Floor 3 Lounge Toilet',
+                'Floor 3 Office Toilet',
+                'Floor 3 Physical Therapy Toilet',
+            ]
         }
+        
       ]
     
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -140,14 +247,35 @@ class OpenStudio::Model::Model
               'Floor 3 Physical Therapy 1', 'Floor 3 Physical Therapy 2', 
               'Floor 3 Treatment', 'Floor 3 Work'
             ]
+        },
+        {
+            'type' => 'Exhaust Fan',
+            'name' => 'Outpatient AHU1 Exhaust Fans',
+            'availability_sch_name' => 'OutPatientHealthCare AHU1-Fan_Pre2004',
+            'flow_rate' => 
+            [
+              0.068,      # Floor 1 Anesthesia
+              0.0793,     # Floor 1 MRI Control Room
+              0.2077,     # Floor 1 MRI Room
+              0.0991,     # Floor 1 Soil
+              0.044,      # Floor 1 Soil Hold
+              0.1416,     # Floor 1 Soil Work 
+              ],
+            'flow_fraction_schedule_name' => nil,
+            'balanced_exhaust_fraction_schedule_name' => nil,
+            'space_names' =>
+            [
+                'Floor 1 Anesthesia',
+                'Floor 1 MRI Control Room',
+                'Floor 1 MRI Room',
+                'Floor 1 Soil',
+                'Floor 1 Soil Hold',
+                'Floor 1 Soil Work'
+            ]
         }
-        # {
-          # TODO exhaust fans
-        # }
       ]      
     end
     
-
     return system_to_space_map
   end
      
@@ -165,7 +293,8 @@ class OpenStudio::Model::Model
     hot_water_loop = nil
     self.getPlantLoops.each do |loop|
       # If it has a boiler:hotwater, it is the correct loop
-      if loop.supplyComponents('Boiler:HotWater'.to_IddObjectType).size > 0
+      if loop.supplyComponents(OpenStudio::Model::BoilerHotWater::iddObjectType).size > 0
+      # if loop.supplyComponents('OS_Boiler_HotWater'.to_IddObjectType).size > 0   # Another feasible expression way
         hot_water_loop = loop
       end
     end
@@ -181,6 +310,8 @@ class OpenStudio::Model::Model
     self.add_door_infiltration(building_vintage,climate_zone)
     # reset boiler sizing factor to 0.3 (default 1)
     self.reset_boiler_sizing_factor
+    # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone
+    self.apply_minimum_total_ach(building_type,building_vintage)
     
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
     
@@ -207,6 +338,7 @@ class OpenStudio::Model::Model
     end
     return true
   end
+
 
   def adjust_clg_setpoint(building_vintage,climate_zone)
     self.getSpaceTypes.sort.each do |space_type|
@@ -263,6 +395,7 @@ class OpenStudio::Model::Model
     end
   end  
 
+
   def add_door_infiltration(building_vintage,climate_zone)
     # add extra infiltration for vestibule door
     case building_vintage
@@ -294,7 +427,7 @@ class OpenStudio::Model::Model
 
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         if water_heater.name.to_s.include?("Booster")
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
@@ -307,14 +440,6 @@ class OpenStudio::Model::Model
     end      
   end
   
-  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-    
-    self.update_waterheater_loss_coefficient(building_vintage)
-  
-    return true
-    
-  end
-
   # add humidifier to AHU1 (contains operating room1)
   def add_humidifier(building_vintage, hot_water_loop)
     operatingroom1_space = self.getSpaceByName('Floor 1 Operating Room 1').get
@@ -361,17 +486,20 @@ class OpenStudio::Model::Model
   # AHU1 doesn't have economizer
   def modify_OAcontroller(building_vintage)
     self.getAirLoopHVACs.each do |air_loop|
-      oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
-      oa_control = oa_sys.getControllerOutdoorAir
-      if air_loop.name.get == 'PVAV Outpatient F1'        
-        oa_control.setEconomizerControlType('NoEconomizer')
-      elsif air_loop.name.get == 'PVAV Outpatient F2 F3'
-        case building_vintage
-        when '90.1-2010'
-          oa_control.setMinimumOutdoorAirFlowRate(0)
-        else
-          next
-        end
+      oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
+      controller_oa = oa_system.getControllerOutdoorAir
+      controller_mv = controller_oa.controllerMechanicalVentilation
+      # AHU1 OA doesn't have controller:mechanicalventilation
+      if air_loop.name.to_s.include? "Outpatient F1"
+        controller_mv.setAvailabilitySchedule(self.alwaysOffDiscreteSchedule)
+        # add minimum fraction of outdoor air schedule to AHU1
+        controller_oa.setMinimumFractionofOutdoorAirSchedule(self.add_schedule('OutPatientHealthCare AHU-1_OAminOAFracSchedule'))
+      # for AHU2, at vintages '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', the minimum OA schedule is not the same as
+      # airloop availability schedule, but separately assigned.
+      elsif building_vintage=='90.1-2004' || building_vintage=='90.1-2007' || building_vintage=='90.1-2010' || building_vintage=='90.1-2013'
+        controller_oa.setMinimumOutdoorAirSchedule(self.add_schedule('OutPatientHealthCare BLDG_OA_SCH'))
+        # add minimum fraction of outdoor air schedule to AHU2
+        controller_oa.setMinimumFractionofOutdoorAirSchedule(self.add_schedule('OutPatientHealthCare BLDG_OA_FRAC_SCH'))
       end
     end
   end
@@ -397,5 +525,68 @@ class OpenStudio::Model::Model
       boiler.setSizingFactor(0.3)
     end
   end  
+  
+  def update_exhaust_fan_efficiency(building_vintage)
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      self.getFanZoneExhausts.sort.each do |exhaust_fan|
+        fan_name = exhaust_fan.name.to_s
+        if (fan_name.include? "X-Ray") || (fan_name.include? "MRI Room")
+          exhaust_fan.setFanEfficiency(0.16)
+          exhaust_fan.setPressureRise(125)
+        else
+          exhaust_fan.setFanEfficiency(0.31)
+          exhaust_fan.setPressureRise(249)
+        end
+      end
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      self.getFanZoneExhausts.sort.each do |exhaust_fan|
+        exhaust_fan.setFanEfficiency(0.338)
+        exhaust_fan.setPressureRise(125)
+      end
+    end
+  end
+  
+  # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone
+  def apply_minimum_total_ach(building_type,building_vintage)
+    self.getSpaces.each do |space|
+      space_type_name = space.spaceType.get.standardsSpaceType.get
+      search_criteria = {
+        'template' => building_vintage,
+        'building_type' => building_type,
+        'space_type' => space_type_name
+      }
+      data = find_object($os_standards['space_types'],search_criteria)
+      
+      # skip space type without minimum total air changes
+      next if data['minimum_total_air_changes'].nil?
+      
+      # calculate the minimum total air flow
+      minimum_total_ach = data['minimum_total_air_changes'].to_f
+      space_volume = space.volume
+      space_area = space.floorArea
+      minimum_airflow_per_zone = minimum_total_ach * space_volume / 3600
+      minimum_airflow_per_zone_floor_area = minimum_airflow_per_zone / space_area
+      # add minimum total air flow limit to sizing:zone
+      zone = space.thermalZone.get
+      sizingzone = zone.sizingZone
+      sizingzone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+      case building_vintage
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+        sizingzone.setCoolingMinimumAirFlow(minimum_airflow_per_zone)
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        sizingzone.setCoolingMinimumAirFlowperZoneFloorArea(minimum_airflow_per_zone_floor_area)
+      end
+    end
+  end
+
+  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+    
+    self.update_waterheater_loss_coefficient(building_vintage)
+  
+    return true
+    
+  end
 
 end
+
