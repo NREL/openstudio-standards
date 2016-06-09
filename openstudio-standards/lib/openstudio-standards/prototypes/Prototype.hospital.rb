@@ -3,8 +3,27 @@
 class OpenStudio::Model::Model
  
   def define_space_type_map(building_type, building_vintage, climate_zone)
-<<<<<<< HEAD
-    space_type_map = {
+    space_type_map = nil
+    case building_vintage
+    when 'NECB 2011'
+      space_type_map ={
+        "Electrical/Mechanical" => ["Basement"],
+        "Corr. >= 2.4m wide" => ["Corridor_Flr_1", "Corridor_Flr_2", "Corridor_Flr_5", "Corridor_NW_Flr_3", "Corridor_NW_Flr_4", "Corridor_SE_Flr_3", "Corridor_SE_Flr_4"],
+        "Dining - bar lounge/leisure" => ["Dining_Flr_5"],
+        "Hospital - emergency" => ["ER_Exam1_Mult4_Flr_1", "ER_Exam3_Mult4_Flr_1", "ER_Trauma1_Flr_1", "ER_Trauma2_Flr_1", "ER_Triage_Mult4_Flr_1"],
+        "Hospital - nurses' station" => ["ER_NurseStn_Lobby_Flr_1", "ICU_NurseStn_Lobby_Flr_2", "NurseStn_Lobby_Flr_3", "NurseStn_Lobby_Flr_4", "NurseStn_Lobby_Flr_5", "OR_NurseStn_Lobby_Flr_2"],
+        "Hospital - patient room" => ["IC_PatRoom1_Mult5_Flr_2", "IC_PatRoom2_Flr_2", "IC_PatRoom3_Mult6_Flr_2", "PatRoom1_Mult10_Flr_3", "PatRoom1_Mult10_Flr_4", "PatRoom2_Flr_3", "PatRoom2_Flr_4", "PatRoom3_Mult10_Flr_3", "PatRoom3_Mult10_Flr_4", "PatRoom4_Flr_3", "PatRoom4_Flr_4", "PatRoom5_Mult10_Flr_3", "PatRoom5_Mult10_Flr_4", "PatRoom6_Flr_3", "PatRoom6_Flr_4", "PatRoom7_Mult10_Flr_3", "PatRoom7_Mult10_Flr_4", "PatRoom8_Flr_3", "PatRoom8_Flr_4"],
+        "Hospital - recovery" => ["ICU_Flr_2"],
+        "Food preparation" => ["Kitchen_Flr_5"],
+        "Lab - research" => ["Lab_Flr_3", "Lab_Flr_4"],
+        "Office - enclosed" => ["Lobby_Records_Flr_1", "Office1_Flr_5", "Office1_Mult4_Flr_1", "Office2_Mult5_Flr_5", "Office3_Flr_5", "Office4_Mult6_Flr_5"],
+        "Hospital - operating room" => ["OR1_Flr_2", "OR2_Mult5_Flr_2", "OR3_Flr_2", "OR4_Flr_2"],
+        "Hospital - physical therapy" => ["PhysTherapy_Flr_3"],
+        "Hospital - radiology/imaging" => ["Radiology_Flr_4"]
+      }
+    
+    else
+      space_type_map = {
       # 'Basement', 'ER_Exam1_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1', 'Office1_Mult4_Flr_1', 'Lobby_Records_Flr_1', 'Corridor_Flr_1', 'ER_NurseStn_Lobby_Flr_1', 'OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2', 'IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', 'ICU_Flr_2', 'ICU_NurseStn_Lobby_Flr_2', 'Corridor_Flr_2', 'OR_NurseStn_Lobby_Flr_2', 'PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PhysTherapy_Flr_3', 'PatRoom6_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'NurseStn_Lobby_Flr_3', 'Lab_Flr_3', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_4', 'Radiology_Flr_4', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4', 'NurseStn_Lobby_Flr_4', 'Lab_Flr_4', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Dining_Flr_5', 'NurseStn_Lobby_Flr_5', 'Kitchen_Flr_5', 'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5', 'Corridor_Flr_5'
       'Corridor' => ['Corridor_Flr_1', 'Corridor_Flr_2', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Corridor_Flr_5'],
       'Dining' => ['Dining_Flr_5', ],
@@ -28,75 +47,28 @@ class OpenStudio::Model::Model
       'PhysTherapy' => ['PhysTherapy_Flr_3', ],
       'Radiology' => ['Radiology_Flr_4', ]   # total number of zones: 55 - equals to the IDF
     }
-=======
-    space_type_map = nil
-    case building_vintage
-    when 'NECB 2011'
-      space_type_map ={
-        "Electrical/Mechanical" => ["Basement"],
-        "Corr. >= 2.4m wide" => ["Corridor_Flr_1", "Corridor_Flr_2", "Corridor_Flr_5", "Corridor_NW_Flr_3", "Corridor_NW_Flr_4", "Corridor_SE_Flr_3", "Corridor_SE_Flr_4"],
-        "Dining - bar lounge/leisure" => ["Dining_Flr_5"],
-        "Hospital - emergency" => ["ER_Exam1_Mult4_Flr_1", "ER_Exam3_Mult4_Flr_1", "ER_Trauma1_Flr_1", "ER_Trauma2_Flr_1", "ER_Triage_Mult4_Flr_1"],
-        "Hospital - nurses' station" => ["ER_NurseStn_Lobby_Flr_1", "ICU_NurseStn_Lobby_Flr_2", "NurseStn_Lobby_Flr_3", "NurseStn_Lobby_Flr_4", "NurseStn_Lobby_Flr_5", "OR_NurseStn_Lobby_Flr_2"],
-        "Hospital - patient room" => ["IC_PatRoom1_Mult5_Flr_2", "IC_PatRoom2_Flr_2", "IC_PatRoom3_Mult6_Flr_2", "PatRoom1_Mult10_Flr_3", "PatRoom1_Mult10_Flr_4", "PatRoom2_Flr_3", "PatRoom2_Flr_4", "PatRoom3_Mult10_Flr_3", "PatRoom3_Mult10_Flr_4", "PatRoom4_Flr_3", "PatRoom4_Flr_4", "PatRoom5_Mult10_Flr_3", "PatRoom5_Mult10_Flr_4", "PatRoom6_Flr_3", "PatRoom6_Flr_4", "PatRoom7_Mult10_Flr_3", "PatRoom7_Mult10_Flr_4", "PatRoom8_Flr_3", "PatRoom8_Flr_4"],
-        "Hospital - recovery" => ["ICU_Flr_2"],
-        "Food preparation" => ["Kitchen_Flr_5"],
-        "Lab - research" => ["Lab_Flr_3", "Lab_Flr_4"],
-        "Office - enclosed" => ["Lobby_Records_Flr_1", "Office1_Flr_5", "Office1_Mult4_Flr_1", "Office2_Mult5_Flr_5", "Office3_Flr_5", "Office4_Mult6_Flr_5"],
-        "Hospital - operating room" => ["OR1_Flr_2", "OR2_Mult5_Flr_2", "OR3_Flr_2", "OR4_Flr_2"],
-        "Hospital - physical therapy" => ["PhysTherapy_Flr_3"],
-        "Hospital - radiology/imaging" => ["Radiology_Flr_4"]
-      }
-    
-    else
-      space_type_map = {
-        # 'Basement', 'ER_Exam1_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1', 'Office1_Mult4_Flr_1', 'Lobby_Records_Flr_1', 'Corridor_Flr_1', 'ER_NurseStn_Lobby_Flr_1', 'OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2', 'IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', 'ICU_Flr_2', 'ICU_NurseStn_Lobby_Flr_2', 'Corridor_Flr_2', 'OR_NurseStn_Lobby_Flr_2', 'PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PhysTherapy_Flr_3', 'PatRoom6_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'NurseStn_Lobby_Flr_3', 'Lab_Flr_3', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_4', 'Radiology_Flr_4', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4', 'NurseStn_Lobby_Flr_4', 'Lab_Flr_4', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Dining_Flr_5', 'NurseStn_Lobby_Flr_5', 'Kitchen_Flr_5', 'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5', 'Corridor_Flr_5'
-        'Corridor' => ['Corridor_Flr_1', 'Corridor_Flr_2', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Corridor_Flr_5'],
-        'Dining' => ['Dining_Flr_5', ],
-        'ER_Exam' => ['ER_Exam1_Mult4_Flr_1', 'ER_Exam3_Mult4_Flr_1', ],
-        'ER_NurseStn' => ['ER_NurseStn_Lobby_Flr_1', ],
-        'ER_Trauma' => ['ER_Trauma1_Flr_1', 'ER_Trauma2_Flr_1', ],
-        'ER_Triage' => ['ER_Triage_Mult4_Flr_1', ],
-        'ICU_NurseStn' => ['ICU_NurseStn_Lobby_Flr_2', ],
-        'ICU_Open' => ['ICU_Flr_2', ],
-        'ICU_PatRm' => ['IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', ],
-        'Kitchen' => ['Kitchen_Flr_5', ],
-        'Lab' => ['Lab_Flr_3', 'Lab_Flr_4', ],
-        'Lobby' => ['Lobby_Records_Flr_1', ],
-        'NurseStn' => ['OR_NurseStn_Lobby_Flr_2', 'NurseStn_Lobby_Flr_3', 'NurseStn_Lobby_Flr_4', 'NurseStn_Lobby_Flr_5', ],
-        'OR' => ['OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2', ],
-        'Office' => ['Office1_Mult4_Flr_1', 'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5', 'Basement', ], # I don't know where to put Basement
-        # 'PatCorridor' => [],
-        'PatRoom' => ['PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PatRoom6_Flr_3', 
-          'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_4', 
-          'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4', ],
-        'PhysTherapy' => ['PhysTherapy_Flr_3', ],
-      'Radiology' => ['Radiology_Flr_4', ]  # total number of zones: 55 - equals to the IDF
-      }
     end
->>>>>>> master
     return space_type_map
   end
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
     
-	case building_vintage
+  case building_vintage
     when '90.1-2010', '90.1-2013'
-	exhaust_flow = 7200
-	when '90.1-2004', '90.1-2007'
-	exhaust_flow = 8000
-	when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-	exhaust_flow = 3710
-	exhaust_flow_dining = 1589
-	end
-	
-	case building_vintage
-	when '90.1-2010', '90.1-2013','90.1-2004', '90.1-2007'
-	system_to_space_map = [
+  exhaust_flow = 7200
+  when '90.1-2004', '90.1-2007'
+  exhaust_flow = 8000
+  when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+  exhaust_flow = 3710
+  exhaust_flow_dining = 1589
+  end
+  
+  case building_vintage
+  when '90.1-2010', '90.1-2013','90.1-2004', '90.1-2007'
+  system_to_space_map = [
       {
-<<<<<<< HEAD
           'type' => 'VAV',
-		  'name' => 'VAV_1',
+      'name' => 'VAV_1',
           'space_names' => [
             'Basement', 'Office1_Mult4_Flr_1', 'Lobby_Records_Flr_1', 'Corridor_Flr_1', 'ER_NurseStn_Lobby_Flr_1', 
             'ICU_NurseStn_Lobby_Flr_2', 'Corridor_Flr_2', 'OR_NurseStn_Lobby_Flr_2'
@@ -104,28 +76,28 @@ class OpenStudio::Model::Model
       },
       {
           'type' => 'VAV',
-		  'name' => 'VAV_ER',
+      'name' => 'VAV_ER',
           'space_names' => [
             'ER_Exam1_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1'
           ]
-	  },
+    },
       {
           'type' => 'VAV',
-		  'name' => 'VAV_OR',
+      'name' => 'VAV_OR',
           'space_names' => [
             'OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2'
           ]
-	 },
+   },
       {
           'type' => 'VAV',
-		  'name' => 'VAV_ICU',
+      'name' => 'VAV_ICU',
           'space_names' => [
             'IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', 'ICU_Flr_2'
           ]
-	  },
+    },
       {
           'type' => 'VAV',
-		  'name' => 'VAV_PATRMS',
+      'name' => 'VAV_PATRMS',
           'space_names' => [
             'PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PatRoom6_Flr_3', 
             'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 
@@ -134,7 +106,7 @@ class OpenStudio::Model::Model
       },
       {
           'type' => 'VAV',
-		  'name' => 'VAV_2',
+      'name' => 'VAV_2',
           'space_names' => [
             'PhysTherapy_Flr_3', 'NurseStn_Lobby_Flr_3', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'Radiology_Flr_4', 
             'NurseStn_Lobby_Flr_4', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Dining_Flr_5', 'NurseStn_Lobby_Flr_5', 
@@ -143,83 +115,31 @@ class OpenStudio::Model::Model
       },
       {
           'type' => 'VAV',
-		  'name' => 'VAV_LABS',
+      'name' => 'VAV_LABS',
           'space_names' => [
             'Lab_Flr_3', 'Lab_Flr_4'
           ]
       },
       {
           'type' => 'CAV',
-		  'name' => 'CAV_KITCHEN',
+      'name' => 'CAV_KITCHEN',
           'space_names' => [
             'Kitchen_Flr_5'
-=======
-        'type' => 'VAV',
-        'space_names' => [
-          'Basement', 'Office1_Mult4_Flr_1', 'Lobby_Records_Flr_1', 'Corridor_Flr_1', 'ER_NurseStn_Lobby_Flr_1', 
-          'ICU_NurseStn_Lobby_Flr_2', 'Corridor_Flr_2', 'OR_NurseStn_Lobby_Flr_2'
-        ]
-      },
-      {
-        'type' => 'VAV',
-        'space_names' => [
-          'ER_Exam1_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1'
-        ]
-      },
-      {
-        'type' => 'VAV',
-        'space_names' => [
-          'OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2'
-        ]
-      },
-      {
-        'type' => 'VAV',
-        'space_names' => [
-          'IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', 'ICU_Flr_2'
-        ]
-      },
-      {
-        'type' => 'VAV',
-        'space_names' => [
-          'PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PatRoom6_Flr_3', 
-          'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 
-          'PatRoom5_Mult10_Flr_4', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4'
-        ]
-      },
-      {
-        'type' => 'VAV',
-        'space_names' => [
-          'PhysTherapy_Flr_3', 'NurseStn_Lobby_Flr_3', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'Radiology_Flr_4', 
-          'NurseStn_Lobby_Flr_4', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Dining_Flr_5', 'NurseStn_Lobby_Flr_5', 
-          'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5', 'Corridor_Flr_5'
-        ]
-      },
-      {
-        'type' => 'VAV',
-        'space_names' => [
-          'Lab_Flr_3', 'Lab_Flr_4'
-        ]
-      },
-      {
-        'type' => 'CAV',
-        'space_names' => [
-          'Kitchen_Flr_5'
->>>>>>> master
           ]                     # 55 spaces assigned.
       },
-	    
-	   {
+      
+     {
           'type' => 'Exhaust Fan',
           'name' => 'Kitchen_Flr_5 Exhaust Fan',
           'availability_sch_name' => 'Hospital Kitchen_Exhaust_SCH',
-		  'flow_rate' => OpenStudio.convert(exhaust_flow,'cfm','m^3/s').get,
-		  'balanced_exhaust_fraction_schedule_name' => 'Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule',
-		  'space_names' =>
+      'flow_rate' => OpenStudio.convert(exhaust_flow,'cfm','m^3/s').get,
+      'balanced_exhaust_fraction_schedule_name' => 'Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule',
+      'space_names' =>
           [
               'Kitchen_Flr_5'
           ]
       },
-	  {
+    {
             'type' => 'Refrigeration',
             'case_type' => 'Walkin Freezer',
             'cooling_capacity_per_length' => 734,
@@ -238,7 +158,7 @@ class OpenStudio::Model::Model
                 'Kitchen_Flr_5'
             ]
         },
-	  {
+    {
             'type' => 'Refrigeration',
             'case_type' => 'Display Case',
             'cooling_capacity_per_length' => 886.5,
@@ -260,76 +180,76 @@ class OpenStudio::Model::Model
     ]
     return system_to_space_map
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-	system_to_space_map = [
+  system_to_space_map = [
       {
           'type' => 'VAV',
-		  'name' => 'CAV_1',
+      'name' => 'CAV_1',
           'space_names' => [
           'ER_Exam1_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1','IC_PatRoom1_Mult5_Flr_2',
-		    'PatRoom1_Mult10_Flr_3','PatRoom5_Mult10_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom3_Mult10_Flr_4', 'PatRoom5_Mult10_Flr_4', 
-			'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4' 
+        'PatRoom1_Mult10_Flr_3','PatRoom5_Mult10_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom3_Mult10_Flr_4', 'PatRoom5_Mult10_Flr_4', 
+      'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4' 
           ]
       },
-	  
-	        {
+    
+          {
           'type' => 'VAV',
-		  'name' => 'CAV_2',
+      'name' => 'CAV_2',
           'space_names' => [
           'OR1_Flr_2','OR2_Mult5_Flr_2','OR3_Flr_2','OR4_Flr_2','IC_PatRoom2_Flr_2','PatRoom2_Flr_3','PatRoom6_Flr_3','PatRoom8_Flr_3','PatRoom4_Flr_4'
-		   ]
+       ]
       },
   
-  	        {
+            {
           'type' => 'VAV',
-		  'name' => 'VAV_1',
+      'name' => 'VAV_1',
           'space_names' => [
           'Office1_Mult4_Flr_1','Lobby_Records_Flr_1','Corridor_Flr_1','ER_NurseStn_Lobby_Flr_1','IC_PatRoom3_Mult6_Flr_2','ICU_NurseStn_Lobby_Flr_2',
-		  'Corridor_Flr_2','OR_NurseStn_Lobby_Flr_2','PatRoom3_Mult10_Flr_3','Lab_Flr_3','PatRoom1_Mult10_Flr_4','PatRoom8_Flr_4'
-		   ]
+      'Corridor_Flr_2','OR_NurseStn_Lobby_Flr_2','PatRoom3_Mult10_Flr_3','Lab_Flr_3','PatRoom1_Mult10_Flr_4','PatRoom8_Flr_4'
+       ]
       },
-    	        {
+              {
           'type' => 'VAV',
-		  'name' => 'VAV_2',
+      'name' => 'VAV_2',
           'space_names' => [
-			'ICU_Flr_2',
-			'PatRoom4_Flr_3', 
-			'PhysTherapy_Flr_3', 
-			'NurseStn_Lobby_Flr_3', 
-			'Corridor_SE_Flr_3', 
-			'Corridor_NW_Flr_3', 
-			'PatRoom2_Flr_4', 
-			'Radiology_Flr_4', 
-			'NurseStn_Lobby_Flr_4', 
-			'Lab_Flr_4', 
-			'Corridor_SE_Flr_4', 
-			'Corridor_NW_Flr_4', 
-			'Dining_Flr_5', 
-			'NurseStn_Lobby_Flr_5', 
-			'Kitchen_Flr_5', 
-			'Office1_Flr_5', 
-			'Office2_Mult5_Flr_5', 
-			'Office3_Flr_5', 
-			'Office4_Mult6_Flr_5', 
-			'Corridor_Flr_5' 
-		   ]
+      'ICU_Flr_2',
+      'PatRoom4_Flr_3', 
+      'PhysTherapy_Flr_3', 
+      'NurseStn_Lobby_Flr_3', 
+      'Corridor_SE_Flr_3', 
+      'Corridor_NW_Flr_3', 
+      'PatRoom2_Flr_4', 
+      'Radiology_Flr_4', 
+      'NurseStn_Lobby_Flr_4', 
+      'Lab_Flr_4', 
+      'Corridor_SE_Flr_4', 
+      'Corridor_NW_Flr_4', 
+      'Dining_Flr_5', 
+      'NurseStn_Lobby_Flr_5', 
+      'Kitchen_Flr_5', 
+      'Office1_Flr_5', 
+      'Office2_Mult5_Flr_5', 
+      'Office3_Flr_5', 
+      'Office4_Mult6_Flr_5', 
+      'Corridor_Flr_5' 
+       ]
       },
-	  
-	 {
+    
+   {
           'type' => 'Exhaust Fan',
           'name' => 'Kitchen_Flr_5 Exhaust Fan',
           'availability_sch_name' => 'Hospital HVACOperationSchd',
-		  'flow_rate' => OpenStudio.convert(exhaust_flow,'cfm','m^3/s').get,
-		  'space_names' =>
+      'flow_rate' => OpenStudio.convert(exhaust_flow,'cfm','m^3/s').get,
+      'space_names' =>
           [
               'Kitchen_Flr_5'
           ]
       },
-	  	 {
+       {
           'type' => 'Exhaust Fan',
           'name' => 'Dining_Flr_5 Exhaust Fan',
           'availability_sch_name' => 'Hospital HVACOperationSchd',
-		  'flow_rate' => OpenStudio.convert(exhaust_flow_dining,'cfm','m^3/s').get,
-		  'space_names' =>
+      'flow_rate' => OpenStudio.convert(exhaust_flow_dining,'cfm','m^3/s').get,
+      'space_names' =>
           [
               'Dining_Flr_5'
           ]
@@ -353,7 +273,7 @@ class OpenStudio::Model::Model
                 'Kitchen_Flr_5'
             ]
         },
-	  {
+    {
             'type' => 'Refrigeration',
             'case_type' => 'Display Case',
             'cooling_capacity_per_length' => 886.5,
@@ -372,13 +292,10 @@ class OpenStudio::Model::Model
                 'Kitchen_Flr_5'
             ]
         }
-	  ]
-	  return system_to_space_map
+    ]
+    return system_to_space_map
   end
-<<<<<<< HEAD
   end
-=======
->>>>>>> master
      
   def define_space_multiplier
    
@@ -390,56 +307,55 @@ class OpenStudio::Model::Model
       'OR2_Mult5_Flr_2' => 5,
       'IC_PatRoom1_Mult5_Flr_2' => 5,
       'IC_PatRoom3_Mult6_Flr_2' => 6,
-	  'PatRoom1_Mult10_Flr_3' => 10,
-	  'PatRoom3_Mult10_Flr_3' => 10,
-	  'PatRoom5_Mult10_Flr_3' => 10, 
-	  'PatRoom7_Mult10_Flr_3' => 10,
-	  'PatRoom1_Mult10_Flr_4' => 10,
-	  'PatRoom3_Mult10_Flr_4' => 10,
-	  'PatRoom5_Mult10_Flr_4' => 10,
-	  'PatRoom7_Mult10_Flr_4' => 10,
-	  'Office2_Mult5_Flr_5' => 5,
-	  'Office4_Mult6_Flr_5' => 6
+    'PatRoom1_Mult10_Flr_3' => 10,
+    'PatRoom3_Mult10_Flr_3' => 10,
+    'PatRoom5_Mult10_Flr_3' => 10, 
+    'PatRoom7_Mult10_Flr_3' => 10,
+    'PatRoom1_Mult10_Flr_4' => 10,
+    'PatRoom3_Mult10_Flr_4' => 10,
+    'PatRoom5_Mult10_Flr_4' => 10,
+    'PatRoom7_Mult10_Flr_4' => 10,
+    'Office2_Mult5_Flr_5' => 5,
+    'Office4_Mult6_Flr_5' => 6
     }
     return space_multiplier_map
   end
-<<<<<<< HEAD
     
    
   def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-	
+  
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
     
     system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
-	
-	hot_water_loop = nil
+  
+  hot_water_loop = nil
     self.getPlantLoops.each do |loop|
       # If it has a boiler:hotwater, it is the correct loop
       if loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).size > 0
         hot_water_loop = loop
       end
-	end	
-	if hot_water_loop
-	  case building_vintage
-	  when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-		self.add_humidifier_er(building_vintage, hot_water_loop)
-		self.add_humidifier_or(building_vintage, hot_water_loop)
-		self.add_humidifier_icu(building_vintage, hot_water_loop)
-		self.add_humidifier_lab(building_vintage, hot_water_loop)
-		self.add_humidifier_pat(building_vintage, hot_water_loop)
-	  when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-		self.add_humidifier_vav1(building_vintage, hot_water_loop)
-		self.add_humidifier_vav2(building_vintage, hot_water_loop)
-	  end
-	  	else
+  end  
+  if hot_water_loop
+    case building_vintage
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    self.add_humidifier_er(building_vintage, hot_water_loop)
+    self.add_humidifier_or(building_vintage, hot_water_loop)
+    self.add_humidifier_icu(building_vintage, hot_water_loop)
+    self.add_humidifier_lab(building_vintage, hot_water_loop)
+    self.add_humidifier_pat(building_vintage, hot_water_loop)
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+    self.add_humidifier_vav1(building_vintage, hot_water_loop)
+    self.add_humidifier_vav2(building_vintage, hot_water_loop)
+    end
+      else
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find hot water loop to attach humidifier to.')
     end
-	
-	self.reset_kitchen_OA(building_vintage)
-	self.update_exhaust_fan_efficiency(building_vintage) 
-	self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
-		
-	  return true
+  
+  self.reset_kitchen_OA(building_vintage)
+  self.update_exhaust_fan_efficiency(building_vintage) 
+  self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
+    
+    return true
   end
  
  
@@ -458,34 +374,12 @@ class OpenStudio::Model::Model
     end      
   end
   
-=======
-
-   
-
-  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-    
-    return true
-      # water_heater.setAmbientTemperatureIndicator('Zone')
-  end
-      # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
-  def update_waterheater_loss_coefficient(building_vintage)
-    case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      self.getWaterHeaterMixeds.sort.each do |water_heater|
-        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
-        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(0.798542707)
-    end
-    end      
-  end  
-
->>>>>>> master
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
     
     self.update_waterheater_loss_coefficient(building_vintage)
     
     return true
     
-<<<<<<< HEAD
   end
   
   def reset_kitchen_OA(building_vintage)
@@ -523,7 +417,7 @@ class OpenStudio::Model::Model
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
     er_exam_zone.setZoneControlHumidistat(humidistat)
-	
+  
     self.getAirLoopHVACs.each do |air_loop|
       if air_loop.thermalZones.include? er_exam_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
@@ -557,9 +451,6 @@ class OpenStudio::Model::Model
       end
     end
   end
-=======
-  end #add swh    
->>>>>>> master
 
   def add_humidifier_or(building_vintage, hot_water_loop)
     or_exam_space = self.getSpaceByName('OR2_Mult5_Flr_2').get
@@ -568,7 +459,7 @@ class OpenStudio::Model::Model
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
     or_exam_zone.setZoneControlHumidistat(humidistat)
-	
+  
     self.getAirLoopHVACs.each do |air_loop|
       if air_loop.thermalZones.include? or_exam_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
@@ -610,7 +501,7 @@ class OpenStudio::Model::Model
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
     icu_zone.setZoneControlHumidistat(humidistat)
-	
+  
     self.getAirLoopHVACs.each do |air_loop|
       if air_loop.thermalZones.include? icu_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
@@ -652,7 +543,7 @@ class OpenStudio::Model::Model
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
     pat_zone.setZoneControlHumidistat(humidistat)
-	
+  
     self.getAirLoopHVACs.each do |air_loop|
       if air_loop.thermalZones.include? pat_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
@@ -694,7 +585,7 @@ class OpenStudio::Model::Model
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
     lab_zone.setZoneControlHumidistat(humidistat)
-	
+  
     self.getAirLoopHVACs.each do |air_loop|
       if air_loop.thermalZones.include? lab_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
@@ -729,14 +620,14 @@ class OpenStudio::Model::Model
     end
   end  
     
-	def add_humidifier_vav1(building_vintage, hot_water_loop)
+  def add_humidifier_vav1(building_vintage, hot_water_loop)
     or_exam_space = self.getSpaceByName('ER_Exam3_Mult4_Flr_1').get
     or_exam_zone = or_exam_space.thermalZone.get
     humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
     or_exam_zone.setZoneControlHumidistat(humidistat)
-	
+  
     self.getAirLoopHVACs.each do |air_loop|
       if air_loop.thermalZones.include? or_exam_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
@@ -771,14 +662,14 @@ class OpenStudio::Model::Model
     end
   end
     
-	def add_humidifier_vav2(building_vintage, hot_water_loop)
+  def add_humidifier_vav2(building_vintage, hot_water_loop)
     or_exam_space = self.getSpaceByName('OR2_Mult5_Flr_2').get
     or_exam_zone = or_exam_space.thermalZone.get
     humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
     or_exam_zone.setZoneControlHumidistat(humidistat)
-	
+  
     self.getAirLoopHVACs.each do |air_loop|
       if air_loop.thermalZones.include? or_exam_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
@@ -811,9 +702,9 @@ class OpenStudio::Model::Model
         humidity_spm.setControlZone(or_exam_zone)
       end
     end
-  end	
-	
-	def hospital_add_daylighting_controls(building_vintage)
+  end  
+  
+  def hospital_add_daylighting_controls(building_vintage)
       space_names = ['Office1_Flr_5','Office3_Flr_5','Lobby_Records_Flr_1']
       space_names.each do |space_name|
         space = self.getSpaceByName(space_name).get
@@ -843,7 +734,7 @@ class OpenStudio::Model::Model
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
       oa_control = oa_sys.getControllerOutdoorAir
       case air_loop.name.get 
-	  when 'VAV_ER', 'VAV_ICU' , 'VAV_LABS' , 'VAV_OR' , 'VAV_PATRMS','CAV_1','CAV_2'	  
+    when 'VAV_ER', 'VAV_ICU' , 'VAV_LABS' , 'VAV_OR' , 'VAV_PATRMS','CAV_1','CAV_2'    
         oa_control.setEconomizerControlType('NoEconomizer')
        end
     end

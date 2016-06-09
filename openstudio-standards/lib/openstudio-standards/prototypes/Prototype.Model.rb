@@ -147,7 +147,6 @@ class OpenStudio::Model::Model
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
         
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
-<<<<<<< HEAD
     # AHU1 doesn't have economizer
     if building_type == "Outpatient"
       self.modify_OAcontroller(building_vintage)
@@ -160,8 +159,6 @@ class OpenStudio::Model::Model
     end
 
     # Apply the HVAC efficiency standard
-=======
->>>>>>> master
     self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
 
     # Add daylighting controls per standard
