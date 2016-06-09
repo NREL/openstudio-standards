@@ -10,46 +10,46 @@
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
         23.9
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        29.4
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        29.4
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        29.4
       ]
     },
     {
@@ -178,58 +178,6 @@
     },
     {
       "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        1.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "Always Off",
       "category": "Activity",
       "units": "W",
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -243,6 +191,32 @@
     },
     {
       "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "Always Off",
       "category": "Unknown",
       "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -252,6 +226,32 @@
       "notes": "From DOE Prototype Buildings",
       "values": [
         1.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.0
       ]
     },
     {
@@ -4102,222 +4102,6 @@
       "notes": "From DOE Reference Buildings ",
       "values": [
         120.0
-      ]
-    },
-    {
-      "name": "Hospital Admin Equipment",
-      "category": "Equipment",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn|Sun|Sat",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Hourly",
-      "notes": "From DOE Reference Buildings ",
-      "values": [
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.5,
-        0.5,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        0.5,
-        0.5,
-        0.3,
-        0.3,
-        0.3,
-        0.3
-      ]
-    },
-    {
-      "name": "Hospital Admin Equipment",
-      "category": "Equipment",
-      "units": null,
-      "day_types": "Sat",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Hourly",
-      "notes": null,
-      "values": [
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.5,
-        0.5,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.5,
-        0.5,
-        0.5,
-        0.5,
-        0.5,
-        0.3,
-        0.3,
-        0.3,
-        0.3
-      ]
-    },
-    {
-      "name": "Hospital Admin Equipment",
-      "category": "Equipment",
-      "units": null,
-      "day_types": "Sun",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Hourly",
-      "notes": null,
-      "values": [
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.5,
-        0.5,
-        0.5,
-        0.5,
-        0.5,
-        0.5,
-        0.5,
-        0.5,
-        0.5,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3
-      ]
-    },
-    {
-      "name": "Hospital Admin Light",
-      "category": "Lighting",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn|Sun|Sat",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Hourly",
-      "notes": "From DOE Reference Buildings ",
-      "values": [
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.3,
-        0.3,
-        0.6,
-        0.9,
-        0.9,
-        0.9,
-        0.9,
-        0.9,
-        0.9,
-        0.9,
-        0.9,
-        0.9,
-        0.9,
-        0.9,
-        0.6,
-        0.6,
-        0.6,
-        0.3,
-        0.3,
-        0.1
-      ]
-    },
-    {
-      "name": "Hospital Admin Light",
-      "category": "Lighting",
-      "units": null,
-      "day_types": "Sat",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Hourly",
-      "notes": null,
-      "values": [
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.3,
-        0.3,
-        0.3,
-        0.4,
-        0.4,
-        0.4,
-        0.4,
-        0.4,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.3,
-        0.1,
-        0.1,
-        0.1,
-        0.1
-      ]
-    },
-    {
-      "name": "Hospital Admin Light",
-      "category": "Lighting",
-      "units": null,
-      "day_types": "Sun",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Hourly",
-      "notes": null,
-      "values": [
-        0.05,
-        0.05,
-        0.05,
-        0.05,
-        0.05,
-        0.05,
-        0.05,
-        0.05,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.05,
-        0.05,
-        0.05,
-        0.05,
-        0.05,
-        0.05,
-        0.05
       ]
     },
     {
@@ -8616,42 +8400,6 @@
         15.6,
         15.6,
         15.6
-      ]
-    },
-    {
-      "name": "Hospital Kitchen_Elec_Equip_SCH",
-      "category": "Equipment",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn|Sun|Sat",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Hourly",
-      "notes": "From DOE Reference Buildings ",
-      "values": [
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.1,
-        0.25,
-        0.35,
-        0.35,
-        0.25,
-        0.35,
-        0.35,
-        0.35,
-        0.25,
-        0.25,
-        0.25,
-        0.35,
-        0.35,
-        0.35,
-        0.25,
-        0.25,
-        0.25,
-        0.25,
-        0.25
       ]
     },
     {
