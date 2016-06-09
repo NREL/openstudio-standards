@@ -1206,7 +1206,8 @@ module BTAP
       def self.create_shape_rectangle(model,
           length = 100.0,
           width = 100.0,
-          num_floors = 3,
+          above_ground_storys = 3,
+          under_ground_storys = 1,
           floor_to_floor_height = 3.8,
           plenum_height = 1,
           perimeter_zone_depth = 4.57
@@ -1222,7 +1223,7 @@ module BTAP
           return false
         end
 
-        if num_floors <= 1e-4
+        if above_ground_storys <= 1e-4
           raise("Number of floors must be greater than 0.")
           return false
         end
@@ -1245,11 +1246,11 @@ module BTAP
 
         #    # Create progress bar
         #    runner.createProgressBar("Creating Spaces")
-        #    num_total = perimeter_zone_depth>0 ? num_floors*5 : num_floors
+        #    num_total = perimeter_zone_depth>0 ? above_ground_storys*5 : above_ground_storys
         #    num_complete = 0
 
         #Loop through the number of floors
-        for floor in (0..num_floors-1)
+        for floor in ((under_ground_storys * -1)..above_ground_storys-1)
 
           z = floor_to_floor_height * floor
 
@@ -1386,6 +1387,10 @@ module BTAP
 
           #Set vertical story position
           story.setNominalZCoordinate(z)
+          
+          #Ensure that underground stories (when z<0 have Ground set as Boundary conditions. 
+          BTAP::Geometry::Surfaces::set_surfaces_boundary_condition(model,BTAP::Geometry::Surfaces::get_surfaces_from_building_stories(model, story), "Ground") if z < 0
+          
 
         end #End of floor loop
 
@@ -2621,9 +2626,9 @@ module BTAP
         return surfaces
       end
 
-      def self.get_surfaces_from_building_stories(story_array)
+      def self.get_surfaces_from_building_stories(model, story_array)
         surfaces = Array.new()
-        get_spaces_from_storeys(story_array).each do |space|
+        BTAP::Geometry::Spaces::get_spaces_from_storeys(model, story_array).each do |space|
           surfaces.concat(space.surfaces())
         end
         return surfaces

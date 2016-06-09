@@ -67,7 +67,6 @@ class OpenStudio::Model::Model
 	  
       #Should this be the first thing done Maria?
       self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
-      puts self.get_full_weather_file_path
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)           #set "dummy construction set
       #BTAP::Geometry::intersect_surfaces(self)                                
       #BTAP::Geometry::match_surfaces(self)  
