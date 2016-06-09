@@ -27,7 +27,11 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
         else
+<<<<<<< HEAD
           hot_water_loop = self.add_hw_loop('NaturalGas', building_type)
+=======
+          hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
+>>>>>>> master
         end
 
         # Retrieve the existing chilled water loop

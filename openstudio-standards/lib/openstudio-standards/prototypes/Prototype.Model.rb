@@ -64,7 +64,7 @@ class OpenStudio::Model::Model
       self.add_loads(building_vintage, climate_zone)   
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
-    
+	  
       #Should this be the first thing done Maria?
       self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
       puts self.get_full_weather_file_path
@@ -110,9 +110,9 @@ class OpenStudio::Model::Model
       self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
       self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
       self.set_sizing_parameters(building_type, building_vintage)
-      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+    self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
-    end
+	  end
     # set climate zone and building type
     self.getBuilding.setStandardsBuildingType(building_type)
     if climate_zone.include? 'ASHRAE 169-2006-'
@@ -147,18 +147,21 @@ class OpenStudio::Model::Model
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
         
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
+<<<<<<< HEAD
     # AHU1 doesn't have economizer
     if building_type == "Outpatient"
       self.modify_OAcontroller(building_vintage)
       # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
       self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
     end
-  
-    if building_type == "Hospital"
+	
+	if building_type == "Hospital"
       self.modify_hospital_OAcontroller(building_vintage)
     end
 
     # Apply the HVAC efficiency standard
+=======
+>>>>>>> master
     self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
 
     # Add daylighting controls per standard
@@ -166,10 +169,10 @@ class OpenStudio::Model::Model
     # todo: YXC to merge to the main function
     if building_type == "LargeHotel"
       self.add_daylighting_controls(building_vintage)
-    elsif building_type == "Hospital"
-      self.hospital_add_daylighting_controls(building_vintage)
-    else
-      self.addDaylightingControls(building_vintage)
+	elsif building_type == "Hospital"
+	  self.hospital_add_daylighting_controls(building_vintage)
+	else
+	  self.addDaylightingControls(building_vintage)
     end
 
     if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant" || building_type == "Outpatient"
