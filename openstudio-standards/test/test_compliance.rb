@@ -91,6 +91,10 @@ class NECBHDDTests < Minitest::Test
   # NECB 2011 8.4.4.1
   # @return [Bool] true if successful. 
   def test_necb_hdd_envelope_rules()
+    # Todo - Define a construction directly to a surface. 
+    # Todo - Define a construction set to a space directly.
+    # Todo - Define a construction set to a floor directly. 
+    # Todo - Define an adiabatic surface (See if it handle the bug) 
      
     #Create report string. 
     @output = ""
@@ -158,12 +162,14 @@ class NECBHDDTests < Minitest::Test
         #Assign default to the model. 
         @model.getBuilding.setDefaultConstructionSet( default_construction_set )
       
-        #Apply NECB contruction rules.(building type is meaningless in this context) 
+        #Add weather file, HDD.
         @model.add_design_days_and_weather_file('HighriseApartment', template, 'NECB HDD Method', File.basename(weather_file))
       
         # Reduce the WWR and SRR, if necessary
         @model.apply_performance_rating_method_baseline_window_to_wall_ratio(template)
         @model.apply_performance_rating_method_baseline_skylight_to_roof_ratio(template)
+        
+        # Apply Construction
         @model.apply_performance_rating_method_construction_types(template)
 
       
@@ -205,6 +211,7 @@ class NECBHDDTests < Minitest::Test
         BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__),"output","#{template}-hdd#{@hdd}-envelope_test.osm"))
       end #Weather file loop.
     end # Template vintage loop
+    
     #Write test report file. 
     test_result_file = File.join(File.dirname(__FILE__),'regression_files','compliance_envelope_test_results.csv')
     File.open(test_result_file, 'w') {|f| f.write(@output) }
@@ -214,7 +221,7 @@ class NECBHDDTests < Minitest::Test
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__),'envelope_test.osm'))
     assert( b_result, 
-      "NECB Envelope output do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
+      "Envelope test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
     )  
   end # test_envelope()
       
