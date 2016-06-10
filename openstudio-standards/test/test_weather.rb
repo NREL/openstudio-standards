@@ -12,11 +12,12 @@ class WeatherTests < Minitest::Test
   def test_weather_reading()
     BTAP::Environment::create_climate_index_file(
       File.join(File.dirname(__FILE__),'..','data','weather'), 
-      File.join(File.dirname(__FILE__),'weather_test.csv') 
+      File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv') 
     )
     assert ( 
-      FileUtils.compare_file(File.join(File.dirname(__FILE__),'..','data','weather','weather_info.csv'), 
-        File.join(File.dirname(__FILE__),'weather_test.csv'))
+      FileUtils.compare_file(
+        File.join(File.dirname(__FILE__),'regression_files','weather_expected_results.csv'), 
+        File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv'))
     )
   end
 end

@@ -16,7 +16,7 @@ class NECBHDDTests < Minitest::Test
     'CAN_NU_Resolute.719240_CWEC.epw' # CZ 8  -FuelOil2 HDD = 12570
   ] 
   #Set Compliance vintage
-  Templates = ['NECB 2011']
+  Templates = ['NECB 2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
   
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
@@ -94,7 +94,7 @@ class NECBHDDTests < Minitest::Test
      
     #Create report string. 
     @output = ""
-    @output << "WeatherFile,HDD,FDWR,SRR," 
+    @output << "Vintage,WeatherFile,HDD,FDWR,SRR," 
     @output << "outdoor_walls_average_conductance,outdoor_roofs_average_conductance,outdoor_floors_average_conductance,"
     @output << "ground_walls_average_conductances, ground_roofs_average_conductances, ground_floors_average_conductances,"
     @output << "windows_average_conductance,skylights_average_conductance,doors_average_conductance,overhead_doors_average_conductance\n"
@@ -198,18 +198,19 @@ class NECBHDDTests < Minitest::Test
         overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
 
         #Save information to report. Rounding is done to avoid floating point small differences. 
-        @output << "#{weather_file},#{@hdd.round(0)},#{BTAP::Geometry::get_fwdr(@model).round(4)},#{BTAP::Geometry::get_srr(@model).round(4)},"
+        @output << "#{template},#{weather_file},#{@hdd.round(0)},#{BTAP::Geometry::get_fwdr(@model).round(4)},#{BTAP::Geometry::get_srr(@model).round(4)},"
         @output << "#{outdoor_walls_average_conductance.round(4)} ,#{outdoor_roofs_average_conductance.round(4)} , #{outdoor_floors_average_conductance.round(4)},"
         @output << "#{ground_walls_average_conductances.round(4)},#{ground_roofs_average_conductances.round(4)},#{ground_floors_average_conductances.round(4)},"
         @output << "#{windows_average_conductance.round(4)},#{skylights_average_conductance.round(4)},#{doors_average_conductance.round(4)},#{overhead_doors_average_conductance.round(4)}\n"
+        BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__),"output","#{template}-hdd#{@hdd}-envelope_test.osm"))
       end #Weather file loop.
     end # Template vintage loop
     #Write test report file. 
-    test_result_file = File.join(File.dirname(__FILE__),'envelope_test.csv')
+    test_result_file = File.join(File.dirname(__FILE__),'regression_files','compliance_envelope_test_results.csv')
     File.open(test_result_file, 'w') {|f| f.write(@output) }
     
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__),'..','data','weather','envelope_info.csv')
+    expected_result_file = File.join(File.dirname(__FILE__),'regression_files','compliance_envelope_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__),'envelope_test.osm'))
     assert( b_result, 

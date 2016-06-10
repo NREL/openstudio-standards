@@ -2973,20 +2973,21 @@ class OpenStudio::Model::Model
     # Without Curb
 
     # Create an array of types
-    case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
-      types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
-      types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
-      types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
-      types_to_modify << ['Ground', 'GroundContactWall', 'Unheated']
-    end
+
     
     case template
     when 'NECB 2011'
       BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
       return true
     else
+      case template
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
+        types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
+        types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+        types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
+        types_to_modify << ['Ground', 'GroundContactWall', 'Unheated']
+      end
       # Modify all constructions of each type
       types_to_modify.each do |boundary_cond, surf_type, const_type|
         constructions = self.find_constructions(boundary_cond, surf_type)

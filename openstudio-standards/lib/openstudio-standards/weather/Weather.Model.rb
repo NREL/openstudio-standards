@@ -298,6 +298,7 @@ module BTAP
       data = ""
       counter = 0
       File.open(output_file, 'w') { |file|
+        puts "outpus #{output_file}"
         data << "file,location_name,energy_plus_location_name,country,state_province_region,city,hdd10,hdd18,cdd10,cdd18,latitude,longitude,elevation, deltaDB, climate_zone, cz_standard, summer_wet_months, winter_dry_months,autumn_months, spring_months, typical_summer_wet_week, typical_winter_dry_week, typical_autumn_week, typical_spring_week\n" 
         BTAP::FileIO::get_find_files_from_folder_by_extension(folder, 'epw').each do |wfile|
           wf = BTAP::Environment::WeatherFile.new(wfile)
