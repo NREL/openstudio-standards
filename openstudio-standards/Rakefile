@@ -15,6 +15,13 @@ Rake::TestTask.new('test:weather') do |task|
   task.test_files = FileList['openstudio-standards/test/test_weather.rb']
 end
 
+require 'rake/testtask'
+desc 'Run the compliance file tests'
+Rake::TestTask.new('test:compliance') do |task|
+  task.libs << 'test'
+  task.test_files = FileList['openstudio-standards/test/test_compliance.rb']
+end
+
 
 require 'rake/testtask'
 desc 'Run test PRM'

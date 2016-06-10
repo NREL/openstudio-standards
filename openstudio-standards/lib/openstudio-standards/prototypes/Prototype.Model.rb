@@ -70,8 +70,10 @@ class OpenStudio::Model::Model
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)           #set "dummy construction set
       #BTAP::Geometry::intersect_surfaces(self)                                
       #BTAP::Geometry::match_surfaces(self)  
-      BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR                                  
-      BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
+      # Reduce the WWR and SRR, if necessary
+      self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage)
+      self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)                                
+      self.apply_performance_rating_method_construction_types(building_vintage)
       #Getting System Fuel type types from BTAP::Environment. 
       BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
       boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4,heating_coil_types_sys6, fan_type = BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)

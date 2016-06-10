@@ -570,6 +570,7 @@ module BTAP
       end
 
 
+      #Depreciated!
       #This method will set the fwdr for a building. It will remove all glazings
       # and hard set the FDWR.
       #@author phylroy.lopez@nrcan.gc.ca

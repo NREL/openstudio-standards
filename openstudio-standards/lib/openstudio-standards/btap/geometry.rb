@@ -1210,7 +1210,8 @@ module BTAP
           under_ground_storys = 1,
           floor_to_floor_height = 3.8,
           plenum_height = 1,
-          perimeter_zone_depth = 4.57
+          perimeter_zone_depth = 4.57,
+          initial_height = 0.0
         )
 
         if length <= 1e-4
@@ -1223,7 +1224,7 @@ module BTAP
           return false
         end
 
-        if above_ground_storys <= 1e-4
+        if (above_ground_storys + under_ground_storys) <= 1e-4
           raise("Number of floors must be greater than 0.")
           return false
         end
@@ -1252,7 +1253,7 @@ module BTAP
         #Loop through the number of floors
         for floor in ((under_ground_storys * -1)..above_ground_storys-1)
 
-          z = floor_to_floor_height * floor
+          z = floor_to_floor_height * floor + initial_height
 
           #Create a new story within the building
           story = OpenStudio::Model::BuildingStory.new(model)
@@ -1389,8 +1390,8 @@ module BTAP
           story.setNominalZCoordinate(z)
           
           #Ensure that underground stories (when z<0 have Ground set as Boundary conditions. 
-          BTAP::Geometry::Surfaces::set_surfaces_boundary_condition(model,BTAP::Geometry::Surfaces::get_surfaces_from_building_stories(model, story), "Ground") if z < 0
-          
+          BTAP::Geometry::Surfaces::set_surfaces_boundary_condition(model,BTAP::Geometry::Surfaces::get_surfaces_from_building_stories(model, story), "Ground") if z <= 0
+          BTAP::Geometry::Surfaces::set_surfaces_boundary_condition(model,BTAP::Geometry::Surfaces::get_surfaces_from_building_stories(model, story), "Outdoors") if z > 0
 
         end #End of floor loop
 
