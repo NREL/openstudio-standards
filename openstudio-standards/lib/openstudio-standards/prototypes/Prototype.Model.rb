@@ -493,7 +493,7 @@ class OpenStudio::Model::Model
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
 
-  def add_loads(building_vintage, climate_zone)
+  def add_loads(building_vintage, climate_zone = nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 

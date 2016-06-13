@@ -10,6 +10,7 @@ class WeatherTests < Minitest::Test
   # NECB 2011 8.4.2.3 
   # @return [Bool] true if successful. 
   def test_weather_reading()
+    #todo Must deal with ground temperatures..They are currently not correct for NECB.
     BTAP::Environment::create_climate_index_file(
       File.join(File.dirname(__FILE__),'..','data','weather'), 
       File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv') 
