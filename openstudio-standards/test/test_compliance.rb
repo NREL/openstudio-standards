@@ -381,8 +381,8 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
   def setup()
     #Create new model for testing. 
     @model = OpenStudio::Model::Model.new
-    #Create Geometry that will be used for all tests.  
-    
+    #    #Create Geometry that will be used for all tests.  
+    #    
     #Below ground story to tests all ground surfaces including roof.
     length = 100.0; width = 100.0 ; num_above_ground_floors = 0; num_under_ground_floors = 1; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = -10.0
     BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
@@ -393,115 +393,191 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
   # This is not for compliance, but for archetype development. 
   # @return [Bool] true if successful. 
   def test_schedule_type_defaults()
+    header_output = ""
     output = ""
     #Iterate through all spacetypes/buildingtypes. 
     Templates.each do |template|
       SpaceTypeNames.each do |name|
+        header_output = ""
         # Create a space type
-        stub_space_type = OpenStudio::Model::SpaceType.new(@model)
-        stub_space_type.setStandardsBuildingType('Space Function')
-        stub_space_type.setStandardsSpaceType(name)
-        stub_space_type.setName(name)
-        stub_space_type.set_rendering_color(template)
-      end
-      @model.add_loads(template)
-    end
-    @model.getSpaceTypes.each do |st|
-      
+        st = OpenStudio::Model::SpaceType.new(@model)
+        st.setStandardsBuildingType('Space Function')
+        st.setStandardsSpaceType(name)
+        st.setName(name)
+        st.set_rendering_color(template)
 
-      #Lights
-      total_lpd = []
-      lpd_sched = []
-      st.lights.each {|light| total_lpd << light.powerPerFloorArea.get ; lpd_sched << light.schedule.get.name}
-      assert(total_lpd.size <= 1 , "#{total_lpd.size} light definitions given. Expecting <= 1.")
-      
-      #People / Occupancy
-      total_occ_dens = []
-      occ_sched = []
-      st.people.each {|people_def| total_occ_dens << people_def.peoplePerFloorArea.get ; occ_sched << people_def.numberofPeopleSchedule.get.name}
-      assert(total_lpd.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")   
-      
-      #Equipment -Gas
-      gas_equip_power = []
-      gas_equip_sched = []
-      st.gasEquipment.each {|gas_equip| gas_equip_power << gas_equip.powerPerFloorArea.get ; gas_equip_sched << gas_equip.schedule.get.name}
-      assert( gas_equip_power.size <= 1 , "#{gas_equip_power.size} gas definitions given. Expecting <= 1." ) 
-      
-      #Equipment -Electric
-      elec_equip_power = []
-      elec_equip_sched = []
-      st.electricEquipment.each {|elec_equip| elec_equip_power << elec_equip.powerPerFloorArea.get ; elec_equip_sched << elec_equip.schedule.get.name}
-      assert( elec_equip_power.size <= 1 , "#{elec_equip_power.size} electric definitions given. Expecting <= 1." ) 
-      
-      #Equipment - Steam
-      steam_equip_power = []
-      steam_equip_sched = []
-      st.steamEquipment.each {|steam_equip| steam_equip_power << steam_equip.powerPerFloorArea.get ; steam_equip_sched << steam_equip.schedule.get.name}
-      assert( steam_equip_power.size <= 1 , "#{steam_equip_power.size} steam definitions given. Expecting <= 1." ) 
-      
-      #Hot Water Equipment
-      hw_equip_power = []
-      hw_equip_sched = []
-      st.hotWaterEquipment.each {|equip| hw_equip_power << equip.powerPerFloorArea.get ; hw_equip_sched << equip.schedule.get.name}
-      assert( hw_equip_power.size <= 1 , "#{hw_equip_power.size} hw definitions given. Expecting <= 1." ) 
-      
-      #Hot Water Equipment
-      other_equip_power = []
-      other_equip_sched = []
-      st.otherEquipment.each {|equip| other_equip_power << equip.powerPerFloorArea.get ; other_equip_sched << equip.schedule.get.name}
-      assert( other_equip_power.size <= 1 , "#{other_equip_power.size} other equipment definitions given. Expecting <= 1." ) 
-      
-      
-      output <<  "#{st.name},"
-      #lights
-      output <<  "#{total_lpd[0]},"
-      output << "#{lpd_sched[0]},"
-      
-      #people
-      output <<  "#{total_occ_dens[0]},"
-      output << "#{occ_sched[0]},"
-      
-      #equipment
-      output <<  "#{gas_equip_power[0]},"
-      output << "#{gas_equip_sched[0]}"
+        @model.add_loads(template)
 
-      output << "\n"
+        #Set all spaces to spacetype
+        @model.getSpaces.each do |space|
+          space.setSpaceType(st)
+        end
+        
+
+        #Lights
+        total_lpd = []
+        lpd_sched = []
+        st.lights.each {|light| total_lpd << light.powerPerFloorArea.get ; lpd_sched << light.schedule.get.name}
+        assert(total_lpd.size <= 1 , "#{total_lpd.size} light definitions given. Expecting <= 1.")
       
+        #People / Occupancy
+        total_occ_dens = []
+        occ_sched = []
+        st.people.each {|people_def| total_occ_dens << people_def.peoplePerFloorArea.get ; occ_sched << people_def.numberofPeopleSchedule.get.name}
+        assert(total_lpd.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")   
       
-    end
-    puts output
-  end
-  # This test will ensure that the wildcard spacetypes are being assigned the 
-  # appropriate schedule.
-  # This is not for compliance, but for archetype development. 
-  # @return [Bool] true if successful. 
-  def wildcard_schedule_defaults_test()
+        #Equipment -Gas
+        gas_equip_power = []
+        gas_equip_sched = []
+        st.gasEquipment.each {|gas_equip| gas_equip_power << gas_equip.powerPerFloorArea.get ; gas_equip_sched << gas_equip.schedule.get.name}
+        assert( gas_equip_power.size <= 1 , "#{gas_equip_power.size} gas definitions given. Expecting <= 1." ) 
+      
+        #Equipment -Electric
+        elec_equip_power = []
+        elec_equip_sched = []
+        st.electricEquipment.each {|elec_equip| elec_equip_power << elec_equip.powerPerFloorArea.get ; elec_equip_sched << elec_equip.schedule.get.name}
+        assert( elec_equip_power.size <= 1 , "#{elec_equip_power.size} electric definitions given. Expecting <= 1." ) 
+      
+        #Equipment - Steam
+        steam_equip_power = []
+        steam_equip_sched = []
+        st.steamEquipment.each {|steam_equip| steam_equip_power << steam_equip.powerPerFloorArea.get ; steam_equip_sched << steam_equip.schedule.get.name}
+        assert( steam_equip_power.size <= 1 , "#{steam_equip_power.size} steam definitions given. Expecting <= 1." ) 
+      
+        #Hot Water Equipment
+        hw_equip_power = []
+        hw_equip_sched = []
+        st.hotWaterEquipment.each {|equip| hw_equip_power << equip.powerPerFloorArea.get ; hw_equip_sched << equip.schedule.get.name}
+        assert( hw_equip_power.size <= 1 , "#{hw_equip_power.size} hw definitions given. Expecting <= 1." ) 
+      
+        #Other Equipment
+        other_equip_power = []
+        other_equip_sched = []
+        st.otherEquipment.each {|equip| other_equip_power << equip.powerPerFloorArea.get ; other_equip_sched << equip.schedule.get.name}
+        assert( other_equip_power.size <= 1 , "#{other_equip_power.size} other equipment definitions given. Expecting <= 1." ) 
+          
+        #SHW
+        shw_loop = OpenStudio::Model::PlantLoop.new(@model)
+        shw_peak_flow_per_area = []
+        shw_heating_target_temperature = []
+        shw__schedule = ""
+        #Get first space to test. 
+        water_fixture = @model.add_swh_end_uses_by_space('Space Function', template, 'NECB HDD Method', shw_loop, st.name.get, @model.getSpaces[0].name.get)
+        shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
+        shw_peak_flow_per_area = water_fixture.waterUseEquipmentDefinition.peakFlowRate
+        shw_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
+
+
+        header_output << "SpaceType,"
+        output << "#{st.name},"
+        #lights
+        if total_lpd[0].nil?
+          total_lpd[0] = 0.0
+          lpd_sched[0] = "NA"
+        end
+        header_output << "Lighting Power Density (W/sft),"
+        output << "#{total_lpd[0].round(4)},"
+        header_output << "Lighting Schedule,"
+        output << "#{lpd_sched[0]},"
+      
+        #people
+        if total_occ_dens[0].nil?
+          total_occ_dens[0] = 0.0
+          occ_sched[0] = "NA"
+        end
+        header_output << "Occupancy Density (people/1000sft),"
+        output << "#{total_occ_dens[0].round(4)},"
+        header_output << "Occupancy Schedule Name,"
+        output << "#{occ_sched[0]},"
+
+        #equipment - Elec
+        if elec_equip_power[0].nil?
+          elec_equip_power[0] = 0.0
+          elec_equip_sched[0] = "NA"
+        end
+        header_output << "Elec Equip Power Density (units?),"
+        output << "#{elec_equip_power[0].round(4)},"
+        header_output << "Elec Equip Schedule,"
+        output << "#{elec_equip_sched[0]}," 
+      
+        #equipment - Gas
+        if gas_equip_power[0].nil?
+          gas_equip_power[0] = 0.0
+          gas_equip_sched[0] = "NA"
+        end
+        header_output << "Gas Equip Power Density (units?),"
+        output << "#{gas_equip_power[0].round(4)},"
+        header_output << "Gas Equip Schedule Name,"
+        output << "#{gas_equip_sched[0]}," 
+      
+        #equipment - steam
+        if steam_equip_power[0].nil?
+          steam_equip_power[0] = 0.0
+          steam_equip_sched[0] = "NA"
+        end
+        header_output << "Steam Equip Power Density (units?),"
+        output << "#{steam_equip_power[0].round(4)},"
+        header_output << "Steam Equip Schedule,"
+        output << "#{steam_equip_sched[0]},"
+      
+        #equipment - hot water
+        if hw_equip_power[0].nil?
+          hw_equip_power[0] = 0.0
+          hw_equip_sched[0] = "NA"
+        end
+        header_output << "HW Equip Power Density (units?),"
+        output << "#{hw_equip_power[0].round(4)},"
+        header_output << "HW Equip Schedule,"
+        output << "#{hw_equip_sched[0]},"
+          
+        #SHW
+        header_output << "SHW Power Density (units?),"
+        output << "#{shw_peak_flow_per_area},"
+        header_output << "SHW Fraction Schedule,"
+        output << "#{shw__fraction_schedule},"
+        header_output << "SHW Temperature Setpoint Schedule Values (C),"
+        output << "#{shw_target_temperature_schedule}"
+        
+        #Infiltration
+        
+        #Ventilation
+        header_output << "\n"
+        output << "\n"
+          
+        #remove space_type (This speeds things up a bit. 
+        st.remove
+        shw_loop.remove
+        water_fixture.remove
+          
+      end #loop spacetypes
+    end #loop Template
+    #Write test report file. 
+    test_result_file = File.join(File.dirname(__FILE__),'regression_files','space_type_test_results.csv')
+    File.open(test_result_file, 'w') {|f| f.write(header_output + output) }
     
-  end
-  
-  # This test will ensure that the loads for each of the 133 spacetypes are 
-  # being assigned the appropriate values for SHW, People and Equipment.
-  # This is not for compliance, but for archetype development. 
-  # @return [Bool] true if successful. 
-  def internal_loads_test()
-    
-  end
-  
-  # This test will ensure that the loads for each of the 133 spacetypes are 
-  # being assigned the appropriate values for LPD.
-  # This is not for compliance, but for archetype development. 
-  # @return [Bool] true if successful.
-  def lighting_power_density_test()
-    
-  end
-  
-  
-  # This test will ensure that the system selection for each of the 133 spacetypes are 
-  # being assigned the appropriate values for LPD.
-  # @return [Bool] true if successful.
-  def system_selection_test()
-    
-  end
+    #Test that the values are correct by doing a file compare.
+    expected_result_file = File.join(File.dirname(__FILE__),'regression_files','space_type_expected_results.csv')
+    b_result = FileUtils.compare_file(expected_result_file , test_result_file )
+    assert( b_result, 
+      "Envelope test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
+    )  
+  end 
+  #  # This test will ensure that the wildcard spacetypes are being assigned the 
+  #  # appropriate schedule.
+  #  # This is not for compliance, but for archetype development. 
+  #  # @return [Bool] true if successful. 
+  #  def wildcard_schedule_defaults_test()
+  #    
+  #  end
+  #
+  #
+  #  
+  #  # This test will ensure that the system selection for each of the 133 spacetypes are 
+  #  # being assigned the appropriate values for LPD.
+  #  # @return [Bool] true if successful.
+  #  def system_selection_test()
+  #    
+  #  end
   
   
 end
