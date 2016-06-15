@@ -571,116 +571,33 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
   #  # This test will ensure that the system selection for each of the 133 spacetypes are 
   #  # being assigned the appropriate values for LPD.
   #  # @return [Bool] true if successful.
-  #  def system_selection_test()
- 
+  def test_system_selection()
   
-  {"Assembly Area" => ["v1", "v2"]}
-  
-  
-  
-  SpaceTypeNames = [
+    space_type_catagories = {}
+    BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |space_type_data|
+      if space_type_catagories[space_type_data[11]].nil? 
+        space_type_catagories[space_type_data[11]] = Array.new
+      end
+      space_type_catagories[space_type_data[11]] << space_type_data[0]
+    end
+    
+    floors = 1
+    space_type_catagories.each do |name,values|      
+      values.sort.each do |value|
+        case name
+        when "Assembly Area" #Assembly Area.
+          #Test different floor numbers
+          [4,5].each do |floor_number|
+            #BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(@model,nil)
+          end
+        when "Automotive Area"
+          
 
-    "Dwelling Unit(s)",
-    "Atrium - H < 13m",
-    "Atrium - H > 13m",
-    "Audience - auditorium",
-    "Audience - performance arts",
-    "Audience - motion picture",
-    "Classroom/lecture/training",
-    "Conf./meet./multi-purpose",
-    "Corr. >= 2.4m wide",
-    "Corr. < 2.4m wide",
-    "Dining - bar lounge/leisure",
-    "Dining - family space",
-    "Dining - other",
-    "Dress./fitt. - performance arts",
-    "Electrical/Mechanical",
-    "Food preparation",
-    "Lab - classrooms",
-    "Lab - research",
-    "Lobby - elevator",
-    "Lobby - performance arts",
-    "Lobby - motion picture",
-    "Lobby - other",
-    "Locker room",
-    "Lounge/recreation",
-    "Office - enclosed",
-    "Office - open plan",
-    "Sales area",
-    "Stairway",
-    "Storage area",
-    "Washroom",
-    "Workshop space",
-    "Automotive - repair",
-    "Bank - banking and offices",
-    "Convention centre - audience",
-    "Convention centre - exhibit",
-    "Courthouse - courtroom",
-    "Courthouse - cell",
-    "Courthouse - chambers",
-    "Penitentiary - audience",
-    "Penitentiary - classroom",
-    "Penitentiary - dining",
-    "Dormitory - living quarters",
-    "Fire station - engine room",
-    "Fire station - quarters",
-    "Gym - fitness",
-    "Gym - audience",
-    "Gym - play",
-    "Hospital corr. >= 2.4m",
-    "Hospital corr. < 2.4m",
-    "Hospital - emergency",
-    "Hospital - exam",
-    "Hospital - laundry/washing",
-    "Hospital - lounge/recreation",
-    "Hospital - medical supply",
-    "Hospital - nursery",
-    "Hospital - nurses' station",
-    "Hospital - operating room",
-    "Hospital - patient room",
-    "Hospital - pharmacy",
-    "Hospital - physical therapy",
-    "Hospital - radiology/imaging",
-    "Hospital - recovery",
-    "Hotel/Motel - dining",
-    "Hotel/Motel - rooms",
-    "Hotel/Motel - lobby",
-    "Hway lodging - dining",
-    "Hway lodging - rooms",
-    "Library - cataloging",
-    "Library - reading",
-    "Library - stacks",
-    "Mfg - corr. >= 2.4m",
-    "Mfg - corr. < 2.4m",
-    "Mfg - detailed",
-    "Mfg - equipment",
-    "Mfg - bay H > 15m",
-    "Mfg - 7.5 <= bay H <= 15m",
-    "Mfg - bay H < 7.5m",
-    "Museum - exhibition",
-    "Museum - restoration",
-    "Parking garage space",
-    "Post office sorting",
-    "Religious - audience",
-    "Religious - fellowship hall",
-    "Religious - pulpit/choir",
-    "Retail - dressing/fitting",
-    "Retail - mall concourse",
-    "Retail - sales",
-    "Sports arena - audience",
-    "Sports arena - court c4",
-    "Sports arena - court c3",
-    "Sports arena - court c2",
-    "Sports arena - court c1",
-    "Sports arena - ring",
-    "Transp. baggage",
-    "Transp. seating",
-    "Transp. concourse",
-    "Transp. counter",
-    "Warehouse - fine",
-    "Warehouse - med/blk",
-    "Warehouse - med/blk2",
-  ]
+        end
+       
+      end
+    end
+  end
   #  end
   
   
