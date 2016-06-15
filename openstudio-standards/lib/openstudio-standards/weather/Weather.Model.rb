@@ -299,10 +299,10 @@ module BTAP
       counter = 0
       File.open(output_file, 'w') { |file|
         puts "outpus #{output_file}"
-        data << "file,location_name,energy_plus_location_name,country,state_province_region,city,hdd10,hdd18,cdd10,cdd18,latitude,longitude,elevation, deltaDB, climate_zone, cz_standard, summer_wet_months, winter_dry_months,autumn_months, spring_months, typical_summer_wet_week, typical_winter_dry_week, typical_autumn_week, typical_spring_week\n" 
+        data << "file,location_name,energy_plus_location_name,country,state_province_region,city,hdd10,hdd18,cdd10,cdd18,latitude,longitude,elevation, deltaDB, climate_zone, cz_standard, summer_wet_months, winter_dry_months,autumn_months, spring_months, typical_summer_wet_week, typical_winter_dry_week, typical_autumn_week, typical_spring_week, heating_design_info[1],cooling_design_info[1],extremes_design_info[1]\n" 
         BTAP::FileIO::get_find_files_from_folder_by_extension(folder, 'epw').each do |wfile|
           wf = BTAP::Environment::WeatherFile.new(wfile)
-          data << "#{File.basename(wfile)}, #{wf.location_name}\,#{wf.energy_plus_location_name},#{wf.country}, #{wf.state_province_region}, #{wf.city}, #{wf.hdd10}, #{wf.hdd18},#{wf.cdd10},#{wf.cdd18},#{wf.latitude}, #{wf.longitude}, #{wf.elevation}, #{wf.delta_dry_bulb} ,#{wf.climate_zone},#{wf.standard},#{wf.summer_wet_months}, #{wf.winter_dry_months},#{wf.autumn_months}, #{wf.spring_months}, #{wf.typical_summer_wet_week}, #{wf.typical_winter_dry_week}, #{wf.typical_autumn_week}, #{wf.typical_spring_week}\n"
+          data << "#{File.basename(wfile)}, #{wf.location_name}\,#{wf.energy_plus_location_name},#{wf.country}, #{wf.state_province_region}, #{wf.city}, #{wf.hdd10}, #{wf.hdd18},#{wf.cdd10},#{wf.cdd18},#{wf.latitude}, #{wf.longitude}, #{wf.elevation}, #{wf.delta_dry_bulb} ,#{wf.climate_zone},#{wf.standard},#{wf.summer_wet_months}, #{wf.winter_dry_months},#{wf.autumn_months}, #{wf.spring_months}, #{wf.typical_summer_wet_week}, #{wf.typical_winter_dry_week}, #{wf.typical_autumn_week}, #{wf.typical_spring_week},#{wf.heating_design_info[1]},#{wf.cooling_design_info[1]},#{wf.extremes_design_info[1]}\n"
           counter += 1
         end
         file.write(data)
@@ -327,6 +327,9 @@ module BTAP
         :cdd18,
         :hdd10,
         :cdd10,
+        :heating_design_info,
+        :cooling_design_info,
+        :extremes_design_info,
         :monthly_dry_bulb,
         :delta_dry_bulb,
         :climate_zone,
@@ -431,6 +434,9 @@ module BTAP
         @cdd18 = @stat_file.cdd18
         @hdd10 = @stat_file.hdd10
         @cdd10 = @stat_file.cdd10
+        @heating_design_info = @stat_file.heating_design_info
+        @cooling_design_info  = @stat_file.cooling_design_info
+        @extremes_design_info = @stat_file.extremes_design_info
         @monthly_dry_bulb = @stat_file.monthly_dry_bulb
         @mean_dry_bulb = @stat_file.mean_dry_bulb
         @delta_dry_bulb = @stat_file.delta_dry_bulb

@@ -423,7 +423,7 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         #People / Occupancy
         total_occ_dens = []
         occ_sched = []
-        st.people.each {|people_def| total_occ_dens << people_def.peoplePerFloorArea.get ; occ_sched << people_def.numberofPeopleSchedule.get.name}
+        st.people.each {|people_def| total_occ_dens << people_def.spaceFloorAreaPerPerson.get ; occ_sched << people_def.numberofPeopleSchedule.get.name}
         assert(total_lpd.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")   
       
         #Equipment -Gas
@@ -461,12 +461,17 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         shw_peak_flow_per_area = []
         shw_heating_target_temperature = []
         shw__schedule = ""
-        #Get first space to test. 
-        water_fixture = @model.add_swh_end_uses_by_space('Space Function', template, 'NECB HDD Method', shw_loop, st.name.get, @model.getSpaces[0].name.get)
+        
+        
+        #Get first space to test.
+        space = @model.getSpaces[0]
+        space_area = space.floorArea #m2
+        area_per_occupant = occ_sched[0] #m2/person
+        water_fixture = @model.add_swh_end_uses_by_space('Space Function', template, 'NECB HDD Method', shw_loop, st.name.get, space.name.get)
         shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
         shw_peak_flow_per_area = water_fixture.waterUseEquipmentDefinition.peakFlowRate
         shw_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
-
+   
 
         header_output << "SpaceType,"
         output << "#{st.name},"
@@ -475,7 +480,7 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
           total_lpd[0] = 0.0
           lpd_sched[0] = "NA"
         end
-        header_output << "Lighting Power Density (W/sft),"
+        header_output << "Lighting Power Density (W/m2),"
         output << "#{total_lpd[0].round(4)},"
         header_output << "Lighting Schedule,"
         output << "#{lpd_sched[0]},"
@@ -485,7 +490,7 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
           total_occ_dens[0] = 0.0
           occ_sched[0] = "NA"
         end
-        header_output << "Occupancy Density (people/1000sft),"
+        header_output << "Occupancy Density (m2/person),"
         output << "#{total_occ_dens[0].round(4)},"
         header_output << "Occupancy Schedule Name,"
         output << "#{occ_sched[0]},"
@@ -495,7 +500,7 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
           elec_equip_power[0] = 0.0
           elec_equip_sched[0] = "NA"
         end
-        header_output << "Elec Equip Power Density (units?),"
+        header_output << "Elec Equip Power Density (W/m2),"
         output << "#{elec_equip_power[0].round(4)},"
         header_output << "Elec Equip Schedule,"
         output << "#{elec_equip_sched[0]}," 
@@ -505,7 +510,7 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
           gas_equip_power[0] = 0.0
           gas_equip_sched[0] = "NA"
         end
-        header_output << "Gas Equip Power Density (units?),"
+        header_output << "Gas Equip Power Density (W/m2),"
         output << "#{gas_equip_power[0].round(4)},"
         header_output << "Gas Equip Schedule Name,"
         output << "#{gas_equip_sched[0]}," 
@@ -515,7 +520,7 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
           steam_equip_power[0] = 0.0
           steam_equip_sched[0] = "NA"
         end
-        header_output << "Steam Equip Power Density (units?),"
+        header_output << "Steam Equip Power Density (W/m2),"
         output << "#{steam_equip_power[0].round(4)},"
         header_output << "Steam Equip Schedule,"
         output << "#{steam_equip_sched[0]},"
@@ -525,13 +530,13 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
           hw_equip_power[0] = 0.0
           hw_equip_sched[0] = "NA"
         end
-        header_output << "HW Equip Power Density (units?),"
+        header_output << "HW Equip Power Density (W/m2),"
         output << "#{hw_equip_power[0].round(4)},"
         header_output << "HW Equip Schedule,"
         output << "#{hw_equip_sched[0]},"
           
         #SHW
-        header_output << "SHW Power Density (units?),"
+        header_output << "SHW Peak Flow per Area (m3/s/m2),"
         output << "#{shw_peak_flow_per_area},"
         header_output << "SHW Fraction Schedule,"
         output << "#{shw__fraction_schedule},"
@@ -562,21 +567,120 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
       "Envelope test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
     )  
   end 
-  #  # This test will ensure that the wildcard spacetypes are being assigned the 
-  #  # appropriate schedule.
-  #  # This is not for compliance, but for archetype development. 
-  #  # @return [Bool] true if successful. 
-  #  def wildcard_schedule_defaults_test()
-  #    
-  #  end
-  #
-  #
-  #  
+
   #  # This test will ensure that the system selection for each of the 133 spacetypes are 
   #  # being assigned the appropriate values for LPD.
   #  # @return [Bool] true if successful.
   #  def system_selection_test()
-  #    
+ 
+  
+  {"Assembly Area" => ["v1", "v2"]}
+  
+  
+  
+  SpaceTypeNames = [
+
+    "Dwelling Unit(s)",
+    "Atrium - H < 13m",
+    "Atrium - H > 13m",
+    "Audience - auditorium",
+    "Audience - performance arts",
+    "Audience - motion picture",
+    "Classroom/lecture/training",
+    "Conf./meet./multi-purpose",
+    "Corr. >= 2.4m wide",
+    "Corr. < 2.4m wide",
+    "Dining - bar lounge/leisure",
+    "Dining - family space",
+    "Dining - other",
+    "Dress./fitt. - performance arts",
+    "Electrical/Mechanical",
+    "Food preparation",
+    "Lab - classrooms",
+    "Lab - research",
+    "Lobby - elevator",
+    "Lobby - performance arts",
+    "Lobby - motion picture",
+    "Lobby - other",
+    "Locker room",
+    "Lounge/recreation",
+    "Office - enclosed",
+    "Office - open plan",
+    "Sales area",
+    "Stairway",
+    "Storage area",
+    "Washroom",
+    "Workshop space",
+    "Automotive - repair",
+    "Bank - banking and offices",
+    "Convention centre - audience",
+    "Convention centre - exhibit",
+    "Courthouse - courtroom",
+    "Courthouse - cell",
+    "Courthouse - chambers",
+    "Penitentiary - audience",
+    "Penitentiary - classroom",
+    "Penitentiary - dining",
+    "Dormitory - living quarters",
+    "Fire station - engine room",
+    "Fire station - quarters",
+    "Gym - fitness",
+    "Gym - audience",
+    "Gym - play",
+    "Hospital corr. >= 2.4m",
+    "Hospital corr. < 2.4m",
+    "Hospital - emergency",
+    "Hospital - exam",
+    "Hospital - laundry/washing",
+    "Hospital - lounge/recreation",
+    "Hospital - medical supply",
+    "Hospital - nursery",
+    "Hospital - nurses' station",
+    "Hospital - operating room",
+    "Hospital - patient room",
+    "Hospital - pharmacy",
+    "Hospital - physical therapy",
+    "Hospital - radiology/imaging",
+    "Hospital - recovery",
+    "Hotel/Motel - dining",
+    "Hotel/Motel - rooms",
+    "Hotel/Motel - lobby",
+    "Hway lodging - dining",
+    "Hway lodging - rooms",
+    "Library - cataloging",
+    "Library - reading",
+    "Library - stacks",
+    "Mfg - corr. >= 2.4m",
+    "Mfg - corr. < 2.4m",
+    "Mfg - detailed",
+    "Mfg - equipment",
+    "Mfg - bay H > 15m",
+    "Mfg - 7.5 <= bay H <= 15m",
+    "Mfg - bay H < 7.5m",
+    "Museum - exhibition",
+    "Museum - restoration",
+    "Parking garage space",
+    "Post office sorting",
+    "Religious - audience",
+    "Religious - fellowship hall",
+    "Religious - pulpit/choir",
+    "Retail - dressing/fitting",
+    "Retail - mall concourse",
+    "Retail - sales",
+    "Sports arena - audience",
+    "Sports arena - court c4",
+    "Sports arena - court c3",
+    "Sports arena - court c2",
+    "Sports arena - court c1",
+    "Sports arena - ring",
+    "Transp. baggage",
+    "Transp. seating",
+    "Transp. concourse",
+    "Transp. counter",
+    "Warehouse - fine",
+    "Warehouse - med/blk",
+    "Warehouse - med/blk2",
+  ]
   #  end
   
   

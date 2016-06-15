@@ -265,170 +265,148 @@ module BTAP
         #NECB Building Type Data
         #Name,IsSpaceType?,NECBScheduleType,OccupantDensity(m2/p),Plug Loads(w/m2),DHW(W/m2),LightingPowerDensity(W/m2),AirChanges(Ac/h),Diveristy Factor (not used) ,4.2.2.2.(2,infiltration_rate m3/s/m2, SystemSpaceType ]
         BuildingTypeData = [
-          ["Automotive facility",0,"E",20,5,90,8.8,0.001151044,0,0,0.00025, 1],      
-          ["Convention centre",0,"C",8,2.5,30,11.6,0.000747686,0,0,0.00025, 1],      
-          ["Courthouse",0,"A",15,5,60,11.3,0.000462385,0,0,0.00025, 1],              
-          ["Dining - bar/lounge",0,"B",10,1,115,10.7,0.001269099,0,0,0.00025, 11],
-          ["Dining - cafeteria",0,"B",10,1,115,9.7,0.001269099,0,0,0.00025,11],
-          ["Dining - family",0,"B",10,1,115,9.6,0.001269099,0,0,0.00025,11],
-          ["Dormitory",0,"G",30,2.5,500,6.6,0.000383681,0,0,0.00025, 10],
-          ["Exercise centre",0,"B",10,1,90,9.5,0.001249422,0,0,0.00025, 4],
-          ["Fire station",0,"F",25,2.5,400,7.6,0.000751622,0,0,0.00025,2],
-          ["Gymnasium",0,"B",10,1,90,10.8,0.001249422,0,0,0.00025, 4],
-          ["Health-care clinic",0,"A",20,7.5,90,9.4,0.002287331,0,0,0.00025,4],
-          ["Hospital",0,"H",20,7.5,90,13,0.002287331,0,0,0.00025,6],
-          ["Hotel",0,"F",25,2.5,500,10.8,0.000399422,0,0,0.00025,9],
-          ["Library",0,"C",20,2.5,90,12.7,0.00072801,0,0,0.00025,5],
-          ["Manufacturing facility",0,"A",30,10,90,11.9,0.00107234,0,0,0.00025,8],
-          ["Motel",0,"F",25,2.5,500,9.5,0.000399422,0,0,0.00025,9],
-          ["Motion picture theatre",0,"C",8,1,30,8.9,0.000600116,0,0,0.00025,1],
-          ["Multi-unit residential",0,"G",60,5,500,6.5,0.000344329,0,0,0.00025,9],
-          ["Museum",0,"C",20,2.5,60,11.4,0.000482061,0,0,0.00025,5],
-          ["Office",0,"A",25,7.5,90,9.7,0.000399422,0,0,0.00025,4],
-          ["Parking garage",0,"H",1000,0,0,2.7,0.0003097,0,0,0.00025,2],
-          ["Penitentiary",0,"H",30,2.5,400,10.4,0.000383681,0,0,0.00025,10],
-          ["Performing arts theatre",0,"C",8,1,30,15,0.000600116,0,0,0.00025,1],
-          ["Police station",0,"H",25,7.5,90,10.3,0.000399422,0,0,0.00025,1], # What is the systemspacetype?
-          ["Post office",0,"A",25,7.5,90,9.4,0.000751622,0,0,0.00025, 4], # What is the systemspacetype?
-          ["Religious",0,"I",5,1,15,11.3,0.0007772,0,0,0.00025, 1],
-          ["Retail",0,"C",30,2.5,40,15.1,0.000423033,0,0,0.00025,4],
-          ["School/university",0,"D",8,5,60,10.7,0.000747686,0,0,0.00025,1],
-          ["Sports arena",0,"B",10,1,90,8.4,0.000659144,0,0,0.00025,4],
-          ["Town hall",0,"D",25,7.5,90,9.9,0.000399422,0,0,0.00025,1],
-          ["Transportation",0,"H",15,1,65,8.3,0.000541089,0,0,0.00025,4],
-          ["Warehouse",0,"A",1500,1,300,7.1,0.000308126,0,0,0.00025,12],
-          ["Workshop",0,"A",30,10,90,12.9,0.00107234,0,0,0.00025,8]
+          ["Automotive facility",0,"E",20,5,90,8.8,0.001151044,0,0,0.00025,"Automotive Area"],      
+          ["Convention centre",0,"C",8,2.5,30,11.6,0.000747686,0,0,0.00025,"Assembly Area"],      
+          ["Courthouse",0,"A",15,5,60,11.3,0.000462385,0,0,0.00025,"Assembly Area"],              
+          ["Dining - bar/lounge",0,"B",10,1,115,10.7,0.001269099,0,0,0.00025,"Supermarket/Food Services Area"],
+          ["Dining - cafeteria",0,"B",10,1,115,9.7,0.001269099,0,0,0.00025,"Supermarket/Food Services Area"],
+          ["Dining - family",0,"B",10,1,115,9.6,0.001269099,0,0,0.00025,"Supermarket/Food Services Area"],
+          ["Dormitory",0,"G",30,2.5,500,6.6,0.000383681,0,0,0.00025,"Sleeping Area"],
+          ["Exercise centre",0,"B",10,1,90,9.5,0.001249422,0,0,0.00025,"General Area"],
+          ["Fire station",0,"F",25,2.5,400,7.6,0.000751622,0,0,0.00025,"Automotive Area"],
+          ["Gymnasium",0,"B",10,1,90,10.8,0.001249422,0,0,0.00025,"General Area"],
+          ["Health-care clinic",0,"A",20,7.5,90,9.4,0.002287331,0,0,0.00025,"General Area"],
+          ["Hospital",0,"H",20,7.5,90,13,0.002287331,0,0,0.00025,"Hospital Area"],
+          ["Hotel",0,"F",25,2.5,500,10.8,0.000399422,0,0,0.00025,"Residential/Accomodation Area"],
+          ["Library",0,"C",20,2.5,90,12.7,0.00072801,0,0,0.00025,"Historical Collections Area"],
+          ["Manufacturing facility",0,"A",30,10,90,11.9,0.00107234,0,0,0.00025,"Industrial Area"],
+          ["Motel",0,"F",25,2.5,500,9.5,0.000399422,0,0,0.00025,"Residential/Accomodation Area"],
+          ["Motion picture theatre",0,"C",8,1,30,8.9,0.000600116,0,0,0.00025,"Assembly Area"],
+          ["Multi-unit residential",0,"G",60,5,500,6.5,0.000344329,0,0,0.00025,"Residential/Accomodation Area"],
+          ["Museum",0,"C",20,2.5,60,11.4,0.000482061,0,0,0.00025,"Historical Collections Area"],
+          ["Office",0,"A",25,7.5,90,9.7,0.000399422,0,0,0.00025,"General Area"],
+          ["Parking garage",0,"H",1000,0,0,2.7,0.0003097,0,0,0.00025,"Automotive Area"],
+          ["Penitentiary",0,"H",30,2.5,400,10.4,0.000383681,0,0,0.00025,"Sleeping Area"],
+          ["Performing arts theatre",0,"C",8,1,30,15,0.000600116,0,0,0.00025,"Assembly Area"],
+          ["Police station",0,"H",25,7.5,90,10.3,0.000399422,0,0,0.00025,"Assembly Area"], # What is the systemspacetype?
+          ["Post office",0,"A",25,7.5,90,9.4,0.000751622,0,0,0.00025,"General Area"], # What is the systemspacetype?
+          ["Religious",0,"I",5,1,15,11.3,0.0007772,0,0,0.00025,"Assembly Area"],
+          ["Retail",0,"C",30,2.5,40,15.1,0.000423033,0,0,0.00025,"General Area"],
+          ["School/university",0,"D",8,5,60,10.7,0.000747686,0,0,0.00025,"Assembly Area"],
+          ["Sports arena",0,"B",10,1,90,8.4,0.000659144,0,0,0.00025,"General Area"],
+          ["Town hall",0,"D",25,7.5,90,9.9,0.000399422,0,0,0.00025,"Assembly Area"],
+          ["Transportation",0,"H",15,1,65,8.3,0.000541089,0,0,0.00025,"General Area"],
+          ["Warehouse",0,"A",1500,1,300,7.1,0.000308126,0,0,0.00025,"Warehouse Area"],
+          ["Workshop",0,"A",30,10,90,12.9,0.00107234,0,0,0.00025,"Industrial Area"]
         ]
 
         #NECB Space Type Data
         #Name,IsSpaceType?,NECBScheduleType,OccupantDensity(p/m2),Plug Loads(w/m2),DHW(W/m2),LightingPowerDensity(W/m2),AirChanges(Ac/h),Diveristy Factor (not used) ,4.2.2.2.(2,infiltration_rate m3/s/m2, SystemSpaceType]
         SpaceTypeData = [
-          ["- undefined -",1,"*",0,0,0,0,0,0,0,0.00025 , 0],
-          ["Dwelling Unit(s)",1,"G",60,5,500,5,0.000344329,0,1,0.00025, 9],
-          ["Atrium - H < 13m",1,"C",10,2.5,0,0,0.000304977,0,1,0.00025, 4],
-          ["Atrium - H > 13m",1,"C",10,2.5,0,0,0.000304977,0,1,0.00025, 4],
-          ["Audience - auditorium",1,"C",5,2.5,30,8.5,0.004117196,0.3,0.9,0.00025, 1],
-          ["Audience - performance arts",1,"C",7.5,2.5,30,26.2,0.004117196,0,1,0.00025, 1],
-          ["Audience - motion picture",1,"C",5,2.5,30,12.3,0.004117196,0,1,0.00025, 1],
-          ["Classroom/lecture/training",1,"D",7.5,5,65,13.3,0.002782919,0.5,0.9,0.00025, 1],
-          ["Conf./meet./multi-purpose",1,"C",5,1,45,13.2,0.001575717,0.5,0.9,0.00025, 1],
-          ["Corr. >= 2.4m wide",1,"*",100,0,0,7.1,0.000304977,0,1,0.00025, 0],
-          ["Corr. < 2.4m wide",1,"*",100,0,0,8.4,0.000304977,0,1,0.00025, 0],
-          ["Dining - bar lounge/leisure",1,"B",10,1,90,14.1,0.003583485,0,1,0.00025,11],
-          ["Dining - family space",1,"B",10,1,120,9.6,0.003583485,0,1,0.00025,11],
-          ["Dining - other",1,"B",10,1,120,7,0.003583485,0,1,0.00025,11],
-          ["Dress./fitt. - performance arts",1,"C",30,2.5,40,4.3,0.001181788,0.4,0.9,0.00025,1],
-          ["Electrical/Mechanical",1,"*",200,1,0,13.3,0.000304977,0.9,1,0.00025,0],
-          ["Food preparation",1,"B",20,10,120,10.7,0.001372399,0,1,0.00025,11], # SystemSpaceType issue.
-          ["Lab - classrooms",1,"D",20,10,180,17.2,0.002185672,0.4,1,0.00025,6],
-          ["Lab - research",1,"A",20,10,180,23.6,0.002185672,0,1,0.00025,6],
-          ["Lobby - elevator",1,"C",10,1,0,6.9,0.004117196,0,1,0.00025,1],
-          ["Lobby - performance arts",1,"C",10,1,0,21.5,0.004117196,0,1,0.00025,1],
-          ["Lobby - motion picture",1,"C",10,1,0,5.6,0.004117196,0,1,0.00025,1],
-          ["Lobby - other",1,"C",10,1,0,9.7,0.004117196,0,1,0.00025,1],
-          ["Locker room",1,"*",10,2.5,0,9.8,0.000940347,0.5,0.9,0.00025,4],
-          ["Lounge/recreation",1,"B",10,1,60,9.4,0.000940347,0,1,0.00025,11],
-          ["Office - enclosed",1,"A",20,7.5,90,11.9,0.000432051,0.3,0.9,0.00025,4],
-          ["Office - open plan",1,"A",20,7.5,90,11,0.000432051,0.2,0.9,0.00025,4],
-          ["Sales area",1,"C",30,2.5,40,18.1,0.001181788,0,1,0.00025,4],
-          ["Stairway",1,"*",200,0,0,7.4,0.000304977,0,1,0.00025,0],
-          ["Storage area",1,"E",100,1,300,6.8,0.000355807,0.6,0.9,0.00025,12],
-          ["Washroom",1,"*",30,1,0,10.5,0.000304977,0.5,0.9,0.00025,0],
-          ["Workshop space",1,"A",30,10,90,17.1,0.001931524,0,1,0.00025,8],
-          ["Automotive - repair",1,"E",20,5,90,7.2,0.001270739,0,1,0.00025,2],
-          ["Bank - banking and offices",1,"A",25,5,60,14.9,0.00087681,0,1,0.00025,4],
-          ["Convention centre - audience",1,"C",5,2.5,30,8.8,0.004117196,0.2,0.9,0.00025,1],
-          ["Convention centre - exhibit",1,"C",5,2.5,30,15.6,0.000864103,0,1,0.00025,1],
-          ["Courthouse - courtroom",1,"A",5,2.5,30,18.5,0.002084013,0.2,1,0.00025,1],
-          ["Courthouse - cell",1,"H",25,2.5,325,14.7,0.001245325,0,1,0.00025,10],
-          ["Courthouse - chambers",1,"A",20,7.5,90,12.6,0.000432051,0.3,0.9,0.00025,1],
-          ["Penitentiary - audience",1,"C",5,2.5,30,4.6,0.002084013,0,1,0.00025,1],
-          ["Penitentiary - classroom",1,"D",7.5,5,65,14.4,0.002782919,0.5,0.9,0.00025,1],
-          ["Penitentiary - dining",1,"B",10,1,120,11.5,0.003583485,0,1,0.00025,11],
-          ["Dormitory - living quarters",1,"G",25,2.5,500,4.1,0.000559125,0,1,0.00025,10],
-          ["Fire station - engine room",1,"H",25,2.5,325,6,0.001270739,0.5,1,0.00025,2],
-          ["Fire station - quarters",1,"G",25,2.5,500,3.4,0.000813273,0,1,0.00025,9],
-          ["Gym - fitness",1,"B",5,1,90,9.8,0.004371344,0,1,0.00025,4],
-          ["Gym - audience",1,"B",5,0,30,4.6,0.004117196,0,1,0.00025,4],
-          ["Gym - play",1,"B",5,1.5,90,12.9,0.001524887,0,1,0.00025,4],
-          ["Hospital corr. >= 2.4m",1,"*",100,0,0,9.6,0.000762444,0,1,0.00025,0],
-          ["Hospital corr. < 2.4m",1,"*",100,0,0,11.7,0.000762444,0,1,0.00025,0],
-          ["Hospital - emergency",1,"H",20,10,180,24.3,0.003049775,0,1,0.00025,6],
-          ["Hospital - exam",1,"C",20,10,90,17.9,0.001524887,0.3,1,0.00025,6],
-          ["Hospital - laundry/washing",1,"C",20,20,60,8,0.002287331,0,1,0.00025,6],
-          ["Hospital - lounge/recreation",1,"B",10,1,60,11.5,0.001270739,0,1,0.00025,11],
-          ["Hospital - medical supply",1,"H",20,1,0,13.7,0.001524887,0.5,0.9,0.00025,6],
-          ["Hospital - nursery",1,"H",20,10,90,9.5,0.001524887,0,1,0.00025,6],
-          ["Hospital - nurses' station",1,"H",20,2.5,45,9.4,0.001524887,0,1,0.00025,6],
-          ["Hospital - operating room",1,"H",20,10,300,20.3,0.004574662,0.1,1,0.00025,6],
-          ["Hospital - patient room",1,"H",20,10,90,6.7,0.001524887,0.1,1,0.00025,6],
-          ["Hospital - pharmacy",1,"C",20,2.5,45,12.3,0.002287331,0,1,0.00025,6],
-          ["Hospital - physical therapy",1,"C",20,10,45,9.8,0.002287331,0.2,1,0.00025,6],
-          ["Hospital - radiology/imaging",1,"H",20,10,90,14.2,0.002287331,0,1,0.00025,6],
-          ["Hospital - recovery",1,"H",20,10,180,12.4,0.004574662,0,1,0.00025,6],
-          ["Hotel/Motel - dining",1,"B",10,1,115,8.8,0.003583485,0,1,0.00025,11],
-          ["Hotel/Motel - rooms",1,"F",25,2.5,600,11.9,0.000559125,0,1,0.00025,9],
-          ["Hotel/Motel - lobby",1,"H",10,2.5,30,11.4,0.001448643,0,1,0.00025,1],
-          ["Hway lodging - dining",1,"B",10,1,115,9.5,0.003583485,0,1,0.00025,11],
-          ["Hway lodging - rooms",1,"F",25,2.5,600,8.1,0.000559125,0,1,0.00025,9],
-          ["Library - cataloging",1,"C",20,2.5,90,7.8,0.000864103,0,1,0.00025,4],
-          ["Library - reading",1,"C",20,1,90,10,0.000864103,0,1,0.00025,4],
-          ["Library - stacks",1,"C",20,0,90,22.9,0.000864103,0,1,0.00025,4],
-          ["Mfg - corr. >= 2.4m",1,"*",100,0,0,4.4,0.001270739,0,1,0.00025,0],
-          ["Mfg - corr. < 2.4m",1,"*",100,0,0,5.5,0.001270739,0,1,0.00025,0],
-          ["Mfg - detailed",1,"A",30,0,90,13.9,0.001270739,0,1,0.00025,8],
-          ["Mfg - equipment",1,"A",30,10,90,13.3,0.001270739,0.2,1,0.00025,8],
-          ["Mfg - bay H > 15m",1,"A",30,10,90,11.3,0.001270739,0,1,0.00025,8],
-          ["Mfg - 7.5 <= bay H <= 15m",1,"A",30,10,90,13.2,0.001270739,0,1,0.00025,8],
-          ["Mfg - bay H < 7.5m",1,"A",30,10,90,12.8,0.001270739,0,1,0.00025,8],
-          ["Museum - exhibition",1,"C",5,2.5,60,11.3,0.001829865,0.2,1,0.00025,5],
-          ["Museum - restoration",1,"A",20,5,50,11,0.000864103,0.3,1,0.00025,5],
-          ["Parking garage space",1,"H",1000,0,0,2,0.002541479,0.4,1,0.00025,2],
-          ["Post office sorting",1,"A",20,7.5,90,10.1,0.00087681,0,1,0.00025,4],
-          ["Religious - audience",1,"I",5,1,15,18.2,0.003354752,0.3,1,0.00025,1],
-          ["Religious - fellowship hall",1,"C",5,1,45,6.9,0.003354752,0.3,1,0.00025,1],
-          ["Religious - pulpit/choir",1,"I",5,1,15,18.2,0.003354752,0.1,1,0.00025,1],
-          ["Retail - dressing/fitting",1,"C",30,2.5,40,9.4,0.001181788,0.4,0.9,0.00025,4],
-          ["Retail - mall concourse",1,"C",20,1,30,11.8,0.001829865,0,1,0.00025,4],
-          ["Retail - sales",1,"C",30,2.5,40,18.1,0.001181788,0,1,0.00025,4],
-          ["Sports arena - audience",1,"B",5,0,30,4.6,0.006023305,0,1,0.00025,4],
-          ["Sports arena - court c4",1,"B",5,1.5,90,7.8,0.001524887,0,1,0.00025,4],
-          ["Sports arena - court c3",1,"B",5,1.5,90,12.9,0.001524887,0,1,0.00025,4],
-          ["Sports arena - court c2",1,"B",5,1.5,90,20.7,0.001524887,0,1,0.00025,4],
-          ["Sports arena - court c1",1,"B",5,1.5,90,32.4,0.001524887,0,1,0.00025,4],
-          ["Sports arena - ring",1,"B",5,1.5,90,28.8,0.001524887,0,1,0.00025,4],
-          ["Transp. baggage",1,"H",20,2.5,65,8.2,0.00087681,0,1,0.00025,4],
-          ["Transp. seating",1,"H",10,0,65,5.8,0.004117196,0,1,0.00025,4],
-          ["Transp. concourse",1,"H",20,0,65,3.9,0.004117196,0,1,0.00025,4],
-          ["Transp. counter",1,"H",10,2.5,65,11.6,0.00087681,0,1,0.00025,4],
-          ["Warehouse - fine",1,"A",50,1,65,10.2,0.000304977,0.5,0.9,0.00025,12],
-          ["Warehouse - med/blk",1,"A",100,1,65,6.4,0.000304977,0.5,0.9,0.00025,12],
-          ["Warehouse - med/blk2",1,"A",100,1,65,10.2,0.000304977,0.5,0.9,0.00025,12]
+          ["- undefined -",1,"*",0,0,0,0,0,0,0,0.00025 ,"Undefined"],
+          ["Dwelling Unit(s)",1,"G",60,5,500,5,0.000344329,0,1,0.00025,"Residential/Accomodation Area"],
+          ["Atrium - H < 13m",1,"C",10,2.5,0,0,0.000304977,0,1,0.00025,"General Area"],
+          ["Atrium - H > 13m",1,"C",10,2.5,0,0,0.000304977,0,1,0.00025,"General Area"],
+          ["Audience - auditorium",1,"C",5,2.5,30,8.5,0.004117196,0.3,0.9,0.00025,"Assembly Area"],
+          ["Audience - performance arts",1,"C",7.5,2.5,30,26.2,0.004117196,0,1,0.00025,"Assembly Area"],
+          ["Audience - motion picture",1,"C",5,2.5,30,12.3,0.004117196,0,1,0.00025,"Assembly Area"],
+          ["Classroom/lecture/training",1,"D",7.5,5,65,13.3,0.002782919,0.5,0.9,0.00025,"Assembly Area"],
+          ["Conf./meet./multi-purpose",1,"C",5,1,45,13.2,0.001575717,0.5,0.9,0.00025,"Assembly Area"],
+          ["Corr. >= 2.4m wide",1,"*",100,0,0,7.1,0.000304977,0,1,0.00025,"Undefined"],
+          ["Corr. < 2.4m wide",1,"*",100,0,0,8.4,0.000304977,0,1,0.00025,"Undefined"],
+          ["Dining - bar lounge/leisure",1,"B",10,1,90,14.1,0.003583485,0,1,0.00025,"Supermarket/Food Services Area"],
+          ["Dining - family space",1,"B",10,1,120,9.6,0.003583485,0,1,0.00025,"Supermarket/Food Services Area"],
+          ["Dining - other",1,"B",10,1,120,7,0.003583485,0,1,0.00025,"Supermarket/Food Services Area"],
+          ["Dress./fitt. - performance arts",1,"C",30,2.5,40,4.3,0.001181788,0.4,0.9,0.00025,"Assembly Area"],
+          ["Electrical/Mechanical",1,"*",200,1,0,13.3,0.000304977,0.9,1,0.00025,"Undefined"],
+          ["Food preparation",1,"B",20,10,120,10.7,0.001372399,0,1,0.00025,"Supermarket/Food Services Area"], # SystemSpaceType issue.
+          ["Lab - classrooms",1,"D",20,10,180,17.2,0.002185672,0.4,1,0.00025,"Hospital Area"],
+          ["Lab - research",1,"A",20,10,180,23.6,0.002185672,0,1,0.00025,"Hospital Area"],
+          ["Lobby - elevator",1,"C",10,1,0,6.9,0.004117196,0,1,0.00025,"Assembly Area"],
+          ["Lobby - performance arts",1,"C",10,1,0,21.5,0.004117196,0,1,0.00025,"Assembly Area"],
+          ["Lobby - motion picture",1,"C",10,1,0,5.6,0.004117196,0,1,0.00025,"Assembly Area"],
+          ["Lobby - other",1,"C",10,1,0,9.7,0.004117196,0,1,0.00025,"Assembly Area"],
+          ["Locker room",1,"*",10,2.5,0,9.8,0.000940347,0.5,0.9,0.00025,"General Area"],
+          ["Lounge/recreation",1,"B",10,1,60,9.4,0.000940347,0,1,0.00025,"Supermarket/Food Services Area"],
+          ["Office - enclosed",1,"A",20,7.5,90,11.9,0.000432051,0.3,0.9,0.00025,"General Area"],
+          ["Office - open plan",1,"A",20,7.5,90,11,0.000432051,0.2,0.9,0.00025,"General Area"],
+          ["Sales area",1,"C",30,2.5,40,18.1,0.001181788,0,1,0.00025,"General Area"],
+          ["Stairway",1,"*",200,0,0,7.4,0.000304977,0,1,0.00025,"Undefined"],
+          ["Storage area",1,"E",100,1,300,6.8,0.000355807,0.6,0.9,0.00025,"Warehouse Area"],
+          ["Washroom",1,"*",30,1,0,10.5,0.000304977,0.5,0.9,0.00025,"Undefined"],
+          ["Workshop space",1,"A",30,10,90,17.1,0.001931524,0,1,0.00025,"Industrial Area"],
+          ["Automotive - repair",1,"E",20,5,90,7.2,0.001270739,0,1,0.00025,"Automotive Area"],
+          ["Bank - banking and offices",1,"A",25,5,60,14.9,0.00087681,0,1,0.00025,"General Area"],
+          ["Convention centre - audience",1,"C",5,2.5,30,8.8,0.004117196,0.2,0.9,0.00025,"Assembly Area"],
+          ["Convention centre - exhibit",1,"C",5,2.5,30,15.6,0.000864103,0,1,0.00025,"Assembly Area"],
+          ["Courthouse - courtroom",1,"A",5,2.5,30,18.5,0.002084013,0.2,1,0.00025,"Assembly Area"],
+          ["Courthouse - cell",1,"H",25,2.5,325,14.7,0.001245325,0,1,0.00025,"Sleeping Area"],
+          ["Courthouse - chambers",1,"A",20,7.5,90,12.6,0.000432051,0.3,0.9,0.00025,"Assembly Area"],
+          ["Penitentiary - audience",1,"C",5,2.5,30,4.6,0.002084013,0,1,0.00025,"Assembly Area"],
+          ["Penitentiary - classroom",1,"D",7.5,5,65,14.4,0.002782919,0.5,0.9,0.00025,"Assembly Area"],
+          ["Penitentiary - dining",1,"B",10,1,120,11.5,0.003583485,0,1,0.00025,"Supermarket/Food Services Area"],
+          ["Dormitory - living quarters",1,"G",25,2.5,500,4.1,0.000559125,0,1,0.00025,"Sleeping Area"],
+          ["Fire station - engine room",1,"H",25,2.5,325,6,0.001270739,0.5,1,0.00025,"Automotive Area"],
+          ["Fire station - quarters",1,"G",25,2.5,500,3.4,0.000813273,0,1,0.00025,"Residential/Accomodation Area"],
+          ["Gym - fitness",1,"B",5,1,90,9.8,0.004371344,0,1,0.00025,"General Area"],
+          ["Gym - audience",1,"B",5,0,30,4.6,0.004117196,0,1,0.00025,"General Area"],
+          ["Gym - play",1,"B",5,1.5,90,12.9,0.001524887,0,1,0.00025,"General Area"],
+          ["Hospital corr. >= 2.4m",1,"*",100,0,0,9.6,0.000762444,0,1,0.00025,"Undefined"],
+          ["Hospital corr. < 2.4m",1,"*",100,0,0,11.7,0.000762444,0,1,0.00025,"Undefined"],
+          ["Hospital - emergency",1,"H",20,10,180,24.3,0.003049775,0,1,0.00025,"Hospital Area"],
+          ["Hospital - exam",1,"C",20,10,90,17.9,0.001524887,0.3,1,0.00025,"Hospital Area"],
+          ["Hospital - laundry/washing",1,"C",20,20,60,8,0.002287331,0,1,0.00025,"Hospital Area"],
+          ["Hospital - lounge/recreation",1,"B",10,1,60,11.5,0.001270739,0,1,0.00025,"Hospital Area"],
+          ["Hospital - medical supply",1,"H",20,1,0,13.7,0.001524887,0.5,0.9,0.00025,"Hospital Area"],
+          ["Hospital - nursery",1,"H",20,10,90,9.5,0.001524887,0,1,0.00025,"Hospital Area"],
+          ["Hospital - nurses' station",1,"H",20,2.5,45,9.4,0.001524887,0,1,0.00025,"Hospital Area"],
+          ["Hospital - operating room",1,"H",20,10,300,20.3,0.004574662,0.1,1,0.00025,"Hospital Area"],
+          ["Hospital - patient room",1,"H",20,10,90,6.7,0.001524887,0.1,1,0.00025,"Hospital Area"],
+          ["Hospital - pharmacy",1,"C",20,2.5,45,12.3,0.002287331,0,1,0.00025,"Hospital Area"],
+          ["Hospital - physical therapy",1,"C",20,10,45,9.8,0.002287331,0.2,1,0.00025,"Hospital Area"],
+          ["Hospital - radiology/imaging",1,"H",20,10,90,14.2,0.002287331,0,1,0.00025,"Hospital Area"],
+          ["Hospital - recovery",1,"H",20,10,180,12.4,0.004574662,0,1,0.00025,"Hospital Area"],
+          ["Hotel/Motel - dining",1,"B",10,1,115,8.8,0.003583485,0,1,0.00025,"Supermarket/Food Services Area"],
+          ["Hotel/Motel - rooms",1,"F",25,2.5,600,11.9,0.000559125,0,1,0.00025,"Residential/Accomodation Area"],
+          ["Hotel/Motel - lobby",1,"H",10,2.5,30,11.4,0.001448643,0,1,0.00025,"Assembly Area"],
+          ["Hway lodging - dining",1,"B",10,1,115,9.5,0.003583485,0,1,0.00025,"Supermarket/Food Services Area"],
+          ["Hway lodging - rooms",1,"F",25,2.5,600,8.1,0.000559125,0,1,0.00025,"Residential/Accomodation Area"],
+          ["Library - cataloging",1,"C",20,2.5,90,7.8,0.000864103,0,1,0.00025,"General Area"],
+          ["Library - reading",1,"C",20,1,90,10,0.000864103,0,1,0.00025,"General Area"],
+          ["Library - stacks",1,"C",20,0,90,22.9,0.000864103,0,1,0.00025,"General Area"],
+          ["Mfg - corr. >= 2.4m",1,"*",100,0,0,4.4,0.001270739,0,1,0.00025,"Undefined"],
+          ["Mfg - corr. < 2.4m",1,"*",100,0,0,5.5,0.001270739,0,1,0.00025,"Undefined"],
+          ["Mfg - detailed",1,"A",30,0,90,13.9,0.001270739,0,1,0.00025,"Industrial Area"],
+          ["Mfg - equipment",1,"A",30,10,90,13.3,0.001270739,0.2,1,0.00025,"Industrial Area"],
+          ["Mfg - bay H > 15m",1,"A",30,10,90,11.3,0.001270739,0,1,0.00025,"Industrial Area"],
+          ["Mfg - 7.5 <= bay H <= 15m",1,"A",30,10,90,13.2,0.001270739,0,1,0.00025,"Industrial Area"],
+          ["Mfg - bay H < 7.5m",1,"A",30,10,90,12.8,0.001270739,0,1,0.00025,"Industrial Area"],
+          ["Museum - exhibition",1,"C",5,2.5,60,11.3,0.001829865,0.2,1,0.00025,"Historical Collections Area"],
+          ["Museum - restoration",1,"A",20,5,50,11,0.000864103,0.3,1,0.00025,"Historical Collections Area"],
+          ["Parking garage space",1,"H",1000,0,0,2,0.002541479,0.4,1,0.00025,"Automotive Area"],
+          ["Post office sorting",1,"A",20,7.5,90,10.1,0.00087681,0,1,0.00025,"General Area"],
+          ["Religious - audience",1,"I",5,1,15,18.2,0.003354752,0.3,1,0.00025,"Assembly Area"],
+          ["Religious - fellowship hall",1,"C",5,1,45,6.9,0.003354752,0.3,1,0.00025,"Assembly Area"],
+          ["Religious - pulpit/choir",1,"I",5,1,15,18.2,0.003354752,0.1,1,0.00025,"Assembly Area"],
+          ["Retail - dressing/fitting",1,"C",30,2.5,40,9.4,0.001181788,0.4,0.9,0.00025,"General Area"],
+          ["Retail - mall concourse",1,"C",20,1,30,11.8,0.001829865,0,1,0.00025,"General Area"],
+          ["Retail - sales",1,"C",30,2.5,40,18.1,0.001181788,0,1,0.00025,"General Area"],
+          ["Sports arena - audience",1,"B",5,0,30,4.6,0.006023305,0,1,0.00025,"General Area"],
+          ["Sports arena - court c4",1,"B",5,1.5,90,7.8,0.001524887,0,1,0.00025,"General Area"],
+          ["Sports arena - court c3",1,"B",5,1.5,90,12.9,0.001524887,0,1,0.00025,"General Area"],
+          ["Sports arena - court c2",1,"B",5,1.5,90,20.7,0.001524887,0,1,0.00025,"General Area"],
+          ["Sports arena - court c1",1,"B",5,1.5,90,32.4,0.001524887,0,1,0.00025,"General Area"],
+          ["Sports arena - ring",1,"B",5,1.5,90,28.8,0.001524887,0,1,0.00025,"General Area"],
+          ["Transp. baggage",1,"H",20,2.5,65,8.2,0.00087681,0,1,0.00025,"General Area"],
+          ["Transp. seating",1,"H",10,0,65,5.8,0.004117196,0,1,0.00025,"General Area"],
+          ["Transp. concourse",1,"H",20,0,65,3.9,0.004117196,0,1,0.00025,"General Area"],
+          ["Transp. counter",1,"H",10,2.5,65,11.6,0.00087681,0,1,0.00025,"General Area"],
+          ["Warehouse - fine",1,"A",50,1,65,10.2,0.000304977,0.5,0.9,0.00025,"Warehouse Area"],
+          ["Warehouse - med/blk",1,"A",100,1,65,6.4,0.000304977,0.5,0.9,0.00025,"Warehouse Area"],
+          ["Warehouse - med/blk2",1,"A",100,1,65,10.2,0.000304977,0.5,0.9,0.00025,"Warehouse Area"]
         ]
       end
-      #this defines the system space types, from Table 8.4.4.8.A
-      SystemSpaceTypes = [
-        "None",
-        #If greater than 4 stories
-        "Assembly Area",[3,6],
-        "Automotive Area",[4],
-        #If colling cap > 20kW
-        "Data Processing Area",[1,2],
-        #if greater than 2 stories
-        "General Area",[3,6],
 
-        "Historical Collections Area",[2],
-        "Hospital Area",[3],
-        "Indoor Arena",[7],
-        "Industrial Area",[3],
-        #if heated and cooled use proposed.
-        "Residential/Accomodation Area",[1],
-        "Sleeping Area",[3],
-        #food prep with a vented hood (add a new space type?)
-        "Supermarket/Food Services Area",[3,4],
-        #non_refridgerated spaces, refrigerated spaces.(New space types?)
-        "Warehouse Area",[4,5]
-      ]
 
       #This method ???.
       #@author phylroy.lopez@nrcan.gc.ca
@@ -1535,60 +1513,60 @@ module BTAP
           when 0
             #These are spaces are undefined...so they are unconditioned and have no loads other than infiltration and no systems
             system = 0
-          when 1 #Assembly Area.
+          when 1 , "Assembly Area" #Assembly Area.
             if number_of_stories <= 4
               system = 3
             else
               system = 6
             end
             
-          when 2 #"Automotive Area",[4]
+          when 2 , "Automotive Area"
             system = 4
             
-          when 3 #"Data Processing Area",[1,2]
+          when 3 , "Data Processing Area"
             if cooling_capacity > 20 #KW...need a sizing run. 
               system = 2
             else
               system = 1
             end
 
-          when 4 #"General Area",[3,6]
+          when 4 , "General Area" #[3,6]
             if number_of_stories <= 2 
               system = 3
             else
               system = 6
             end
             
-          when 5 #"Historical Collections Area",[2],
+          when 5 , "Historical Collections Area" #[2],
             system = 2
             
-          when 6 # "Hospital Area",[3],
+          when 6 , "Hospital Area" #[3],
             system = 6
             
-          when 7 # "Indoor Arena",[7],
+          when 7 , "Indoor Arena" #,[7],
             system = 7
             
-          when 8 # "Industrial Area [3] this need some thought. 
+          when 8,   "Industrial Area"#  [3] this need some thought. 
             system = 3
             
-          when 9 # "Residential/Accomodation Area",[1], this needs some thought. 
+          when 9 ,  "Residential/Accomodation Area"#,[1], this needs some thought. 
             if heated_only
               system = 1
             else 
               system = 1
             end
             
-          when 10 #"Sleeping Area",[3],
+          when 10 , "Sleeping Area" #[3],
             system = 3
             
-          when 11 #"Supermarket/Food Services Area",[3,4],
+          when 11 , "Supermarket/Food Services Area"#[3,4],
             if vented
               system = 3
             else
               system = 4
             end
             
-          when 12 # Warehouse
+          when 12 ,  "Warehouse"
             if refrigerated
               system = 3
             else

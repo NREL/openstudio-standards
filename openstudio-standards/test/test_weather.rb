@@ -15,10 +15,13 @@ class WeatherTests < Minitest::Test
       File.join(File.dirname(__FILE__),'..','data','weather'), 
       File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv') 
     )
-    assert ( 
-      FileUtils.compare_file(
+    
+    test = FileUtils.compare_file(
         File.join(File.dirname(__FILE__),'regression_files','weather_expected_results.csv'), 
-        File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv'))
+        File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv') )
+      
+    assert( test ,
+        "Weather output from test does not match what is expected. Compare #{File.join(File.dirname(__FILE__),'regression_files','weather_expected_results.csv')} with #{File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv')}"
     )
   end
 end
