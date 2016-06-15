@@ -52,22 +52,22 @@ class OpenStudio::Model::ChillerElectricEIR
   # Finds capacity in tons
   #
   # @return [Double] capacity in tons to be used for find object
-  def find_capacity(building_type)
+  def find_capacity()
 
     # Get the chiller capacity
     capacity_w = nil
     if self.referenceCapacity.is_initialized
-	  capacity_w = self.referenceCapacity.get
-	elsif self.autosizedReferenceCapacity.is_initialized
-	  capacity_w = self.autosizedReferenceCapacity.get
-	else
+      capacity_w = self.referenceCapacity.get
+    elsif self.autosizedReferenceCapacity.is_initialized
+      capacity_w = self.autosizedReferenceCapacity.get
+    else
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.ChillerElectricEIR", "For #{self.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
     capacity_tons = OpenStudio.convert(capacity_w, "W", "ton").get
-    
+
 
     return capacity_tons
 
@@ -100,25 +100,25 @@ class OpenStudio::Model::ChillerElectricEIR
   end
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
-  # 
+  #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
   def setStandardEfficiencyAndCurves(template, clg_tower_objs)
-  
+
     chillers = $os_standards['chillers']
     curve_biquadratics = $os_standards['curve_biquadratics']
     curve_quadratics = $os_standards['curve_quadratics']
     curve_bicubics = $os_standards['curve_bicubics']
 
-  
+
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
     search_criteria = {}
     search_criteria['template'] = template
     cooling_type = self.condenserType
     search_criteria['cooling_type'] = cooling_type
-    
+
     # TODO Standards replace this with a mechanism to store this
     # data in the chiller object itself.
     # For now, retrieve the condenser type from the name
@@ -162,11 +162,11 @@ class OpenStudio::Model::ChillerElectricEIR
     end
 
     #NECB 2011 requires that all chillers be modulating down to 25% of their capacity
-    if template == 'NECB 2011'      
+    if template == 'NECB 2011'
       self.setChillerFlowMode('LeavingSetpointModulated')
       self.setMinimumPartLoadRatio(0.25)
       self.setMinimumUnloadingRatio(0.25)
-      if((capacity_w/1000.0) < 2100.0) 
+      if((capacity_w/1000.0) < 2100.0)
         if(self.name.to_s.include? 'Primary Chiller')
           chiller_capacity = capacity_w
         elsif(self.name.to_s.include? 'Secondary Chiller')
@@ -184,7 +184,7 @@ class OpenStudio::Model::ChillerElectricEIR
     else
       capacity_tons = OpenStudio.convert(capacity_w, "W", "ton").get
     end
-    
+
     # Get the chiller properties
     chlr_props = self.model.find_object(chillers, search_criteria, capacity_tons)
     if !chlr_props
@@ -200,17 +200,17 @@ class OpenStudio::Model::ChillerElectricEIR
     else
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.ChillerElectricEIR", "For #{self.name}, cannot find cool_cap_ft curve, will not be set.")
       successfully_set_all_properties = false
-    end    
-    
+    end
+
     # Make the EIRFT curve
     cool_eir_ft = self.model.add_curve(chlr_props['eirft'])
     if cool_eir_ft
-      self.setElectricInputToCoolingOutputRatioFunctionOfTemperature(cool_eir_ft)  
+      self.setElectricInputToCoolingOutputRatioFunctionOfTemperature(cool_eir_ft)
     else
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.ChillerElectricEIR", "For #{self.name}, cannot find cool_eir_ft curve, will not be set.")
       successfully_set_all_properties = false
-    end    
-    
+    end
+
     # Make the EIRFPLR curve
     # which may be either a CurveBicubic or a CurveQuadratic based on chiller type
     cool_plf_fplr = self.model.add_curve(chlr_props['eirfplr'])
@@ -219,7 +219,7 @@ class OpenStudio::Model::ChillerElectricEIR
     else
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.ChillerElectricEIR", "For #{self.name}, cannot find cool_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false
-    end     
+    end
 
     # Set the efficiency value
     kw_per_ton = nil
@@ -232,13 +232,13 @@ class OpenStudio::Model::ChillerElectricEIR
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.ChillerElectricEIR", "For #{self.name}, cannot find minimum full load efficiency, will not be set.")
       successfully_set_all_properties = false
     end
-    
+
     # Set cooling tower properties for NECB 2011 now that the new COP of the chiller is set
-    if template == 'NECB 2011'      
+    if template == 'NECB 2011'
       if(self.name.to_s.include? 'Primary Chiller')
         # Single speed tower model assumes 25% extra for compressor power
         tower_cap = capacity_w*(1.0+1.0/self.referenceCOP)
-        if((tower_cap/1000.0) < 1750) 
+        if((tower_cap/1000.0) < 1750)
           clg_tower_objs[0].setNumberofCells(1)
         else
           clg_tower_objs[0].setNumberofCells((tower_cap/(1000*1750)+0.5).round)
@@ -250,9 +250,9 @@ class OpenStudio::Model::ChillerElectricEIR
     # Append the name with size and kw/ton
     self.setName("#{name} #{capacity_tons.round}tons #{kw_per_ton.round(1)}kW/ton")
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.ChillerElectricEIR', "For #{template}: #{self.name}: #{cooling_type} #{condenser_type} #{compressor_type} Capacity = #{capacity_tons.round}tons; COP = #{cop.round(1)} (#{kw_per_ton.round(1)}kW/ton)")
-  
+
     return successfully_set_all_properties
 
   end
-  
+
 end
