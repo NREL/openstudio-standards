@@ -334,14 +334,15 @@ class OpenStudio::Model::Model
     if hot_water_loop
       case building_vintage
         when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          self.add_humidifier_er(building_vintage, hot_water_loop)
-          self.add_humidifier_or(building_vintage, hot_water_loop)
-          self.add_humidifier_icu(building_vintage, hot_water_loop)
-          self.add_humidifier_lab(building_vintage, hot_water_loop)
-          self.add_humidifier_pat(building_vintage, hot_water_loop)
+          space_names = ['ER_Exam3_Mult4_Flr_1','OR2_Mult5_Flr_2','ICU_Flr_2','PatRoom5_Mult10_Flr_4','Lab_Flr_3']
+          space_names.each do |space_name|
+            self.add_humidifier(space_name, building_vintage, hot_water_loop)
+          end
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-          self.add_humidifier_vav1(building_vintage, hot_water_loop)
-          self.add_humidifier_vav2(building_vintage, hot_water_loop)
+          space_names = ['ER_Exam3_Mult4_Flr_1','OR2_Mult5_Flr_2']
+          space_names.each do |space_name|
+            self.add_humidifier(space_name, building_vintage, hot_water_loop)
+          end
       end
     else
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find hot water loop to attach humidifier to.')
@@ -404,16 +405,16 @@ class OpenStudio::Model::Model
     end
   end
 
-  def add_humidifier_er(building_vintage, hot_water_loop)
-    er_exam_space = self.getSpaceByName('ER_Exam3_Mult4_Flr_1').get
-    er_exam_zone = er_exam_space.thermalZone.get
+  def add_humidifier(space_name, building_vintage, hot_water_loop)
+    space = self.getSpaceByName(space_name).get
+    zone = space.thermalZone.get
     humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
-    er_exam_zone.setZoneControlHumidistat(humidistat)
+    zone.setZoneControlHumidistat(humidistat)
 
     self.getAirLoopHVACs.each do |air_loop|
-      if air_loop.thermalZones.include? er_exam_zone
+      if air_loop.thermalZones.include? zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
         humidifier.setRatedCapacity(3.72E-5)
         humidifier.setRatedPower(100000)
@@ -432,268 +433,16 @@ class OpenStudio::Model::Model
         case building_vintage
         when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
           extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
-          extra_elec_htg_coil.setName("ER extra Electric Htg Coil")
+          extra_elec_htg_coil.setName("#{space_name} Electric Htg Coil")
           extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-          extra_water_htg_coil.setName("ER extra Water Htg Coil")
+          extra_water_htg_coil.setName("#{space_name} Water Htg Coil")
           hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
           extra_elec_htg_coil.addToNode(supply_outlet_node)
           extra_water_htg_coil.addToNode(supply_outlet_node)
         end
         # humidity_spm.addToNode(supply_outlet_node)
         humidity_spm.addToNode(humidifier.outletModelObject().get.to_Node.get)
-        humidity_spm.setControlZone(er_exam_zone)
-      end
-    end
-  end
-
-  def add_humidifier_or(building_vintage, hot_water_loop)
-    or_exam_space = self.getSpaceByName('OR2_Mult5_Flr_2').get
-    or_exam_zone = or_exam_space.thermalZone.get
-    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
-    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
-    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
-    or_exam_zone.setZoneControlHumidistat(humidistat)
-
-    self.getAirLoopHVACs.each do |air_loop|
-      if air_loop.thermalZones.include? or_exam_zone
-        humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
-        humidifier.setRatedCapacity(3.72E-5)
-        humidifier.setRatedPower(100000)
-        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
-        # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
-        htg_coil = nil
-        air_loop.supplyComponents.each do |equip|
-          if equip.to_CoilHeatingWater.is_initialized
-            htg_coil = equip.to_CoilHeatingWater.get
-          end
-        end
-        heating_coil_outlet_node = htg_coil.airOutletModelObject().get.to_Node.get
-        supply_outlet_node = air_loop.supplyOutletNode
-        humidifier.addToNode(heating_coil_outlet_node)
-        humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(self)
-        case building_vintage
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
-          extra_elec_htg_coil.setName("OR extra Electric Htg Coil")
-          extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-          extra_water_htg_coil.setName("OR extra Water Htg Coil")
-          hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
-          extra_elec_htg_coil.addToNode(supply_outlet_node)
-          extra_water_htg_coil.addToNode(supply_outlet_node)
-        end
-        # humidity_spm.addToNode(supply_outlet_node)
-        humidity_spm.addToNode(humidifier.outletModelObject().get.to_Node.get)
-        humidity_spm.setControlZone(or_exam_zone)
-      end
-    end
-  end
-
- def add_humidifier_icu(building_vintage, hot_water_loop)
-    icu_space = self.getSpaceByName('ICU_Flr_2').get
-    icu_zone = icu_space.thermalZone.get
-    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
-    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
-    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
-    icu_zone.setZoneControlHumidistat(humidistat)
-
-    self.getAirLoopHVACs.each do |air_loop|
-      if air_loop.thermalZones.include? icu_zone
-        humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
-        humidifier.setRatedCapacity(3.72E-5)
-        humidifier.setRatedPower(100000)
-        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
-        # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
-        htg_coil = nil
-        air_loop.supplyComponents.each do |equip|
-          if equip.to_CoilHeatingWater.is_initialized
-            htg_coil = equip.to_CoilHeatingWater.get
-          end
-        end
-        heating_coil_outlet_node = htg_coil.airOutletModelObject().get.to_Node.get
-        supply_outlet_node = air_loop.supplyOutletNode
-        humidifier.addToNode(heating_coil_outlet_node)
-        humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(self)
-        case building_vintage
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
-          extra_elec_htg_coil.setName("ICU extra Electric Htg Coil")
-          extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-          extra_water_htg_coil.setName("ICU extra Water Htg Coil")
-          hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
-          extra_elec_htg_coil.addToNode(supply_outlet_node)
-          extra_water_htg_coil.addToNode(supply_outlet_node)
-        end
-        # humidity_spm.addToNode(supply_outlet_node)
-        humidity_spm.addToNode(humidifier.outletModelObject().get.to_Node.get)
-        humidity_spm.setControlZone(icu_zone)
-      end
-    end
-  end
-
- def add_humidifier_pat(building_vintage, hot_water_loop)
-    pat_space = self.getSpaceByName('PatRoom5_Mult10_Flr_4').get
-    pat_zone = pat_space.thermalZone.get
-    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
-    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
-    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
-    pat_zone.setZoneControlHumidistat(humidistat)
-
-    self.getAirLoopHVACs.each do |air_loop|
-      if air_loop.thermalZones.include? pat_zone
-        humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
-        humidifier.setRatedCapacity(3.72E-5)
-        humidifier.setRatedPower(100000)
-        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
-        # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
-        htg_coil = nil
-        air_loop.supplyComponents.each do |equip|
-          if equip.to_CoilHeatingWater.is_initialized
-            htg_coil = equip.to_CoilHeatingWater.get
-          end
-        end
-        heating_coil_outlet_node = htg_coil.airOutletModelObject().get.to_Node.get
-        supply_outlet_node = air_loop.supplyOutletNode
-        humidifier.addToNode(heating_coil_outlet_node)
-        humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(self)
-        case building_vintage
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
-          extra_elec_htg_coil.setName("Pat extra Electric Htg Coil")
-          extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-          extra_water_htg_coil.setName("Pat extra Water Htg Coil")
-          hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
-          extra_elec_htg_coil.addToNode(supply_outlet_node)
-          extra_water_htg_coil.addToNode(supply_outlet_node)
-        end
-        # humidity_spm.addToNode(supply_outlet_node)
-        humidity_spm.addToNode(humidifier.outletModelObject().get.to_Node.get)
-        humidity_spm.setControlZone(pat_zone)
-      end
-    end
-  end
-
-   def add_humidifier_lab(building_vintage, hot_water_loop)
-    lab_space = self.getSpaceByName('Lab_Flr_3').get
-    lab_zone = lab_space.thermalZone.get
-    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
-    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
-    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
-    lab_zone.setZoneControlHumidistat(humidistat)
-
-    self.getAirLoopHVACs.each do |air_loop|
-      if air_loop.thermalZones.include? lab_zone
-        humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
-        humidifier.setRatedCapacity(3.72E-5)
-        humidifier.setRatedPower(100000)
-        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
-        # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
-        htg_coil = nil
-        air_loop.supplyComponents.each do |equip|
-          if equip.to_CoilHeatingWater.is_initialized
-            htg_coil = equip.to_CoilHeatingWater.get
-          end
-        end
-        heating_coil_outlet_node = htg_coil.airOutletModelObject().get.to_Node.get
-        supply_outlet_node = air_loop.supplyOutletNode
-        humidifier.addToNode(heating_coil_outlet_node)
-        humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(self)
-        case building_vintage
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
-          extra_elec_htg_coil.setName("lab extra Electric Htg Coil")
-          extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-          extra_water_htg_coil.setName("lab extra Water Htg Coil")
-          hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
-          extra_elec_htg_coil.addToNode(supply_outlet_node)
-          extra_water_htg_coil.addToNode(supply_outlet_node)
-        end
-        # humidity_spm.addToNode(supply_outlet_node)
-        humidity_spm.addToNode(humidifier.outletModelObject().get.to_Node.get)
-        humidity_spm.setControlZone(lab_zone)
-      end
-    end
-  end
-
-  def add_humidifier_vav1(building_vintage, hot_water_loop)
-    or_exam_space = self.getSpaceByName('ER_Exam3_Mult4_Flr_1').get
-    or_exam_zone = or_exam_space.thermalZone.get
-    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
-    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
-    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
-    or_exam_zone.setZoneControlHumidistat(humidistat)
-
-    self.getAirLoopHVACs.each do |air_loop|
-      if air_loop.thermalZones.include? or_exam_zone
-        humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
-        humidifier.setRatedCapacity(3.72E-5)
-        humidifier.setRatedPower(100000)
-        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
-        # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
-        htg_coil = nil
-        air_loop.supplyComponents.each do |equip|
-          if equip.to_CoilHeatingWater.is_initialized
-            htg_coil = equip.to_CoilHeatingWater.get
-          end
-        end
-        heating_coil_outlet_node = htg_coil.airOutletModelObject().get.to_Node.get
-        supply_outlet_node = air_loop.supplyOutletNode
-        humidifier.addToNode(heating_coil_outlet_node)
-        humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(self)
-        case building_vintage
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
-          extra_elec_htg_coil.setName("OR extra Electric Htg Coil")
-          extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-          extra_water_htg_coil.setName("OR extra Water Htg Coil")
-          hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
-          extra_elec_htg_coil.addToNode(supply_outlet_node)
-          extra_water_htg_coil.addToNode(supply_outlet_node)
-        end
-        # humidity_spm.addToNode(supply_outlet_node)
-        humidity_spm.addToNode(humidifier.outletModelObject().get.to_Node.get)
-        humidity_spm.setControlZone(or_exam_zone)
-      end
-    end
-  end
-
-  def add_humidifier_vav2(building_vintage, hot_water_loop)
-    or_exam_space = self.getSpaceByName('OR2_Mult5_Flr_2').get
-    or_exam_zone = or_exam_space.thermalZone.get
-    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
-    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MinRelHumSetSch'))
-    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(self.add_schedule('Hospital MaxRelHumSetSch'))
-    or_exam_zone.setZoneControlHumidistat(humidistat)
-
-    self.getAirLoopHVACs.each do |air_loop|
-      if air_loop.thermalZones.include? or_exam_zone
-        humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
-        humidifier.setRatedCapacity(3.72E-5)
-        humidifier.setRatedPower(100000)
-        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
-        # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
-        htg_coil = nil
-        air_loop.supplyComponents.each do |equip|
-          if equip.to_CoilHeatingWater.is_initialized
-            htg_coil = equip.to_CoilHeatingWater.get
-          end
-        end
-        heating_coil_outlet_node = htg_coil.airOutletModelObject().get.to_Node.get
-        supply_outlet_node = air_loop.supplyOutletNode
-        humidifier.addToNode(heating_coil_outlet_node)
-        humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(self)
-        case building_vintage
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
-          extra_elec_htg_coil.setName("OR extra Electric Htg Coil")
-          extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-          extra_water_htg_coil.setName("OR extra Water Htg Coil")
-          hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
-          extra_elec_htg_coil.addToNode(supply_outlet_node)
-          extra_water_htg_coil.addToNode(supply_outlet_node)
-        end
-        # humidity_spm.addToNode(supply_outlet_node)
-        humidity_spm.addToNode(humidifier.outletModelObject().get.to_Node.get)
-        humidity_spm.setControlZone(or_exam_zone)
+        humidity_spm.setControlZone(zone)
       end
     end
   end
@@ -721,14 +470,12 @@ class OpenStudio::Model::Model
     end
   end
 
-
-
   def modify_hospital_OAcontroller(building_vintage)
     self.getAirLoopHVACs.each do |air_loop|
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
       oa_control = oa_sys.getControllerOutdoorAir
       case air_loop.name.get
-        when 'VAV_ER', 'VAV_ICU' , 'VAV_LABS' , 'VAV_OR' , 'VAV_PATRMS','CAV_1','CAV_2'
+        when 'VAV_ER', 'VAV_ICU', 'VAV_LABS', 'VAV_OR', 'VAV_PATRMS', 'CAV_1', 'CAV_2'
           oa_control.setEconomizerControlType('NoEconomizer')
       end
     end
