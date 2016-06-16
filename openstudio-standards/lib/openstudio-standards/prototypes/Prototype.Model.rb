@@ -61,7 +61,8 @@ class OpenStudio::Model::Model
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)      
       self.assign_space_type_stubs("Space Function", building_vintage, space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
-      self.add_loads(building_vintage, climate_zone)   
+      self.add_loads(building_vintage, climate_zone)
+      self.apply_infiltration_standard(building_vintage)
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
 	  

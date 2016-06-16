@@ -1213,7 +1213,9 @@ module BTAP
           perimeter_zone_depth = 4.57,
           initial_height = 0.0
         )
-
+        
+        
+        
         if length <= 1e-4
           raise("Length must be greater than 0.")
           return false
@@ -1245,11 +1247,7 @@ module BTAP
           return false
         end
 
-        #    # Create progress bar
-        #    runner.createProgressBar("Creating Spaces")
-        #    num_total = perimeter_zone_depth>0 ? above_ground_storys*5 : above_ground_storys
-        #    num_complete = 0
-
+        building_stories = Array.new
         #Loop through the number of floors
         for floor in ((under_ground_storys * -1)..above_ground_storys-1)
 
@@ -1259,6 +1257,7 @@ module BTAP
           story = OpenStudio::Model::BuildingStory.new(model)
           story.setNominalFloortoFloorHeight(floor_to_floor_height)
           story.setName("Story #{floor+1}")
+          building_stories << story
 
 
           nw_point = OpenStudio::Point3d.new(0,width,z)
@@ -1393,11 +1392,12 @@ module BTAP
           BTAP::Geometry::Surfaces::set_surfaces_boundary_condition(model,BTAP::Geometry::Surfaces::get_surfaces_from_building_stories(model, story), "Ground") if z <= 0
           BTAP::Geometry::Surfaces::set_surfaces_boundary_condition(model,BTAP::Geometry::Surfaces::get_surfaces_from_building_stories(model, story), "Outdoors") if z > 0
 
+          
         end #End of floor loop
 
         #    runner.destroyProgressBar
         BTAP::Geometry::match_surfaces(model)
-        return model
+        return building_stories
       end
 
       def self.create_shape_t(model,

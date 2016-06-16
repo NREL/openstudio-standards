@@ -1,102 +1,102 @@
 SpaceType,Lighting Power Density (W/m2),Lighting Schedule,Occupancy Density (m2/person),Occupancy Schedule Name,Elec Equip Power Density (W/m2),Elec Equip Schedule,Gas Equip Power Density (W/m2),Gas Equip Schedule Name,Steam Equip Power Density (W/m2),Steam Equip Schedule,HW Equip Power Density (W/m2),HW Equip Schedule,SHW Watt/Person (W/person),SHW Fraction Schedule,SHW Temperature Setpoint Schedule Values (C),
-- undefined -,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Dwelling Unit(s),5.0,NECB-G-Lighting,59.9374,NECB-G-Occupancy,5.0,NECB-G-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,499.9789259795901,NECB-G-Service Water Heating,[60.0]
-Atrium - H < 13m,0.0,NA,10.0003,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0]
-Atrium - H > 13m,0.0,NA,10.0003,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0]
-Audience - auditorium,8.4999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0]
-Audience - performance arts,26.1998,NECB-C-Lighting,7.4982,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323760491135,NECB-C-Service Water Heating,[60.0]
-Audience - motion picture,12.2999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0]
-Classroom/lecture/training,13.2999,NECB-D-Lighting,7.4982,NECB-D-Occupancy,5.0,NECB-D-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.0617366458846,NECB-D-Service Water Heating,[60.0]
-Conf./meet./multi-purpose,13.1999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13291790657261,NECB-C-Service Water Heating,[60.0]
-Corr. >= 2.4m wide,7.0999,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Corr. < 2.4m wide,8.3999,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Dining - bar lounge/leisure,14.0999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392823,NECB-B-Service Water Heating,[60.0]
-Dining - family space,9.5999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,119.86600070216527,NECB-B-Service Water Heating,[60.0]
-Dining - other,6.9999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,119.86600070216527,NECB-B-Service Water Heating,[60.0]
-Dress./fitt. - performance arts,4.3,NECB-C-Lighting,29.9687,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,39.85762599900915,NECB-C-Service Water Heating,[60.0]
-Electrical/Mechanical,13.2999,NECB-*-Lighting,201.9631,NECB-*-Occupancy,1.0,NECB-*-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Food preparation,10.6999,NECB-B-Lighting,19.9791,NECB-B-Occupancy,9.9999,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,119.86600971356036,NECB-B-Service Water Heating,[60.0]
-Lab - classrooms,17.1999,NECB-D-Lighting,19.9791,NECB-D-Occupancy,9.9999,NECB-D-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,179.9455593944718,NECB-D-Service Water Heating,[60.0]
-Lab - research,23.5998,NECB-A-Lighting,19.9791,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,179.9455593944718,NECB-A-Service Water Heating,[60.0]
-Lobby - elevator,6.8999,NECB-C-Lighting,10.0003,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0]
-Lobby - performance arts,21.4998,NECB-C-Lighting,10.0003,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0]
-Lobby - motion picture,5.6,NECB-C-Lighting,10.0003,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0]
-Lobby - other,9.6999,NECB-C-Lighting,10.0003,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0]
-Locker room,9.7999,NECB-*-Lighting,10.0003,NECB-*-Occupancy,2.5,NECB-*-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Lounge/recreation,9.3999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.07953446569121,NECB-B-Service Water Heating,[60.0]
-Office - enclosed,11.8999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,7.4999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-A-Service Water Heating,[60.0]
-Office - open plan,10.9999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,7.4999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-A-Service Water Heating,[60.0]
-Sales area,18.0998,NECB-C-Lighting,29.9687,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,39.85762599900915,NECB-C-Service Water Heating,[60.0]
-Stairway,7.3999,NECB-*-Lighting,201.9631,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Storage area,6.7999,NECB-E-Lighting,99.8957,NECB-E-Occupancy,1.0,NECB-E-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,300.1045325514802,NECB-E-Service Water Heating,[60.0]
-Washroom,10.4999,NECB-*-Lighting,29.9687,NECB-*-Occupancy,1.0,NECB-*-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Workshop space,17.0999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0]
-Automotive - repair,7.1999,NECB-E-Lighting,19.9791,NECB-E-Occupancy,5.0,NECB-E-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-E-Service Water Heating,[60.0]
-Bank - banking and offices,14.8999,NECB-A-Lighting,24.9739,NECB-A-Occupancy,5.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.07953916384314,NECB-A-Service Water Heating,[60.0]
-Convention centre - audience,8.7999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0]
-Convention centre - exhibit,15.5999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0]
-Courthouse - courtroom,18.4998,NECB-A-Lighting,5.0002,NECB-A-Occupancy,2.5,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-A-Service Water Heating,[60.0]
-Courthouse - cell,14.6999,NECB-H-Lighting,24.9739,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,325.0156276788681,NECB-H-Service Water Heating,[60.0]
-Courthouse - chambers,12.5999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,7.4999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-A-Service Water Heating,[60.0]
-Penitentiary - audience,4.6,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0]
-Penitentiary - classroom,14.3999,NECB-D-Lighting,7.4982,NECB-D-Occupancy,5.0,NECB-D-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.0617366458846,NECB-D-Service Water Heating,[60.0]
-Penitentiary - dining,11.4999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,119.86600070216527,NECB-B-Service Water Heating,[60.0]
-Dormitory - living quarters,4.1,NECB-G-Lighting,24.9739,NECB-G-Occupancy,2.5,NECB-G-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,499.97898908199744,NECB-G-Service Water Heating,[60.0]
-Fire station - engine room,6.0,NECB-H-Lighting,24.9739,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,325.0156276788681,NECB-H-Service Water Heating,[60.0]
-Fire station - quarters,3.4,NECB-G-Lighting,24.9739,NECB-G-Occupancy,2.5,NECB-G-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,499.97898908199744,NECB-G-Service Water Heating,[60.0]
-Gym - fitness,9.7999,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0]
-Gym - audience,4.6,NECB-B-Lighting,5.0002,NECB-B-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-B-Service Water Heating,[60.0]
-Gym - play,12.8999,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0]
-Hospital corr. >= 2.4m,9.5999,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Hospital corr. < 2.4m,11.6999,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Hospital - emergency,24.2998,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,179.9455593944718,NECB-H-Service Water Heating,[60.0]
-Hospital - exam,17.8999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,9.9999,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-C-Service Water Heating,[60.0]
-Hospital - laundry/washing,7.9999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,19.9998,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.07954968091111,NECB-C-Service Water Heating,[60.0]
-Hospital - lounge/recreation,11.4999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.07953446569121,NECB-B-Service Water Heating,[60.0]
-Hospital - medical supply,13.6999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,1.0,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-H-Service Water Heating,[60.0]
-Hospital - nursery,9.4999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-H-Service Water Heating,[60.0]
-Hospital - nurses' station,9.3999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13290312154503,NECB-H-Service Water Heating,[60.0]
-Hospital - operating room,20.2998,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,300.1046166880221,NECB-H-Service Water Heating,[60.0]
-Hospital - patient room,6.6999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-H-Service Water Heating,[60.0]
-Hospital - pharmacy,12.2999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13290312154503,NECB-C-Service Water Heating,[60.0]
-Hospital - physical therapy,9.7999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,9.9999,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13290312154503,NECB-C-Service Water Heating,[60.0]
-Hospital - radiology/imaging,14.1999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-H-Service Water Heating,[60.0]
-Hospital - recovery,12.3999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,179.9455593944718,NECB-H-Service Water Heating,[60.0]
-Hotel/Motel - dining,8.7999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,114.8837986919223,NECB-B-Service Water Heating,[60.0]
-Hotel/Motel - rooms,11.8999,NECB-F-Lighting,24.9739,NECB-F-Occupancy,2.5,NECB-F-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,599.9161647619178,NECB-F-Service Water Heating,[60.0]
-Hotel/Motel - lobby,11.3999,NECB-H-Lighting,10.0003,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823711,NECB-H-Service Water Heating,[60.0]
-Hway lodging - dining,9.4999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,114.8837986919223,NECB-B-Service Water Heating,[60.0]
-Hway lodging - rooms,8.0999,NECB-F-Lighting,24.9739,NECB-F-Occupancy,2.5,NECB-F-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,599.9161647619178,NECB-F-Service Water Heating,[60.0]
-Library - cataloging,7.7999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-C-Service Water Heating,[60.0]
-Library - reading,9.9999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-C-Service Water Heating,[60.0]
-Library - stacks,22.8998,NECB-C-Lighting,19.9791,NECB-C-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-C-Service Water Heating,[60.0]
-Mfg - corr. >= 2.4m,4.4,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Mfg - corr. < 2.4m,5.5,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0]
-Mfg - detailed,13.8999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0]
-Mfg - equipment,13.2999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0]
-Mfg - bay H > 15m,11.2999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0]
-Mfg - 7.5 <= bay H <= 15m,13.1999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0]
-Mfg - bay H < 7.5m,12.7999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0]
-Museum - exhibition,11.2999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.0795344656911,NECB-C-Service Water Heating,[60.0]
-Museum - restoration,10.9999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,5.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,50.11513266409088,NECB-A-Service Water Heating,[60.0]
-Parking garage space,2.0,NECB-H-Lighting,1032.256,NECB-H-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-H-Service Water Heating,[60.0]
-Post office sorting,10.0999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,7.4999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-A-Service Water Heating,[60.0]
-Religious - audience,18.1998,NECB-I-Lighting,5.0002,NECB-I-Occupancy,1.0,NECB-I-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,14.946616559118524,NECB-I-Service Water Heating,[60.0]
-Religious - fellowship hall,6.8999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13291790657261,NECB-C-Service Water Heating,[60.0]
-Religious - pulpit/choir,18.1998,NECB-I-Lighting,5.0002,NECB-I-Occupancy,1.0,NECB-I-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,14.946616559118524,NECB-I-Service Water Heating,[60.0]
-Retail - dressing/fitting,9.3999,NECB-C-Lighting,29.9687,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,39.85762599900915,NECB-C-Service Water Heating,[60.0]
-Retail - mall concourse,11.7999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.893251050460506,NECB-C-Service Water Heating,[60.0]
-Retail - sales,18.0998,NECB-C-Lighting,29.9687,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,39.85762599900915,NECB-C-Service Water Heating,[60.0]
-Sports arena - audience,4.6,NECB-B-Lighting,5.0002,NECB-B-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-B-Service Water Heating,[60.0]
-Sports arena - court c4,7.7999,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0]
-Sports arena - court c3,12.8999,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0]
-Sports arena - court c2,20.6998,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0]
-Sports arena - court c1,32.3997,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0]
-Sports arena - ring,28.7998,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0]
-Transp. baggage,8.1999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173715518537,NECB-H-Service Water Heating,[60.0]
-Transp. seating,5.8,NECB-H-Lighting,10.0003,NECB-H-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,32.56588565894639,NECB-H-Service Water Heating,[60.0]
-Transp. concourse,3.9,NECB-H-Lighting,19.9791,NECB-H-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,129.98355523901768,NECB-H-Service Water Heating,[60.0]
-Transp. counter,11.5999,NECB-H-Lighting,10.0003,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173647593458,NECB-H-Service Water Heating,[60.0]
-Warehouse - fine,10.1999,NECB-A-Lighting,49.9479,NECB-A-Occupancy,1.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173715518528,NECB-A-Service Water Heating,[60.0]
-Warehouse - med/blk,6.3999,NECB-A-Lighting,99.8957,NECB-A-Occupancy,1.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173715518581,NECB-A-Service Water Heating,[60.0]
-Warehouse - med/blk2,10.1999,NECB-A-Lighting,99.8957,NECB-A-Occupancy,1.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173715518581,NECB-A-Service Water Heating,[60.0]
+- undefined -,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Dwelling Unit(s),5.0,NECB-G-Lighting,59.9374,NECB-G-Occupancy,5.0,NECB-G-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,499.9789259795901,NECB-G-Service Water Heating,[60.0],
+Atrium - H < 13m,0.0,NA,10.0003,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0],
+Atrium - H > 13m,0.0,NA,10.0003,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0],
+Audience - auditorium,8.4999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0],
+Audience - performance arts,26.1998,NECB-C-Lighting,7.4982,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323760491135,NECB-C-Service Water Heating,[60.0],
+Audience - motion picture,12.2999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0],
+Classroom/lecture/training,13.2999,NECB-D-Lighting,7.4982,NECB-D-Occupancy,5.0,NECB-D-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.0617366458846,NECB-D-Service Water Heating,[60.0],
+Conf./meet./multi-purpose,13.1999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13291790657261,NECB-C-Service Water Heating,[60.0],
+Corr. >= 2.4m wide,7.0999,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Corr. < 2.4m wide,8.3999,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Dining - bar lounge/leisure,14.0999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392823,NECB-B-Service Water Heating,[60.0],
+Dining - family space,9.5999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,119.86600070216527,NECB-B-Service Water Heating,[60.0],
+Dining - other,6.9999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,119.86600070216527,NECB-B-Service Water Heating,[60.0],
+Dress./fitt. - performance arts,4.3,NECB-C-Lighting,29.9687,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,39.85762599900915,NECB-C-Service Water Heating,[60.0],
+Electrical/Mechanical,13.2999,NECB-*-Lighting,201.9631,NECB-*-Occupancy,1.0,NECB-*-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Food preparation,10.6999,NECB-B-Lighting,19.9791,NECB-B-Occupancy,9.9999,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,119.86600971356036,NECB-B-Service Water Heating,[60.0],
+Lab - classrooms,17.1999,NECB-D-Lighting,19.9791,NECB-D-Occupancy,9.9999,NECB-D-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,179.9455593944718,NECB-D-Service Water Heating,[60.0],
+Lab - research,23.5998,NECB-A-Lighting,19.9791,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,179.9455593944718,NECB-A-Service Water Heating,[60.0],
+Lobby - elevator,6.8999,NECB-C-Lighting,10.0003,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0],
+Lobby - performance arts,21.4998,NECB-C-Lighting,10.0003,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0],
+Lobby - motion picture,5.6,NECB-C-Lighting,10.0003,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0],
+Lobby - other,9.6999,NECB-C-Lighting,10.0003,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-C-Service Water Heating,[60.0],
+Locker room,9.7999,NECB-*-Lighting,10.0003,NECB-*-Occupancy,2.5,NECB-*-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Lounge/recreation,9.3999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.07953446569121,NECB-B-Service Water Heating,[60.0],
+Office - enclosed,11.8999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,7.4999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-A-Service Water Heating,[60.0],
+Office - open plan,10.9999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,7.4999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-A-Service Water Heating,[60.0],
+Sales area,18.0998,NECB-C-Lighting,29.9687,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,39.85762599900915,NECB-C-Service Water Heating,[60.0],
+Stairway,7.3999,NECB-*-Lighting,201.9631,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Storage area,6.7999,NECB-E-Lighting,99.8957,NECB-E-Occupancy,1.0,NECB-E-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,300.1045325514802,NECB-E-Service Water Heating,[60.0],
+Washroom,10.4999,NECB-*-Lighting,29.9687,NECB-*-Occupancy,1.0,NECB-*-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Workshop space,17.0999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0],
+Automotive - repair,7.1999,NECB-E-Lighting,19.9791,NECB-E-Occupancy,5.0,NECB-E-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-E-Service Water Heating,[60.0],
+Bank - banking and offices,14.8999,NECB-A-Lighting,24.9739,NECB-A-Occupancy,5.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.07953916384314,NECB-A-Service Water Heating,[60.0],
+Convention centre - audience,8.7999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0],
+Convention centre - exhibit,15.5999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0],
+Courthouse - courtroom,18.4998,NECB-A-Lighting,5.0002,NECB-A-Occupancy,2.5,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-A-Service Water Heating,[60.0],
+Courthouse - cell,14.6999,NECB-H-Lighting,24.9739,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,325.0156276788681,NECB-H-Service Water Heating,[60.0],
+Courthouse - chambers,12.5999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,7.4999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-A-Service Water Heating,[60.0],
+Penitentiary - audience,4.6,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-C-Service Water Heating,[60.0],
+Penitentiary - classroom,14.3999,NECB-D-Lighting,7.4982,NECB-D-Occupancy,5.0,NECB-D-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.0617366458846,NECB-D-Service Water Heating,[60.0],
+Penitentiary - dining,11.4999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,119.86600070216527,NECB-B-Service Water Heating,[60.0],
+Dormitory - living quarters,4.1,NECB-G-Lighting,24.9739,NECB-G-Occupancy,2.5,NECB-G-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,499.97898908199744,NECB-G-Service Water Heating,[60.0],
+Fire station - engine room,6.0,NECB-H-Lighting,24.9739,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,325.0156276788681,NECB-H-Service Water Heating,[60.0],
+Fire station - quarters,3.4,NECB-G-Lighting,24.9739,NECB-G-Occupancy,2.5,NECB-G-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,499.97898908199744,NECB-G-Service Water Heating,[60.0],
+Gym - fitness,9.7999,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0],
+Gym - audience,4.6,NECB-B-Lighting,5.0002,NECB-B-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-B-Service Water Heating,[60.0],
+Gym - play,12.8999,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0],
+Hospital corr. >= 2.4m,9.5999,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Hospital corr. < 2.4m,11.6999,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Hospital - emergency,24.2998,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,179.9455593944718,NECB-H-Service Water Heating,[60.0],
+Hospital - exam,17.8999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,9.9999,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-C-Service Water Heating,[60.0],
+Hospital - laundry/washing,7.9999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,19.9998,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.07954968091111,NECB-C-Service Water Heating,[60.0],
+Hospital - lounge/recreation,11.4999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.07953446569121,NECB-B-Service Water Heating,[60.0],
+Hospital - medical supply,13.6999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,1.0,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-H-Service Water Heating,[60.0],
+Hospital - nursery,9.4999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-H-Service Water Heating,[60.0],
+Hospital - nurses' station,9.3999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13290312154503,NECB-H-Service Water Heating,[60.0],
+Hospital - operating room,20.2998,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,300.1046166880221,NECB-H-Service Water Heating,[60.0],
+Hospital - patient room,6.6999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-H-Service Water Heating,[60.0],
+Hospital - pharmacy,12.2999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13290312154503,NECB-C-Service Water Heating,[60.0],
+Hospital - physical therapy,9.7999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,9.9999,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13290312154503,NECB-C-Service Water Heating,[60.0],
+Hospital - radiology/imaging,14.1999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-H-Service Water Heating,[60.0],
+Hospital - recovery,12.3999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,9.9999,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,179.9455593944718,NECB-H-Service Water Heating,[60.0],
+Hotel/Motel - dining,8.7999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,114.8837986919223,NECB-B-Service Water Heating,[60.0],
+Hotel/Motel - rooms,11.8999,NECB-F-Lighting,24.9739,NECB-F-Occupancy,2.5,NECB-F-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,599.9161647619178,NECB-F-Service Water Heating,[60.0],
+Hotel/Motel - lobby,11.3999,NECB-H-Lighting,10.0003,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.89323311823711,NECB-H-Service Water Heating,[60.0],
+Hway lodging - dining,9.4999,NECB-B-Lighting,10.0003,NECB-B-Occupancy,1.0,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,114.8837986919223,NECB-B-Service Water Heating,[60.0],
+Hway lodging - rooms,8.0999,NECB-F-Lighting,24.9739,NECB-F-Occupancy,2.5,NECB-F-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,599.9161647619178,NECB-F-Service Water Heating,[60.0],
+Library - cataloging,7.7999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-C-Service Water Heating,[60.0],
+Library - reading,9.9999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-C-Service Water Heating,[60.0],
+Library - stacks,22.8998,NECB-C-Lighting,19.9791,NECB-C-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-C-Service Water Heating,[60.0],
+Mfg - corr. >= 2.4m,4.4,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Mfg - corr. < 2.4m,5.5,NECB-*-Lighting,99.8957,NECB-*-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-*-Service Water Heating,[60.0],
+Mfg - detailed,13.8999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0],
+Mfg - equipment,13.2999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0],
+Mfg - bay H > 15m,11.2999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0],
+Mfg - 7.5 <= bay H <= 15m,13.1999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0],
+Mfg - bay H < 7.5m,12.7999,NECB-A-Lighting,29.9687,NECB-A-Occupancy,9.9999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97280073137168,NECB-A-Service Water Heating,[60.0],
+Museum - exhibition,11.2999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,60.0795344656911,NECB-C-Service Water Heating,[60.0],
+Museum - restoration,10.9999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,5.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,50.11513266409088,NECB-A-Service Water Heating,[60.0],
+Parking garage space,2.0,NECB-H-Lighting,1032.256,NECB-H-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,0.0,NECB-H-Service Water Heating,[60.0],
+Post office sorting,10.0999,NECB-A-Lighting,19.9791,NECB-A-Occupancy,7.4999,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.9727586630996,NECB-A-Service Water Heating,[60.0],
+Religious - audience,18.1998,NECB-I-Lighting,5.0002,NECB-I-Occupancy,1.0,NECB-I-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,14.946616559118524,NECB-I-Service Water Heating,[60.0],
+Religious - fellowship hall,6.8999,NECB-C-Lighting,5.0002,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,45.13291790657261,NECB-C-Service Water Heating,[60.0],
+Religious - pulpit/choir,18.1998,NECB-I-Lighting,5.0002,NECB-I-Occupancy,1.0,NECB-I-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,14.946616559118524,NECB-I-Service Water Heating,[60.0],
+Retail - dressing/fitting,9.3999,NECB-C-Lighting,29.9687,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,39.85762599900915,NECB-C-Service Water Heating,[60.0],
+Retail - mall concourse,11.7999,NECB-C-Lighting,19.9791,NECB-C-Occupancy,1.0,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,29.893251050460506,NECB-C-Service Water Heating,[60.0],
+Retail - sales,18.0998,NECB-C-Lighting,29.9687,NECB-C-Occupancy,2.5,NECB-C-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,39.85762599900915,NECB-C-Service Water Heating,[60.0],
+Sports arena - audience,4.6,NECB-B-Lighting,5.0002,NECB-B-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,29.89323311823697,NECB-B-Service Water Heating,[60.0],
+Sports arena - court c4,7.7999,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0],
+Sports arena - court c3,12.8999,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0],
+Sports arena - court c2,20.6998,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0],
+Sports arena - court c1,32.3997,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0],
+Sports arena - ring,28.7998,NECB-B-Lighting,5.0002,NECB-B-Occupancy,1.5,NECB-B-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,89.97276758392806,NECB-B-Service Water Heating,[60.0],
+Transp. baggage,8.1999,NECB-H-Lighting,19.9791,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173715518537,NECB-H-Service Water Heating,[60.0],
+Transp. seating,5.8,NECB-H-Lighting,10.0003,NECB-H-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,32.56588565894639,NECB-H-Service Water Heating,[60.0],
+Transp. concourse,3.9,NECB-H-Lighting,19.9791,NECB-H-Occupancy,0.0,NA,0.0,NA,0.0,NA,0.0,NA,129.98355523901768,NECB-H-Service Water Heating,[60.0],
+Transp. counter,11.5999,NECB-H-Lighting,10.0003,NECB-H-Occupancy,2.5,NECB-H-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173647593458,NECB-H-Service Water Heating,[60.0],
+Warehouse - fine,10.1999,NECB-A-Lighting,49.9479,NECB-A-Occupancy,1.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173715518528,NECB-A-Service Water Heating,[60.0],
+Warehouse - med/blk,6.3999,NECB-A-Lighting,99.8957,NECB-A-Occupancy,1.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173715518581,NECB-A-Service Water Heating,[60.0],
+Warehouse - med/blk2,10.1999,NECB-A-Lighting,99.8957,NECB-A-Occupancy,1.0,NECB-A-Electric-Equipment,0.0,NA,0.0,NA,0.0,NA,65.06173715518581,NECB-A-Service Water Heating,[60.0],

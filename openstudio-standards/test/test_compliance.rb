@@ -9,11 +9,12 @@ require_relative 'minitest_helper'
 class NECBHDDTests < Minitest::Test
   #set global weather files sample
   NECB_epw_files_for_cdn_climate_zones = [
-    'CAN_BC_Vancouver.718920_CWEC.epw',#  CZ 5 - Gas HDD = 3019 
-    'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
-    'CAN_PQ_Sherbrooke.716100_CWEC.epw', #CZ 7a - Electric HDD = 5068
-    'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
-    'CAN_NU_Resolute.719240_CWEC.epw' # CZ 8  -FuelOil2 HDD = 12570
+    'CAN_BC_Vancouver.718920_CWEC.epw',#  CZ 4 HDD = 2932
+    'CAN_BC_Kamloops.718870_CWEC.epw',#    CZ 5 HDD = 3567
+    'CAN_ON_Ottawa.716280_CWEC.epw', #CZ 6 HDD = 4563
+    'CAN_PQ_Ste.Agathe.des.Monts.717200_CWEC.epw', #CZ 7aHDD = 5501
+    'CAN_MB_The.Pas.718670_CWEC.epw', #CZ 7b HDD = 6572
+    'CAN_NU_Resolute.719240_CWEC.epw' # CZ 8HDD = 12570
   ] 
   #Set Compliance vintage
   Templates = ['NECB 2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
@@ -28,11 +29,11 @@ class NECBHDDTests < Minitest::Test
     
     #Below ground story to tests all ground surfaces including roof.
     length = 100.0; width = 100.0 ; num_above_ground_floors = 0; num_under_ground_floors = 1; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = -10.0
-    BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
+    @below_ground_floors = BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
 
     #Above ground story to test all above outdoors surfaces including floor.
     length = 100.0; width = 100.0 ; num_above_ground_floors = 3; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-    BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
+    @above_ground_floors = BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
 
     #Find all outdoor surfaces. 
     outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(@model.getSurfaces(), "Outdoors")
@@ -90,7 +91,7 @@ class NECBHDDTests < Minitest::Test
   # for all HDDs 
   # NECB 2011 8.4.4.1
   # @return [Bool] true if successful. 
-  def necb_hdd_envelope_rules()
+  def test_necb_hdd_envelope_rules()
     # Todo - Define a construction directly to a surface. 
     # Todo - Define a construction set to a space directly.
     # Todo - Define a construction set to a floor directly. 
@@ -98,11 +99,8 @@ class NECBHDDTests < Minitest::Test
     # Todo - Roughly 1 day of work (phylroy) 
      
     #Create report string. 
+    
     @output = ""
-    @output << "Vintage,WeatherFile,HDD,FDWR,SRR," 
-    @output << "outdoor_walls_average_conductance,outdoor_roofs_average_conductance,outdoor_floors_average_conductance,"
-    @output << "ground_walls_average_conductances, ground_roofs_average_conductances, ground_floors_average_conductances,"
-    @output << "windows_average_conductance,skylights_average_conductance,doors_average_conductance,overhead_doors_average_conductance\n"
      
     
     #Iterate through the weather files. 
@@ -172,6 +170,10 @@ class NECBHDDTests < Minitest::Test
         
         # Apply Construction
         @model.apply_performance_rating_method_construction_types(template)
+        
+        #Add Infiltration rates to the space objects themselves. 
+        @model.apply_infiltration_standard(template)
+        
 
       
         #Get Surfaces by type.
@@ -203,19 +205,48 @@ class NECBHDDTests < Minitest::Test
         skylights_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(skylights)
         doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(doors)
         overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
-
-        #Save information to report. Rounding is done to avoid floating point small differences. 
+        
+        
+        
+        #Create headers.
+        
+        @header_output  = ""
+        @header_output  << "Vintage,WeatherFile,HDD,FDWR,SRR," 
+        @header_output  << "outdoor_walls_average_conductance,outdoor_roofs_average_conductance,outdoor_floors_average_conductance,"
+        @header_output  << "ground_walls_average_conductances, ground_roofs_average_conductances, ground_floors_average_conductances,"
+        @header_output  << "windows_average_conductance,skylights_average_conductance,doors_average_conductance,overhead_doors_average_conductance,"
+        
+        
+        #Output conductances 
         @output << "#{template},#{weather_file},#{@hdd.round(0)},#{BTAP::Geometry::get_fwdr(@model).round(4)},#{BTAP::Geometry::get_srr(@model).round(4)},"
         @output << "#{outdoor_walls_average_conductance.round(4)} ,#{outdoor_roofs_average_conductance.round(4)} , #{outdoor_floors_average_conductance.round(4)},"
         @output << "#{ground_walls_average_conductances.round(4)},#{ground_roofs_average_conductances.round(4)},#{ground_floors_average_conductances.round(4)},"
-        @output << "#{windows_average_conductance.round(4)},#{skylights_average_conductance.round(4)},#{doors_average_conductance.round(4)},#{overhead_doors_average_conductance.round(4)}\n"
+        @output << "#{windows_average_conductance.round(4)},#{skylights_average_conductance.round(4)},#{doors_average_conductance.round(4)},#{overhead_doors_average_conductance.round(4)},"
+        
+        #infiltration test
+        # Get the effective infiltration rate through the walls and roof only.
+        BTAP::Geometry::Spaces::get_spaces_from_storeys(@model,@above_ground_floors).each do |space|
+          @header_output << "#{space.name} - Wall/Roof infil rate (L/s/m2),"
+          assert( space.spaceInfiltrationDesignFlowRates.size <= 1, "There should be no more than one infiltration object per space in the reference/budget building#{space.spaceInfiltrationDesignFlowRates}" )
+          #If space rightfully does not have an infiltration rate (no exterior surfaces) output an NA. 
+          if space.spaceInfiltrationDesignFlowRates.size == 0
+            @output << "NA,"
+          else
+            #Do some math to determine the effective infiltration rate of the walls and roof only as per NECB. 
+            wall_roof_infiltration_rate  = space.spaceInfiltrationDesignFlowRates[0].flowperExteriorSurfaceArea.get *  space.exteriorArea / space.exterior_wall_and_roof_and_subsurface_area
+            #Output effective infiltration rate
+            @output << "#{wall_roof_infiltration_rate * 1000},"
+          end
+        end
+        @header_output << "\n"
+        @output << "\n"
         BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__),"output","#{template}-hdd#{@hdd}-envelope_test.osm"))
       end #Weather file loop.
     end # Template vintage loop
     
     #Write test report file. 
     test_result_file = File.join(File.dirname(__FILE__),'regression_files','compliance_envelope_test_results.csv')
-    File.open(test_result_file, 'w') {|f| f.write(@output) }
+    File.open(test_result_file, 'w') {|f| f.write( @header_output + @output) }
     
     #Test that the values are correct by doing a file compare.
     expected_result_file = File.join(File.dirname(__FILE__),'regression_files','compliance_envelope_expected_results.csv')
@@ -383,8 +414,8 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
     @model = OpenStudio::Model::Model.new
     #    #Create Geometry that will be used for all tests.  
     #    
-    #Below ground story to tests all ground surfaces including roof.
-    length = 100.0; width = 100.0 ; num_above_ground_floors = 0; num_under_ground_floors = 1; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = -10.0
+    #Create only above ground geometry (Used for infiltration tests) 
+    length = 100.0; width = 100.0 ; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
     BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
 
   end
@@ -412,6 +443,13 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         @model.getSpaces.each do |space|
           space.setSpaceType(st)
         end
+        
+        #Add Infiltration rates to the space objects themselves. 
+        @model.apply_infiltration_standard(template)
+        
+        #Get handle for space. 
+        space = @model.getSpaces[0]
+        space_area = space.floorArea #m2
         
 
         #Lights
@@ -461,21 +499,17 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         shw_peak_flow_per_area = []
         shw_heating_target_temperature = []
         shw__schedule = ""
-        
-        
-        #Get first space to test.
-        space = @model.getSpaces[0]
-        space_area = space.floorArea #m2
         area_per_occ = 0.0
         area_per_occ = total_occ_dens[0] unless total_occ_dens[0].nil?
         water_fixture = @model.add_swh_end_uses_by_space('Space Function', template, 'NECB HDD Method', shw_loop, st.name.get, space.name.get)
         shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
         shw_peak_flow = water_fixture.waterUseEquipmentDefinition.getPeakFlowRate.value # m3/s
         shw_peak_flow_per_area = shw_peak_flow / space_area #m3/s/m2
-        # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
-        shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 *44.4) * 1000 * area_per_occ
+        # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
+        shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
         shw_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
    
+
 
         header_output << "SpaceType,"
         output << "#{st.name},"
@@ -545,11 +579,9 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         header_output << "SHW Fraction Schedule,"
         output << "#{shw__fraction_schedule},"
         header_output << "SHW Temperature Setpoint Schedule Values (C),"
-        output << "#{shw_target_temperature_schedule}"
-        
-        #Infiltration
-        
-        #Ventilation
+        output << "#{shw_target_temperature_schedule},"
+
+        #End line
         header_output << "\n"
         output << "\n"
           
