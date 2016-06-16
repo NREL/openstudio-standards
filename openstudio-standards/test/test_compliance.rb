@@ -90,7 +90,7 @@ class NECBHDDTests < Minitest::Test
   # for all HDDs 
   # NECB 2011 8.4.4.1
   # @return [Bool] true if successful. 
-  def test_necb_hdd_envelope_rules()
+  def necb_hdd_envelope_rules()
     # Todo - Define a construction directly to a surface. 
     # Todo - Define a construction set to a space directly.
     # Todo - Define a construction set to a floor directly. 
@@ -466,10 +466,14 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         #Get first space to test.
         space = @model.getSpaces[0]
         space_area = space.floorArea #m2
-        area_per_occupant = occ_sched[0] #m2/person
+        area_per_occ = 0.0
+        area_per_occ = total_occ_dens[0] unless total_occ_dens[0].nil?
         water_fixture = @model.add_swh_end_uses_by_space('Space Function', template, 'NECB HDD Method', shw_loop, st.name.get, space.name.get)
         shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
-        shw_peak_flow_per_area = water_fixture.waterUseEquipmentDefinition.peakFlowRate
+        shw_peak_flow = water_fixture.waterUseEquipmentDefinition.getPeakFlowRate.value # m3/s
+        shw_peak_flow_per_area = shw_peak_flow / space_area #m3/s/m2
+        # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
+        shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 *44.4) * 1000 * area_per_occ
         shw_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
    
 
@@ -536,8 +540,8 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         output << "#{hw_equip_sched[0]},"
           
         #SHW
-        header_output << "SHW Peak Flow per Area (m3/s/m2),"
-        output << "#{shw_peak_flow_per_area},"
+        header_output << "SHW Watt/Person (W/person),"
+        output << "#{shw_watts_per_person},"
         header_output << "SHW Fraction Schedule,"
         output << "#{shw__fraction_schedule},"
         header_output << "SHW Temperature Setpoint Schedule Values (C),"
@@ -571,7 +575,7 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
   #  # This test will ensure that the system selection for each of the 133 spacetypes are 
   #  # being assigned the appropriate values for LPD.
   #  # @return [Bool] true if successful.
-  def test_system_selection()
+  def system_selection()
   
     space_type_catagories = {}
     BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |space_type_data|
