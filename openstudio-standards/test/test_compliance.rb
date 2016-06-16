@@ -225,7 +225,10 @@ class NECBHDDTests < Minitest::Test
         
         #infiltration test
         # Get the effective infiltration rate through the walls and roof only.
-        BTAP::Geometry::Spaces::get_spaces_from_storeys(@model,@above_ground_floors).each do |space|
+        sorted_spaces = BTAP::Geometry::Spaces::get_spaces_from_storeys(@model,@above_ground_floors).sort_by{|space| space.name.get}
+        #Need to sort spaces otherwise the output order is random.
+        sorted_spaces.each do |space|
+          
           @header_output << "#{space.name} - Wall/Roof infil rate (L/s/m2),"
           assert( space.spaceInfiltrationDesignFlowRates.size <= 1, "There should be no more than one infiltration object per space in the reference/budget building#{space.spaceInfiltrationDesignFlowRates}" )
           #If space rightfully does not have an infiltration rate (no exterior surfaces) output an NA. 
@@ -235,7 +238,7 @@ class NECBHDDTests < Minitest::Test
             #Do some math to determine the effective infiltration rate of the walls and roof only as per NECB. 
             wall_roof_infiltration_rate  = space.spaceInfiltrationDesignFlowRates[0].flowperExteriorSurfaceArea.get *  space.exteriorArea / space.exterior_wall_and_roof_and_subsurface_area
             #Output effective infiltration rate
-            @output << "#{wall_roof_infiltration_rate * 1000},"
+            @output << "#{(wall_roof_infiltration_rate * 1000).round(3)},"
           end
         end
         @header_output << "\n"
@@ -575,7 +578,7 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
           
         #SHW
         header_output << "SHW Watt/Person (W/person),"
-        output << "#{shw_watts_per_person},"
+        output << "#{shw_watts_per_person.round(0)},"
         header_output << "SHW Fraction Schedule,"
         output << "#{shw__fraction_schedule},"
         header_output << "SHW Temperature Setpoint Schedule Values (C),"
