@@ -1111,18 +1111,19 @@ class OpenStudio::Model::Model
   # @param fan_efficiency [Double] fan total efficiency, including motor and impeller
   # @param fan_motor_efficiency [Double] fan motor efficiency
   # @param fan_pressure_rise [Double] fan pressure rise, in Pa
+  # @param chilled_water_loop [String] chilled water loop to connect cooling coil to.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop
   def add_cav(standard,
               sys_name,
               hot_water_loop,
-              chilled_water_loop,
               thermal_zones,
               hvac_op_sch,
               oa_damper_sch,
               fan_efficiency,
               fan_motor_efficiency,
               fan_pressure_rise,
+              chilled_water_loop=nil,
               building_type=nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding CAV for #{thermal_zones.size} zones.")
@@ -1240,13 +1241,13 @@ class OpenStudio::Model::Model
 
     # Air handler cooling coil
 
-    if building_type == 'Hospital'
+    if chilled_water_loop.nil?
+      clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(self)
+    else
       clg_coil = OpenStudio::Model::CoilCoolingWater.new(self,self.alwaysOnDiscreteSchedule)
       clg_coil.setHeatExchangerConfiguration("CrossFlow")
       chilled_water_loop.addDemandBranchForComponent(clg_coil)
       clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
-    else
-      clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(self)
     end
     clg_coil.setName("#{air_loop.name} Clg Coil")
     clg_coil.addToNode(air_loop.supplyInletNode)

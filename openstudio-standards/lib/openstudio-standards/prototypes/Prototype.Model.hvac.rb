@@ -92,7 +92,7 @@ class OpenStudio::Model::Model
         chilled_water_loop = nil
         if self.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
-        else
+        elsif building_type == 'Hospital'
           condenser_water_loop = nil
           if prototype_input['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = self.add_cw_loop()
@@ -105,20 +105,19 @@ class OpenStudio::Model::Model
                                                 prototype_input['chiller_compressor_type'],
                                                 prototype_input['chiller_capacity_guess'],
                                                 condenser_water_loop)
-
         end
 
         # Add the CAV
         self.add_cav(building_vintage,
                     system['name'],
                     hot_water_loop,
-                    chilled_water_loop,
                     thermal_zones,
                     prototype_input['vav_operation_schedule'],
                     prototype_input['vav_oa_damper_schedule'],
                     prototype_input['vav_fan_efficiency'],
                     prototype_input['vav_fan_motor_efficiency'],
                     prototype_input['vav_fan_pressure_rise'],
+                    chilled_water_loop,
                     building_type)
 
       when 'PSZ-AC'
