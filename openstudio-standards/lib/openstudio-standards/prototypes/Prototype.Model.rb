@@ -76,7 +76,6 @@ class OpenStudio::Model::Model
       self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)                                
       self.apply_performance_rating_method_construction_types(building_vintage)
       #Getting System Fuel type types from BTAP::Environment. 
-      BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
       boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4,heating_coil_types_sys6, fan_type = BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
       BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self, runner=nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type )
       

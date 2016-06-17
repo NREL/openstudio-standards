@@ -497,6 +497,11 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         st.otherEquipment.each {|equip| other_equip_power << equip.powerPerFloorArea.get ; other_equip_sched << equip.schedule.get.name}
         assert( other_equip_power.size <= 1 , "#{other_equip_power.size} other equipment definitions given. Expecting <= 1." ) 
           
+
+
+        
+        
+        
         #SHW
         shw_loop = OpenStudio::Model::PlantLoop.new(@model)
         shw_peak_flow_per_area = []
@@ -583,7 +588,30 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         output << "#{shw__fraction_schedule},"
         header_output << "SHW Temperature Setpoint Schedule Values (C),"
         output << "#{shw_target_temperature_schedule},"
+        
 
+        #Outdoor Air / Ventilation
+        dsoa = st.designSpecificationOutdoorAir.get
+        header_output << "outdoorAirMethod,"         
+        output << "#{dsoa.outdoorAirMethod },"
+        header_output << "OutdoorAirFlowperFloorArea (#{dsoa.getOutdoorAirFlowperFloorArea.units.print}) ,"
+        output << "#{dsoa.getOutdoorAirFlowperFloorArea.value.round(4)},"
+        
+        header_output << "OutdoorAirFlowperPerson  (#{dsoa.getOutdoorAirFlowperPerson.units.print}) ,"
+        output << "#{dsoa.getOutdoorAirFlowperPerson.value.round(4)},"
+        
+        header_output << "OutdoorAirFlowRate (#{dsoa.getOutdoorAirFlowRate.units.print}) ,"
+        output << "#{dsoa.getOutdoorAirFlowRate.value.round(4)},"
+        
+        header_output << "OutdoorAirFlowAirChangesperHour (#{dsoa.getOutdoorAirFlowAirChangesperHour.units.print}) ,"
+        output << "#{dsoa.getOutdoorAirFlowAirChangesperHour.value.round(4)},"
+        
+        header_output << "outdoorAirFlowRateFractionSchedule,"
+        if dsoa.outdoorAirFlowRateFractionSchedule.empty?
+           output << "NA,"
+        else
+           output << "#{dsoa.outdoorAirFlowRateFractionSchedule.get.name},"
+        end
         #End line
         header_output << "\n"
         output << "\n"
