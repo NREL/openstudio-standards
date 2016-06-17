@@ -2,7 +2,7 @@
 # open the class to add methods to size all HVAC equipment
 class OpenStudio::Model::Model
 
-  # Load the helper libraries for 
+  # Load the helper libraries for
   require_relative 'Prototype.FanConstantVolume'
   require_relative 'Prototype.FanVariableVolume'
   require_relative 'Prototype.FanOnOff'
@@ -25,7 +25,7 @@ class OpenStudio::Model::Model
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
 
   def create_prototype_building(building_type, building_vintage, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
-    
+
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == "HighriseApartment"
       if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004'
@@ -44,40 +44,40 @@ class OpenStudio::Model::Model
       'template' => building_vintage,
       'building_type' => building_type
     }
-    
+
     prototype_input = self.find_object($os_standards['prototype_inputs'], search_criteria,nil)
-    
-    
+
+
     if prototype_input.nil?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for #{search_criteria}, cannot create model.")
       return false
     end
 
 
-    case building_vintage       
-    when 'NECB 2011'     
+    case building_vintage
+    when 'NECB 2011'
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
-      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)      
+      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
       self.assign_space_type_stubs("Space Function", building_vintage, space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
-      self.add_loads(building_vintage, climate_zone)   
+      self.add_loads(building_vintage, climate_zone)
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
-	  
+
       #Should this be the first thing done Maria?
       self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
       puts self.get_full_weather_file_path
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)           #set "dummy construction set
-      #BTAP::Geometry::intersect_surfaces(self)                                
-      #BTAP::Geometry::match_surfaces(self)  
-      BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR                                  
+      #BTAP::Geometry::intersect_surfaces(self)
+      #BTAP::Geometry::match_surfaces(self)
+      BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR
       BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
-      #Getting System Fuel type types from BTAP::Environment. 
+      #Getting System Fuel type types from BTAP::Environment.
       BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
       boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4,heating_coil_types_sys6, fan_type = BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
       BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self, runner=nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type )
-      
+
       self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
       self.add_swh(building_type, building_vintage, climate_zone, prototype_input)  # note exhaust fan schedule for * common spaces.
@@ -85,12 +85,12 @@ class OpenStudio::Model::Model
       # NECB 2011 follows ASHRAE 90.1 for now, does this need to change?
       self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
       #      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-      #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)      
+      #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
 
-      #      
-      
+      #
+
     else
-      
+
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
@@ -112,7 +112,7 @@ class OpenStudio::Model::Model
       self.set_sizing_parameters(building_type, building_vintage)
     self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
-	  end
+    end
     # set climate zone and building type
     self.getBuilding.setStandardsBuildingType(building_type)
     if climate_zone.include? 'ASHRAE 169-2006-'
@@ -124,44 +124,58 @@ class OpenStudio::Model::Model
       return false
     end
 
-    
+
     # If there are any multizone systems, set damper positions
     # and perform a second sizing run
     has_multizone_systems = false
-    
-    
+
+
     self.getAirLoopHVACs.sort.each do |air_loop|
-            
+
       if air_loop.is_multizone_vav_system
         self.apply_multizone_vav_outdoor_air_sizing(building_vintage)
         if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
           return false
         end
         break
-      end            
+      end
     end
 
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
-        
+
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
+    # AHU1 doesn't have economizer
+    if building_type == "Outpatient"
+      self.modify_OAcontroller(building_vintage)
+      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+      self.reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
+    end
+
+    if building_type == "Hospital"
+      self.modify_hospital_OAcontroller(building_vintage)
+    end
+
+    # Apply the HVAC efficiency standard
     self.applyHVACEfficiencyStandard(building_vintage, climate_zone)
 
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
-    if building_type != "LargeHotel"
-      self.addDaylightingControls(building_vintage)
-    else
+    if building_type == "LargeHotel"
       self.add_daylighting_controls(building_vintage)
+    elsif building_type == "Hospital"
+      self.hospital_add_daylighting_controls(building_vintage)
+    else
+      self.addDaylightingControls(building_vintage)
     end
 
     if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant" || building_type == "Outpatient"
       self.update_exhaust_fan_efficiency(building_vintage)
     end
-    
+
     if building_type == "HighriseApartment"
       self.update_fan_efficiency
     end
@@ -210,7 +224,7 @@ class OpenStudio::Model::Model
     when 'RetailStripmall'
       lookup_name = 'StripMall'
     when 'Office'
-      lookup_name = 'Office'    
+      lookup_name = 'Office'
     end
 
     return lookup_name
@@ -286,7 +300,7 @@ class OpenStudio::Model::Model
     # Determine which geometry file to use
     # based on building_type and template
     # NECB 2011 geometry is not explicitly defined; for NECB 2011 vintage, latest ASHRAE 90.1 geometry file is assigned (implicitly)
-    
+
     case building_type
     when 'SecondarySchool'
       if building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004'
@@ -382,7 +396,7 @@ class OpenStudio::Model::Model
       geometry_file = 'Geometry.outpatient.osm'
     when 'MidriseApartment'
       geometry_file = 'Geometry.mid_rise_apartment.osm'
-    when 'Office'    # For NECB 2011 prototypes (old) 
+    when 'Office'    # For NECB 2011 prototypes (old)
       geometry_file = 'Geometry.large_office_2010.osm'
       alt_search_name = 'Office'
     when 'HighriseApartment'
@@ -451,9 +465,9 @@ class OpenStudio::Model::Model
       stub_space_type.set_rendering_color(building_vintage)
 
       space_names.each do |space_name|
-        
+
         space = self.getSpaceByName(space_name)
-        
+
         next if space.empty?
         space = space.get
         space.setSpaceType(stub_space_type)
@@ -502,13 +516,13 @@ class OpenStudio::Model::Model
 
       # Rendering color
       space_type.set_rendering_color(building_vintage)
-    
+
       # Loads
       space_type.set_internal_loads(building_vintage, true, true, true, true, true, true)
 
       # Schedules
       space_type.set_internal_load_schedules(building_vintage, true, true, true, true, true, true, true)
-      
+
 
     end
 
@@ -741,7 +755,7 @@ class OpenStudio::Model::Model
     unless (building_vintage == 'NECB 2011')
       conditioned_space_names = find_conditioned_space_names(building_type, building_vintage, climate_zone)
     end
-    
+
 
     # add internal mass
     # not required for NECB 2011
@@ -1054,10 +1068,10 @@ class OpenStudio::Model::Model
     end
     # Set the terrain type
     self.getSite.setTerrain(terrain)
-  
+
       # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
       return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013' or building_vintage == 'NECB 2011'
-  
+
       # The pre-1980 and 1980-2004 buildings have this:
       # 1.0000,                  !- Constant Term Coefficient
       # 0.0000,                  !- Temperature Term Coefficient
@@ -1089,7 +1103,7 @@ class OpenStudio::Model::Model
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       inside.setAlgorithm('TARP')
-      outside.setAlgorithm('DOE-2')     
+      outside.setAlgorithm('DOE-2')
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('TARP')
@@ -1128,7 +1142,7 @@ class OpenStudio::Model::Model
     when 'NECB 2011'
       clg = 1.3
       htg = 1.3
-    end 
+    end
 
     sizing_params = self.getSizingParameters
     sizing_params.setHeatingSizingFactor(htg)
