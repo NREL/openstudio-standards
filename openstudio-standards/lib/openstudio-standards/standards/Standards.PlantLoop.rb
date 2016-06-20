@@ -380,7 +380,7 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
       # and therefore less heating capacity is likely required.
       decrease_f = 30.0
       hwt_at_hi_oat_f = hwt_at_lo_oat_f - decrease_f 
-      hwt_at_hi_oat_c = OpenStudio.convert(hwt_at_hi_oat_f, 'C', 'F').get
+      hwt_at_hi_oat_c = OpenStudio.convert(hwt_at_hi_oat_f, 'F', 'C').get
 
       # Define the high and low outdoor air temperatures
       lo_oat_f = 20
