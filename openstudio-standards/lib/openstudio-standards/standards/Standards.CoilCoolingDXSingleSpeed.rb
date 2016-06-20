@@ -260,6 +260,20 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
 
     # Convert capacity to Btu/hr
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
+
+
+    # If it's a PTAC or PTHP System, we need to divide the capacity by the potential zone multiplier
+    # because the COP is dependent on capacity, and the capacity should be the capacity of a single zone, not all the zones
+    if ['PTAC', 'PTHP'].include?(subcategory)
+      mult = 1
+      comp = self.containingZoneHVACComponent
+      if comp.is_initialized && comp.get.thermalZone.is_initialized
+        mult = comp.get.thermalZone.get.multiplier
+        capacity_btu_per_hr /= comp.thermalZone.get.multiplier
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{self.name} capacity was divided by the zone multiplier of #{mult}.")
+      end
+    end
+
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, "W", "kBtu/hr").get
     
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
