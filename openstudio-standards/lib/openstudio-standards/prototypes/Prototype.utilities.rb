@@ -222,6 +222,16 @@ def afue_to_thermal_eff(afue)
  
 end
 
+# A helper method to convert from thermal efficiency to AFUE
+#
+# @param teff [Double] Thermal Efficiency
+# @return [Double] AFUE
+def thermal_eff_to_afue(teff)
+  
+  return teff # Per PNNL doc, Boiler Addendum 90.1-04an
+ 
+end
+
 # A helper method to convert from combustion efficiency to thermal efficiency
 #
 # @param combustion_eff [Double] Combustion efficiency (%)
@@ -229,6 +239,16 @@ end
 def combustion_eff_to_thermal_eff(combustion_eff)
   
   return combustion_eff - 0.007 # Per PNNL doc, Boiler Addendum 90.1-04an
+ 
+end
+
+# A helper method to convert from thermal efficiency to combustion efficiency
+#
+# @param combustion_eff [Double] Thermal efficiency
+# @return [Double] Thermal efficiency
+def thermal_eff_to_comb_eff(teff)
+  
+  return teff + 0.007 # Per PNNL doc, Boiler Addendum 90.1-04an
  
 end
 
