@@ -269,7 +269,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       comp = self.containingZoneHVACComponent
       if comp.is_initialized && comp.get.thermalZone.is_initialized
         mult = comp.get.thermalZone.get.multiplier
-        capacity_btu_per_hr /= comp.thermalZone.get.multiplier
+        capacity_btu_per_hr /= mult
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{self.name} capacity was divided by the zone multiplier of #{mult}.")
       end
     end
