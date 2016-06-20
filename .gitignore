@@ -8,3 +8,4 @@ run-legacy-updated/
 /test/reports
 /coverage/
 Archive/
+/openstudio-standards/lib/openstudio-standards/btap/compliance_1.rb

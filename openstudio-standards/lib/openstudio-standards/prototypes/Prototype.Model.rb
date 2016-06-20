@@ -61,7 +61,8 @@ class OpenStudio::Model::Model
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)      
       self.assign_space_type_stubs("Space Function", building_vintage, space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
-      self.add_loads(building_vintage, climate_zone)   
+      self.add_loads(building_vintage, climate_zone)
+      self.apply_infiltration_standard(building_vintage)
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
 	  
@@ -75,7 +76,6 @@ class OpenStudio::Model::Model
       self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)                                
       self.apply_performance_rating_method_construction_types(building_vintage)
       #Getting System Fuel type types from BTAP::Environment. 
-      BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
       boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4,heating_coil_types_sys6, fan_type = BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
       BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self, runner=nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type )
       
