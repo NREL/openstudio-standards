@@ -258,8 +258,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       return successfully_set_all_properties
     end    
 
-    # Convert capacity to Btu/hr
-    capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
+
 
 
     # If it's a PTAC or PTHP System, we need to divide the capacity by the potential zone multiplier
@@ -270,13 +269,16 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       if comp.is_initialized && comp.get.thermalZone.is_initialized
         mult = comp.get.thermalZone.get.multiplier
         if mult > 1
-          capacity_btu_per_hr /= mult
-          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{self.name} capacity was divided by the zone multiplier of #{mult}.")
+          total_cap = capacity_w
+          capacity_w /= mult
+          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{self.name}, total capacity of #{OpenStudio.convert(total_cap, "W", "kBtu/hr").get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, "W", "kBtu/hr").get.round(2)}kBTU/hr.")
         end
       end
     end
 
-    capacity_kbtu_per_hr = capacity_btu_per_hr / 1000.0
+    # Convert capacity to Btu/hr
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
+    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, "W", "kBtu/hr").get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
@@ -380,7 +382,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       ptac_eer = ptac_eer_coeff_1 + (ptac_eer_coeff_2 * capacity_btu_per_hr)
       cop = eer_to_cop(ptac_eer)
       new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer.round(1)}EER"
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed',  "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{ptac_eer}")      
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed',  "For #{template}: #{self.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{ptac_eer.round(2)}")
     end
     
     # If specified as SEER
