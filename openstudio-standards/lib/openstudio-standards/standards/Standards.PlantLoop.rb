@@ -357,7 +357,7 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
     # and determine if already has temperature reset
     spms = self.supplyOutletNode.setpointManagers
     spms.each do |spm|
-      if spm.to_SetpointManagerOutdoorAirReset
+      if spm.to_SetpointManagerOutdoorAirReset.is_initialized
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: supply water temperature reset is already enabled.")
         return false
       end
@@ -365,9 +365,9 @@ lcnwt_f = lcnwt_10f_approach if lcnwt_10f_approach < 85
 
     # Get the design water temperature
     sizing_plant = self.sizingPlant
-    design_temp_c = sizing_plant.loopDesignExitTemperature
+    design_temp_c = sizing_plant.designLoopExitTemperature
     design_temp_f = OpenStudio.convert(design_temp_c,'C','F').get
-    loop_type = self.loopType
+    loop_type = sizing_plant.loopType
     
     # Apply the reset, depending on the type of loop.
     case loop_type
