@@ -88,12 +88,13 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     climate_zone.setDefaultValue('ASHRAE 169-2006-2A')
     args << climate_zone
 
-	#Drop down selector for Canadian weather files. 
-	epw_files = OpenStudio::StringVector.new
+    #Drop down selector for Canadian weather files. 
+    epw_files = OpenStudio::StringVector.new
+    epw_files << 'Not Applicable'
     BTAP::Environment::get_canadian_weather_file_names().each {|file| epw_files << file }
-    epw_file = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('epw_file', canadian_weather_files, true)
+    epw_file = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('epw_file', epw_files, true)
     epw_file.setDisplayName('Climate File (NECB only)')
-    epw_file.setDefaultValue('CAN_AB_Calgary.718770_CWEC.epw')
+    epw_file.setDefaultValue('Not Applicable')
     args << epw_file
    
     return args

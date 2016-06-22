@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>create_doe_prototype_building</name>
   <uid>be90fd0b-a651-467a-bc8d-29d310b0f937</uid>
-  <version_id>08e6a0a1-6c3f-4284-bd7f-6499e75c44db</version_id>
-  <version_modified>20160427T172549Z</version_modified>
+  <version_id>30b809fb-3336-4c5e-8f37-b8921a572f9e</version_id>
+  <version_modified>20160622T222751Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>CreateDOEPrototypeBuilding</class_name>
   <display_name>Create DOE Prototype Building</display_name>
@@ -218,7 +218,7 @@
       <filename>create_DOE_prototype_building_test.rb</filename>
       <filetype>rb</filetype>
       <usage_type>test</usage_type>
-      <checksum>ACF690FB</checksum>
+      <checksum>F1B08ADE</checksum>
     </file>
     <file>
       <version>
@@ -229,7 +229,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>205B4171</checksum>
+      <checksum>E41E6332</checksum>
     </file>
   </files>
 </measure>
