@@ -3723,7 +3723,7 @@ class OpenStudio::Model::Model
     }
     data = find_object($os_standards['space_types'],search_criteria)
     if data.nil?
-      puts search_criteria
+      puts "Error: #{search_criteria}"
     end
     space = self.getSpaceByName(space_name)
     space = space.get

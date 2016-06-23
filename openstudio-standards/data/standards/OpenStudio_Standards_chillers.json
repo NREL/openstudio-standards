@@ -207,7 +207,7 @@
       "minimum_integrated_part_load_value": 0.55,
       "capft": "WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT",
       "eirft": "WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT",
-      "eirfplr": "ChlrWtrCentPathBGtEql600tonEIRRatio_fQRatio",
+      "eirfplr": "ChlrWtrCentPathAAllEIRRatio_fQRatio",
       "notes": null
     },
     {
@@ -492,7 +492,7 @@
       "minimum_integrated_part_load_value": 0.549,
       "capft": "WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT",
       "eirft": "WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT",
-      "eirfplr": "ChlrWtrCentPathBGtEql300Lt600tonEIRRatio_fQRatio",
+      "eirfplr": "ChlrWtrCentPathAAllEIRRatio_fQRatio",
       "notes": "Path A Minimum Efficiencies"
     },
     {
@@ -507,7 +507,7 @@
       "minimum_integrated_part_load_value": 0.539,
       "capft": "WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT",
       "eirft": "WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT",
-      "eirfplr": "ChlrWtrCentPathBGtEql600tonEIRRatio_fQRatio",
+      "eirfplr": "ChlrWtrCentPathAAllEIRRatio_fQRatio",
       "notes": "Path A Minimum Efficiencies"
     },
     {
@@ -1197,7 +1197,7 @@
       "minimum_integrated_part_load_value": 0.5,
       "capft": "WaterCooled_Centrifugal_Chiller_2010_PathB_CAPFT",
       "eirft": "WaterCooled_Centrifugal_Chiller_2010_PathB_EIRFT",
-      "eirfplr": "ChlrWtrCentPathBGtEql300Lt600tonEIRRatio_fQRatio",
+      "eirfplr": "ChlrWtrCentPathAAllEIRRatio_fQRatio",
       "notes": null
     },
     {
@@ -1212,7 +1212,7 @@
       "minimum_integrated_part_load_value": 0.5,
       "capft": "WaterCooled_Centrifugal_Chiller_2010_PathB_CAPFT",
       "eirft": "WaterCooled_Centrifugal_Chiller_2010_PathB_EIRFT",
-      "eirfplr": "ChlrWtrCentPathBGtEql600tonEIRRatio_fQRatio",
+      "eirfplr": "ChlrWtrCentPathAAllEIRRatio_fQRatio",
       "notes": "Add but unsure what to put for Minimum full load efficiency and min IPLV"
     },
     {

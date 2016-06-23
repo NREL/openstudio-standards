@@ -80,6 +80,9 @@ class OpenStudio::Model::Model
   require_relative 'Standards.PumpConstantSpeed'
   require_relative 'Standards.PumpVariableSpeed'
   require_relative 'Standards.AirTerminalSingleDuctVAVReheat'
+  
+  
+
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.  
@@ -3712,6 +3715,56 @@ class OpenStudio::Model::Model
     
     return result
   
+  end
+  
+  # This method ensures that all spaces with spacetypes defined contain at least
+  # a standardSpaceType appropriate for the standard template (code) So, if any space 
+  # with a space type defined does not have a NECB spacetype, or is undefined, an error will stop 
+  # with information that the spacetype needs to be defined. 
+  def validate_standards_spacetypes_in_model( template )
+    error_string = ""
+    # populate search hash
+    self.getSpaces.each do |space|
+      unless space.spaceType.empty?
+        if space.spaceType.get.standardsSpaceType.empty? || space.spaceType.get.standardsBuildingType.empty?
+          error_string << "Space: #{space.name} has SpaceType of #{space.spaceType.get.name} but the standardSpaceType or standardBuildingType  is undefined. Please use an appropriate standardSpaceType for #{template}\n"
+          next
+        else
+          search_criteria = {
+            "template" => template,
+            "building_type" => space.spaceType.get.standardsBuildingType.get,
+            "space_type" => space.spaceType.get.standardsSpaceType.get
+          }
+          # lookup space type properties
+          space_type_properties = @model.find_object($os_standards["space_types"], search_criteria)
+          if space_type_properties.nil?
+            error_string << "Could not find spacetype of criteria : #{search_criteria}. Please ensure you have a valid standardSpaceType and stantdardBuildingType defined.\n"
+            space_type_properties = {}
+          end
+        end
+      end
+    end
+    if "" == error_string
+      return true
+    else
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', error_string)
+      return false
+    end
+  end
+  
+  
+  
+  def create_necb_compliance_models()
+    @proposed_model = nil
+    @space_sizing_model = nil
+    @hvac_sizing_model = nil
+    @reference_model = nil
+    #Do some preflight tests to ensure that we have what we need to perform a compliance run. 
+    #1-Space Type test. Ensure that all spacetypes in the model have been defined with NECB spacetypes. 
+    
+    
+    
+    
   end
 
 end
