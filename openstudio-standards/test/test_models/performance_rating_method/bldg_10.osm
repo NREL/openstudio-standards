@@ -12901,6 +12901,20 @@ OS:YearDescription,
   ,                                       !- Calendar Year
   Sunday;                                 !- Day of Week for Start Day
 
+OS:WeatherFile,
+  {161f28ac-f0b6-4799-aaf0-8244547a5f76}, !- Handle
+  Denver Intl Ap,                         !- City
+  CO,                                     !- State Province Region
+  USA,                                    !- Country
+  TMY3,                                   !- Data Source
+  725650,                                 !- WMO Number
+  39.83,                                  !- Latitude {deg}
+  -104.65,                                !- Longitude {deg}
+  -7,                                     !- Time Zone {hr}
+  1650,                                   !- Elevation {m}
+  file:files/USA_CO_Denver.Intl.AP.725650_TMY3.epw, !- Url
+  E23378AA;                               !- Checksum  
+
 OS:RadianceParameters,
   {8e44efdf-8540-4ae8-954f-b08a3ead6eb3}, !- Handle
   1,                                      !- Accumulated Rays per Record
