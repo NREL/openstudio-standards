@@ -220,7 +220,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     end
 
     # Add the heating type to the search criteria
-    unless heating_type.nil?
+    unless suppl_heating_type.nil?
       search_criteria['heating_type'] = suppl_heating_type
     end
     
