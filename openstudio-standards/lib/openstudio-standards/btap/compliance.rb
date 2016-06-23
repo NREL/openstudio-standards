@@ -539,63 +539,7 @@ module BTAP
         return false
       end
       
-      # This method determines if all the spacetype names match the NECB spacetypes. This is a prerequisite for NECB zoning and system assignment
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::Model::Model]
-      #@param runner [Object]
-      #@return [String] item
-      def self.check_all_spacetypes_are_valid_necb_names(model,runner = nil)
-        #collect space type and building type names. 
-        spacetypenames = []
-        found = false
-        BTAP::Compliance::NECB2011::Data::SpaceTypeData.each    {  |item| spacetypenames << item[0]}
-        BTAP::Compliance::NECB2011::Data::BuildingTypeData.each {  |item| spacetypenames << item[0]}
-        non_necb_spacetype_names = []
-        model.getSpaceTypes.each do |model_spacetype|
-          found = false
-          spacetypenames.each do |valid_spacetype_name|
-            # The optional suffix allows for for defined "wildcard" spacetypes to pass through. 
-            if model_spacetype.name =~ /NECB-#{valid_spacetype_name}(\-[ABCDEFGHI])?/
-              found = true
-            end
-          end
-          non_necb_spacetype_names << model_spacetype.name unless found == true
-        end
-        if non_necb_spacetype_names.size > 0
-          BTAP::runner_register("ERROR","The following spacetypes are not NECB space types.", runner)
-          non_necb_spacetype_names.each {|item| BTAP::runner_register("ERROR","-#{item}", runner) }
-          BTAP::runner_register("ERROR","Please edit model and assign valid space types.", runner)
-          return false
-        end
-        BTAP::runner_register("INFO","All spacetypes conform to NECB naming.", runner)
-        return true
-      end
-      
-      
-      
-      # This model gets the building space type info from lookup table. 
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param type [String]
-      #@return  [String] item
-      def self.lookup_spacetype_info(type)
-        BTAP::Compliance::NECB2011::Data::SpaceTypeData.each do |item|
-          # The optional suffix allows for for defined "wildcard" spacetypes to pass through. 
-          # space type names have changed - original commented out below (until i know it works)
-          # if type.strip =~ /NECB 2011 - Space Function - #{item[0]}(\-[ABCDEFGHI])?/         
-          if type.strip =~ /Space Function #{item[0]}(\-[ABCDEFGHI])?/
-            return item
-          end
-          
-        end
-        BTAP::Compliance::NECB2011::Data::BuildingTypeData.each do |item|
-          # space type names have changed - original commented out below (until i know it works)
-          # if type.strip =~ /NECB 2011 - Space Function - #{item[0]}(\-[ABCDEFGHI])?/
-          if type.strip =~ /Space Function #{item[0]}(\-[ABCDEFGHI])?/
-            return item
-          end
-        end
-        raise ("#{type} is not a NECB space type, Cannot use NECB system definitions!!")
-      end
+
 
       #This model determines the dominant NECB schedule type
       #@param model [OpenStudio::model::Model] A model object
@@ -655,19 +599,7 @@ module BTAP
         return space_type_properties['necb_schedule_type'].strip
       end
       
-      #This method will replace all the spacetypes in a non-compliance model to 
-      # the necb default spacetypes as indicated in NECB A-8.4.3.2.
-      def self.replace_non_compliant_spacetypes_with_default_spacetypes(model,vintage)
-        model.getSpaces.each do |space|
-          unless space.spaceType.empty?
-            #get space and building type
-            building_type = space.spaceType.standardsBuildingType
-            space_type = space.spaceType.standardsSpaceType
-          end
-        end
-        model.add_loads(vintage)
-      end
-      
+ 
       
       
       def self.necb_spacetype_system_selection(model, runner = nil)
@@ -936,16 +868,8 @@ module BTAP
                   space_array.each do |space|
                     BTAP::runner_register("DEBUG","space name/type:#{space.name}:#{space.spaceType.get.name}" , runner)
                   end
-                  
-                  #default it to ideal air system. 
-                  #thermal_zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
-                  #thermal_zone_ideal_loads.addToThermalZone(thermal_zone)
-                  
-                  # thermal_zone.setUseIdealAirLoads(true) - this uses HVACTemplateObject
-                  
-                  #store zone in 
+                  #add thermal zone to system array.
                   system_zone_array[system_number] << thermal_zone
-
                 end
               end
             end

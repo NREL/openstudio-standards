@@ -271,147 +271,7 @@ require_relative 'minitest_helper'
 class NECB2011DefaultSpaceTypeTests < Minitest::Test
   #Standards
   Templates = ['NECB 2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
-  #NECB Building Spacetype definition names. 
-  BuildingTypeNames = [
-    "Automotive facility",
-    "Convention centre",
-    "Courthouse",
-    "Dining - bar/lounge",
-    "Dining - cafeteria",
-    "Dining - family",
-    "Dormitory",
-    "Exercise centre",
-    "Fire station",
-    "Gymnasium",
-    "Health-care clinic",
-    "Hospital",
-    "Hotel",
-    "Library",
-    "Manufacturing facility",
-    "Motel",
-    "Motion picture theatre",
-    "Multi-unit residential",
-    "Museum",
-    "Office",
-    "Parking garage",
-    "Penitentiary",
-    "Performing arts theatre",
-    "Police station",
-    "Post office",
-    "Religious",
-    "Retail",
-    "School/university",
-    "Sports arena",
-    "Town hall",
-    "Transportation",
-    "Warehouse",
-    "Workshop",
-  ]
 
-  #NECB Spacetype definition names. 
-  SpaceTypeNames = [
-    "- undefined -",
-    "Dwelling Unit(s)",
-    "Atrium - H < 13m",
-    "Atrium - H > 13m",
-    "Audience - auditorium",
-    "Audience - performance arts",
-    "Audience - motion picture",
-    "Classroom/lecture/training",
-    "Conf./meet./multi-purpose",
-    "Corr. >= 2.4m wide",
-    "Corr. < 2.4m wide",
-    "Dining - bar lounge/leisure",
-    "Dining - family space",
-    "Dining - other",
-    "Dress./fitt. - performance arts",
-    "Electrical/Mechanical",
-    "Food preparation",
-    "Lab - classrooms",
-    "Lab - research",
-    "Lobby - elevator",
-    "Lobby - performance arts",
-    "Lobby - motion picture",
-    "Lobby - other",
-    "Locker room",
-    "Lounge/recreation",
-    "Office - enclosed",
-    "Office - open plan",
-    "Sales area",
-    "Stairway",
-    "Storage area",
-    "Washroom",
-    "Workshop space",
-    "Automotive - repair",
-    "Bank - banking and offices",
-    "Convention centre - audience",
-    "Convention centre - exhibit",
-    "Courthouse - courtroom",
-    "Courthouse - cell",
-    "Courthouse - chambers",
-    "Penitentiary - audience",
-    "Penitentiary - classroom",
-    "Penitentiary - dining",
-    "Dormitory - living quarters",
-    "Fire station - engine room",
-    "Fire station - quarters",
-    "Gym - fitness",
-    "Gym - audience",
-    "Gym - play",
-    "Hospital corr. >= 2.4m",
-    "Hospital corr. < 2.4m",
-    "Hospital - emergency",
-    "Hospital - exam",
-    "Hospital - laundry/washing",
-    "Hospital - lounge/recreation",
-    "Hospital - medical supply",
-    "Hospital - nursery",
-    "Hospital - nurses' station",
-    "Hospital - operating room",
-    "Hospital - patient room",
-    "Hospital - pharmacy",
-    "Hospital - physical therapy",
-    "Hospital - radiology/imaging",
-    "Hospital - recovery",
-    "Hotel/Motel - dining",
-    "Hotel/Motel - rooms",
-    "Hotel/Motel - lobby",
-    "Hway lodging - dining",
-    "Hway lodging - rooms",
-    "Library - cataloging",
-    "Library - reading",
-    "Library - stacks",
-    "Mfg - corr. >= 2.4m",
-    "Mfg - corr. < 2.4m",
-    "Mfg - detailed",
-    "Mfg - equipment",
-    "Mfg - bay H > 15m",
-    "Mfg - 7.5 <= bay H <= 15m",
-    "Mfg - bay H < 7.5m",
-    "Museum - exhibition",
-    "Museum - restoration",
-    "Parking garage space",
-    "Post office sorting",
-    "Religious - audience",
-    "Religious - fellowship hall",
-    "Religious - pulpit/choir",
-    "Retail - dressing/fitting",
-    "Retail - mall concourse",
-    "Retail - sales",
-    "Sports arena - audience",
-    "Sports arena - court c4",
-    "Sports arena - court c3",
-    "Sports arena - court c2",
-    "Sports arena - court c1",
-    "Sports arena - ring",
-    "Transp. baggage",
-    "Transp. seating",
-    "Transp. concourse",
-    "Transp. counter",
-    "Warehouse - fine",
-    "Warehouse - med/blk",
-    "Warehouse - med/blk2",
-  ]
   def setup()
 
     #Create new model for testing. 
@@ -421,11 +281,6 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
     #Create only above ground geometry (Used for infiltration tests) 
     length = 100.0; width = 100.0 ; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
     BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
-
-    
-    
-    
-    
   end
     
   # Tests to ensure that the NECB default schedules are being defined correctly.
@@ -442,7 +297,6 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
     }
     # lookup space type properties
     @model.find_objects($os_standards["space_types"], search_criteria).each do |space_type_properties|
-        puts space_type_properties
         header_output = ""
         # Create a space type
         st = OpenStudio::Model::SpaceType.new(@model)
@@ -507,11 +361,6 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         st.otherEquipment.each {|equip| other_equip_power << equip.powerPerFloorArea.get ; other_equip_sched << equip.schedule.get.name}
         assert( other_equip_power.size <= 1 , "#{other_equip_power.size} other equipment definitions given. Expecting <= 1." ) 
             
-  
-  
-          
-          
-          
         #SHW
         shw_loop = OpenStudio::Model::PlantLoop.new(@model)
         shw_peak_flow_per_area = []
@@ -654,7 +503,6 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
   #  # being assigned the appropriate values for LPD.
   #  # @return [Bool] true if successful.
   def test_system_selection()
-  
 #    assert(@model.validate_standards_spacetypes_in_model( 'NECB 2011' ))
 #    
 #    
