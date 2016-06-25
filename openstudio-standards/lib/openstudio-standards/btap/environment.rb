@@ -541,8 +541,8 @@ module BTAP
         water_temp = model.getSiteWaterMainsTemperature
         water_temp.setAnnualAverageOutdoorAirTemperature(@stat_file.mean_dry_bulb)
         water_temp.setMaximumDifferenceInMonthlyAverageOutdoorAirTemperatures(@stat_file.delta_dry_bulb)
-        BTAP::runner_register("Info","SiteWaterMainsTemperature.AnnualAverageOutdoorAirTemperature = #{@stat_file.mean_dry_bulb}.", runner ) 
-        BTAP::runner_register("Info","SiteWaterMainsTemperature.MaximumDifferenceInMonthlyAverageOutdoorAirTemperatures = #{@stat_file.delta_dry_bulb}.", runner ) 
+        BTAP::runner_register("Info","SiteWaterMainsTemperature.AnnualAverageOutdoorAirTemperature = #{@stat_file.mean_dry_bulb.round(1)} C.", runner ) 
+        BTAP::runner_register("Info","SiteWaterMainsTemperature.MaximumDifferenceInMonthlyAverageOutdoorAirTemperatures = #{@stat_file.delta_dry_bulb.round(1)} C.", runner ) 
 
         # Remove all the Design Day objects that are in the file
         model.getObjectsByType("OS:SizingPeriod:DesignDay".to_IddObjectType).each { |d| d.remove }
