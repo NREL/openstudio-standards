@@ -206,6 +206,9 @@ class OpenStudio::Model::Construction
     
   end
 
+  # Get the SHGC as calculated by EnergyPlus.
+  # Only applies to fenestration constructions.
+  # @return [Double] the SHGC as a decimal.
   def calculated_solar_heat_gain_coefficient
 
     construction_name = self.name.get.to_s
@@ -258,8 +261,9 @@ class OpenStudio::Model::Construction
 
   end
 
-  # Get the VT as calculated by EnergyPlus
-  #
+  # Get the VT as calculated by EnergyPlus.
+  # Only applies to fenestration constructions.
+  # @return [Double] the visible transmittance as a decimal.
   def calculated_visible_transmittance
 
     construction_name = self.name.get.to_s
@@ -312,8 +316,9 @@ class OpenStudio::Model::Construction
 
   end
 
-  # Get the U-Factor as calculated by EnergyPlus
-  # in W/m^2*K
+  # Get the U-Factor as calculated by EnergyPlus.
+  # Only applies to fenestration constructions.
+  # @return [Double] the U-Factor in W/m^2*K.
   def calculated_u_factor
 
     construction_name = self.name.get.to_s
@@ -366,8 +371,15 @@ class OpenStudio::Model::Construction
 
   end
 
-  # @param intended_surface_type [string]
-  # @return u value [double]
+  # Returns the R-value of the combined inside and outside
+  # air film values from 90.1-2010 A9.4.1 Air Films
+  # @param intended_surface_type [String] 
+  #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling', 
+  #   'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor', 'DemisingRoof',
+  #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor', 
+  #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
+  #   'GroundContactWall', 'GroundContactRoof'
+  # @return [double] r-value in m^2*K/W.
   def film_coefficients_r_value(intended_surface_type)
 
     other_layer_r_value_si = 0.0
