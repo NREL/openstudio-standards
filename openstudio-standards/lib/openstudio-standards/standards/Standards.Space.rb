@@ -625,13 +625,13 @@ class OpenStudio::Model::Space
             
             # Primary sidelighted area
             # Move the x vertices outward by the specified amount.
-            if vertex.x == min_x_val
+            if (vertex.x - min_x_val).abs < 0.01
               new_x = vertex.x - extra_width_m
-            elsif vertex.x == max_x_val
+            elsif (vertex.x - max_x_val).abs < 0.01
               new_x = vertex.x + extra_width_m
             else
               new_x = 99.9
-              OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "A window in space #{self.name} is non-rectangular; this sub-surface will not be included in the daylighted area calculation.")
+              OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "A window in space #{self.name} is non-rectangular; this sub-surface will not be included in the primary daylighted area calculation. #{vertex.x} != #{min_x_val} or #{max_x_val}")
             end
             
             # Zero-out the y for the bottom edge because the 
@@ -652,13 +652,13 @@ class OpenStudio::Model::Space
             
             # Secondary sidelighted area
             # Move the x vertices outward by the specified amount.
-            if vertex.x == min_x_val
+            if (vertex.x - min_x_val).abs < 0.01
               new_x = vertex.x - extra_width_m
-            elsif vertex.x == max_x_val
+            elsif (vertex.x - max_x_val).abs < 0.01
               new_x = vertex.x + extra_width_m
             else
               new_x = 99.9
-              OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "A window in space #{self.name} is non-rectangular; this sub-surface will not be included in the daylighted area calculation.")
+              OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "A window in space #{self.name} is non-rectangular; this sub-surface will not be included in the secondary daylighted area calculation.")
             end
             
             # Add the head height of the window to all points
@@ -2235,6 +2235,11 @@ Warehouse.Office
       if space_type.name.get.to_s.downcase.include?('plenum')
         plenum_status = true
       end
+      if space_type.standardsSpaceType.is_initialized
+        if space_type.standardsSpaceType.get.downcase.include?('plenum')
+          plenum_status = true
+        end
+      end
     end
 
     # Check if it is designated
@@ -2252,19 +2257,56 @@ Warehouse.Office
   # Determine if the space is residential based on the
   # space type properties for the space.
   # For spaces with no space type, assume nonresidential.
+  # For spaces that are plenums, base the decision on the space
+  # type of the space below the largest floor in the plenum.
   #
   # return [Bool] true if residential, false if nonresidential
   def is_residential(standard)
   
     is_res = false
   
-    space_type = self.spaceType
+    space_to_check = self
+  
+    # If this space is a plenum, check the space type
+    # of the space below the largest floor in the space
+    if self.is_plenum
+      # Find the largest floor
+      largest_floor_area = 0.0
+      largest_surface = nil
+      self.surfaces.each do |surface|
+        next unless surface.surfaceType == 'Floor'
+        surface.outsideBoundaryCondition == 'Surface'
+        if surface.grossArea > largest_floor_area
+          largest_floor_area = surface.grossArea
+          largest_surface = surface
+        end
+      end
+      if largest_surface.nil?
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{self.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
+        return is_res
+      end
+      # Get the space on the other side of this floor
+      if largest_surface.adjacentSurface.is_initialized
+        adj_surface = largest_surface.adjacentSurface.get
+        if adj_surface.space.is_initialized
+          space_to_check = adj_surface.space.get
+        else
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{self.name} is a plenum, but could not find a space attached to the largest floor's adjacent surface #{adj_surface.name} to determine if plenum should be res or nonres.  Assuming nonresidential.")
+          return is_res
+        end
+      else
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{self.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
+        return is_res
+      end
+    end
+  
+    space_type = space_to_check.spaceType
     if space_type.is_initialized
       space_type = space_type.get
       # Get the space type data
       space_type_properties = space_type.get_standards_data(standard)
       if space_type_properties.nil?
-        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{self.name}, assuming nonresidential.")
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
         is_res = false
       else
         if space_type_properties['is_residential'] == "Yes"
@@ -2274,7 +2316,7 @@ Warehouse.Office
         end
       end
     else
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{self.name}, assuming nonresidential.")
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{space_to_check.name}, assuming nonresidential.")
       is_res = false
     end  
   

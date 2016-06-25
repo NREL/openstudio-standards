@@ -43,7 +43,7 @@ class OpenStudio::Model::ThermalZone
       
       # compute outdoor air rates in case we need them
       oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
-      oa_for_floor_area = floorArea * dsn_oa.outdoorAirFlowperFloorArea
+      oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
       oa_rate = dsn_oa.outdoorAirFlowRate
       oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour
 
@@ -464,8 +464,7 @@ class OpenStudio::Model::ThermalZone
   # Will multiply it by the ZONE MULTIPLIER as well!
   #
   # @return [Double] the zone net floor area in m^2 (with multiplier taken into account)
-  #   @units square meters (m^2)
-  def get_net_area
+  def floor_area_with_zone_multipliers
     area_m2 = 0
     zone_mult = self.multiplier
     self.spaces.each do |space|
@@ -761,6 +760,33 @@ class OpenStudio::Model::ThermalZone
   
   end
   
+  # Determine if the thermal zone is a plenum
+  # based on whether a majority of the spaces
+  # in the zone are plenums or not.
+  # @return [Bool] true if majority plenum, false if not
+  def is_plenum
+
+    plenum_status = false
+  
+    area_plenum = 0
+    area_non_plenum = 0
+    self.spaces.each do |space|
+      if space.is_plenum
+        area_plenum += space.floorArea
+      else
+        area_non_plenum += space.floorArea
+      end
+    end
+
+    # Majority
+    if area_plenum > area_non_plenum
+      plenum_status = true
+    end 
+  
+    return plenum_status
+  
+  end
+  
   # Determines whether the zone is conditioned per 90.1,
   # which is based on heating and cooling loads.
   #
@@ -878,7 +904,8 @@ class OpenStudio::Model::ThermalZone
     # return the current design heating temperature
     if setpoint_c.nil?
       setpoint_c = self.sizingZone.zoneHeatingDesignSupplyAirTemperature
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine max heating setpoint.  Design heating supply temperature will refer to current zone setting.")
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine max heating setpoint.  Design heating supply temperature will user current zone setting of #{OpenStudio.convert(setpoint_c,'C','F').get.round} F.")
+      return setpoint_c
     end
 
     # Add 20F delta-T
@@ -919,7 +946,8 @@ class OpenStudio::Model::ThermalZone
     # return the current design cooling temperature
     if setpoint_c.nil?
       setpoint_c = self.sizingZone.zoneCoolingDesignSupplyAirTemperature
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine max heating setpoint.  Design cooling supply temperature will refer to current zone setting.")
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine max heating setpoint.  Design cooling supply temperature will use current zone setting of #{OpenStudio.convert(setpoint_c,'C','F').get.round} F.")
+      return setpoint_c
     end
 
     # Subtract 20F delta-T
@@ -940,6 +968,9 @@ class OpenStudio::Model::ThermalZone
   # @return [Bool] true if successful, false if not
   def set_performance_rating_method_baseline_supply_temperatures
 
+    # Skip spaces that aren't heated or cooled
+    return true unless self.is_heated || self.is_cooled
+  
     # Heating
     htg_sat_c = self.performance_rating_method_baseline_heating_design_supply_temperature
     htg_success = self.sizingZone.setZoneHeatingDesignSupplyAirTemperature(htg_sat_c)
@@ -950,7 +981,7 @@ class OpenStudio::Model::ThermalZone
     
     htg_sat_f = OpenStudio.convert(htg_sat_c,'C','F').get
     clg_sat_f = OpenStudio.convert(clg_sat_c,'C','F').get
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.ThermalZone", "For #{self.name}, Htg SAT = #{htg_sat_f.round(1)}F, Clg SAT = #{clg_sat_f.round(1)}F.")
+    OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "For #{self.name}, Htg SAT = #{htg_sat_f.round(1)}F, Clg SAT = #{clg_sat_f.round(1)}F.")
     
     result = false
     if htg_success && clg_success
@@ -961,4 +992,32 @@ class OpenStudio::Model::ThermalZone
 
   end  
 
+  def add_unconditioned_thermostat
+  
+    # Heated to 0F (below is_heated threshold)
+    htg_t_f = 0
+    htg_t_c = OpenStudio::convert(htg_t_f,"F","C").get
+    htg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    htg_stpt_sch.setName("Unconditioned Minimal Heating")
+    htg_stpt_sch.defaultDaySchedule().setName("Unconditioned Minimal Heating Default")
+    htg_stpt_sch.defaultDaySchedule().addValue(OpenStudio::Time.new(0,24,0,0),htg_t_c)
+
+    # Cooled to 120F (above is_cooled threshold)
+    clg_t_f = 120
+    clg_t_c = OpenStudio::convert(clg_t_f,"F","C").get
+    clg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    clg_stpt_sch.setName("Unconditioned Minimal Heating")
+    clg_stpt_sch.defaultDaySchedule().setName("Unconditioned Minimal Heating Default")
+    clg_stpt_sch.defaultDaySchedule().addValue(OpenStudio::Time.new(0,24,0,0),clg_t_c)    
+  
+    # Thermostat
+    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(self.model)
+    thermostat.setName("#{self.name} Unconditioned Thermostat")
+    thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
+    thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
+  
+    return true
+  
+  end
+  
 end
