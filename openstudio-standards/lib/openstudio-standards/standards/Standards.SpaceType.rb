@@ -69,7 +69,7 @@ class OpenStudio::Model::SpaceType
   # but the first instance if multiple instances.  Add a new instance/definition 
   # if no instance exists. Modify the definition for the remaining instance
   # to have the specified values. This method does not alter any
-  # loads directly assigned to spaces.
+  # loads directly assigned to spaces.  This method skips plenums.
   #
   # @param set_people [Bool] if true, set the people density.
   # Also, assign reasonable clothing, air velocity, and work efficiency inputs
@@ -82,6 +82,18 @@ class OpenStudio::Model::SpaceType
   # @param set_infiltration [Bool] if true, set the infiltration rates
   # @return [Bool] returns true if successful, false if not  
   def set_internal_loads(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+  
+    # Skip plenums
+    # Check if the space type name
+    # contains the word plenum.
+    if self.name.get.to_s.downcase.include?('plenum')
+      return false
+    end
+    if self.standardsSpaceType.is_initialized
+      if self.standardsSpaceType.get.downcase.include?('plenum')
+        return false
+      end
+    end    
   
     # Get the standards data
     space_type_properties = self.get_standards_data(template)
