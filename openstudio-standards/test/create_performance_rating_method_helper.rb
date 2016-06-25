@@ -1,11 +1,5 @@
 
-def create_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false)
-
-  # Make a directory to save the resulting models
-  test_dir = "#{File.dirname(__FILE__)}/output"
-  if !Dir.exists?(test_dir)
-    Dir.mkdir(test_dir)
-  end
+def load_test_model(model_name)
 
   # Load the test model
   translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -13,6 +7,32 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   model = translator.loadModel(path)
   assert(model.is_initialized, "Could not load test model '#{model_name}.osm' from test_models/performance_rating_method.  Check name for typos.")
   model = model.get
+
+  return model
+  
+end
+
+def create_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false, load_existing_model = true)
+
+  # If requested, first attempt to load baseline model
+  # from file instead of recreating it.
+  model = nil
+  if load_existing_model
+    model = load_baseline_model(model_name, standard, climate_zone, building_type, custom, debug)
+  end
+  
+  # If the existing model was loaded, return that
+  if model
+    return model
+  end
+
+  # Make a directory to save the resulting models
+  test_dir = "#{File.dirname(__FILE__)}/output"
+  if !Dir.exists?(test_dir)
+    Dir.mkdir(test_dir)
+  end
+
+  model = load_test_model(model_name)
 
   # Fix up the weather file paths
   base_rel_path = '../../data/weather/'
@@ -100,7 +120,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   end
 
   # Create a directory for the test result
-  osm_directory = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}"
+  osm_directory = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}-#{custom}"
   if !Dir.exists?(osm_directory)
     Dir.mkdir(osm_directory)
   end
@@ -119,6 +139,12 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
 
   # Show the output messages
   errs = []
+
+  # Log the messages to file for easier review
+  log_name = "create_baseline.log"
+  log_file_path = "#{osm_directory}/#{log_name}"
+  messages = log_messages_to_file(log_file_path, debug)
+  
   msg_log.logMessages.each do |msg|
     # DLM: you can filter on log channel here for now
     if /openstudio.*/.match(msg.logChannel) #/openstudio\.model\..*/
@@ -143,11 +169,62 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
       end
     end
   end
-
+  
   # Save the test model
-  model.save(OpenStudio::Path.new("#{osm_directory}/#{model_name}_baseline.osm"), true)
+  baseline_model_name = "baseline"
+  model.save(OpenStudio::Path.new("#{osm_directory}/#{baseline_model_name}.osm"), true)
 
-  return [model, errs]
+  # Assert no errors
+  assert(errs.size == 0, "Model created, but had Errors: #{errs.join(',')}")    
+  
+  # Run a sizing run for the baseline model
+  # so that the sql matches the actual equipment names
+  if model.runSizingRun("#{osm_directory}/SizingRunBaseline") == false
+    return false
+  end
+  
+  return model
 
 end
   
+def load_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false)  
+ 
+  # Get the test directory
+  test_dir = "#{File.dirname(__FILE__)}/output"
+  osm_directory = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}-#{custom}"
+  if !Dir.exists?(osm_directory)
+    return false
+  end  
+  
+  # Load the test model
+  base_model_name = "baseline"
+  translator = OpenStudio::OSVersion::VersionTranslator.new
+  path = OpenStudio::Path.new("#{osm_directory}/#{base_model_name}.osm")
+  model = translator.loadModel(path)
+  if model.empty?
+    return false
+  else
+    model = model.get
+  end
+    
+  # Attach the sql file from the last sizing run
+  sql_path = OpenStudio::Path.new("#{osm_directory}/SizingRunBaseline/EnergyPlus/eplusout.sql")   
+  if OpenStudio::exists(sql_path)
+    sql = OpenStudio::SqlFile.new(sql_path)
+    # Check to make sure the sql file is readable,
+    # which won't be true if EnergyPlus crashed during simulation.
+    if !sql.connectionOpen
+      puts "The sizing run failed, cannot create model.  Look at the eplusout.err file in #{File.dirname(sql_path.to_s)} to see the cause."
+      return false
+    end
+    # Attach the sql file from the run to the model
+    model.setSqlFile(sql)
+  else 
+    puts "Results for the sizing run couldn't be found here: #{sql_path}."
+    return false
+  end  
+  
+  return model
+ 
+end 
+ 
