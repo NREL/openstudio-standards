@@ -160,6 +160,8 @@ module BTAP
     end
     
     
+    
+    
 
     # This method loads an Openstudio file into the model.
     # @author Phylroy A. Lopez
@@ -229,10 +231,40 @@ module BTAP
     # @return [OpenStudio::Model::Model] a copy of the OpenStudio model object.
     def self.deep_copy(model,bool = true)
       return model.clone(bool).to_Model
-      #      model.save(OpenStudio::Path.new("deep_copy.osm"))
-      #      model_copy =  self.load_osm("deep_copy.osm")
-      #      File.delete("deep_copy.osm")
-      #      return model_copy
+
+      # pull original weather file object over
+      weather_file = new_model.getOptionalWeatherFile
+      if not weather_file.empty?
+        weather_file.get.remove
+        BTAP::runner_register("Info", "Removed alternate model's weather file object.",runner)
+      end
+      original_weather_file = model.getOptionalWeatherFile
+      if not original_weather_file.empty?
+        original_weather_file.get.clone(new_model)
+      end
+
+      # pull original design days over
+      new_model.getDesignDays.each { |designDay|
+        designDay.remove
+      }
+      model.getDesignDays.each { |designDay|
+        designDay.clone(new_model)
+      }
+
+      # swap underlying data in model with underlying data in new_model
+      # remove existing objects from model
+      handles = OpenStudio::UUIDVector.new
+      model.objects.each do |obj|
+        handles << obj.handle
+      end
+      model.removeObjects(handles)
+      # add new file to empty model
+      model.addObjects( new_model.toIdfFile.objects )
+      BTAP::runner_register("Info",  "Model name is now #{model.building.get.name}.", runner)
+      
+      
+      
+      
     end
 
     # This method will save the model to an osm file.

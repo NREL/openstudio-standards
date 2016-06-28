@@ -562,6 +562,7 @@ module BTAP
           "I",0
         ]
         #iterate through spaces in building.
+        wildcard_spaces = 0
         model.getSpaces.each do |space|
           found_space_type = false
           #iterate through the NECB spacetype property table
@@ -571,7 +572,11 @@ module BTAP
                 OpenStudio::logFree(OpenStudio::Error, "openstudio.Standards.Model", "Space #{space.name} does not have a standardSpaceType defined")
                 found_space_type = false
               elsif space.spaceType.get.standardsSpaceType.get  == spacetype['space_type'] && space.spaceType.get.standardsBuildingType.get  == spacetype['building_type'] 
-                s[ spacetype['necb_schedule_type'] ] = s[ spacetype['necb_schedule_type'] ] + space.floorArea() if "*" != spacetype['necb_schedule_type'] 
+                if "*" == spacetype['necb_schedule_type']
+                wildcard_spaces =+ 1
+                else
+                  s[ spacetype['necb_schedule_type'] ] = s[ spacetype['necb_schedule_type'] ] + space.floorArea() if "*" != spacetype['necb_schedule_type'] 
+                end
                 #puts "Found #{space.spaceType.get.name} schedule #{spacetype[2]} match with floor area of #{space.floorArea()}"
                 found_space_type = true
               elsif "*" != spacetype['necb_schedule_type'] 
@@ -584,8 +589,9 @@ module BTAP
         end
         #finds max value and returns NECB schedule letter.
         puts s
-        raise("default necb schedule could not be determined for . ") if 0.0 == s.values.max
-        return s.each { |k, v| return k.to_s if v == s.values.max }
+        raise("Only wildcard spaces in model. You need to define the actual spaces. ") if  wildcard_spaces == model.getSpaces.size
+        dominant_schedule =  s.each { |k, v| return k.to_s if v == s.values.max }
+        return dominant_schedule
       end
       
       #This method determines the spacetype schedule type. This will re
@@ -609,7 +615,9 @@ module BTAP
           :story,                   # the floor
           :horizontal_placement,    # the horizontal placement (norht, south, east, west, core) 
           :vertical_placment,       # the vertical placement ( ground, top, both, middle )
-          :people_obj )             # Spacetype people object
+          :people_obj,              # Spacetype people object
+          :heating_capacity,
+          :cooling_capacity )
         #some defaults until we figure out how to handle them. (TODO) 
         vented = true
         heated_only = true
@@ -624,6 +632,10 @@ module BTAP
         
         #this method replaces all the "*" space types with concrete "A-I" schedule based shedules. 
         BTAP::Compliance::NECB2011::set_wildcard_schedules_to_dominant_building_schedule(model, runner)
+        
+        
+        #Do a sizing run.
+        
         
         #find the number of stories in the model. 
         number_of_stories = model.getBuildingStorys.size
@@ -649,6 +661,11 @@ module BTAP
             space_system_index = space_type_property['necb_hvac_system_selection_type']
             raise("could not find necb system selection type for space: #{space.get.name}") if space_type_property.nil?
           end
+          
+          #Get the heating and cooling load for the space. 
+          coolingDesignLoad = 0#space.thermalZone.get.coolingDesignLoad.get
+          heatingDesignLoad = 0#space.thermalZone.get.heatingDesignLoad.get
+          
           
           #identify space-system_index and assign the right NECB system type 1-7. 
           system = nil
@@ -721,7 +738,7 @@ module BTAP
           horizontal_placement, vertical_placement =  BTAP::Geometry::Spaces::get_space_placement( space )
           #dump all info into an array for debugging and iteration. 
           unless space.spaceType.empty? or space.spaceType.get.name.to_s.include?("undefined")
-            space_zoning_data_array << spacezoning_data.new( space,system,building_story, horizontal_placement,vertical_placement,space.spaceType.get.people )
+            space_zoning_data_array << spacezoning_data.new( space,system,building_story, horizontal_placement,vertical_placement,space.spaceType.get.people, heatingDesignLoad, coolingDesignLoad )
             schedule_type_array <<  BTAP::Compliance::NECB2011::determine_necb_schedule_type( space ).to_s
           end
         end
