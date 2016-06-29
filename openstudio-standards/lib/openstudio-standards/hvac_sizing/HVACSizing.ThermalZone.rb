@@ -243,6 +243,23 @@ class OpenStudio::Model::ThermalZone
   
     fuels = []
     
+    # Special logic for models imported from Sefaira.
+    # In this case, the fuels are listed as a comment
+    # above the Zone object.
+    if !self.comment == ''
+      m = self.comment.match /! *(.*)/
+      if m
+        all_fuels = m[1].split(',')
+        all_fuels.each do |fuel|
+          fuels += fuel.strip
+        end
+      end
+      if fuels.size > 0
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{self.name}, fuel type #{fuels.join(', ')} pulled from Zone comment.")
+        fuels.uniq.sort
+      end
+    end
+    
     # Check the zone hvac heating fuels
     fuels += self.model.zone_equipment_heating_fuels(self)
 
