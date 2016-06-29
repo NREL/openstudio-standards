@@ -670,6 +670,21 @@ class OpenStudio::Model::ThermalZone
           if max_c > temp_c
             htd = true
           end
+        elsif htg_sch.to_ScheduleConstant.is_initialized
+          htg_sch = htg_sch.to_ScheduleConstant.get
+          max_c = htg_sch.annual_min_max_value['max']
+          if max_c > temp_c
+            htd = true
+          end
+        elsif htg_sch.to_ScheduleCompact.is_initialized
+          htg_sch = htg_sch.to_ScheduleCompact.get
+          max_c = htg_sch.annual_min_max_value['max']
+          if max_c > temp_c
+            htd = true
+          end
+        else
+          OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} used an unknown schedule type for the heating setpoint; assuming heated.")
+          htd = true
         end
       end
     elsif tstat.to_ZoneControlThermostatStagedDualSetpoint
@@ -739,6 +754,21 @@ class OpenStudio::Model::ThermalZone
           if min_c < temp_c
             cld = true
           end
+        elsif clg_sch.to_ScheduleConstant.is_initialized
+          clg_sch = clg_sch.to_ScheduleConstant.get
+          min_c = clg_sch.annual_min_max_value['min']
+          if min_c < temp_c
+            cld = true
+          end
+        elsif clg_sch.to_ScheduleCompact.is_initialized
+          clg_sch = clg_sch.to_ScheduleCompact.get
+          min_c = clg_sch.annual_min_max_value['min']
+          if min_c < temp_c
+            cld = true
+          end
+        else
+          OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
+          cld = true
         end
       end
     elsif tstat.to_ZoneControlThermostatStagedDualSetpoint
@@ -893,8 +923,14 @@ class OpenStudio::Model::ThermalZone
       setpoint_sch = tstat.heatingSetpointTemperatureSchedule
       if setpoint_sch.is_initialized
         setpoint_sch = setpoint_sch.get
-        if setpoint_sch.to_ScheduleRuleset.get
+        if setpoint_sch.to_ScheduleRuleset.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
+          setpoint_c = setpoint_sch.annual_min_max_value['max']
+        elsif setpoint_sch.to_ScheduleConstant.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleConstant.get
+          setpoint_c = setpoint_sch.annual_min_max_value['max']
+        elsif setpoint_sch.to_ScheduleCompact.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleCompact.get
           setpoint_c = setpoint_sch.annual_min_max_value['max']
         end
       end
@@ -935,9 +971,15 @@ class OpenStudio::Model::ThermalZone
       setpoint_sch = tstat.coolingSetpointTemperatureSchedule
       if setpoint_sch.is_initialized
         setpoint_sch = setpoint_sch.get
-        if setpoint_sch.to_ScheduleRuleset.get
+        if setpoint_sch.to_ScheduleRuleset.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
           setpoint_c = setpoint_sch.annual_min_max_value['min']
+        elsif setpoint_sch.to_ScheduleConstant.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleConstant.get
+          setpoint_c = setpoint_sch.annual_min_max_value['min']
+        elsif setpoint_sch.to_ScheduleCompact.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleCompact.get
+          setpoint_c = setpoint_sch.annual_min_max_value['min']  
         end
       end
     end
@@ -946,7 +988,7 @@ class OpenStudio::Model::ThermalZone
     # return the current design cooling temperature
     if setpoint_c.nil?
       setpoint_c = self.sizingZone.zoneCoolingDesignSupplyAirTemperature
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine max heating setpoint.  Design cooling supply temperature will use current zone setting of #{OpenStudio.convert(setpoint_c,'C','F').get.round} F.")
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine min cooling setpoint.  Design cooling supply temperature will use current zone setting of #{OpenStudio.convert(setpoint_c,'C','F').get.round} F.")
       return setpoint_c
     end
 
