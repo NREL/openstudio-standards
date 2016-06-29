@@ -240,7 +240,7 @@ class HVACEfficienciesTest < MiniTest::Test
       result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
       # Save the model
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "Failure in Standards for #{name}")
+      assert_equal(true, result, "test_chiller_curves: Failure in Standards for #{name}")
       chillers = model.getChillerElectricEIRs
       chiller_cap_ft_curve = chillers[0].coolingCapacityFunctionOfTemperature
       chiller_res_file_output_text +=

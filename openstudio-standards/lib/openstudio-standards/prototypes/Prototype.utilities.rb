@@ -171,6 +171,29 @@ def seer_to_cop(seer)
  
 end
 
+# Convert from COP to SEER
+# per the method specified in "Achieving the 30% Goal: Energy 
+# and cost savings analysis of ASHRAE Standard 90.1-2010
+# Thornton, et al 2011
+#
+# @param [Double] COP
+# @return [Double] Seasonal Energy Efficiency Ratio
+def cop_to_seer(cop)
+  
+  seer = nil
+
+  # First convert COP to EER
+  eer = cop_to_eer(cop)
+
+  # Next convert from EER to SEER
+  delta = 1.1088**2 - 4.0 * 0.0182 * eer
+  seer = (-delta**0.5 + 1.1088)/(2.0 * 0.0182)
+  #eer = (-0.0182 * seer * seer) + (1.1088 * seer)
+  
+  return seer
+ 
+end
+
 # Convert from EER to COP
 # per the method specified in "Achieving the 30% Goal: Energy 
 # and cost savings analysis of ASHRAE Standard 90.1-2010
@@ -189,6 +212,28 @@ def eer_to_cop(eer)
   cop = (eer/3.413 + r)/(1-r)
   
   return cop
+ 
+end
+
+# Convert from COP to EER
+# per the method specified in "Achieving the 30% Goal: Energy 
+# and cost savings analysis of ASHRAE Standard 90.1-2010
+# Thornton, et al 2011
+#
+# @param [Double] COP
+# @return [Double] Energy Efficiency Ratio (EER)
+def cop_to_eer(cop)
+  
+  eer = nil
+
+  # r is the ratio of supply fan power to total equipment power at the rating condition,
+  # assumed to be 0.12 for the reference buildngs per PNNL.
+  r = 0.12
+  
+  eer = 3.413 * (cop * (1 - r) - r)
+  #cop = (eer/3.413 + r)/(1-r)
+  
+  return eer
  
 end
 
