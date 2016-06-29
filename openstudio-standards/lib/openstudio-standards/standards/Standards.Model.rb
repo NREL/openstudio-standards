@@ -74,6 +74,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.SubSurface'
   require_relative 'Standards.ScheduleRuleset'
   require_relative 'Standards.ScheduleConstant'
+  require_relative 'Standards.ScheduleCompact'
   require_relative 'Standards.SpaceType'
   require_relative 'Standards.PlanarSurface'
   require_relative 'Standards.PlantLoop'
@@ -107,7 +108,12 @@ class OpenStudio::Model::Model
 
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
+    # Remove external shading devices
+		OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Removing External Shading Devices ***")
+    self.remove_external_shading_devices
+ 
     # Reduce the WWR and SRR, if necessary
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Adjusting Window and Skylight Ratios ***")
     self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage, climate_zone)
     self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)
 
@@ -3059,14 +3065,26 @@ class OpenStudio::Model::Model
       # Hard-assigned surfaces
       self.getSurfaces.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
-        next unless surf.surfaceType == type
+        surf_type = surf.surfaceType
+        if surf_type == 'Floor' || surf_type == 'Wall'
+          next unless type.include?(surf_type)
+        elsif surf_type == 'RoofCeiling'
+          next unless type.include?('Roof') || type.include?('Ceiling')
+        end
         constructions << surf.construction
       end
       
       # Hard-assigned subsurfaces
       self.getSubSurfaces.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
-        next unless surf.subSurfaceType == type
+        surf_type = surf.subSurfaceType
+        if surf_type == 'FixedWindow' || surf_type == 'OperableWindow'
+          next unless type == 'ExteriorWindow'
+        elsif surf_type == 'Door'
+          next unless type.include?('Door')
+        else
+          next unless surf.subSurfaceType == type
+        end
         constructions << surf.construction
       end
       
@@ -3172,7 +3190,10 @@ class OpenStudio::Model::Model
     types_to_modify.each do |boundary_cond, surf_type, const_type|
       constructions = self.find_constructions(boundary_cond, surf_type)
 
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "The constructions for #{boundary_cond} #{surf_type} are:")
+
       constructions.sort.each do |const|  
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "--- #{const.name}")
         standards_info = const.standardsInformation
         standards_info.setIntendedSurfaceType(surf_type)
         standards_info.setStandardsConstructionType(const_type)
@@ -3640,19 +3661,42 @@ class OpenStudio::Model::Model
       
   end
   
+  # Remove external shading devices.
+  # Buildng and Site shading will not be impacted.
+  # @return [Bool] returns true if successful, false if not.
+  def remove_external_shading_devices
+
+    shading_surfaces_removed = 0
+    self.getShadingSurfaceGroups.each do |shade_group|
+      # Skip Site and Building shading
+      next if shade_group.shadingSurfaceType == 'Site' || shade_group.shadingSurfaceType == 'Building'
+      # Space shading surfaces should be removed
+      shading_surfaces_removed += shade_group.shadingSurfaces.size
+      shade_group.remove
+		end
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Removed #{shading_surfaces_removed} external shading devices.")
+    
+    return true
+
+  end
+  
   # Helper method to get the story object that
   # cooresponds to a specific minimum z value.
   # Makes a new story if none found at this height.
+  # 
   #
   # @param minz [Double] the z value (height) of the
   # desired story, in meters.
+  # @param tolerance [Double] tolerance for comparison, in m.
+  # Default is 0.3 m ~1ft
   # @return [OpenStudio::Model::BuildingStory] the story
-  def get_story_for_nominal_z_coordinate(minz)
+  def get_story_for_nominal_z_coordinate(minz, tolerance = 0.3)
 
     self.getBuildingStorys.each do |story|
       z = story.nominalZCoordinate
       if z.is_initialized
-        if minz == z.get
+        if (minz - z.get).abs < tolerance
           return story
         end
       end
