@@ -80,6 +80,62 @@ class OpenStudio::Model::Model
     return true
 
   end
+  
+  # A helper method to run a sizing run and pull any values calculated during
+  # autosizing back into the self.
+  def runSpaceSizingRun(sizing_run_dir = "#{Dir.pwd}/SpaceSizingRun")
+    #Make sure the model is good to run. 
+    #1. Ensure External surfaces are set to a construction
+    ext_surfaces =  BTAP::Geometry::Surfaces::filter_by_boundary_condition(self.getSurfaces, ["Outdoors",
+        "Ground",
+        "GroundFCfactorMethod",
+        "GroundSlabPreprocessorAverage",
+        "GroundSlabPreprocessorCore",
+        "GroundSlabPreprocessorPerimeter",
+        "GroundBasementPreprocessorAverageWall",
+        "GroundBasementPreprocessorAverageFloor",
+        "GroundBasementPreprocessorUpperWall",
+        "GroundBasementPreprocessorLowerWall"])
+    fail = false
+    ext_surfaces.each do |surface|
+      if surface.construction.nil?
+        OpenStudio::logFree(OpenStudio::Error,'openstudio.model.Model', "Ext Surface #{surface.name} does not have a construction.Cannot perform sizing.") 
+        fail = true
+      end
+    end
+    raise ("Can't run sizing since envelope is not set.") if fail == true
+    
+    #remove any thermal zones. 
+    self.getThermalZones.each {|zone| zone.remove}
+    
+    #assign a zone to each space. 
+    # Create a thermal zone for each space in the self
+    self.getSpaces.each do |space|
+      zone = OpenStudio::Model::ThermalZone.new(self)
+      zone.setName("#{space.name} ZN")
+      space.setThermalZone(zone)
+
+      # Skip thermostat for spaces with no space type
+      next if space.spaceType.empty?
+      
+    end
+    # Add a thermostat
+    BTAP::Compliance::NECB2011::set_zones_thermostat_schedule_based_on_space_type_schedules(self)
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
+
+
+    
+    # Add ideal loads to every zone/space and run
+    # a sizing run to determine heating/cooling loads,
+    # which will impact HVAC systems.
+    self.getThermalZones.each do |zone|
+      ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
+      ideal_loads.addToThermalZone(zone)
+    end
+    return self.runSizingRun(sizing_run_dir)
+  end
+  
+  
 
   # Takes the values calculated by the EnergyPlus sizing routines
   # and puts them into all objects model in place of the autosized fields.

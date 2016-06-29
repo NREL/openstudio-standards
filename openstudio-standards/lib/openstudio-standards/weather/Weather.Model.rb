@@ -145,13 +145,10 @@ class OpenStudio::Model::Model
         end
       end
     else
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .stat file for: #{stat_filename}.")
-      puts "Could not find .stat file for: #{stat_filename}."
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .ddy file for: #{ddy_file}.")
+      puts "Could not find .ddy file for: #{ddy_file}."
       return false
     end
-
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Finished adding weather file for climate zone: #{climate_zone}.")
-    puts "Could not find .stat file for: #{stat_filename}."
     
     return true
       

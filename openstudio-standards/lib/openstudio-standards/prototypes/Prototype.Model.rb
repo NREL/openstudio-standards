@@ -1488,4 +1488,62 @@ class OpenStudio::Model::Model
 
   end
 
+  def clear_and_set_example_constructions()
+    
+    #Define Materials
+    name = "opaque material";      thickness = 0.012700; conductivity = 0.160000
+    opaque_mat     = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material( self, name, thickness, conductivity)
+    
+    name = "insulation material";  thickness = 0.050000; conductivity = 0.043000
+    insulation_mat = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material( self,name, thickness, conductivity)
+    
+    name = "simple glazing test";shgc  = 0.250000 ; ufactor = 3.236460; thickness = 0.003000; visible_transmittance = 0.160000
+    simple_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration::create_simple_glazing(self,name,shgc,ufactor,thickness,visible_transmittance)
+    
+    name = "Standard Glazing Test"; thickness = 0.003; conductivity = 0.9; solarTransmittanceatNormalIncidence = 0.84; frontSideSolarReflectanceatNormalIncidence = 0.075; backSideSolarReflectanceatNormalIncidence = 0.075; visibleTransmittance = 0.9; frontSideVisibleReflectanceatNormalIncidence = 0.081; backSideVisibleReflectanceatNormalIncidence = 0.081; infraredTransmittanceatNormalIncidence = 0.0; frontSideInfraredHemisphericalEmissivity = 0.84; backSideInfraredHemisphericalEmissivity = 0.84; opticalDataType = "SpectralAverage"; dirt_correction_factor = 1.0; is_solar_diffusing = false
+    standard_glazing_mat =BTAP::Resources::Envelope::Materials::Fenestration::create_standard_glazing( self, name ,thickness, conductivity, solarTransmittanceatNormalIncidence, frontSideSolarReflectanceatNormalIncidence, backSideSolarReflectanceatNormalIncidence, visibleTransmittance, frontSideVisibleReflectanceatNormalIncidence, backSideVisibleReflectanceatNormalIncidence, infraredTransmittanceatNormalIncidence, frontSideInfraredHemisphericalEmissivity, backSideInfraredHemisphericalEmissivity,opticalDataType, dirt_correction_factor, is_solar_diffusing)
+    
+    #Define Constructions
+    # # Surfaces 
+    ext_wall                            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionExtWall",                    [opaque_mat,insulation_mat], insulation_mat)
+    ext_roof                            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionExtRoof",                    [opaque_mat,insulation_mat], insulation_mat)
+    ext_floor                           = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionExtFloor",                   [opaque_mat,insulation_mat], insulation_mat)
+    grnd_wall                           = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionGrndWall",                   [opaque_mat,insulation_mat], insulation_mat)
+    grnd_roof                           = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionGrndRoof",                   [opaque_mat,insulation_mat], insulation_mat)
+    grnd_floor                          = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionGrndFloor",                  [opaque_mat,insulation_mat], insulation_mat)
+    int_wall                            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionIntWall",                    [opaque_mat,insulation_mat], insulation_mat)
+    int_roof                            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionIntRoof",                    [opaque_mat,insulation_mat], insulation_mat)
+    int_floor                           = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionIntFloor",                   [opaque_mat,insulation_mat], insulation_mat)
+    # # Subsurfaces
+    fixedWindowConstruction             = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionFixed",                [simple_glazing_mat])
+    operableWindowConstruction          = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionOperable",             [simple_glazing_mat])
+    setGlassDoorConstruction            = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionDoor",                 [standard_glazing_mat])
+    setDoorConstruction                 = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionDoor",                       [opaque_mat,insulation_mat], insulation_mat)
+    overheadDoorConstruction            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionOverheadDoor",               [opaque_mat,insulation_mat], insulation_mat)
+    skylightConstruction                = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionSkylight",             [standard_glazing_mat])
+    tubularDaylightDomeConstruction     = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionDomeConstruction",     [standard_glazing_mat])
+    tubularDaylightDiffuserConstruction = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionDiffuserConstruction", [standard_glazing_mat])
+    
+    #Define Construction Sets
+    # # Surface
+    exterior_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions( self,"ExteriorSet",ext_wall,ext_roof,ext_floor)
+    interior_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions( self,"InteriorSet",int_wall,int_roof,int_floor)
+    ground_construction_set   = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions( self,"GroundSet",  grnd_wall,grnd_roof,grnd_floor)
+    
+    # # Subsurface 
+    subsurface_exterior_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_subsurface_construction_set( self, fixedWindowConstruction, operableWindowConstruction, setDoorConstruction, setGlassDoorConstruction, overheadDoorConstruction, skylightConstruction, tubularDaylightDomeConstruction, tubularDaylightDiffuserConstruction)
+    subsurface_interior_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_subsurface_construction_set( self, fixedWindowConstruction, operableWindowConstruction, setDoorConstruction, setGlassDoorConstruction, overheadDoorConstruction, skylightConstruction, tubularDaylightDomeConstruction, tubularDaylightDiffuserConstruction)
+    
+    #Define default construction sets.
+    name = "Construction Set 1"
+    default_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_construction_set(self, name, exterior_construction_set, interior_construction_set, ground_construction_set, subsurface_exterior_construction_set, subsurface_interior_construction_set)
+
+    
+    #Assign default to the model. 
+    self.getBuilding.setDefaultConstructionSet( default_construction_set )
+    
+    return default_construction_set
+  end
+  
+  
 end

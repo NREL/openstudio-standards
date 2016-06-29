@@ -62174,7 +62174,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Automotive Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "E"
     },
     {
       "template": "NECB 2011",
@@ -62232,7 +62232,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Assembly Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "C"
     },
     {
       "template": "NECB 2011",
@@ -62290,7 +62290,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Assembly Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "A"
     },
     {
       "template": "NECB 2011",
@@ -62348,7 +62348,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Supermarket/Food Services Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "B"
     },
     {
       "template": "NECB 2011",
@@ -62406,7 +62406,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Supermarket/Food Services Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "B"
     },
     {
       "template": "NECB 2011",
@@ -62464,7 +62464,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Supermarket/Food Services Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "B"
     },
     {
       "template": "NECB 2011",
@@ -62522,7 +62522,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Sleeping Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "G"
     },
     {
       "template": "NECB 2011",
@@ -62580,7 +62580,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "General Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "B"
     },
     {
       "template": "NECB 2011",
@@ -62638,7 +62638,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Automotive Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "F"
     },
     {
       "template": "NECB 2011",
@@ -62696,7 +62696,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "General Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "B"
     },
     {
       "template": "NECB 2011",
@@ -62754,7 +62754,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "General Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "A"
     },
     {
       "template": "NECB 2011",
@@ -62812,7 +62812,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Hospital Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "H"
     },
     {
       "template": "NECB 2011",
@@ -62870,7 +62870,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Residential/Accomodation Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "F"
     },
     {
       "template": "NECB 2011",
@@ -62928,7 +62928,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Historical Collections Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "C"
     },
     {
       "template": "NECB 2011",
@@ -62986,7 +62986,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Industrial Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "A"
     },
     {
       "template": "NECB 2011",
@@ -63044,7 +63044,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Residential/Accomodation Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "F"
     },
     {
       "template": "NECB 2011",
@@ -63102,7 +63102,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Assembly Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "C"
     },
     {
       "template": "NECB 2011",
@@ -63160,7 +63160,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Residential/Accomodation Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "G"
     },
     {
       "template": "NECB 2011",
@@ -63218,7 +63218,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Historical Collections Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "C"
     },
     {
       "template": "NECB 2011",
@@ -63276,7 +63276,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "General Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "A"
     },
     {
       "template": "NECB 2011",
@@ -63334,7 +63334,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Automotive Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "H"
     },
     {
       "template": "NECB 2011",
@@ -63392,7 +63392,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Sleeping Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "H"
     },
     {
       "template": "NECB 2011",
@@ -63450,7 +63450,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Assembly Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "C"
     },
     {
       "template": "NECB 2011",
@@ -63508,7 +63508,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Assembly Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "H"
     },
     {
       "template": "NECB 2011",
@@ -63566,7 +63566,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "General Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "A"
     },
     {
       "template": "NECB 2011",
@@ -63624,7 +63624,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Assembly Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "I"
     },
     {
       "template": "NECB 2011",
@@ -63682,7 +63682,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "General Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "C"
     },
     {
       "template": "NECB 2011",
@@ -63740,7 +63740,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Assembly Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "D"
     },
     {
       "template": "NECB 2011",
@@ -69772,7 +69772,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "General Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "B"
     },
     {
       "template": "NECB 2011",
@@ -69830,7 +69830,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Assembly Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "D"
     },
     {
       "template": "NECB 2011",
@@ -69888,7 +69888,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "General Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "H"
     },
     {
       "template": "NECB 2011",
@@ -69946,7 +69946,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Warehouse Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "A"
     },
     {
       "template": "NECB 2011",
@@ -70004,7 +70004,7 @@
       "balanced_exhaust_fraction_schedule": null,
       "is_residential": null,
       "necb_hvac_system_selection_type": "Industrial Area",
-      "necb_schedule_type": null
+      "necb_schedule_type": "A"
     },
     {
       "template": "OEESC 2014",
