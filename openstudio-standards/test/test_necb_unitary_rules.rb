@@ -68,7 +68,7 @@ class HVACEfficienciesTest < MiniTest::Test
         heating_coil_type = 'Gas'
       end
       heating_type_cap[heating_type].each do |unitary_cap|
-        name = "sys1_MuaHtgCoilType~#{heating_coil_type}_UnitaryCap~#{unitary_cap}watts"
+        name = "sys3_MuaHtgCoilType~#{heating_coil_type}_UnitaryCap~#{unitary_cap}watts"
         puts "***************************************#{name}*******************************************************\n"
         model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
