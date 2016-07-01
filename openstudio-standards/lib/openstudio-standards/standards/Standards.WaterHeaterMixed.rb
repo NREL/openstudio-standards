@@ -55,7 +55,7 @@ class OpenStudio::Model::WaterHeaterMixed
     sl_btu_per_hr = nil
     case fuel_type
     when 'Electricity'
-      if capacity_btu_per_hr <= 12000  
+      if capacity_btu_per_hr <= OpenStudio.convert(12,'kW','Btu/hr').get  
         # Fixed water heater efficiency per PNNL
         water_heater_eff = 1
         # Calculate the minimum Energy Factor (EF)
@@ -90,7 +90,7 @@ class OpenStudio::Model::WaterHeaterMixed
           # Thermal efficiency requirement from 90.1
           et = 0.8
           # Calculate the max allowable standby loss (SL)
-          sl_btu_per_hr = et*(capacity_btu_per_hr/800 + 110*Math.sqrt(volume_gal))
+          sl_btu_per_hr = (capacity_btu_per_hr/800 + 110*Math.sqrt(volume_gal))
           # Calculate the skin loss coefficient (UA)
           ua_btu_per_hr_per_f = (sl_btu_per_hr*et)/70
           # Calculate water heater efficiency
@@ -121,6 +121,55 @@ class OpenStudio::Model::WaterHeaterMixed
     # Append the name with standards information
     self.setName("#{name} #{water_heater_eff.round(3)}Eff")
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{self.name}; efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr AKA #{ua_btu_per_hr_per_c.round(1)}W/K")  
+  
+    return true
+  
+  end
+  
+  # Applies the correct fuel type for the water heaters
+  # in the baseline model.  For most standards and for most building
+  # types, the baseline uses the same fuel type as the proposed.
+  # However, certain standards like 90.1-2013 require a change
+  # in some scenarios.
+  # 
+  # @param building_type [String] the building type
+  # @return [Bool] returns true if successful, false if not.
+  def apply_performance_rating_method_baseline_fuel_type(template, building_type)
+    
+    # For all standards except 90.1-2013
+    # baseline is same as proposed per
+    # Table G3.1 item 11.b
+    unless template == '90.1-2013'
+      return true
+    end
+  
+    # Determine the building-type specific
+    # fuel requirements from Table G3.1.1-2   
+    new_fuel = nil
+    case building_type
+    when 'SecondarySchool', 'PrimarySchool', # School/university
+         'SmallHotel', # Motel
+         'LargeHotel', # Hotel
+         'QuickServiceRestaurant', # Dining: Cafeteria/fast food
+         'FullServiceRestaurant', # Dining: Family
+         'MidriseApartment', 'HighriseApartment', # Multifamily
+         'Hospital', # Hospital
+         'Outpatient' # Health-care clinic
+      new_fuel = 'NaturalGas'
+    when 'SmallOffice', 'MediumOffice', 'LargeOffice', # Office
+         'RetailStandalone', 'RetailStripmall', # Retail
+         'Warehouse' # Warehouse
+      new_fuel = 'Electricity'
+    else
+      new_fuel = 'NaturalGas'
+    end
+
+    # Change the fuel type if necessary
+    old_fuel = self.heaterFuelType
+    unless new_fuel == old_fuel
+      self.setHeaterFuelType(new_fuel)
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.WaterHeaterMixed", "For #{self.name}, changed baseline water heater fuel from #{old_fuel} to #{new_fuel}.")
+    end
   
     return true
   
