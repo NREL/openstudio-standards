@@ -3233,7 +3233,7 @@ class OpenStudio::Model::Model
                                                       clg_energy_input_ratio_f_of_flow,
                                                       clg_part_load_ratio)
 
-      clg_coil.setName("#{zone.name} PTAC 1spd DX HP Clg Coil")
+      clg_coil.setName("#{zone.name} PTHP Clg Coil")
       #clg_coil.setRatedSensibleHeatRatio(0.69)
       #clg_coil.setBasinHeaterCapacity(10)
       #clg_coil.setBasinHeaterSetpointTemperature(2.0)
