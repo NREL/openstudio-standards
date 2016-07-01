@@ -155,6 +155,11 @@ class OpenStudio::Model::Model
     # Remove all HVAC from model
     self.remove_performance_rating_method_hvac
     
+    # Set the water heater fuel types
+    self.getWaterHeaterMixeds.each do |water_heater|
+      water_heater.apply_performance_rating_method_baseline_fuel_type(building_vintage, building_type)
+    end
+    
     # Add ideal loads to every zone with a thermostat and run
     # a sizing run to determine heating/cooling loads,
     # which will impact which zones go onto secondary
