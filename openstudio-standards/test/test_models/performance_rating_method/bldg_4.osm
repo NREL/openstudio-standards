@@ -5168,7 +5168,7 @@ OS:StandardsInformation:Construction,
   {d092aab2-f36a-49c4-97f6-2a94a8681164}, !- Handle
   {98937ed4-a30e-45f9-8e9b-a08a0a84b620}, !- Construction Name
   ExteriorWindow,                         !- Intended Surface Type
-  Metal framing (all other),              !- Standards Construction Type
+  ,                                       !- Standards Construction Type
   ,                                       !- Perturbable Layer
   ,                                       !- Perturbable Layer Type
   ,                                       !- Other Perturbable Layer Type
@@ -5177,7 +5177,7 @@ OS:StandardsInformation:Construction,
   ,                                       !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
-  ,                                       !- Fenestration Frame Type
+  Metal Framing,                          !- Fenestration Frame Type
   ,                                       !- Fenestration Divider Type
   ,                                       !- Fenestration Tint
   ;                                       !- Fenestration Gas Fill
@@ -5192,7 +5192,7 @@ OS:StandardsInformation:Construction,
   {c1e2dd99-4ce6-4ff2-bf7e-7fab101e63d3}, !- Handle
   {36e44297-7b7d-4f15-9845-ed817df8cfb9}, !- Construction Name
   ExteriorWindow,                         !- Intended Surface Type
-  Metal framing (all other),              !- Standards Construction Type
+  ,                                       !- Standards Construction Type
   ,                                       !- Perturbable Layer
   ,                                       !- Perturbable Layer Type
   ,                                       !- Other Perturbable Layer Type
@@ -5201,7 +5201,7 @@ OS:StandardsInformation:Construction,
   ,                                       !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
-  ,                                       !- Fenestration Frame Type
+  Metal Framing,                          !- Fenestration Frame Type
   ,                                       !- Fenestration Divider Type
   ,                                       !- Fenestration Tint
   ;                                       !- Fenestration Gas Fill
@@ -5216,7 +5216,7 @@ OS:StandardsInformation:Construction,
   {f8eca294-1218-4eec-951b-712eb4bd0f3a}, !- Handle
   {d90984d2-8b5e-4ed7-97f8-e795f96880b2}, !- Construction Name
   ExteriorWindow,                         !- Intended Surface Type
-  Metal framing (all other),              !- Standards Construction Type
+  ,                                       !- Standards Construction Type
   ,                                       !- Perturbable Layer
   ,                                       !- Perturbable Layer Type
   ,                                       !- Other Perturbable Layer Type
@@ -5225,7 +5225,7 @@ OS:StandardsInformation:Construction,
   ,                                       !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
-  ,                                       !- Fenestration Frame Type
+  Metal Framing,                          !- Fenestration Frame Type
   ,                                       !- Fenestration Divider Type
   ,                                       !- Fenestration Tint
   ;                                       !- Fenestration Gas Fill
@@ -6729,7 +6729,7 @@ OS:StandardsInformation:Construction,
   ,                                       !- Other Perturbable Layer Type
   ,                                       !- Construction Standard
   ,                                       !- Construction Standard Source
-  ,                                       !- Fenestration Type
+  Plastic Skylight without Curb,          !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
   ,                                       !- Fenestration Frame Type
