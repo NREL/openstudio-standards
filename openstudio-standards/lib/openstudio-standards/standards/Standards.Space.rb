@@ -2393,4 +2393,53 @@ Warehouse.Office
   
   end
   
+  # Determine the design internal load (W) for
+  # this space without space multipliers.
+  # This include People, Lights, Electric Equipment,
+  # and Gas Equipment.  It assumes 100% of the wattage
+  # is converted to heat, and that the design peak
+  # schedule value is 1 (100%).
+  #
+  # @return [Double] the design internal load, in W
+  def design_internal_load
+  
+    load_w = 0.0
+  
+    # People
+    self.people.each do |people|
+      w_per_person = 125 # Initial assumption
+      act_sch = people.activityLevelSchedule
+      if act_sch.is_initialized
+        if act_sch.get.to_ScheduleRuleset.is_initialized
+          act_sch = act_sch.get.to_ScheduleRuleset.get
+          w_per_person = act_sch.annual_min_max_value['max']
+        else
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "#{self.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+        end
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "#{self.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
+      end
+      
+      num_ppl = people.getNumberOfPeople(self.floorArea)
+    
+      ppl_w = num_ppl * w_per_person
+    
+      load_w += ppl_w
+    
+    end
+    
+    # Lights
+    load_w += self.lightingPower
+    
+    # Electric Equipment
+    load_w += self.electricEquipmentPower	
+    
+    # Gas Equipment
+    load_w += self.gasEquipmentPower
+  
+    OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "#{self.name} has #{load_w.round}W of design internal loads.")
+  
+    return load_w
+  
+  end
+ 
 end

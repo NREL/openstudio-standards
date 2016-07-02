@@ -1062,4 +1062,25 @@ class OpenStudio::Model::ThermalZone
   
   end
   
+  # Determine the design internal load (W) for
+  # this zone without space multipliers.
+  # This include People, Lights, Electric Equipment,
+  # and Gas Equipment in all spaces in this zone.
+  # It assumes 100% of the wattage
+  # is converted to heat, and that the design peak
+  # schedule value is 1 (100%).
+  #
+  # @return [Double] the design internal load, in W
+  def design_internal_load
+    
+    load_w = 0.0
+  
+    self.spaces.each do |space|
+      load_w += space.design_internal_load
+    end
+    
+    return load_w
+  
+  end
+  
 end

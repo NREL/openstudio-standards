@@ -159,33 +159,6 @@ class OpenStudio::Model::Model
     self.getWaterHeaterMixeds.each do |water_heater|
       water_heater.apply_performance_rating_method_baseline_fuel_type(building_vintage, building_type)
     end
-    
-    # Add ideal loads to every zone with a thermostat and run
-    # a sizing run to determine heating/cooling loads,
-    # which will impact which zones go onto secondary
-    # HVAC systems.
-    self.getThermalZones.each do |zone|
-      # Skip plenum zones
-      next if zone.is_plenum
-      # 
-      
-      if zone.thermostat.empty?
-        zone.add_unconditioned_thermostat
-        #puts "Skipping #{zone.name}"
-        #puts "Dsn clg temp = #{zone.sizingZone.zoneCoolingDesignSupplyAirTemperature}"
-        #puts "Dsn htg temp = #{zone.sizingZone.zoneHeatingDesignSupplyAirTemperature}"
-      end
-      ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
-      ideal_loads.addToThermalZone(zone)
-    end
-    # Run sizing run
-    if self.runSizingRun("#{sizing_run_dir}/SizingRunIdeal") == false
-      return false
-    end
-    # Remove ideal loads
-    self.getZoneHVACIdealLoadsAirSystems.each do |ideal_loads|
-      ideal_loads.remove
-    end
 
     # Determine the baseline HVAC system type for each of
     # the groups of zones and add that system type.
@@ -1325,13 +1298,10 @@ class OpenStudio::Model::Model
   # lighting schedule is used as the proxy for operation
   # instead of occupancy to avoid accidentally removing
   # transition spaces.  Second, eliminate zones whose
-  # heating or cooling loads differ from the 
+  # design internal loads differ from the 
   # area-weighted average of all other zones
   # on the system by more than 10 Btu/hr*ft^2.
   #
-  # @todo Improve load-based exception algorithm.
-  # Current algorithm is faithful to 90.1, but can
-  # lead to nonsensical results in some cases.
   # @return [Hash] A hash of two arrays of ThermalZones,
   # where the keys are 'primary' and 'secondary'
   def differentiate_primary_secondary_thermal_zones(zones)
@@ -1400,7 +1370,7 @@ class OpenStudio::Model::Model
     # than (40 hrs/wk * 52 wks/yr) = 2080 annual full load hrs.    
     zones_same_hrs = eliminate_outlier_zones(zone_data_1, 'wk_op_hrs', 40, 'weekly operating hrs', 'hrs')
   
-    # Get the heating and cooling loads and areas for
+    # Get the internal loads for
     # all remaining zones.
     zone_data_2 = []
     zones_same_hrs.each do |zn_data|    
@@ -1408,34 +1378,21 @@ class OpenStudio::Model::Model
       zone = zn_data['zone']
       data['zone'] = zone
       # Get the area
-      area_ft2 = OpenStudio.convert(zone.floorArea * zone.multiplier, 'm^2', 'ft^2').get
+      area_m2 = zone.floorArea * zone.multiplier
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
       data['area_ft2'] = area_ft2
-      # Get the heating load
-      htg_load_w_per_m2 = zone.heatingDesignLoad
-      if htg_load_w_per_m2.is_initialized
-        htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get,'W/m^2','Btu/hr*ft^2').get
-        data['htg_load_btu_per_ft2'] = htg_load_btu_per_ft2
-      else
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "For zone #{data['zone'].name}, could not determine the design heating load.")
-        data['htg_load_btu_per_ft2'] = 0.0
-      end
-      # Get the cooling load
-      clg_load_w_per_m2 = zone.coolingDesignLoad
-      if clg_load_w_per_m2.is_initialized
-        clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get,'W/m^2','Btu/hr*ft^2').get
-        data['clg_load_btu_per_ft2'] = clg_load_btu_per_ft2
-      else
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "For zone #{data['zone'].name}, could not determine the design cooling load.")
-        data['clg_load_btu_per_ft2'] = 0.0
-      end
+      # Get the internal loads
+      int_load_w = zone.design_internal_load
+      # Normalize per-area
+      int_load_w_per_m2 = int_load_w / area_m2
+      int_load_btu_per_ft2 = OpenStudio.convert(int_load_w_per_m2,'W/m^2','Btu/hr*ft^2').get
+      data['int_load_btu_per_ft2'] = int_load_btu_per_ft2
       zone_data_2 << data
     end    
    
-    # Filter out any zones that are +/- 10 Btu/hr*ft^2 from the heating average
-    pri_zn_data = eliminate_outlier_zones(zone_data_2, 'htg_load_btu_per_ft2', 10, 'heating load', 'Btu/hr*ft^2')
-    
-    # Filter out any zones that are +/- 10 Btu/hr*ft^2 from the cooling average
-    pri_zn_data = eliminate_outlier_zones(pri_zn_data, 'clg_load_btu_per_ft2', 10, 'cooling load', 'Btu/hr*ft^2')    
+    # Filter out any zones that are +/- 10 Btu/hr*ft^2 from the average
+    pri_zn_data = eliminate_outlier_zones(zone_data_2, 'int_load_btu_per_ft2', 10, 'internal load', 'Btu/hr*ft^2')
+   
     # Get just the primary zones themselves
     pri_zones = []
     pri_zone_names = []
