@@ -1477,49 +1477,168 @@ class OpenStudio::Model::AirLoopHVAC
         end      
       end
     when '90.1-2013'
-      # Table 6.5.6.1-2
-      case climate_zone
-      when 'ASHRAE 169-2006-3C'
-        erv_cfm = nil
-      when 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4C', 'ASHRAE 169-2006-5C'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
-          erv_cfm = nil
-        elsif pct_oa >= 0.2 && pct_oa < 0.3
-          erv_cfm = 19500
-        elsif pct_oa >= 0.3 && pct_oa < 0.4
-          erv_cfm = 9000
-        elsif pct_oa >= 0.4 && pct_oa < 0.5
-          erv_cfm = 5000
-        elsif pct_oa >= 0.5 && pct_oa < 0.6
-          erv_cfm = 4000
-        elsif pct_oa >= 0.6 && pct_oa < 0.7
-          erv_cfm = 3000
-        elsif pct_oa >= 0.7 && pct_oa < 0.8
-          erv_cfm = 1500
-        elsif pct_oa >= 0.8 
-          erv_cfm = 0
+      # Calculate the number of system operating hours
+      # based on the availability schedule.
+      ann_op_hrs = 0.0
+      avail_sch = self.availabilitySchedule
+      if avail_sch == self.model.alwaysOnDiscreteSchedule
+        ann_op_hrs = 8760.0
+      elsif avail_sch.to_ScheduleRuleset.is_initialized
+        avail_sch = avail_sch.to_ScheduleRuleset.get
+        ann_op_hrs = avail_sch.annual_hours_above_value(0.0)
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{self.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
+      end
+      
+      if ann_op_hrs < 8000.0
+        # Table 6.5.6.1-1, less than 8000 hrs
+        case climate_zone
+        when 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C', 'ASHRAE 169-2006-5B'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = nil
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = nil
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = nil
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = nil
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = nil
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = nil
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = nil
+          elsif pct_oa >= 0.8 
+            erv_cfm = nil
+          end
+        when 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-5C'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = nil
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = nil
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = nil
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = nil
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 26000
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 12000
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 5000
+          elsif pct_oa >= 0.8 
+            erv_cfm = 4000
+          end
+        when 'ASHRAE 169-2006-6B'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = 28000
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 26500
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 11000
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 5500
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 4500
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 3500
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 2500
+          elsif pct_oa >= 0.8 
+            erv_cfm = 1500
+          end      
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-6A'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = 26000
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 16000
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 5500
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 4500
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 3500
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 2000
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 1000
+          elsif pct_oa >= 0.8 
+            erv_cfm = 0
+          end   
+        when 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = 4500
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 4000
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 2500
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 1000
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 0
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 0
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 0
+          elsif pct_oa >= 0.8 
+            erv_cfm = 0
+          end      
         end
-      when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-4B',  'ASHRAE 169-2006-5B'
-        if pct_oa < 0.1
+      else
+        # Table 6.5.6.1-2, above 8000 hrs
+        case climate_zone
+        when 'ASHRAE 169-2006-3C'
           erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
-          erv_cfm = 2500
-        elsif pct_oa >= 0.2 && pct_oa < 0.3
-          erv_cfm = 2000
-        elsif pct_oa >= 0.3 && pct_oa < 0.4
-          erv_cfm = 1000
-        elsif pct_oa >= 0.4 && pct_oa < 0.5
-          erv_cfm = 500
-        elsif pct_oa >= 0.5
-          erv_cfm = 0
-        end
-      when 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1
-          erv_cfm = 0
+        when 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4C', 'ASHRAE 169-2006-5C'
+          if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = nil
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 19500
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 9000
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 5000
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 4000
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 3000
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 1500
+          elsif pct_oa >= 0.8 
+            erv_cfm = 0
+          end
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-4B',  'ASHRAE 169-2006-5B'
+          if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = 2500
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 2000
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 1000
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 500
+          elsif pct_oa >= 0.5
+            erv_cfm = 0
+          end
+        when 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
+          if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1
+            erv_cfm = 0
+          end
         end
       end
     when 'NECB 2011'
