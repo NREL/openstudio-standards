@@ -1926,7 +1926,15 @@ Warehouse.Office
     else
       zone = self.thermalZone.get
     end
-    
+
+    # Ensure that total controlled fraction
+    # is never set above 1 (100%)
+    if sensor_1_frac + sensor_2_frac >= 1.0
+      # Lower sensor_2_frac so that the total
+      # is just slightly lower than 1.0
+      sensor_2_frac = 1.0 - sensor_1_frac - 0.001
+    end
+
     # Sensors
     if sensor_1_frac > 0.0
       OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 1 controls #{(sensor_1_frac*100).round}% of the zone lighting.")
