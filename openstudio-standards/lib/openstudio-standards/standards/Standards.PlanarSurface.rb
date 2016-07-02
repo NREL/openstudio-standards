@@ -71,7 +71,7 @@ class OpenStudio::Model::PlanarSurface
           return previous_construction_map
         end
       else
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the standards fenestration frame type for #{self.name}.  This surface will not have the standard applied.")
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the standards fenestration frame type for #{self.name} from #{construction.name}.  This surface will not have the standard applied.")
         return previous_construction_map
       end    
     # Skylights
@@ -91,7 +91,7 @@ class OpenStudio::Model::PlanarSurface
           return previous_construction_map
         end
       else
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the standards fenestration type for #{self.name}.  This surface will not have the standard applied.")
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the standards fenestration type for #{self.name} from #{construction.name}.  This surface will not have the standard applied.")
         return previous_construction_map
       end
     # All other surface types
