@@ -1784,14 +1784,14 @@ class OpenStudio::Model::Model
     ##### Apply equipment efficiencies
 
     # Fans
-    # self.getFanVariableVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
-    # self.getFanConstantVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
-    # self.getFanOnOffs.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
-    # self.getFanZoneExhausts.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
+    self.getFanVariableVolumes.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brakeHorsepower)}
+    self.getFanConstantVolumes.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brakeHorsepower)}
+    self.getFanOnOffs.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brakeHorsepower)}
+    self.getFanZoneExhausts.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brakeHorsepower)}
 
     # Pumps
-    #self.getPumpConstantSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
-    #self.getPumpVariableSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
+    self.getPumpConstantSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
+    self.getPumpVariableSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
     
     # Unitary ACs
     self.getCoilCoolingDXTwoSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}

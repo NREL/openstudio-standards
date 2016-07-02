@@ -3,6 +3,7 @@
 class OpenStudio::Model::Model
 
   # Load the helper libraries for 
+  require_relative 'Prototype.Fan'
   require_relative 'Prototype.FanConstantVolume'
   require_relative 'Prototype.FanVariableVolume'
   require_relative 'Prototype.FanOnOff'
@@ -1073,11 +1074,18 @@ class OpenStudio::Model::Model
     ##### Apply equipment efficiencies
 
     # Fans
+    # Pressure Rise
     self.getFanConstantVolumes.sort.each {|obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)}
     self.getFanVariableVolumes.sort.each {|obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)}
     self.getFanOnOffs.sort.each {|obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)}
     self.getFanZoneExhausts.sort.each {|obj| obj.setPrototypeFanPressureRise}
-
+    
+    # Motor Efficiency
+    self.getFanConstantVolumes.sort.each {|obj| obj.set_prototype_fan_efficiency}
+    self.getFanVariableVolumes.sort.each {|obj| obj.set_prototype_fan_efficiency}
+    self.getFanOnOffs.sort.each {|obj| obj.set_prototype_fan_efficiency}
+    self.getFanZoneExhausts.sort.each {|obj| obj.set_prototype_fan_efficiency}
+    
     ##### Add Economizers
 
     if (building_vintage != 'NECB 2011') then

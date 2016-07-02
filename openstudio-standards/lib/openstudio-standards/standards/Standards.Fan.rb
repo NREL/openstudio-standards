@@ -3,71 +3,6 @@
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
 module Fan
 
-  # Sets the fan motor efficiency based on the standard.
-  # Assumes 65% fan efficiency and 4-pole, enclosed motor.
-  #
-  # @return [Bool] true if successful, false if not
-  def setStandardEfficiency(template)
-    
-    # Get the max flow rate from the fan.
-    maximum_flow_rate_m3_per_s = nil
-    if self.maximumFlowRate.is_initialized
-      maximum_flow_rate_m3_per_s = self.maximumFlowRate.get
-    elsif self.autosizedMaximumFlowRate.is_initialized
-      maximum_flow_rate_m3_per_s = self.autosizedMaximumFlowRate.get
-    else
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{self.name} max flow rate is not hard sized, cannot apply efficiency standard.")
-      return false
-    end
-    
-    # Convert max flow rate to cfm
-    maximum_flow_rate_cfm = OpenStudio.convert(maximum_flow_rate_m3_per_s, 'm^3/s', 'cfm').get
-    
-    # Get the pressure rise from the fan
-    pressure_rise_pa = self.pressureRise
-    pressure_rise_in_h2o = OpenStudio.convert(pressure_rise_pa, 'Pa','inH_{2}O').get
-    
-    # Get the default impeller efficiency
-    fan_impeller_eff = self.baselineImpellerEfficiency(template)
-    
-    # Calculate the Brake Horsepower
-    brake_hp = (pressure_rise_in_h2o * maximum_flow_rate_cfm)/(fan_impeller_eff * 6356) 
-    allowed_hp = brake_hp * 1.1 # Per PNNL document #TODO add reference
-    if allowed_hp > 0.1
-      allowed_hp = allowed_hp.round(2)+0.0001
-    elsif allowed_hp < 0.01
-      allowed_hp = 0.01
-    end
-    
-    # Minimum motor size for efficiency lookup
-    # is 1 HP unless the motor serves an exhaust fan,
-    # a powered VAV terminal, or a fan coil unit.
-    unless self.is_small_fan
-      if allowed_hp < 1.0
-        allowed_hp = 1.01
-      end
-    end
-    
-    # Find the motor efficiency
-    motor_eff, nominal_hp = standard_minimum_motor_efficiency(template, allowed_hp)
-
-    # Calculate the total fan efficiency
-    total_fan_eff = fan_impeller_eff * motor_eff
-    
-    # Set the total fan efficiency and the motor efficiency
-    if self.to_FanZoneExhaust.is_initialized
-      self.setFanEfficiency(total_fan_eff)
-    else
-      self.setFanEfficiency(total_fan_eff)
-      self.setMotorEfficiency(motor_eff)
-    end
-    
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{self.name}: allowed_hp = #{allowed_hp.round(2)}HP; motor eff = #{(motor_eff*100).round(2)}%; total fan eff = #{(total_fan_eff*100).round}% based on #{maximum_flow_rate_cfm.round} cfm.")
-    
-    return true
-    
-  end
-
   def set_standard_minimum_motor_efficiency(template, allowed_bhp)
     
     # Find the motor efficiency
@@ -81,7 +16,14 @@ module Fan
     # Calculate the total motor HP
     motor_hp = self.motorHorsepower
     
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{self.name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_eff*100).round(2)}%.")
+    # Exception for small fans, including
+    # zone exhaust, fan coil, and fan powered terminals.
+    # In this case, 0.5 HP is used for the lookup.
+    if self.is_small_fan
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{self.name}: motor eff = #{(motor_eff*100).round(2)}%; assumed to represent several < 1 HP motors.")
+    else
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{self.name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_eff*100).round(2)}%.")
+    end
     
     return true    
   
@@ -136,8 +78,12 @@ module Fan
     
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
-    if self.autosizedMaximumFlowRate.is_initialized
-      dsn_air_flow_m3_per_s = self.autosizedMaximumFlowRate.get
+    if self.to_FanZoneExhaust.empty?
+      if self.autosizedMaximumFlowRate.is_initialized
+        dsn_air_flow_m3_per_s = self.autosizedMaximumFlowRate.get
+      else
+        dsn_air_flow_m3_per_s = self.maximumFlowRate.get
+      end
     else
       dsn_air_flow_m3_per_s = self.maximumFlowRate.get
     end
@@ -268,12 +214,17 @@ module Fan
   
   end
   
-  # Determines the minimum fan motor efficiency 
+  # Determines the minimum fan motor efficiency and nominal size
   # for a given motor bhp.  This should be the total brake horsepower with
-  # any desired safety factor already included.  This method
+  # any desired safety factor already included.  This method picks
+  # the next nominal motor catgory larger than the required brake
+  # horsepower, and the efficiency is based on that size.  For example,
+  # if the bhp = 6.3, the nominal size will be 7.5HP and the efficiency
+  # for 90.1-2010 will be 91.7% from Table 10.8B.  This method assumes
+  # 4-pole, 1800rpm totally-enclosed fan-cooled motors.
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
-  # @return [Double] minimum motor efficiency (0.0 to 1.0), nominal HP
+  # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
   def standard_minimum_motor_efficiency_and_size(template, motor_bhp)
   
     fan_motor_eff = 0.85
@@ -288,21 +239,34 @@ module Fan
       "number_of_poles" => 4.0,
       "type" => "Enclosed",
     }
-    
-    motor_properties = self.model.find_object(motors, search_criteria, motor_bhp)
-    if motor_properties.nil?
-      OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Fan", "For #{self.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
-      return [fan_motor_eff, nominal_hp]
-    end
- 
-    fan_motor_eff = motor_properties["nominal_full_load_efficiency"]  
-    nominal_hp = motor_properties["maximum_capacity"].to_f.round(1)
-    # Round to nearest whole HP for niceness
-    if nominal_hp >= 2
-      nominal_hp = nominal_hp.round
-    end
 
-    # TODO Add exception for small 
+    # Exception for small fans, including
+    # zone exhaust, fan coil, and fan powered terminals.
+    # In this case, use the 0.5 HP for the lookup.
+    if self.is_small_fan
+      nominal_hp = 0.5
+    else 
+      motor_properties = self.model.find_object(motors, search_criteria, motor_bhp)
+      if motor_properties.nil?
+        OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Fan", "For #{self.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+        return [fan_motor_eff, nominal_hp]
+      end
+
+      nominal_hp = motor_properties["maximum_capacity"].to_f.round(1)
+      # Round to nearest whole HP for niceness
+      if nominal_hp >= 2
+        nominal_hp = nominal_hp.round
+      end
+    end
+    
+    # Get the efficiency based on the nominal horsepower
+    # Add 0.01 hp to avoid search errors.
+    motor_properties = self.model.find_object(motors, search_criteria, nominal_hp + 0.01)
+    if motor_properties.nil?
+      OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Fan", "For #{self.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+      return [fan_motor_eff, nominal_hp]
+    end    
+    fan_motor_eff = motor_properties["nominal_full_load_efficiency"]
 
     return [fan_motor_eff, nominal_hp]
   
