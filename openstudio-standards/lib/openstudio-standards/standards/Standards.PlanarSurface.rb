@@ -46,7 +46,7 @@ class OpenStudio::Model::PlanarSurface
     standards_info = construction.standardsInformation
     surf_type = standards_info.intendedSurfaceType
     if surf_type.empty?
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the intended surface type for #{self.name}.  This surface will not have the standard applied.")
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the intended surface type for #{self.name} from #{construction.name}.  This surface will not have the standard applied.")
       return previous_construction_map
     end
     surf_type = surf_type.get
