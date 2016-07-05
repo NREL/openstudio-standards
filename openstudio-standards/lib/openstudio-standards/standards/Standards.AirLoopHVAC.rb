@@ -93,8 +93,8 @@ class OpenStudio::Model::AirLoopHVAC
     # TODO Prototype buildings use OAT-based SAT reset,
     # but PRM RM suggests Warmest zone based SAT reset.
     if self.is_supply_air_temperature_reset_required(template, climate_zone)
-      self.enable_supply_air_temperature_reset_outdoor_temperature
-      # self.enable_supply_air_temperature_reset_warmest_zone(template)
+      #self.enable_supply_air_temperature_reset_outdoor_temperature
+      self.enable_supply_air_temperature_reset_warmest_zone(template)
     end    
     
     # Unoccupied shutdown
@@ -145,7 +145,7 @@ class OpenStudio::Model::AirLoopHVAC
       # even if not required by prescriptive section.
       case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        self.enable_supply_air_temperature_reset_outdoor_temperature
+        self.enable_supply_air_temperature_reset_warmest_zone(template)
       end
 
     end
