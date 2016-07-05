@@ -1574,8 +1574,8 @@ class OpenStudio::Model::Model
     ##### Apply equipment efficiencies
 
     # Fans
-    # self.getFanVariableVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
-    # self.getFanConstantVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
+     self.getFanVariableVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
+     self.getFanConstantVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
     # self.getFanOnOffs.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
     # self.getFanZoneExhausts.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
 
