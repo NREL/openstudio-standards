@@ -8,9 +8,9 @@ class HVACEfficienciesTest < MiniTest::Test
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
-  # Test to validate variable volume performance curves
-  def test_vav_fan_curves
-    output_folder = "#{File.dirname(__FILE__)}/output/vavfan_curves"
+  # Test to validate variable volume fan performance curves and pressure rise
+  def test_vav_fan_rules
+    output_folder = "#{File.dirname(__FILE__)}/output/vavfan_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     vavfan_expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_vavfan_curves_expected_results.csv')
@@ -62,17 +62,17 @@ class HVACEfficienciesTest < MiniTest::Test
         diff = (deltaP - necb_deltaP).abs / necb_deltaP
         deltaP_set_properly = true
         if diff > 1.0e-3 then deltaP_set_properly = false end
-        assert(deltaP_set_properly, "test_vavfan_curves: Variable fan pressure rise does not match necb requirement #{name}")
+        assert(deltaP_set_properly, "test_vavfan_rules: Variable fan pressure rise does not match necb requirement #{name}")
         necb_tot_eff = 0.55
         tot_eff = ifan.fanEfficiency
         diff = (tot_eff - necb_tot_eff).abs / necb_tot_eff
         tot_eff_set_properly = true
         if diff > 1.0e-3 then tot_eff_set_properly = false end
-        assert(tot_eff_set_properly, "test_vavfan_curves: Variable fan total efficiency does not match necb requirement #{name}")
+        assert(tot_eff_set_properly, "test_vavfan_rules: Variable fan total efficiency does not match necb requirement #{name}")
       end
     # Save the model
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "test_vavfan_curves: Failure in Standards for #{name}")
+      assert_equal(true, result, "test_vavfan_rules: Failure in Standards for #{name}")
       vav_fans = model.getFanVariableVolumes
       vavfan_res_file_output_text +=
         "#{vavfan_curve_names[fan_index-1]},cubic,#{'%.5E' % vav_fans[0].fanPowerCoefficient1},#{'%.5E' % vav_fans[0].fanPowerCoefficient2}," +
@@ -88,6 +88,54 @@ class HVACEfficienciesTest < MiniTest::Test
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
     "Variable volume fan performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+  end
+  
+  # Test to validate constant volume fan pressure rise and total efficiency
+  def test_const_vol_fan_rules
+    output_folder = "#{File.dirname(__FILE__)}/output/const_vol_fan_rules"
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
+    boiler_fueltype = 'NaturalGas'
+    mau_type = true
+    mau_heating_coil_type = 'Hot Water'
+    baseboard_type = 'Hot Water'
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
+    # save baseline
+    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+    name = 'sys1'
+    puts "***************************************#{name}*******************************************************\n"
+    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
+    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(
+      model, 
+      model.getThermalZones, 
+      boiler_fueltype, 
+      mau_type, 
+      mau_heating_coil_type, 
+      baseboard_type)
+    # Save the model after btap hvac.
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
+    # run the standards
+    result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+    fans = model.getFanVariableVolumes
+    fans.each do |ifan|
+      deltaP = ifan.pressureRise
+      necb_deltaP = 640.0
+      diff = (deltaP - necb_deltaP).abs / necb_deltaP
+      deltaP_set_properly = true
+      if diff > 1.0e-3 then deltaP_set_properly = false end
+      assert(deltaP_set_properly, "test_const_vol_fan_rules: Fan pressure rise does not match necb requirement #{name}")
+      necb_tot_eff = 0.55
+      tot_eff = ifan.fanEfficiency
+      diff = (tot_eff - necb_tot_eff).abs / necb_tot_eff
+      tot_eff_set_properly = true
+      if diff > 1.0e-3 then tot_eff_set_properly = false end
+      assert(tot_eff_set_properly, "test_const_vol_fan_rules: Fan total efficiency does not match necb requirement #{name}")
+    end
+    # Save the model
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
+    assert_equal(true, result, "test_const_vol_fan_rules: Failure in Standards for #{name}")
   end
   
   def run_simulations(output_folder)
