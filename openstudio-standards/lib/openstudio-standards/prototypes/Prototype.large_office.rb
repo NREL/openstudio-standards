@@ -28,10 +28,11 @@ class OpenStudio::Model::Model
       ]
     }
       when 'NECB 2011'
+        #Dom is A
       space_type_map = {
         "Electrical/Mechanical" => ["Basement"],
         
-        "Office - open plan" => [ "Core_bottom", "Core_mid", "Core_top", "MidFloor_Plenum", 
+        "Office - open plan" => [ "Core_bottom", "Core_mid", "Core_top",
           "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", 
           "Perimeter_bot_ZN_4", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", 
           "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", 
@@ -39,7 +40,7 @@ class OpenStudio::Model::Model
           "DataCenter_basement_ZN_6", "DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", 
           "DataCenter_top_ZN_6"],
         
-        "- undefined -" => ["GroundFloor_Plenum", "TopFloor_Plenum"]
+        "- undefined -" => ["GroundFloor_Plenum", "TopFloor_Plenum", "MidFloor_Plenum" ]
       }
     end
     return space_type_map

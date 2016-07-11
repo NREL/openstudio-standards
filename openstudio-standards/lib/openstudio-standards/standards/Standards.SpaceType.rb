@@ -31,7 +31,7 @@ class OpenStudio::Model::SpaceType
     space_type_properties = self.model.find_object($os_standards["space_types"], search_criteria)
 
     if space_type_properties.nil?
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
       space_type_properties = {}
     end
     
@@ -52,6 +52,7 @@ class OpenStudio::Model::SpaceType
     
     # Set the rendering color of the space type
     rgb = space_type_properties['rgb']
+    raise ("RGB not present in space type #{space_type_properties}") if rgb.nil?
     rgb = rgb.split('_')
     r = rgb[0].to_i
     g = rgb[1].to_i

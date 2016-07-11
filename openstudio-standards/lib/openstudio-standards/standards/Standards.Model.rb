@@ -3754,17 +3754,5 @@ class OpenStudio::Model::Model
   
   
   
-  def create_necb_compliance_models()
-    @proposed_model = nil
-    @space_sizing_model = nil
-    @hvac_sizing_model = nil
-    @reference_model = nil
-    #Do some preflight tests to ensure that we have what we need to perform a compliance run. 
-    #1-Space Type test. Ensure that all spacetypes in the model have been defined with NECB spacetypes. 
-    
-    
-    
-    
-  end
 
 end

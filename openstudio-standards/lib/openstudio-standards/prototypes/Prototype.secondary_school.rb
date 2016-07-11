@@ -52,17 +52,18 @@ class OpenStudio::Model::Model
         ]
       }
     when 'NECB 2011'
+      sch = "D"
       space_type_map ={
         "Audience - auditorium" => ["Auditorium_ZN_1_FLR_1"],
         "Gym - play" => ["Aux_Gym_ZN_1_FLR_1", "Gym_ZN_1_FLR_1"],
         "Washroom" => ["Bathrooms_ZN_1_FLR_1", "Bathrooms_ZN_1_FLR_2"],
         "Conf./meet./multi-purpose" => ["Cafeteria_ZN_1_FLR_1"],
         "Classroom/lecture/training" => ["Corner_Class_1_Pod_1_ZN_1_FLR_1", "Corner_Class_1_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_2_ZN_1_FLR_1", "Corner_Class_1_Pod_2_ZN_1_FLR_2", "Corner_Class_1_Pod_3_ZN_1_FLR_1", "Corner_Class_1_Pod_3_ZN_1_FLR_2", "Corner_Class_2_Pod_1_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_2", "Corner_Class_2_Pod_2_ZN_1_FLR_1", "Corner_Class_2_Pod_2_ZN_1_FLR_2", "Corner_Class_2_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_3_ZN_1_FLR_2", "Mult_Class_1_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_1_ZN_1_FLR_2", "Mult_Class_1_Pod_2_ZN_1_FLR_1", "Mult_Class_1_Pod_2_ZN_1_FLR_2", "Mult_Class_1_Pod_3_ZN_1_FLR_1", "Mult_Class_1_Pod_3_ZN_1_FLR_2", "Mult_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_2", "Mult_Class_2_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_2_ZN_1_FLR_2", "Mult_Class_2_Pod_3_ZN_1_FLR_1", "Mult_Class_2_Pod_3_ZN_1_FLR_2"],
-        "Corr. >= 2.4m wide" => ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_1_ZN_1_FLR_2", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_2", "Corridor_Pod_3_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_1", "Main_Corridor_ZN_1_FLR_2"],
+        "Corr. >= 2.4m wide-sch-#{sch}" => ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_1_ZN_1_FLR_2", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_2", "Corridor_Pod_3_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_1", "Main_Corridor_ZN_1_FLR_2"],
         "Food preparation" => ["Kitchen_ZN_1_FLR_1"],
         "Library - reading" => ["LIBRARY_MEDIA_CENTER_ZN_1_FLR_2"],
         "Lobby - elevator" => ["Lobby_ZN_1_FLR_1", "Lobby_ZN_1_FLR_2"],
-        "Electrical/Mechanical" => ["Mech_ZN_1_FLR_1", "Mech_ZN_1_FLR_2"],
+        "Electrical/Mechanical-sch-#{sch}" => ["Mech_ZN_1_FLR_1", "Mech_ZN_1_FLR_2"],
         "Office - enclosed" => ["Offices_ZN_1_FLR_1", "Offices_ZN_1_FLR_2"]
       }
     else

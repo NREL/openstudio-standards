@@ -6,9 +6,10 @@ class OpenStudio::Model::Model
     space_type_map = nil
     case building_vintage
     when 'NECB 2011'
+      sch = "B"
       space_type_map ={
-        "Electrical/Mechanical" => ["Basement"],
-        "Corr. >= 2.4m wide" => ["Corridor_Flr_1", "Corridor_Flr_2", "Corridor_Flr_5", "Corridor_NW_Flr_3", "Corridor_NW_Flr_4", "Corridor_SE_Flr_3", "Corridor_SE_Flr_4"],
+        "Electrical/Mechanical-sch-#{sch}" => ["Basement"],
+        "Hospital corr. >= 2.4m-sch-#{sch}" => ["Corridor_Flr_1", "Corridor_Flr_2", "Corridor_Flr_5", "Corridor_NW_Flr_3", "Corridor_NW_Flr_4", "Corridor_SE_Flr_3", "Corridor_SE_Flr_4"],
         "Dining - bar lounge/leisure" => ["Dining_Flr_5"],
         "Hospital - emergency" => ["ER_Exam1_Mult4_Flr_1", "ER_Exam3_Mult4_Flr_1", "ER_Trauma1_Flr_1", "ER_Trauma2_Flr_1", "ER_Triage_Mult4_Flr_1"],
         "Hospital - nurses' station" => ["ER_NurseStn_Lobby_Flr_1", "ICU_NurseStn_Lobby_Flr_2", "NurseStn_Lobby_Flr_3", "NurseStn_Lobby_Flr_4", "NurseStn_Lobby_Flr_5", "OR_NurseStn_Lobby_Flr_2"],
@@ -45,7 +46,7 @@ class OpenStudio::Model::Model
           'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_4', 
           'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4', ],
         'PhysTherapy' => ['PhysTherapy_Flr_3', ],
-      'Radiology' => ['Radiology_Flr_4', ]  # total number of zones: 55 - equals to the IDF
+        'Radiology' => ['Radiology_Flr_4', ]  # total number of zones: 55 - equals to the IDF
       }
     end
     return space_type_map
@@ -104,45 +105,45 @@ class OpenStudio::Model::Model
         'type' => 'CAV',
         'space_names' => [
           'Kitchen_Flr_5'
-          ]                     # 55 spaces assigned.
+        ]                     # 55 spaces assigned.
       },
-	  {
-            'type' => 'Refrigeration',
-            'case_type' => 'Walkin Freezer',
-            'cooling_capacity_per_length' => 734,
-            'length' => 10.98,
-            'evaporator_fan_pwr_per_length' => 69,
-            'lighting_per_length' => 33,
-            'lighting_sch_name' => 'Hospital BLDG_LIGHT_SCH',
-            'defrost_pwr_per_length' => 364,
-            'restocking_sch_name' => 'Hospital Kitchen_Flr_5_Case:1_WALKINFREEZER_WalkInStockingSched',
-            'cop' => 1.5,
-            'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
-            'condenser_fan_pwr' => 1000,
-            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-            'space_names' =>
-            [
-                'Kitchen_Flr_5'
-            ]
-        },
-	  {
-            'type' => 'Refrigeration',
-            'case_type' => 'Display Case',
-            'cooling_capacity_per_length' => 886.5,
-            'length' => 8.93,
-            'evaporator_fan_pwr_per_length' => 67,
-            'lighting_per_length' => 40,
-            'lighting_sch_name' => 'Hospital BLDG_LIGHT_SCH',
-            'defrost_pwr_per_length' => 0.0,
-            'restocking_sch_name' => 'Hospital Kitchen_Flr_5_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
-            'cop' => 3.0,
-            'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
-            'condenser_fan_pwr' => 1000,
-            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-            'space_names' =>
-            [
-                'Kitchen_Flr_5'
-            ]
+      {
+        'type' => 'Refrigeration',
+        'case_type' => 'Walkin Freezer',
+        'cooling_capacity_per_length' => 734,
+        'length' => 10.98,
+        'evaporator_fan_pwr_per_length' => 69,
+        'lighting_per_length' => 33,
+        'lighting_sch_name' => 'Hospital BLDG_LIGHT_SCH',
+        'defrost_pwr_per_length' => 364,
+        'restocking_sch_name' => 'Hospital Kitchen_Flr_5_Case:1_WALKINFREEZER_WalkInStockingSched',
+        'cop' => 1.5,
+        'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
+        'condenser_fan_pwr' => 1000,
+        'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+        'space_names' =>
+          [
+          'Kitchen_Flr_5'
+        ]
+      },
+      {
+        'type' => 'Refrigeration',
+        'case_type' => 'Display Case',
+        'cooling_capacity_per_length' => 886.5,
+        'length' => 8.93,
+        'evaporator_fan_pwr_per_length' => 67,
+        'lighting_per_length' => 40,
+        'lighting_sch_name' => 'Hospital BLDG_LIGHT_SCH',
+        'defrost_pwr_per_length' => 0.0,
+        'restocking_sch_name' => 'Hospital Kitchen_Flr_5_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
+        'cop' => 3.0,
+        'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
+        'condenser_fan_pwr' => 1000,
+        'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+        'space_names' =>
+          [
+          'Kitchen_Flr_5'
+        ]
       }
     ]
     return system_to_space_map
@@ -158,16 +159,16 @@ class OpenStudio::Model::Model
       'OR2_Mult5_Flr_2' => 5,
       'IC_PatRoom1_Mult5_Flr_2' => 5,
       'IC_PatRoom3_Mult6_Flr_2' => 6,
-	  'PatRoom1_Mult10_Flr_3' => 10,
-	  'PatRoom3_Mult10_Flr_3' => 10,
-	  'PatRoom5_Mult10_Flr_3' => 10, 
-	  'PatRoom7_Mult10_Flr_3' => 10,
-	  'PatRoom1_Mult10_Flr_4' => 10,
-	  'PatRoom3_Mult10_Flr_4' => 10,
-	  'PatRoom5_Mult10_Flr_4' => 10,
-	  'PatRoom7_Mult10_Flr_4' => 10,
-	  'Office2_Mult5_Flr_5' => 5,
-	  'Office4_Mult6_Flr_5' => 6
+      'PatRoom1_Mult10_Flr_3' => 10,
+      'PatRoom3_Mult10_Flr_3' => 10,
+      'PatRoom5_Mult10_Flr_3' => 10, 
+      'PatRoom7_Mult10_Flr_3' => 10,
+      'PatRoom1_Mult10_Flr_4' => 10,
+      'PatRoom3_Mult10_Flr_4' => 10,
+      'PatRoom5_Mult10_Flr_4' => 10,
+      'PatRoom7_Mult10_Flr_4' => 10,
+      'Office2_Mult5_Flr_5' => 5,
+      'Office4_Mult6_Flr_5' => 6
     }
     return space_multiplier_map
   end
@@ -177,16 +178,16 @@ class OpenStudio::Model::Model
   def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
     
     return true
-      # water_heater.setAmbientTemperatureIndicator('Zone')
+    # water_heater.setAmbientTemperatureIndicator('Zone')
   end
-      # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
+  # water_heater.setAmbientTemperatureThermalZone(default_water_heater_ambient_temp_sch)
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(0.798542707)
-    end
+      end
     end      
   end  
 

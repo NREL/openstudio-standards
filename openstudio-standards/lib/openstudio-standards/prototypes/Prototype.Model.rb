@@ -75,18 +75,20 @@ class OpenStudio::Model::Model
       self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage)
       self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)                                
       self.apply_performance_rating_method_construction_types(building_vintage)
-      #Getting System Fuel type types from BTAP::Environment. 
-      boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4,heating_coil_types_sys6, fan_type = BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
-      BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self, runner=nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type )
-      
-      self.set_sizing_parameters(building_type, building_vintage)
+            self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
       self.add_swh(building_type, building_vintage, climate_zone, prototype_input)  # note exhaust fan schedule for * common spaces.
       # TO DO: routine custom_swh_tweaks sets loss coefficient to ambient for water heater, differs for each archetype
       # NECB 2011 follows ASHRAE 90.1 for now, does this need to change?
       self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
       #      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-      #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)      
+      #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)  
+      #space_sizing_model = self.runSpaceSizingRun()
+      #Getting System Fuel type types from BTAP::Environment. 
+      boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4,heating_coil_types_sys6, fan_type = BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
+      BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self, runner=nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type )
+      
+    
 
       #      
       
@@ -452,19 +454,28 @@ class OpenStudio::Model::Model
       stub_space_type.set_rendering_color(building_vintage)
 
       space_names.each do |space_name|
-        
         space = self.getSpaceByName(space_name)
-        
         next if space.empty?
         space = space.get
         space.setSpaceType(stub_space_type)
-
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Setting #{space.name} to #{building_type}.#{space_type_name}")
       end
     end
-
     return true
   end
+  
+    def add_full_space_type_libs(template)
+    space_type_properties_list = self.find_objects($os_standards["space_types"], { "template" => 'NECB 2011'})
+    space_type_properties_list.each do |space_type_property|
+      stub_space_type = OpenStudio::Model::SpaceType.new(self)
+      stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
+      stub_space_type.setStandardsSpaceType(space_type_property['space_type'])
+      stub_space_type.setName("#{template}-#{space_type_property['building_type']}-#{space_type_property['space_type']}")
+      stub_space_type.set_rendering_color(template)
+    end
+    self.add_loads(template)
+  end
+  
 
   def assign_building_story(building_type, building_vintage, climate_zone, building_story_map)
     building_story_map.each do |building_story_name, space_names|
@@ -478,7 +489,6 @@ class OpenStudio::Model::Model
         space.setBuildingStory(stub_building_story)
       end
     end
-
     return true
   end
 
@@ -509,8 +519,6 @@ class OpenStudio::Model::Model
 
       # Schedules
       space_type.set_internal_load_schedules(building_vintage, true, true, true, true, true, true, true)
-      
-
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')

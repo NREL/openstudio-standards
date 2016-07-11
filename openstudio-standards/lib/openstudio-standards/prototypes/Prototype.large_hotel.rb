@@ -6,15 +6,17 @@ class OpenStudio::Model::Model
     space_type_map = nil
     case building_vintage
     when 'NECB 2011'
+      #Building Schedule
+      sch = "E"
       space_type_map ={
         "Hotel/Motel - dining" => ["Banquet_Flr_6", "Dining_Flr_6"],
-        "Storage area" => ["Basement", "Storage_Flr_1"],
+        "Storage area-sch" => ["Basement", "Storage_Flr_1"],
         "Retail - mall concourse" => ["Cafe_Flr_1"],
-        "Corr. >= 2.4m wide" => ["Corridor_Flr_3", "Corridor_Flr_6"],
+        "Corr. >= 2.4m wide-sch-#{sch}" => ["Corridor_Flr_3", "Corridor_Flr_6"],
         "Food preparation" => ["Kitchen_Flr_6"],
         "Hospital - laundry/washing" => ["Laundry_Flr_1"],
         "Hotel/Motel - lobby" => ["Lobby_Flr_1"],
-        "Electrical/Mechanical" => ["Mech_Flr_1"],
+        "Electrical/Mechanical-sch-#{sch}" => ["Mech_Flr_1"],
         "Retail - sales" => ["Retail_1_Flr_1", "Retail_2_Flr_1"],
         "Hotel/Motel - rooms" => ["Room_1_Flr_3", "Room_1_Flr_6", "Room_2_Flr_3", "Room_2_Flr_6", "Room_3_Mult19_Flr_3", "Room_3_Mult9_Flr_6", "Room_4_Mult19_Flr_3", "Room_5_Flr_3", "Room_6_Flr_3"]
       }
