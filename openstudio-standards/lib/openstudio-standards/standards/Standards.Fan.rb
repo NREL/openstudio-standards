@@ -47,7 +47,7 @@ module Fan
         allowed_hp = 1.01
       end
     end
-    
+
     # Find the motor efficiency
     motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, allowed_hp)
 
@@ -287,7 +287,7 @@ module Fan
   
     # Lookup the minimum motor efficiency
     motors = $os_standards["motors"]
-    
+
     # Assuming all fan motors are 4-pole ODP
     template_mod = template.dup
     if(template == 'NECB 2011') 
@@ -295,6 +295,8 @@ module Fan
         template_mod = template_mod+'-CONSTANT'
       elsif(self.class.name == 'OpenStudio::Model::FanVariableVolume')
         template_mod = template_mod+'-VARIABLE'
+        # 0.909 corrects for 10% over sizing implemented upstream
+        # 0.7457 is to convert from bhp to kW
         fan_power_kw = 0.909*0.7457*motor_bhp
         if(fan_power_kw >= 25.0)
           power_vs_flow_curve_name = 'VarVolFan-FCInletVanes-NECB2011-FPLR'
@@ -303,7 +305,7 @@ module Fan
         else
           power_vs_flow_curve_name = 'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
         end
-        power_vs_flow_curve = self.model.add_curve(power_vs_flow_curve_name, standards)
+        power_vs_flow_curve = self.model.add_curve(power_vs_flow_curve_name)
         self.setFanPowerMinimumFlowRateInputMethod("Fraction")
         self.setFanPowerCoefficient5(0.0)
         self.setFanPowerMinimumFlowFraction(power_vs_flow_curve.minimumValueofx)
