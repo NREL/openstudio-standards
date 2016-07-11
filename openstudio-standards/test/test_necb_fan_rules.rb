@@ -118,7 +118,7 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
     result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
-    fans = model.getFanVariableVolumes
+    fans = model.getFanConstantVolumes
     fans.each do |ifan|
       deltaP = ifan.pressureRise
       necb_deltaP = 640.0
@@ -126,7 +126,7 @@ class HVACEfficienciesTest < MiniTest::Test
       deltaP_set_properly = true
       if diff > 1.0e-3 then deltaP_set_properly = false end
       assert(deltaP_set_properly, "test_const_vol_fan_rules: Fan pressure rise does not match necb requirement #{name}")
-      necb_tot_eff = 0.55
+      necb_tot_eff = 0.4
       tot_eff = ifan.fanEfficiency
       diff = (tot_eff - necb_tot_eff).abs / necb_tot_eff
       tot_eff_set_properly = true
