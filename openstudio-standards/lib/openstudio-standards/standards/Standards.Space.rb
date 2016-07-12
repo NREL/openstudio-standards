@@ -2024,7 +2024,7 @@ Warehouse.Office
           infil.remove
         end
       end
-       # Remove infiltration rates set at the space object.
+      # Remove infiltration rates set at the space object.
       self.spaceInfiltrationDesignFlowRates.each do |infil|
         infil.remove
       end
@@ -2333,4 +2333,55 @@ Warehouse.Office
   
   end
   
+  def get_adjacent_spaces(same_floor = true)
+    same_floor_spaces = []
+    spaces = []
+    self.surfaces.each do |surface|
+      adj_surface = surface.adjacentSurface
+      unless adj_surface.empty?
+        self.model.getSpaces.each do |space|
+          next if space == self
+          space.surfaces.each do |surface|
+            if surface == adj_surface.get
+              spaces << space
+            end
+          end
+        end
+      end
+    end
+    #If looking for only spaces adjacent on the same floor. 
+    if same_floor == true
+      raise ("Cannot get adjacent spaces of space #{self.name} since space not set to BuildingStory") if self.buildingStory.empty?
+      spaces.each do |space|
+        raise ("One or more adjecent spaces to space #{self.name} is not assigned to a BuildingStory. Ensure all spaces are assigned.") if space.buildingStory.empty?
+        if space.buildingStory.get == self.buildingStory.get
+          same_floor_spaces << space
+        end
+      end
+      return same_floor_spaces
+    end
+    return spaces
+  end
+  def get_adjacent_space_with_most_shared_wall_area(same_floor = true)
+    area_index = []
+    adj_spaces = get_adjacent_spaces(same_floor)
+    self.surfaces.each do |surface|
+      adj_surface = surface.adjacentSurface
+      unless adj_surface.empty?
+        adj_spaces.each_with_index do |space,index|
+          next if space == self
+          space.surfaces.each do |surface|
+            if surface == adj_surface.get
+              area_index[index] = 0 if area_index[index].nil?
+              area_index[index] += surface.grossArea
+            end
+          end
+        end
+      end
+    end
+    return adj_spaces[area_index.each_with_index.max[1]]
+  end
+  
 end
+
+

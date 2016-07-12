@@ -7,17 +7,18 @@ class OpenStudio::Model::Model
     space_type_map = nil
     case building_vintage
     when 'NECB 2011'
+      sch ="D"
       space_type_map ={
-        "Washroom" => ["Bath_ZN_1_FLR_1"],
+        "Washroom-sch-#{sch}" => ["Bath_ZN_1_FLR_1"],
         "Conf./meet./multi-purpose" => ["Cafeteria_ZN_1_FLR_1"],
         "Lab - classrooms" => ["Computer_Class_ZN_1_FLR_1"],
         "Classroom/lecture/training" => ["Corner_Class_1_Pod_1_ZN_1_FLR_1", "Corner_Class_1_Pod_2_ZN_1_FLR_1", "Corner_Class_1_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_1", "Corner_Class_2_Pod_2_ZN_1_FLR_1", "Corner_Class_2_Pod_3_ZN_1_FLR_1", "Mult_Class_1_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_2_ZN_1_FLR_1", "Mult_Class_1_Pod_3_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_2_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_3_ZN_1_FLR_1"],
-        "Corr. >= 2.4m wide" => ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_1", "Main_Corridor_ZN_1_FLR_1"],
+        "Corr. >= 2.4m wide-sch-#{sch}" => ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_1", "Main_Corridor_ZN_1_FLR_1"],
         "Gym - play" => ["Gym_ZN_1_FLR_1"],
         "Food preparation" => ["Kitchen_ZN_1_FLR_1"],
         "Library - reading" => ["Library_Media_Center_ZN_1_FLR_1"],
         "Lobby - elevator" => ["Lobby_ZN_1_FLR_1"],
-        "Electrical/Mechanical" => ["Mech_ZN_1_FLR_1"],
+        "Electrical/Mechanical-sch-#{sch}" => ["Mech_ZN_1_FLR_1"],
         "Office - enclosed" => ["Offices_ZN_1_FLR_1"]
       }
     else

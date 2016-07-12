@@ -11,6 +11,7 @@ class OpenStudio::Model::Model
     space_type_map = nil
     case building_vintage
     when 'NECB 2011'
+      sch = "C"
       space_type_map ={
         "Storage area" => ["Back_Space"],
         "Retail - sales" => ["Core_Retail", "Front_Retail", "Point_Of_Sale"],

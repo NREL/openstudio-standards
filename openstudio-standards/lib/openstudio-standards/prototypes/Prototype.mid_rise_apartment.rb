@@ -74,10 +74,11 @@ class OpenStudio::Model::Model
       }
 		 
     when 'NECB 2011'
+      sch = "G"
       space_type_map ={
-        "Corr. < 2.4m wide" => ["G Corridor", "M Corridor", "T Corridor"],
+        "Corr. < 2.4m wide-sch-#{sch}" => ["G Corridor", "M Corridor", "T Corridor"],
         
-        "Dormitory - living quarters" => ["G N1 Apartment", "G N2 Apartment", "G NE Apartment", 
+        "Dwelling Unit(s)" => ["G N1 Apartment", "G N2 Apartment", "G NE Apartment", 
           "G NW Apartment", "G S1 Apartment", "G S2 Apartment", 
           "G SW Apartment", "M N1 Apartment", "M N2 Apartment", 
           "M NE Apartment", "M NW Apartment", "M S1 Apartment", 

@@ -205,7 +205,6 @@ module BTAP
             # I was thinking of adding a suffix to the name to make it more descriptive, but this can be confusing. Keeping it here if I need it later.
             # name = name + " " + "t=" + sprintf("%.3f", thickness) + "c=" + sprintf("%.3f", conductance) + "d=" + sprintf("%.3f", density) + "s=" + sprintf("%.3", specific_heat)
             material = OpenStudio::Model::StandardOpaqueMaterial.new( model, roughness , thickness, conductivity , density, specific_heat )
-            puts material
             material.setName( name ) unless name == "" or name == nil
             material.setThermalAbsorptance( thermal_absorptance )
             material.setSolarAbsorptance( solar_absorptance )
