@@ -589,8 +589,6 @@ module BTAP
           raise ("Did not find #{space.spaceType.get.name} in NECB space types.") if found_space_type == false
         end
         #finds max value and returns NECB schedule letter.
-        puts s
-        raise ("Hell")
         raise("Only wildcard spaces in model. You need to define the actual spaces. ") if  wildcard_spaces == model.getSpaces.size
         dominant_schedule =  s.each { |k, v| return k.to_s if v == s.values.max }
         return dominant_schedule
@@ -636,27 +634,8 @@ module BTAP
         #        BTAP::Compliance::NECB2011::set_wildcard_schedules_to_dominant_building_schedule(model, runner)
         #        
         #        
-        #Do a sizing run.
-        # Remove any Thermal zones assigned
-        model.getThermalZones.each { |zone| zone.remove}
-      
-        # Assign Thermal Zones for each space. 
-        model.getSpaces.each do |space|
-          #create and assign thermal zone to space.
-          zone = OpenStudio::Model::ThermalZone.new(model)
-          zone.setName("#{space.name} ZN")
-          space.setThermalZone(zone)
-          #Set Ideal loads to thermal zone for sizing. 
-          ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
-          ideal_loads.addToThermalZone(zone)
-        end
-      
-        #Set Thermostats for each zone. 
-        BTAP::Compliance::NECB2011::set_zones_thermostat_schedule_based_on_space_type_schedules(model)
 
-        #Perform a sizing run
-        index = SecureRandom.uuid
-        raise ("Failed Sizind run for spaces ") unless model.runSizingRun("#{Dir.pwd}/SpaceSizingRun/#{index}")
+
         
         #find the number of stories in the model. 
         number_of_stories = model.getBuildingStorys.size
@@ -683,7 +662,7 @@ module BTAP
             raise("could not find necb system selection type for space: #{space.get.name}") if space_type_property.nil?
           end
           
-          #Get the heating and cooling load for the space. 
+          #Get the heating and cooling load for the space.
           coolingDesignLoad = space.thermalZone.get.coolingDesignLoad.get
           heatingDesignLoad = space.thermalZone.get.heatingDesignLoad.get
           
@@ -763,7 +742,7 @@ module BTAP
             schedule_type_array <<  BTAP::Compliance::NECB2011::determine_necb_schedule_type( space ).to_s
           end
         end
-        #remove duplicates
+
         return schedule_type_array.uniq! , space_zoning_data_array
       end
 
@@ -858,12 +837,13 @@ module BTAP
           BTAP::runner_register("ERROR","heating_coil_types_sys4 = #{heating_coil_types_sys4}",runner)
           return false
         end
-        
-        #Remove any zones that exist.
-        model.getThermalZones.each {|zone| zone.remove}
 
         #this method will determine the spaces that should be set to each system
         schedule_type_array , space_zoning_data_array = self.necb_spacetype_system_selection(model)
+        
+#        #remove any thermal zones used for sizing to start fresh. Should only do this after the above system selection method. 
+        model.getThermalZones.each {|zone| zone.remove}
+
         
         #now lets apply the rules. 
         # Rule1 all zones must contain only the same schedule / occupancy schedule. 
@@ -905,9 +885,6 @@ module BTAP
                   name = "Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement}"
                   thermal_zone = BTAP::Geometry::Zones::create_thermal_zone(model, space_array)
                   thermal_zone.setAttribute("name",name)
-                  BTAP::runner_register("INFO", "ThermalZone:#{name} Created with the following spaces:", runner)
-                  space_array.each do |space|
-                  end
                   #add thermal zone to system array.
                   system_zone_array[system_number] << thermal_zone
                 end
@@ -915,27 +892,7 @@ module BTAP
             end
           end
         end #system iteration
-        BTAP::runner_register("INFO", "ThermalZone:#{name} Created with the following spaces:", runner)
-        #print Thermalzone map. 
-        counter = 0
-        system_zone_array.each do |system|
-          puts "Systems #{counter}"
-          system.each do |zone|
-            counter += 1
-            puts "\tZone Name => #{zone.name} #Spaces => #{zone.spaces.size}"
-            zone.spaces.each do |space|
-              puts "\t\t SpaceName #{space.name}"
-            end
-          end
-        end
-        
-        
-        
-        
-        
-        #Set Thermostats
-        BTAP::Compliance::NECB2011::set_zones_thermostat_schedule_based_on_space_type_schedules(model,runner)
-        
+
         #Create and assign the zones to the systems.
         unless use_ideal_air_loads == true
           system_zone_array.each_with_index do |zones,system_index|

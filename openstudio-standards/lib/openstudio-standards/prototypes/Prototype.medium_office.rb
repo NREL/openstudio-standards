@@ -7,13 +7,14 @@ class OpenStudio::Model::Model
     case building_vintage 
     when 'NECB 2011'
       space_type_map ={
+        #"- undefined -" => ["FirstFloor_Plenum", "TopFloor_Plenum", "MidFloor_Plenum"],
         "Office - open plan" => ["Core_bottom", "Core_mid", "Core_top", 
           "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", 
           "Perimeter_bot_ZN_4", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", 
           "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", 
-          "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"],
+          "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"]
         
-        "- undefined -" => ["FirstFloor_Plenum", "TopFloor_Plenum", "MidFloor_Plenum"]
+        
       }
     else
       space_type_map = {

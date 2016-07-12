@@ -10,7 +10,7 @@ class OpenStudio::Model::Model
       sch = "E"
       space_type_map ={
         "Hotel/Motel - dining" => ["Banquet_Flr_6", "Dining_Flr_6"],
-        "Storage area-sch" => ["Basement", "Storage_Flr_1"],
+        "Storage area" => ["Basement", "Storage_Flr_1"],
         "Retail - mall concourse" => ["Cafe_Flr_1"],
         "Corr. >= 2.4m wide-sch-#{sch}" => ["Corridor_Flr_3", "Corridor_Flr_6"],
         "Food preparation" => ["Kitchen_Flr_6"],

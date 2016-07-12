@@ -2252,7 +2252,7 @@ module BTAP
           if space_obj.buildingStory.empty?
           
             story = getStoryForNominalZCoordinate(model, space_minz)
-            puts("Setting story of Space " + space_obj.name.get + " to " + story.name.get + ".")
+            #puts("Setting story of Space " + space_obj.name.get + " to " + story.name.get + ".")
             space_obj.setBuildingStory(story)
           end
         end

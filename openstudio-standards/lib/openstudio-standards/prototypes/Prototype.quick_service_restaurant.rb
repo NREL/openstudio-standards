@@ -19,7 +19,7 @@ class OpenStudio::Model::Model
     when 'NECB 2011'
       #dom = B
       space_type_map ={
-        "- undefined -" => ["attic"],
+        #"- undefined -" => ["attic"],
         "Dining - bar lounge/leisure" => ["Dining"],
         "Food preparation" => ["Kitchen"]
       }
