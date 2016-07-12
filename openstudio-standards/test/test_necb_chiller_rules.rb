@@ -88,15 +88,15 @@ class HVACEfficienciesTest < MiniTest::Test
         model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
         # run the standards
         result = run_the_measure(model,"#{output_folder}/#{name}/sizing")
+        # Save the model
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
+        assert_equal(true, result, "Failure in Standards for #{name}")
         model.getChillerElectricEIRs.each do |ichiller|
           if ichiller.referenceCapacity.to_f > 1
             actual_chiller_cop[chiller_type] << ichiller.referenceCOP.round(1)
             break
           end
         end
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "Failure in Standards for #{name}")
       end
     end
 
@@ -127,7 +127,7 @@ class HVACEfficienciesTest < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     first_cutoff_chlr_cap = 2100000.0
-    small = 1.0e-6
+    tol = 1.0e-3
     # Generate the osm files for all relevant cases to generate the test data for system 6
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
@@ -158,6 +158,9 @@ class HVACEfficienciesTest < MiniTest::Test
         model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
         # run the standards
         result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+        # Save the model
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
+        assert_equal(true, result, "Failure in Standards for #{name}")
         chillers = model.getChillerElectricEIRs
         # check that there are two chillers in the model
         num_of_chillers_is_correct = false
@@ -175,27 +178,24 @@ class HVACEfficienciesTest < MiniTest::Test
           if ichiller.name.to_s.include? 'Primary Chiller'
             chiller_cap_is_correct = false
             if this_is_the_first_cap_range
-              cap_diff = (chiller_cap - ichiller.referenceCapacity.to_f).abs
+              cap_diff = (chiller_cap - ichiller.referenceCapacity.to_f).abs / chiller_cap
             elsif this_is_the_second_cap_range
-              cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs
+              cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs / (0.5 * chiller_cap)
             end
-            if cap_diff < small then chiller_cap_is_correct = true end
+            if cap_diff < tol then chiller_cap_is_correct = true end
             assert(chiller_cap_is_correct, 'Primary chiller capacity is not correct')
           end
           if ichiller.name.to_s.include? 'Secondary Chiller'
             chiller_cap_is_correct = false
             if this_is_the_first_cap_range
-              cap_diff = (ichiller.referenceCapacity.to_f - 0.001).abs
+              cap_diff = (ichiller.referenceCapacity.to_f - 0.001).abs 
             elsif this_is_the_second_cap_range
-              cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs
+              cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs / (0.5 * chiller_cap)
             end
-            if cap_diff < small then chiller_cap_is_correct = true end
+            if cap_diff < tol then chiller_cap_is_correct = true end
             assert(chiller_cap_is_correct, 'Secondary chiller capacity is not correct')
           end
         end
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "Failure in Standards for #{name}")
       end
     end
   end

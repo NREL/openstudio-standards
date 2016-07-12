@@ -31,6 +31,7 @@ class HVACEfficienciesTest < MiniTest::Test
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     fan_index = 1
+    tol = 1.0e-3
     vavfan_caps.each do |cap|
       name = "sys6_vavfancap~#{cap}watts"
       puts "***************************************#{name}*******************************************************\n"
@@ -53,26 +54,35 @@ class HVACEfficienciesTest < MiniTest::Test
         flow_rate = cap * fan_eff/deltaP
         ifan.setMaximumFlowRate(flow_rate)
       end
-    # run the standards
+      # run the standards
       result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+      # Save the model
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
+      assert_equal(true, result, "test_vavfan_rules: Failure in Standards for #{name}")
       vavfans = model.getFanVariableVolumes
       vavfans.each do |ifan|
         deltaP = ifan.pressureRise
         necb_deltaP = 1000.0
         diff = (deltaP - necb_deltaP).abs / necb_deltaP
         deltaP_set_properly = true
-        if diff > 1.0e-3 then deltaP_set_properly = false end
+        if diff > tol then deltaP_set_properly = false end
         assert(deltaP_set_properly, "test_vavfan_rules: Variable fan pressure rise does not match necb requirement #{name}")
         necb_tot_eff = 0.55
         tot_eff = ifan.fanEfficiency
         diff = (tot_eff - necb_tot_eff).abs / necb_tot_eff
         tot_eff_set_properly = true
-        if diff > 1.0e-3 then tot_eff_set_properly = false end
+        if diff > tol then tot_eff_set_properly = false end
         assert(tot_eff_set_properly, "test_vavfan_rules: Variable fan total efficiency does not match necb requirement #{name}")
       end
-    # Save the model
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "test_vavfan_rules: Failure in Standards for #{name}")
+      # check enthalpy economizer
+      airloops = model.getAirLoopHVACs
+      airloops.each do |iloop|
+        oa_sys = iloop.airLoopHVACOutdoorAirSystem.get
+        oa_ctl = oa_sys.getControllerOutdoorAir
+        econ_is_diff_enthalpy = true
+        if oa_ctl.getEconomizerControlType.to_s != 'DifferentialEnthalpy' then econ_is_diff_enthalpy = false end
+        assert(econ_is_diff_enthalpy, "test_vavfan_rules: Economizer control does not match necb requirement #{name}")
+      end
       vav_fans = model.getFanVariableVolumes
       vavfan_res_file_output_text +=
         "#{vavfan_curve_names[fan_index-1]},cubic,#{'%.5E' % vav_fans[0].fanPowerCoefficient1},#{'%.5E' % vav_fans[0].fanPowerCoefficient2}," +
@@ -105,8 +115,6 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = 'sys1'
     puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(
       model, 
       model.getThermalZones, 
@@ -118,24 +126,33 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
     result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+    # Save the model
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
+    assert_equal(true, result, "test_const_vol_fan_rules: Failure in Standards for #{name}")
     fans = model.getFanConstantVolumes
+    tol = 1.0e-3
     fans.each do |ifan|
       deltaP = ifan.pressureRise
       necb_deltaP = 640.0
       diff = (deltaP - necb_deltaP).abs / necb_deltaP
       deltaP_set_properly = true
-      if diff > 1.0e-3 then deltaP_set_properly = false end
+      if diff > tol then deltaP_set_properly = false end
       assert(deltaP_set_properly, "test_const_vol_fan_rules: Fan pressure rise does not match necb requirement #{name}")
       necb_tot_eff = 0.4
       tot_eff = ifan.fanEfficiency
       diff = (tot_eff - necb_tot_eff).abs / necb_tot_eff
       tot_eff_set_properly = true
-      if diff > 1.0e-3 then tot_eff_set_properly = false end
+      if diff > tol then tot_eff_set_properly = false end
       assert(tot_eff_set_properly, "test_const_vol_fan_rules: Fan total efficiency does not match necb requirement #{name}")
     end
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_const_vol_fan_rules: Failure in Standards for #{name}")
+    airloops = model.getAirLoopHVACs
+    airloops.each do |iloop|
+      oa_sys = iloop.airLoopHVACOutdoorAirSystem.get
+      oa_ctl = oa_sys.getControllerOutdoorAir
+      econ_is_diff_enthalpy = true
+      if oa_ctl.getEconomizerControlType.to_s != 'DifferentialEnthalpy' then econ_is_diff_enthalpy = false end
+      assert(econ_is_diff_enthalpy, "test_vavfan_rules: Economizer control does not match necb requirement #{name}")
+    end
   end
   
   def run_simulations(output_folder)

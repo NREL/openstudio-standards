@@ -93,15 +93,15 @@ class HVACEfficienciesTest < MiniTest::Test
         model.getBoilerHotWaters.each { |iboiler| iboiler.setNominalCapacity(boiler_cap) }
         # run the standards
         result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+        # Save the model
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
+        assert_equal(true, result, "test_boiler_efficiency: Failure in Standards for #{name}")
         model.getBoilerHotWaters.each do |iboiler|
           if iboiler.nominalCapacity.to_f > 1
             actual_boiler_thermal_eff[boiler_fueltype] << iboiler.nominalThermalEfficiency
             break
           end
         end
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "test_boiler_efficiency: Failure in Standards for #{name}")
       end
     end
 
@@ -149,7 +149,7 @@ class HVACEfficienciesTest < MiniTest::Test
     FileUtils.mkdir_p(output_folder)
     first_cutoff_blr_cap = 176000.0
     second_cutoff_blr_cap = 352000.0
-    small = 1.0e-6
+    tol = 1.0e-3
     # Generate the osm files for all relevant cases to generate the test data for system 3
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
@@ -175,6 +175,9 @@ class HVACEfficienciesTest < MiniTest::Test
       model.getBoilerHotWaters.each { |iboiler| iboiler.setNominalCapacity(boiler_cap) }
       # run the standards
       result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+      # Save the model
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
+      assert_equal(true, result, "test_number_of_boilers: Failure in Standards for #{name}")
       boilers = model.getBoilerHotWaters
       # check that there are two boilers in the model
       num_of_boilers_is_correct = false
@@ -195,11 +198,11 @@ class HVACEfficienciesTest < MiniTest::Test
         if iboiler.name.to_s.include? 'Primary Boiler'
           boiler_cap_is_correct = false
           if this_is_the_first_cap_range || this_is_the_third_cap_range
-            cap_diff = (boiler_cap - iboiler.nominalCapacity.to_f).abs
+            cap_diff = (boiler_cap - iboiler.nominalCapacity.to_f).abs / boiler_cap
           elsif this_is_the_second_cap_range
-            cap_diff = (0.5 * boiler_cap - iboiler.nominalCapacity.to_f).abs
+            cap_diff = (0.5 * boiler_cap - iboiler.nominalCapacity.to_f).abs / (0.5 * boiler_cap)
           end
-          if cap_diff < small then boiler_cap_is_correct = true end
+          if cap_diff < tol then boiler_cap_is_correct = true end
           assert(boiler_cap_is_correct, 'test_number_of_boilers: Primary boiler capacity is not correct')
         end
         if iboiler.name.to_s.include? 'Secondary Boiler'
@@ -207,15 +210,12 @@ class HVACEfficienciesTest < MiniTest::Test
           if this_is_the_first_cap_range || this_is_the_third_cap_range
             cap_diff = (iboiler.nominalCapacity.to_f - 0.001).abs
           elsif this_is_the_second_cap_range
-            cap_diff = (0.5*boiler_cap - iboiler.nominalCapacity.to_f).abs
+            cap_diff = (0.5 * boiler_cap - iboiler.nominalCapacity.to_f).abs / (0.5 * boiler_cap)
           end
-          if cap_diff < small then boiler_cap_is_correct = true end
+          if cap_diff < tol then boiler_cap_is_correct = true end
           assert(boiler_cap_is_correct, 'test_number_of_boilers: Secondary boiler capacity is not correct')
         end
       end
-      # Save the model
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "test_number_of_boilers: Failure in Standards for #{name}")
     end
   end
 
