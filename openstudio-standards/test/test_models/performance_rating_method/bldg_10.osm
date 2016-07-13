@@ -34216,8 +34216,21 @@ OS:StandardsInformation:Construction,
   {8185e692-8fdf-4983-b4ce-28f6817bee2f}, !- Handle
   {f32204b4-d8c6-4616-a7cd-dfcb48658a8d}, !- Construction Name
   ExteriorWindow,                         !- Intended Surface Type
-  Metal framing (all other);              !- Standards Construction Type
-
+  ,                                       !- Standards Construction Type
+  ,                                       !- Perturbable Layer
+  ,                                       !- Perturbable Layer Type
+  ,                                       !- Other Perturbable Layer Type
+  ,                                       !- Construction Standard
+  ,                                       !- Construction Standard Source
+  ,                                       !- Fenestration Type
+  ,                                       !- Fenestration Assembly Context
+  ,                                       !- Fenestration Number of Panes
+  Metal Framing,                          !- Fenestration Frame Type
+  ,                                       !- Fenestration Divider Type
+  ,                                       !- Fenestration Tint
+  ;                                       !- Fenestration Gas Fill  
+  
+  
 OS:Material,
   {5213154e-0ea8-40f5-88ce-0730ffa41a2d}, !- Handle
   14038 Office Wall Rigid Insulation,     !- Name

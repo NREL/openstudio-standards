@@ -74626,14 +74626,14 @@ OS:Construction,
 OS:StandardsInformation:Construction,
   {66bd99f2-3984-45aa-834e-9d149d8c805a}, !- Handle
   {b56a0eee-1d17-4ef7-b2a8-c184a27558bc}, !- Construction Name
-  ExteriorWindow,                         !- Intended Surface Type
+  Skylight,                               !- Intended Surface Type
   ,                                       !- Standards Construction Type
   ,                                       !- Perturbable Layer
   ,                                       !- Perturbable Layer Type
   ,                                       !- Other Perturbable Layer Type
   ,                                       !- Construction Standard
   ,                                       !- Construction Standard Source
-  ,                                       !- Fenestration Type
+  Glass Skylight with Curb,               !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
   ,                                       !- Fenestration Frame Type
