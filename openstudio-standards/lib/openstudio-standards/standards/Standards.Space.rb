@@ -2226,14 +2226,17 @@ Warehouse.Office
 
     plenum_status = false
 
-    # Check if it is part of a zone
-    # that is a supply/return plenum
-    zone = self.thermalZone
-    if zone.is_initialized
-      if zone.get.isPlenum
-        plenum_status = true
-      end
+    # Check if it is designated
+    # as not part of the building
+    # floor area.  This method internally
+    # also checks to see if the space's zone
+    # is a supply or return plenum 
+    unless self.partofTotalFloorArea
+      plenum_status = true
+      return plenum_status
     end
+    
+    # todo - update to check if it has internal loads
 
     # Check if the space type name
     # contains the word plenum.
@@ -2242,20 +2245,14 @@ Warehouse.Office
       space_type = space_type.get
       if space_type.name.get.to_s.downcase.include?('plenum')
         plenum_status = true
+        return plenum_status
       end
       if space_type.standardsSpaceType.is_initialized
         if space_type.standardsSpaceType.get.downcase.include?('plenum')
           plenum_status = true
+          return plenum_status
         end
       end
-    end
-
-    # Check if it is designated
-    # as not part of the building
-    # floor area.
-    # todo - update to check if it has internal loads
-    unless self.partofTotalFloorArea
-      plenum_status = true
     end
 
     return plenum_status
