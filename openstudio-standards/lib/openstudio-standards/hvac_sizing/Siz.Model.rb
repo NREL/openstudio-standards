@@ -80,8 +80,7 @@ class OpenStudio::Model::Model
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
     
-    #remove files generated from sizing run. 
-    FileUtils.rm_rf(sizing_run_dir)
+
     
     return true
 

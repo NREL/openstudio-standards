@@ -2333,7 +2333,8 @@ Warehouse.Office
   
   end
   
-  def get_adjacent_spaces(same_floor = true)
+  #will return a sorted array of array of spaces and connected area (Descending) 
+  def get_adjacent_spaces_with_shared_wall_areas(same_floor = true)
     same_floor_spaces = []
     spaces = []
     self.surfaces.each do |surface|
@@ -2358,28 +2359,38 @@ Warehouse.Office
           same_floor_spaces << space
         end
       end
-      return same_floor_spaces
+      spaces =  same_floor_spaces
     end
-    return spaces
-  end
-  def get_adjacent_space_with_most_shared_wall_area(same_floor = true)
+
+    #now sort by areas.    
     area_index = []
-    adj_spaces = get_adjacent_spaces(same_floor)
+    array_hash ={}
+    return nil if spaces.size == 0
+    #iterate through each surface in the space
     self.surfaces.each do |surface|
+      #get the adjacent surface in another space.
       adj_surface = surface.adjacentSurface
       unless adj_surface.empty?
-        adj_spaces.each_with_index do |space,index|
+        #go through each of the adjeacent spaces to find the matching  surface/space.
+        spaces.each_with_index do |space,index|
           next if space == self
           space.surfaces.each do |surface|
             if surface == adj_surface.get
+              #initialize array index to zero for first time so += will work. 
               area_index[index] = 0 if area_index[index].nil?
               area_index[index] += surface.grossArea
+              array_hash[space] = area_index[index]
             end
           end
         end
       end
     end
-    return adj_spaces[area_index.each_with_index.max[1]]
+    sorted_spaces = array_hash.sort_by {|_key, value| value}.reverse
+    return sorted_spaces
+  end
+  
+  def get_adjacent_space_with_most_shared_wall_area(same_floor = true)
+    return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
   
 end

@@ -3732,6 +3732,13 @@ class OpenStudio::Model::Model
       space_multiplier = 1
     end
 
+    #If there is no service hot water load.. Don't bother adding anything. 
+    if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 ||
+       data['service_water_heating_peak_flow_rate'].to_f == 0.0 
+        return nil
+    end
+    
+    
     # Water use connection
     swh_connection = OpenStudio::Model::WaterUseConnections.new(self)
 

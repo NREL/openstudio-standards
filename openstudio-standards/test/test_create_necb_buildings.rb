@@ -76,18 +76,18 @@ DEBUG = false
 #end
 #
 ##MediumOffice
-#class TestNECBMediumOffice < CreateDOEPrototypeBuildingTest
-#  building_types = ['MediumOffice']
-#  templates = NECB_templates
-#  climate_zones = NECB_climate_zone
-#  epw_files = NECB_epw_files_for_cdn_climate_zones
-#  create_models = CREATE_MODELS
-#  run_models = RUN_MODELS
-#  compare_results = COMPARE_RESULTS
-#  debug = DEBUG
-#  TestNECBMediumOffice.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
-#  # TestNECBMediumOffice.compare_test_results(building_types, templates, climate_zones, file_ext="")
-#end
+class TestNECBMediumOffice < CreateDOEPrototypeBuildingTest
+  building_types = ['MediumOffice']
+  templates = NECB_templates
+  climate_zones = NECB_climate_zone
+  epw_files = NECB_epw_files_for_cdn_climate_zones
+  create_models = CREATE_MODELS
+  run_models = RUN_MODELS
+  compare_results = COMPARE_RESULTS
+  debug = DEBUG
+  TestNECBMediumOffice.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
+  # TestNECBMediumOffice.compare_test_results(building_types, templates, climate_zones, file_ext="")
+end
 #
 ##MidriseApartment
 #class TestNECBMidriseApartment < CreateDOEPrototypeBuildingTest
@@ -174,18 +174,18 @@ DEBUG = false
 #end
 #
 #SmallHotel
-class TestNECBSmallHotel < CreateDOEPrototypeBuildingTest
-  building_types = ['SmallHotel']
-  templates = NECB_templates
-  climate_zones = NECB_climate_zone
-  epw_files = NECB_epw_files_for_cdn_climate_zones
-  create_models = CREATE_MODELS
-  run_models = RUN_MODELS
-  compare_results = COMPARE_RESULTS
-  debug = DEBUG
-  TestNECBSmallHotel.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
-  # TestNECBSmallHotel.compare_test_results(building_types, templates, climate_zones, file_ext="")
-end
+#class TestNECBSmallHotel < CreateDOEPrototypeBuildingTest
+#  building_types = ['SmallHotel']
+#  templates = NECB_templates
+#  climate_zones = NECB_climate_zone
+#  epw_files = NECB_epw_files_for_cdn_climate_zones
+#  create_models = CREATE_MODELS
+#  run_models = RUN_MODELS
+#  compare_results = COMPARE_RESULTS
+#  debug = DEBUG
+#  TestNECBSmallHotel.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
+#  # TestNECBSmallHotel.compare_test_results(building_types, templates, climate_zones, file_ext="")
+#end
 #
 ##SmallOffice
 #class TestNECBSmallOffice < CreateDOEPrototypeBuildingTest
