@@ -28,7 +28,9 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
         min_damper_position = 0.3
       end
     end
-    
+	
+	
+	
     # TODO remove the template conditional; doesn't make sense
     # Determine whether or not to use the high minimum guess.
     # Cutoff was determined by correlating apparent minimum guesses

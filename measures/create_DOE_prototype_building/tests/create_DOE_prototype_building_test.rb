@@ -27,7 +27,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
   end
 
   # Create a set of models, return a list of failures
-  def create_models(bldg_types, vintages, climate_zones)
+  def create_models(bldg_types, vintages, climate_zones , epw_files)
 
     #### Create the prototype building
     failures = []
@@ -36,8 +36,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
     bldg_types.sort.each do |building_type|
       vintages.sort.each do |template|
         climate_zones.sort.each do |climate_zone|
-    
-          model_name = "#{building_type}-#{template}-#{climate_zone}"
+          epw_files.sort.each do |epw_file|
+		  
+          model_name = "#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
           puts "****Testing #{model_name}****"
           
           # Create an instance of the measure
@@ -63,6 +64,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
           climate_zone_arg = arguments[2].clone
           assert(climate_zone_arg.setValue(climate_zone))
           argument_map['climate_zone'] = climate_zone_arg
+		  
+		  epw_file_arg = arguments[3].clone
+          assert(epw_file_arg.setValue(epw_file))
+          argument_map['epw_file'] = epw_file_arg
+		  
 
           measure.run(model, runner, argument_map)
           result = runner.result
@@ -83,6 +89,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
         end     
       end
     end
+	end
 
     #### Return the list of failures
     return failures
@@ -152,7 +159,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
               if File.exist?(epw_path.get.to_s)
                 epw_path = epw_path.get
               else
-                failures << "Error - #{model_name} - Model has not been assigned a weather file."
+                failures << "Error - #{model_name} - Model has not been assigned a weather file1."
                 return failures
               end
             else
@@ -160,7 +167,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Unit::TestCase
               return failures
             end
           else
-            failures << "Error - #{model_name} - Model has not been assigned a weather file."
+            failures << "Error - #{model_name} - Model has not been assigned a weather file.2"
             return failures
           end
 

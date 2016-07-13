@@ -27,6 +27,7 @@ class OpenStudio::Model::SpaceType
     }
 
     # lookup space type properties
+    
     space_type_properties = self.model.find_object($os_standards["space_types"], search_criteria)
 
     if space_type_properties.nil?
@@ -47,7 +48,8 @@ class OpenStudio::Model::SpaceType
  
     # Get the standards data
     space_type_properties = self.get_standards_data(template)
- 
+    
+    
     # Set the rendering color of the space type
     rgb = space_type_properties['rgb']
     if rgb.nil?

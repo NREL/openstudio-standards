@@ -39,7 +39,7 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     building_type_chs << 'FullServiceRestaurant'
     building_type_chs << 'MidriseApartment'
     building_type_chs << 'HighriseApartment'
-    #building_type_chs << 'Hospital'
+    building_type_chs << 'Hospital'
     building_type_chs << 'Outpatient'
     building_type = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('building_type', building_type_chs, true)
     building_type.setDisplayName('Building Type.')
@@ -55,6 +55,7 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     #template_chs << '189.1-2009'
     template_chs << '90.1-2010'
     template_chs << '90.1-2013'
+    template_chs << 'NECB 2011'
     template = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('template', template_chs, true)
     template.setDisplayName('Template.')
     template.setDefaultValue('90.1-2010')
@@ -81,11 +82,21 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     #climate_zone_chs << 'ASHRAE 169-2006-7B'
     climate_zone_chs << 'ASHRAE 169-2006-8A'
     #climate_zone_chs << 'ASHRAE 169-2006-8B'
+    climate_zone_chs << 'NECB HDD Method'
     climate_zone = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('climate_zone', climate_zone_chs, true)
     climate_zone.setDisplayName('Climate Zone.')
     climate_zone.setDefaultValue('ASHRAE 169-2006-2A')
     args << climate_zone
 
+    #Drop down selector for Canadian weather files. 
+    epw_files = OpenStudio::StringVector.new
+    epw_files << 'Not Applicable'
+    BTAP::Environment::get_canadian_weather_file_names().each {|file| epw_files << file }
+    epw_file = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('epw_file', epw_files, true)
+    epw_file.setDisplayName('Climate File (NECB only)')
+    epw_file.setDefaultValue('Not Applicable')
+    args << epw_file
+   
     return args
   end
 
@@ -102,6 +113,7 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
     building_type = runner.getStringArgumentValue('building_type',user_arguments)
     template = runner.getStringArgumentValue('template',user_arguments)
     climate_zone = runner.getStringArgumentValue('climate_zone',user_arguments)
+    epw_file = runner.getStringArgumentValue('epw_file',user_arguments)
 
     # Turn debugging output on/off
     @debug = false    
@@ -122,12 +134,23 @@ class CreateDOEPrototypeBuilding < OpenStudio::Ruleset::ModelUserScript
       Dir.mkdir(build_dir)
     end
 
-    osm_directory = "#{build_dir}/#{building_type}-#{template}-#{climate_zone}"
+	#Set OSM folder
+	osm_directory = ""
+	if template == 'NECB 2011'
+    osm_directory = "#{build_dir}/#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
+	else
+	osm_directory = "#{build_dir}/#{building_type}-#{template}-#{climate_zone}"
+	end
     if !Dir.exists?(osm_directory)
       Dir.mkdir(osm_directory)
     end
 
-    model.create_prototype_building(building_type,template,climate_zone,osm_directory,@debug)
+    model.create_prototype_building(building_type,
+									template,
+									climate_zone,
+									epw_file,
+									osm_directory,
+									@debug)
     
     log_msgs
     return true
