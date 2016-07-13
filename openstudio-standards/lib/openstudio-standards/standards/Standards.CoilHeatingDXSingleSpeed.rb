@@ -156,7 +156,10 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     # TODO Standards - add split system vs single package to model
     # For now, assume single package
     subcategory = 'Single Package'
-
+    
+    # Assume they are all aircooled for now
+    search_criteria['cooling_type'] = 'AirCooled'
+    
     # Determine supplemental heating type if unitary
     unitary = false
     suppl_heating_type = nil
