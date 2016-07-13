@@ -92,11 +92,6 @@ class OpenStudio::Model::Model
       osw_path = File.join(osw_dir, 'workflow.osw')
       File.open(osw_path, 'wb') { |f| f << JSON.pretty_generate(osw_hash) }
 
-      # Create local adapters
-      adapter_options = {workflow_filename: File.basename(osw_path), output_directory: File.join(osw_dir, 'run')}
-      input_adapter = OpenStudio::Workflow.load_input_adapter 'local', adapter_options
-      output_adapter = OpenStudio::Workflow.load_output_adapter 'local', adapter_options
-
       # Run workflow.osw
       run_options = Hash.new
       
@@ -136,7 +131,20 @@ class OpenStudio::Model::Model
           { state: :errored }
       ]
       
-      k = OpenStudio::Workflow::Run.new input_adapter, output_adapter, File.dirname(osw_path), run_options
+      begin
+        # earlier version of the Workflow::Run method
+        
+        # Create local adapters
+        adapter_options = {workflow_filename: File.basename(osw_path), output_directory: File.join(Dir.pwd, 'run')}
+        input_adapter = OpenStudio::Workflow.load_input_adapter 'local', adapter_options
+        output_adapter = OpenStudio::Workflow.load_output_adapter 'local', adapter_options
+        
+        k = OpenStudio::Workflow::Run.new input_adapter, output_adapter, File.dirname(osw_path), run_options
+      rescue 
+        # current version of the Workflow::Run method
+        k = OpenStudio::Workflow::Run.new osw_path, run_options
+      end
+
       final_state = k.run
 
       # Check run status and return the sql_path
