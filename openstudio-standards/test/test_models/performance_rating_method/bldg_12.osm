@@ -71264,11 +71264,19 @@ OS:StandardsInformation:Construction,
   {6ccfd131-a271-4b4b-bd7c-37d88077e1f4}, !- Handle
   {846cad9c-13f0-4d91-a2f3-98b004484ec6}, !- Construction Name
   ExteriorWindow,                         !- Intended Surface Type
-  Metal framing (all other),              !- Standards Construction Type
+  ,                                       !- Standards Construction Type
   ,                                       !- Perturbable Layer
   ,                                       !- Perturbable Layer Type
   ,                                       !- Other Perturbable Layer Type
-  ASHRAE 90.1-2007;                       !- Construction Standard
+  ASHRAE 90.1-2007,                       !- Construction Standard
+  ,                                       !- Construction Standard Source
+  ,                                       !- Fenestration Type
+  ,                                       !- Fenestration Assembly Context
+  ,                                       !- Fenestration Number of Panes
+  Metal Framing,                          !- Fenestration Frame Type
+  ,                                       !- Fenestration Divider Type
+  ,                                       !- Fenestration Tint
+  ;                                       !- Fenestration Gas Fill  
 
 OS:Construction,
   {e11e980d-fc5f-4e21-b92d-0d921837aa94}, !- Handle
