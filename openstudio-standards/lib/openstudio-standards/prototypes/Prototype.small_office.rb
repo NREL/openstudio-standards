@@ -9,7 +9,7 @@ class OpenStudio::Model::Model
     when 'NECB 2011'
       #dom = ?
       space_type_map ={
-        #"- undefined -" => ["Attic"],
+        "- undefined -" => ["Attic"],
         "Office - enclosed" => ["Core_ZN", "Perimeter_ZN_1", "Perimeter_ZN_2", "Perimeter_ZN_3", "Perimeter_ZN_4"]
       }
     else

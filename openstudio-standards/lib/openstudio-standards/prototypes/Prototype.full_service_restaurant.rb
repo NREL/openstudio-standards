@@ -19,7 +19,7 @@ class OpenStudio::Model::Model
     
     when 'NECB 2011'
       space_type_map ={
-        #"- undefined -" => ["attic"],
+        "- undefined -" => ["attic"],
         "Dining - family space" => ["Dining"],
         "Food preparation" => ["Kitchen"]
       }

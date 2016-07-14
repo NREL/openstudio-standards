@@ -38,10 +38,8 @@ class OpenStudio::Model::Model
           "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", 
           "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4",
           "DataCenter_basement_ZN_6", "DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", 
-          "DataCenter_top_ZN_6"]
-        #,
-        #
-        #"- undefined -" => ["GroundFloor_Plenum", "TopFloor_Plenum", "MidFloor_Plenum" ]
+          "DataCenter_top_ZN_6"],
+        "- undefined -" => ["GroundFloor_Plenum", "TopFloor_Plenum", "MidFloor_Plenum" ]
       }
     end
     return space_type_map

@@ -667,8 +667,6 @@ module BTAP
           end
           
           #Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load. 
-          puts space
-          puts space.thermalZone.get
 
           if space.spaceType.get.standardsSpaceType.get == "- undefined -"
             coolingDesignLoad = 0.0
@@ -755,7 +753,7 @@ module BTAP
           end
         end
         
-        #Deal with Wildcard spaces. 
+        #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
         space_zoning_data_array.each do |space_zone_data|
           if space_zone_data.system_number.nil?
             #iterate through all adjacent spaces from largest shared wall area to smallest.
@@ -774,7 +772,7 @@ module BTAP
           end
         end
 
-        puts space_zoning_data_array
+
         return schedule_type_array.uniq! , space_zoning_data_array
       end
 

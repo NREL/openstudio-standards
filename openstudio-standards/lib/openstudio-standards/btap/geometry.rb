@@ -2384,7 +2384,9 @@ module BTAP
       
 
       def self.is_perimeter_space?(model,space)
-        return Array.new(BTAP::Common::validate_array(model,space,"Space").first.surfaces).filterByBoundaryConditions(["Outdoors","Ground",
+        exterior_surfaces =  BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces,
+          ["Outdoors",
+            "Ground",
             "GroundFCfactorMethod",
             "GroundSlabPreprocessorAverage",
             "GroundSlabPreprocessorCore",
@@ -2392,7 +2394,9 @@ module BTAP
             "GroundBasementPreprocessorAverageWall",
             "GroundBasementPreprocessorAverageFloor",
             "GroundBasementPreprocessorUpperWall",
-            "GroundBasementPreprocessorLowerWall"]).size > 0
+            "GroundBasementPreprocessorLowerWall"])
+        
+        return BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces,["Wall"]).size > 0
 
       end
       def self.show(model,space)

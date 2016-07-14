@@ -86,7 +86,7 @@ class OpenStudio::Model::Model
       self.modify_surface_convection_algorithm(building_vintage)
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)
       self.create_thermal_zones(building_type,building_vintage, climate_zone)
-      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input)
+      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input,epw_file)
       self.custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
       self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
       self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
