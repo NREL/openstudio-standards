@@ -17,7 +17,7 @@ class HVACEfficienciesTest < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     first_cutoff_twr_cap = 1750000.0
-    small = 1.0e-3
+    tol = 1.0e-3
     # Generate the osm files for all relevant cases to generate the test data for system 6
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
@@ -50,6 +50,9 @@ class HVACEfficienciesTest < MiniTest::Test
         model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
         # run the standards
         result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+        # Save the model
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
+        assert_equal(true, result, "Failure in Standards for #{name}")
         this_is_the_first_cap_range = false
         this_is_the_second_cap_range = false
         if tower_cap < first_cutoff_twr_cap
@@ -71,11 +74,8 @@ class HVACEfficienciesTest < MiniTest::Test
         necb2011_fan_power = 0.015 * tower_cap
         tower_fan_power_is_correct = false
         rel_diff = (necb2011_fan_power - tower.fanPoweratDesignAirFlowRate.to_f).abs/necb2011_fan_power
-        if rel_diff < small then tower_fan_power_is_correct = true end
+        if rel_diff < tol then tower_fan_power_is_correct = true end
         assert(tower_fan_power_is_correct, 'Tower fan power is not correct based on NECB 2011')
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "Failure in Standards for #{name}")
       end
     end
   end
