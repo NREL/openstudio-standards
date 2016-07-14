@@ -12,6 +12,7 @@ class OpenStudio::Model::Model
 
   # Load the helper libraries for getting the autosized
   # values for each type of model object.
+<<<<<<< HEAD:openstudio-standards/lib/openstudio-standards/hvac_sizing/Siz.Model.rb
   require_relative 'Siz.AirTermSnglDuctParallelPIUReheat'
   require_relative 'Siz.AirTermSnglDuctVAVReheat'
   require_relative 'Siz.AirTermSnglDuctUncontrolled'
@@ -40,6 +41,38 @@ class OpenStudio::Model::Model
   require_relative 'Siz.ControllerWaterCoil'
   require_relative 'Siz.SizingSystem'
   require_relative 'Siz.ThermalZone'
+=======
+  require_relative 'HVACSizing.AirTerminalSingleDuctParallelPIUReheat'
+  require_relative 'HVACSizing.AirTerminalSingleDuctVAVReheat'
+  require_relative 'HVACSizing.AirTerminalSingleDuctUncontrolled'
+  require_relative 'HVACSizing.AirLoopHVAC'
+  require_relative 'HVACSizing.AirLoopHVACUnitaryHeatPumpAirToAir'
+  require_relative 'HVACSizing.FanConstantVolume'
+  require_relative 'HVACSizing.FanVariableVolume'
+  require_relative 'HVACSizing.FanOnOff'
+  require_relative 'HVACSizing.CoilHeatingElectric'
+  require_relative 'HVACSizing.CoilHeatingGas'
+  require_relative 'HVACSizing.CoilHeatingWater'
+  require_relative 'HVACSizing.CoilHeatingDXSingleSpeed'
+  require_relative 'HVACSizing.CoilHeatingWaterToAirHeatPumpEquationFit'
+  require_relative 'HVACSizing.CoilCoolingWaterToAirHeatPumpEquationFit'
+  require_relative 'HVACSizing.CoilCoolingDXSingleSpeed'
+  require_relative 'HVACSizing.CoilCoolingDXTwoSpeed'
+  require_relative 'HVACSizing.CoilCoolingWater'
+  require_relative 'HVACSizing.ControllerOutdoorAir'
+  require_relative 'HVACSizing.HeatExchangerAirToAirSensibleAndLatent'
+  require_relative 'HVACSizing.PlantLoop'
+  require_relative 'HVACSizing.PumpConstantSpeed'
+  require_relative 'HVACSizing.PumpVariableSpeed'
+  require_relative 'HVACSizing.BoilerHotWater'
+  require_relative 'HVACSizing.ChillerElectricEIR'
+  require_relative 'HVACSizing.CoolingTowerSingleSpeed'
+  require_relative 'HVACSizing.CoolingTowerTwoSpeed'
+  require_relative 'HVACSizing.CoolingTowerVariableSpeed'
+  require_relative 'HVACSizing.ControllerWaterCoil'
+  require_relative 'HVACSizing.SizingSystem'
+  require_relative 'HVACSizing.ThermalZone'
+>>>>>>> origin/ecbc_baseline_automation:openstudio-standards/lib/openstudio-standards/hvac_sizing/HVACSizing.Model.rb
 
   # Recently added and not fully tested
   require_relative 'Siz.ZoneHVACPackagedTerminalAirConditioner'
@@ -71,13 +104,13 @@ class OpenStudio::Model::Model
     sim_control.setRunSimulationforWeatherFileRunPeriods(false)
     
     # Run the sizing run
-    self.run_simulation_and_log_errors(sizing_run_dir)
+    success = self.run_simulation_and_log_errors(sizing_run_dir)
     
     # Change the model back to running the weather file
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
     
-    return true
+    return success
 
   end
 

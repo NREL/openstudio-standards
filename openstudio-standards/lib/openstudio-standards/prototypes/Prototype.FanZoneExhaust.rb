@@ -2,6 +2,8 @@
 # Reopen the OpenStudio class to add methods to apply standards to this object
 class OpenStudio::Model::FanZoneExhaust
 
+  include PrototypeFan
+
   # Sets the fan pressure rise based on the Prototype buildings inputs
   def setPrototypeFanPressureRise
     

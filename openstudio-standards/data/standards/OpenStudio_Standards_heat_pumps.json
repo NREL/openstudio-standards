@@ -11,6 +11,11 @@
       "minimum_full_load_efficiency": 10.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -29,6 +34,11 @@
       "minimum_full_load_efficiency": 10.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -47,6 +57,11 @@
       "minimum_full_load_efficiency": 10.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -65,6 +80,11 @@
       "minimum_full_load_efficiency": 10.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -83,6 +103,11 @@
       "minimum_full_load_efficiency": 9.26,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -101,6 +126,11 @@
       "minimum_full_load_efficiency": 9.08,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -119,6 +149,11 @@
       "minimum_full_load_efficiency": 9.26,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -137,6 +172,11 @@
       "minimum_full_load_efficiency": 9.08,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -155,6 +195,11 @@
       "minimum_full_load_efficiency": 8.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -173,6 +218,11 @@
       "minimum_full_load_efficiency": 8.72,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -191,6 +241,11 @@
       "minimum_full_load_efficiency": 8.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -209,6 +264,11 @@
       "minimum_full_load_efficiency": 8.72,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -227,6 +287,11 @@
       "minimum_full_load_efficiency": 7.94,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -245,6 +310,11 @@
       "minimum_full_load_efficiency": 7.76,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -263,6 +333,11 @@
       "minimum_full_load_efficiency": 7.94,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -281,6 +356,11 @@
       "minimum_full_load_efficiency": 7.76,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "DXCOOL-NECB2011-REF-CAPFT",
       "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "DXCOOL-NECB2011-REF-COOLEIRFT",
@@ -299,6 +379,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -317,6 +402,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -335,6 +425,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -353,6 +448,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -371,6 +471,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -389,6 +494,11 @@
       "minimum_full_load_efficiency": 10.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -407,6 +517,11 @@
       "minimum_full_load_efficiency": 10.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -425,6 +540,11 @@
       "minimum_full_load_efficiency": 9.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -443,6 +563,11 @@
       "minimum_full_load_efficiency": 9.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -461,6 +586,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -479,6 +609,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -497,6 +632,11 @@
       "minimum_full_load_efficiency": 9.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -515,6 +655,11 @@
       "minimum_full_load_efficiency": 9.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -533,6 +678,11 @@
       "minimum_full_load_efficiency": 9.0,
       "minimum_iplv": 9.2,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -551,6 +701,11 @@
       "minimum_full_load_efficiency": 9.0,
       "minimum_iplv": 9.2,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -569,6 +724,11 @@
       "minimum_full_load_efficiency": 8.8,
       "minimum_iplv": 9.0,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -587,6 +747,11 @@
       "minimum_full_load_efficiency": 8.8,
       "minimum_iplv": 9.0,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -595,6 +760,49 @@
       "notes": "From 90.1-2004 since DOE Reference Buildings did not have any heat pumps"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "DOE Ref Pre-1980",
+      "cooling_type": "AirCooled",
+      "heating_type": "Electric Resistance or None",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 10.0,
+      "pthp_eer_coefficient_2": 0.16,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-1989 Table 10-4A"
+    },
+    {
+      "template": "DOE Ref Pre-1980",
+      "cooling_type": "AirCooled",
+      "heating_type": "All Other",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 10.0,
+      "pthp_eer_coefficient_2": 0.16,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-1989 Table 10-4A"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "DOE Ref 1980-2004",
       "cooling_type": "AirCooled",
       "heating_type": null,
@@ -605,6 +813,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -623,6 +836,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -641,6 +859,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -659,6 +882,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -677,6 +905,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -695,6 +928,11 @@
       "minimum_full_load_efficiency": 10.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -713,6 +951,11 @@
       "minimum_full_load_efficiency": 10.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -731,6 +974,11 @@
       "minimum_full_load_efficiency": 9.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -749,6 +997,11 @@
       "minimum_full_load_efficiency": 9.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -767,6 +1020,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -785,6 +1043,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -803,6 +1066,11 @@
       "minimum_full_load_efficiency": 9.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -821,6 +1089,11 @@
       "minimum_full_load_efficiency": 9.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -839,6 +1112,11 @@
       "minimum_full_load_efficiency": 9.0,
       "minimum_iplv": 9.2,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -857,6 +1135,11 @@
       "minimum_full_load_efficiency": 9.0,
       "minimum_iplv": 9.2,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -875,6 +1158,11 @@
       "minimum_full_load_efficiency": 8.8,
       "minimum_iplv": 9.0,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -893,6 +1181,11 @@
       "minimum_full_load_efficiency": 8.8,
       "minimum_iplv": 9.0,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -901,6 +1194,49 @@
       "notes": "From 90.1-2004 since DOE Reference Buildings did not have any heat pumps"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "DOE Ref 1980-2004",
+      "cooling_type": "AirCooled",
+      "heating_type": "Electric Resistance or None",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 10.0,
+      "pthp_eer_coefficient_2": 0.16,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-1989 Table 10-4A"
+    },
+    {
+      "template": "DOE Ref 1980-2004",
+      "cooling_type": "AirCooled",
+      "heating_type": "All Other",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 10.0,
+      "pthp_eer_coefficient_2": 0.16,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-1989 Table 10-4A"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "90.1-2004",
       "cooling_type": "AirCooled",
       "heating_type": null,
@@ -911,6 +1247,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -929,6 +1270,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -947,6 +1293,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -965,6 +1316,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -983,6 +1339,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1001,6 +1362,11 @@
       "minimum_full_load_efficiency": 10.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1019,6 +1385,11 @@
       "minimum_full_load_efficiency": 10.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1037,6 +1408,11 @@
       "minimum_full_load_efficiency": 9.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1055,6 +1431,11 @@
       "minimum_full_load_efficiency": 9.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1073,6 +1454,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1091,6 +1477,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1109,6 +1500,11 @@
       "minimum_full_load_efficiency": 9.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1127,6 +1523,11 @@
       "minimum_full_load_efficiency": 9.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1145,6 +1546,11 @@
       "minimum_full_load_efficiency": 9.0,
       "minimum_iplv": 9.2,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1163,6 +1569,11 @@
       "minimum_full_load_efficiency": 9.0,
       "minimum_iplv": 9.2,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1181,6 +1592,11 @@
       "minimum_full_load_efficiency": 8.8,
       "minimum_iplv": 9.0,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1199,6 +1615,11 @@
       "minimum_full_load_efficiency": 8.8,
       "minimum_iplv": 9.0,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1207,6 +1628,49 @@
       "notes": "From 90.1-2004 Table 6.8.1B"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "90.1-2004",
+      "cooling_type": "AirCooled",
+      "heating_type": "Electric Resistance or None",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 12.3,
+      "pthp_eer_coefficient_2": 0.213,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-2004 Table 6.8.1D"
+    },
+    {
+      "template": "90.1-2004",
+      "cooling_type": "AirCooled",
+      "heating_type": "All Other",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 12.3,
+      "pthp_eer_coefficient_2": 0.213,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-2004 Table 6.8.1D"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "90.1-2007",
       "cooling_type": "AirCooled",
       "heating_type": null,
@@ -1217,6 +1681,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1235,6 +1704,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1253,6 +1727,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1271,6 +1750,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1289,6 +1773,11 @@
       "minimum_full_load_efficiency": 10.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1307,6 +1796,11 @@
       "minimum_full_load_efficiency": 10.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1325,6 +1819,11 @@
       "minimum_full_load_efficiency": 9.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1343,6 +1842,11 @@
       "minimum_full_load_efficiency": 9.9,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1361,6 +1865,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1379,6 +1888,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1397,6 +1911,11 @@
       "minimum_full_load_efficiency": 9.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1415,6 +1934,11 @@
       "minimum_full_load_efficiency": 9.1,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1433,6 +1957,11 @@
       "minimum_full_load_efficiency": 9.0,
       "minimum_iplv": 9.2,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1451,6 +1980,11 @@
       "minimum_full_load_efficiency": 9.0,
       "minimum_iplv": 9.2,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1469,6 +2003,11 @@
       "minimum_full_load_efficiency": 8.8,
       "minimum_iplv": 9.0,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1487,6 +2026,11 @@
       "minimum_full_load_efficiency": 8.8,
       "minimum_iplv": 9.0,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1495,6 +2039,49 @@
       "notes": "From 90.1-2007 Table 6.8.1B, Before 1/1/2010"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "90.1-2007",
+      "cooling_type": "AirCooled",
+      "heating_type": "Electric Resistance or None",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 12.3,
+      "pthp_eer_coefficient_2": 0.213,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-2007 Table 6.8.1D"
+    },
+    {
+      "template": "90.1-2007",
+      "cooling_type": "AirCooled",
+      "heating_type": "All Other",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 12.3,
+      "pthp_eer_coefficient_2": 0.213,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-2007 Table 6.8.1D"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "90.1-2010",
       "cooling_type": "AirCooled",
       "heating_type": null,
@@ -1505,6 +2092,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1523,6 +2115,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1541,6 +2138,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1559,6 +2161,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1577,6 +2184,11 @@
       "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.2,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1595,6 +2207,11 @@
       "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.2,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1613,6 +2230,11 @@
       "minimum_full_load_efficiency": 10.8,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.0,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1631,6 +2253,11 @@
       "minimum_full_load_efficiency": 10.8,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.0,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1649,6 +2276,11 @@
       "minimum_full_load_efficiency": 10.6,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.7,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1667,6 +2299,11 @@
       "minimum_full_load_efficiency": 10.6,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.7,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1685,6 +2322,11 @@
       "minimum_full_load_efficiency": 10.4,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.5,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1703,6 +2345,11 @@
       "minimum_full_load_efficiency": 10.4,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.5,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1721,6 +2368,11 @@
       "minimum_full_load_efficiency": 9.5,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.6,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1739,6 +2391,11 @@
       "minimum_full_load_efficiency": 9.5,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.6,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1757,6 +2414,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.4,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1775,6 +2437,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.4,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1783,6 +2450,49 @@
       "notes": "From 90.1-2010 Table 6.8.1B"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "90.1-2010",
+      "cooling_type": "AirCooled",
+      "heating_type": "Electric Resistance or None",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 12.3,
+      "pthp_eer_coefficient_2": 0.213,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-2010 Table 6.8.1D Before 10/8/2012"
+    },
+    {
+      "template": "90.1-2010",
+      "cooling_type": "AirCooled",
+      "heating_type": "All Other",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 12.3,
+      "pthp_eer_coefficient_2": 0.213,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-2010 Table 6.8.1D Before 10/8/2012"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "90.1-2013",
       "cooling_type": "AirCooled",
       "heating_type": null,
@@ -1793,6 +2503,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1811,6 +2526,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1829,6 +2549,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1847,6 +2572,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1865,6 +2595,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1883,6 +2618,11 @@
       "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.2,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1901,6 +2641,11 @@
       "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.2,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1919,6 +2664,11 @@
       "minimum_full_load_efficiency": 10.8,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.0,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1937,6 +2687,11 @@
       "minimum_full_load_efficiency": 10.8,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.0,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1955,6 +2710,11 @@
       "minimum_full_load_efficiency": 10.6,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.7,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1973,6 +2733,11 @@
       "minimum_full_load_efficiency": 10.6,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.7,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -1991,6 +2756,11 @@
       "minimum_full_load_efficiency": 10.4,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.5,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2009,6 +2779,11 @@
       "minimum_full_load_efficiency": 10.4,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.5,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2027,6 +2802,11 @@
       "minimum_full_load_efficiency": 9.5,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.6,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2045,6 +2825,11 @@
       "minimum_full_load_efficiency": 9.5,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.6,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2063,6 +2848,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.4,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2081,6 +2871,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.4,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2089,6 +2884,49 @@
       "notes": "From 90.1-2010 Table 6.8.1-2 Before 1/1/2016"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "90.1-2013",
+      "cooling_type": "AirCooled",
+      "heating_type": "Electric Resistance or None",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 14.0,
+      "pthp_eer_coefficient_2": 0.3,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-2013 Table 6.8.1-4"
+    },
+    {
+      "template": "90.1-2013",
+      "cooling_type": "AirCooled",
+      "heating_type": "All Other",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 14.0,
+      "pthp_eer_coefficient_2": 0.3,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From 90.1-2013 Table 6.8.1-4"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "OEESC 2014",
       "cooling_type": "AirCooled",
       "heating_type": null,
@@ -2099,6 +2937,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2117,6 +2960,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2135,6 +2983,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2153,6 +3006,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2171,6 +3029,11 @@
       "minimum_full_load_efficiency": null,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2189,6 +3052,11 @@
       "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.2,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2207,6 +3075,11 @@
       "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.2,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2225,6 +3098,11 @@
       "minimum_full_load_efficiency": 10.8,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.0,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2243,6 +3121,11 @@
       "minimum_full_load_efficiency": 10.8,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 11.0,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2261,6 +3144,11 @@
       "minimum_full_load_efficiency": 10.6,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.7,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2279,6 +3167,11 @@
       "minimum_full_load_efficiency": 10.6,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.7,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2297,6 +3190,11 @@
       "minimum_full_load_efficiency": 10.4,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.5,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2315,6 +3213,11 @@
       "minimum_full_load_efficiency": 10.4,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 10.5,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2333,6 +3236,11 @@
       "minimum_full_load_efficiency": 9.5,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.6,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2351,6 +3259,11 @@
       "minimum_full_load_efficiency": 9.5,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.6,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2369,6 +3282,11 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.4,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
@@ -2387,12 +3305,60 @@
       "minimum_full_load_efficiency": 9.3,
       "minimum_iplv": null,
       "minimum_integrated_energy_efficiency_ratio": 9.4,
+<<<<<<< HEAD
+=======
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "cool_cap_ft": "HPACCoolCapFT",
       "cool_cap_fflow": "HPACCoolCapFFF",
       "cool_eir_ft": "HPACCOOLEIRFT",
       "cool_eir_fflow": "HPACCOOLEIRFFF",
       "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "From OEESC 2014 Table 503.2.3(2) Before 1/1/2016"
+<<<<<<< HEAD
+=======
+    },
+    {
+      "template": "OEESC 2014",
+      "cooling_type": "AirCooled",
+      "heating_type": "Electric Resistance or None",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 14.0,
+      "pthp_eer_coefficient_2": 0.3,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From OEESC 2014 Table 503.2.3(3)"
+    },
+    {
+      "template": "OEESC 2014",
+      "cooling_type": "AirCooled",
+      "heating_type": "All Other",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": null,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": 14.0,
+      "pthp_eer_coefficient_2": 0.3,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From OEESC 2014 Table 503.2.3(3)"
+>>>>>>> origin/ecbc_baseline_automation
     }
   ]
 }

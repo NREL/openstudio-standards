@@ -40,6 +40,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Unit::TestCa
     "standard" => standard,
     "building_type" => building_type,
     "climate_zone" => climate_zone,
+    "custom" => "*None*",
     "debug" => false
     }
     

@@ -20,6 +20,8 @@ class OpenStudio::Model::PlanarSurface
   # [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   # and the value is the newly created construction.  This can be
   # used to avoid creating duplicate constructions.
+  # @todo Align the standard construction enumerations in the
+  # spreadsheet with the enumerations in OpenStudio (follow CBECC-Com).
   def apply_standard_construction(template, climate_zone, previous_construction_map = {})
 
     # Skip surfaces not in a space
@@ -33,12 +35,8 @@ class OpenStudio::Model::PlanarSurface
     # Determine if residential or nonresidential
     # based on the space type.
     occ_type = 'Nonresidential'
-    if space.spaceType.is_initialized
-      space_type = space.spaceType.get
-      space_type_props = space_type.get_standards_data(template)
-      if space_type_props['is_residential']
-        occ_type = 'Residential'
-      end
+    if space.is_residential(template)
+      occ_type = 'Residential'
     end
     
     # Get the climate zone set
@@ -46,24 +44,78 @@ class OpenStudio::Model::PlanarSurface
     
     # Get the intended surface type
     standards_info = construction.standardsInformation
-    intended_surface_type = standards_info.intendedSurfaceType
-    standards_construction_type = standards_info.standardsConstructionType
-    if intended_surface_type.empty? || standards_construction_type.empty?
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine one or more of the intended surface type or the standards construction type for #{self.name}.  This surface will not have the standard applied.")
+    surf_type = standards_info.intendedSurfaceType
+    if surf_type.empty?
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the intended surface type for #{self.name} from #{construction.name}.  This surface will not have the standard applied.")
       return previous_construction_map
     end
-
+    surf_type = surf_type.get
+    
+    # Get the standards type, which is based on different fields
+    # if is intended for a window, a skylight, or something else.
+    # Mapping is between standards-defined enumerations and the
+    # enumerations available in OpenStudio.
+    stds_type = nil
+    # Windows
+    if surf_type == 'ExteriorWindow'
+      stds_type = standards_info.fenestrationFrameType 
+      if stds_type.is_initialized
+        stds_type = stds_type.get
+        case stds_type
+        when 'Metal Framing', 'Metal Framing with Thermal Break'
+          stds_type = 'Metal framing (all other)'
+        when 'Non-Metal Framing'
+          stds_type = 'Nonmetal framing (all)'
+        else
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "The standards fenestration frame type #{stds_type} cannot be used on #{surf_type} in #{self.name}.  This surface will not have the standard applied.")
+          return previous_construction_map
+        end
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the standards fenestration frame type for #{self.name} from #{construction.name}.  This surface will not have the standard applied.")
+        return previous_construction_map
+      end    
+    # Skylights
+    elsif surf_type == 'Skylight'
+      stds_type = standards_info.fenestrationType
+      if stds_type.is_initialized
+        stds_type = stds_type.get
+        case stds_type
+        when 'Glass Skylight with Curb'
+          stds_type = 'Glass with Curb'
+        when 'Plastic Skylight with Curb'
+          stds_type = 'Plastic with Curb'
+        when 'Plastic Skylight without Curb', 'Glass Skylight without Curb'
+          stds_type = 'Without Curb'
+        else
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "The standards fenestration type #{stds_type} cannot be used on #{surf_type} in #{self.name}.  This surface will not have the standard applied.")
+          return previous_construction_map
+        end
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the standards fenestration type for #{self.name} from #{construction.name}.  This surface will not have the standard applied.")
+        return previous_construction_map
+      end
+    # All other surface types
+    else
+      stds_type = standards_info.standardsConstructionType
+      if stds_type.is_initialized
+        stds_type = stds_type.get
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.PlanarSurface", "Could not determine the standards construction type for #{self.name}.  This surface will not have the standard applied.")
+        return previous_construction_map
+      end
+    end    
+    
     # Check if the construction type was already created.
     # If yes, use that construction.  If no, make a new one.
     new_construction = nil
-    type = [template, climate_zone, intended_surface_type.get, standards_construction_type.get, occ_type]
+    type = [template, climate_zone, surf_type, stds_type, occ_type]
     if previous_construction_map[type]
       new_construction = previous_construction_map[type]
     else
       new_construction = self.model.find_and_add_construction(template,
                                                   climate_zone_set,
-                                                  intended_surface_type.get,
-                                                  standards_construction_type.get,
+                                                  surf_type,
+                                                  stds_type,
                                                   occ_type)
       if !new_construction == false
         previous_construction_map[type] = new_construction

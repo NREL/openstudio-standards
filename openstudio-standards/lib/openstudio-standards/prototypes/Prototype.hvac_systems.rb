@@ -259,12 +259,27 @@ class OpenStudio::Model::Model
 
   # Creates a condenser water loop and adds it to the model.
   #
+  # @param cooling_tower_type [String] valid choices are Open Cooling Tower, Closed Cooling Tower
+  # @param cooling_tower_fan_type [String] valid choices are Centrifugal, Propeller or Axial
+  # @param cooling_tower_capacity_control [String] valid choices are Fluid Bypass, Fan Cycling, TwoSpeed Fan, Variable Speed Fan
+  # @param number_of_cells_per_tower [Integer] the number of discrete cells per tower
   # @param number_cooling_towers [Integer] the number of cooling towers to be added (in parallel)
+  # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
+<<<<<<< HEAD
 
 
   def add_cw_loop(building_type, building_vintage, number_cooling_towers = 1)
 
+=======
+  def add_cw_loop(standard,
+                  cooling_tower_type,
+                  cooling_tower_fan_type,
+                  cooling_tower_capacity_control,
+                  number_of_cells_per_tower,
+                  number_cooling_towers = 1,
+                  building_type=nil)
+>>>>>>> origin/ecbc_baseline_automation
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding condenser water loop.")
 
@@ -294,6 +309,7 @@ class OpenStudio::Model::Model
     sizing_plant.setDesignLoopExitTemperature(cw_temp_sizing_c)
     sizing_plant.setLoopDesignTemperatureDifference(cw_delta_t_k)
 
+<<<<<<< HEAD
     if building_type == 'Hospital' && (building_vintage == 'DOE Ref 1980-2004' || building_vintage == 'DOE Ref Pre-1980')
       cw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
       cw_pump.setName('Condenser Water Loop Pump')
@@ -327,9 +343,27 @@ class OpenStudio::Model::Model
     cooling_tower_fan_curve.setCoefficient4xPOW3(1)
     cooling_tower_fan_curve.setMinimumValueofx(0)
     cooling_tower_fan_curve.setMaximumValueofx(1)
+=======
+    # Condenser water pump #TODO make this into a HeaderedPump:VariableSpeed
+    cw_pump = OpenStudio::Model::PumpVariableSpeed.new(self)
+    cw_pump.setName('Condenser Water Loop Pump')
+    cw_pump_head_ft_h2o = 49.7
+    cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O','Pa').get
+    cw_pump.setRatedPumpHead(cw_pump_head_press_pa)
+    # Curve makes it perform like variable speed pump
+    cw_pump.setFractionofMotorInefficienciestoFluidStream(0)
+    cw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
+    cw_pump.setCoefficient2ofthePartLoadPerformanceCurve(0.0216)
+    cw_pump.setCoefficient3ofthePartLoadPerformanceCurve(-0.0325)
+    cw_pump.setCoefficient4ofthePartLoadPerformanceCurve(1.0095)
+    cw_pump.setPumpControlType('Intermittent')
+    cw_pump.addToNode(condenser_water_loop.supplyInletNode)
+>>>>>>> origin/ecbc_baseline_automation
 
     # Cooling towers
+    # Per PNNL PRM Reference Manual
     number_cooling_towers.times do |i|
+<<<<<<< HEAD
       if building_type == 'Hospital' && (building_vintage == 'DOE Ref 1980-2004' || building_vintage == 'DOE Ref Pre-1980')
         cooling_tower = OpenStudio::Model::CoolingTowerSingleSpeed.new(self)
         cooling_tower.setName("#{condenser_water_loop.name} Cooling Tower #{i}")
@@ -346,6 +380,48 @@ class OpenStudio::Model::Model
         cooling_tower.setCellControl('MaximalCell')
         condenser_water_loop.addSupplyBranchForComponent(cooling_tower)
       end
+=======
+      sizing_factor = 1/number_cooling_towers
+      twr_name = "#{cooling_tower_fan_type} #{cooling_tower_capacity_control} #{cooling_tower_type}"
+      
+      # Tower object depends on the control type
+      cooling_tower = nil
+      case cooling_tower_capacity_control
+      when 'Fluid Bypass', 'Fan Cycling'
+        cooling_tower = OpenStudio::Model::CoolingTowerSingleSpeed.new(self)
+        if cooling_tower_capacity_control == 'Fluid Bypass'
+          cooling_tower.setCellControl('FluidBypass')
+        else
+          cooling_tower.setCellControl('FanCycling')
+        end
+      when 'TwoSpeed Fan'
+        cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+        # TODO expose newer cooling tower sizing fields in API
+        #cooling_tower.setLowFanSpeedAirFlowRateSizingFactor(0.5)
+        #cooling_tower.setLowFanSpeedFanPowerSizingFactor(0.3)
+        #cooling_tower.setLowFanSpeedUFactorTimesAreaSizingFactor
+        #cooling_tower.setLowSpeedNominalCapacitySizingFactor
+      when 'Variable Speed Fan'
+        cooling_tower = OpenStudio::Model::CoolingTowerVariableSpeed.new(self)
+        cooling_tower.setDesignApproachTemperature(cw_approach_delta_t_k)
+        cooling_tower.setDesignRangeTemperature(cw_delta_t_k)
+        cooling_tower.setFractionofTowerCapacityinFreeConvectionRegime(0.125)
+        twr_fan_curve = self.add_curve('VSD-TWR-FAN-FPLR')
+        cooling_tower.setFanPowerRatioFunctionofAirFlowRateRatioCurve(twr_fan_curve)
+      else
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{cooling_tower_capacity_control} is not a valid choice of cooling tower capacity control.  Valid choices are Fluid Bypass, Fan Cycling, TwoSpeed Fan, Variable Speed Fan.")
+      end
+
+      # Set the properties that apply to all tower types
+      # and attach to the condenser loop.
+      unless cooling_tower.nil?
+        cooling_tower.setName(twr_name)
+        cooling_tower.setSizingFactor(sizing_factor)
+        cooling_tower.setNumberofCells(number_of_cells_per_tower)
+        condenser_water_loop.addSupplyBranchForComponent(cooling_tower)
+      end
+
+>>>>>>> origin/ecbc_baseline_automation
     end
 
     # Condenser water loop pipes
@@ -1097,6 +1173,167 @@ class OpenStudio::Model::Model
 
   end
 
+  # Creates a packaged VAV system with parallel fan powered boxes and adds it to the model.
+  #
+  # @param standard [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param thermal_zones [String] zones to connect to this system
+  # @param hvac_op_sch [String] name of the HVAC operation schedule
+  # or nil in which case will be defaulted to always on
+  # @param oa_damper_sch [Double] name of the oa damper schedule, 
+  # or nil in which case will be defaulted to always open
+  # @param vav_fan_efficiency [Double] fan total efficiency, including motor and impeller
+  # @param vav_fan_motor_efficiency [Double] fan motor efficiency
+  # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa  
+  # @param building_type [String] the building type
+  # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop  
+  def add_pvav_pfp_boxes(standard, 
+              sys_name,
+              thermal_zones,
+              hvac_op_sch,
+              oa_damper_sch,
+              vav_fan_efficiency,
+              vav_fan_motor_efficiency,
+              vav_fan_pressure_rise,
+              building_type=nil)
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding PVAV with PFP Boxes and Reheat system for #{thermal_zones.size} zones.")
+    thermal_zones.each do |zone|
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
+    end
+
+    # hvac operation schedule
+    if hvac_op_sch.nil?
+      hvac_op_sch = self.alwaysOnDiscreteSchedule
+    else
+      hvac_op_sch = self.add_schedule(hvac_op_sch)
+    end
+    
+    # oa damper schedule
+    if oa_damper_sch.nil?
+      oa_damper_sch = self.alwaysOnDiscreteSchedule
+    else
+      oa_damper_sch = self.add_schedule(oa_damper_sch)
+    end
+
+    # control temps used across all air handlers
+    clg_sa_temp_f = 55.04 # Central deck clg temp 55F
+    prehtg_sa_temp_f = 44.6 # Preheat to 44.6F
+    preclg_sa_temp_f = 55.04 # Precool to 55F
+    htg_sa_temp_f = 55.04 # Central deck htg temp 55F
+    rht_sa_temp_f = 104 # VAV box reheat to 104F
+    zone_htg_sa_temp_f = 104 # Zone heating design supply air temperature to 104 F
+    
+    clg_sa_temp_c = OpenStudio.convert(clg_sa_temp_f,'F','C').get
+    prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f,'F','C').get
+    preclg_sa_temp_c = OpenStudio.convert(preclg_sa_temp_f,'F','C').get
+    htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f,'F','C').get
+    rht_sa_temp_c = OpenStudio.convert(rht_sa_temp_f,'F','C').get
+    zone_htg_sa_temp_c = OpenStudio.convert(zone_htg_sa_temp_f,'F','C').get
+
+    sa_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+    sa_temp_sch.setName("Supply Air Temp - #{clg_sa_temp_f}F")
+    sa_temp_sch.defaultDaySchedule.setName("Supply Air Temp - #{clg_sa_temp_f}F Default")
+    sa_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),clg_sa_temp_c)
+
+    #air handler
+    air_loop = OpenStudio::Model::AirLoopHVAC.new(self)
+    if sys_name.nil?
+      air_loop.setName("#{thermal_zones.size} Zone VAV with PFP Boxes and Reheat")
+    else
+      air_loop.setName(sys_name)
+    end
+    air_loop.setAvailabilitySchedule(hvac_op_sch)
+
+    sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,sa_temp_sch)
+    sa_stpt_manager.setName("#{thermal_zones.size} Zone VAV supply air setpoint manager")
+    sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
+
+    #air handler controls
+    sizing_system = air_loop.sizingSystem
+    sizing_system.setPreheatDesignTemperature(prehtg_sa_temp_c)
+    sizing_system.setPrecoolDesignTemperature(preclg_sa_temp_c)
+    sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
+    sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
+    sizing_system.setSizingOption('Coincident')
+    sizing_system.setAllOutdoorAirinCooling(false)
+    sizing_system.setAllOutdoorAirinHeating(false)
+    sizing_system.setSystemOutdoorAirMethod('ZoneSum')
+
+    #fan
+    fan = OpenStudio::Model::FanVariableVolume.new(self,self.alwaysOnDiscreteSchedule)
+    fan.setName("#{air_loop.name} Fan")
+    fan.setFanEfficiency(vav_fan_efficiency)
+    fan.setMotorEfficiency(vav_fan_motor_efficiency)
+    fan.setPressureRise(vav_fan_pressure_rise)
+    fan.setFanPowerMinimumFlowRateInputMethod('fraction')
+    fan.setFanPowerMinimumFlowFraction(0.25)
+    fan.addToNode(air_loop.supplyInletNode)
+    fan.setEndUseSubcategory("VAV system Fans")
+
+    #heating coil
+    htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
+    htg_coil.setName("#{air_loop.name} Htg Coil")
+    htg_coil.addToNode(air_loop.supplyInletNode)
+
+    #cooling coil
+    clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(self)
+    clg_coil.setName("#{air_loop.name} Clg Coil")
+    clg_coil.addToNode(air_loop.supplyInletNode)
+
+    #outdoor air intake system
+    oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
+    oa_intake_controller.setName("#{air_loop.name} OA Controller")
+    oa_intake_controller.setMinimumLimitType('FixedMinimum')
+    oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
+
+    controller_mv = oa_intake_controller.controllerMechanicalVentilation
+    controller_mv.setName("#{air_loop.name} Vent Controller")
+    controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+
+    oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
+    oa_intake.setName("#{air_loop.name} OA Sys")
+    oa_intake.addToNode(air_loop.supplyInletNode)
+
+    # The oa system need to be added before setting the night cycle control
+    air_loop.setNightCycleControlType('CycleOnAny')
+
+    #hook the VAV system to each zone
+    thermal_zones.each do |zone|
+
+      #reheat coil
+      rht_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
+      rht_coil.setName("#{zone.name} Rht Coil")
+
+      # terminal fan
+      pfp_fan = OpenStudio::Model::FanConstantVolume.new(self,self.alwaysOnDiscreteSchedule)
+      pfp_fan.setName("#{zone.name} PFP Term Fan")
+      pfp_fan.setPressureRise(300)
+      
+      #parallel fan powered terminal
+      pfp_terminal = OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat.new(self,
+                                                                                  self.alwaysOnDiscreteSchedule,
+                                                                                  pfp_fan,
+                                                                                  rht_coil)
+      pfp_terminal.setName("#{zone.name} PFP Term")
+      air_loop.addBranchForZone(zone,pfp_terminal.to_StraightComponent)
+
+      # Zone sizing
+      sizing_zone = zone.sizingZone
+      sizing_zone.setCoolingDesignAirFlowMethod('DesignDay')
+      sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
+      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
+      #sizing_zone.setZoneHeatingDesignSupplyAirTemperature(rht_sa_temp_c)
+      sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zone_htg_sa_temp_c)
+
+    end
+
+    return air_loop
+
+  end
+  
   # Creates a packaged VAV system and adds it to the model.
   #
   # @param standard [String] Valid choices are 90.1-2004,
@@ -3142,7 +3379,7 @@ class OpenStudio::Model::Model
                                                       clg_energy_input_ratio_f_of_flow,
                                                       clg_part_load_ratio)
 
-      clg_coil.setName("#{zone.name} PTAC 1spd DX HP Clg Coil")
+      clg_coil.setName("#{zone.name} PTHP Clg Coil")
       #clg_coil.setRatedSensibleHeatRatio(0.69)
       #clg_coil.setBasinHeaterCapacity(10)
       #clg_coil.setBasinHeaterSetpointTemperature(2.0)

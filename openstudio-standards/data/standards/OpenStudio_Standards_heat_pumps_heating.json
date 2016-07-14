@@ -9,6 +9,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": 8.9,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -25,6 +30,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": 8.9,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -41,6 +51,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": 9.5,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -57,6 +72,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": 9.5,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -73,6 +93,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": 9.2,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -89,6 +114,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": 9.2,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -105,6 +135,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -121,6 +156,11 @@
       "minimum_heating_seasonal_performance_factor": 6.6,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -137,6 +177,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -153,6 +198,11 @@
       "minimum_heating_seasonal_performance_factor": 6.6,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -169,6 +219,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -185,6 +240,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.2,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -201,6 +261,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.1,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -209,6 +274,27 @@
       "notes": "From 90.1-2004 since no DOE Reference Buildings had heat pumps"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "DOE Ref Pre-1980",
+      "cooling_type": "AirCooled",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_heating_seasonal_performance_factor": null,
+      "minimum_coefficient_of_performance_heating": null,
+      "minimum_energy_efficiency_ratio": null,
+      "pthp_cop_coefficient_1": 2.9,
+      "pthp_cop_coefficient_2": 0.026,
+      "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+      "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+      "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+      "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+      "notes": "From 90.1-1989 Table 10-4A"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "DOE Ref 1980-2004",
       "cooling_type": "AirCooled",
       "subcategory": "Split System",
@@ -217,6 +303,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -233,6 +324,11 @@
       "minimum_heating_seasonal_performance_factor": 6.6,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -249,6 +345,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -265,6 +366,11 @@
       "minimum_heating_seasonal_performance_factor": 6.6,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -281,6 +387,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -297,6 +408,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.2,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -313,6 +429,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.1,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -321,6 +442,27 @@
       "notes": "From 90.1-2004 since no DOE Reference Buildings had heat pumps"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "DOE Ref 1980-2004",
+      "cooling_type": "AirCooled",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_heating_seasonal_performance_factor": null,
+      "minimum_coefficient_of_performance_heating": null,
+      "minimum_energy_efficiency_ratio": null,
+      "pthp_cop_coefficient_1": 2.9,
+      "pthp_cop_coefficient_2": 0.026,
+      "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+      "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+      "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+      "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+      "notes": "From 90.1-1989 Table 10-4A"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "90.1-2004",
       "cooling_type": "AirCooled",
       "subcategory": "Split System",
@@ -329,6 +471,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -345,6 +492,11 @@
       "minimum_heating_seasonal_performance_factor": 6.6,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -361,6 +513,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -377,6 +534,11 @@
       "minimum_heating_seasonal_performance_factor": 6.6,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -393,6 +555,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -409,6 +576,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.2,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -425,6 +597,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.1,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -433,6 +610,27 @@
       "notes": "From 90.1-2004 Table 6.8.1B, Before 1/23/2006"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "90.1-2004",
+      "cooling_type": "AirCooled",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_heating_seasonal_performance_factor": null,
+      "minimum_coefficient_of_performance_heating": null,
+      "minimum_energy_efficiency_ratio": null,
+      "pthp_cop_coefficient_1": 3.2,
+      "pthp_cop_coefficient_2": 0.026,
+      "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+      "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+      "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+      "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+      "notes": "From 90.1-2004 Table 6.8.1D"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "90.1-2007",
       "cooling_type": "AirCooled",
       "subcategory": "Split System",
@@ -441,6 +639,11 @@
       "minimum_heating_seasonal_performance_factor": 7.7,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -457,6 +660,11 @@
       "minimum_heating_seasonal_performance_factor": 7.7,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -473,6 +681,11 @@
       "minimum_heating_seasonal_performance_factor": 7.1,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -489,6 +702,11 @@
       "minimum_heating_seasonal_performance_factor": 7.0,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -505,6 +723,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.2,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -521,6 +744,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.1,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -529,6 +757,27 @@
       "notes": "From 90.1-2007 Table 6.8.1B, Before 1/1/2010"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "90.1-2007",
+      "cooling_type": "AirCooled",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_heating_seasonal_performance_factor": null,
+      "minimum_coefficient_of_performance_heating": null,
+      "minimum_energy_efficiency_ratio": null,
+      "pthp_cop_coefficient_1": 3.2,
+      "pthp_cop_coefficient_2": 0.026,
+      "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+      "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+      "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+      "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+      "notes": "From 90.1-2007 Table 6.8.1D"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "90.1-2010",
       "cooling_type": "AirCooled",
       "subcategory": "Split System",
@@ -537,6 +786,11 @@
       "minimum_heating_seasonal_performance_factor": 7.7,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -553,6 +807,11 @@
       "minimum_heating_seasonal_performance_factor": 7.7,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -569,6 +828,11 @@
       "minimum_heating_seasonal_performance_factor": 7.4,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -585,6 +849,11 @@
       "minimum_heating_seasonal_performance_factor": 7.4,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -601,6 +870,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.3,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -617,6 +891,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.2,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -625,6 +904,27 @@
       "notes": "From 90.1-2010 Table 6.8.1B"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "90.1-2010",
+      "cooling_type": "AirCooled",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_heating_seasonal_performance_factor": null,
+      "minimum_coefficient_of_performance_heating": null,
+      "minimum_energy_efficiency_ratio": null,
+      "pthp_cop_coefficient_1": 3.2,
+      "pthp_cop_coefficient_2": 0.026,
+      "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+      "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+      "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+      "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+      "notes": "From 90.1-2010 Table 6.8.1D before 10/08/2012"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "90.1-2013",
       "cooling_type": "AirCooled",
       "subcategory": "Split System",
@@ -633,6 +933,11 @@
       "minimum_heating_seasonal_performance_factor": 7.7,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -649,6 +954,11 @@
       "minimum_heating_seasonal_performance_factor": 7.7,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -665,6 +975,11 @@
       "minimum_heating_seasonal_performance_factor": 7.4,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -681,6 +996,11 @@
       "minimum_heating_seasonal_performance_factor": 7.4,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -697,6 +1017,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -713,6 +1038,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.3,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -729,6 +1059,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.2,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -737,6 +1072,27 @@
       "notes": "From 90.1-2013 Table 6.8.1-6"
     },
     {
+<<<<<<< HEAD
+=======
+      "template": "90.1-2013",
+      "cooling_type": "AirCooled",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_heating_seasonal_performance_factor": null,
+      "minimum_coefficient_of_performance_heating": null,
+      "minimum_energy_efficiency_ratio": null,
+      "pthp_cop_coefficient_1": 3.7,
+      "pthp_cop_coefficient_2": 0.052,
+      "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+      "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+      "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+      "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+      "notes": "From 90.1-2013 Table 6.8.1-4"
+    },
+    {
+>>>>>>> origin/ecbc_baseline_automation
       "template": "OEESC 2014",
       "cooling_type": "AirCooled",
       "subcategory": "Split System",
@@ -745,6 +1101,11 @@
       "minimum_heating_seasonal_performance_factor": 8.2,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -761,6 +1122,11 @@
       "minimum_heating_seasonal_performance_factor": 8.0,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -777,6 +1143,11 @@
       "minimum_heating_seasonal_performance_factor": 7.4,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -793,6 +1164,11 @@
       "minimum_heating_seasonal_performance_factor": 7.4,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -809,6 +1185,11 @@
       "minimum_heating_seasonal_performance_factor": 6.8,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -825,6 +1206,11 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.3,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
@@ -841,12 +1227,38 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": 3.2,
       "minimum_energy_efficiency_ratio": null,
+<<<<<<< HEAD
+=======
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+>>>>>>> origin/ecbc_baseline_automation
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
       "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
       "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From OEESC2014 Table 503.2.3(2) Before 1/1/2016"
+<<<<<<< HEAD
+=======
+    },
+    {
+      "template": "OEESC 2014",
+      "cooling_type": "AirCooled",
+      "subcategory": "PTHP",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "minimum_heating_seasonal_performance_factor": null,
+      "minimum_coefficient_of_performance_heating": null,
+      "minimum_energy_efficiency_ratio": null,
+      "pthp_cop_coefficient_1": 3.2,
+      "pthp_cop_coefficient_2": 0.026,
+      "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+      "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+      "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+      "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+      "notes": "From OEESC2014 Table 503.2.3(3)"
+>>>>>>> origin/ecbc_baseline_automation
     }
   ]
 }

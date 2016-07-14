@@ -150,43 +150,84 @@ def strip_model(model)
 
 end
 
-# Convert from SEER to COP
-# per the method specified in "Achieving the 30% Goal: Energy 
-# and cost savings analysis of ASHRAE Standard 90.1-2010
-# Thornton, et al 2011
+# Convert from SEER to COP (no fan) for cooling coils
+# per the method specified in 90.1-2013 Appendix G
 #
 # @param seer [Double] seasonal energy efficiency ratio (SEER)
 # @return [Double] Coefficient of Performance (COP)
-def seer_to_cop(seer)
+def seer_to_cop_cooling_no_fan(seer)
   
-  cop = nil
+  cop = -0.0076 * seer * seer + 0.3796 * seer
+  
+  return cop
+ 
+end
 
-  # First convert from SEER to EER
-  eer = (-0.0182 * seer * seer) + (1.1088 * seer)
+# Convert from COP_H to COP (no fan) for heat pump heating coils
+# per the method specified in 90.1-2013 Appendix G
+#
+# @param coph47 [Double] coefficient of performance at 47F Tdb, 42F Twb
+# @param capacity_w [Double] the heating capacity at AHRI rating conditions, in W
+# @return [Double] Coefficient of Performance (COP)
+def cop_heating_to_cop_heating_no_fan(coph47,capacity_w)
+
+  # Convert the capacity to Btu/hr
+  capacity_btu_per_hr = OpenStudio.convert(capacity_w,'W','Btu/hr').get
   
-  # Next convert EER to COP
-  cop = eer_to_cop(eer)
+  cop = 1.48E-7 * coph47 * capacity_btu_per_hr + 1.062 * coph47
+
+  return cop
+ 
+end
+
+# Convert from HSPF to COP (no fan) for heat pump heating coils
+# per the method specified in 90.1-2013 Appendix G
+#
+# @param hspf [Double] heating seasonal performance factor (HSPF)
+# @return [Double] Coefficient of Performance (COP)
+def hspf_to_cop_heating_no_fan(hspf)
+  
+  cop = -0.0296 * hspf * hspf + 0.7134 * hspf
   
   return cop
  
 end
 
 # Convert from EER to COP
-# per the method specified in "Achieving the 30% Goal: Energy 
-# and cost savings analysis of ASHRAE Standard 90.1-2010
-# Thornton, et al 2011
+# If capacity is not supplied, use the method specified
+# in "Achieving the 30% Goal: Energy and cost savings
+# analysis of ASHRAE Standard 90.1-2010
+# Thornton, et al 2011.
+# If capacity is supplied, use the method specified in
+# 90.1-2013.
 #
 # @param eer [Double] Energy Efficiency Ratio (EER)
+# @param capacity_w [Double] the heating capacity at AHRI rating conditions, in W
 # @return [Double] Coefficient of Performance (COP)
-def eer_to_cop(eer)
-  
-  cop = nil
+def eer_to_cop(eer, capacity_w=nil)
 
-  # r is the ratio of supply fan power to total equipment power at the rating condition,
-  # assumed to be 0.12 for the reference buildngs per PNNL.
-  r = 0.12
+  cop = nil
   
-  cop = (eer/3.413 + r)/(1-r)
+  if capacity_w.nil?
+
+    # The PNNL Method.
+  
+    # r is the ratio of supply fan power to total equipment power at the rating condition,
+    # assumed to be 0.12 for the reference buildngs per PNNL.
+    r = 0.12
+    
+    cop = (eer/3.413 + r)/(1-r)
+  
+  else
+    
+    # The 90.1-2013 method
+
+    # Convert the capacity to Btu/hr
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w,'W','Btu/hr').get
+  
+    cop = 7.84E-8 * eer * capacity_btu_per_hr + 0.338 * eer
+  
+  end
   
   return cop
  

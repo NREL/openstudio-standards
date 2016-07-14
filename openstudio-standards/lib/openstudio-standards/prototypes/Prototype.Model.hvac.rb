@@ -47,7 +47,17 @@ class OpenStudio::Model::Model
             end
           end
           if prototype_input['chiller_cooling_type'] == 'WaterCooled'
+<<<<<<< HEAD
             condenser_water_loop = self.add_cw_loop(building_type, building_vintage, number_cooling_towers)
+=======
+            condenser_water_loop = self.add_cw_loop(building_vintage,
+                                                    'Open Cooling Tower',
+                                                    'Centrifugal',
+                                                    'Fan Cycling',
+                                                    2,
+                                                    1,
+                                                    building_type)
+>>>>>>> origin/ecbc_baseline_automation
           end
           chilled_water_loop = self.add_chw_loop(
                                   building_vintage,
@@ -205,7 +215,13 @@ class OpenStudio::Model::Model
         else
           condenser_water_loop = nil
           if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-            condenser_water_loop = self.add_cw_loop()
+            condenser_water_loop = self.add_cw_loop(building_vintage,
+                                                    'Open Cooling Tower',
+                                                    'Centrifugal',
+                                                    'Fan Cycling',
+                                                    2,
+                                                    1,
+                                                    building_type)
           end
 
           chilled_water_loop = self.add_chw_loop(building_vintage,
@@ -278,7 +294,7 @@ class OpenStudio::Model::Model
                             thermal_zones,
                             prototype_input['unitheater_operation_schedule'],
                             prototype_input['unitheater_fan_control_type'],
-                            prototype_input['unitheater_fan_static_pressure'],
+                            OpenStudio.convert(prototype_input['unitheater_fan_static_pressure'], "inH_{2}O", "Pa").get,
                             prototype_input['unitheater_heating_type'],
                             building_type)
 
