@@ -52,7 +52,7 @@ class OpenStudio::Model::Model
                                                 prototype_input['chiller_cooling_type'],
                                                 prototype_input['chiller_condenser_type'],
                                                 prototype_input['chiller_compressor_type'],
-                                                prototype_input['chiller_capacity_guess'],
+                                                'Electricity',
                                                 condenser_water_loop)
                                  
         end
@@ -69,6 +69,7 @@ class OpenStudio::Model::Model
             prototype_input['vav_fan_motor_efficiency'],
             prototype_input['vav_fan_pressure_rise'],
             return_plenum,
+            electric_reheat=false,
             building_type)
           
       when 'CAV'
@@ -156,7 +157,9 @@ class OpenStudio::Model::Model
                       thermal_zones, 
                       prototype_input['vav_operation_schedule'],
                       prototype_input['vav_oa_damper_schedule'],
+                      electric_reheat=false,
                       hot_water_loop,
+                      chilled_water_loop=nil,
                       return_plenum, 
                       building_type)
       
@@ -193,7 +196,7 @@ class OpenStudio::Model::Model
                                                 prototype_input['chiller_cooling_type'],
                                                 prototype_input['chiller_condenser_type'],
                                                 prototype_input['chiller_compressor_type'],
-                                                prototype_input['chiller_capacity_guess'],
+                                                'Electricity',
                                                 condenser_water_loop)
         end      
 
@@ -260,6 +263,7 @@ class OpenStudio::Model::Model
                             prototype_input['unitheater_fan_control_type'],
                             OpenStudio.convert(prototype_input['unitheater_fan_static_pressure'], "inH_{2}O", "Pa").get,
                             prototype_input['unitheater_heating_type'],
+                            hot_water_loop=nil,
                             building_type)
 
       when 'PTAC'

@@ -4,10 +4,10 @@ class OpenStudio::Model::Model
 
   require_relative 'Prototype.AirTerminalSingleDuctVAVReheat'
 
-  # Creates a hot water loop with one boiler
+  # Creates a hot water loop with one boiler or district heating
   # and add it to the model.
   #
-  # @param boiler_fuel_type [String] valid choices are Electricity, Gas, PropaneGas, FuelOil#1, FuelOil#2
+  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2, DistrictHeating
   # @return [OpenStudio::Model::PlantLoop] the resulting hot water loop  
   def add_hw_loop(boiler_fuel_type, building_type=nil)
 
@@ -56,34 +56,41 @@ class OpenStudio::Model::Model
     hw_pump.setPumpControlType('Intermittent')
     hw_pump.addToNode(hot_water_loop.supplyInletNode)
 
-    #boiler
-    boiler_max_t_f = 203
-    boiler_max_t_c = OpenStudio.convert(boiler_max_t_f,'F','C').get
-    boiler = OpenStudio::Model::BoilerHotWater.new(self)
-    boiler.setName('Hot Water Loop Boiler')
-    boiler.setEfficiencyCurveTemperatureEvaluationVariable('LeavingBoiler')
-    boiler.setFuelType(boiler_fuel_type)
-    boiler.setDesignWaterOutletTemperature(hw_temp_c)
-    boiler.setNominalThermalEfficiency(0.78)
-    boiler.setMaximumPartLoadRatio(1.2)
-    boiler.setWaterOutletUpperTemperatureLimit(boiler_max_t_c)
-    boiler.setBoilerFlowMode('LeavingSetpointModulated')
-    hot_water_loop.addSupplyBranchForComponent(boiler)
-
-    if building_type == "LargeHotel"
-      boiler.setEfficiencyCurveTemperatureEvaluationVariable("LeavingBoiler")
-      boiler.setDesignWaterOutletTemperature(81)
+    # DistrictHeating
+    if boiler_fuel_type == 'DistrictHeating'
+      dist_ht = OpenStudio::Model::DistrictHeating.new(self)
+      dist_ht.setName('Purchased Heating')
+      dist_ht.setNominalCapacity(1000000)
+      hot_water_loop.addSupplyBranchForComponent(dist_ht)
+    # Boiler
+    else
+      boiler_max_t_f = 203
+      boiler_max_t_c = OpenStudio.convert(boiler_max_t_f,'F','C').get
+      boiler = OpenStudio::Model::BoilerHotWater.new(self)
+      boiler.setName('Hot Water Loop Boiler')
+      boiler.setEfficiencyCurveTemperatureEvaluationVariable('LeavingBoiler')
+      boiler.setFuelType(boiler_fuel_type)
+      boiler.setDesignWaterOutletTemperature(hw_temp_c)
+      boiler.setNominalThermalEfficiency(0.78)
       boiler.setMaximumPartLoadRatio(1.2)
-      boiler.setSizingFactor(1.2)
-      boiler.setWaterOutletUpperTemperatureLimit(95)
+      boiler.setWaterOutletUpperTemperatureLimit(boiler_max_t_c)
+      boiler.setBoilerFlowMode('LeavingSetpointModulated')
+      hot_water_loop.addSupplyBranchForComponent(boiler)
+
+      if building_type == "LargeHotel"
+        boiler.setEfficiencyCurveTemperatureEvaluationVariable("LeavingBoiler")
+        boiler.setDesignWaterOutletTemperature(81)
+        boiler.setMaximumPartLoadRatio(1.2)
+        boiler.setSizingFactor(1.2)
+        boiler.setWaterOutletUpperTemperatureLimit(95)
+      end
+      
+      # TODO: Yixing. Add the temperature setpoint will cost the simulation with
+      # thousands of Severe Errors. Need to figure this out later.
+      #boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,hw_temp_sch)
+      #boiler_stpt_manager.setName("Boiler outlet setpoint manager")
+      #boiler_stpt_manager.addToNode(boiler.outletModelObject.get.to_Node.get)
     end
-
-    # TODO: Yixing. Add the temperature setpoint will cost the simulation with
-    # thousands of Severe Errors. Need to figure this out later.
-    #boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,hw_temp_sch)
-    #boiler_stpt_manager.setName("Boiler outlet setpoint manager")
-    #boiler_stpt_manager.addToNode(boiler.outletModelObject.get.to_Node.get)
-
 
     #hot water loop pipes
     boiler_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
@@ -109,7 +116,8 @@ class OpenStudio::Model::Model
   # @param chiller_cooling_type [String] valid choices are AirCooled, WaterCooled
   # @param chiller_condenser_type [String] valid choices are WithCondenser, WithoutCondenser, nil
   # @param chiller_compressor_type [String] valid choices are Centrifugal, Reciprocating, Rotary Screw, Scroll, nil
-  # @param chiller_capacity_guess_tons [Double] tonnage to base initial chiller efficiencies on
+  # @param cooling_fuel [String] cooling fuel. Valid choices are:
+  # Electricity, DistrictCooling
   # @param condenser_water_loop [OpenStudio::Model::PlantLoop] optional condenser water loop
   #   for water-cooled chillers.  If this is not passed in, the chillers will be air cooled.
   # @return [OpenStudio::Model::PlantLoop] the resulting chilled water loop
@@ -118,7 +126,7 @@ class OpenStudio::Model::Model
                   chiller_cooling_type,
                   chiller_condenser_type,
                   chiller_compressor_type,
-                  chiller_capacity_guess_tons,
+                  cooling_fuel,
                   condenser_water_loop = nil,
                   building_type=nil)
 
@@ -200,40 +208,48 @@ class OpenStudio::Model::Model
       chilled_water_loop.setCommonPipeSimulation('CommonPipe')
     end
 
-    # Make the correct type of chiller based these properties 
-    chiller = OpenStudio::Model::ChillerElectricEIR.new(self)
-    chiller.setName("#{standard} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller")
-    chilled_water_loop.addSupplyBranchForComponent(chiller)
-    chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
-    ref_cond_wtr_temp_f = 95
-    ref_cond_wtr_temp_c = OpenStudio.convert(ref_cond_wtr_temp_f,'F','C').get
-    chiller.setReferenceEnteringCondenserFluidTemperature(ref_cond_wtr_temp_c)
-    chiller.setMinimumPartLoadRatio(0.15)
-    chiller.setMaximumPartLoadRatio(1.0)
-    chiller.setOptimumPartLoadRatio(1.0)
-    chiller.setMinimumUnloadingRatio(0.25)
-    chiller.setCondenserType('AirCooled')
-    chiller.setLeavingChilledWaterLowerTemperatureLimit(OpenStudio.convert(36,'F','C').get)
-    chiller.setChillerFlowMode('ConstantFlow')
+    # DistrictCooling
+    if cooling_fuel == 'DistrictCooling'
+      dist_clg = OpenStudio::Model::DistrictCooling.new(self)
+      dist_clg.setName('Purchased Cooling')
+      dist_clg.setNominalCapacity(1000000)
+      chilled_water_loop.addSupplyBranchForComponent(dist_clg)
+    # Chiller
+    else
+      # Make the correct type of chiller based these properties 
+      chiller = OpenStudio::Model::ChillerElectricEIR.new(self)
+      chiller.setName("#{standard} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller")
+      chilled_water_loop.addSupplyBranchForComponent(chiller)
+      chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
+      ref_cond_wtr_temp_f = 95
+      ref_cond_wtr_temp_c = OpenStudio.convert(ref_cond_wtr_temp_f,'F','C').get
+      chiller.setReferenceEnteringCondenserFluidTemperature(ref_cond_wtr_temp_c)
+      chiller.setMinimumPartLoadRatio(0.15)
+      chiller.setMaximumPartLoadRatio(1.0)
+      chiller.setOptimumPartLoadRatio(1.0)
+      chiller.setMinimumUnloadingRatio(0.25)
+      chiller.setCondenserType('AirCooled')
+      chiller.setLeavingChilledWaterLowerTemperatureLimit(OpenStudio.convert(36,'F','C').get)
+      chiller.setChillerFlowMode('ConstantFlow')
 
-    #if building_type == "LargeHotel"
-      # TODO: Yixing. Add the temperature setpoint and change the flow mode will cost the simulation with
-      # thousands of Severe Errors. Need to figure this out later.
-      #chiller.setChillerFlowMode('LeavingSetpointModulated')
-      #chiller_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,chw_temp_sch)
-      #chiller_stpt_manager.setName("chiller outlet setpoint manager")
-      #chiller_stpt_manager.addToNode(chiller.supplyOutletModelObject.get.to_Node.get)
-    #end
+      #if building_type == "LargeHotel"
+        # TODO: Yixing. Add the temperature setpoint and change the flow mode will cost the simulation with
+        # thousands of Severe Errors. Need to figure this out later.
+        #chiller.setChillerFlowMode('LeavingSetpointModulated')
+        #chiller_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,chw_temp_sch)
+        #chiller_stpt_manager.setName("chiller outlet setpoint manager")
+        #chiller_stpt_manager.addToNode(chiller.supplyOutletModelObject.get.to_Node.get)
+      #end
 
-    # Connect the chiller to the condenser loop if
-    # one was supplied.
-    if condenser_water_loop
-      condenser_water_loop.addDemandBranchForComponent(chiller)
-      chiller.setCondenserType('WaterCooled')
-	end
-	
+      # Connect the chiller to the condenser loop if
+      # one was supplied.
+      if condenser_water_loop
+        condenser_water_loop.addDemandBranchForComponent(chiller)
+        chiller.setCondenserType('WaterCooled')
+      end
+    end
 
-	#chilled water loop pipes
+    #chilled water loop pipes
     chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
     chilled_water_loop.addSupplyBranchForComponent(chiller_bypass_pipe)
     coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
@@ -511,6 +527,8 @@ class OpenStudio::Model::Model
   # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa
   # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as
   # the supply plenum, or nil, in which case no return plenum will be used.
+  # @param electric_reheat [Bool] if true, this system will have electric reheat coils,
+  # but if false, the reheat coils will be served by the hot_water_loop.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
   def add_vav_reheat(standard, 
@@ -524,6 +542,7 @@ class OpenStudio::Model::Model
               vav_fan_motor_efficiency,
               vav_fan_pressure_rise,
               return_plenum,
+              electric_reheat=false,
               building_type=nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding VAV system for #{thermal_zones.size} zones.")
@@ -670,13 +689,19 @@ class OpenStudio::Model::Model
     thermal_zones.each do |zone|
 
       #reheat coil
-      rht_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
-      rht_coil.setName("#{zone.name} Rht Coil")
-      rht_coil.setRatedInletWaterTemperature(hw_temp_c)
-      rht_coil.setRatedInletAirTemperature(htg_sa_temp_c)
-      rht_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-      rht_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
-      hot_water_loop.addDemandBranchForComponent(rht_coil)
+      rht_coil = nil
+      if electric_reheat
+        rht_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
+        rht_coil.setName("#{zone.name} Rht Coil")
+      else
+        rht_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
+        rht_coil.setName("#{zone.name} Rht Coil")
+        rht_coil.setRatedInletWaterTemperature(hw_temp_c)
+        rht_coil.setRatedInletAirTemperature(htg_sa_temp_c)
+        rht_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
+        rht_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
+        hot_water_loop.addDemandBranchForComponent(rht_coil)
+      end
 
       #vav terminal
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self,self.alwaysOnDiscreteSchedule,rht_coil)
@@ -729,7 +754,7 @@ class OpenStudio::Model::Model
   # or nil in which case will be defaulted to always open
   # @param vav_fan_efficiency [Double] fan total efficiency, including motor and impeller
   # @param vav_fan_motor_efficiency [Double] fan motor efficiency
-  # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa  
+  # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop  
   def add_vav_pfp_boxes(standard, 
@@ -821,7 +846,7 @@ class OpenStudio::Model::Model
     htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
     htg_coil.setName("#{air_loop.name} Htg Coil")
     htg_coil.addToNode(air_loop.supplyInletNode)
-
+      
     #cooling coil
     clg_coil = OpenStudio::Model::CoilCoolingWater.new(self,self.alwaysOnDiscreteSchedule)
     clg_coil.setName("#{air_loop.name} Clg Coil")
@@ -889,13 +914,19 @@ class OpenStudio::Model::Model
   # @param standard [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to.
-  #   if nil, will be electric heat and electric reheat
   # @param thermal_zones [String] zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule, 
   # or nil in which case will be defaulted to always open
+  # @param electric_reheat [Bool] if true, this system will have electric reheat coils,
+  # but if false, the reheat coils will be served by the hot_water_loop.
+  # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to.
+  #   if nil, will be electric heat and electric reheat 
+  # @param chilled_water_loop [String] chilled water loop to connect cooling coils to.
+  #   if nil, will be DX cooling. 
+  # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as
+  # the supply plenum, or nil, in which case no return plenum will be used.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop  
   def add_pvav(standard, 
@@ -903,7 +934,9 @@ class OpenStudio::Model::Model
               thermal_zones, 
               hvac_op_sch,
               oa_damper_sch,
-              hot_water_loop = nil, 
+              electric_reheat = false,
+              hot_water_loop = nil,
+              chilled_water_loop = nil,
               return_plenum = nil,
               building_type = nil)
 
@@ -1008,10 +1041,19 @@ class OpenStudio::Model::Model
     end
 
     # Cooling coil
-    clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(self)
-    clg_coil.setName("#{air_loop.name} Clg Coil")
-    clg_coil.addToNode(air_loop.supplyInletNode)
-
+    if chilled_water_loop.nil?    
+      clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(self)
+      clg_coil.setName("#{air_loop.name} Clg Coil")
+      clg_coil.addToNode(air_loop.supplyInletNode)
+    else
+      clg_coil = OpenStudio::Model::CoilCoolingWater.new(self,self.alwaysOnDiscreteSchedule)
+      clg_coil.setName("#{air_loop.name} Clg Coil")
+      clg_coil.addToNode(air_loop.supplyInletNode)
+      clg_coil.setHeatExchangerConfiguration("CrossFlow")
+      chilled_water_loop.addDemandBranchForComponent(clg_coil)
+      clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
+    end
+    
     # Outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
@@ -1029,7 +1071,7 @@ class OpenStudio::Model::Model
       # Reheat coil
       rht_coil = nil
       # sys_name.include? "Outpatient F2 F3"  is only for reheat coil of Outpatient Floor2&3
-      if hot_water_loop.nil? or sys_name.include? "Outpatient F2 F3"
+      if electric_reheat || hot_water_loop.nil? || sys_name.include?("Outpatient F2 F3")
         rht_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
       else
@@ -1080,6 +1122,8 @@ class OpenStudio::Model::Model
   # @param vav_fan_efficiency [Double] fan total efficiency, including motor and impeller
   # @param vav_fan_motor_efficiency [Double] fan motor efficiency
   # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa  
+  # @param chilled_water_loop [String] chilled water loop to connect cooling coils to.
+  #   if nil, will be DX cooling.   
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop  
   def add_pvav_pfp_boxes(standard, 
@@ -1090,6 +1134,7 @@ class OpenStudio::Model::Model
               vav_fan_efficiency,
               vav_fan_motor_efficiency,
               vav_fan_pressure_rise,
+              chilled_water_loop=nil,
               building_type=nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding PVAV with PFP Boxes and Reheat system for #{thermal_zones.size} zones.")
@@ -1166,16 +1211,25 @@ class OpenStudio::Model::Model
     fan.addToNode(air_loop.supplyInletNode)
     fan.setEndUseSubcategory("VAV system Fans")
 
-    #heating coil
+    #heating coil    
     htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self,self.alwaysOnDiscreteSchedule)
-    htg_coil.setName("#{air_loop.name} Htg Coil")
+    htg_coil.setName("#{air_loop.name} Main Htg Coil")
     htg_coil.addToNode(air_loop.supplyInletNode)
 
-    #cooling coil
-    clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(self)
-    clg_coil.setName("#{air_loop.name} Clg Coil")
-    clg_coil.addToNode(air_loop.supplyInletNode)
-
+    # Cooling coil
+    if chilled_water_loop.nil?    
+      clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(self)
+      clg_coil.setName("#{air_loop.name} Clg Coil")
+      clg_coil.addToNode(air_loop.supplyInletNode)
+    else
+      clg_coil = OpenStudio::Model::CoilCoolingWater.new(self,self.alwaysOnDiscreteSchedule)
+      clg_coil.setName("#{air_loop.name} Clg Coil")
+      clg_coil.addToNode(air_loop.supplyInletNode)
+      clg_coil.setHeatExchangerConfiguration("CrossFlow")
+      chilled_water_loop.addDemandBranchForComponent(clg_coil)
+      clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
+    end    
+    
     #outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
@@ -3277,11 +3331,10 @@ class OpenStudio::Model::Model
   # @param fan_control_type [Double] valid choices are Continuous, OnOff, Cycling
   # @param fan_pressure_rise [Double] fan pressure rise, in Pa
   # @param heating_type [Double] valid choices are 
-  # Gas, Electric
+  # NaturalGas, Electricity, DistrictHeating
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACUnitHeater>] an 
   # array of the resulting unit heaters.
-  # Todo: to leverage this method for proposed model creation, might be useful to add 'Water' to heating type with an optional hot_water_loop to tie it to
   def add_unitheater(standard, 
                     sys_name,
                     thermal_zones, 
@@ -3289,8 +3342,17 @@ class OpenStudio::Model::Model
                     fan_control_type,
                     fan_pressure_rise,
                     heating_type,
+                    hot_water_loop=nil,
                     building_type=nil)
 
+    # Control temps for HW loop
+    # will only be used when hot_water_loop is provided.
+    hw_temp_f = 180 #HW setpoint 180F
+    hw_delta_t_r = 20 #20F delta-T
+
+    hw_temp_c = OpenStudio.convert(hw_temp_f,'F','C').get
+    hw_delta_t_k = OpenStudio.convert(hw_delta_t_r,'R','K').get
+                    
     thermal_zones.each do |zone|
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding split unit heater for #{zone.name}.")
     end  
@@ -3326,12 +3388,20 @@ class OpenStudio::Model::Model
 
       # add heating coil
       htg_coil = nil
-      if heating_type == "Gas"
+      if heating_type == 'NaturalGas'
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, hvac_op_sch)
         htg_coil.setName("#{zone.name} UnitHeater Gas Htg Coil")
-      elsif heating_type == "Electric"
+      elsif heating_type == 'Electricity'
         htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, hvac_op_sch)
         htg_coil.setName("#{zone.name} UnitHeater Electric Htg Coil")
+      elsif heating_type == 'DistrictHeating' && !hot_water_loop.nil?
+        htg_coil = OpenStudio::Model::CoilHeatingWater.new(self,self.alwaysOnDiscreteSchedule)
+        htg_coil.setName("#{zone.name} UnitHeater Water Htg Coil")
+        htg_coil.setRatedInletWaterTemperature(hw_temp_c)
+        htg_coil.setRatedInletAirTemperature(rht_rated_air_in_temp_c)
+        htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
+        htg_coil.setRatedOutletAirTemperature(rht_rated_air_out_temp_c)
+        hot_water_loop.addDemandBranchForComponent(htg_coil)
       else
         OpenStudio::logFree(OpenStudio::Error, 'openstudio.Model.Model', "No heating type was found when adding unit heater; no unit heater will be created.")
         return false

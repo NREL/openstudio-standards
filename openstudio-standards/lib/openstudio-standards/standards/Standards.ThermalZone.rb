@@ -401,6 +401,90 @@ class OpenStudio::Model::ThermalZone
   
   end
   
+  # Determine if the thermal zone's fuel type category.
+  # Options are:
+  # fossil, electric, purchasedheat, purchasedcooling, purchasedheatandcooling, unconditioned
+  # If a customization is passed, additional categories may
+  # be returned.
+  # If 'Xcel Energy CO EDA', the type fossilandelectric is added.
+  #
+  # @return [String] the fuel type category
+  def fuel_type(custom)
+  
+    fossil = false
+    electric = false
+    purchased_heating = false
+    purchased_cooling = false
+    
+    # Fossil heating
+    htg_fuels = self.heating_fuels
+    if htg_fuels.include?('NaturalGas') ||
+       htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil#1') ||
+       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('Coal') ||
+       htg_fuels.include?('Diesel') ||
+       htg_fuels.include?('Gasoline')
+      fossil = true
+    end
+    
+    # Electric heating
+    if htg_fuels.include?('Electricity')
+      electric = true
+    end    
+    
+    # Purchased heating
+    if htg_fuels.include?('DistrictHeating')
+      purchased_heating = true
+    end     
+    
+    # Purchased cooling
+    clg_fuels = self.cooling_fuels
+    if clg_fuels.include?('DistrictCooling')
+      purchased_cooling = true
+    end 
+    
+    # Categorize
+    fuel_type = nil
+    if purchased_heating && purchased_cooling
+      fuel_type = 'purchasedheatandcooling'
+    elsif purchased_heating && !purchased_cooling
+      fuel_type = 'purchasedheat'
+    elsif !purchased_heating && purchased_cooling
+      fuel_type = 'purchasedcooling'
+    elsif fossil
+      # If uses any fossil, counts as fossil even if electric is present too
+      fuel_type = 'fossil'
+    elsif electric
+      fuel_type = 'electric'
+    elsif htg_fuels.size == 0 && clg_fuels.size == 0
+      fuel_type = 'unconditioned'
+    else
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "For #{self.name}, could not determine fuel type, assuming fossil.  Heating fuels = #{htg_fuels.join(', ')}; cooling fuels = #{clg_fuels.join(', ')}.")
+      fuel_type = 'fossil'
+    end
+    
+    # Customization for Xcel.
+    # Likely useful for other utility
+    # programs where fuel switching is important.
+    # This is primarily for systems where Gas is
+    # used at the central AHU and electric is
+    # used at the terminals/zones.  Examples
+    # include zone VRF/PTHP with gas-heated DOAS,
+    # and gas VAV with electric reheat
+    case custom
+    when 'Xcel Energy CO EDA'
+      if fossil && electric
+        fuel_type = 'fossilandelectric'
+      end
+    end
+  
+    #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.Model", "For #{self.name}, fuel type = #{fuel_type}.")
+  
+    return fuel_type
+  
+  end  
+
   # Determine if the thermal zone is
   # Fossil/Purchased Heat/Electric Hybrid
   #
@@ -1080,6 +1164,85 @@ class OpenStudio::Model::ThermalZone
     end
     
     return load_w
+  
+  end
+  
+  # Returns the space type that represents a majority
+  # of the floor area.
+  #
+  # @return [Boost::Optional<OpenStudio::Model::SpaceType>] an optional SpaceType
+  def majority_space_type
+  
+    space_type_to_area = Hash.new(0.0)
+  
+    self.spaces.each do |space|
+      if space.spaceType.is_initialized
+        space_type = space.spaceType.get
+        space_type_to_area[space_type] += space.floorArea
+      end
+    end
+  
+    # If no space types, return empty optional SpaceType
+    if space_type_to_area.size == 0
+      return OpenStudio::Model::OptionalSpaceType.new
+    end
+  
+    # Sort by area
+    biggest_space_type = space_type_to_area.sort_by {|st, area| area}[0][0]
+      
+    return OpenStudio::Model::OptionalSpaceType.new(biggest_space_type)
+
+  end
+  
+  # Determine if the thermal zone's occupancy type category.
+  # Options are:
+  # residential, nonresidential, heatedonly
+  # 90.1-2013 adds additional Options:
+  # publicassembly, retail
+  #
+  # @return [String] the occupancy type category
+  # @todo Add public assembly building types
+  def occupancy_type(standard)
+
+    occ_type = nil
+  
+    heated = self.is_heated
+    cooled = self.is_cooled  
+
+    # Heated Only
+    occ_type = nil
+    if heated && !cooled
+      occ_type = 'heatedonly'
+    # Residential
+    elsif self.is_residential(standard)
+      occ_type = 'residential'
+    # Nonresidential
+    else
+      occ_type = 'nonresidential'
+    end
+
+    # Based on the space type that
+    # represents a majority of the zone.
+    if standard == '90.1-2013'
+      space_type = self.majority_space_type
+      if space_type.is_initialized
+        space_type = space_type.get
+        bldg_type = space_type.standardsBuildingType
+        if bldg_type.is_initialized
+          bldg_type = bldg_type.get
+          case bldg_type
+          when 'Retail', 'StripMall', 'SuperMarket'
+            occ_type = 'retail'
+          # when 'SomeBuildingType' # TODO add publicassembly building types
+            # occ_type = 'publicassembly'
+          end
+        end
+      end
+    end
+  
+    #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.ThermalZone", "For #{self.name}, occupancy type = #{occ_type}.")
+
+    return occ_type
   
   end
   

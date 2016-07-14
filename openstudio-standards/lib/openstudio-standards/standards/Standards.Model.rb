@@ -103,13 +103,13 @@ class OpenStudio::Model::Model
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
   def create_performance_rating_method_baseline_building(building_type, building_vintage, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-
+    
     lookup_building_type = self.get_lookup_name(building_type)
 
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
     # Remove external shading devices
-		OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Removing External Shading Devices ***")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Removing External Shading Devices ***")
     self.remove_external_shading_devices
  
     # Reduce the WWR and SRR, if necessary
@@ -150,7 +150,7 @@ class OpenStudio::Model::Model
     # This must be done before removing the HVAC systems
     # because it requires knowledge of proposed HVAC fuels.
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Grouping Zones by Fuel Type and Occupancy Type ***")
-    sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage, custom)    
+    sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage, custom)
     
     # Remove all HVAC from model
     self.remove_performance_rating_method_hvac
@@ -174,12 +174,21 @@ class OpenStudio::Model::Model
                                                                 sys_group['stories'],
                                                                 custom)
 
-      sys_group['zones'].each do |zone|
-        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "---#{zone.name}")
+      sys_group['zones'].sort.each_slice(5) do |zone_list|
+        zone_names = []
+        zone_list.each do |zone|
+          zone_names << zone.name.get.to_s
+        end
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
       end
       
       # Add the system type for these zones
-      self.add_performance_rating_method_baseline_system(building_vintage, system_type, sys_group['zones'])
+      self.add_performance_rating_method_baseline_system(building_vintage,
+                                                        system_type[0],
+                                                        system_type[1],
+                                                        system_type[2],
+                                                        system_type[3],
+                                                        sys_group['zones'])
     
     end
 
@@ -274,7 +283,7 @@ class OpenStudio::Model::Model
         curve.remove
       end
     end
-
+    
     # Todo: turn off self shading
     # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
     # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
@@ -346,144 +355,90 @@ class OpenStudio::Model::Model
 
   end  
   
+  # Categorize zones by occupancy type and fuel type,
+  # where the types depend on the standard.
+  #
+  # @return [Array<Hash>] an array of hashes, one for each zone,
+  # with the keys 'zone', 'type' (occ type), 'fuel', and 'area'
+  def zones_by_occ_and_fuel_type(standard, custom)
+  
+    zones = []
+    
+    self.getThermalZones.sort.each do |zone|
+      
+      # Skip plenums
+      if zone.is_plenum
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Zone #{zone.name} is a plenum.  It will not be assigned a baseline system.")
+        next
+      end
+      
+      # Skip unconditioned zones
+      heated = zone.is_heated
+      cooled = zone.is_cooled
+      if !heated && !cooled
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Zone #{zone.name} is unconditioned.  It will not be assigned a baseline system.")
+        next
+      end      
+      
+      zn_hash = {}
+    
+      # The zone object
+      zn_hash['zone'] = zone
+
+      # Floor area
+      zn_hash['area'] = zone.floorArea
+
+      # Occupancy type
+      zn_hash['type'] = zone.occupancy_type(standard)
+
+      # Fuel type
+      zn_hash['fuel'] = zone.fuel_type(custom)
+      
+      zones << zn_hash
+      
+    end
+ 
+    return zones
+  
+  end
+  
   # Determine the dominant and exceptional areas of the
   # building based on fuel types and occupancy types.
   #
   # @param standard [String] the standard.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, fuel, and zones (an array of zones)
-  def performance_rating_method_baseline_system_groups(standard, custom)
+  def performance_rating_method_baseline_system_groups(standard, custom)  
   
-    # Get the residential and nonresidential
-    # fossil and electric zones and their areas
-    res_fossil = {'area_ft2'=>0, 'type'=>'residential', 'fuel'=>'fossil', 'zones'=>[]}
-    res_elec = {'area_ft2'=>0, 'type'=>'residential', 'fuel'=>'electric', 'zones'=>[]}
-    nonres_fossil = {'area_ft2'=>0, 'type'=>'nonresidential', 'fuel'=>'fossil', 'zones'=>[]}
-    nonres_elec = {'area_ft2'=>0, 'type'=>'nonresidential', 'fuel'=>'electric', 'zones'=>[]}
-    fossil_ho = {'area_ft2'=>0, 'type'=>'heatedonly', 'fuel'=>'fossil', 'zones'=>[]}
-    elec_ho = {'area_ft2'=>0, 'type'=>'heatedonly', 'fuel'=>'electric', 'zones'=>[]}  
-    zones_already_warned_unconditioned = []
-    [res_fossil, res_elec, nonres_fossil, nonres_elec, fossil_ho, elec_ho].each do |data|
-      # If the zone meets the criteria, add it
-      self.getThermalZones.sort.each do |zone|
-        area_m2 = zone.floor_area_with_zone_multipliers
-        area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-        heated = zone.is_heated
-        cooled = zone.is_cooled
-        # Plenum zones
-        if zone.is_plenum
-          unless zones_already_warned_unconditioned.include?(zone)
-            OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Zone #{zone.name} is a plenum.  It will not be assigned a baseline system.")
-            zones_already_warned_unconditioned << zone
-          end
-          next # Skip this zone
-        # Unconditioned
-        elsif !heated && !cooled
-          unless zones_already_warned_unconditioned.include?(zone)
-            OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Zone #{zone.name} is unconditioned.  It will not be assigned a baseline system.")
-            zones_already_warned_unconditioned << zone
-          end
-          next # Skip this zone
-        # Heated-Only
-        elsif heated && !cooled 
-          # Heated-Only Fossil
-          if data['type'] == 'heatedonly' && data['fuel'] == 'fossil'
-            if zone.is_fossil_hybrid_or_purchased_heat
-              data['area_ft2'] += area_ft2
-              data['zones'] << zone
-            end
-          # Heated-Only Electric
-          elsif data['type'] == 'heatedonly' && data['fuel'] == 'electric'
-            if !zone.is_fossil_hybrid_or_purchased_heat
-              data['area_ft2'] += area_ft2
-              data['zones'] << zone
-            end
-          end
-        # Heated and Cooled
-        else
-          # Residential Fossil
-          if data['type'] == 'residential' && data['fuel'] == 'fossil'
-            if zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
-              data['area_ft2'] += area_ft2
-              data['zones'] << zone
-            end
-          # Residential Electric
-          elsif data['type'] == 'residential' && data['fuel'] == 'electric'
-            if zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
-              data['area_ft2'] += area_ft2
-              data['zones'] << zone
-            end
-          # Nonresidential Fossil
-          elsif data['type'] == 'nonresidential' && data['fuel'] == 'fossil'
-            if !zone.is_residential(standard) && zone.is_fossil_hybrid_or_purchased_heat
-              data['area_ft2'] += area_ft2
-              data['zones'] << zone
-            end
-          # Nonresidential Electric
-          elsif data['type'] == 'nonresidential' && data['fuel'] == 'electric'
-            if !zone.is_residential(standard) && !zone.is_fossil_hybrid_or_purchased_heat
-              data['area_ft2'] += area_ft2
-              data['zones'] << zone
-            end
-          end
-        end
+    # Get the zones with fuel type, occ type, and area properties
+    zones = self.zones_by_occ_and_fuel_type(standard, custom)
+
+    # Determine the dominant area type
+    type_to_area = Hash.new{0.0}
+    zones_by_area = zones.group_by {|z| z['type'] }
+    zones_by_area.each do |type, zns|
+      zns.each do |zn|
+        type_to_area[type] += zn['area']
       end
     end
-     
-    # Determine the dominant area type.
-    # In the event of a tie, choose nonresidential.
-    dom_type = nil
-    if res_fossil['area_ft2'] + res_elec['area_ft2'] > nonres_fossil['area_ft2'] + nonres_elec['area_ft2']
-      dom_type = 'residential'
-    else
-      dom_type = 'nonresidential'
-    end
-  
+    dom_type = type_to_area.sort_by {|t| t }[0][0]
+
     # Determine the dominant fuel type
-    # in the dominant area type.
-    # In the event of a tie, choose fossil.
-    dom_fuel = nil
-    if dom_type == 'residential'
-      if res_elec['area_ft2'] > res_fossil['area_ft2']
-        dom_fuel = 'electric'
-      else
-        dom_fuel = 'fossil'
-      end
-    elsif dom_type == 'nonresidential'
-      if nonres_elec['area_ft2'] > nonres_fossil['area_ft2']
-        dom_fuel = 'electric'
-      else
-        dom_fuel = 'fossil'
+    # from the subset of the dominant area type
+    fuel_to_area = Hash.new{0.0}
+    zones_by_fuel = zones.group_by {|z| z['fuel'] }
+    zones_by_fuel.each do |fuel, zns|
+      zns.each do |zn|
+        next unless zn['type'] == dom_type
+        fuel_to_area[fuel] += zn['area']
       end
     end
-    
-    # Categorize the hashes
-    dom_type_dom_fuel = nil
-    dom_type_sec_fuel = nil
-    sec_type_dom_fuel = nil
-    sec_type_sec_fuel = nil
-    [res_fossil, res_elec, nonres_fossil, nonres_elec].each do |data|
-      if data['type'] == dom_type && data['fuel'] == dom_fuel
-        dom_type_dom_fuel = data
-      elsif data['type'] == dom_type && data['fuel'] != dom_fuel
-        dom_type_sec_fuel = data
-      elsif data['type'] != dom_type && data['fuel'] == dom_fuel
-        sec_type_dom_fuel = data    
-      elsif data['type'] != dom_type && data['fuel'] != dom_fuel
-        sec_type_sec_fuel = data
-      end
-      # Report out the initial groupings
-      next if data['zones'].size == 0
-      zn_names = []
-      data['zones'].sort.each do |zone|
-        zn_names << zone.name.get.to_s
-      end
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Initial system type group: type = #{data['type']}, fuel = #{data['fuel']}, area = #{data['area_ft2'].round} ft2, zones = #{zn_names.join(' ,')}.")
-    end
-    
-    # Report the dominant occupany and fuel types
+    dom_fuel = fuel_to_area.sort_by {|t| t }[0][0]
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The dominant occupancy type = #{dom_type}, the dominant fuel = #{dom_fuel}.")
-    
+
+    # Group by type and fuel type
+    initial_groups = zones.group_by {|x| {'type' => x['type'], 'fuel' => x['fuel']} }
+
     # Define the minimum area for the 
     # exception that allows a different
     # system type in part of the building.
@@ -501,64 +456,82 @@ class OpenStudio::Model::Model
         exception_min_area_ft2 = 5000
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
       end
-    end    
-
-    # There are four possible categories of data
-    # dom is the dominant zones, or zones that don't fall into an exception
-    # exc_fuel is any group of zones that meet the fuel type exception
-    # exc_occ is any group of zones that meet the occ type exception
-    # exc_fuel_occ is any group of zones that meet both the fuel and occ typ exceptions
-    dom = dom_type_dom_fuel
-    exc_fuel = nil
-    exc_occ = nil
-    exc_fuel_occ = nil
-    # Exception for fuel type
-    if dom_type_sec_fuel['area_ft2'] > exception_min_area_ft2
-      exc_fuel = dom_type_sec_fuel
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with the non-dominant fuel type is bigger than the minimum exception area of #{exception_min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
-    else
-      dom['area_ft2'] += dom_type_sec_fuel['area_ft2']
-      dom['zones'] += dom_type_sec_fuel['zones']
     end
-    # Exception for occupancy type
-    if sec_type_dom_fuel['area_ft2'] > exception_min_area_ft2
-      exc_fuel = sec_type_dom_fuel
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with the non-dominant occupancy type is bigger than the minimum exception area of #{exception_min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
-    else
-      dom['area_ft2'] += sec_type_dom_fuel['area_ft2']
-      dom['zones'] += sec_type_dom_fuel['zones']
-    end    
-    # Exception for fuel type and occupancy type
-    if sec_type_sec_fuel['area_ft2'] > exception_min_area_ft2
-      exc_fuel = sec_type_sec_fuel
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with the non-dominant fuel and occupancy types is bigger than the minimum exception area of #{exception_min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
-    else
-      dom['area_ft2'] += sec_type_sec_fuel['area_ft2']
-      dom['zones'] += sec_type_sec_fuel['zones']
-    end     
 
-    # Put all the non-nil groups into an array. 
-    # A group will be nil if the exception was not triggered.
-    sys_groups = []
-    [dom, exc_fuel, exc_occ, exc_fuel_occ, fossil_ho, elec_ho].each do |data|
-      next if data.nil?
-      next if data['zones'].size == 0
-      # Determine the number of stories this group spans
-      num_stories = self.num_stories_spanned(data['zones'])
-      data['stories'] = num_stories
-      sys_groups << data
-      # Report out the final groupings
-      zn_names = []
-      data['zones'].sort.each do |zone|
-        zn_names << zone.name.get.to_s
+    # Any group that isn't big enough to hit the exception
+    # gets put into the dominant type dominant fuel group
+    dom = {'area_ft2'=>0.0, 'type'=>dom_type, 'fuel'=>dom_fuel, 'zones'=>[]}
+    final_groups = []
+    initial_groups.each do |gp, zns|
+
+      # Report out the initial group
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Initial system type group: type = #{gp['type']}, fuel = #{gp['fuel']}, zones:")
+      zns.each_slice(5) do |zone_list|
+        zone_names = []
+        zone_list.each do |zn|
+          zone_names << zn['zone'].name.get.to_s
+        end
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
       end
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: type = #{data['type']}, fuel = #{data['fuel']}, area = #{data['area_ft2'].round} ft2, num stories = #{data['stories']}, zones = #{zn_names.join(' ,')}.")
-    end
     
-    return sys_groups
-  
+      # Skip unconditioned groups
+      next if gp['fuel'] == 'unconditioned'  
+    
+      # Total the area and get the zones
+      area_ft2 = 0.0
+      gp_zns = []
+      zns.each do |zn|
+        area_ft2 += OpenStudio.convert(zn['area'], 'm^2', 'ft^2').get
+        gp_zns << zn['zone']
+      end
+      
+      # If this is the dominant group, report it directly
+      if gp['type'] == dom_type && gp['fuel'] == dom_fuel
+        dom['area_ft2'] += area_ft2
+        dom['zones'] += gp_zns
+        next
+      end
+      
+      # Exception based on area
+      if area_ft2 > exception_min_area_ft2
+        group = {}
+        group['area_ft2'] = area_ft2
+        group['type'] = gp['type']
+        group['fuel'] = gp['fuel']
+        group['zones'] = gp_zns
+        final_groups << group
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with an occupancy type of #{gp['type']} and fuel type of #{gp['fuel']} is bigger than the minimum exception area of #{exception_min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
+      # Add to the dominant group
+      else
+        dom['area_ft2'] += area_ft2
+        dom['zones'] += gp_zns
+      end
+
+    end
+    # Add the dominant group
+    final_groups << dom
+
+    # Determine the number of stories spanned
+    # by each group and report out info.
+    final_groups.each do |group|
+      # Determine the number of stories this group spans
+      num_stories = self.num_stories_spanned(group['zones'])
+      group['stories'] = num_stories
+      # Report out the final grouping
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: type = #{group['type']}, fuel = #{group['fuel']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
+      group['zones'].sort.each_slice(5) do |zone_list|
+        zone_names = []
+        zone_list.each do |zone|
+          zone_names << zone.name.get.to_s
+        end
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+      end
+    end
+
+    return final_groups
+
   end
-  
+
   # Determine the baseline system type given the
   # inputs.  Logic is different for different standards.
   #
@@ -566,32 +539,36 @@ class OpenStudio::Model::Model
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param area_type [String] Valid choices are residential,
   # nonresidential, and heatedonly
-  # @param heating_fuel_type [String] Valid choices are
-  # electric and fossil
+  # @param fuel_type [String] Valid choices are
+  # electric, fossil, fossilandelectric, 
+  # purchasedheat, purchasedcooling, purchasedheatandcooling
   # @param area_ft2 [Double] Area in ft^2
   # @param num_stories [Integer] Number of stories
   # @return [String] The system type.  Possibilities are
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes, 
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
   # @todo add 90.1-2013 systems 11-13
-  def performance_rating_method_baseline_system_type(standard, climate_zone, area_type, heating_fuel_type, area_ft2, num_stories, custom)
-  
-    system_type = nil
+  def performance_rating_method_baseline_system_type(standard, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
+
+    #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
+    system_type = [nil, nil, nil, nil]
     
     # Customization - Xcel EDA Program Manual 2014
     # Table 3.2.2 Baseline HVAC System Types
     if custom == 'Xcel Energy CO EDA'
       standard = '90.1-2010'
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 lookup for HVAC system types shall be used.")
-    end
-  
+    end    
+    
+    # Get the row from TableG3.1.1A
+    sys_num = nil
     case standard
     when '90.1-2004', '90.1-2007' 
       # Set the limit differently for
       # different codes
       limit_ft2 = 25000
       limit_ft2 = 75000 if standard == '90.1-2004'
-
+      
       # Warn about heated only
       if area_type == 'heatedonly'
         OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Per Table G3.1.10.d, '(In the proposed building) Where no cooling system exists or no cooling system has been specified, the cooling system shall be identical to the system modeled in the baseline building design.' This requires that you go back and add a cooling system to the proposed model.  This code cannot do that for you; you must do it manually.")
@@ -599,135 +576,144 @@ class OpenStudio::Model::Model
       
       case area_type
       when 'residential'
-        if heating_fuel_type == 'electric'
-          system_type = 'PTHP' # sys 2
-        else
-          system_type = 'PTAC' # sys 1
-        end
+        sys_num = '1_or_2'
       when 'nonresidential', 'heatedonly'
-        # nonresidential and 3 floors or less and <75,000 ft2
+        # nonresidential and 3 floors or less and <25,000 ft2
         if num_stories <= 3 && area_ft2 < limit_ft2
-          if heating_fuel_type == 'electric'
-            system_type = 'PSZ_HP' # sys 4
-          else
-            system_type = 'PSZ_AC' # sys 3
-          end
-        # nonresidential and 4 or 5 floors or 5 floors or less and 75,000 ft2 to 150,000 ft2
+          sys_num = '3_or_4'
+        # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
         elsif ( ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000)) )
-          if heating_fuel_type == 'electric'
-            system_type = 'PVAV_PFP_Boxes' # sys 6
-          else
-            system_type = 'PVAV_Reheat' # sys 5
-          end
+          sys_num = '5_or_6'
         # nonresidential and more than 5 floors or >150,000 ft2
         elsif (num_stories >= 5 || area_ft2 > 150000)
-          if heating_fuel_type == 'electric'
-            system_type = 'VAV_PFP_Boxes' # sys 8
-          else
-            system_type = 'VAV_Reheat' # sys 7
-          end
+          sys_num = '7_or_8'
         end
-      end
-      
+      end   
+    
     when '90.1-2010' 
 
       limit_ft2 = 25000
-
+    
+      # Customization for Xcel EDA.
+      # No special retail category
+      # for regular 90.1-2010.
+      unless custom == 'Xcel Energy CO EDA'
+        if area_type == 'retail'
+          area_type = 'nonresidential'
+        end
+      end 
+    
       case area_type
       when 'residential'
-        if heating_fuel_type == 'electric'
-          system_type = 'PTHP' # sys 2
-        else
-          system_type = 'PTAC' # sys 1
-        end
+        sys_num = '1_or_2'
       when 'nonresidential'
         # nonresidential and 3 floors or less and <25,000 ft2
         if num_stories <= 3 && area_ft2 < limit_ft2
-          if heating_fuel_type == 'electric'
-            system_type = 'PSZ_HP' # sys 4
-          else
-            system_type = 'PSZ_AC' # sys 3
-          end
+          sys_num = '3_or_4'
         # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
         elsif ( ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000)) )
-          if heating_fuel_type == 'electric'
-            system_type = 'PVAV_PFP_Boxes' # sys 6
-          else
-            system_type = 'PVAV_Reheat' # sys 5
-          end
+          sys_num = '5_or_6'
         # nonresidential and more than 5 floors or >150,000 ft2
         elsif (num_stories >= 5 || area_ft2 > 150000)
-          if heating_fuel_type == 'electric'
-            system_type = 'VAV_PFP_Boxes' # sys 8
-          else
-            system_type = 'VAV_Reheat' # sys 7
-          end
+          sys_num = '7_or_8'
         end
       when 'heatedonly'
-        if heating_fuel_type == 'electric'
-          system_type = 'Electric_Furnace' # sys 9
-        else
-          system_type = 'Gas_Furnace' # sys 10
-        end
+        sys_num = '9_or_10'
+      when 'retail'
+        # Should only be hit by Xcel EDA
+        sys_num = '3_or_4'
       end
-      
+
     when '90.1-2013'
     
       limit_ft2 = 25000
     
-      # Fuel type is determined based on climate zone
-      # for 90.1-2013
-      case climate_zone
-      when 'ASHRAE 169-2006-1A',
-            'ASHRAE 169-2006-2A',
-            'ASHRAE 169-2006-3A'
-        heating_fuel_type = 'electric'
-      else
-        heating_fuel_type = 'fossil'
-      end
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Heating fuel is #{heating_fuel_type} for 90.1-2013, climate zone #{climate_zone}.  This is independent of the heating fuel type in the proposed building, per G3.1.1-3.  This is different than previous versions of 90.1.")
-    
       case area_type
       when 'residential'
-        if heating_fuel_type == 'electric'
-          system_type = 'PTHP' # sys 2
-        else
-          system_type = 'PTAC' # sys 1
-        end
+        sys_num = '1_or_2'
       when 'nonresidential'
         # nonresidential and 3 floors or less and <25,000 ft2
         if num_stories <= 3 && area_ft2 < limit_ft2
-          if heating_fuel_type == 'electric'
-            system_type = 'PSZ_HP' # sys 4
-          else
-            system_type = 'PSZ_AC' # sys 3
-          end
+          sys_num = '3_or_4'
         # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
         elsif ( ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000)) )
-          if heating_fuel_type == 'electric'
-            system_type = 'PVAV_PFP_Boxes' # sys 6
-          else
-            system_type = 'PVAV_Reheat' # sys 5
-          end
+          sys_num = '5_or_6'
         # nonresidential and more than 5 floors or >150,000 ft2
         elsif (num_stories >= 5 || area_ft2 > 150000)
-          if heating_fuel_type == 'electric'
-            system_type = 'VAV_PFP_Boxes' # sys 8
-          else
-            system_type = 'VAV_Reheat' # sys 7
-          end
+          sys_num = '7_or_8'
         end
       when 'heatedonly'
-        if heating_fuel_type == 'electric'
-          system_type = 'Electric_Furnace' # sys 9
-        else
-          system_type = 'Gas_Furnace' # sys 10
-        end
+        sys_num = '9_or_10'
+      when 'retail'
+        sys_num = '3_or_4'
       end
-
+    
     end
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type} for #{standard}, #{area_type}, #{heating_fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
+    # For 90.1-2013 the fuel type is determined based on climate zone.
+    # Don't change the fuel if it purchased heating or cooling.
+    if standard == '90.1-2013'
+      if fuel_type == 'electric' || fuel_type == 'fossil'
+        case climate_zone
+        when 'ASHRAE 169-2006-1A',
+              'ASHRAE 169-2006-2A',
+              'ASHRAE 169-2006-3A'
+          fuel_type = 'electric'
+        else
+          fuel_type = 'fossil'
+        end
+        OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Heating fuel is #{fuel_type} for 90.1-2013, climate zone #{climate_zone}.  This is independent of the heating fuel type in the proposed building, per G3.1.1-3.  This is different than previous versions of 90.1.")
+      end
+    end
+    
+    # Define the lookup by row and by fuel type
+    sys_lookup = Hash.new{|h,k| h[k]=Hash.new(&h.default_proc) }
+    
+    # fossil, fossil and electric, purchased heat, purchased heat and cooling
+    sys_lookup['1_or_2']['fossil'] = ['PTAC','NaturalGas',nil,'Electricity']
+    sys_lookup['1_or_2']['fossilandelectric'] = ['PTAC','NaturalGas',nil,'Electricity']
+    sys_lookup['1_or_2']['purchasedheat'] = ['PTAC','DistrictHeating',nil,'Electricity']
+    sys_lookup['1_or_2']['purchasedheatandcooling'] = ['Fan_Coil','DistrictHeating',nil,'DistrictCooling']
+    sys_lookup['3_or_4']['fossil'] = ['PSZ_AC','NaturalGas',nil,'Electricity']
+    sys_lookup['3_or_4']['fossilandelectric'] = ['PSZ_AC','NaturalGas',nil,'Electricity']
+    sys_lookup['3_or_4']['purchasedheat'] = ['PSZ_AC','DistrictHeating',nil,'Electricity']
+    sys_lookup['3_or_4']['purchasedheatandcooling'] = ['PSZ_AC','DistrictHeating',nil,'DistrictCooling']
+    sys_lookup['5_or_6']['fossil'] = ['PVAV_Reheat','NaturalGas','NaturalGas','Electricity']
+    sys_lookup['5_or_6']['fossilandelectric'] = ['PVAV_Reheat','NaturalGas','Electricity','Electricity']
+    sys_lookup['5_or_6']['purchasedheat'] = ['PVAV_Reheat','DistrictHeating','DistrictHeating','Electricity']
+    sys_lookup['5_or_6']['purchasedheatandcooling'] = ['PVAV_Reheat','DistrictHeating','DistrictHeating','DistrictCooling']
+    sys_lookup['7_or_8']['fossil'] = ['VAV_Reheat','NaturalGas','NaturalGas','Electricity']
+    sys_lookup['7_or_8']['fossilandelectric'] = ['VAV_Reheat','NaturalGas','Electricity','Electricity']
+    sys_lookup['7_or_8']['purchasedheat'] = ['VAV_Reheat','DistrictHeating','DistrictHeating','Electricity']
+    sys_lookup['7_or_8']['purchasedheatandcooling'] = ['VAV_Reheat','DistrictHeating','DistrictHeating','DistrictCooling']
+    sys_lookup['9_or_10']['fossil'] = ['Gas_Furnace','NaturalGas',nil,nil]
+    sys_lookup['9_or_10']['fossilandelectric'] = ['Gas_Furnace','NaturalGas',nil,nil]
+    sys_lookup['9_or_10']['purchasedheat'] = ['Gas_Furnace','DistrictHeating',nil,nil]
+    sys_lookup['9_or_10']['purchasedheatandcooling'] = ['Gas_Furnace','DistrictHeating',nil,nil]
+    # electric (heat), purchased cooling
+    sys_lookup['1_or_2']['electric'] = ['PTHP','Electricity',nil,'Electricity']
+    sys_lookup['1_or_2']['purchasedcooling'] = ['Fan_Coil','NaturalGas',nil,'DistrictCooling']
+    sys_lookup['3_or_4']['electric'] = ['PSZ_HP','Electricity',nil,'Electricity']
+    sys_lookup['3_or_4']['purchasedcooling'] = ['PSZ_AC','NaturalGas',nil,'DistrictCooling']
+    sys_lookup['5_or_6']['electric'] = ['PVAV_PFP_Boxes','Electricity','Electricity','Electricity']
+    sys_lookup['5_or_6']['purchasedcooling'] = ['PVAV_PFP_Boxes','Electricity','Electricity','DistrictCooling']
+    sys_lookup['7_or_8']['electric'] = ['VAV_PFP_Boxes','Electricity','Electricity','Electricity']
+    sys_lookup['7_or_8']['purchasedcooling'] = ['VAV_PFP_Boxes','Electricity','Electricity','DistrictCooling']
+    sys_lookup['9_or_10']['electric'] = ['Electric_Furnace','Electricity',nil,nil]
+    sys_lookup['9_or_10']['purchasedcooling'] = ['Electric_Furnace','Electricity',nil,nil]
+   
+    # Get the system type
+    system_type = sys_lookup[sys_num][fuel_type]
+    
+    if system_type.nil?
+      system_type = [nil, nil, nil, nil]
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not determine system type for #{standard}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
+    else
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type[0]} for #{standard}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[1]} for main heating") unless system_type[1].nil?
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[2]} for zone heat/reheat") unless system_type[2].nil?
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[3]} for cooling") unless system_type[3].nil?      
+    end
   
     return system_type
     
@@ -753,8 +739,14 @@ class OpenStudio::Model::Model
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace,
   # which are also returned by the method
   # OpenStudio::Model::Model.performance_rating_method_baseline_system_type.
+  # @param main_heat_fuel [String] main heating fuel.  Valid choices are
+  # Electricity, NaturalGas, DistrictHeating
+  # @param main_heat_fuel [String] zone heating/reheat fuel.  Valid choices are
+  # Electricity, NaturalGas, DistrictHeating
+  # @param main_heat_fuel [String] cooling fuel.  Valid choices are
+  # Electricity, DistrictCooling  
   # @todo add 90.1-2013 systems 11-13    
-  def add_performance_rating_method_baseline_system(standard, system_type, zones)
+  def add_performance_rating_method_baseline_system(standard, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
   
     case standard
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
@@ -770,7 +762,7 @@ class OpenStudio::Model::Model
           if self.getPlantLoopByName('Hot Water Loop').is_initialized
             hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
           else
-            hot_water_loop = self.add_hw_loop('NaturalGas')
+            hot_water_loop = self.add_hw_loop(main_heat_fuel)
           end      
         
           # Add a hot water PTAC to each zone
@@ -801,6 +793,34 @@ class OpenStudio::Model::Model
       when 'PSZ_AC' # System 3
 
         if zones.size > 0
+      
+          # If district heating
+          hot_water_loop = nil
+          if main_heat_fuel == 'DistrictHeating'
+            if self.getPlantLoopByName('Hot Water Loop').is_initialized
+              hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
+            else
+              hot_water_loop = self.add_hw_loop(main_heat_fuel)
+            end 
+          end
+      
+          # If district cooling
+          chilled_water_loop = nil
+          if cool_fuel == 'DistrictCooling'
+            if self.getPlantLoopByName('Chilled Water Loop').is_initialized
+              chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
+            else
+              chilled_water_loop = self.add_chw_loop(standard,
+                                                      'const_pri',
+                                                      chiller_cooling_type=nil,
+                                                      chiller_condenser_type=nil,
+                                                      chiller_compressor_type=nil,
+                                                      cool_fuel,
+                                                      condenser_water_loop=nil,
+                                                      building_type=nil)
+
+            end 
+          end
       
           # Add a gas-fired PSZ-AC to each zone
           # hvac_op_sch=nil means always on
@@ -852,7 +872,30 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
         else
-          hot_water_loop = self.add_hw_loop('NaturalGas')
+          hot_water_loop = self.add_hw_loop(main_heat_fuel)
+        end
+        
+        # If district cooling
+        chilled_water_loop = nil
+        if cool_fuel == 'DistrictCooling'
+          if self.getPlantLoopByName('Chilled Water Loop').is_initialized
+            chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
+          else
+            chilled_water_loop = self.add_chw_loop(standard,
+                                                    'const_pri',
+                                                    chiller_cooling_type=nil,
+                                                    chiller_condenser_type=nil,
+                                                    chiller_compressor_type=nil,
+                                                    cool_fuel,
+                                                    condenser_water_loop=nil,
+                                                    building_type=nil)
+          end 
+        end        
+        
+        # If electric zone heat
+        electric_reheat = false
+        if zone_heat_fuel == 'Electricity'
+          electric_reheat = true
         end
         
         # Group zones by story
@@ -883,16 +926,37 @@ class OpenStudio::Model::Model
                           pri_zones,
                           nil,
                           nil,
-                          hot_water_loop)
+                          electric_reheat,
+                          hot_water_loop,
+                          chilled_water_loop,
+                          nil,
+                          nil)
           end
 
           # Add a PSZ_AC for each secondary zone
           if sec_zones.size > 0
-            self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)
+            self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
         end      
       
       when 'PVAV_PFP_Boxes' # System 6
+
+        # If district cooling
+        chilled_water_loop = nil
+        if cool_fuel == 'DistrictCooling'
+          if self.getPlantLoopByName('Chilled Water Loop').is_initialized
+            chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
+          else
+            chilled_water_loop = self.add_chw_loop(standard,
+                                                    'const_pri',
+                                                    chiller_cooling_type=nil,
+                                                    chiller_condenser_type=nil,
+                                                    chiller_compressor_type=nil,
+                                                    cool_fuel,
+                                                    condenser_water_loop=nil,
+                                                    building_type=nil)
+          end 
+        end        
 
         # Group zones by story
         story_zone_lists = self.group_zones_by_story(zones)
@@ -920,11 +984,13 @@ class OpenStudio::Model::Model
                                     nil,
                                     0.62,
                                     0.9,
-                                    OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+                                    OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                                    chilled_water_loop,
+                                    nil)
           end
           # Add a PSZ_HP for each secondary zone
           if sec_zones.size > 0
-            self.add_performance_rating_method_baseline_system(standard, 'PSZ_HP', sec_zones)
+            self.add_performance_rating_method_baseline_system(standard, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
 
         end      
@@ -937,7 +1003,7 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Hot Water Loop').is_initialized
           hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
         else
-          hot_water_loop = self.add_hw_loop('NaturalGas')
+          hot_water_loop = self.add_hw_loop(main_heat_fuel)
         end
 
         # Retrieve the existing chilled water loop
@@ -946,24 +1012,42 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
         else
-          fan_type = 'TwoSpeed Fan'
-          if standard == '90.1-2013'
-            fan_type = 'Variable Speed Fan'
+          if cool_fuel == 'DistrictCooling'
+            chilled_water_loop = self.add_chw_loop(standard,
+                                                    'const_pri',
+                                                    chiller_cooling_type=nil,
+                                                    chiller_condenser_type=nil,
+                                                    chiller_compressor_type=nil,
+                                                    cool_fuel,
+                                                    condenser_water_loop=nil,
+                                                    building_type=nil)
+          else
+            fan_type = 'TwoSpeed Fan'
+            if standard == '90.1-2013'
+              fan_type = 'Variable Speed Fan'
+            end
+            condenser_water_loop = self.add_cw_loop(standard,
+                                                    'Open Cooling Tower',
+                                                    'Propeller or Axial',
+                                                    fan_type,
+                                                    1,
+                                                    1,
+                                                    nil)
+            chilled_water_loop = self.add_chw_loop(standard,
+                                                  'const_pri_var_sec',
+                                                  'WaterCooled',
+                                                  chiller_condenser_type=nil,
+                                                  'Rotary Screw',
+                                                  cooling_fuel=nil,
+                                                  condenser_water_loop,
+                                                  building_type=nil)
           end
-          condenser_water_loop = self.add_cw_loop(standard,
-                                                  'Open Cooling Tower',
-                                                  'Propeller or Axial',
-                                                  fan_type,
-                                                  1,
-                                                  1,
-                                                  nil)
-          chilled_water_loop = self.add_chw_loop(standard,
-                                                'const_pri_var_sec',
-                                                'WaterCooled',
-                                                nil,
-                                                'Rotary Screw',
-                                                175.0,
-                                                condenser_water_loop)
+        end
+        
+        # If electric zone heat
+        electric_reheat = false
+        if zone_heat_fuel == 'Electricity'
+          electric_reheat = true
         end
         
         # Group zones by story
@@ -1001,12 +1085,14 @@ class OpenStudio::Model::Model
                         0.62,
                         0.9,
                         OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                        nil,
+                        electric_reheat,
                         nil)
           end
           
           # Add a PSZ_AC for each secondary zone
           if sec_zones.size > 0
-            self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', sec_zones)
+            self.add_performance_rating_method_baseline_system(standard, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
 
 
@@ -1020,24 +1106,36 @@ class OpenStudio::Model::Model
         if self.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
         else
-          fan_type = 'TwoSpeed Fan'
-          if standard == '90.1-2013'
-            fan_type = 'Variable Speed Fan'
+          if cool_fuel == 'DistrictCooling'
+            chilled_water_loop = self.add_chw_loop(standard,
+                                                  'const_pri',
+                                                  chiller_cooling_type=nil,
+                                                  chiller_condenser_type=nil,
+                                                  chiller_compressor_type=nil,
+                                                  cool_fuel,
+                                                  condenser_water_loop=nil,
+                                                  building_type=nil)
+          else
+            fan_type = 'TwoSpeed Fan'
+            if standard == '90.1-2013'
+              fan_type = 'Variable Speed Fan'
+            end
+            condenser_water_loop = self.add_cw_loop(standard,
+                                                    'Open Cooling Tower',
+                                                    'Propeller or Axial',
+                                                    fan_type,
+                                                    1,
+                                                    1,
+                                                    nil)
+            chilled_water_loop = self.add_chw_loop(standard,
+                                                  'const_pri_var_sec',
+                                                  'WaterCooled',
+                                                  chiller_condenser_type=nil,
+                                                  'Rotary Screw',
+                                                  cool_fueling=nil,
+                                                  condenser_water_loop,
+                                                  building_type=nil)
           end
-          condenser_water_loop = self.add_cw_loop(standard,
-                                                  'Open Cooling Tower',
-                                                  'Propeller or Axial',
-                                                  fan_type,
-                                                  1,
-                                                  1,
-                                                  nil)
-          chilled_water_loop = self.add_chw_loop(standard,
-                                                'const_pri_var_sec',
-                                                'WaterCooled',
-                                                nil,
-                                                'Rotary Screw',
-                                                175.0,
-                                                condenser_water_loop)
         end
         
         # Group zones by story
@@ -1071,7 +1169,7 @@ class OpenStudio::Model::Model
           end
           # Add a PSZ_HP for each secondary zone
           if sec_zones.size > 0
-            self.add_performance_rating_method_baseline_system(standard, 'PSZ_HP', sec_zones)
+            self.add_performance_rating_method_baseline_system(standard, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
 
         end      
@@ -1080,6 +1178,16 @@ class OpenStudio::Model::Model
          
           if zones.size > 0
         
+            # If district heating
+            hot_water_loop = nil
+            if main_heat_fuel == 'DistrictHeating'
+              if self.getPlantLoopByName('Hot Water Loop').is_initialized
+                hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
+              else
+                hot_water_loop = self.add_hw_loop(main_heat_fuel)
+              end 
+            end        
+        
             # Add a System 9 - Gas Unit Heater to each zone
             self.add_unitheater(standard,
                                nil,
@@ -1087,7 +1195,8 @@ class OpenStudio::Model::Model
                                nil,
                                'ConstantVolume',
                                OpenStudio::convert(0.2, "inH_{2}O", "Pa").get,
-                               'Gas',
+                               main_heat_fuel,
+                               hot_water_loop,
                                nil)
                              
           end
@@ -1098,13 +1207,14 @@ class OpenStudio::Model::Model
       
           # Add a System 10 - Electric Unit Heater to each zone
           self.add_unitheater(standard,
-                                nil,
-                                zones,
-                                nil,
-                                'ConstantVolume',
-                                OpenStudio::convert(0.2, "inH_{2}O", "Pa").get,
-                                'Electric',
-                                nil)
+                              nil,
+                              zones,
+                              nil,
+                              'ConstantVolume',
+                              OpenStudio::convert(0.2, "inH_{2}O", "Pa").get,
+                              main_heat_fuel,
+                              nil,
+                              nil)
                               
         end
       
@@ -1220,8 +1330,6 @@ class OpenStudio::Model::Model
       end
 
     end
-      
-    puts zone_to_sys_type
     
     return zone_to_sys_type
     
@@ -3635,7 +3743,7 @@ class OpenStudio::Model::Model
       # Space shading surfaces should be removed
       shading_surfaces_removed += shade_group.shadingSurfaces.size
       shade_group.remove
-		end
+    end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Removed #{shading_surfaces_removed} external shading devices.")
     
