@@ -10,8 +10,6 @@ class OpenStudio::Model::WaterHeaterMixed
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  # @todo break parasitic/skin losses into a separate method in
-  #   Prototype.WaterHeaterMixed because not governed by standard?
   def setStandardEfficiency(template)
   
     # Get the capacity of the water heater
@@ -77,15 +75,21 @@ class OpenStudio::Model::WaterHeaterMixed
         ua_btu_per_hr_per_f = 11.37
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         if capacity_btu_per_hr <= 75000  
-          # Fixed water heater efficiency per PNNL
+          # Fixed water heater thermal efficiency per PNNL
           water_heater_eff = 0.82
           # Calculate the minimum Energy Factor (EF)
           ef = 0.67 - (0.0019 * volume_gal)
+          # Calculate the Recovery Efficiency (RE)
+          # based on a fixed capacity of 75,000 Btu/hr
+          # and a fixed volume of 40 gallons by solving
+          # this system of equations:
+          # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
+          # 0.82 = (ua*67.5+cap*re)/cap
+          cap = 75000.0
+          re = (Math.sqrt(6724*ef**2*cap**2 + 40409100*ef**2*cap - 28080900*ef*cap + 29318000625*ef**2 - 58636001250*ef + 29318000625) + 82*ef*cap + 171225*ef - 171225)/(200*ef*cap)
           # Calculate the skin loss coefficient (UA)
-          # TODO solve system of equations {u = (1/.95-1/r)/(67.5*(24/41094-1/(r*75000))), 0.82 = (u*67.5+75000*r)/75000}
-          # Assume recovery efficieny = 0.81 based on regression of prototype models instead
-          re = 0.81
-          ua_btu_per_hr_per_f = (1/ef-1/re)/(67.5*(24/41094-1/(re*capacity_btu_per_hr)))
+          # based on the actual capacity.
+          ua_btu_per_hr_per_f = (water_heater_eff-re)*capacity_btu_per_hr/67.5
         else
           # Thermal efficiency requirement from 90.1
           et = 0.8
