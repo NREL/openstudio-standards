@@ -52,6 +52,10 @@ class OpenStudio::Model::SpaceType
     
     # Set the rendering color of the space type
     rgb = space_type_properties['rgb']
+    if rgb.nil?
+      return false
+    end
+    
     rgb = rgb.split('_')
     r = rgb[0].to_i
     g = rgb[1].to_i
@@ -61,7 +65,7 @@ class OpenStudio::Model::SpaceType
     rendering_color.setRenderingGreenValue(g)
     rendering_color.setRenderingBlueValue(b)
     self.setRenderingColor(rendering_color)
-
+    
     return true
   
   end
