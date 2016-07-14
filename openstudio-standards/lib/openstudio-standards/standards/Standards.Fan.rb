@@ -230,6 +230,13 @@ module Fan
     fan_motor_eff = 0.85
     nominal_hp = motor_bhp
   
+    # Don't attempt to look up motor efficiency
+    # for zero-hp fans, which may occur when there is no
+    # airflow required for a particular system, typically
+    # heated-only spaces with high internal gains
+    # and no OA requirements such as elevator shafts.
+    return [fan_motor_eff, 0] if motor_bhp == 0.0  
+  
     # Lookup the minimum motor efficiency
     motors = $os_standards["motors"]
     
