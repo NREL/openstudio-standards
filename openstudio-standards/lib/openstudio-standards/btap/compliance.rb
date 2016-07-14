@@ -576,7 +576,7 @@ module BTAP
                 if "*" == spacetype['necb_schedule_type']
                   wildcard_spaces =+ 1
                 else
-                  s[ spacetype['necb_schedule_type'] ] = s[ spacetype['necb_schedule_type'] ] + space.floorArea() if "*" != spacetype['necb_schedule_type'] and "Unconditioned" != spacetype['necb_schedule_type']
+                  s[ spacetype['necb_schedule_type'] ] = s[ spacetype['necb_schedule_type'] ] + space.floorArea() if "*" != spacetype['necb_schedule_type'] and "- undefined -" != spacetype['necb_schedule_type']
                 end
                 #puts "Found #{space.spaceType.get.name} schedule #{spacetype[2]} match with floor area of #{space.floorArea()}"
                 found_space_type = true
@@ -670,7 +670,7 @@ module BTAP
           puts space
           puts space.thermalZone.get
 
-          if space.spaceType.get.standardsSpaceType.get == "Unconditioned"
+          if space.spaceType.get.standardsSpaceType.get == "- undefined -"
             coolingDesignLoad = 0.0
             heatingDesignLoad = 0.0
           else
@@ -683,7 +683,7 @@ module BTAP
           case space_system_index
           when nil
             raise ("#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database.")
-          when 0, "Unconditioned"
+          when 0, "- undefined -"
             #These are spaces are undefined...so they are unconditioned and have no loads other than infiltration and no systems
             system = 0
           when 1 , "Assembly Area" #Assembly Area.
