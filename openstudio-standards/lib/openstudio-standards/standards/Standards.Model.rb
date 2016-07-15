@@ -219,17 +219,10 @@ class OpenStudio::Model::Model
       return false
     end    
 
-    # If there are any multizone systems, set damper positions
-    # and perform a second sizing run
-    self.getAirLoopHVACs.sort.each do |air_loop|
-      if air_loop.is_multizone_vav_system
-        self.apply_multizone_vav_outdoor_air_sizing(building_vintage)
-        if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
-          return false
-        end
-        break
-      end
-    end
+    # If there are any multizone systems, reset damper positions
+    # to achieve a 60% ventilation effectiveness minimum for the system
+    # following the ventilation rate procedure from 62.1
+    self.apply_multizone_vav_outdoor_air_sizing(building_vintage)
 
     # Set the baseline fan power for all airloops
     self.getAirLoopHVACs.sort.each do |air_loop|
@@ -252,7 +245,7 @@ class OpenStudio::Model::Model
     
     # Run sizing run with the new chillers, boilers, and
     # cooling towers to determine capacities
-    if self.runSizingRun("#{sizing_run_dir}/SizingRun3") == false
+    if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
       return false
     end
         
