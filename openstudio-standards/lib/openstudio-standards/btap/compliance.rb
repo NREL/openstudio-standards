@@ -608,23 +608,22 @@ module BTAP
  
       
       
-      def self.necb_spacetype_system_selection(model, runner = nil)
+      def self.necb_spacetype_system_selection(model, heatingDesignLoad  = nil,coolingDesignLoad = nil, runner = nil  )
         spacezoning_data = Struct.new( 
           :space,                   # the space object 
           :space_name,              # the space name
+          :building_type_name,         # space type name
+          :space_type_name,         # space type name
+          :necb_hvac_system_selection_type, #
           :system_number,           # the necb system type
+          :number_of_stories,       #number of stories
           :story,                   # the floor
           :horizontal_placement,    # the horizontal placement (norht, south, east, west, core) 
           :vertical_placment,       # the vertical placement ( ground, top, both, middle )
           :people_obj,              # Spacetype people object
           :heating_capacity,
           :cooling_capacity )
-        #some defaults until we figure out how to handle them. (TODO) 
-        vented = true
-        heated_only = true
-        refrigerated = false
-        coolingDesignLoad = 0.0
-        heatingDesignLoad = 0.0
+
         # Reassign / set floors if required. 
         BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
         
@@ -662,100 +661,118 @@ module BTAP
             space_system_index = nil
           else
             space_type_property = space.model.find_object($os_standards["space_types"], { "template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get,"building_type" => space.spaceType.get.standardsBuildingType.get })
-            space_system_index = space_type_property['necb_hvac_system_selection_type']
+            necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
             raise("could not find necb system selection type for space: #{space.get.name}") if space_type_property.nil?
           end
+          
+          
+
+          
           
           #Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load. 
 
           if space.spaceType.get.standardsSpaceType.get == "- undefined -"
             coolingDesignLoad = 0.0
             heatingDesignLoad = 0.0
-          else
-            coolingDesignLoad = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 #kW
-            heatingDesignLoad = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 #kW
           end
+          
+          #if the heating and cooling loads have not been hardset by the method argument (for testing) , use the sizing run data. 
+          coolingDesignLoad = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if coolingDesignLoad.nil? 
+          heatingDesignLoad = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heatingDesignLoad.nil?
+
           
           #identify space-system_index and assign the right NECB system type 1-7. 
           system = nil
-          case space_system_index
+          case necb_hvac_system_selection_type
           when nil
             raise ("#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database.")
           when 0, "- undefined -"
             #These are spaces are undefined...so they are unconditioned and have no loads other than infiltration and no systems
             system = 0
-          when 1 , "Assembly Area" #Assembly Area.
+          when "Assembly Area" #Assembly Area.
             if number_of_stories <= 4
               system = 3
             else
               system = 6
             end
             
-          when 2 , "Automotive Area"
+          when "Automotive Area"
             system = 4
             
-          when 3 , "Data Processing Area"
+          when "Data Processing Area"
             if coolingDesignLoad > 20 #KW...need a sizing run. 
               system = 2
             else
               system = 1
             end
 
-          when 4 , "General Area" #[3,6]
+          when "General Area" #[3,6]
             if number_of_stories <= 2 
               system = 3
             else
               system = 6
             end
             
-          when 5 , "Historical Collections Area" #[2],
+          when "Historical Collections Area" #[2],
             system = 2
             
-          when 6 , "Hospital Area" #[3],
+          when "Hospital Area" #[3],
             system = 6
             
-          when 7 , "Indoor Arena" #,[7],
+          when "Indoor Arena" #,[7],
             system = 7
             
-          when 8,   "Industrial Area"#  [3] this need some thought. 
+          when "Industrial Area"#  [3] this need some thought. 
             system = 3
             
-          when 9 ,  "Residential/Accomodation Area"#,[1], this needs some thought. 
-            if heated_only
-              system = 1
-            else 
-              system = 1
-            end
+          when "Residential/Accomodation Area"#,[1], this needs some thought. 
+            system = 1
             
-          when 10 , "Sleeping Area" #[3],
+          when "Sleeping Area" #[3],
             system = 3
             
-          when 11 , "Supermarket/Food Services Area"#[3,4],
-            if vented
-              system = 3
-            else
-              system = 4
-            end
+          when "Supermarket/Food Services Area"#[3,4],
+            system = 3
             
-          when 12 ,  "Warehouse Area"
-            if refrigerated
-              system = 3
-            else
-              system = 3
-            end
+          when "Supermarket/Food Services Area - vented"
+            system = 4
+            
+          when "Warehouse Area"
+            system = 4
+            
+          when "Warehouse Area - refrigerated"
+            system = 5
+          when "Wildcard"
+            system = "Wildcard"
+          else
+            raise ("NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid")
           end 
           #get placement on floor, core or perimeter and if a top, bottom, middle or single story. 
           horizontal_placement, vertical_placement =  BTAP::Geometry::Spaces::get_space_placement( space )
           #dump all info into an array for debugging and iteration. 
           unless space.spaceType.empty? 
-            space_zoning_data_array << spacezoning_data.new( space,space.name.get,system,building_story, horizontal_placement,vertical_placement,space.spaceType.get.people, heatingDesignLoad, coolingDesignLoad )
+            space_type_name = space.spaceType.get.standardsSpaceType.get
+            building_type_name = space.spaceType.get.standardsBuildingType.get
+            space_zoning_data_array << spacezoning_data.new( space,
+              space.name.get,
+              building_type_name,
+              space_type_name,
+              necb_hvac_system_selection_type,
+              system,
+              number_of_stories,
+              building_story, 
+              horizontal_placement,
+              vertical_placement,
+              space.spaceType.get.people, 
+              heatingDesignLoad, 
+              coolingDesignLoad )
             schedule_type_array <<  BTAP::Compliance::NECB2011::determine_necb_schedule_type( space ).to_s
           end
         end
         
         #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
         space_zoning_data_array.each do |space_zone_data|
-          if space_zone_data.system_number.nil?
+          if space_zone_data.system_number == "Wildcard"
             #iterate through all adjacent spaces from largest shared wall area to smallest.
             # Set system type to match first space system that is not nil. 
             space_zone_data.space.get_adjacent_spaces_with_shared_wall_areas(true).each do |adj_space|
