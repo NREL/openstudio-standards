@@ -1847,7 +1847,7 @@ class OpenStudio::Model::AirLoopHVAC
         end
       end
       if num_fan_powered_terminals > 0
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{self.name}, multizone vav optimization is not required because the system has #{num_fan_powered_terminals} fan-powered terminals.")
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, multizone vav optimization is not required because the system has #{num_fan_powered_terminals} fan-powered terminals.")
         return multizone_opt_required
       end
       
@@ -1900,13 +1900,13 @@ class OpenStudio::Model::AirLoopHVAC
       # Not required for systems where
       # exhaust is more than 70% of the total OA intake.
       if pct_oa > 0.7
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because system is more than 70% OA.")
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because system is more than 70% OA.")
         return multizone_opt_required
       end
 
       # TODO Not required for dual-duct systems
       # if self.isDualDuct
-        # OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because it is a dual duct system")
+        # OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because it is a dual duct system")
         # return multizone_opt_required
       # end
       
@@ -1959,17 +1959,20 @@ class OpenStudio::Model::AirLoopHVAC
    
   end 
 
-  # Set the minimum VAV damper positions
+  # Set the minimum VAV damper positions.
   #
-  # 
-  def set_minimum_vav_damper_positions(template)
+  # @param template [String] the building template
+  # @param has_ddc [Bool] if true, will assume that there
+  # is DDC control of vav terminals.  If false, assumes otherwise.
+  # @return [Bool] true if successful, false if not
+  def set_minimum_vav_damper_positions(template, has_ddc=true)
   
     self.thermalZones.each do |zone|
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-          zone_oa_per_area = zone.outdoor_airflow_rate_per_area
+          zone_oa = zone.outdoor_airflow_rate
           vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
-          vav_terminal.set_minimum_damper_position(template, zone_oa_per_area)
+          vav_terminal.set_minimum_damper_position(template, zone_oa, has_ddc)
         end
       end
     end
@@ -2048,27 +2051,38 @@ class OpenStudio::Model::AirLoopHVAC
       end
       
       # Get the minimum damper position
-      mdp = 1.0
+      mdp_term = 1.0
+      min_zn_flow = 0.0
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.get
-          mdp = term.zoneMinimumAirFlowFraction
+          mdp_term = term.zoneMinimumAirFlowFraction
         elsif equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
-          mdp = term.zoneMinimumAirFlowFraction
+          mdp_term = term.zoneMinimumAirFlowFraction
         elsif equip.to_AirTerminalSingleDuctVAVNoReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVNoReheat.get
           if term.constantMinimumAirFlowFraction.is_initialized
-            mdp = term.constantMinimumAirFlowFraction.get
+            mdp_term = term.constantMinimumAirFlowFraction.get
           end
         elsif equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVReheat.get
-          mdp = term.constantMinimumAirFlowFraction
+          mdp_term = term.constantMinimumAirFlowFraction
+          min_zn_flow = term.fixedMinimumAirFlowRate
         end
       end
     
+      # For VAV Reheat terminals, min flow is greater of mdp
+      # and min flow rate / design flow rate.
+      mdp = mdp_term
+      mdp_oa = min_zn_flow/v_ps
+      if min_zn_flow > 0.0
+        mdp = [mdp_term, mdp_oa].max.round(2)
+      end
+      #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Zone #{zone.name} mdp_term = #{mdp_term.round(2)}, mdp_oa = #{mdp_oa.round(2)}; mdp_final = #{mdp}")
+
       # Zone minimum discharge airflow rate
-      v_dz = v_pz*mdp
+      v_dz = v_pz*mdp 
     
       # Zone discharge air fraction
       z_d = v_oz / v_dz
@@ -2559,7 +2573,7 @@ class OpenStudio::Model::AirLoopHVAC
       end
     end    
     
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: VAV damper action was set to #{damper_action} control.")
+    #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: VAV damper action was set to #{damper_action} control.")
     
     return true
     

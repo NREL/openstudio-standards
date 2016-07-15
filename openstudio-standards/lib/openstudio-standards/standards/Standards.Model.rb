@@ -204,9 +204,9 @@ class OpenStudio::Model::Model
       air_loop.apply_performance_rating_method_baseline_controls(building_vintage, climate_zone)
     end
   
-    # Apply the minimum damper positions
+    # Apply the minimum damper positions, assuming no DDC control of VAV terminals
     self.getAirLoopHVACs.sort.each do |air_loop|
-      air_loop.set_minimum_vav_damper_positions(building_vintage)
+      air_loop.set_minimum_vav_damper_positions(building_vintage, false)
     end
 
     # Apply the baseline system temperatures
@@ -221,7 +221,6 @@ class OpenStudio::Model::Model
 
     # If there are any multizone systems, set damper positions
     # and perform a second sizing run
-    has_multizone_systems = false
     self.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.is_multizone_vav_system
         self.apply_multizone_vav_outdoor_air_sizing(building_vintage)

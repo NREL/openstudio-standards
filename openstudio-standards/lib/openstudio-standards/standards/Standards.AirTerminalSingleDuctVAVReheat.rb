@@ -7,14 +7,16 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
   # Final position will be adjusted upward
   # as necessary by Standards.AirLoopHVAC.adjust_minimum_vav_damper_positions
   # @param building_vintage [String] the building vintage
-  # @param zone_oa_per_area [Double] the zone outdoor air per area, m^3/s
-  # @param has_ddc [Bool] whether or not there is DDC control of the VAV terminal
+  # @param zone_min_oa [Double] the zone outdoor air flow rate, in m^3/s.
+  # If supplied, this will be set as a minimum limit in addition to the minimum
+  # damper position.  EnergyPlus will use the larger of the two values during sizing.
+  # @param has_ddc [Bool] whether or not there is DDC control of the VAV terminal,
+  # which impacts the minimum damper position requirement.
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
-  def set_minimum_damper_position(building_vintage, zone_oa_per_area, has_ddc = true)
+  def set_minimum_damper_position(building_vintage, zone_min_oa=nil, has_ddc = true)
  
-    # Minimum damper position is based on prototype
-    # assumptions, which are not clearly documented.
+    # Minimum damper position
     min_damper_position = nil
     case building_vintage       
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
@@ -28,17 +30,14 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
         min_damper_position = 0.3
       end
     end
+    self.setConstantMinimumAirFlowFraction(min_damper_position)
     
-    # TODO remove the template conditional; doesn't make sense
-    # Determine whether or not to use the high minimum guess.
-    # Cutoff was determined by correlating apparent minimum guesses
-    # to OA rates in prototypes since not well documented in papers.
-    if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-      # High OA zones
-      self.setConstantMinimumAirFlowFraction(0.7)
-    else
-      # Low OA zones
-      self.setConstantMinimumAirFlowFraction(min_damper_position)
+    # Minimum OA flow rate
+    # If specified, will also add this limit
+    # and the larger of the two will be used
+    # for sizing.
+    unless zone_min_oa.nil?
+      self.setFixedMinimumAirFlowRate(zone_min_oa)
     end
 
     return true
