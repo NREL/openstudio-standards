@@ -2474,7 +2474,7 @@ module BTAP
             zones.each do |zone|
 
               # Zone sizing temperature
-              sizing_zone = OpenStudio::Model::SizingZone.new(model,zone)
+              sizing_zone = zone.sizingZone
               sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
               sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
               sizing_zone.setZoneCoolingSizingFactor(1.1)
@@ -2722,7 +2722,7 @@ module BTAP
             zones.each do |zone|
             
               # Zone sizing temperature
-              sizing_zone = OpenStudio::Model::SizingZone.new(model,zone)
+              sizing_zone = zone.sizingZone
               sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
               sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
               sizing_zone.setZoneCoolingSizingFactor(1.1)
@@ -2949,7 +2949,7 @@ module BTAP
             zones.each do |zone| 
 
               # Zone sizing temperature
-              sizing_zone = OpenStudio::Model::SizingZone.new(model,zone)
+              sizing_zone = zone.sizingZone
               sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
               sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
               sizing_zone.setZoneCoolingSizingFactor(1.1)
@@ -3044,7 +3044,7 @@ module BTAP
               air_loop_sizing.setSystemOutdoorAirMethod("ZoneSum")
 
               # Zone sizing temperature
-              sizing_zone = OpenStudio::Model::SizingZone.new(model,zone)
+              sizing_zone = zone.sizingZone
               sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
               sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
               sizing_zone.setZoneCoolingSizingFactor(1.1)
@@ -3063,7 +3063,9 @@ module BTAP
                 htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)  
                 supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
                 htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-10.0)
-                
+                sizing_zone.setZoneHeatingSizingFactor(1.3)
+                sizing_zone.setZoneCoolingSizingFactor(1.0)
+puts 'test1111'               
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")
               end
@@ -3209,7 +3211,7 @@ module BTAP
               air_loop_sizing.setSystemOutdoorAirMethod("ZoneSum")
 
               # Zone sizing temperature
-              sizing_zone = OpenStudio::Model::SizingZone.new(model,zone)
+              sizing_zone = zone.sizingZone
               sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
               sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
               sizing_zone.setZoneCoolingSizingFactor(1.1)
@@ -3249,7 +3251,8 @@ module BTAP
                 htg_stage_3 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
                 htg_stage_4 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
                 supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
-                
+                sizing_zone.setZoneHeatingSizingFactor(1.3)
+                sizing_zone.setZoneCoolingSizingFactor(1.0)
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")
               end
@@ -3393,7 +3396,7 @@ module BTAP
               air_loop_sizing.setSystemOutdoorAirMethod("ZoneSum")
 
               # Zone sizing temperature
-              sizing_zone = OpenStudio::Model::SizingZone.new(model,zone)
+              sizing_zone = zone.sizingZone
               sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
               sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
               sizing_zone.setZoneCoolingSizingFactor(1.1)
@@ -3599,8 +3602,8 @@ module BTAP
                 # and hook the reheat coil to the HW loop
                 ( BTAP::Geometry::BuildingStoreys::get_zones_from_storey(story) & zones).each do |zone|
                   
-                  # Zone sizing temperature
-                  sizing_zone = OpenStudio::Model::SizingZone.new(model,zone)
+                  # Zone sizing parameters
+                  sizing_zone = zone.sizingZone
                   sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
                   sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
                   sizing_zone.setZoneCoolingSizingFactor(1.1)
