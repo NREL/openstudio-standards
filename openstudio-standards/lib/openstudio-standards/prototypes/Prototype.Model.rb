@@ -1081,10 +1081,10 @@ class OpenStudio::Model::Model
     self.getFanZoneExhausts.sort.each {|obj| obj.setPrototypeFanPressureRise}
     
     # Motor Efficiency
-    self.getFanConstantVolumes.sort.each {|obj| obj.set_prototype_fan_efficiency}
-    self.getFanVariableVolumes.sort.each {|obj| obj.set_prototype_fan_efficiency}
-    self.getFanOnOffs.sort.each {|obj| obj.set_prototype_fan_efficiency}
-    self.getFanZoneExhausts.sort.each {|obj| obj.set_prototype_fan_efficiency}
+    self.getFanConstantVolumes.sort.each {|obj| obj.set_prototype_fan_efficiency(building_vintage)}
+    self.getFanVariableVolumes.sort.each {|obj| obj.set_prototype_fan_efficiency(building_vintage)}
+    self.getFanOnOffs.sort.each {|obj| obj.set_prototype_fan_efficiency(building_vintage)}
+    self.getFanZoneExhausts.sort.each {|obj| obj.set_prototype_fan_efficiency(building_vintage)}
     
     ##### Add Economizers
 

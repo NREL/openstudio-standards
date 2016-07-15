@@ -3388,10 +3388,10 @@ class OpenStudio::Model::Model
 
       # add heating coil
       htg_coil = nil
-      if heating_type == 'NaturalGas'
+      if heating_type == 'NaturalGas' || heating_type == 'Gas'
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, hvac_op_sch)
         htg_coil.setName("#{zone.name} UnitHeater Gas Htg Coil")
-      elsif heating_type == 'Electricity'
+      elsif heating_type == 'Electricity' || heating_type == 'Electric'
         htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, hvac_op_sch)
         htg_coil.setName("#{zone.name} UnitHeater Electric Htg Coil")
       elsif heating_type == 'DistrictHeating' && !hot_water_loop.nil?
