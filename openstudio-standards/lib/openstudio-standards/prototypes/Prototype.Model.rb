@@ -59,39 +59,20 @@ class OpenStudio::Model::Model
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
-      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)      
+      space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
       self.assign_space_type_stubs("Space Function", building_vintage, space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
       self.add_loads(building_vintage, climate_zone)
       self.apply_infiltration_standard(building_vintage)
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
-	  
-      #Should this be the first thing done Maria?
+      self.add_constructions(lookup_building_type, building_vintage, climate_zone)
+      self.create_thermal_zones(building_type,building_vintage, climate_zone)
       self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
-      self.add_constructions(lookup_building_type, building_vintage, climate_zone)           #set "dummy construction set
-      #BTAP::Geometry::intersect_surfaces(self)                                
-      #BTAP::Geometry::match_surfaces(self)  
-      # Reduce the WWR and SRR, if necessary
-      self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage)
-      self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)                                
-      self.apply_performance_rating_method_construction_types(building_vintage)
-            self.set_sizing_parameters(building_type, building_vintage)
+      return false if self.runSizingRun("#{sizing_run_dir}/SizingRun0") == false
+      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, epw_file)
+      self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
+      self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
-      self.add_swh(building_type, building_vintage, climate_zone, prototype_input)  # note exhaust fan schedule for * common spaces.
-      # TO DO: routine custom_swh_tweaks sets loss coefficient to ambient for water heater, differs for each archetype
-      # NECB 2011 follows ASHRAE 90.1 for now, does this need to change?
-      self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-      #      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-      #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)  
-      #space_sizing_model = self.runSpaceSizingRun()
-      #Getting System Fuel type types from BTAP::Environment. 
-      boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4,heating_coil_types_sys6, fan_type = BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
-      BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self, runner=nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type )
-      
-    
-
-      #      
-      
     else
       
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
@@ -105,7 +86,7 @@ class OpenStudio::Model::Model
       self.modify_surface_convection_algorithm(building_vintage)
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)
       self.create_thermal_zones(building_type,building_vintage, climate_zone)
-      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input)
+      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input,epw_file)
       self.custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
       self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
       self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
@@ -113,7 +94,7 @@ class OpenStudio::Model::Model
       self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
       self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
       self.set_sizing_parameters(building_type, building_vintage)
-    self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
 	  end
     # set climate zone and building type
@@ -126,6 +107,7 @@ class OpenStudio::Model::Model
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
     end
+    
 
     
     # If there are any multizone systems, set damper positions
@@ -464,7 +446,7 @@ class OpenStudio::Model::Model
     return true
   end
   
-    def add_full_space_type_libs(template)
+  def add_full_space_type_libs(template)
     space_type_properties_list = self.find_objects($os_standards["space_types"], { "template" => 'NECB 2011'})
     space_type_properties_list.each do |space_type_property|
       stub_space_type = OpenStudio::Model::SpaceType.new(self)
@@ -804,6 +786,10 @@ class OpenStudio::Model::Model
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
 
+    # Remove any Thermal zones assigned
+    self.getThermalZones.each { |zone| zone.remove}
+    
+    
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type
     when 'LargeHotel', 'MidriseApartment','LargeOffice','Hospital'
@@ -833,13 +819,15 @@ class OpenStudio::Model::Model
       else
         thermostatClone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostatClone)
+        #Set Ideal loads to thermal zone for sizing. 
+        ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
+        ideal_loads.addToThermalZone(zone)
       end
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
 
-    return true
-
+   
   end
 
   # Adds occupancy sensors to certain space types per
@@ -1056,33 +1044,33 @@ class OpenStudio::Model::Model
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       case building_type
       when 'Warehouse'
-      terrain = 'Urban'
+        terrain = 'Urban'
       when 'SmallHotel'
-      terrain = 'Suburbs'
+        terrain = 'Suburbs'
       end
     end
     # Set the terrain type
     self.getSite.setTerrain(terrain)
   
-      # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
-      return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013' or building_vintage == 'NECB 2011'
+    # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
+    return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013' or building_vintage == 'NECB 2011'
   
-      # The pre-1980 and 1980-2004 buildings have this:
-      # 1.0000,                  !- Constant Term Coefficient
-      # 0.0000,                  !- Temperature Term Coefficient
-      # 0.0000,                  !- Velocity Term Coefficient
-      # 0.0000;                  !- Velocity Squared Term Coefficient
-      # The 90.1-2010 buildings have this:
-      # 0.0000,                  !- Constant Term Coefficient
-      # 0.0000,                  !- Temperature Term Coefficient
-      # 0.224,                   !- Velocity Term Coefficient
-      # 0.0000;                  !- Velocity Squared Term Coefficient
-      self.getSpaceInfiltrationDesignFlowRates.each do |infiltration|
-        infiltration.setConstantTermCoefficient(0.0)
-        infiltration.setTemperatureTermCoefficient(0.0)
-        infiltration.setVelocityTermCoefficient(0.224)
-        infiltration.setVelocitySquaredTermCoefficient(0.0)
-      end
+    # The pre-1980 and 1980-2004 buildings have this:
+    # 1.0000,                  !- Constant Term Coefficient
+    # 0.0000,                  !- Temperature Term Coefficient
+    # 0.0000,                  !- Velocity Term Coefficient
+    # 0.0000;                  !- Velocity Squared Term Coefficient
+    # The 90.1-2010 buildings have this:
+    # 0.0000,                  !- Constant Term Coefficient
+    # 0.0000,                  !- Temperature Term Coefficient
+    # 0.224,                   !- Velocity Term Coefficient
+    # 0.0000;                  !- Velocity Squared Term Coefficient
+    self.getSpaceInfiltrationDesignFlowRates.each do |infiltration|
+      infiltration.setConstantTermCoefficient(0.0)
+      infiltration.setTemperatureTermCoefficient(0.0)
+      infiltration.setVelocityTermCoefficient(0.224)
+      infiltration.setVelocitySquaredTermCoefficient(0.0)
+    end
   end
 
   # Sets the inside and outside convection algorithms for different vintages

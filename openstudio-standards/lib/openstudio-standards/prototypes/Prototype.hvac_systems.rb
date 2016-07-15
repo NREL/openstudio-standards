@@ -3713,6 +3713,8 @@ class OpenStudio::Model::Model
 
   end
 
+  #This method will add an swh water fixture to the model for the space. 
+  # if the it will return a water fixture object, or NIL if there is no water load at all. 
   def add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
 
     # find the specific space_type properties from standard.json
@@ -3732,6 +3734,13 @@ class OpenStudio::Model::Model
       space_multiplier = 1
     end
 
+    #If there is no service hot water load.. Don't bother adding anything. 
+    if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 ||
+       data['service_water_heating_peak_flow_rate'].to_f == 0.0 
+        return nil
+    end
+    
+    
     # Water use connection
     swh_connection = OpenStudio::Model::WaterUseConnections.new(self)
 

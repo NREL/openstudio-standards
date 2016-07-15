@@ -6,7 +6,7 @@ class OpenStudio::Model::Model
     
     # Make the directory if it doesn't exist
     if !Dir.exists?(run_dir)
-      Dir.mkdir(run_dir)
+      FileUtils.mkdir_p(run_dir)
     end
     
     # Save the model to energyplus idf

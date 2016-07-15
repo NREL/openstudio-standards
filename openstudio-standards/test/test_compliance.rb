@@ -316,12 +316,18 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         area_per_occ = 0.0
         area_per_occ = total_occ_dens[0] unless total_occ_dens[0].nil?
         water_fixture = @model.add_swh_end_uses_by_space(st.standardsBuildingType.get, template, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
-        shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
-        shw_peak_flow = water_fixture.waterUseEquipmentDefinition.getPeakFlowRate.value # m3/s
-        shw_peak_flow_per_area = shw_peak_flow / space_area #m3/s/m2
-        # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
-        shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
-        shw_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
+        if water_fixture.nil?
+          shw_watts_per_person = 0.0
+          shw__fraction_schedule = 0.0
+          shw_target_temperature_schedule = "NA"
+        else
+          shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
+          shw_peak_flow = water_fixture.waterUseEquipmentDefinition.getPeakFlowRate.value # m3/s
+          shw_peak_flow_per_area = shw_peak_flow / space_area #m3/s/m2
+          # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
+          shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
+          shw_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
+        end
 
         header_output << "SpaceType,"
         output << "#{st.name},"
@@ -430,7 +436,7 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
         #remove space_type (This speeds things up a bit. 
         st.remove
         shw_loop.remove
-        water_fixture.remove
+        water_fixture.remove unless water_fixture.nil? 
             
       end #loop spacetypes
     end #loop Template
@@ -456,34 +462,61 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
 
     #Go Through each space type. with a counter
     empty_model.find_objects($os_standards["space_types"], { "template" => 'NECB 2011'}).each_with_index do |space_type_properties , index|
-      #Create new model for testing. 
-      model = OpenStudio::Model::Model.new
-      #Set weather file
-      template = 'NECB 2011'
-      model.add_design_days_and_weather_file('HighriseApartment', template, 'NECB HDD Method', File.basename('CAN_BC_Vancouver.718920_CWEC.epw'))
-      #Create only above ground geometry (Used for infiltration tests) 
-      length = 100.0; width = 100.0 ; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-      BTAP::Geometry::Wizards::create_shape_rectangle(model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
+      [1,2,4,5].each do |number_of_floors|
+        #Create new model for testing. 
+        model = OpenStudio::Model::Model.new
+        #Set weather file
+        template = 'NECB 2011'
+        model.add_design_days_and_weather_file('HighriseApartment', template, 'NECB HDD Method', File.basename('CAN_BC_Vancouver.718920_CWEC.epw'))
+        #Create only above ground geometry (Used for infiltration tests) 
+        length = 100.0; width = 100.0 ; num_above_ground_floors = number_of_floors; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
+        BTAP::Geometry::Wizards::create_shape_rectangle(model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
 
       
-      #set constructions
-      model.clear_and_set_example_constructions()
+        #set constructions
+        model.clear_and_set_example_constructions()
       
       
-      # Create a space type
-      puts "Testing spacetype #{space_type_properties["building_type"]}-#{space_type_properties["space_type"]}"
-      st = OpenStudio::Model::SpaceType.new(model)
-      st.setStandardsBuildingType(space_type_properties['building_type'])
-      st.setStandardsSpaceType(space_type_properties['space_type'])
-      st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
-      st.set_rendering_color(template)
-      model.add_loads(template)
+        # Create a space type
+        puts "Testing spacetype #{space_type_properties["building_type"]}-#{space_type_properties["space_type"]}"
+        st = OpenStudio::Model::SpaceType.new(model)
+        st.setStandardsBuildingType(space_type_properties['building_type'])
+        st.setStandardsSpaceType(space_type_properties['space_type'])
+        st_name = "#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}"
+        st.setName(st_name)
+        st.set_rendering_color(template)
       
-      #Assign Space types to spaces
-      model.getSpaces.each { |space| space.setSpaceType(st)}    
+
+        st_core = OpenStudio::Model::SpaceType.new(model)
+        st_core.setStandardsBuildingType("Space Function")
+        st_core.setStandardsSpaceType("Office - enclosed")
+        st_core_name = "#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}"
+        st_core.setName(st_core_name)
+        st_core.set_rendering_color(template)
       
-      schedule_type_array , space_zoning_data_array = BTAP::Compliance::NECB2011::necb_spacetype_system_selection(model)
-      puts space_zoning_data_array
+        model.add_loads(template)
+      
+        #Assign Space types to spaces. Setting the core to always an office space. This is done to 
+        # Ensure wildcard spaces are tested. 
+        model.getSpaces.each do |space|
+          if  BTAP::Geometry::Spaces::is_perimeter_space?(model, space)
+            space.setSpaceType(st_core)
+          else
+            space.setSpaceType(st)
+          end
+        end
+        #Assign Thermal zone and thermostats
+        model.create_thermal_zones(nil,nil, nil)
+        #Sizing
+        return false if model.runSizingRun("#{Dir.pwd}/SizingRun/#{index}-#{number_of_floors}") == false
+        #Run method to test. 
+        schedule_type_array , space_zoning_data_array = BTAP::Compliance::NECB2011::necb_spacetype_system_selection(model)
+        
+        
+        
+        puts space_zoning_data_array
+        #FileUtils.rm_rf("#{Dir.pwd}/SizingRun/#{index}")
+      end
     end
     #      
     #    #Run System picker

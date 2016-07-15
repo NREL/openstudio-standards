@@ -65,11 +65,14 @@ class OpenStudio::Model::Model
   # autosizing back into the self.
   def runSizingRun(sizing_run_dir = "#{Dir.pwd}/SizingRun")
 
+
     # Change the simulation to only run the sizing days
     sim_control = self.getSimulationControl
     sim_control.setRunSimulationforSizingPeriods(true)
     sim_control.setRunSimulationforWeatherFileRunPeriods(false)
-    
+
+    #check that all zones have surfaces. 
+    raise ("Error: Sizing Run Failed. Thermal Zones with no surfaces exist.") unless self.do_all_zones_have_surfaces?
     # Run the sizing run
     self.run_simulation_and_log_errors(sizing_run_dir)
     
@@ -77,8 +80,30 @@ class OpenStudio::Model::Model
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
     
+
+    
     return true
 
+  end
+  
+  #Method to check if all zones have surfaces. This is required to run a simulation. 
+  def do_all_zones_have_surfaces?()
+    error_string = ""
+    error = false
+    #Check to see if all zones have surfaces. 
+    self.getThermalZones.each do |zone|
+      if  0 == BTAP::Geometry::Surfaces::get_surfaces_from_thermal_zones([zone]).size
+        error_string << "Error: Thermal zone #{zone.name} does not contain surfaces.\n"
+        error = true
+      end
+      if error == true
+        puts error_string
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.Siz.Model', error_string)
+        return false
+      else
+        return true
+      end
+    end
   end
   
   # A helper method to run a sizing run and pull any values calculated during
