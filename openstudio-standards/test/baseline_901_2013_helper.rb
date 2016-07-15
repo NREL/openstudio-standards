@@ -122,17 +122,17 @@ module Baseline9012013
       if sys.name.get.include?('(Sys5)') # checking system 5
         supp_node = sys.supplyOutletNode
         supp_node.setpointManagers.each do |spm|
-          if spm.to_SetpointManagerOutdoorAirReset.is_initialized
-            spm = spm.to_SetpointManagerOutdoorAirReset.get
-            low_temp = OpenStudio.convert(spm.setpointatOutdoorHighTemperature,"C","F").get
-            high_temp = OpenStudio.convert(spm.setpointatOutdoorLowTemperature,"C","F").get
+          if spm.to_SetpointManagerWarmest.is_initialized
+            spm = spm.to_SetpointManagerWarmest.get
+            low_temp = OpenStudio.convert(spm.minimumSetpointTemperature,"C","F").get
+            high_temp = OpenStudio.convert(spm.maximumSetpointTemperature ,"C","F").get
             
             # check if reset is correct
             delta = high_temp - low_temp
             if (delta - 5.0).abs > 0.1
               reset_bad << "#{sys.name} reset = #{delta} delta-F"
             end
-          else # no setpointmanager:outdoorairreset
+          else # no SetpointManager:Warmest
             no_reset << sys.name.get
           end
         end #supp_node.each
@@ -157,11 +157,14 @@ module Baseline9012013
     min_good = []
     min_bad = []
     
-    model.getAirLoopHVACs.each do |sys|
+    vent_driven = []
+    oa_driven = []
+    fixed_min_driven = []
+    model.getAirLoopHVACs.sort.each do |sys|
       # get only systems 5 and 7
       if sys.name.get.include?('(Sys5)') || sys.name.get.include?('(Sys7)')
       
-        sys.thermalZones.each do |zone|
+        sys.thermalZones.sort.each do |zone|
           terminal = nil
           zone.equipment.each do |equip|
             next if equip.to_AirTerminalSingleDuctVAVReheat.empty?
@@ -173,27 +176,59 @@ module Baseline9012013
             des_flow = des_flow.get
           else puts "CANT GET TERMINAL DESIGN FLOW"
           end
-          
-          #assuming minimum is always specified as a constant fraction
-          min_flow_frac = terminal.constantMinimumAirFlowFraction
-          
-          #get outdoor air rate from DSOA
-          oa_rate = zone.outdoor_airflow_rate
 
-          # Calculate the actual fraction
-          act_oa_frac = oa_rate / des_flow
+          #get outdoor air rate from DSOA
+          min_oa_flow = zone.outdoor_airflow_rate
           
-          #check if terminal minimum meets requirements
+          # larger of fixed 20% fraction and fraction based
+          # on minimum OA requirement
+          expected_fixed_min_frac = 0.3
+          expected_oa_min_frac = min_oa_flow/des_flow
+          expected_min_frac = [expected_fixed_min_frac, expected_oa_min_frac].max
+
+          # minimum fraction, which is the greater
+          # of the min fraction or the min fixed value converted to a fraction.
+          act_fixed_min_frac = terminal.constantMinimumAirFlowFraction
+          act_oa_min_frac = 0.0
+          act_min_flow = terminal.fixedMinimumAirFlowRate
+          if act_min_flow > 0.0
+            act_oa_min_frac = act_min_flow/des_flow
+          end
+          act_min_frac = [act_fixed_min_frac, act_oa_min_frac].max
           
-          if (act_oa_frac - min_flow_frac).abs < 0.01  
-            puts "Min Flow from OA Rate"
-          elsif min_flow_frac == 0.3
-            puts "Min Flow is 30% Peak Flow"
-          else min_bad << "#{zone.name}, actual min OA frac = #{act_oa_frac.round(2)}, min damper pos = #{min_flow_frac.round(2)}"
-          end          
+          # If expected min OA frac is higher than the fixed minimum, check that
+          if act_fixed_min_frac > expected_min_frac
+            vent_driven << "#{zone.name} #{act_fixed_min_frac.round(2)} > #{expected_min_frac.round(2)}"
+          elsif expected_oa_min_frac > expected_fixed_min_frac
+            oa_driven << "#{zone.name} #{expected_oa_min_frac.round(2)} == #{act_oa_min_frac.round(2)}"
+            unless (expected_oa_min_frac - act_oa_min_frac).abs < 0.01
+              min_bad << "#{zone.name} min VAV is OA driven, but OA min flow #{expected_oa_min_frac.round(2)} != #{act_oa_min_frac.round(2)}"
+            end
+          else
+            fixed_min_driven << "#{zone.name} #{expected_fixed_min_frac.round(2)} == #{act_fixed_min_frac.round(2)}"
+            unless (expected_fixed_min_frac - act_fixed_min_frac).abs < 0.01
+             min_bad << "#{zone.name} min VAV is OA driven, but fixed minimum fraction #{expected_fixed_min_frac.round(2)} != #{act_fixed_min_frac.round(2)}"
+            end
+          end
+         
         end
       end
     end #model.getAirLoopHVACs
+    
+    puts "******** VAV Minimum Drivers ******"
+    puts ""
+    
+    puts "*** Ventilation Effectiveness Driven ***"
+    puts vent_driven
+    puts ""
+ 
+    puts "*** Min OA Driven ***"
+    puts oa_driven
+    puts ""
+    
+    puts "*** Fixed Minimum Driven ***"
+    puts fixed_min_driven    
+    puts ""
     
     assert_equal(min_bad.size,0,"The following zones' terminal units do not meet the minimum flow criteria of 30% or minimum outdoor airflow rate: #{min_bad.sort.join("\n")}. They may still may meet the requirement if applicable codes or standards require additional airflow.")    
   
@@ -393,23 +428,23 @@ module Baseline9012013
     if climate_zones_3bto8.include?(climate_zone)
     
       if building_type == 'MidriseApartment'
-        system_type = 'PTAC' #building_type_prm = 'Residential'
+        correct_sys_type = 'PTAC' #building_type_prm = 'Residential'
       # 5. Public assembly building types include
       # houses of worship, auditoriums, movie theaters, performance theaters, 
       # concert halls, arenas, enclosed stadiums, ice rinks, gymnasiums, 
       # convention centers, exhibition centers, and natatoriums. 
       # elsif (building_type == 'PublicAssembly' && model_area_ip < 120000)
-      #   system_type = 'PSZ_AC' #TODO add boolean for this PRM building type since not included in prototypes
+      #   correct_sys_type = 'PSZ_AC' #TODO add boolean for this PRM building type since not included in prototypes
       # elsif (building_type == 'PublicAssembly' && model_area_ip >= 120000)
-      #   system_type = 'SZ_CV_HW' #TODO
+      #   correct_sys_type = 'SZ_CV_HW' #TODO
       elsif (building_storys <= 3 && model_area_ip < 25000)
-        system_type = 'PSZ_AC'
+        correct_sys_type = 'PSZ_AC'
       elsif ( (building_storys = 4 || building_storys = 5) && model_area_ip < 25000 )
-        system_type = 'PVAV_Reheat'
+        correct_sys_type = 'PVAV_Reheat'
       elsif ( building_storys <= 5 && (model_area_ip >= 25000 && model_area_ip <= 150000) )
-        system_type = 'PVAV_Reheat'
+        correct_sys_type = 'PVAV_Reheat'
       elsif (building_storys >= 5 || model_area_ip > 150000)
-        system_type = 'VAV_Reheat'
+        correct_sys_type = 'VAV_Reheat'
       else
         puts "#{prm_maj_sec}: baseline system could not be determined"
       end
@@ -417,23 +452,23 @@ module Baseline9012013
     elsif climate_zones_1to3a.include?(climate_zone)
       
       if building_type == 'MidriseApartment'
-        system_type = 'PTHP' #building_type_prm = 'Residential'
+        correct_sys_type = 'PTHP' #building_type_prm = 'Residential'
       # 5. Public assembly building types include
       # houses of worship, auditoriums, movie theaters, performance theaters, 
       # concert halls, arenas, enclosed stadiums, ice rinks, gymnasiums, 
       # convention centers, exhibition centers, and natatoriums. 
       # elsif building_type == 'PublicAssembly' && model_area_ip < 120000
-      #   system_type = 'PSZ_HP' #TODO add boolean for this PRM building type since not included in prototypes
+      #   correct_sys_type = 'PSZ_HP' #TODO add boolean for this PRM building type since not included in prototypes
       # elsif building_type == 'PublicAssembly' && model_area_ip >= 120000
-      #   system_type = 'SZ_CV_ER' #TODO
+      #   correct_sys_type = 'SZ_CV_ER' #TODO
       elsif building_storys <= 3 && model_area_ip < 25000
-        system_type = 'PSZ_HP'
+        correct_sys_type = 'PSZ_HP'
       elsif (building_storys = 4 || building_storys = 5) && model_area_ip < 25000
-        system_type = 'PVAV_PFP_Boxes'
+        correct_sys_type = 'PVAV_PFP_Boxes'
       elsif building_storys <= 5 && (model_area_ip >= 25000 && model_area_ip <= 150000)
-        system_type = 'PVAV_PFP_Boxes'
+        correct_sys_type = 'PVAV_PFP_Boxes'
       elsif building_storys >= 5 && model_area_ip > 150000
-        system_type = 'VAV_PFP_Boxes'
+        correct_sys_type = 'VAV_PFP_Boxes'
       else
         puts "#{prm_maj_sec}: baseline system could not be determined"
       end
@@ -453,7 +488,9 @@ module Baseline9012013
         
         z.equipment.each do |ze|
           obj_type = ze.iddObjectType.valueName
-          obj_type_name = obj_type.gsub('OS_','').gsub('_','')
+          obj_type_name = obj_type.gsub('OS_','').gsub('_','').strip
+          # Don't count exhaust fans
+          next if obj_type_name == 'FanZoneExhaust'
           zone_eqpt << obj_type_name
         end
         
@@ -478,38 +515,35 @@ module Baseline9012013
       htg_type = 'Electric'
     end
     
-    # tests
+    # determine the actual system type
+    actual_sys_type = nil
     case base_model_primary_system
-      
     when 'ZoneHVACPackagedTerminalAirConditioner' 
-      
-      assert_equal('PTAC', system_type, "#{prm_maj_sec}: primary baseline system type incorrect") #sys1
-      
+      actual_sys_type =  'PTAC' #sys1
     when 'ZoneHVACPackagedTerminalHeatPump'
-      
-      assert_equal('PTHP', system_type, "#{prm_maj_sec}: primary baseline system type incorrect") #sys2
-      
+      actual_sys_type =  'PTHP' #sys2
     when 'AirTerminalSingleDuctUncontrolled'
-      
       if clg_type == 'DX' && htg_type == 'HW'
-        assert_equal('PSZ_AC', system_type, "#{prm_maj_sec}: primary baseline system type incorrect") #sys 3
+        actual_sys_type =  'PSZ_AC' #sys 3
       elsif clg_type == 'DX' && htg_type == 'Electric'
-        assert_equal('PSZ_HP', system_type, "#{prm_maj_sec}: primary baseline system type incorrect") #sys 4
+        actual_sys_type =  'PSZ_HP' #sys 4
       end
-      
     when 'AirTerminalSingleDuctVAVReheat'
-      
       if clg_type == 'DX' && htg_type == 'HW'
-        assert_equal('PVAV_Reheat', system_type, "#{prm_maj_sec}: primary baseline system type incorrect") #sys 5
+        actual_sys_type =  'PVAV_Reheat' #sys 5
       elsif clg_type == 'DX' && htg_type == 'Electric'
-        assert_equal('PVAV_PFP_Boxes', system_type, "#{prm_maj_sec}: primary baseline system type incorrect") #sys 6
+        actual_sys_type =  'PVAV_PFP_Boxes' #sys 6
       elsif clg_type == 'CHW' && htg_type == 'HW'
-        assert_equal('VAV_Reheat', system_type, "#{prm_maj_sec}: primary baseline system type incorrect") #sys 7
+        actual_sys_type = 'VAV_Reheat' #sys 7
       elsif clg_type == 'CHW' && htg_type == 'Electric'
-        assert_equal('VAV_PFP_Boxes', system_type, "#{prm_maj_sec}: primary baseline system type incorrect") #sys 8    
+        actual_sys_type = 'VAV_PFP_Boxes'
       end
-      
-    end     
+    else
+      puts "Unrecognized base_model_primary_system: '#{base_model_primary_system}'"
+    end
+
+    # Compare the correct type to the actual type
+    assert_equal(correct_sys_type, actual_sys_type, "#{prm_maj_sec}: primary baseline system type incorrect")
     
   end  
  
@@ -812,12 +846,24 @@ module Baseline9012013
     
     # determine building area type
     # 90.1-2013, Table G3.1.1-2
-    # TODO building types here do not match measure options
-    if building_type.include?('Office') || building_type.include?('Retail')
+    prm_shw_fuel = nil
+    case building_type
+    when 'SecondarySchool', 'PrimarySchool', # School/university
+         'SmallHotel', # Motel
+         'LargeHotel', # Hotel
+         'QuickServiceRestaurant', # Dining: Cafeteria/fast food
+         'FullServiceRestaurant', # Dining: Family
+         'MidriseApartment', 'HighriseApartment', # Multifamily
+         'Hospital', # Hospital
+         'Outpatient' # Health-care clinic
       prm_shw_fuel = 'NaturalGas'
-    else
+    when 'SmallOffice', 'MediumOffice', 'LargeOffice', # Office
+         'RetailStandalone', 'RetailStripmall', # Retail
+         'Warehouse' # Warehouse
       prm_shw_fuel = 'Electricity'
-    end   
+    else
+      prm_shw_fuel = 'NaturalGas'
+    end 
     
     # 90.1-2013 Table 7.8
     prm_cap_elec = OpenStudio.convert(12, 'kW', 'Btu/h').get
@@ -830,11 +876,15 @@ module Baseline9012013
         
         wh = wh.to_WaterHeaterMixed.get
         fuel = wh.heaterFuelType
-        eff = wh.getHeaterThermalEfficiency(returnIP=true).get.value
-        cap = wh.getHeaterMaximumCapacity(returnIP=true).get.value
-        vol = wh.getTankVolume(returnIP=true).get.value
-        ua_off = wh.getOffCycleLossCoefficienttoAmbientTemperature(returnIP=true).get.value
-        ua_on = wh.getOnCycleLossCoefficienttoAmbientTemperature(returnIP=true).get.value
+        eff = wh.heaterThermalEfficiency.get
+        cap = wh.heaterMaximumCapacity.get
+        cap = OpenStudio.convert(cap,'W','Btu/h').get
+        vol = wh.tankVolume.get
+        vol = OpenStudio.convert(vol,'m^3','gal').get
+        ua_off = wh.offCycleLossCoefficienttoAmbientTemperature.get
+        ua_off = OpenStudio.convert(ua_off,'W/K','Btu/hr*R').get
+        ua_on = wh.onCycleLossCoefficienttoAmbientTemperature.get
+        ua_on = OpenStudio.convert(ua_on,'W/K','Btu/hr*R').get
         
         # test baseline water heater fuel
          assert_equal(prm_shw_fuel, fuel, "#{prm_maj_sec}: baseline water heater fuel type")
@@ -873,14 +923,14 @@ module Baseline9012013
           elsif cap > prm_cap_gas
             # from standard
             e_t = 0.8
-            cap = 75000
             sl = cap / 800 + 110 * Math.sqrt(vol) #per 2013 errata
             # from PNNL
             ua = sl * e_t / 70
-            p_on = 75000 #Btu/h
+            p_on = cap
             e_ht = (ua * 70 + p_on * e_t) / p_on
+            
             # test
-            assert_in_delta(e_ht, eff, delta=0.001, "#{prm_maj_sec}: baseline water heater efficiency")
+            assert_in_delta(e_ht, eff, delta=0.01, "#{prm_maj_sec}: baseline water heater efficiency")
             assert_in_delta(ua, ua_off, delta=0.1, "#{prm_maj_sec}: baseline water heater UA")
             assert_in_delta(ua, ua_on, delta=0.1, "#{prm_maj_sec}: baseline water heater UA")
           end
