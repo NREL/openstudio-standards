@@ -50,7 +50,7 @@ module PrototypeFan
     end
     
     # Find the motor efficiency
-    motor_eff, nominal_hp = standard_minimum_motor_efficiency(template, allowed_hp)
+    motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, allowed_hp)
 
     # Calculate the total fan efficiency
     total_fan_eff = fan_impeller_eff * motor_eff
