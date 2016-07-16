@@ -260,6 +260,12 @@ module Fan
       end
 
       nominal_hp = motor_properties["maximum_capacity"].to_f.round(1)
+      # If the biggest fan motor size is hit, use the highest category efficiency
+      if nominal_hp == 9999.0
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Fan", "For #{self.name}, there is no greater nominal HP.  Use the efficiency of the largest motor category.")
+        nominal_hp = motor_bhp
+      end
+      
       # Round to nearest whole HP for niceness
       if nominal_hp >= 2
         nominal_hp = nominal_hp.round
