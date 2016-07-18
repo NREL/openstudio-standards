@@ -265,8 +265,6 @@ class OpenStudio::Model::Model
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
 
     self.update_waterheater_loss_coefficient(building_vintage)
-
-    
     return true
 
   end

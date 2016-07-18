@@ -52,7 +52,10 @@ class OpenStudio::Model::SpaceType
     
     # Set the rendering color of the space type
     rgb = space_type_properties['rgb']
-    raise ("RGB not present in space type #{space_type_properties}") if rgb.nil?
+    if rgb.nil?
+      return false
+    end
+    
     rgb = rgb.split('_')
     r = rgb[0].to_i
     g = rgb[1].to_i

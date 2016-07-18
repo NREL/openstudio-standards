@@ -18,9 +18,9 @@ class OpenStudio::Model::Model
       # Add each HVAC system
       system_to_space_map.each do |system|
 
-        thermal_zones = get_zones_from_spaces_on_system(system)
+    thermal_zones = get_zones_from_spaces_on_system(system)
 
-        return_plenum = get_return_plenum_from_system(system)
+    return_plenum = get_return_plenum_from_system(system)
       
         # Add the HVAC systems
         case system['type']
@@ -32,7 +32,7 @@ class OpenStudio::Model::Model
           if self.getPlantLoopByName('Hot Water Loop').is_initialized
             hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
           else
-            hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
+          hot_water_loop = self.add_hw_loop('NaturalGas', building_type)
           end
 
           # Retrieve the existing chilled water loop
@@ -42,22 +42,33 @@ class OpenStudio::Model::Model
             chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
           else
             condenser_water_loop = nil
-            if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-              condenser_water_loop = self.add_cw_loop()
+          number_cooling_towers = 1
+          num_chillers = 1
+          if building_type == "Hospital" or building_type == "LargeOffice"
+            case building_vintage
+              when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+                number_cooling_towers = 2
+                num_chillers = 2
             end
-          
-            chilled_water_loop = self.add_chw_loop(building_vintage,
-              prototype_input['chw_pumping_type'],
-              prototype_input['chiller_cooling_type'],
-              prototype_input['chiller_condenser_type'],
-              prototype_input['chiller_compressor_type'],
-              prototype_input['chiller_capacity_guess'],
-              condenser_water_loop)
-                                 
+          end
+            if prototype_input['chiller_cooling_type'] == 'WaterCooled'
+            condenser_water_loop = self.add_cw_loop(building_type, building_vintage, number_cooling_towers)
+            end
+          chilled_water_loop = self.add_chw_loop(
+                                  building_vintage,
+                                  prototype_input['chw_pumping_type'],
+                                  prototype_input['chiller_cooling_type'],
+                                  prototype_input['chiller_condenser_type'],
+                                  prototype_input['chiller_compressor_type'],
+                                  prototype_input['chiller_capacity_guess'],
+                                  condenser_water_loop,
+                                  building_type,
+                                  num_chillers
+                                )
           end
       
           # Add the VAV
-          self.add_vav_reheat(building_vintage, 
+        self.add_vav_reheat(building_vintage,
             system['name'], 
             hot_water_loop, 
             chilled_water_loop,
@@ -68,8 +79,10 @@ class OpenStudio::Model::Model
             prototype_input['vav_fan_motor_efficiency'],
             prototype_input['vav_fan_pressure_rise'],
             return_plenum,
-            building_type)
+          building_type
+        )
           
+
         when 'CAV'
       
           # Retrieve the existing hot water loop
@@ -81,7 +94,25 @@ class OpenStudio::Model::Model
             hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
           end
         
-          # Add the CAV
+        chilled_water_loop = nil
+        if self.getPlantLoopByName('Chilled Water Loop').is_initialized
+          chilled_water_loop = self.getPlantLoopByName('Chilled Water Loop').get
+        elsif building_type == 'Hospital'
+          condenser_water_loop = nil
+          if prototype_input['chiller_cooling_type'] == 'WaterCooled'
+            condenser_water_loop = self.add_cw_loop()
+          end
+
+          chilled_water_loop = self.add_chw_loop(building_vintage,
+                                                prototype_input['chw_pumping_type'],
+                                                prototype_input['chiller_cooling_type'],
+                                                prototype_input['chiller_condenser_type'],
+                                                prototype_input['chiller_compressor_type'],
+                                                prototype_input['chiller_capacity_guess'],
+                                                condenser_water_loop)
+        end
+
+        # Add the CAV
           self.add_cav(building_vintage,
             system['name'],
             hot_water_loop,
@@ -91,6 +122,7 @@ class OpenStudio::Model::Model
             prototype_input['vav_fan_efficiency'],
             prototype_input['vav_fan_motor_efficiency'],
             prototype_input['vav_fan_pressure_rise'],
+                    chilled_water_loop,
             building_type)
         
         when 'PSZ-AC'
@@ -123,14 +155,14 @@ class OpenStudio::Model::Model
             heat_pump_loop = add_hp_loop(building_type)
           end
       
-          self.add_psz_ac(building_vintage, 
-            system['name'], 
+        self.add_psz_ac(building_vintage,
+                        system['name'],
             heat_pump_loop, # Typically nil unless water source hp
             heat_pump_loop, # Typically nil unless water source hp
-            thermal_zones, 
+                        thermal_zones,
             hvac_op_sch,
             oa_sch,
-            fan_position, 
+                        fan_position,
             prototype_input['pszac_fan_type'],
             prototype_input['pszac_heating_type'],
             prototype_input['pszac_supplemental_heating_type'],
@@ -148,15 +180,15 @@ class OpenStudio::Model::Model
             hot_water_loop = nil
           else
             hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
-          end      
+        end
 
-          self.add_pvav(building_vintage, 
-            system['name'], 
-            thermal_zones, 
+        self.add_pvav(building_vintage,
+                      system['name'],
+                      thermal_zones,
             prototype_input['vav_operation_schedule'],
             prototype_input['vav_oa_damper_schedule'],
             hot_water_loop,
-            return_plenum, 
+                      return_plenum,
             building_type)
       
         when 'DOAS'
@@ -188,18 +220,18 @@ class OpenStudio::Model::Model
               prototype_input['chiller_compressor_type'],
               prototype_input['chiller_capacity_guess'],
               condenser_water_loop)
-          end      
+        end
 
-          self.add_doas(building_vintage, 
-            system['name'], 
-            hot_water_loop, 
+        self.add_doas(building_vintage,
+                    system['name'],
+                    hot_water_loop,
             chilled_water_loop,
             thermal_zones,
             prototype_input['vav_operation_schedule'],
             prototype_input['doas_oa_damper_schedule'],
             prototype_input['doas_fan_maximum_flow_rate'],
             prototype_input['doas_economizer_control_type'],
-            building_type)       
+                    building_type)
 
         when 'DC' # Data Center
       
@@ -210,7 +242,7 @@ class OpenStudio::Model::Model
             hot_water_loop = self.getPlantLoopByName('Hot Water Loop').get
           else
             hot_water_loop = self.add_hw_loop('NaturalGas',building_type)
-          end      
+        end
       
           # Retrieve the existing heat pump loop
           # or add a new one if necessary.
@@ -232,9 +264,9 @@ class OpenStudio::Model::Model
       
         when 'SAC'
       
-          self.add_split_AC(building_vintage, 
+        self.add_split_AC(building_vintage,
             nil,
-            thermal_zones, 
+                          thermal_zones,
             prototype_input['sac_operation_schedule'],
             prototype_input['sac_operation_schedule_meeting'],
             prototype_input['sac_oa_damper_schedule'],
@@ -246,9 +278,9 @@ class OpenStudio::Model::Model
 
         when 'UnitHeater'
       
-          self.add_unitheater(building_vintage, 
+        self.add_unitheater(building_vintage,
             nil,
-            thermal_zones, 
+                            thermal_zones,
             prototype_input['unitheater_operation_schedule'],
             prototype_input['unitheater_fan_control_type'],
             prototype_input['unitheater_fan_static_pressure'],
@@ -257,14 +289,14 @@ class OpenStudio::Model::Model
 
         when 'PTAC'
 
-          self.add_ptac(building_vintage, 
+        self.add_ptac(building_vintage,
             nil,
             nil,
             thermal_zones,
             prototype_input['ptac_fan_type'],
             prototype_input['ptac_heating_type'],
             prototype_input['ptac_cooling_type'],
-            building_type)      
+                      building_type)
                             
         when 'Exhaust Fan'
       

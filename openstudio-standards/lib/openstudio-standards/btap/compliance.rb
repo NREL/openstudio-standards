@@ -617,16 +617,13 @@ module BTAP
           :necb_hvac_system_selection_type, #
           :system_number,           # the necb system type
           :number_of_stories,       #number of stories
-          :story,                   # the floor
           :horizontal_placement,    # the horizontal placement (norht, south, east, west, core) 
           :vertical_placment,       # the vertical placement ( ground, top, both, middle )
           :people_obj,              # Spacetype people object
           :heating_capacity,
           :cooling_capacity )
 
-        # Reassign / set floors if required. 
-        BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
-        
+      
         
         #Array to store schedule objects
         schedule_type_array = []
@@ -646,14 +643,7 @@ module BTAP
         
         #First pass of spaces to collect information into the space_zoning_data_array . 
         model.getSpaces.each do |space|
-          #initialize building story variable. 
-          building_story = nil
-          #check to see if the space is already set to a story. 
-          if space.buildingStory.empty?
-            raise ("Building Story not set for space #{space.name}. This must be set.")
-          else
-            building_story = space.buildingStory.get
-          end
+
             
           #this will get the spacetype system index 8.4.4.8A  from the SpaceTypeData and BuildingTypeData in  (1-12)
           space_system_index = nil
@@ -670,16 +660,17 @@ module BTAP
           
           
           #Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load. 
-
-          if space.spaceType.get.standardsSpaceType.get == "- undefined -"
-            coolingDesignLoad = 0.0
-            heatingDesignLoad = 0.0
-          end
+          #Make sure we don't have sideeffects by changing the argument variables. 
+          cooling_load = coolingDesignLoad
+          heating_load = heatingDesignLoad
           
-          #if the heating and cooling loads have not been hardset by the method argument (for testing) , use the sizing run data. 
-          coolingDesignLoad = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if coolingDesignLoad.nil? 
-          heatingDesignLoad = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heatingDesignLoad.nil?
-
+          if space.spaceType.get.standardsSpaceType.get == "- undefined -"
+            cooling_load = 0.0
+            heating_load = 0.0
+          else
+              cooling_load = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if cooling_load.nil? 
+              heating_load = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heating_load.nil?
+          end 
           
           #identify space-system_index and assign the right NECB system type 1-7. 
           system = nil
@@ -760,34 +751,16 @@ module BTAP
               necb_hvac_system_selection_type,
               system,
               number_of_stories,
-              building_story, 
               horizontal_placement,
               vertical_placement,
               space.spaceType.get.people, 
-              heatingDesignLoad, 
-              coolingDesignLoad )
+              heating_load, 
+              cooling_load )
             schedule_type_array <<  BTAP::Compliance::NECB2011::determine_necb_schedule_type( space ).to_s
           end
         end
         
-        #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
-        space_zoning_data_array.each do |space_zone_data|
-          if space_zone_data.system_number == "Wildcard"
-            #iterate through all adjacent spaces from largest shared wall area to smallest.
-            # Set system type to match first space system that is not nil. 
-            space_zone_data.space.get_adjacent_spaces_with_shared_wall_areas(true).each do |adj_space|
-              raise ("Could not determine adj space to space #{space_zone_data.space.name.get}") if adj_space.nil?
-              adj_space_data = space_zoning_data_array.find { |data| data.space == adj_space[0] }
-              if adj_space_data.system_number.nil?
-                next
-              else
-                space_zone_data.system_number = adj_space_data.system_number
-                break
-              end 
-            end
-            raise ("Could not determine adj space system to space #{space_zone_data.space.name.get}") if space_zone_data.system_number.nil?
-          end
-        end
+
 
 
         return schedule_type_array.uniq! , space_zoning_data_array
@@ -884,11 +857,34 @@ module BTAP
           BTAP::runner_register("ERROR","heating_coil_types_sys4 = #{heating_coil_types_sys4}",runner)
           return false
         end
+        
+        # Reassign / set floors if required. 
+        BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
 
         #this method will determine the spaces that should be set to each system
         schedule_type_array , space_zoning_data_array = self.necb_spacetype_system_selection(model)
         
-        #        #remove any thermal zones used for sizing to start fresh. Should only do this after the above system selection method. 
+        #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
+        space_zoning_data_array.each do |space_zone_data|
+          if space_zone_data.system_number == "Wildcard"
+            #iterate through all adjacent spaces from largest shared wall area to smallest.
+            # Set system type to match first space system that is not nil. 
+            space_zone_data.space.get_adjacent_spaces_with_shared_wall_areas(true).each do |adj_space|
+              raise ("Could not determine adj space to space #{space_zone_data.space.name.get}") if adj_space.nil?
+              adj_space_data = space_zoning_data_array.find { |data| data.space == adj_space[0] }
+              if adj_space_data.system_number.nil?
+                next
+              else
+                space_zone_data.system_number = adj_space_data.system_number
+                break
+              end 
+            end
+            raise ("Could not determine adj space system to space #{space_zone_data.space.name.get}") if space_zone_data.system_number.nil?
+          end
+        end
+        
+        
+        #remove any thermal zones used for sizing to start fresh. Should only do this after the above system selection method. 
         model.getThermalZones.each {|zone| zone.remove}
 
         

@@ -462,29 +462,23 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
     
     #Create new model for testing. 
     empty_model = OpenStudio::Model::Model.new
-    
+    #Hardcode heating load to 20kW
+    heatingDesignLoad = 20.0
 
-    #Go Through each space type. with a counter
-    empty_model.find_objects($os_standards["space_types"], { "template" => 'NECB 2011'}).each_with_index do |space_type_properties , index|
-      heatingDesignLoad = 20.0
-      #      coolingDesignLoad = 20.0 ; number_of_floors = 1
-      
-      [0,5,20.1].each do |coolingDesignLoad|
-        [1,2,4,5].each do |number_of_floors|
-          #Create new model for testing. 
-          model = OpenStudio::Model::Model.new
-          #Set weather file
-          template = 'NECB 2011'
-          model.add_design_days_and_weather_file('HighriseApartment', template, 'NECB HDD Method', File.basename('CAN_BC_Vancouver.718920_CWEC.epw'))
-          #Create only above ground geometry (Used for infiltration tests) 
-          length = 100.0; width = 100.0 ; num_above_ground_floors = number_of_floors; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-          BTAP::Geometry::Wizards::create_shape_rectangle(model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
+    #GGo through all combinations of floors and cooling loads
+    [0,5,20.1].each do |coolingDesignLoad| #0,5,20,20.1
+      [1,2,4,5].each do |number_of_floors| #1,2,4,5
+        #Create new model for testing. 
+        model = OpenStudio::Model::Model.new
+        template = 'NECB 2011'
+        #Set weather file
+        model.add_design_days_and_weather_file('HighriseApartment', template, 'NECB HDD Method', File.basename('CAN_BC_Vancouver.718920_CWEC.epw'))
+        #Create Floors
+        (1..number_of_floors).each {|floor| OpenStudio::Model::BuildingStory.new(model)}
+        
+        #Go Through each space type. with a counter
+        empty_model.find_objects($os_standards["space_types"], { "template" => 'NECB 2011'}).each_with_index do |space_type_properties , index|
 
-      
-          #set constructions
-          model.clear_and_set_example_constructions()
-      
-      
           # Create a space type
           puts "Testing spacetype #{space_type_properties["building_type"]}-#{space_type_properties["space_type"]}"
           st = OpenStudio::Model::SpaceType.new( model )
@@ -493,58 +487,42 @@ class NECB2011DefaultSpaceTypeTests < Minitest::Test
           st_name = "#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}"
           st.setName(st_name)
           st.set_rendering_color(template)
-      
+          
+          #create space and add the space type to it. 
+          space = OpenStudio::Model::Space.new(model)
+          space.setSpaceType(st)
 
-          st_core = OpenStudio::Model::SpaceType.new(model)
-          st_core.setStandardsBuildingType("Space Function")
-          st_core.setStandardsSpaceType("Office - enclosed")
-          st_core_name = "#{template}-Space Function-Office - enclosed"
-          st_core.setName(st_core_name)
-          st_core.set_rendering_color(template)
-      
-          model.add_loads(template)
-      
-          #Assign Space types to spaces. Setting the core to always an office space. This is done to 
-          # Ensure wildcard spaces are tested. 
-          model.getSpaces.each do |space|
-            if  not BTAP::Geometry::Spaces::is_perimeter_space?(model, space)
-              #set core to office type
-              space.setSpaceType(st_core)
-            else
-              space.setSpaceType(st)
-            end
-          end
-          #Assign Thermal zone and thermostats
-          model.create_thermal_zones(nil,nil, nil)
-          #          #Sizing
-          #          return false if model.runSizingRun("#{Dir.pwd}/SizingRun/#{index}-#{number_of_floors}") == false
-          #Run method to test. 
-          schedule_type_array , space_zoning_data_array = BTAP::Compliance::NECB2011::necb_spacetype_system_selection(model,heatingDesignLoad,coolingDesignLoad)
-        
-          #iterate through results          
-          space_zoning_data_array.each  do |data| 
-            results_array << { 
-              :necb_hvac_selection_type => "#{data.necb_hvac_system_selection_type}",
-              :space_type_name          => "#{data.building_type_name}-#{data.space_type_name}",
-              :number_of_stories        => "#{data.number_of_stories}",
-              :heating_capacity         => "#{data.heating_capacity}", 
-              :cooling_capacity         => "#{data.cooling_capacity}",
-              :system_number            => "#{data.system_number}"
-            } 
-          end
-          #end
-          #end
         end
-        test_result_file = File.join(File.dirname(__FILE__),'regression_files','space_type_system_selection_test_results.csv')
-        results_array.uniq!.sort_by! { |k| k[:necb_hvac_selection_type] }
-        CSV.open(test_result_file, "wb") do |csv|
-          csv << results_array.first.keys # adds the attributes name on the first line
-          results_array.each do |hash|
-            csv << hash.values
-          end
-        end#csv
+        model.add_loads(template)
+      
+        #Assign Thermal zone and thermostats
+        model.create_thermal_zones(nil,nil, nil)
+
+        #Run method to test. 
+        schedule_type_array , space_zoning_data_array = BTAP::Compliance::NECB2011::necb_spacetype_system_selection(model,heatingDesignLoad,coolingDesignLoad)
+        
+        #iterate through results          
+        space_zoning_data_array.each  do |data| 
+          results_array << { 
+            :necb_hvac_selection_type => "#{data.necb_hvac_system_selection_type}",
+            :space_type_name          => "#{data.building_type_name}-#{data.space_type_name}",
+            :number_of_stories        => "#{data.number_of_stories}",
+            :heating_capacity         => "#{data.heating_capacity}", 
+            :cooling_capacity         => "#{data.cooling_capacity}",
+            :system_number            => "#{data.system_number}"
+          } 
+        end
       end
     end
+    test_result_file = File.join(File.dirname(__FILE__),'regression_files','space_type_system_selection_test_results.csv')
+    puts results_array.uniq!
+    results_array.sort_by! { |k| k[:necb_hvac_selection_type] }
+    CSV.open(test_result_file, "wb") do |csv|
+      csv << results_array.first.keys # adds the attributes name on the first line
+      results_array.each do |hash|
+        csv << hash.values
+      end
+    end#csv
   end
   
     

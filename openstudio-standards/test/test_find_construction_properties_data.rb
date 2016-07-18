@@ -31,7 +31,7 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
     u_value = data['assembly_maximum_u_value']
 
     # check various internal loads. This has ip values
-    assert(u_value.to_f == 0.064) # currently using Nonresidential. If spreadsheet udpates to Residential then value will be .064
+    assert_in_delta(u_value.to_f, 0.064)
 
   end
 
