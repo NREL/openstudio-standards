@@ -209,7 +209,6 @@ class OpenStudio::Model::Model
       chilled_water_loop.setCommonPipeSimulation('CommonPipe')
     end
 
-<<<<<<< HEAD
     # DistrictCooling
     if cooling_fuel == 'DistrictCooling'
       dist_clg = OpenStudio::Model::DistrictCooling.new(self)
