@@ -3,17 +3,26 @@
 class OpenStudio::Model::Model
  
   def define_space_type_map(building_type, building_vintage, climate_zone)
-    space_type_map = {
-      'Strip mall - type 1' => [
-        'LGstore1', 'SMstore1'
-      ],
-      'Strip mall - type 2' => [
-        'SMstore2', 'SMstore3', 'SMstore4'
-      ],
-      'Strip mall - type 3' => [
-        'LGstore2', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'
-      ]
-    }
+    space_type_map = nil
+    case building_vintage
+    
+    when 'NECB 2011'
+      space_type_map ={
+        "Retail - sales" => ["LGstore1", "LGstore2", "SMstore1", "SMstore2", "SMstore3", "SMstore4", "SMstore5", "SMstore6", "SMstore7", "SMstore8"]
+      }
+    else
+      space_type_map = {
+        'Strip mall - type 1' => [
+          'LGstore1', 'SMstore1'
+        ],
+        'Strip mall - type 2' => [
+          'SMstore2', 'SMstore3', 'SMstore4'
+        ],
+        'Strip mall - type 3' => [
+          'LGstore2', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'
+        ]
+      }
+    end
     return space_type_map
   end
 
@@ -90,38 +99,39 @@ class OpenStudio::Model::Model
     # Add infiltration door opening
     # Spaces names to design infiltration rates (m3/s)
     case building_vintage
-      when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
-        door_infiltration_map = { ['LGstore1','LGstore2'] => 0.388884328,
-                                  ['SMstore1','SMstore2', 'SMstore3', 'SMstore4','SMstore5', 'SMstore6', 'SMstore7', 'SMstore8']=>0.222287037}
+    when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
+      door_infiltration_map = { ['LGstore1','LGstore2'] => 0.388884328,
+        ['SMstore1','SMstore2', 'SMstore3', 'SMstore4','SMstore5', 'SMstore6', 'SMstore7', 'SMstore8']=>0.222287037}
 
-        door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|
-          space_names.each do |space_name|
-            space = self.getSpaceByName(space_name).get
-            # Create the infiltration object and hook it up to the space type
-            infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
-            infiltration.setName("#{space_name} Door Open Infiltration")
-            infiltration.setSpace(space)
-            infiltration.setDesignFlowRate(infiltration_design_flowrate)
-            infiltration_schedule = self.add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
-            if infiltration_schedule.nil?
-              OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Can't find schedule (RetailStripmall INFIL_Door_Opening_SCH).")
-              return false
-            else
-              infiltration.setSchedule(infiltration_schedule)
-            end
+      door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|
+        space_names.each do |space_name|
+          space = self.getSpaceByName(space_name).get
+          # Create the infiltration object and hook it up to the space type
+          infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+          infiltration.setName("#{space_name} Door Open Infiltration")
+          infiltration.setSpace(space)
+          infiltration.setDesignFlowRate(infiltration_design_flowrate)
+          infiltration_schedule = self.add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
+          if infiltration_schedule.nil?
+            OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Can't find schedule (RetailStripmall INFIL_Door_Opening_SCH).")
+            return false
+          else
+            infiltration.setSchedule(infiltration_schedule)
           end
         end
-      else
-        # do nothing for the old vintage
+      end
+    else
+      # do nothing for the old vintage
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
     return true
   end #add hvac
 
+
   def update_waterheater_loss_coefficient(building_vintage)
     case building_vintage
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       self.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.205980747)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.205980747)

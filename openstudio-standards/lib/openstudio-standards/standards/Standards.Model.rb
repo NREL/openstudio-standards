@@ -1810,6 +1810,7 @@ class OpenStudio::Model::Model
   
   
   end
+
   
   # Applies the multi-zone VAV outdoor air sizing requirements
   # to all applicable air loops in the model.
@@ -1851,6 +1852,7 @@ class OpenStudio::Model::Model
     self.getPumpVariableSpeeds.sort.each {|obj| obj.set_standard_minimum_motor_efficiency(building_vintage)}
     
     # Unitary ACs
+
     self.getCoilCoolingDXTwoSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
     self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(building_vintage, sql_db_vars_map)}
 
@@ -1858,7 +1860,9 @@ class OpenStudio::Model::Model
     self.getCoilHeatingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(building_vintage, sql_db_vars_map)}
 
     # Chillers
-    self.getChillerElectricEIRs.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
+    clg_tower_objs = self.getCoolingTowerSingleSpeeds
+    self.getChillerElectricEIRs.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage, clg_tower_objs)}
+
 
     # Boilers
     self.getBoilerHotWaters.sort.each {|obj| obj.setStandardEfficiencyAndCurves(building_vintage)}
@@ -1904,6 +1908,7 @@ class OpenStudio::Model::Model
       space.set_infiltration_rate(building_vintage)
     end
 
+
     case building_vintage
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         #"For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004', infiltration rates are not defined using this method, no changes have been made to the model.
@@ -1915,7 +1920,9 @@ class OpenStudio::Model::Model
           end
         end
       end
-  end
+    end
+ 
+
 
   # Method to search through a hash for the objects that meets the
   # desired search criteria, as passed via a hash.
@@ -2160,6 +2167,7 @@ class OpenStudio::Model::Model
         day_types.include?('Thu') ||
         day_types.include?('Fri')
 
+
         # Make the Rule
         sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
         day_sch = sch_rule.daySchedule
@@ -2399,12 +2407,14 @@ class OpenStudio::Model::Model
     # Get the construction properties,
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
+
     props = self.find_object($os_standards['construction_properties'], {'template'=>building_vintage,
                                                                     'climate_zone_set'=> climate_zone_set,
                                                                     'intended_surface_type'=> intended_surface_type,
                                                                     'standards_construction_type'=> standards_construction_type,
                                                                     'building_category' => building_category
                                                                     })
+
     if !props
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{building_vintage}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
       # Return an empty construction
@@ -2446,17 +2456,25 @@ class OpenStudio::Model::Model
     end
 
     # Get the object data
+
     data = self.find_object($os_standards['construction_sets'], {'template'=>building_vintage, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type, 'is_residential'=>is_residential})
     if !data
       data = self.find_object($os_standards['construction_sets'], {'template'=>building_vintage, 'climate_zone_set'=> climate_zone_set, 'building_type'=>building_type, 'space_type'=>spc_type})
+
       if !data
+    
+        # for debugging (maria)
+        #puts "data = #{data}"
+        
         return construction_set
       end
+
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{building_vintage}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
 
     name = make_name(building_vintage, clim, building_type, spc_type)
+
 
     # Create a new construction set and name it
     construction_set = OpenStudio::Model::DefaultConstructionSet.new(self)
@@ -2466,6 +2484,7 @@ class OpenStudio::Model::Model
     exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
     construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
     if data['exterior_floor_standards_construction_type'] && data['exterior_floor_building_category']
+
       exterior_surfaces.setFloorConstruction(find_and_add_construction(building_vintage,
                                                                        climate_zone_set,
                                                                        'ExteriorFloor',
@@ -2526,6 +2545,7 @@ class OpenStudio::Model::Model
                                                                        'GroundContactRoof',
                                                                        data['ground_contact_ceiling_standards_construction_type'],
                                                                        data['ground_contact_ceiling_building_category']))
+
     end
 
     # Exterior sub surfaces constructions
@@ -3583,6 +3603,7 @@ class OpenStudio::Model::Model
           sky_area_m2 += ss.netArea * space.multiplier
         end
       end
+
       
       # Determine the space category
       cat = 'NonRes'
@@ -3972,7 +3993,7 @@ class OpenStudio::Model::Model
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       result = possible_climate_zones.sort.last
-    when '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       result = possible_climate_zones.sort.first
     when '90.1-2004'
       if possible_climate_zones.include? "ClimateZone 3"

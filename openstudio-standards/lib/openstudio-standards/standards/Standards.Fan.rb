@@ -241,8 +241,33 @@ module Fan
     motors = $os_standards["motors"]
     
     # Assuming all fan motors are 4-pole ODP
+    template_mod = template.dup
+    if(template == 'NECB 2011') 
+      if(self.class.name == 'OpenStudio::Model::FanConstantVolume')
+        template_mod = template_mod+'-CONSTANT'
+      elsif(self.class.name == 'OpenStudio::Model::FanVariableVolume')
+        template_mod = template_mod+'-VARIABLE'
+        fan_power_kw = 0.909*0.7457*motor_bhp
+        if(fan_power_kw >= 25.0)
+          power_vs_flow_curve_name = 'VarVolFan-FCInletVanes-NECB2011-FPLR'
+        elsif(fan_power_kw >= 7.5 && fan_power_kw < 25)
+          power_vs_flow_curve_name = 'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
+        else
+          power_vs_flow_curve_name = 'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
+        end
+        power_vs_flow_curve = self.model.add_curve(power_vs_flow_curve_name, standards)
+        self.setFanPowerMinimumFlowRateInputMethod("Fraction")
+        self.setFanPowerCoefficient5(0.0)
+        self.setFanPowerMinimumFlowFraction(power_vs_flow_curve.minimumValueofx)
+        self.setFanPowerCoefficient1(power_vs_flow_curve.coefficient1Constant)
+        self.setFanPowerCoefficient2(power_vs_flow_curve.coefficient2x)
+        self.setFanPowerCoefficient3(power_vs_flow_curve.coefficient3xPOW2)
+        self.setFanPowerCoefficient4(power_vs_flow_curve.coefficient4xPOW3)
+      end
+    end
+ 
     search_criteria = {
-      "template" => template,
+      "template" => template_mod,
       "number_of_poles" => 4.0,
       "type" => "Enclosed",
     }
