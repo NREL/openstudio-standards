@@ -43,7 +43,7 @@ class OpenStudio::Model::ThermalZone
       
       # compute outdoor air rates in case we need them
       oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
-      oa_for_floor_area = floorArea * dsn_oa.outdoorAirFlowperFloorArea
+      oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
       oa_rate = dsn_oa.outdoorAirFlowRate
       oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour
 
@@ -401,14 +401,154 @@ class OpenStudio::Model::ThermalZone
   
   end
   
+  # Determine if the thermal zone's fuel type category.
+  # Options are:
+  # fossil, electric, purchasedheat, purchasedcooling, purchasedheatandcooling, unconditioned
+  # If a customization is passed, additional categories may
+  # be returned.
+  # If 'Xcel Energy CO EDA', the type fossilandelectric is added.
+  #
+  # @return [String] the fuel type category
+  def fuel_type(custom)
+  
+    fossil = false
+    electric = false
+    purchased_heating = false
+    purchased_cooling = false
+    
+    # Fossil heating
+    htg_fuels = self.heating_fuels
+    if htg_fuels.include?('NaturalGas') ||
+       htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil#1') ||
+       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('Coal') ||
+       htg_fuels.include?('Diesel') ||
+       htg_fuels.include?('Gasoline')
+      fossil = true
+    end
+    
+    # Electric heating
+    if htg_fuels.include?('Electricity')
+      electric = true
+    end    
+    
+    # Purchased heating
+    if htg_fuels.include?('DistrictHeating')
+      purchased_heating = true
+    end     
+    
+    # Purchased cooling
+    clg_fuels = self.cooling_fuels
+    if clg_fuels.include?('DistrictCooling')
+      purchased_cooling = true
+    end 
+    
+    # Categorize
+    fuel_type = nil
+    if purchased_heating && purchased_cooling
+      fuel_type = 'purchasedheatandcooling'
+    elsif purchased_heating && !purchased_cooling
+      fuel_type = 'purchasedheat'
+    elsif !purchased_heating && purchased_cooling
+      fuel_type = 'purchasedcooling'
+    elsif fossil
+      # If uses any fossil, counts as fossil even if electric is present too
+      fuel_type = 'fossil'
+    elsif electric
+      fuel_type = 'electric'
+    elsif htg_fuels.size == 0 && clg_fuels.size == 0
+      fuel_type = 'unconditioned'
+    else
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "For #{self.name}, could not determine fuel type, assuming fossil.  Heating fuels = #{htg_fuels.join(', ')}; cooling fuels = #{clg_fuels.join(', ')}.")
+      fuel_type = 'fossil'
+    end
+    
+    # Customization for Xcel.
+    # Likely useful for other utility
+    # programs where fuel switching is important.
+    # This is primarily for systems where Gas is
+    # used at the central AHU and electric is
+    # used at the terminals/zones.  Examples
+    # include zone VRF/PTHP with gas-heated DOAS,
+    # and gas VAV with electric reheat
+    case custom
+    when 'Xcel Energy CO EDA'
+      if fossil && electric
+        fuel_type = 'fossilandelectric'
+      end
+    end
+  
+    #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.Model", "For #{self.name}, fuel type = #{fuel_type}.")
+  
+    return fuel_type
+  
+  end  
+
+  # Determine if the thermal zone is
+  # Fossil/Purchased Heat/Electric Hybrid
+  #
+  # return [Bool] true if mixed 
+  # Fossil/Electric Hybrid, and Purchased Heat zone
+  def has_mixed_heating_fuel
+  
+    is_mixed = false
+  
+    # Get an array of the heating fuels
+    # used by the zone.  Possible values are
+    # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
+    # Coal, Diesel, Gasoline, DistrictHeating, 
+    # and SolarEnergy.
+    htg_fuels = self.heating_fuels
+    
+    # Includes fossil
+    fossil = false
+    if htg_fuels.include?('NaturalGas') ||
+       htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil#1') ||
+       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('Coal') ||
+       htg_fuels.include?('Diesel') ||
+       htg_fuels.include?('Gasoline')
+       
+       fossil = true
+    end
+    
+    # Electric and fossil and district
+    if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating') && fossil
+      is_mixed = true
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating mixed electricity, fossil, and district.")
+    end    
+
+    # Electric and fossil
+    if htg_fuels.include?('Electricity') && fossil
+      is_mixed = true
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating mixed electricity and fossil.")
+    end
+    
+    # Electric and district
+    if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating')
+      is_mixed = true
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating mixed electricity and district.")
+    end
+    
+    # Fossil and district
+    if fossil && htg_fuels.include?('DistrictHeating')
+      is_mixed = true
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating mixed fossil and district.")
+    end
+  
+    return is_mixed
+  
+  end
+  
   # Determine the net area of the zone
   # Loops on each space, and checks if part of total floor area or not
   # If not part of total floor area, it is not added to the zone floor area
   # Will multiply it by the ZONE MULTIPLIER as well!
   #
   # @return [Double] the zone net floor area in m^2 (with multiplier taken into account)
-  #   @units square meters (m^2)
-  def get_net_area
+  def floor_area_with_zone_multipliers
     area_m2 = 0
     zone_mult = self.multiplier
     self.spaces.each do |space|
@@ -566,4 +706,544 @@ class OpenStudio::Model::ThermalZone
 
   end
 
+  # Determines heating status.  If the zone has a thermostat
+  # with a maximum heating setpoint above 5C (41F),
+  # counts as heated.  Plenums are also assumed to be heated.
+  #
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if heated, false if not
+  def is_heated
+  
+    temp_f = 41
+    temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
+  
+    htd = false
+    
+    # Consider plenum zones heated
+    area_plenum = 0
+    area_non_plenum = 0
+    self.spaces.each do |space|
+      if space.is_plenum
+        area_plenum += space.floorArea
+      else
+        area_non_plenum += space.floorArea
+      end
+    end
+
+    # Majority
+    if area_plenum > area_non_plenum
+      htd = true
+      return htd
+    end    
+
+    # Unheated if no thermostat present
+    if self.thermostat.empty?
+      return htd
+    end
+    
+    # Check the heating setpoint
+    tstat = self.thermostat.get
+    if tstat.to_ThermostatSetpointDualSetpoint
+      tstat = tstat.to_ThermostatSetpointDualSetpoint.get
+      htg_sch = tstat.getHeatingSchedule
+      if htg_sch.is_initialized
+        htg_sch = htg_sch.get
+        if htg_sch.to_ScheduleRuleset.is_initialized
+          htg_sch = htg_sch.to_ScheduleRuleset.get
+          max_c = htg_sch.annual_min_max_value['max']
+          if max_c > temp_c
+            htd = true
+          end
+        elsif htg_sch.to_ScheduleConstant.is_initialized
+          htg_sch = htg_sch.to_ScheduleConstant.get
+          max_c = htg_sch.annual_min_max_value['max']
+          if max_c > temp_c
+            htd = true
+          end
+        elsif htg_sch.to_ScheduleCompact.is_initialized
+          htg_sch = htg_sch.to_ScheduleCompact.get
+          max_c = htg_sch.annual_min_max_value['max']
+          if max_c > temp_c
+            htd = true
+          end
+        else
+          OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} used an unknown schedule type for the heating setpoint; assuming heated.")
+          htd = true
+        end
+      end
+    elsif tstat.to_ZoneControlThermostatStagedDualSetpoint
+      tstat = tstat.to_ZoneControlThermostatStagedDualSetpoint.get
+      htg_sch = tstat.heatingTemperatureSetpointSchedule
+      if htg_sch.is_initialized
+        htg_sch = htg_sch.get
+        if htg_sch.to_ScheduleRuleset.is_initialized
+          htg_sch = htg_sch.to_ScheduleRuleset.get
+          max_c = htg_sch.annual_min_max_value['max']
+          if max_c > temp_c
+            htd = true
+          end
+        end
+      end
+    end
+
+    return htd
+  
+  end
+  
+  # Determines cooling status.  If the zone has a thermostat
+  # with a minimum cooling setpoint below 33C (91F),
+  # counts as cooled.  Plenums are also assumed to be cooled.
+  #
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if cooled, false if not
+  def is_cooled
+  
+    temp_f = 91
+    temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
+  
+    cld = false
+    
+    # Consider plenum zones cooled
+    area_plenum = 0
+    area_non_plenum = 0
+    self.spaces.each do |space|
+      if space.is_plenum
+        area_plenum += space.floorArea
+      else
+        area_non_plenum += space.floorArea
+      end
+    end
+
+    # Majority
+    if area_plenum > area_non_plenum
+      cld = true
+      return cld
+    end     
+    
+    # Unheated if no thermostat present
+    if self.thermostat.empty?
+      return cld
+    end
+    
+    # Check the cooling setpoint
+    tstat = self.thermostat.get
+    if tstat.to_ThermostatSetpointDualSetpoint
+      tstat = tstat.to_ThermostatSetpointDualSetpoint.get
+      clg_sch = tstat.getCoolingSchedule
+      if clg_sch.is_initialized
+        clg_sch = clg_sch.get
+        if clg_sch.to_ScheduleRuleset.is_initialized
+          clg_sch = clg_sch.to_ScheduleRuleset.get
+          min_c = clg_sch.annual_min_max_value['min']
+          if min_c < temp_c
+            cld = true
+          end
+        elsif clg_sch.to_ScheduleConstant.is_initialized
+          clg_sch = clg_sch.to_ScheduleConstant.get
+          min_c = clg_sch.annual_min_max_value['min']
+          if min_c < temp_c
+            cld = true
+          end
+        elsif clg_sch.to_ScheduleCompact.is_initialized
+          clg_sch = clg_sch.to_ScheduleCompact.get
+          min_c = clg_sch.annual_min_max_value['min']
+          if min_c < temp_c
+            cld = true
+          end
+        else
+          OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
+          cld = true
+        end
+      end
+    elsif tstat.to_ZoneControlThermostatStagedDualSetpoint
+      tstat = tstat.to_ZoneControlThermostatStagedDualSetpoint.get
+      clg_sch = tstat.coolingTemperatureSetpointSchedule
+      if clg_sch.is_initialized
+        clg_sch = clg_sch.get
+        if clg_sch.to_ScheduleRuleset.is_initialized
+          clg_sch = clg_sch.to_ScheduleRuleset.get
+          min_c = clg_sch.annual_min_max_value['min']
+          if min_c < temp_c
+            cld = true
+          end
+        end
+      end
+    end
+    
+    return cld
+  
+  end
+  
+  # Determine if the thermal zone is a plenum
+  # based on whether a majority of the spaces
+  # in the zone are plenums or not.
+  # @return [Bool] true if majority plenum, false if not
+  def is_plenum
+
+    plenum_status = false
+  
+    area_plenum = 0
+    area_non_plenum = 0
+    self.spaces.each do |space|
+      if space.is_plenum
+        area_plenum += space.floorArea
+      else
+        area_non_plenum += space.floorArea
+      end
+    end
+
+    # Majority
+    if area_plenum > area_non_plenum
+      plenum_status = true
+    end 
+  
+    return plenum_status
+  
+  end
+  
+  # Determines whether the zone is conditioned per 90.1,
+  # which is based on heating and cooling loads.
+  #
+  # @param climate_zone [String] climate zone
+  # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
+  # @todo add logic to detect indirectly-conditioned spaces
+  def conditioning_category(standard, climate_zone)
+  
+    # Get the heating load
+    htg_load_btu_per_ft2 = 0.0
+    htg_load_w_per_m2 = self.heatingDesignLoad
+    if htg_load_w_per_m2.is_initialized
+      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get,'W/m^2','Btu/hr*ft^2').get
+    end  
+  
+    # Get the cooling load
+    clg_load_btu_per_ft2 = 0.0
+    clg_load_w_per_m2 = self.coolingDesignLoad
+    if clg_load_w_per_m2.is_initialized
+      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get,'W/m^2','Btu/hr*ft^2').get
+    end
+
+    # Determine the heating limit based on climate zone
+    # From Table 3.1 Heated Space Criteria
+    htg_lim_btu_per_ft2 = 0.0
+      case climate_zone
+      when 'ASHRAE 169-2006-1A',
+          'ASHRAE 169-2006-1B',
+          'ASHRAE 169-2006-2A',
+          'ASHRAE 169-2006-2B'
+        htg_lim_btu_per_ft2 = 5
+      when 'ASHRAE 169-2006-3A',
+          'ASHRAE 169-2006-3B',
+          'ASHRAE 169-2006-3C'
+        htg_lim_btu_per_ft2 = 10
+      when 'ASHRAE 169-2006-4A',
+          'ASHRAE 169-2006-4B',
+          'ASHRAE 169-2006-4C',
+          'ASHRAE 169-2006-5A',
+          'ASHRAE 169-2006-5B',
+          'ASHRAE 169-2006-5C',
+        htg_lim_btu_per_ft2 = 15
+      when 'ASHRAE 169-2006-6A',
+          'ASHRAE 169-2006-6B',
+          'ASHRAE 169-2006-7A',
+          'ASHRAE 169-2006-7B',
+        htg_lim_btu_per_ft2 = 20
+      when 
+          'ASHRAE 169-2006-8A',
+          'ASHRAE 169-2006-8B'
+        htg_lim_btu_per_ft2 = 25
+      end
+    
+    # Cooling limit is climate-independent
+    clg_lim_btu_per_ft2 = 5
+    
+    # Semiheated limit is climate-independent
+    semihtd_lim_btu_per_ft2 = 3.4
+    
+    # Determine if residential
+    res = false
+    if self.is_residential(standard)
+      res = true
+    end
+    
+    cond_cat = 'Unconditioned'
+    if htg_load_btu_per_ft2 > htg_lim_btu_per_ft2
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} is conditioned because heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{htg_lim_btu_per_ft2.round} Btu/hr*ft^2.")
+      if res
+        cond_cat = 'ResConditioned'
+      else
+        cond_cat = 'NonResConditioned'
+      end
+    elsif clg_load_btu_per_ft2 > clg_lim_btu_per_ft2
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} is conditioned because cooling load of #{clg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{clg_lim_btu_per_ft2.round} Btu/hr*ft^2.")
+      if res
+        cond_cat = 'ResConditioned'
+      else
+        cond_cat = 'NonResConditioned'
+      end
+    elsif htg_load_btu_per_ft2 > semihtd_lim_btu_per_ft2
+      cond_cat = 'Semiheated'
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "Zone #{self.name} is semiheated because heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{semihtd_lim_btu_per_ft2.round} Btu/hr*ft^2.")
+    end
+  
+    return cond_cat
+  
+  end
+ 
+  # Calculate the heating supply temperature based on the
+  # specified delta-T. Delta-T is calculated based on the
+  # highest value found in the heating setpoint schedule.
+  #
+  # @return [Double] the design heating supply temperature, in C
+  # @todo Exception: 17F delta-T for labs  
+  def performance_rating_method_baseline_heating_design_supply_temperature
+ 
+    setpoint_c = nil
+    
+    # Setpoint schedule
+    tstat = self.thermostatSetpointDualSetpoint
+    if tstat.is_initialized
+      tstat = tstat.get
+      setpoint_sch = tstat.heatingSetpointTemperatureSchedule
+      if setpoint_sch.is_initialized
+        setpoint_sch = setpoint_sch.get
+        if setpoint_sch.to_ScheduleRuleset.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
+          setpoint_c = setpoint_sch.annual_min_max_value['max']
+        elsif setpoint_sch.to_ScheduleConstant.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleConstant.get
+          setpoint_c = setpoint_sch.annual_min_max_value['max']
+        elsif setpoint_sch.to_ScheduleCompact.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleCompact.get
+          setpoint_c = setpoint_sch.annual_min_max_value['max']
+        end
+      end
+    end
+
+    # If the heating setpoint could not be determined
+    # return the current design heating temperature
+    if setpoint_c.nil?
+      setpoint_c = self.sizingZone.zoneHeatingDesignSupplyAirTemperature
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine max heating setpoint.  Design heating supply temperature will user current zone setting of #{OpenStudio.convert(setpoint_c,'C','F').get.round} F.")
+      return setpoint_c
+    end
+
+    # Add 20F delta-T
+    delta_t_r = 20
+    delta_t_k = OpenStudio.convert(delta_t_r,'R','K').get
+    
+    sat_c = setpoint_c + delta_t_k # Add for heating
+    
+    return sat_c
+    
+  end
+ 
+  # Calculate the cooling supply temperature based on the
+  # specified delta-T. Delta-T is calculated based on the
+  # highest value found in the cooling setpoint schedule.
+  #
+  # @return [Double] the design heating supply temperature, in C
+  # @todo Exception: 17F delta-T for labs   
+  def performance_rating_method_baseline_cooling_design_supply_temperature
+ 
+    setpoint_c = nil
+    
+    # Setpoint schedule
+    tstat = self.thermostatSetpointDualSetpoint
+    if tstat.is_initialized
+      tstat = tstat.get
+      setpoint_sch = tstat.coolingSetpointTemperatureSchedule
+      if setpoint_sch.is_initialized
+        setpoint_sch = setpoint_sch.get
+        if setpoint_sch.to_ScheduleRuleset.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
+          setpoint_c = setpoint_sch.annual_min_max_value['min']
+        elsif setpoint_sch.to_ScheduleConstant.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleConstant.get
+          setpoint_c = setpoint_sch.annual_min_max_value['min']
+        elsif setpoint_sch.to_ScheduleCompact.is_initialized
+          setpoint_sch = setpoint_sch.to_ScheduleCompact.get
+          setpoint_c = setpoint_sch.annual_min_max_value['min']  
+        end
+      end
+    end
+
+    # If the cooling setpoint could not be determined
+    # return the current design cooling temperature
+    if setpoint_c.nil?
+      setpoint_c = self.sizingZone.zoneCoolingDesignSupplyAirTemperature
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.ThermalZone", "For #{self.name}, could not determine min cooling setpoint.  Design cooling supply temperature will use current zone setting of #{OpenStudio.convert(setpoint_c,'C','F').get.round} F.")
+      return setpoint_c
+    end
+
+    # Subtract 20F delta-T
+    delta_t_r = 20
+    delta_t_k = OpenStudio.convert(delta_t_r,'R','K').get
+    
+    sat_c = setpoint_c - delta_t_k # Subtract for cooling
+    
+    return sat_c
+    
+  end 
+
+  # Set the design delta-T for zone heating and cooling sizing
+  # supply air temperatures.  This value determines zone
+  # air flows, which will be summed during system 
+  # design airflow calculation.
+  # 
+  # @return [Bool] true if successful, false if not
+  def set_performance_rating_method_baseline_supply_temperatures
+
+    # Skip spaces that aren't heated or cooled
+    return true unless self.is_heated || self.is_cooled
+  
+    # Heating
+    htg_sat_c = self.performance_rating_method_baseline_heating_design_supply_temperature
+    htg_success = self.sizingZone.setZoneHeatingDesignSupplyAirTemperature(htg_sat_c)
+        
+    # Cooling
+    clg_sat_c = self.performance_rating_method_baseline_cooling_design_supply_temperature
+    clg_success = self.sizingZone.setZoneCoolingDesignSupplyAirTemperature(clg_sat_c)
+    
+    htg_sat_f = OpenStudio.convert(htg_sat_c,'C','F').get
+    clg_sat_f = OpenStudio.convert(clg_sat_c,'C','F').get
+    OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.ThermalZone", "For #{self.name}, Htg SAT = #{htg_sat_f.round(1)}F, Clg SAT = #{clg_sat_f.round(1)}F.")
+    
+    result = false
+    if htg_success && clg_success
+      result = true
+    end
+    
+    return result
+
+  end  
+
+  def add_unconditioned_thermostat
+  
+    # Heated to 0F (below is_heated threshold)
+    htg_t_f = 0
+    htg_t_c = OpenStudio::convert(htg_t_f,"F","C").get
+    htg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    htg_stpt_sch.setName("Unconditioned Minimal Heating")
+    htg_stpt_sch.defaultDaySchedule().setName("Unconditioned Minimal Heating Default")
+    htg_stpt_sch.defaultDaySchedule().addValue(OpenStudio::Time.new(0,24,0,0),htg_t_c)
+
+    # Cooled to 120F (above is_cooled threshold)
+    clg_t_f = 120
+    clg_t_c = OpenStudio::convert(clg_t_f,"F","C").get
+    clg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    clg_stpt_sch.setName("Unconditioned Minimal Heating")
+    clg_stpt_sch.defaultDaySchedule().setName("Unconditioned Minimal Heating Default")
+    clg_stpt_sch.defaultDaySchedule().addValue(OpenStudio::Time.new(0,24,0,0),clg_t_c)    
+  
+    # Thermostat
+    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(self.model)
+    thermostat.setName("#{self.name} Unconditioned Thermostat")
+    thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
+    thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
+  
+    return true
+  
+  end
+  
+  # Determine the design internal load (W) for
+  # this zone without space multipliers.
+  # This include People, Lights, Electric Equipment,
+  # and Gas Equipment in all spaces in this zone.
+  # It assumes 100% of the wattage
+  # is converted to heat, and that the design peak
+  # schedule value is 1 (100%).
+  #
+  # @return [Double] the design internal load, in W
+  def design_internal_load
+    
+    load_w = 0.0
+  
+    self.spaces.each do |space|
+      load_w += space.design_internal_load
+    end
+    
+    return load_w
+  
+  end
+  
+  # Returns the space type that represents a majority
+  # of the floor area.
+  #
+  # @return [Boost::Optional<OpenStudio::Model::SpaceType>] an optional SpaceType
+  def majority_space_type
+  
+    space_type_to_area = Hash.new(0.0)
+  
+    self.spaces.each do |space|
+      if space.spaceType.is_initialized
+        space_type = space.spaceType.get
+        space_type_to_area[space_type] += space.floorArea
+      end
+    end
+  
+    # If no space types, return empty optional SpaceType
+    if space_type_to_area.size == 0
+      return OpenStudio::Model::OptionalSpaceType.new
+    end
+  
+    # Sort by area
+    biggest_space_type = space_type_to_area.sort_by {|st, area| area}[0][0]
+      
+    return OpenStudio::Model::OptionalSpaceType.new(biggest_space_type)
+
+  end
+  
+  # Determine if the thermal zone's occupancy type category.
+  # Options are:
+  # residential, nonresidential, heatedonly
+  # 90.1-2013 adds additional Options:
+  # publicassembly, retail
+  #
+  # @return [String] the occupancy type category
+  # @todo Add public assembly building types
+  def occupancy_type(standard)
+
+    occ_type = nil
+  
+    heated = self.is_heated
+    cooled = self.is_cooled  
+
+    # Heated Only
+    occ_type = nil
+    if heated && !cooled
+      occ_type = 'heatedonly'
+    # Residential
+    elsif self.is_residential(standard)
+      occ_type = 'residential'
+    # Nonresidential
+    else
+      occ_type = 'nonresidential'
+    end
+
+    # Based on the space type that
+    # represents a majority of the zone.
+    if standard == '90.1-2013'
+      space_type = self.majority_space_type
+      if space_type.is_initialized
+        space_type = space_type.get
+        bldg_type = space_type.standardsBuildingType
+        if bldg_type.is_initialized
+          bldg_type = bldg_type.get
+          case bldg_type
+          when 'Retail', 'StripMall', 'SuperMarket'
+            occ_type = 'retail'
+          # when 'SomeBuildingType' # TODO add publicassembly building types
+            # occ_type = 'publicassembly'
+          end
+        end
+      end
+    end
+  
+    #OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.ThermalZone", "For #{self.name}, occupancy type = #{occ_type}.")
+
+    return occ_type
+  
+  end
+  
 end

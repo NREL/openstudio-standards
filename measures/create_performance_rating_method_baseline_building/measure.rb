@@ -84,6 +84,16 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
     climate_zone.setDefaultValue('ASHRAE 169-2006-2A')
     args << climate_zone   
 
+    # Make an argument for the customization
+    custom_chs = OpenStudio::StringVector.new
+    custom_chs << 'Xcel Energy CO EDA'
+    custom_chs << '*None*'
+    custom = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('custom', custom_chs, true)
+    custom.setDisplayName('Customization')
+    custom.setDescription('If selected, some of the standard process will be replaced by custom logic specific to particular programs.  If these do not apply to you, select None.')
+    custom.setDefaultValue('*None*')
+    args << custom     
+    
     # Make an argument for enabling debug messages
     debug = OpenStudio::Ruleset::OSArgument::makeBoolArgument('debug', true)
     debug.setDisplayName('Show debug messages?')
@@ -106,7 +116,13 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
     building_type = runner.getStringArgumentValue('building_type',user_arguments)
     standard = runner.getStringArgumentValue('standard',user_arguments)
     climate_zone = runner.getStringArgumentValue('climate_zone',user_arguments)
+    custom = runner.getStringArgumentValue('custom',user_arguments)
     debug = runner.getBoolArgumentValue('debug',user_arguments) 
+    
+    # Convert custom to nil if necessary
+    if custom == '*None*'
+      custom = nil
+    end
     
     # Open a channel to log info/warning/error messages
     @msg_log = OpenStudio::StringStreamLogSink.new
@@ -129,16 +145,21 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
       Dir.mkdir(osm_directory)
     end
 
-    model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,osm_directory,debug)
-    
+    success = model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug)
+
     log_msgs(debug)
-    return true
+    return success
 
   end #end the run method
 
   # Get all the log messages and put into output
   # for users to see.
   def log_msgs(debug)
+    # Log the messages to file for easier review
+    log_name = "create_baseline.log"
+    log_file_path = "#{Dir.pwd}/#{log_name}"
+    messages = log_messages_to_file(log_file_path, debug)
+    @runner.registerFinalCondition("Messages below saved to <a href='file:///#{log_file_path}'>#{log_name}</a>.")
     @msg_log.logMessages.each do |msg|
       # DLM: you can filter on log channel here for now
       if /openstudio.*/.match(msg.logChannel) #/openstudio\.model\..*/

@@ -75,113 +75,44 @@ class OpenStudio::Model::SubSurface
     return comp_infil_rate_m3_per_s
     
   end
-  
-  # Reduce the area of the subsurface by raising the
-  # sill height.
-  #
-  # @param percent_reduction [Double] the fractional amount
-  # to reduce the area.
-  def reduce_area_by_percent_by_raising_sill(percent_reduction)
-  
-    mult = 1-percent_reduction
-    
-    # Calculate the original area
-    area_original = self.netArea
-
-    # Find the min and max z values
-    min_z_val = 99999
-    max_z_val = -99999
-    self.vertices.each do |vertex|
-      # Min z value
-      if vertex.z < min_z_val
-        min_z_val = vertex.z
-      end
-      # Max z value
-      if vertex.z > max_z_val
-        max_z_val = vertex.z
-      end
-    end
-    
-    # Calculate the window height
-    height = max_z_val - min_z_val
-    
-    # Calculate the new sill height
-    new_sill_z = max_z_val - (height * mult)    
-    
-    # Reset the z value of the lowest points
-    new_vertices = []
-    self.vertices.each do |vertex|
-      new_x = vertex.x
-      new_y = vertex.y
-      new_z = vertex.z
-      if new_z == min_z_val
-        new_z = new_sill_z
-      end
-      new_vertices << OpenStudio::Point3d.new(new_x, new_y, new_z)
-    end
-    
-    # Reset the vertices
-    self.setVertices(new_vertices)
-    
-    # Compare the new area to the old for validation
-    act_pct_red = 1.0 - (self.netArea / area_original)
-    
-    return true
-  
-  end
 
   # Reduce the area of the subsurface by shrinking it
-  # in the x direction.  Designed to work on skylights.
+  # toward the centroid.
+  # @author Julien Marrec
   #
   # @param percent_reduction [Double] the fractional amount
   # to reduce the area.
-  def reduce_area_by_percent_by_shrinking_x(percent_reduction)
-  
+  def reduce_area_by_percent_by_shrinking_toward_centroid(percent_reduction)
+ 
     mult = 1-percent_reduction
-    
-    # Calculate the original area
-    area_original = self.netArea
+    scale_factor = mult**0.5 
+ 
+    # Get the centroid (Point3d)
+    g = self.centroid
 
-    # Find the min and max x values
-    min_x_val = 99999
-    max_x_val = -99999
-    self.vertices.each do |vertex|
-      # Min x value
-      if vertex.x < min_x_val
-        min_x_val = vertex.x
-      end
-      # Max x value
-      if vertex.x > max_x_val
-        max_x_val = vertex.x
-      end
-    end
-    
-    # Calculate the skylight width
-    width = max_x_val - min_x_val
-    
-    # Calculate the new sill width
-    new_width_x = max_x_val - (width * mult)    
-    
-    # Reset the z value of the lowest points
+    # Create an array to collect the new vertices
     new_vertices = []
+
+    # Loop on vertices (Point3ds)
     self.vertices.each do |vertex|
-      new_x = vertex.x
-      if new_x == min_x_val
-        new_x = new_width_x
-      end
-      new_y = vertex.y
-      new_z = vertex.z
-      new_vertices << OpenStudio::Point3d.new(new_x, new_y, new_z)
+      
+      # Point3d - Point3d = Vector3d
+      # Vector from centroid to vertex (GA, GB, GC, etc)
+      centroid_vector = vertex - g
+
+      # Resize the vector (done in place) according to scale_factor
+      centroid_vector.setLength(centroid_vector.length*scale_factor)
+
+      # Move the vertex toward the centroid
+      vertex = g + centroid_vector
+
+      new_vertices << vertex
+
     end
-    
-    # Reset the vertices
-    self.setVertices(new_vertices)
-    
-    # Compare the new area to the old for validation
-    act_pct_red = 1.0 - (self.netArea / area_original)
-    
-    return true
-  
+
+    # Assign the new vertices to the self
+    self.setVertices(new_vertices) 
+ 
   end
  
 end

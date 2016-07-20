@@ -267,6 +267,9 @@ class OpenStudio::Model::Space
           end
         end
       end
+      
+      # Disable the log sink to prevent memory hogging
+      msg_log.disable
      
       # TODO remove this workaround, which is tried if there
       # are any join errors.  This handles the case of polygons
@@ -296,6 +299,9 @@ class OpenStudio::Model::Space
             end
           end
         end
+      
+        # Disable the log sink to prevent memory hogging
+        msg_log_2.disable      
       
         if join_errs_2 > 0 || inner_loop_errs_2 > 0
           OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "For #{self.name}, the workaround for joining polygons failed.")
@@ -448,11 +454,11 @@ class OpenStudio::Model::Space
 
     OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{self.name}, calculating daylighted areas.")
     
-    result = {'toplighted_area' => nil,
-              'primary_sidelighted_area' => nil,
-              'secondary_sidelighted_area' => nil,
-              'total_window_area' => nil,
-              'total_skylight_area' => nil
+    result = {'toplighted_area' => 0.0,
+              'primary_sidelighted_area' => 0.0,
+              'secondary_sidelighted_area' => 0.0,
+              'total_window_area' => 0.0,
+              'total_skylight_area' => 0.0
               }
     
     total_window_area = 0
@@ -524,7 +530,7 @@ class OpenStudio::Model::Space
     
     # Make sure there is one floor surface
     if floor_surface.nil?
-      OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Could not find a floor in space #{self.name.get}, cannot determine daylighted areas.")
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Could not find a floor in space #{self.name.get}, cannot determine daylighted areas.")
       return result
     end
     
@@ -619,13 +625,13 @@ class OpenStudio::Model::Space
             
             # Primary sidelighted area
             # Move the x vertices outward by the specified amount.
-            if vertex.x == min_x_val
+            if (vertex.x - min_x_val).abs < 0.01
               new_x = vertex.x - extra_width_m
-            elsif vertex.x == max_x_val
+            elsif (vertex.x - max_x_val).abs < 0.01
               new_x = vertex.x + extra_width_m
             else
               new_x = 99.9
-              OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "A window in space #{self.name} is non-rectangular; this sub-surface will not be included in the daylighted area calculation.")
+              OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "A window in space #{self.name} is non-rectangular; this sub-surface will not be included in the primary daylighted area calculation. #{vertex.x} != #{min_x_val} or #{max_x_val}")
             end
             
             # Zero-out the y for the bottom edge because the 
@@ -646,13 +652,13 @@ class OpenStudio::Model::Space
             
             # Secondary sidelighted area
             # Move the x vertices outward by the specified amount.
-            if vertex.x == min_x_val
+            if (vertex.x - min_x_val).abs < 0.01
               new_x = vertex.x - extra_width_m
-            elsif vertex.x == max_x_val
+            elsif (vertex.x - max_x_val).abs < 0.01
               new_x = vertex.x + extra_width_m
             else
               new_x = 99.9
-              OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "A window in space #{self.name} is non-rectangular; this sub-surface will not be included in the daylighted area calculation.")
+              OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "A window in space #{self.name} is non-rectangular; this sub-surface will not be included in the secondary daylighted area calculation.")
             end
             
             # Add the head height of the window to all points
@@ -1245,6 +1251,20 @@ class OpenStudio::Model::Space
       end
     end
 
+    # Skip this space if it has no exterior windows or skylights
+    ext_fen_area_m2 = 0
+    self.surfaces.each do |surface|
+      next unless surface.outsideBoundaryCondition == "Outdoors"
+      surface.subSurfaces.each do |sub_surface|
+        next unless sub_surface.subSurfaceType == "FixedWindow" || sub_surface.subSurfaceType == "OperableWindow" ||  sub_surface.subSurfaceType == "Skylight"
+        ext_fen_area_m2 += sub_surface.netArea
+      end
+    end
+    if ext_fen_area_m2 == 0
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{self.name}, daylighting control not applicable because no exterior fenestration is present.")
+      return false    
+    end
+    
     areas = nil
     
     req_top_ctrl = false
@@ -1278,7 +1298,7 @@ class OpenStudio::Model::Space
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
@@ -1307,7 +1327,7 @@ class OpenStudio::Model::Space
       # Toplighting
       # Check if the toplit area < 900 ft2
       if areas['toplighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
         req_top_ctrl = false
       elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
@@ -1341,7 +1361,7 @@ class OpenStudio::Model::Space
       # Primary Sidelighting
       # Check if the primary sidelit area contains less than 150W of lighting
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] * space_lpd_w_per_m2 < 150.0
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because less than 150W of lighting are present in the primary daylighted area per 9.4.1.1(e).")
@@ -1363,7 +1383,7 @@ class OpenStudio::Model::Space
       # Secondary Sidelighting
       # Check if the primary and secondary sidelit areas contains less than 300W of lighting
       if areas['secondary_sidelighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
         req_pri_ctrl = false      
       elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 300
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, secondary sidelighting control not required because less than 300W of lighting are present in the combined primary and secondary daylighted areas per 9.4.1.1(e).")
@@ -1385,7 +1405,7 @@ class OpenStudio::Model::Space
       # Toplighting
       # Check if the toplit area contains less than 150W of lighting
       if areas['toplighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
         req_pri_ctrl = false 
       elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
@@ -1408,7 +1428,7 @@ class OpenStudio::Model::Space
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
@@ -1418,7 +1438,7 @@ class OpenStudio::Model::Space
       # Toplighting
       # Check if the toplit area < 900 ft2
       if areas['toplighted_area'] == 0.0
-        OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
+        OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
         req_top_ctrl = false
       elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
         OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
@@ -1906,10 +1926,22 @@ Warehouse.Office
     else
       zone = self.thermalZone.get
     end
-    
+
+    # Ensure that total controlled fraction
+    # is never set above 1 (100%)
+    if sensor_1_frac + sensor_2_frac >= 1.0
+      # Lower sensor_2_frac so that the total
+      # is just slightly lower than 1.0
+      sensor_2_frac = 1.0 - sensor_1_frac - 0.001
+    end
+
     # Sensors
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 1 fraction = #{sensor_1_frac.round(2)}.")
-    OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 2 fraction = #{sensor_2_frac.round(2)}.")
+    if sensor_1_frac > 0.0
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 1 controls #{(sensor_1_frac*100).round}% of the zone lighting.")
+    end
+    if sensor_2_frac > 0.0
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, sensor 2 controls #{(sensor_2_frac*100).round}% of the zone lighting.")
+    end
     
     # First sensor
     if sensor_1_window
@@ -2184,29 +2216,43 @@ Warehouse.Office
 
   # Determine if the space is a plenum.
   # Assume it is a plenum if it is a supply
-  # or return plenum for an AirLoop, or
-  # if it is not part of the total floor area.
+  # or return plenum for an AirLoop, 
+  # if it is not part of the total floor area,
+  # or if the space type name contains the
+  # word plenum.
   #
   # return [Bool] returns true if plenum, false if not
   def is_plenum
 
     plenum_status = false
 
-    # Check if it is part of a zone
-    # that is a supply/return plenum
-    zone = self.thermalZone
-    if zone.is_initialized
-      if zone.get.isPlenum
-        plenum_status = true
-      end
-    end
-
     # Check if it is designated
     # as not part of the building
-    # floor area.
-    # todo - update to check if it has internal loads
+    # floor area.  This method internally
+    # also checks to see if the space's zone
+    # is a supply or return plenum 
     unless self.partofTotalFloorArea
       plenum_status = true
+      return plenum_status
+    end
+    
+    # todo - update to check if it has internal loads
+
+    # Check if the space type name
+    # contains the word plenum.
+    space_type = self.spaceType
+    if space_type.is_initialized
+      space_type = space_type.get
+      if space_type.name.get.to_s.downcase.include?('plenum')
+        plenum_status = true
+        return plenum_status
+      end
+      if space_type.standardsSpaceType.is_initialized
+        if space_type.standardsSpaceType.get.downcase.include?('plenum')
+          plenum_status = true
+          return plenum_status
+        end
+      end
     end
 
     return plenum_status
@@ -2216,19 +2262,56 @@ Warehouse.Office
   # Determine if the space is residential based on the
   # space type properties for the space.
   # For spaces with no space type, assume nonresidential.
+  # For spaces that are plenums, base the decision on the space
+  # type of the space below the largest floor in the plenum.
   #
   # return [Bool] true if residential, false if nonresidential
   def is_residential(standard)
   
     is_res = false
   
-    space_type = self.spaceType
+    space_to_check = self
+  
+    # If this space is a plenum, check the space type
+    # of the space below the largest floor in the space
+    if self.is_plenum
+      # Find the largest floor
+      largest_floor_area = 0.0
+      largest_surface = nil
+      self.surfaces.each do |surface|
+        next unless surface.surfaceType == 'Floor'
+        surface.outsideBoundaryCondition == 'Surface'
+        if surface.grossArea > largest_floor_area
+          largest_floor_area = surface.grossArea
+          largest_surface = surface
+        end
+      end
+      if largest_surface.nil?
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{self.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
+        return is_res
+      end
+      # Get the space on the other side of this floor
+      if largest_surface.adjacentSurface.is_initialized
+        adj_surface = largest_surface.adjacentSurface.get
+        if adj_surface.space.is_initialized
+          space_to_check = adj_surface.space.get
+        else
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{self.name} is a plenum, but could not find a space attached to the largest floor's adjacent surface #{adj_surface.name} to determine if plenum should be res or nonres.  Assuming nonresidential.")
+          return is_res
+        end
+      else
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{self.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
+        return is_res
+      end
+    end
+  
+    space_type = space_to_check.spaceType
     if space_type.is_initialized
       space_type = space_type.get
       # Get the space type data
       space_type_properties = space_type.get_standards_data(standard)
       if space_type_properties.nil?
-        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{self.name}, assuming nonresidential.")
+        OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
         is_res = false
       else
         if space_type_properties['is_residential'] == "Yes"
@@ -2238,42 +2321,130 @@ Warehouse.Office
         end
       end
     else
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{self.name}, assuming nonresidential.")
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{space_to_check.name}, assuming nonresidential.")
       is_res = false
     end  
   
     return is_res
   
-  end 
-  
-  # Determine if the space is a plenum.
-  # Assume it is a plenum if it is a supply
-  # or return plenum for an AirLoop, or
-  # if it is not part of the total floor area.
+  end
+
+  # Determines whether the space is conditioned per 90.1,
+  # which is based on heating and cooling loads.
   #
-  # return [Bool] returns true if plenum, false if not
-  def is_plenum
+  # @param climate_zone [String] climate zone
+  # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
+  # @todo add logic to detect indirectly-conditioned spaces
+  def conditioning_category(standard, climate_zone)
   
-    plenum_status = false
-  
-    # Check if it is part of a zone
-    # that is a supply/return plenum
+    # Get the zone this space is inside
     zone = self.thermalZone
-    if zone.is_initialized
-      if zone.get.isPlenum
-        plenum_status = true
-      end
-    end
     
-    # Check if it is designated
-    # as not part of the building
-    # floor area.
-    unless self.partofTotalFloorArea
-      plenum_status = true
+    # Assume unconditioned if not assigned to a zone
+    if zone.empty?
+      return 'Unconditioned'
     end
   
-    return plenum_status
+    # Get the category from the zone
+    cond_cat = zone.get.conditioning_category(standard, climate_zone)
+
+    return cond_cat
+  
+  end  
+  
+  # Determines heating status.  If the space's 
+  # zone has a thermostat with a maximum heating
+  # setpoint above 5C (41F), counts as heated.
+  #
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if heated, false if not
+  def is_heated
+
+    # Get the zone this space is inside
+    zone = self.thermalZone
+    
+    # Assume unheated if not assigned to a zone
+    if zone.empty?
+      return false
+    end
+  
+    # Get the category from the zone
+    htd = zone.get.is_heated
+
+    return htd
   
   end
   
+  # Determines cooling status.  If the space's 
+  # zone has a thermostat with a minimum cooling
+  # setpoint above 33C (91F), counts as cooled.
+  #
+  # @author Andrew Parker, Julien Marrec
+  # @return [Bool] true if cooled, false if not
+  def is_cooled
+  
+    # Get the zone this space is inside
+    zone = self.thermalZone
+    
+    # Assume uncooled if not assigned to a zone
+    if zone.empty?
+      return false
+    end
+  
+    # Get the category from the zone
+    cld = zone.get.is_cooled
+
+    return cld
+  
+  end
+  
+  # Determine the design internal load (W) for
+  # this space without space multipliers.
+  # This include People, Lights, Electric Equipment,
+  # and Gas Equipment.  It assumes 100% of the wattage
+  # is converted to heat, and that the design peak
+  # schedule value is 1 (100%).
+  #
+  # @return [Double] the design internal load, in W
+  def design_internal_load
+  
+    load_w = 0.0
+  
+    # People
+    self.people.each do |people|
+      w_per_person = 125 # Initial assumption
+      act_sch = people.activityLevelSchedule
+      if act_sch.is_initialized
+        if act_sch.get.to_ScheduleRuleset.is_initialized
+          act_sch = act_sch.get.to_ScheduleRuleset.get
+          w_per_person = act_sch.annual_min_max_value['max']
+        else
+          OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "#{self.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+        end
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "#{self.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
+      end
+      
+      num_ppl = people.getNumberOfPeople(self.floorArea)
+    
+      ppl_w = num_ppl * w_per_person
+    
+      load_w += ppl_w
+    
+    end
+    
+    # Lights
+    load_w += self.lightingPower
+    
+    # Electric Equipment
+    load_w += self.electricEquipmentPower	
+    
+    # Gas Equipment
+    load_w += self.gasEquipmentPower
+  
+    OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "#{self.name} has #{load_w.round}W of design internal loads.")
+  
+    return load_w
+  
+  end
+ 
 end

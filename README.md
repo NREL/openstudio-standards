@@ -8,7 +8,7 @@ This library (a Ruby Gem) is an extension of the {https://www.openstudio.net/ Op
 
 ## Complete Documentation
 
-{http://www.rubydoc.info/github/NREL/openstudio-standards/master Complete Online Documentation} 
+{http://www.rubydoc.info/gems/openstudio-standards Complete Online Documentation} 
 
 ## User Quick Start Guide
 

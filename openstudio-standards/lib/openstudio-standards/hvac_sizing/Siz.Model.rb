@@ -24,6 +24,7 @@ class OpenStudio::Model::Model
   require_relative 'Siz.CoilHeatingGas'
   require_relative 'Siz.CoilHeatingWater'
   require_relative 'Siz.CoilHeatingDXSingleSpeed'
+  require_relative 'Siz.CoilHeatingDXMultiSpeed'
   require_relative 'Siz.CoilHeatingWaterToAirHeatPumpEquationFit'
   require_relative 'Siz.CoilCoolingWaterToAirHeatPumpEquationFit'
   require_relative 'Siz.CoilCoolingDXSingleSpeed'
@@ -37,26 +38,17 @@ class OpenStudio::Model::Model
   require_relative 'Siz.BoilerHotWater'
   require_relative 'Siz.ChillerElectricEIR'
   require_relative 'Siz.CoolingTowerSingleSpeed'
+  require_relative 'Siz.CoolingTowerTwoSpeed'
+  require_relative 'Siz.CoolingTowerVariableSpeed'
   require_relative 'Siz.ControllerWaterCoil'
   require_relative 'Siz.SizingSystem'
   require_relative 'Siz.ThermalZone'
-
-  # Recently added and not fully tested
   require_relative 'Siz.ZoneHVACPackagedTerminalAirConditioner'
   require_relative 'Siz.ZoneHVACPackagedTerminalHeatPump'
   require_relative 'Siz.ZoneHVACTerminalUnitVariableRefrigerantFlow'
   require_relative 'Siz.AirConditionerVariableRefrigerantFlow'
   require_relative 'Siz.CoilCoolingDXVariableRefrigerantFlow'
   require_relative 'Siz.CoilHeatingDXVariableRefrigerantFlow'
-
-  # Methods not yet implemented
-  require_relative 'Siz.AirTermSnglDuctVAVReheat'
-  require_relative 'Siz.AirTermSnglDuctUncontrolled'
-  require_relative 'Siz.AirLoopHVAC'
-  require_relative 'Siz.AirLoopHVACUnitaryHeatPumpAirToAir'
-  require_relative 'Siz.FanConstantVolume'
-  require_relative 'Siz.FanVariableVolume'
-  require_relative 'Siz.FanOnOff'  
 
   # Heating and cooling fuel methods
   require_relative 'Siz.HeatingCoolingFuels'
@@ -71,13 +63,13 @@ class OpenStudio::Model::Model
     sim_control.setRunSimulationforWeatherFileRunPeriods(false)
     
     # Run the sizing run
-    self.run_simulation_and_log_errors(sizing_run_dir)
+    success = self.run_simulation_and_log_errors(sizing_run_dir)
     
     # Change the model back to running the weather file
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
     
-    return true
+    return success
 
   end
 
@@ -302,13 +294,13 @@ class OpenStudio::Model::Model
     name = object.name.get.upcase
 
     object_type = object.iddObject.type.valueDescription.gsub('OS:','')
-    if(object_type == 'Coil:Heating:Gas:MultiStage') then object_type = 'Coil:Heating:GasMultiStage' end
 
     # Special logic for two coil types which are inconsistently
     # uppercase in the sqlfile:
     object_type = object_type.upcase if object_type == 'Coil:Cooling:WaterToAirHeatPump:EquationFit'
     object_type = object_type.upcase if object_type == 'Coil:Heating:WaterToAirHeatPump:EquationFit'
-      
+		object_type = 'Coil:Heating:GasMultiStage' if object_type == 'Coil:Heating:Gas:MultiStage'
+    
     sql = self.sqlFile
 
     if sql.is_initialized

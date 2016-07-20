@@ -70,12 +70,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     end
 
     # find object
-    ac_props = nil
-    if heat_pump == true
-      ac_props = self.model.find_object(standards['heat_pumps_heating'], search_criteria, capacity_btu_per_hr)
-    else
-      ac_props = self.model.find_object(standards['heat_pumps'], search_criteria, capacity_btu_per_hr)
-    end
+    ac_props = self.model.find_object(standards['heat_pumps_heating'], search_criteria, capacity_btu_per_hr)
 
     # Get the minimum efficiency standards
     cop = nil
@@ -86,17 +81,24 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
       return cop # value of nil
     end
 
-    # If specified as SEER
-    unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
-      min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop(min_seer)
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+    # If specified as HSPF
+    unless ac_props['minimum_heating_seasonal_performance_factor'].nil?
+      min_hspf = ac_props['minimum_heating_seasonal_performance_factor']
+      cop = hspf_to_cop_heating_no_fan(min_hspf)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
     end
 
+    # If specified as COPH
+    unless ac_props['minimum_coefficient_of_performance_heating'].nil?
+      min_coph = ac_props['minimum_coefficient_of_performance_heating']
+      cop = cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph}")
+    end    
+    
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{self.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
@@ -119,16 +121,18 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     # TODO Standards - add split system vs single package to model
     # For now, assume single package
     subcategory = 'Single Package'
-    search_criteria['subcategory'] = subcategory
-
+    
+    # Assume they are all aircooled for now
+    search_criteria['cooling_type'] = 'AirCooled'
+    
     # Determine supplemental heating type if unitary
-    heat_pump = false
+    unitary = false
     suppl_heating_type = nil
     if self.airLoopHVAC.empty?
       if self.containingHVACComponent.is_initialized
         containing_comp = containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
-          heat_pump = true
+          unitary = true
           htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil
           if htg_coil.to_CoilHeatingElectric.is_initialized
             suppl_heating_type = 'Electric Resistance or None'
@@ -141,9 +145,6 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
         # PTHP
         if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           pthp = containing_comp.to_ZoneHVACPackagedTerminalHeatPump.get
-          #heat_pump = true?
-          # Todo: Should we implement a subcategory for PTHP like there is one for PTAC?
-          # Because for PTHP the COP has two coefficients two (eg 90.1-2007: COP = 3.2 - 0.000026*Cap)
           subcategory = 'PTHP'
           htg_coil = containing_comp.to_ZoneHVACPackagedTerminalHeatPump.get.supplementalHeatingCoil
           if htg_coil.to_CoilHeatingElectric.is_initialized
@@ -154,33 +155,40 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
         end
       end
     end
+    
+    # Add the subcategory to the search criteria
+    search_criteria['subcategory'] = subcategory
 
     # Determine the supplemental heating type if on an airloop
     if self.airLoopHVAC.is_initialized
       air_loop = self.airLoopHVAC.get
-      if air_loop.supplyComponents('Coil:Heating:Electric'.to_IddObjectType).size > 0
+      if air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).size > 0
         suppl_heating_type = 'Electric Resistance or None'
-      elsif air_loop.supplyComponents('Coil:Heating:Gas'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Water'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:DX:SingleSpeed'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Gas:MultiStage'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Gas:MultiStage'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:Desuperheater'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:Desuperheater'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'
-      elsif air_loop.supplyComponents('Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).size > 0
+      elsif air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).size > 0
         suppl_heating_type = 'All Other'  
       else
         suppl_heating_type = 'Electric Resistance or None'
       end
     end
 
-
+    # Add the heating type to the search criteria
+    unless suppl_heating_type.nil?
+      search_criteria['heating_type'] = suppl_heating_type
+    end
+    
     # Get the coil capacity
     capacity_w = nil
-    if(heat_pump == true)
+    if unitary
       containing_comp = self.containingHVACComponent.get
       heat_pump_comp = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
       ccoil = heat_pump_comp.coolingCoil
@@ -217,40 +225,13 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, "W", "kBtu/hr").get
 
-    # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
+    # Lookup efficiencies depending on whether it is a unitary HP or a heat pump
     ac_props = nil
-    if heat_pump == true
-      ac_props = self.model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
-    else
+    if unitary == true
       ac_props = self.model.find_object(unitary_hps, search_criteria, capacity_btu_per_hr)
+    else
+      ac_props = self.model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
     end
-
-    # TODO: REMOVE THIS, TEMPORARY HACK ONLY
-    if subcategory == 'PTHP'
-      case template
-        when '90.1-2007'
-          pthp_cop_coeff_1 = 3.2
-          pthp_cop_coeff_2 = -0.000026
-        when '90.1-2010'
-          # As of 10/08/2012
-          pthp_cop_coeff_1 = 3.7
-          pthp_cop_coeff_2 = -0.000052
-      end
-
-      # TABLE 6.8.1D
-      # COP = pthp_cop_coeff_1 + pthp_cop_coeff_2 * Cap
-      # Note c: Cap means the rated cooling capacity of the product in Btu/h.
-      # If the unit’s capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
-      # If the unit’s capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
-      capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
-      capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
-      pthp_cop = pthp_cop_coeff_1 + (pthp_cop_coeff_2 * capacity_btu_per_hr)
-      new_comp_name = "#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_cop.round(1)}COP"
-      self.setName(new_comp_name)
-      self.setRatedCOP(pthp_cop)
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "HACK: For #{template}: #{self.name}: #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_cop.round(2)}COP")
-    end
-    # TODO: END OF REMOVE THIS TEMPORARY HACK ONLY
 
     # Check to make sure properties were found
     if ac_props.nil?
@@ -306,23 +287,42 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
  
     # Get the minimum efficiency standards
     cop = nil
-    
-    # If specified as SEER
-    unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
-      min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop(min_seer)
-      self.setName("#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
-      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+   
+    # If PTHP, use equations
+    if subcategory == 'PTHP'
+      pthp_cop_coeff_1 = ac_props['pthp_cop_coefficient_1']
+      pthp_cop_coeff_2 = ac_props['pthp_cop_coefficient_2']
+      # TABLE 6.8.1D
+      # COP = pthp_cop_coeff_1 - (pthp_cop_coeff_2 * Cap / 1000)
+      # Note c: Cap means the rated cooling capacity of the product in Btu/h.
+      # If the unit’s capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
+      # If the unit’s capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
+      capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
+      capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
+      cop = pthp_cop_coeff_1 - (pthp_cop_coeff_2 * capacity_btu_per_hr / 1000.0)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{self.name}: #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{cop.round(2)}")
     end
+   
+    # If specified as HSPF
+    unless ac_props['minimum_heating_seasonal_performance_factor'].nil?
+      min_hspf = ac_props['minimum_heating_seasonal_performance_factor']
+      cop = hspf_to_cop_heating_no_fan(min_hspf)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
+    end
+
+    # If specified as COPH
+    unless ac_props['minimum_coefficient_of_performance_heating'].nil?
+      min_coph = ac_props['minimum_coefficient_of_performance_heating']
+      cop = cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed',  "For #{template}: #{self.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph}")
+    end    
     
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
-      self.setName("#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER")
+      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr,'kBtu/hr','W').get)
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{self.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
-
 
     # Set the efficiency values
     unless cop.nil?

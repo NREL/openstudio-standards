@@ -25,7 +25,7 @@ class OpenStudio::Model::Model
       when 'OS_Boiler_Steam' 
         component = component.to_BoilerHotWater.get
         fuels << component.fuelType
-      when 'OS_District_Heating'
+      when 'OS_DistrictHeating'
         fuels << 'DistrictHeating' 
       when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
         fuels << 'Electricity'

@@ -64,10 +64,10 @@ module Pump
   def set_standard_minimum_motor_efficiency(template)
     
     # Get the horsepower
-    hp = self.horsepower
+    bhp = self.brakeHorsepower
     
     # Find the motor efficiency
-    motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, hp)
+    motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, bhp)
 
     # Change the motor efficiency
     self.setMotorEfficiency(motor_eff)
@@ -78,12 +78,17 @@ module Pump
   
   end
 
-  # Determines the minimum pump motor efficiency 
+  # Determines the minimum pump motor efficiency and nominal size
   # for a given motor bhp.  This should be the total brake horsepower with
-  # any desired safety factor already included.
+  # any desired safety factor already included.  This method picks
+  # the next nominal motor catgory larger than the required brake
+  # horsepower, and the efficiency is based on that size.  For example,
+  # if the bhp = 6.3, the nominal size will be 7.5HP and the efficiency
+  # for 90.1-2010 will be 91.7% from Table 10.8B.  This method assumes
+  # 4-pole, 1800rpm totally-enclosed fan-cooled motors.
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
-  # @return [Double] minimum motor efficiency (0.0 to 1.0)
+  # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
   def standard_minimum_motor_efficiency_and_size(template, motor_bhp)
   
     motor_eff = 0.85
@@ -116,7 +121,16 @@ module Pump
     if nominal_hp >= 2
       nominal_hp = nominal_hp.round
     end
-    
+ 
+    # Get the efficiency based on the nominal horsepower
+    # Add 0.01 hp to avoid search errors.
+    motor_properties = self.model.find_object(motors, search_criteria, nominal_hp + 0.01)
+    if motor_properties.nil?
+      OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Fan", "For #{self.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+      return [motor_eff, nominal_hp]
+    end    
+    motor_eff = motor_properties["nominal_full_load_efficiency"]
+ 
     return [motor_eff, nominal_hp]
   
   end 

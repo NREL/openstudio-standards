@@ -2,7 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>create_performance_rating_method_baseline_building</name>
   <uid>0474f1c8-11cf-477c-9bd6-2091207ddf42</uid>
-  <version_id>15cbcec7-07e4-462e-ac01-784359aa195f</version_id>
+  <version_id>e4585467-144e-4816-b7e1-38353e960bbd</version_id>
+  <version_modified>20160531T165443Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>CreatePerformanceRatingMethodBaselineBuilding</class_name>
   <display_name>Create Performance Rating Method Baseline Building</display_name>
@@ -17,6 +18,10 @@
       <model_dependent>false</model_dependent>
       <default_value>90.1-2013</default_value>
       <choices>
+        <choice>
+          <value>90.1-2007</value>
+          <display_name>90.1-2007</display_name>
+        </choice>
         <choice>
           <value>90.1-2010</value>
           <display_name>90.1-2010</display_name>
@@ -39,6 +44,10 @@
       <model_dependent>false</model_dependent>
       <default_value>SmallOffice</default_value>
       <choices>
+        <choice>
+          <value>MidriseApartment</value>
+          <display_name>MidriseApartment</display_name>
+        </choice>
         <choice>
           <value>SecondarySchool</value>
           <display_name>SecondarySchool</display_name>
@@ -172,6 +181,25 @@
       </choices>
     </argument>
     <argument>
+      <name>custom</name>
+      <display_name>Customization</display_name>
+      <description>If selected, some of the standard process will be replaced by custom logic specific to particular programs.  If these do not apply to you, select None.</description>
+      <type>Choice</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>*None*</default_value>
+      <choices>
+        <choice>
+          <value>Xcel Energy CO EDA</value>
+          <display_name>Xcel Energy CO EDA</display_name>
+        </choice>
+        <choice>
+          <value>*None*</value>
+          <display_name>*None*</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
       <name>debug</name>
       <display_name>Show debug messages?</display_name>
       <type>Boolean</type>
@@ -214,6 +242,18 @@
       <checksum>6BED784B</checksum>
     </file>
     <file>
+      <filename>SecondarySchool-DOE Ref Pre-1980-ASHRAE 169-2006-2A.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>F8619A70</checksum>
+    </file>
+    <file>
+      <filename>create_performance_rating_method_baseline_building_test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>AD0078FC</checksum>
+    </file>
+    <file>
       <version>
         <software_program>OpenStudio</software_program>
         <identifier>1.6.0</identifier>
@@ -222,19 +262,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>6A032357</checksum>
-    </file>
-    <file>
-      <filename>create_performance_rating_method_baseline_building_test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>FDBEE9D3</checksum>
-    </file>
-    <file>
-      <filename>SecondarySchool-DOE Ref Pre-1980-ASHRAE 169-2006-2A.osm</filename>
-      <filetype>osm</filetype>
-      <usage_type>test</usage_type>
-      <checksum>F8619A70</checksum>
+      <checksum>D65E4086</checksum>
     </file>
   </files>
 </measure>

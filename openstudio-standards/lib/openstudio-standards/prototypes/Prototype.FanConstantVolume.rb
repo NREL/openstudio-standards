@@ -2,6 +2,8 @@
 # Reopen the OpenStudio class to add methods to apply standards to this object
 class OpenStudio::Model::FanConstantVolume
 
+  include PrototypeFan
+
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.

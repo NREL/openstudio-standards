@@ -106,10 +106,9 @@ class OpenStudio::Model::AirLoopHVAC
     # TODO Prototype buildings use OAT-based SAT reset,
     # but PRM RM suggests Warmest zone based SAT reset.
     if self.is_supply_air_temperature_reset_required(template, climate_zone)
-      self.enable_supply_air_temperature_reset_outdoor_temperature
-      # self.enable_supply_air_temperature_reset_warmest_zone(template)
+      self.enable_supply_air_temperature_reset_warmest_zone(template)
     end
-
+    
     # Unoccupied shutdown
     if self.is_unoccupied_fan_shutoff_required(template)
       self.enable_unoccupied_fan_shutoff
@@ -1204,7 +1203,10 @@ class OpenStudio::Model::AirLoopHVAC
       return false # No OA system
     end
     oa_control = oa_sys.getControllerOutdoorAir
-
+ 
+    # Set the economizer type
+    oa_control.setEconomizerControlType(economizer_type)
+ 
     # Set the limits
     case economizer_type
     when 'FixedDryBulb'
@@ -1515,49 +1517,168 @@ class OpenStudio::Model::AirLoopHVAC
         end
       end
     when '90.1-2013'
-      # Table 6.5.6.1-2
-      case climate_zone
-      when 'ASHRAE 169-2006-3C'
-        erv_cfm = nil
-      when 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4C', 'ASHRAE 169-2006-5C'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
-          erv_cfm = nil
-        elsif pct_oa >= 0.2 && pct_oa < 0.3
-          erv_cfm = 19500
-        elsif pct_oa >= 0.3 && pct_oa < 0.4
-          erv_cfm = 9000
-        elsif pct_oa >= 0.4 && pct_oa < 0.5
-          erv_cfm = 5000
-        elsif pct_oa >= 0.5 && pct_oa < 0.6
-          erv_cfm = 4000
-        elsif pct_oa >= 0.6 && pct_oa < 0.7
-          erv_cfm = 3000
-        elsif pct_oa >= 0.7 && pct_oa < 0.8
-          erv_cfm = 1500
-        elsif pct_oa >= 0.8
-          erv_cfm = 0
+      # Calculate the number of system operating hours
+      # based on the availability schedule.
+      ann_op_hrs = 0.0
+      avail_sch = self.availabilitySchedule
+      if avail_sch == self.model.alwaysOnDiscreteSchedule
+        ann_op_hrs = 8760.0
+      elsif avail_sch.to_ScheduleRuleset.is_initialized
+        avail_sch = avail_sch.to_ScheduleRuleset.get
+        ann_op_hrs = avail_sch.annual_hours_above_value(0.0)
+      else
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{self.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
+      end
+      
+      if ann_op_hrs < 8000.0
+        # Table 6.5.6.1-1, less than 8000 hrs
+        case climate_zone
+        when 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C', 'ASHRAE 169-2006-5B'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = nil
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = nil
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = nil
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = nil
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = nil
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = nil
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = nil
+          elsif pct_oa >= 0.8 
+            erv_cfm = nil
+          end
+        when 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-5C'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = nil
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = nil
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = nil
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = nil
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 26000
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 12000
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 5000
+          elsif pct_oa >= 0.8 
+            erv_cfm = 4000
+          end
+        when 'ASHRAE 169-2006-6B'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = 28000
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 26500
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 11000
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 5500
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 4500
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 3500
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 2500
+          elsif pct_oa >= 0.8 
+            erv_cfm = 1500
+          end      
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-6A'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = 26000
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 16000
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 5500
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 4500
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 3500
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 2000
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 1000
+          elsif pct_oa >= 0.8 
+            erv_cfm = 0
+          end   
+        when 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
+         if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = 4500
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 4000
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 2500
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 1000
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 0
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 0
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 0
+          elsif pct_oa >= 0.8 
+            erv_cfm = 0
+          end      
         end
-      when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-4B',  'ASHRAE 169-2006-5B'
-        if pct_oa < 0.1
+      else
+        # Table 6.5.6.1-2, above 8000 hrs
+        case climate_zone
+        when 'ASHRAE 169-2006-3C'
           erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
-          erv_cfm = 2500
-        elsif pct_oa >= 0.2 && pct_oa < 0.3
-          erv_cfm = 2000
-        elsif pct_oa >= 0.3 && pct_oa < 0.4
-          erv_cfm = 1000
-        elsif pct_oa >= 0.4 && pct_oa < 0.5
-          erv_cfm = 500
-        elsif pct_oa >= 0.5
-          erv_cfm = 0
-        end
-      when 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1
-          erv_cfm = 0
+        when 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-4C', 'ASHRAE 169-2006-5C'
+          if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = nil
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 19500
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 9000
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 5000
+          elsif pct_oa >= 0.5 && pct_oa < 0.6
+            erv_cfm = 4000
+          elsif pct_oa >= 0.6 && pct_oa < 0.7
+            erv_cfm = 3000
+          elsif pct_oa >= 0.7 && pct_oa < 0.8
+            erv_cfm = 1500
+          elsif pct_oa >= 0.8 
+            erv_cfm = 0
+          end
+        when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-4B',  'ASHRAE 169-2006-5B'
+          if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1 && pct_oa < 0.2
+            erv_cfm = 2500
+          elsif pct_oa >= 0.2 && pct_oa < 0.3
+            erv_cfm = 2000
+          elsif pct_oa >= 0.3 && pct_oa < 0.4
+            erv_cfm = 1000
+          elsif pct_oa >= 0.4 && pct_oa < 0.5
+            erv_cfm = 500
+          elsif pct_oa >= 0.5
+            erv_cfm = 0
+          end
+        when 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
+          if pct_oa < 0.1
+            erv_cfm = nil
+          elsif pct_oa >= 0.1
+            erv_cfm = 0
+          end
         end
       end
     when 'NECB 2011'
@@ -1766,7 +1887,7 @@ class OpenStudio::Model::AirLoopHVAC
         end
       end
       if num_fan_powered_terminals > 0
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{self.name}, multizone vav optimization is not required because the system has #{num_fan_powered_terminals} fan-powered terminals.")
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, multizone vav optimization is not required because the system has #{num_fan_powered_terminals} fan-powered terminals.")
         return multizone_opt_required
       end
 
@@ -1819,13 +1940,13 @@ class OpenStudio::Model::AirLoopHVAC
       # Not required for systems where
       # exhaust is more than 70% of the total OA intake.
       if pct_oa > 0.7
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because system is more than 70% OA.")
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because system is more than 70% OA.")
         return multizone_opt_required
       end
 
       # TODO Not required for dual-duct systems
       # if self.isDualDuct
-        # OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because it is a dual duct system")
+        # OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{controller_oa.name}: multizone optimization is not applicable because it is a dual duct system")
         # return multizone_opt_required
       # end
 
@@ -1878,17 +1999,20 @@ class OpenStudio::Model::AirLoopHVAC
 
   end
 
-  # Set the minimum VAV damper positions
+  # Set the minimum VAV damper positions.
   #
-  #
-  def set_minimum_vav_damper_positions(template)
-
+  # @param template [String] the building template
+  # @param has_ddc [Bool] if true, will assume that there
+  # is DDC control of vav terminals.  If false, assumes otherwise.
+  # @return [Bool] true if successful, false if not
+  def set_minimum_vav_damper_positions(template, has_ddc=true)
+  
     self.thermalZones.each do |zone|
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-          zone_oa_per_area = zone.outdoor_airflow_rate_per_area
+          zone_oa = zone.outdoor_airflow_rate
           vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
-          vav_terminal.set_minimum_damper_position(template, zone_oa_per_area)
+          vav_terminal.set_minimum_damper_position(template, zone_oa, has_ddc)
         end
       end
     end
@@ -1969,28 +2093,39 @@ class OpenStudio::Model::AirLoopHVAC
       end
 
       # Get the minimum damper position
-      mdp = 1.0
+      mdp_term = 1.0
+      min_zn_flow = 0.0
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.get
-          mdp = term.zoneMinimumAirFlowFraction
+          mdp_term = term.zoneMinimumAirFlowFraction
         elsif equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
-          mdp = term.zoneMinimumAirFlowFraction
+          mdp_term = term.zoneMinimumAirFlowFraction
         elsif equip.to_AirTerminalSingleDuctVAVNoReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVNoReheat.get
           if term.constantMinimumAirFlowFraction.is_initialized
-            mdp = term.constantMinimumAirFlowFraction.get
+            mdp_term = term.constantMinimumAirFlowFraction.get
           end
         elsif equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVReheat.get
-          mdp = term.constantMinimumAirFlowFraction
+          mdp_term = term.constantMinimumAirFlowFraction
+          min_zn_flow = term.fixedMinimumAirFlowRate
         end
       end
+    
+      # For VAV Reheat terminals, min flow is greater of mdp
+      # and min flow rate / design flow rate.
+      mdp = mdp_term
+      mdp_oa = min_zn_flow/v_ps
+      if min_zn_flow > 0.0
+        mdp = [mdp_term, mdp_oa].max.round(2)
+      end
+      #OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Zone #{zone.name} mdp_term = #{mdp_term.round(2)}, mdp_oa = #{mdp_oa.round(2)}; mdp_final = #{mdp}")
 
       # Zone minimum discharge airflow rate
-      v_dz = v_pz*mdp
-
+      v_dz = v_pz*mdp 
+    
       # Zone discharge air fraction
       z_d = v_oz / v_dz
 
