@@ -418,7 +418,7 @@ class OpenStudio::Model::Model
     end
 
     # If a csv path is given, output
-    if !csv_path.nil?
+    if !csv_path.nil? && !table.first.nil?
       CSV.open(csv_path, "wb") do |csv|
         csv << table.first.keys # adds the attributes name on the first line
         table.each do |hash|
