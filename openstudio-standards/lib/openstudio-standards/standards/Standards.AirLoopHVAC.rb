@@ -462,7 +462,7 @@ class OpenStudio::Model::AirLoopHVAC
       next if fan.name.to_s.include?("Fan Coil fan")
       next if fan.name.to_s.include?("UnitHeater Fan")
 
-      OpenStudio::logFree(OpenStudio::Info, "#{fan.name}")
+      OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC", "#{fan.name}")
 
       # Get the bhp of the fan on the proposed system
       proposed_fan_bhp = fan.brakeHorsepower
@@ -1132,7 +1132,7 @@ class OpenStudio::Model::AirLoopHVAC
     # 'DifferentialDryBulbAndEnthalpy'
 
     # Determine the type and limits
-    economizer_type = nil
+    economizer_type = "NoEconomizer"
     drybulb_limit_f = nil
     enthalpy_limit_btu_per_lb = nil
     dewpoint_limit_f = nil
@@ -1430,6 +1430,7 @@ class OpenStudio::Model::AirLoopHVAC
       if pct_oa < 0.7
         erv_cfm = nil
       else
+        # @Todo: Add exceptions (eg: e. cooling systems in climate zones 3C, 4C, 5B, 5C, 6B, 7 and 8 | d. Heating systems in climate zones 1 to 3)
         erv_cfm = 5000
       end
     when '90.1-2010'

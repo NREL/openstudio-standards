@@ -11,6 +11,8 @@
 class OpenStudio::Model::Model
   
   # Get the heating fuel type of a plant loop
+  # @Todo: If no heating equipment is found, check if there's a heat exchanger,
+  # or a WaterHeater:Mixed or stratified that is connected to a heating source on the demand side
   def plant_loop_heating_fuels(plant_loop)
     fuels = []
     # Get the heating fuels for all supply components
@@ -38,9 +40,20 @@ class OpenStudio::Model::Model
       when 'OS_WaterHeater_HeatPump'
         fuels << 'Electricity'     
       when 'OS_WaterHeater_Mixed'
-        fuels << 'obj.fuelType'
+        # @Todo: check if connected on demand side
+        component = component.to_WaterHeaterMixed.get
+        fuels << component.heaterFuelType
       when 'OS_WaterHeater_Stratified'
-        fuels << 'obj.fuelType'
+        # @Todo: check if connected on demand side
+        component = component.to_WaterHeaterStratified.get
+        fuels << component.heaterFuelType
+      when 'OS_HeatExchanger_FluidToFluid'
+        hx = component.to_HeatExchangerFluidToFluid.get
+        cooling_hx_control_types = ["CoolingSetpointModulated", "CoolingSetpointOnOff", "CoolingDifferentialOnOff", "CoolingSetpointOnOffWithComponentOverride"]
+        cooling_hx_control_types.each {|x| x.downcase!}
+        if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
+          fuels += self.plant_loop_heating_fuels(hx.secondaryPlantLoop.get)
+        end
       when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
         # To avoid extraneous debug messages
       else

@@ -249,12 +249,29 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
-    end    
+    end
+
+    # If it's a PTAC or PTHP System, we need to divide the capacity by the potential zone multiplier
+    # because the COP is dependent on capacity, and the capacity should be the capacity of a single zone, not all the zones
+    if ['PTAC', 'PTHP'].include?(subcategory)
+      mult = 1
+      comp = self.containingZoneHVACComponent
+      if comp.is_initialized
+      	if comp.get.thermalZone.is_initialized
+          mult = comp.get.thermalZone.get.multiplier
+          if mult > 1
+            total_cap = capacity_w
+            capacity_w /= mult
+            OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{self.name}, total capacity of #{OpenStudio.convert(total_cap, "W", "kBtu/hr").get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, "W", "kBtu/hr").get.round(2)}kBTU/hr.")
+          end
+        end
+      end
+    end
 
     # Convert capacity to Btu/hr
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, "W", "kBtu/hr").get
-    
+
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     if heat_pump == true

@@ -30,6 +30,7 @@ module OpenstudioStandards
   # Load the Openstudio Standards JSON
   # and assign to a constant.  This
   # should never be altered by the gem.
+  # @Todo: A constant in ruby is $CONSTANT not $constant
   $os_standards = load_openstudio_standards_json 
   
   
