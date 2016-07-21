@@ -1574,8 +1574,8 @@ class OpenStudio::Model::Model
     ##### Apply equipment efficiencies
 
     # Fans
-     self.getFanVariableVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
-     self.getFanConstantVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
+    self.getFanVariableVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
+    self.getFanConstantVolumes.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
     # self.getFanOnOffs.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
     # self.getFanZoneExhausts.sort.each {|obj| obj.setStandardEfficiency(building_vintage)}
 
@@ -1671,7 +1671,38 @@ class OpenStudio::Model::Model
   #     return false #TODO change to return empty optional schedule:ruleset?
   #   end
   def find_objects(hash_of_objects, search_criteria, capacity = nil)
-
+#    matching_objects = hash_of_objects.clone 
+#    #new
+#    puts "searching"
+#    puts search_criteria
+#    raise ("hash of objects is nil or empty. #{hash_of_objects}") if hash_of_objects.nil? || hash_of_objects.empty? || matching_objects[0].nil?
+#
+#    search_criteria.each do |key,value|
+#      puts "#{key}-#{value}"
+#      puts matching_objects.size
+#      #if size has already reduced to zero. Get out of loop.
+#      break if matching_objects.size == 0
+#      #if there are no keys that match, skip search... (This seems odd) 
+#      next unless  matching_objects[0].has_key?(key)
+#      matching_objects.select!{ |k| k[key] == value }
+#    end
+#    if not capacity.nil?
+#      puts "Capacity = #{capacity}"
+#      capacity = capacity + (capacity * 0.01) if capacity == capacity.round
+#      matching_objects.select!{|k| capacity.to_f > k['minimum_capacity'].to_f}
+#      matching_objects.select!{|k| capacity.to_f <= k['maximum_capacity'].to_f}
+#    end
+#
+#
+#    # Check the number of matching objects found
+#    if matching_objects.size == 0
+#      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}.")
+#    
+#    end
+#    new_matching_objects =  matching_objects
+    
+    
+    #old
     desired_object = nil
     search_criteria_matching_objects = []
     matching_objects = []
@@ -1708,9 +1739,9 @@ class OpenStudio::Model::Model
         # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
         next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
         # Skip objects whose the minimum capacity is below the specified capacity
-        next if capacity <= object['minimum_capacity']
+        next if capacity.to_f <= object['minimum_capacity'].to_f
         # Skip objects whose max
-        next if capacity > object['maximum_capacity']
+        next if capacity.to_f > object['maximum_capacity'].to_f
         # Found a matching object
         matching_objects << object
       end
@@ -1722,6 +1753,13 @@ class OpenStudio::Model::Model
       #OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}.")
     end
 
+#    if new_matching_objects != matching_objects
+#      puts "new..." 
+#      puts new_matching_objects
+#      puts "is not.."
+#      puts matching_objects
+#      raise ("Hell")
+#    end
     return matching_objects
 
   end
@@ -1747,6 +1785,8 @@ class OpenStudio::Model::Model
   #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
   def find_object(hash_of_objects, search_criteria, capacity = nil)
 
+#    new_matching_objects = self.find_objects(hash_of_objects, search_criteria, capacity)
+    
     desired_object = nil
     search_criteria_matching_objects = []
     matching_objects = []
@@ -1791,6 +1831,7 @@ class OpenStudio::Model::Model
       end
     end
 
+    
     # Check the number of matching objects found
     if matching_objects.size == 0
       desired_object = nil
