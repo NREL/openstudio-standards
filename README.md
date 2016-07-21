@@ -1,10 +1,14 @@
 # OpenStudio-Standards
 
-[![Circle CI](https://circleci.com/gh/NREL/openstudio-standards/tree/master.svg?style=svg)](https://circleci.com/gh/NREL/openstudio-standards/tree/master)
+**Unit Test Status:** [![Circle CI](https://circleci.com/gh/NREL/openstudio-standards/tree/master.svg?style=svg)](https://circleci.com/gh/NREL/openstudio-standards/tree/master)
 
-[![Coverage Status](https://coveralls.io/repos/github/NREL/openstudio-standards/badge.svg?branch=master)](https://coveralls.io/github/NREL/openstudio-standards?branch=master)
+**Code Coverage:** [![Coverage Status](https://coveralls.io/repos/github/NREL/openstudio-standards/badge.svg?branch=master)](https://coveralls.io/github/NREL/openstudio-standards?branch=master)
 
-This library (a Ruby Gem) is an extension of the {https://www.openstudio.net/ OpenStudio SDK} that allows you to apply standards (like ASHRAE 90.1, Canada's NECB, etc.) to your OpenStudio model.
+This library (a Ruby Gem) is an extension of the {https://www.openstudio.net/ OpenStudio SDK} with three main use-cases:
+
+1. Create the DOE Prototype Buildings in OpenStudio format
+2. Create a code baseline model from a proposed model
+3. Check a model against a code/standard (not yet implemented)
 
 ## Complete Documentation
 
@@ -12,7 +16,7 @@ This library (a Ruby Gem) is an extension of the {https://www.openstudio.net/ Op
 
 ## User Quick Start Guide
 
-{file:openstudio-standards/docs/UserQuickStartGuide.md User Quick Start Guide}
+If you are a user, see the {file:openstudio-standards/docs/UserQuickStartGuide.md User Quick Start Guide}
 
 ## Developer Information
 
