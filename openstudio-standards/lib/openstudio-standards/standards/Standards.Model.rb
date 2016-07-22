@@ -420,7 +420,7 @@ class OpenStudio::Model::Model
         type_to_area[type] += zn['area']
       end
     end
-    dom_type = type_to_area.sort_by {|t| t }[0][0]
+    dom_type = type_to_area.sort_by {|t| t }.reverse[0][0]
 
     # Determine the dominant fuel type
     # from the subset of the dominant area type
@@ -432,7 +432,7 @@ class OpenStudio::Model::Model
         fuel_to_area[fuel] += zn['area']
       end
     end
-    dom_fuel = fuel_to_area.sort_by {|t| t }[0][0]
+    dom_fuel = fuel_to_area.sort_by {|t| t }.reverse[0][0]
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The dominant occupancy type = #{dom_type}, the dominant fuel = #{dom_fuel}.")
 
     # Group by type and fuel type
