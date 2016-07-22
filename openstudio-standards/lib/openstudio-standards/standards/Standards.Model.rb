@@ -97,7 +97,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @param building_vintage [String] the building vintage.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @param climate_zone [String] the climate zone
-  # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are Xcel Energy CO EDA.
+  # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
   # If nothing is specified, no custom logic will be applied; the process will follow the building_vintage logic explicitly.
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
@@ -152,9 +152,12 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Grouping Zones by Fuel Type and Occupancy Type ***")
     sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage, custom)
     
-    # Remove all HVAC from model
+    # Remove all HVAC from model (except DHW loops)
     self.remove_performance_rating_method_hvac
-    
+
+    # @Todo: handle the service hot water loops correctly
+    #self.create_baseline_swh_loop(building_vintage)
+
     # Set the water heater fuel types
     self.getWaterHeaterMixeds.each do |water_heater|
       water_heater.apply_performance_rating_method_baseline_fuel_type(building_vintage, building_type)
@@ -547,11 +550,15 @@ class OpenStudio::Model::Model
     
     # Customization - Xcel EDA Program Manual 2014
     # Table 3.2.2 Baseline HVAC System Types
-    if custom == 'Xcel Energy CO EDA'
+    if custom == 'Xcel Energy CO EDA' || custom == "90.1-2007 with addenda dn"
       standard = '90.1-2010'
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 lookup for HVAC system types shall be used.")
-    end    
-    
+    end
+    if custom == "90.1-2007 with addenda dn"
+      standard = '90.1-2010'
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Custom; per Addenda dn of 90.1-2007, System 10 and 11 (same as system 9 and 10 in 90.1-2010) will be used for heated only space.")
+    end
+
     # Get the row from TableG3.1.1A
     sys_num = nil
     case standard
@@ -3715,14 +3722,9 @@ class OpenStudio::Model::Model
   
     # Plant loops
     self.getPlantLoops.each do |loop|
-      serves_swh = false
-      loop.demandComponents.each do |comp|
-        if comp.to_WaterUseConnections.is_initialized
-          serves_swh = true
-          break
-        end
-      end
-      next if serves_swh
+      # Skip if it's a swh_loop
+      # @Todo: delete any HeatExchanger:FluidToFluid that's going to be left unconnected on the source side here? We need to check before deletion what's serving it
+      next if loop.is_swh_loop
       loop.remove
     end
   
@@ -3739,6 +3741,7 @@ class OpenStudio::Model::Model
 
     # Outdoor VRF units (not in zone, not in loops)
     self.getAirConditionerVariableRefrigerantFlows.each {|vrf| vrf.remove}
+
       
     return true
       

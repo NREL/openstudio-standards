@@ -393,6 +393,12 @@ class OpenStudio::Model::PlantLoop
   end
   
   def enable_supply_water_temperature_reset
+
+    # Do not enable for service hot water loops
+    if self.is_swh_loop
+      OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}: This is a Service Hot Water Loop, no supply water temperature reset needed.")
+      return false
+    end
   
     # Get the current setpoint manager on the outlet node
     # and determine if already has temperature reset
@@ -1100,6 +1106,23 @@ class OpenStudio::Model::PlantLoop
     end
 
     return maximum_loop_flow_rate
+
+  end
+
+  # Determines if the loop is a Service Hot Water loop by checking if there is a WaterUseConnection on the demand side
+  #
+  # @return [Boolean] true if it's indeed a SHW loop, false otherwise
+  def is_swh_loop()
+
+    serves_swh = false
+    self.demandComponents.each do |comp|
+      if comp.to_WaterUseConnections.is_initialized
+        serves_swh = true
+        break
+      end
+    end
+
+    return serves_swh
 
   end
 
