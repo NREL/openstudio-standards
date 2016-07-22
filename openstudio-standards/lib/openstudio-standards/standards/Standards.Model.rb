@@ -151,17 +151,12 @@ class OpenStudio::Model::Model
     # because it requires knowledge of proposed HVAC fuels.
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Grouping Zones by Fuel Type and Occupancy Type ***")
     sys_groups = self.performance_rating_method_baseline_system_groups(building_vintage, custom)
+
+    # @Todo: handle the service hot water loops correctly before deletion of the HVAC loops
+    self.create_baseline_swh_loop(building_vintage, building_type)
     
     # Remove all HVAC from model (except DHW loops)
     self.remove_performance_rating_method_hvac
-
-    # @Todo: handle the service hot water loops correctly
-    #self.create_baseline_swh_loop(building_vintage)
-
-    # Set the water heater fuel types
-    self.getWaterHeaterMixeds.each do |water_heater|
-      water_heater.apply_performance_rating_method_baseline_fuel_type(building_vintage, building_type)
-    end
 
     # Determine the baseline HVAC system type for each of
     # the groups of zones and add that system type.
@@ -550,7 +545,7 @@ class OpenStudio::Model::Model
     
     # Customization - Xcel EDA Program Manual 2014
     # Table 3.2.2 Baseline HVAC System Types
-    if custom == 'Xcel Energy CO EDA' || custom == "90.1-2007 with addenda dn"
+    if custom == 'Xcel Energy CO EDA'
       standard = '90.1-2010'
       OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 lookup for HVAC system types shall be used.")
     end
@@ -4016,5 +4011,188 @@ class OpenStudio::Model::Model
     return result
   
   end
+
+  # Create the baseline SHW loop
+  def create_baseline_swh_loop(standard, building_type)
+
+    self.getPlantLoops.each do |plant_loop|
+      next if !plant_loop.is_swh_loop
+
+      htg_fuels, combination_system, storage_capacity, total_heating_capacity = self.classify_swh_system_type(plant_loop)
+
+      # htg_fuels.size == 0 shoudln't happen
+
+      electric = true
+
+      if htg_fuels.include?('NaturalGas') ||
+          htg_fuels.include?('PropaneGas') ||
+          htg_fuels.include?('FuelOil#1') ||
+          htg_fuels.include?('FuelOil#2') ||
+          htg_fuels.include?('Coal') ||
+          htg_fuels.include?('Diesel') ||
+          htg_fuels.include?('Gasoline')
+        electric = false
+      end
+
+
+      # If true, we just trash everything and recreate a WaterHeater:Mixed
+      # G3.1.11.e: If combination, create a WaterHeater:Mixed
+      if combination_system
+        plant_loop.supplyComponents.each do |component|
+
+          # Get the object type
+          obj_type = component.iddObjectType.valueName.to_s
+          next if ['OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'].include?(obj_type)
+
+          component.remove
+
+        end
+
+        water_heater = OpenStudio::Model::WaterHeaterMixed.new(self)
+        water_heater.setHeaterMaximumCapacity(total_heating_capacity)
+        water_heater.setTankVolume(storage_capacity)
+        plant_loop.addSupplyBranchForComponent(water_heater)
+
+        if electric
+          # G3.1.11.b: If electric, WaterHeater:Mixed with an electric resistance
+          water_heater.setHeaterFuelType("Electricity")
+          water_heater.setHeaterThermalEfficiency(1.0)
+          # @Todo: this is definitely not the right way to do it, but placeholder for now
+        else
+          # @Todo: for now, just get the first fuel that isn't Electricity...
+          # Theoretically a better way would be to count the capacities associated with each fuel type and use the preponderant one
+          fuels = htg_fuels - ["Electricity"]
+          fuelType = fuels[0]
+          water_heater.setHeaterFuelType("NaturalGas")
+          water_heater.setHeaterThermalEfficiency(0.8)
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Defaulting the SWH loop fuelType to '#{fuelType}'. You might want to edit that manually later on")
+        end
+
+      else # If it's not what we call a combination system
+        # We don't do anything, aside from changing the fuel Type to electric resistance if it's electric
+        if electric
+          self.getWaterHeaterMixeds.each do |water_heater|
+            # G3.1.11.b: If electric, WaterHeater:Mixed with an electric resistance
+
+            water_heater.setHeaterFuelType("Electricity")
+            water_heater.setHeaterThermalEfficiency(1.0)
+          end
+        end
+      end # end if combination_system
+
+      # Set the water heater fuel types if it's 90.1-2013
+      self.getWaterHeaterMixeds.each do |water_heater|
+        # Deal with specific 90.1-2013
+        water_heater.apply_performance_rating_method_baseline_fuel_type(standard, building_type)
+      end
+
+    end
+
+  end
+
+  def classify_swh_system_type(plant_loop)
+    combination_system = true
+    storage_capacity = 0
+    primary_fuels = []
+    secondary_fuels = []
+
+    # @Todo: to work correctly, plantloop.total_heating_capacity requires to have either hardsized capacities or a sizing run.
+    primary_heating_capacity = plant_loop.total_heating_capacity
+    secondary_heating_capacity = 0
+
+    plant_loop.supplyComponents.each do |component|
+
+      # Get the object type
+      obj_type = component.iddObjectType.valueName.to_s
+
+      case obj_type
+        when 'OS_DistrictHeating'
+          primary_fuels << 'DistrictHeating'
+          combination_system = false
+        when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
+          primary_fuels << 'Electricity'
+        when 'OS_SolarCollector_FlatPlate_PhotovoltaicThermal'
+          primary_fuels << 'SolarEnergy'
+        when 'OS_SolarCollector_FlatPlate_Water'
+          primary_fuels << 'SolarEnergy'
+        when 'OS_SolarCollector_IntegralCollectorStorage'
+          primary_fuels << 'SolarEnergy'
+        when 'OS_WaterHeater_HeatPump'
+          primary_fuels << 'Electricity'
+        when 'OS_WaterHeater_Mixed'
+          component = component.to_WaterHeaterMixed.get
+          # Check it it's actually a heater, not just a storage tank
+          if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
+            # If it does, we add the heater Fuel Type
+            primary_fuels << component.heaterFuelType
+            # And in this case we'll reuse this object
+            combination_system = false
+          end  # @Todo: not sure about whether it should be an elsif or not
+          # Check the plant loop connection on the source side
+          if component.secondaryPlantLoop.is_initialized
+            source_plant_loop = component.secondaryPlantLoop.get
+            secondary_fuels += self.plant_loop_heating_fuels(source_plant_loop)
+            secondary_heating_capacity += source_plant_loop.total_heating_capacity
+          end
+
+          # Storage capacity
+          if component.tankVolume.is_initialized
+            storage_capacity = component.tankVolume.get
+          end
+
+        when 'OS_WaterHeater_Stratified'
+          component = component.to_WaterHeaterStratified.get
+
+          # Check if the heater actually has a capacity (otherwise it's simply a Storage Tank)
+          if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
+            # If it does, we add the heater Fuel Type
+            primary_fuels << component.heaterFuelType
+            # And in this case we'll reuse this object
+            combination_system = false
+          end # @Todo: not sure about whether it should be an elsif or not
+          # Check the plant loop connection on the source side
+          if component.secondaryPlantLoop.is_initialized
+            source_plant_loop = component.secondaryPlantLoop.get
+            secondary_fuels += self.plant_loop_heating_fuels(source_plant_loop)
+            secondary_heating_capacity += source_plant_loop.total_heating_capacity
+          end
+
+          # Storage capacity
+          if component.tankVolume.is_initialized
+            storage_capacity = component.tankVolume.get
+          end
+
+        when 'OS_HeatExchanger_FluidToFluid'
+          hx = component.to_HeatExchangerFluidToFluid.get
+          cooling_hx_control_types = ["CoolingSetpointModulated", "CoolingSetpointOnOff", "CoolingDifferentialOnOff", "CoolingSetpointOnOffWithComponentOverride"]
+          cooling_hx_control_types.each {|x| x.downcase!}
+          if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
+            source_plant_loop = hx.secondaryPlantLoop.get
+            secondary_fuels += self.plant_loop_heating_fuels(source_plant_loop)
+            secondary_heating_capacity += source_plant_loop.total_heating_capacity
+          end
+
+        when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
+          # To avoid extraneous debug messages
+        else
+          #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
+      end # end case obj_type
+
+    end # end loop on supplyComponents
+
+
+    # @Todo: decide how to handle primary and secondary stuff
+    fuels = primary_fuels + secondary_fuels
+    total_heating_capacity = primary_heating_capacity + secondary_heating_capacity
+    # If the primary heating capacity is bigger than secondary, assume the secondary is just a backup and disregard it?
+    # if primary_heating_capacity > secondary_heating_capacity
+    #   total_heating_capacity = primary_heating_capacity
+    #   fuels = primary_fuels
+    # end
+
+    return fuels.uniq.sort, combination_system, storage_capacity, total_heating_capacity
+
+  end # end classify_swh_system_type
+
 
 end
