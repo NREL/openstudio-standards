@@ -138,33 +138,33 @@
       ]
     },
     {
-      "name": "India ECBC Cold",
+      "name": "ECBC Cold",
       "climate_zones": [
-        "India ECBC Cold"
+        "ECBC Cold"
       ]
     },
     {
-      "name": "India ECBC Composite",
+      "name": "ECBC Composite",
       "climate_zones": [
-        "India ECBC Composite"
+        "ECBC Composite"
       ]
     },
     {
-      "name": "India ECBC Hot and Dry",
+      "name": "ECBC Hot and Dry",
       "climate_zones": [
-        "India ECBC Hot and Dry"
+        "ECBC Hot and Dry"
       ]
     },
     {
-      "name": "India ECBC Moderate",
+      "name": "ECBC Moderate",
       "climate_zones": [
-        "India ECBC Moderate"
+        "ECBC Moderate"
       ]
     },
     {
-      "name": "India ECBC Warm and Humid",
+      "name": "ECBC Warm and Humid",
       "climate_zones": [
-        "India ECBC Warm and Humid"
+        "ECBC Warm and Humid"
       ]
     },
     {

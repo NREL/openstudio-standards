@@ -5,11 +5,7 @@ module OpenstudioStandards
   require 'json' # Used to load standards JSON files
   
   # HVAC sizing
-<<<<<<< HEAD
   require 'openstudio-standards/hvac_sizing/Siz.Model'
-=======
-  require_relative 'openstudio-standards/hvac_sizing/HVACSizing.Model'
->>>>>>> origin/ecbc_baseline_automation
 
   # Prototype Inputs
   require_relative 'openstudio-standards/prototypes/Prototype.Model'
