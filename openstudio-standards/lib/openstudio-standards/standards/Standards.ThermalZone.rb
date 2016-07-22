@@ -1188,7 +1188,7 @@ class OpenStudio::Model::ThermalZone
     end
   
     # Sort by area
-    biggest_space_type = space_type_to_area.sort_by {|st, area| area}[0][0]
+    biggest_space_type = space_type_to_area.sort_by {|st, area| area}.reverse[0][0]
       
     return OpenStudio::Model::OptionalSpaceType.new(biggest_space_type)
 
