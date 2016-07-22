@@ -209,6 +209,8 @@ class OpenStudio::Model::Model
 
     # Apply the baseline system temperatures
     self.getPlantLoops.sort.each do |plant_loop|
+      # Skip the SHW loops
+      next if plant_loop.is_swh_loop
       plant_loop.apply_performance_rating_method_baseline_temperatures(building_vintage)
     end
     
@@ -231,6 +233,8 @@ class OpenStudio::Model::Model
     # Set the baseline pump control type for all plant loops
     # Set the baseline number of boilers and chillers
     self.getPlantLoops.sort.each do |plant_loop|
+      # Skip the SHW loops
+      next if plant_loop.is_swh_loop
       plant_loop.apply_performance_rating_method_number_of_boilers(building_vintage)
       plant_loop.apply_performance_rating_method_number_of_chillers(building_vintage)
     end
@@ -238,6 +242,8 @@ class OpenStudio::Model::Model
     # Set the baseline number of cooling towers
     # Must be done after all chillers are added
     self.getPlantLoops.sort.each do |plant_loop|
+      # Skip the SHW loops
+      next if plant_loop.is_swh_loop
       plant_loop.apply_performance_rating_method_number_of_cooling_towers(building_vintage)
     end
     
@@ -249,7 +255,10 @@ class OpenStudio::Model::Model
         
     # Set the pumping control strategy and power
     # Must be done after sizing components
-    self.getPlantLoops.sort.each do |plant_loop|    
+    self.getPlantLoops.sort.each do |plant_loop|
+      # Todo: determine how to handle the SHW loop. My best guess (jmarrec) at the time is to leave it same as proposed
+      # Skip the SHW loops
+      next if plant_loop.is_swh_loop
       plant_loop.apply_performance_rating_method_baseline_pump_power(building_vintage)
       plant_loop.apply_performance_rating_method_baseline_pumping_type(building_vintage)
     end
