@@ -474,7 +474,7 @@ class OpenStudio::Model::Model
       end
     
       # Skip unconditioned groups
-      next if gp['fuel'] == 'unconditioned'  
+      next if gp['fuel'] == 'unconditioned'
     
       # Total the area and get the zones
       area_ft2 = 0.0
@@ -482,6 +482,17 @@ class OpenStudio::Model::Model
       zns.each do |zn|
         area_ft2 += OpenStudio.convert(zn['area'], 'm^2', 'ft^2').get
         gp_zns << zn['zone']
+      end
+
+      # heated only
+      if gp['type'] == "heatedonly"
+        group = {}
+        group['area_ft2'] = area_ft2
+        group['type'] = gp['type']
+        group['fuel'] = gp['fuel']
+        group['zones'] = gp_zns
+        final_groups << group
+        next
       end
       
       # If this is the dominant group, report it directly
