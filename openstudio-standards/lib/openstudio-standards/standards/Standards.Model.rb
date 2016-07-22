@@ -485,6 +485,7 @@ class OpenStudio::Model::Model
       end
 
       # heated only
+      # @Todo: This is a temporary fix...
       if gp['type'] == "heatedonly"
         group = {}
         group['area_ft2'] = area_ft2
