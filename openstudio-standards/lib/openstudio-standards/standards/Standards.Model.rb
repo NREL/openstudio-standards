@@ -125,7 +125,13 @@ class OpenStudio::Model::Model
     # keeping user-defined schedules.
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Changing Lighting Loads ***")
     self.getSpaceTypes.sort.each do |space_type|
-      space_type.set_internal_loads(building_vintage, false, true, false, false, false, false) 
+      set_people = false
+      set_lights = true
+      set_electric_equipment = false
+      set_gas_equipment = false
+      set_ventilation = false
+      set_infiltration = false
+      space_type.set_internal_loads(building_vintage, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     end
 
     # If any of the lights are missing schedules, assign an
