@@ -93,18 +93,19 @@ class OpenStudio::Model::Model
 
       }
     when 'NECB 2011'
+      sch = "F"
       space_type_map ={
-        "Corr. >= 2.4m wide" => ["CorridorFlr1", "CorridorFlr2", "CorridorFlr3", "CorridorFlr4"],
+        "Corr. >= 2.4m wide-sch-#{sch}" => ["CorridorFlr1", "CorridorFlr2", "CorridorFlr3", "CorridorFlr4"],
         "Lobby - elevator" => ["ElevatorCoreFlr1", "ElevatorCoreFlr2", "ElevatorCoreFlr3", "ElevatorCoreFlr4"],
         "Lounge/recreation" => ["EmployeeLoungeFlr1"],
         "Gym - fitness" => ["ExerciseCenterFlr1"],
         "Hotel/Motel - lobby" => ["FrontLoungeFlr1"],
         "Office - enclosed" => ["FrontOfficeFlr1"],
-        "Stairway" => ["FrontStairsFlr1", "FrontStairsFlr2", "FrontStairsFlr3", "FrontStairsFlr4", "RearStairsFlr1", "RearStairsFlr2", "RearStairsFlr3", "RearStairsFlr4"],
+        "Stairway-sch-#{sch}" => ["FrontStairsFlr1", "FrontStairsFlr2", "FrontStairsFlr3", "FrontStairsFlr4", "RearStairsFlr1", "RearStairsFlr2", "RearStairsFlr3", "RearStairsFlr4"],
         "Storage area" => ["FrontStorageFlr1", "FrontStorageFlr2", "FrontStorageFlr3", "FrontStorageFlr4", "LaundryRoomFlr1", "RearStorageFlr1", "RearStorageFlr2", "RearStorageFlr3", "RearStorageFlr4"],
         "Hway lodging - rooms" => ["GuestRoom101", "GuestRoom102", "GuestRoom103", "GuestRoom104", "GuestRoom105", "GuestRoom201", "GuestRoom202_205", "GuestRoom206_208", "GuestRoom209_212", "GuestRoom213", "GuestRoom214", "GuestRoom215_218", "GuestRoom219", "GuestRoom220_223", "GuestRoom224", "GuestRoom301", "GuestRoom302_305", "GuestRoom306_308", "GuestRoom309_312", "GuestRoom313", "GuestRoom314", "GuestRoom315_318", "GuestRoom319", "GuestRoom320_323", "GuestRoom324", "GuestRoom401", "GuestRoom402_405", "GuestRoom406_408", "GuestRoom409_412", "GuestRoom413", "GuestRoom414", "GuestRoom415_418", "GuestRoom419", "GuestRoom420_423", "GuestRoom424"],
-        "Electrical/Mechanical" => ["MechanicalRoomFlr1", "MeetingRoomFlr1"],
-        "Washroom" => ["RestroomFlr1"]
+        "Electrical/Mechanical-sch-#{sch}" => ["MechanicalRoomFlr1", "MeetingRoomFlr1"],
+        "Washroom-sch-#{sch}" => ["RestroomFlr1"]
       }
       
     end  

@@ -144,7 +144,7 @@ class OpenStudio::Model::Space
         # TODO Skip really small polygons
         # reduced_b_polygons = []
         # b_polygons.each do |b_polygon|
-          # next
+        # next
         # end
         
         # Perform the subtraction
@@ -215,11 +215,11 @@ class OpenStudio::Model::Space
       # Split any polygons that are joined by a line into two separate
       # polygons.  Do this by finding duplicate 
       # unique_final_polygons_ruby.each do |unique_final_polygon_ruby|
-        # next if unique_final_polygon_ruby.size == 4 # Don't check 4-sided polygons
-        # dupes = find_duplicate_vertices(unique_final_polygon_ruby)
-        # if dupes.size > 0
-          # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "---Two polygons attached by line = #{unique_final_polygon_ruby.to_s.gsub(/\[|\]/,'|')}")
-        # end
+      # next if unique_final_polygon_ruby.size == 4 # Don't check 4-sided polygons
+      # dupes = find_duplicate_vertices(unique_final_polygon_ruby)
+      # if dupes.size > 0
+      # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "---Two polygons attached by line = #{unique_final_polygon_ruby.to_s.gsub(/\[|\]/,'|')}")
+      # end
       # end
 
       OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "---Remove final duplicates: #{final_polygons_ruby.size} ==> #{unique_final_polygons_ruby.size}")
@@ -307,14 +307,14 @@ class OpenStudio::Model::Space
           OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "For #{self.name}, the workaround for joining polygons failed.")
         else
 
-        # First polygon minus the already combined polygons
-        first_polygon_minus_combined = a_polygons_minus_b_polygons([first_polygon], combined_polygons_2, 'first_polygon', 'combined_polygons_2')
+          # First polygon minus the already combined polygons
+          first_polygon_minus_combined = a_polygons_minus_b_polygons([first_polygon], combined_polygons_2, 'first_polygon', 'combined_polygons_2')
       
-        # Add the result back
-        combined_polygons_2 += first_polygon_minus_combined
-        combined_polygons = combined_polygons_2
-        join_errs = 0
-        inner_loop_errs = 0
+          # Add the result back
+          combined_polygons_2 += first_polygon_minus_combined
+          combined_polygons = combined_polygons_2
+          join_errs = 0
+          inner_loop_errs = 0
         
         end
       end
@@ -392,9 +392,9 @@ class OpenStudio::Model::Space
               OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "Could not determine the area of #{a_polygon.to_s.gsub(/\[|\]/,'|')} in #{a_name}; #{a_name} overlaps #{b_name}.")
             end
             
-          # If part of a polygon overlaps b polygon, determine the
-          # original area of polygon b, subtract polygon a from b, 
-          # then add the difference in area to the total.
+            # If part of a polygon overlaps b polygon, determine the
+            # original area of polygon b, subtract polygon a from b, 
+            # then add the difference in area to the total.
           elsif OpenStudio.intersects(a_polygon, b_polygon, 0.01)
             
             OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "---------a overlaps b PARTIALLY.")
@@ -432,7 +432,7 @@ class OpenStudio::Model::Space
             # Add the diference to the total
             overlap_area += (area_initial - area_final)
 
-          # There is no overlap
+            # There is no overlap
           else
             
             OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "---------a does not overlaps b at all.")
@@ -848,39 +848,39 @@ class OpenStudio::Model::Space
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***Making Surfaces to view in SketchUp***")
 
     # combined_toplit_polygons.each do |polygon|
-      # dummy_space = OpenStudio::Model::Space.new(model)
-      # polygon = up_translation_top * polygon
-      # daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
-      # daylt_surf.setConstruction(toplit_construction)
-      # daylt_surf.setSpace(dummy_space)
-      # daylt_surf.setName("Top")
+    # dummy_space = OpenStudio::Model::Space.new(model)
+    # polygon = up_translation_top * polygon
+    # daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
+    # daylt_surf.setConstruction(toplit_construction)
+    # daylt_surf.setSpace(dummy_space)
+    # daylt_surf.setName("Top")
     # end  
     
     # combined_pri_sidelit_polygons.each do |polygon|
-      # dummy_space = OpenStudio::Model::Space.new(model)
-      # polygon = up_translation_pri * polygon
-      # daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
-      # daylt_surf.setConstruction(pri_sidelit_construction)
-      # daylt_surf.setSpace(dummy_space)
-      # daylt_surf.setName("Pri")    
+    # dummy_space = OpenStudio::Model::Space.new(model)
+    # polygon = up_translation_pri * polygon
+    # daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
+    # daylt_surf.setConstruction(pri_sidelit_construction)
+    # daylt_surf.setSpace(dummy_space)
+    # daylt_surf.setName("Pri")    
     # end
     
     # combined_sec_sidelit_polygons.each do |polygon|
-      # dummy_space = OpenStudio::Model::Space.new(model)
-      # polygon = up_translation_sec * polygon
-      # daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
-      # daylt_surf.setConstruction(sec_sidelit_construction)
-      # daylt_surf.setSpace(dummy_space)
-      # daylt_surf.setName("Sec")
+    # dummy_space = OpenStudio::Model::Space.new(model)
+    # polygon = up_translation_sec * polygon
+    # daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
+    # daylt_surf.setConstruction(sec_sidelit_construction)
+    # daylt_surf.setSpace(dummy_space)
+    # daylt_surf.setName("Sec")
     # end
 
     # combined_floor_polygons.each do |polygon|
-      # dummy_space = OpenStudio::Model::Space.new(model)
-      # polygon = up_translation_flr * polygon
-      # daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
-      # daylt_surf.setConstruction(flr_construction)
-      # daylt_surf.setSpace(dummy_space)
-      # daylt_surf.setName("Flr")
+    # dummy_space = OpenStudio::Model::Space.new(model)
+    # polygon = up_translation_flr * polygon
+    # daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
+    # daylt_surf.setConstruction(flr_construction)
+    # daylt_surf.setSpace(dummy_space)
+    # daylt_surf.setName("Flr")
     # end  
     
     OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***Subtracting overlapping areas***")
@@ -1315,8 +1315,8 @@ class OpenStudio::Model::Space
         else
           # TODO Check the space type
           # if 
-            # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{self.name}, primary sidelighting control not required because space type is retail per 9.4.1.4 Exception c.")
-            # req_pri_ctrl = false
+          # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{self.name}, primary sidelighting control not required because space type is retail per 9.4.1.4 Exception c.")
+          # req_pri_ctrl = false
           # end
         end
       end
@@ -1344,8 +1344,8 @@ class OpenStudio::Model::Space
         else
           # TODO Check the climate zone.  Not required in CZ8 where toplit areas < 1500ft2
           # if 
-            # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{self.name}, toplighting control not required because space type is retail per 9.4.1.5 Exception c.")
-            # req_top_ctrl = false
+          # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{self.name}, toplighting control not required because space type is retail per 9.4.1.5 Exception c.")
+          # req_top_ctrl = false
           # end
         end
       end
@@ -1374,8 +1374,8 @@ class OpenStudio::Model::Space
         else      
           # TODO Check the space type
           # if 
-            # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because space type is retail per 9.4.1.1(e) Exception c.")
-            # req_pri_ctrl = false
+          # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because space type is retail per 9.4.1.1(e) Exception c.")
+          # req_pri_ctrl = false
           # end
         end
       end
@@ -1396,8 +1396,8 @@ class OpenStudio::Model::Space
         else      
           # TODO Check the space type
           # if 
-            # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because space type is retail per 9.4.1.1(e) Exception c.")
-            # req_sec_ctrl = false
+          # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{vintage} #{self.name}, primary sidelighting control not required because space type is retail per 9.4.1.1(e) Exception c.")
+          # req_sec_ctrl = false
           # end
         end
       end
@@ -2046,29 +2046,59 @@ Warehouse.Office
     
     # Adjust the infiltration rate to the average pressure
     # for the prototype buildings.
-    adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
-    adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
-    
-    #OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "For #{self.name}, infil = #{adj_infil_rate_cfm_per_ft2.round(8)} cfm/ft2.")
-    #OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "For #{self.name}, infil = #{adj_infil_rate_m3_per_s_per_m2.round(8)} m^3/s*m^2.")
-        
-    # Get the exterior wall area
-    exterior_wall_and_window_area_m2 = self.exterior_wall_and_window_area 
+    adj_infil_rate_m3_per_s_per_m2 = nil
+    all_ext_infil_m3_per_s_per_m2 = nil
+    case template
+    when 'NECB 2011'
+      # Remove infiltration rates set at the space type.
+      if not self.spaceType.empty?
+        self.spaceType.get.spaceInfiltrationDesignFlowRates.each do |infil|
+          infil.remove
+        end
+      end
+      # Remove infiltration rates set at the space object.
+      self.spaceInfiltrationDesignFlowRates.each do |infil|
+        infil.remove
+      end
+      
+      adj_infil_rate_m3_per_s_per_m2 = 0.25 * 0.001 # m3/s/m2
+      exterior_wall_and_roof_and_subsurface_area = self.exterior_wall_and_roof_and_subsurface_area #To do
+      # Don't create an object if there is no exterior wall area
+      if exterior_wall_and_roof_and_subsurface_area <= 0.0 
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.Model", "For #{template}, no exterior wall area was found, no infiltration will be added.")
+        return true
+      end
+      # Calculate the total infiltration, assuming
+      # that it only occurs through exterior walls and roofs (not floors as 
+      # explicit stated in the NECB 2011 so overhang/cantilevered floors will 
+      # have no effective infiltration) 
+      tot_infil_m3_per_s = adj_infil_rate_m3_per_s_per_m2 * exterior_wall_and_roof_and_subsurface_area
+      # Now spread the total infiltration rate over all
+      # exterior surface area (for the E+ input field) this will include the exterior floor if present. 
+      all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / self.exteriorArea
+      
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007','90.1-2010', '90.1-2013'
+      adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
+      adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
+      # Get the exterior wall area
+      exterior_wall_and_window_area_m2 = self.exterior_wall_and_window_area 
 
-    # Don't create an object if there is no exterior wall area
-    if exterior_wall_and_window_area_m2 <= 0.0 
-      OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.Model", "For #{template}, no exterior wall area was found, no infiltration will be added.")
-      return true
+      # Don't create an object if there is no exterior wall area
+      if exterior_wall_and_window_area_m2 <= 0.0 
+        OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.Model", "For #{template}, no exterior wall area was found, no infiltration will be added.")
+        return true
+      end
+    
+      # Calculate the total infiltration, assuming
+      # that it only occurs through exterior walls
+      tot_infil_m3_per_s = adj_infil_rate_m3_per_s_per_m2 * exterior_wall_and_window_area_m2
+
+      # Now spread the total infiltration rate over all
+      # exterior surface areas (for the E+ input field)
+      all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / self.exteriorArea
+    
     end
-    
-    # Calculate the total infiltration, assuming
-    # that it only occurs through exterior walls
-    tot_infil_m3_per_s = adj_infil_rate_m3_per_s_per_m2 * exterior_wall_and_window_area_m2
 
-    # Now spread the total infiltration rate over all
-    # exterior surface area (for the E+ input field)
-    all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / self.exteriorArea
-    
     OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "For #{self.name}, adj infil = #{all_ext_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2.")
 
     # Get any infiltration schedule already assigned to this space or its space type
@@ -2213,6 +2243,33 @@ Warehouse.Office
     return area_m2
   
   end
+  
+  # Calculate the area of the exterior walls,
+  # including the area of the windows on these walls.
+  #
+  # @return [Double] area in m^2
+  def exterior_wall_and_roof_and_subsurface_area()
+    
+    area_m2 = 0.0
+    
+    # Loop through all surfaces in this space
+    self.surfaces.sort.each do |surface|
+      # Skip non-outdoor surfaces
+      next unless surface.outsideBoundaryCondition == 'Outdoors'
+      # Skip non-walls
+      next unless surface.surfaceType == 'Wall'  || surface.surfaceType == 'RoofCeiling' 
+      # This surface
+      area_m2 += surface.netArea
+      # Subsurfaces in this surface
+      surface.subSurfaces.sort.each do |subsurface|
+        area_m2 += subsurface.netArea
+      end
+    end
+
+    return area_m2
+  
+  end
+  
 
   # Determine if the space is a plenum.
   # Assume it is a plenum if it is a supply
@@ -2398,6 +2455,7 @@ Warehouse.Office
   
   end
   
+
   # Determine the design internal load (W) for
   # this space without space multipliers.
   # This include People, Lights, Electric Equipment,
@@ -2447,4 +2505,67 @@ Warehouse.Office
   
   end
  
+
+  #will return a sorted array of array of spaces and connected area (Descending) 
+  def get_adjacent_spaces_with_shared_wall_areas(same_floor = true)
+    same_floor_spaces = []
+    spaces = []
+    self.surfaces.each do |surface|
+      adj_surface = surface.adjacentSurface
+      unless adj_surface.empty?
+        self.model.getSpaces.each do |space|
+          next if space == self
+          space.surfaces.each do |surface|
+            if surface == adj_surface.get
+              spaces << space
+            end
+          end
+        end
+      end
+    end
+    #If looking for only spaces adjacent on the same floor. 
+    if same_floor == true
+      raise ("Cannot get adjacent spaces of space #{self.name} since space not set to BuildingStory") if self.buildingStory.empty?
+      spaces.each do |space|
+        raise ("One or more adjecent spaces to space #{self.name} is not assigned to a BuildingStory. Ensure all spaces are assigned.") if space.buildingStory.empty?
+        if space.buildingStory.get == self.buildingStory.get
+          same_floor_spaces << space
+        end
+      end
+      spaces =  same_floor_spaces
+    end
+
+    #now sort by areas.    
+    area_index = []
+    array_hash ={}
+    return nil if spaces.size == 0
+    #iterate through each surface in the space
+    self.surfaces.each do |surface|
+      #get the adjacent surface in another space.
+      adj_surface = surface.adjacentSurface
+      unless adj_surface.empty?
+        #go through each of the adjeacent spaces to find the matching  surface/space.
+        spaces.each_with_index do |space,index|
+          next if space == self
+          space.surfaces.each do |surface|
+            if surface == adj_surface.get
+              #initialize array index to zero for first time so += will work. 
+              area_index[index] = 0 if area_index[index].nil?
+              area_index[index] += surface.grossArea
+              array_hash[space] = area_index[index]
+            end
+          end
+        end
+      end
+    end
+    sorted_spaces = array_hash.sort_by {|_key, value| value}.reverse
+    return sorted_spaces
+  end
+  
+  def get_adjacent_space_with_most_shared_wall_area(same_floor = true)
+    return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
+  end
+
 end
+
+

@@ -3996,7 +3996,7 @@ class OpenStudio::Model::Model
                       flowrate_schedule,
                       water_use_temperature,
                       space_name,
-                      building_type=nil)
+                      building_type = nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_loop.name}.")
 
@@ -4056,6 +4056,8 @@ class OpenStudio::Model::Model
 
   end
 
+  #This method will add an swh water fixture to the model for the space. 
+  # if the it will return a water fixture object, or NIL if there is no water load at all. 
   def add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
 
     # find the specific space_type properties from standard.json
@@ -4065,6 +4067,9 @@ class OpenStudio::Model::Model
       'space_type' => space_type_name
     }
     data = find_object($os_standards['space_types'],search_criteria)
+    if data.nil?
+      puts "Error: #{search_criteria}"
+    end
     space = self.getSpaceByName(space_name)
     space = space.get
     space_area = OpenStudio.convert(space.floorArea,'m^2','ft^2').get   # ft2
@@ -4072,6 +4077,13 @@ class OpenStudio::Model::Model
       space_multiplier = 1
     end
 
+    #If there is no service hot water load.. Don't bother adding anything. 
+    if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 ||
+       data['service_water_heating_peak_flow_rate'].to_f == 0.0 
+        return nil
+    end
+    
+    
     # Water use connection
     swh_connection = OpenStudio::Model::WaterUseConnections.new(self)
 
@@ -4113,7 +4125,7 @@ class OpenStudio::Model::Model
 
     # Connect the water use connection to the SWH loop
     swh_loop.addDemandBranchForComponent(swh_connection)
-
+    return water_fixture
   end
 
   # Creates water fixtures and attaches them
@@ -4151,6 +4163,7 @@ class OpenStudio::Model::Model
     mixed_water_temp_f = OpenStudio.convert(water_use_temperature,'F','C').get
     mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),OpenStudio.convert(mixed_water_temp_f,'F','C').get)
+    puts mixed_water_temp_sch
     water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
 
     # Water use equipment

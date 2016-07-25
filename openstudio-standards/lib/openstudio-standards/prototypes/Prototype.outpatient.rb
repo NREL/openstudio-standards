@@ -8,6 +8,7 @@ class OpenStudio::Model::Model
     space_type_map = nil
     case building_vintage
     when 'NECB 2011'
+      #Dom is G
       space_type_map ={
         "Dormitory - living quarters" => ["Floor 1 Anesthesia", "Floor 1 Bio Haz", "Floor 1 Cafe", 
           "Floor 1 Clean", "Floor 1 Clean Work", "Floor 1 Dictation", 

@@ -237,6 +237,99 @@ module EnergyPlus
 
         # insert as numbers
         monthly_temps.each { |temp| @monthly_dry_bulb << temp.to_f }
+        
+         #      Design Stat	ColdestMonth	DB996	DB990	DP996	HR_DP996	DB_DP996	DP990	HR_DP990	DB_DP990	WS004c	DB_WS004c	WS010c	DB_WS010c	WS_DB996	WD_DB996	
+        #    	Units	{}	{ï¿½C}	{ï¿½C}	{ï¿½C}	{}	{ï¿½C}	{ï¿½C}	{}	{ï¿½C}	{m/s}	{ï¿½C}	{m/s}	{ï¿½C}	{m/s}	{deg}	
+        #    	Heating	12	-7	-4	-13.9	1.1	-5	-9.6	1.7	-2.9	14.2	5.9	11.9	6.8	2.9	100
+        #use regex to get the temperatures
+        regex = /\s*Heating(\s*\d+.*)\n/
+        match_data = text.match(regex)
+        if match_data.nil?
+          puts "Can't find heating design information"
+        else
+          # first match is outdoor air temps
+          
+          heating_design_info_raw = match_data[1].strip.split(/\s+/)
+
+          # have to be 14 data points
+          if heating_design_info_raw.size != 15
+            puts "Can't find cooling design info, found #{heating_design_info_raw.size}"
+          end
+
+          # insert as numbers
+          heating_design_info_raw.each do |value| 
+            @heating_design_info << value.to_f 
+          end
+          #puts @heating_design_info
+        end
+        
+        regex = /\s*Cooling(\s*\d+.*)\n/ 
+        match_data = text.match(regex)
+        if match_data.nil?
+          puts "Can't find cooling design information"
+        else
+          # first match is outdoor air temps
+          
+          design_info_raw = match_data[1].strip.split(/\s+/)
+
+          # have to be 14 data points
+          if design_info_raw.size != 32
+            puts "Can't find cooling design info, found #{design_info_raw.size} "
+          end
+
+          # insert as numbers
+          design_info_raw.each do |value| 
+            @cooling_design_info << value 
+          end
+          #puts @cooling_design_info
+        end
+        
+        regex = /\s*Extremes\s*(.*)\n/
+        match_data = text.match(regex)
+        if match_data.nil?
+          puts "Can't find extremes design information"
+        else
+          # first match is outdoor air temps
+          
+          design_info_raw = match_data[1].strip.split(/\s+/)
+
+          # have to be 14 data points
+          if design_info_raw.size != 16
+            #puts "Can't find extremes design info"
+          end
+
+          # insert as numbers
+          design_info_raw.each do |value| 
+            @extremes_design_info << value 
+          end
+          #puts @extremes_design_info
+        end
+        
+        
+
+
+        #use regex to get the temperatures
+        regex = /Daily Avg(.*)\n/
+        match_data = text.match(regex)
+        if match_data.nil?
+          puts "Can't find outdoor air temps"
+        else
+          # first match is outdoor air temps
+          monthly_temps = match_data[1].strip.split(/\s+/)
+
+          # have to be 12 months
+          if monthly_temps.size != 12
+            puts "Can't find outdoor air temps"
+          end
+
+          # insert as numbers
+          monthly_temps.each { |temp| @monthly_dry_bulb << temp.to_f }
+          #puts "#{@monthly_dry_bulb}"
+        end
+
+        # now we are valid
+        @valid = true
+       
       end
       
       #Get 2004 Climate zone. 
