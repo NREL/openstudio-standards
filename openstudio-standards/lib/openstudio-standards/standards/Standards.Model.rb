@@ -3488,7 +3488,6 @@ class OpenStudio::Model::Model
           else
             next
           end
-          
         end
       end
       
@@ -3518,9 +3517,6 @@ class OpenStudio::Model::Model
           cat = 'NonResConditioned'
         end
       end
-      # if space.is_semiheated
-      # cat = 'Semiheated'
-      # end
       
       # Add to the correct category
       case cat
@@ -3540,18 +3536,13 @@ class OpenStudio::Model::Model
       total_wall_m2 += wall_area_m2
       total_subsurface_m2 += wind_area_m2 #this contains doors as well. 
       
-      
     end
       
     # Calculate the WWR of each category
     wwr_nr = ((nr_wind_m2 / nr_wall_m2)*100.0).round(1)
     wwr_res = ((res_wind_m2 / res_wall_m2)*100).round(1)
     wwr_sh = ((sh_wind_m2 / sh_wall_m2)*100).round(1)
-<<<<<<< HEAD
-=======
     fdwr = ((total_subsurface_m2 / total_wall_m2)*100).round(1) #used by NECB 2011
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The WWRs are: NonRes: #{wwr_nr.round}%, Res: #{wwr_res.round}%.")
->>>>>>> origin/migrate_necb_loads_to_standards
     
     # Convert to IP and report
     nr_wind_ft2 = OpenStudio.convert(nr_wind_m2,'m^2','ft^2').get
@@ -3578,7 +3569,6 @@ class OpenStudio::Model::Model
     wwr_nr > wwr_lim ? red_nr = true : red_nr = false
     wwr_res > wwr_lim ? red_res = true : red_res = false
     wwr_sh > wwr_lim ? red_sh = true : red_sh = false
-
 
     case template
     when 'NECB 2011'
@@ -3607,56 +3597,52 @@ class OpenStudio::Model::Model
       # Stop here unless windows need reducing
       return true unless red_nr || red_res || red_sh
 
-
-    
-    
       # Determine the factors by which to reduce the window area
       mult_nr_red = wwr_lim / wwr_nr 
       mult_res_red = wwr_lim / wwr_res
       mult_sh_red = wwr_lim / wwr_sh
-
     
       # Reduce the window area if any of the categories necessary
       self.getSpaces.each do |space|
       
-      # Determine the space category
-      # from the previously stored values
-      cat = space_cats[space]
-      
-      # Get the correct multiplier
-      case cat
-      when 'Unconditioned'
-        next # Skip unconditioned spaces
-      when 'NonResConditioned'
-        next unless red_nr
-        mult = mult_nr_red
-      when 'ResConditioned'
-        next unless red_res
-        mult = mult_res_red
-      when 'Semiheated'
-        next unless red_sh
-        mult = mult_sh_red
-      end
-      
-      # Loop through all surfaces in this space
-      space.surfaces.sort.each do |surface|
-        # Skip non-outdoor surfaces
-        next unless surface.outsideBoundaryCondition == 'Outdoors'
-        # Skip non-walls
-        next unless surface.surfaceType.downcase == 'wall'
-        # Subsurfaces in this surface
-        surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
-          # Reduce the size of the window
-          red = 1.0 - mult
-          ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
+        # Determine the space category
+        # from the previously stored values
+        cat = space_cats[space]
+        
+        # Get the correct multiplier
+        case cat
+        when 'Unconditioned'
+          next # Skip unconditioned spaces
+        when 'NonResConditioned'
+          next unless red_nr
+          mult = mult_nr_red
+        when 'ResConditioned'
+          next unless red_res
+          mult = mult_res_red
+        when 'Semiheated'
+          next unless red_sh
+          mult = mult_sh_red
         end
-      end
-
+        
+        # Loop through all surfaces in this space
+        space.surfaces.sort.each do |surface|
+          # Skip non-outdoor surfaces
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          # Skip non-walls
+          next unless surface.surfaceType.downcase == 'wall'
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |ss|
+            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+            # Reduce the size of the window
+            red = 1.0 - mult
+            ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
+          end
         end
 
-      end    
-    end #template case statment
+      end
+   
+    end
+    
     return true
   
   end

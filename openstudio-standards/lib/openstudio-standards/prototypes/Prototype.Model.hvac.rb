@@ -353,6 +353,8 @@ class OpenStudio::Model::Model
     
       return true
 
+    end
+      
   end #add hvac
 
   private
