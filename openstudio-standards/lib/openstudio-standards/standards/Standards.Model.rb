@@ -3312,7 +3312,7 @@ class OpenStudio::Model::Model
         types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
         types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
         types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
-        types_to_modify << ['Ground', 'GroundContactWall', 'Unheated']
+        types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
       end
       # Modify all constructions of each type
       types_to_modify.each do |boundary_cond, surf_type, const_type|
@@ -3467,6 +3467,8 @@ class OpenStudio::Model::Model
     sh_wind_m2 = 0
     total_wall_m2 = 0.001
     total_subsurface_m2 = 0.0
+    # Store the space conditioning category for later use
+    space_cats = {}
     self.getSpaces.each do |space|
       
       # Loop through all surfaces in this space
@@ -3517,6 +3519,7 @@ class OpenStudio::Model::Model
           cat = 'NonResConditioned'
         end
       end
+      space_cats[space] = cat
       
       # Add to the correct category
       case cat
