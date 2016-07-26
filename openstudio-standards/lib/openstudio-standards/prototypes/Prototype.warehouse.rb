@@ -8,6 +8,7 @@ class OpenStudio::Model::Model
     case building_vintage
   
     when 'NECB 2011'
+      #dom =A
       space_type_map ={
         "Warehouse - med/blk" => ["Zone3 Bulk Storage"],
         "Warehouse - fine" => ["Zone2 Fine Storage"],

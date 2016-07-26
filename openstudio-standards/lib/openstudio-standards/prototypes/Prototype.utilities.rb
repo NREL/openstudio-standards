@@ -193,6 +193,28 @@ def hspf_to_cop_heating_no_fan(hspf)
  
 end
 
+# Convert from COP to SEER
+# per the method specified in "Achieving the 30% Goal: Energy 
+# and cost savings analysis of ASHRAE Standard 90.1-2010
+# Thornton, et al 2011
+#
+# @param [Double] COP
+# @return [Double] Seasonal Energy Efficiency Ratio
+def cop_to_seer(cop)
+  
+  seer = nil
+
+  # First convert COP to EER
+  eer = cop_to_eer(cop)
+
+  # Next convert from EER to SEER
+  delta = 1.1088**2 - 4.0 * 0.0182 * eer
+  seer = (-delta**0.5 + 1.1088)/(2.0 * 0.0182)
+  
+  return seer
+ 
+end
+
 # Convert from EER to COP
 # If capacity is not supplied, use the method specified
 # in "Achieving the 30% Goal: Energy and cost savings
@@ -233,6 +255,27 @@ def eer_to_cop(eer, capacity_w=nil)
  
 end
 
+# Convert from COP to EER
+# per the method specified in "Achieving the 30% Goal: Energy 
+# and cost savings analysis of ASHRAE Standard 90.1-2010
+# Thornton, et al 2011
+#
+# @param [Double] COP
+# @return [Double] Energy Efficiency Ratio (EER)
+def cop_to_eer(cop)
+  
+  eer = nil
+
+  # r is the ratio of supply fan power to total equipment power at the rating condition,
+  # assumed to be 0.12 for the reference buildngs per PNNL.
+  r = 0.12
+  
+  eer = 3.413 * (cop * (1 - r) - r)
+  
+  return eer
+ 
+end
+
 # Convert from COP to kW/ton
 #
 # @param cop [Double] Coefficient of Performance (COP)
@@ -263,6 +306,16 @@ def afue_to_thermal_eff(afue)
  
 end
 
+# A helper method to convert from thermal efficiency to AFUE
+#
+# @param teff [Double] Thermal Efficiency
+# @return [Double] AFUE
+def thermal_eff_to_afue(teff)
+  
+  return teff # Per PNNL doc, Boiler Addendum 90.1-04an
+ 
+end
+
 # A helper method to convert from combustion efficiency to thermal efficiency
 #
 # @param combustion_eff [Double] Combustion efficiency (%)
@@ -270,6 +323,16 @@ end
 def combustion_eff_to_thermal_eff(combustion_eff)
   
   return combustion_eff - 0.007 # Per PNNL doc, Boiler Addendum 90.1-04an
+ 
+end
+
+# A helper method to convert from thermal efficiency to combustion efficiency
+#
+# @param combustion_eff [Double] Thermal efficiency
+# @return [Double] Thermal efficiency
+def thermal_eff_to_comb_eff(teff)
+  
+  return teff + 0.007 # Per PNNL doc, Boiler Addendum 90.1-04an
  
 end
 

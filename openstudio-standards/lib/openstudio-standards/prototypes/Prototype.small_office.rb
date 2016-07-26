@@ -7,6 +7,7 @@ class OpenStudio::Model::Model
     
     case building_vintage
     when 'NECB 2011'
+      #dom = ?
       space_type_map ={
         "- undefined -" => ["Attic"],
         "Office - enclosed" => ["Core_ZN", "Perimeter_ZN_1", "Perimeter_ZN_2", "Perimeter_ZN_3", "Perimeter_ZN_4"]

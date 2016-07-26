@@ -26,7 +26,7 @@ class OpenStudio::Model::Model
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
 
   def create_prototype_building(building_type, building_vintage, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
-
+    
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == "HighriseApartment"
       if building_vintage == 'DOE Ref Pre-1980' or building_vintage == 'DOE Ref 1980-2004'
@@ -45,53 +45,37 @@ class OpenStudio::Model::Model
       'template' => building_vintage,
       'building_type' => building_type
     }
-
+    
     prototype_input = self.find_object($os_standards['prototype_inputs'], search_criteria,nil)
-
-
+    
+    
     if prototype_input.nil?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for #{search_criteria}, cannot create model.")
       return false
     end
 
 
-    case building_vintage
-    when 'NECB 2011'
+    case building_vintage       
+    when 'NECB 2011'     
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
       space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
       self.assign_space_type_stubs("Space Function", building_vintage, space_type_map)  # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
       self.add_loads(building_vintage, climate_zone)
+      self.apply_infiltration_standard(building_vintage)
       self.modify_infiltration_coefficients(building_type, building_vintage, climate_zone)   #does not apply to NECB 2011 but left here for consistency
       self.modify_surface_convection_algorithm(building_vintage)
-
-      #Should this be the first thing done Maria?
+      self.add_constructions(lookup_building_type, building_vintage, climate_zone)
+      self.create_thermal_zones(building_type,building_vintage, climate_zone)
       self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
-      puts self.get_full_weather_file_path
-      self.add_constructions(lookup_building_type, building_vintage, climate_zone)           #set "dummy construction set
-      #BTAP::Geometry::intersect_surfaces(self)
-      #BTAP::Geometry::match_surfaces(self)
-      BTAP::Compliance::NECB2011::set_necb_fwdr( self, true, runner=nil)      # set FWDR
-      BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(self, runner=nil)
-      #Getting System Fuel type types from BTAP::Environment.
-      BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
-      boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4,heating_coil_types_sys6, fan_type = BTAP::Environment::get_canadian_system_defaults_by_weatherfile_name(epw_file)
-      BTAP::Compliance::NECB2011::necb_autozone_and_autosystem(self, runner=nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type )
-
+      return false if self.runSizingRun("#{sizing_run_dir}/SizingRun0") == false
+      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input, epw_file)
+      self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
       self.set_sizing_parameters(building_type, building_vintage)
       self.yearDescription.get.setDayofWeekforStartDay('Sunday')
-      self.add_swh(building_type, building_vintage, climate_zone, prototype_input)  # note exhaust fan schedule for * common spaces.
-      # TO DO: routine custom_swh_tweaks sets loss coefficient to ambient for water heater, differs for each archetype
-      # NECB 2011 follows ASHRAE 90.1 for now, does this need to change?
-      self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-      #      self.add_exterior_lights(building_type, building_vintage, climate_zone, prototype_input)
-      #      self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
-
-      #
-
     else
-
+      
       self.load_building_type_methods(building_type, building_vintage, climate_zone)
       self.load_geometry(building_type, building_vintage, climate_zone)
       self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} created: #{Time.new}")
@@ -103,7 +87,7 @@ class OpenStudio::Model::Model
       self.modify_surface_convection_algorithm(building_vintage)
       self.add_constructions(lookup_building_type, building_vintage, climate_zone)
       self.create_thermal_zones(building_type,building_vintage, climate_zone)
-      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input)
+      self.add_hvac(building_type, building_vintage, climate_zone, prototype_input,epw_file)
       self.custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
       self.add_swh(building_type, building_vintage, climate_zone, prototype_input)
       self.custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
@@ -111,9 +95,9 @@ class OpenStudio::Model::Model
       self.add_occupancy_sensors(building_type, building_vintage, climate_zone)
       self.add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
       self.set_sizing_parameters(building_type, building_vintage)
-    self.yearDescription.get.setDayofWeekforStartDay('Sunday')
+      self.yearDescription.get.setDayofWeekforStartDay('Sunday')
 
-    end
+	  end
     # set climate zone and building type
     self.getBuilding.setStandardsBuildingType(building_type)
     if climate_zone.include? 'ASHRAE 169-2006-'
@@ -124,29 +108,30 @@ class OpenStudio::Model::Model
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
     end
+    
 
-
+    
     # If there are any multizone systems, set damper positions
     # and perform a second sizing run
     has_multizone_systems = false
-
-
+    
+    
     self.getAirLoopHVACs.sort.each do |air_loop|
-
+            
       if air_loop.is_multizone_vav_system
         self.apply_multizone_vav_outdoor_air_sizing(building_vintage)
         if self.runSizingRun("#{sizing_run_dir}/SizingRun2") == false
           return false
         end
         break
-      end
+      end            
     end
 
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
     self.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
-
+        
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
     # AHU1 doesn't have economizer
     if building_type == "Outpatient"
@@ -176,7 +161,7 @@ class OpenStudio::Model::Model
     if building_type == "QuickServiceRestaurant" || building_type == "FullServiceRestaurant" || building_type == "Outpatient"
       self.update_exhaust_fan_efficiency(building_vintage)
     end
-
+    
     if building_type == "HighriseApartment"
       self.update_fan_efficiency
     end
@@ -225,7 +210,7 @@ class OpenStudio::Model::Model
     when 'RetailStripmall'
       lookup_name = 'StripMall'
     when 'Office'
-      lookup_name = 'Office'
+      lookup_name = 'Office'    
     end
 
     return lookup_name
@@ -301,7 +286,7 @@ class OpenStudio::Model::Model
     # Determine which geometry file to use
     # based on building_type and template
     # NECB 2011 geometry is not explicitly defined; for NECB 2011 vintage, latest ASHRAE 90.1 geometry file is assigned (implicitly)
-
+    
     case building_type
     when 'SecondarySchool'
       if building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004'
@@ -397,7 +382,7 @@ class OpenStudio::Model::Model
       geometry_file = 'Geometry.outpatient.osm'
     when 'MidriseApartment'
       geometry_file = 'Geometry.mid_rise_apartment.osm'
-    when 'Office'    # For NECB 2011 prototypes (old)
+    when 'Office'    # For NECB 2011 prototypes (old) 
       geometry_file = 'Geometry.large_office_2010.osm'
       alt_search_name = 'Office'
     when 'HighriseApartment'
@@ -466,19 +451,28 @@ class OpenStudio::Model::Model
       stub_space_type.set_rendering_color(building_vintage)
 
       space_names.each do |space_name|
-
         space = self.getSpaceByName(space_name)
-
         next if space.empty?
         space = space.get
         space.setSpaceType(stub_space_type)
-
         OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "Setting #{space.name} to #{building_type}.#{space_type_name}")
       end
     end
-
     return true
   end
+  
+  def add_full_space_type_libs(template)
+    space_type_properties_list = self.find_objects($os_standards["space_types"], { "template" => 'NECB 2011'})
+    space_type_properties_list.each do |space_type_property|
+      stub_space_type = OpenStudio::Model::SpaceType.new(self)
+      stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
+      stub_space_type.setStandardsSpaceType(space_type_property['space_type'])
+      stub_space_type.setName("#{template}-#{space_type_property['building_type']}-#{space_type_property['space_type']}")
+      stub_space_type.set_rendering_color(template)
+    end
+    self.add_loads(template)
+  end
+  
 
   def assign_building_story(building_type, building_vintage, climate_zone, building_story_map)
     building_story_map.each do |building_story_name, space_names|
@@ -492,7 +486,6 @@ class OpenStudio::Model::Model
         space.setBuildingStory(stub_building_story)
       end
     end
-
     return true
   end
 
@@ -507,7 +500,7 @@ class OpenStudio::Model::Model
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
 
-  def add_loads(building_vintage, climate_zone)
+  def add_loads(building_vintage, climate_zone = nil)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
@@ -517,14 +510,12 @@ class OpenStudio::Model::Model
 
       # Rendering color
       space_type.set_rendering_color(building_vintage)
-
+    
       # Loads
       space_type.set_internal_loads(building_vintage, true, true, true, true, true, true)
 
       # Schedules
       space_type.set_internal_load_schedules(building_vintage, true, true, true, true, true, true, true)
-
-
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
@@ -756,7 +747,7 @@ class OpenStudio::Model::Model
     unless (building_vintage == 'NECB 2011')
       conditioned_space_names = find_conditioned_space_names(building_type, building_vintage, climate_zone)
     end
-
+    
 
     # add internal mass
     # not required for NECB 2011
@@ -810,6 +801,10 @@ class OpenStudio::Model::Model
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
 
+    # Remove any Thermal zones assigned
+    self.getThermalZones.each { |zone| zone.remove}
+    
+    
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type
     when 'LargeHotel', 'MidriseApartment','LargeOffice','Hospital'
@@ -839,13 +834,15 @@ class OpenStudio::Model::Model
       else
         thermostatClone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostatClone)
+        #Set Ideal loads to thermal zone for sizing. 
+        ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
+        ideal_loads.addToThermalZone(zone)
       end
     end
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
 
-    return true
-
+   
   end
 
   # Adds occupancy sensors to certain space types per
@@ -1062,33 +1059,33 @@ class OpenStudio::Model::Model
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       case building_type
       when 'Warehouse'
-      terrain = 'Urban'
+        terrain = 'Urban'
       when 'SmallHotel'
-      terrain = 'Suburbs'
+        terrain = 'Suburbs'
       end
     end
     # Set the terrain type
     self.getSite.setTerrain(terrain)
-
-      # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
-      return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013' or building_vintage == 'NECB 2011'
-
-      # The pre-1980 and 1980-2004 buildings have this:
-      # 1.0000,                  !- Constant Term Coefficient
-      # 0.0000,                  !- Temperature Term Coefficient
-      # 0.0000,                  !- Velocity Term Coefficient
-      # 0.0000;                  !- Velocity Squared Term Coefficient
-      # The 90.1-2010 buildings have this:
-      # 0.0000,                  !- Constant Term Coefficient
-      # 0.0000,                  !- Temperature Term Coefficient
-      # 0.224,                   !- Velocity Term Coefficient
-      # 0.0000;                  !- Velocity Squared Term Coefficient
-      self.getSpaceInfiltrationDesignFlowRates.each do |infiltration|
-        infiltration.setConstantTermCoefficient(0.0)
-        infiltration.setTemperatureTermCoefficient(0.0)
-        infiltration.setVelocityTermCoefficient(0.224)
-        infiltration.setVelocitySquaredTermCoefficient(0.0)
-      end
+  
+    # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
+    return true unless building_vintage == '90.1-2004' or building_vintage == '90.1-2007' or building_vintage == '90.1-2010' or building_vintage == '90.1-2013' or building_vintage == 'NECB 2011'
+  
+    # The pre-1980 and 1980-2004 buildings have this:
+    # 1.0000,                  !- Constant Term Coefficient
+    # 0.0000,                  !- Temperature Term Coefficient
+    # 0.0000,                  !- Velocity Term Coefficient
+    # 0.0000;                  !- Velocity Squared Term Coefficient
+    # The 90.1-2010 buildings have this:
+    # 0.0000,                  !- Constant Term Coefficient
+    # 0.0000,                  !- Temperature Term Coefficient
+    # 0.224,                   !- Velocity Term Coefficient
+    # 0.0000;                  !- Velocity Squared Term Coefficient
+    self.getSpaceInfiltrationDesignFlowRates.each do |infiltration|
+      infiltration.setConstantTermCoefficient(0.0)
+      infiltration.setTemperatureTermCoefficient(0.0)
+      infiltration.setVelocityTermCoefficient(0.224)
+      infiltration.setVelocitySquaredTermCoefficient(0.0)
+    end
   end
 
   # Sets the inside and outside convection algorithms for different vintages
@@ -1104,7 +1101,7 @@ class OpenStudio::Model::Model
     case building_vintage
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       inside.setAlgorithm('TARP')
-      outside.setAlgorithm('DOE-2')
+      outside.setAlgorithm('DOE-2')     
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('TARP')
@@ -1143,7 +1140,7 @@ class OpenStudio::Model::Model
     when 'NECB 2011'
       clg = 1.3
       htg = 1.3
-    end
+    end 
 
     sizing_params = self.getSizingParameters
     sizing_params.setHeatingSizingFactor(htg)
@@ -1509,4 +1506,62 @@ class OpenStudio::Model::Model
 
   end
 
+  def clear_and_set_example_constructions()
+    
+    #Define Materials
+    name = "opaque material";      thickness = 0.012700; conductivity = 0.160000
+    opaque_mat     = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material( self, name, thickness, conductivity)
+    
+    name = "insulation material";  thickness = 0.050000; conductivity = 0.043000
+    insulation_mat = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material( self,name, thickness, conductivity)
+    
+    name = "simple glazing test";shgc  = 0.250000 ; ufactor = 3.236460; thickness = 0.003000; visible_transmittance = 0.160000
+    simple_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration::create_simple_glazing(self,name,shgc,ufactor,thickness,visible_transmittance)
+    
+    name = "Standard Glazing Test"; thickness = 0.003; conductivity = 0.9; solarTransmittanceatNormalIncidence = 0.84; frontSideSolarReflectanceatNormalIncidence = 0.075; backSideSolarReflectanceatNormalIncidence = 0.075; visibleTransmittance = 0.9; frontSideVisibleReflectanceatNormalIncidence = 0.081; backSideVisibleReflectanceatNormalIncidence = 0.081; infraredTransmittanceatNormalIncidence = 0.0; frontSideInfraredHemisphericalEmissivity = 0.84; backSideInfraredHemisphericalEmissivity = 0.84; opticalDataType = "SpectralAverage"; dirt_correction_factor = 1.0; is_solar_diffusing = false
+    standard_glazing_mat =BTAP::Resources::Envelope::Materials::Fenestration::create_standard_glazing( self, name ,thickness, conductivity, solarTransmittanceatNormalIncidence, frontSideSolarReflectanceatNormalIncidence, backSideSolarReflectanceatNormalIncidence, visibleTransmittance, frontSideVisibleReflectanceatNormalIncidence, backSideVisibleReflectanceatNormalIncidence, infraredTransmittanceatNormalIncidence, frontSideInfraredHemisphericalEmissivity, backSideInfraredHemisphericalEmissivity,opticalDataType, dirt_correction_factor, is_solar_diffusing)
+    
+    #Define Constructions
+    # # Surfaces 
+    ext_wall                            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionExtWall",                    [opaque_mat,insulation_mat], insulation_mat)
+    ext_roof                            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionExtRoof",                    [opaque_mat,insulation_mat], insulation_mat)
+    ext_floor                           = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionExtFloor",                   [opaque_mat,insulation_mat], insulation_mat)
+    grnd_wall                           = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionGrndWall",                   [opaque_mat,insulation_mat], insulation_mat)
+    grnd_roof                           = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionGrndRoof",                   [opaque_mat,insulation_mat], insulation_mat)
+    grnd_floor                          = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionGrndFloor",                  [opaque_mat,insulation_mat], insulation_mat)
+    int_wall                            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionIntWall",                    [opaque_mat,insulation_mat], insulation_mat)
+    int_roof                            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionIntRoof",                    [opaque_mat,insulation_mat], insulation_mat)
+    int_floor                           = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionIntFloor",                   [opaque_mat,insulation_mat], insulation_mat)
+    # # Subsurfaces
+    fixedWindowConstruction             = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionFixed",                [simple_glazing_mat])
+    operableWindowConstruction          = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionOperable",             [simple_glazing_mat])
+    setGlassDoorConstruction            = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionDoor",                 [standard_glazing_mat])
+    setDoorConstruction                 = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionDoor",                       [opaque_mat,insulation_mat], insulation_mat)
+    overheadDoorConstruction            = BTAP::Resources::Envelope::Constructions::create_construction(self, "OpaqueConstructionOverheadDoor",               [opaque_mat,insulation_mat], insulation_mat)
+    skylightConstruction                = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionSkylight",             [standard_glazing_mat])
+    tubularDaylightDomeConstruction     = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionDomeConstruction",     [standard_glazing_mat])
+    tubularDaylightDiffuserConstruction = BTAP::Resources::Envelope::Constructions::create_construction(self, "FenestrationConstructionDiffuserConstruction", [standard_glazing_mat])
+    
+    #Define Construction Sets
+    # # Surface
+    exterior_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions( self,"ExteriorSet",ext_wall,ext_roof,ext_floor)
+    interior_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions( self,"InteriorSet",int_wall,int_roof,int_floor)
+    ground_construction_set   = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions( self,"GroundSet",  grnd_wall,grnd_roof,grnd_floor)
+    
+    # # Subsurface 
+    subsurface_exterior_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_subsurface_construction_set( self, fixedWindowConstruction, operableWindowConstruction, setDoorConstruction, setGlassDoorConstruction, overheadDoorConstruction, skylightConstruction, tubularDaylightDomeConstruction, tubularDaylightDiffuserConstruction)
+    subsurface_interior_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_subsurface_construction_set( self, fixedWindowConstruction, operableWindowConstruction, setDoorConstruction, setGlassDoorConstruction, overheadDoorConstruction, skylightConstruction, tubularDaylightDomeConstruction, tubularDaylightDiffuserConstruction)
+    
+    #Define default construction sets.
+    name = "Construction Set 1"
+    default_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_construction_set(self, name, exterior_construction_set, interior_construction_set, ground_construction_set, subsurface_exterior_construction_set, subsurface_interior_construction_set)
+
+    
+    #Assign default to the model. 
+    self.getBuilding.setDefaultConstructionSet( default_construction_set )
+    
+    return default_construction_set
+  end
+  
+  
 end

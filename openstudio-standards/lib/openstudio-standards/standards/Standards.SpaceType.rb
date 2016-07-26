@@ -65,7 +65,7 @@ class OpenStudio::Model::SpaceType
     rendering_color.setRenderingGreenValue(g)
     rendering_color.setRenderingBlueValue(b)
     self.setRenderingColor(rendering_color)
-    
+
     return true
   
   end
