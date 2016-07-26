@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "yard", "~> 0.8"
   spec.add_development_dependency "rubocop", "~> 0.26"
+  spec.add_development_dependency "rubocop-checkstyle_formatter", "~> 0.1.1"
   spec.add_development_dependency "minitest-reporters"
   spec.add_development_dependency "rubyXL", "3.3.8" # install rubyXL gem to export excel files to json
   spec.add_development_dependency "activesupport", "4.2.5" # pairs with google-api-client, > 5.0.0 does not work

@@ -171,10 +171,14 @@ end
 require 'rubocop/rake_task'
 desc 'Check the code for style consistency'
 RuboCop::RakeTask.new(:rubocop) do |task|
-  task.options = ['--no-color', '--out=rubocop-results.xml']
-  task.formatters = ['RuboCop::Formatter::CheckstyleFormatter']
+  # Make a folder for the output
+  out_dir = 'openstudio-standards/.rubocop'
+  Dir::mkdir(out_dir) unless File.exists?(out_dir)
+  #task.options = []
+  task.options = ['-L','--format=h',"--out=#{out_dir}/rubocop-results.html"]
   task.requires = ['rubocop/formatter/checkstyle_formatter']
-  # don't abort rake on failure 
+  task.formatters = ['RuboCop::Formatter::CheckstyleFormatter']
+  # don't abort rake on failure
   task.fail_on_error = false
 end
 
