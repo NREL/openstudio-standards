@@ -468,7 +468,7 @@ class OpenStudio::Model::ThermalZone
   #
   # return [Bool] true if mixed
   # Fossil/Electric Hybrid, and Purchased Heat zone
-  def has_mixed_heating_fuel
+  def mixed_heating_fuel?
     is_mixed = false
 
     # Get an array of the heating fuels

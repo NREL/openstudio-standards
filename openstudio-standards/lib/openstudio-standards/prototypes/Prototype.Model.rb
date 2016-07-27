@@ -1145,7 +1145,7 @@ class OpenStudio::Model::Model
 
     # Check each airloop
     getAirLoopHVACs.each do |air_loop|
-      if air_loop.is_economizer_required(building_vintage, climate_zone) == true
+      if air_loop.economizer_required?(building_vintage, climate_zone) == true
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
         economizer_type = nil

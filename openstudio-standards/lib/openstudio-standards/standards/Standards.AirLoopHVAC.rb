@@ -35,7 +35,7 @@ class OpenStudio::Model::AirLoopHVAC
 
   # Apply all standard required controls to the airloop
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
   # @todo optimum start
   # @todo night damper shutoff
@@ -43,7 +43,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @todo night fan shutoff
   def apply_standard_controls(template, climate_zone)
     # Energy Recovery Ventilation
-    if is_energy_recovery_ventilator_required(template, climate_zone)
+    if energy_recovery_ventilator_required?(template, climate_zone)
       apply_energy_recovery_ventilator
     end
 
@@ -60,7 +60,7 @@ class OpenStudio::Model::AirLoopHVAC
       # Multizone VAV Optimization
       # This rule does not apply to two hospital and one outpatient systems (TODO add hospital two systems as exception)
       unless name.to_s.include? 'Outpatient F1'
-        if is_multizone_vav_optimization_required(template, climate_zone)
+        if multizone_vav_optimization_required?(template, climate_zone)
           enable_multizone_vav_optimization
         else
           disable_multizone_vav_optimization
@@ -70,7 +70,7 @@ class OpenStudio::Model::AirLoopHVAC
       # VAV Static Pressure Reset
       # assume all systems have DDC control of VAV terminals
       has_ddc = true
-      if is_static_pressure_reset_required(template, has_ddc)
+      if static_pressure_reset_required?(template, has_ddc)
         supply_return_exhaust_relief_fans.each do |fan|
           if fan.to_FanVariableVolume.is_initialized
             fan.set_control_type('Multi Zone VAV with Static Pressure Reset')
@@ -88,26 +88,26 @@ class OpenStudio::Model::AirLoopHVAC
     # end
 
     # DCV
-    if is_demand_control_ventilation_required(template, climate_zone)
+    if demand_control_ventilation_required?(template, climate_zone)
       enable_demand_control_ventilation
     end
 
     # SAT reset
     # TODO Prototype buildings use OAT-based SAT reset,
     # but PRM RM suggests Warmest zone based SAT reset.
-    if is_supply_air_temperature_reset_required(template, climate_zone)
+    if supply_air_temperature_reset_required?(template, climate_zone)
       enable_supply_air_temperature_reset_warmest_zone(template)
     end
 
     # Unoccupied shutdown
-    if is_unoccupied_fan_shutoff_required(template)
+    if unoccupied_fan_shutoff_required?(template)
       enable_unoccupied_fan_shutoff
     else
       setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     end
 
     # Motorized OA damper
-    if is_motorized_oa_damper_required(template, climate_zone)
+    if motorized_oa_damper_required?(template, climate_zone)
       # Assume that the availability schedule has already been
       # set to reflect occupancy and use this for the OA damper.
       add_motorized_oa_damper(0.15, availabilitySchedule)
@@ -129,11 +129,11 @@ class OpenStudio::Model::AirLoopHVAC
   # prescriptive controls, which are added via
   # AirLoopHVAC.apply_standard_controls
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
   def apply_performance_rating_method_baseline_controls(template, climate_zone)
     # Economizers
-    if is_performance_rating_method_baseline_economizer_required(template, climate_zone)
+    if performance_rating_method_baseline_economizer_required?(template, climate_zone)
       apply_performance_rating_method_baseline_economizer(template, climate_zone)
     end
 
@@ -645,7 +645,7 @@ class OpenStudio::Model::AirLoopHVAC
   # 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B', 'ASHRAE 169-2006-5C', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
   # 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
   # @return [Bool] returns true if an economizer is required, false if not
-  def is_economizer_required(template, climate_zone)
+  def economizer_required?(template, climate_zone)
     economizer_required = false
 
     return economizer_required if name.to_s.include? 'Outpatient F1'
@@ -768,7 +768,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Set the economizer limits per the standard.  Limits are based on the economizer
   # type currently specified in the ControllerOutdoorAir object on this air loop.
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
   def set_economizer_limits(template, climate_zone)
     # EnergyPlus economizer types
@@ -895,8 +895,8 @@ class OpenStudio::Model::AirLoopHVAC
   # to integrated on non-integrated per the standard.
   #
   # @note this method assumes you previously checked that an economizer is required at all
-  #   via #is_economizer_required
-  # @param (see #is_economizer_required)
+  #   via #economizer_required?
+  # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
   def set_economizer_integration(template, climate_zone)
     # Determine if the system is a VAV system based on the fan
@@ -998,9 +998,9 @@ class OpenStudio::Model::AirLoopHVAC
 
   # Determine if an economizer is required per the PRM.
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] returns true if required, false if not
-  def is_performance_rating_method_baseline_economizer_required(template, climate_zone)
+  def performance_rating_method_baseline_economizer_required?(template, climate_zone)
     economizer_required = false
 
     # A big number of ft2 as the minimum requirement
@@ -1081,7 +1081,7 @@ class OpenStudio::Model::AirLoopHVAC
 
   # Apply the PRM economizer type and set temperature limits
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
   def apply_performance_rating_method_baseline_economizer(template, climate_zone)
     # EnergyPlus economizer types
@@ -1200,7 +1200,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
   # is acceptable per the standard.
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] Returns true if allowable, if the system has no economizer or no OA system.
   # Returns false if the economizer type is not allowable.
   def is_economizer_type_allowable(template, climate_zone)
@@ -1297,10 +1297,10 @@ class OpenStudio::Model::AirLoopHVAC
 
   # Check if ERV is required on this airloop.
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def is_energy_recovery_ventilator_required(template, climate_zone)
+  def energy_recovery_ventilator_required?(template, climate_zone)
     # ERV Not Applicable for AHUs that serve
     # parking garage, warehouse, or multifamily
     # if space_types_served_names.include?('PNNL_Asset_Rating_Apartment_Space_Type') ||
@@ -1746,7 +1746,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Add an ERV to this airloop.
   # Will be a rotary-type HX
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def apply_energy_recovery_ventilator
@@ -1813,12 +1813,12 @@ class OpenStudio::Model::AirLoopHVAC
 
   # Determine if multizone vav optimization is required.
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for
   #   systems with AIA healthcare ventilation requirements
   #   dual duct systems
-  def is_multizone_vav_optimization_required(template, climate_zone)
+  def multizone_vav_optimization_required?(template, climate_zone)
     multizone_opt_required = false
 
     case template
@@ -1842,7 +1842,7 @@ class OpenStudio::Model::AirLoopHVAC
       end
 
       # Not required for systems that require an ERV
-      if has_energy_recovery
+      if has_energy_recovery?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: multizone vav optimization is not required because the system has Energy Recovery.")
         return multizone_opt_required
       end
@@ -1966,7 +1966,7 @@ class OpenStudio::Model::AirLoopHVAC
 
   # Adjust minimum VAV damper positions to the values
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def adjust_minimum_vav_damper_positions
@@ -2197,11 +2197,11 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if demand control ventilation (DCV) is
   # required for this air loop.
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for
   #   systems that serve multifamily, parking garage, warehouse
-  def is_demand_control_ventilation_required(template, climate_zone)
+  def demand_control_ventilation_required?(template, climate_zone)
     dcv_required = false
 
     # Not required by the old vintages
@@ -2211,7 +2211,7 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     # Not required for systems that require an ERV
-    if has_energy_recovery
+    if has_energy_recovery?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system has Energy Recovery.")
       return dcv_required
     end
@@ -2282,20 +2282,20 @@ class OpenStudio::Model::AirLoopHVAC
     oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
 
     # Check for min OA without an economizer OR has economizer
-    if oa_flow_cfm < min_oa_without_economizer_cfm && has_economizer == false
+    if oa_flow_cfm < min_oa_without_economizer_cfm && has_economizer? == false
       # Message if doesn't pass OA limit
       if oa_flow_cfm < min_oa_without_economizer_cfm
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_without_economizer_cfm.round} cfm.")
       end
       # Message if doesn't have economizer
-      if has_economizer == false
+      if has_economizer? == false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system does not have an economizer.")
       end
       return dcv_required
     end
 
     # If has economizer, cfm limit is lower
-    if oa_flow_cfm < min_oa_with_economizer_cfm && has_economizer
+    if oa_flow_cfm < min_oa_with_economizer_cfm && has_economizer?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system has an economizer, but the min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_with_economizer_cfm.round} cfm for systems with an economizer.")
       return dcv_required
     end
@@ -2338,9 +2338,9 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system required supply air temperature
   # (SAT) reset.
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
-  def is_supply_air_temperature_reset_required(template, climate_zone)
+  def supply_air_temperature_reset_required?(template, climate_zone)
     is_sat_reset_required = false
 
     # Only required for multizone VAV systems
@@ -2470,7 +2470,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system has an economizer
   #
   # @return [Bool] Returns true if required, false if not.
-  def has_economizer
+  def has_economizer?
     # Get the OA system and OA controller
     oa_sys = airLoopHVACOutdoorAirSystem
     if oa_sys.is_initialized
@@ -2520,7 +2520,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system has energy recovery already
   #
   # @return [Bool] Returns true if an ERV is present, false if not.
-  def has_energy_recovery
+  def has_energy_recovery?
     has_erv = false
 
     # Get the OA system
@@ -2578,7 +2578,7 @@ class OpenStudio::Model::AirLoopHVAC
   end
 
   # Determine if a motorized OA damper is required
-  def is_motorized_oa_damper_required(template, climate_zone)
+  def motorized_oa_damper_required?(template, climate_zone)
     motorized_oa_damper_required = false
 
     if name.to_s.include? 'Outpatient F1'
@@ -2589,7 +2589,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # If the system has an economizer, it must have
     # a motorized damper.
-    if has_economizer
+    if has_economizer?
       motorized_oa_damper_required = true
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Because the system has an economizer, it requires a motorized OA damper.")
       return motorized_oa_damper_required
@@ -3333,7 +3333,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param has_ddc [Bool] whether or not the system has DDC control
   # over VAV terminals.
   # return [Bool] returns true if static pressure reset is required, false if not
-  def is_static_pressure_reset_required(template, has_ddc)
+  def static_pressure_reset_required?(template, has_ddc)
     sp_reset_required = false
 
     # A big number of btu per hr as the minimum requirement
@@ -3363,7 +3363,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param template [String]
   # @return [Bool] true if required, false if not
-  def is_unoccupied_fan_shutoff_required(template)
+  def unoccupied_fan_shutoff_required?(template)
     shutoff_required = true
 
     # Per 90.1 6.4.3.4.5, systems less than 0.75 HP

@@ -3,7 +3,7 @@
 class OpenStudio::Model::PlantLoop
   # Apply all standard required controls to the plantloop
   #
-  # @param (see #is_economizer_required)
+  # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
   def apply_standard_controls(template, climate_zone)
     # Variable flow system
@@ -12,7 +12,7 @@ class OpenStudio::Model::PlantLoop
     end
 
     # Supply water temperature reset
-    if is_supply_water_temperature_reset_required(template)
+    if supply_water_temperature_reset_required?(template)
       enable_supply_water_temperature_reset
     end
   end
@@ -338,7 +338,7 @@ class OpenStudio::Model::PlantLoop
     return true
   end
 
-  def is_supply_water_temperature_reset_required(template)
+  def supply_water_temperature_reset_required?(template)
     reset_required = false
 
     case template
