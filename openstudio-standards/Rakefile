@@ -22,7 +22,6 @@ Rake::TestTask.new('test:compliance') do |task|
   task.test_files = FileList['openstudio-standards/test/test_compliance.rb']
 end
 
-
 require 'rake/testtask'
 desc 'Run test PRM'
 Rake::TestTask.new('test:prm') do |task|
@@ -52,8 +51,8 @@ Rake::TestTask.new('test:gem_group_1') do |task|
   'openstudio-standards/test/test_secondary_school.rb', # 70 min
   'openstudio-standards/test/test_medium_office.rb',
   'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
-  'openstudio-standards/test/test_high_rise_apartment.rb'#, # 7 min
-  #'openstudio-standards/test/test_outpatient.rb' # 
+  'openstudio-standards/test/test_high_rise_apartment.rb' # , # 7 min
+    # 'openstudio-standards/test/test_outpatient.rb' #
   ]
 end
 
@@ -115,9 +114,6 @@ Rake::TestTask.new('test:gem') do |task|
   task.test_files = FileList['openstudio-standards/test/test_*.rb']
 end
 
-
-
-
 require 'rake/testtask'
 desc 'Run the measure tests'
 Rake::TestTask.new('test:measures') do |task|
@@ -173,9 +169,9 @@ desc 'Check the code for style consistency'
 RuboCop::RakeTask.new(:rubocop) do |task|
   # Make a folder for the output
   out_dir = 'openstudio-standards/.rubocop'
-  Dir::mkdir(out_dir) unless File.exists?(out_dir)
-  #task.options = []
-  task.options = ['-L','--format=h',"--out=#{out_dir}/rubocop-results.html"]
+  Dir.mkdir(out_dir) unless File.exist?(out_dir)
+  # task.options = []
+  task.options = ['--format=h', "--out=#{out_dir}/rubocop-results.html"]
   task.requires = ['rubocop/formatter/checkstyle_formatter']
   task.formatters = ['RuboCop::Formatter::CheckstyleFormatter']
   # don't abort rake on failure
@@ -183,6 +179,6 @@ RuboCop::RakeTask.new(:rubocop) do |task|
 end
 
 desc 'Build, install, test gem & measures'
-task :btest => [:install, 'test:all']
+task btest: [:install, 'test:all']
 
-task :default => :btest
+task default: :btest

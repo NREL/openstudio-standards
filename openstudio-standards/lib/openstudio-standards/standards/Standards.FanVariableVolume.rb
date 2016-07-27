@@ -1,11 +1,9 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
 class OpenStudio::Model::FanVariableVolume
-
   include Fan
 
   def set_control_type(control_type)
-    
     # Determine the coefficients
     coeff_a = nil
     coeff_b = nil
@@ -62,23 +60,21 @@ class OpenStudio::Model::FanVariableVolume
       coeff_d = 1.030920
       min_pct_pwr = 0.1
     else
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.FanVariableVolume', "Fan control type '#{control_type}' not recognized, fan power coefficients will not be changed.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.FanVariableVolume', "Fan control type '#{control_type}' not recognized, fan power coefficients will not be changed.")
       return false
     end
-    
+
     # Set the coefficients
-    self.setFanPowerCoefficient1(coeff_a)
-    self.setFanPowerCoefficient2(coeff_b)
-    self.setFanPowerCoefficient3(coeff_c)
-    self.setFanPowerCoefficient4(coeff_d)
-    
+    setFanPowerCoefficient1(coeff_a)
+    setFanPowerCoefficient2(coeff_b)
+    setFanPowerCoefficient3(coeff_c)
+    setFanPowerCoefficient4(coeff_d)
+
     # Set the fan minimum power
-    self.setFanPowerMinimumFlowRateInputMethod('Fraction')
-    self.setFanPowerMinimumFlowFraction(min_pct_pwr)
+    setFanPowerMinimumFlowRateInputMethod('Fraction')
+    setFanPowerMinimumFlowFraction(min_pct_pwr)
 
     # Append the control type to the fan name
-    #self.setName("#{self.name} #{control_type}")
-  
+    # self.setName("#{self.name} #{control_type}")
   end
-
 end

@@ -1,48 +1,44 @@
 
 # Extend the class to add Large Hotel specific stuff
 class OpenStudio::Model::Model
-
   def define_space_type_map(building_type, building_vintage, climate_zone)
     space_type_map = nil
     case building_vintage
     when 'NECB 2011'
-      #Building Schedule
-      sch = "E"
-      space_type_map ={
-        "Hotel/Motel - dining" => ["Banquet_Flr_6", "Dining_Flr_6"],
-        "Storage area" => ["Basement", "Storage_Flr_1"],
-        "Retail - mall concourse" => ["Cafe_Flr_1"],
-        "Corr. >= 2.4m wide-sch-#{sch}" => ["Corridor_Flr_3", "Corridor_Flr_6"],
-        "Food preparation" => ["Kitchen_Flr_6"],
-        "Hospital - laundry/washing" => ["Laundry_Flr_1"],
-        "Hotel/Motel - lobby" => ["Lobby_Flr_1"],
-        "Electrical/Mechanical-sch-#{sch}" => ["Mech_Flr_1"],
-        "Retail - sales" => ["Retail_1_Flr_1", "Retail_2_Flr_1"],
-        "Hotel/Motel - rooms" => ["Room_1_Flr_3", "Room_1_Flr_6", "Room_2_Flr_3", "Room_2_Flr_6", "Room_3_Mult19_Flr_3", "Room_3_Mult9_Flr_6", "Room_4_Mult19_Flr_3", "Room_5_Flr_3", "Room_6_Flr_3"]
+      # Building Schedule
+      sch = 'E'
+      space_type_map = {
+        'Hotel/Motel - dining' => %w(Banquet_Flr_6 Dining_Flr_6),
+        'Storage area' => %w(Basement Storage_Flr_1),
+        'Retail - mall concourse' => ['Cafe_Flr_1'],
+        "Corr. >= 2.4m wide-sch-#{sch}" => %w(Corridor_Flr_3 Corridor_Flr_6),
+        'Food preparation' => ['Kitchen_Flr_6'],
+        'Hospital - laundry/washing' => ['Laundry_Flr_1'],
+        'Hotel/Motel - lobby' => ['Lobby_Flr_1'],
+        "Electrical/Mechanical-sch-#{sch}" => ['Mech_Flr_1'],
+        'Retail - sales' => %w(Retail_1_Flr_1 Retail_2_Flr_1),
+        'Hotel/Motel - rooms' => %w(Room_1_Flr_3 Room_1_Flr_6 Room_2_Flr_3 Room_2_Flr_6 Room_3_Mult19_Flr_3 Room_3_Mult9_Flr_6 Room_4_Mult19_Flr_3 Room_5_Flr_3 Room_6_Flr_3)
       }
     else
       space_type_map = {
-        'Banquet' => ['Banquet_Flr_6','Dining_Flr_6'],
-        'Basement'=>['Basement'],
+        'Banquet' => %w(Banquet_Flr_6 Dining_Flr_6),
+        'Basement' => ['Basement'],
         'Cafe' => ['Cafe_Flr_1'],
-        'Corridor'=> ['Corridor_Flr_6'],
-        'Corridor2'=> ['Corridor_Flr_3'],
-        'GuestRoom'=> ['Room_1_Flr_3','Room_2_Flr_3','Room_5_Flr_3','Room_6_Flr_3'],
-        'GuestRoom2'=> ['Room_3_Mult19_Flr_3','Room_4_Mult19_Flr_3'],
-        'GuestRoom3'=> ['Room_1_Flr_6','Room_2_Flr_6'],
-        'GuestRoom4'=> ['Room_3_Mult9_Flr_6'],
-        'Kitchen'=> ['Kitchen_Flr_6'],
-        'Laundry'=> ['Laundry_Flr_1'],
-        'Lobby'=> ['Lobby_Flr_1'],
-        'Mechanical'=> ['Mech_Flr_1'],
-        'Retail'=> ['Retail_1_Flr_1'],
-        'Retail2'=> ['Retail_2_Flr_1'],
-        'Storage'=> ['Storage_Flr_1']
+        'Corridor' => ['Corridor_Flr_6'],
+        'Corridor2' => ['Corridor_Flr_3'],
+        'GuestRoom' => %w(Room_1_Flr_3 Room_2_Flr_3 Room_5_Flr_3 Room_6_Flr_3),
+        'GuestRoom2' => %w(Room_3_Mult19_Flr_3 Room_4_Mult19_Flr_3),
+        'GuestRoom3' => %w(Room_1_Flr_6 Room_2_Flr_6),
+        'GuestRoom4' => ['Room_3_Mult9_Flr_6'],
+        'Kitchen' => ['Kitchen_Flr_6'],
+        'Laundry' => ['Laundry_Flr_1'],
+        'Lobby' => ['Lobby_Flr_1'],
+        'Mechanical' => ['Mech_Flr_1'],
+        'Retail' => ['Retail_1_Flr_1'],
+        'Retail2' => ['Retail_2_Flr_1'],
+        'Storage' => ['Storage_Flr_1']
       }
     end
-    
-    
-
 
     return space_type_map
   end
@@ -53,28 +49,28 @@ class OpenStudio::Model::Model
         'type' => 'VAV',
         'name' => 'VAV WITH REHEAT',
         'space_names' =>
-          [
-          'Basement',
-          'Retail_1_Flr_1',
-          'Retail_2_Flr_1',
-          'Mech_Flr_1',
-          'Storage_Flr_1',
-          'Laundry_Flr_1',
-          'Cafe_Flr_1',
-          'Lobby_Flr_1',
-          'Corridor_Flr_3',
-          'Banquet_Flr_6',
-          'Dining_Flr_6',
-          'Corridor_Flr_6',
-          'Kitchen_Flr_6'
-        ]
+          %w(
+            Basement
+            Retail_1_Flr_1
+            Retail_2_Flr_1
+            Mech_Flr_1
+            Storage_Flr_1
+            Laundry_Flr_1
+            Cafe_Flr_1
+            Lobby_Flr_1
+            Corridor_Flr_3
+            Banquet_Flr_6
+            Dining_Flr_6
+            Corridor_Flr_6
+            Kitchen_Flr_6
+          )
       },
       {
         'type' => 'DOAS',
         'space_names' =>
-          [
-          'Room_1_Flr_3','Room_2_Flr_3','Room_3_Mult19_Flr_3','Room_4_Mult19_Flr_3','Room_5_Flr_3','Room_6_Flr_3','Room_1_Flr_6','Room_2_Flr_6','Room_3_Mult9_Flr_6'
-        ]
+          %w(
+            Room_1_Flr_3 Room_2_Flr_3 Room_3_Mult19_Flr_3 Room_4_Mult19_Flr_3 Room_5_Flr_3 Room_6_Flr_3 Room_1_Flr_6 Room_2_Flr_6 Room_3_Mult9_Flr_6
+          )
       },
       {
         'type' => 'Refrigeration',
@@ -92,8 +88,8 @@ class OpenStudio::Model::Model
         'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
         'space_names' =>
           [
-          'Kitchen_Flr_6'
-        ]
+            'Kitchen_Flr_6'
+          ]
       },
       {
         'type' => 'Refrigeration',
@@ -111,8 +107,8 @@ class OpenStudio::Model::Model
         'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
         'space_names' =>
           [
-          'Kitchen_Flr_6'
-        ]
+            'Kitchen_Flr_6'
+          ]
       }
     ]
     return system_to_space_map
@@ -134,29 +130,28 @@ class OpenStudio::Model::Model
   end
 
   def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-    
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')    
-    
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+
     # Add Exhaust Fan
     space_type_map = define_space_type_map(building_type, building_vintage, climate_zone)
     exhaust_fan_space_types = []
     case building_vintage
-    when '90.1-2004','90.1-2007'
-      exhaust_fan_space_types =['Kitchen','Laundry']
+    when '90.1-2004', '90.1-2007'
+      exhaust_fan_space_types = %w(Kitchen Laundry)
     else
-      exhaust_fan_space_types =['Banquet', 'Kitchen','Laundry']
+      exhaust_fan_space_types = %w(Banquet Kitchen Laundry)
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = self.find_object($os_standards['space_types'], {'template'=>building_vintage, 'building_type'=>building_type, 'space_type'=>space_type_name})
-      if space_type_data == nil
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{building_vintage}-#{building_type}-#{space_type_name}")
+      space_type_data = find_object($os_standards['space_types'], 'template' => building_vintage, 'building_type' => building_type, 'space_type' => space_type_name)
+      if space_type_data.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{building_vintage}-#{building_type}-#{space_type_name}")
         return false
       end
 
       exhaust_schedule = add_schedule(space_type_data['exhaust_schedule'])
-      if exhaust_schedule.class.to_s == "NilClass"
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{building_vintage}-#{building_type}-#{space_type_name}")
+      if exhaust_schedule.class.to_s == 'NilClass'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{building_vintage}-#{building_type}-#{space_type_name}")
         return false
       end
 
@@ -164,24 +159,24 @@ class OpenStudio::Model::Model
 
       space_names = space_type_map[space_type_name]
       space_names.each do |space_name|
-        space = self.getSpaceByName(space_name).get
+        space = getSpaceByName(space_name).get
         thermal_zone = space.thermalZone.get
 
         zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(self)
-        zone_exhaust_fan.setName(space.name.to_s + " Exhaust Fan")
+        zone_exhaust_fan.setName(space.name.to_s + ' Exhaust Fan')
         zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
         zone_exhaust_fan.setFanEfficiency(space_type_data['exhaust_fan_efficiency'])
         zone_exhaust_fan.setPressureRise(space_type_data['exhaust_fan_pressure_rise'])
         maximum_flow_rate = OpenStudio.convert(space_type_data['exhaust_fan_maximum_flow_rate'], 'cfm', 'm^3/s').get
 
         zone_exhaust_fan.setMaximumFlowRate(maximum_flow_rate)
-        if balanced_exhaust_schedule.class.to_s != "NilClass"
+        if balanced_exhaust_schedule.class.to_s != 'NilClass'
           zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_exhaust_schedule)
         end
-        zone_exhaust_fan.setEndUseSubcategory("Zone Exhaust Fans")
+        zone_exhaust_fan.setEndUseSubcategory('Zone Exhaust Fans')
         zone_exhaust_fan.addToThermalZone(thermal_zone)
 
-        if space_type_data['exhaust_fan_power'] != nil and space_type_data['exhaust_fan_power'].to_f != 0
+        if !space_type_data['exhaust_fan_power'].nil? && space_type_data['exhaust_fan_power'].to_f.nonzero?
           # Create the electric equipment definition
           exhaust_fan_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
           exhaust_fan_equip_def.setName("#{space_name} Electric Equipment Definition")
@@ -200,31 +195,27 @@ class OpenStudio::Model::Model
     end
 
     # Update Sizing Zone
-    zone_sizing = self.getSpaceByName('Kitchen_Flr_6').get.thermalZone.get.sizingZone
+    zone_sizing = getSpaceByName('Kitchen_Flr_6').get.thermalZone.get.sizingZone
     zone_sizing.setCoolingMinimumAirFlowFraction(0.7)
 
-    zone_sizing = self.getSpaceByName('Laundry_Flr_1').get.thermalZone.get.sizingZone
+    zone_sizing = getSpaceByName('Laundry_Flr_1').get.thermalZone.get.sizingZone
     zone_sizing.setCoolingMinimumAirFlow(0.23567919336)
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
-    
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
+
     return true
-    
-  end #add hvac
+  end # add hvac
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
   def add_daylighting_controls(building_vintage)
-    space_names = ['Banquet_Flr_6','Dining_Flr_6','Cafe_Flr_1','Lobby_Flr_1']
+    space_names = %w(Banquet_Flr_6 Dining_Flr_6 Cafe_Flr_1 Lobby_Flr_1)
     space_names.each do |space_name|
-      space = self.getSpaceByName(space_name).get
+      space = getSpaceByName(space_name).get
       space.addDaylightingControls(building_vintage, false, false)
     end
   end
 
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-
     return true
-    
   end
-
 end
