@@ -3,7 +3,7 @@
 class OpenStudio::Model::CoolingTowerVariableSpeed
   include CoolingTower
 
-  def setStandardEfficiencyAndCurves(standard)
+  def set_efficiency_and_curves(standard)
     set_minimum_power_per_flow(standard)
 
     # 90.1-2013 6.5.2.2 Multicell heat rejection with VSD

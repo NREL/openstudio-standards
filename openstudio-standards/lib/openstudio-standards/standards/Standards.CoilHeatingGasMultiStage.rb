@@ -1,7 +1,7 @@
 
 # open the class to add methods to return sizing values
 class OpenStudio::Model::CoilHeatingGasMultiStage
-  def setStandardEfficiencyAndCurves(template, standards)
+  def set_efficiency_and_curves(template, standards)
     successfully_set_all_properties = true
 
     # Get the coil capacity

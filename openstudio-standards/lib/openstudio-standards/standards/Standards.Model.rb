@@ -1815,10 +1815,10 @@ class OpenStudio::Model::Model
     ##### Apply equipment efficiencies
 
     # Fans
-    getFanVariableVolumes.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brakeHorsepower) }
-    getFanConstantVolumes.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brakeHorsepower) }
-    getFanOnOffs.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brakeHorsepower) }
-    getFanZoneExhausts.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brakeHorsepower) }
+    getFanVariableVolumes.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
+    getFanConstantVolumes.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
+    getFanOnOffs.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
+    getFanZoneExhausts.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
 
     # Pumps
     getPumpConstantSpeeds.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage) }
@@ -1826,26 +1826,26 @@ class OpenStudio::Model::Model
 
     # Unitary ACs
 
-    getCoilCoolingDXTwoSpeeds.sort.each { |obj| obj.setStandardEfficiencyAndCurves(building_vintage) }
-    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(building_vintage, sql_db_vars_map) }
+    getCoilCoolingDXTwoSpeeds.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
+    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.set_efficiency_and_curves(building_vintage, sql_db_vars_map) }
 
     # Unitary HPs
-    getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.setStandardEfficiencyAndCurves(building_vintage, sql_db_vars_map) }
+    getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.set_efficiency_and_curves(building_vintage, sql_db_vars_map) }
 
     # Chillers
     clg_tower_objs = getCoolingTowerSingleSpeeds
-    getChillerElectricEIRs.sort.each { |obj| obj.setStandardEfficiencyAndCurves(building_vintage, clg_tower_objs) }
+    getChillerElectricEIRs.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage, clg_tower_objs) }
 
     # Boilers
-    getBoilerHotWaters.sort.each { |obj| obj.setStandardEfficiencyAndCurves(building_vintage) }
+    getBoilerHotWaters.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
 
     # Water Heaters
-    getWaterHeaterMixeds.sort.each { |obj| obj.setStandardEfficiency(building_vintage) }
+    getWaterHeaterMixeds.sort.each { |obj| obj.set_efficiency(building_vintage) }
 
     # Cooling Towers
-    getCoolingTowerSingleSpeeds.sort.each { |obj| obj.setStandardEfficiencyAndCurves(building_vintage) }
-    getCoolingTowerTwoSpeeds.sort.each { |obj| obj.setStandardEfficiencyAndCurves(building_vintage) }
-    getCoolingTowerVariableSpeeds.sort.each { |obj| obj.setStandardEfficiencyAndCurves(building_vintage) }
+    getCoolingTowerSingleSpeeds.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
+    getCoolingTowerTwoSpeeds.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
+    getCoolingTowerVariableSpeeds.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
@@ -2405,11 +2405,11 @@ class OpenStudio::Model::Model
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = find_object($os_standards['construction_properties'], 'template' => building_vintage,
-                                                                        'climate_zone_set' => climate_zone_set,
-                                                                        'intended_surface_type' => intended_surface_type,
-                                                                        'standards_construction_type' => standards_construction_type,
-                                                                        'building_category' => building_category})
+    props = find_object($os_standards['construction_properties'], { 'template' => building_vintage,
+                                                                    'climate_zone_set' => climate_zone_set,
+                                                                    'intended_surface_type' => intended_surface_type,
+                                                                    'standards_construction_type' => standards_construction_type,
+                                                                    'building_category' => building_category })
 
     if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{building_vintage}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")

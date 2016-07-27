@@ -99,7 +99,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     return cop
   end
 
-  def setStandardEfficiencyAndCurves(template, sql_db_vars_map)
+  def set_efficiency_and_curves(template, sql_db_vars_map)
     successfully_set_all_properties = true
 
     unitary_hps = $os_standards['heat_pumps']

@@ -344,7 +344,7 @@ class OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find hot water loop to attach humidifier to.')
     end
 
-    reset_kitchen_OA(building_vintage)
+    reset_kitchen_oa(building_vintage)
     update_exhaust_fan_efficiency(building_vintage)
     reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
 
@@ -371,7 +371,7 @@ class OpenStudio::Model::Model
     return true
   end # add swh
 
-  def reset_kitchen_OA(building_vintage)
+  def reset_kitchen_oa(building_vintage)
     space_kitchen = getSpaceByName('Kitchen_Flr_5').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
     ventilation.setOutdoorAirFlowperPerson(0)
@@ -464,7 +464,7 @@ end
     end
   end
 
-  def modify_hospital_OAcontroller(building_vintage)
+  def modify_hospital_oa_controller(building_vintage)
     getAirLoopHVACs.each do |air_loop|
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
       oa_control = oa_sys.getControllerOutdoorAir

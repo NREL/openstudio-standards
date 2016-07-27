@@ -473,7 +473,7 @@ class OpenStudio::Model::Model
 
   # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
   # AHU1 doesn't have economizer
-  def modify_OAcontroller(building_vintage)
+  def modify_oa_controller(building_vintage)
     getAirLoopHVACs.each do |air_loop|
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir

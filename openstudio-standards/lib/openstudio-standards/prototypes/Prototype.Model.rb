@@ -122,18 +122,18 @@ class OpenStudio::Model::Model
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
-    applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
+    apply_prototype_hvac_assumptions(building_type, building_vintage, climate_zone)
 
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
     # AHU1 doesn't have economizer
     if building_type == 'Outpatient'
-      modify_OAcontroller(building_vintage)
+      modify_oa_controller(building_vintage)
       # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
       reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
     end
 
     if building_type == 'Hospital'
-      modify_hospital_OAcontroller(building_vintage)
+      modify_hospital_oa_controller(building_vintage)
     end
 
     # Apply the HVAC efficiency standard
@@ -162,7 +162,7 @@ class OpenStudio::Model::Model
     # AHU1 doesn't have economizer
     if building_type == 'Outpatient'
       # remove the controller:mechanical ventilation for AHU1 OA
-      modify_OAcontroller(building_vintage)
+      modify_oa_controller(building_vintage)
       # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
       reset_or_room_vav_minimum_damper(prototype_input, building_vintage)
     end
@@ -1108,17 +1108,17 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{htg} for heating and #{clg} for cooling.")
   end
 
-  def applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
+  def apply_prototype_hvac_assumptions(building_type, building_vintage, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying prototype HVAC assumptions.')
 
     ##### Apply equipment efficiencies
 
     # Fans
     # Pressure Rise
-    getFanConstantVolumes.sort.each { |obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone) }
-    getFanVariableVolumes.sort.each { |obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone) }
-    getFanOnOffs.sort.each { |obj| obj.setPrototypeFanPressureRise(building_type, building_vintage, climate_zone) }
-    getFanZoneExhausts.sort.each(&:setPrototypeFanPressureRise)
+    getFanConstantVolumes.sort.each { |obj| obj.set_prototype_fan_pressure_rise(building_type, building_vintage, climate_zone) }
+    getFanVariableVolumes.sort.each { |obj| obj.set_prototype_fan_pressure_rise(building_type, building_vintage, climate_zone) }
+    getFanOnOffs.sort.each { |obj| obj.set_prototype_fan_pressure_rise(building_type, building_vintage, climate_zone) }
+    getFanZoneExhausts.sort.each(&:set_prototype_fan_pressure_rise)
 
     # Motor Efficiency
     getFanConstantVolumes.sort.each { |obj| obj.set_prototype_fan_efficiency(building_vintage) }

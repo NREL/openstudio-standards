@@ -2444,7 +2444,7 @@ class OpenStudio::Model::Model
   # Single Speed DX AC, Single Speed Heat Pump
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting split AC air loop.
-  def add_split_AC(standard,
+  def add_split_ac(standard,
                    sys_name,
                    thermal_zones,
                    hvac_op_sch,

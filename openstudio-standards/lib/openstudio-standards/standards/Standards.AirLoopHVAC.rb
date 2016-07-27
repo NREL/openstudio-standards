@@ -401,7 +401,7 @@ class OpenStudio::Model::AirLoopHVAC
     # sum up their brake horsepower values.
     sys_fan_bhp = 0
     fans.sort.each do |fan|
-      sys_fan_bhp += fan.brakeHorsepower
+      sys_fan_bhp += fan.brake_horsepower
     end
 
     return sys_fan_bhp
@@ -441,7 +441,7 @@ class OpenStudio::Model::AirLoopHVAC
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', fan.name.to_s)
 
       # Get the bhp of the fan on the proposed system
-      proposed_fan_bhp = fan.brakeHorsepower
+      proposed_fan_bhp = fan.brake_horsepower
 
       # Get the bhp of the fan on the proposed system
       proposed_fan_bhp_frac = proposed_fan_bhp / proposed_sys_bhp
@@ -452,13 +452,13 @@ class OpenStudio::Model::AirLoopHVAC
 
       # Set the baseline impeller eff of the fan,
       # preserving the proposed motor eff.
-      baseline_impeller_eff = fan.baselineImpellerEfficiency(template)
-      fan.changeImpellerEfficiency(baseline_impeller_eff)
+      baseline_impeller_eff = fan.baseline_impeller_efficiency(template)
+      fan.change_impeller_efficiency(baseline_impeller_eff)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "* #{(baseline_impeller_eff * 100).round(1)}% = Baseline fan impeller efficiency.")
 
       # Set the baseline motor efficiency for the specified bhp
       baseline_motor_eff = fan.standardMinimumMotorEfficiency(template, standards, allowable_fan_bhp)
-      fan.changeMotorEfficiency(baseline_motor_eff)
+      fan.change_motor_efficiency(baseline_motor_eff)
 
       # Get design supply air flow rate (whether autosized or hard-sized)
       dsn_air_flow_m3_per_s = 0
@@ -479,7 +479,7 @@ class OpenStudio::Model::AirLoopHVAC
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "* #{fan_pressure_rise_in_wc.round(2)} in w.c. = Pressure drop to achieve allowable fan power.")
 
       # Calculate the bhp of the fan to make sure it matches
-      calc_bhp = fan.brakeHorsepower
+      calc_bhp = fan.brake_horsepower
       if ((calc_bhp - baseline_fan_bhp) / baseline_fan_bhp).abs > 0.02
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "#{fan.name} baseline fan bhp supposed to be #{baseline_fan_bhp}, but is #{calc_bhp}.")
       end
@@ -1806,7 +1806,7 @@ class OpenStudio::Model::AirLoopHVAC
     spm_oa_pretreat.addToNode(erv_outlet)
 
     # Apply the prototype Heat Exchanger power assumptions.
-    erv.setPrototypeNominalElectricPower
+    erv.set_prototype_nominal_electric_power
 
     return true
   end
@@ -3377,7 +3377,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Determine the system fan horsepower
     total_hp = 0.0
     supply_return_exhaust_relief_fans.each do |fan|
-      total_hp += fan.motorHorsepower
+      total_hp += fan.motor_horsepower
     end
 
     # Check the HP exception

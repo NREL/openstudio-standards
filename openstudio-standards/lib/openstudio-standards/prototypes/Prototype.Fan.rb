@@ -27,7 +27,7 @@ module PrototypeFan
     pressure_rise_in_h2o = OpenStudio.convert(pressure_rise_pa, 'Pa', 'inH_{2}O').get
 
     # Get the default impeller efficiency
-    fan_impeller_eff = baselineImpellerEfficiency(template)
+    fan_impeller_eff = baseline_impeller_efficiency(template)
 
     # Calculate the Brake Horsepower
     brake_hp = (pressure_rise_in_h2o * maximum_flow_rate_cfm) / (fan_impeller_eff * 6356)

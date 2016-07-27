@@ -3,7 +3,7 @@
 class OpenStudio::Model::CoolingTowerSingleSpeed
   include CoolingTower
 
-  def setStandardEfficiencyAndCurves(standard)
+  def set_efficiency_and_curves(standard)
     set_minimum_power_per_flow(standard)
 
     return true

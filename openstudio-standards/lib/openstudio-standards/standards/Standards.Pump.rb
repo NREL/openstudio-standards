@@ -19,7 +19,7 @@ module Pump
     impeller_efficiency = 0.78
 
     # Get the brake horsepower
-    brake_hp = brakeHorsepower
+    brake_hp = brake_horsepower
 
     # Find the motor efficiency
     motor_efficiency, nominal_hp = standard_minimum_motor_efficiency_and_size(template, brake_hp)
@@ -41,7 +41,7 @@ module Pump
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: brake hp = #{brake_hp.round(2)}HP; motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_efficiency * 100).round(2)}%; #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_pa.round(0)} Pa // #{pressure_rise_ft_h2O.round(2)} ftH2O.")
 
     # Calculate the W/gpm for verification
-    calculated_w = pumpPower
+    calculated_w = pump_power
 
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
@@ -60,7 +60,7 @@ module Pump
 
   def set_standard_minimum_motor_efficiency(template)
     # Get the horsepower
-    bhp = brakeHorsepower
+    bhp = brake_horsepower
 
     # Find the motor efficiency
     motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, bhp)
@@ -134,7 +134,7 @@ module Pump
   #
   # @return [Double] pump power
   #   @units Watts (W)
-  def pumpPower
+  def pump_power
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
     flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
@@ -169,7 +169,7 @@ module Pump
   #
   # @return [Double] brake horsepower
   #   @units horsepower (hp)
-  def brakeHorsepower
+  def brake_horsepower
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
     flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
@@ -199,9 +199,9 @@ module Pump
   # pump impeller efficiency.
   #
   # @return [Double] horsepower
-  def motorHorsepower
+  def motor_horsepower
     # Get the pump power
-    pump_power_w = pumpPower
+    pump_power_w = pump_power
 
     # Convert to HP
     pump_hp = pump_power_w / 745.7 # 745.7 W/HP

@@ -6,7 +6,7 @@ class OpenStudio::Model::FanConstantVolume
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def setPrototypeFanPressureRise(building_type, building_vintage, climate_zone)
+  def set_prototype_fan_pressure_rise(building_type, building_vintage, climate_zone)
     # NECB
     if building_vintage == 'NECB 2011'
       pressure_rise_pa = 640.0

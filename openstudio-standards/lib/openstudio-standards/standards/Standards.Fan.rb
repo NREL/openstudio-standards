@@ -9,10 +9,10 @@ module Fan
     # Change the motor efficiency
     # but preserve the existing fan impeller
     # efficiency.
-    changeMotorEfficiency(motor_eff)
+    change_motor_efficiency(motor_eff)
 
     # Calculate the total motor HP
-    motor_hp = motorHorsepower
+    motor_hp = motor_horsepower
 
     # Exception for small fans, including
     # zone exhaust, fan coil, and fan powered terminals.
@@ -41,7 +41,7 @@ module Fan
                             end
 
     # Get the current fan power
-    current_fan_power_w = fanPower
+    current_fan_power_w = fan_power
 
     # Get the current pressure rise (Pa)
     pressure_rise_pa = pressureRise
@@ -57,9 +57,9 @@ module Fan
     setPressureRise(new_pressure_rise_pa)
 
     # Calculate the new power
-    new_power_w = fanPower
+    new_power_w = fan_power
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{name}: pressure rise = #{new_pressure_rise_in_h2o.round(1)} in w.c., power = #{new_power_w.round} W // #{motorHorsepower.round(2)}HP.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{name}: pressure rise = #{new_pressure_rise_in_h2o.round(1)} in w.c., power = #{new_power_w.round} W // #{motor_horsepower.round(2)}HP.")
 
     return true
   end
@@ -69,7 +69,7 @@ module Fan
   #
   # @return [Double] fan power
   #   @units Watts (W)
-  def fanPower
+  def fan_power
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_m3_per_s = if to_FanZoneExhaust.empty?
@@ -101,7 +101,7 @@ module Fan
   #
   # @return [Double] brake horsepower
   #   @units horsepower (hp)
-  def brakeHorsepower
+  def brake_horsepower
     # Get the fan motor efficiency
     existing_motor_eff = 0.7
     if to_FanZoneExhaust.empty?
@@ -109,7 +109,7 @@ module Fan
     end
 
     # Get the fan power (W)
-    fan_power_w = fanPower
+    fan_power_w = fan_power
 
     # Calculate the brake horsepower (bhp)
     fan_bhp = fan_power_w * existing_motor_eff / 746
@@ -122,9 +122,9 @@ module Fan
   # fan impeller efficiency.
   #
   # @return [Double] horsepower
-  def motorHorsepower
+  def motor_horsepower
     # Get the fan power
-    fan_power_w = fanPower
+    fan_power_w = fan_power
 
     # Convert to HP
     fan_hp = fan_power_w / 745.7 # 745.7 W/HP
@@ -136,7 +136,7 @@ module Fan
   # at the same time, preserving the impeller efficiency.
   #
   # @param motor_eff [Double] motor efficiency (0.0 to 1.0)
-  def changeMotorEfficiency(motor_eff)
+  def change_motor_efficiency(motor_eff)
     # Calculate the existing impeller efficiency
     existing_motor_eff = 0.7
     if to_FanZoneExhaust.empty?
@@ -161,7 +161,7 @@ module Fan
   # at the same time, preserving the motor efficiency.
   #
   # @param impeller_eff [Double] impeller efficiency (0.0 to 1.0)
-  def changeImpellerEfficiency(impeller_eff)
+  def change_impeller_efficiency(impeller_eff)
     # Get the existing motor efficiency
     existing_motor_eff = 0.7
     if to_FanZoneExhaust.empty?
@@ -180,7 +180,7 @@ module Fan
   #
   # @return [Double] impeller efficiency (0.0 to 1.0)
   # @todo Add fan type to data model and modify this method
-  def baselineImpellerEfficiency(template)
+  def baseline_impeller_efficiency(template)
     # Assume that the fan efficiency is 65% for normal fans
     # and 55% for small fans (like exhaust fans).
     # TODO add fan type to fan data model
@@ -332,7 +332,7 @@ module Fan
     if rated_power_w.is_initialized
       rated_power_w = rated_power_w.get
     else
-      rated_power_w = fanPower
+      rated_power_w = fan_power
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Pump', "For #{name}, could not find rated fan power from Equipment Summary. Will calculate it based on current pressure rise and total fan efficiency")
     end
 

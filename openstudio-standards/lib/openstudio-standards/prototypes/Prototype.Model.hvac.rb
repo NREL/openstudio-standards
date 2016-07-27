@@ -272,7 +272,7 @@ class OpenStudio::Model::Model
 
         when 'SAC'
 
-          add_split_AC(building_vintage,
+          add_split_ac(building_vintage,
                        nil,
                        thermal_zones,
                        prototype_input['sac_operation_schedule'],

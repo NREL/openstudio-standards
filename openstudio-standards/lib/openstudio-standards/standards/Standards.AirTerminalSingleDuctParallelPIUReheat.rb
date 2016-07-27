@@ -60,7 +60,7 @@ class OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat
     fan_power_new_w = fan_rise_new_pa * max_sec_flow_rate_cfm / fan_efficiency
     fan_efficacy_new_w_per_cfm = fan_power_new_w / max_sec_flow_rate_cfm
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "For #{name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm, fan bhp = #{fan.brakeHorsepower} hp, motor efficiency = #{fan.motorEfficiency}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "For #{name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm, fan bhp = #{fan.brake_horsepower} hp, motor efficiency = #{fan.motorEfficiency}.")
 
     return true
     end

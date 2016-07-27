@@ -323,7 +323,7 @@ class OpenStudio::Model::Model
     # adjust the cooling setpoint
     adjust_clg_setpoint(building_vintage, climate_zone)
     # reset the design OA of kitchen
-    reset_kitchen_OA(building_vintage)
+    reset_kitchen_oa(building_vintage)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
@@ -458,7 +458,7 @@ class OpenStudio::Model::Model
   # In order to provide sufficient OSA to replace exhaust flow through kitchen hoods (3,300 cfm),
   # modeled OSA to kitchen is different from OSA determined based on ASHRAE  62.1.
   # It takes into account the available OSA in dining as transfer air.
-  def reset_kitchen_OA(building_vintage)
+  def reset_kitchen_oa(building_vintage)
     space_kitchen = getSpaceByName('Kitchen').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
     ventilation.setOutdoorAirFlowperPerson(0)

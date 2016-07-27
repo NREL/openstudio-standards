@@ -578,7 +578,7 @@ module BTAP
       # @param hum [Fixnum] humidity
       # @param press [Fixnum] pressure
       # @return [String] self
-      def setConstantDryandDewPointTemperatureHumidityAndPressure(dbt = '0.0', dpt = '-1.1', hum = '92', press = '98500')
+      def set_constant_dry_and_dewpoint_temperature_humidity_pressure(dbt = '0.0', dpt = '-1.1', hum = '92', press = '98500')
         scan if @filearray.nil?
         setcolumntovalue(Dry_Bulb_Temperature, dbt)
         setcolumntovalue(Dew_Point_Temperature, dpt)
