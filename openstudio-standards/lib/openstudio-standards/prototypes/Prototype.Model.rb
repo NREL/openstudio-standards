@@ -429,7 +429,7 @@ class OpenStudio::Model::Model
       stub_space_type.setStandardsBuildingType(building_type)
       stub_space_type.setStandardsSpaceType(space_type_name)
       stub_space_type.setName("#{building_type} #{space_type_name}")
-      stub_space_type.set_rendering_color(building_vintage)
+      stub_space_type.apply_rendering_color(building_vintage)
 
       space_names.each do |space_name|
         space = getSpaceByName(space_name)
@@ -449,7 +449,7 @@ class OpenStudio::Model::Model
       stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
       stub_space_type.setStandardsSpaceType(space_type_property['space_type'])
       stub_space_type.setName("#{template}-#{space_type_property['building_type']}-#{space_type_property['space_type']}")
-      stub_space_type.set_rendering_color(template)
+      stub_space_type.apply_rendering_color(template)
     end
     add_loads(template)
   end
@@ -487,10 +487,10 @@ class OpenStudio::Model::Model
     # which are placeholders, and give them appropriate loads and schedules
     getSpaceTypes.sort.each do |space_type|
       # Rendering color
-      space_type.set_rendering_color(building_vintage)
+      space_type.apply_rendering_color(building_vintage)
 
       # Loads
-      space_type.set_internal_loads(building_vintage, true, true, true, true, true, true)
+      space_type.apply_internal_loads(building_vintage, true, true, true, true, true, true)
 
       # Schedules
       space_type.set_internal_load_schedules(building_vintage, true, true, true, true, true, true, true)
@@ -1121,10 +1121,10 @@ class OpenStudio::Model::Model
     getFanZoneExhausts.sort.each(&:set_prototype_fan_pressure_rise)
 
     # Motor Efficiency
-    getFanConstantVolumes.sort.each { |obj| obj.set_prototype_fan_efficiency(building_vintage) }
-    getFanVariableVolumes.sort.each { |obj| obj.set_prototype_fan_efficiency(building_vintage) }
-    getFanOnOffs.sort.each { |obj| obj.set_prototype_fan_efficiency(building_vintage) }
-    getFanZoneExhausts.sort.each { |obj| obj.set_prototype_fan_efficiency(building_vintage) }
+    getFanConstantVolumes.sort.each { |obj| obj.apply_prototype_fan_efficiency(building_vintage) }
+    getFanVariableVolumes.sort.each { |obj| obj.apply_prototype_fan_efficiency(building_vintage) }
+    getFanOnOffs.sort.each { |obj| obj.apply_prototype_fan_efficiency(building_vintage) }
+    getFanZoneExhausts.sort.each { |obj| obj.apply_prototype_fan_efficiency(building_vintage) }
 
     ##### Add Economizers
 

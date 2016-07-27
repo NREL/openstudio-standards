@@ -153,7 +153,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def set_efficiency_and_curves(template, sql_db_vars_map)
+  def apply_efficiency_and_curves(template, sql_db_vars_map)
     successfully_set_all_properties = true
 
     unitary_acs = $os_standards['unitary_acs']

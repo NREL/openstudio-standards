@@ -1,7 +1,7 @@
 
 # open the class to add methods to return sizing values
 class OpenStudio::Model::CoilHeatingDXMultiSpeed
-  def set_efficiency_and_curves(template, standards, sql_db_vars_map)
+  def apply_efficiency_and_curves(template, standards, sql_db_vars_map)
     successfully_set_all_properties = true
 
     heat_pumps = standards['heat_pumps_heating']

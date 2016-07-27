@@ -55,7 +55,7 @@ class OpenStudio::Model::AirLoopHVAC
     if is_multizone_vav_system
 
       # VAV Reheat Control
-      set_vav_damper_action(template)
+      apply_vav_damper_action(template)
 
       # Multizone VAV Optimization
       # This rule does not apply to two hospital and one outpatient systems (TODO add hospital two systems as exception)
@@ -167,7 +167,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @todo Figure out how to split fan power between multiple fans
   # if the proposed model had multiple fans (supply, return, exhaust, etc.)
   # return [Bool] true if successful, false if not.
-  def set_performance_rating_method_baseline_fan_power(template)
+  def apply_performance_rating_method_baseline_fan_power(template)
     # Main AHU fans
 
     # Calculate the allowable fan motor bhp
@@ -185,7 +185,7 @@ class OpenStudio::Model::AirLoopHVAC
     # fan power for each fan and adjust
     # the fan pressure rise accordingly
     all_fans.each do |fan|
-      fan.set_standard_minimum_motor_efficiency(template, allowable_fan_bhp)
+      fan.apply_standard_minimum_motor_efficiency(template, allowable_fan_bhp)
       allowable_power_w = allowable_fan_bhp * 746 / fan.motorEfficiency
       fan.adjust_pressure_rise_to_meet_fan_power(allowable_power_w)
     end
@@ -196,7 +196,7 @@ class OpenStudio::Model::AirLoopHVAC
     demandComponents.each do |dc|
       next if dc.to_AirTerminalSingleDuctParallelPIUReheat.empty?
       pfp_term = dc.to_AirTerminalSingleDuctParallelPIUReheat.get
-      pfp_term.set_performance_rating_method_baseline_fan_power(template)
+      pfp_term.apply_performance_rating_method_baseline_fan_power(template)
     end
 
     return true
@@ -411,7 +411,7 @@ class OpenStudio::Model::AirLoopHVAC
   # the system hitting the baseline allowable fan power
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  def set_baseline_fan_pressure_rise(template = 'ASHRAE 90.1-2007')
+  def apply_baseline_fan_pressure_rise(template = 'ASHRAE 90.1-2007')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{name}-Setting #{template} baseline fan power.")
 
     # Get the total system bhp from the proposed system, including terminal fans
@@ -2546,7 +2546,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @return [Bool] Returns true if successful, false if not
   # @todo see if this impacts the sizing run.
-  def set_vav_damper_action(template)
+  def apply_vav_damper_action(template)
     damper_action = nil
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', 'NECB 2011'

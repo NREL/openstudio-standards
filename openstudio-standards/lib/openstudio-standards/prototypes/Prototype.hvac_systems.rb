@@ -760,7 +760,7 @@ class OpenStudio::Model::Model
     end
 
     # Set the damper action based on the template.
-    air_loop.set_vav_damper_action(standard)
+    air_loop.apply_vav_damper_action(standard)
 
     return air_loop
   end
@@ -1139,7 +1139,7 @@ class OpenStudio::Model::Model
     end
 
     # Set the damper action based on the template.
-    air_loop.set_vav_damper_action(standard)
+    air_loop.apply_vav_damper_action(standard)
 
     return true
   end
@@ -1530,7 +1530,7 @@ class OpenStudio::Model::Model
     end
 
     # Set the damper action based on the template.
-    air_loop.set_vav_damper_action(standard)
+    air_loop.apply_vav_damper_action(standard)
 
     return true
   end

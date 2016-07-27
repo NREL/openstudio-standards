@@ -37,7 +37,7 @@ class OpenStudio::Model::SpaceType
   #
   # @param [string] target template for lookup
   # @return [Bool] returns true if successful, false if not.
-  def set_rendering_color(template)
+  def apply_rendering_color(template)
     # Get the standards data
     space_type_properties = get_standards_data(template)
 
@@ -77,7 +77,7 @@ class OpenStudio::Model::SpaceType
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
   # @param set_infiltration [Bool] if true, set the infiltration rates
   # @return [Bool] returns true if successful, false if not
-  def set_internal_loads(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+  def apply_internal_loads(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     # Skip plenums
     # Check if the space type name
     # contains the word plenum.

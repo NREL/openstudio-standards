@@ -17,7 +17,7 @@ module CoolingTower
   #
   # @param standard [String] the target standard
   # @return [Bool] true if successful, false if not
-  def set_minimum_power_per_flow(standard)
+  def apply_minimum_power_per_flow(standard)
     # Get the design water flow rate
     design_water_flow_m3_per_s = nil
     if designWaterFlowRate.is_initialized

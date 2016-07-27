@@ -6,7 +6,7 @@ class OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat
   #
   # @param template [String] the standard
   # @return [Bool] returns true if successful, false if not
-  def set_performance_rating_method_baseline_fan_power(template)
+  def apply_performance_rating_method_baseline_fan_power(template)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "Setting PIU fan power for #{name}.")
 
     # Determine the fan sizing flow rate, min flow rate,

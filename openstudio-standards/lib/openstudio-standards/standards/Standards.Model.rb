@@ -123,7 +123,7 @@ class OpenStudio::Model::Model
     # keeping user-defined schedules.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Changing Lighting Loads ***')
     getSpaceTypes.sort.each do |space_type|
-      space_type.set_internal_loads(building_vintage, false, true, false, false, false, false)
+      space_type.apply_internal_loads(building_vintage, false, true, false, false, false, false)
     end
 
     # If any of the lights are missing schedules, assign an
@@ -223,7 +223,7 @@ class OpenStudio::Model::Model
 
     # Set the baseline fan power for all airloops
     getAirLoopHVACs.sort.each do |air_loop|
-      air_loop.set_performance_rating_method_baseline_fan_power(building_vintage)
+      air_loop.apply_performance_rating_method_baseline_fan_power(building_vintage)
     end
 
     # Set the baseline pumping power for all plant loops
@@ -1815,37 +1815,37 @@ class OpenStudio::Model::Model
     ##### Apply equipment efficiencies
 
     # Fans
-    getFanVariableVolumes.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
-    getFanConstantVolumes.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
-    getFanOnOffs.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
-    getFanZoneExhausts.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
+    getFanVariableVolumes.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
+    getFanConstantVolumes.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
+    getFanOnOffs.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
+    getFanZoneExhausts.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(building_vintage, obj.brake_horsepower) }
 
     # Pumps
-    getPumpConstantSpeeds.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage) }
-    getPumpVariableSpeeds.sort.each { |obj| obj.set_standard_minimum_motor_efficiency(building_vintage) }
+    getPumpConstantSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(building_vintage) }
+    getPumpVariableSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(building_vintage) }
 
     # Unitary ACs
 
-    getCoilCoolingDXTwoSpeeds.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
-    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.set_efficiency_and_curves(building_vintage, sql_db_vars_map) }
+    getCoilCoolingDXTwoSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(building_vintage) }
+    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(building_vintage, sql_db_vars_map) }
 
     # Unitary HPs
-    getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.set_efficiency_and_curves(building_vintage, sql_db_vars_map) }
+    getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(building_vintage, sql_db_vars_map) }
 
     # Chillers
     clg_tower_objs = getCoolingTowerSingleSpeeds
-    getChillerElectricEIRs.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage, clg_tower_objs) }
+    getChillerElectricEIRs.sort.each { |obj| obj.apply_efficiency_and_curves(building_vintage, clg_tower_objs) }
 
     # Boilers
-    getBoilerHotWaters.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
+    getBoilerHotWaters.sort.each { |obj| obj.apply_efficiency_and_curves(building_vintage) }
 
     # Water Heaters
-    getWaterHeaterMixeds.sort.each { |obj| obj.set_efficiency(building_vintage) }
+    getWaterHeaterMixeds.sort.each { |obj| obj.apply_efficiency(building_vintage) }
 
     # Cooling Towers
-    getCoolingTowerSingleSpeeds.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
-    getCoolingTowerTwoSpeeds.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
-    getCoolingTowerVariableSpeeds.sort.each { |obj| obj.set_efficiency_and_curves(building_vintage) }
+    getCoolingTowerSingleSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(building_vintage) }
+    getCoolingTowerTwoSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(building_vintage) }
+    getCoolingTowerVariableSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(building_vintage) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end

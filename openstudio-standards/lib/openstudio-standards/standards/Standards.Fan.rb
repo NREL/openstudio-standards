@@ -2,7 +2,7 @@
 # A variety of fan calculation methods that are the same regardless of fan type.
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
 module Fan
-  def set_standard_minimum_motor_efficiency(template, allowed_bhp)
+  def apply_standard_minimum_motor_efficiency(template, allowed_bhp)
     # Find the motor efficiency
     motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, allowed_bhp)
 
