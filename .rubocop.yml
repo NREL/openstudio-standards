@@ -1,136 +1,135 @@
+
+# Most of the maintainers of this code are professional engineers,
+# not professional Rubyists.  The style guide for this project
+# has been modified accordingly, with explanations given below.
+# Where a Cop is not listed, it uses the Rubocop defaults.
+
 AllCops:
   Exclude:
     - 'measures/**/*'
     - 'openstudio-standards/data/**/*'
     - 'openstudio-standards/test/**/*'
     - 'openstudio-standards/lib/openstudio-standards/hvac_sizing/**/*'
+    - 'openstudio-standards/lib/openstudio-standards/btap/**/*'
 
 # ==================== Linters ====================
-Lint/AmbiguousOperator:
-  Enabled: true
 
-Lint/BlockAlignment:
-  Enabled: true
-
-Lint/ParenthesesAsGroupedExpression:
-  Enabled: true
-
-Lint/RequireParentheses:
-  Enabled: true
-
-# Offense count: 1
-Lint/UnreachableCode:
+# Allow variable initialization to indicate
+# what variable is going to be set by the next
+# block of code.
+Lint/UselessAssignment:
   Enabled: false
 
-# Offense count: 51
-Lint/UselessAssignment:
-  Enabled: true
-
-# ==================== Styles / Metrics====================
-# Offense count: 4
+# Allow unused arguments in anticipation that
+# those arguments will be used in the future.
+# The ruby _arg convention will not be understood
+# by many of the non-Rubyists maintaining the code.
+Lint/UnusedMethodArgument:
+  Enabled: false  
+  
+# Allow unused blow arguments.
+# The ruby _arg convention will not be understood
+# by many of the non-Rubyists maintaining the code.
+Lint/UnusedBlockArgument:
+  Enabled: false  
+  
+# ==================== Metrics ====================
 Metrics/BlockNesting:
   Max: 4
 
-# Offense count: 18
-# Configuration parameters: CountComments.
-Metrics/ClassLength:
-  Max: 500
-
-# Offense count: 27
 Metrics/CyclomaticComplexity:
   Max: 48
 
-# Offense count: 974
+# Allow long lines to encourage sufficiently
+# detailed user-facing log messages.
 Metrics/LineLength:
-  Max: 1200
+  Max: 1000
 
-# Offense count: 87
-# Configuration parameters: CountComments.
-Metrics/MethodLength:
-  Max: 350
-
-# Offense count: 1
-# Configuration parameters: CountKeywordArgs.
+# Longer parameter list limits for methods that
+# add HVAC systems
 Metrics/ParameterLists:
-  Max: 8
+  Max: 15
+  
+# Disable this metric.  This is a complex engineering-focused library.
+Metrics/ClassLength:
+  Enabled: false
 
-# ==================== Disabled on Purpose ====================
-# Offense count: 3
+# Disable this metric.  This is a complex engineering-focused library.  
+Metrics/MethodLength:
+  Enabled: false
+  
+# Disable this metric.  This is a complex engineering-focused library.
+Metrics/ModuleLength:
+  Enabled: false  
+  
+# Disable this metric.  This is a complex engineering-focused library.
+Metrics/AbcSize:
+  Enabled: false
+  
+# Disable this metric.  This is a complex engineering-focused library.
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+# Disable this metric.  This is a complex engineering-focused library.
+Metrics/CyclomaticComplexity:
+  Enabled: false
+  
+# ==================== Styles ====================
+  
+# WordArray enforces how array literals of word-like strings should be expressed.
+# Enforce ['Word1', 'Word2'] for readability
+Style/WordArray:
+  EnforcedStyle: brackets
+
+# Intentionally allow set_foo because these methods do not
+# take have cooresponding getters.
 Style/AccessorMethodName:
-  Enabled: true
+  Enabled: false
 
-# Need to allow indented case statements
-# Offense count: 9
-# Configuration parameters: IndentWhenRelativeTo, SupportedStyles, IndentOneStep.
+# Allow indented case statements
 Style/CaseIndentation:
   Enabled: false
 
-# Offense count: 18
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/ClassAndModuleChildren:
-  Enabled: false
-
-# Offense count: 2
-Style/ClassVars:
-  Enabled: false
-
-# Offense count: 42
-Style/Documentation:
-  Enabled: false
-
-# Offense count: 1
-Style/EachWithObject:
-  Enabled: false
-
-# Offense count: 2
-# Configuration parameters: AllowedVariables.
-Style/GlobalVars:
-  Enabled: false
-
-# Offense count: 7
-# Configuration parameters: MinBodyLength.
+# Disabled because in most of this codebase,
+# the current approach is more readable.
 Style/GuardClause:
-  Enabled: true
+  Enabled: false  
 
-# Offense count: 17
-# Configuration parameters: MaxLineLength.
-Style/IfUnlessModifier:
+# Allow this type of nesting for logic clarity.
+Style/IfInsideElse:
+  Enabled: false  
+ 
+# This library encourages explicit returns for clarity
+Style/RedundantReturn:
   Enabled: false
 
-# Do NOT enable.  For some reason this is catchy any next which I feel are okay.
-# Offense count: 18
-# Configuration parameters: EnforcedStyle, SupportedStyles.
+# Allow duplication inside conditional branches to keep
+# code that does certain tasks more consolidated.
+Style/IdenticalConditionalBranches:
+  Enabled: false  
+
+# Do not force people to use Next.
 Style/Next:
   Enabled: false
 
-# Do NOT enable this because it appears $? is different than $CHILD_STATUS.
-# Offense count: 7
-# Cop supports --auto-correct.
-Style/SpecialGlobalVars:
+# Do not force people to use one-line if statements.
+Style/IfUnlessModifier:
   Enabled: false
 
-# More Changes per DLM -- pulled from https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
-Style/RedundantReturn:
-  Description: 'Do not use return where it is not required.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-explicit-return'
+# Allow global variables because using $os_standards 
+# to avoid passing it around to every method.
+# Should not use any more global variables though.
+Style/GlobalVars:
+  Enabled: false 
+ 
+# Ignore file name convention; choices based on OpenStudio C++ class names
+Style/FileName:
   Enabled: false
 
-Style/NumericLiterals:
-  Description: 'Add underscores to large numeric literals to improve readability.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#underscores-in-numerics'
-  Enabled: false
-
-Lint/UnusedBlockArgument:
-  Description: 'Checks for unused block arguments.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#underscore-unused-vars'
-  Enabled: false
-
-Lint/UnusedMethodArgument:
-  Description: 'Checks for unused method arguments.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#underscore-unused-vars'
-  Enabled: false
-
-Lint/UselessAssignment:
-  Description: 'Checks for useless assignment to a local variable.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#underscore-unused-vars'
+# Documentation will be covered by YARD.
+Style/Documentation:
+  Enabled: false  
+  
+# Unclear what this Cop is about; disregard
+Style/ClassAndModuleChildren:
   Enabled: false
