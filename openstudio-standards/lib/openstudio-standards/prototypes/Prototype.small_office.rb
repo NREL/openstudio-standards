@@ -5,17 +5,17 @@ class OpenStudio::Model::Model
     space_type_map = nil
 
     space_type_map = case building_vintage
-    when 'NECB 2011'
-      # dom = ?
-      {
-        '- undefined -' => ['Attic'],
-        'Office - enclosed' => ['Core_ZN', 'Perimeter_ZN_1', 'Perimeter_ZN_2', 'Perimeter_ZN_3', 'Perimeter_ZN_4']
-      }
-    else
-      {
-        'WholeBuilding - Sm Office' => ['Perimeter_ZN_1', 'Perimeter_ZN_2', 'Perimeter_ZN_3', 'Perimeter_ZN_4', 'Core_ZN'],
-        'Attic' => ['Attic']
-      }
+                     when 'NECB 2011'
+                       # dom = ?
+                       {
+                         '- undefined -' => ['Attic'],
+                         'Office - enclosed' => ['Core_ZN', 'Perimeter_ZN_1', 'Perimeter_ZN_2', 'Perimeter_ZN_3', 'Perimeter_ZN_4']
+                       }
+                     else
+                       {
+                         'WholeBuilding - Sm Office' => ['Perimeter_ZN_1', 'Perimeter_ZN_2', 'Perimeter_ZN_3', 'Perimeter_ZN_4', 'Core_ZN'],
+                         'Attic' => ['Attic']
+                       }
                      end
     return space_type_map
   end

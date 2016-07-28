@@ -374,36 +374,36 @@ class OpenStudio::Model::Construction
     fil_int_surf_vertical_r_si = OpenStudio.convert(fil_int_surf_vertical_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
 
     case intended_surface_type
-      when 'AtticFloor'
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
-        other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
-      when 'AtticWall', 'AtticRoof'
-        other_layer_r_value_si += film_ext_surf_r_si # Outside
-        other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
-      when 'DemisingFloor', 'InteriorFloor'
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
-        other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
-      when 'InteriorCeiling'
-        other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Outside
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
-      when 'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor'
-        other_layer_r_value_si += fil_int_surf_vertical_r_si # Outside
-        other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
-      when 'DemisingRoof', 'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser'
-        other_layer_r_value_si += film_ext_surf_r_si # Outside
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
-      when 'ExteriorFloor'
-        other_layer_r_value_si += film_ext_surf_r_si # Outside
-        other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
-      when 'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor'
-        other_layer_r_value_si += film_ext_surf_r_si # Outside
-        other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
-      when 'GroundContactFloor'
-        other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
-      when 'GroundContactWall'
-        other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
-      when 'GroundContactRoof'
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
+    when 'AtticFloor'
+      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
+      other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
+    when 'AtticWall', 'AtticRoof'
+      other_layer_r_value_si += film_ext_surf_r_si # Outside
+      other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
+    when 'DemisingFloor', 'InteriorFloor'
+      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
+      other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
+    when 'InteriorCeiling'
+      other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Outside
+      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
+    when 'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor'
+      other_layer_r_value_si += fil_int_surf_vertical_r_si # Outside
+      other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
+    when 'DemisingRoof', 'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser'
+      other_layer_r_value_si += film_ext_surf_r_si # Outside
+      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
+    when 'ExteriorFloor'
+      other_layer_r_value_si += film_ext_surf_r_si # Outside
+      other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
+    when 'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor'
+      other_layer_r_value_si += film_ext_surf_r_si # Outside
+      other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
+    when 'GroundContactFloor'
+      other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
+    when 'GroundContactWall'
+      other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
+    when 'GroundContactRoof'
+      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
     end
 
     return other_layer_r_value_si

@@ -42,9 +42,9 @@ class OpenStudio::Model::Model
             num_chillers = 1
             if building_type == 'Hospital' || building_type == 'LargeOffice'
               case building_vintage
-                when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-                  number_cooling_towers = 2
-                  num_chillers = 2
+              when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+                number_cooling_towers = 2
+                num_chillers = 2
               end
             end
             if prototype_input['chiller_cooling_type'] == 'WaterCooled'
@@ -82,47 +82,47 @@ class OpenStudio::Model::Model
                          electric_reheat = false,
                          building_type)
 
-      when 'CAV'
+        when 'CAV'
 
-        # Retrieve the existing hot water loop
-        # or add a new one if necessary.
-        hot_water_loop = nil
-        hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
-                           getPlantLoopByName('Hot Water Loop').get
-                         else
-                           add_hw_loop('NaturalGas', building_type)
-                         end
+          # Retrieve the existing hot water loop
+          # or add a new one if necessary.
+          hot_water_loop = nil
+          hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
+                             getPlantLoopByName('Hot Water Loop').get
+                           else
+                             add_hw_loop('NaturalGas', building_type)
+                           end
 
-        chilled_water_loop = nil
-        if getPlantLoopByName('Chilled Water Loop').is_initialized
-          chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
-        elsif building_type == 'Hospital'
-          condenser_water_loop = nil
-          if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-            condenser_water_loop = add_cw_loop
+          chilled_water_loop = nil
+          if getPlantLoopByName('Chilled Water Loop').is_initialized
+            chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
+          elsif building_type == 'Hospital'
+            condenser_water_loop = nil
+            if prototype_input['chiller_cooling_type'] == 'WaterCooled'
+              condenser_water_loop = add_cw_loop
+            end
+
+            chilled_water_loop = add_chw_loop(building_vintage,
+                                              prototype_input['chw_pumping_type'],
+                                              prototype_input['chiller_cooling_type'],
+                                              prototype_input['chiller_condenser_type'],
+                                              prototype_input['chiller_compressor_type'],
+                                              prototype_input['chiller_capacity_guess'],
+                                              condenser_water_loop)
           end
 
-          chilled_water_loop = add_chw_loop(building_vintage,
-                                            prototype_input['chw_pumping_type'],
-                                            prototype_input['chiller_cooling_type'],
-                                            prototype_input['chiller_condenser_type'],
-                                            prototype_input['chiller_compressor_type'],
-                                            prototype_input['chiller_capacity_guess'],
-                                            condenser_water_loop)
-        end
-
-        # Add the CAV
-        add_cav(building_vintage,
-                system['name'],
-                hot_water_loop,
-                thermal_zones,
-                prototype_input['vav_operation_schedule'],
-                prototype_input['vav_oa_damper_schedule'],
-                prototype_input['vav_fan_efficiency'],
-                prototype_input['vav_fan_motor_efficiency'],
-                prototype_input['vav_fan_pressure_rise'],
-                chilled_water_loop,
-                building_type)
+          # Add the CAV
+          add_cav(building_vintage,
+                  system['name'],
+                  hot_water_loop,
+                  thermal_zones,
+                  prototype_input['vav_operation_schedule'],
+                  prototype_input['vav_oa_damper_schedule'],
+                  prototype_input['vav_fan_efficiency'],
+                  prototype_input['vav_fan_motor_efficiency'],
+                  prototype_input['vav_fan_pressure_rise'],
+                  chilled_water_loop,
+                  building_type)
 
         when 'PSZ-AC'
 
@@ -192,53 +192,53 @@ class OpenStudio::Model::Model
                    return_plenum,
                    building_type)
 
-      when 'DOAS'
+        when 'DOAS'
 
-        # Retrieve the existing hot water loop
-        # or add a new one if necessary.
-        hot_water_loop = nil
-        hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
-                           getPlantLoopByName('Hot Water Loop').get
-                         else
-                           add_hw_loop('NaturalGas', building_type)
-                         end
+          # Retrieve the existing hot water loop
+          # or add a new one if necessary.
+          hot_water_loop = nil
+          hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
+                             getPlantLoopByName('Hot Water Loop').get
+                           else
+                             add_hw_loop('NaturalGas', building_type)
+                           end
 
-        # Retrieve the existing chilled water loop
-        # or add a new one if necessary.
-        chilled_water_loop = nil
-        if getPlantLoopByName('Chilled Water Loop').is_initialized
-          chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
-        else
-          condenser_water_loop = nil
-          if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-            condenser_water_loop = add_cw_loop(building_vintage,
-                                               'Open Cooling Tower',
-                                               'Centrifugal',
-                                               'Fan Cycling',
-                                               2,
-                                               1,
-                                               building_type)
+          # Retrieve the existing chilled water loop
+          # or add a new one if necessary.
+          chilled_water_loop = nil
+          if getPlantLoopByName('Chilled Water Loop').is_initialized
+            chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
+          else
+            condenser_water_loop = nil
+            if prototype_input['chiller_cooling_type'] == 'WaterCooled'
+              condenser_water_loop = add_cw_loop(building_vintage,
+                                                 'Open Cooling Tower',
+                                                 'Centrifugal',
+                                                 'Fan Cycling',
+                                                 2,
+                                                 1,
+                                                 building_type)
+            end
+
+            chilled_water_loop = add_chw_loop(building_vintage,
+                                              prototype_input['chw_pumping_type'],
+                                              prototype_input['chiller_cooling_type'],
+                                              prototype_input['chiller_condenser_type'],
+                                              prototype_input['chiller_compressor_type'],
+                                              'Electricity',
+                                              condenser_water_loop)
           end
 
-          chilled_water_loop = add_chw_loop(building_vintage,
-                                            prototype_input['chw_pumping_type'],
-                                            prototype_input['chiller_cooling_type'],
-                                            prototype_input['chiller_condenser_type'],
-                                            prototype_input['chiller_compressor_type'],
-                                            'Electricity',
-                                            condenser_water_loop)
-        end
-
-        add_doas(building_vintage,
-                 system['name'],
-                 hot_water_loop,
-                 chilled_water_loop,
-                 thermal_zones,
-                 prototype_input['vav_operation_schedule'],
-                 prototype_input['doas_oa_damper_schedule'],
-                 prototype_input['doas_fan_maximum_flow_rate'],
-                 prototype_input['doas_economizer_control_type'],
-                 building_type)
+          add_doas(building_vintage,
+                   system['name'],
+                   hot_water_loop,
+                   chilled_water_loop,
+                   thermal_zones,
+                   prototype_input['vav_operation_schedule'],
+                   prototype_input['doas_oa_damper_schedule'],
+                   prototype_input['doas_fan_maximum_flow_rate'],
+                   prototype_input['doas_economizer_control_type'],
+                   building_type)
 
         when 'DC' # Data Center
 

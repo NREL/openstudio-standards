@@ -1327,14 +1327,14 @@ class OpenStudio::Model::AirLoopHVAC
       return erv_required
     end
     case template
-      when '90.1-2004', '90.1-2007'
-        if name.to_s.include? 'VAV_ICU'
-          erv_required = false
-          return erv_required
-        elsif name.to_s.include? 'VAV_PATRMS'
-          erv_required = false
-          return erv_required
-        end
+    when '90.1-2004', '90.1-2007'
+      if name.to_s.include? 'VAV_ICU'
+        erv_required = false
+        return erv_required
+      elsif name.to_s.include? 'VAV_PATRMS'
+        erv_required = false
+        return erv_required
+      end
     end
 
     # ERV Not Applicable for AHUs that have DCV
@@ -2392,11 +2392,11 @@ class OpenStudio::Model::AirLoopHVAC
     design_sat_f = OpenStudio.convert(design_sat_c, 'C', 'F').get
 
     case template
-      when '90.1-2004'
-        # 2004 has a 10F sat reset
-        sat_reset_r = 10
-      when '90.1-2007', '90.1-2010', '90.1-2013'
-        sat_reset_r = 5
+    when '90.1-2004'
+      # 2004 has a 10F sat reset
+      sat_reset_r = 10
+    when '90.1-2007', '90.1-2010', '90.1-2013'
+      sat_reset_r = 5
     end
 
     sat_reset_k = OpenStudio.convert(sat_reset_r, 'R', 'K').get

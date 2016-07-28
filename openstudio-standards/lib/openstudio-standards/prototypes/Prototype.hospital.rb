@@ -278,16 +278,16 @@ class OpenStudio::Model::Model
     end
     if hot_water_loop
       case building_vintage
-        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2', 'ICU_Flr_2', 'PatRoom5_Mult10_Flr_4', 'Lab_Flr_3']
-          space_names.each do |space_name|
-            add_humidifier(space_name, building_vintage, hot_water_loop)
-          end
-        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-          space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2']
-          space_names.each do |space_name|
-            add_humidifier(space_name, building_vintage, hot_water_loop)
-          end
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2', 'ICU_Flr_2', 'PatRoom5_Mult10_Flr_4', 'Lab_Flr_3']
+        space_names.each do |space_name|
+          add_humidifier(space_name, building_vintage, hot_water_loop)
+        end
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+        space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2']
+        space_names.each do |space_name|
+          add_humidifier(space_name, building_vintage, hot_water_loop)
+        end
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find hot water loop to attach humidifier to.')
@@ -418,8 +418,8 @@ class OpenStudio::Model::Model
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
       oa_control = oa_sys.getControllerOutdoorAir
       case air_loop.name.get
-        when 'VAV_ER', 'VAV_ICU', 'VAV_LABS', 'VAV_OR', 'VAV_PATRMS', 'CAV_1', 'CAV_2'
-          oa_control.setEconomizerControlType('NoEconomizer')
+      when 'VAV_ER', 'VAV_ICU', 'VAV_LABS', 'VAV_OR', 'VAV_PATRMS', 'CAV_1', 'CAV_2'
+        oa_control.setEconomizerControlType('NoEconomizer')
       end
     end
   end
