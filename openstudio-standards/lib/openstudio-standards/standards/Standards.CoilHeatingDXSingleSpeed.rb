@@ -290,7 +290,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
       # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
       # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
-      capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
+      capacity_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
       cop = pthp_cop_coeff_1 - (pthp_cop_coeff_2 * capacity_btu_per_hr / 1000.0)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{name}: #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{cop.round(2)}")
     end

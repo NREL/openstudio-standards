@@ -421,9 +421,9 @@ class OpenStudio::Model::Model
     exception_min_area_ft2 = nil
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010'
-      exception_min_area_ft2 = 20000
+      exception_min_area_ft2 = 20_000
     when '90.1-2013'
-      exception_min_area_ft2 = 20000
+      exception_min_area_ft2 = 20_000
       # Customization - Xcel EDA Program Manual 2014
       # 3.2.1 Mechanical System Selection ii
       if custom == 'Xcel Energy CO EDA'
@@ -536,8 +536,8 @@ class OpenStudio::Model::Model
     when '90.1-2004', '90.1-2007'
       # Set the limit differently for
       # different codes
-      limit_ft2 = 25000
-      limit_ft2 = 75000 if template == '90.1-2004'
+      limit_ft2 = 25_000
+      limit_ft2 = 75_000 if template == '90.1-2004'
 
       # Warn about heated only
       if area_type == 'heatedonly'
@@ -552,17 +552,17 @@ class OpenStudio::Model::Model
         if num_stories <= 3 && area_ft2 < limit_ft2
           sys_num = '3_or_4'
         # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
-        elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000))
+        elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150_000))
           sys_num = '5_or_6'
         # nonresidential and more than 5 floors or >150,000 ft2
-        elsif num_stories >= 5 || area_ft2 > 150000
+        elsif num_stories >= 5 || area_ft2 > 150_000
           sys_num = '7_or_8'
         end
       end
 
     when '90.1-2010'
 
-      limit_ft2 = 25000
+      limit_ft2 = 25_000
 
       # Customization for Xcel EDA.
       # No special retail category
@@ -581,10 +581,10 @@ class OpenStudio::Model::Model
         if num_stories <= 3 && area_ft2 < limit_ft2
           sys_num = '3_or_4'
         # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
-        elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000))
+        elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150_000))
           sys_num = '5_or_6'
         # nonresidential and more than 5 floors or >150,000 ft2
-        elsif num_stories >= 5 || area_ft2 > 150000
+        elsif num_stories >= 5 || area_ft2 > 150_000
           sys_num = '7_or_8'
         end
       when 'heatedonly'
@@ -596,7 +596,7 @@ class OpenStudio::Model::Model
 
     when '90.1-2013'
 
-      limit_ft2 = 25000
+      limit_ft2 = 25_000
 
       case area_type
       when 'residential'
@@ -606,10 +606,10 @@ class OpenStudio::Model::Model
         if num_stories <= 3 && area_ft2 < limit_ft2
           sys_num = '3_or_4'
         # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
-        elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150000))
+        elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150_000))
           sys_num = '5_or_6'
         # nonresidential and more than 5 floors or >150,000 ft2
-        elsif num_stories >= 5 || area_ft2 > 150000
+        elsif num_stories >= 5 || area_ft2 > 150_000
           sys_num = '7_or_8'
         end
       when 'heatedonly'
@@ -2808,11 +2808,11 @@ class OpenStudio::Model::Model
     if building_type == 'FullServiceRestaurant' # 5502 ft^2
       result = 511
     elsif building_type == 'Hospital' # 241,410 ft^2 (including basement)
-      result = 22422
+      result = 22_422
     elsif building_type == 'LargeHotel' # 122,132 ft^2
-      result = 11345
+      result = 11_345
     elsif building_type == 'LargeOffice' # 498,600 ft^2
-      result = 46320
+      result = 46_320
     elsif building_type == 'MediumOffice' # 53,600 ft^2
       result = 4982
     elsif building_type == 'MidriseApartment' # 33,700 ft^2
@@ -2829,7 +2829,7 @@ class OpenStudio::Model::Model
     elsif building_type == 'Retail' # 24,695 ft^2
       result = 2294
     elsif building_type == 'SecondarySchool' # 210,900 ft^2
-      result = 19592
+      result = 19_592
     elsif building_type == 'SmallHotel' # 43,200 ft^2
       result = 4014
     elsif building_type == 'SmallOffice' # 5500 ft^2
@@ -2877,7 +2877,7 @@ class OpenStudio::Model::Model
       open_studio_area = getBuilding.floorArea
       building_type = if open_studio_area < 2750
                         'SmallOffice'
-                      elsif open_studio_area < 25250
+                      elsif open_studio_area < 25_250
                         'MediumOffice'
                       else
                         'LargeOffice'
@@ -3862,7 +3862,7 @@ class OpenStudio::Model::Model
                                          else
                                            3.0
                                          end
-    internal_loads['igain_btu_per_day'] = units_per_bldg * (17900.0 + 23.8 * conditioned_floor_area + 4104.0 * bedrooms_per_unit)
+    internal_loads['igain_btu_per_day'] = units_per_bldg * (17_900.0 + 23.8 * conditioned_floor_area + 4104.0 * bedrooms_per_unit)
     internal_loads['internal_mass_lbs'] = total_floor_area * 8.0
 
     return internal_loads

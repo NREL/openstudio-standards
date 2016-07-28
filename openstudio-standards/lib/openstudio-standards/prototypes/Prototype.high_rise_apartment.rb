@@ -376,7 +376,7 @@ class OpenStudio::Model::Model
     elec_equip_def2.setFractionLatent(0)
     elec_equip_def2.setFractionRadiant(0)
     elec_equip_def2.setFractionLost(0.95)
-    elec_equip_def1.setDesignLevel(20370)
+    elec_equip_def1.setDesignLevel(20_370)
     case template
     when '90.1-2013'
       elec_equip_def2.setDesignLevel(63)

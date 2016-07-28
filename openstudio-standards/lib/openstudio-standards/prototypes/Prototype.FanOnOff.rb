@@ -45,7 +45,7 @@ class OpenStudio::Model::FanOnOff
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                                  2.5
-                               elsif maximum_flow_rate_cfm >= 7437 && maximum_flow_rate_cfm < 20000
+                               elsif maximum_flow_rate_cfm >= 7437 && maximum_flow_rate_cfm < 20_000
                                  4.46
                                else # Over 20,000 cfm
                                  4.09
@@ -65,7 +65,7 @@ class OpenStudio::Model::FanOnOff
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                                  2.5
-                               elsif maximum_flow_rate_cfm >= 7437 && maximum_flow_rate_cfm < 20000
+                               elsif maximum_flow_rate_cfm >= 7437 && maximum_flow_rate_cfm < 20_000
                                  4.46
                                else # Over 20,000 cfm
                                  4.09

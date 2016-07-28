@@ -336,7 +336,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
       # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
-      capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
+      capacity_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
       pthp_eer = pthp_eer_coeff_1 - (pthp_eer_coeff_2 * capacity_btu_per_hr / 1000.0)
       cop = eer_to_cop(pthp_eer)
       new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_eer.round(1)}EER"
@@ -353,7 +353,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
       # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
-      capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
+      capacity_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
       ptac_eer = ptac_eer_coeff_1 + (ptac_eer_coeff_2 * capacity_btu_per_hr / 1000.0)
       cop = eer_to_cop(ptac_eer)
       new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer.round(1)}EER"

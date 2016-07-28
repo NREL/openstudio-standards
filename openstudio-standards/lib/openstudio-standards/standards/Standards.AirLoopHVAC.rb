@@ -651,7 +651,7 @@ class OpenStudio::Model::AirLoopHVAC
     return economizer_required if name.to_s.include? 'Outpatient F1'
 
     # A big number of btu per hr as the minimum requirement
-    infinity_btu_per_hr = 999999999999
+    infinity_btu_per_hr = 999_999_999_999
     minimum_capacity_btu_per_hr = infinity_btu_per_hr
 
     # Determine if the airloop serves any computer rooms
@@ -678,7 +678,7 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-7B',
           'ASHRAE 169-2006-8A',
           'ASHRAE 169-2006-8B'
-        minimum_capacity_btu_per_hr = 35000
+        minimum_capacity_btu_per_hr = 35_000
       when 'ASHRAE 169-2006-3B',
           'ASHRAE 169-2006-3C',
           'ASHRAE 169-2006-4B',
@@ -686,7 +686,7 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-5B',
           'ASHRAE 169-2006-5C',
           'ASHRAE 169-2006-6B'
-        minimum_capacity_btu_per_hr = 65000
+        minimum_capacity_btu_per_hr = 65_000
       end
     when '90.1-2010', '90.1-2013'
       if is_dc # data center / computer room
@@ -704,7 +704,7 @@ class OpenStudio::Model::AirLoopHVAC
             'ASHRAE 169-2006-7B',
             'ASHRAE 169-2006-8A',
             'ASHRAE 169-2006-8B'
-          minimum_capacity_btu_per_hr = 135000
+          minimum_capacity_btu_per_hr = 135_000
         when 'ASHRAE 169-2006-3B',
             'ASHRAE 169-2006-3C',
             'ASHRAE 169-2006-4B',
@@ -712,7 +712,7 @@ class OpenStudio::Model::AirLoopHVAC
             'ASHRAE 169-2006-5B',
             'ASHRAE 169-2006-5C',
             'ASHRAE 169-2006-6B'
-          minimum_capacity_btu_per_hr = 65000
+          minimum_capacity_btu_per_hr = 65_000
         end
       else
         case climate_zone
@@ -736,11 +736,11 @@ class OpenStudio::Model::AirLoopHVAC
             'ASHRAE 169-2006-5B',
             'ASHRAE 169-2006-5C',
             'ASHRAE 169-2006-6B'
-          minimum_capacity_btu_per_hr = 54000
+          minimum_capacity_btu_per_hr = 54_000
         end
       end
     when 'NECB 2011'
-      minimum_capacity_btu_per_hr = 68243 # NECB requires economizer for cooling cap > 20 kW
+      minimum_capacity_btu_per_hr = 68_243 # NECB requires economizer for cooling cap > 20 kW
     end
 
     # Check whether the system requires an economizer by comparing
@@ -924,14 +924,14 @@ class OpenStudio::Model::AirLoopHVAC
     num_zones_served = thermalZones.size
 
     # A big number of btu per hr as the minimum requirement
-    infinity_btu_per_hr = 999999999999
+    infinity_btu_per_hr = 999_999_999_999
     minimum_capacity_btu_per_hr = infinity_btu_per_hr
 
     # Determine if an integrated economizer is required
     integrated_economizer_required = true
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
-      minimum_capacity_btu_per_hr = 65000
+      minimum_capacity_btu_per_hr = 65_000
       minimum_capacity_w = OpenStudio.convert(minimum_capacity_btu_per_hr, 'Btu/hr', 'W').get
       # 6.5.1.3 Integrated Economizer Control
       # Exception a, DX VAV systems
@@ -1004,7 +1004,7 @@ class OpenStudio::Model::AirLoopHVAC
     economizer_required = false
 
     # A big number of ft2 as the minimum requirement
-    infinity_ft2 = 999999999999
+    infinity_ft2 = 999_999_999_999
     min_int_area_served_ft2 = infinity_ft2
     min_ext_area_served_ft2 = infinity_ft2
 
@@ -1026,7 +1026,7 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-7B',
           'ASHRAE 169-2006-8A',
           'ASHRAE 169-2006-8B'
-        min_int_area_served_ft2 = 15000
+        min_int_area_served_ft2 = 15_000
         min_ext_area_served_ft2 = infinity_ft2 # No requirement
       when 'ASHRAE 169-2006-3B',
           'ASHRAE 169-2006-3C',
@@ -1035,8 +1035,8 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-5B',
           'ASHRAE 169-2006-5C',
           'ASHRAE 169-2006-6B'
-        min_int_area_served_ft2 = 10000
-        min_ext_area_served_ft2 = 25000
+        min_int_area_served_ft2 = 10_000
+        min_ext_area_served_ft2 = 25_000
       end
     when '90.1-2007', '90.1-2010', '90.1-2013'
       case climate_zone
@@ -1419,9 +1419,9 @@ class OpenStudio::Model::AirLoopHVAC
         elsif pct_oa >= 0.4 && pct_oa < 0.5
           erv_cfm = nil
         elsif pct_oa >= 0.5 && pct_oa < 0.6
-          erv_cfm = 26000
+          erv_cfm = 26_000
         elsif pct_oa >= 0.6 && pct_oa < 0.7
-          erv_cfm = 12000
+          erv_cfm = 12_000
         elsif pct_oa >= 0.7 && pct_oa < 0.8
           erv_cfm = 5000
         elsif pct_oa >= 0.8
@@ -1431,7 +1431,7 @@ class OpenStudio::Model::AirLoopHVAC
         if pct_oa < 0.3
           erv_cfm = nil
         elsif pct_oa >= 0.3 && pct_oa < 0.4
-          erv_cfm = 11000
+          erv_cfm = 11_000
         elsif pct_oa >= 0.4 && pct_oa < 0.5
           erv_cfm = 5500
         elsif pct_oa >= 0.5 && pct_oa < 0.6
@@ -1525,9 +1525,9 @@ class OpenStudio::Model::AirLoopHVAC
           elsif pct_oa >= 0.4 && pct_oa < 0.5
             erv_cfm = nil
           elsif pct_oa >= 0.5 && pct_oa < 0.6
-            erv_cfm = 26000
+            erv_cfm = 26_000
           elsif pct_oa >= 0.6 && pct_oa < 0.7
-            erv_cfm = 12000
+            erv_cfm = 12_000
           elsif pct_oa >= 0.7 && pct_oa < 0.8
             erv_cfm = 5000
           elsif pct_oa >= 0.8
@@ -1537,11 +1537,11 @@ class OpenStudio::Model::AirLoopHVAC
           if pct_oa < 0.1
             erv_cfm = nil
           elsif pct_oa >= 0.1 && pct_oa < 0.2
-            erv_cfm = 28000
+            erv_cfm = 28_000
           elsif pct_oa >= 0.2 && pct_oa < 0.3
-            erv_cfm = 26500
+            erv_cfm = 26_500
           elsif pct_oa >= 0.3 && pct_oa < 0.4
-            erv_cfm = 11000
+            erv_cfm = 11_000
           elsif pct_oa >= 0.4 && pct_oa < 0.5
             erv_cfm = 5500
           elsif pct_oa >= 0.5 && pct_oa < 0.6
@@ -1557,9 +1557,9 @@ class OpenStudio::Model::AirLoopHVAC
           if pct_oa < 0.1
             erv_cfm = nil
           elsif pct_oa >= 0.1 && pct_oa < 0.2
-            erv_cfm = 26000
+            erv_cfm = 26_000
           elsif pct_oa >= 0.2 && pct_oa < 0.3
-            erv_cfm = 16000
+            erv_cfm = 16_000
           elsif pct_oa >= 0.3 && pct_oa < 0.4
             erv_cfm = 5500
           elsif pct_oa >= 0.4 && pct_oa < 0.5
@@ -1605,7 +1605,7 @@ class OpenStudio::Model::AirLoopHVAC
           elsif pct_oa >= 0.1 && pct_oa < 0.2
             erv_cfm = nil
           elsif pct_oa >= 0.2 && pct_oa < 0.3
-            erv_cfm = 19500
+            erv_cfm = 19_500
           elsif pct_oa >= 0.3 && pct_oa < 0.4
             erv_cfm = 9000
           elsif pct_oa >= 0.4 && pct_oa < 0.5
@@ -3333,7 +3333,7 @@ class OpenStudio::Model::AirLoopHVAC
     sp_reset_required = false
 
     # A big number of btu per hr as the minimum requirement
-    infinity_btu_per_hr = 999999999999
+    infinity_btu_per_hr = 999_999_999_999
     minimum_capacity_btu_per_hr = infinity_btu_per_hr
 
     # Determine the minimum capacity that requires an economizer

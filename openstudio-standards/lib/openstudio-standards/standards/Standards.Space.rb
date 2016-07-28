@@ -18,7 +18,6 @@ class OpenStudio::Model::Space
   # @todo add a list of valid choices for template argument
   # TODO stop skipping non-vertical walls
   def daylighted_areas(template, draw_daylight_areas_for_debugging = false)
-
     ### Begin the actual daylight area calculations ###
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, calculating daylighted areas.")
@@ -171,8 +170,8 @@ class OpenStudio::Model::Space
           aligned_vertices = face_transform.inverse * sub_surface.vertices
 
           # Find the min and max x values
-          min_x_val = 99999
-          max_x_val = -99999
+          min_x_val = 99_999
+          max_x_val = -99_999
           aligned_vertices.each do |vertex|
             # Min x value
             if vertex.x < min_x_val
@@ -302,10 +301,10 @@ class OpenStudio::Model::Space
           aligned_vertices = face_transform.inverse * polygon_on_floor
 
           # Find the min and max x and y values
-          min_x_val = 99999
-          max_x_val = -99999
-          min_y_val = 99999
-          max_y_val = -99999
+          min_x_val = 99_999
+          max_x_val = -99_999
+          min_y_val = 99_999
+          max_y_val = -99_999
           aligned_vertices.each do |vertex|
             # Min x value
             if vertex.x < min_x_val
@@ -1341,8 +1340,8 @@ class OpenStudio::Model::Space
 
     # Sort by priority; first by facade, then by area,
     # then by name to ensure deterministic in case identical in other ways
-    sorted_windows = windows.sort_by { |window, vals| [vals[:facade], vals[:area], vals[:name]] }
-    sorted_skylights = skylights.sort_by { |skylight, vals| [vals[:facade], vals[:area], vals[:name]] }
+    sorted_windows = windows.sort_by { |_window, vals| [vals[:facade], vals[:area], vals[:name]] }
+    sorted_skylights = skylights.sort_by { |_skylight, vals| [vals[:facade], vals[:area], vals[:name]] }
 
     # Report out the sorted skylights for debugging
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, Skylights:")
@@ -2052,9 +2051,9 @@ class OpenStudio::Model::Space
   def get_adjacent_space_with_most_shared_wall_area(same_floor = true)
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
-  
+
   private
-  
+
   # A series of private methods to modify polygons.  Most are
   # wrappers of native OpenStudio methods, but with
   # workarounds for known issues or limitations.
@@ -2457,6 +2456,5 @@ class OpenStudio::Model::Space
     end
 
     return overlap_area
-  end  
-  
+  end
 end

@@ -372,7 +372,7 @@ class OpenStudio::Model::Model
       if air_loop.thermalZones.include? zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
         humidifier.setRatedCapacity(3.72E-5)
-        humidifier.setRatedPower(100000)
+        humidifier.setRatedPower(100_000)
         humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
         # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
         htg_coil = nil

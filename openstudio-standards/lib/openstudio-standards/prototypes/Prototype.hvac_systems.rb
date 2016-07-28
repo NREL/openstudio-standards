@@ -57,7 +57,7 @@ class OpenStudio::Model::Model
     if boiler_fuel_type == 'DistrictHeating'
       dist_ht = OpenStudio::Model::DistrictHeating.new(self)
       dist_ht.setName('Purchased Heating')
-      dist_ht.setNominalCapacity(1000000)
+      dist_ht.setNominalCapacity(1_000_000)
       hot_water_loop.addSupplyBranchForComponent(dist_ht)
     # Boiler
     else
@@ -209,7 +209,7 @@ class OpenStudio::Model::Model
     if cooling_fuel == 'DistrictCooling'
       dist_clg = OpenStudio::Model::DistrictCooling.new(self)
       dist_clg.setName('Purchased Cooling')
-      dist_clg.setNominalCapacity(1000000)
+      dist_clg.setNominalCapacity(1_000_000)
       chilled_water_loop.addSupplyBranchForComponent(dist_clg)
     # Chiller
     else
@@ -340,7 +340,7 @@ class OpenStudio::Model::Model
 
     # Cooling towers
     # Per PNNL PRM Reference Manual
-    number_cooling_towers.times do |i|
+    number_cooling_towers.times do |_i|
       sizing_factor = 1 / number_cooling_towers
       twr_name = "#{cooling_tower_fan_type} #{cooling_tower_capacity_control} #{cooling_tower_type}"
 
@@ -2366,7 +2366,7 @@ class OpenStudio::Model::Model
       if main_data_center
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
         humidifier.setRatedCapacity(3.72E-5)
-        humidifier.setRatedPower(100000)
+        humidifier.setRatedPower(100_000)
         humidifier.setName("#{air_loop.name} Electric Steam Humidifier")
 
         extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOnDiscreteSchedule)
@@ -4341,24 +4341,24 @@ class OpenStudio::Model::Model
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       if elevator_type == 'Traction'
-        lift_pwr_w = 18537.0
+        lift_pwr_w = 18_537.0
       elsif elevator_type == 'Hydraulic'
         lift_pwr_w = if building_type == 'MidriseApartment'
-                       16055.0
+                       16_055.0
                      else
-                       14610.0
+                       14_610.0
                      end
       else
-        lift_pwr_w = 14610.0
+        lift_pwr_w = 14_610.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Elevator type '#{elevator_type}', not recognized, will assume Hydraulic elevator, #{lift_pwr_w} W.")
       end
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       if elevator_type == 'Traction'
-        lift_pwr_w = 20370.0
+        lift_pwr_w = 20_370.0
       elsif elevator_type == 'Hydraulic'
-        lift_pwr_w = 16055.0
+        lift_pwr_w = 16_055.0
       else
-        lift_pwr_w = 16055.0
+        lift_pwr_w = 16_055.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Elevator type '#{elevator_type}', not recognized, will assume Hydraulic elevator, #{lift_pwr_w} W.")
       end
     end

@@ -346,7 +346,7 @@ class OpenStudio::Model::Model
     elec_equip_def.setFractionLatent(0)
     elec_equip_def.setFractionRadiant(0.1)
     elec_equip_def.setFractionLost(0.9)
-    elec_equip_def.setDesignLevel(48165)
+    elec_equip_def.setDesignLevel(48_165)
     elec_equip = OpenStudio::Model::ElectricEquipment.new(elec_equip_def)
     elec_equip.setName('Elevator Pump Room Elevator Equipment')
     elec_equip.setSpace(elevator_pump_room)
@@ -467,7 +467,7 @@ class OpenStudio::Model::Model
       if air_loop.thermalZones.include? operatingroom1_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
         humidifier.setRatedCapacity(3.72E-5)
-        humidifier.setRatedPower(100000)
+        humidifier.setRatedPower(100_000)
         humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
         # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
         htg_coil = nil

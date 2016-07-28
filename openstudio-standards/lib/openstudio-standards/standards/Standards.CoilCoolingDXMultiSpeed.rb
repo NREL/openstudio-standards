@@ -193,7 +193,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
       ptac_eer_coeff_1 = ac_props['ptac_eer_coefficient_1']
       ptac_eer_coeff_2 = ac_props['ptac_eer_coefficient_2']
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
-      capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
+      capacity_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
       ptac_eer = ptac_eer_coeff_1 + (ptac_eer_coeff_2 * capacity_btu_per_hr)
       cop = eer_to_cop(ptac_eer)
       # self.setName("#{self.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer}EER")

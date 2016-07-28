@@ -359,7 +359,7 @@ class OpenStudio::Model::PlantLoop
       cooling_capacity_btu_per_hr = OpenStudio.convert(cooling_capacity_w, 'W', 'Btu/hr').get
 
       # Compare against capacity minimum requirement
-      min_cap_btu_per_hr = 300000
+      min_cap_btu_per_hr = 300_000
       if heating_capacity_btu_per_hr > min_cap_btu_per_hr
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}: supply water temperature reset is required because heating capacity of #{heating_capacity_btu_per_hr.round} Btu/hr exceeds the minimum threshold of #{min_cap_btu_per_hr.round} Btu/hr.")
         reset_required = true
@@ -593,7 +593,7 @@ class OpenStudio::Model::PlantLoop
       minimum_area_ft2 = nil
       case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        minimum_area_ft2 = 120000
+        minimum_area_ft2 = 120_000
       end
 
       # Determine the area served
@@ -632,7 +632,7 @@ class OpenStudio::Model::PlantLoop
       case template
       when '90.1-2004'
 
-        minimum_area_ft2 = 120000
+        minimum_area_ft2 = 120_000
 
         # Determine the area served
         area_served_m2 = total_floor_area_served
@@ -725,7 +725,7 @@ class OpenStudio::Model::PlantLoop
     minimum_area_ft2 = nil
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      minimum_area_ft2 = 15000
+      minimum_area_ft2 = 15_000
     end
 
     # Determine the area served

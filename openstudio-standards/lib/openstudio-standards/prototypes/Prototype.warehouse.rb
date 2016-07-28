@@ -72,7 +72,7 @@ class OpenStudio::Model::Model
           'type' => 'Zone Ventilation',
           'name' => 'Bulk Storage Zone Ventilation - Exhaust',
           'availability_sch_name' => 'Always On',
-          'flow_rate' => OpenStudio.convert(80008.9191, 'cfm', 'm^3/s').get,
+          'flow_rate' => OpenStudio.convert(80_008.9191, 'cfm', 'm^3/s').get,
           'ventilation_type' => 'Exhaust',
           'space_names' => ['Zone3 Bulk Storage']
         },

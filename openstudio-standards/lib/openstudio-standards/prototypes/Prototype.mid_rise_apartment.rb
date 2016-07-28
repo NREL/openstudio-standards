@@ -213,7 +213,7 @@ class OpenStudio::Model::Model
       elec_equip_def2.setFractionLatent(0)
       elec_equip_def2.setFractionRadiant(0)
       elec_equip_def2.setFractionLost(0.95)
-      elec_equip_def1.setDesignLevel(16055)
+      elec_equip_def1.setDesignLevel(16_055)
       if template == '90.1-2013'
         elec_equip_def2.setDesignLevel(63)
       elsif template == '90.1-2010'
@@ -236,7 +236,7 @@ class OpenStudio::Model::Model
         elec_equip2.setSchedule(add_schedule('ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF'))
       end
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      elec_equip_def1.setDesignLevel(16055)
+      elec_equip_def1.setDesignLevel(16_055)
       elec_equip_def1.setFractionLatent(0)
       elec_equip_def1.setFractionRadiant(0)
       elec_equip_def1.setFractionLost(0.95)
