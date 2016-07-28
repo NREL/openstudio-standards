@@ -1842,7 +1842,7 @@ class OpenStudio::Model::AirLoopHVAC
       end
 
       # Not required for systems that require an ERV
-      if has_energy_recovery?
+      if energy_recovery?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: multizone vav optimization is not required because the system has Energy Recovery.")
         return multizone_opt_required
       end
@@ -2211,7 +2211,7 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     # Not required for systems that require an ERV
-    if has_energy_recovery?
+    if energy_recovery?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system has Energy Recovery.")
       return dcv_required
     end
@@ -2282,20 +2282,20 @@ class OpenStudio::Model::AirLoopHVAC
     oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
 
     # Check for min OA without an economizer OR has economizer
-    if oa_flow_cfm < min_oa_without_economizer_cfm && has_economizer? == false
+    if oa_flow_cfm < min_oa_without_economizer_cfm && economizer? == false
       # Message if doesn't pass OA limit
       if oa_flow_cfm < min_oa_without_economizer_cfm
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_without_economizer_cfm.round} cfm.")
       end
       # Message if doesn't have economizer
-      if has_economizer? == false
+      if economizer? == false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system does not have an economizer.")
       end
       return dcv_required
     end
 
     # If has economizer, cfm limit is lower
-    if oa_flow_cfm < min_oa_with_economizer_cfm && has_economizer?
+    if oa_flow_cfm < min_oa_with_economizer_cfm && economizer?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system has an economizer, but the min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_with_economizer_cfm.round} cfm for systems with an economizer.")
       return dcv_required
     end
@@ -2470,7 +2470,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system has an economizer
   #
   # @return [Bool] Returns true if required, false if not.
-  def has_economizer?
+  def economizer?
     # Get the OA system and OA controller
     oa_sys = airLoopHVACOutdoorAirSystem
     if oa_sys.is_initialized
@@ -2520,7 +2520,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system has energy recovery already
   #
   # @return [Bool] Returns true if an ERV is present, false if not.
-  def has_energy_recovery?
+  def energy_recovery?
     has_erv = false
 
     # Get the OA system
@@ -2589,7 +2589,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # If the system has an economizer, it must have
     # a motorized damper.
-    if has_economizer?
+    if economizer?
       motorized_oa_damper_required = true
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Because the system has an economizer, it requires a motorized OA damper.")
       return motorized_oa_damper_required
