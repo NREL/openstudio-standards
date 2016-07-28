@@ -42,7 +42,7 @@ class OpenStudio::Model::CoilHeatingGasMultiStage
         end
       end
       # set capacities, flow rates, and sensible heat ratio for stages
-      for istage in 0..3
+      (0..3).each do |istage|
         htg_stages[istage].setNominalCapacity(stage_cap[istage])
       end
       # PLF vs PLR curve

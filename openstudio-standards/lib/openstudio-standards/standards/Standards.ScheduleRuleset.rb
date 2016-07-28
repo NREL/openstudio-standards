@@ -44,8 +44,8 @@ class OpenStudio::Model::ScheduleRuleset
 
     # Build a hash that maps schedule day index to schedule day
     schedule_index_to_day = {}
-    for i in 0..(day_schs.length - 1)
-      schedule_index_to_day[day_schs_used_each_day[i]] = day_schs[i]
+    day_schs.each_with_index do |day_sch, i|
+      schedule_index_to_day[day_schs_used_each_day[i]] = day_sch
     end
 
     # Loop through each of the schedules that is used, figure out the
@@ -77,12 +77,8 @@ class OpenStudio::Model::ScheduleRuleset
       times = day_sch.times
 
       previous_time_decimal = 0
-      for i in 0..(times.length - 1)
-        time_days = times[i].days
-        time_hours = times[i].hours
-        time_minutes = times[i].minutes
-        time_seconds = times[i].seconds
-        time_decimal = (time_days * 24) + time_hours + (time_minutes / 60) + (time_seconds / 3600)
+      times.each_with_index do |time, i|
+        time_decimal = (time.days * 24) + time.hours + (time.minutes / 60) + (time.seconds / 3600)
         duration_of_value = time_decimal - previous_time_decimal
         # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Value of #{values[i]} for #{duration_of_value} hours")
         daily_flh += values[i] * duration_of_value
@@ -116,8 +112,7 @@ class OpenStudio::Model::ScheduleRuleset
   def annual_min_max_value
     # gather profiles
     profiles = []
-    defaultProfile = defaultDaySchedule
-    profiles << defaultProfile
+    profiles << defaultDaySchedule
     rules = scheduleRules
     rules.each do |rule|
       profiles << rule.daySchedule
@@ -131,12 +126,12 @@ class OpenStudio::Model::ScheduleRuleset
         if min.nil?
           min = value
         else
-          if min > value then min = value end
+          min = value if min > value
         end
         if max.nil?
           max = value
         else
-          if max < value then max = value end
+          max = value if max < value
         end
       end
     end
@@ -190,8 +185,8 @@ class OpenStudio::Model::ScheduleRuleset
 
     # Build a hash that maps schedule day index to schedule day
     schedule_index_to_day = {}
-    for i in 0..(day_schs.length - 1)
-      schedule_index_to_day[day_schs_used_each_day[i]] = day_schs[i]
+    day_schs.each_with_index do |day_sch, i|
+      schedule_index_to_day[day_schs_used_each_day[i]] = day_sch
     end
 
     # Loop through each of the schedules that is used, figure out the
@@ -222,17 +217,11 @@ class OpenStudio::Model::ScheduleRuleset
       times = day_sch.times
 
       previous_time_decimal = 0
-      for i in 0..(times.length - 1)
-        time_days = times[i].days
-        time_hours = times[i].hours
-        time_minutes = times[i].minutes
-        time_seconds = times[i].seconds
-        time_decimal = (time_days * 24) + time_hours + (time_minutes / 60) + (time_seconds / 3600)
+      times.each_with_index do |time, i|
+        time_decimal = (time.days * 24) + time.hours + (time.minutes / 60) + (time.seconds / 3600)
         duration_of_value = time_decimal - previous_time_decimal
         # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Value of #{values[i]} for #{duration_of_value} hours")
-        if values[i] > lower_limit
-          daily_hrs += duration_of_value
-        end
+        daily_flh += values[i] * duration_of_value
         previous_time_decimal = time_decimal
       end
 

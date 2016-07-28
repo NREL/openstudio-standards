@@ -287,8 +287,8 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
       # TABLE 6.8.1D
       # COP = pthp_cop_coeff_1 - (pthp_cop_coeff_2 * Cap / 1000)
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
-      # If the unit’s capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
-      # If the unit’s capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
+      # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
+      # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
       capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
       cop = pthp_cop_coeff_1 - (pthp_cop_coeff_2 * capacity_btu_per_hr / 1000.0)

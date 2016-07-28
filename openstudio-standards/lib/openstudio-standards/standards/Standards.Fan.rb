@@ -17,7 +17,7 @@ module Fan
     # Exception for small fans, including
     # zone exhaust, fan coil, and fan powered terminals.
     # In this case, 0.5 HP is used for the lookup.
-    if is_small_fan
+    if small_fan?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{name}: motor eff = #{(motor_eff * 100).round(2)}%; assumed to represent several < 1 HP motors.")
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_eff * 100).round(2)}%.")
@@ -77,7 +77,7 @@ module Fan
                                 autosizedMaximumFlowRate.get
                               else
                                 maximumFlowRate.get
-                                                      end
+                              end
                             else
                               maximumFlowRate.get
                             end
@@ -190,7 +190,7 @@ module Fan
     # TODO check COMNET and T24 ACM and PNNL 90.1 doc
     fan_impeller_eff = 0.65
 
-    if is_small_fan
+    if small_fan?
       fan_impeller_eff = 0.55
     end
 
@@ -259,7 +259,7 @@ module Fan
     # Exception for small fans, including
     # zone exhaust, fan coil, and fan powered terminals.
     # In this case, use the 0.5 HP for the lookup.
-    if is_small_fan
+    if small_fan?
       nominal_hp = 0.5
     else
       motor_properties = model.find_object(motors, search_criteria, motor_bhp)
@@ -298,7 +298,7 @@ module Fan
   # as small fans and get different impeller efficiencies
   # and motor efficiencies than other fans
   # @return [Bool] returns true if it is a small fan, false if not
-  def is_small_fan
+  def small_fan?
     is_small = false
 
     # Exhaust fan

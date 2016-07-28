@@ -211,7 +211,7 @@ class OpenStudio::Model::Model
     space_names = %w(Banquet_Flr_6 Dining_Flr_6 Cafe_Flr_1 Lobby_Flr_1)
     space_names.each do |space_name|
       space = getSpaceByName(space_name).get
-      space.addDaylightingControls(building_vintage, false, false)
+      space.add_daylighting_controls(building_vintage, false, false)
     end
   end
 

@@ -27,7 +27,7 @@ class OpenStudio::Model::BuildingStory
 
     # Calculate the average multiplier and
     # then convert to integer.
-    avg_multiplier = (multipliers.inject { |sum, el| sum + el }.to_f / multipliers.size).to_i
+    avg_multiplier = (multipliers.inject { |a, e| a + e }.to_f / multipliers.size).to_i
 
     # If the multiplier is greater than 1, report this
     if avg_multiplier > 1

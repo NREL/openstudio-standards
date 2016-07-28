@@ -7,20 +7,16 @@ class OpenStudio::Model::PlantLoop
   # @return [Bool] returns true if successful, false if not
   def apply_standard_controls(template, climate_zone)
     # Variable flow system
-    if is_variable_flow_required(template)
-      enable_variable_flow(template)
-    end
+    enable_variable_flow(template) if is_variable_flow_required(template)
 
     # Supply water temperature reset
-    if supply_water_temperature_reset_required?(template)
-      enable_supply_water_temperature_reset
-    end
+    enable_supply_water_temperature_reset if supply_water_temperature_reset_required?(template)
   end
 
   def enable_variable_flow(template)
   end
 
-  def is_variable_flow_system
+  def variable_flow_system?
     variable_flow = false
 
     # Modify all the primary pumps
@@ -131,7 +127,7 @@ class OpenStudio::Model::PlantLoop
     when 'Heating'
 
       # Loop properties
-      # G3.1.3.3 - HW Supply at 180°F, return at 130°F
+      # G3.1.3.3 - HW Supply at 180F, return at 130F
       hw_temp_f = 180
       hw_delta_t_r = 50
       min_temp_f = 50
@@ -145,7 +141,7 @@ class OpenStudio::Model::PlantLoop
       setMinimumLoopTemperature(min_temp_c)
 
       # ASHRAE Appendix G - G3.1.3.4 (for ASHRAE 90.1-2004, 2007 and 2010)
-      # HW reset: 180°F at 20°F and below, 150°F at 50°F and above
+      # HW reset: 180F at 20F and below, 150F at 50F and above
       enable_supply_water_temperature_reset
 
       # Boiler properties
@@ -179,7 +175,7 @@ class OpenStudio::Model::PlantLoop
       setMaximumLoopTemperature(max_temp_c)
 
       # ASHRAE Appendix G - G3.1.3.9 (for ASHRAE 90.1-2004, 2007 and 2010)
-      # ChW reset: 44°F at 80°F and above, 54°F at 60°F and below
+      # ChW reset: 44F at 80F and above, 54F at 60F and below
       enable_supply_water_temperature_reset
 
       # Chiller properties
@@ -240,7 +236,7 @@ class OpenStudio::Model::PlantLoop
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         # G3.1.3.11 - CW supply temp = 85F or 10F approaching design wet bulb temperature,
         # whichever is lower.  Design range = 10F
-        # Design Temperature rise of 10F => Range: 10°F
+        # Design Temperature rise of 10F => Range: 10F
         range_r = 10
 
         # Determine the leaving CW temp
@@ -350,7 +346,7 @@ class OpenStudio::Model::PlantLoop
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
 
       # Not required for variable flow systems
-      if is_variable_flow_system
+      if variable_flow_system?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}: supply water temperature reset not required for variable flow systems per 6.5.4.3 Exception b.")
         return reset_required
       end
@@ -1027,8 +1023,8 @@ class OpenStudio::Model::PlantLoop
 
     # Determine if primary only or primary-secondary
     # IF there's a pump on the demand side it's primary-secondary
-    demandPumps = demandComponents('OS:Pump:VariableSpeed'.to_IddObjectType) + demandComponents('OS:Pump:ConstantSpeed'.to_IddObjectType)
-    demandPumps.each do |component|
+    demand_pumps = demandComponents('OS:Pump:VariableSpeed'.to_IddObjectType) + demandComponents('OS:Pump:ConstantSpeed'.to_IddObjectType)
+    demand_pumps.each do |component|
       if component.to_PumpConstantSpeed.is_initialized
         pump = component.to_PumpConstantSpeed.get
         pump_rated_w_per_gpm = pump.rated_w_per_gpm

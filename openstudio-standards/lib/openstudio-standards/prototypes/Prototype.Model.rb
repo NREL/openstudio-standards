@@ -110,7 +110,7 @@ class OpenStudio::Model::Model
     has_multizone_systems = false
 
     getAirLoopHVACs.sort.each do |air_loop|
-      if air_loop.is_multizone_vav_system
+      if air_loop.multizone_vav_system?
         apply_multizone_vav_outdoor_air_sizing(building_vintage)
         if runSizingRun("#{sizing_run_dir}/SizingRun2") == false
           return false
@@ -137,7 +137,7 @@ class OpenStudio::Model::Model
     end
 
     # Apply the HVAC efficiency standard
-    applyHVACEfficiencyStandard(building_vintage, climate_zone)
+    apply_hvac_efficiency_standard(building_vintage, climate_zone)
 
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
@@ -147,7 +147,7 @@ class OpenStudio::Model::Model
     elsif building_type == 'Hospital'
       hospital_add_daylighting_controls(building_vintage)
     else
-      addDaylightingControls(building_vintage)
+      add_daylighting_controls(building_vintage)
     end
 
     if building_type == 'QuickServiceRestaurant' || building_type == 'FullServiceRestaurant' || building_type == 'Outpatient'
@@ -608,7 +608,7 @@ class OpenStudio::Model::Model
     end
 
     # Make the default construction set for the building
-    bldg_def_const_set = add_construction_set(building_vintage, climate_zone, building_type, nil, is_residential)
+    bldg_def_const_set = add_construction_set(building_vintage, climate_zone, building_type, nil, residential?)
 
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
@@ -643,7 +643,7 @@ class OpenStudio::Model::Model
 
       # Attempt to make a construction set for this space type
       # and assign it if it can be created.
-      spc_type_const_set = add_construction_set(building_vintage, climate_zone, stds_building_type, stds_spc_type, is_residential)
+      spc_type_const_set = add_construction_set(building_vintage, climate_zone, stds_building_type, stds_spc_type, residential?)
       if spc_type_const_set.is_initialized
         space_type.setDefaultConstructionSet(spc_type_const_set.get)
       end
@@ -667,13 +667,13 @@ class OpenStudio::Model::Model
           end
           data = find_object($os_standards['space_types'], 'template' => building_vintage, 'building_type' => building_type, 'space_type' => space_type_name)
           exterior_spaces_area += space.floorArea
-          story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
+          story_exterior_residential_area += space.floorArea if data['residential?'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
         is_residential = 'Yes' if story_exterior_residential_area / exterior_spaces_area >= 0.5
         next if is_residential == 'No'
 
         # if the story is identified as residential, assign residential construction set to the spaces on this story.
-        building_story_const_set = add_construction_set(building_vintage, climate_zone, building_type, nil, is_residential)
+        building_story_const_set = add_construction_set(building_vintage, climate_zone, building_type, nil, residential?)
         if building_story_const_set.is_initialized
           story.spaces.each do |space|
             space.setDefaultConstructionSet(building_story_const_set.get)
@@ -801,8 +801,8 @@ class OpenStudio::Model::Model
       if thermostat.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
       else
-        thermostatClone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
-        zone.setThermostatSetpointDualSetpoint(thermostatClone)
+        thermostat_clone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
+        zone.setThermostatSetpointDualSetpoint(thermostat_clone)
         # Set Ideal loads to thermal zone for sizing.
         ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
         ideal_loads.addToThermalZone(zone)
@@ -889,17 +889,17 @@ class OpenStudio::Model::Model
 
           # Create new values by using the multiplier on the original values
           new_values = []
-          for i in 0..(values.length - 1)
-            new_values << if values[i] > limit
-                            values[i] * multiplier
+          values.each do |value|
+            new_values << if value > limit
+                            value * multiplier
                           else
-                            values[i]
+                            value
                           end
           end
 
           # Add the revised time/value pairs to the schedule
-          for i in 0..(new_values.length - 1)
-            day_sch.addValue(times[i], new_values[i])
+          new_values.each_with_index do |new_value, i|
+            day_sch.addValue(times[i], new_value)
           end
         end # end reduce schedule
 
@@ -1186,7 +1186,7 @@ class OpenStudio::Model::Model
 
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.
-        unless air_loop.is_economizer_type_allowable(building_vintage, climate_zone)
+        unless air_loop.economizer_type_allowable?(building_vintage, climate_zone)
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{building_vintage}, climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
           oa_control.setEconomizerControlType('NoEconomizer')
         end
@@ -1227,8 +1227,8 @@ class OpenStudio::Model::Model
     end
 
     var_names.each do |var_name, reporting_frequency|
-      outputVariable = OpenStudio::Model::OutputVariable.new(var_name, self)
-      outputVariable.setReportingFrequency(reporting_frequency)
+      output_var = OpenStudio::Model::OutputVariable.new(var_name, self)
+      output_var.setReportingFrequency(reporting_frequency)
     end
   end
 
@@ -1448,24 +1448,61 @@ class OpenStudio::Model::Model
     # vars << ['Schedule Value','hourly']
 
     vars.each do |var, freq|
-      outputVariable = OpenStudio::Model::OutputVariable.new(var, self)
-      outputVariable.setReportingFrequency(freq)
+      output_var = OpenStudio::Model::OutputVariable.new(var, self)
+      output_var.setReportingFrequency(freq)
     end
   end
 
   def clear_and_set_example_constructions
     # Define Materials
-    name = 'opaque material'; thickness = 0.012700; conductivity = 0.160000
+    name = 'opaque material'
+    thickness = 0.012700
+    conductivity = 0.160000
     opaque_mat = BTAP::Resources::Envelope::Materials::Opaque.create_opaque_material(self, name, thickness, conductivity)
 
-    name = 'insulation material'; thickness = 0.050000; conductivity = 0.043000
+    name = 'insulation material'
+    thickness = 0.050000
+    conductivity = 0.043000
     insulation_mat = BTAP::Resources::Envelope::Materials::Opaque.create_opaque_material(self, name, thickness, conductivity)
 
-    name = 'simple glazing test'; shgc = 0.250000; ufactor = 3.236460; thickness = 0.003000; visible_transmittance = 0.160000
+    name = 'simple glazing test'
+    shgc = 0.250000
+    ufactor = 3.236460
+    thickness = 0.003000
+    visible_transmittance = 0.160000
     simple_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_simple_glazing(self, name, shgc, ufactor, thickness, visible_transmittance)
 
-    name = 'Standard Glazing Test'; thickness = 0.003; conductivity = 0.9; solarTransmittanceatNormalIncidence = 0.84; frontSideSolarReflectanceatNormalIncidence = 0.075; backSideSolarReflectanceatNormalIncidence = 0.075; visibleTransmittance = 0.9; frontSideVisibleReflectanceatNormalIncidence = 0.081; backSideVisibleReflectanceatNormalIncidence = 0.081; infraredTransmittanceatNormalIncidence = 0.0; frontSideInfraredHemisphericalEmissivity = 0.84; backSideInfraredHemisphericalEmissivity = 0.84; opticalDataType = 'SpectralAverage'; dirt_correction_factor = 1.0; is_solar_diffusing = false
-    standard_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_standard_glazing(self, name, thickness, conductivity, solarTransmittanceatNormalIncidence, frontSideSolarReflectanceatNormalIncidence, backSideSolarReflectanceatNormalIncidence, visibleTransmittance, frontSideVisibleReflectanceatNormalIncidence, backSideVisibleReflectanceatNormalIncidence, infraredTransmittanceatNormalIncidence, frontSideInfraredHemisphericalEmissivity, backSideInfraredHemisphericalEmissivity, opticalDataType, dirt_correction_factor, is_solar_diffusing)
+    name = 'Standard Glazing Test'
+    thickness = 0.003
+    conductivity = 0.9
+    solar_trans_normal = 0.84
+    front_solar_ref_normal = 0.075
+    back_solar_ref_normal = 0.075
+    vlt = 0.9
+    front_vis_ref_normal = 0.081
+    back_vis_ref_normal = 0.081
+    ir_trans_normal = 0.0
+    front_ir_emis = 0.84
+    back_ir_emis = 0.84
+    optical_data_type = 'SpectralAverage'
+    dirt_correction_factor = 1.0
+    is_solar_diffusing = false
+
+    standard_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_standard_glazing(self,
+                                                                                                      name,
+                                                                                                      thickness,
+                                                                                                      conductivity,
+                                                                                                      solar_trans_normal,
+                                                                                                      front_solar_ref_normal,
+                                                                                                      back_solar_ref_normal, vlt,
+                                                                                                      front_vis_ref_normal,
+                                                                                                      back_vis_ref_normal,
+                                                                                                      ir_trans_normal,
+                                                                                                      front_ir_emis,
+                                                                                                      back_ir_emis,
+                                                                                                      optical_data_type,
+                                                                                                      dirt_correction_factor,
+                                                                                                      is_solar_diffusing)
 
     # Define Constructions
     # # Surfaces
@@ -1479,14 +1516,14 @@ class OpenStudio::Model::Model
     int_roof                            = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionIntRoof',                    [opaque_mat, insulation_mat], insulation_mat)
     int_floor                           = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionIntFloor',                   [opaque_mat, insulation_mat], insulation_mat)
     # # Subsurfaces
-    fixedWindowConstruction             = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionFixed',                [simple_glazing_mat])
-    operableWindowConstruction          = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionOperable',             [simple_glazing_mat])
-    setGlassDoorConstruction            = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDoor',                 [standard_glazing_mat])
-    setDoorConstruction                 = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionDoor',                       [opaque_mat, insulation_mat], insulation_mat)
-    overheadDoorConstruction            = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionOverheadDoor',               [opaque_mat, insulation_mat], insulation_mat)
-    skylightConstruction                = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionSkylight',             [standard_glazing_mat])
-    tubularDaylightDomeConstruction     = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDomeConstruction',     [standard_glazing_mat])
-    tubularDaylightDiffuserConstruction = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDiffuserConstruction', [standard_glazing_mat])
+    fixed_window                        = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionFixed',                [simple_glazing_mat])
+    operable_window                     = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionOperable',             [simple_glazing_mat])
+    glass_door                          = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDoor',                 [standard_glazing_mat])
+    door                                = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionDoor',                       [opaque_mat, insulation_mat], insulation_mat)
+    overhead_door                       = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionOverheadDoor',               [opaque_mat, insulation_mat], insulation_mat)
+    skylt                               = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionSkylight',             [standard_glazing_mat])
+    daylt_dome                          = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDomeConstruction',     [standard_glazing_mat])
+    daylt_diffuser                      = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDiffuserConstruction', [standard_glazing_mat])
 
     # Define Construction Sets
     # # Surface
@@ -1495,8 +1532,8 @@ class OpenStudio::Model::Model
     ground_construction_set   = BTAP::Resources::Envelope::ConstructionSets.create_default_surface_constructions(self, 'GroundSet', grnd_wall, grnd_roof, grnd_floor)
 
     # # Subsurface
-    subsurface_exterior_construction_set = BTAP::Resources::Envelope::ConstructionSets.create_subsurface_construction_set(self, fixedWindowConstruction, operableWindowConstruction, setDoorConstruction, setGlassDoorConstruction, overheadDoorConstruction, skylightConstruction, tubularDaylightDomeConstruction, tubularDaylightDiffuserConstruction)
-    subsurface_interior_construction_set = BTAP::Resources::Envelope::ConstructionSets.create_subsurface_construction_set(self, fixedWindowConstruction, operableWindowConstruction, setDoorConstruction, setGlassDoorConstruction, overheadDoorConstruction, skylightConstruction, tubularDaylightDomeConstruction, tubularDaylightDiffuserConstruction)
+    subsurface_exterior_construction_set = BTAP::Resources::Envelope::ConstructionSets.create_subsurface_construction_set(self, fixed_window, operable_window, door, glass_door, overhead_door, skylt, daylt_dome, daylt_diffuser)
+    subsurface_interior_construction_set = BTAP::Resources::Envelope::ConstructionSets.create_subsurface_construction_set(self, fixed_window, operable_window, door, glass_door, overhead_door, skylt, daylt_dome, daylt_diffuser)
 
     # Define default construction sets.
     name = 'Construction Set 1'

@@ -53,130 +53,130 @@ class OpenStudio::Model::Model
 
   def define_hvac_system_map(building_type, building_vintage, climate_zone)
     case building_vintage
-      when '90.1-2010', '90.1-2013'
-        exhaust_flow = 7200
-      when '90.1-2004', '90.1-2007'
-        exhaust_flow = 8000
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-        exhaust_flow = 3710
-        exhaust_flow_dining = 1589
+    when '90.1-2010', '90.1-2013'
+      exhaust_flow = 7200
+    when '90.1-2004', '90.1-2007'
+      exhaust_flow = 8000
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      exhaust_flow = 3710
+      exhaust_flow_dining = 1589
     end
 
     case building_vintage
-      when '90.1-2010', '90.1-2013', '90.1-2004', '90.1-2007'
-        system_to_space_map = [
-          {
-            'type' => 'VAV',
-            'name' => 'VAV_1',
-            'space_names' => %w(
-              Basement Office1_Mult4_Flr_1 Lobby_Records_Flr_1 Corridor_Flr_1 ER_NurseStn_Lobby_Flr_1
-              ICU_NurseStn_Lobby_Flr_2 Corridor_Flr_2 OR_NurseStn_Lobby_Flr_2
-            )
-          },
-          {
-            'type' => 'VAV',
-            'name' => 'VAV_ER',
-            'space_names' => %w(
-              ER_Exam1_Mult4_Flr_1 ER_Trauma1_Flr_1 ER_Exam3_Mult4_Flr_1 ER_Trauma2_Flr_1 ER_Triage_Mult4_Flr_1
-            )
-          },
-          {
-            'type' => 'VAV',
-            'name' => 'VAV_OR',
-            'space_names' => %w(
-              OR1_Flr_2 OR2_Mult5_Flr_2 OR3_Flr_2 OR4_Flr_2
-            )
-          },
-          {
-            'type' => 'VAV',
-            'name' => 'VAV_ICU',
-            'space_names' => %w(
-              IC_PatRoom1_Mult5_Flr_2 IC_PatRoom2_Flr_2 IC_PatRoom3_Mult6_Flr_2 ICU_Flr_2
-            )
-          },
-          {
-            'type' => 'VAV',
-            'name' => 'VAV_PATRMS',
-            'space_names' => %w(
-              PatRoom1_Mult10_Flr_3 PatRoom2_Flr_3 PatRoom3_Mult10_Flr_3 PatRoom4_Flr_3 PatRoom5_Mult10_Flr_3 PatRoom6_Flr_3
-              PatRoom7_Mult10_Flr_3 PatRoom8_Flr_3 PatRoom1_Mult10_Flr_4 PatRoom2_Flr_4 PatRoom3_Mult10_Flr_4 PatRoom4_Flr_4
-              PatRoom5_Mult10_Flr_4 PatRoom6_Flr_4 PatRoom7_Mult10_Flr_4 PatRoom8_Flr_4
-            )
-          },
-          {
-            'type' => 'VAV',
-            'name' => 'VAV_2',
-            'space_names' => %w(
-              PhysTherapy_Flr_3 NurseStn_Lobby_Flr_3 Corridor_SE_Flr_3 Corridor_NW_Flr_3 Radiology_Flr_4
-              NurseStn_Lobby_Flr_4 Corridor_SE_Flr_4 Corridor_NW_Flr_4 Dining_Flr_5 NurseStn_Lobby_Flr_5
-              Office1_Flr_5 Office2_Mult5_Flr_5 Office3_Flr_5 Office4_Mult6_Flr_5 Corridor_Flr_5
-            )
-          },
-          {
-            'type' => 'VAV',
-            'name' => 'VAV_LABS',
-            'space_names' => %w(
-              Lab_Flr_3 Lab_Flr_4
-            )
-          },
-          {
-            'type' => 'CAV',
-            'name' => 'CAV_KITCHEN',
-            'space_names' => [
-              'Kitchen_Flr_5'
-            ] # 55 spaces assigned.
-          },
-          {
-            'type' => 'Exhaust Fan',
-            'name' => 'Kitchen_Flr_5 Exhaust Fan',
-            'availability_sch_name' => 'Hospital Kitchen_Exhaust_SCH',
-            'flow_rate' => OpenStudio.convert(exhaust_flow, 'cfm', 'm^3/s').get,
-            'balanced_exhaust_fraction_schedule_name' => 'Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule',
-            'space_names' =>
-            [
-              'Kitchen_Flr_5'
-            ]
-          },
-          {
-            'type' => 'Refrigeration',
-            'case_type' => 'Walkin Freezer',
-            'cooling_capacity_per_length' => 734,
-            'length' => 10.98,
-            'evaporator_fan_pwr_per_length' => 69,
-            'lighting_per_length' => 33,
-            'lighting_sch_name' => 'Hospital BLDG_LIGHT_SCH',
-            'defrost_pwr_per_length' => 364,
-            'restocking_sch_name' => 'Hospital Kitchen_Flr_5_Case:1_WALKINFREEZER_WalkInStockingSched',
-            'cop' => 1.5,
-            'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
-            'condenser_fan_pwr' => 1000,
-            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-            'space_names' =>
-            [
-              'Kitchen_Flr_5'
-            ]
-          },
-          {
-            'type' => 'Refrigeration',
-            'case_type' => 'Display Case',
-            'cooling_capacity_per_length' => 886.5,
-            'length' => 8.93,
-            'evaporator_fan_pwr_per_length' => 67,
-            'lighting_per_length' => 40,
-            'lighting_sch_name' => 'Hospital BLDG_LIGHT_SCH',
-            'defrost_pwr_per_length' => 0.0,
-            'restocking_sch_name' => 'Hospital Kitchen_Flr_5_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
-            'cop' => 3.0,
-            'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
-            'condenser_fan_pwr' => 1000,
-            'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
-            'space_names' =>
-            [
-              'Kitchen_Flr_5'
-            ]
-          }
-        ]
-        return system_to_space_map
+    when '90.1-2010', '90.1-2013', '90.1-2004', '90.1-2007'
+      system_to_space_map = [
+        {
+          'type' => 'VAV',
+          'name' => 'VAV_1',
+          'space_names' => %w(
+            Basement Office1_Mult4_Flr_1 Lobby_Records_Flr_1 Corridor_Flr_1 ER_NurseStn_Lobby_Flr_1
+            ICU_NurseStn_Lobby_Flr_2 Corridor_Flr_2 OR_NurseStn_Lobby_Flr_2
+          )
+        },
+        {
+          'type' => 'VAV',
+          'name' => 'VAV_ER',
+          'space_names' => %w(
+            ER_Exam1_Mult4_Flr_1 ER_Trauma1_Flr_1 ER_Exam3_Mult4_Flr_1 ER_Trauma2_Flr_1 ER_Triage_Mult4_Flr_1
+          )
+        },
+        {
+          'type' => 'VAV',
+          'name' => 'VAV_OR',
+          'space_names' => %w(
+            OR1_Flr_2 OR2_Mult5_Flr_2 OR3_Flr_2 OR4_Flr_2
+          )
+        },
+        {
+          'type' => 'VAV',
+          'name' => 'VAV_ICU',
+          'space_names' => %w(
+            IC_PatRoom1_Mult5_Flr_2 IC_PatRoom2_Flr_2 IC_PatRoom3_Mult6_Flr_2 ICU_Flr_2
+          )
+        },
+        {
+          'type' => 'VAV',
+          'name' => 'VAV_PATRMS',
+          'space_names' => %w(
+            PatRoom1_Mult10_Flr_3 PatRoom2_Flr_3 PatRoom3_Mult10_Flr_3 PatRoom4_Flr_3 PatRoom5_Mult10_Flr_3 PatRoom6_Flr_3
+            PatRoom7_Mult10_Flr_3 PatRoom8_Flr_3 PatRoom1_Mult10_Flr_4 PatRoom2_Flr_4 PatRoom3_Mult10_Flr_4 PatRoom4_Flr_4
+            PatRoom5_Mult10_Flr_4 PatRoom6_Flr_4 PatRoom7_Mult10_Flr_4 PatRoom8_Flr_4
+          )
+        },
+        {
+          'type' => 'VAV',
+          'name' => 'VAV_2',
+          'space_names' => %w(
+            PhysTherapy_Flr_3 NurseStn_Lobby_Flr_3 Corridor_SE_Flr_3 Corridor_NW_Flr_3 Radiology_Flr_4
+            NurseStn_Lobby_Flr_4 Corridor_SE_Flr_4 Corridor_NW_Flr_4 Dining_Flr_5 NurseStn_Lobby_Flr_5
+            Office1_Flr_5 Office2_Mult5_Flr_5 Office3_Flr_5 Office4_Mult6_Flr_5 Corridor_Flr_5
+          )
+        },
+        {
+          'type' => 'VAV',
+          'name' => 'VAV_LABS',
+          'space_names' => %w(
+            Lab_Flr_3 Lab_Flr_4
+          )
+        },
+        {
+          'type' => 'CAV',
+          'name' => 'CAV_KITCHEN',
+          'space_names' => [
+            'Kitchen_Flr_5'
+          ] # 55 spaces assigned.
+        },
+        {
+          'type' => 'Exhaust Fan',
+          'name' => 'Kitchen_Flr_5 Exhaust Fan',
+          'availability_sch_name' => 'Hospital Kitchen_Exhaust_SCH',
+          'flow_rate' => OpenStudio.convert(exhaust_flow, 'cfm', 'm^3/s').get,
+          'balanced_exhaust_fraction_schedule_name' => 'Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule',
+          'space_names' =>
+          [
+            'Kitchen_Flr_5'
+          ]
+        },
+        {
+          'type' => 'Refrigeration',
+          'case_type' => 'Walkin Freezer',
+          'cooling_capacity_per_length' => 734,
+          'length' => 10.98,
+          'evaporator_fan_pwr_per_length' => 69,
+          'lighting_per_length' => 33,
+          'lighting_sch_name' => 'Hospital BLDG_LIGHT_SCH',
+          'defrost_pwr_per_length' => 364,
+          'restocking_sch_name' => 'Hospital Kitchen_Flr_5_Case:1_WALKINFREEZER_WalkInStockingSched',
+          'cop' => 1.5,
+          'cop_f_of_t_curve_name' => 'RACK1_RackCOPfTCurve',
+          'condenser_fan_pwr' => 1000,
+          'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+          'space_names' =>
+          [
+            'Kitchen_Flr_5'
+          ]
+        },
+        {
+          'type' => 'Refrigeration',
+          'case_type' => 'Display Case',
+          'cooling_capacity_per_length' => 886.5,
+          'length' => 8.93,
+          'evaporator_fan_pwr_per_length' => 67,
+          'lighting_per_length' => 40,
+          'lighting_sch_name' => 'Hospital BLDG_LIGHT_SCH',
+          'defrost_pwr_per_length' => 0.0,
+          'restocking_sch_name' => 'Hospital Kitchen_Flr_5_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched',
+          'cop' => 3.0,
+          'cop_f_of_t_curve_name' => 'RACK2_RackCOPfTCurve',
+          'condenser_fan_pwr' => 1000,
+          'condenser_fan_pwr_curve_name' => 'RACK1_RackCondFanCurve2',
+          'space_names' =>
+          [
+            'Kitchen_Flr_5'
+          ]
+        }
+      ]
+      return system_to_space_map
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       system_to_space_map = [
         {
@@ -289,7 +289,7 @@ class OpenStudio::Model::Model
         }
       ]
       return system_to_space_map
-  end
+    end
   end
 
   def define_space_multiplier
@@ -325,7 +325,7 @@ class OpenStudio::Model::Model
       # If it has a boiler:hotwater, it is the correct loop
       unless loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).empty?
         hot_water_loop = loop
-  end
+      end
     end
     if hot_water_loop
       case building_vintage
@@ -363,7 +363,7 @@ class OpenStudio::Model::Model
           water_heater.setOnCycleLossCoefficienttoAmbientTemperature(15.60100708)
         end
       end
-  end
+    end
   end
 
   def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
@@ -377,25 +377,25 @@ class OpenStudio::Model::Model
     ventilation.setOutdoorAirFlowperPerson(0)
     ventilation.setOutdoorAirFlowperFloorArea(0)
     case building_vintage
-      when '90.1-2010', '90.1-2013'
-        ventilation.setOutdoorAirFlowRate(3.398)
-      when '90.1-2004', '90.1-2007', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-        ventilation.setOutdoorAirFlowRate(3.776)
-end
+    when '90.1-2010', '90.1-2013'
+      ventilation.setOutdoorAirFlowRate(3.398)
+    when '90.1-2004', '90.1-2007', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      ventilation.setOutdoorAirFlowRate(3.776)
+    end
   end
 
   def update_exhaust_fan_efficiency(building_vintage)
     case building_vintage
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        getFanZoneExhausts.sort.each do |exhaust_fan|
-          exhaust_fan.setFanEfficiency(0.16)
-          exhaust_fan.setPressureRise(125)
-        end
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-        getFanZoneExhausts.sort.each do |exhaust_fan|
-          exhaust_fan.setFanEfficiency(0.338)
-          exhaust_fan.setPressureRise(125)
-        end
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      getFanZoneExhausts.sort.each do |exhaust_fan|
+        exhaust_fan.setFanEfficiency(0.16)
+        exhaust_fan.setPressureRise(125)
+      end
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      getFanZoneExhausts.sort.each do |exhaust_fan|
+        exhaust_fan.setFanEfficiency(0.338)
+        exhaust_fan.setPressureRise(125)
+      end
     end
   end
 
@@ -445,7 +445,7 @@ end
     space_names = %w(Office1_Flr_5 Office3_Flr_5 Lobby_Records_Flr_1)
     space_names.each do |space_name|
       space = getSpaceByName(space_name).get
-      space.addDaylightingControls(building_vintage, false, false)
+      space.add_daylighting_controls(building_vintage, false, false)
     end
   end
 

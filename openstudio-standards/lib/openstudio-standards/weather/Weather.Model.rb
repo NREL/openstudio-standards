@@ -78,34 +78,34 @@ class OpenStudio::Model::Model
     # Add or update ground temperature data
     ground_temp_vals = find_object($os_standards['ground_temperatures'], 'template' => building_vintage, 'climate_zone' => climate_zone, 'building_type' => building_type)
     if ground_temp_vals && ground_temp_vals['jan']
-      groundTemp = getSiteGroundTemperatureBuildingSurface
-      groundTemp.setJanuaryGroundTemperature(ground_temp_vals['jan'])
-      groundTemp.setFebruaryGroundTemperature(ground_temp_vals['feb'])
-      groundTemp.setMarchGroundTemperature(ground_temp_vals['mar'])
-      groundTemp.setAprilGroundTemperature(ground_temp_vals['apr'])
-      groundTemp.setMayGroundTemperature(ground_temp_vals['may'])
-      groundTemp.setJuneGroundTemperature(ground_temp_vals['jun'])
-      groundTemp.setJulyGroundTemperature(ground_temp_vals['jul'])
-      groundTemp.setAugustGroundTemperature(ground_temp_vals['aug'])
-      groundTemp.setSeptemberGroundTemperature(ground_temp_vals['sep'])
-      groundTemp.setOctoberGroundTemperature(ground_temp_vals['oct'])
-      groundTemp.setNovemberGroundTemperature(ground_temp_vals['nov'])
-      groundTemp.setDecemberGroundTemperature(ground_temp_vals['dec'])
+      ground_temp = getSiteGroundTemperatureBuildingSurface
+      ground_temp.setJanuaryGroundTemperature(ground_temp_vals['jan'])
+      ground_temp.setFebruaryGroundTemperature(ground_temp_vals['feb'])
+      ground_temp.setMarchGroundTemperature(ground_temp_vals['mar'])
+      ground_temp.setAprilGroundTemperature(ground_temp_vals['apr'])
+      ground_temp.setMayGroundTemperature(ground_temp_vals['may'])
+      ground_temp.setJuneGroundTemperature(ground_temp_vals['jun'])
+      ground_temp.setJulyGroundTemperature(ground_temp_vals['jul'])
+      ground_temp.setAugustGroundTemperature(ground_temp_vals['aug'])
+      ground_temp.setSeptemberGroundTemperature(ground_temp_vals['sep'])
+      ground_temp.setOctoberGroundTemperature(ground_temp_vals['oct'])
+      ground_temp.setNovemberGroundTemperature(ground_temp_vals['nov'])
+      ground_temp.setDecemberGroundTemperature(ground_temp_vals['dec'])
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures; will use generic temperatures, which will skew results.')
-      groundTemp = getSiteGroundTemperatureBuildingSurface
-      groundTemp.setJanuaryGroundTemperature(19.527)
-      groundTemp.setFebruaryGroundTemperature(19.502)
-      groundTemp.setMarchGroundTemperature(19.536)
-      groundTemp.setAprilGroundTemperature(19.598)
-      groundTemp.setMayGroundTemperature(20.002)
-      groundTemp.setJuneGroundTemperature(21.640)
-      groundTemp.setJulyGroundTemperature(22.225)
-      groundTemp.setAugustGroundTemperature(22.375)
-      groundTemp.setSeptemberGroundTemperature(21.449)
-      groundTemp.setOctoberGroundTemperature(20.121)
-      groundTemp.setNovemberGroundTemperature(19.802)
-      groundTemp.setDecemberGroundTemperature(19.633)
+      ground_temp = getSiteGroundTemperatureBuildingSurface
+      ground_temp.setJanuaryGroundTemperature(19.527)
+      ground_temp.setFebruaryGroundTemperature(19.502)
+      ground_temp.setMarchGroundTemperature(19.536)
+      ground_temp.setAprilGroundTemperature(19.598)
+      ground_temp.setMayGroundTemperature(20.002)
+      ground_temp.setJuneGroundTemperature(21.640)
+      ground_temp.setJulyGroundTemperature(22.225)
+      ground_temp.setAugustGroundTemperature(22.375)
+      ground_temp.setSeptemberGroundTemperature(21.449)
+      ground_temp.setOctoberGroundTemperature(20.121)
+      ground_temp.setNovemberGroundTemperature(19.802)
+      ground_temp.setDecemberGroundTemperature(19.633)
     end
 
     # Add SiteWaterMainsTemperature -- via parsing of STAT file.
@@ -265,8 +265,8 @@ module BTAP
 
     # this method returns the default system fuel types by epw_file.
     def self.get_canadian_system_defaults_by_weatherfile_name(epw_file)
-      if data = BTAP::Environment::WeatherData1.find { |data| data[:file] == epw_file.strip }
-        return  data[:boiler_fueltype], data[:baseboard_type], data[:mau_type], data[:mau_heating_coil_type], data[:mau_cooling_type], data[:chiller_type], data[:heating_coil_type_sys_3], data[:heating_coil_type_sys4], data[:heating_coil_type_sys6], data[:fan_type]
+      if (data = BTAP::Environment::WeatherData1.find { |d| d[:file] == epw_file.strip })
+        return data[:boiler_fueltype], data[:baseboard_type], data[:mau_type], data[:mau_heating_coil_type], data[:mau_cooling_type], data[:chiller_type], data[:heating_coil_type_sys_3], data[:heating_coil_type_sys4], data[:heating_coil_type_sys6], data[:fan_type]
       else
         puts 'Not found!'
       end
@@ -321,41 +321,41 @@ module BTAP
                     :typical_autumn_week,
                     :typical_spring_week
 
-      Year = 0
-      Month = 1
-      Day = 2
-      Hour = 3
-      Minute = 4
-      Data_Source = 5
-      Dry_Bulb_Temperature = 6
-      Dew_Point_Temperature = 7
-      Relative_Humidity = 8
-      Atmospheric_Station_Pressure = 9
-      Extraterrestrial_Horizontal_Radiation = 10 # not used
-      Extraterrestrial_Direct_Normal_Radiation = 11 # not used
-      Horizontal_Infrared_Radiation_Intensity = 12
-      Global_Horizontal_Radiation = 13 # not used
-      Direct_Normal_Radiation = 14
-      Diffuse_Horizontal_Radiation = 15
-      Global_Horizontal_Illuminance = 16 # not used
-      Direct_Normal_Illuminance = 17 # not used
-      Diffuse_Horizontal_Illuminance = 18 # not used
-      Zenith_Luminance = 19 # not used
-      Wind_Direction = 20
-      Wind_Speed = 21
-      Total_Sky_Cover = 22 # not used
-      Opaque_Sky_Cover = 23 # not used
-      Visibility = 24 # not used
-      Ceiling_Height = 25 # not used
-      Present_Weather_Observation = 26
-      Present_Weather_Codes = 27
-      Precipitable_Water = 28 # not used
-      Aerosol_Optical_Depth = 29 # not used
-      Snow_Depth = 30
-      Days_Since_Last_Snowfall = 31 # not used
-      Albedo = 32 # not used
-      Liquid_Precipitation_Depth = 33
-      Liquid_Precipitation_Quantity = 34
+      YEAR = 0
+      MONTH = 1
+      DAY = 2
+      HOUR = 3
+      MINUTE = 4
+      DATA_SOURCE = 5
+      DRY_BULB_TEMPERATURE = 6
+      DEW_POINT_TEMPERATURE = 7
+      RELATIVE_HUMIDITY = 8
+      ATMOSPHERIC_STATION_PRESSURE = 9
+      EXTRATERRESTRIAL_HORIZONTAL_RADIATION = 10 # not used
+      EXTRATERRESTRIAL_DIRECT_NORMAL_RADIATION = 11 # not used
+      HORIZONTAL_INFRARED_RADIATION_INTENSITY = 12
+      GLOBAL_HORIZONTAL_RADIATION = 13 # not used
+      DIRECT_NORMAL_RADIATION = 14
+      DIFFUSE_HORIZONTAL_RADIATION = 15
+      GLOBAL_HORIZONTAL_ILLUMINANCE = 16 # not used
+      DIRECT_NORMAL_ILLUMINANCE = 17 # not used
+      DIFFUSE_HORIZONTAL_ILLUMINANCE = 18 # not used
+      ZENITH_LUMINANCE = 19 # not used
+      WIND_DIRECTION = 20
+      WIND_SPEED = 21
+      TOTAL_SKY_COVER = 22 # not used
+      OPAQUE_SKY_COVER = 23 # not used
+      VISIBILITY = 24 # not used
+      CEILING_HEIGHT = 25 # not used
+      PRESENT_WEATHER_OBSERVATION = 26
+      PRESENT_WEATHER_CODES = 27
+      PRECIPITABLE_WATER = 28 # not used
+      AEROSOL_OPTICAL_DEPTH = 29 # not used
+      SNOW_DEPTH = 30
+      DAYS_SINCE_LAST_SNOWFALL = 31 # not used
+      ALBEDO = 32 # not used
+      LIQUID_PRECIPITATION_DEPTH = 33
+      LIQUID_PRECIPITATION_QUANTITY = 34
 
       # This method initializes and returns self.
       # @author phylroy.lopez@nrcan.gc.ca
@@ -499,21 +499,21 @@ module BTAP
       # @return  [String] self
       def eliminate_all_radiation
         scan if @filearray.nil?
-        setcolumntovalue(Extraterrestrial_Horizontal_Radiation, '0') # not used
-        setcolumntovalue(Extraterrestrial_Direct_Normal_Radiation, '0') # not used
-        setcolumntovalue(Horizontal_Infrared_Radiation_Intensity, '315')
-        setcolumntovalue(Global_Horizontal_Radiation, '0') # not used
-        setcolumntovalue(Direct_Normal_Radiation, '0')
-        setcolumntovalue(Diffuse_Horizontal_Radiation, '0')
-        setcolumntovalue(Total_Sky_Cover, '10') # not used
-        setcolumntovalue(Opaque_Sky_Cover, '10') # not used
-        setcolumntovalue(Visibility, '0') # not used
-        setcolumntovalue(Ceiling_Height, '0') # not used
+        setcolumntovalue(EXTRATERRESTRIAL_HORIZONTAL_RADIATION, '0') # not used
+        setcolumntovalue(EXTRATERRESTRIAL_DIRECT_NORMAL_RADIATION, '0') # not used
+        setcolumntovalue(HORIZONTAL_INFRARED_RADIATION_INTENSITY, '315')
+        setcolumntovalue(GLOBAL_HORIZONTAL_RADIATION, '0') # not used
+        setcolumntovalue(DIRECT_NORMAL_RADIATION, '0')
+        setcolumntovalue(DIFFUSE_HORIZONTAL_RADIATION, '0')
+        setcolumntovalue(TOTAL_SKY_COVER, '10') # not used
+        setcolumntovalue(OPAQUE_SKY_COVER, '10') # not used
+        setcolumntovalue(VISIBILITY, '0') # not used
+        setcolumntovalue(CEILING_HEIGHT, '0') # not used
         # lux values
-        setcolumntovalue(Global_Horizontal_Illuminance, '0') # not used
-        setcolumntovalue(Direct_Normal_Illuminance, '0') # not used
-        setcolumntovalue(Diffuse_Horizontal_Illuminance, '0') # not used
-        setcolumntovalue(Zenith_Luminance, '0') # not used
+        setcolumntovalue(GLOBAL_HORIZONTAL_ILLUMINANCE, '0') # not used
+        setcolumntovalue(DIRECT_NORMAL_ILLUMINANCE, '0') # not used
+        setcolumntovalue(DIFFUSE_HORIZONTAL_ILLUMINANCE, '0') # not used
+        setcolumntovalue(ZENITH_LUMINANCE, '0') # not used
         return self
       end
 
@@ -522,9 +522,9 @@ module BTAP
       # @return  [String] self
       def eliminate_only_solar_radiation
         scan if @filearray.nil?
-        setcolumntovalue(Global_Horizontal_Radiation, '0') # not used
-        setcolumntovalue(Direct_Normal_Radiation, '0')
-        setcolumntovalue(Diffuse_Horizontal_Radiation, '0')
+        setcolumntovalue(GLOBAL_HORIZONTAL_RADIATION, '0') # not used
+        setcolumntovalue(DIRECT_NORMAL_RADIATION, '0')
+        setcolumntovalue(DIFFUSE_HORIZONTAL_RADIATION, '0')
         return self
       end
 
@@ -533,18 +533,18 @@ module BTAP
       # @return [String] self
       def eliminate_all_radiation_except_solar
         scan if @filearray.nil?
-        setcolumntovalue(Extraterrestrial_Horizontal_Radiation, '0') # not used
-        setcolumntovalue(Extraterrestrial_Direct_Normal_Radiation, '0') # not used
-        setcolumntovalue(Horizontal_Infrared_Radiation_Intensity, '315')
-        setcolumntovalue(Total_Sky_Cover, '10') # not used
-        setcolumntovalue(Opaque_Sky_Cover, '10') # not used
-        setcolumntovalue(Visibility, '0') # not used
-        setcolumntovalue(Ceiling_Height, '0') # not used
+        setcolumntovalue(EXTRATERRESTRIAL_HORIZONTAL_RADIATION, '0') # not used
+        setcolumntovalue(EXTRATERRESTRIAL_DIRECT_NORMAL_RADIATION, '0') # not used
+        setcolumntovalue(HORIZONTAL_INFRARED_RADIATION_INTENSITY, '315')
+        setcolumntovalue(TOTAL_SKY_COVER, '10') # not used
+        setcolumntovalue(OPAQUE_SKY_COVER, '10') # not used
+        setcolumntovalue(VISIBILITY, '0') # not used
+        setcolumntovalue(CEILING_HEIGHT, '0') # not used
         # lux values
-        setcolumntovalue(Global_Horizontal_Illuminance, '0') # not used
-        setcolumntovalue(Direct_Normal_Illuminance, '0') # not used
-        setcolumntovalue(Diffuse_Horizontal_Illuminance, '0') # not used
-        setcolumntovalue(Zenith_Luminance, '0') # not used
+        setcolumntovalue(GLOBAL_HORIZONTAL_ILLUMINANCE, '0') # not used
+        setcolumntovalue(DIRECT_NORMAL_ILLUMINANCE, '0') # not used
+        setcolumntovalue(DIFFUSE_HORIZONTAL_ILLUMINANCE, '0') # not used
+        setcolumntovalue(ZENITH_LUMINANCE, '0') # not used
         return self
       end
 
@@ -553,11 +553,11 @@ module BTAP
       # @return  [String] self
       def eliminate_percipitation
         scan if @filearray.nil?
-        setcolumntovalue(Present_Weather_Observation, '0')
-        setcolumntovalue(Present_Weather_Codes, '999999999') # no weather. Clear day.
-        setcolumntovalue(Snow_Depth, '0')
-        setcolumntovalue(Liquid_Precipitation_Depth, '0')
-        setcolumntovalue(Liquid_Precipitation_Quantity, '0')
+        setcolumntovalue(PRESENT_WEATHER_OBSERVATION, '0')
+        setcolumntovalue(PRESENT_WEATHER_CODES, '999999999') # no weather. Clear day.
+        setcolumntovalue(SNOW_DEPTH, '0')
+        setcolumntovalue(LIQUID_PRECIPITATION_DEPTH, '0')
+        setcolumntovalue(LIQUID_PRECIPITATION_QUANTITY, '0')
         return self
       end
 
@@ -566,8 +566,8 @@ module BTAP
       # @return  [String] self
       def eliminate_wind
         scan if @filearray.nil?
-        setcolumntovalue(Wind_Direction, '0')
-        setcolumntovalue(Wind_Speed, '0')
+        setcolumntovalue(WIND_DIRECTION, '0')
+        setcolumntovalue(WIND_SPEED, '0')
         return self
       end
 
@@ -580,10 +580,10 @@ module BTAP
       # @return [String] self
       def set_constant_dry_and_dewpoint_temperature_humidity_pressure(dbt = '0.0', dpt = '-1.1', hum = '92', press = '98500')
         scan if @filearray.nil?
-        setcolumntovalue(Dry_Bulb_Temperature, dbt)
-        setcolumntovalue(Dew_Point_Temperature, dpt)
-        setcolumntovalue(Relative_Humidity, hum)
-        setcolumntovalue(Atmospheric_Station_Pressure, press)
+        setcolumntovalue(DRY_BULB_TEMPERATURE, dbt)
+        setcolumntovalue(DEW_POINT_TEMPERATURE, dpt)
+        setcolumntovalue(RELATIVE_HUMIDITY, hum)
+        setcolumntovalue(ATMOSPHERIC_STATION_PRESSURE, press)
         return self
       end
 

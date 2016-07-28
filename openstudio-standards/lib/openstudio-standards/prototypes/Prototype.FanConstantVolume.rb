@@ -46,10 +46,8 @@ class OpenStudio::Model::FanConstantVolume
       else # This type of fan should not exist in the prototype models
         return false
       end
-    end
-
     # If the fan lives on an airloop
-    if airLoopHVAC.is_initialized
+    elsif airLoopHVAC.is_initialized
       case building_vintage
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437

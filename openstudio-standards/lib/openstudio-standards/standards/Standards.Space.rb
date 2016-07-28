@@ -1184,7 +1184,7 @@ class OpenStudio::Model::Space
   # @todo stop skipping non-horizontal roofs
   # @todo Determine the illuminance setpoint for the controls based on space type
   # @todo rotate sensor to face window (only needed for glare calcs)
-  def addDaylightingControls(vintage, remove_existing_controls, draw_daylight_areas_for_debugging = false)
+  def add_daylighting_controls(vintage, remove_existing_controls, draw_daylight_areas_for_debugging = false)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "******For #{name}, adding daylight controls.")
 
     # Check for existing daylighting controls
@@ -2185,7 +2185,7 @@ class OpenStudio::Model::Space
   # word plenum.
   #
   # return [Bool] returns true if plenum, false if not
-  def is_plenum
+  def plenum?
     plenum_status = false
 
     # Check if it is designated
@@ -2227,14 +2227,14 @@ class OpenStudio::Model::Space
   # type of the space below the largest floor in the plenum.
   #
   # return [Bool] true if residential, false if nonresidential
-  def is_residential(standard)
+  def residential?(standard)
     is_res = false
 
     space_to_check = self
 
     # If this space is a plenum, check the space type
     # of the space below the largest floor in the space
-    if is_plenum
+    if plenum?
       # Find the largest floor
       largest_floor_area = 0.0
       largest_surface = nil
@@ -2274,7 +2274,7 @@ class OpenStudio::Model::Space
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
         is_res = false
       else
-        is_res = if space_type_properties['is_residential'] == 'Yes'
+        is_res = if space_type_properties['residential?'] == 'Yes'
                    true
                  else
                    false
@@ -2315,7 +2315,7 @@ class OpenStudio::Model::Space
   #
   # @author Andrew Parker, Julien Marrec
   # @return [Bool] true if heated, false if not
-  def is_heated
+  def heated?
     # Get the zone this space is inside
     zone = thermalZone
 
@@ -2325,7 +2325,7 @@ class OpenStudio::Model::Space
     end
 
     # Get the category from the zone
-    htd = zone.get.is_heated
+    htd = zone.get.heated?
 
     return htd
   end
@@ -2336,7 +2336,7 @@ class OpenStudio::Model::Space
   #
   # @author Andrew Parker, Julien Marrec
   # @return [Bool] true if cooled, false if not
-  def is_cooled
+  def cooled?
     # Get the zone this space is inside
     zone = thermalZone
 
@@ -2346,7 +2346,7 @@ class OpenStudio::Model::Space
     end
 
     # Get the category from the zone
-    cld = zone.get.is_cooled
+    cld = zone.get.cooled?
 
     return cld
   end

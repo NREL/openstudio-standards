@@ -55,16 +55,15 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
           setConstantMinimumAirFlowFraction(1)
         elsif building_type == 'Hospital'
           case building_vintage
-            when '90.1-2010', '90.1-2013'
-              if vav_name.include? 'PatRoom'
-                setConstantMinimumAirFlowFraction(0.5)
-              else
-                setConstantMinimumAirFlowFraction(1)
-              end
-            when '90.1-2004', '90.1-2007'
+          when '90.1-2010', '90.1-2013'
+            if vav_name.include? 'PatRoom'
+              setConstantMinimumAirFlowFraction(0.5)
+            else
               setConstantMinimumAirFlowFraction(1)
+            end
+          when '90.1-2004', '90.1-2007'
+            setConstantMinimumAirFlowFraction(1)
           end
-
         else
           setConstantMinimumAirFlowFraction(0.7)
         end

@@ -44,7 +44,34 @@ class OpenStudio::Model::Model
       }
     else
       space_type_map = {
-        # 'Floor 1 Anesthesia', 'Floor 1 Bio Haz', 'Floor 1 Cafe', 'Floor 1 Clean', 'Floor 1 Clean Work', 'Floor 1 Dictation', 'Floor 1 Dressing Room', 'Floor 1 Electrical Room', 'Floor 1 Elevator Pump Room', 'Floor 1 Humid', 'Floor 1 IT Hall', 'Floor 1 IT Room', 'Floor 1 Lobby', 'Floor 1 Lobby Hall', 'Floor 1 Lobby Toilet', 'Floor 1 Locker Room', 'Floor 1 Locker Room Hall', 'Floor 1 Lounge', 'Floor 1 Med Gas', 'Floor 1 MRI Control Room', 'Floor 1 MRI Hall', 'Floor 1 MRI Room', 'Floor 1 MRI Toilet', 'Floor 1 Nourishment', 'Floor 1 Nurse Hall', 'Floor 1 Nurse Janitor', 'Floor 1 Nurse Station', 'Floor 1 Nurse Toilet', 'Floor 1 Office', 'Floor 1 Operating Room 1', 'Floor 1 Operating Room 2', 'Floor 1 Operating Room 3', 'Floor 1 PACU', 'Floor 1 Pre-Op Hall', 'Floor 1 Pre-Op Room 1', 'Floor 1 Pre-Op Room 2', 'Floor 1 Pre-Op Toilet', 'Floor 1 Procedure Room', 'Floor 1 Reception', 'Floor 1 Reception Hall', 'Floor 1 Recovery Room', 'Floor 1 Scheduling', 'Floor 1 Scrub', 'Floor 1 Soil', 'Floor 1 Soil Hold', 'Floor 1 Soil Work', 'Floor 1 Step Down', 'Floor 1 Sterile Hall', 'Floor 1 Sterile Storage', 'Floor 1 Storage', 'Floor 1 Sub-Sterile', 'Floor 1 Utility Hall', 'Floor 1 Utility Janitor', 'Floor 1 Utility Room', 'Floor 1 Vestibule', 'Floor 2 Conference', 'Floor 2 Conference Toilet', 'Floor 2 Dictation', 'Floor 2 Exam 1', 'Floor 2 Exam 2', 'Floor 2 Exam 3', 'Floor 2 Exam 4', 'Floor 2 Exam 5', 'Floor 2 Exam 6', 'Floor 2 Exam 7', 'Floor 2 Exam 8', 'Floor 2 Exam 9', 'Floor 2 Exam Hall 1', 'Floor 2 Exam Hall 2', 'Floor 2 Exam Hall 3', 'Floor 2 Exam Hall 4', 'Floor 2 Exam Hall 5', 'Floor 2 Exam Hall 6', 'Floor 2 Janitor', 'Floor 2 Lounge', 'Floor 2 Nurse Station 1', 'Floor 2 Nurse Station 2', 'Floor 2 Office', 'Floor 2 Office Hall', 'Floor 2 Reception', 'Floor 2 Reception Hall', 'Floor 2 Reception Toilet', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 2 Storage 1', 'Floor 2 Storage 2', 'Floor 2 Storage 3', 'Floor 2 Utility', 'Floor 2 Work', 'Floor 2 Work Hall', 'Floor 2 Work Toilet', 'Floor 2 X-Ray', 'Floor 3 Dressing Room', 'Floor 3 Elevator Hall', 'Floor 3 Humid', 'Floor 3 Janitor', 'Floor 3 Locker', 'Floor 3 Lounge', 'Floor 3 Lounge Toilet', 'Floor 3 Mechanical', 'Floor 3 Mechanical Hall', 'Floor 3 Office', 'Floor 3 Office Hall', 'Floor 3 Office Toilet', 'Floor 3 Physical Therapy 1', 'Floor 3 Physical Therapy 2', 'Floor 3 Physical Therapy Toilet', 'Floor 3 Storage 1', 'Floor 3 Storage 2', 'Floor 3 Treatment', 'Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2', 'Floor 3 Utility', 'Floor 3 Work', 'NE Stair', 'NW Elevator', 'NW Stair', 'SW Stair'
+        # 'Floor 1 Anesthesia', 'Floor 1 Bio Haz', 'Floor 1 Cafe', 'Floor 1 Clean', 'Floor 1 Clean Work',
+        # 'Floor 1 Dictation', 'Floor 1 Dressing Room', 'Floor 1 Electrical Room', 'Floor 1 Elevator Pump Room',
+        # 'Floor 1 Humid', 'Floor 1 IT Hall', 'Floor 1 IT Room', 'Floor 1 Lobby', 'Floor 1 Lobby Hall',
+        # 'Floor 1 Lobby Toilet', 'Floor 1 Locker Room', 'Floor 1 Locker Room Hall', 'Floor 1 Lounge',
+        # 'Floor 1 Med Gas', 'Floor 1 MRI Control Room', 'Floor 1 MRI Hall', 'Floor 1 MRI Room',
+        # 'Floor 1 MRI Toilet', 'Floor 1 Nourishment', 'Floor 1 Nurse Hall', 'Floor 1 Nurse Janitor',
+        # 'Floor 1 Nurse Station', 'Floor 1 Nurse Toilet', 'Floor 1 Office', 'Floor 1 Operating Room 1',
+        # 'Floor 1 Operating Room 2', 'Floor 1 Operating Room 3', 'Floor 1 PACU', 'Floor 1 Pre-Op Hall',
+        # 'Floor 1 Pre-Op Room 1', 'Floor 1 Pre-Op Room 2', 'Floor 1 Pre-Op Toilet', 'Floor 1 Procedure Room',
+        # 'Floor 1 Reception', 'Floor 1 Reception Hall', 'Floor 1 Recovery Room', 'Floor 1 Scheduling',
+        # 'Floor 1 Scrub', 'Floor 1 Soil', 'Floor 1 Soil Hold', 'Floor 1 Soil Work', 'Floor 1 Step Down',
+        # 'Floor 1 Sterile Hall', 'Floor 1 Sterile Storage', 'Floor 1 Storage', 'Floor 1 Sub-Sterile',
+        # 'Floor 1 Utility Hall', 'Floor 1 Utility Janitor', 'Floor 1 Utility Room', 'Floor 1 Vestibule',
+        # 'Floor 2 Conference', 'Floor 2 Conference Toilet', 'Floor 2 Dictation', 'Floor 2 Exam 1',
+        # 'Floor 2 Exam 2', 'Floor 2 Exam 3', 'Floor 2 Exam 4', 'Floor 2 Exam 5', 'Floor 2 Exam 6',
+        # 'Floor 2 Exam 7', 'Floor 2 Exam 8', 'Floor 2 Exam 9', 'Floor 2 Exam Hall 1',
+        # 'Floor 2 Exam Hall 2', 'Floor 2 Exam Hall 3', 'Floor 2 Exam Hall 4', 'Floor 2 Exam Hall 5',
+        # 'Floor 2 Exam Hall 6', 'Floor 2 Janitor', 'Floor 2 Lounge', 'Floor 2 Nurse Station 1',
+        # 'Floor 2 Nurse Station 2', 'Floor 2 Office', 'Floor 2 Office Hall', 'Floor 2 Reception',
+        # 'Floor 2 Reception Hall', 'Floor 2 Reception Toilet', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2',
+        # 'Floor 2 Storage 1', 'Floor 2 Storage 2', 'Floor 2 Storage 3', 'Floor 2 Utility', 'Floor 2 Work',
+        # 'Floor 2 Work Hall', 'Floor 2 Work Toilet', 'Floor 2 X-Ray', 'Floor 3 Dressing Room',
+        # 'Floor 3 Elevator Hall', 'Floor 3 Humid', 'Floor 3 Janitor', 'Floor 3 Locker',
+        # 'Floor 3 Lounge', 'Floor 3 Lounge Toilet', 'Floor 3 Mechanical', 'Floor 3 Mechanical Hall',
+        # 'Floor 3 Office', 'Floor 3 Office Hall', 'Floor 3 Office Toilet', 'Floor 3 Physical Therapy 1',
+        # 'Floor 3 Physical Therapy 2', 'Floor 3 Physical Therapy Toilet', 'Floor 3 Storage 1',
+        # 'Floor 3 Storage 2', 'Floor 3 Treatment', 'Floor 3 Undeveloped 1', 'Floor 3 Undeveloped 2',
+        # 'Floor 3 Utility', 'Floor 3 Work', 'NE Stair', 'NW Elevator', 'NW Stair', 'SW Stair'
 
         # TODO: still need to put these into their space types...
         #  all zones mapped
@@ -353,29 +380,28 @@ class OpenStudio::Model::Model
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       getSpaces.sort.each do |space|
         space_type = space.spaceType.get
-        if space.exterior_wall_and_window_area <= 0
-          next
-        elsif space_type.spaceInfiltrationDesignFlowRates.size <= 0
-          next
-        else
-          # get the infiltration information from the space type infiltration
-          infiltration_space_type = space_type.spaceInfiltrationDesignFlowRates[0]
-          infil_sch = infiltration_space_type.schedule.get
-          infil_rate = nil
-          infil_ach = nil
-          if infiltration_space_type.flowperExteriorWallArea.is_initialized
-            infil_rate = infiltration_space_type.flowperExteriorWallArea.get
-          elsif infiltration_space_type.airChangesperHour.is_initialized
-            infil_ach = infiltration_space_type.airChangesperHour.get
-          end
-          # Create an infiltration rate object for this space
-          infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
-          infiltration.setName("#{space.name} Infiltration")
-          infiltration.setFlowperExteriorSurfaceArea(infil_rate) unless infil_rate.nil? || infil_rate.to_f.zero?
-          infiltration.setAirChangesperHour(infil_ach) unless infil_ach.nil? || infil_ach.to_f.zero?
-          infiltration.setSchedule(infil_sch)
-          infiltration.setSpace(space)
+        # Skip interior spaces
+        next if space.exterior_wall_and_window_area <= 0
+        # Skip spaces that have no infiltration objects to adjust
+        next if space_type.spaceInfiltrationDesignFlowRates.size <= 0
+
+        # get the infiltration information from the space type infiltration
+        infiltration_space_type = space_type.spaceInfiltrationDesignFlowRates[0]
+        infil_sch = infiltration_space_type.schedule.get
+        infil_rate = nil
+        infil_ach = nil
+        if infiltration_space_type.flowperExteriorWallArea.is_initialized
+          infil_rate = infiltration_space_type.flowperExteriorWallArea.get
+        elsif infiltration_space_type.airChangesperHour.is_initialized
+          infil_ach = infiltration_space_type.airChangesperHour.get
         end
+        # Create an infiltration rate object for this space
+        infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+        infiltration.setName("#{space.name} Infiltration")
+        infiltration.setFlowperExteriorSurfaceArea(infil_rate) unless infil_rate.nil? || infil_rate.to_f.zero?
+        infiltration.setAirChangesperHour(infil_ach) unless infil_ach.nil? || infil_ach.to_f.zero?
+        infiltration.setSchedule(infil_sch)
+        infiltration.setSpace(space)
       end
       getSpaceTypes.each do |space_type|
         space_type.spaceInfiltrationDesignFlowRates.each(&:remove)

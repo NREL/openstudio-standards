@@ -172,8 +172,8 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   Dir.mkdir(out_dir) unless File.exist?(out_dir)
   # task.options = []
   task.options = ['--format=h', "--out=#{out_dir}/rubocop-results.html"]
-  task.requires = ['rubocop/formatter/checkstyle_formatter']
-  task.formatters = ['RuboCop::Formatter::CheckstyleFormatter']
+  # task.requires = ['rubocop/formatter/checkstyle_formatter']
+  # task.formatters = ['RuboCop::Formatter::CheckstyleFormatter']
   # don't abort rake on failure
   task.fail_on_error = false
 end

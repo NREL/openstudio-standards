@@ -41,7 +41,7 @@ module PrototypeFan
     # Minimum motor size for efficiency lookup
     # is 1 HP unless the motor serves an exhaust fan,
     # a powered VAV terminal, or a fan coil unit.
-    unless is_small_fan
+    unless small_fan?
       if allowed_hp < 1.0
         allowed_hp = 1.01
       end

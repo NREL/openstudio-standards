@@ -353,7 +353,7 @@ class OpenStudio::Model::Model
           infiltration_per_zone_diningdoor = 0.583798439
           infiltration_diningdoor.setSchedule(add_schedule('RestaurantFastFood VESTIBULE_DOOR_INFIL_SCH'))
         end
-      elsif building_vintage == '90.1-2010' || '90.1-2013'
+      elsif building_vintage == '90.1-2010' || building_vintage == '90.1-2013'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C'
           infiltration_per_zone_diningdoor = 0.902834611

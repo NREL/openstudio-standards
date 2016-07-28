@@ -333,8 +333,8 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       # TABLE 6.8.1D
       # EER = pthp_eer_coeff_1 - (pthp_eer_coeff_2 * Cap / 1000)
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
-      # If the unit’s capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
-      # If the unit’s capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
+      # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
+      # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
       capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
       pthp_eer = pthp_eer_coeff_1 - (pthp_eer_coeff_2 * capacity_btu_per_hr / 1000.0)
@@ -350,8 +350,8 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       # TABLE 6.8.1D
       # EER = ptac_eer_coeff_1 - (ptac_eer_coeff_2 * Cap / 1000)
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
-      # If the unit’s capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
-      # If the unit’s capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
+      # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
+      # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
       capacity_btu_per_hr = 15000 if capacity_btu_per_hr > 15000
       ptac_eer = ptac_eer_coeff_1 + (ptac_eer_coeff_2 * capacity_btu_per_hr / 1000.0)

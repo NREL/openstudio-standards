@@ -7,7 +7,6 @@ class OpenStudio::Model::Model
     when 'NECB 2011'
       boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
       BTAP::Compliance::NECB2011.necb_autozone_and_autosystem(self, runner = nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type)
-      return true
     else
       # Get the list of HVAC systems, as defined
       # for each building in the Prototype.building_name files.
@@ -66,7 +65,7 @@ class OpenStudio::Model::Model
                                               'Electricity',
                                               condenser_water_loop)
 
-        end
+          end
 
           # Add the VAV
           add_vav_reheat(building_vintage,
@@ -180,7 +179,7 @@ class OpenStudio::Model::Model
                              nil
                            else
                              add_hw_loop('NaturalGas', building_type)
-                         end
+                           end
 
           add_pvav(building_vintage,
                    system['name'],
@@ -250,7 +249,7 @@ class OpenStudio::Model::Model
                              getPlantLoopByName('Hot Water Loop').get
                            else
                              add_hw_loop('NaturalGas', building_type)
-                         end
+                           end
 
           # Retrieve the existing heat pump loop
           # or add a new one if necessary.
@@ -345,11 +344,11 @@ class OpenStudio::Model::Model
         end
       end
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
-
-      return true
-
     end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
+
+    return true
   end # add hvac
 
   private

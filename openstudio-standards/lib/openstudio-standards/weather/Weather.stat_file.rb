@@ -175,8 +175,8 @@ module EnergyPlus
       end
 
       # get heating and cooling degree days
-      cdd10Regex = /-\s*(.*) annual \((standard|wthr file)\) cooling degree-days \(10.C baseline\)/
-      match_data = text.match(cdd10Regex)
+      cdd_10_regex = /-\s*(.*) annual \((standard|wthr file)\) cooling degree-days \(10.C baseline\)/
+      match_data = text.match(cdd_10_regex)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find CDD 10")
         return
@@ -185,8 +185,8 @@ module EnergyPlus
         @cdd10 = match_data[1].to_f
       end
 
-      hdd10Regex = /-\s*(.*) annual \((standard|wthr file)\) heating degree-days \(10.C baseline\)/
-      match_data = text.match(hdd10Regex)
+      hdd_10_regex = /-\s*(.*) annual \((standard|wthr file)\) heating degree-days \(10.C baseline\)/
+      match_data = text.match(hdd_10_regex)
 
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find HDD 10")
@@ -195,8 +195,8 @@ module EnergyPlus
         @hdd10 = match_data[1].to_f
       end
 
-      cdd18Regex = /-\s*(.*) annual \((standard|wthr file)\) cooling degree-days \(18.*C baseline\)/
-      match_data = text.match(cdd18Regex)
+      cdd_18_regex = /-\s*(.*) annual \((standard|wthr file)\) cooling degree-days \(18.*C baseline\)/
+      match_data = text.match(cdd_18_regex)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find CDD 18")
         return
@@ -204,8 +204,8 @@ module EnergyPlus
         @cdd18 = match_data[1].to_f
       end
 
-      hdd18Regex = /-\s*(.*) annual \((standard|wthr file)\) heating degree-days \(18.*C baseline\)/
-      match_data = text.match(hdd18Regex)
+      hdd_18_regex = /-\s*(.*) annual \((standard|wthr file)\) heating degree-days \(18.*C baseline\)/
+      match_data = text.match(hdd_18_regex)
 
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find HDD 18")

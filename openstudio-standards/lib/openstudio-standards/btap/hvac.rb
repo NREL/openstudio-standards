@@ -2356,7 +2356,7 @@ module BTAP
             # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
             # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
             
-            # Some system parameters are set after system is set up; by applying method 'applyHVACEfficiencyStandard'
+            # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 
 
             always_on = model.alwaysOnDiscreteSchedule
@@ -2559,7 +2559,7 @@ module BTAP
             # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
             # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
             
-            # Some system parameters are set after system is set up; by applying method 'applyHVACEfficiencyStandard'
+            # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 
 
             always_on = model.alwaysOnDiscreteSchedule

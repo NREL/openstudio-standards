@@ -44,15 +44,14 @@ class OpenStudio::Model::FanVariableVolume
       else # This type of fan should not exist in the prototype models
         return false
       end
-    end
+    # If the fan lives on an airloop
+    elsif airLoopHVAC.is_initialized
 
-    # TODO: Inconsistency - Primary School uses CAV pressure rises
-    # even thought it has a VAV system.  CAV system is listed in document,
-    # so assume the system type was updated but forgot to update pressure rises.
-    if building_type == 'PrimarySchool' && (building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004')
+      # TODO: Inconsistency - Primary School uses CAV pressure rises
+      # even thought it has a VAV system.  CAV system is listed in document,
+      # so assume the system type was updated but forgot to update pressure rises.
+      if building_type == 'PrimarySchool' && (building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004')
 
-      # If the fan lives on an airloop (From Prototype.FanConstantVolume)
-      if airLoopHVAC.is_initialized
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7487
                                  2.5
                                elsif maximum_flow_rate_cfm >= 7487 && maximum_flow_rate_cfm < 20000
@@ -60,12 +59,9 @@ class OpenStudio::Model::FanVariableVolume
                                else # Over 20,000 cfm
                                  4.09
                                end
-      end
 
-    else
+      else
 
-      # If the fan lives on an airloop
-      if airLoopHVAC.is_initialized
         case building_vintage
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
           pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
@@ -82,8 +78,8 @@ class OpenStudio::Model::FanVariableVolume
                                    5.58
                                  end
         end
-      end
 
+      end
     end
 
     # Set the fan pressure rise

@@ -613,7 +613,7 @@ class OpenStudio::Model::Model
                          0.3
                        else
                          1
-                                        end
+                       end
                      else
                        0.3
                      end
@@ -2482,7 +2482,7 @@ class OpenStudio::Model::Model
                     end
 
     # OA_controller Maximum OA Fraction schedule
-    econ_MaxOAFrac_Sch = add_schedule('HotelSmall SAC_Econ_MaxOAFrac_Sch')
+    econ_max_oa_frac_sch = add_schedule('HotelSmall SAC_Econ_MaxOAFrac_Sch')
 
     # Make a SAC for each group of thermal zones
     parts = []
@@ -2852,7 +2852,7 @@ class OpenStudio::Model::Model
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_controller.setName("#{thermal_zone_name} SAC OA Sys Controller")
     oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
-    oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_MaxOAFrac_Sch)
+    oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_max_oa_frac_sch)
     oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_controller)
     oa_system.setName("#{thermal_zone_name} SAC OA Sys")
 
@@ -3589,7 +3589,7 @@ class OpenStudio::Model::Model
                    OpenStudio::Model::PumpConstantSpeed.new(self)
                  else
                    OpenStudio::Model::PumpVariableSpeed.new(self)
-                            end
+                 end
                else
                  OpenStudio::Model::PumpConstantSpeed.new(self)
                end
@@ -4228,26 +4228,26 @@ class OpenStudio::Model::Model
     cooling_coil.addToNode(airloop_supply_inlet)
 
     # create controller outdoor air
-    controller_OA = OpenStudio::Model::ControllerOutdoorAir.new(self)
-    controller_OA.setName('DOAS OA Controller')
-    controller_OA.setEconomizerControlType(economizer_control_type)
-    controller_OA.setMinimumLimitType('FixedMinimum')
-    controller_OA.setMinimumOutdoorAirSchedule(oa_damper_sch)
-    controller_OA.resetEconomizerMaximumLimitDryBulbTemperature
+    controller_oa = OpenStudio::Model::ControllerOutdoorAir.new(self)
+    controller_oa.setName('DOAS OA Controller')
+    controller_oa.setEconomizerControlType(economizer_control_type)
+    controller_oa.setMinimumLimitType('FixedMinimum')
+    controller_oa.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    controller_oa.resetEconomizerMaximumLimitDryBulbTemperature
     # TODO: Yixing read the schedule from the Prototype Input
     if building_type == 'LargeHotel'
-      controller_OA.setMinimumFractionofOutdoorAirSchedule(add_schedule('HotelLarge FLR_3_DOAS_OAminOAFracSchedule'))
+      controller_oa.setMinimumFractionofOutdoorAirSchedule(add_schedule('HotelLarge FLR_3_DOAS_OAminOAFracSchedule'))
     end
-    controller_OA.resetEconomizerMaximumLimitEnthalpy
-    controller_OA.resetMaximumFractionofOutdoorAirSchedule
-    controller_OA.resetEconomizerMinimumLimitDryBulbTemperature
+    controller_oa.resetEconomizerMaximumLimitEnthalpy
+    controller_oa.resetMaximumFractionofOutdoorAirSchedule
+    controller_oa.resetEconomizerMinimumLimitDryBulbTemperature
 
     # create ventilation schedules and assign to OA controller
-    controller_OA.setHeatRecoveryBypassControlType('BypassWhenWithinEconomizerLimits')
+    controller_oa.setHeatRecoveryBypassControlType('BypassWhenWithinEconomizerLimits')
 
     # create outdoor air system
-    system_OA = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, controller_OA)
-    system_OA.addToNode(airloop_supply_inlet)
+    system_oa = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, controller_oa)
+    system_oa.addToNode(airloop_supply_inlet)
 
     # create scheduled setpoint manager for airloop
     # DOAS or VAV for cooling and not ventilation

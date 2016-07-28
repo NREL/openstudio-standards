@@ -3,8 +3,8 @@
 def safe_load_model(model_path_string)
   model_path = OpenStudio::Path.new(model_path_string)
   if OpenStudio.exists(model_path)
-    versionTranslator = OpenStudio::OSVersion::VersionTranslator.new
-    model = versionTranslator.loadModel(model_path)
+    version_translator = OpenStudio::OSVersion::VersionTranslator.new
+    model = version_translator.loadModel(model_path)
     if model.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{model_path_string}")
       return false

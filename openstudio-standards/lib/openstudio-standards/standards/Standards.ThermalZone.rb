@@ -123,11 +123,10 @@ class OpenStudio::Model::ThermalZone
             num_ppl = people.getNumberOfPeople(space.floorArea)
             if occ_schedules_num_occ[num_ppl_sch].nil?
               occ_schedules_num_occ[num_ppl_sch] = num_ppl
-              max_occ_on_thermal_zone += num_ppl
             else
               occ_schedules_num_occ[num_ppl_sch] += num_ppl
-              max_occ_on_thermal_zone += num_ppl
             end
+            max_occ_on_thermal_zone += num_ppl
           end
         end
       end
@@ -142,11 +141,10 @@ class OpenStudio::Model::ThermalZone
           num_ppl = people.getNumberOfPeople(space.floorArea)
           if occ_schedules_num_occ[num_ppl_sch].nil?
             occ_schedules_num_occ[num_ppl_sch] = num_ppl
-            max_occ_on_thermal_zone += num_ppl
           else
             occ_schedules_num_occ[num_ppl_sch] += num_ppl
-            max_occ_on_thermal_zone += num_ppl
           end
+          max_occ_on_thermal_zone += num_ppl
         end
       end
     end
@@ -157,8 +155,7 @@ class OpenStudio::Model::ThermalZone
     yearly_data = []
     yearly_times = OpenStudio::DateTimeVector.new
     yearly_values = []
-    for i in 1..365
-
+    (1..365).each do |i|
       times_on_this_day = []
       os_date = year.makeDate(i)
       day_of_week = os_date.dayOfWeek.valueName
@@ -211,17 +208,16 @@ class OpenStudio::Model::ThermalZone
       simple_daily_os_times = []
       simple_daily_values = []
       simple_daily_occs = []
-      daily_values.each_with_index do |value, i|
-        next if value == daily_values[i + 1]
-        simple_daily_times << daily_times[i]
-        simple_daily_os_times << daily_os_times[i]
-        simple_daily_values << daily_values[i]
-        simple_daily_occs << daily_occs[i]
+      daily_values.each_with_index do |value, j|
+        next if value == daily_values[j + 1]
+        simple_daily_times << daily_times[j]
+        simple_daily_os_times << daily_os_times[j]
+        simple_daily_values << daily_values[j]
+        simple_daily_occs << daily_occs[j]
       end
 
       # Store the daily values
       yearly_data << { 'date' => os_date, 'day_of_week' => day_of_week, 'times' => simple_daily_times, 'values' => simple_daily_values, 'daily_os_times' => simple_daily_os_times, 'daily_occs' => simple_daily_occs }
-
     end
 
     # Create a TimeSeries from the data
@@ -253,13 +249,13 @@ class OpenStudio::Model::ThermalZone
 
     # Create ruleset schedules, attempting to create
     # the minimum number of unique rules.
-    %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday).each do |day_of_week|
+    %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday).each do |weekday|
       end_of_prev_rule = yearly_data[0]['date']
-      yearly_data.each_with_index do |daily_data, i|
+      yearly_data.each_with_index do |daily_data, k|
         # Skip unless it is the day of week
         # currently under inspection
         day = daily_data['day_of_week']
-        next unless day == day_of_week
+        next unless day == weekday
         date = daily_data['date']
         times = daily_data['times']
         values = daily_data['values']
@@ -270,9 +266,9 @@ class OpenStudio::Model::ThermalZone
         # If the next is different, or if
         # we've reached the end of the year,
         # create a new rule
-        unless yearly_data[i + 7].nil?
-          next_day_times = yearly_data[i + 7]['times']
-          next_day_values = yearly_data[i + 7]['values']
+        unless yearly_data[k + 7].nil?
+          next_day_times = yearly_data[k + 7]['times']
+          next_day_values = yearly_data[k + 7]['values']
           next if times == next_day_times && values == next_day_values
         end
 
@@ -283,12 +279,12 @@ class OpenStudio::Model::ThermalZone
         # rule to today
 
         sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
-        sch_rule.setName("#{sch_name} #{day_of_week} Rule")
+        sch_rule.setName("#{sch_name} #{weekday} Rule")
         day_sch = sch_rule.daySchedule
-        day_sch.setName("#{sch_name} #{day_of_week}")
-        daily_os_times.each_with_index do |time, i|
-          value = values[i]
-          next if value == values[i + 1] # Don't add breaks if same value
+        day_sch.setName("#{sch_name} #{weekday}")
+        daily_os_times.each_with_index do |time, l|
+          value = values[l]
+          next if value == values[l + 1] # Don't add breaks if same value
           day_sch.addValue(time, value)
         end
 
@@ -297,13 +293,13 @@ class OpenStudio::Model::ThermalZone
         sch_rule.setEndDate(date)
 
         # Individual Days
-        sch_rule.setApplyMonday(true) if day_of_week == 'Monday'
-        sch_rule.setApplyTuesday(true) if day_of_week == 'Tuesday'
-        sch_rule.setApplyWednesday(true) if day_of_week == 'Wednesday'
-        sch_rule.setApplyThursday(true) if day_of_week == 'Thursday'
-        sch_rule.setApplyFriday(true) if day_of_week == 'Friday'
-        sch_rule.setApplySaturday(true) if day_of_week == 'Saturday'
-        sch_rule.setApplySunday(true) if day_of_week == 'Sunday'
+        sch_rule.setApplyMonday(true) if weekday == 'Monday'
+        sch_rule.setApplyTuesday(true) if weekday == 'Tuesday'
+        sch_rule.setApplyWednesday(true) if weekday == 'Wednesday'
+        sch_rule.setApplyThursday(true) if weekday == 'Thursday'
+        sch_rule.setApplyFriday(true) if weekday == 'Friday'
+        sch_rule.setApplySaturday(true) if weekday == 'Saturday'
+        sch_rule.setApplySunday(true) if weekday == 'Sunday'
 
         # Reset the previous rule end date
         end_of_prev_rule = date + OpenStudio::Time.new(0, 24, 0, 0)
@@ -311,7 +307,7 @@ class OpenStudio::Model::ThermalZone
     end
 
     return sch_ruleset
-   end
+  end
 
   # Determine if the thermal zone is residential based on the
   # space type properties for the spaces in the zone.
@@ -321,14 +317,14 @@ class OpenStudio::Model::ThermalZone
   # it will be assumed nonresidential.
   #
   # return [Bool] true if residential, false if nonresidential
-  def is_residential(standard)
+  def residential?(standard)
     # Determine the respective areas
     res_area_m2 = 0
     nonres_area_m2 = 0
     spaces.each do |space|
       # Ignore space if not part of total area
       next unless space.partofTotalFloorArea
-      if space.is_residential(standard)
+      if space.residential?(standard)
         res_area_m2 += space.floorArea
       else
         nonres_area_m2 += space.floorArea
@@ -354,7 +350,7 @@ class OpenStudio::Model::ThermalZone
   # false if Electric or Other.
   # To-do: It's not doing it properly right now. If you have a zone with a VRF + a DOAS (via an ATU SingleDUct Uncontrolled)
   # it'll pick up both natural gas and electricity and classify it as fossil fuel, when I would definitely classify it as electricity
-  def is_fossil_hybrid_or_purchased_heat
+  def fossil_hybrid_or_purchased_heat?
     is_fossil = false
 
     # Get an array of the heating fuels
@@ -376,7 +372,7 @@ class OpenStudio::Model::ThermalZone
       is_fossil = true
     end
 
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating fuels = #{htg_fuels.join(', ')}; is_fossil_hybrid_or_purchased_heat = #{is_fossil}.")
+    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating fuels = #{htg_fuels.join(', ')}; fossil_hybrid_or_purchased_heat? = #{is_fossil}.")
 
     return is_fossil
   end
@@ -581,7 +577,7 @@ class OpenStudio::Model::ThermalZone
     # Get the zone heating and cooling fuels
     htg_fuels = heating_fuels
     clg_fuels = cooling_fuels
-    is_fossil = is_fossil_hybrid_or_purchased_heat
+    is_fossil = fossil_hybrid_or_purchased_heat?
 
     # Infer the HVAC type
     sys_type = 'Unknown'
@@ -685,7 +681,7 @@ class OpenStudio::Model::ThermalZone
   #
   # @author Andrew Parker, Julien Marrec
   # @return [Bool] true if heated, false if not
-  def is_heated
+  def heated?
     temp_f = 41
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
 
@@ -695,7 +691,7 @@ class OpenStudio::Model::ThermalZone
     area_plenum = 0
     area_non_plenum = 0
     spaces.each do |space|
-      if space.is_plenum
+      if space.plenum?
         area_plenum += space.floorArea
       else
         area_non_plenum += space.floorArea
@@ -767,7 +763,7 @@ class OpenStudio::Model::ThermalZone
   #
   # @author Andrew Parker, Julien Marrec
   # @return [Bool] true if cooled, false if not
-  def is_cooled
+  def cooled?
     temp_f = 91
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
 
@@ -777,7 +773,7 @@ class OpenStudio::Model::ThermalZone
     area_plenum = 0
     area_non_plenum = 0
     spaces.each do |space|
-      if space.is_plenum
+      if space.plenum?
         area_plenum += space.floorArea
       else
         area_non_plenum += space.floorArea
@@ -847,13 +843,13 @@ class OpenStudio::Model::ThermalZone
   # based on whether a majority of the spaces
   # in the zone are plenums or not.
   # @return [Bool] true if majority plenum, false if not
-  def is_plenum
+  def plenum?
     plenum_status = false
 
     area_plenum = 0
     area_non_plenum = 0
     spaces.each do |space|
-      if space.is_plenum
+      if space.plenum?
         area_plenum += space.floorArea
       else
         area_non_plenum += space.floorArea
@@ -928,7 +924,7 @@ class OpenStudio::Model::ThermalZone
 
     # Determine if residential
     res = false
-    if is_residential(standard)
+    if residential?(standard)
       res = true
     end
 
@@ -1055,7 +1051,7 @@ class OpenStudio::Model::ThermalZone
   # @return [Bool] true if successful, false if not
   def set_performance_rating_method_baseline_supply_temperatures
     # Skip spaces that aren't heated or cooled
-    return true unless is_heated || is_cooled
+    return true unless heated? || cooled?
 
     # Heating
     htg_sat_c = performance_rating_method_baseline_heating_design_supply_temperature
@@ -1078,7 +1074,7 @@ class OpenStudio::Model::ThermalZone
   end
 
   def add_unconditioned_thermostat
-    # Heated to 0F (below is_heated threshold)
+    # Heated to 0F (below heated? threshold)
     htg_t_f = 0
     htg_t_c = OpenStudio.convert(htg_t_f, 'F', 'C').get
     htg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -1086,7 +1082,7 @@ class OpenStudio::Model::ThermalZone
     htg_stpt_sch.defaultDaySchedule.setName('Unconditioned Minimal Heating Default')
     htg_stpt_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), htg_t_c)
 
-    # Cooled to 120F (above is_cooled threshold)
+    # Cooled to 120F (above cooled? threshold)
     clg_t_f = 120
     clg_t_c = OpenStudio.convert(clg_t_f, 'F', 'C').get
     clg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -1158,15 +1154,15 @@ class OpenStudio::Model::ThermalZone
   def occupancy_type(standard)
     occ_type = nil
 
-    heated = is_heated
-    cooled = is_cooled
+    heated = heated?
+    cooled = cooled?
 
     # Heated Only
     occ_type = nil
     occ_type = if heated && !cooled
                  'heatedonly'
                # Residential
-               elsif is_residential(standard)
+               elsif residential?(standard)
                  'residential'
                # Nonresidential
                else

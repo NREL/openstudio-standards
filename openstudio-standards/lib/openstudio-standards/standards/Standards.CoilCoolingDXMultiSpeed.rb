@@ -106,7 +106,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
         end
       end
       # set capacities, flow rates, and sensible heat ratio for stages
-      for istage in 0..3
+      (0..3).each do |istage|
         clg_stages[istage].setGrossRatedTotalCoolingCapacity(stage_cap[istage])
         clg_stages[istage].setRatedAirFlowRate(flow_rate4 * stage_cap[istage] / capacity_w)
       end
@@ -134,8 +134,8 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Make the COOL-CAP-FT curve
     cool_cap_ft = model.add_curve(ac_props['cool_cap_ft'], standards)
     if cool_cap_ft
-      clg_stages.each do |istage|
-        istage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft)
+      clg_stages.each do |stage|
+        stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft)
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{name}, cannot find cool_cap_ft curve, will not be set.")
@@ -145,8 +145,8 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Make the COOL-CAP-FFLOW curve
     cool_cap_fflow = model.add_curve(ac_props['cool_cap_fflow'], standards)
     if cool_cap_fflow
-      clg_stages.each do |istage|
-        istage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow)
+      clg_stages.each do |stage|
+        stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow)
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{name}, cannot find cool_cap_fflow curve, will not be set.")
@@ -156,8 +156,8 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Make the COOL-EIR-FT curve
     cool_eir_ft = model.add_curve(ac_props['cool_eir_ft'], standards)
     if cool_eir_ft
-      clg_stages.each do |istage|
-        istage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft)
+      clg_stages.each do |stage|
+        stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft)
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{name}, cannot find cool_eir_ft curve, will not be set.")
@@ -167,8 +167,8 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Make the COOL-EIR-FFLOW curve
     cool_eir_fflow = model.add_curve(ac_props['cool_eir_fflow'], standards)
     if cool_eir_fflow
-      clg_stages.each do |istage|
-        istage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow)
+      clg_stages.each do |stage|
+        stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow)
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{name}, cannot find cool_eir_fflow curve, will not be set.")
@@ -178,8 +178,8 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Make the COOL-PLF-FPLR curve
     cool_plf_fplr = model.add_curve(ac_props['cool_plf_fplr'], standards)
     if cool_plf_fplr
-      clg_stages.each do |istage|
-        istage.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
+      clg_stages.each do |stage|
+        stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{name}, cannot find cool_plf_fplr curve, will not be set.")

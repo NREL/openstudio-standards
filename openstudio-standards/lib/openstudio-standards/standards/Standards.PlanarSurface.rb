@@ -33,7 +33,7 @@ class OpenStudio::Model::PlanarSurface
     # Determine if residential or nonresidential
     # based on the space type.
     occ_type = 'Nonresidential'
-    if space.is_residential(template)
+    if space.residential?(template)
       occ_type = 'Residential'
     end
 

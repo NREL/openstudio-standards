@@ -19,7 +19,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Only applies to multi-zone vav systems
     # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
     # (2) AHU1 in 2004-2013
-    if is_multizone_vav_system && !(name.to_s.include? 'Outpatient F1')
+    if multizone_vav_system? && !(name.to_s.include? 'Outpatient F1')
       adjust_minimum_vav_damper_positions
     end
 
@@ -52,7 +52,7 @@ class OpenStudio::Model::AirLoopHVAC
     set_economizer_integration(template, climate_zone)
 
     # Multizone VAV Systems
-    if is_multizone_vav_system
+    if multizone_vav_system?
 
       # VAV Reheat Control
       apply_vav_damper_action(template)
@@ -138,7 +138,7 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     # Multizone VAV Systems
-    if is_multizone_vav_system
+    if multizone_vav_system?
 
       # SAT Reset
       # G3.1.3.12 SAT reset required for all Multizone VAV systems,
@@ -300,7 +300,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # For 90.1-2010, single-zone VAV systems use the
     # constant volume limitation per 6.5.3.1.1
-    if template == 'ASHRAE 90.1-2010' && fan_pwr_limit_type = 'variable volume' && num_zones_served == 1
+    if template == 'ASHRAE 90.1-2010' && fan_pwr_limit_type == 'variable volume' && num_zones_served == 1
       fan_pwr_limit_type = 'constant volume'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Using the constant volume limitation because single-zone VAV system.")
     end
@@ -1203,7 +1203,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if allowable, if the system has no economizer or no OA system.
   # Returns false if the economizer type is not allowable.
-  def is_economizer_type_allowable(template, climate_zone)
+  def economizer_type_allowable?(template, climate_zone)
     # EnergyPlus economizer types
     # 'NoEconomizer'
     # 'FixedDryBulb'
@@ -1512,7 +1512,7 @@ class OpenStudio::Model::AirLoopHVAC
             erv_cfm = nil
           elsif pct_oa >= 0.8
             erv_cfm = nil
-           end
+          end
         when 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-5C'
           if pct_oa < 0.1
             erv_cfm = nil
@@ -1532,7 +1532,7 @@ class OpenStudio::Model::AirLoopHVAC
             erv_cfm = 5000
           elsif pct_oa >= 0.8
             erv_cfm = 4000
-           end
+          end
         when 'ASHRAE 169-2006-6B'
           if pct_oa < 0.1
             erv_cfm = nil
@@ -1552,7 +1552,7 @@ class OpenStudio::Model::AirLoopHVAC
             erv_cfm = 2500
           elsif pct_oa >= 0.8
             erv_cfm = 1500
-           end
+          end
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-6A'
           if pct_oa < 0.1
             erv_cfm = nil
@@ -1572,7 +1572,7 @@ class OpenStudio::Model::AirLoopHVAC
             erv_cfm = 1000
           elsif pct_oa >= 0.8
             erv_cfm = 0
-           end
+          end
         when 'ASHRAE 169-2006-7A', 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
           if pct_oa < 0.1
             erv_cfm = nil
@@ -1592,7 +1592,7 @@ class OpenStudio::Model::AirLoopHVAC
             erv_cfm = 0
           elsif pct_oa >= 0.8
             erv_cfm = 0
-           end
+          end
         end
       else
         # Table 6.5.6.1-2, above 8000 hrs
@@ -1671,13 +1671,13 @@ class OpenStudio::Model::AirLoopHVAC
 
       # initialize counters
       sum_zone_oa = 0.0
-      sum_zoneoaTimesheatDesignT = 0.0
+      sum_zone_oa_times_heat_design_t = 0.0
 
       # zone loop
       zones.each do |zone|
         # get design heat temperature for each zone; this is equivalent to design exhaust temperature
         zone_sizing = zone.sizingZone
-        heatDesignTemp = zone_sizing.zoneHeatingDesignSupplyAirTemperature
+        heat_design_t = zone_sizing.zoneHeatingDesignSupplyAirTemperature
 
         # initialize counter
         zone_oa = 0.0
@@ -1698,11 +1698,11 @@ class OpenStudio::Model::AirLoopHVAC
         end # space loop
 
         sum_zone_oa += zone_oa # sum of all zone oa flows to get system oa flow
-        sum_zoneoaTimesheatDesignT += (zone_oa * heatDesignTemp) # calculated to get oa flow weighted average of design exhaust temperature
+        sum_zone_oa_times_heat_design_t += (zone_oa * heat_design_t) # calculated to get oa flow weighted average of design exhaust temperature
       end # zone loop
 
       # Calculate average exhaust temperature (oa flow weighted average)
-      avg_exhaust_temp = sum_zoneoaTimesheatDesignT / sum_zone_oa
+      avg_exhaust_temp = sum_zone_oa_times_heat_design_t / sum_zone_oa
 
       # for debugging/testing
       #      puts "average exhaust temp = #{avg_exhaust_temp}"
@@ -2168,12 +2168,12 @@ class OpenStudio::Model::AirLoopHVAC
   def adjust_minimum_vav_damper_positions_outpatient
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
-      sizingZone = zone.sizingZone
+      sizing_zone = zone.sizingZone
       space_area = space.floorArea
-      if sizingZone.coolingDesignAirFlowMethod == 'DesignDay'
+      if sizing_zone.coolingDesignAirFlowMethod == 'DesignDay'
         next
-      elsif sizingZone.coolingDesignAirFlowMethod == 'DesignDayWithLimit'
-        minimum_airflow_per_zone_floor_area = sizingZone.coolingMinimumAirFlowperZoneFloorArea
+      elsif sizing_zone.coolingDesignAirFlowMethod == 'DesignDayWithLimit'
+        minimum_airflow_per_zone_floor_area = sizing_zone.coolingMinimumAirFlowperZoneFloorArea
         minimum_airflow_per_zone = minimum_airflow_per_zone_floor_area * space_area
         # get the autosized maximum air flow of the VAV terminal
         zone.equipment.each do |equip|
@@ -2344,7 +2344,7 @@ class OpenStudio::Model::AirLoopHVAC
     is_sat_reset_required = false
 
     # Only required for multizone VAV systems
-    return is_sat_reset_required unless is_multizone_vav_system
+    return is_sat_reset_required unless multizone_vav_system?
 
     # Not required until 90.1-2010
     case template
@@ -2492,12 +2492,12 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system is a multizone VAV system
   #
   # @return [Bool] Returns true if required, false if not.
-  def is_multizone_vav_system
-    is_multizone_vav_system = false
+  def multizone_vav_system?
+    multizone_vav_system = false
 
     # Must serve more than 1 zone
     if thermalZones.size < 2
-      return is_multizone_vav_system
+      return multizone_vav_system
     end
 
     # Must be a variable volume system
@@ -2508,13 +2508,13 @@ class OpenStudio::Model::AirLoopHVAC
       end
     end
     if has_vav_fan == false
-      return is_multizone_vav_system
+      return multizone_vav_system
     end
 
     # If here, it's a multizone VAV system
-    is_multizone_vav_system = true
+    multizone_vav_system = true
 
-    return is_multizone_vav_system
+    return multizone_vav_system
   end
 
   # Determine if the system has energy recovery already
@@ -2768,11 +2768,10 @@ class OpenStudio::Model::AirLoopHVAC
               num_ppl = people.getNumberOfPeople(space.floorArea)
               if occ_schedules_num_occ[num_ppl_sch].nil?
                 occ_schedules_num_occ[num_ppl_sch] = num_ppl
-                max_occ_on_airloop += num_ppl
               else
                 occ_schedules_num_occ[num_ppl_sch] += num_ppl
-                max_occ_on_airloop += num_ppl
               end
+              max_occ_on_airloop += num_ppl
             end
           end
         end
@@ -2787,11 +2786,10 @@ class OpenStudio::Model::AirLoopHVAC
             num_ppl = people.getNumberOfPeople(space.floorArea)
             if occ_schedules_num_occ[num_ppl_sch].nil?
               occ_schedules_num_occ[num_ppl_sch] = num_ppl
-              max_occ_on_airloop += num_ppl
             else
               occ_schedules_num_occ[num_ppl_sch] += num_ppl
-              max_occ_on_airloop += num_ppl
             end
+            max_occ_on_airloop += num_ppl
           end
         end
       end
@@ -2809,8 +2807,7 @@ class OpenStudio::Model::AirLoopHVAC
     yearly_data = []
     yearly_times = OpenStudio::DateTimeVector.new
     yearly_values = []
-    for i in 1..365
-
+    (1..365).each do |i|
       times_on_this_day = []
       os_date = year.makeDate(i)
       day_of_week = os_date.dayOfWeek.valueName
@@ -2866,19 +2863,18 @@ class OpenStudio::Model::AirLoopHVAC
       simple_daily_os_times = []
       simple_daily_values = []
       simple_daily_occs = []
-      daily_values.each_with_index do |value, i|
-        next if value == daily_values[i + 1]
-        simple_daily_times << daily_times[i]
-        simple_daily_os_times << daily_os_times[i]
-        simple_daily_values << daily_values[i]
-        simple_daily_occs << daily_occs[i]
+      daily_values.each_with_index do |value, j|
+        next if value == daily_values[j + 1]
+        simple_daily_times << daily_times[j]
+        simple_daily_os_times << daily_os_times[j]
+        simple_daily_values << daily_values[j]
+        simple_daily_occs << daily_occs[j]
       end
 
       # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.AirLoopHVAC", "#{simple_daily_times.join(', ')}                  {simple_daily_values.join(', ')}")
 
       # Store the daily values
       yearly_data << { 'date' => os_date, 'day_of_week' => day_of_week, 'times' => simple_daily_times, 'values' => simple_daily_values, 'daily_os_times' => simple_daily_os_times, 'daily_occs' => simple_daily_occs }
-
     end
 
     # Create a TimeSeries from the data
@@ -2910,14 +2906,14 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Create ruleset schedules, attempting to create
     # the minimum number of unique rules.
-    %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday).each do |day_of_week|
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', day_of_week.to_s)
+    %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday).each do |weekday|
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', weekday.to_s)
       end_of_prev_rule = yearly_data[0]['date']
-      yearly_data.each_with_index do |daily_data, i|
+      yearly_data.each_with_index do |daily_data, k|
         # Skip unless it is the day of week
         # currently under inspection
         day = daily_data['day_of_week']
-        next unless day == day_of_week
+        next unless day == weekday
         date = daily_data['date']
         times = daily_data['times']
         values = daily_data['values']
@@ -2928,9 +2924,9 @@ class OpenStudio::Model::AirLoopHVAC
         # If the next is different, or if
         # we've reached the end of the year,
         # create a new rule
-        unless yearly_data[i + 7].nil?
-          next_day_times = yearly_data[i + 7]['times']
-          next_day_values = yearly_data[i + 7]['values']
+        unless yearly_data[k + 7].nil?
+          next_day_times = yearly_data[k + 7]['times']
+          next_day_values = yearly_data[k + 7]['values']
           next if times == next_day_times && values == next_day_values
         end
 
@@ -2939,14 +2935,14 @@ class OpenStudio::Model::AirLoopHVAC
 
         # If here, we need to make a rule to cover from the previous
         # rule to today
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "Making a new rule for #{day_of_week} from #{end_of_prev_rule} to #{date}")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
         sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
-        sch_rule.setName("#{sch_name} #{day_of_week} Rule")
+        sch_rule.setName("#{sch_name} #{weekday} Rule")
         day_sch = sch_rule.daySchedule
-        day_sch.setName("#{sch_name} #{day_of_week}")
-        daily_os_times.each_with_index do |time, i|
-          value = values[i]
-          next if value == values[i + 1] # Don't add breaks if same value
+        day_sch.setName("#{sch_name} #{weekday}")
+        daily_os_times.each_with_index do |time, t|
+          value = values[t]
+          next if value == values[t + 1] # Don't add breaks if same value
           day_sch.addValue(time, value)
           OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "   Adding value #{time}, #{value}")
         end
@@ -2956,13 +2952,13 @@ class OpenStudio::Model::AirLoopHVAC
         sch_rule.setEndDate(date)
 
         # Individual Days
-        sch_rule.setApplyMonday(true) if day_of_week == 'Monday'
-        sch_rule.setApplyTuesday(true) if day_of_week == 'Tuesday'
-        sch_rule.setApplyWednesday(true) if day_of_week == 'Wednesday'
-        sch_rule.setApplyThursday(true) if day_of_week == 'Thursday'
-        sch_rule.setApplyFriday(true) if day_of_week == 'Friday'
-        sch_rule.setApplySaturday(true) if day_of_week == 'Saturday'
-        sch_rule.setApplySunday(true) if day_of_week == 'Sunday'
+        sch_rule.setApplyMonday(true) if weekday == 'Monday'
+        sch_rule.setApplyTuesday(true) if weekday == 'Tuesday'
+        sch_rule.setApplyWednesday(true) if weekday == 'Wednesday'
+        sch_rule.setApplyThursday(true) if weekday == 'Thursday'
+        sch_rule.setApplyFriday(true) if weekday == 'Friday'
+        sch_rule.setApplySaturday(true) if weekday == 'Saturday'
+        sch_rule.setApplySunday(true) if weekday == 'Sunday'
 
         # Reset the previous rule end date
         end_of_prev_rule = date + OpenStudio::Time.new(0, 24, 0, 0)

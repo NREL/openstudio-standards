@@ -32,13 +32,13 @@ module Pump
     desired_power_per_m3_s = OpenStudio.convert(target_w_per_gpm, 'W*min/gal', 'W*s/m^3').get
 
     pressure_rise_pa = desired_power_per_m3_s * total_efficiency
-    pressure_rise_ft_h2O = OpenStudio.convert(pressure_rise_pa, 'Pa', 'ftH_{2}O').get
+    pressure_rise_ft_h2o = OpenStudio.convert(pressure_rise_pa, 'Pa', 'ftH_{2}O').get
 
     # Change pressure rise
     setRatedPumpHead(pressure_rise_pa)
 
     # Report
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: brake hp = #{brake_hp.round(2)}HP; motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_efficiency * 100).round(2)}%; #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_pa.round(0)} Pa // #{pressure_rise_ft_h2O.round(2)} ftH2O.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: brake hp = #{brake_hp.round(2)}HP; motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_efficiency * 100).round(2)}%; #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_pa.round(0)} Pa // #{pressure_rise_ft_h2o.round(2)} ftH2O.")
 
     # Calculate the W/gpm for verification
     calculated_w = pump_power
