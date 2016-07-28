@@ -2526,37 +2526,37 @@ class OpenStudio::Model::Model
                                                                              data['exterior_skylight_standards_construction_type'],
                                                                              data['exterior_skylight_building_category']))
     end
-    if construction_name == data['tubular_daylight_domes']
+    if (construction_name = data['tubular_daylight_domes'])
       exterior_subsurfaces.setTubularDaylightDomeConstruction(add_construction(construction_name))
     end
-    if construction_name == data['tubular_daylight_diffusers']
+    if (construction_name = data['tubular_daylight_diffusers'])
       exterior_subsurfaces.setTubularDaylightDiffuserConstruction(add_construction(construction_name))
     end
 
     # Interior sub surfaces constructions
     interior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(self)
     construction_set.setDefaultInteriorSubSurfaceConstructions(interior_subsurfaces)
-    if construction_name == data['interior_fixed_windows']
+    if (construction_name = data['interior_fixed_windows'])
       interior_subsurfaces.setFixedWindowConstruction(add_construction(construction_name))
     end
-    if construction_name == data['interior_operable_windows']
+    if (construction_name = data['interior_operable_windows'])
       interior_subsurfaces.setOperableWindowConstruction(add_construction(construction_name))
     end
-    if construction_name == data['interior_doors']
+    if (construction_name = data['interior_doors'])
       interior_subsurfaces.setDoorConstruction(add_construction(construction_name))
     end
 
     # Other constructions
-    if construction_name == data['interior_partitions']
+    if (construction_name = data['interior_partitions'])
       construction_set.setInteriorPartitionConstruction(add_construction(construction_name))
     end
-    if construction_name == data['space_shading']
+    if (construction_name = data['space_shading'])
       construction_set.setSpaceShadingConstruction(add_construction(construction_name))
     end
-    if construction_name == data['building_shading']
+    if (construction_name = data['building_shading'])
       construction_set.setBuildingShadingConstruction(add_construction(construction_name))
     end
-    if construction_name == data['site_shading']
+    if (construction_name = data['site_shading'])
       construction_set.setSiteShadingConstruction(add_construction(construction_name))
     end
 

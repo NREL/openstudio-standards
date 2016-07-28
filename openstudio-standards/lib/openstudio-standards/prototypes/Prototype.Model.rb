@@ -608,7 +608,7 @@ class OpenStudio::Model::Model
     end
 
     # Make the default construction set for the building
-    bldg_def_const_set = add_construction_set(template, climate_zone, building_type, nil, residential?)
+    bldg_def_const_set = add_construction_set(template, climate_zone, building_type, nil, is_residential)
 
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
@@ -643,7 +643,7 @@ class OpenStudio::Model::Model
 
       # Attempt to make a construction set for this space type
       # and assign it if it can be created.
-      spc_type_const_set = add_construction_set(template, climate_zone, stds_building_type, stds_spc_type, residential?)
+      spc_type_const_set = add_construction_set(template, climate_zone, stds_building_type, stds_spc_type, is_residential)
       if spc_type_const_set.is_initialized
         space_type.setDefaultConstructionSet(spc_type_const_set.get)
       end
@@ -667,13 +667,13 @@ class OpenStudio::Model::Model
           end
           data = find_object($os_standards['space_types'], 'template' => template, 'building_type' => building_type, 'space_type' => space_type_name)
           exterior_spaces_area += space.floorArea
-          story_exterior_residential_area += space.floorArea if data['residential?'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
+          story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
         is_residential = 'Yes' if story_exterior_residential_area / exterior_spaces_area >= 0.5
         next if is_residential == 'No'
 
         # if the story is identified as residential, assign residential construction set to the spaces on this story.
-        building_story_const_set = add_construction_set(template, climate_zone, building_type, nil, residential?)
+        building_story_const_set = add_construction_set(template, climate_zone, building_type, nil, is_residential)
         if building_story_const_set.is_initialized
           story.spaces.each do |space|
             space.setDefaultConstructionSet(building_story_const_set.get)
