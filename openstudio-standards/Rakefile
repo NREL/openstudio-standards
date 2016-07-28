@@ -171,7 +171,7 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   out_dir = 'openstudio-standards/.rubocop'
   Dir.mkdir(out_dir) unless File.exist?(out_dir)
   # Output both XML (CheckStyle format) and HTML
-  task.options = ["--out=#{out_dir}/rubocop-results.xml", '--format=h', "--out=#{out_dir}/rubocop-results.html"]
+  task.options = ["--out=#{out_dir}/rubocop-results.xml", '--format=h', "--out=#{out_dir}/rubocop-results.html", '--format=offenses', "--out=#{out_dir}/rubocop-summary.txt"]
   task.requires = ['rubocop/formatter/checkstyle_formatter']
   task.formatters = ['RuboCop::Formatter::CheckstyleFormatter']
   # don't abort rake on failure
