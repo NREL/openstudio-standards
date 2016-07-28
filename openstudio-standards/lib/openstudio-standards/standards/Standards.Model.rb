@@ -1105,14 +1105,14 @@ class OpenStudio::Model::Model
         # separate the primary zones from the secondary zones.
         # Add the baseline system type to the primary zones
         # and add the suplemental system type to the secondary zones.
-        story_zone_lists.each do |zones|
+        story_zone_lists.each do |story_group|
           # Differentiate primary and secondary zones
-          pri_sec_zone_lists = differentiate_primary_secondary_thermal_zones(zones)
+          pri_sec_zone_lists = differentiate_primary_secondary_thermal_zones(story_group)
           pri_zones = pri_sec_zone_lists['primary']
           sec_zones = pri_sec_zone_lists['secondary']
 
           # Add an VAV for the primary zones
-          story_name = zones[0].spaces[0].buildingStory.get.name.get
+          story_name = story_group[0].spaces[0].buildingStory.get.name.get
           sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
@@ -2063,20 +2063,6 @@ class OpenStudio::Model::Model
     if rules.size.zero?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
       return false # TODO: change to return empty optional schedule:ruleset?
-    end
-
-    # Helper method to fill in hourly values
-    def add_vals_to_sch(day_sch, sch_type, values)
-      if sch_type == 'Constant'
-        day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), values[0])
-      elsif sch_type == 'Hourly'
-        (0..23).each do |i|
-          next if values[i] == values[i + 1]
-          day_sch.addValue(OpenStudio::Time.new(0, i + 1, 0, 0), values[i])
-        end
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Schedule type: #{sch_type} is not recognized.  Valid choices are 'Constant' and 'Hourly'.")
-      end
     end
 
     # Make a schedule ruleset
@@ -4011,6 +3997,22 @@ class OpenStudio::Model::Model
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', error_string)
       return false
+    end
+  end
+
+  private
+
+  # Helper method to fill in hourly values
+  def add_vals_to_sch(day_sch, sch_type, values)
+    if sch_type == 'Constant'
+      day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), values[0])
+    elsif sch_type == 'Hourly'
+      (0..23).each do |i|
+        next if values[i] == values[i + 1]
+        day_sch.addValue(OpenStudio::Time.new(0, i + 1, 0, 0), values[i])
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Schedule type: #{sch_type} is not recognized.  Valid choices are 'Constant' and 'Hourly'.")
     end
   end
 end

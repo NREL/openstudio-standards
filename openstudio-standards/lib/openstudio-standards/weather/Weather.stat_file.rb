@@ -233,9 +233,13 @@ module EnergyPlus
         # insert as numbers
         monthly_temps.each { |temp| @monthly_dry_bulb << temp.to_f }
 
+        # Allow non Ascii comment because this is the
+        # actual content of the .stat file.
+        # rubocop:disable AsciiComments
         #      Design Stat	ColdestMonth	DB996	DB990	DP996	HR_DP996	DB_DP996	DP990	HR_DP990	DB_DP990	WS004c	DB_WS004c	WS010c	DB_WS010c	WS_DB996	WD_DB996
         #    	Units	{}	{ï¿½C}	{ï¿½C}	{ï¿½C}	{}	{ï¿½C}	{ï¿½C}	{}	{ï¿½C}	{m/s}	{ï¿½C}	{m/s}	{ï¿½C}	{m/s}	{deg}
         #    	Heating	12	-7	-4	-13.9	1.1	-5	-9.6	1.7	-2.9	14.2	5.9	11.9	6.8	2.9	100
+        # rubocop:enable AsciiComments
         # use regex to get the temperatures
         regex = /\s*Heating(\s*\d+.*)\n/
         match_data = text.match(regex)

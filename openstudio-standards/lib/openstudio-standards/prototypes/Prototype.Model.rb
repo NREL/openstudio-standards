@@ -876,33 +876,6 @@ class OpenStudio::Model::Model
         new_lights_sch.setName("#{lights_sch_name} OccSensor Reduction")
         reduced_lights_schs[lights_sch_name] = new_lights_sch
 
-        # Method to multiply the values in a day schedule by a specified value
-        # but only when the existing value is higher than a specified lower limit.
-        # This limit prevents occupancy sensors from affecting unoccupied hours.
-        def multiply_schedule(day_sch, multiplier, limit)
-          # Record the original times and values
-          times = day_sch.times
-          values = day_sch.values
-
-          # Remove the original times and values
-          day_sch.clearValues
-
-          # Create new values by using the multiplier on the original values
-          new_values = []
-          values.each do |value|
-            new_values << if value > limit
-                            value * multiplier
-                          else
-                            value
-                          end
-          end
-
-          # Add the revised time/value pairs to the schedule
-          new_values.each_with_index do |new_value, i|
-            day_sch.addValue(times[i], new_value)
-          end
-        end # end reduce schedule
-
         # Reduce default day schedule
         multiply_schedule(new_lights_sch.defaultDaySchedule, red_multiplier, 0.25)
 
@@ -1544,4 +1517,33 @@ class OpenStudio::Model::Model
 
     return default_construction_set
   end
+
+  private
+
+  # Method to multiply the values in a day schedule by a specified value
+  # but only when the existing value is higher than a specified lower limit.
+  # This limit prevents occupancy sensors from affecting unoccupied hours.
+  def multiply_schedule(day_sch, multiplier, limit)
+    # Record the original times and values
+    times = day_sch.times
+    values = day_sch.values
+
+    # Remove the original times and values
+    day_sch.clearValues
+
+    # Create new values by using the multiplier on the original values
+    new_values = []
+    values.each do |value|
+      new_values << if value > limit
+                      value * multiplier
+                    else
+                      value
+                    end
+    end
+
+    # Add the revised time/value pairs to the schedule
+    new_values.each_with_index do |new_value, i|
+      day_sch.addValue(times[i], new_value)
+    end
+  end # end reduce schedule
 end
