@@ -4,7 +4,7 @@ class OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat
   # Sets the fan power of a PIU fan based on the W/cfm
   # specified in the standard.
   #
-  # @param template [String] the standard
+  # @param template [String] the template base requirements on
   # @return [Bool] returns true if successful, false if not
   def apply_performance_rating_method_baseline_fan_power(template)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "Setting PIU fan power for #{name}.")

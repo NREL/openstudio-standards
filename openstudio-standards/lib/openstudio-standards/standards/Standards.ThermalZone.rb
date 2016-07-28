@@ -317,14 +317,14 @@ class OpenStudio::Model::ThermalZone
   # it will be assumed nonresidential.
   #
   # return [Bool] true if residential, false if nonresidential
-  def residential?(standard)
+  def residential?(template)
     # Determine the respective areas
     res_area_m2 = 0
     nonres_area_m2 = 0
     spaces.each do |space|
       # Ignore space if not part of total area
       next unless space.partofTotalFloorArea
-      if space.residential?(standard)
+      if space.residential?(template)
         res_area_m2 += space.floorArea
       else
         nonres_area_m2 += space.floorArea
@@ -870,7 +870,7 @@ class OpenStudio::Model::ThermalZone
   # @param climate_zone [String] climate zone
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces
-  def conditioning_category(standard, climate_zone)
+  def conditioning_category(template, climate_zone)
     # Get the heating load
     htg_load_btu_per_ft2 = 0.0
     htg_load_w_per_m2 = heatingDesignLoad
@@ -924,7 +924,7 @@ class OpenStudio::Model::ThermalZone
 
     # Determine if residential
     res = false
-    if residential?(standard)
+    if residential?(template)
       res = true
     end
 
@@ -1151,7 +1151,7 @@ class OpenStudio::Model::ThermalZone
   #
   # @return [String] the occupancy type category
   # @todo Add public assembly building types
-  def occupancy_type(standard)
+  def occupancy_type(template)
     occ_type = nil
 
     heated = heated?
@@ -1162,7 +1162,7 @@ class OpenStudio::Model::ThermalZone
     occ_type = if heated && !cooled
                  'heatedonly'
                # Residential
-               elsif residential?(standard)
+               elsif residential?(template)
                  'residential'
                # Nonresidential
                else
@@ -1171,7 +1171,7 @@ class OpenStudio::Model::ThermalZone
 
     # Based on the space type that
     # represents a majority of the zone.
-    if standard == '90.1-2013'
+    if template == '90.1-2013'
       space_type = majority_space_type
       if space_type.is_initialized
         space_type = space_type.get

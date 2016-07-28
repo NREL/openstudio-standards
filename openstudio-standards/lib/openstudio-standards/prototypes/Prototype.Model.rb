@@ -17,7 +17,7 @@ class OpenStudio::Model::Model
   # the current model with this model.
   #
   # @param building_type [String] the building type
-  # @param template [String] the building vintage
+  # @param template [String] the template
   # @param climate_zone [String] the climate zone
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
@@ -28,10 +28,10 @@ class OpenStudio::Model::Model
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == 'HighriseApartment'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
-        OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{building_type} at vintage #{template} are not available, the measure is disabled for this specific type.")
+        OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{building_type} at template #{template} are not available, the measure is disabled for this specific type.")
         return false
       elsif template == 'NECB 2011'
-        OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at vintage #{template} is not available, the measure is disabled for this specific type.")
+        OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at template #{template} is not available, the measure is disabled for this specific type.")
         return false
       end
     end
@@ -209,7 +209,7 @@ class OpenStudio::Model::Model
   # Loads the library of methods specific to this building type
   #
   # @param building_type [String] the building type
-  # @param template [String] the building vintage
+  # @param template [String] the template
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
   def load_building_type_methods(building_type, template, climate_zone)
@@ -262,7 +262,7 @@ class OpenStudio::Model::Model
   # Loads a geometry-only .osm as a starting point.
   #
   # @param building_type [String] the building type
-  # @param template [String] the building vintage
+  # @param template [String] the template
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
   def load_geometry(building_type, template, climate_zone)
@@ -270,7 +270,7 @@ class OpenStudio::Model::Model
 
     # Determine which geometry file to use
     # based on building_type and template
-    # NECB 2011 geometry is not explicitly defined; for NECB 2011 vintage, latest ASHRAE 90.1 geometry file is assigned (implicitly)
+    # NECB 2011 geometry is not explicitly defined; for NECB 2011 template, latest ASHRAE 90.1 geometry file is assigned (implicitly)
 
     case building_type
     when 'SecondarySchool'
@@ -476,7 +476,7 @@ class OpenStudio::Model::Model
   # Some loads are governed by the standard, others are typical values
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
-  # @param template [String] the template/standard to draw data from
+  # @param template [String] the template to draw data from
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
 
@@ -508,7 +508,7 @@ class OpenStudio::Model::Model
   # to this space type, overriding the whole-building construction set.
   #
   # @param building_type [String] the type of building
-  # @param template [String] the template/standard to draw data from
+  # @param template [String] the template to draw data from
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
   def add_constructions(building_type, template, climate_zone)

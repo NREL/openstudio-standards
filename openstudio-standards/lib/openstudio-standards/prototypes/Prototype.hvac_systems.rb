@@ -106,7 +106,7 @@ class OpenStudio::Model::Model
 
   # Creates a chilled water loop and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param chw_pumping_type [String] valid choices are const_pri, const_pri_var_sec
   # @param chiller_cooling_type [String] valid choices are AirCooled, WaterCooled
@@ -117,7 +117,7 @@ class OpenStudio::Model::Model
   # @param condenser_water_loop [OpenStudio::Model::PlantLoop] optional condenser water loop
   #   for water-cooled chillers.  If this is not passed in, the chillers will be air cooled.
   # @return [OpenStudio::Model::PlantLoop] the resulting chilled water loop
-  def add_chw_loop(standard,
+  def add_chw_loop(template,
                    chw_pumping_type,
                    chiller_cooling_type,
                    chiller_condenser_type,
@@ -217,7 +217,7 @@ class OpenStudio::Model::Model
       # Make the correct type of chiller based these properties
       num_chillers.times do |i|
         chiller = OpenStudio::Model::ChillerElectricEIR.new(self)
-        chiller.setName("#{standard} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
+        chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
         chilled_water_loop.addSupplyBranchForComponent(chiller)
         chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
         ref_cond_wtr_temp_f = 95
@@ -277,7 +277,7 @@ class OpenStudio::Model::Model
   # @param number_cooling_towers [Integer] the number of cooling towers to be added (in parallel)
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
-  def add_cw_loop(standard,
+  def add_cw_loop(template,
                   cooling_tower_type,
                   cooling_tower_fan_type,
                   cooling_tower_capacity_control,
@@ -521,7 +521,7 @@ class OpenStudio::Model::Model
 
   # Creates a VAV system and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to
@@ -540,7 +540,7 @@ class OpenStudio::Model::Model
   # but if false, the reheat coils will be served by the hot_water_loop.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
-  def add_vav_reheat(standard,
+  def add_vav_reheat(template,
                      sys_name,
                      hot_water_loop,
                      chilled_water_loop,
@@ -734,7 +734,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self, alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      terminal.set_initial_prototype_damper_position(building_type, standard, zone.outdoor_airflow_rate_per_area)
+      terminal.set_initial_prototype_damper_position(building_type, template, zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
@@ -760,14 +760,14 @@ class OpenStudio::Model::Model
     end
 
     # Set the damper action based on the template.
-    air_loop.apply_vav_damper_action(standard)
+    air_loop.apply_vav_damper_action(template)
 
     return air_loop
   end
 
   # Creates a VAV system with parallel fan powered boxes and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to
@@ -781,7 +781,7 @@ class OpenStudio::Model::Model
   # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
-  def add_vav_pfp_boxes(standard,
+  def add_vav_pfp_boxes(template,
                         sys_name,
                         chilled_water_loop,
                         thermal_zones,
@@ -932,7 +932,7 @@ class OpenStudio::Model::Model
 
   # Creates a packaged VAV system and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
@@ -950,7 +950,7 @@ class OpenStudio::Model::Model
   # the supply plenum, or nil, in which case no return plenum will be used.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop
-  def add_pvav(standard,
+  def add_pvav(template,
                sys_name,
                thermal_zones,
                hvac_op_sch,
@@ -1029,7 +1029,7 @@ class OpenStudio::Model::Model
       hvac_op_sch = add_schedule('OutPatientHealthCare AHU1-Fan_Pre2004')
       # Outpatient has different temperature settings for sizing
       clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
-      sys_dsn_clg_sa_temp_f = if standard == 'DOE Ref 1980-2004' || standard == 'DOE Ref Pre-1980'
+      sys_dsn_clg_sa_temp_f = if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
                                 52
                               else
                                 45
@@ -1125,7 +1125,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self, alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      terminal.set_initial_prototype_damper_position(building_type, standard, zone.outdoor_airflow_rate_per_area)
+      terminal.set_initial_prototype_damper_position(building_type, template, zone.outdoor_airflow_rate_per_area)
       air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
 
       unless return_plenum.nil?
@@ -1139,14 +1139,14 @@ class OpenStudio::Model::Model
     end
 
     # Set the damper action based on the template.
-    air_loop.apply_vav_damper_action(standard)
+    air_loop.apply_vav_damper_action(template)
 
     return true
   end
 
   # Creates a packaged VAV system with parallel fan powered boxes and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
@@ -1161,7 +1161,7 @@ class OpenStudio::Model::Model
   #   if nil, will be DX cooling.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
-  def add_pvav_pfp_boxes(standard,
+  def add_pvav_pfp_boxes(template,
                          sys_name,
                          thermal_zones,
                          hvac_op_sch,
@@ -1316,7 +1316,7 @@ class OpenStudio::Model::Model
 
   # Creates a packaged VAV system and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to.
@@ -1331,7 +1331,7 @@ class OpenStudio::Model::Model
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop
-  def add_cav(standard,
+  def add_cav(template,
               sys_name,
               hot_water_loop,
               thermal_zones,
@@ -1507,7 +1507,7 @@ class OpenStudio::Model::Model
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self, alwaysOnDiscreteSchedule, rht_coil)
         terminal.setName("#{zone.name} VAV Term")
         terminal.setZoneMinimumAirFlowMethod('Constant')
-        terminal.set_initial_prototype_damper_position(building_type, standard, zone.outdoor_airflow_rate_per_area)
+        terminal.set_initial_prototype_damper_position(building_type, template, zone.outdoor_airflow_rate_per_area)
         terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
         terminal.setMaximumFlowFractionDuringReheat(0.5)
         terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
@@ -1530,14 +1530,14 @@ class OpenStudio::Model::Model
     end
 
     # Set the damper action based on the template.
-    air_loop.apply_vav_damper_action(standard)
+    air_loop.apply_vav_damper_action(template)
 
     return true
   end
 
   # Creates a PSZ-AC system for each zone and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating coil to, or nil
@@ -1558,7 +1558,7 @@ class OpenStudio::Model::Model
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting PSZ-AC air loops
   # Todo: clarify where these default curves coefficients are coming from
   # Todo: I (jmarrec) believe it is the DOE Ref curves ("DOE Ref DX Clg Coil Cool-Cap-fT")
-  def add_psz_ac(standard,
+  def add_psz_ac(template,
                  sys_name,
                  hot_water_loop,
                  chilled_water_loop,
@@ -1646,7 +1646,7 @@ class OpenStudio::Model::Model
 
       # Zone sizing
       sizing_zone = zone.sizingZone
-      if building_type == 'RetailStandalone' && (standard == 'DOE Ref 1980-2004' || standard == 'DOE Ref Pre-1980')
+      if building_type == 'RetailStandalone' && (template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980')
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(14)
       else
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(12.8)
@@ -1690,7 +1690,7 @@ class OpenStudio::Model::Model
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, alwaysOnDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} Gas Htg Coil")
 
-        if standard == 'DOE Ref Pre-1980'
+        if template == 'DOE Ref Pre-1980'
           htg_coil.setGasBurnerEfficiency(0.78)
         end
 
@@ -2061,7 +2061,7 @@ class OpenStudio::Model::Model
       oa_system.setName("#{air_loop.name} OA Sys")
       econ_eff_sch = add_schedule('RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
 
-      case standard
+      case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_eff_sch) if building_type == 'RetailStandalone' || building_type == 'RetailStripmall'
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -2199,7 +2199,7 @@ class OpenStudio::Model::Model
 
   # Creates a data center PSZ-AC system for each zone.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heatin coil to
@@ -2212,7 +2212,7 @@ class OpenStudio::Model::Model
   # @param main_data_center [Bool] whether or not this is the main data
   # center in the building.
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting air loops
-  def add_data_center_hvac(standard,
+  def add_data_center_hvac(template,
                            sys_name,
                            hot_water_loop,
                            heat_pump_loop,
@@ -2429,7 +2429,7 @@ class OpenStudio::Model::Model
 
   # Creates a split DX AC system for each zone and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
@@ -2444,7 +2444,7 @@ class OpenStudio::Model::Model
   # Single Speed DX AC, Single Speed Heat Pump
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting split AC air loop.
-  def add_split_ac(standard,
+  def add_split_ac(template,
                    sys_name,
                    thermal_zones,
                    hvac_op_sch,
@@ -2900,7 +2900,7 @@ class OpenStudio::Model::Model
 
   # Creates a PTAC system for each zone and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating coil to.
@@ -2914,7 +2914,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an
   # array of the resulting PTACs.
-  def add_ptac(standard,
+  def add_ptac(template,
                sys_name,
                hot_water_loop,
                thermal_zones,
@@ -3176,7 +3176,7 @@ class OpenStudio::Model::Model
 
   # Creates a PTHP system for each zone and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
@@ -3184,7 +3184,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an
   # array of the resulting PTACs.
-  def add_pthp(standard,
+  def add_pthp(template,
                sys_name,
                thermal_zones,
                fan_type,
@@ -3370,7 +3370,7 @@ class OpenStudio::Model::Model
 
   # Creates a unit heater for each zone and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
@@ -3383,7 +3383,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACUnitHeater>] an
   # array of the resulting unit heaters.
-  def add_unitheater(standard,
+  def add_unitheater(template,
                      sys_name,
                      thermal_zones,
                      hvac_op_sch,
@@ -3417,7 +3417,7 @@ class OpenStudio::Model::Model
     thermal_zones.each do |zone|
       # Zone sizing
       sizing_zone = zone.sizingZone
-      if building_type == 'RetailStandalone' && standard != 'DOE Ref 1980-2004' && standard != 'DOE Ref Pre-1980'
+      if building_type == 'RetailStandalone' && template != 'DOE Ref 1980-2004' && template != 'DOE Ref Pre-1980'
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(12.8)
       else
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(14)
@@ -3470,7 +3470,7 @@ class OpenStudio::Model::Model
 
   # Creates a high temp radiant heater for each zone and adds it to the model.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
@@ -3480,7 +3480,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACHighTemperatureRadiant>] an
   # array of the resulting radiant heaters.
-  def add_high_temp_radiant(standard,
+  def add_high_temp_radiant(template,
                             sys_name,
                             thermal_zones,
                             heating_type,
@@ -3506,7 +3506,7 @@ class OpenStudio::Model::Model
 
   # Creates a service water heating loop.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone]
@@ -3524,7 +3524,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop]
   # the resulting service water loop.
-  def add_swh_loop(standard,
+  def add_swh_loop(template,
                    sys_name,
                    water_heater_thermal_zone,
                    service_water_temperature,
@@ -3584,7 +3584,7 @@ class OpenStudio::Model::Model
       swh_pump_motor_efficiency = 1
     end
 
-    swh_pump = if standard == 'DOE Ref 1980-2004' || 'template' == 'DOE Ref Pre-1980'
+    swh_pump = if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
                  if building_type == 'Medium Office'
                    OpenStudio::Model::PumpConstantSpeed.new(self)
                  else
@@ -3599,7 +3599,7 @@ class OpenStudio::Model::Model
     swh_pump.setPumpControlType('Intermittent')
     swh_pump.addToNode(service_water_loop.supplyInletNode)
 
-    water_heater = add_water_heater(standard,
+    water_heater = add_water_heater(template,
                                     water_heater_capacity,
                                     water_heater_volume,
                                     water_heater_fuel,
@@ -3632,7 +3632,7 @@ class OpenStudio::Model::Model
   # Creates a water heater and attaches it to the supplied
   # service water heating loop.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
@@ -3652,7 +3652,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::WaterHeaterMixed]
   # the resulting water heater.
-  def add_water_heater(standard,
+  def add_water_heater(template,
                        water_heater_capacity,
                        water_heater_volume,
                        water_heater_fuel,
@@ -3757,7 +3757,7 @@ class OpenStudio::Model::Model
   # Creates a booster water heater and attaches it
   # to the supplied service water heating loop.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param main_service_water_loop [OpenStudio::Model::PlantLoop]
   # the main service water loop that this booster assists.
@@ -3773,7 +3773,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop]
   # the resulting booster water loop.
-  def add_swh_booster(standard,
+  def add_swh_booster(template,
                       main_service_water_loop,
                       water_heater_capacity,
                       water_heater_volume,
@@ -3921,7 +3921,7 @@ class OpenStudio::Model::Model
   # Creates water fixtures and attaches them
   # to the supplied service water loop.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param use_name [String] The name that will be assigned
   # to the newly created fixture.
@@ -3935,7 +3935,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::WaterUseEquipment]
   # the resulting water fixture.
-  def add_swh_end_uses(standard,
+  def add_swh_end_uses(template,
                        use_name,
                        swh_loop,
                        peak_flowrate,
@@ -4074,7 +4074,7 @@ class OpenStudio::Model::Model
   # Creates water fixtures and attaches them
   # to the supplied booster water loop.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param swh_booster_loop [OpenStudio::Model::PlantLoop]
   # the booster water loop to add water fixtures to.
@@ -4084,7 +4084,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::WaterUseEquipment]
   # the resulting water fixture.
-  def add_booster_swh_end_uses(standard,
+  def add_booster_swh_end_uses(template,
                                swh_booster_loop,
                                peak_flowrate,
                                flowrate_schedule,
@@ -4125,7 +4125,7 @@ class OpenStudio::Model::Model
   # Creates a DOAS system with fan coil units
   # for each zone.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating and zone fan coils to
@@ -4141,7 +4141,7 @@ class OpenStudio::Model::Model
   # FixedDryBulb,
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting DOAS air loop
-  def add_doas(standard,
+  def add_doas(template,
                sys_name,
                hot_water_loop,
                chilled_water_loop,
@@ -4314,7 +4314,7 @@ class OpenStudio::Model::Model
 
   # Add an elevator the the specified space
   #
-  # @param standard [String] Valid choices are
+  # @param template [String] Valid choices are
   # DOE Ref Pre-1980, DOE Ref 1980-2004,
   # 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013,
   # @param space [OpenStudio::Model::Space] the space
@@ -4327,7 +4327,7 @@ class OpenStudio::Model::Model
   # @param elevator_lights_schedule [String] the name of the elevator lights schedule
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::ElectricEquipment] the resulting elevator
-  def add_elevator(standard,
+  def add_elevator(template,
                    space,
                    number_of_elevators,
                    elevator_type,
@@ -4338,7 +4338,7 @@ class OpenStudio::Model::Model
 
     # Lift motor assumptions
     lift_pwr_w = nil
-    case standard
+    case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       if elevator_type == 'Traction'
         lift_pwr_w = 18537.0
@@ -4404,7 +4404,7 @@ class OpenStudio::Model::Model
     elevator_equipment.setMultiplier(number_of_elevators)
 
     # Pre-1980 and 1980-2004 don't have lights or fans
-    return elevator_equipment if standard == 'DOE Ref Pre-1980' || standard == 'DOE Ref 1980-2004'
+    return elevator_equipment if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
 
     # Elevator fan
     elevator_fan_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
@@ -4553,7 +4553,7 @@ class OpenStudio::Model::Model
   # @todo Set compressor properties since prototypes use simple
   # refrigeration rack instead of detailed
   # @todo fix latent case credit curve setter
-  def add_refrigeration(standard,
+  def add_refrigeration(template,
                         case_type,
                         cooling_capacity_per_length,
                         length,
@@ -4583,7 +4583,7 @@ class OpenStudio::Model::Model
       runtime_fraction = 0.4
       fraction_antisweat_to_case = 0.0
       under_case_return_air_fraction = 0.0
-      case standard
+      case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'

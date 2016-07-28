@@ -1,11 +1,11 @@
 
 class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
   # Set the minimum damper position based on OA
-  # rate of the space and the building vintage.
+  # rate of the space and the template.
   # Zones with low OA per area get lower initial guesses.
   # Final position will be adjusted upward
   # as necessary by Standards.AirLoopHVAC.adjust_minimum_vav_damper_positions
-  # @param template [String] the building vintage
+  # @param template [String] the template
   # @param zone_min_oa [Double] the zone outdoor air flow rate, in m^3/s.
   # If supplied, this will be set as a minimum limit in addition to the minimum
   # damper position.  EnergyPlus will use the larger of the two values during sizing.

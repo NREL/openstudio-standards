@@ -3325,7 +3325,7 @@ class OpenStudio::Model::AirLoopHVAC
   #   has DDC control of VAV terminals or not, determine this
   #   from the system itself.  This may require additional information
   #   be added to the OpenStudio data model.
-  # @param template [String] the standard
+  # @param template [String] the template base requirements on
   # @param has_ddc [Bool] whether or not the system has DDC control
   # over VAV terminals.
   # return [Bool] returns true if static pressure reset is required, false if not

@@ -45,7 +45,7 @@ class OpenStudio::Model::Model
   def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-    # Add the door infiltration for vintage 2004,2007,2010,2013
+    # Add the door infiltration for template 2004,2007,2010,2013
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       entry_space = getSpaceByName('Front_Entry').get

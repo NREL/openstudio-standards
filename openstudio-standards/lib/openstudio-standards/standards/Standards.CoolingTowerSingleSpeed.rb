@@ -3,8 +3,8 @@
 class OpenStudio::Model::CoolingTowerSingleSpeed
   include CoolingTower
 
-  def apply_efficiency_and_curves(standard)
-    apply_minimum_power_per_flow(standard)
+  def apply_efficiency_and_curves(template)
+    apply_minimum_power_per_flow(template)
 
     return true
   end

@@ -92,7 +92,7 @@ class OpenStudio::Model::Model
   # compliance path for minimum standard compliance."  This means you can't use
   # this method for code compliance to get a permit.
   # @param building_type [String] the building type
-  # @param template [String] the building vintage.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
+  # @param template [String] the template.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @param climate_zone [String] the climate zone
   # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are Xcel Energy CO EDA.
   # If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
@@ -289,11 +289,11 @@ class OpenStudio::Model::Model
   # For spaces with no space type, assume nonresidential.
   #
   # @return [Hash] keys are 'residential' and 'nonresidential', units are m^2
-  def residential_and_nonresidential_floor_areas(standard)
+  def residential_and_nonresidential_floor_areas(template)
     res_area_m2 = 0
     nonres_area_m2 = 0
     getSpaces.each do |space|
-      if space.residential?(standard)
+      if space.residential?(template)
         res_area_m2 += space.floorArea
       else
         nonres_area_m2 += space.floorArea
@@ -339,7 +339,7 @@ class OpenStudio::Model::Model
   #
   # @return [Array<Hash>] an array of hashes, one for each zone,
   # with the keys 'zone', 'type' (occ type), 'fuel', and 'area'
-  def zones_by_occ_and_fuel_type(standard, custom)
+  def zones_by_occ_and_fuel_type(template, custom)
     zones = []
 
     getThermalZones.sort.each do |zone|
@@ -366,7 +366,7 @@ class OpenStudio::Model::Model
       zn_hash['area'] = zone.floorArea
 
       # Occupancy type
-      zn_hash['type'] = zone.occupancy_type(standard)
+      zn_hash['type'] = zone.occupancy_type(template)
 
       # Fuel type
       zn_hash['fuel'] = zone.fuel_type(custom)
@@ -380,12 +380,12 @@ class OpenStudio::Model::Model
   # Determine the dominant and exceptional areas of the
   # building based on fuel types and occupancy types.
   #
-  # @param standard [String] the standard.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
+  # @param template [String] the template.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, fuel, and zones (an array of zones)
-  def performance_rating_method_baseline_system_groups(standard, custom)
+  def performance_rating_method_baseline_system_groups(template, custom)
     # Get the zones with fuel type, occ type, and area properties
-    zones = zones_by_occ_and_fuel_type(standard, custom)
+    zones = zones_by_occ_and_fuel_type(template, custom)
 
     # Determine the dominant area type
     type_to_area = Hash.new { 0.0 }
@@ -419,7 +419,7 @@ class OpenStudio::Model::Model
     # This is common across different versions
     # of 90.1
     exception_min_area_ft2 = nil
-    case standard
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010'
       exception_min_area_ft2 = 20000
     when '90.1-2013'
@@ -506,7 +506,7 @@ class OpenStudio::Model::Model
   # Determine the baseline system type given the
   # inputs.  Logic is different for different standards.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param area_type [String] Valid choices are residential,
   # nonresidential, and heatedonly
@@ -519,25 +519,25 @@ class OpenStudio::Model::Model
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
   # @todo add 90.1-2013 systems 11-13
-  def performance_rating_method_baseline_system_type(standard, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
+  def performance_rating_method_baseline_system_type(template, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
     #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
 
     # Customization - Xcel EDA Program Manual 2014
     # Table 3.2.2 Baseline HVAC System Types
     if custom == 'Xcel Energy CO EDA'
-      standard = '90.1-2010'
+      template = '90.1-2010'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 lookup for HVAC system types shall be used.')
     end
 
     # Get the row from TableG3.1.1A
     sys_num = nil
-    case standard
+    case template
     when '90.1-2004', '90.1-2007'
       # Set the limit differently for
       # different codes
       limit_ft2 = 25000
-      limit_ft2 = 75000 if standard == '90.1-2004'
+      limit_ft2 = 75000 if template == '90.1-2004'
 
       # Warn about heated only
       if area_type == 'heatedonly'
@@ -622,7 +622,7 @@ class OpenStudio::Model::Model
 
     # For 90.1-2013 the fuel type is determined based on climate zone.
     # Don't change the fuel if it purchased heating or cooling.
-    if standard == '90.1-2013'
+    if template == '90.1-2013'
       if fuel_type == 'electric' || fuel_type == 'fossil'
         case climate_zone
         when 'ASHRAE 169-2006-1A',
@@ -677,9 +677,9 @@ class OpenStudio::Model::Model
 
     if system_type.nil?
       system_type = [nil, nil, nil, nil]
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not determine system type for #{standard}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not determine system type for #{template}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
     else
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type[0]} for #{standard}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type[0]} for #{template}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[1]} for main heating") unless system_type[1].nil?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[2]} for zone heat/reheat") unless system_type[2].nil?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[3]} for cooling") unless system_type[3].nil?
@@ -689,13 +689,13 @@ class OpenStudio::Model::Model
   end
 
   # Add the specified baseline system type to the
-  # specified zons based on the specified standard.
+  # specified zons based on the specified template.
   # For some multi-zone system types, the standards require
   # identifying zones whose loads or schedules
   # are outliers and putting these systems on separate
   # single-zone systems.  This method does that.
   #
-  # @param standard [String] Valid choices are 90.1-2004,
+  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param area_type [String] Valid choices are residential,
   # nonresidential, and heatedonly
@@ -715,8 +715,8 @@ class OpenStudio::Model::Model
   # @param main_heat_fuel [String] cooling fuel.  Valid choices are
   # Electricity, DistrictCooling
   # @todo add 90.1-2013 systems 11-13
-  def add_performance_rating_method_baseline_system(standard, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
-    case standard
+  def add_performance_rating_method_baseline_system(template, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
 
       case system_type
@@ -734,7 +734,7 @@ class OpenStudio::Model::Model
                            end
 
           # Add a hot water PTAC to each zone
-          add_ptac(standard,
+          add_ptac(template,
                    nil,
                    hot_water_loop,
                    zones,
@@ -750,7 +750,7 @@ class OpenStudio::Model::Model
           # Add an air-source packaged terminal
           # heat pump with electric supplemental heat
           # to each zone.
-          add_pthp(standard,
+          add_pthp(template,
                    nil,
                    zones,
                    'ConstantVolume')
@@ -777,7 +777,7 @@ class OpenStudio::Model::Model
             chilled_water_loop = if getPlantLoopByName('Chilled Water Loop').is_initialized
                                    getPlantLoopByName('Chilled Water Loop').get
                                  else
-                                   add_chw_loop(standard,
+                                   add_chw_loop(template,
                                                 'const_pri',
                                                 chiller_cooling_type = nil,
                                                 chiller_condenser_type = nil,
@@ -792,7 +792,7 @@ class OpenStudio::Model::Model
           # Add a gas-fired PSZ-AC to each zone
           # hvac_op_sch=nil means always on
           # oa_damper_sch to nil means always open
-          add_psz_ac(standard,
+          add_psz_ac(template,
                      sys_name = nil,
                      hot_water_loop = nil,
                      chilled_water_loop = nil,
@@ -815,7 +815,7 @@ class OpenStudio::Model::Model
           # Add an air-source packaged single zone
           # heat pump with electric supplemental heat
           # to each zone.
-          add_psz_ac(standard,
+          add_psz_ac(template,
                      'PSZ-HP',
                      nil,
                      nil,
@@ -848,7 +848,7 @@ class OpenStudio::Model::Model
           chilled_water_loop = if getPlantLoopByName('Chilled Water Loop').is_initialized
                                  getPlantLoopByName('Chilled Water Loop').get
                                else
-                                 add_chw_loop(standard,
+                                 add_chw_loop(template,
                                               'const_pri',
                                               chiller_cooling_type = nil,
                                               chiller_condenser_type = nil,
@@ -886,7 +886,7 @@ class OpenStudio::Model::Model
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
 
-            add_pvav(standard,
+            add_pvav(template,
                      sys_name,
                      pri_zones,
                      nil,
@@ -900,7 +900,7 @@ class OpenStudio::Model::Model
 
           # Add a PSZ_AC for each secondary zone
           unless sec_zones.empty?
-            add_performance_rating_method_baseline_system(standard, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
+            add_performance_rating_method_baseline_system(template, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
         end
 
@@ -912,7 +912,7 @@ class OpenStudio::Model::Model
           chilled_water_loop = if getPlantLoopByName('Chilled Water Loop').is_initialized
                                  getPlantLoopByName('Chilled Water Loop').get
                                else
-                                 add_chw_loop(standard,
+                                 add_chw_loop(template,
                                               'const_pri',
                                               chiller_cooling_type = nil,
                                               chiller_condenser_type = nil,
@@ -941,7 +941,7 @@ class OpenStudio::Model::Model
           sys_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
-            add_pvav_pfp_boxes(standard,
+            add_pvav_pfp_boxes(template,
                                sys_name,
                                pri_zones,
                                nil,
@@ -954,7 +954,7 @@ class OpenStudio::Model::Model
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
-            add_performance_rating_method_baseline_system(standard, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
+            add_performance_rating_method_baseline_system(template, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
         end
 
@@ -976,7 +976,7 @@ class OpenStudio::Model::Model
           chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
         else
           if cool_fuel == 'DistrictCooling'
-            chilled_water_loop = add_chw_loop(standard,
+            chilled_water_loop = add_chw_loop(template,
                                               'const_pri',
                                               chiller_cooling_type = nil,
                                               chiller_condenser_type = nil,
@@ -986,17 +986,17 @@ class OpenStudio::Model::Model
                                               building_type = nil)
           else
             fan_type = 'TwoSpeed Fan'
-            if standard == '90.1-2013'
+            if template == '90.1-2013'
               fan_type = 'Variable Speed Fan'
             end
-            condenser_water_loop = add_cw_loop(standard,
+            condenser_water_loop = add_cw_loop(template,
                                                'Open Cooling Tower',
                                                'Propeller or Axial',
                                                fan_type,
                                                1,
                                                1,
                                                nil)
-            chilled_water_loop = add_chw_loop(standard,
+            chilled_water_loop = add_chw_loop(template,
                                               'const_pri_var_sec',
                                               'WaterCooled',
                                               chiller_condenser_type = nil,
@@ -1037,7 +1037,7 @@ class OpenStudio::Model::Model
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
-            add_vav_reheat(standard,
+            add_vav_reheat(template,
                            sys_name,
                            hot_water_loop,
                            chilled_water_loop,
@@ -1054,7 +1054,7 @@ class OpenStudio::Model::Model
 
           # Add a PSZ_AC for each secondary zone
           unless sec_zones.empty?
-            add_performance_rating_method_baseline_system(standard, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
+            add_performance_rating_method_baseline_system(template, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
         end
 
@@ -1067,7 +1067,7 @@ class OpenStudio::Model::Model
           chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
         else
           if cool_fuel == 'DistrictCooling'
-            chilled_water_loop = add_chw_loop(standard,
+            chilled_water_loop = add_chw_loop(template,
                                               'const_pri',
                                               chiller_cooling_type = nil,
                                               chiller_condenser_type = nil,
@@ -1077,17 +1077,17 @@ class OpenStudio::Model::Model
                                               building_type = nil)
           else
             fan_type = 'TwoSpeed Fan'
-            if standard == '90.1-2013'
+            if template == '90.1-2013'
               fan_type = 'Variable Speed Fan'
             end
-            condenser_water_loop = add_cw_loop(standard,
+            condenser_water_loop = add_cw_loop(template,
                                                'Open Cooling Tower',
                                                'Propeller or Axial',
                                                fan_type,
                                                1,
                                                1,
                                                nil)
-            chilled_water_loop = add_chw_loop(standard,
+            chilled_water_loop = add_chw_loop(template,
                                               'const_pri_var_sec',
                                               'WaterCooled',
                                               chiller_condenser_type = nil,
@@ -1116,7 +1116,7 @@ class OpenStudio::Model::Model
           sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
-            add_vav_pfp_boxes(standard,
+            add_vav_pfp_boxes(template,
                               sys_name,
                               chilled_water_loop,
                               pri_zones,
@@ -1128,7 +1128,7 @@ class OpenStudio::Model::Model
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
-            add_performance_rating_method_baseline_system(standard, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
+            add_performance_rating_method_baseline_system(template, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
         end
 
@@ -1147,7 +1147,7 @@ class OpenStudio::Model::Model
           end
 
           # Add a System 9 - Gas Unit Heater to each zone
-          add_unitheater(standard,
+          add_unitheater(template,
                          nil,
                          zones,
                          nil,
@@ -1164,7 +1164,7 @@ class OpenStudio::Model::Model
         unless zones.empty?
 
           # Add a System 10 - Electric Unit Heater to each zone
-          add_unitheater(standard,
+          add_unitheater(template,
                          nil,
                          zones,
                          nil,
@@ -1568,7 +1568,7 @@ class OpenStudio::Model::Model
   #
   # @param category [String] the construction set category desired.
   # Valid choices are Nonresidential, Residential, and Semiheated
-  # @param template [String] the building vintage.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
+  # @param template [String] the template.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @return [OpenStudio::Model::DefaultConstructionSet] returns a default
   # construction set populated with the specified constructions.
   def add_performance_rating_method_construction_set(template, category)
@@ -1765,8 +1765,8 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying multizone vav OA sizing.')
   end
 
-  # Applies the HVAC parts of the standard to all objects in the model
-  # using the the template/standard specified in the model.
+  # Applies the HVAC parts of the template to all objects in the model
+  # using the the template specified in the model.
   def apply_hvac_efficiency_standard(template, climate_zone)
     sql_db_vars_map = {}
 
@@ -3980,7 +3980,7 @@ class OpenStudio::Model::Model
   end
 
   # This method ensures that all spaces with spacetypes defined contain at least
-  # a standardSpaceType appropriate for the standard template (code) So, if any space
+  # a standardSpaceType appropriate for the template. So, if any space
   # with a space type defined does not have a NECB spacetype, or is undefined, an error will stop
   # with information that the spacetype needs to be defined.
   def validate_standards_spacetypes_in_model(template)
