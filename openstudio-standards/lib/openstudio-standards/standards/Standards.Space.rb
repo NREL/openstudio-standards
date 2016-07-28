@@ -18,409 +18,6 @@ class OpenStudio::Model::Space
   # @todo add a list of valid choices for template argument
   # TODO stop skipping non-vertical walls
   def daylighted_areas(template, draw_daylight_areas_for_debugging = false)
-    # A series of methods to modify polygons.  Most are
-    # wrappers of native OpenStudio methods, but with
-    # workarounds for known issues or limitations.
-
-    # Check the z coordinates of a polygon
-    # @api private
-    def check_z_zero(polygons, name, space)
-      fails = []
-      errs = 0
-      polygons.each do |polygon|
-        # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} => #{polygon.to_s.gsub(/\[|\]/,'|')}.")
-        polygon.each do |vertex|
-          # clsss << vertex.class
-          unless vertex.z == 0.0
-            errs += 1
-            fails << vertex.z
-          end
-        end
-      end
-      # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} => #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
-      if errs > 0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "***FAIL*** #{space} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.")
-      end
-    end
-
-    # A method to convert an array of arrays to
-    # an array of OpenStudio::Point3ds.
-    # @api private
-    def ruby_polygons_to_point3d_z_zero(ruby_polygons)
-      # Convert the final polygons back to OpenStudio
-      os_polygons = []
-      ruby_polygons.each do |ruby_polygon|
-        os_polygon = []
-        ruby_polygon.each do |vertex|
-          vertex = OpenStudio::Point3d.new(vertex[0], vertex[1], 0.0) # Set z to hard-zero instead of vertex[2]
-          os_polygon << vertex
-        end
-        os_polygons << os_polygon
-      end
-
-      return os_polygons
-    end
-
-    # A method to zero-out the z vertex of an array of polygons
-    # @api private
-    def polygons_set_z(polygons, new_z)
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "### #{polygons}")
-
-      # Convert the final polygons back to OpenStudio
-      new_polygons = []
-      polygons.each do |polygon|
-        new_polygon = []
-        polygon.each do |vertex|
-          new_vertex = OpenStudio::Point3d.new(vertex.x, vertex.y, new_z) # Set z to hard-zero instead of vertex[2]
-          new_polygon << new_vertex
-        end
-        new_polygons << new_polygon
-      end
-
-      return new_polygons
-    end
-
-    # A method to returns the number of duplicate vertices in a polygon.
-    # TODO does not actually wor
-    # @api private
-    def find_duplicate_vertices(ruby_polygon, tol = 0.001)
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '***')
-      duplicates = []
-
-      combos = ruby_polygon.combination(2).to_a
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "########{combos.size}")
-      combos.each do |i, j|
-        i_vertex = OpenStudio::Point3d.new(i[0], i[1], i[2])
-        j_vertex = OpenStudio::Point3d.new(j[0], j[1], j[2])
-
-        distance = OpenStudio.getDistance(i_vertex, j_vertex)
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "------- #{i} to #{j} = #{distance}")
-        if distance < tol
-          duplicates << i
-        end
-      end
-
-      return duplicates
-    end
-
-    # Subtracts one array of polygons from the next,
-    # returning an array of resulting polygons.
-    # @api private
-    def a_polygons_minus_b_polygons(a_polygons, b_polygons, a_name, b_name)
-      final_polygons_ruby = []
-
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "#{a_polygons.size} #{a_name} minus #{b_polygons.size} #{b_name}")
-
-      # Don't try to subtract anything if either set is empty
-      if a_polygons.size.zero?
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} - #{b_name}: #{a_name} contains no polygons.")
-        return polygons_set_z(a_polygons, 0.0)
-      elsif b_polygons.size.zero?
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} - #{b_name}: #{b_name} contains no polygons.")
-        return polygons_set_z(a_polygons, 0.0)
-      end
-
-      # Loop through all a polygons, and for each one,
-      # subtract all the b polygons.
-      a_polygons.each do |a_polygon|
-        # Translate the polygon to plain arrays
-        a_polygon_ruby = []
-        a_polygon.each do |vertex|
-          a_polygon_ruby << [vertex.x, vertex.y, vertex.z]
-        end
-
-        # TODO: Skip really small polygons
-        # reduced_b_polygons = []
-        # b_polygons.each do |b_polygon|
-        # next
-        # end
-
-        # Perform the subtraction
-        a_minus_b_polygons = OpenStudio.subtract(a_polygon, b_polygons, 0.01)
-
-        # Translate the resulting polygons to plain ruby arrays
-        a_minus_b_polygons_ruby = []
-        num_small_polygons = 0
-        a_minus_b_polygons.each do |a_minus_b_polygon|
-          # Drop any super small or zero-vertex polygons resulting from the subtraction
-          area = OpenStudio.getArea(a_minus_b_polygon)
-          if area.is_initialized
-            if area.get < 0.5 # 5 square feet
-              num_small_polygons += 1
-              next
-            end
-          else
-            num_small_polygons += 1
-            next
-          end
-
-          # Translate polygon to ruby array
-          a_minus_b_polygon_ruby = []
-          a_minus_b_polygon.each do |vertex|
-            a_minus_b_polygon_ruby << [vertex.x, vertex.y, vertex.z]
-          end
-
-          a_minus_b_polygons_ruby << a_minus_b_polygon_ruby
-        end
-
-        if num_small_polygons > 0
-          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Dropped #{num_small_polygons} small or invalid polygons resulting from subtraction.")
-        end
-
-        # Remove duplicate polygons
-        unique_a_minus_b_polygons_ruby = a_minus_b_polygons_ruby.uniq
-
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove duplicates: #{a_minus_b_polygons_ruby.size} ==> #{unique_a_minus_b_polygons_ruby.size}")
-
-        # TODO: bug workaround?
-        # If the result includes the a polygon, the a polygon
-        # was unchanged; only include that polgon and throw away the other junk?/bug? polygons.
-        # If the result does not include the a polygon, the a polygon was
-        # split into multiple pieces.  Keep all those pieces.
-        if unique_a_minus_b_polygons_ruby.include?(a_polygon_ruby)
-          if unique_a_minus_b_polygons_ruby.size == 1
-            final_polygons_ruby.concat([a_polygon_ruby])
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---includes only original polygon, keeping that one')
-          else
-            # Remove the original polygon
-            unique_a_minus_b_polygons_ruby.delete(a_polygon_ruby)
-            final_polygons_ruby.concat(unique_a_minus_b_polygons_ruby)
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---includes the original and others; keeping all other polygons')
-          end
-        else
-          final_polygons_ruby.concat(unique_a_minus_b_polygons_ruby)
-          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---does not include original, keeping all resulting polygons')
-        end
-      end
-
-      # Remove duplicate polygons again
-      unique_final_polygons_ruby = final_polygons_ruby.uniq
-
-      # TODO: remove this workaround
-      # Split any polygons that are joined by a line into two separate
-      # polygons.  Do this by finding duplicate
-      # unique_final_polygons_ruby.each do |unique_final_polygon_ruby|
-      # next if unique_final_polygon_ruby.size == 4 # Don't check 4-sided polygons
-      # dupes = find_duplicate_vertices(unique_final_polygon_ruby)
-      # if dupes.size > 0
-      # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "---Two polygons attached by line = #{unique_final_polygon_ruby.to_s.gsub(/\[|\]/,'|')}")
-      # end
-      # end
-
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove final duplicates: #{final_polygons_ruby.size} ==> #{unique_final_polygons_ruby.size}")
-
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} minus #{b_name} = #{unique_final_polygons_ruby.size} polygons.")
-
-      # Convert the final polygons back to OpenStudio
-      unique_final_polygons = ruby_polygons_to_point3d_z_zero(unique_final_polygons_ruby)
-
-      return unique_final_polygons
-    end
-
-    # Wrapper to catch errors in joinAll method
-    # [utilities.geometry.joinAll] <1> Expected polygons to join together
-    # @api private
-    def join_polygons(polygons, tol, name)
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Joining #{name} from #{self.name}")
-
-      combined_polygons = []
-
-      # Don't try to combine an empty array of polygons
-      if polygons.size.zero?
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{name} contains no polygons, not combining.")
-        return combined_polygons
-      end
-
-      # Open a log
-      msg_log = OpenStudio::StringStreamLogSink.new
-      msg_log.setLogLevel(OpenStudio::Info)
-
-      # Combine the polygons
-      combined_polygons = OpenStudio.joinAll(polygons, 0.01)
-
-      # Count logged errors
-      join_errs = 0
-      inner_loop_errs = 0
-      msg_log.logMessages.each do |msg|
-        if /utilities.geometry/ =~ msg.logChannel
-          if msg.logMessage.include?('Expected polygons to join together')
-            join_errs += 1
-          elsif msg.logMessage.include?('Union has inner loops')
-            inner_loop_errs += 1
-          end
-        end
-      end
-
-      # Disable the log sink to prevent memory hogging
-      msg_log.disable
-
-      # TODO: remove this workaround, which is tried if there
-      # are any join errors.  This handles the case of polygons
-      # that make an inner loop, the most common case being
-      # when all 4 sides of a space have windows.
-      # If an error occurs, attempt to join n-1 polygons,
-      # then subtract the
-      if join_errs > 0 || inner_loop_errs > 0
-
-        # Open a log
-        msg_log_2 = OpenStudio::StringStreamLogSink.new
-        msg_log_2.setLogLevel(OpenStudio::Info)
-
-        first_polygon = polygons.first
-        polygons = polygons.drop(1)
-
-        combined_polygons_2 = OpenStudio.joinAll(polygons, 0.01)
-
-        join_errs_2 = 0
-        inner_loop_errs_2 = 0
-        msg_log_2.logMessages.each do |msg|
-          if /utilities.geometry/ =~ msg.logChannel
-            if msg.logMessage.include?('Expected polygons to join together')
-              join_errs_2 += 1
-            elsif msg.logMessage.include?('Union has inner loops')
-              inner_loop_errs_2 += 1
-            end
-          end
-        end
-
-        # Disable the log sink to prevent memory hogging
-        msg_log_2.disable
-
-        if join_errs_2 > 0 || inner_loop_errs_2 > 0
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, the workaround for joining polygons failed.")
-        else
-
-          # First polygon minus the already combined polygons
-          first_polygon_minus_combined = a_polygons_minus_b_polygons([first_polygon], combined_polygons_2, 'first_polygon', 'combined_polygons_2')
-
-          # Add the result back
-          combined_polygons_2 += first_polygon_minus_combined
-          combined_polygons = combined_polygons_2
-          join_errs = 0
-          inner_loop_errs = 0
-
-        end
-      end
-
-      # Report logged errors to user
-      if join_errs > 0
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, #{join_errs} of #{polygons.size} #{name} were not joined properly due to limitations of the geometry calculation methods.  The resulting daylighted areas will be smaller than they should be.")
-      end
-      if inner_loop_errs > 0
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, #{inner_loop_errs} of #{polygons.size} #{name} were not joined properly becasue the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
-      end
-
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Joined #{polygons.size} #{name} into #{combined_polygons.size} polygons.")
-
-      return combined_polygons
-    end
-
-    # Gets the total area of a series of polygons
-    # @api private
-    def total_area_of_polygons(polygons)
-      total_area_m2 = 0
-      polygons.each do |polygon|
-        area_m2 = OpenStudio.getArea(polygon)
-        if area_m2.is_initialized
-          total_area_m2 += area_m2.get
-        else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Could not get area for a polygon in #{name}, daylighted area calculation will not be accurate.")
-        end
-      end
-
-      return total_area_m2
-    end
-
-    # Returns an array of resulting polygons.
-    # Assumes that a_polygons don't overlap one another, and that b_polygons don't overlap one another
-    # @api private
-    def area_a_polygons_overlap_b_polygons(a_polygons, b_polygons, a_name, b_name)
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "#{a_polygons.size} #{a_name} overlaps #{b_polygons.size} #{b_name}")
-
-      overlap_area = 0
-
-      # Don't try anything if either set is empty
-      if a_polygons.size.zero?
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} overlaps #{b_name}: #{a_name} contains no polygons.")
-        return overlap_area
-      elsif b_polygons.size.zero?
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} overlaps #{b_name}: #{b_name} contains no polygons.")
-        return overlap_area
-      end
-
-      # Loop through each base surface
-      b_polygons.each do |b_polygon|
-        # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "---b polygon = #{b_polygon_ruby.to_s.gsub(/\[|\]/,'|')}")
-
-        # Loop through each overlap surface and determine if it overlaps this base surface
-        a_polygons.each do |a_polygon|
-          # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "------a polygon = #{a_polygon_ruby.to_s.gsub(/\[|\]/,'|')}")
-
-          # If the entire a polygon is within the b polygon, count 100% of the area
-          # as overlapping and remove a polygon from the list
-          if OpenStudio.within(a_polygon, b_polygon, 0.01)
-
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---------a overlaps b ENTIRELY.')
-
-            area = OpenStudio.getArea(a_polygon)
-            if area.is_initialized
-              overlap_area += area.get
-              next
-            else
-              OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Could not determine the area of #{a_polygon.to_s.gsub(/\[|\]/, '|')} in #{a_name}; #{a_name} overlaps #{b_name}.")
-            end
-
-            # If part of a polygon overlaps b polygon, determine the
-            # original area of polygon b, subtract polygon a from b,
-            # then add the difference in area to the total.
-          elsif OpenStudio.intersects(a_polygon, b_polygon, 0.01)
-
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---------a overlaps b PARTIALLY.')
-
-            # Get the initial area
-            area_initial = 0
-            area = OpenStudio.getArea(b_polygon)
-            if area.is_initialized
-              area_initial = area.get
-            else
-              OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Could not determine the area of #{a_polygon.to_s.gsub(/\[|\]/, '|')} in #{a_name}; #{a_name} overlaps #{b_name}.")
-            end
-
-            # Perform the subtraction
-            b_minus_a_polygons = OpenStudio.subtract(b_polygon, [a_polygon], 0.01)
-
-            # Get the final area
-            area_final = 0
-            b_minus_a_polygons.each do |polygon|
-              # Skip polygons that have no vertices
-              # resulting from the subtraction.
-              if polygon.size.zero?
-                OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Zero-vertex polygon resulting from #{b_polygon.to_s.gsub(/\[|\]/, '|')} minus #{a_polygon.to_s.gsub(/\[|\]/, '|')}.")
-                next
-              end
-              # Find the area of real polygons
-              area = OpenStudio.getArea(polygon)
-              if area.is_initialized
-                area_final += area.get
-              else
-                OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Could not determine the area of #{polygon.to_s.gsub(/\[|\]/, '|')} in #{a_name}; #{a_name} overlaps #{b_name}.")
-              end
-            end
-
-            # Add the diference to the total
-            overlap_area += (area_initial - area_final)
-
-            # There is no overlap
-          else
-
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---------a does not overlaps b at all.')
-
-          end
-        end
-      end
-
-      return overlap_area
-    end
 
     ### Begin the actual daylight area calculations ###
 
@@ -949,7 +546,7 @@ class OpenStudio::Model::Space
   #
   # @param primary_sidelighted_area [Double] the primary sidelighted area (m^2) of the space
   # @return [Double] the unitless sidelighting effective aperture metric
-  def sidelightingEffectiveAperture(primary_sidelighted_area)
+  def sidelighting_effective_aperture(primary_sidelighted_area)
     # sidelighting_effective_aperture = E(window area * window VT) / primary_sidelighted_area
     sidelighting_effective_aperture = 9999
 
@@ -974,7 +571,7 @@ class OpenStudio::Model::Space
         if construction.is_initialized
           construction_name = construction.get.name.get.upcase
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{name}, could not determine construction for #{sub_surface.name}, will not be included in  sidelightingEffectiveAperture calculation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{name}, could not determine construction for #{sub_surface.name}, will not be included in  sidelighting_effective_aperture calculation.")
           next
         end
 
@@ -998,7 +595,7 @@ class OpenStudio::Model::Space
             if row_id.is_initialized
               row_id = row_id.get
             else
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "VT row ID not found for construction: #{construction_name}, #{sub_surface.name} will not be included in  sidelightingEffectiveAperture calculation.")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "VT row ID not found for construction: #{construction_name}, #{sub_surface.name} will not be included in  sidelighting_effective_aperture calculation.")
               row_id = 9999
             end
 
@@ -1056,7 +653,7 @@ class OpenStudio::Model::Space
   #
   # @param toplighted_area [Double] the toplighted area (m^2) of the space
   # @return [Double] the unitless skylight effective aperture metric
-  def skylightEffectiveAperture(toplighted_area)
+  def skylight_effective_aperture(toplighted_area)
     # skylight_effective_aperture = E(0.85 * skylight area * skylight VT * WF) / toplighted_area
     skylight_effective_aperture = 0.0
 
@@ -1254,7 +851,7 @@ class OpenStudio::Model::Space
         req_pri_ctrl = false
       else
         # Check effective sidelighted aperture
-        sidelighted_effective_aperture = sidelightingEffectiveAperture(areas['primary_sidelighted_area'])
+        sidelighted_effective_aperture = sidelighting_effective_aperture(areas['primary_sidelighted_area'])
         ###################
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
         ###################
@@ -1277,7 +874,7 @@ class OpenStudio::Model::Space
         req_top_ctrl = false
       else
         # Check effective sidelighted aperture
-        sidelighted_effective_aperture = skylightEffectiveAperture(areas['toplighted_area'])
+        sidelighted_effective_aperture = skylight_effective_aperture(areas['toplighted_area'])
         ###################
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_top = #{sidelighted_effective_aperture}")
         ###################
@@ -2455,4 +2052,411 @@ class OpenStudio::Model::Space
   def get_adjacent_space_with_most_shared_wall_area(same_floor = true)
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
+  
+  private
+  
+  # A series of private methods to modify polygons.  Most are
+  # wrappers of native OpenStudio methods, but with
+  # workarounds for known issues or limitations.
+
+  # Check the z coordinates of a polygon
+  # @api private
+  def check_z_zero(polygons, name, space)
+    fails = []
+    errs = 0
+    polygons.each do |polygon|
+      # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} => #{polygon.to_s.gsub(/\[|\]/,'|')}.")
+      polygon.each do |vertex|
+        # clsss << vertex.class
+        unless vertex.z == 0.0
+          errs += 1
+          fails << vertex.z
+        end
+      end
+    end
+    # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} => #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
+    if errs > 0
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "***FAIL*** #{space} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.")
+    end
+  end
+
+  # A method to convert an array of arrays to
+  # an array of OpenStudio::Point3ds.
+  # @api private
+  def ruby_polygons_to_point3d_z_zero(ruby_polygons)
+    # Convert the final polygons back to OpenStudio
+    os_polygons = []
+    ruby_polygons.each do |ruby_polygon|
+      os_polygon = []
+      ruby_polygon.each do |vertex|
+        vertex = OpenStudio::Point3d.new(vertex[0], vertex[1], 0.0) # Set z to hard-zero instead of vertex[2]
+        os_polygon << vertex
+      end
+      os_polygons << os_polygon
+    end
+
+    return os_polygons
+  end
+
+  # A method to zero-out the z vertex of an array of polygons
+  # @api private
+  def polygons_set_z(polygons, new_z)
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "### #{polygons}")
+
+    # Convert the final polygons back to OpenStudio
+    new_polygons = []
+    polygons.each do |polygon|
+      new_polygon = []
+      polygon.each do |vertex|
+        new_vertex = OpenStudio::Point3d.new(vertex.x, vertex.y, new_z) # Set z to hard-zero instead of vertex[2]
+        new_polygon << new_vertex
+      end
+      new_polygons << new_polygon
+    end
+
+    return new_polygons
+  end
+
+  # A method to returns the number of duplicate vertices in a polygon.
+  # TODO does not actually wor
+  # @api private
+  def find_duplicate_vertices(ruby_polygon, tol = 0.001)
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '***')
+    duplicates = []
+
+    combos = ruby_polygon.combination(2).to_a
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "########{combos.size}")
+    combos.each do |i, j|
+      i_vertex = OpenStudio::Point3d.new(i[0], i[1], i[2])
+      j_vertex = OpenStudio::Point3d.new(j[0], j[1], j[2])
+
+      distance = OpenStudio.getDistance(i_vertex, j_vertex)
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "------- #{i} to #{j} = #{distance}")
+      if distance < tol
+        duplicates << i
+      end
+    end
+
+    return duplicates
+  end
+
+  # Subtracts one array of polygons from the next,
+  # returning an array of resulting polygons.
+  # @api private
+  def a_polygons_minus_b_polygons(a_polygons, b_polygons, a_name, b_name)
+    final_polygons_ruby = []
+
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "#{a_polygons.size} #{a_name} minus #{b_polygons.size} #{b_name}")
+
+    # Don't try to subtract anything if either set is empty
+    if a_polygons.size.zero?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} - #{b_name}: #{a_name} contains no polygons.")
+      return polygons_set_z(a_polygons, 0.0)
+    elsif b_polygons.size.zero?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} - #{b_name}: #{b_name} contains no polygons.")
+      return polygons_set_z(a_polygons, 0.0)
+    end
+
+    # Loop through all a polygons, and for each one,
+    # subtract all the b polygons.
+    a_polygons.each do |a_polygon|
+      # Translate the polygon to plain arrays
+      a_polygon_ruby = []
+      a_polygon.each do |vertex|
+        a_polygon_ruby << [vertex.x, vertex.y, vertex.z]
+      end
+
+      # TODO: Skip really small polygons
+      # reduced_b_polygons = []
+      # b_polygons.each do |b_polygon|
+      # next
+      # end
+
+      # Perform the subtraction
+      a_minus_b_polygons = OpenStudio.subtract(a_polygon, b_polygons, 0.01)
+
+      # Translate the resulting polygons to plain ruby arrays
+      a_minus_b_polygons_ruby = []
+      num_small_polygons = 0
+      a_minus_b_polygons.each do |a_minus_b_polygon|
+        # Drop any super small or zero-vertex polygons resulting from the subtraction
+        area = OpenStudio.getArea(a_minus_b_polygon)
+        if area.is_initialized
+          if area.get < 0.5 # 5 square feet
+            num_small_polygons += 1
+            next
+          end
+        else
+          num_small_polygons += 1
+          next
+        end
+
+        # Translate polygon to ruby array
+        a_minus_b_polygon_ruby = []
+        a_minus_b_polygon.each do |vertex|
+          a_minus_b_polygon_ruby << [vertex.x, vertex.y, vertex.z]
+        end
+
+        a_minus_b_polygons_ruby << a_minus_b_polygon_ruby
+      end
+
+      if num_small_polygons > 0
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Dropped #{num_small_polygons} small or invalid polygons resulting from subtraction.")
+      end
+
+      # Remove duplicate polygons
+      unique_a_minus_b_polygons_ruby = a_minus_b_polygons_ruby.uniq
+
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove duplicates: #{a_minus_b_polygons_ruby.size} ==> #{unique_a_minus_b_polygons_ruby.size}")
+
+      # TODO: bug workaround?
+      # If the result includes the a polygon, the a polygon
+      # was unchanged; only include that polgon and throw away the other junk?/bug? polygons.
+      # If the result does not include the a polygon, the a polygon was
+      # split into multiple pieces.  Keep all those pieces.
+      if unique_a_minus_b_polygons_ruby.include?(a_polygon_ruby)
+        if unique_a_minus_b_polygons_ruby.size == 1
+          final_polygons_ruby.concat([a_polygon_ruby])
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---includes only original polygon, keeping that one')
+        else
+          # Remove the original polygon
+          unique_a_minus_b_polygons_ruby.delete(a_polygon_ruby)
+          final_polygons_ruby.concat(unique_a_minus_b_polygons_ruby)
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---includes the original and others; keeping all other polygons')
+        end
+      else
+        final_polygons_ruby.concat(unique_a_minus_b_polygons_ruby)
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---does not include original, keeping all resulting polygons')
+      end
+    end
+
+    # Remove duplicate polygons again
+    unique_final_polygons_ruby = final_polygons_ruby.uniq
+
+    # TODO: remove this workaround
+    # Split any polygons that are joined by a line into two separate
+    # polygons.  Do this by finding duplicate
+    # unique_final_polygons_ruby.each do |unique_final_polygon_ruby|
+    # next if unique_final_polygon_ruby.size == 4 # Don't check 4-sided polygons
+    # dupes = find_duplicate_vertices(unique_final_polygon_ruby)
+    # if dupes.size > 0
+    # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "---Two polygons attached by line = #{unique_final_polygon_ruby.to_s.gsub(/\[|\]/,'|')}")
+    # end
+    # end
+
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove final duplicates: #{final_polygons_ruby.size} ==> #{unique_final_polygons_ruby.size}")
+
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} minus #{b_name} = #{unique_final_polygons_ruby.size} polygons.")
+
+    # Convert the final polygons back to OpenStudio
+    unique_final_polygons = ruby_polygons_to_point3d_z_zero(unique_final_polygons_ruby)
+
+    return unique_final_polygons
+  end
+
+  # Wrapper to catch errors in joinAll method
+  # [utilities.geometry.joinAll] <1> Expected polygons to join together
+  # @api private
+  def join_polygons(polygons, tol, name)
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Joining #{name} from #{self.name}")
+
+    combined_polygons = []
+
+    # Don't try to combine an empty array of polygons
+    if polygons.size.zero?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{name} contains no polygons, not combining.")
+      return combined_polygons
+    end
+
+    # Open a log
+    msg_log = OpenStudio::StringStreamLogSink.new
+    msg_log.setLogLevel(OpenStudio::Info)
+
+    # Combine the polygons
+    combined_polygons = OpenStudio.joinAll(polygons, 0.01)
+
+    # Count logged errors
+    join_errs = 0
+    inner_loop_errs = 0
+    msg_log.logMessages.each do |msg|
+      if /utilities.geometry/ =~ msg.logChannel
+        if msg.logMessage.include?('Expected polygons to join together')
+          join_errs += 1
+        elsif msg.logMessage.include?('Union has inner loops')
+          inner_loop_errs += 1
+        end
+      end
+    end
+
+    # Disable the log sink to prevent memory hogging
+    msg_log.disable
+
+    # TODO: remove this workaround, which is tried if there
+    # are any join errors.  This handles the case of polygons
+    # that make an inner loop, the most common case being
+    # when all 4 sides of a space have windows.
+    # If an error occurs, attempt to join n-1 polygons,
+    # then subtract the
+    if join_errs > 0 || inner_loop_errs > 0
+
+      # Open a log
+      msg_log_2 = OpenStudio::StringStreamLogSink.new
+      msg_log_2.setLogLevel(OpenStudio::Info)
+
+      first_polygon = polygons.first
+      polygons = polygons.drop(1)
+
+      combined_polygons_2 = OpenStudio.joinAll(polygons, 0.01)
+
+      join_errs_2 = 0
+      inner_loop_errs_2 = 0
+      msg_log_2.logMessages.each do |msg|
+        if /utilities.geometry/ =~ msg.logChannel
+          if msg.logMessage.include?('Expected polygons to join together')
+            join_errs_2 += 1
+          elsif msg.logMessage.include?('Union has inner loops')
+            inner_loop_errs_2 += 1
+          end
+        end
+      end
+
+      # Disable the log sink to prevent memory hogging
+      msg_log_2.disable
+
+      if join_errs_2 > 0 || inner_loop_errs_2 > 0
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, the workaround for joining polygons failed.")
+      else
+
+        # First polygon minus the already combined polygons
+        first_polygon_minus_combined = a_polygons_minus_b_polygons([first_polygon], combined_polygons_2, 'first_polygon', 'combined_polygons_2')
+
+        # Add the result back
+        combined_polygons_2 += first_polygon_minus_combined
+        combined_polygons = combined_polygons_2
+        join_errs = 0
+        inner_loop_errs = 0
+
+      end
+    end
+
+    # Report logged errors to user
+    if join_errs > 0
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, #{join_errs} of #{polygons.size} #{name} were not joined properly due to limitations of the geometry calculation methods.  The resulting daylighted areas will be smaller than they should be.")
+    end
+    if inner_loop_errs > 0
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, #{inner_loop_errs} of #{polygons.size} #{name} were not joined properly becasue the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
+    end
+
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Joined #{polygons.size} #{name} into #{combined_polygons.size} polygons.")
+
+    return combined_polygons
+  end
+
+  # Gets the total area of a series of polygons
+  # @api private
+  def total_area_of_polygons(polygons)
+    total_area_m2 = 0
+    polygons.each do |polygon|
+      area_m2 = OpenStudio.getArea(polygon)
+      if area_m2.is_initialized
+        total_area_m2 += area_m2.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Could not get area for a polygon in #{name}, daylighted area calculation will not be accurate.")
+      end
+    end
+
+    return total_area_m2
+  end
+
+  # Returns an array of resulting polygons.
+  # Assumes that a_polygons don't overlap one another, and that b_polygons don't overlap one another
+  # @api private
+  def area_a_polygons_overlap_b_polygons(a_polygons, b_polygons, a_name, b_name)
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "#{a_polygons.size} #{a_name} overlaps #{b_polygons.size} #{b_name}")
+
+    overlap_area = 0
+
+    # Don't try anything if either set is empty
+    if a_polygons.size.zero?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} overlaps #{b_name}: #{a_name} contains no polygons.")
+      return overlap_area
+    elsif b_polygons.size.zero?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} overlaps #{b_name}: #{b_name} contains no polygons.")
+      return overlap_area
+    end
+
+    # Loop through each base surface
+    b_polygons.each do |b_polygon|
+      # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "---b polygon = #{b_polygon_ruby.to_s.gsub(/\[|\]/,'|')}")
+
+      # Loop through each overlap surface and determine if it overlaps this base surface
+      a_polygons.each do |a_polygon|
+        # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "------a polygon = #{a_polygon_ruby.to_s.gsub(/\[|\]/,'|')}")
+
+        # If the entire a polygon is within the b polygon, count 100% of the area
+        # as overlapping and remove a polygon from the list
+        if OpenStudio.within(a_polygon, b_polygon, 0.01)
+
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---------a overlaps b ENTIRELY.')
+
+          area = OpenStudio.getArea(a_polygon)
+          if area.is_initialized
+            overlap_area += area.get
+            next
+          else
+            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Could not determine the area of #{a_polygon.to_s.gsub(/\[|\]/, '|')} in #{a_name}; #{a_name} overlaps #{b_name}.")
+          end
+
+          # If part of a polygon overlaps b polygon, determine the
+          # original area of polygon b, subtract polygon a from b,
+          # then add the difference in area to the total.
+        elsif OpenStudio.intersects(a_polygon, b_polygon, 0.01)
+
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---------a overlaps b PARTIALLY.')
+
+          # Get the initial area
+          area_initial = 0
+          area = OpenStudio.getArea(b_polygon)
+          if area.is_initialized
+            area_initial = area.get
+          else
+            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Could not determine the area of #{a_polygon.to_s.gsub(/\[|\]/, '|')} in #{a_name}; #{a_name} overlaps #{b_name}.")
+          end
+
+          # Perform the subtraction
+          b_minus_a_polygons = OpenStudio.subtract(b_polygon, [a_polygon], 0.01)
+
+          # Get the final area
+          area_final = 0
+          b_minus_a_polygons.each do |polygon|
+            # Skip polygons that have no vertices
+            # resulting from the subtraction.
+            if polygon.size.zero?
+              OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Zero-vertex polygon resulting from #{b_polygon.to_s.gsub(/\[|\]/, '|')} minus #{a_polygon.to_s.gsub(/\[|\]/, '|')}.")
+              next
+            end
+            # Find the area of real polygons
+            area = OpenStudio.getArea(polygon)
+            if area.is_initialized
+              area_final += area.get
+            else
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Could not determine the area of #{polygon.to_s.gsub(/\[|\]/, '|')} in #{a_name}; #{a_name} overlaps #{b_name}.")
+            end
+          end
+
+          # Add the diference to the total
+          overlap_area += (area_initial - area_final)
+
+          # There is no overlap
+        else
+
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '---------a does not overlaps b at all.')
+
+        end
+      end
+    end
+
+    return overlap_area
+  end  
+  
 end
