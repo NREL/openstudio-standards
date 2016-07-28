@@ -8,27 +8,27 @@ class OpenStudio::Model::Model
       # Building Schedule
       sch = 'E'
       space_type_map = {
-        'Hotel/Motel - dining' => %w(Banquet_Flr_6 Dining_Flr_6),
-        'Storage area' => %w(Basement Storage_Flr_1),
+        'Hotel/Motel - dining' => ['Banquet_Flr_6', 'Dining_Flr_6'],
+        'Storage area' => ['Basement', 'Storage_Flr_1'],
         'Retail - mall concourse' => ['Cafe_Flr_1'],
-        "Corr. >= 2.4m wide-sch-#{sch}" => %w(Corridor_Flr_3 Corridor_Flr_6),
+        "Corr. >= 2.4m wide-sch-#{sch}" => ['Corridor_Flr_3', 'Corridor_Flr_6'],
         'Food preparation' => ['Kitchen_Flr_6'],
         'Hospital - laundry/washing' => ['Laundry_Flr_1'],
         'Hotel/Motel - lobby' => ['Lobby_Flr_1'],
         "Electrical/Mechanical-sch-#{sch}" => ['Mech_Flr_1'],
-        'Retail - sales' => %w(Retail_1_Flr_1 Retail_2_Flr_1),
-        'Hotel/Motel - rooms' => %w(Room_1_Flr_3 Room_1_Flr_6 Room_2_Flr_3 Room_2_Flr_6 Room_3_Mult19_Flr_3 Room_3_Mult9_Flr_6 Room_4_Mult19_Flr_3 Room_5_Flr_3 Room_6_Flr_3)
+        'Retail - sales' => ['Retail_1_Flr_1', 'Retail_2_Flr_1'],
+        'Hotel/Motel - rooms' => ['Room_1_Flr_3', 'Room_1_Flr_6', 'Room_2_Flr_3', 'Room_2_Flr_6', 'Room_3_Mult19_Flr_3', 'Room_3_Mult9_Flr_6', 'Room_4_Mult19_Flr_3', 'Room_5_Flr_3', 'Room_6_Flr_3']
       }
     else
       space_type_map = {
-        'Banquet' => %w(Banquet_Flr_6 Dining_Flr_6),
+        'Banquet' => ['Banquet_Flr_6', 'Dining_Flr_6'],
         'Basement' => ['Basement'],
         'Cafe' => ['Cafe_Flr_1'],
         'Corridor' => ['Corridor_Flr_6'],
         'Corridor2' => ['Corridor_Flr_3'],
-        'GuestRoom' => %w(Room_1_Flr_3 Room_2_Flr_3 Room_5_Flr_3 Room_6_Flr_3),
-        'GuestRoom2' => %w(Room_3_Mult19_Flr_3 Room_4_Mult19_Flr_3),
-        'GuestRoom3' => %w(Room_1_Flr_6 Room_2_Flr_6),
+        'GuestRoom' => ['Room_1_Flr_3', 'Room_2_Flr_3', 'Room_5_Flr_3', 'Room_6_Flr_3'],
+        'GuestRoom2' => ['Room_3_Mult19_Flr_3', 'Room_4_Mult19_Flr_3'],
+        'GuestRoom3' => ['Room_1_Flr_6', 'Room_2_Flr_6'],
         'GuestRoom4' => ['Room_3_Mult9_Flr_6'],
         'Kitchen' => ['Kitchen_Flr_6'],
         'Laundry' => ['Laundry_Flr_1'],
@@ -49,28 +49,12 @@ class OpenStudio::Model::Model
         'type' => 'VAV',
         'name' => 'VAV WITH REHEAT',
         'space_names' =>
-          %w(
-            Basement
-            Retail_1_Flr_1
-            Retail_2_Flr_1
-            Mech_Flr_1
-            Storage_Flr_1
-            Laundry_Flr_1
-            Cafe_Flr_1
-            Lobby_Flr_1
-            Corridor_Flr_3
-            Banquet_Flr_6
-            Dining_Flr_6
-            Corridor_Flr_6
-            Kitchen_Flr_6
-          )
+          ['Basement', 'Retail_1_Flr_1', 'Retail_2_Flr_1', 'Mech_Flr_1', 'Storage_Flr_1', 'Laundry_Flr_1', 'Cafe_Flr_1', 'Lobby_Flr_1', 'Corridor_Flr_3', 'Banquet_Flr_6', 'Dining_Flr_6', 'Corridor_Flr_6', 'Kitchen_Flr_6']
       },
       {
         'type' => 'DOAS',
         'space_names' =>
-          %w(
-            Room_1_Flr_3 Room_2_Flr_3 Room_3_Mult19_Flr_3 Room_4_Mult19_Flr_3 Room_5_Flr_3 Room_6_Flr_3 Room_1_Flr_6 Room_2_Flr_6 Room_3_Mult9_Flr_6
-          )
+          ['Room_1_Flr_3', 'Room_2_Flr_3', 'Room_3_Mult19_Flr_3', 'Room_4_Mult19_Flr_3', 'Room_5_Flr_3', 'Room_6_Flr_3', 'Room_1_Flr_6', 'Room_2_Flr_6', 'Room_3_Mult9_Flr_6']
       },
       {
         'type' => 'Refrigeration',
@@ -137,9 +121,9 @@ class OpenStudio::Model::Model
     exhaust_fan_space_types = []
     case building_vintage
     when '90.1-2004', '90.1-2007'
-      exhaust_fan_space_types = %w(Kitchen Laundry)
+      exhaust_fan_space_types = ['Kitchen', 'Laundry']
     else
-      exhaust_fan_space_types = %w(Banquet Kitchen Laundry)
+      exhaust_fan_space_types = ['Banquet', 'Kitchen', 'Laundry']
     end
 
     exhaust_fan_space_types.each do |space_type_name|
@@ -208,7 +192,7 @@ class OpenStudio::Model::Model
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
   def add_daylighting_controls(building_vintage)
-    space_names = %w(Banquet_Flr_6 Dining_Flr_6 Cafe_Flr_1 Lobby_Flr_1)
+    space_names = ['Banquet_Flr_6', 'Dining_Flr_6', 'Cafe_Flr_1', 'Lobby_Flr_1']
     space_names.each do |space_name|
       space = getSpaceByName(space_name).get
       space.add_daylighting_controls(building_vintage, false, false)

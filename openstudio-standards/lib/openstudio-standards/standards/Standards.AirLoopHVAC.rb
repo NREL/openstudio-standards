@@ -1278,7 +1278,7 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-2A',
           'ASHRAE 169-2006-3A',
           'ASHRAE 169-2006-4A'
-        prohibited_types = %w(FixedDryBulb DifferentialDryBulb)
+        prohibited_types = ['FixedDryBulb', 'DifferentialDryBulb']
       when
         'ASHRAE 169-2006-5A',
           'ASHRAE 169-2006-6A',
@@ -2906,7 +2906,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Create ruleset schedules, attempting to create
     # the minimum number of unique rules.
-    %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday).each do |weekday|
+    ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].each do |weekday|
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', weekday.to_s)
       end_of_prev_rule = yearly_data[0]['date']
       yearly_data.each_with_index do |daily_data, k|

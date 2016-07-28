@@ -244,7 +244,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
 
     # If it's a PTAC or PTHP System, we need to divide the capacity by the potential zone multiplier
     # because the COP is dependent on capacity, and the capacity should be the capacity of a single zone, not all the zones
-    if %w(PTAC PTHP).include?(subcategory)
+    if ['PTAC', 'PTHP'].include?(subcategory)
       mult = 1
       comp = containingZoneHVACComponent
       if comp.is_initialized

@@ -13,7 +13,7 @@ class OpenStudio::Model::Model
       sch = 'C'
       space_type_map = {
         'Storage area' => ['Back_Space'],
-        'Retail - sales' => %w(Core_Retail Front_Retail Point_Of_Sale),
+        'Retail - sales' => ['Core_Retail', 'Front_Retail', 'Point_Of_Sale'],
         'Lobby - elevator' => ['Front_Entry']
       }
 
@@ -22,7 +22,7 @@ class OpenStudio::Model::Model
         'Back_Space' => ['Back_Space'],
         'Entry' => ['Front_Entry'],
         'Point_of_Sale' => ['Point_Of_Sale'],
-        'Retail' => %w(Core_Retail Front_Retail)
+        'Retail' => ['Core_Retail', 'Front_Retail']
       }
     end
     return space_type_map
@@ -32,7 +32,7 @@ class OpenStudio::Model::Model
     system_to_space_map = [
       {
         'type' => 'PSZ-AC',
-        'space_names' => %w(Back_Space Core_Retail Point_Of_Sale Front_Retail)
+        'space_names' => ['Back_Space', 'Core_Retail', 'Point_Of_Sale', 'Front_Retail']
       },
       {
         'type' => 'UnitHeater',

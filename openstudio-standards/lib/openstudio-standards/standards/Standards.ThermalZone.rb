@@ -249,7 +249,7 @@ class OpenStudio::Model::ThermalZone
 
     # Create ruleset schedules, attempting to create
     # the minimum number of unique rules.
-    %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday).each do |weekday|
+    ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].each do |weekday|
       end_of_prev_rule = yearly_data[0]['date']
       yearly_data.each_with_index do |daily_data, k|
         # Skip unless it is the day of week

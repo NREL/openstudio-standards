@@ -9,11 +9,11 @@ class OpenStudio::Model::Model
       # dom = ?
       {
         '- undefined -' => ['Attic'],
-        'Office - enclosed' => %w(Core_ZN Perimeter_ZN_1 Perimeter_ZN_2 Perimeter_ZN_3 Perimeter_ZN_4)
+        'Office - enclosed' => ['Core_ZN', 'Perimeter_ZN_1', 'Perimeter_ZN_2', 'Perimeter_ZN_3', 'Perimeter_ZN_4']
       }
     else
       {
-        'WholeBuilding - Sm Office' => %w(Perimeter_ZN_1 Perimeter_ZN_2 Perimeter_ZN_3 Perimeter_ZN_4 Core_ZN),
+        'WholeBuilding - Sm Office' => ['Perimeter_ZN_1', 'Perimeter_ZN_2', 'Perimeter_ZN_3', 'Perimeter_ZN_4', 'Core_ZN'],
         'Attic' => ['Attic']
       }
                      end

@@ -648,14 +648,14 @@ class OpenStudio::Model::Model
     sys_lookup['3_or_4']['fossilandelectric'] = ['PSZ_AC', 'NaturalGas', nil, 'Electricity']
     sys_lookup['3_or_4']['purchasedheat'] = ['PSZ_AC', 'DistrictHeating', nil, 'Electricity']
     sys_lookup['3_or_4']['purchasedheatandcooling'] = ['PSZ_AC', 'DistrictHeating', nil, 'DistrictCooling']
-    sys_lookup['5_or_6']['fossil'] = %w(PVAV_Reheat NaturalGas NaturalGas Electricity)
-    sys_lookup['5_or_6']['fossilandelectric'] = %w(PVAV_Reheat NaturalGas Electricity Electricity)
-    sys_lookup['5_or_6']['purchasedheat'] = %w(PVAV_Reheat DistrictHeating DistrictHeating Electricity)
-    sys_lookup['5_or_6']['purchasedheatandcooling'] = %w(PVAV_Reheat DistrictHeating DistrictHeating DistrictCooling)
-    sys_lookup['7_or_8']['fossil'] = %w(VAV_Reheat NaturalGas NaturalGas Electricity)
-    sys_lookup['7_or_8']['fossilandelectric'] = %w(VAV_Reheat NaturalGas Electricity Electricity)
-    sys_lookup['7_or_8']['purchasedheat'] = %w(VAV_Reheat DistrictHeating DistrictHeating Electricity)
-    sys_lookup['7_or_8']['purchasedheatandcooling'] = %w(VAV_Reheat DistrictHeating DistrictHeating DistrictCooling)
+    sys_lookup['5_or_6']['fossil'] = ['PVAV_Reheat', 'NaturalGas', 'NaturalGas', 'Electricity']
+    sys_lookup['5_or_6']['fossilandelectric'] = ['PVAV_Reheat', 'NaturalGas', 'Electricity', 'Electricity']
+    sys_lookup['5_or_6']['purchasedheat'] = ['PVAV_Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity']
+    sys_lookup['5_or_6']['purchasedheatandcooling'] = ['PVAV_Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
+    sys_lookup['7_or_8']['fossil'] = ['VAV_Reheat', 'NaturalGas', 'NaturalGas', 'Electricity']
+    sys_lookup['7_or_8']['fossilandelectric'] = ['VAV_Reheat', 'NaturalGas', 'Electricity', 'Electricity']
+    sys_lookup['7_or_8']['purchasedheat'] = ['VAV_Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity']
+    sys_lookup['7_or_8']['purchasedheatandcooling'] = ['VAV_Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
     sys_lookup['9_or_10']['fossil'] = ['Gas_Furnace', 'NaturalGas', nil, nil]
     sys_lookup['9_or_10']['fossilandelectric'] = ['Gas_Furnace', 'NaturalGas', nil, nil]
     sys_lookup['9_or_10']['purchasedheat'] = ['Gas_Furnace', 'DistrictHeating', nil, nil]
@@ -665,10 +665,10 @@ class OpenStudio::Model::Model
     sys_lookup['1_or_2']['purchasedcooling'] = ['Fan_Coil', 'NaturalGas', nil, 'DistrictCooling']
     sys_lookup['3_or_4']['electric'] = ['PSZ_HP', 'Electricity', nil, 'Electricity']
     sys_lookup['3_or_4']['purchasedcooling'] = ['PSZ_AC', 'NaturalGas', nil, 'DistrictCooling']
-    sys_lookup['5_or_6']['electric'] = %w(PVAV_PFP_Boxes Electricity Electricity Electricity)
-    sys_lookup['5_or_6']['purchasedcooling'] = %w(PVAV_PFP_Boxes Electricity Electricity DistrictCooling)
-    sys_lookup['7_or_8']['electric'] = %w(VAV_PFP_Boxes Electricity Electricity Electricity)
-    sys_lookup['7_or_8']['purchasedcooling'] = %w(VAV_PFP_Boxes Electricity Electricity DistrictCooling)
+    sys_lookup['5_or_6']['electric'] = ['PVAV_PFP_Boxes', 'Electricity', 'Electricity', 'Electricity']
+    sys_lookup['5_or_6']['purchasedcooling'] = ['PVAV_PFP_Boxes', 'Electricity', 'Electricity', 'DistrictCooling']
+    sys_lookup['7_or_8']['electric'] = ['VAV_PFP_Boxes', 'Electricity', 'Electricity', 'Electricity']
+    sys_lookup['7_or_8']['purchasedcooling'] = ['VAV_PFP_Boxes', 'Electricity', 'Electricity', 'DistrictCooling']
     sys_lookup['9_or_10']['electric'] = ['Electric_Furnace', 'Electricity', nil, nil]
     sys_lookup['9_or_10']['purchasedcooling'] = ['Electric_Furnace', 'Electricity', nil, nil]
 
@@ -3193,11 +3193,11 @@ class OpenStudio::Model::Model
     else
       case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        types_to_modify << %w(Outdoors ExteriorWall SteelFramed)
-        types_to_modify << %w(Outdoors ExteriorRoof IEAD)
-        types_to_modify << %w(Outdoors ExteriorFloor SteelFramed)
-        types_to_modify << %w(Ground GroundContactFloor Unheated)
-        types_to_modify << %w(Ground GroundContactWall Mass)
+        types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
+        types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
+        types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+        types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
+        types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
       end
       # Modify all constructions of each type
       types_to_modify.each do |boundary_cond, surf_type, const_type|
@@ -3244,17 +3244,17 @@ class OpenStudio::Model::Model
     # each standard applies to.
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      types_to_modify << %w(Outdoors Floor)
-      types_to_modify << %w(Outdoors Wall)
-      types_to_modify << %w(Outdoors RoofCeiling)
-      types_to_modify << %w(Outdoors FixedWindow)
-      types_to_modify << %w(Outdoors OperableWindow)
-      types_to_modify << %w(Outdoors Door)
-      types_to_modify << %w(Outdoors GlassDoor)
-      types_to_modify << %w(Outdoors OverheadDoor)
-      types_to_modify << %w(Outdoors Skylight)
-      types_to_modify << %w(Ground Floor)
-      types_to_modify << %w(Ground Wall)
+      types_to_modify << ['Outdoors', 'Floor']
+      types_to_modify << ['Outdoors', 'Wall']
+      types_to_modify << ['Outdoors', 'RoofCeiling']
+      types_to_modify << ['Outdoors', 'FixedWindow']
+      types_to_modify << ['Outdoors', 'OperableWindow']
+      types_to_modify << ['Outdoors', 'Door']
+      types_to_modify << ['Outdoors', 'GlassDoor']
+      types_to_modify << ['Outdoors', 'OverheadDoor']
+      types_to_modify << ['Outdoors', 'Skylight']
+      types_to_modify << ['Ground', 'Floor']
+      types_to_modify << ['Ground', 'Wall']
     end
 
     # Find just those surfaces
@@ -3786,7 +3786,7 @@ class OpenStudio::Model::Model
       result << { units: 'meal', block: nil, max_hourly: 1.5, max_daily: 11.0, avg_day_unit: 2.4 }
     elsif building_type == 'Hospital'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
-    elsif %w(LargeHotel SmallHotel).include? building_type
+    elsif ['LargeHotel', 'SmallHotel'].include? building_type
       result << { units: 'unit', block: 20, max_hourly: 6.0, max_daily: 35.0, avg_day_unit: 24.0 }
       result << { units: 'unit', block: 60, max_hourly: 5.0, max_daily: 25.0, avg_day_unit: 14.0 }
       result << { units: 'unit', block: 100, max_hourly: 4.0, max_daily: 15.0, avg_day_unit: 10.0 }
@@ -3796,7 +3796,7 @@ class OpenStudio::Model::Model
       result << { units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0 }
       result << { units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0 }
       result << { units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0 }
-    elsif %w(Office LargeOffice MediumOffice SmallOffice).include? building_type
+    elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice'].include? building_type
       result << { units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0 }
     elsif building_type == 'Outpatient'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
@@ -3857,7 +3857,7 @@ class OpenStudio::Model::Model
 
     internal_loads = {}
     internal_loads['mech_vent_cfm'] = units_per_bldg * (0.01 * conditioned_floor_area + 7.5 * (bedrooms_per_unit + 1.0))
-    internal_loads['infiltration_ach'] = if %w(1A 1B 2A 2B).include? climate_zone_value
+    internal_loads['infiltration_ach'] = if ['1A', '1B', '2A', '2B'].include? climate_zone_value
                                            5.0
                                          else
                                            3.0

@@ -10,8 +10,8 @@ class OpenStudio::Model::Model
         "Washroom-sch-#{sch}" => ['Bath_ZN_1_FLR_1'],
         'Conf./meet./multi-purpose' => ['Cafeteria_ZN_1_FLR_1'],
         'Lab - classrooms' => ['Computer_Class_ZN_1_FLR_1'],
-        'Classroom/lecture/training' => %w(Corner_Class_1_Pod_1_ZN_1_FLR_1 Corner_Class_1_Pod_2_ZN_1_FLR_1 Corner_Class_1_Pod_3_ZN_1_FLR_1 Corner_Class_2_Pod_1_ZN_1_FLR_1 Corner_Class_2_Pod_2_ZN_1_FLR_1 Corner_Class_2_Pod_3_ZN_1_FLR_1 Mult_Class_1_Pod_1_ZN_1_FLR_1 Mult_Class_1_Pod_2_ZN_1_FLR_1 Mult_Class_1_Pod_3_ZN_1_FLR_1 Mult_Class_2_Pod_1_ZN_1_FLR_1 Mult_Class_2_Pod_2_ZN_1_FLR_1 Mult_Class_2_Pod_3_ZN_1_FLR_1),
-        "Corr. >= 2.4m wide-sch-#{sch}" => %w(Corridor_Pod_1_ZN_1_FLR_1 Corridor_Pod_2_ZN_1_FLR_1 Corridor_Pod_3_ZN_1_FLR_1 Main_Corridor_ZN_1_FLR_1),
+        'Classroom/lecture/training' => ['Corner_Class_1_Pod_1_ZN_1_FLR_1', 'Corner_Class_1_Pod_2_ZN_1_FLR_1', 'Corner_Class_1_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_1', 'Corner_Class_2_Pod_2_ZN_1_FLR_1', 'Corner_Class_2_Pod_3_ZN_1_FLR_1', 'Mult_Class_1_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_2_ZN_1_FLR_1', 'Mult_Class_1_Pod_3_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_2_Pod_2_ZN_1_FLR_1', 'Mult_Class_2_Pod_3_ZN_1_FLR_1'],
+        "Corr. >= 2.4m wide-sch-#{sch}" => ['Corridor_Pod_1_ZN_1_FLR_1', 'Corridor_Pod_2_ZN_1_FLR_1', 'Corridor_Pod_3_ZN_1_FLR_1', 'Main_Corridor_ZN_1_FLR_1'],
         'Gym - play' => ['Gym_ZN_1_FLR_1'],
         'Food preparation' => ['Kitchen_ZN_1_FLR_1'],
         'Library - reading' => ['Library_Media_Center_ZN_1_FLR_1'],
@@ -27,29 +27,9 @@ class OpenStudio::Model::Model
         'Mechanical' => ['Mech_ZN_1_FLR_1'],
         'Cafeteria' => ['Cafeteria_ZN_1_FLR_1'],
         'Kitchen' => ['Kitchen_ZN_1_FLR_1'],
-        'Restroom' => %w(Bath_ZN_1_FLR_1 Bathrooms_ZN_1_FLR_1),
-        'Corridor' => %w(
-          Corridor_Pod_1_ZN_1_FLR_1
-          Corridor_Pod_2_ZN_1_FLR_1
-          Corridor_Pod_3_ZN_1_FLR_1
-          Main_Corridor_ZN_1_FLR_1
-        ),
-        'Classroom' => %w(
-          Computer_Class_ZN_1_FLR_1
-          Corner_Class_1_Pod_1_ZN_1_FLR_1
-          Corner_Class_1_Pod_2_ZN_1_FLR_1
-          Corner_Class_1_Pod_3_ZN_1_FLR_1
-          Corner_Class_2_Pod_1_ZN_1_FLR_1
-          Corner_Class_2_Pod_2_ZN_1_FLR_1
-          Corner_Class_2_Pod_3_ZN_1_FLR_1
-          Library_Media_Center_ZN_1_FLR_1
-          Mult_Class_1_Pod_1_ZN_1_FLR_1
-          Mult_Class_1_Pod_2_ZN_1_FLR_1
-          Mult_Class_1_Pod_3_ZN_1_FLR_1
-          Mult_Class_2_Pod_1_ZN_1_FLR_1
-          Mult_Class_2_Pod_2_ZN_1_FLR_1
-          Mult_Class_2_Pod_3_ZN_1_FLR_1
-        )
+        'Restroom' => ['Bath_ZN_1_FLR_1', 'Bathrooms_ZN_1_FLR_1'],
+        'Corridor' => ['Corridor_Pod_1_ZN_1_FLR_1', 'Corridor_Pod_2_ZN_1_FLR_1', 'Corridor_Pod_3_ZN_1_FLR_1', 'Main_Corridor_ZN_1_FLR_1'],
+        'Classroom' => ['Computer_Class_ZN_1_FLR_1', 'Corner_Class_1_Pod_1_ZN_1_FLR_1', 'Corner_Class_1_Pod_2_ZN_1_FLR_1', 'Corner_Class_1_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_1', 'Corner_Class_2_Pod_2_ZN_1_FLR_1', 'Corner_Class_2_Pod_3_ZN_1_FLR_1', 'Library_Media_Center_ZN_1_FLR_1', 'Mult_Class_1_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_2_ZN_1_FLR_1', 'Mult_Class_1_Pod_3_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_2_Pod_2_ZN_1_FLR_1', 'Mult_Class_2_Pod_3_ZN_1_FLR_1']
       }
     end
     return space_type_map
@@ -143,51 +123,25 @@ class OpenStudio::Model::Model
         'type' => 'PVAV',
         'name' => 'PVAV_POD_1',
         'space_names' =>
-          %w(
-            Corner_Class_1_Pod_1_ZN_1_FLR_1
-            Mult_Class_1_Pod_1_ZN_1_FLR_1
-            Corridor_Pod_1_ZN_1_FLR_1
-            Corner_Class_2_Pod_1_ZN_1_FLR_1
-            Mult_Class_2_Pod_1_ZN_1_FLR_1
-          )
+          ['Corner_Class_1_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_1_ZN_1_FLR_1', 'Corridor_Pod_1_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_1']
       },
       {
         'type' => 'PVAV',
         'name' => 'PVAV_POD_2',
         'space_names' =>
-          %w(
-            Mult_Class_1_Pod_2_ZN_1_FLR_1
-            Corridor_Pod_2_ZN_1_FLR_1
-            Corner_Class_2_Pod_2_ZN_1_FLR_1
-            Mult_Class_2_Pod_2_ZN_1_FLR_1
-            Corner_Class_1_Pod_2_ZN_1_FLR_1
-          )
+          ['Mult_Class_1_Pod_2_ZN_1_FLR_1', 'Corridor_Pod_2_ZN_1_FLR_1', 'Corner_Class_2_Pod_2_ZN_1_FLR_1', 'Mult_Class_2_Pod_2_ZN_1_FLR_1', 'Corner_Class_1_Pod_2_ZN_1_FLR_1']
       },
       {
         'type' => 'PVAV',
         'name' => 'PVAV_POD_3',
         'space_names' =>
-          %w(
-            Corner_Class_1_Pod_3_ZN_1_FLR_1
-            Mult_Class_1_Pod_3_ZN_1_FLR_1
-            Corridor_Pod_3_ZN_1_FLR_1
-            Corner_Class_2_Pod_3_ZN_1_FLR_1
-            Mult_Class_2_Pod_3_ZN_1_FLR_1
-          )
+          ['Corner_Class_1_Pod_3_ZN_1_FLR_1', 'Mult_Class_1_Pod_3_ZN_1_FLR_1', 'Corridor_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_3_ZN_1_FLR_1', 'Mult_Class_2_Pod_3_ZN_1_FLR_1']
       },
       {
         'type' => 'PVAV',
         'name' => 'PVAV_OTHER',
         'space_names' =>
-          %w(
-            Computer_Class_ZN_1_FLR_1
-            Main_Corridor_ZN_1_FLR_1
-            Lobby_ZN_1_FLR_1
-            Mech_ZN_1_FLR_1
-            Bath_ZN_1_FLR_1
-            Offices_ZN_1_FLR_1
-            Library_Media_Center_ZN_1_FLR_1
-          )
+          ['Computer_Class_ZN_1_FLR_1', 'Main_Corridor_ZN_1_FLR_1', 'Lobby_ZN_1_FLR_1', 'Mech_ZN_1_FLR_1', 'Bath_ZN_1_FLR_1', 'Offices_ZN_1_FLR_1', 'Library_Media_Center_ZN_1_FLR_1']
       },
       {
         'type' => 'PSZ-AC',

@@ -8,19 +8,13 @@ class OpenStudio::Model::Model
     when 'NECB 2011'
       sch = 'C'
       space_type_map = {
-        'Retail - sales' => %w(LGstore1 LGstore2 SMstore1 SMstore2 SMstore3 SMstore4 SMstore5 SMstore6 SMstore7 SMstore8)
+        'Retail - sales' => ['LGstore1', 'LGstore2', 'SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8']
       }
     else
       space_type_map = {
-        'Strip mall - type 1' => %w(
-          LGstore1 SMstore1
-        ),
-        'Strip mall - type 2' => %w(
-          SMstore2 SMstore3 SMstore4
-        ),
-        'Strip mall - type 3' => %w(
-          LGstore2 SMstore5 SMstore6 SMstore7 SMstore8
-        )
+        'Strip mall - type 1' => ['LGstore1', 'SMstore1'],
+        'Strip mall - type 2' => ['SMstore2', 'SMstore3', 'SMstore4'],
+        'Strip mall - type 3' => ['LGstore2', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8']
       }
     end
     return space_type_map
@@ -99,8 +93,8 @@ class OpenStudio::Model::Model
     # Spaces names to design infiltration rates (m3/s)
     case building_vintage
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      door_infiltration_map = { %w(LGstore1 LGstore2) => 0.388884328,
-                                %w(SMstore1 SMstore2 SMstore3 SMstore4 SMstore5 SMstore6 SMstore7 SMstore8) => 0.222287037 }
+      door_infiltration_map = { ['LGstore1', 'LGstore2'] => 0.388884328,
+                                ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037 }
 
       door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|
         space_names.each do |space_name|

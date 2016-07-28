@@ -27,7 +27,7 @@ class OpenStudio::Model::Model
       if building_type == 'LargeOffice' && building_vintage != 'NECB 2011'
 
         # Only the core spaces have service water
-        %w(Core_bottom Core_mid Core_top).each do |space_name|
+        ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
           add_swh_end_uses(building_vintage,
                            'Main',
                            main_swh_loop,
@@ -43,7 +43,7 @@ class OpenStudio::Model::Model
         return true if building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004'
 
         # Create a separate hot water loop & water heater for each space in the list
-        swh_space_names = %w(LGstore1 SMstore1 SMstore2 SMstore3 LGstore2 SMstore5 SMstore6)
+        swh_space_names = ['LGstore1', 'SMstore1', 'SMstore2', 'SMstore3', 'LGstore2', 'SMstore5', 'SMstore6']
         swh_sch_names = ['RetailStripmall Type1_SWH_SCH', 'RetailStripmall Type1_SWH_SCH', 'RetailStripmall Type2_SWH_SCH',
                          'RetailStripmall Type2_SWH_SCH', 'RetailStripmall Type3_SWH_SCH', 'RetailStripmall Type3_SWH_SCH',
                          'RetailStripmall Type3_SWH_SCH']

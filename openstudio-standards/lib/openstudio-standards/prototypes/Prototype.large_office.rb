@@ -19,9 +19,7 @@ class OpenStudio::Model::Model
           'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4',
           'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4'
         ],
-        'OfficeLarge Data Center' => %w(
-          DataCenter_bot_ZN_6 DataCenter_mid_ZN_6 DataCenter_top_ZN_6
-        ),
+        'OfficeLarge Data Center' => ['DataCenter_bot_ZN_6', 'DataCenter_mid_ZN_6', 'DataCenter_top_ZN_6'],
         'OfficeLarge Main Data Center' => [
           'DataCenter_basement_ZN_6'
         ]
@@ -31,14 +29,8 @@ class OpenStudio::Model::Model
         space_type_map = {
           'Electrical/Mechanical' => ['Basement'],
 
-          'Office - open plan' => %w(Core_bottom Core_mid Core_top
-                                     Perimeter_bot_ZN_1 Perimeter_bot_ZN_2 Perimeter_bot_ZN_3
-                                     Perimeter_bot_ZN_4 Perimeter_mid_ZN_1 Perimeter_mid_ZN_2
-                                     Perimeter_mid_ZN_3 Perimeter_mid_ZN_4 Perimeter_top_ZN_1
-                                     Perimeter_top_ZN_2 Perimeter_top_ZN_3 Perimeter_top_ZN_4
-                                     DataCenter_basement_ZN_6 DataCenter_bot_ZN_6 DataCenter_mid_ZN_6
-                                     DataCenter_top_ZN_6),
-          '- undefined -' => %w(GroundFloor_Plenum TopFloor_Plenum MidFloor_Plenum)
+          'Office - open plan' => ['Core_bottom', 'Core_mid', 'Core_top', 'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4', 'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4', 'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4', 'DataCenter_basement_ZN_6', 'DataCenter_bot_ZN_6', 'DataCenter_mid_ZN_6', 'DataCenter_top_ZN_6'],
+          '- undefined -' => ['GroundFloor_Plenum', 'TopFloor_Plenum', 'MidFloor_Plenum']
         }
     end
     return space_type_map
@@ -52,39 +44,21 @@ class OpenStudio::Model::Model
           'type' => 'VAV',
           'name' => 'VAV_1',
           'space_names' =>
-            %w(
-              Perimeter_bot_ZN_1
-              Perimeter_bot_ZN_2
-              Perimeter_bot_ZN_3
-              Perimeter_bot_ZN_4
-              Core_bottom
-            ),
+            ['Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4', 'Core_bottom'],
           'return_plenum' => 'GroundFloor_Plenum'
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_2',
           'space_names' =>
-            %w(
-              Perimeter_mid_ZN_1
-              Perimeter_mid_ZN_2
-              Perimeter_mid_ZN_3
-              Perimeter_mid_ZN_4
-              Core_mid
-            ),
+            ['Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4', 'Core_mid'],
           'return_plenum' => 'MidFloor_Plenum'
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_3',
           'space_names' =>
-            %w(
-              Perimeter_top_ZN_1
-              Perimeter_top_ZN_2
-              Perimeter_top_ZN_3
-              Perimeter_top_ZN_4
-              Core_top
-            ),
+            ['Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4', 'Core_top'],
           'return_plenum' => 'TopFloor_Plenum'
         },
         {
@@ -102,39 +76,21 @@ class OpenStudio::Model::Model
           'type' => 'VAV',
           'name' => 'VAV_bot WITH REHEAT',
           'space_names' =>
-          %w(
-            Perimeter_bot_ZN_1
-            Perimeter_bot_ZN_2
-            Perimeter_bot_ZN_3
-            Perimeter_bot_ZN_4
-            Core_bottom
-          ),
+          ['Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4', 'Core_bottom'],
           'return_plenum' => 'GroundFloor_Plenum'
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_mid WITH REHEAT',
           'space_names' =>
-            %w(
-              Perimeter_mid_ZN_1
-              Perimeter_mid_ZN_2
-              Perimeter_mid_ZN_3
-              Perimeter_mid_ZN_4
-              Core_mid
-            ),
+            ['Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4', 'Core_mid'],
           'return_plenum' => 'MidFloor_Plenum'
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_top WITH REHEAT',
           'space_names' =>
-            %w(
-              Perimeter_top_ZN_1
-              Perimeter_top_ZN_2
-              Perimeter_top_ZN_3
-              Perimeter_top_ZN_4
-              Core_top
-            ),
+            ['Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4', 'Core_top'],
           'return_plenum' => 'TopFloor_Plenum'
         },
         {

@@ -8,16 +8,16 @@ class OpenStudio::Model::Model
       sch = 'B'
       space_type_map = {
         "Electrical/Mechanical-sch-#{sch}" => ['Basement'],
-        "Hospital corr. >= 2.4m-sch-#{sch}" => %w(Corridor_Flr_1 Corridor_Flr_2 Corridor_Flr_5 Corridor_NW_Flr_3 Corridor_NW_Flr_4 Corridor_SE_Flr_3 Corridor_SE_Flr_4),
+        "Hospital corr. >= 2.4m-sch-#{sch}" => ['Corridor_Flr_1', 'Corridor_Flr_2', 'Corridor_Flr_5', 'Corridor_NW_Flr_3', 'Corridor_NW_Flr_4', 'Corridor_SE_Flr_3', 'Corridor_SE_Flr_4'],
         'Dining - bar lounge/leisure' => ['Dining_Flr_5'],
-        'Hospital - emergency' => %w(ER_Exam1_Mult4_Flr_1 ER_Exam3_Mult4_Flr_1 ER_Trauma1_Flr_1 ER_Trauma2_Flr_1 ER_Triage_Mult4_Flr_1),
-        "Hospital - nurses' station" => %w(ER_NurseStn_Lobby_Flr_1 ICU_NurseStn_Lobby_Flr_2 NurseStn_Lobby_Flr_3 NurseStn_Lobby_Flr_4 NurseStn_Lobby_Flr_5 OR_NurseStn_Lobby_Flr_2),
-        'Hospital - patient room' => %w(IC_PatRoom1_Mult5_Flr_2 IC_PatRoom2_Flr_2 IC_PatRoom3_Mult6_Flr_2 PatRoom1_Mult10_Flr_3 PatRoom1_Mult10_Flr_4 PatRoom2_Flr_3 PatRoom2_Flr_4 PatRoom3_Mult10_Flr_3 PatRoom3_Mult10_Flr_4 PatRoom4_Flr_3 PatRoom4_Flr_4 PatRoom5_Mult10_Flr_3 PatRoom5_Mult10_Flr_4 PatRoom6_Flr_3 PatRoom6_Flr_4 PatRoom7_Mult10_Flr_3 PatRoom7_Mult10_Flr_4 PatRoom8_Flr_3 PatRoom8_Flr_4),
+        'Hospital - emergency' => ['ER_Exam1_Mult4_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1'],
+        "Hospital - nurses' station" => ['ER_NurseStn_Lobby_Flr_1', 'ICU_NurseStn_Lobby_Flr_2', 'NurseStn_Lobby_Flr_3', 'NurseStn_Lobby_Flr_4', 'NurseStn_Lobby_Flr_5', 'OR_NurseStn_Lobby_Flr_2'],
+        'Hospital - patient room' => ['IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', 'PatRoom1_Mult10_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_3', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_3', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_3', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_3', 'PatRoom5_Mult10_Flr_4', 'PatRoom6_Flr_3', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_3', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_3', 'PatRoom8_Flr_4'],
         'Hospital - recovery' => ['ICU_Flr_2'],
         'Food preparation' => ['Kitchen_Flr_5'],
-        'Lab - research' => %w(Lab_Flr_3 Lab_Flr_4),
-        'Office - enclosed' => %w(Lobby_Records_Flr_1 Office1_Flr_5 Office1_Mult4_Flr_1 Office2_Mult5_Flr_5 Office3_Flr_5 Office4_Mult6_Flr_5),
-        'Hospital - operating room' => %w(OR1_Flr_2 OR2_Mult5_Flr_2 OR3_Flr_2 OR4_Flr_2),
+        'Lab - research' => ['Lab_Flr_3', 'Lab_Flr_4'],
+        'Office - enclosed' => ['Lobby_Records_Flr_1', 'Office1_Flr_5', 'Office1_Mult4_Flr_1', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5'],
+        'Hospital - operating room' => ['OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2'],
         'Hospital - physical therapy' => ['PhysTherapy_Flr_3'],
         'Hospital - radiology/imaging' => ['Radiology_Flr_4']
       }
@@ -25,25 +25,23 @@ class OpenStudio::Model::Model
     else
       space_type_map = {
         # 'Basement', 'ER_Exam1_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1', 'Office1_Mult4_Flr_1', 'Lobby_Records_Flr_1', 'Corridor_Flr_1', 'ER_NurseStn_Lobby_Flr_1', 'OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2', 'IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', 'ICU_Flr_2', 'ICU_NurseStn_Lobby_Flr_2', 'Corridor_Flr_2', 'OR_NurseStn_Lobby_Flr_2', 'PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PhysTherapy_Flr_3', 'PatRoom6_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'NurseStn_Lobby_Flr_3', 'Lab_Flr_3', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_4', 'Radiology_Flr_4', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4', 'NurseStn_Lobby_Flr_4', 'Lab_Flr_4', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Dining_Flr_5', 'NurseStn_Lobby_Flr_5', 'Kitchen_Flr_5', 'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5', 'Corridor_Flr_5'
-        'Corridor' => %w(Corridor_Flr_1 Corridor_Flr_2 Corridor_SE_Flr_3 Corridor_NW_Flr_3 Corridor_SE_Flr_4 Corridor_NW_Flr_4 Corridor_Flr_5),
+        'Corridor' => ['Corridor_Flr_1', 'Corridor_Flr_2', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Corridor_Flr_5'],
         'Dining' => ['Dining_Flr_5'],
-        'ER_Exam' => %w(ER_Exam1_Mult4_Flr_1 ER_Exam3_Mult4_Flr_1),
+        'ER_Exam' => ['ER_Exam1_Mult4_Flr_1', 'ER_Exam3_Mult4_Flr_1'],
         'ER_NurseStn' => ['ER_NurseStn_Lobby_Flr_1'],
-        'ER_Trauma' => %w(ER_Trauma1_Flr_1 ER_Trauma2_Flr_1),
+        'ER_Trauma' => ['ER_Trauma1_Flr_1', 'ER_Trauma2_Flr_1'],
         'ER_Triage' => ['ER_Triage_Mult4_Flr_1'],
         'ICU_NurseStn' => ['ICU_NurseStn_Lobby_Flr_2'],
         'ICU_Open' => ['ICU_Flr_2'],
-        'ICU_PatRm' => %w(IC_PatRoom1_Mult5_Flr_2 IC_PatRoom2_Flr_2 IC_PatRoom3_Mult6_Flr_2),
+        'ICU_PatRm' => ['IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2'],
         'Kitchen' => ['Kitchen_Flr_5'],
-        'Lab' => %w(Lab_Flr_3 Lab_Flr_4),
+        'Lab' => ['Lab_Flr_3', 'Lab_Flr_4'],
         'Lobby' => ['Lobby_Records_Flr_1'],
-        'NurseStn' => %w(OR_NurseStn_Lobby_Flr_2 NurseStn_Lobby_Flr_3 NurseStn_Lobby_Flr_4 NurseStn_Lobby_Flr_5),
-        'OR' => %w(OR1_Flr_2 OR2_Mult5_Flr_2 OR3_Flr_2 OR4_Flr_2),
-        'Office' => %w(Office1_Mult4_Flr_1 Office1_Flr_5 Office2_Mult5_Flr_5 Office3_Flr_5 Office4_Mult6_Flr_5),
+        'NurseStn' => ['OR_NurseStn_Lobby_Flr_2', 'NurseStn_Lobby_Flr_3', 'NurseStn_Lobby_Flr_4', 'NurseStn_Lobby_Flr_5'],
+        'OR' => ['OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2'],
+        'Office' => ['Office1_Mult4_Flr_1', 'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5'],
         'Basement' => ['Basement'], # 'PatCorridor' => [],
-        'PatRoom' => %w(PatRoom1_Mult10_Flr_3 PatRoom2_Flr_3 PatRoom3_Mult10_Flr_3 PatRoom4_Flr_3 PatRoom5_Mult10_Flr_3 PatRoom6_Flr_3
-                        PatRoom7_Mult10_Flr_3 PatRoom8_Flr_3 PatRoom1_Mult10_Flr_4 PatRoom2_Flr_4 PatRoom3_Mult10_Flr_4 PatRoom4_Flr_4 PatRoom5_Mult10_Flr_4
-                        PatRoom6_Flr_4 PatRoom7_Mult10_Flr_4 PatRoom8_Flr_4),
+        'PatRoom' => ['PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PatRoom6_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_4', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4'],
         'PhysTherapy' => ['PhysTherapy_Flr_3'],
         'Radiology' => ['Radiology_Flr_4'] # total number of zones: 55 - equals to the IDF
       }
@@ -68,56 +66,37 @@ class OpenStudio::Model::Model
         {
           'type' => 'VAV',
           'name' => 'VAV_1',
-          'space_names' => %w(
-            Basement Office1_Mult4_Flr_1 Lobby_Records_Flr_1 Corridor_Flr_1 ER_NurseStn_Lobby_Flr_1
-            ICU_NurseStn_Lobby_Flr_2 Corridor_Flr_2 OR_NurseStn_Lobby_Flr_2
-          )
+          'space_names' => ['Basement', 'Office1_Mult4_Flr_1', 'Lobby_Records_Flr_1', 'Corridor_Flr_1', 'ER_NurseStn_Lobby_Flr_1', 'ICU_NurseStn_Lobby_Flr_2', 'Corridor_Flr_2', 'OR_NurseStn_Lobby_Flr_2']
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_ER',
-          'space_names' => %w(
-            ER_Exam1_Mult4_Flr_1 ER_Trauma1_Flr_1 ER_Exam3_Mult4_Flr_1 ER_Trauma2_Flr_1 ER_Triage_Mult4_Flr_1
-          )
+          'space_names' => ['ER_Exam1_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1']
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_OR',
-          'space_names' => %w(
-            OR1_Flr_2 OR2_Mult5_Flr_2 OR3_Flr_2 OR4_Flr_2
-          )
+          'space_names' => ['OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2']
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_ICU',
-          'space_names' => %w(
-            IC_PatRoom1_Mult5_Flr_2 IC_PatRoom2_Flr_2 IC_PatRoom3_Mult6_Flr_2 ICU_Flr_2
-          )
+          'space_names' => ['IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', 'ICU_Flr_2']
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_PATRMS',
-          'space_names' => %w(
-            PatRoom1_Mult10_Flr_3 PatRoom2_Flr_3 PatRoom3_Mult10_Flr_3 PatRoom4_Flr_3 PatRoom5_Mult10_Flr_3 PatRoom6_Flr_3
-            PatRoom7_Mult10_Flr_3 PatRoom8_Flr_3 PatRoom1_Mult10_Flr_4 PatRoom2_Flr_4 PatRoom3_Mult10_Flr_4 PatRoom4_Flr_4
-            PatRoom5_Mult10_Flr_4 PatRoom6_Flr_4 PatRoom7_Mult10_Flr_4 PatRoom8_Flr_4
-          )
+          'space_names' => ['PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PatRoom6_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_4', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4']
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_2',
-          'space_names' => %w(
-            PhysTherapy_Flr_3 NurseStn_Lobby_Flr_3 Corridor_SE_Flr_3 Corridor_NW_Flr_3 Radiology_Flr_4
-            NurseStn_Lobby_Flr_4 Corridor_SE_Flr_4 Corridor_NW_Flr_4 Dining_Flr_5 NurseStn_Lobby_Flr_5
-            Office1_Flr_5 Office2_Mult5_Flr_5 Office3_Flr_5 Office4_Mult6_Flr_5 Corridor_Flr_5
-          )
+          'space_names' => ['PhysTherapy_Flr_3', 'NurseStn_Lobby_Flr_3', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'Radiology_Flr_4', 'NurseStn_Lobby_Flr_4', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Dining_Flr_5', 'NurseStn_Lobby_Flr_5', 'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5', 'Corridor_Flr_5']
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_LABS',
-          'space_names' => %w(
-            Lab_Flr_3 Lab_Flr_4
-          )
+          'space_names' => ['Lab_Flr_3', 'Lab_Flr_4']
         },
         {
           'type' => 'CAV',
@@ -182,52 +161,22 @@ class OpenStudio::Model::Model
         {
           'type' => 'VAV',
           'name' => 'CAV_1',
-          'space_names' => %w(
-            ER_Exam1_Mult4_Flr_1 ER_Trauma1_Flr_1 ER_Exam3_Mult4_Flr_1 ER_Trauma2_Flr_1 ER_Triage_Mult4_Flr_1 IC_PatRoom1_Mult5_Flr_2
-            PatRoom1_Mult10_Flr_3 PatRoom5_Mult10_Flr_3 PatRoom7_Mult10_Flr_3 PatRoom3_Mult10_Flr_4 PatRoom5_Mult10_Flr_4
-            PatRoom6_Flr_4 PatRoom7_Mult10_Flr_4
-          )
+          'space_names' => ['ER_Exam1_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1', 'IC_PatRoom1_Mult5_Flr_2', 'PatRoom1_Mult10_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom3_Mult10_Flr_4', 'PatRoom5_Mult10_Flr_4', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4']
         },
         {
           'type' => 'VAV',
           'name' => 'CAV_2',
-          'space_names' => %w(
-            OR1_Flr_2 OR2_Mult5_Flr_2 OR3_Flr_2 OR4_Flr_2 IC_PatRoom2_Flr_2 PatRoom2_Flr_3 PatRoom6_Flr_3 PatRoom8_Flr_3 PatRoom4_Flr_4
-          )
+          'space_names' => ['OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2', 'IC_PatRoom2_Flr_2', 'PatRoom2_Flr_3', 'PatRoom6_Flr_3', 'PatRoom8_Flr_3', 'PatRoom4_Flr_4']
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_1',
-          'space_names' => %w(
-            Office1_Mult4_Flr_1 Lobby_Records_Flr_1 Corridor_Flr_1 ER_NurseStn_Lobby_Flr_1 IC_PatRoom3_Mult6_Flr_2 ICU_NurseStn_Lobby_Flr_2
-            Corridor_Flr_2 OR_NurseStn_Lobby_Flr_2 PatRoom3_Mult10_Flr_3 Lab_Flr_3 PatRoom1_Mult10_Flr_4 PatRoom8_Flr_4
-          )
+          'space_names' => ['Office1_Mult4_Flr_1', 'Lobby_Records_Flr_1', 'Corridor_Flr_1', 'ER_NurseStn_Lobby_Flr_1', 'IC_PatRoom3_Mult6_Flr_2', 'ICU_NurseStn_Lobby_Flr_2', 'Corridor_Flr_2', 'OR_NurseStn_Lobby_Flr_2', 'PatRoom3_Mult10_Flr_3', 'Lab_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom8_Flr_4']
         },
         {
           'type' => 'VAV',
           'name' => 'VAV_2',
-          'space_names' => %w(
-            ICU_Flr_2
-            PatRoom4_Flr_3
-            PhysTherapy_Flr_3
-            NurseStn_Lobby_Flr_3
-            Corridor_SE_Flr_3
-            Corridor_NW_Flr_3
-            PatRoom2_Flr_4
-            Radiology_Flr_4
-            NurseStn_Lobby_Flr_4
-            Lab_Flr_4
-            Corridor_SE_Flr_4
-            Corridor_NW_Flr_4
-            Dining_Flr_5
-            NurseStn_Lobby_Flr_5
-            Kitchen_Flr_5
-            Office1_Flr_5
-            Office2_Mult5_Flr_5
-            Office3_Flr_5
-            Office4_Mult6_Flr_5
-            Corridor_Flr_5
-          )
+          'space_names' => ['ICU_Flr_2', 'PatRoom4_Flr_3', 'PhysTherapy_Flr_3', 'NurseStn_Lobby_Flr_3', 'Corridor_SE_Flr_3', 'Corridor_NW_Flr_3', 'PatRoom2_Flr_4', 'Radiology_Flr_4', 'NurseStn_Lobby_Flr_4', 'Lab_Flr_4', 'Corridor_SE_Flr_4', 'Corridor_NW_Flr_4', 'Dining_Flr_5', 'NurseStn_Lobby_Flr_5', 'Kitchen_Flr_5', 'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5', 'Corridor_Flr_5']
         },
         {
           'type' => 'Exhaust Fan',
@@ -330,12 +279,12 @@ class OpenStudio::Model::Model
     if hot_water_loop
       case building_vintage
         when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          space_names = %w(ER_Exam3_Mult4_Flr_1 OR2_Mult5_Flr_2 ICU_Flr_2 PatRoom5_Mult10_Flr_4 Lab_Flr_3)
+          space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2', 'ICU_Flr_2', 'PatRoom5_Mult10_Flr_4', 'Lab_Flr_3']
           space_names.each do |space_name|
             add_humidifier(space_name, building_vintage, hot_water_loop)
           end
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-          space_names = %w(ER_Exam3_Mult4_Flr_1 OR2_Mult5_Flr_2)
+          space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2']
           space_names.each do |space_name|
             add_humidifier(space_name, building_vintage, hot_water_loop)
           end
@@ -442,7 +391,7 @@ class OpenStudio::Model::Model
   end
 
   def hospital_add_daylighting_controls(building_vintage)
-    space_names = %w(Office1_Flr_5 Office3_Flr_5 Lobby_Records_Flr_1)
+    space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
     space_names.each do |space_name|
       space = getSpaceByName(space_name).get
       space.add_daylighting_controls(building_vintage, false, false)

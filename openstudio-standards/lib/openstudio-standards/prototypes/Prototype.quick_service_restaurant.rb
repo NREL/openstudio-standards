@@ -32,7 +32,7 @@ class OpenStudio::Model::Model
       system_to_space_map = [
         {
           'type' => 'PSZ-AC',
-          'space_names' => %w(Dining Kitchen)
+          'space_names' => ['Dining', 'Kitchen']
         },
         {
           'type' => 'Exhaust Fan',
@@ -101,7 +101,7 @@ class OpenStudio::Model::Model
       system_to_space_map = [
         {
           'type' => 'PSZ-AC',
-          'space_names' => %w(Dining Kitchen)
+          'space_names' => ['Dining', 'Kitchen']
         },
         {
           'type' => 'Exhaust Fan',
@@ -170,7 +170,7 @@ class OpenStudio::Model::Model
       system_to_space_map = [
         {
           'type' => 'PSZ-AC',
-          'space_names' => %w(Dining Kitchen)
+          'space_names' => ['Dining', 'Kitchen']
         },
         {
           'type' => 'Exhaust Fan',
@@ -239,7 +239,7 @@ class OpenStudio::Model::Model
       system_to_space_map = [
         {
           'type' => 'PSZ-AC',
-          'space_names' => %w(Dining Kitchen)
+          'space_names' => ['Dining', 'Kitchen']
         },
         {
           'type' => 'Exhaust Fan',
@@ -437,7 +437,7 @@ class OpenStudio::Model::Model
   end
 
   def adjust_clg_setpoint(building_vintage, climate_zone)
-    %w(Dining Kitchen).each do |space_name|
+    ['Dining', 'Kitchen'].each do |space_name|
       space_type_name = getSpaceByName(space_name).get.spaceType.get.name.get
       thermostat_name = space_type_name + ' Thermostat'
       thermostat = getThermostatSetpointDualSetpointByName(thermostat_name).get
