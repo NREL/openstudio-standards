@@ -6,9 +6,9 @@ class OpenStudio::Model::Model
   # TODO: The HeatExchangerAirToAir is not calculating correctly. It does not equal the legacy IDF and has higher energy usage due to that.
   # TODO: Need to determine if WaterHeater can be alone or if we need to 'fake' it.
 
-  def define_space_type_map(building_type, building_vintage, climate_zone)
+  def define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
-    case building_vintage
+    case template
     when 'NECB 2011'
       sch = 'C'
       space_type_map = {
@@ -28,7 +28,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, building_vintage, climate_zone)
+  def define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = [
       {
         'type' => 'PSZ-AC',
@@ -42,11 +42,11 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # Add the door infiltration for vintage 2004,2007,2010,2013
-    case building_vintage
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       entry_space = getSpaceByName('Front_Entry').get
       infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
@@ -62,8 +62,8 @@ class OpenStudio::Model::Model
     return true
   end
 
-  def update_waterheater_loss_coefficient(building_vintage)
-    case building_vintage
+  def update_waterheater_loss_coefficient(template)
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
@@ -72,8 +72,8 @@ class OpenStudio::Model::Model
     end
   end
 
-  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(building_vintage)
+  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+    update_waterheater_loss_coefficient(template)
 
     return true
   end

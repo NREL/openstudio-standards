@@ -6,9 +6,9 @@ class OpenStudio::Model::FanVariableVolume
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def set_prototype_fan_pressure_rise(building_type, building_vintage, climate_zone)
+  def set_prototype_fan_pressure_rise(building_type, template, climate_zone)
     # NECB
-    if building_vintage == 'NECB 2011'
+    if template == 'NECB 2011'
       pressure_rise_pa = 1000.0
       setPressureRise(pressure_rise_pa)
       return true
@@ -50,7 +50,7 @@ class OpenStudio::Model::FanVariableVolume
       # TODO: Inconsistency - Primary School uses CAV pressure rises
       # even thought it has a VAV system.  CAV system is listed in document,
       # so assume the system type was updated but forgot to update pressure rises.
-      if building_type == 'PrimarySchool' && (building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004')
+      if building_type == 'PrimarySchool' && (template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004')
 
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7487
                                  2.5
@@ -62,7 +62,7 @@ class OpenStudio::Model::FanVariableVolume
 
       else
 
-        case building_vintage
+        case template
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
           pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
                                    4.0

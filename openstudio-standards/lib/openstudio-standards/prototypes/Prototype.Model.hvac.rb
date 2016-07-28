@@ -1,16 +1,16 @@
 
 # open the class to add methods to size all HVAC equipment
 class OpenStudio::Model::Model
-  def add_hvac(building_type, building_vintage, climate_zone, prototype_input, epw_file)
+  def add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    case building_vintage
+    case template
     when 'NECB 2011'
       boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
       BTAP::Compliance::NECB2011.necb_autozone_and_autosystem(self, runner = nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type)
     else
       # Get the list of HVAC systems, as defined
       # for each building in the Prototype.building_name files.
-      system_to_space_map = define_hvac_system_map(building_type, building_vintage, climate_zone)
+      system_to_space_map = define_hvac_system_map(building_type, template, climate_zone)
 
       # Add each HVAC system
       system_to_space_map.each do |system|
@@ -41,14 +41,14 @@ class OpenStudio::Model::Model
             number_cooling_towers = 1
             num_chillers = 1
             if building_type == 'Hospital' || building_type == 'LargeOffice'
-              case building_vintage
+              case template
               when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
                 number_cooling_towers = 2
                 num_chillers = 2
               end
             end
             if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-              condenser_water_loop = add_cw_loop(building_vintage,
+              condenser_water_loop = add_cw_loop(template,
                                                  'Open Cooling Tower',
                                                  'Centrifugal',
                                                  'Fan Cycling',
@@ -57,7 +57,7 @@ class OpenStudio::Model::Model
                                                  building_type)
             end
 
-            chilled_water_loop = add_chw_loop(building_vintage,
+            chilled_water_loop = add_chw_loop(template,
                                               prototype_input['chw_pumping_type'],
                                               prototype_input['chiller_cooling_type'],
                                               prototype_input['chiller_condenser_type'],
@@ -68,7 +68,7 @@ class OpenStudio::Model::Model
           end
 
           # Add the VAV
-          add_vav_reheat(building_vintage,
+          add_vav_reheat(template,
                          system['name'],
                          hot_water_loop,
                          chilled_water_loop,
@@ -102,7 +102,7 @@ class OpenStudio::Model::Model
               condenser_water_loop = add_cw_loop
             end
 
-            chilled_water_loop = add_chw_loop(building_vintage,
+            chilled_water_loop = add_chw_loop(template,
                                               prototype_input['chw_pumping_type'],
                                               prototype_input['chiller_cooling_type'],
                                               prototype_input['chiller_condenser_type'],
@@ -112,7 +112,7 @@ class OpenStudio::Model::Model
           end
 
           # Add the CAV
-          add_cav(building_vintage,
+          add_cav(template,
                   system['name'],
                   hot_water_loop,
                   thermal_zones,
@@ -154,7 +154,7 @@ class OpenStudio::Model::Model
             heat_pump_loop = add_hp_loop(building_type)
           end
 
-          add_psz_ac(building_vintage,
+          add_psz_ac(template,
                      system['name'],
                      heat_pump_loop, # Typically nil unless water source hp
                      heat_pump_loop, # Typically nil unless water source hp
@@ -181,7 +181,7 @@ class OpenStudio::Model::Model
                              add_hw_loop('NaturalGas', building_type)
                            end
 
-          add_pvav(building_vintage,
+          add_pvav(template,
                    system['name'],
                    thermal_zones,
                    prototype_input['vav_operation_schedule'],
@@ -211,7 +211,7 @@ class OpenStudio::Model::Model
           else
             condenser_water_loop = nil
             if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-              condenser_water_loop = add_cw_loop(building_vintage,
+              condenser_water_loop = add_cw_loop(template,
                                                  'Open Cooling Tower',
                                                  'Centrifugal',
                                                  'Fan Cycling',
@@ -220,7 +220,7 @@ class OpenStudio::Model::Model
                                                  building_type)
             end
 
-            chilled_water_loop = add_chw_loop(building_vintage,
+            chilled_water_loop = add_chw_loop(template,
                                               prototype_input['chw_pumping_type'],
                                               prototype_input['chiller_cooling_type'],
                                               prototype_input['chiller_condenser_type'],
@@ -229,7 +229,7 @@ class OpenStudio::Model::Model
                                               condenser_water_loop)
           end
 
-          add_doas(building_vintage,
+          add_doas(template,
                    system['name'],
                    hot_water_loop,
                    chilled_water_loop,
@@ -260,7 +260,7 @@ class OpenStudio::Model::Model
                              add_hp_loop(building_type)
                            end
 
-          add_data_center_hvac(building_vintage,
+          add_data_center_hvac(template,
                                nil,
                                hot_water_loop,
                                heat_pump_loop,
@@ -271,7 +271,7 @@ class OpenStudio::Model::Model
 
         when 'SAC'
 
-          add_split_ac(building_vintage,
+          add_split_ac(template,
                        nil,
                        thermal_zones,
                        prototype_input['sac_operation_schedule'],
@@ -285,7 +285,7 @@ class OpenStudio::Model::Model
 
         when 'UnitHeater'
 
-          add_unitheater(building_vintage,
+          add_unitheater(template,
                          nil,
                          thermal_zones,
                          prototype_input['unitheater_operation_schedule'],
@@ -297,7 +297,7 @@ class OpenStudio::Model::Model
 
         when 'PTAC'
 
-          add_ptac(building_vintage,
+          add_ptac(template,
                    nil,
                    nil,
                    thermal_zones,
@@ -323,7 +323,7 @@ class OpenStudio::Model::Model
 
         when 'Refrigeration'
 
-          add_refrigeration(building_vintage,
+          add_refrigeration(template,
                             system['case_type'],
                             system['cooling_capacity_per_length'],
                             system['length'],

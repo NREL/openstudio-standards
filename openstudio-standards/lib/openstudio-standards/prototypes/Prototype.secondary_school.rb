@@ -1,10 +1,10 @@
 
 # Extend the class to add Secondary School specific stuff
 class OpenStudio::Model::Model
-  def define_space_type_map(building_type, building_vintage, climate_zone)
+  def define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
 
-    case building_vintage
+    case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       space_type_map = {
         'Office' => ['Offices_ZN_1_FLR_1', 'Offices_ZN_1_FLR_2'],
@@ -54,10 +54,10 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, building_vintage, climate_zone)
+  def define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = nil
 
-    case building_vintage
+    case template
     when 'DOE Ref Pre-1980'
       system_to_space_map = [
         {
@@ -337,12 +337,12 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     getSpaces.each do |space|
       if space.name.get.to_s == 'Mech_ZN_1_FLR_1'
-        add_elevator(building_vintage,
+        add_elevator(template,
                      space,
                      prototype_input['number_of_elevators'],
                      prototype_input['elevator_type'],
@@ -358,7 +358,7 @@ class OpenStudio::Model::Model
     return true
   end
 
-  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
     return true
   end
 end

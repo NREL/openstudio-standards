@@ -5,7 +5,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
   # Zones with low OA per area get lower initial guesses.
   # Final position will be adjusted upward
   # as necessary by Standards.AirLoopHVAC.adjust_minimum_vav_damper_positions
-  # @param building_vintage [String] the building vintage
+  # @param template [String] the building vintage
   # @param zone_min_oa [Double] the zone outdoor air flow rate, in m^3/s.
   # If supplied, this will be set as a minimum limit in addition to the minimum
   # damper position.  EnergyPlus will use the larger of the two values during sizing.
@@ -13,10 +13,10 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
   # which impacts the minimum damper position requirement.
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
-  def set_minimum_damper_position(building_vintage, zone_min_oa = nil, has_ddc = true)
+  def set_minimum_damper_position(template, zone_min_oa = nil, has_ddc = true)
     # Minimum damper position
     min_damper_position = nil
-    case building_vintage
+    case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
       min_damper_position = 0.3
     when '90.1-2007'

@@ -5,7 +5,7 @@ class OpenStudio::Model::Model
   # water mains temperature, and set ground temperature.
   # Based on ChangeBuildingLocation measure by Nicholas Long
 
-  def add_design_days_and_weather_file(building_type, building_vintage, climate_zone, epw_file)
+  def add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
     require_relative 'Weather.stat_file'
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Started adding weather file for climate zone: #{climate_zone}.")
@@ -76,7 +76,7 @@ class OpenStudio::Model::Model
     site.setElevation(weather_elev)
 
     # Add or update ground temperature data
-    ground_temp_vals = find_object($os_standards['ground_temperatures'], 'template' => building_vintage, 'climate_zone' => climate_zone, 'building_type' => building_type)
+    ground_temp_vals = find_object($os_standards['ground_temperatures'], 'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type)
     if ground_temp_vals && ground_temp_vals['jan']
       ground_temp = getSiteGroundTemperatureBuildingSurface
       ground_temp.setJanuaryGroundTemperature(ground_temp_vals['jan'])

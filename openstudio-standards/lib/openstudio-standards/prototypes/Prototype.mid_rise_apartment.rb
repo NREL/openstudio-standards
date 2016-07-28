@@ -1,10 +1,10 @@
 
 
 class OpenStudio::Model::Model
-  def define_space_type_map(building_type, building_vintage, climate_zone)
+  def define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
 
-    case building_vintage
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       space_type_map = {
         'Office' => ['Office'],
@@ -91,7 +91,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, building_vintage, climate_zone)
+  def define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = [
       { 'type' => 'SAC',
         'space_names' => ['G SW Apartment'] },
@@ -143,7 +143,7 @@ class OpenStudio::Model::Model
         'space_names' => ['Office'] }
     ]
 
-    case building_vintage
+    case template
     when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
       system_to_space_map.push('type' => 'UnitHeater', 'space_names' => ['G Corridor'])
       system_to_space_map.push('type' => 'UnitHeater', 'space_names' => ['M Corridor'])
@@ -169,27 +169,27 @@ class OpenStudio::Model::Model
     return space_multiplier_map
   end
 
-  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # adjust the cooling setpoint
-    adjust_clg_setpoint(building_vintage, climate_zone)
+    adjust_clg_setpoint(template, climate_zone)
     # add elevator and lights&fans for the ground floor corridor
-    add_extra_equip_corridor(building_vintage)
+    add_extra_equip_corridor(template)
     # add extra infiltration for ground floor corridor
-    add_door_infiltration(building_vintage, climate_zone)
+    add_door_infiltration(template, climate_zone)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     return true
   end
 
-  def adjust_clg_setpoint(building_vintage, climate_zone)
+  def adjust_clg_setpoint(template, climate_zone)
     space_name = 'Office'
     space_type_name = getSpaceByName(space_name).get.spaceType.get.name.get
     thermostat_name = space_type_name + ' Thermostat'
     thermostat = getThermostatSetpointDualSetpointByName(thermostat_name).get
-    case building_vintage
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010'
       case climate_zone
       when 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-3B'
@@ -199,13 +199,13 @@ class OpenStudio::Model::Model
   end
 
   # add elevator and lights&fans for the ground floor corridor
-  def add_extra_equip_corridor(building_vintage)
+  def add_extra_equip_corridor(template)
     corridor_ground_space = getSpaceByName('G Corridor').get
     elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
     elec_equip_def1.setName('Ground Corridor Electric Equipment Definition1')
     elec_equip_def2.setName('Ground Corridor Electric Equipment Definition2')
-    case building_vintage
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       elec_equip_def1.setFractionLatent(0)
       elec_equip_def1.setFractionRadiant(0)
@@ -214,9 +214,9 @@ class OpenStudio::Model::Model
       elec_equip_def2.setFractionRadiant(0)
       elec_equip_def2.setFractionLost(0.95)
       elec_equip_def1.setDesignLevel(16055)
-      if building_vintage == '90.1-2013'
+      if template == '90.1-2013'
         elec_equip_def2.setDesignLevel(63)
-      elsif building_vintage == '90.1-2010'
+      elsif template == '90.1-2010'
         elec_equip_def2.setDesignLevel(105.9)
       else
         elec_equip_def2.setDesignLevel(161.9)
@@ -229,7 +229,7 @@ class OpenStudio::Model::Model
       elec_equip1.setSpace(corridor_ground_space)
       elec_equip2.setSpace(corridor_ground_space)
       elec_equip1.setSchedule(add_schedule('ApartmentMidRise BLDG_ELEVATORS'))
-      case building_vintage
+      case template
       when '90.1-2004', '90.1-2007'
         elec_equip2.setSchedule(add_schedule('ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7'))
       when '90.1-2010', '90.1-2013'
@@ -248,8 +248,8 @@ class OpenStudio::Model::Model
     end
   end
 
-  def update_waterheater_loss_coefficient(building_vintage)
-    case building_vintage
+  def update_waterheater_loss_coefficient(template)
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(46.288874618)
@@ -259,8 +259,8 @@ class OpenStudio::Model::Model
   end
 
   # add extra infiltration for ground floor corridor
-  def add_door_infiltration(building_vintage, climate_zone)
-    case building_vintage
+  def add_door_infiltration(template, climate_zone)
+    case template
     when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
       # no door infiltration in these two vintages
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
@@ -268,7 +268,7 @@ class OpenStudio::Model::Model
       infiltration_g_corridor_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
       infiltration_g_corridor_door.setName('G Corridor door Infiltration')
       infiltration_g_corridor_door.setSpace(g_corridor)
-      case building_vintage
+      case template
       when '90.1-2004'
         infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
         infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
@@ -292,8 +292,8 @@ class OpenStudio::Model::Model
     end
   end
 
-  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(building_vintage)
+  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+    update_waterheater_loss_coefficient(template)
 
     return true
   end

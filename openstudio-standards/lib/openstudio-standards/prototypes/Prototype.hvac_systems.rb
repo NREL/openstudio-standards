@@ -314,7 +314,7 @@ class OpenStudio::Model::Model
     sizing_plant.setLoopDesignTemperatureDifference(cw_delta_t_k)
 
     # Condenser water pump
-    if building_type == 'Hospital' && (building_vintage == 'DOE Ref 1980-2004' || building_vintage == 'DOE Ref Pre-1980')
+    if building_type == 'Hospital' && (template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980')
       cw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
       cw_pump.setName('Condenser Water Loop Pump')
       cw_pump_head_ft_h2o = 60.0
@@ -4003,10 +4003,10 @@ class OpenStudio::Model::Model
 
   # This method will add an swh water fixture to the model for the space.
   # if the it will return a water fixture object, or NIL if there is no water load at all.
-  def add_swh_end_uses_by_space(building_type, building_vintage, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
+  def add_swh_end_uses_by_space(building_type, template, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
     # find the specific space_type properties from standard.json
     search_criteria = {
-      'template' => building_vintage,
+      'template' => template,
       'building_type' => building_type,
       'space_type' => space_type_name
     }

@@ -1,14 +1,14 @@
 
 # open the class to add methods to size all HVAC equipment
 class OpenStudio::Model::Model
-  def add_swh(building_type, building_vintage, climate_zone, prototype_input)
+  def add_swh(building_type, template, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
 
       # Add the main service water loop
-      main_swh_loop = add_swh_loop(building_vintage,
+      main_swh_loop = add_swh_loop(template,
                                    'Main Service Water Loop',
                                    nil,
                                    OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
@@ -18,17 +18,17 @@ class OpenStudio::Model::Model
                                    OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
                                    prototype_input['main_water_heater_fuel'],
                                    OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                   building_type) unless building_type == 'RetailStripmall' && building_vintage != 'NECB 2011'
+                                   building_type) unless building_type == 'RetailStripmall' && template != 'NECB 2011'
 
       # Attach the end uses if specified in prototype inputs
       # TODO remove special logic for large office SWH end uses
       # TODO remove special logic for stripmall SWH end uses and service water loops
       # TODO remove special logic for large hotel SWH end uses
-      if building_type == 'LargeOffice' && building_vintage != 'NECB 2011'
+      if building_type == 'LargeOffice' && template != 'NECB 2011'
 
         # Only the core spaces have service water
         ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
-          add_swh_end_uses(building_vintage,
+          add_swh_end_uses(template,
                            'Main',
                            main_swh_loop,
                            OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
@@ -38,9 +38,9 @@ class OpenStudio::Model::Model
                            building_type)
         end
 
-      elsif building_type == 'RetailStripmall' && building_vintage != 'NECB 2011'
+      elsif building_type == 'RetailStripmall' && template != 'NECB 2011'
 
-        return true if building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004'
+        return true if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
 
         # Create a separate hot water loop & water heater for each space in the list
         swh_space_names = ['LGstore1', 'SMstore1', 'SMstore2', 'SMstore3', 'LGstore2', 'SMstore5', 'SMstore6']
@@ -53,7 +53,7 @@ class OpenStudio::Model::Model
         # Loop through all spaces
         swh_space_names.zip(swh_sch_names).each do |swh_space_name, swh_sch_name|
           swh_thermal_zone = getSpaceByName(swh_space_name).get.thermalZone.get
-          main_swh_loop = add_swh_loop(building_vintage,
+          main_swh_loop = add_swh_loop(template,
                                        "#{swh_thermal_zone.name} Service Water Loop",
                                        swh_thermal_zone,
                                        OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
@@ -65,7 +65,7 @@ class OpenStudio::Model::Model
                                        OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
                                        building_type)
 
-          add_swh_end_uses(building_vintage,
+          add_swh_end_uses(template,
                            'Main',
                            main_swh_loop,
                            rated_flow_rate_m3_per_s,
@@ -83,7 +83,7 @@ class OpenStudio::Model::Model
       #         kitchen_water_use_schedule = "HotelLarge BLDG_SWH_SCH"
       #
       #         water_end_uses = []
-      #         space_type_map = self.define_space_type_map(building_type, building_vintage, climate_zone)
+      #         space_type_map = self.define_space_type_map(building_type, template, climate_zone)
       #         space_multipliers = define_space_multiplier
       #
       #         kitchen_space_types = ['Kitchen']
@@ -92,7 +92,7 @@ class OpenStudio::Model::Model
       #         guess_room_water_use_rate = 0.020833333 # gal/min, Reference: NREL Reference building report 5.1.6
       #
       #         # Create a list of water use rates and associated room multipliers
-      #         case building_vintage
+      #         case template
       #         when "90.1-2004", "90.1-2007", "90.1-2010", "90.1-2013"
       #           guess_room_space_types =['GuestRoom','GuestRoom2','GuestRoom3','GuestRoom4']
       #         else
@@ -158,7 +158,7 @@ class OpenStudio::Model::Model
       #           use_rate = water_end_use[1] # in gal/min
       #           use_schedule = water_end_use[2]
       #
-      #           self.add_swh_end_uses(building_vintage,
+      #           self.add_swh_end_uses(template,
       #                               'Main',
       #                               main_swh_loop,
       #                               OpenStudio.convert(use_rate,'gal/min','m^3/s').get,
@@ -171,7 +171,7 @@ class OpenStudio::Model::Model
       elsif prototype_input['main_service_water_peak_flowrate']
 
         # Attaches the end uses if specified as a lump value in the prototype_input
-        add_swh_end_uses(building_vintage,
+        add_swh_end_uses(template,
                          'Main',
                          main_swh_loop,
                          OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
@@ -184,14 +184,14 @@ class OpenStudio::Model::Model
 
         # Attaches the end uses if specified by space type
 
-        if building_vintage == 'NECB 2011'
+        if template == 'NECB 2011'
           building_type = 'Space Function'
         end
 
-        space_type_map = define_space_type_map(building_type, building_vintage, climate_zone)
+        space_type_map = define_space_type_map(building_type, template, climate_zone)
         space_type_map.each do |space_type_name, space_names|
           search_criteria = {
-            'template' => building_vintage,
+            'template' => template,
             'building_type' => get_lookup_name(building_type),
             'space_type' => space_type_name
           }
@@ -201,14 +201,14 @@ class OpenStudio::Model::Model
           next if data.nil?
 
           # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-          next unless building_vintage == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
+          next unless template == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
 
           # Add a service water use for each space
           space_names.each do |space_name|
             space = getSpaceByName(space_name).get
             space_multiplier = space.multiplier
             add_swh_end_uses_by_space(get_lookup_name(building_type),
-                                      building_vintage,
+                                      template,
                                       climate_zone,
                                       main_swh_loop,
                                       space_type_name,
@@ -225,7 +225,7 @@ class OpenStudio::Model::Model
     unless prototype_input['booster_water_heater_volume'].nil?
 
       # Add the booster water loop
-      swh_booster_loop = add_swh_booster(building_vintage,
+      swh_booster_loop = add_swh_booster(template,
                                          main_swh_loop,
                                          OpenStudio.convert(prototype_input['booster_water_heater_capacity'], 'Btu/hr', 'W').get,
                                          OpenStudio.convert(prototype_input['booster_water_heater_volume'], 'gal', 'm^3').get,
@@ -236,7 +236,7 @@ class OpenStudio::Model::Model
                                          building_type)
 
       # Attach the end uses
-      add_booster_swh_end_uses(building_vintage,
+      add_booster_swh_end_uses(template,
                                swh_booster_loop,
                                OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                prototype_input['booster_service_water_flowrate_schedule'],
@@ -249,7 +249,7 @@ class OpenStudio::Model::Model
     unless prototype_input['laundry_water_heater_volume'].nil?
 
       # Add the laundry service water heating loop
-      laundry_swh_loop = add_swh_loop(building_vintage,
+      laundry_swh_loop = add_swh_loop(template,
                                       'Laundry Service Water Loop',
                                       nil,
                                       OpenStudio.convert(prototype_input['laundry_service_water_temperature'], 'F', 'C').get,
@@ -262,7 +262,7 @@ class OpenStudio::Model::Model
                                       building_type)
 
       # Attach the end uses if specified in prototype inputs
-      add_swh_end_uses(building_vintage,
+      add_swh_end_uses(template,
                        'Laundry',
                        laundry_swh_loop,
                        OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,

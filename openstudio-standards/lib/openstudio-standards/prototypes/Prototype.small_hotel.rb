@@ -1,10 +1,10 @@
 
 # Extend the class to add Small Hotel specific stuff
 class OpenStudio::Model::Model
-  def define_space_type_map(building_type, building_vintage, climate_zone)
+  def define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
 
-    case building_vintage
+    case template
     when 'DOE Ref Pre-1980'
       space_type_map = {
         'Corridor' => ['CorridorFlr1', 'CorridorFlr2', 'CorridorFlr3', 'CorridorFlr4'],
@@ -90,10 +90,10 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, building_vintage, climate_zone)
+  def define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = nil
 
-    case building_vintage
+    case template
     when 'DOE Ref Pre-1980'
       system_to_space_map = [
         { 'type' => 'PTAC',
@@ -469,7 +469,7 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def define_building_story_map(building_type, building_vintage, climate_zone)
+  def define_building_story_map(building_type, template, climate_zone)
     building_story_map = nil
 
     building_story_map = {
@@ -480,23 +480,23 @@ class OpenStudio::Model::Model
     }
 
     # attic only applies to the two DOE vintages.
-    if building_vintage == 'DOE Ref Pre-1980' || building_vintage == 'DOE Ref 1980-2004'
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
       building_story_map['AtticStory'] = ['Attic']
     end
     return building_story_map
   end
 
-  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add extra infiltration for corridor1 door
     corridor_space = getSpaceByName('CorridorFlr1')
     corridor_space = corridor_space.get
-    unless building_vintage == 'DOE Ref 1980-2004' || building_vintage == 'DOE Ref Pre-1980'
+    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       infiltration_corridor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
       infiltration_corridor.setName('Corridor1 door Infiltration')
       infiltration_per_zone = 0
-      infiltration_per_zone = if building_vintage == '90.1-2010' || building_vintage == '90.1-2007'
+      infiltration_per_zone = if template == '90.1-2010' || template == '90.1-2007'
                                 0.591821538
                               else
                                 0.91557718
@@ -507,7 +507,7 @@ class OpenStudio::Model::Model
     end
 
     # hardsize corridor1. put in standards in the future  #TODO
-    unless building_vintage == 'DOE Ref 1980-2004' || building_vintage == 'DOE Ref Pre-1980'
+    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       getZoneHVACPackagedTerminalAirConditioners.sort.each do |ptac|
         zone = ptac.thermalZone.get
         if zone.spaces.include?(corridor_space)
@@ -528,7 +528,7 @@ class OpenStudio::Model::Model
     return true
   end
 
-  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
     return true
   end
 end

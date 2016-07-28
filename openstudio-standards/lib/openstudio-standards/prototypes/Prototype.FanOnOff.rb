@@ -6,7 +6,7 @@ class OpenStudio::Model::FanOnOff
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def set_prototype_fan_pressure_rise(building_type, building_vintage, climate_zone)
+  def set_prototype_fan_pressure_rise(building_type, template, climate_zone)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if maximumFlowRate.is_initialized
@@ -41,7 +41,7 @@ class OpenStudio::Model::FanOnOff
 
     # If the fan lives on an airloop
     if airLoopHVAC.is_initialized
-      case building_vintage
+      case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                                  2.5
@@ -61,7 +61,7 @@ class OpenStudio::Model::FanOnOff
 
     # If the fan lives inside a unitary system
     if airLoopHVAC.empty? && containingZoneHVACComponent.empty?
-      case building_vintage
+      case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                                  2.5

@@ -1,9 +1,9 @@
 
 # Extend the class to add Large Hotel specific stuff
 class OpenStudio::Model::Model
-  def define_space_type_map(building_type, building_vintage, climate_zone)
+  def define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
-    case building_vintage
+    case template
     when 'NECB 2011'
       # Building Schedule
       sch = 'E'
@@ -43,7 +43,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, building_vintage, climate_zone)
+  def define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = [
       {
         'type' => 'VAV',
@@ -113,13 +113,13 @@ class OpenStudio::Model::Model
     return space_multiplier_map
   end
 
-  def custom_hvac_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # Add Exhaust Fan
-    space_type_map = define_space_type_map(building_type, building_vintage, climate_zone)
+    space_type_map = define_space_type_map(building_type, template, climate_zone)
     exhaust_fan_space_types = []
-    case building_vintage
+    case template
     when '90.1-2004', '90.1-2007'
       exhaust_fan_space_types = ['Kitchen', 'Laundry']
     else
@@ -127,15 +127,15 @@ class OpenStudio::Model::Model
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = find_object($os_standards['space_types'], 'template' => building_vintage, 'building_type' => building_type, 'space_type' => space_type_name)
+      space_type_data = find_object($os_standards['space_types'], 'template' => template, 'building_type' => building_type, 'space_type' => space_type_name)
       if space_type_data.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{building_vintage}-#{building_type}-#{space_type_name}")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{template}-#{building_type}-#{space_type_name}")
         return false
       end
 
       exhaust_schedule = add_schedule(space_type_data['exhaust_schedule'])
       if exhaust_schedule.class.to_s == 'NilClass'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{building_vintage}-#{building_type}-#{space_type_name}")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{template}-#{building_type}-#{space_type_name}")
         return false
       end
 
@@ -191,15 +191,15 @@ class OpenStudio::Model::Model
   end # add hvac
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
-  def add_daylighting_controls(building_vintage)
+  def add_daylighting_controls(template)
     space_names = ['Banquet_Flr_6', 'Dining_Flr_6', 'Cafe_Flr_1', 'Lobby_Flr_1']
     space_names.each do |space_name|
       space = getSpaceByName(space_name).get
-      space.add_daylighting_controls(building_vintage, false, false)
+      space.add_daylighting_controls(template, false, false)
     end
   end
 
-  def custom_swh_tweaks(building_type, building_vintage, climate_zone, prototype_input)
+  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
     return true
   end
 end
