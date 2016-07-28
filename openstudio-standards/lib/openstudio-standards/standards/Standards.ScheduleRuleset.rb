@@ -221,7 +221,7 @@ class OpenStudio::Model::ScheduleRuleset
         time_decimal = (time.days * 24) + time.hours + (time.minutes / 60) + (time.seconds / 3600)
         duration_of_value = time_decimal - previous_time_decimal
         # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Value of #{values[i]} for #{duration_of_value} hours")
-        daily_flh += values[i] * duration_of_value
+        daily_hrs += values[i] * duration_of_value
         previous_time_decimal = time_decimal
       end
 
