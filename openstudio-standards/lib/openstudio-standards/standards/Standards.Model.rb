@@ -1836,7 +1836,7 @@ class OpenStudio::Model::Model
   def apply_infiltration_standard(template)
     # Set the infiltration rate at each space
     getSpaces.sort.each do |space|
-      space.set_infiltration_rate(template)
+      space.apply_infiltration_rate(template)
     end
 
     case template

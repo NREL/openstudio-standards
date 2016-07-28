@@ -1488,53 +1488,53 @@ class OpenStudio::Model::Space
     # Determine the illuminance setpoint for the controls based on space type
     # From IESNA Handbook 10th Edition - Applications
     daylight_stpt_lux = 300
-#
-#
-#     space_type = self.space_type
-#     if space_type.empty?
-#       OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Space #{space.name} is an unknown space type, assuming Office and 300 Lux daylight setpoint")
-#     else
-#       space_type = space_type.get
-#       std_spc_type = space_type.standardsSpaceType
-#       if std_spc_type.empty?
-#         OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Space #{space.name} does not have a defined standards space type, assuming Office and 300 Lux daylight setpoint")
-#       else
-#         std_spc_type = std_spc_type.get
-#         case std_spc_type
-#         when
-#         Storage = 50
-#         Corridor = 50
-#         Corridor2 = 50
-#         when
-# PatCorridor = 100
-#         'Banquet = 100
-#         Basement = 100
-# Cafe = 100
-# Lobby = 100
-# when
-# Dining = 150
-# GuestRoom = 150
-# GuestRoom2 = 150
-# GuestRoom3 = 150
-# GuestRoom4 = 150
-# when
-# Mechanical = 200
-# Retail = 200
-# Retail2 = 200
-# when
-# Laundry = 300
-# Office = 300
-# when
-# ER_NurseStn = 500
-# ICU_Open = 500
-# ICU_PatRm = 500
-# Kitchen = 500
-# Lab = 500
-# NurseStn = 500
-# ICU_NurseStn = 500
-# PatRoom = 500
-# PhysTherapy = 500
-# Radiology = 500
+    #
+    #
+    #     space_type = self.space_type
+    #     if space_type.empty?
+    #       OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Space #{space.name} is an unknown space type, assuming Office and 300 Lux daylight setpoint")
+    #     else
+    #       space_type = space_type.get
+    #       std_spc_type = space_type.standardsSpaceType
+    #       if std_spc_type.empty?
+    #         OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Space #{space.name} does not have a defined standards space type, assuming Office and 300 Lux daylight setpoint")
+    #       else
+    #         std_spc_type = std_spc_type.get
+    #         case std_spc_type
+    #         when
+    #         Storage = 50
+    #         Corridor = 50
+    #         Corridor2 = 50
+    #         when
+    # PatCorridor = 100
+    #         'Banquet = 100
+    #         Basement = 100
+    # Cafe = 100
+    # Lobby = 100
+    # when
+    # Dining = 150
+    # GuestRoom = 150
+    # GuestRoom2 = 150
+    # GuestRoom3 = 150
+    # GuestRoom4 = 150
+    # when
+    # Mechanical = 200
+    # Retail = 200
+    # Retail2 = 200
+    # when
+    # Laundry = 300
+    # Office = 300
+    # when
+    # ER_NurseStn = 500
+    # ICU_Open = 500
+    # ICU_PatRm = 500
+    # Kitchen = 500
+    # Lab = 500
+    # NurseStn = 500
+    # ICU_NurseStn = 500
+    # PatRoom = 500
+    # PhysTherapy = 500
+    # Radiology = 500
     # when
     # ER_Exam = 1000
     # ER_Trauma = 1000
@@ -1733,7 +1733,7 @@ class OpenStudio::Model::Space
     #         end
     #       end
     #     end
-    # =end
+
     # Get the zone that the space is in
     zone = thermalZone
     if zone.empty?
@@ -1944,7 +1944,7 @@ class OpenStudio::Model::Space
   # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
-  def set_infiltration_rate(template)
+  def apply_infiltration_rate(template)
     # Define the total building baseline infiltration rate
     basic_infil_rate_cfm_per_ft2 = nil
     infil_type = nil
@@ -2239,8 +2239,7 @@ class OpenStudio::Model::Space
       largest_floor_area = 0.0
       largest_surface = nil
       surfaces.each do |surface|
-        next unless surface.surfaceType == 'Floor'
-        surface.outsideBoundaryCondition == 'Surface'
+        next unless surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Surface'
         if surface.grossArea > largest_floor_area
           largest_floor_area = surface.grossArea
           largest_surface = surface
@@ -2406,8 +2405,8 @@ class OpenStudio::Model::Space
       unless adj_surface.empty?
         model.getSpaces.each do |space|
           next if space == self
-          space.surfaces.each do |surface|
-            if surface == adj_surface.get
+          space.surfaces.each do |surf|
+            if surf == adj_surface.get
               spaces << space
             end
           end
@@ -2438,11 +2437,11 @@ class OpenStudio::Model::Space
         # go through each of the adjeacent spaces to find the matching  surface/space.
         spaces.each_with_index do |space, index|
           next if space == self
-          space.surfaces.each do |surface|
-            if surface == adj_surface.get
+          space.surfaces.each do |surf|
+            if surf == adj_surface.get
               # initialize array index to zero for first time so += will work.
               area_index[index] = 0 if area_index[index].nil?
-              area_index[index] += surface.grossArea
+              area_index[index] += surf.grossArea
               array_hash[space] = area_index[index]
             end
           end
