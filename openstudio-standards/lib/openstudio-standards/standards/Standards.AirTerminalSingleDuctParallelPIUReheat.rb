@@ -63,5 +63,5 @@ class OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "For #{name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm, fan bhp = #{fan.brake_horsepower} hp, motor efficiency = #{fan.motorEfficiency}.")
 
     return true
-    end
+  end
 end
