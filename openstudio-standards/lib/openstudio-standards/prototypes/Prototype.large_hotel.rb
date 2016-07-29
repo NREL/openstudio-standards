@@ -191,7 +191,7 @@ class OpenStudio::Model::Model
   end # add hvac
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
-  def add_daylighting_controls(template)
+  def large_hotel_add_daylighting_controls(template)
     space_names = ['Banquet_Flr_6', 'Dining_Flr_6', 'Cafe_Flr_1', 'Lobby_Flr_1']
     space_names.each do |space_name|
       space = getSpaceByName(space_name).get
