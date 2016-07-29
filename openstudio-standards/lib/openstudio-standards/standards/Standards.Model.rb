@@ -3425,10 +3425,6 @@ class OpenStudio::Model::Model
     # WWR limit
     wwr_lim = 40.0
 
-    # NECB FDWR limit
-    hdd = BTAP::Environment::WeatherFile.new(weatherFile.get.path.get).hdd18
-    fdwr_lim = (BTAP::Compliance::NECB2011.max_fwdr(hdd) * 100.0).round(1)
-
     # Check against WWR limit
     red_nr = wwr_nr > wwr_lim ? true : false
     red_res = wwr_res > wwr_lim ? true : false
@@ -3436,6 +3432,10 @@ class OpenStudio::Model::Model
 
     case template
     when 'NECB 2011'
+      # NECB FDWR limit
+      hdd = BTAP::Environment::WeatherFile.new(weatherFile.get.path.get).hdd18
+      fdwr_lim = (BTAP::Compliance::NECB2011.max_fwdr(hdd) * 100.0).round(1)
+    
       # Stop here unless windows / doors need reducing
       return true unless fdwr > fdwr_lim
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{wwr_lim.round}%.")
