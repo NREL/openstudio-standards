@@ -232,7 +232,7 @@ class Baseline9012013Test < Minitest::Test
   def test_bldg_13_economizer
 
     base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
-    check_sat_delta(base_model)
+    check_economizers(base_model)
     
   end
 
