@@ -221,8 +221,6 @@ class OpenStudio::Model::Model
       air_loop.apply_performance_rating_method_baseline_fan_power(template)
     end
 
-    # Set the baseline pumping power for all plant loops
-    # Set the baseline pump control type for all plant loops
     # Set the baseline number of boilers and chillers
     getPlantLoops.sort.each do |plant_loop|
       plant_loop.apply_performance_rating_method_number_of_boilers(template)
