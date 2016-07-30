@@ -7,7 +7,7 @@ class Baseline9012013Test < Minitest::Test
   include Baseline9012013
 
   # Simple example test that checks LPD of gyms
-  def dont_testsec_school_example_test
+  def testsec_school_example_test
 
     base_model = create_baseline_model('SecondarySchool-DOE Ref Pre-1980-ASHRAE 169-2006-2A', '90.1-2013', 'ASHRAE 169-2006-2A', 'SecondarySchool', 'Xcel Energy CO EDA', false, true)
 
@@ -29,20 +29,26 @@ class Baseline9012013Test < Minitest::Test
     base_model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
 
   end  
-  
-  def dont_test_bldg_4
+
+  def test_bldg_3
+
+    base_model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+
+  end
+
+  def test_bldg_4
 
     base_model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
 
   end  
   
-  def dont_test_bldg_9
+  def test_bldg_9
 
     base_model = create_baseline_model('bldg_9', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
 
   end
 
-  def dont_test_bldg_10_shw
+  def test_bldg_10_shw
 
     test_model_name = 'bldg_10'
     building_type = 'MediumOffice'
@@ -66,7 +72,7 @@ class Baseline9012013Test < Minitest::Test
     
   end
 
-  def dont_test_bldg_10_num_boilers
+  def test_bldg_10_num_boilers
  
     test_model_name = 'bldg_10'
 
@@ -77,7 +83,7 @@ class Baseline9012013Test < Minitest::Test
  
   end
 
-  def dont_test_bldg_10_num_chillers
+  def test_bldg_10_num_chillers
  
     test_model_name = 'bldg_10'
 
@@ -88,7 +94,7 @@ class Baseline9012013Test < Minitest::Test
  
   end
  
-  def dont_test_bldg_10_plant_controls
+  def test_bldg_10_plant_controls
  
     test_model_name = 'bldg_10'
 
@@ -99,7 +105,7 @@ class Baseline9012013Test < Minitest::Test
  
   end 
 
-  def dont_test_bldg_11_shw
+  def test_bldg_11_shw
  
     test_model_name = 'bldg_11'
     building_type = 'LargeOffice'
@@ -112,7 +118,7 @@ class Baseline9012013Test < Minitest::Test
  
   end  
   
-  def dont_test_bldg_11_baseline_sys
+  def test_bldg_11_baseline_sys
  
     test_model_name = 'bldg_11'
     building_type = 'LargeOffice'
@@ -125,7 +131,7 @@ class Baseline9012013Test < Minitest::Test
  
   end
 
-  def dont_test_bldg_11_num_boilers
+  def test_bldg_11_num_boilers
  
     test_model_name = 'bldg_11'
 
@@ -136,7 +142,7 @@ class Baseline9012013Test < Minitest::Test
  
   end
 
-  def dont_test_bldg_11_num_chillers
+  def test_bldg_11_num_chillers
  
     test_model_name = 'bldg_11'
 
@@ -147,7 +153,7 @@ class Baseline9012013Test < Minitest::Test
  
   end
  
-  def dont_test_bldg_11_plant_controls
+  def test_bldg_11_plant_controls
  
     test_model_name = 'bldg_11'
 
@@ -158,7 +164,7 @@ class Baseline9012013Test < Minitest::Test
  
   end
 
-  def dont_test_bldg_12_shw
+  def test_bldg_12_shw
 
     test_model_name = 'bldg_12'
     building_type = 'MidriseApartment'
@@ -171,7 +177,7 @@ class Baseline9012013Test < Minitest::Test
     
   end
   
-  def dont_test_bldg_12_baseline_sys
+  def test_bldg_12_baseline_sys
 
     test_model_name = 'bldg_12'
     building_type = 'MidriseApartment'
@@ -190,7 +196,7 @@ class Baseline9012013Test < Minitest::Test
     
   end
 
-  def dont_test_bldg_12_num_boilers
+  def test_bldg_12_num_boilers
 
     test_model_name = 'bldg_12'
     
@@ -201,7 +207,7 @@ class Baseline9012013Test < Minitest::Test
     
   end  
   
-  def dont_test_bldg_12_num_chillers
+  def test_bldg_12_num_chillers
 
     test_model_name = 'bldg_12'
     
@@ -212,7 +218,7 @@ class Baseline9012013Test < Minitest::Test
     
   end   
 
-  def dont_test_bldg_12_plant_controls
+  def test_bldg_12_plant_controls
 
     test_model_name = 'bldg_12'
     
@@ -223,42 +229,42 @@ class Baseline9012013Test < Minitest::Test
     
   end
 
-  def dont_test_bldg_13_economizer
+  def test_bldg_13_economizer
 
     base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_sat_delta(base_model)
     
   end
 
-  def dont_test_bldg_13_sat_delta
+  def test_bldg_13_sat_delta
 
     base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_sat_delta(base_model)
     
   end
 
-  def dont_test_bldg_13_sat_reset
+  def test_bldg_13_sat_reset
   
     base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_sat_reset(base_model)
     
   end
 
-  def dont_test_bldg_13_min_vav_setpoints
+  def test_bldg_13_min_vav_setpoints
 
     base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_min_vav_setpoints(base_model)
     
   end
 
-  def dont_test_bldg_13_coil_efficiencies
+  def test_bldg_13_coil_efficiencies
 
     base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_coil_efficiencies(base_model)
   
   end
 
-  def dont_test_bldg_13_ventilation_rates
+  def test_bldg_13_ventilation_rates
 
     test_model_name = 'bldg_13'
     
@@ -269,14 +275,14 @@ class Baseline9012013Test < Minitest::Test
   
   end 
 
-  def dont_test_bldg_14_coil_efficiencies
+  def test_bldg_14_coil_efficiencies
 
     base_model = create_baseline_model('bldg_14', '90.1-2013', 'ASHRAE 169-2006-5B', 'Warehouse','Xcel Energy CO EDA', false, true)
     check_coil_efficiencies(base_model)
   
   end
  
-  def dont_test_bldg_14_ventilation_rates
+  def test_bldg_14_ventilation_rates
 
     test_model_name = 'bldg_14'
     
