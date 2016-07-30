@@ -988,6 +988,15 @@ class OpenStudio::Model::ThermalZone
       return setpoint_c
     end
 
+    # If the heating setpoint was set very low so that
+    # heating equipment never comes on
+    # return the current design heating temperature
+    if setpoint_c < OpenStudio.convert(41, 'F', 'C').get
+      setpoint_c = sizingZone.zoneHeatingDesignSupplyAirTemperature
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{name}, max heating setpoint is low to avoid turning equipment on. Design heating supply temperature will user current zone setting of #{OpenStudio.convert(setpoint_c, 'C', 'F').get.round} F.")
+      return setpoint_c
+    end
+
     # Add 20F delta-T
     delta_t_r = 20
     delta_t_k = OpenStudio.convert(delta_t_r, 'R', 'K').get
@@ -1031,6 +1040,15 @@ class OpenStudio::Model::ThermalZone
     if setpoint_c.nil?
       setpoint_c = sizingZone.zoneCoolingDesignSupplyAirTemperature
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{name}, could not determine min cooling setpoint.  Design cooling supply temperature will use current zone setting of #{OpenStudio.convert(setpoint_c, 'C', 'F').get.round} F.")
+      return setpoint_c
+    end
+
+    # If the cooling setpoint was set very high so that
+    # cooling equipment never comes on
+    # return the current design cooling temperature
+    if setpoint_c > OpenStudio.convert(91, 'F', 'C').get
+      setpoint_c = sizingZone.zoneCoolingDesignSupplyAirTemperature
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{name}, min cooling setpoint is high to avoid turning equipment on. Design cooling supply temperature will user current zone setting of #{OpenStudio.convert(setpoint_c, 'C', 'F').get.round} F.")
       return setpoint_c
     end
 
