@@ -3397,9 +3397,13 @@ class OpenStudio::Model::Model
     # will only be used when hot_water_loop is provided.
     hw_temp_f = 180 # HW setpoint 180F
     hw_delta_t_r = 20 # 20F delta-T
+    htg_sa_temp_f = 100 # 100F air from unit heaters
+    zn_temp_f = 60 # 60F entering unit heater from zone
 
     hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
     hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
+    htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f, 'F', 'C').get
+    zn_temp_c = OpenStudio.convert(zn_temp_f, 'F', 'C').get
 
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding split unit heater for #{zone.name}.")
@@ -3446,9 +3450,9 @@ class OpenStudio::Model::Model
         htg_coil = OpenStudio::Model::CoilHeatingWater.new(self, alwaysOnDiscreteSchedule)
         htg_coil.setName("#{zone.name} UnitHeater Water Htg Coil")
         htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-        htg_coil.setRatedInletAirTemperature(rht_rated_air_in_temp_c)
+        htg_coil.setRatedInletAirTemperature(zn_temp_c)
         htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-        htg_coil.setRatedOutletAirTemperature(rht_rated_air_out_temp_c)
+        htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
         hot_water_loop.addDemandBranchForComponent(htg_coil)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'No heating type was found when adding unit heater; no unit heater will be created.')
