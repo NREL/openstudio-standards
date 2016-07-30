@@ -1869,7 +1869,7 @@ class OpenStudio::Model::Space
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
         is_res = false
       else
-        is_res = if space_type_properties['residential?'] == 'Yes'
+        is_res = if space_type_properties['is_residential'] == 'Yes'
                    true
                  else
                    false

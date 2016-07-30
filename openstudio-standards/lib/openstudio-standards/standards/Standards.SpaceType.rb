@@ -559,7 +559,7 @@ class OpenStudio::Model::SpaceType
   # @return [hash] hash of construction properties
   def get_construction_properties(template, intended_surface_type, standards_construction_type)
     # get building_category value
-    building_category = if !get_standards_data(template).nil? && get_standards_data(template)['residential?'] == 'Yes'
+    building_category = if !get_standards_data(template).nil? && get_standards_data(template)['is_residential'] == 'Yes'
                           'Residential'
                         else
                           'Nonresidential'
