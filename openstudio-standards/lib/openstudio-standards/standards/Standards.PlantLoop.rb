@@ -950,8 +950,8 @@ class OpenStudio::Model::PlantLoop
         new_twr.setDesignApproachTemperature(orig_twr.designApproachTemperature.get)
         new_twr.setDesignRangeTemperature(orig_twr.designRangeTemperature.get)
         new_twr.setFractionofTowerCapacityinFreeConvectionRegime(orig_twr.fractionofTowerCapacityinFreeConvectionRegime.get)
-        if orig_twr.fan_powerRatioFunctionofAirFlowRateRatioCurve.is_initialized
-          new_twr.setFanPowerRatioFunctionofAirFlowRateRatioCurve(orig_twr.fan_powerRatioFunctionofAirFlowRateRatioCurve.get)
+        if orig_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.is_initialized
+          new_twr.setFanPowerRatioFunctionofAirFlowRateRatioCurve(orig_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get)
         end
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{name}, could not clone cooling tower #{orig_twr.name}, cannot apply the performance rating method number of cooling towers.")
@@ -960,11 +960,11 @@ class OpenStudio::Model::PlantLoop
       final_twrs << new_twr
 
       # spit out the curve name
-      # puts new_twr.fan_powerRatioFunctionofAirFlowRateRatioCurve.get.name
+      # puts new_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get.name
       # new_curve = OpenStudio::Model::CurveCubic.new(model)
       # new_curve.setName("Net CT Curve")
       # new_twr.setFanPowerRatioFunctionofAirFlowRateRatioCurve(new_curve)
-      # puts new_twr.fan_powerRatioFunctionofAirFlowRateRatioCurve.get.name
+      # puts new_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get.name
 
       # Connect the new cooling tower to the CW loop
       addSupplyBranchForComponent(new_twr)
