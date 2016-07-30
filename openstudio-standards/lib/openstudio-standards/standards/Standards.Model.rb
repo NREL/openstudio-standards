@@ -393,7 +393,7 @@ class OpenStudio::Model::Model
         type_to_area[type] += zn['area']
       end
     end
-    dom_type = type_to_area.sort[0][0]
+    dom_type = type_to_area.sort_by { |k, v| v }.reverse[0][0]
 
     # Determine the dominant fuel type
     # from the subset of the dominant area type
@@ -405,7 +405,7 @@ class OpenStudio::Model::Model
         fuel_to_area[fuel] += zn['area']
       end
     end
-    dom_fuel = fuel_to_area.sort[0][0]
+    dom_fuel = fuel_to_area.sort_by { |k, v| v }.reverse[0][0]
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The dominant occupancy type = #{dom_type}, the dominant fuel = #{dom_fuel}.")
 
     # Group by type and fuel type
@@ -436,13 +436,13 @@ class OpenStudio::Model::Model
     final_groups = []
     initial_groups.each do |gp, zns|
       # Report out the initial group
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Initial system type group: type = #{gp['type']}, fuel = #{gp['fuel']}, zones:")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Initial system type group: type = #{gp['type']}, fuel = #{gp['fuel']}, zones:")
       zns.each_slice(5) do |zone_list|
         zone_names = []
         zone_list.each do |zn|
           zone_names << zn['zone'].name.get.to_s
         end
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
       end
 
       # Skip unconditioned groups
