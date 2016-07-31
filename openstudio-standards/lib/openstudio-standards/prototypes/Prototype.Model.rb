@@ -108,7 +108,7 @@ class OpenStudio::Model::Model
     # If there are any multizone systems, reset damper positions
     # to achieve a 60% ventilation effectiveness minimum for the system
     # following the ventilation rate procedure from 62.1
-    apply_multizone_vav_outdoor_air_sizing(building_vintage)
+    apply_multizone_vav_outdoor_air_sizing(template)
 
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
