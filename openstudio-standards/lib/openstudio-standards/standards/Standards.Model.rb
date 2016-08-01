@@ -406,6 +406,13 @@ class OpenStudio::Model::Model
       end
     end
     dom_fuel = fuel_to_area.sort_by { |k, v| v }.reverse[0][0]
+
+    # Don't allow unconditioned to be the dominant fuel,
+    # go to the next biggest
+    if dom_fuel == 'unconditioned'
+      dom_fuel = fuel_to_area.sort_by { |k, v| v }.reverse[1][0]
+    end
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The dominant occupancy type = #{dom_type}, the dominant fuel = #{dom_fuel}.")
 
     # Group by type and fuel type
