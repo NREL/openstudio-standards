@@ -6,7 +6,7 @@ class OpenStudio::Model::FanOnOff
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def set_prototype_fan_pressure_rise(building_type, template, climate_zone)
+  def apply_prototype_fan_pressure_rise(building_type, template, climate_zone)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if maximumFlowRate.is_initialized

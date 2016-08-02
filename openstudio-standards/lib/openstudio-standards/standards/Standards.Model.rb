@@ -187,7 +187,7 @@ class OpenStudio::Model::Model
     end
 
     # Set the zone sizing SAT for each zone in the model
-    getThermalZones.each(&:set_performance_rating_method_baseline_supply_temperatures)
+    getThermalZones.each(&:apply_performance_rating_method_baseline_supply_temperatures)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
 
@@ -198,7 +198,7 @@ class OpenStudio::Model::Model
 
     # Apply the minimum damper positions, assuming no DDC control of VAV terminals
     getAirLoopHVACs.sort.each do |air_loop|
-      air_loop.set_minimum_vav_damper_positions(template, false)
+      air_loop.apply_minimum_vav_damper_positions(template, false)
     end
 
     # Apply the baseline system temperatures

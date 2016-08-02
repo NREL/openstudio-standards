@@ -1067,7 +1067,7 @@ class OpenStudio::Model::ThermalZone
   # design airflow calculation.
   #
   # @return [Bool] true if successful, false if not
-  def set_performance_rating_method_baseline_supply_temperatures
+  def apply_performance_rating_method_baseline_supply_temperatures
     # Skip spaces that aren't heated or cooled
     return true unless heated? || cooled?
 

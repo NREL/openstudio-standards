@@ -68,7 +68,7 @@ class OpenStudio::Model::Model
       return false if runSizingRun("#{sizing_run_dir}/SizingRun0") == false
       add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
       add_swh(building_type, template, climate_zone, prototype_input)
-      set_sizing_parameters(building_type, template)
+      apply_sizing_parameters(building_type, template)
       yearDescription.get.setDayofWeekforStartDay('Sunday')
     else
 
@@ -90,7 +90,7 @@ class OpenStudio::Model::Model
       add_exterior_lights(building_type, template, climate_zone, prototype_input)
       add_occupancy_sensors(building_type, template, climate_zone)
       add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
-      set_sizing_parameters(building_type, template)
+      apply_sizing_parameters(building_type, template)
       yearDescription.get.setDayofWeekforStartDay('Sunday')
 
     end
@@ -484,7 +484,7 @@ class OpenStudio::Model::Model
       space_type.apply_internal_loads(template, true, true, true, true, true, true)
 
       # Schedules
-      space_type.set_internal_load_schedules(template, true, true, true, true, true, true, true)
+      space_type.apply_internal_load_schedules(template, true, true, true, true, true, true, true)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
@@ -1040,7 +1040,7 @@ class OpenStudio::Model::Model
   # @return [Bool] returns true if successful, false if not
   # @todo Consistency - make sizing factors consistent
   #   between building types, climate zones, and vintages?
-  def set_sizing_parameters(building_type, template)
+  def apply_sizing_parameters(building_type, template)
     # Default unless otherwise specified
     clg = 1.2
     htg = 1.2
@@ -1079,10 +1079,10 @@ class OpenStudio::Model::Model
 
     # Fans
     # Pressure Rise
-    getFanConstantVolumes.sort.each { |obj| obj.set_prototype_fan_pressure_rise(building_type, template, climate_zone) }
-    getFanVariableVolumes.sort.each { |obj| obj.set_prototype_fan_pressure_rise(building_type, template, climate_zone) }
-    getFanOnOffs.sort.each { |obj| obj.set_prototype_fan_pressure_rise(building_type, template, climate_zone) }
-    getFanZoneExhausts.sort.each(&:set_prototype_fan_pressure_rise)
+    getFanConstantVolumes.sort.each { |obj| obj.apply_prototype_fan_pressure_rise(building_type, template, climate_zone) }
+    getFanVariableVolumes.sort.each { |obj| obj.apply_prototype_fan_pressure_rise(building_type, template, climate_zone) }
+    getFanOnOffs.sort.each { |obj| obj.apply_prototype_fan_pressure_rise(building_type, template, climate_zone) }
+    getFanZoneExhausts.sort.each(&:apply_prototype_fan_pressure_rise)
 
     # Motor Efficiency
     getFanConstantVolumes.sort.each { |obj| obj.apply_prototype_fan_efficiency(template) }

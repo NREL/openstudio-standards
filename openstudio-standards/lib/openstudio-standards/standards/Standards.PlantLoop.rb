@@ -99,10 +99,10 @@ class OpenStudio::Model::PlantLoop
     supplyComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.set_performance_rating_method_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump.apply_performance_rating_method_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.set_performance_rating_method_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump.apply_performance_rating_method_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       end
     end
 
@@ -110,10 +110,10 @@ class OpenStudio::Model::PlantLoop
     demandComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.set_performance_rating_method_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
+        pump.apply_performance_rating_method_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.set_performance_rating_method_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
+        pump.apply_performance_rating_method_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
       end
     end
 

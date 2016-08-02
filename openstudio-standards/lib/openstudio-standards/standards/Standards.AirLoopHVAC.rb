@@ -48,8 +48,8 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     # Economizers
-    set_economizer_limits(template, climate_zone)
-    set_economizer_integration(template, climate_zone)
+    apply_economizer_limits(template, climate_zone)
+    apply_economizer_integration(template, climate_zone)
 
     # Multizone VAV Systems
     if multizone_vav_system?
@@ -770,7 +770,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def set_economizer_limits(template, climate_zone)
+  def apply_economizer_limits(template, climate_zone)
     # EnergyPlus economizer types
     # 'NoEconomizer'
     # 'FixedDryBulb'
@@ -898,7 +898,7 @@ class OpenStudio::Model::AirLoopHVAC
   #   via #economizer_required?
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def set_economizer_integration(template, climate_zone)
+  def apply_economizer_integration(template, climate_zone)
     # Determine if the system is a VAV system based on the fan
     # which may be inside of a unitary system.
     is_vav = false
@@ -1950,7 +1950,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param has_ddc [Bool] if true, will assume that there
   # is DDC control of vav terminals.  If false, assumes otherwise.
   # @return [Bool] true if successful, false if not
-  def set_minimum_vav_damper_positions(template, has_ddc = true)
+  def apply_minimum_vav_damper_positions(template, has_ddc = true)
     thermalZones.each do |zone|
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized

@@ -4,7 +4,7 @@ class OpenStudio::Model::FanZoneExhaust
   include PrototypeFan
 
   # Sets the fan pressure rise based on the Prototype buildings inputs
-  def set_prototype_fan_pressure_rise
+  def apply_prototype_fan_pressure_rise
     # All exhaust fans are assumed to have a pressure rise of
     # 0.5 in w.c. in the prototype building models.
     pressure_rise_in_h2o = 0.5

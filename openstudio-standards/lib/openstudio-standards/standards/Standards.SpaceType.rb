@@ -453,7 +453,7 @@ class OpenStudio::Model::SpaceType
   # schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
   # but may be found and used later.
   # @return [Bool] returns true if successful, false if not
-  def set_internal_load_schedules(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
+  def apply_internal_load_schedules(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
     # Get the standards data
     space_type_properties = get_standards_data(template)
 

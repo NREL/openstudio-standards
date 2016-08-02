@@ -4,12 +4,12 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
   # rate of the space and the template.
   # Zones with low OA per area get lower initial guesses.
   # Final position will be adjusted upward
-  # as necessary by Standards.AirLoopHVAC.set_minimum_vav_damper_positions
+  # as necessary by Standards.AirLoopHVAC.apply_minimum_vav_damper_positions
   # @param template [String] the template
   # @param zone_oa_per_area [Double] the zone outdoor air per area, m^3/s
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
-  def set_initial_prototype_damper_position(building_type, template, zone_oa_per_area)
+  def apply_initial_prototype_damper_position(building_type, template, zone_oa_per_area)
     # Minimum damper position is based on prototype
     # assumptions, which are not clearly documented.
     min_damper_position = nil

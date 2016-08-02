@@ -6,7 +6,7 @@ class OpenStudio::Model::FanVariableVolume
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def set_prototype_fan_pressure_rise(building_type, template, climate_zone)
+  def apply_prototype_fan_pressure_rise(building_type, template, climate_zone)
     # NECB
     if template == 'NECB 2011'
       pressure_rise_pa = 1000.0
