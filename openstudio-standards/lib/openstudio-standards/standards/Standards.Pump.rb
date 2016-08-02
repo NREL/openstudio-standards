@@ -10,7 +10,7 @@ module Pump
   # @param target_w_per_gpm [Double] the target power per flow, in W/gpm
   # @return [Bool] return true if successful, false if not
   # @author jmarrec
-  def apply_performance_rating_method_pressure_rise_and_motor_efficiency(target_w_per_gpm, template)
+  def apply_prm_pressure_rise_and_motor_efficiency(target_w_per_gpm, template)
     # Eplus assumes an impeller efficiency of 0.78 to determine the total efficiency
     # http://bigladdersoftware.com/epx/docs/8-4/engineering-reference/component-sizing.html#pump-sizing
     # Rated_Power_Use = Rated_Volume_Flow_Rate * Rated_Pump_Head / Total_Efficiency

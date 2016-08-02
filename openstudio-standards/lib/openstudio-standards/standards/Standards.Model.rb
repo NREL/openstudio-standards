@@ -99,7 +99,7 @@ class OpenStudio::Model::Model
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
-  def create_performance_rating_method_baseline_building(building_type, template, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
+  def create_prm_baseline_building(building_type, template, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
     lookup_building_type = get_lookup_name(building_type)
 
     getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
@@ -110,8 +110,8 @@ class OpenStudio::Model::Model
 
     # Reduce the WWR and SRR, if necessary
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-    apply_performance_rating_method_baseline_window_to_wall_ratio(template, climate_zone)
-    apply_performance_rating_method_baseline_skylight_to_roof_ratio(template)
+    apply_prm_baseline_window_to_wall_ratio(template, climate_zone)
+    apply_prm_baseline_skylight_to_roof_ratio(template)
 
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
@@ -136,7 +136,7 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
 
     # Modify some of the construction types as necessary
-    apply_performance_rating_method_construction_types(template)
+    apply_prm_construction_types(template)
 
     # Set the construction properties of all the surfaces in the model
     apply_standard_constructions(template, climate_zone)
@@ -146,14 +146,14 @@ class OpenStudio::Model::Model
     # This must be done before removing the HVAC systems
     # because it requires knowledge of proposed HVAC fuels.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
-    sys_groups = performance_rating_method_baseline_system_groups(template, custom)
+    sys_groups = prm_baseline_system_groups(template, custom)
 
     # Remove all HVAC from model
-    remove_performance_rating_method_hvac
+    remove_prm_hvac
 
     # Set the water heater fuel types
     getWaterHeaterMixeds.each do |water_heater|
-      water_heater.apply_performance_rating_method_baseline_fuel_type(template, building_type)
+      water_heater.apply_prm_baseline_fuel_type(template, building_type)
     end
 
     # Determine the baseline HVAC system type for each of
@@ -161,13 +161,13 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
     sys_groups.each do |sys_group|
       # Determine the primary baseline system type
-      system_type = performance_rating_method_baseline_system_type(template,
-                                                                   climate_zone,
-                                                                   sys_group['type'],
-                                                                   sys_group['fuel'],
-                                                                   sys_group['area_ft2'],
-                                                                   sys_group['stories'],
-                                                                   custom)
+      system_type = prm_baseline_system_type(template,
+                                             climate_zone,
+                                             sys_group['type'],
+                                             sys_group['fuel'],
+                                             sys_group['area_ft2'],
+                                             sys_group['stories'],
+                                             custom)
 
       sys_group['zones'].sort.each_slice(5) do |zone_list|
         zone_names = []
@@ -178,22 +178,22 @@ class OpenStudio::Model::Model
       end
 
       # Add the system type for these zones
-      add_performance_rating_method_baseline_system(template,
-                                                    system_type[0],
-                                                    system_type[1],
-                                                    system_type[2],
-                                                    system_type[3],
-                                                    sys_group['zones'])
+      add_prm_baseline_system(template,
+                              system_type[0],
+                              system_type[1],
+                              system_type[2],
+                              system_type[3],
+                              sys_group['zones'])
     end
 
     # Set the zone sizing SAT for each zone in the model
-    getThermalZones.each(&:apply_performance_rating_method_baseline_supply_temperatures)
+    getThermalZones.each(&:apply_prm_baseline_supply_temperatures)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
 
     # SAT reset, economizers
     getAirLoopHVACs.sort.each do |air_loop|
-      air_loop.apply_performance_rating_method_baseline_controls(template, climate_zone)
+      air_loop.apply_prm_baseline_controls(template, climate_zone)
     end
 
     # Apply the minimum damper positions, assuming no DDC control of VAV terminals
@@ -203,7 +203,7 @@ class OpenStudio::Model::Model
 
     # Apply the baseline system temperatures
     getPlantLoops.sort.each do |plant_loop|
-      plant_loop.apply_performance_rating_method_baseline_temperatures(template)
+      plant_loop.apply_prm_baseline_temperatures(template)
     end
 
     # Run sizing run with the HVAC equipment
@@ -218,19 +218,19 @@ class OpenStudio::Model::Model
 
     # Set the baseline fan power for all airloops
     getAirLoopHVACs.sort.each do |air_loop|
-      air_loop.apply_performance_rating_method_baseline_fan_power(template)
+      air_loop.apply_prm_baseline_fan_power(template)
     end
 
     # Set the baseline number of boilers and chillers
     getPlantLoops.sort.each do |plant_loop|
-      plant_loop.apply_performance_rating_method_number_of_boilers(template)
-      plant_loop.apply_performance_rating_method_number_of_chillers(template)
+      plant_loop.apply_prm_number_of_boilers(template)
+      plant_loop.apply_prm_number_of_chillers(template)
     end
 
     # Set the baseline number of cooling towers
     # Must be done after all chillers are added
     getPlantLoops.sort.each do |plant_loop|
-      plant_loop.apply_performance_rating_method_number_of_cooling_towers(template)
+      plant_loop.apply_prm_number_of_cooling_towers(template)
     end
 
     # Run sizing run with the new chillers, boilers, and
@@ -242,8 +242,8 @@ class OpenStudio::Model::Model
     # Set the pumping control strategy and power
     # Must be done after sizing components
     getPlantLoops.sort.each do |plant_loop|
-      plant_loop.apply_performance_rating_method_baseline_pump_power(template)
-      plant_loop.apply_performance_rating_method_baseline_pumping_type(template)
+      plant_loop.apply_prm_baseline_pump_power(template)
+      plant_loop.apply_prm_baseline_pumping_type(template)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
@@ -381,7 +381,7 @@ class OpenStudio::Model::Model
   # @param template [String] the template.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, fuel, and zones (an array of zones)
-  def performance_rating_method_baseline_system_groups(template, custom)
+  def prm_baseline_system_groups(template, custom)
     # Get the zones with fuel type, occ type, and area properties
     zones = zones_by_occ_and_fuel_type(template, custom)
 
@@ -524,7 +524,7 @@ class OpenStudio::Model::Model
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
   # @todo add 90.1-2013 systems 11-13
-  def performance_rating_method_baseline_system_type(template, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
+  def prm_baseline_system_type(template, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
     #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
 
@@ -712,7 +712,7 @@ class OpenStudio::Model::Model
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace,
   # which are also returned by the method
-  # OpenStudio::Model::Model.performance_rating_method_baseline_system_type.
+  # OpenStudio::Model::Model.prm_baseline_system_type.
   # @param main_heat_fuel [String] main heating fuel.  Valid choices are
   # Electricity, NaturalGas, DistrictHeating
   # @param main_heat_fuel [String] zone heating/reheat fuel.  Valid choices are
@@ -720,7 +720,7 @@ class OpenStudio::Model::Model
   # @param main_heat_fuel [String] cooling fuel.  Valid choices are
   # Electricity, DistrictCooling
   # @todo add 90.1-2013 systems 11-13
-  def add_performance_rating_method_baseline_system(template, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
+  def add_prm_baseline_system(template, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
 
@@ -905,7 +905,7 @@ class OpenStudio::Model::Model
 
           # Add a PSZ_AC for each secondary zone
           unless sec_zones.empty?
-            add_performance_rating_method_baseline_system(template, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
+            add_prm_baseline_system(template, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
         end
 
@@ -959,7 +959,7 @@ class OpenStudio::Model::Model
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
-            add_performance_rating_method_baseline_system(template, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
+            add_prm_baseline_system(template, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
         end
 
@@ -1059,7 +1059,7 @@ class OpenStudio::Model::Model
 
           # Add a PSZ_AC for each secondary zone
           unless sec_zones.empty?
-            add_performance_rating_method_baseline_system(template, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
+            add_prm_baseline_system(template, 'PSZ_AC', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
         end
 
@@ -1133,7 +1133,7 @@ class OpenStudio::Model::Model
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
-            add_performance_rating_method_baseline_system(template, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
+            add_prm_baseline_system(template, 'PSZ_HP', main_heat_fuel, zone_heat_fuel, cool_fuel, sec_zones)
           end
         end
 
@@ -1206,7 +1206,7 @@ class OpenStudio::Model::Model
     # baseline HVAC systems for later use.
     # This must be done before removing the HVAC systems
     # because it requires knowledge of proposed HVAC fuels.
-    sys_groups = performance_rating_method_baseline_system_groups(template, custom)
+    sys_groups = prm_baseline_system_groups(template, custom)
 
     # Remove all HVAC from model
     BTAP::Resources::HVAC.clear_all_hvac_from_model(self)
@@ -1234,13 +1234,13 @@ class OpenStudio::Model::Model
     # the groups of zones and add that system type.
     sys_groups.each do |sys_group|
       # Determine the primary baseline system type
-      pri_system_type = performance_rating_method_baseline_system_type(template,
-                                                                       climate_zone,
-                                                                       sys_group['type'],
-                                                                       sys_group['fuel'],
-                                                                       sys_group['area_ft2'],
-                                                                       sys_group['stories'],
-                                                                       custom)
+      pri_system_type = prm_baseline_system_type(template,
+                                                 climate_zone,
+                                                 sys_group['type'],
+                                                 sys_group['fuel'],
+                                                 sys_group['area_ft2'],
+                                                 sys_group['stories'],
+                                                 custom)
 
       # Record the zone-by-zone system type assignments
       case template
@@ -1576,7 +1576,7 @@ class OpenStudio::Model::Model
   # @param template [String] the template.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @return [OpenStudio::Model::DefaultConstructionSet] returns a default
   # construction set populated with the specified constructions.
-  def add_performance_rating_method_construction_set(template, category)
+  def add_prm_construction_set(template, category)
     construction_set = OpenStudio::Model::OptionalDefaultConstructionSet.new
 
     # Find the climate zone set that this climate zone falls into
@@ -3115,7 +3115,7 @@ class OpenStudio::Model::Model
   # @param template [String] valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
-  def apply_performance_rating_method_construction_types(template)
+  def apply_prm_construction_types(template)
     types_to_modify = []
 
     # Possible boundary conditions are
@@ -3322,7 +3322,7 @@ class OpenStudio::Model::Model
   # and shrinking as necessary if WWR is above limit.
   # @todo support semiheated spaces as a separate WWR category
   # @todo add window frame area to calculation of WWR
-  def apply_performance_rating_method_baseline_window_to_wall_ratio(template, climate_zone)
+  def apply_prm_baseline_window_to_wall_ratio(template, climate_zone)
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -3518,7 +3518,7 @@ class OpenStudio::Model::Model
   #
   # @todo support semiheated spaces as a separate SRR category
   # @todo add skylight frame area to calculation of SRR
-  def apply_performance_rating_method_baseline_skylight_to_roof_ratio(template)
+  def apply_prm_baseline_skylight_to_roof_ratio(template)
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -3681,7 +3681,7 @@ class OpenStudio::Model::Model
   # WaterUse:Equipment or Fan:ZoneExhaust
   #
   # @return [Bool] true if successful, false if not
-  def remove_performance_rating_method_hvac
+  def remove_prm_hvac
     # Plant loops
     getPlantLoops.each do |loop|
       serves_swh = false

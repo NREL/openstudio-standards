@@ -38,7 +38,7 @@ class OpenStudio::Model::PlantLoop
 
   # TODO: I think it makes more sense to sense the motor efficiency right there...
   # But actually it's completely irrelevant... you could set at 0.9 and just calculate the pressurise rise to have your 19 W/GPM or whatever
-  def apply_performance_rating_method_baseline_pump_power(template)
+  def apply_prm_baseline_pump_power(template)
     # Determine the pumping power per
     # flow based on loop type.
     pri_w_per_gpm = nil
@@ -99,10 +99,10 @@ class OpenStudio::Model::PlantLoop
     supplyComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.apply_performance_rating_method_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.apply_performance_rating_method_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       end
     end
 
@@ -110,17 +110,17 @@ class OpenStudio::Model::PlantLoop
     demandComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.apply_performance_rating_method_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
+        pump.apply_prm_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.apply_performance_rating_method_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
+        pump.apply_prm_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
       end
     end
 
     return true
   end
 
-  def apply_performance_rating_method_baseline_temperatures(template)
+  def apply_prm_baseline_temperatures(template)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
     case loop_type
@@ -579,7 +579,7 @@ class OpenStudio::Model::PlantLoop
     return area_served_m2
   end
 
-  def apply_performance_rating_method_baseline_pumping_type(template)
+  def apply_prm_baseline_pumping_type(template)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
 
@@ -716,7 +716,7 @@ class OpenStudio::Model::PlantLoop
     return true
   end
 
-  def apply_performance_rating_method_number_of_boilers(template)
+  def apply_prm_number_of_boilers(template)
     # Skip non-heating plants
     return true unless sizingPlant.loopType == 'Heating'
 
@@ -779,7 +779,7 @@ class OpenStudio::Model::PlantLoop
     return true
   end
 
-  def apply_performance_rating_method_number_of_chillers(template)
+  def apply_prm_number_of_chillers(template)
     # Skip non-cooling plants
     return true unless sizingPlant.loopType == 'Cooling'
 
@@ -877,7 +877,7 @@ class OpenStudio::Model::PlantLoop
     return true
   end
 
-  def apply_performance_rating_method_number_of_cooling_towers(template)
+  def apply_prm_number_of_cooling_towers(template)
     # Skip non-cooling plants
     return true unless sizingPlant.loopType == 'Condenser'
 

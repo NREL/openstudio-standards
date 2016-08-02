@@ -135,7 +135,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
 
   # Create the baseline model from the
   # supplied proposed test model
-  model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug)
+  model.create_prm_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug)
 
   # Show the output messages
   errs = []

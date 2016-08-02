@@ -957,7 +957,7 @@ class OpenStudio::Model::ThermalZone
   #
   # @return [Double] the design heating supply temperature, in C
   # @todo Exception: 17F delta-T for labs
-  def performance_rating_method_baseline_heating_design_supply_temperature
+  def prm_baseline_heating_design_supply_temperature
     setpoint_c = nil
 
     # Setpoint schedule
@@ -1012,7 +1012,7 @@ class OpenStudio::Model::ThermalZone
   #
   # @return [Double] the design heating supply temperature, in C
   # @todo Exception: 17F delta-T for labs
-  def performance_rating_method_baseline_cooling_design_supply_temperature
+  def prm_baseline_cooling_design_supply_temperature
     setpoint_c = nil
 
     # Setpoint schedule
@@ -1067,16 +1067,16 @@ class OpenStudio::Model::ThermalZone
   # design airflow calculation.
   #
   # @return [Bool] true if successful, false if not
-  def apply_performance_rating_method_baseline_supply_temperatures
+  def apply_prm_baseline_supply_temperatures
     # Skip spaces that aren't heated or cooled
     return true unless heated? || cooled?
 
     # Heating
-    htg_sat_c = performance_rating_method_baseline_heating_design_supply_temperature
+    htg_sat_c = prm_baseline_heating_design_supply_temperature
     htg_success = sizingZone.setZoneHeatingDesignSupplyAirTemperature(htg_sat_c)
 
     # Cooling
-    clg_sat_c = performance_rating_method_baseline_cooling_design_supply_temperature
+    clg_sat_c = prm_baseline_cooling_design_supply_temperature
     clg_success = sizingZone.setZoneCoolingDesignSupplyAirTemperature(clg_sat_c)
 
     htg_sat_f = OpenStudio.convert(htg_sat_c, 'C', 'F').get

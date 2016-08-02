@@ -161,7 +161,7 @@ class OpenStudio::Model::WaterHeaterMixed
   #
   # @param building_type [String] the building type
   # @return [Bool] returns true if successful, false if not.
-  def apply_performance_rating_method_baseline_fuel_type(template, building_type)
+  def apply_prm_baseline_fuel_type(template, building_type)
     # For all standards except 90.1-2013
     # baseline is same as proposed per
     # Table G3.1 item 11.b

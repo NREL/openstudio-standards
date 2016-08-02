@@ -13,7 +13,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
   # which impacts the minimum damper position requirement.
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
-  def set_minimum_damper_position(template, zone_min_oa = nil, has_ddc = true)
+  def apply_minimum_damper_position(template, zone_min_oa = nil, has_ddc = true)
     # Minimum damper position
     min_damper_position = nil
     case template

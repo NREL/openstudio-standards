@@ -131,10 +131,10 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def apply_performance_rating_method_baseline_controls(template, climate_zone)
+  def apply_prm_baseline_controls(template, climate_zone)
     # Economizers
-    if performance_rating_method_baseline_economizer_required?(template, climate_zone)
-      apply_performance_rating_method_baseline_economizer(template, climate_zone)
+    if prm_baseline_economizer_required?(template, climate_zone)
+      apply_prm_baseline_economizer(template, climate_zone)
     end
 
     # Multizone VAV Systems
@@ -167,7 +167,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @todo Figure out how to split fan power between multiple fans
   # if the proposed model had multiple fans (supply, return, exhaust, etc.)
   # return [Bool] true if successful, false if not.
-  def apply_performance_rating_method_baseline_fan_power(template)
+  def apply_prm_baseline_fan_power(template)
     # Main AHU fans
 
     # Calculate the allowable fan motor bhp
@@ -196,7 +196,7 @@ class OpenStudio::Model::AirLoopHVAC
     demandComponents.each do |dc|
       next if dc.to_AirTerminalSingleDuctParallelPIUReheat.empty?
       pfp_term = dc.to_AirTerminalSingleDuctParallelPIUReheat.get
-      pfp_term.apply_performance_rating_method_baseline_fan_power(template)
+      pfp_term.apply_prm_baseline_fan_power(template)
     end
 
     return true
@@ -1000,7 +1000,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if required, false if not
-  def performance_rating_method_baseline_economizer_required?(template, climate_zone)
+  def prm_baseline_economizer_required?(template, climate_zone)
     economizer_required = false
 
     # A big number of ft2 as the minimum requirement
@@ -1083,7 +1083,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def apply_performance_rating_method_baseline_economizer(template, climate_zone)
+  def apply_prm_baseline_economizer(template, climate_zone)
     # EnergyPlus economizer types
     # 'NoEconomizer'
     # 'FixedDryBulb'
@@ -1806,7 +1806,7 @@ class OpenStudio::Model::AirLoopHVAC
     spm_oa_pretreat.addToNode(erv_outlet)
 
     # Apply the prototype Heat Exchanger power assumptions.
-    erv.set_prototype_nominal_electric_power
+    erv.apply_prototype_nominal_electric_power
 
     return true
   end
@@ -1956,7 +1956,7 @@ class OpenStudio::Model::AirLoopHVAC
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
           zone_oa = zone.outdoor_airflow_rate
           vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
-          vav_terminal.set_minimum_damper_position(template, zone_oa, has_ddc)
+          vav_terminal.apply_minimum_damper_position(template, zone_oa, has_ddc)
         end
       end
     end

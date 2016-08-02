@@ -1,7 +1,7 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
 class OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent
-  defapply_prototype_nominal_electric_power
+  def apply_prototype_nominal_electric_power
     # Get the nominal supply air flow rate
     supply_air_flow_m3_per_s = nil
     if nominalSupplyAirFlowRate.is_initialized
