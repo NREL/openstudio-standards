@@ -1,6 +1,30 @@
 require 'openstudio-standards/version'
 
 module OpenstudioStandards
+ 
+  # this function either reads a file from the embedded archive or from disk, returns file content as a string
+  def loadResourceFile(path, mode='r')
+  
+    puts "Looking for file '#{path}'"
+    begin
+      if EmbeddedScripting::hasFile(path)
+        puts "Found embedded file"
+        return EmbeddedScripting::getFileAsString(path)
+      end
+    rescue
+      puts "EmbeddedScripting not available"
+    end
+    
+    result = ""
+    if File.exists?(path)
+      puts "Found file on disk"
+      File.open(path, mode) do |file|
+        result = file.read
+      end
+    end
+    return result
+  end
+
   require 'json' # Used to load standards JSON files
 
   # HVAC sizing

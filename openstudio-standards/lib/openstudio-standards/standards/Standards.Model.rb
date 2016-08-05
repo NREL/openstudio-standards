@@ -33,7 +33,7 @@ def load_openstudio_standards_json
   standards_data_dir = "#{top_dir}/data/standards"
   standards_data = {}
   standards_files.sort.each do |standards_file|
-    temp = File.open("#{standards_data_dir}/#{standards_file}", 'r:UTF-8')
+    temp = loadResourceFile("#{standards_data_dir}/#{standards_file}", 'r:UTF-8')
     file_hash = JSON.load(temp)
     standards_data = standards_data.merge(file_hash)
   end
