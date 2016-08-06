@@ -33,7 +33,14 @@ def load_openstudio_standards_json
   standards_data_dir = "#{top_dir}/data/standards"
   standards_data = {}
   standards_files.sort.each do |standards_file|
-    temp = loadResourceFile("#{standards_data_dir}/#{standards_file}", 'r:UTF-8')
+    temp = ""
+    begin
+      temp = load_resource_relative("../../../data/standards/#{standards_file}", 'r:UTF-8')
+    rescue NoMethodError 
+      File.open("#{standards_data_dir}/#{standards_file}", 'r:UTF-8') do |f|
+        temp = f.read
+      end
+    end
     file_hash = JSON.load(temp)
     standards_data = standards_data.merge(file_hash)
   end
