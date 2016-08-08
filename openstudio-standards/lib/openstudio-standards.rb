@@ -20,7 +20,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/standards/Standards.Model'
 
   # BTAP (Natural Resources Canada)
-  #require_relative 'openstudio-standards/btap/btap'
+  require_relative 'openstudio-standards/btap/btap'
 
   # Utilities
   require_relative 'openstudio-standards/utilities/logging'

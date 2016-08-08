@@ -41,10 +41,6 @@ class OpenStudio::Model::Model
       'NECB-CNEB-8'  => epw_file.to_s
     }
 
-    # Define where the weather files live
-    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-    weather_dir = "#{top_dir}/data/weather"
-
     # Get the weather file name from the hash
     weather_file_name = climate_zone_weather_file_map[climate_zone]
     if weather_file_name.nil?
@@ -52,6 +48,29 @@ class OpenStudio::Model::Model
       return false
     end
 
+    # Define where the weather files lives
+    weather_dir = nil
+    if File.dirname(__FILE__)[0] == ':'
+      # running embedded copy of the gem
+      
+      # load weather file from embedded files
+      epw_string = load_resource_relative("../../../data/weather/#{weather_file_name}")
+      ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw','.ddy')}")
+      stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw','.stat')}")
+      
+      # extract to local weather dir
+      weather_dir = File.expand_path(File.join(Dir.pwd, "extracted_files/weather/"))
+      puts "Extracting weather files to #{weather_dir}"
+      FileUtils.mkdir_p(weather_dir)
+      File.open("#{weather_dir}/#{weather_file_name}", 'w') {|f| f << epw_string}
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw','.ddy')}", 'w') {|f| f << ddy_string}
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw','.stat')}", 'w') {|f| f << stat_string}
+    else
+      # loaded gem from system path
+      top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+      weather_dir = File.expand_path("#{top_dir}/data/weather")
+    end
+    
     # Add Weather File
     unless (Pathname.new weather_dir).absolute?
       weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
