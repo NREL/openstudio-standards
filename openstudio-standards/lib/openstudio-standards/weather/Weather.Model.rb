@@ -62,9 +62,9 @@ class OpenStudio::Model::Model
       weather_dir = File.expand_path(File.join(Dir.pwd, "extracted_files/weather/"))
       puts "Extracting weather files to #{weather_dir}"
       FileUtils.mkdir_p(weather_dir)
-      File.open("#{weather_dir}/#{weather_file_name}", 'w') {|f| f << epw_string}
-      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw','.ddy')}", 'w') {|f| f << ddy_string}
-      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw','.stat')}", 'w') {|f| f << stat_string}
+      File.open("#{weather_dir}/#{weather_file_name}", 'wb') {|f| f << epw_string ; f.flush}
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw','.ddy')}", 'wb') {|f| f << ddy_string ; f.flush}
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw','.stat')}", 'wb') {|f| f << stat_string ; f.flush}
     else
       # loaded gem from system path
       top_dir = File.expand_path('../../..', File.dirname(__FILE__))
