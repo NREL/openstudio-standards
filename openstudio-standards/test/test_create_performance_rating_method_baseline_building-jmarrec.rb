@@ -5,7 +5,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
   def test_jmarrec
 
-    model_name = 'model'
+    model_name = 'jmarrec'
     standard = '90.1-2010'
     climate_zone = 'ASHRAE 169-2006-5A'
     # Use addenda dn (heated only systems)

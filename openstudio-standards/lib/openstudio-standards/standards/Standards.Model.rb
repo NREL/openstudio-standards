@@ -220,6 +220,9 @@ class OpenStudio::Model::Model
       plant_loop.apply_performance_rating_method_baseline_temperatures(building_vintage)
     end
 
+    # Move Fan:ZoneExhaust and ZoneVentilation:DesignFlowRate at the end of the cooling/heating priority
+    self.reorder_zone_equipment_priority
+
     # Run sizing run with the HVAC equipment
     if self.runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
@@ -4229,6 +4232,28 @@ class OpenStudio::Model::Model
     return fuels.uniq.sort, combination_system, storage_capacity, total_heating_capacity
 
   end # end classify_swh_system_type
+
+
+  # Move Fan:ZoneExhaust and ZoneVentilation:DesignFlowRate at the end of the cooling/heating priority
+  def reorder_zone_equipment_priority
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "\n\n*** Moving Fan:ZoneExhaust and ZoneVentilation:DesignFlowRate at the end of the zone equipment priority ***")
+    self.getThermalZones.each do |zone|
+
+      if zone.equipment.size >= 2
+        zone.equipment.each do |equip|
+
+          if equip.to_ZoneVentilationDesignFlowRate.is_initialized || equip.to_FanZoneExhaust.is_initialized
+            zone.setCoolingPriority(equip, zone.equipment.size)
+            zone.setHeatingPriority(equip, zone.equipment.size)
+            OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{zone.name}: set #{equip.name} to last in line")
+          end
+        end
+      end
+
+    end
+
+  end # end reorder_zone_equipment_priority
 
 
 end
