@@ -3756,7 +3756,16 @@ class OpenStudio::Model::Model
     # Zone equipment
     self.getThermalZones.each do |zone|
       zone.equipment.each do |zone_equipment|
-        next if zone_equipment.to_FanZoneExhaust.is_initialized
+        # Do not delete the Fan:ZoneExhaust (local exhaust)
+        # Do not delete the ZoneVentilation:DesignFlowRate either (usually used for local exhaust)
+        if zone_equipment.to_FanZoneExhaust.is_initialized
+          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "In zone #{zone.name} found a FanZoneExhaust named #{zone_equipment.name}: Not deleting it.")
+          next
+        end
+        if zone_equipment.to_ZoneVentilationDesignFlowRate.is_initialized
+          OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "In zone #{zone.name} found a ZoneVentilationDesignFlowRate named #{zone_equipment.name}: Not deleting it.")
+          next
+        end
         zone_equipment.remove()
       end
     end
