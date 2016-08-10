@@ -2,7 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>set_default_construction_set</name>
   <uid>b7840b31-858b-4d1c-8832-787138c7a52c</uid>
-  <version_id>274bab6a-6fc1-41b0-ba41-8acf291a2afc</version_id>
+  <version_id>c064c66e-ad64-4d33-af42-352080317bea</version_id>
+  <version_modified>20160810T142524Z</version_modified>
   <xml_checksum>11D60F39</xml_checksum>
   <class_name>SetDefaultConstructionSet</class_name>
   <display_name>Set Default Construction Set</display_name>
@@ -85,12 +86,6 @@
   </attributes>
   <files>
     <file>
-      <filename>set_default_construction_set_test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>1B04C6B3</checksum>
-    </file>
-    <file>
       <version>
         <software_program>OpenStudio</software_program>
         <identifier>1.6.0</identifier>
@@ -112,6 +107,12 @@
       <filetype>osm</filetype>
       <usage_type>test</usage_type>
       <checksum>42038EB0</checksum>
+    </file>
+    <file>
+      <filename>set_default_construction_set_test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>86DD128E</checksum>
     </file>
   </files>
 </measure>

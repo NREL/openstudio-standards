@@ -2,7 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>change_building_location</name>
   <uid>d4db4971-f5ba-11e3-a3ac-0800200c9a66</uid>
-  <version_id>2bed00fb-68df-40dc-94ca-86a5131e2e2f</version_id>
+  <version_id>e4ea95b5-b930-4623-955f-dbf1f44d927a</version_id>
+  <version_modified>20160810T142524Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>ChangeBuildingLocation</class_name>
   <display_name>ChangeBuildingLocation</display_name>
@@ -60,12 +61,6 @@
       <checksum>B5BF926A</checksum>
     </file>
     <file>
-      <filename>btap_change_location_test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>7D6F1803</checksum>
-    </file>
-    <file>
       <filename>CAN_AB_Calgary.718770_CWEC.ddy</filename>
       <filetype>ddy</filetype>
       <usage_type>test</usage_type>
@@ -82,6 +77,12 @@
       <filetype>stat</filetype>
       <usage_type>test</usage_type>
       <checksum>F31D30A0</checksum>
+    </file>
+    <file>
+      <filename>btap_change_location_test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>8D356B45</checksum>
     </file>
   </files>
 </measure>

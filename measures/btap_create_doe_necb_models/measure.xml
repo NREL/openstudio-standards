@@ -2,7 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>convert_doe_reference_to_necbosm</name>
   <uid>a87039f4-d7b2-40ac-9e97-80745f6c7c32</uid>
-  <version_id>b600a399-8189-45b3-abd1-5ebae057278c</version_id>
+  <version_id>507bbc18-2c80-4bab-a69f-06b680e84dc3</version_id>
+  <version_modified>20160810T142524Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>ConvertDOEReferenceToNECBOSM</class_name>
   <display_name>ConvertDOEReferenceToNECBOSM</display_name>
@@ -49,7 +50,7 @@
       <filename>DOE2NECB_Model_Test.rb</filename>
       <filetype>rb</filetype>
       <usage_type>test</usage_type>
-      <checksum>8E858419</checksum>
+      <checksum>5CCB1E06</checksum>
     </file>
   </files>
 </measure>

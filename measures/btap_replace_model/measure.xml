@@ -1,8 +1,10 @@
 <measure>
   <schema_version>3.0</schema_version>
+  <error>superclass mismatch for class ReplaceModel</error>
   <name>replace_model</name>
   <uid>2b5abde0-82d3-46a5-a43c-1a463ffcd9fa</uid>
-  <version_id>00660de7-3a9f-490f-a0c1-576b6a2d9b6b</version_id>
+  <version_id>b9927d58-08c2-4025-805e-31e38a105528</version_id>
+  <version_modified>20160810T142524Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>ReplaceModel</class_name>
   <display_name>Replaces OpenStudio Model with one loaded. </display_name>
@@ -50,12 +52,6 @@
       <checksum>6616E1BE</checksum>
     </file>
     <file>
-      <filename>ReplaceModel_Test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>FF8C2ACB</checksum>
-    </file>
-    <file>
       <version>
         <software_program>OpenStudio</software_program>
         <identifier>0.10.2</identifier>
@@ -71,6 +67,12 @@
       <filetype>osm</filetype>
       <usage_type>test</usage_type>
       <checksum>B5BF926A</checksum>
+    </file>
+    <file>
+      <filename>ReplaceModel_Test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>5EF4710D</checksum>
     </file>
   </files>
 </measure>

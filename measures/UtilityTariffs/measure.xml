@@ -2,7 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>utility_tariffs_model_setup</name>
   <uid>7353d86e-d166-4f32-a572-27ce8e65ebb5</uid>
-  <version_id>6cb4e071-cc24-43f4-897d-f0c2a9e6d8ea</version_id>
+  <version_id>37fe9f20-2d8a-4df5-ae5c-ea715ef38353</version_id>
+  <version_modified>20160810T142524Z</version_modified>
   <xml_checksum>4A4E44A5</xml_checksum>
   <class_name>UtilityTariffsModelSetup</class_name>
   <display_name>Utility Tariffs Model Setup</display_name>
@@ -26,12 +27,6 @@
     </attribute>
   </attributes>
   <files>
-    <file>
-      <filename>UtilityTariffs_Test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>BDF6DE1E</checksum>
-    </file>
     <file>
       <version>
         <software_program>OpenStudio</software_program>
@@ -96,6 +91,12 @@
       <filetype>rb</filetype>
       <usage_type>resource</usage_type>
       <checksum>4829124D</checksum>
+    </file>
+    <file>
+      <filename>UtilityTariffs_Test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>7F8E0D03</checksum>
     </file>
   </files>
 </measure>

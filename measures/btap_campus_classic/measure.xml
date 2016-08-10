@@ -2,7 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>cold_lake_classic</name>
   <uid>e63d5314-2873-4ff6-ae7d-21462d3d2781</uid>
-  <version_id>39f1bbd3-662e-41e5-92f2-abb6c8f2fe2a</version_id>
+  <version_id>95053edf-3cad-4868-9528-a3a31352aaaa</version_id>
+  <version_modified>20160810T142524Z</version_modified>
   <xml_checksum>1E1F8B97</xml_checksum>
   <class_name>ColdLakeClassic</class_name>
   <display_name>ColdLakeVintageMaker</display_name>
@@ -143,7 +144,7 @@
       <filename>btap_coldlake_classic_test.rb</filename>
       <filetype>rb</filetype>
       <usage_type>test</usage_type>
-      <checksum>76512AAF</checksum>
+      <checksum>0BD0092D</checksum>
     </file>
   </files>
 </measure>

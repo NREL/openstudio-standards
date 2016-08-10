@@ -6,10 +6,11 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
   def test_jmarrec
 
     model_name = 'model'
-    standard = '90.1-2007'
+    standard = '90.1-2010'
     climate_zone = 'ASHRAE 169-2006-5A'
     # Use addenda dn (heated only systems)
-    custom = '90.1-2007 with addenda dn'
+    # custom = '90.1-2007 with addenda dn'
+    custom=nil
     model = create_baseline_model(model_name, standard, climate_zone, 'MidriseApartment', custom, debug = true, load_existing_model = true)
 
     # Do another sizing run just to check that the final values are actually correct
