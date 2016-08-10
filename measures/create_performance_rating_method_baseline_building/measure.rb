@@ -87,6 +87,7 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
     # Make an argument for the customization
     custom_chs = OpenStudio::StringVector.new
     custom_chs << 'Xcel Energy CO EDA'
+    custom_chs << '90.1-2007 with addenda dn'
     custom_chs << '*None*'
     custom = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('custom', custom_chs, true)
     custom.setDisplayName('Customization')
