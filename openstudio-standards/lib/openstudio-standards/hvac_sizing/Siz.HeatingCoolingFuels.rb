@@ -307,14 +307,17 @@ class OpenStudio::Model::Model
       # Get the object type
       obj_type = equipment.iddObjectType.valueName.to_s
       case obj_type    
-      when 'to_AirTerminal_SingleDuct_ConstantVolume_CooledBeam'
+      when 'OS_AirTerminal_SingleDuct_ConstantVolume_CooledBeam'
         equipment = equipment.to_AirTerminalSingleDuctConstantVolumeCooledBeam.get
         fuels += self.coil_cooling_fuels(equipment.coilCoolingCooledBeam)
-      when 'to_AirTerminal_SingleDuct_ConstantVolume_FourPipeInduction'      
+      when 'OS_AirTerminal_SingleDuct_ConstantVolume_FourPipeInduction'      
         equipment = equipment.to_AirTerminalSingleDuctConstantVolumeFourPipeInduction.get
         if equipment.coolingCoil.is_initialized
-          fuels += self.coil_heating_fuels(equipment.coolingCoil.get) 
+          fuels += self.coil_cooling_fuels(equipment.coolingCoil.get) 
         end
+      when 'OS_ZoneHVAC_FourPipeFanCoil'
+        equipment = equipment.to_ZoneHVACFourPipeFanCoil.get
+        fuels += self.coil_cooling_fuels(equipment.coolingCoil)
       when 'OS_Refrigeration_AirChiller'
         fuels << 'Electricity'
       when 'OS_ZoneHVAC_IdealLoadsAirSystem'
