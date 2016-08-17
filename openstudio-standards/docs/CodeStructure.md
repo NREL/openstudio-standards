@@ -19,8 +19,6 @@ These files contain information from energy codes/standards, as well as typical 
 
 Rather than editing the JSON files directly, developers should edit [The OpenStudio_Standards Google Spreadsheet](https://docs.google.com/spreadsheets/d/15-mlZrWbA4srtFHtWRP1dgPeuI5plFdjCb1B79fEukI/edit?usp=sharing)
 
-**TODO** Show how to export the spreadsheet `Standards.export_OpenStudio_HVAC_Standards.rb`
-
 ### /weather
 
 These files contain weather information for representative locations. The `.epw` files contain typical annual weather data, the `.ddy` files contain design day information, and the `.stat` files contain a summary of the weather in that location.
@@ -35,7 +33,7 @@ These files contain methods to apply the Canadian energy code (NECB) to models, 
 
 ### /hvac_sizing
 
-These files extend OpenStudio classes to allow users to run a sizing run and access autosized HVAC equipment values (capacities, flow rates, etc.), and to pull these values back into the model if desired.
+These files extend OpenStudio classes to allow users to run a sizing run and access autosized HVAC equipment values (capacities, flow rates, etc.), and to pull these values back into the model if desired.  These methods will eventually be moved into the OpenStudio C++.
 
 ### /prototypes
 
@@ -51,7 +49,7 @@ These files extend the OpenStudio classes to allow a model to import design days
 
 ## /test
 
-This directory contains the simulation results from the legacy IDF files, as well as test fixtures which will run the Measure, create the models, and then compare the model results against the legacy IDF files.
+This directory contains unit tests which run various portions of the code and ensure that it is working.  When new functionality is added to this library, corresponding unit tests should be added as well.
 
 ## docs
 

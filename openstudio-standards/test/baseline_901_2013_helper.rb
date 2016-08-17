@@ -85,6 +85,11 @@ module Baseline9012013
         heat_set_t = OpenStudio.convert(heating_min_max['max'],"C","F").get
         cool_set_t = OpenStudio.convert(cooling_min_max['min'],"C","F").get
         
+        # don't check zones where the heating or cooling setpoints
+        # are such that the heating or cooling equipment never runs
+        next if heat_set_t < 41
+        next if cool_set_t > 91
+        
         # get sizing:zone supply air temperatures
         cool_sizing = zone.sizingZone.zoneCoolingDesignSupplyAirTemperature
         heat_sizing = zone.sizingZone.zoneHeatingDesignSupplyAirTemperature

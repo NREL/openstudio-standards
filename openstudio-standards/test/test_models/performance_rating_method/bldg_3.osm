@@ -38675,7 +38675,7 @@ OS:StandardsInformation:Construction,
   ,                                       !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
-  ,                                       !- Fenestration Frame Type
+  Metal Framing,                          !- Fenestration Frame Type
   ,                                       !- Fenestration Divider Type
   ,                                       !- Fenestration Tint
   ;                                       !- Fenestration Gas Fill
@@ -38699,7 +38699,7 @@ OS:StandardsInformation:Construction,
   ,                                       !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
-  ,                                       !- Fenestration Frame Type
+  Metal Framing,                          !- Fenestration Frame Type
   ,                                       !- Fenestration Divider Type
   ,                                       !- Fenestration Tint
   ;                                       !- Fenestration Gas Fill
@@ -38723,7 +38723,7 @@ OS:StandardsInformation:Construction,
   ,                                       !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
-  ,                                       !- Fenestration Frame Type
+  Metal Framing,                          !- Fenestration Frame Type
   ,                                       !- Fenestration Divider Type
   ,                                       !- Fenestration Tint
   ;                                       !- Fenestration Gas Fill

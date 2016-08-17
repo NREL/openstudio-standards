@@ -2356,7 +2356,7 @@ module BTAP
             # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
             # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
             
-            # Some system parameters are set after system is set up; by applying method 'applyHVACEfficiencyStandard'
+            # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 
 
             always_on = model.alwaysOnDiscreteSchedule
@@ -2395,10 +2395,10 @@ module BTAP
               air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
-              air_loop_sizing.setPrecoolDesignTemperature(12.8)
+              air_loop_sizing.setPrecoolDesignTemperature(13.0)
               air_loop_sizing.setPrecoolDesignHumidityRatio(0.008)
-              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(12.8)
-              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(40.0)
+              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(13.0)
+              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(43.0)
               air_loop_sizing.setSizingOption("NonCoincident")
               air_loop_sizing.setAllOutdoorAirinCooling(false)
               air_loop_sizing.setAllOutdoorAirinHeating(false)
@@ -2473,6 +2473,13 @@ module BTAP
             
             zones.each do |zone|
 
+              # Zone sizing temperature
+              sizing_zone = zone.sizingZone
+              sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
+              sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
+              sizing_zone.setZoneCoolingSizingFactor(1.1)
+              sizing_zone.setZoneHeatingSizingFactor(1.3)
+              
               # Set up PTAC heating coil; apply always off schedule            
  
               # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
@@ -2552,7 +2559,7 @@ module BTAP
             # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
             # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
             
-            # Some system parameters are set after system is set up; by applying method 'applyHVACEfficiencyStandard'
+            # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 
 
             always_on = model.alwaysOnDiscreteSchedule
@@ -2614,8 +2621,8 @@ module BTAP
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
               air_loop_sizing.setPrecoolDesignTemperature(12.8)
               air_loop_sizing.setPrecoolDesignHumidityRatio(0.008)
-              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(12.8)
-              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(40.0)
+              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(13.0)
+              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(43.0)
               air_loop_sizing.setSizingOption("NonCoincident")
               air_loop_sizing.setAllOutdoorAirinCooling(false)
               air_loop_sizing.setAllOutdoorAirinHeating(false)
@@ -2714,6 +2721,13 @@ module BTAP
             
             zones.each do |zone|
             
+              # Zone sizing temperature
+              sizing_zone = zone.sizingZone
+              sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
+              sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
+              sizing_zone.setZoneCoolingSizingFactor(1.1)
+              sizing_zone.setZoneHeatingSizingFactor(1.3)
+
               # Set up PTAC heating coil; apply always off schedule            
  
               # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
@@ -2877,10 +2891,10 @@ module BTAP
             air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
             air_loop_sizing.setPreheatDesignTemperature(7.0)
             air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
-            air_loop_sizing.setPrecoolDesignTemperature(12.8)
+            air_loop_sizing.setPrecoolDesignTemperature(13.0)
             air_loop_sizing.setPrecoolDesignHumidityRatio(0.008)
             air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(13.0)
-            air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(12.8)
+            air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(13.1)
             air_loop_sizing.setSizingOption("NonCoincident")
             air_loop_sizing.setAllOutdoorAirinCooling(false)
             air_loop_sizing.setAllOutdoorAirinHeating(false)
@@ -2926,13 +2940,20 @@ module BTAP
             # TO DO: need to have method to pick appropriate control zone?
 
             setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
-            setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(12.8)
-            setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(13.0)
+            setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(13.0)
+            setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(13.1)
             setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
            
             # Set up FC (ZoneHVAC,cooling coil, heating coil, fan) in each zone
 
             zones.each do |zone| 
+
+              # Zone sizing temperature
+              sizing_zone = zone.sizingZone
+              sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
+              sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
+              sizing_zone.setZoneCoolingSizingFactor(1.1)
+              sizing_zone.setZoneHeatingSizingFactor(1.3)
 
               # fc supply fan
               fc_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
@@ -3007,10 +3028,10 @@ module BTAP
               air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
-              air_loop_sizing.setPrecoolDesignTemperature(12.8)
+              air_loop_sizing.setPrecoolDesignTemperature(13.0)
               air_loop_sizing.setPrecoolDesignHumidityRatio(0.008)
-              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(12.8)
-              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(40)
+              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(13.0)
+              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(43)
               air_loop_sizing.setSizingOption("NonCoincident")
               air_loop_sizing.setAllOutdoorAirinCooling(false)
               air_loop_sizing.setAllOutdoorAirinHeating(false)
@@ -3021,6 +3042,13 @@ module BTAP
               air_loop_sizing.setHeatingDesignAirFlowMethod("DesignDay")
               air_loop_sizing.setHeatingDesignAirFlowRate(0.0)
               air_loop_sizing.setSystemOutdoorAirMethod("ZoneSum")
+
+              # Zone sizing temperature
+              sizing_zone = zone.sizingZone
+              sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
+              sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
+              sizing_zone.setZoneCoolingSizingFactor(1.1)
+              sizing_zone.setZoneHeatingSizingFactor(1.3)
 
               fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
                            
@@ -3035,7 +3063,9 @@ module BTAP
                 htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)  
                 supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
                 htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-10.0)
-                
+                sizing_zone.setZoneHeatingSizingFactor(1.3)
+                sizing_zone.setZoneCoolingSizingFactor(1.0)
+puts 'test1111'               
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")
               end
@@ -3165,10 +3195,10 @@ module BTAP
               air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
-              air_loop_sizing.setPrecoolDesignTemperature(12.8)
+              air_loop_sizing.setPrecoolDesignTemperature(13.0)
               air_loop_sizing.setPrecoolDesignHumidityRatio(0.008)
-              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(12.8)
-              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(40.0)
+              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(13.0)
+              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(43.0)
               air_loop_sizing.setSizingOption("NonCoincident")
               air_loop_sizing.setAllOutdoorAirinCooling(false)
               air_loop_sizing.setAllOutdoorAirinHeating(false)
@@ -3179,6 +3209,13 @@ module BTAP
               air_loop_sizing.setHeatingDesignAirFlowMethod("DesignDay")
               air_loop_sizing.setHeatingDesignAirFlowRate(0.0)
               air_loop_sizing.setSystemOutdoorAirMethod("ZoneSum")
+
+              # Zone sizing temperature
+              sizing_zone = zone.sizingZone
+              sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
+              sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
+              sizing_zone.setZoneCoolingSizingFactor(1.1)
+              sizing_zone.setZoneHeatingSizingFactor(1.3)
 
               fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
 
@@ -3214,7 +3251,8 @@ module BTAP
                 htg_stage_3 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
                 htg_stage_4 = OpenStudio::Model::CoilHeatingDXMultiSpeedStageData.new(model)
                 supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
-                
+                sizing_zone.setZoneHeatingSizingFactor(1.3)
+                sizing_zone.setZoneCoolingSizingFactor(1.0)
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")
               end
@@ -3342,10 +3380,10 @@ module BTAP
               air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
-              air_loop_sizing.setPrecoolDesignTemperature(12.8)
+              air_loop_sizing.setPrecoolDesignTemperature(13.0)
               air_loop_sizing.setPrecoolDesignHumidityRatio(0.008)
-              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(12.8)
-              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(40.0)
+              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(13.0)
+              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(43.0)
               air_loop_sizing.setSizingOption("NonCoincident")
               air_loop_sizing.setAllOutdoorAirinCooling(false)
               air_loop_sizing.setAllOutdoorAirinHeating(false)
@@ -3356,6 +3394,13 @@ module BTAP
               air_loop_sizing.setHeatingDesignAirFlowMethod("DesignDay")
               air_loop_sizing.setHeatingDesignAirFlowRate(0.0)
               air_loop_sizing.setSystemOutdoorAirMethod("ZoneSum")
+
+              # Zone sizing temperature
+              sizing_zone = zone.sizingZone
+              sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
+              sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
+              sizing_zone.setZoneCoolingSizingFactor(1.1)
+              sizing_zone.setZoneHeatingSizingFactor(1.3)
 
               fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
                             
@@ -3491,13 +3536,13 @@ module BTAP
                 air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
                 air_loop.setName("VAV with Reheat")
                 sizingSystem = air_loop.sizingSystem
-                sizingSystem.setCentralCoolingDesignSupplyAirTemperature(14.0)
-                sizingSystem.setCentralHeatingDesignSupplyAirTemperature(14.0)
+                sizingSystem.setCentralCoolingDesignSupplyAirTemperature(13.0)
+                sizingSystem.setCentralHeatingDesignSupplyAirTemperature(13.1)
                 sizingSystem.autosizeDesignOutdoorAirFlowRate
                 sizingSystem.setMinimumSystemAirFlowRatio(0.3)
                 sizingSystem.setPreheatDesignTemperature(7.0)
                 sizingSystem.setPreheatDesignHumidityRatio(0.008)
-                sizingSystem.setPrecoolDesignTemperature(14.0)
+                sizingSystem.setPrecoolDesignTemperature(13.0)
                 sizingSystem.setPrecoolDesignHumidityRatio(0.008)
                 sizingSystem.setSizingOption("NonCoincident")
                 sizingSystem.setAllOutdoorAirinCooling(false)
@@ -3543,7 +3588,7 @@ module BTAP
 
                 # Add a setpoint manager to control the
                 # supply air to a constant temperature
-                sat_c = 14.0
+                sat_c = 13.0
                 sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
                 sat_sch.setName("Supply Air Temp")
                 sat_sch.defaultDaySchedule().setName("Supply Air Temp Default")
@@ -3556,6 +3601,14 @@ module BTAP
                 # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array. 
                 # and hook the reheat coil to the HW loop
                 ( BTAP::Geometry::BuildingStoreys::get_zones_from_storey(story) & zones).each do |zone|
+                  
+                  # Zone sizing parameters
+                  sizing_zone = zone.sizingZone
+                  sizing_zone.setZoneCoolingDesignSupplyAirTemperature(13.0)
+                  sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
+                  sizing_zone.setZoneCoolingSizingFactor(1.1)
+                  sizing_zone.setZoneHeatingSizingFactor(1.3)
+
                   if(heating_coil_type == "Hot Water")
                     reheat_coil = OpenStudio::Model::CoilHeatingWater.new(model,always_on)
                     hw_loop.addDemandBranchForComponent(reheat_coil)
@@ -3570,7 +3623,7 @@ module BTAP
                   #TODO: schedule based on whether the zone is occupied or not as stipulated in 8.4.4.22 of NECB2011
                   min_flow_rate = 0.002*zone.floorArea
                   vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate) 
-	                vav_terminal.setMaximumReheatAirTemperature(40)
+	                vav_terminal.setMaximumReheatAirTemperature(43)
 
                   #Set zone baseboards
                   if ( baseboard_type == "Electric") then

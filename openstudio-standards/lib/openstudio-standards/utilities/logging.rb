@@ -8,19 +8,18 @@ $OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug)
 # debug @param [Boolean] If true, include the debug messages in the log
 # @return [Runner] The same Measure runner, with messages from the openstudio-standards library added
 def log_messages_to_runner(runner, debug = false)
-
   $OPENSTUDIO_LOG.logMessages.each do |msg|
     # DLM: you can filter on log channel here for now
-    if /openstudio.*/.match(msg.logChannel) #/openstudio\.model\..*/
+    if /openstudio.*/ =~ msg.logChannel # /openstudio\.model\..*/
       # Skip certain messages that are irrelevant/misleading
-      next if msg.logMessage.include?("Skipping layer") || # Annoying/bogus "Skipping layer" warnings
-          msg.logChannel.include?("runmanager") || # RunManager messages
-          msg.logChannel.include?("setFileExtension") || # .ddy extension unexpected
-          msg.logChannel.include?("Translator") || # Forward translator and geometry translator
-          msg.logMessage.include?("UseWeatherFile") || # 'UseWeatherFile' is not yet a supported option for YearDescription
-          msg.logMessage.include?("EpwFile") || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
-          msg.logMessage.include?("has multiple parents") # Bogus errors about curves having multiple parents
-          
+      next if msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
+              msg.logChannel.include?('runmanager') || # RunManager messages
+              msg.logChannel.include?('setFileExtension') || # .ddy extension unexpected
+              msg.logChannel.include?('Translator') || # Forward translator and geometry translator
+              msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
+              msg.logMessage.include?('EpwFile') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
+              msg.logMessage.include?('has multiple parents') # Bogus errors about curves having multiple parents
+
       # Report the message in the correct way
       if msg.logLevel == OpenStudio::Info
         runner.registerInfo(msg.logMessage)
@@ -33,7 +32,6 @@ def log_messages_to_runner(runner, debug = false)
       end
     end
   end
- 
 end
 
 # Log the info, warning, and error messages to a file.
@@ -41,23 +39,21 @@ end
 # debug @param [Boolean] If true, include the debug messages in the log
 # @return [Array<String>] The array of messages, which can be used elsewhere.
 def log_messages_to_file(file_path, debug = false)
-
   messages = []
 
-  File.open(file_path, 'w') do |file|  
-  
+  File.open(file_path, 'w') do |file|
     $OPENSTUDIO_LOG.logMessages.each do |msg|
       # DLM: you can filter on log channel here for now
-      if /openstudio.*/.match(msg.logChannel) #/openstudio\.model\..*/
+      if /openstudio.*/ =~ msg.logChannel # /openstudio\.model\..*/
         # Skip certain messages that are irrelevant/misleading
-        next if msg.logMessage.include?("Skipping layer") || # Annoying/bogus "Skipping layer" warnings
-            msg.logChannel.include?("runmanager") || # RunManager messages
-            msg.logChannel.include?("setFileExtension") || # .ddy extension unexpected
-            msg.logChannel.include?("Translator") || # Forward translator and geometry translator
-            msg.logMessage.include?("UseWeatherFile") || # 'UseWeatherFile' is not yet a supported option for YearDescription
-            msg.logMessage.include?("EpwFile") || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
-            msg.logMessage.include?("has multiple parents") # Bogus errors about curves having multiple parents
-            
+        next if msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
+                msg.logChannel.include?('runmanager') || # RunManager messages
+                msg.logChannel.include?('setFileExtension') || # .ddy extension unexpected
+                msg.logChannel.include?('Translator') || # Forward translator and geometry translator
+                msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
+                msg.logMessage.include?('EpwFile') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
+                msg.logMessage.include?('has multiple parents') # Bogus errors about curves having multiple parents
+
         # Report the message in the correct way
         if msg.logLevel == OpenStudio::Info
           s = "INFO  #{msg.logMessage}"
@@ -78,41 +74,35 @@ def log_messages_to_file(file_path, debug = false)
         end
       end
     end
-    
   end
-  
+
   return messages
- 
 end
 
 # Get an array of all messages of a given type in the log
 def get_logs(log_type = OpenStudio::Error)
-
   errors = []
 
   $OPENSTUDIO_LOG.logMessages.each do |msg|
-    if /openstudio.*/.match(msg.logChannel)
+    if /openstudio.*/ =~ msg.logChannel
       # Skip certain messages that are irrelevant/misleading
-      next if msg.logMessage.include?("Skipping layer") || # Annoying/bogus "Skipping layer" warnings
-          msg.logChannel.include?("runmanager") || # RunManager messages
-          msg.logChannel.include?("setFileExtension") || # .ddy extension unexpected
-          msg.logChannel.include?("Translator") || # Forward translator and geometry translator
-          msg.logMessage.include?("UseWeatherFile") || # 'UseWeatherFile' is not yet a supported option for YearDescription
-          msg.logMessage.include?("EpwFile") || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
-          msg.logMessage.include?("has multiple parents") # Bogus errors about curves having multiple parents
+      next if msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
+              msg.logChannel.include?('runmanager') || # RunManager messages
+              msg.logChannel.include?('setFileExtension') || # .ddy extension unexpected
+              msg.logChannel.include?('Translator') || # Forward translator and geometry translator
+              msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
+              msg.logMessage.include?('EpwFile') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
+              msg.logMessage.include?('has multiple parents') # Bogus errors about curves having multiple parents
       # Only fail on the errors
       if msg.logLevel == log_type
         errors << "[#{msg.logChannel}] #{msg.logMessage}"
       end
     end
-  end 
+  end
 
   return errors
-  
 end
 
 def reset_log
-
   $OPENSTUDIO_LOG.resetStringStream
-
 end

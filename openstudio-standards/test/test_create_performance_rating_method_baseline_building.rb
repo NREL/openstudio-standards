@@ -7,7 +7,7 @@ class Baseline9012013Test < Minitest::Test
   include Baseline9012013
 
   # Simple example test that checks LPD of gyms
-  def dont_testsec_school_example_test
+  def testsec_school_example_test
 
     base_model = create_baseline_model('SecondarySchool-DOE Ref Pre-1980-ASHRAE 169-2006-2A', '90.1-2013', 'ASHRAE 169-2006-2A', 'SecondarySchool', 'Xcel Energy CO EDA', false, true)
 
@@ -29,7 +29,13 @@ class Baseline9012013Test < Minitest::Test
     base_model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
 
   end  
-  
+
+  def test_bldg_3
+
+    base_model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+
+  end
+
   def test_bldg_4
 
     base_model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
@@ -226,7 +232,7 @@ class Baseline9012013Test < Minitest::Test
   def test_bldg_13_economizer
 
     base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
-    check_sat_delta(base_model)
+    check_economizers(base_model)
     
   end
 
