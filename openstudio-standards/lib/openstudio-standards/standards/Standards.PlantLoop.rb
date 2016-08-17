@@ -345,6 +345,12 @@ class OpenStudio::Model::PlantLoop
 
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
 
+      # Not required for service water heating systems
+      if swh_loop?
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}: supply water temperature reset not required for service water heating systems.")
+        return reset_required
+      end
+
       # Not required for variable flow systems
       if variable_flow_system?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}: supply water temperature reset not required for variable flow systems per 6.5.4.3 Exception b.")
@@ -494,6 +500,7 @@ class OpenStudio::Model::PlantLoop
   #
   # @return [Double] total heating capacity
   #   units = Watts (W)
+  # @todo Add district heating to plant loop heating capacity
   def total_heating_capacity
     # Sum the heating capacity for all heating components
     # on the plant loop.
@@ -507,13 +514,33 @@ class OpenStudio::Model::PlantLoop
         elsif boiler.autosizedNominalCapacity.is_initialized
           total_heating_capacity_w += boiler.autosizedNominalCapacity.get
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name} capacity of #{boiler.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of Boiler:HotWater ' #{boiler.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
+        end
+      # WaterHeater:Mixed
+      elsif sc.to_WaterHeaterMixed.is_initialized
+        water_heater = sc.to_WaterHeaterMixed.get
+        if water_heater.heaterMaximumCapacity.is_initialized
+          total_heating_capacity_w += water_heater.heaterMaximumCapacity.get
+        elsif water_heater.autosizedHeaterMaximumCapacity.is_initialized
+          total_heating_capacity_w += water_heater.autosizedHeaterMaximumCapacity.get
+        else
+          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of WaterHeater:Mixed #{water_heater.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
+        end
+      # WaterHeater:Stratified
+      elsif sc.to_WaterHeaterStratified.is_initialized
+        water_heater = sc.to_WaterHeaterStratified.get
+        if water_heater.heater1Capacity.is_initialized
+          total_heating_capacity_w += water_heater.heater1Capacity.get
+        end
+        if water_heater.heater2Capacity.is_initialized
+          total_heating_capacity_w += water_heater.heater2Capacity.get
         end
       end
-    end
+      # TODO: Add DistrictHeating
+    end # End loop on supplyComponents
 
-    total_heating_capacity_kbtu_per_hr = OpenStudio.convert(total_heating_capacity_w, 'W', 'tons').get
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, heating capacity is #{total_heating_capacity_kbtu_per_hr.round} kBtu/hr.")
+    total_heating_capacity_kbtu_per_hr = OpenStudio.convert(total_heating_capacity_w,'W','kBtu/hr').get
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, heating capacity is #{total_heating_capacity_kbtu_per_hr.round} kBtu/hr.")
 
     return total_heating_capacity_w
   end
@@ -1060,5 +1087,21 @@ class OpenStudio::Model::PlantLoop
     end
 
     return maximum_loop_flow_rate
+  end
+
+  # Determines if the loop is a Service Water Heating loop by checking if there is a WaterUseConnection on the demand side
+  #
+  # @return [Boolean] true if it's indeed a SHW loop, false otherwise
+  def swh_loop?()
+
+    serves_swh = false
+    self.demandComponents.each do |comp|
+      if comp.to_WaterUseConnections.is_initialized
+        serves_swh = true
+        break
+      end
+    end
+
+    return serves_swh
   end
 end

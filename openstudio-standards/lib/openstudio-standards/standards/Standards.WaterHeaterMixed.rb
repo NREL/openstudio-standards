@@ -199,4 +199,27 @@ class OpenStudio::Model::WaterHeaterMixed
 
     return true
   end
+
+  # Finds capacity in Btu/hr
+  #
+  # @return [Double] capacity in Btu/hr to be used for find object
+  def find_capacity()
+
+    # Get the coil capacity
+    capacity_w = nil
+    if self.heaterMaximumCapacity.is_initialized
+      capacity_w = self.heaterMaximumCapacity.get
+    elsif self.autosizedHeaterMaximumCapacity.is_initialized
+      capacity_w = self.autosizedHeaterMaximumCapacity.get
+    else
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{self.name} capacity is not available.")
+      return false
+    end
+
+    # Convert capacity to Btu/hr
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
+
+    return capacity_btu_per_hr
+
+  end
 end
