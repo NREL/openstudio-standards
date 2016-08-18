@@ -94,7 +94,7 @@ class OpenStudio::Model::Model
   # @param building_type [String] the building type
   # @param template [String] the template.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @param climate_zone [String] the climate zone
-  # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are Xcel Energy CO EDA.
+  # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
   # If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
@@ -119,9 +119,15 @@ class OpenStudio::Model::Model
 
     # Modify the internal loads in each space type,
     # keeping user-defined schedules.
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Changing Lighting Loads ***')
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Changing Lighting Loads ***")
     getSpaceTypes.sort.each do |space_type|
-      space_type.apply_internal_loads(template, false, true, false, false, false, false)
+      set_people = false
+      set_lights = true
+      set_electric_equipment = false
+      set_gas_equipment = false
+      set_ventilation = false
+      set_infiltration = false
+      space_type.apply_internal_loads(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     end
 
     # If any of the lights are missing schedules, assign an
@@ -148,13 +154,13 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
     sys_groups = prm_baseline_system_groups(template, custom)
 
-    # Remove all HVAC from model
+    # Remove all HVAC from model,
+    # excluding service water heating
     remove_prm_hvac
 
-    # Set the water heater fuel types
-    getWaterHeaterMixeds.each do |water_heater|
-      water_heater.apply_prm_baseline_fuel_type(template, building_type)
-    end
+    # Modify the service water heating loops
+    # per the baseline rules
+    apply_baseline_swh_loops(template, building_type)
 
     # Determine the baseline HVAC system type for each of
     # the groups of zones and add that system type.
@@ -203,6 +209,8 @@ class OpenStudio::Model::Model
 
     # Apply the baseline system temperatures
     getPlantLoops.sort.each do |plant_loop|
+      # Skip the SWH loops
+      next if plant_loop.swh_loop?
       plant_loop.apply_prm_baseline_temperatures(template)
     end
 
@@ -223,6 +231,8 @@ class OpenStudio::Model::Model
 
     # Set the baseline number of boilers and chillers
     getPlantLoops.sort.each do |plant_loop|
+      # Skip the SWH loops
+      next if plant_loop.swh_loop?
       plant_loop.apply_prm_number_of_boilers(template)
       plant_loop.apply_prm_number_of_chillers(template)
     end
@@ -230,6 +240,8 @@ class OpenStudio::Model::Model
     # Set the baseline number of cooling towers
     # Must be done after all chillers are added
     getPlantLoops.sort.each do |plant_loop|
+      # Skip the SWH loops
+      next if plant_loop.swh_loop?
       plant_loop.apply_prm_number_of_cooling_towers(template)
     end
 
@@ -242,6 +254,8 @@ class OpenStudio::Model::Model
     # Set the pumping control strategy and power
     # Must be done after sizing components
     getPlantLoops.sort.each do |plant_loop|
+      # Skip the SWH loops
+      next if plant_loop.swh_loop?
       plant_loop.apply_prm_baseline_pump_power(template)
       plant_loop.apply_prm_baseline_pumping_type(template)
     end
@@ -463,6 +477,17 @@ class OpenStudio::Model::Model
         gp_zns << zn['zone']
       end
 
+      # All heated only zones get their own HVAC
+      if gp['type'] == "heatedonly"
+        group = {}
+        group['area_ft2'] = area_ft2
+        group['type'] = gp['type']
+        group['fuel'] = gp['fuel']
+        group['zones'] = gp_zns
+        final_groups << group
+        next
+      end
+
       # If this is the dominant group, report it directly
       if gp['type'] == dom_type && gp['fuel'] == dom_fuel
         dom['area_ft2'] += area_ft2
@@ -533,6 +558,10 @@ class OpenStudio::Model::Model
     if custom == 'Xcel Energy CO EDA'
       template = '90.1-2010'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 lookup for HVAC system types shall be used.')
+    end
+    if custom == "90.1-2007 with addenda dn"
+      template = '90.1-2010'
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Addenda dn of 90.1-2007, System 10 and 11 (same as system 9 and 10 in 90.1-2010) will be used for heated only space.')
     end
 
     # Get the row from TableG3.1.1A
@@ -3668,7 +3697,7 @@ class OpenStudio::Model::Model
             # Reduce the size of the skylight
             red = 1.0 - mult
             ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
-          end
+        end
         end
       end
     end # template case
@@ -3684,14 +3713,8 @@ class OpenStudio::Model::Model
   def remove_prm_hvac
     # Plant loops
     getPlantLoops.each do |loop|
-      serves_swh = false
-      loop.demandComponents.each do |comp|
-        if comp.to_WaterUseConnections.is_initialized
-          serves_swh = true
-          break
-        end
-      end
-      next if serves_swh
+      # Don't remove service water heating loops
+      next if loop.swh_loop?
       loop.remove
     end
 
@@ -4019,5 +4042,90 @@ class OpenStudio::Model::Model
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Schedule type: #{sch_type} is not recognized.  Valid choices are 'Constant' and 'Hourly'.")
     end
+  end
+
+  # Modify the existing service water heating loops
+  # to match the baseline required heating type.
+  # @return [Bool] return true if successful, false if not
+  # @author Julien Marrec
+  def apply_baseline_swh_loops(template, building_type)
+
+    getPlantLoops.each do |plant_loop|
+      # Skip non service water heating loops
+      next unless plant_loop.swh_loop?
+
+      htg_fuels, combination_system, storage_capacity, total_heating_capacity = plant_loop.swh_system_type
+
+      # htg_fuels.size == 0 shoudln't happen
+
+      electric = true
+
+      if htg_fuels.include?('NaturalGas') ||
+          htg_fuels.include?('PropaneGas') ||
+          htg_fuels.include?('FuelOil#1') ||
+          htg_fuels.include?('FuelOil#2') ||
+          htg_fuels.include?('Coal') ||
+          htg_fuels.include?('Diesel') ||
+          htg_fuels.include?('Gasoline')
+        electric = false
+      end
+
+      # Per Table G3.1 11.e, if the baseline system was a combination of 
+      # heating and service water heating, delete all heating equipment
+      # and recreate a WaterHeater:Mixed.
+      if combination_system
+        plant_loop.supplyComponents.each do |component|
+
+          # Get the object type
+          obj_type = component.iddObjectType.valueName.to_s
+          next if ['OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'].include?(obj_type)
+
+          component.remove
+
+        end
+
+        water_heater = OpenStudio::Model::WaterHeaterMixed.new(self)
+        water_heater.setName("Baseline Water Heater")
+        water_heater.setHeaterMaximumCapacity(total_heating_capacity)
+        water_heater.setTankVolume(storage_capacity)
+        plant_loop.addSupplyBranchForComponent(water_heater)
+
+        if electric
+          # G3.1.11.b: If electric, WaterHeater:Mixed with electric resistance
+          water_heater.setHeaterFuelType("Electricity")
+          water_heater.setHeaterThermalEfficiency(1.0)
+        else
+          # TODO: for now, just get the first fuel that isn't Electricity
+          # A better way would be to count the capacities associated
+          # with each fuel type and use the preponderant one
+          fuels = htg_fuels - ["Electricity"]
+          fossil_fuel_type = fuels[0]
+          water_heater.setHeaterFuelType(fossil_fuel_type)
+          water_heater.setHeaterThermalEfficiency(0.8)
+        end
+      # If it's not a combination heating and service water heating system
+      # just change the fuel type of all water heaters on the system
+      # to electric resistance if it's electric
+      else
+        if electric
+          plant_loop.supplyComponents.each do |component|
+            next unless component.to_WaterHeaterMixed.is_initialized
+            water_heater = component.to_WaterHeaterMixed.get
+            # G3.1.11.b: If electric, WaterHeater:Mixed with electric resistance
+            water_heater.setHeaterFuelType("Electricity")
+            water_heater.setHeaterThermalEfficiency(1.0)
+          end
+        end
+      end
+ 
+    end
+
+    # Set the water heater fuel types if it's 90.1-2013
+    getWaterHeaterMixeds.each do |water_heater|
+      water_heater.apply_prm_baseline_fuel_type(template, building_type)
+    end
+    
+    return true
+    
   end
 end

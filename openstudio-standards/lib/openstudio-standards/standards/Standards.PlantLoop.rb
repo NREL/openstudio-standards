@@ -1104,4 +1104,114 @@ class OpenStudio::Model::PlantLoop
 
     return serves_swh
   end
+  
+  # Classifies the service water system and returns information
+  # about fuel types, whether it serves both heating and service water heating,
+  # the water storage volume, and the total heating capacity.
+  #
+  # @return [Array<Array<String>, Bool, Double, Double>] An array of:
+  # fuel types, combination_system (true/false), storage_capacity (m^3), total_heating_capacity (W)
+  def swh_system_type
+    combination_system = true
+    storage_capacity = 0
+    primary_fuels = []
+    secondary_fuels = []
+
+    # @Todo: to work correctly, plantloop.total_heating_capacity requires to have either hardsized capacities or a sizing run.
+    primary_heating_capacity = total_heating_capacity
+    secondary_heating_capacity = 0
+
+    supplyComponents.each do |component|
+
+      # Get the object type
+      obj_type = component.iddObjectType.valueName.to_s
+
+      case obj_type
+      when 'OS_DistrictHeating'
+        primary_fuels << 'DistrictHeating'
+        combination_system = false
+      when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
+        primary_fuels << 'Electricity'
+      when 'OS_SolarCollector_FlatPlate_PhotovoltaicThermal'
+        primary_fuels << 'SolarEnergy'
+      when 'OS_SolarCollector_FlatPlate_Water'
+        primary_fuels << 'SolarEnergy'
+      when 'OS_SolarCollector_IntegralCollectorStorage'
+        primary_fuels << 'SolarEnergy'
+      when 'OS_WaterHeater_HeatPump'
+        primary_fuels << 'Electricity'
+      when 'OS_WaterHeater_Mixed'
+        component = component.to_WaterHeaterMixed.get
+        # Check it it's actually a heater, not just a storage tank
+        if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
+          # If it does, we add the heater Fuel Type
+          primary_fuels << component.heaterFuelType
+          # And in this case we'll reuse this object
+          combination_system = false
+        end  # @Todo: not sure about whether it should be an elsif or not
+        # Check the plant loop connection on the source side
+        if component.secondaryPlantLoop.is_initialized
+          source_plant_loop = component.secondaryPlantLoop.get
+          secondary_fuels += plant_loop_heating_fuels(source_plant_loop)
+          secondary_heating_capacity += source_plant_loop.total_heating_capacity
+        end
+
+        # Storage capacity
+        if component.tankVolume.is_initialized
+          storage_capacity = component.tankVolume.get
+        end
+
+      when 'OS_WaterHeater_Stratified'
+        component = component.to_WaterHeaterStratified.get
+
+        # Check if the heater actually has a capacity (otherwise it's simply a Storage Tank)
+        if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
+          # If it does, we add the heater Fuel Type
+          primary_fuels << component.heaterFuelType
+          # And in this case we'll reuse this object
+          combination_system = false
+        end # @Todo: not sure about whether it should be an elsif or not
+        # Check the plant loop connection on the source side
+        if component.secondaryPlantLoop.is_initialized
+          source_plant_loop = component.secondaryPlantLoop.get
+          secondary_fuels += plant_loop_heating_fuels(source_plant_loop)
+          secondary_heating_capacity += source_plant_loop.total_heating_capacity
+        end
+
+        # Storage capacity
+        if component.tankVolume.is_initialized
+          storage_capacity = component.tankVolume.get
+        end
+
+      when 'OS_HeatExchanger_FluidToFluid'
+        hx = component.to_HeatExchangerFluidToFluid.get
+        cooling_hx_control_types = ["CoolingSetpointModulated", "CoolingSetpointOnOff", "CoolingDifferentialOnOff", "CoolingSetpointOnOffWithComponentOverride"]
+        cooling_hx_control_types.each {|x| x.downcase!}
+        if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
+          source_plant_loop = hx.secondaryPlantLoop.get
+          secondary_fuels += plant_loop_heating_fuels(source_plant_loop)
+          secondary_heating_capacity += source_plant_loop.total_heating_capacity
+        end
+
+      when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
+        # To avoid extraneous debug messages
+      else
+        #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
+      end
+
+    end
+
+    # @Todo: decide how to handle primary and secondary stuff
+    fuels = primary_fuels + secondary_fuels
+    total_heating_capacity = primary_heating_capacity + secondary_heating_capacity
+    # If the primary heating capacity is bigger than secondary, assume the secondary is just a backup and disregard it?
+    # if primary_heating_capacity > secondary_heating_capacity
+    #   total_heating_capacity = primary_heating_capacity
+    #   fuels = primary_fuels
+    # end
+
+    return fuels.uniq.sort, combination_system, storage_capacity, total_heating_capacity
+
+  end # end classify_swh_system_type  
+  
 end
