@@ -911,7 +911,7 @@ class OpenStudio::Model::Space
       # Check if the primary and secondary sidelit areas contains less than 300W of lighting
       if areas['secondary_sidelighted_area'] == 0.0
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
-        req_pri_ctrl = false
+        req_sec_ctrl = false
       elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 300
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, secondary sidelighting control not required because less than 300W of lighting are present in the combined primary and secondary daylighted areas per 9.4.1.1(e).")
         req_sec_ctrl = false
@@ -927,10 +927,10 @@ class OpenStudio::Model::Space
       # Check if the toplit area contains less than 150W of lighting
       if areas['toplighted_area'] == 0.0
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
-        req_pri_ctrl = false
+        req_top_ctrl = false
       elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
-        req_sec_ctrl = false
+        req_top_ctrl = false
       end
 
     when 'AssetScore'
@@ -1408,14 +1408,14 @@ class OpenStudio::Model::Space
         sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2
         sensor_1_window = sorted_windows[0]
         # Sensor 2 controls secondary area
-        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2) / 2
+        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2)
         sensor_2_window = sorted_windows[0]
       elsif req_top_ctrl && !req_pri_ctrl && req_sec_ctrl
         # Sensor 1 controls toplighted area
         sensor_1_frac = areas['toplighted_area'] / space_area_m2
         sensor_1_window = sorted_skylights[0]
         # Sensor 2 controls secondary area
-        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2) / 2
+        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2)
         sensor_2_window = sorted_windows[0]
       elsif req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
         # Sensor 1 controls toplighted area
