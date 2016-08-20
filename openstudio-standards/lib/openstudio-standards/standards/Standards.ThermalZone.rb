@@ -379,17 +379,17 @@ class OpenStudio::Model::ThermalZone
 
   # Determine if the thermal zone's fuel type category.
   # Options are:
-  # fossil, electric, purchasedheat, purchasedcooling, purchasedheatandcooling, unconditioned
+  # fossil, electric, unconditioned
   # If a customization is passed, additional categories may
   # be returned.
   # If 'Xcel Energy CO EDA', the type fossilandelectric is added.
+  # DistrictHeating is considered a fossil fuel since it is
+  # typically created by natural gas boilers.
   #
   # @return [String] the fuel type category
-  def fuel_type(custom)
+  def fossil_or_electric_type(custom)
     fossil = false
     electric = false
-    purchased_heating = false
-    purchased_cooling = false
 
     # Fossil heating
     htg_fuels = heating_fuels
@@ -399,7 +399,8 @@ class OpenStudio::Model::ThermalZone
        htg_fuels.include?('FuelOil#2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
-       htg_fuels.include?('Gasoline')
+       htg_fuels.include?('Gasoline') ||
+       htg_fuels.include?('DistrictHeating')
       fossil = true
     end
 
@@ -408,26 +409,13 @@ class OpenStudio::Model::ThermalZone
       electric = true
     end
 
-    # Purchased heating
-    if htg_fuels.include?('DistrictHeating')
-      purchased_heating = true
-    end
-
-    # Purchased cooling
+    # Cooling fuels, for determining
+    # unconditioned zones
     clg_fuels = cooling_fuels
-    if clg_fuels.include?('DistrictCooling')
-      purchased_cooling = true
-    end
 
     # Categorize
     fuel_type = nil
-    if purchased_heating && purchased_cooling
-      fuel_type = 'purchasedheatandcooling'
-    elsif purchased_heating && !purchased_cooling
-      fuel_type = 'purchasedheat'
-    elsif !purchased_heating && purchased_cooling
-      fuel_type = 'purchasedcooling'
-    elsif fossil
+    if fossil
       # If uses any fossil, counts as fossil even if electric is present too
       fuel_type = 'fossil'
     elsif electric
@@ -1163,26 +1151,15 @@ class OpenStudio::Model::ThermalZone
 
   # Determine if the thermal zone's occupancy type category.
   # Options are:
-  # residential, nonresidential, heatedonly
+  # residential, nonresidential
   # 90.1-2013 adds additional Options:
   # publicassembly, retail
   #
   # @return [String] the occupancy type category
   # @todo Add public assembly building types
   def occupancy_type(template)
-    occ_type = nil
-
-    heated = heated?
-    cooled = cooled?
-
-    # Heated Only
-    occ_type = nil
-    occ_type = if heated && !cooled
-                 'heatedonly'
-               # Residential
-               elsif residential?(template)
+    occ_type = if residential?(template)
                  'residential'
-               # Nonresidential
                else
                  'nonresidential'
                end

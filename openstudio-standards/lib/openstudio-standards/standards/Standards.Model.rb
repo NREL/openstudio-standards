@@ -169,7 +169,7 @@ class OpenStudio::Model::Model
       # Determine the primary baseline system type
       system_type = prm_baseline_system_type(template,
                                              climate_zone,
-                                             sys_group['type'],
+                                             sys_group['occ'],
                                              sys_group['fuel'],
                                              sys_group['area_ft2'],
                                              sys_group['stories'],
@@ -351,7 +351,7 @@ class OpenStudio::Model::Model
   #
   # @return [Array<Hash>] an array of hashes, one for each zone,
   # with the keys 'zone', 'type' (occ type), 'fuel', and 'area'
-  def zones_by_occ_and_fuel_type(template, custom)
+  def zones_with_occ_and_fuel_type(template, custom)
     zones = []
 
     getThermalZones.sort.each do |zone|
@@ -378,10 +378,10 @@ class OpenStudio::Model::Model
       zn_hash['area'] = zone.floorArea
 
       # Occupancy type
-      zn_hash['type'] = zone.occupancy_type(template)
+      zn_hash['occ'] = zone.occupancy_type(template)
 
       # Fuel type
-      zn_hash['fuel'] = zone.fuel_type(custom)
+      zn_hash['fuel'] = zone.fossil_or_electric_type(custom)
 
       zones << zn_hash
     end
@@ -396,41 +396,6 @@ class OpenStudio::Model::Model
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, fuel, and zones (an array of zones)
   def prm_baseline_system_groups(template, custom)
-    # Get the zones with fuel type, occ type, and area properties
-    zones = zones_by_occ_and_fuel_type(template, custom)
-
-    # Determine the dominant area type
-    type_to_area = Hash.new { 0.0 }
-    zones_by_area = zones.group_by { |z| z['type'] }
-    zones_by_area.each do |type, zns|
-      zns.each do |zn|
-        type_to_area[type] += zn['area']
-      end
-    end
-    dom_type = type_to_area.sort_by { |k, v| v }.reverse[0][0]
-
-    # Determine the dominant fuel type
-    # from the subset of the dominant area type
-    fuel_to_area = Hash.new { 0.0 }
-    zones_by_fuel = zones.group_by { |z| z['fuel'] }
-    zones_by_fuel.each do |fuel, zns|
-      zns.each do |zn|
-        next unless zn['type'] == dom_type
-        fuel_to_area[fuel] += zn['area']
-      end
-    end
-    dom_fuel = fuel_to_area.sort_by { |k, v| v }.reverse[0][0]
-
-    # Don't allow unconditioned to be the dominant fuel,
-    # go to the next biggest
-    if dom_fuel == 'unconditioned'
-      dom_fuel = fuel_to_area.sort_by { |k, v| v }.reverse[1][0]
-    end
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The dominant occupancy type = #{dom_type}, the dominant fuel = #{dom_fuel}.")
-
-    # Group by type and fuel type
-    initial_groups = zones.group_by { |x| { 'type' => x['type'], 'fuel' => x['fuel'] } }
 
     # Define the minimum area for the
     # exception that allows a different
@@ -449,69 +414,243 @@ class OpenStudio::Model::Model
         exception_min_area_ft2 = 5000
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
       end
-    end
+    end  
 
-    # Any group that isn't big enough to hit the exception
-    # gets put into the dominant type dominant fuel group
-    dom = { 'area_ft2' => 0.0, 'type' => dom_type, 'fuel' => dom_fuel, 'zones' => [] }
-    final_groups = []
-    initial_groups.each do |gp, zns|
-      # Report out the initial group
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Initial system type group: type = #{gp['type']}, fuel = #{gp['fuel']}, zones:")
-      zns.each_slice(5) do |zone_list|
-        zone_names = []
-        zone_list.each do |zn|
-          zone_names << zn['zone'].name.get.to_s
+    # Get occupancy type, fuel type, and area information for all zones,
+    # excluding unconditioned zones.
+    # Occupancy types are:
+    # Residential
+    # NonResidential
+    # (and for 90.1-2013)
+    # PublicAssembly
+    # Retail
+    # Fuel types are:
+    # fossil
+    # electric
+    # (and for Xcel Energy CO EDA)
+    # fossilandelectric
+    zones = zones_with_occ_and_fuel_type(template, custom)
+
+    # Group the zones by occupancy type
+    type_to_area = Hash.new { 0.0 }
+    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
+
+    # Determine the dominant occupancy type by area
+    zones_grouped_by_occ.each do |occ_type, zns|
+      zns.each do |zn|
+        type_to_area[occ_type] += zn['area']
+      end
+    end
+    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
+
+    # Get the dominant occupancy type group
+    dom_occ_group = zones_grouped_by_occ[dom_occ]
+
+    # Check the non-dominant occupancy type groups to see if they
+    # are big enough to trigger the occupancy exception.
+    # If they are, leave the group standing alone.
+    # If they are not, add the zones in that group 
+    # back to the dominant occupancy type group.
+    occ_groups = []
+    zones_grouped_by_occ.each do |occ_type, zns|
+      # Skip the dominant occupancy type
+      next if occ_type == dom_occ
+      
+      # Add up the floor area of the group
+      area_m2 = 0
+      zns.each do |zn|
+        area_m2 += zn['area']
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      
+      # If the non-dominant group is big enough, preserve that group.
+      if area_ft2 > exception_min_area_ft2
+        occ_groups << [occ_type, zns]
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with an occupancy type of #{occ_type} is bigger than the minimum exception area of #{exception_min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
+      # Otherwise, add the zones back to the dominant group.
+      else
+        dom_occ_group += zns
+      end
+      
+    end
+    # Add the dominant occupancy group to the list
+    occ_groups << [dom_occ, dom_occ_group]
+
+    # Inside of each remaining occupancy group,
+    # determine the dominant fuel type.  This determination
+    # should only include zones that are part of the
+    # dominant area type inside of this group.
+    occ_and_fuel_groups = []
+    occ_groups.each do |occ_type, zns|
+      # Separate the zones that are part of the dominant occ type
+      dom_occ_zns = []
+      nondom_occ_zns = []
+      zns.each do |zn|
+        if zn['occ'] == occ_type
+          dom_occ_zns << zn
+        else
+          nondom_occ_zns << zn
         end
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
       end
 
-      # Skip unconditioned groups
-      next if gp['fuel'] == 'unconditioned'
+      # Determine the dominant fuel type
+      # from the subset of the dominant area type zones
+      fuel_to_area = Hash.new { 0.0 }
+      zones_grouped_by_fuel = dom_occ_zns.group_by { |z| z['fuel'] }
+      zones_grouped_by_fuel.each do |fuel, zns|
+        zns.each do |zn|
+          fuel_to_area[fuel] += zn['area']
+        end
+      end
+      dom_fuel = fuel_to_area.sort_by { |k, v| v }.reverse[0][0]
 
-      # Total the area and get the zones
-      area_ft2 = 0.0
+      # Don't allow unconditioned to be the dominant fuel,
+      # go to the next biggest
+      if dom_fuel == 'unconditioned'
+        dom_fuel = fuel_to_area.sort_by { |k, v| v }.reverse[1][0]
+      end
+
+      # Get the dominant fuel type group
+      dom_fuel_group = {}
+      dom_fuel_group['occ'] = occ_type
+      dom_fuel_group['fuel'] = dom_fuel
+      dom_fuel_group['zones'] = zones_grouped_by_fuel[dom_fuel]
+
+      # The zones that aren't part of the dominant occ type
+      # are automatically added to the dominant fuel group
+      dom_fuel_group['zones'] += nondom_occ_zns
+
+      # Check the non-dominant occupancy type groups to see if they
+      # are big enough to trigger the occupancy exception.
+      # If they are, leave the group standing alone.
+      # If they are not, add the zones in that group 
+      # back to the dominant occupancy type group.
+      zones_grouped_by_fuel.each do |fuel_type, zns|
+        # Skip the dominant occupancy type
+        next if fuel_type == dom_fuel
+
+        # Add up the floor area of the group
+        area_m2 = 0
+        zns.each do |zn|
+          area_m2 += zn['area']
+        end
+        area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+
+        # If the non-dominant group is big enough, preserve that group.
+        if area_ft2 > exception_min_area_ft2
+          group = {}
+          group['occ'] = occ_type
+          group['fuel'] = fuel_type
+          group['zones'] = zns
+          occ_and_fuel_groups << group
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with an occupancy type of #{occ_type} and fuel type of #{fuel_type} is bigger than the minimum exception area of #{exception_min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
+        # Otherwise, add the zones back to the dominant group.
+        else
+          dom_fuel_group['zones'] += zns
+        end
+
+      end
+      # Add the dominant occupancy group to the list
+      occ_and_fuel_groups << dom_fuel_group     
+
+    end
+
+    # Moved heated-only zones into their own groups.
+    # Per the PNNL PRM RM, this must be done AFTER
+    # the dominant occ and fuel types are determined
+    # so that heated-only zone areas are part of
+    # the determination.
+    final_groups = []
+    occ_and_fuel_groups.each do |gp|
+
+      heated_only_zones = []
+      heated_cooled_zones = []
+      gp['zones'].each do |zn|
+        if zn['zone'].heated? && !zn['zone'].cooled?
+          heated_only_zones << zn
+        else
+          heated_cooled_zones << zn
+        end
+      end
+      gp['zones'] = heated_cooled_zones
+
+      # Add the group (less unheated zones) to the final list
+      final_groups << gp
+      
+      # If there are any heated-only zones, create
+      # a new group for them.
+      if heated_only_zones.size > 0
+        htd_only_group = {}
+        htd_only_group['occ'] = 'heatedonly'
+        htd_only_group['fuel'] = gp['fuel']
+        htd_only_group['zones'] = heated_only_zones
+        final_groups << htd_only_group
+      end
+    end
+
+    # Calculate the area for each of the final groups
+    # and replace the zone hashes with the zone objects
+    final_groups.each do |gp|
+      area_m2 = 0.0
       gp_zns = []
-      zns.each do |zn|
-        area_ft2 += OpenStudio.convert(zn['area'], 'm^2', 'ft^2').get
+      gp['zones'].each do |zn|
+        area_m2 += zn['area']
         gp_zns << zn['zone']
       end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      gp['area_ft2'] = area_ft2
+      gp['zones'] = gp_zns
+    end
 
-      # All heated only zones get their own HVAC
-      if gp['type'] == "heatedonly"
-        group = {}
-        group['area_ft2'] = area_ft2
-        group['type'] = gp['type']
-        group['fuel'] = gp['fuel']
-        group['zones'] = gp_zns
-        final_groups << group
-        next
-      end
+    # TODO Remove the secondary zones before
+    # determining the area used to pick the HVAC
+    # system, per PNNL PRM RM
+    
+    
+    # If there is any district heating or district cooling
+    # in the proposed building, the heating and cooling
+    # fuels in the entire baseline building are changed
+    # for the purposes of HVAC system assignment
+    all_htg_fuels = []
+    all_clg_fuels = []
+    getThermalZones.each do |zone|
+      all_htg_fuels += zone.heating_fuels
+      all_clg_fuels += zone.cooling_fuels
+    end
 
-      # If this is the dominant group, report it directly
-      if gp['type'] == dom_type && gp['fuel'] == dom_fuel
-        dom['area_ft2'] += area_ft2
-        dom['zones'] += gp_zns
-        next
-      end
+    purchased_heating = false
+    purchased_cooling = false
 
-      # Exception based on area
-      if area_ft2 > exception_min_area_ft2
-        group = {}
-        group['area_ft2'] = area_ft2
-        group['type'] = gp['type']
-        group['fuel'] = gp['fuel']
-        group['zones'] = gp_zns
-        final_groups << group
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with an occupancy type of #{gp['type']} and fuel type of #{gp['fuel']} is bigger than the minimum exception area of #{exception_min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
-      # Add to the dominant group
-      else
-        dom['area_ft2'] += area_ft2
-        dom['zones'] += gp_zns
+    # Purchased heating
+    if all_htg_fuels.include?('DistrictHeating')
+      purchased_heating = true
+    end
+
+    # Purchased cooling
+    if all_clg_fuels.include?('DistrictCooling')
+      purchased_cooling = true
+    end
+
+    # Categorize
+    district_fuel = nil
+    if purchased_heating && purchased_cooling
+      district_fuel = 'purchasedheatandcooling'
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The proposed model included purchased heating and cooling.  All baseline building system selection will be based on this information.")
+    elsif purchased_heating && !purchased_cooling
+      district_fuel = 'purchasedheat'
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The proposed model included purchased heating.  All baseline building system selection will be based on this information.")
+    elsif !purchased_heating && purchased_cooling
+      district_fuel = 'purchasedcooling'
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The proposed model included purchased cooling.  All baseline building system selection will be based on this information.")
+    end    
+    
+    # Change the fuel in all final groups
+    # if district systems were found.
+    if district_fuel
+      final_groups.each do |gp|
+        gp['fuel'] = district_fuel
       end
     end
-    # Add the dominant group
-    final_groups << dom
 
     # Determine the number of stories spanned
     # by each group and report out info.
@@ -520,7 +659,7 @@ class OpenStudio::Model::Model
       num_stories = num_stories_spanned(group['zones'])
       group['stories'] = num_stories
       # Report out the final grouping
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: type = #{group['type']}, fuel = #{group['fuel']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['occ']}, fuel = #{group['fuel']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
       group['zones'].sort.each_slice(5) do |zone_list|
         zone_names = []
         zone_list.each do |zone|
@@ -1265,7 +1404,7 @@ class OpenStudio::Model::Model
       # Determine the primary baseline system type
       pri_system_type = prm_baseline_system_type(template,
                                                  climate_zone,
-                                                 sys_group['type'],
+                                                 sys_group['occ'],
                                                  sys_group['fuel'],
                                                  sys_group['area_ft2'],
                                                  sys_group['stories'],
