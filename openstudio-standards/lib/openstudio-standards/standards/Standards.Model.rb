@@ -4193,6 +4193,10 @@ class OpenStudio::Model::Model
       # Skip non service water heating loops
       next unless plant_loop.swh_loop?
 
+      # Rename the loop to avoid accidentally hooking
+      # up the HVAC systems to this loop later.
+      plant_loop.setName("Service Water Heating Loop")
+
       htg_fuels, combination_system, storage_capacity, total_heating_capacity = plant_loop.swh_system_type
 
       # htg_fuels.size == 0 shoudln't happen
