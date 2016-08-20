@@ -299,6 +299,13 @@ class OpenStudio::Model::PlantLoop
       supplyComponents.each do |sc|
         if sc.to_CoolingTowerVariableSpeed.is_initialized
           ct = sc.to_CoolingTowerVariableSpeed.get
+          # E+ has a minimum limit of 68F (20C) for this field.
+          # Check against limit before attempting to set value.
+          eplus_design_oat_wb_c_lim = 20
+          if design_oat_wb_c < eplus_design_oat_wb_c_lim
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 68F will be used for sizing the cooling towers because the actual design value is below the limit EnergyPlus accepts for this input.")
+            design_oat_wb_c = eplus_design_oat_wb_c_lim
+          end
           ct.setDesignInletAirWetBulbTemperature(design_oat_wb_c)
           ct.setDesignApproachTemperature(approach_k)
           ct.setDesignRangeTemperature(range_k)
@@ -324,6 +331,13 @@ class OpenStudio::Model::PlantLoop
       cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(model)
       cw_t_stpt_manager.setName("CW Temp Follows OATwb w/ #{approach_r} deltaF approach min #{float_down_to_f.round(1)} F to max #{leaving_cw_t_f.round(1)}")
       cw_t_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
+      # At low design OATwb, it is possible to calculate
+      # a maximum temperature below the minimum.  In this case,
+      # make the maximum and minimum the same.
+      if leaving_cw_t_c < float_down_to_c
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{name}, the maximum leaving temperature of #{leaving_cw_t_f.round(1)} F is below the minimum of #{float_down_to_f.round(1)} F.  The maximum will be set to the same value as the minimum.")
+        leaving_cw_t_c = float_down_to_c
+      end
       cw_t_stpt_manager.setMaximumSetpointTemperature(leaving_cw_t_c)
       cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
       cw_t_stpt_manager.setOffsetTemperatureDifference(approach_k)
