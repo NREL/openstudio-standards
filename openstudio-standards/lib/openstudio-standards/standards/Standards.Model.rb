@@ -2113,6 +2113,24 @@ class OpenStudio::Model::Model
         # Found a matching object
         matching_objects << object
       end
+      # If no object was found, round the capacity down a little
+      # to avoid issues where the number fell between the limits
+      # in the json file.
+      if matching_objects.size.zero?
+        capacity = capacity * 0.99
+        search_criteria_matching_objects.each do |object|
+          # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+          next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
+          # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
+          next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
+          # Skip objects whose the minimum capacity is below the specified capacity
+          next if capacity <= object['minimum_capacity'].to_f
+          # Skip objects whose max
+          next if capacity > object['maximum_capacity'].to_f
+          # Found a matching object
+          matching_objects << object
+        end
+      end
     end
 
     # Check the number of matching objects found
@@ -2194,6 +2212,24 @@ class OpenStudio::Model::Model
         next if capacity > object['maximum_capacity'].to_f
         # Found a matching object
         matching_objects << object
+      end
+      # If no object was found, round the capacity down a little
+      # to avoid issues where the number fell between the limits
+      # in the json file.
+      if matching_objects.size.zero?
+        capacity = capacity * 0.99
+        search_criteria_matching_objects.each do |object|
+          # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+          next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
+          # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
+          next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
+          # Skip objects whose the minimum capacity is below the specified capacity
+          next if capacity <= object['minimum_capacity'].to_f
+          # Skip objects whose max
+          next if capacity > object['maximum_capacity'].to_f
+          # Found a matching object
+          matching_objects << object
+        end
       end
     end
 
