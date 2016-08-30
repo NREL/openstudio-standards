@@ -120,7 +120,7 @@ class OpenStudio::Model::Space
         end
 
         surface.subSurfaces.sort.each do |sub_surface|
-          next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow')
+          next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'GlassDoor')
 
           # OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***#{sub_surface.name}***"
           total_window_area += sub_surface.netArea
@@ -557,7 +557,7 @@ class OpenStudio::Model::Space
     surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall'
       surface.subSurfaces.sort.each do |sub_surface|
-        next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow')
+        next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'GlassDoor')
 
         num_sub_surfaces += 1
 
@@ -801,7 +801,7 @@ class OpenStudio::Model::Space
     surfaces.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       surface.subSurfaces.each do |sub_surface|
-        next unless sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'Skylight'
+        next unless sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'Skylight' || sub_surface.subSurfaceType == 'GlassDoor'
         ext_fen_area_m2 += sub_surface.netArea
       end
     end
