@@ -901,7 +901,7 @@ class OpenStudio::Model::Space
         req_pri_ctrl = false
       else
         # Check the size of the windows
-        if areas['total_window_area'] < 20.0
+        if areas['total_window_area'] < OpenStudio.convert(20.0, 'ft^2', 'm^2').get
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
           req_pri_ctrl = false
         end
@@ -917,7 +917,7 @@ class OpenStudio::Model::Space
         req_sec_ctrl = false
       else
         # Check the size of the windows
-        if areas['total_window_area'] < 20
+        if areas['total_window_area'] < OpenStudio.convert(20.0, 'ft^2', 'm^2').get
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, secondary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
           req_sec_ctrl = false
         end
