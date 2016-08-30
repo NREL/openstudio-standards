@@ -31,6 +31,8 @@ class OpenStudio::Model::Model
   require_relative 'Siz.CoilCoolingDXTwoSpeed'
   require_relative 'Siz.CoilCoolingWater'
   require_relative 'Siz.ControllerOutdoorAir'
+  require_relative 'Siz.DistrictHeating'
+  require_relative 'Siz.DistrictCooling'
   require_relative 'Siz.HeatExchangerAirToAirSensibleAndLatent'
   require_relative 'Siz.PlantLoop'
   require_relative 'Siz.PumpConstantSpeed'

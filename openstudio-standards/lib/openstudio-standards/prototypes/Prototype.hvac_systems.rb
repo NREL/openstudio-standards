@@ -57,7 +57,7 @@ class OpenStudio::Model::Model
     if boiler_fuel_type == 'DistrictHeating'
       dist_ht = OpenStudio::Model::DistrictHeating.new(self)
       dist_ht.setName('Purchased Heating')
-      dist_ht.setNominalCapacity(1_000_000)
+      dist_ht.autosizeNominalCapacity
       hot_water_loop.addSupplyBranchForComponent(dist_ht)
     # Boiler
     else
@@ -209,7 +209,7 @@ class OpenStudio::Model::Model
     if cooling_fuel == 'DistrictCooling'
       dist_clg = OpenStudio::Model::DistrictCooling.new(self)
       dist_clg.setName('Purchased Cooling')
-      dist_clg.setNominalCapacity(1_000_000)
+      dist_clg.autosizeNominalCapacity
       chilled_water_loop.addSupplyBranchForComponent(dist_clg)
     # Chiller
     else

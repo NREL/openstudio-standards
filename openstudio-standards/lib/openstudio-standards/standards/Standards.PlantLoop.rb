@@ -501,6 +501,16 @@ class OpenStudio::Model::PlantLoop
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name} capacity of #{chiller.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
         end
+      # DistrictCooling
+      elsif sc.to_DistrictCooling.is_initialized
+        dist_clg = sc.to_DistrictCooling.get
+        if dist_clg.nominalCapacity.is_initialized
+          total_cooling_capacity_w += dist_clg.nominalCapacity.get
+        elsif dist_clg.autosizedNominalCapacity.is_initialized
+          total_cooling_capacity_w += dist_clg.autosizedNominalCapacity.get
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of DistrictCooling #{dist_clg.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
+        end
       end
     end
 
@@ -528,7 +538,7 @@ class OpenStudio::Model::PlantLoop
         elsif boiler.autosizedNominalCapacity.is_initialized
           total_heating_capacity_w += boiler.autosizedNominalCapacity.get
         else
-          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of Boiler:HotWater ' #{boiler.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of Boiler:HotWater ' #{boiler.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
         end
       # WaterHeater:Mixed
       elsif sc.to_WaterHeaterMixed.is_initialized
@@ -538,7 +548,7 @@ class OpenStudio::Model::PlantLoop
         elsif water_heater.autosizedHeaterMaximumCapacity.is_initialized
           total_heating_capacity_w += water_heater.autosizedHeaterMaximumCapacity.get
         else
-          OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of WaterHeater:Mixed #{water_heater.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of WaterHeater:Mixed #{water_heater.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
         end
       # WaterHeater:Stratified
       elsif sc.to_WaterHeaterStratified.is_initialized
@@ -549,12 +559,21 @@ class OpenStudio::Model::PlantLoop
         if water_heater.heater2Capacity.is_initialized
           total_heating_capacity_w += water_heater.heater2Capacity.get
         end
+      # DistrictHeating
+      elsif sc.to_DistrictHeating.is_initialized
+        dist_htg = sc.to_DistrictHeating.get
+        if dist_htg.nominalCapacity.is_initialized
+          total_heating_capacity_w += dist_htg.nominalCapacity.get
+        elsif dist_htg.autosizedNominalCapacity.is_initialized
+          total_heating_capacity_w += dist_htg.autosizedNominalCapacity.get
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of DistrictHeating #{dist_htg.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
+        end
       end
-      # TODO: Add DistrictHeating
     end # End loop on supplyComponents
 
     total_heating_capacity_kbtu_per_hr = OpenStudio.convert(total_heating_capacity_w,'W','kBtu/hr').get
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, heating capacity is #{total_heating_capacity_kbtu_per_hr.round} kBtu/hr.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, heating capacity is #{total_heating_capacity_kbtu_per_hr.round} kBtu/hr.")
 
     return total_heating_capacity_w
   end
