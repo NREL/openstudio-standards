@@ -107,6 +107,7 @@ class OpenStudio::Model::Model
     lookup_building_type = self.get_lookup_name(building_type)
 
     self.getBuilding.setName("#{building_vintage}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
+	
 
     # Remove external shading devices
 		OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Removing External Shading Devices ***")
@@ -132,12 +133,12 @@ class OpenStudio::Model::Model
     # always-off schedule to those lights.  This is assumed to
     # be the user's intent in the proposed model.
     self.getLightss.each do |lights|
-      if lights.schedule.empty?
+      if lights.schedule.empty?search_criteria.d
         lights.setSchedule(self.alwaysOffDiscreteSchedule)
       end
     end
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Applying Baseline Constructions ***")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Applying Baseline Constructions ***")g
     
     # Modify some of the construction types as necessary
     self.apply_performance_rating_method_construction_types(building_vintage)
@@ -2306,7 +2307,65 @@ class OpenStudio::Model::Model
     return construction
 
   end
+  # Starts ECBC - Thermal capacity of opaque(such as wall & roof) construction in basecase must be same as proposed case 
+  # Helper method to find a particular construction and add it to the model
+  # after modifying the insulation value if necessary.
+  def apply_ecbc_construction_requirements(building_vintage, climate_zone_set,operation_type, intended_surface_type, standards_construction_type, building_category)
 
+    # Get the construction properties,
+    # which specifies properties by construction category by climate zone set.
+    # AKA the info in Tables 4.3.2(Opaque Walls)
+
+    props = self.find_object($os_standards['construction_properties'], {'template'=>building_vintage,
+                                                                    'climate_zone_set'=> climate_zone_set,
+																	'operation_type'=> operation_type,
+                                                                    'intended_surface_type'=> intended_surface_type,
+                                                                    'standards_construction_type'=> standards_construction_type,
+                                                                    'building_category' => building_category
+                                                                    })
+
+    if !props
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{building_vintage}-#{climate_zone_set}-#{operation_type}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
+      # Return an empty construction
+      construction = OpenStudio::Model::Construction.new(self)
+      construction.setName("Could not find construction properties set to Adiabatic ")
+      almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(self, "Smooth", 500)
+      construction.insertLayer(0, almost_adiabatic)
+      return construction
+    else
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{building_vintage}-#{climate_zone_set}-#{operation_type}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
+    end
+
+    # Make sure that a construction is specified
+    if props['construction'].nil?
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No typical construction is specified for construction properties of: #{building_vintage}-#{climate_zone_set}-#{operation_type}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.  Make sure it is entered in the spreadsheet.")
+      # Return an empty construction
+      construction = OpenStudio::Model::Construction.new(self)
+      construction.setName("No typical construction was specified")
+      return construction
+    end
+
+    # Add the construction, modifying properties as necessary
+    #construction = add_construction(props['construction'], props)
+
+    #return construction
+	if construction_props
+      # Determine the target U-value, C-factor, and F-factor
+      target_u_value_ip = construction_props['assembly_maximum_u_value']
+      target_f_factor_ip = construction_props['assembly_maximum_f_factor']
+      target_c_factor_ip = construction_props['assembly_maximum_c_factor']
+
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
+
+      if target_u_value_ip && !(data['intended_surface_type'] == 'ExteriorRoof') 
+
+        # Set the U-Value
+        construction.set_u_value(target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], true)
+
+  end
+   # Ends ECBC thermal capacity for opaque constructions
+   
+   
   # Helper method to find a particular construction and add it to the model
   # after modifying the insulation value if necessary.
   def find_and_add_construction(building_vintage, climate_zone_set, intended_surface_type, standards_construction_type, building_category)
