@@ -651,8 +651,9 @@ module BTAP
             space_system_index = nil
           else
             space_type_property = space.model.find_object($os_standards["space_types"], { "template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get,"building_type" => space.spaceType.get.standardsBuildingType.get })
+            raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
             necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
-            raise("could not find necb system selection type for space: #{space.get.name}") if space_type_property.nil?
+            
           end
           
           
@@ -915,7 +916,7 @@ module BTAP
                   #puts "Spacename: #{space_info.space.name}:#{space_info.space.spaceType.get.name}"
                   if space_info.system_number == system_number and 
                       space_info.space.spaceType.get.name.get.include?("- undefined -") == false and
-                      space_info.story == story and
+                      space_info.space.buildingStory.get == story and
                       BTAP::Compliance::NECB2011::determine_necb_schedule_type(space_info.space).to_s == schedule_type and
                       space_info.horizontal_placement == horizontal_placement
 
