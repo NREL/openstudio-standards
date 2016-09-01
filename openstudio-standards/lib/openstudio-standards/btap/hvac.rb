@@ -3065,7 +3065,6 @@ module BTAP
                 htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-10.0)
                 sizing_zone.setZoneHeatingSizingFactor(1.3)
                 sizing_zone.setZoneCoolingSizingFactor(1.0)
-puts 'test1111'               
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")
               end
