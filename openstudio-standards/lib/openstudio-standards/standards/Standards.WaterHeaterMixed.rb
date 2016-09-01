@@ -72,7 +72,7 @@ class OpenStudio::Model::WaterHeaterMixed
 
       when 'NECB 2011'
         volume_l_per_s = volume_m3 * 1000
-        if capacity_btu_per_hr <= OpenStudio.convert(12, 'kW', 'Btu/hr')
+        if capacity_btu_per_hr <= OpenStudio.convert(12, 'kW', 'Btu/hr').get
           # Fixed water heater efficiency per PNNL
           water_heater_eff = 1
           # Calculate the max allowable standby loss (SL)

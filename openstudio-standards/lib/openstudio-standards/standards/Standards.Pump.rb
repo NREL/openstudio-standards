@@ -46,10 +46,10 @@ module Pump
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
     flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
-                      autosizedRatedFlowRate.get
-                    else
-                      ratedFlowRate.get
-                    end
+      autosizedRatedFlowRate.get
+    else
+      ratedFlowRate.get
+    end
     flow_gpm = OpenStudio.convert(flow_m3_per_s, 'm^3/s', 'gal/min').get
     calculated_w_per_gpm = calculated_w / flow_gpm
 
@@ -87,7 +87,7 @@ module Pump
   def standard_minimum_motor_efficiency_and_size(template, motor_bhp)
     motor_eff = 0.85
     nominal_hp = motor_bhp
-
+    search_criteria = nil
     # Don't attempt to look up motor efficiency
     # for zero-hp pumps (required for circulation-pump-free
     # service water heating systems).
@@ -96,7 +96,7 @@ module Pump
     # Lookup the minimum motor efficiency
     motors = $os_standards['motors']
 
-    # Assuming all pump motors are 4-pole ODP
+
     search_criteria = {
       'template' => template,
       'number_of_poles' => 4.0,
@@ -138,10 +138,10 @@ module Pump
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
     flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
-                      autosizedRatedFlowRate.get
-                    else
-                      ratedFlowRate.get
-                    end
+      autosizedRatedFlowRate.get
+    else
+      ratedFlowRate.get
+    end
 
     # E+ default impeller efficiency
     # http://bigladdersoftware.com/epx/docs/8-4/engineering-reference/component-sizing.html#pump-sizing
@@ -173,10 +173,10 @@ module Pump
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
     flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
-                      autosizedRatedFlowRate.get
-                    else
-                      ratedFlowRate.get
-                    end
+      autosizedRatedFlowRate.get
+    else
+      ratedFlowRate.get
+    end
 
     # E+ default impeller efficiency
     # http://bigladdersoftware.com/epx/docs/8-4/engineering-reference/component-sizing.html#pump-sizing

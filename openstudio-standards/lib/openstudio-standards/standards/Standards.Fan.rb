@@ -225,6 +225,7 @@ module Fan
     # Assuming all fan motors are 4-pole ODP
     template_mod = template.dup
     if template == 'NECB 2011'
+
       if self.class.name == 'OpenStudio::Model::FanConstantVolume'
         template_mod += '-CONSTANT'
       elsif self.class.name == 'OpenStudio::Model::FanVariableVolume'
@@ -247,6 +248,8 @@ module Fan
         setFanPowerCoefficient2(power_vs_flow_curve.coefficient2x)
         setFanPowerCoefficient3(power_vs_flow_curve.coefficient3xPOW2)
         setFanPowerCoefficient4(power_vs_flow_curve.coefficient4xPOW3)
+      else
+        raise("")
       end
     end
 
