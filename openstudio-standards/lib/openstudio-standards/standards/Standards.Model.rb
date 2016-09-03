@@ -221,6 +221,9 @@ class OpenStudio::Model::Model
       plant_loop.apply_prm_baseline_temperatures(template)
     end
 
+    # Set the heating and cooling sizing parameters
+    apply_prm_sizing_parameters    
+
     # Run sizing run with the HVAC equipment
     if runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
@@ -3928,6 +3931,19 @@ class OpenStudio::Model::Model
     return true
   end
 
+  # Changes the sizing parameters to the PRM specifications.
+  def apply_prm_sizing_parameters
+
+    clg = 1.15
+    htg = 1.25
+
+    sizing_params = getSizingParameters
+    sizing_params.setHeatingSizingFactor(htg)
+    sizing_params.setCoolingSizingFactor(clg)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{htg} for heating and #{clg} for cooling.")
+  end
+  
   # Helper method to get the story object that
   # cooresponds to a specific minimum z value.
   # Makes a new story if none found at this height.
