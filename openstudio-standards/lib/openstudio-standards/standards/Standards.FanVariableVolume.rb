@@ -47,7 +47,7 @@ class OpenStudio::Model::FanVariableVolume
       coeff_c = 0.9506
       coeff_d = -0.0998
       min_pct_pwr = 0.2
-    when 'Multi Zone VAV with Static Pressure Reset'
+    when 'Multi Zone VAV with VSD and Static Pressure Reset'
       coeff_a = 0.04076
       coeff_b = 0.0881
       coeff_c = -0.0729
@@ -64,6 +64,8 @@ class OpenStudio::Model::FanVariableVolume
       return false
     end
 
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FanVariableVolume', "For #{name}: Set fan curve coefficients to reflect control type of '#{control_type}'.")
+
     # Set the coefficients
     setFanPowerCoefficient1(coeff_a)
     setFanPowerCoefficient2(coeff_b)
@@ -76,5 +78,161 @@ class OpenStudio::Model::FanVariableVolume
 
     # Append the control type to the fan name
     # self.setName("#{self.name} #{control_type}")
+  end
+
+  # Determines whether there is a requirement to have a
+  # VSD or some other method to reduce fan power
+  # at low part load ratios.
+  def part_load_fan_power_limitation?(template)
+     part_load_control_required = false
+
+    # Not required by the old vintages
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011'
+      return part_load_control_required
+    end
+
+    # Determine the motor size limit
+    hp_limit = nil # No minimum limit
+    cap_limit_btu_per_hr = nil # No minimum limit
+    case template
+    when '90.1-2004'
+      hp_limit = 15.0
+    when '90.1-2007', '90.1-2010'
+      hp_limit = 10.0
+    when '90.1-2013'
+      case cooling_system_type
+      when 'dx'
+        hp_limit = 0.0
+        cap_limit_btu_per_hr = 110_000
+      when 'chw'
+        hp_limit = 5.0
+      when 'evap'
+        hp_limit = 0.25
+      else
+        hp_limit = 9999.9 # No requirement
+      end
+    end
+
+    # Check against limits
+    if hp_limit && cap_limit_btu_per_hr
+      air_loop = airLoopHVAC
+      unless air_loop.is_initialized
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name}: Could not find the air loop to get cooling capacity for determining part load fan power control requirement.")
+        return part_load_control_required
+      end
+      air_loop = air_loop.get
+      clg_cap_w = air_loop.total_cooling_capacity
+      clg_cap_btu_per_hr = OpenStudio.convert(clg_cap_w, 'W', 'Btu/hr').get
+      fan_hp = motor_horsepower
+      if fan_hp >= hp_limit && clg_cap_btu_per_hr >= cap_limit_btu_per_hr
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: part load fan power control is required for #{fan_hp.round(1)} HP fan, #{clg_cap_btu_per_hr.round} Btu/hr cooling capacity.")
+        part_load_control_required = true
+      end             
+    elsif hp_limit
+      fan_hp = motor_horsepower
+      if fan_hp >= hp_limit
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Part load fan power control is required for #{fan_hp.round(1)} HP fan.")
+        part_load_control_required = true
+      end
+    end
+
+    return part_load_control_required
+  end
+
+  # Determine if the cooling system is DX, CHW, evaporative, or a mixture.
+  # @return [String] the cooling system type.  Possible options are:
+  # dx, chw, evaporative, mixed, unknown.
+  def cooling_system_type
+    clg_sys_type = 'unknown'
+
+    # Get the air loop this fan is connected to
+    air_loop = airLoopHVAC
+    unless air_loop.is_initialized
+      return clg_sys_type
+    end
+    air_loop = air_loop.get
+
+    # Check the types of coils on the AirLoopHVAC
+    has_dx = false
+    has_chw = false
+    has_evap = false
+    air_loop.supplyComponents.each do |sc|
+      # CoilCoolingDXSingleSpeed
+      if sc.to_CoilCoolingDXSingleSpeed.is_initialized
+        has_dx = true
+      # CoilCoolingDXTwoSpeed
+      elsif sc.to_CoilCoolingDXTwoSpeed.is_initialized
+        has_dx = true
+      # CoilCoolingMultiSpeed
+      elsif sc.to_CoilCoolingDXMultiSpeed.is_initialized
+        has_dx = true
+      # CoilCoolingWater
+      elsif sc.to_CoilCoolingWater.is_initialized
+        has_chw = true
+      # CoilCoolingWaterToAirHeatPumpEquationFit
+      elsif sc.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+        has_dx = true
+      # UnitarySystem
+      elsif sc.to_AirLoopHVACUnitarySystem.is_initialized
+        unitary = sc.to_AirLoopHVACUnitarySystem.get
+        if unitary.coolingCoil.is_initialized
+          clg_coil = unitary.coolingCoil.get
+          # CoilCoolingDXSingleSpeed
+          if clg_coil.to_CoilCoolingDXSingleSpeed.is_initialized
+            has_dx = true
+          # CoilCoolingDXTwoSpeed
+          elsif clg_coil.to_CoilCoolingDXTwoSpeed.is_initialized
+            has_dx = true
+          # CoilCoolingWater
+          elsif clg_coil.to_CoilCoolingWater.is_initialized
+            has_chw = true
+          # CoilCoolingWaterToAirHeatPumpEquationFit
+          elsif clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+            has_dx = true
+          end
+        end
+      # UnitaryHeatPumpAirToAir
+      elsif sc.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+        unitary = sc.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
+        clg_coil = unitary.coolingCoil
+        # CoilCoolingDXSingleSpeed
+        if clg_coil.to_CoilCoolingDXSingleSpeed.is_initialized
+          has_dx = true
+        # CoilCoolingDXTwoSpeed
+        elsif clg_coil.to_CoilCoolingDXTwoSpeed.is_initialized
+          has_dx = true
+        # CoilCoolingWater
+        elsif clg_coil.to_CoilCoolingWater.is_initialized
+          has_chw = true
+        end
+      # EvaporativeCoolerDirectResearchSpecial
+      elsif sc.to_EvaporativeCoolerDirectResearchSpecial.is_initialized
+        has_evap = true
+      # EvaporativeCoolerIndirectResearchSpecial
+      elsif sc.to_EvaporativeCoolerIndirectResearchSpecial.is_initialized
+        has_evap = true
+      elsif sc.to_CoilCoolingCooledBeam.is_initialized ||
+            sc.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized ||
+            sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized ||
+            sc.to_AirLoopHVACUnitarySystem.is_initialized
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "#{air_loop.name} has a cooling coil named #{sc.name}, whose type is not yet covered by cooling system type checks.")
+      end
+    end
+
+    # Determine the type
+    if (has_chw && has_dx && has_evap) ||
+      (has_chw && has_dx) ||
+      (has_chw && has_evap) ||
+      (has_dx && has_evap)
+      clg_sys_type = 'mixed'
+    elsif has_chw
+      clg_sys_type = 'chw'
+    elsif has_dx
+      clg_sys_type = 'dx'
+    elsif has_evap
+      clg_sys_type = 'evap'
+    end
+
+    return clg_sys_type
   end
 end
