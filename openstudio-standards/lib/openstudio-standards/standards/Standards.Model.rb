@@ -3924,13 +3924,13 @@ class OpenStudio::Model::Model
   end
 
   # Remove external shading devices.
-  # Buildng and Site shading will not be impacted.
+  # Site shading will not be impacted.
   # @return [Bool] returns true if successful, false if not.
   def remove_external_shading_devices
     shading_surfaces_removed = 0
     getShadingSurfaceGroups.each do |shade_group|
-      # Skip Site and Building shading
-      next if shade_group.shadingSurfaceType == 'Site' || shade_group.shadingSurfaceType == 'Building'
+      # Skip Site shading
+      next if shade_group.shadingSurfaceType == 'Site'
       # Space shading surfaces should be removed
       shading_surfaces_removed += shade_group.shadingSurfaces.size
       shade_group.remove
