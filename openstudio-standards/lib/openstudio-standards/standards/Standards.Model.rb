@@ -119,7 +119,7 @@ class OpenStudio::Model::Model
 
     # Modify the internal loads in each space type,
     # keeping user-defined schedules.
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Changing Lighting Loads ***")
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Changing Lighting Loads ***')
     getSpaceTypes.sort.each do |space_type|
       set_people = false
       set_lights = true
@@ -137,6 +137,13 @@ class OpenStudio::Model::Model
       if lights.schedule.empty?
         lights.setSchedule(alwaysOffDiscreteSchedule)
       end
+    end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
+
+    # Add daylighting controls to each space
+    getSpaces.sort.each do |space|
+      added = space.add_daylighting_controls(template, false, false)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
@@ -264,13 +271,6 @@ class OpenStudio::Model::Model
 
     # Apply the HVAC efficiency standard
     apply_hvac_efficiency_standard(template, climate_zone)
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
-
-    # Add daylighting controls to each space
-    getSpaces.sort.each do |space|
-      added = space.add_daylighting_controls(template, false, false)
-    end
 
     # Delete all the unused curves
     getCurves.sort.each do |curve|
