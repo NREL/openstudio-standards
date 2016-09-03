@@ -3712,8 +3712,15 @@ class OpenStudio::Model::Model
           surface.subSurfaces.sort.each do |ss|
             next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
             # Reduce the size of the window
+            # If a vertical rectangle, raise sill height to avoid
+            # impacting daylighting areas, otherwise
+            # reduce toward centroid.
             red = 1.0 - mult
-            ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
+            if ss.vertical_rectangle?
+              ss.reduce_area_by_percent_by_raising_sill(red)
+            else
+              ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
+            end
           end
         end
       end

@@ -107,4 +107,81 @@ class OpenStudio::Model::SubSurface
     # Assign the new vertices to the self
     setVertices(new_vertices)
   end
+
+  # Reduce the area of the subsurface by raising the
+  # sill height.
+  #
+  # @param percent_reduction [Double] the fractional amount
+  # to reduce the area.
+  def reduce_area_by_percent_by_raising_sill(percent_reduction)
+
+    mult = 1 - percent_reduction
+
+    # Calculate the original area
+    area_original = netArea
+
+    # Find the min and max z values
+    min_z_val = 99999
+    max_z_val = -99999
+    vertices.each do |vertex|
+      # Min z value
+      if vertex.z < min_z_val
+        min_z_val = vertex.z
+      end
+      # Max z value
+      if vertex.z > max_z_val
+        max_z_val = vertex.z
+      end
+    end
+
+    # Calculate the window height
+    height = max_z_val - min_z_val
+
+    # Calculate the new sill height
+    new_sill_z = max_z_val - (height * mult)    
+
+    # Reset the z value of the lowest points
+    new_vertices = []
+    vertices.each do |vertex|
+      new_x = vertex.x
+      new_y = vertex.y
+      new_z = vertex.z
+      if new_z == min_z_val
+        new_z = new_sill_z
+      end
+      new_vertices << OpenStudio::Point3d.new(new_x, new_y, new_z)
+    end
+
+    # Reset the vertices
+    setVertices(new_vertices)
+
+    return true
+  end
+
+  # Determine if the sub surface is a vertical rectangle,
+  # meaning a rectangle where the bottom is parallel to the ground.
+  def vertical_rectangle?
+    # Get the vertices once
+    verts = vertices
+
+    # Check for 4 vertices
+    return false unless verts.size == 4
+
+    # Check if the 2 lowest z-values
+    # are the same
+    z_vals = []
+    verts.each do |vertex|
+      z_vals << vertex.z
+    end
+    z_vals = z_vals.sort
+    return false unless z_vals[0] = z_vals[1]
+
+    # Check if the diagonals are equal length
+    diag_a = verts[0] - verts[2]
+    diag_b = verts[1] - verts[3]
+    return false unless diag_a.length == diag_b.length
+
+    # If here, we have a rectangle
+    return true
+  end
 end
