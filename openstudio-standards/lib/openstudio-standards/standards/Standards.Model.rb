@@ -940,19 +940,24 @@ class OpenStudio::Model::Model
 
         unless zones.empty?
 
+          heating_type = 'Gas'
           # If district heating
           hot_water_loop = nil
           if main_heat_fuel == 'DistrictHeating'
+            heating_type = 'Water'
             hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
                                getPlantLoopByName('Hot Water Loop').get
                              else
                                add_hw_loop(main_heat_fuel)
                              end
+            puts "hot_water_loop = #{hot_water_loop}"
           end
 
+          cooling_type = 'Single Speed DX AC'
           # If district cooling
           chilled_water_loop = nil
           if cool_fuel == 'DistrictCooling'
+            cooling_type = 'Water'
             chilled_water_loop = if getPlantLoopByName('Chilled Water Loop').is_initialized
                                    getPlantLoopByName('Chilled Water Loop').get
                                  else
@@ -973,16 +978,16 @@ class OpenStudio::Model::Model
           # oa_damper_sch to nil means always open
           add_psz_ac(template,
                      sys_name = nil,
-                     hot_water_loop = nil,
-                     chilled_water_loop = nil,
+                     hot_water_loop,
+                     chilled_water_loop,
                      zones,
                      hvac_op_sch = nil,
                      oa_damper_sch = nil,
                      fan_location = 'DrawThrough',
                      fan_type = 'ConstantVolume',
-                     heating_type = 'Gas',
+                     heating_type,
                      supplemental_heating_type = 'Gas', # Should we really add supplemental heating here?
-                     cooling_type = 'Single Speed DX AC',
+                     cooling_type,
                      building_type = nil)
 
         end
