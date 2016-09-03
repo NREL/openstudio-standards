@@ -202,6 +202,9 @@ class OpenStudio::Model::Model
     # Set the zone sizing SAT for each zone in the model
     getThermalZones.each(&:apply_prm_baseline_supply_temperatures)
 
+    # Set the system sizing properties based on the zone sizing information
+    getAirLoopHVACs.each(&:apply_prm_sizing_temperatures)
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
 
     # SAT reset, economizers

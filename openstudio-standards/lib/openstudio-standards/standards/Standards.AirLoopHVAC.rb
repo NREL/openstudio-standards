@@ -2543,6 +2543,25 @@ class OpenStudio::Model::AirLoopHVAC
     return multizone_vav_system
   end
 
+  # Determine if the system has terminal reheat
+  #
+  # @return [Bool] returns true if has one or more reheat terminals, false if it doesn't.
+  def terminal_reheat?
+    has_term_rht = false
+    demandComponents.each do |sc|
+      if sc.to_AirTerminalSingleDuctConstantVolumeReheat.is_initialized ||
+         sc.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized ||
+         sc.to_AirTerminalSingleDuctSeriesPIUReheat.is_initialized ||
+         sc.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized ||
+         sc.to_AirTerminalSingleDuctVAVReheat.is_initialized
+         has_term_rht = true
+         break
+      end
+    end
+
+    return has_term_rht  
+  end
+
   # Determine if the system has energy recovery already
   #
   # @return [Bool] Returns true if an ERV is present, false if not.
@@ -3543,5 +3562,80 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     return dc_area_m2
+  end
+
+  # Sets the maximum reheat temperature to the specified
+  # value for all reheat terminals (of any type) on the loop.
+  #
+  # @param max_reheat_c [Double] the maximum reheat temperature, in C
+  # @return [Bool] returns true if successful, false if not.
+  def apply_maximum_reheat_temperature(max_reheat_c)
+    demandComponents.each do |sc|
+      if sc.to_AirTerminalSingleDuctConstantVolumeReheat.is_initialized
+        term = sc.to_AirTerminalSingleDuctConstantVolumeReheat.get
+        term.setMaximumReheatAirTemperature(max_reheat_c)
+      elsif sc.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
+        # No control option available
+      elsif sc.to_AirTerminalSingleDuctSeriesPIUReheat.is_initialized
+        # No control option available
+      elsif sc.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized
+        term = sc.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
+        term.setMaximumReheatAirTemperature(max_reheat_c)
+      elsif sc.to_AirTerminalSingleDuctVAVReheat.is_initialized
+        term = sc.to_AirTerminalSingleDuctVAVReheat.get
+        term.setMaximumReheatAirTemperature(max_reheat_c)
+      end
+    end
+
+    max_reheat_f = OpenStudio.convert(max_reheat_c, 'C', 'F').get
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: reheat terminal maximum set to #{max_reheat_f.round} F.")
+
+    return true
+  end
+
+  # Set the system sizing properties based on the zone sizing information
+  #
+  # @return [Bool] true if successful, false if not.
+  def apply_prm_sizing_temperatures
+    # Get the design heating and cooling SAT information
+    # for all zones served by the system.
+    htg_setpts_c = []
+    clg_setpts_c = []
+    thermalZones.each do |zone|
+      sizing_zone = zone.sizingZone
+      htg_setpts_c << sizing_zone.zoneHeatingDesignSupplyAirTemperature
+      clg_setpts_c << sizing_zone.zoneCoolingDesignSupplyAirTemperature
+    end
+
+    # Cooling SAT set to minimum zone cooling design SAT
+    clg_sat_c = clg_setpts_c.min
+
+    # If the system has terminal reheat,
+    # heating SAT is set to the same value as cooling SAT
+    # and the terminals are expected to do the heating.
+    # If not, heating SAT set to maximum zone heating design SAT.
+    has_term_rht = terminal_reheat?
+    htg_sat_c = if has_term_rht
+                  clg_sat_c
+                else
+                  htg_setpts_c.max
+                end
+
+    # Set the central SAT values
+    sizing_system = sizingSystem
+    sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_sat_c)
+    sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sat_c)
+
+    clg_sat_f = OpenStudio.convert(clg_sat_c, 'C', 'F').get
+    htg_sat_f = OpenStudio.convert(htg_sat_c, 'C', 'F').get
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: central heating SAT set to #{htg_sat_f.round} F, cooling SAT set to #{clg_sat_f.round} F.")
+
+    # If it's a terminal reheat system, set the reheat terminal setpoints too
+    if has_term_rht
+      rht_c = htg_setpts_c.max
+      apply_maximum_reheat_temperature(rht_c)
+    end
+
+    return true
   end
 end
