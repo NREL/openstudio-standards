@@ -117,6 +117,7 @@ class OpenStudio::Model::Model
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "*** Adjusting Window and Skylight Ratios ***")
     self.apply_performance_rating_method_baseline_window_to_wall_ratio(building_vintage, climate_zone)
     self.apply_performance_rating_method_baseline_skylight_to_roof_ratio(building_vintage)
+	self.apply_ecbc_window_to_wall_ratio(building_vintage,climate_zone)
 
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
@@ -3364,6 +3365,143 @@ class OpenStudio::Model::Model
     return construction_properties
 
   end  
+  #ECBC starts 
+  #calculate WWR as per ECBC -2007 
+  # Fenestration areas shall be equal to that in the proposed design or 40% 
+  # of gross above grade wall area, whichever is smaller 
+  # and shall be distributed uniformly in horizontal bands across the four orientations 
+  
+  def apply_ecbc_window_to_wall_ratio(template, climate_zone) 
+  #Loop through all spaces in the model, and 
+  # per the Whole Building Reference manual, find the areas for Non-Resedential 
+  nr_wall_m2 = 0.001
+  nr_wind_m2 = 0
+  # store the space conditioning category for later use 
+  space_cats = {}
+  self.getSpaces.sort.each do |space|
+  # Loop through all surfaces in this space
+      wall_area_m2 = 0
+      wind_area_m2 = 0
+      space.surfaces.sort.each do |surface|
+	  # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType.downcase == 'wall'
+        # This wall's gross area (including window area)
+        wall_area_m2 += surface.grossArea * space.multiplier
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType.downcase == 'fixedwindow' || ss.subSurfaceType.downcase == 'operablewindow'
+          wind_area_m2 += ss.netArea * space.multiplier
+        end
+      end
+	  # Determine the space category
+      # TODO This should really use the heating/cooling loads
+      # from the proposed building.  However, in an attempt
+      # to avoid another sizing run just for this purpose,
+      # conditioned status is based on heating/cooling
+      # setpoints.  If heated-only, will be assumed Semiheated.
+      # The full-bore method is on the next line in case needed.
+      # cat = space.conditioning_category(template, climate_zone)
+      cooled = space.is_cooled
+      heated = space.is_heated
+      cat = 'Unconditioned'
+      # Unconditioned
+      if !heated && !cooled
+        cat = 'Unconditioned'
+      # Heated-Only
+      elsif heated && !cooled 
+        cat = 'Semiheated'
+      # Heated and Cooled
+      else
+        res = space.is_residential(template)
+        if res
+          cat = 'ResConditioned'
+        else
+          cat = 'NonResConditioned'
+        end
+      end
+      space_cats[space] = cat
+      
+      # Add to the correct category
+      case cat
+      when 'Unconditioned'
+        next # Skip unconditioned spaces
+      when 'NonResConditioned'
+        nr_wall_m2 += wall_area_m2
+        nr_wind_m2 += wind_area_m2
+      when 'ResConditioned'
+        res_wall_m2 += wall_area_m2
+        res_wind_m2 += wind_area_m2
+      when 'Semiheated'
+        sh_wall_m2 += wall_area_m2
+        sh_wind_m2 += wind_area_m2
+      end
+      
+    end
+	
+	# Calculate the WWR of Non-Resedential 
+	wwr_nr = ((nr_wind_m2 / nr_wall_m2)*100).round(1)
+	
+	# Convert to IP and report
+    nr_wind_ft2 = OpenStudio.convert(nr_wind_m2,'m^2','ft^2').get
+    nr_wall_ft2 = OpenStudio.convert(nr_wall_m2,'m^2','ft^2').get
+	
+	OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR NonRes = #{wwr_nr.round}%; window = #{nr_wind_ft2.round} ft2, wall = #{nr_wall_ft2.round} ft2.")
+	
+	# WWR limit
+    wwr_lim = 40.0 
+	
+	 # Check against WWR limit
+    wwr_nr > wwr_lim ? red_nr = true : red_nr = false
+	
+	# Stop here unless windows need reducing
+    return true unless red_nr || red_res || red_sh
+    
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows to reduce window area down to the limit of #{wwr_lim.round}%.")
+	
+	# Determine the factors by which to reduce the window area
+    mult_nr_red = wwr_lim / wwr_nr
+	
+	# Reduce the window area if any of the categories necessary
+    self.getSpaces.each do |space|
+	
+	 # Determine the space category
+      # from the previously stored values
+      cat = space_cats[space]
+      
+      # Get the correct multiplier
+      case cat
+      when 'Unconditioned'
+        next # Skip unconditioned spaces
+      when 'NonResConditioned'
+        next unless red_nr
+        mult = mult_nr_red
+	  end
+	  
+	  # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType.downcase == 'wall'
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+          # Reduce the size of the window
+          red = 1.0 - mult
+          ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
+        end
+      end
+
+    end    
+    
+    return true
+  
+  end
+  
+  # ECBC Ends 	
+  
 
   # Reduces the WWR to the values specified by the PRM. WWR reduction
   # will be done by moving vertices inward toward centroid.  This causes the least impact
