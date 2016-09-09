@@ -2603,14 +2603,26 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Set the control for any VAV reheat terminals
     # on this airloop.
+    control_type_set = false
     demandComponents.each do |equip|
       if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
         term = equip.to_AirTerminalSingleDuctVAVReheat.get
-        term.setDamperHeatingAction(damper_action_eplus)
+        # Dual maximum only applies to terminals with HW reheat coils
+        if damper_action == 'Dual Maximum'
+          if term.reheatCoil.to_CoilHeatingWater.is_initialized
+            term.setDamperHeatingAction(damper_action_eplus)
+            control_type_set = true
+          end
+        else
+          term.setDamperHeatingAction(damper_action_eplus)
+          control_type_set = true
+        end
       end
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: VAV damper action was set to #{damper_action} control.")
+    if control_type_set
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: VAV damper action was set to #{damper_action} control.")
+    end
 
     return true
   end
