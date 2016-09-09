@@ -950,7 +950,6 @@ class OpenStudio::Model::Model
                              else
                                add_hw_loop(main_heat_fuel)
                              end
-            puts "hot_water_loop = #{hot_water_loop}"
           end
 
           cooling_type = 'Single Speed DX AC'
@@ -1063,7 +1062,11 @@ class OpenStudio::Model::Model
           sec_zones = pri_sec_zone_lists['secondary']
 
           # Add a PVAV with Reheat for the primary zones
-          story_name = story_group[0].spaces[0].buildingStory.get.name.get
+          stories = []
+          story_group[0].spaces.each do |space|
+            stories << [space.buildingStory.get.name.get, space.buildingStory.get.minimum_z_value]
+          end
+          story_name = stories.sort_by{ |nm, z| z }[0][0]
           sys_name = "#{story_name} PVAV_Reheat (Sys5)"
 
           # If and only if there are primary zones to attach to the loop
@@ -1121,7 +1124,11 @@ class OpenStudio::Model::Model
           sec_zones = pri_sec_zone_lists['secondary']
 
           # Add an VAV for the primary zones
-          story_name = story_group[0].spaces[0].buildingStory.get.name.get
+          stories = []
+          story_group[0].spaces.each do |space|
+            stories << [space.buildingStory.get.name.get, space.buildingStory.get.minimum_z_value]
+          end
+          story_name = stories.sort_by{ |nm, z| z }[0][0]
           sys_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
@@ -1215,7 +1222,11 @@ class OpenStudio::Model::Model
           sec_zones = pri_sec_zone_lists['secondary']
 
           # Add a VAV for the primary zones
-          story_name = story_group[0].spaces[0].buildingStory.get.name.get
+          stories = []
+          story_group[0].spaces.each do |space|
+            stories << [space.buildingStory.get.name.get, space.buildingStory.get.minimum_z_value]
+          end
+          story_name = stories.sort_by{ |nm, z| z }[0][0]
           sys_name = "#{story_name} VAV_Reheat (Sys7)"
 
           # If and only if there are primary zones to attach to the loop
@@ -1296,7 +1307,11 @@ class OpenStudio::Model::Model
           sec_zones = pri_sec_zone_lists['secondary']
 
           # Add an VAV for the primary zones
-          story_name = story_group[0].spaces[0].buildingStory.get.name.get
+          stories = []
+          story_group[0].spaces.each do |space|
+            stories << [space.buildingStory.get.name.get, space.buildingStory.get.minimum_z_value]
+          end
+          story_name = stories.sort_by{ |nm, z| z }[0][0]
           sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
@@ -1736,10 +1751,9 @@ class OpenStudio::Model::Model
       space_obj = space[0]
       space_minz = space[1]
       if space_obj.buildingStory.empty?
-
         story = get_story_for_nominal_z_coordinate(space_minz)
         space_obj.setBuildingStory(story)
-
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "Space #{space[0].name} was not assigned to a story by the user.  It has been assigned to #{story.name}.")
       end
     end
 
@@ -3971,16 +3985,17 @@ class OpenStudio::Model::Model
   # @return [OpenStudio::Model::BuildingStory] the story
   def get_story_for_nominal_z_coordinate(minz, tolerance = 0.3)
     getBuildingStorys.each do |story|
-      z = story.nominalZCoordinate
-      if z.is_initialized
-        if (minz - z.get).abs < tolerance
-          return story
-        end
+      z = story.minimum_z_value
+
+      if (minz - z).abs < tolerance
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "The story with a min z value of #{minz.round(2)} is #{story.name}.")
+        return story
       end
     end
 
     story = OpenStudio::Model::BuildingStory.new(self)
     story.setNominalZCoordinate(minz)
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "No story with a min z value of #{minz.round(2)} m +/- #{tolerance} m was found, so a new story called #{story.name} was created.")
 
     return story
   end
