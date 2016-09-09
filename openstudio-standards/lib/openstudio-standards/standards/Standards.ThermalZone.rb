@@ -93,6 +93,21 @@ class OpenStudio::Model::ThermalZone
     return tot_oa_flow_rate_per_area
   end
 
+  # Convert total minimum OA requirement to a per-area value.
+  #
+  # @return [Bool] true if successful, false if not
+  def convert_oa_req_to_per_area
+    # Get the per-area requirement
+    oa_per_area = outdoor_airflow_rate_per_area
+    # Set the per-area requirement
+    ventilation.setOutdoorAirFlowperFloorArea(oa_per_area)
+    # Zero-out the per-person and ACH requirements
+    ventilation.setOutdoorAirFlowperPerson(0.0)
+    ventilation.setOutdoorAirFlowAirChangesperHour(0.0)
+
+    return true
+  end
+
   # This method creates a schedule where the value is zero when
   # the overall occupancy for 1 zone is below
   # the specified threshold, and one when the overall occupancy is
@@ -1190,5 +1205,66 @@ class OpenStudio::Model::ThermalZone
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.ThermalZone", "For #{self.name}, occupancy type = #{occ_type}.")
 
     return occ_type
+  end
+
+  # Determine if demand control ventilation (DCV) is
+  # required for this zone based on area and occupant density.
+  # Does not account for System requirements like ERV, economizer, etc.
+  # Those are accounted for in the AirLoopHVAC method of the same name.
+  #
+  # @return [Bool] Returns true if required, false if not.
+  # @todo Add exception logic for 90.1-2013
+  #   for cells, sickrooms, labs, barbers, salons, and bowling alleys
+  def demand_control_ventilation_required?(template, climate_zone)
+    dcv_required = false
+
+    # Not required by the old vintages
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011'
+      return dcv_required
+    end
+
+    # Area and occupant density limits
+    min_area_ft2 = 0
+    min_occ_per_1000_ft2 = 0
+    case template
+    when '90.1-2004'
+      min_area_ft2 = 0
+      min_occ_per_1000_ft2 = 100
+    when '90.1-2007', '90.1-2010'
+      min_area_ft2 = 500
+      min_occ_per_1000_ft2 = 40
+    when '90.1-2013'
+      min_area_ft2 = 500
+      min_occ_per_1000_ft2 = 25
+    end
+
+    # Get the area served and the number of occupants
+    area_served_m2 = 0
+    num_people = 0
+    spaces.each do |space|
+      area_served_m2 += space.floorArea
+      num_people += space.numberOfPeople
+    end
+
+    # Check the minimum area
+    area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
+    if area_served_ft2 < min_area_ft2
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{name}: DCV is not required since the area is #{area_served_ft2.round} ft2, but the minimum size is #{min_area_ft2.round} ft2.")
+      return dcv_required
+    end
+
+    # Check the minimum occupancy density
+    occ_per_ft2 = num_people / area_served_ft2
+    occ_per_1000_ft2 = occ_per_ft2 * 1000
+
+    if occ_per_1000_ft2 < min_occ_per_1000_ft2
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{name}: DCV is not required since the occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
+      return dcv_required
+    end
+
+    # If here, DCV is required
+    dcv_required = true
+
+    return dcv_required
   end
 end

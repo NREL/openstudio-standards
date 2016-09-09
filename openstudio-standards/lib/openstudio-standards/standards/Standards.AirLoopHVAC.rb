@@ -2242,53 +2242,19 @@ class OpenStudio::Model::AirLoopHVAC
       return dcv_required
     end
 
-    # Area, occupant density, and OA flow limits
-    min_area_ft2 = 0
-    min_occ_per_1000_ft2 = 0
+    # OA flow limits
     min_oa_without_economizer_cfm = 0
     min_oa_with_economizer_cfm = 0
     case template
     when '90.1-2004'
-      min_area_ft2 = 0
-      min_occ_per_1000_ft2 = 100
       min_oa_without_economizer_cfm = 3000
       min_oa_with_economizer_cfm = 0
     when '90.1-2007', '90.1-2010'
-      min_area_ft2 = 500
-      min_occ_per_1000_ft2 = 40
       min_oa_without_economizer_cfm = 3000
       min_oa_with_economizer_cfm = 1200
     when '90.1-2013'
-      min_area_ft2 = 500
-      min_occ_per_1000_ft2 = 25
       min_oa_without_economizer_cfm = 3000
       min_oa_with_economizer_cfm = 750
-    end
-
-    # Get the area served and the number of occupants
-    area_served_m2 = 0
-    num_people = 0
-    thermalZones.each do |zone|
-      zone.spaces.each do |space|
-        area_served_m2 += space.floorArea
-        num_people += space.numberOfPeople
-      end
-    end
-
-    # Check the minimum area
-    area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
-    if area_served_ft2 < min_area_ft2
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system serves #{area_served_ft2.round} ft2, but the minimum size is #{min_area_ft2.round} ft2.")
-      return dcv_required
-    end
-
-    # Check the minimum occupancy density
-    occ_per_ft2 = num_people / area_served_ft2
-    occ_per_1000_ft2 = occ_per_ft2 * 1000
-
-    if occ_per_1000_ft2 < min_occ_per_1000_ft2
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
-      return dcv_required
     end
 
     # Get the min OA flow rate
@@ -2326,6 +2292,19 @@ class OpenStudio::Model::AirLoopHVAC
       return dcv_required
     end
 
+    # Check area and density limits
+    # for all of zones on the loop
+    any_zones_req_dcv = false
+    thermalZones.sort.each do |zone|
+      if zone.demand_control_ventilation_required?(template, climate_zone)
+        any_zones_req_dcv = true
+        break
+      end
+    end
+    unless any_zones_req_dcv
+      return dcv_required
+    end
+
     # If here, DCV is required
     dcv_required = true
 
@@ -2333,6 +2312,10 @@ class OpenStudio::Model::AirLoopHVAC
   end
 
   # Enable demand control ventilation (DCV) for this air loop.
+  # Zones on this loop that require DCV preserve
+  # both per-area and per-person OA reqs.
+  # Other zones have OA reqs converted
+  # to per-area values only so that DCV won't impact these zones.
   #
   # @return [Bool] Returns true if required, false if not.
   def enable_demand_control_ventilation
@@ -2357,6 +2340,16 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Enable DCV in the controller mechanical ventilation
     controller_mv.setDemandControlledVentilation(true)
+
+    # Zones that require DCV preserve
+    # both per-area and per-person OA reqs.
+    # Other zones have OA reqs converted
+    # to per-area values only so that DCV
+    thermalZones.sort.each do |zone|
+      if zone.demand_control_ventilation_required?
+        zone.convert_oa_req_to_per_area
+      end
+    end
 
     return true
   end
