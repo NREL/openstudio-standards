@@ -60,11 +60,11 @@ def log_messages_to_file(file_path, debug = false)
           file.puts(s)
           messages << s
         elsif msg.logLevel == OpenStudio::Warn
-          s = "WARN  [#{msg.logChannel}] #{msg.logMessage}"
+          s = "WARN  #{msg.logMessage}"
           file.puts(s)
           messages << s
         elsif msg.logLevel == OpenStudio::Error
-          s = "ERROR [#{msg.logChannel}] #{msg.logMessage}"
+          s = "ERROR #{msg.logMessage}"
           file.puts(s)
           messages << s
         elsif msg.logLevel == OpenStudio::Debug && debug
