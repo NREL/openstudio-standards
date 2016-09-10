@@ -106,7 +106,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # DCV
     if demand_control_ventilation_required?(template, climate_zone)
-      enable_demand_control_ventilation
+      enable_demand_control_ventilation(template, climate_zone)
     end
 
     # SAT reset
@@ -2318,7 +2318,7 @@ class OpenStudio::Model::AirLoopHVAC
   # to per-area values only so that DCV won't impact these zones.
   #
   # @return [Bool] Returns true if required, false if not.
-  def enable_demand_control_ventilation
+  def enable_demand_control_ventilation(template, climate_zone)
     # Get the OA intake
     controller_oa = nil
     controller_mv = nil
@@ -2346,7 +2346,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Other zones have OA reqs converted
     # to per-area values only so that DCV
     thermalZones.sort.each do |zone|
-      if zone.demand_control_ventilation_required?
+      if zone.demand_control_ventilation_required?(template, climate_zone)
         zone.convert_oa_req_to_per_area
       end
     end
