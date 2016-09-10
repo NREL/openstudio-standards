@@ -2434,7 +2434,7 @@ class OpenStudio::Model::AirLoopHVAC
     # supply outlet node of the system.
     sat_warmest_reset.addToNode(supplyOutletNode)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Supply air temperature reset was enabled using a SPM Warmest with a min SAT of #{design_sat_c.round}C // #{design_sat_f.round}F and a max SAT of #{max_sat_c.round}C // #{max_sat_f.round}F.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Supply air temperature reset was enabled using a SPM Warmest with a min SAT of #{design_sat_f.round}F and a max SAT of #{max_sat_f.round}F.")
 
     return true
   end
