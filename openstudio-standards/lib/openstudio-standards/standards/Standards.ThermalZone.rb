@@ -97,13 +97,37 @@ class OpenStudio::Model::ThermalZone
   #
   # @return [Bool] true if successful, false if not
   def convert_oa_req_to_per_area
-    # Get the per-area requirement
-    oa_per_area = outdoor_airflow_rate_per_area
-    # Set the per-area requirement
-    ventilation.setOutdoorAirFlowperFloorArea(oa_per_area)
-    # Zero-out the per-person and ACH requirements
-    ventilation.setOutdoorAirFlowperPerson(0.0)
-    ventilation.setOutdoorAirFlowAirChangesperHour(0.0)
+
+    # For each space in the zone, convert
+    # all design OA to per-area
+    spaces.each do |space|
+      dsn_oa = space.designSpecificationOutdoorAir
+      next if dsn_oa.empty?
+      dsn_oa = dsn_oa.get
+
+      # Get the space properties
+      floor_area = space.floorArea
+      number_of_people = space.numberOfPeople
+      volume = space.volume
+
+      # Sum up the total OA from all sources
+      oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
+      oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
+      oa_rate = dsn_oa.outdoorAirFlowRate
+      oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour
+      tot_oa = oa_for_people + oa_for_floor_area + oa_rate + oa_for_volume
+
+      # Convert total to per-area
+      tot_oa_per_area = tot_oa / floor_area
+
+      # Set the per-area requirement
+      dsn_oa.setOutdoorAirFlowperFloorArea(tot_oa_per_area)
+      # Zero-out the per-person, ACH, and flow requirements
+      dsn_oa.setOutdoorAirFlowperPerson(0.0)
+      dsn_oa.setOutdoorAirFlowAirChangesperHour(0.0)
+      dsn_oa.setOutdoorAirFlowRate(0.0)
+
+    end
 
     return true
   end
