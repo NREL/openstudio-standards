@@ -169,6 +169,7 @@ class OpenStudio::Model::Model
 
     # Modify the service water heating loops
     # per the baseline rules
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
     apply_baseline_swh_loops(template, building_type)
 
     # Determine the baseline HVAC system type for each of
