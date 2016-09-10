@@ -304,10 +304,16 @@ module Fan
     # Exhaust fan
     if to_FanZoneExhaust.is_initialized
       is_small = true
-    # Fan coil unit
+    # Fan coil unit, unit heater, PTAC, PTHP
     elsif containingZoneHVACComponent.is_initialized
       zone_hvac = containingZoneHVACComponent.get
       if zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
         is_small = true
       end
     # Powered VAV terminal

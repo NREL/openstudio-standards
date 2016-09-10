@@ -83,6 +83,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.CoolingTowerSingleSpeed'
   require_relative 'Standards.CoolingTowerTwoSpeed'
   require_relative 'Standards.CoolingTowerVariableSpeed'
+  require_relative 'Standards.ZoneHVACComponent'
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.
@@ -240,6 +241,11 @@ class OpenStudio::Model::Model
     # Set the baseline fan power for all airloops
     getAirLoopHVACs.sort.each do |air_loop|
       air_loop.apply_prm_baseline_fan_power(template)
+    end
+
+    # Set the baseline fan power for all zone HVAC
+    getZoneHVACComponents.sort.each do |zone_hvac|
+      zone_hvac.apply_prm_baseline_fan_power(template)
     end
 
     # Set the baseline number of boilers and chillers
