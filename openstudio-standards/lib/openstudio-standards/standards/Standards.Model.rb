@@ -84,6 +84,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.CoolingTowerTwoSpeed'
   require_relative 'Standards.CoolingTowerVariableSpeed'
   require_relative 'Standards.ZoneHVACComponent'
+  require_relative 'Standards.HeatExchangerSensLat'
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.
@@ -2013,6 +2014,9 @@ class OpenStudio::Model::Model
     getCoolingTowerSingleSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(template) }
     getCoolingTowerTwoSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(template) }
     getCoolingTowerVariableSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(template) }
+
+    # ERVs
+    getHeatExchangerAirToAirSensibleAndLatents.each { |obj| obj.apply_efficiency(template) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
