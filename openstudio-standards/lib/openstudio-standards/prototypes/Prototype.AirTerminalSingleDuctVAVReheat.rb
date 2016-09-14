@@ -10,15 +10,20 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
   # @param zone_oa_per_area [Double] the zone outdoor air per area, m^3/s
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
-  def set_initial_prototype_damper_position(building_vintage, zone_oa_per_area)
+  def set_initial_prototype_damper_position(building_type, building_vintage, zone_oa_per_area)
  
     # Minimum damper position is based on prototype
     # assumptions, which are not clearly documented.
     min_damper_position = nil
+    vav_name = self.name.get
     case building_vintage       
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
-      min_damper_position = 0.3
-    when '90.1-2007'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      if building_type == "Outpatient" and vav_name.include? "Floor 1" 
+        min_damper_position = 1
+      else
+        min_damper_position = 0.3
+      end
+    when '90.1-2004', '90.1-2007'
       min_damper_position = 0.3
     when '90.1-2010', '90.1-2013'
       min_damper_position = 0.2
@@ -34,7 +39,11 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
         self.setConstantMinimumAirFlowFraction(min_damper_position)
       else
         # High OA zones
-        self.setConstantMinimumAirFlowFraction(0.7)
+        if building_type == "Outpatient"
+          self.setConstantMinimumAirFlowFraction(1)
+        else
+          self.setConstantMinimumAirFlowFraction(0.7)
+        end
       end
     else
       # Low OA zones

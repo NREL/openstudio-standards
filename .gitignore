@@ -1,4 +1,5 @@
 output/
+run-legacy-updated/
 # TODO change btap/measures.rb to save in an /output directory
 /measures/**/sample*.csv
 /.yardoc
@@ -6,3 +7,4 @@ output/
 /netbeans
 /test/reports
 /coverage/
+Archive/
