@@ -13325,7 +13325,7 @@ OS:WeatherFile,
   -122.4,                                 !- Longitude {deg}
   -8,                                     !- Time Zone {hr}
   2,                                      !- Elevation {m}
-  file:///C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/openstudio-standards-0.1.0/data/weather/USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw, !- Url
+  file:///C:/Users/BRavache/.gem/ruby/2.0.0/gems/openstudio-standards-0.1.0/data/weather/USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw, !- Url
   EF1A69B0;                               !- Checksum
 
 OS:Site:GroundTemperature:BuildingSurface,
