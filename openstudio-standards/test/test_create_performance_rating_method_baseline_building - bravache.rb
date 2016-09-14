@@ -185,8 +185,8 @@ class TestRun01 < Minitest::Test
 		roof_sol_ref = roof_top_layer.solarReflectance.get
 		roof_th_em = roof_top_layer.thermalAbsorptance
 		
-		assert_in_delta(0.55, roof_sol_ref, 0.001, "Roof has a solar reflectance of #{roof_sol_ref} when 0.55 was expected.")
-		assert_in_delta(0.75, roof_th_em, 0.001, "Roof has a thermal emittance of #{roof_th_em} when 0.75 was expected.")
+		assert_in_delta(0.55, roof_sol_ref, 0.001, "Roof has a solar reflectance of #{roof_sol_ref} when 0.55 was expected")
+		assert_in_delta(0.75, roof_th_em, 0.001, "Roof has a thermal emittance of #{roof_th_em} when 0.75 was expected")
 	end
 		
 	def test_901_2010_run01_test05_1
@@ -282,7 +282,7 @@ class TestRun02 < Minitest::Test
 		num_layer = floor_cons.numLayers
 		
 		#The insulation should be removed from the construction, which means only 2 layers in the baseline model.
-		assert_equal(2, num_layer, "Floor construction has #{num_layer} when only 2 were expected (no insulation).")
+		assert_equal(2, num_layer, "Floor construction has #{num_layer} layers when only 2 were expected (no insulation)")
 	end
 	
 	def test_901_2010_run02_test05	
@@ -307,7 +307,7 @@ class TestRun02 < Minitest::Test
 		shadings = @@model.getShadingSurfaces
 		number_of_shading = shadings.count
 
-		assert_empty(shadings, "There is/are #{number_of_shading} shading objects when 0 was expected.")
+		assert_empty(shadings, "There is/are #{number_of_shading} shading objects when 0 was expected")
 	end
 
 end
@@ -418,7 +418,7 @@ class TestRun05 < Minitest::Test
 		assert_instance_of OpenStudio::Model::Model, @@model
 	end
 	
-	def test_901_2010_run06_test01
+	def test_901_2010_run05_test01
 		#Testing the WWR per orientation by checking the area of 4 windows (N/S/E/W)
 		#This could be more explicit but here is the reasoning behind the area test
 		#North and South Facade are 289.52m2. East and West Facade are 193.01m2.
@@ -441,12 +441,12 @@ class TestRun05 < Minitest::Test
 		
 		total_WWR = (north_window.grossArea+east_window.grossArea+south_window.grossArea+west_window.grossArea)/(289.52*2+193.01*2)
 		
-		assert_in_delta(0.40, north_window_WWR, 0.01, "North facade have a WWR of #{north_window_WWR} when 0.4 was expected.")
-		assert_in_delta(0.40, east_window_WWR, 0.01, "East facade have a WWR of #{north_window_WWR} when 0.4 was expected.")
-		assert_in_delta(0.40, south_window_WWR, 0.01, "South facade have a WWR of #{north_window_WWR} when 0.4 was expected.")
-		assert_in_delta(0.40, west_window_WWR, 0.01, "West facade have a WWR of #{north_window_WWR} when 0.4 was expected.")
+		assert_in_delta(0.40, north_window_WWR, 0.01, "North facade have a WWR of #{north_window_WWR} when 0.4 was expected")
+		assert_in_delta(0.40, east_window_WWR, 0.01, "East facade have a WWR of #{north_window_WWR} when 0.4 was expected")
+		assert_in_delta(0.40, south_window_WWR, 0.01, "South facade have a WWR of #{north_window_WWR} when 0.4 was expected")
+		assert_in_delta(0.40, west_window_WWR, 0.01, "West facade have a WWR of #{north_window_WWR} when 0.4 was expected")
 		
-		assert_in_delta(total_WWR, 0.4, 0.01, "Whole building has a WWR of #{total_WWR} when 0.4 was expected.")
+		assert_in_delta(total_WWR, 0.4, 0.01, "Whole building has a WWR of #{total_WWR} when 0.4 was expected")
 	
 	end
 	
@@ -456,7 +456,7 @@ class TestRun06 < Minitest::Test
 	#Standard Design Fenestration Test
 	#The prototype model is Large_Office, CZ2, with the following variations:
 	#WWR per orientation: North 50%, West 50%, South 40%, East 45% (Total of 46%)
-	#South facade have overhangs with projection factor or 0.5
+	#South facade have overhangs with projection factor of 0.5
 	
 	model_name = 'Run06_Prototype'
 	standard = '90.1-2010'
@@ -502,12 +502,12 @@ class TestRun06 < Minitest::Test
 		south_required_WWR = 0.4 * 40/46 #34.78%
 		west_required_WWR = 0.5 * 40/46 #43.48%
 		
-		assert_in_delta(north_required_WWR, north_window_WWR, 0.01, "North facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
-		assert_in_delta(east_required_WWR, east_window_WWR, 0.01, "East facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
-		assert_in_delta(south_required_WWR, south_window_WWR, 0.01, "South facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
-		assert_in_delta(west_required_WWR, west_window_WWR, 0.01, "West facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected.")
+		assert_in_delta(north_required_WWR, north_window_WWR, 0.01, "North facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected")
+		assert_in_delta(east_required_WWR, east_window_WWR, 0.01, "East facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected")
+		assert_in_delta(south_required_WWR, south_window_WWR, 0.01, "South facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected")
+		assert_in_delta(west_required_WWR, west_window_WWR, 0.01, "West facade have a WWR of #{north_window_WWR} when #{north_required_WWR} was expected")
 		
-		assert_in_delta(total_WWR, 0.4, 0.01, "Whole building has a WWR of #{total_WWR} when 0.4 was expected.")
+		assert_in_delta(total_WWR, 0.4, 0.01, "Whole building has a WWR of #{total_WWR} when 0.4 was expected")
 	
 	end
 	
@@ -516,7 +516,7 @@ class TestRun06 < Minitest::Test
 		shadings = @@model.getShadingSurfaces
 		number_of_shading = shadings.count
 
-		assert_empty(shadings, "There is/are #{number_of_shading} shading objects when 0 was expected.")
+		assert_empty(shadings, "There is/are #{number_of_shading} shading objects when 0 was expected")
 	end
 end
 
@@ -558,14 +558,14 @@ class TestRun08 < Minitest::Test
 		total_skylight = bulk_ceiling_skylight + fine_ceiling_skylight
 		total_SRR = total_skylight / 4598.25
 		
-		assert_in_delta(total_SRR, 0.05, 0.01, "Whole building has a SRR of #{total_SRR} when 0.05 was expected.")
+		assert_in_delta(total_SRR, 0.05, 0.01, "Whole building has a SRR of #{total_SRR} when 0.05 was expected")
 		
 		ratio_fine_bulk = bulk_ceiling_skylight/fine_ceiling_skylight
 		assert_in_delta(ratio_fine_bulk, 2.5, 0.01, "The ratio of skylights between the fine storage and bulk storage space is #{ratio_fine_bulk} when 2.5 was expected (conserved ratio)")
 	
 	end
 	
-	def test_901_2010_run08_test03
+	def test_901_2010_run08_test02
 		#Testing skylight U-Value
 		
 		skylight_name = 'Sub Surface 4'.upcase
@@ -588,21 +588,21 @@ class TestRun08 < Minitest::Test
 		skylight_uFactor_IP = OpenStudio.convert(skylight_uFactor_SI, 'W/m^2*K','Btu/h*ft^2*R').get
 		
 		assert_in_delta(1.36, skylight_uFactor_IP, 0.001, "Skylight has a U-Value of #{skylight_uFactor_IP} BTU/h.ft^2.R when 1.36 BTU/h.ft^2.R was expected (CZ2)")
-		assert_in_delta(0.19, window_SHGC, 0.001, "Skylight has a SHGC of #{window_SHGC} when 0.19 was expected (CZ2")
+		assert_in_delta(0.19, window_SHGC, 0.001, "Skylight has a SHGC of #{window_SHGC} when 0.19 was expected (CZ2)")
 		
 	end
 	
-	def test_901_2010_run08_test04
+	def test_901_2010_run08_test03
 		#Testing LPD in fine storage and bulk storage room
 		fine_storage_space = @@model.getSpaceByName("Zone2 Fine Storage").get
 		lpd_w_per_m2 = fine_storage_space.lightingPowerPerFloorArea
 		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-		assert_in_delta(0.95, lpd_w_per_ft2, 0.01, "'#{fine_storage_space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.95 was expected.")
+		assert_in_delta(0.95, lpd_w_per_ft2, 0.01, "'#{fine_storage_space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.95 was expected")
 		
 		bulk_storage_space = @@model.getSpaceByName("Zone3 Bulk Storage").get
 		lpd_w_per_m2 = bulk_storage_space.lightingPowerPerFloorArea
 		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-		assert_in_delta(0.58, lpd_w_per_ft2, 0.01, "'#{bulk_storage_space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.58 was expected.")
+		assert_in_delta(0.58, lpd_w_per_ft2, 0.01, "'#{bulk_storage_space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.58 was expected")
 	end
 end
 
@@ -642,7 +642,7 @@ class TestRun09 < Minitest::Test
 		total_skylight = bulk_ceiling_skylight + fine_ceiling_skylight
 		total_SRR = total_skylight / 4598.25
 		
-		assert_in_delta(total_SRR, 0.05, 0.01, "Whole building has a SRR of #{total_SRR} when 0.05 was expected.")
+		assert_in_delta(total_SRR, 0.05, 0.01, "Whole building has a SRR of #{total_SRR} when 0.05 was expected")
 		
 		ratio_fine_bulk = bulk_ceiling_skylight/fine_ceiling_skylight
 		assert_in_delta(ratio_fine_bulk, 2.429, 0.01, "The ratio of skylights between the fine storage and bulk storage space is #{ratio_fine_bulk} when 2.429 was expected (conserved ratio)")
@@ -673,7 +673,7 @@ class TestRun12 < Minitest::Test
 		space = @@model.getSpaceByName("Perimeter_mid_ZN_4").get
 		lpd_w_per_m2 = space.lightingPowerPerFloorArea
 		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-		assert_in_delta(0.90, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.90 was expected.")
+		assert_in_delta(0.90, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.90 was expected")
 	end
 	
 	def test_901_2010_run12_test02
@@ -683,7 +683,7 @@ class TestRun12 < Minitest::Test
 		lpd_w_per_m2 = space.lightingPowerPerFloorArea
 		lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
 		#(expected, actual, tolerance, message to show if it fails) 
-		assert_in_delta(0.73, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.73 was expected.")	
+		assert_in_delta(0.73, lpd_w_per_ft2, 0.01, "'#{space.name.get}' has a LPD of #{lpd_w_per_ft2} W/ft^2 while 0.73 was expected")	
 	end
 
 end
@@ -713,26 +713,26 @@ class TestRun18 < Minitest::Test
 	def test_901_2010_run19_test02_1
 		#Types and number of heating coil
 		heating_coil = @@model.getCoilHeatingGass
-		assert_equal(5, heating_coil.size, "Model has #{heating_coil.size} furnace, when 5 where expected. (System 3, 5 air loops)")
+		assert_equal(5, heating_coil.size, "Model has #{heating_coil.size} furnace, when 5 where expected (System 3, 5 air loops)")
 	end
 	
 	def test_901_2010_run19_test02_2
 		#Types and number of cooling coil
 		cooling_coils = @@model.getCoilCoolingDXSingleSpeeds
-		assert_equal(5, cooling_coils.size, "Model has #{cooling_coils.size} direct expansion cooling coil, when 5 where expected. (System 3, 5 air loops)")
+		assert_equal(5, cooling_coils.size, "Model has #{cooling_coils.size} direct expansion cooling coil, when 5 where expected (System 3, 5 air loops)")
 	end
 	
-	def test_901_2010_run19_test02_3
+	def test_901_2010_run19_test03_1
 		#Types and number of fans
 		fans = @@model.getFanConstantVolumes
-		assert_equal(5, fans.size, "Model has #{fans.size} constant volume fans, when 5 where expected. (System 3, 5 air loops)")
+		assert_equal(5, fans.size, "Model has #{fans.size} constant volume fans, when 5 where expected (System 3, 5 air loops)")
 	end
 	
-	def test_901_2010_run19_test02_4
+	def test_901_2010_run19_test03_2
 		#Economizer type
 		outdoorair_controllers = @@model.getControllerOutdoorAirs
 		outdoorair_controllers.each do |outdoorair_controller|
-			assert_equal("FixedDryBulb", outdoorair_controller.getEconomizerControlType, "The economizer control type is set to #{outdoorair_controller.getEconomizerControlType} when FixedDryBulb was expected. (G3.1.2.7, System 5, CZ5A)")
+			assert_equal("FixedDryBulb", outdoorair_controller.getEconomizerControlType, "The economizer control type is set to #{outdoorair_controller.getEconomizerControlType} when FixedDryBulb was expected (G3.1.2.7, System 5, CZ5A)")
 			
 			shutoff_limit_C = outdoorair_controller.getEconomizerMaximumLimitDryBulbTemperature.get
 			shutoff_limit_F = OpenStudio.convert(shutoff_limit_C, 'C','F').get
@@ -740,7 +740,7 @@ class TestRun18 < Minitest::Test
 		end
 	end
 	
-	def test_901_2010_run18_test03_1
+	def test_901_2010_run18_test04_1
 		#Testing the cooling equipment efficiency
 		
 		sql = @@model.sqlFile.get
@@ -784,7 +784,7 @@ class TestRun18 < Minitest::Test
 		end			
 	end
 	
-	def test_901_2010_run18_test03_2
+	def test_901_2010_run18_test04_2
 		#Testing the heating equipment efficiency
 		furnaces = @@model.getCoilHeatingGass
 		
@@ -823,39 +823,39 @@ class TestRun19 < Minitest::Test
 	def test_901_2010_run19_test02_1
 		#Types and number of boilers (G3.1.3.2, System 5)
 		boilers = @@model.getBoilerHotWaters
-		assert_equal(2, boilers.size, "Model has #{boilers.size} boilers, when 2 where expected. (G3.1.3.2, building 53000sqft)")
+		assert_equal(2, boilers.size, "Model has #{boilers.size} boilers, when 2 where expected (G3.1.3.2, building 53000sqft)")
 		boilers.each do |boiler|
-			assert_equal("NaturalGas", boiler.fuelType, "Boiler uses #{boiler.fuelType} when Natural Gas was expected. (G3.1.3.2, design uses Natural Gas)")
+			assert_equal("NaturalGas", boiler.fuelType, "Boiler uses #{boiler.fuelType} when Natural Gas was expected (G3.1.3.2, design uses Natural Gas)")
 		end
 	end
 	
 	def test_901_2010_run19_test02_2
 		#Types and number of cooling coil
 		cooling_coils = @@model.getCoilCoolingDXSingleSpeeds
-		assert_equal(3, cooling_coils.size, "Model has #{cooling_coils.size} direct expansion cooling coil, when 3 where expected. (System 5, 3 air loops)")
-	end
-	
-	def test_901_2010_run19_test02_3
-		#Types and number of fans
-		fans = @@model.getFanVariableVolumes
-		assert_equal(3, fans.size, "Model has #{fans.size} variable volume fans, when 3 where expected. (System 5, 3 air loops)")
-	end
-	
-	def test_901_2010_run19_test02_4
-		#Economizer type
-		outdoorair_controllers = @@model.getControllerOutdoorAirs
-		outdoorair_controllers.each do |outdoorair_controller|
-			assert_equal("NoEconomizer", outdoorair_controller.getEconomizerControlType, "The economizer control type is set to #{outdoorair_controller.getEconomizerControlType} when no economizer was expected. (G3.1.2.7, System 5, CZ2A)")
-		end
-	end
-	
-	def test_901_2010_run19_test02_5
-		#Air terminal type
-		air_terminals = @@model.getAirTerminalSingleDuctVAVReheats
-		assert_equal(15, air_terminals.size, "Model has #{air_terminals.size} VAV air terminal with reheat, when 15 where expected. (System 5, 15 thermal zones)")
+		assert_equal(3, cooling_coils.size, "Model has #{cooling_coils.size} direct expansion cooling coil, when 3 where expected (System 5, 3 air loops)")
 	end
 	
 	def test_901_2010_run19_test03_1
+		#Types and number of fans
+		fans = @@model.getFanVariableVolumes
+		assert_equal(3, fans.size, "Model has #{fans.size} variable volume fans, when 3 where expected (System 5, 3 air loops)")
+	end
+	
+	def test_901_2010_run19_test03_2
+		#Economizer type
+		outdoorair_controllers = @@model.getControllerOutdoorAirs
+		outdoorair_controllers.each do |outdoorair_controller|
+			assert_equal("NoEconomizer", outdoorair_controller.getEconomizerControlType, "The economizer control type is set to #{outdoorair_controller.getEconomizerControlType} when no economizer was expected (G3.1.2.7, System 5, CZ2A)")
+		end
+	end
+	
+	def test_901_2010_run19_test03_3
+		#Air terminal type
+		air_terminals = @@model.getAirTerminalSingleDuctVAVReheats
+		assert_equal(15, air_terminals.size, "Model has #{air_terminals.size} VAV air terminal with reheat, when 15 where expected (System 5, 15 thermal zones)")
+	end
+	
+	def test_901_2010_run19_test04_1
 		#Testing the cooling equipment efficiency		
 		sql = @@model.sqlFile.get
 		
@@ -898,7 +898,7 @@ class TestRun19 < Minitest::Test
 		end			
 	end
 	
-	def test_901_2010_run19_test03_2
+	def test_901_2010_run19_test04_2
 		#Testing the heating efficiency
 		sql = @@model.sqlFile.get
 		
@@ -935,7 +935,7 @@ class TestRun19 < Minitest::Test
 		
 	end
 	
-	def test_901_2010_run19_test04_1
+	def test_901_2010_run19_test05
 		#Testing air terminal minimum air flow fraction (G3.1.3.13)
 		air_terminals = @@model.getAirTerminalSingleDuctVAVReheats
 		air_terminals.each do |air_terminal|
@@ -943,7 +943,7 @@ class TestRun19 < Minitest::Test
 		end
 	end
 	
-	def test_901_2010_run19_test04_2
+	def test_901_2010_run19_test06
 		#Testing hot water loop design supply and return temperature (G3.1.3.3)
 		plant_sizings = @@model.getSizingPlants
 		plant_sizings.each do |plant_sizing|
@@ -984,50 +984,50 @@ class TestRun20 < Minitest::Test
 	def test_901_2010_run20_test01
 		#Testing if there are one air loop per floor (G3.1.1, System 8)
 		air_loops = @@model.getAirLoopHVACs
-		assert_equal(3, air_loops.size, "Model has #{air_loops.size} air loops when 3 where expected (one per floor)")
+		assert_equal(4, air_loops.size, "Model has #{air_loops.size} air loops when 4 where expected (one per floor)")
 	end
 	
 	def test_901_2010_run20_test02_1
 		#Types and number of heating coil (System 8)
 		heating_coils = @@model.getCoilHeatingElectrics
-		assert_equal(3, heating_coils.size, "Model has #{heating_coils.size} electrical heating coil, when 3 where expected. (System 8, 3 air loops)")
+		assert_equal(23, heating_coils.size, "Model has #{heating_coils.size} electrical heating coil, when 23 where expected (System 8, 3 air loops + 20 thermal zones with reheat coils)")
 	end
 	
 	def test_901_2010_run20_test02_2
 		#Types and number of cooling coil (System 8)
 		cooling_coils = @@model.getCoilCoolingWaters
-		assert_equal(3, cooling_coils.size, "Model has #{cooling_coils.size} water cooling coil, when 3 where expected. (System 8, 3 air loops)")
-	end
-	
-	def test_901_2010_run20_test02_3
-		#Types and number of fans
-		fans = @@model.getFanVariableVolumes
-		assert_equal(3, fans.size, "Model has #{fans.size} variable volume fans, when 3 where expected. (System 8, 3 air loops)")
-	end
-	
-	def test_901_2010_run20_test02_4
-		#Economizer type
-		outdoorair_controllers = @@model.getControllerOutdoorAirs
-		outdoorair_controllers.each do |outdoorair_controller|
-			assert_equal("FixedDryBulb", outdoorair_controller.getEconomizerControlType, "The economizer control type is set to #{outdoorair_controller.getEconomizerControlType} when FixedDryBulb was expected. (G3.1.2.7, System 8, CZ3B)")
-		end
-	end
-	
-	def test_901_2010_run20_test02_5
-		#Air terminal type
-		air_terminals = @@model.getAirTerminalSingleDuctParallelPIUReheats
-		assert_equal(15, air_terminals.size, "Model has #{air_terminals.size} parallel fan-powered boxes with reheat, when 15 where expected. (System 8, 15 thermal zones)")
+		assert_equal(3, cooling_coils.size, "Model has #{cooling_coils.size} water cooling coil, when 3 where expected (System 8, 3 air loops)")
 	end
 	
 	def test_901_2010_run20_test03_1
-		#Testing the cooling equipment efficiency				
+		#Types and number of fans
+		fans = @@model.getFanVariableVolumes
+		assert_equal(3, fans.size, "Model has #{fans.size} variable volume fans, when 3 where expected (System 8, 3 air loops)")
 	end
 	
 	def test_901_2010_run20_test03_2
-		#Testing the heating equipment efficiency		
+		#Economizer type
+		outdoorair_controllers = @@model.getControllerOutdoorAirs
+		outdoorair_controllers.each do |outdoorair_controller|
+			assert_equal("FixedDryBulb", outdoorair_controller.getEconomizerControlType, "The economizer control type is set to #{outdoorair_controller.getEconomizerControlType} when FixedDryBulb was expected (G3.1.2.7, System 8, CZ3B)")
+		end
+	end
+	
+	def test_901_2010_run20_test03_3
+		#Air terminal type
+		air_terminals = @@model.getAirTerminalSingleDuctParallelPIUReheats
+		assert_equal(20, air_terminals.size, "Model has #{air_terminals.size} parallel fan-powered boxes with reheat, when 20 where expected (System 8, 20 thermal zones)")
+	end
+	
+	def test_901_2010_run20_test04_1
+		#Testing the cooling equipment efficiency				
 	end
 	
 	def test_901_2010_run20_test04_2
+		#Testing the heating equipment efficiency		
+	end
+	
+	def test_901_2010_run20_test05
 		#Testing chilled water loop design supply and return temperature (G3.1.3.8)
 		plant_sizings = @@model.getSizingPlants
 		plant_sizings.each do |plant_sizing|
@@ -1062,48 +1062,48 @@ class TestRun21 < Minitest::Test
 	end
 	
 	def test_901_2010_run21_test01
-		#Testing if there are one air loop per floor (G3.1.1, System 6)
+		#Testing if there are one air loop per floor (G3.1.1, System 10)
 		air_loops = @@model.getAirLoopHVACs
 		assert_equal(1, air_loops.size, "Model has #{air_loops.size} air loops when 1 where expected (one per floor)")
 	end
 	
 	def test_901_2010_run21_test02_1
-		#Types and number of heating coil (System 6)
+		#Types and number of heating coil (System 10)
 		heating_coils = @@model.getCoilHeatingElectrics
-		assert_equal(1, heating_coils.size, "Model has #{heating_coils.size} electrical heating coil, when 1 where expected. (System 6, 1 air loop)")
+		assert_equal(1, heating_coils.size, "Model has #{heating_coils.size} electrical heating coil, when 1 where expected (System 10, 1 air loop)")
 	end
 	
 	def test_901_2010_run21_test02_2
-		#Types and number of cooling coil (System 6)
-		cooling_coils = @@model.getCoilCoolingDXSingleSpeeds
-		assert_equal(1, cooling_coils.size, "Model has #{cooling_coils.size} direct expansion cooling coil, when 1 where expected. (System 6, 1 air loop)")
-	end
-	
-	def test_901_2010_run21_test02_3
-		#Types and number of fans
-		fans = @@model.getFanVariableVolumes
-		assert_equal(1, fans.size, "Model has #{fans.size} variable volume fans, when 1 where expected. (System 6, 1 air loop)")
-	end
-	
-	def test_901_2010_run21_test02_4
-		#Economizer type
-		outdoorair_controllers = @@model.getControllerOutdoorAirs
-		outdoorair_controllers.each do |outdoorair_controller|
-			assert_equal("FixedDryBulb", outdoorair_controller.getEconomizerControlType, "The economizer control type is set to #{outdoorair_controller.getEconomizerControlType} when FixedDryBulb was expected. (G3.1.2.7, System 6, CZ8A)")
-		end
-	end
-	
-	def test_901_2010_run21_test02_5
-		#Air terminal type
-		air_terminals = @@model.getAirTerminalSingleDuctParallelPIUReheats
-		assert_equal(3, air_terminals.size, "Model has #{air_terminals.size} parallel fan-powered boxes with reheat, when 3 where expected. (System 6, 3 thermal zones)")
+		#Types and number of cooling coil (System 10)
+		cooling_coils_number = @@model.getCoilCoolingDXSingleSpeeds.size +  @@model.getCoilCoolingDXMultiSpeeds.size + @@model.getCoilCoolingDXTwoSpeeds.size
+		assert_equal(0, cooling_coils_number, "Model has #{cooling_coils_number} cooling coil, when 0 where expected (System 10)")
 	end
 	
 	def test_901_2010_run21_test03_1
-		#Testing the cooling equipment efficiency				
+		#Types and number of fans
+		fans = @@model.getFanConstantVolumes
+		assert_equal(1, fans.size, "Model has #{fans.size} variable volume fans, when 1 where expected (System 10, 1 air loop)")
 	end
 	
 	def test_901_2010_run21_test03_2
+		#Economizer type
+		outdoorair_controllers = @@model.getControllerOutdoorAirs
+		outdoorair_controllers.each do |outdoorair_controller|
+			assert_equal("NoEconomizer", outdoorair_controller.getEconomizerControlType, "The economizer control type is set to #{outdoorair_controller.getEconomizerControlType} when NoEconomizer was expected (G3.1.2.7, System 10)")
+		end
+	end
+	
+	def test_901_2010_run21_test03_3
+		#Air terminal type
+		air_terminals = @@model.getAirTerminalSingleDuctUncontrolleds
+		assert_equal(3, air_terminals.size, "Model has #{air_terminals.size} uncontrolled single duct air terminal, when 3 where expected (System 10, 3 thermal zones)")
+	end
+	
+	def test_901_2010_run21_test04_1
+		#Testing the cooling equipment efficiency				
+	end
+	
+	def test_901_2010_run21_test04_2
 		#Testing the heating equipment efficiency		
 	end
 end
