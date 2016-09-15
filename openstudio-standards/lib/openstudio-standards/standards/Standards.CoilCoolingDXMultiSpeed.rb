@@ -119,9 +119,9 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if heat_pump == true
-                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
+                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model.find_object(unitary_acs, search_criteria, capacity_btu_per_hr)
+                 model.find_object(unitary_acs, search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found

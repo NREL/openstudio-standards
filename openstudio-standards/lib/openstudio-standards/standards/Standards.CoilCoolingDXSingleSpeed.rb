@@ -106,7 +106,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     capacity_btu_per_hr = find_capacity
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'kBtu/hr').get
 
-    ac_props = model.find_object(standards['unitary_acs'], search_criteria, capacity_btu_per_hr)
+    ac_props = model.find_object(standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Get the minimum efficiency standards
     cop = nil
@@ -266,9 +266,9 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if heat_pump == true
-                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
+                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model.find_object(unitary_acs, search_criteria, capacity_btu_per_hr)
+                 model.find_object(unitary_acs, search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found

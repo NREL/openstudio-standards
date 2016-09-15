@@ -2204,7 +2204,7 @@ class OpenStudio::Model::Model
   #   'type' => 'Enclosed',
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
-  def find_object(hash_of_objects, search_criteria, capacity = nil)
+  def find_object(hash_of_objects, search_criteria, capacity = nil, date = nil)
     #    new_matching_objects = self.find_objects(hash_of_objects, search_criteria, capacity)
 
     desired_object = nil
@@ -2269,6 +2269,22 @@ class OpenStudio::Model::Model
       end
     end
 
+    # If date was specified, narrow down the matching objects
+    unless date.nil?
+      date_matching_objects = []
+      matching_objects.each do |object|
+        # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+        next if !object.key?('start_date') || !object.key?('end_date')
+        # Skip objects whose the start date is earlier than the specified date
+        next if date <= Date.parse(object['start_date'])
+        # Skip objects whose end date is beyond the specified date
+        next if date > Date.parse(object['end_date'])
+        # Found a matching object
+        date_matching_objects << object
+      end
+      matching_objects = date_matching_objects
+    end
+
     # Check the number of matching objects found
     if matching_objects.size.zero?
       desired_object = nil
@@ -2277,7 +2293,7 @@ class OpenStudio::Model::Model
       desired_object = matching_objects[0]
     else
       desired_object = matching_objects[0]
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Called from #{caller(0)[1]}. \n Search criteria: \n #{search_criteria} \n  All results: \n #{matching_objects.join("\n")}")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Called from #{caller(0)[1]}. \n Search criteria: \n #{search_criteria}, capacity = #{capacity} \n  All results: \n #{matching_objects.join("\n")}")
     end
 
     return desired_object

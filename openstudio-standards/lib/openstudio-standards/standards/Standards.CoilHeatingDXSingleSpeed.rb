@@ -64,7 +64,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     end
 
     # find object
-    ac_props = model.find_object(standards['heat_pumps_heating'], search_criteria, capacity_btu_per_hr)
+    ac_props = model.find_object(standards['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Get the minimum efficiency standards
     cop = nil
@@ -220,9 +220,9 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     # Lookup efficiencies depending on whether it is a unitary HP or a heat pump
     ac_props = nil
     ac_props = if unitary == true
-                 model.find_object(unitary_hps, search_criteria, capacity_btu_per_hr)
+                 model.find_object(unitary_hps, search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
+                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
