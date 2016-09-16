@@ -1677,13 +1677,13 @@ class OpenStudio::Model::AirLoopHVAC
     # Determine if an ERV is required
     # erv_required = nil
     if erv_cfm.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}.")
       erv_required = false
     elsif dsn_flow_cfm < erv_cfm
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Does not exceed minimum flow requirement of #{erv_cfm}cfm.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Does not exceed minimum flow requirement of #{erv_cfm}cfm.")
       erv_required = false
     else
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV required based on #{(pct_oa * 100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Exceeds minimum flow requirement of #{erv_cfm}cfm.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Exceeds minimum flow requirement of #{erv_cfm}cfm.")
       erv_required = true
     end
 
@@ -3642,5 +3642,41 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     return true
+  end
+
+  def min_oa_with_multipliers
+    oa_no_mult = 0.0
+    oa_yes_mult = 0.0
+    thermalZones.each do |zone|
+      oa_no_mult += zone.outdoor_airflow_rate
+      oa_yes_mult += zone.outdoor_airflow_rate * zone.multiplier
+    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: min OA no multipliers = #{oa_no_mult} m^3/s.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: min OA with multipliers = #{oa_yes_mult} m^3/s.")
+  
+    return oa_yes_mult
+  end
+
+  # Determine if every zone on the system has an identical
+  # multiplier.  If so, return this number.  If not, return 1.
+  # @return [Integer] an integer representing the system multiplier.
+  def system_multiplier
+    mult = 1
+
+    # Get all the zone multipliers
+    zn_mults = []
+    thermalZones.each do |zone|
+      zn_mults << zone.multiplier
+    end
+ 
+    # Warn if there are different multipliers
+    uniq_mults = zn_mults.uniq
+    if uniq_mults.size > 1
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name}: not all zones on the system have an identical zone multiplier.  Multipliers are: #{uniq_mults.join(', ')}.")
+    else
+      mult = uniq_mults[0]
+    end
+
+    return mult
   end
 end
