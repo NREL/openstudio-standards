@@ -3644,19 +3644,6 @@ class OpenStudio::Model::AirLoopHVAC
     return true
   end
 
-  def min_oa_with_multipliers
-    oa_no_mult = 0.0
-    oa_yes_mult = 0.0
-    thermalZones.each do |zone|
-      oa_no_mult += zone.outdoor_airflow_rate
-      oa_yes_mult += zone.outdoor_airflow_rate * zone.multiplier
-    end
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: min OA no multipliers = #{oa_no_mult} m^3/s.")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: min OA with multipliers = #{oa_yes_mult} m^3/s.")
-  
-    return oa_yes_mult
-  end
-
   # Determine if every zone on the system has an identical
   # multiplier.  If so, return this number.  If not, return 1.
   # @return [Integer] an integer representing the system multiplier.
