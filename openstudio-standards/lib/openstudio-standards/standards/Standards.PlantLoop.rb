@@ -257,10 +257,10 @@ class OpenStudio::Model::PlantLoop
         # Limit the OATwb
         if design_oat_wb_f < 55
           design_oat_wb_f = 55
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 55F will be used for sizing the cooling towers because the actual design value is below the limit in G3.1.3.11.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 55F will be used for sizing the cooling towers because the actual design value is below the limit in G3.1.3.11.")
         elsif design_oat_wb_f > 90
           design_oat_wb_f = 90
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 90F will be used for sizing the cooling towers because the actual design value is above the limit in G3.1.3.11.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 90F will be used for sizing the cooling towers because the actual design value is above the limit in G3.1.3.11.")
         end
 
         # Calculate the approach
@@ -303,7 +303,7 @@ class OpenStudio::Model::PlantLoop
           # Check against limit before attempting to set value.
           eplus_design_oat_wb_c_lim = 20
           if design_oat_wb_c < eplus_design_oat_wb_c_lim
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 68F will be used for sizing the cooling towers because the actual design value is below the limit EnergyPlus accepts for this input.")
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 68F will be used for sizing the cooling towers because the actual design value is below the limit EnergyPlus accepts for this input.")
             design_oat_wb_c = eplus_design_oat_wb_c_lim
           end
           ct.setDesignInletAirWetBulbTemperature(design_oat_wb_c)
