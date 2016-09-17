@@ -948,7 +948,1384 @@ module Baseline9012013
     end
   
   end  
+
+  # @author Matt Leach, NORESCO
+  def calculate_motor_efficiency(bhp)
+    if bhp > 150
+      # 200 hp
+      motor_efficiency = 0.962
+    elsif bhp > 125
+      # 150 hp
+      motor_efficiency = 0.958
+    elsif bhp > 100
+      # 125 hp
+      motor_efficiency = 0.954
+    elsif bhp > 75
+      # 100 hp
+      motor_efficiency = 0.954
+    elsif bhp > 60
+      # 75 hp
+      motor_efficiency = 0.954
+    elsif bhp > 50
+      # 60n hp
+      motor_efficiency = 0.950
+    elsif bhp > 40
+      # 50 hp
+      motor_efficiency = 0.945
+    elsif bhp > 30
+      # 40 hp
+      motor_efficiency = 0.941
+    elsif bhp > 25
+      # 30 hp
+      motor_efficiency = 0.936
+    elsif bhp > 20
+      # 25 hp
+      motor_efficiency = 0.936
+    elsif bhp > 15
+      # 20 hp
+      motor_efficiency = 0.930
+    elsif bhp > 10
+      # 15 hp
+      motor_efficiency = 0.924
+    elsif bhp > 7.5
+      # 10 hp
+      motor_efficiency = 0.917
+    elsif bhp > 5
+      # 7.5 hp
+      motor_efficiency = 0.917
+    elsif bhp > 3
+      # 5 hp
+      motor_efficiency = 0.895
+    elsif bhp > 2
+      # 3 hp
+      motor_efficiency = 0.895
+    elsif bhp > 1.5
+      # 2 hp
+      motor_efficiency = 0.865
+    elsif bhp > 1
+      # 1.5 hp
+      motor_efficiency = 0.865
+    elsif bhp > 1/12.0
+      # 1 hp
+      motor_efficiency = 0.855
+    else
+      motor_efficiency = 0.70
+    end
+    return motor_efficiency
+  end
+
+  # @author Matt Leach, NORESCO
+  def check_dx_cooling_single_speed_efficiency(model, dx_coil_hash, failure_array)
+    model.getCoilCoolingDXSingleSpeeds.each do |cooling_coil|
+      cooling_coil_name = cooling_coil.name.get.to_s
+      dx_coil_hash.keys.each do |cooling_coil_name_keyword|
+        next unless cooling_coil_name.include? cooling_coil_name_keyword
+        next unless dx_coil_hash[cooling_coil_name_keyword]["CoilType"] == "SingleSpeedCooling"
+        if cooling_coil.getRatedCOP.is_initialized
+          coil_cop = cooling_coil.getRatedCOP.get
+          if dx_coil_hash[cooling_coil_name_keyword]["EfficiencyType"] == "EER"
+            expected_coil_cop = (7.84e-8*dx_coil_hash[cooling_coil_name_keyword]["Efficiency"]*dx_coil_hash[cooling_coil_name_keyword]["Capacity"]*1000.0)+(0.338*dx_coil_hash[cooling_coil_name_keyword]["Efficiency"])
+          elsif dx_coil_hash[cooling_coil_name_keyword]["EfficiencyType"] == "SEER"
+            expected_coil_cop = -0.0076*dx_coil_hash[cooling_coil_name_keyword]["Efficiency"]**2+0.3796*dx_coil_hash[cooling_coil_name_keyword]["Efficiency"]
+          elsif dx_coil_hash[cooling_coil_name_keyword]["EfficiencyType"] == "PTAC"
+            if dx_coil_hash[cooling_coil_name_keyword]["Capacity"] < 7
+              capacity_for_calculation = 7
+            elsif dx_coil_hash[cooling_coil_name_keyword]["Capacity"] > 15  
+              capacity_for_calculation = 15
+            else  
+              capacity_for_calculation = dx_coil_hash[cooling_coil_name_keyword]["Capacity"]
+            end  
+            expected_coil_eer = 13.8 - (0.3*capacity_for_calculation)
+            expected_coil_cop = (7.84e-8*expected_coil_eer*dx_coil_hash[cooling_coil_name_keyword]["Capacity"]*1000.0)+(0.338*expected_coil_eer)
+          else
+            failure_array << "Test Error: unexpected Efficiency Type (#{dx_coil_hash[cooling_coil_name_keyword]["EfficiencyType"]}) for #{cooling_coil_name}; expected 'EER' or 'SEER'"
+          end    
+          unless (expected_coil_cop - coil_cop).abs < 0.02
+            failure_array << "Expected COP of #{expected_coil_cop.round(2)} for #{cooling_coil_name}; got #{coil_cop.round(2)} instead"
+          end
+        else
+          failure_array << "Expected COP to be set for #{cooling_coil_name}"
+        end  
+      end
+    end
+    return failure_array
+  end
   
+  # @author Matt Leach, NORESCO
+  def check_dx_cooling_two_speed_efficiency(model, dx_coil_hash, failure_array)
+    model.getCoilCoolingDXTwoSpeeds.each do |cooling_coil|
+      cooling_coil_name = cooling_coil.name.get.to_s
+      dx_coil_hash.keys.each do |cooling_coil_name_keyword|
+        next unless cooling_coil_name.include? cooling_coil_name_keyword
+        next unless dx_coil_hash[cooling_coil_name_keyword]["CoilType"] == "TwoSpeedCooling"
+        if cooling_coil.getRatedHighSpeedCOP.is_initialized
+          coil_cop = cooling_coil.getRatedHighSpeedCOP.get
+          if dx_coil_hash[cooling_coil_name_keyword]["EfficiencyType"] == "EER"
+            expected_coil_cop = (7.84e-8*dx_coil_hash[cooling_coil_name_keyword]["Efficiency"]*dx_coil_hash[cooling_coil_name_keyword]["Capacity"]*1000.0)+(0.338*dx_coil_hash[cooling_coil_name_keyword]["Efficiency"])
+          elsif dx_coil_hash[cooling_coil_name_keyword]["EfficiencyType"] == "SEER"
+            expected_coil_cop = -0.0076*dx_coil_hash[cooling_coil_name_keyword]["Efficiency"]**2+0.3796*dx_coil_hash[cooling_coil_name_keyword]["Efficiency"]
+          else
+            failure_array << "Test Error: unexpected Efficiency Type (#{}) for #{cooling_coil_name}; expected 'EER' or 'SEER'"
+          end    
+          unless (expected_coil_cop - coil_cop).abs < 0.02
+            failure_array << "Expected COP of #{expected_coil_cop.round(2)} for #{cooling_coil_name}; got #{coil_cop.round(2)} instead"
+          end
+        else
+          failure_array << "Expected COP to be set for #{cooling_coil_name}"
+        end  
+      end
+    end
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_dx_heating_single_speed_efficiency(model, dx_coil_hash, failure_array)
+    model.getCoilHeatingDXSingleSpeeds.each do |heating_coil|
+      heating_coil_name = heating_coil.name.get.to_s
+      dx_coil_hash.keys.each do |heating_coil_name_keyword|
+        next unless heating_coil_name.include? heating_coil_name_keyword
+        next unless dx_coil_hash[heating_coil_name_keyword]["CoilType"] == "SingleSpeedHeating"
+        coil_cop = heating_coil.ratedCOP
+        if dx_coil_hash[heating_coil_name_keyword]["EfficiencyType"] == "COP"
+          expected_coil_cop = (1.48e-7*dx_coil_hash[heating_coil_name_keyword]["Efficiency"]*dx_coil_hash[heating_coil_name_keyword]["Capacity"]*1000.0)+(1.062*dx_coil_hash[heating_coil_name_keyword]["Efficiency"])
+        elsif dx_coil_hash[heating_coil_name_keyword]["EfficiencyType"] == "HSPF"
+          expected_coil_cop = -0.0296*dx_coil_hash[heating_coil_name_keyword]["Efficiency"]**2+0.7134*dx_coil_hash[heating_coil_name_keyword]["Efficiency"]
+        else
+          failure_array << "Test Error: unexpected Efficiency Type (#{}) for #{heating_coil_name}; expected 'COP' or 'HSPF'"
+        end    
+        unless (expected_coil_cop - coil_cop).abs < 0.02
+          failure_array << "Expected COP of #{expected_coil_cop.round(2)} for #{heating_coil_name}; got #{coil_cop.round(2)} instead"
+        end
+      end
+    end
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_variable_speed_fan_power(model, supply_fan_hash, failure_array)
+    model.getFanVariableVolumes.each do |supply_fan|
+      supply_fan_name = supply_fan.name.get.to_s
+      supply_fan_hash.keys.each do |supply_fan_name_to_match|
+        next unless supply_fan_name == supply_fan_name_to_match
+        
+        fan_total_efficiency = supply_fan.fanEfficiency
+        fan_pressure_rise_pa = supply_fan.pressureRise
+        fan_pressure_rise_in_h2o = fan_pressure_rise_pa/249.1
+        fan_watts_per_cfm = fan_pressure_rise_in_h2o / (8.5605*fan_total_efficiency)
+        
+        expected_fan_bhp = 0.0013*supply_fan_hash[supply_fan_name]["CFM"]+supply_fan_hash[supply_fan_name]["PressureDifferential"]*supply_fan_hash[supply_fan_name]["CFM"]/4131
+        expected_motor_efficiency = calculate_motor_efficiency(expected_fan_bhp)
+        expected_fan_watts_per_cfm = (expected_fan_bhp*746/expected_motor_efficiency)/supply_fan_hash[supply_fan_name]["CFM"]
+        
+        unless (fan_watts_per_cfm - expected_fan_watts_per_cfm).abs < 0.02
+          failure_array << "Expected Fan Power of #{expected_fan_watts_per_cfm.round(2)} W/cfm for #{supply_fan_name}; got #{fan_watts_per_cfm.round(2)} W/cfm instead"
+        end
+        
+      end
+      # check fan curves
+      # coefficient 1
+      if supply_fan.fanPowerCoefficient1.is_initialized
+        expected_coefficient = 0.0013
+        coefficient = supply_fan.fanPowerCoefficient1.get
+        unless (coefficient - expected_coefficient).abs < 0.01
+          failure_array << "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead"
+        end
+      else
+        failure_array << "Expected Coefficient 1 for #{supply_fan_name} to be set"
+      end
+      # coefficient 2
+      if supply_fan.fanPowerCoefficient2.is_initialized
+        expected_coefficient = 0.1470
+        coefficient = supply_fan.fanPowerCoefficient2.get
+        unless (coefficient - expected_coefficient).abs < 0.01
+          failure_array << "Expected Coefficient 2 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead"
+        end
+      else
+        failure_array << "Expected Coefficient 2 for #{supply_fan_name} to be set"
+      end
+      # coefficient 3
+      if supply_fan.fanPowerCoefficient3.is_initialized
+        expected_coefficient = 0.9506
+        coefficient = supply_fan.fanPowerCoefficient3.get
+        unless (coefficient - expected_coefficient).abs < 0.01
+          failure_array << "Expected Coefficient 3 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead"
+        end
+      else
+        failure_array << "Expected Coefficient 3 for #{supply_fan_name} to be set"
+      end
+      # coefficient 4
+      if supply_fan.fanPowerCoefficient4.is_initialized
+        expected_coefficient = -0.0998
+        coefficient = supply_fan.fanPowerCoefficient4.get
+        unless (coefficient - expected_coefficient).abs < 0.01
+          failure_array << "Expected Coefficient 4 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead"
+        end
+      else
+        failure_array << "Expected Coefficient 4 for #{supply_fan_name} to be set"
+      end
+      # coefficient 5
+      if supply_fan.fanPowerCoefficient5.is_initialized
+        expected_coefficient = 0
+        coefficient = supply_fan.fanPowerCoefficient5.get
+        unless (coefficient - expected_coefficient).abs < 0.01
+          failure_array << "Expected Coefficient 5 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead"
+        end
+      else
+        failure_array << "Expected Coefficient 5 for #{supply_fan_name} to be set"
+      end
+    end  
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_constant_speed_fan_power(model, supply_fan_hash, failure_array)
+    model.getFanConstantVolumes.each do |fan|
+      fan_name = fan.name.get.to_s
+      # check PFP terminal fans
+      if fan_name.include? "PFP Term Fan"
+        # check if fan power is 0.35 W/cfm
+        fan_total_efficiency = fan.fanEfficiency
+        fan_pressure_rise_pa = fan.pressureRise
+        fan_pressure_rise_in_h2o = fan_pressure_rise_pa/249.1
+        fan_watts_per_cfm = fan_pressure_rise_in_h2o / (8.5605*fan_total_efficiency)
+        expected_fan_watts_per_cfm = 0.35
+        unless (fan_watts_per_cfm - expected_fan_watts_per_cfm).abs < 0.02
+          failure_array << "Expected Fan Power of #{expected_fan_watts_per_cfm} W/cfm for #{fan_name}; got #{fan_watts_per_cfm.round(2)} W/cfm instead"
+        end
+      elsif (fan_name.include? "PTAC" or fan_name.include? "PTHP")
+        # check if fan power is 0.3 W/cfm
+        fan_total_efficiency = fan.fanEfficiency
+        fan_pressure_rise_pa = fan.pressureRise
+        fan_pressure_rise_in_h2o = fan_pressure_rise_pa/249.1
+        fan_watts_per_cfm = fan_pressure_rise_in_h2o / (8.5605*fan_total_efficiency)
+        expected_fan_watts_per_cfm = 0.30
+        unless (fan_watts_per_cfm - expected_fan_watts_per_cfm).abs < 0.01
+          failure_array << "Expected Fan Power of #{expected_fan_watts_per_cfm} W/cfm for #{fan_name}; got #{fan_watts_per_cfm.round(2)} W/cfm instead"
+        end
+      elsif fan_name.include? "UnitHeater"  
+        # check if fan power is 0.3 W/cfm
+        fan_total_efficiency = fan.fanEfficiency
+        fan_pressure_rise_pa = fan.pressureRise
+        fan_pressure_rise_in_h2o = fan_pressure_rise_pa/249.1
+        fan_watts_per_cfm = fan_pressure_rise_in_h2o / (8.5605*fan_total_efficiency)
+        expected_fan_watts_per_cfm = 0.30
+        unless (fan_watts_per_cfm - expected_fan_watts_per_cfm).abs < 0.01
+          failure_array << "Expected Fan Power of #{expected_fan_watts_per_cfm} W/cfm for #{fan_name}; got #{fan_watts_per_cfm.round(2)} W/cfm instead"
+        end
+      else
+        supply_fan_hash.keys.each do |supply_fan_name_to_match|
+          next unless fan_name == supply_fan_name_to_match
+          fan_total_efficiency = fan.fanEfficiency
+          fan_pressure_rise_pa = fan.pressureRise
+          fan_pressure_rise_in_h2o = fan_pressure_rise_pa/249.1
+          fan_watts_per_cfm = fan_pressure_rise_in_h2o / (8.5605*fan_total_efficiency)
+          expected_fan_bhp = 0.00094*supply_fan_hash[fan_name]["CFM"]+supply_fan_hash[fan_name]["PressureDifferential"]*supply_fan_hash[fan_name]["CFM"]/4131
+          expected_motor_efficiency = calculate_motor_efficiency(expected_fan_bhp)
+          expected_fan_watts_per_cfm = (expected_fan_bhp*746/expected_motor_efficiency)/supply_fan_hash[fan_name]["CFM"]
+          unless (fan_watts_per_cfm - expected_fan_watts_per_cfm).abs < 0.01
+            failure_array << "Expected Fan Power of #{expected_fan_watts_per_cfm.round(2)} W/cfm for #{fan_name}; got #{fan_watts_per_cfm.round(2)} W/cfm instead"
+          end
+        end
+      end
+    end  
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_chillers(model, total_chilled_water_capacity_tons, failure_array)
+    # chillers
+    chiller_check_output_hash = {}
+    number_of_chillers = 0
+    if total_chilled_water_capacity_tons >= 600
+      model.getChillerElectricEIRs.each do |chiller|
+        number_of_chillers += 1
+        # check curves (should be centrifugal)
+        unless chiller.coolingCapacityFunctionOfTemperature.name.get.to_s.include? "Cent"
+          failure_array << "Expected Chiller(s) of Type Centrifugal but Curve #{chiller.coolingCapacityFunctionOfTemperature.name} does not contain 'Cent'"
+        end
+        unless chiller.  electricInputToCoolingOutputRatioFunctionOfTemperature.name.get.to_s.include? "Cent"
+          failure_array << "Expected Chiller(s) of Type Centrifugal but Curve #{chiller.  electricInputToCoolingOutputRatioFunctionOfTemperature.name} does not contain 'Cent'"
+        end
+        unless chiller.  electricInputToCoolingOutputRatioFunctionOfPLR.name.get.to_s.include? "Cent"
+          failure_array << "Expected Chiller(s) of Type Centrifugal but Curve #{chiller.  electricInputToCoolingOutputRatioFunctionOfPLR.name} does not contain 'Cent'"
+        end
+      end
+      # check for two chillers
+      unless number_of_chillers == 2
+        failure_array << "Total CHW Capacity is #{total_chilled_water_capacity_tons} tons.  For capacities larger than 600 tons, 2 chillers are expected; found #{number_of_chillers} chillers instead"
+      end
+      # check chiller efficiency        
+      chiller_capacity = total_chilled_water_capacity_tons/number_of_chillers
+      # Centrifugal, Path B efficiencies, Effective 1/1/2010
+      if chiller_capacity >= 600
+        expected_kw_per_ton = 0.56
+      elsif chiller_capacity >= 400
+        expected_kw_per_ton = 0.56
+      elsif chiller_capacity >= 300
+        expected_kw_per_ton = 0.56
+      elsif chiller_capacity >= 150
+        expected_kw_per_ton = 0.61
+      else
+        expected_kw_per_ton = 0.61
+      end
+      expected_cop = (12/expected_kw_per_ton)/3.412
+      model.getChillerElectricEIRs.each do |chiller|
+        cop = chiller.referenceCOP
+        unless (cop - expected_cop).abs < 0.05
+          failure_array << "Expected COP of #{expected_cop.round(2)} for Chiller #{chiller.name}; found #{cop.round(2)} instead"
+        end
+      end  
+    elsif total_chilled_water_capacity_tons > 300
+      model.getChillerElectricEIRs.each do |chiller|
+        number_of_chillers += 1
+        # check curves (should be positive displacement)
+        unless chiller.coolingCapacityFunctionOfTemperature.name.get.to_s.include? "PosDisp"
+          failure_array << "Expected Chiller(s) of Type Screw but Curve #{chiller.coolingCapacityFunctionOfTemperature.name} does not contain 'PosDisp'"
+        end
+        unless chiller.  electricInputToCoolingOutputRatioFunctionOfTemperature.name.get.to_s.include? "PosDisp"
+          failure_array << "Expected Chiller(s) of Type Screw but Curve #{chiller.  electricInputToCoolingOutputRatioFunctionOfTemperature.name} does not contain 'PosDisp'"
+        end
+        unless chiller.  electricInputToCoolingOutputRatioFunctionOfPLR.name.get.to_s.include? "PosDisp"
+          failure_array << "Expected Chiller(s) of Type Screw but Curve #{chiller.  electricInputToCoolingOutputRatioFunctionOfPLR.name} does not contain 'PosDisp'"
+        end
+      end
+      # check for two chillers
+      unless number_of_chillers == 2
+        failure_array << "Total CHW Capacity is #{total_chilled_water_capacity_tons} tons.  For capacities larger than 600 tons, 2 chillers are expected; found #{number_of_chillers} chillers instead"
+      end
+      # check chiller efficiency
+      unless number_of_chillers == 0  
+        chiller_capacity = total_chilled_water_capacity_tons/number_of_chillers
+        # Positive Displacement, Path A efficiencies, Effective 1/1/2015
+        if chiller_capacity >= 600
+          expected_kw_per_ton = 0.560
+        elsif chiller_capacity >= 300
+          expected_kw_per_ton = 0.610
+        elsif chiller_capacity >= 150
+          expected_kw_per_ton = 0.660
+        elsif chiller_capacity >= 75
+          expected_kw_per_ton = 0.720
+        else
+          expected_kw_per_ton = 0.750
+        end
+        expected_cop = (12/expected_kw_per_ton)/3.412
+        model.getChillerElectricEIRs.each do |chiller|
+          cop = chiller.referenceCOP
+          unless (cop - expected_cop).abs < 0.05
+            failure_array << "Expected COP of #{expected_cop.round(2)} for Chiller #{chiller.name}; found #{cop.round(2)} instead"
+          end
+        end
+      end  
+    else
+      model.getChillerElectricEIRs.each do |chiller|
+        number_of_chillers += 1
+        # check curves (should be positive displacement)
+        unless chiller.coolingCapacityFunctionOfTemperature.name.get.to_s.include? "PosDisp"
+          failure_array << "Expected Chiller(s) of Type Screw but Curve #{chiller.coolingCapacityFunctionOfTemperature.name} does not contain 'PosDisp'"
+        end
+        unless chiller.  electricInputToCoolingOutputRatioFunctionOfTemperature.name.get.to_s.include? "PosDisp"
+          failure_array << "Expected Chiller(s) of Type Screw but Curve #{chiller.  electricInputToCoolingOutputRatioFunctionOfTemperature.name} does not contain 'PosDisp'"
+        end
+        unless chiller.  electricInputToCoolingOutputRatioFunctionOfPLR.name.get.to_s.include? "PosDisp"
+          failure_array << "Expected Chiller(s) of Type Screw but Curve #{chiller.  electricInputToCoolingOutputRatioFunctionOfPLR.name} does not contain 'PosDisp'"
+        end
+      end
+      # check for two chillers
+      unless number_of_chillers == 1
+        failure_array << "Total CHW Capacity is #{total_chilled_water_capacity_tons} tons.  For capacities larger than 600 tons, 1 chiller is expected; found #{number_of_chillers} chillers instead"
+      end
+      # check chiller efficiency        
+      unless number_of_chillers == 0  
+        chiller_capacity = total_chilled_water_capacity_tons/number_of_chillers
+        # Positive Displacement, Path A efficiencies, Effective 1/1/2015
+        if chiller_capacity >= 600
+          expected_kw_per_ton = 0.560
+        elsif chiller_capacity >= 300
+          expected_kw_per_ton = 0.610
+        elsif chiller_capacity >= 150
+          expected_kw_per_ton = 0.660
+        elsif chiller_capacity >= 75
+          expected_kw_per_ton = 0.720
+        else
+          expected_kw_per_ton = 0.750
+        end
+        expected_cop = (12/expected_kw_per_ton)/3.412
+        model.getChillerElectricEIRs.each do |chiller|
+          cop = chiller.referenceCOP
+          unless (cop - expected_cop).abs < 0.05
+            failure_array << "Expected COP of #{expected_cop.round(2)} for Chiller #{chiller.name}; found #{cop.round(2)} instead"
+          end
+        end
+      end  
+    end
+    chiller_check_output_hash["Failure_Array"] = failure_array
+    chiller_check_output_hash["Number_Of_Chillers"] = number_of_chillers
+    return chiller_check_output_hash
+  end
+  
+  # @author Matt Leach, NORESCO
+  def calculate_zones_served_by_hot_water_loop(hw_loop, zones_served)
+    airloops_to_check = []
+    zone_hvacs_to_check = []
+    vav_reheat_terminals_to_check = []
+    # get zones served by hot water coils
+    hw_loop.demandComponents.each do |demand_component|
+      next if demand_component.to_Node.is_initialized
+      next if demand_component.to_PipeAdiabatic.is_initialized
+      next if demand_component.to_ConnectorMixer.is_initialized
+      next if demand_component.to_ConnectorSplitter.is_initialized
+      next if demand_component.to_ConnectorSplitter.is_initialized
+      next if demand_component.to_WaterUseConnections.is_initialized
+      if demand_component.to_CoilHeatingWater.is_initialized
+        # get thermal zone
+        hot_water_coil = demand_component.to_CoilHeatingWater.get
+        # get airloop if relevant
+        if hot_water_coil.airLoopHVAC.is_initialized
+          airloops_to_check << hot_water_coil.airLoopHVAC.get
+          airloops_to_check = airloops_to_check.uniq
+        elsif hot_water_coil.containingZoneHVACComponent.is_initialized
+          zone_hvacs_to_check << hot_water_coil.containingZoneHVACComponent.get
+          zone_hvacs_to_check = zone_hvacs_to_check.uniq
+        elsif hot_water_coil.containingHVACComponent.is_initialized
+          hvac_component = hot_water_coil.containingHVACComponent.get
+          if hvac_component.to_AirTerminalSingleDuctVAVReheat.is_initialized
+            vav_reheat_terminals_to_check << hvac_component.to_AirTerminalSingleDuctVAVReheat.get
+          end
+        end  
+      else
+        failure_array << "Expected demand components for Loop #{hw_loop.name} to be CoilHeatingWater"
+      end
+    end
+    airloops_to_check.each do |airloop|
+      airloop.thermalZones.each do |zone|
+        zones_served << zone
+      end
+    end
+    zone_hvacs_to_check.each do |zone_hvac|
+      if zone_hvac.thermalZone.is_initialized
+        zones_served << zone_hvac.thermalZone.get
+      end
+    end
+    vav_reheat_terminals_to_check.each do |vav_reheat_terminal|
+      if vav_reheat_terminal.outletModelObject.is_initialized
+        if vav_reheat_terminal.outletModelObject.get.to_Node.is_initialized
+          if vav_reheat_terminal.outletModelObject.get.to_Node.get.outletModelObject.is_initialized
+            if vav_reheat_terminal.outletModelObject.get.to_Node.get.outletModelObject.get.to_PortList.is_initialized
+              zones_served << vav_reheat_terminal.outletModelObject.get.to_Node.get.outletModelObject.get.to_PortList.get.thermalZone
+            end
+          end  
+        end
+      end
+    end
+    return zones_served
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_boilers(model, failure_array)
+    hw_loops = []
+    hot_water_area_served_ft2 = 0
+    number_of_boilers = 0
+    zones_served = []
+    # get hot water loop
+    model.getBoilerHotWaters.each do |boiler|
+      number_of_boilers += 1
+      if boiler.plantLoop.is_initialized
+        plant_loop = boiler.plantLoop.get
+        hw_loops << plant_loop
+        hw_loops = hw_loops.uniq
+      else
+        failure_array << "Boiler #{boiler.name} is not attached to a Plant Loop"
+      end  
+    end  
+    if hw_loops.length > 1
+      failure_array << "Expected only one HW Loop"
+    elsif  hw_loops.length == 0
+      failure_array << "Could not find a hot water loop with a Boiler"
+    end
+    # get zones served by hot water coils   
+    hw_loops.each do |hw_loop|
+      zones_served = calculate_zones_served_by_hot_water_loop(hw_loop, zones_served)    
+    end  
+    # calculate area served
+    zones_served = zones_served.uniq
+    zones_served.each do |zone|
+      hot_water_area_served_ft2 += zone.floorArea * 10.7639
+    end
+    # check number of boilers
+    if hot_water_area_served_ft2 > 15000
+      # should be two boilers
+      unless number_of_boilers == 2
+        failure_array << "Hot water plant serves #{hot_water_area_served_ft2.round()} ft2 of floor area; expected 2 boilers but found #{number_of_boilers}"
+      end
+    else
+      # should be one boiler
+      unless number_of_boilers == 1
+        failure_array << "Hot water plant serves #{hot_water_area_served_ft2.round()} ft2 of floor area; expected 1 boiler but found #{number_of_boilers}"
+      end
+    end
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_cooling_towers(model, number_of_chillers, failure_array)
+    # towers (should be one tower per chiller)
+    number_of_towers = 0
+    model.getCoolingTowerVariableSpeeds.each do |tower|
+      number_of_towers += 1
+    end
+    unless number_of_towers == number_of_chillers
+      failure_array << "Number of towers should match number of chillers; found #{number_of_towers} towers and #{number_of_chillers} chillers"
+    end
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_chw_pumps(model, number_of_chillers, total_chilled_water_capacity_tons, failure_array)
+    # should be one constant speed pump per chiller on the supply side with 9 W/gpm power
+    chw_loops = []
+    model.getChillerElectricEIRs.each do |chiller|
+      if chiller.plantLoop.is_initialized
+        chw_loops << chiller.plantLoop.get
+        chw_loops = chw_loops.uniq
+      else
+        failure_array << "Chiller #{chiller.name} is not connected to a plant loop"
+      end
+    end
+    # get pumps from chw loop
+    if chw_loops.length > 1
+      failure_array << "Expected 1 CHW Loop; found #{chw_loops.length}"
+    elsif  chw_loops.length == 0
+      failure_array << "Could not find a chilled water loop with a Chiller"
+    else  
+      chw_loops.each do |chw_loop|  
+        # supply side
+        constant_speed_supply_pumps = chw_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
+        variable_speed_supply_pumps = chw_loop.supplyComponents('OS_Pump_VariableSpeed'.to_IddObjectType)
+        number_of_pumps = constant_speed_supply_pumps.length + variable_speed_supply_pumps.length
+        # check number of pumps
+        unless number_of_pumps == number_of_chillers
+          failure_array << "Expected #{number_of_chillers} supply-side pumps for #{chw_loop.name} because Loop has #{number_of_chillers} Chillers; found #{number_of_pumps} pump(s) instead"
+        end
+        # check type of pumps
+        unless number_of_pumps == constant_speed_supply_pumps.length
+          failure_array << "Expected supply-side pumps for #{chw_loop.name} to be of type ConstantSpeed, but #{number_of_pumps - constant_speed_supply_pumps.length} of #{number_of_pumps} pump(s) is/are of type VariableSpeed"
+        end
+        # check pump power
+        expected_pump_watts_per_gpm = 9
+        # constant speed
+        constant_speed_supply_pumps.each do |pump|
+          pump = pump.to_PumpConstantSpeed.get
+          motor_efficiency = pump.motorEfficiency
+          impeller_efficiency = 0.78
+          pump_efficiency = motor_efficiency * impeller_efficiency
+          pump_head_pa = pump.ratedPumpHead
+          pump_head_ft = pump_head_pa / (12*249.09)
+          pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+          unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+            failure_array << "Expected supply-side pumps for #{chw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+          end
+        end
+        # variable speed
+        variable_speed_supply_pumps.each do |pump|
+          pump = pump.to_PumpVariableSpeed.get
+          motor_efficiency = pump.motorEfficiency
+          impeller_efficiency = 0.78
+          pump_efficiency = motor_efficiency * impeller_efficiency
+          pump_head_pa = pump.ratedPumpHead
+          pump_head_ft = pump_head_pa / (12*249.09)
+          pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+          unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+            failure_array << "Expected supply-side pumps for #{chw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+          end
+        end
+        # should be one variable speed pump on the demand side with 13 W/gpm (riding curve if CHW capacity less than 300 tons)
+        constant_speed_supply_pumps = chw_loop.demandComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
+        variable_speed_supply_pumps = chw_loop.demandComponents('OS_Pump_VariableSpeed'.to_IddObjectType)
+        number_of_pumps = constant_speed_supply_pumps.length + variable_speed_supply_pumps.length
+        # check number of pumps
+        unless number_of_pumps == 1
+          failure_array << "Expected 1 demand-side pump for #{chw_loop.name}; found #{number_of_pumps} pump instead"
+        end
+        # check type of pumps
+        unless number_of_pumps == variable_speed_supply_pumps.length
+          failure_array << "Expected demand-side pump for #{chw_loop.name} to be of type VariableSpeed, but #{number_of_pumps - variable_speed_supply_pumps.length} of #{number_of_pumps} pump(s) is/are of type ConstantSpeed"
+        end
+        # check pump power
+        expected_pump_watts_per_gpm = 13
+        # constant speed
+        constant_speed_supply_pumps.each do |pump|
+          pump = pump.to_PumpConstantSpeed.get
+          motor_efficiency = pump.motorEfficiency
+          impeller_efficiency = 0.78
+          pump_efficiency = motor_efficiency * impeller_efficiency
+          pump_head_pa = pump.ratedPumpHead
+          pump_head_ft = pump_head_pa / (12*249.09)
+          pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+          unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+            failure_array << "Expected demand-side pumps for #{chw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+          end
+        end
+        # variable speed
+        variable_speed_supply_pumps.each do |pump|
+          pump = pump.to_PumpVariableSpeed.get
+          motor_efficiency = pump.motorEfficiency
+          impeller_efficiency = 0.78
+          pump_efficiency = motor_efficiency * impeller_efficiency
+          pump_head_pa = pump.ratedPumpHead
+          pump_head_ft = pump_head_pa / (12*249.09)
+          pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+          unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+            failure_array << "Expected demand-side pumps for #{chw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+          end
+          # check pump curve
+          if total_chilled_water_capacity_tons < 300
+            # riding the curve
+            pump_type = "Riding the Pump Curve"
+            expected_coefficient_1 = 0
+            expected_coefficient_2 = 3.2485
+            expected_coefficient_3 = -4.7443
+            expected_coefficient_4 = 2.5294
+          else
+            # variable speed drive
+            pump_type = "Variable Speed Drive"
+            expected_coefficient_1 = 0
+            expected_coefficient_2 = 0.5726
+            expected_coefficient_3 = -0.301
+            expected_coefficient_4 = 0.7347
+          end
+          # coefficient 1
+          coefficient_1 = pump.coefficient1ofthePartLoadPerformanceCurve
+          unless (coefficient_1 - expected_coefficient_1).abs < 0.01
+            failure_array << "Expected Coefficient 1 for #{pump.name} to be equal to #{expected_coefficient_1} (#{pump_type}); found #{coefficient_1} instead"
+          end
+          # coefficient 2
+          coefficient_2 = pump.coefficient2ofthePartLoadPerformanceCurve
+          unless (coefficient_2 - expected_coefficient_2).abs < 0.01
+            failure_array << "Expected Coefficient 2 for #{pump.name} to be equal to #{expected_coefficient_2} (#{pump_type}); found #{coefficient_2} instead"
+          end
+          # coefficient 3
+          coefficient_3 = pump.coefficient3ofthePartLoadPerformanceCurve
+          unless (coefficient_3 - expected_coefficient_3).abs < 0.01
+            failure_array << "Expected Coefficient 3 for #{pump.name} to be equal to #{expected_coefficient_3} (#{pump_type}); found #{coefficient_3} instead"
+          end
+          # coefficient 4
+          coefficient_4 = pump.coefficient4ofthePartLoadPerformanceCurve
+          unless (coefficient_4 - expected_coefficient_4).abs < 0.01
+            failure_array << "Expected Coefficient 4 for #{pump.name} to be equal to #{expected_coefficient_4} (#{pump_type}); found #{coefficient_4} instead"
+          end
+        end
+      end
+    end
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_district_chw_pumps(model, total_chilled_water_capacity_tons, failure_array)
+    # should be one variable speed pump on supply side with 16 W/gpm power (riding the pump curve if chw capacity less than 300 tons)
+    chw_loops = []
+    model.getDistrictCoolings.each do |district_cooling|
+      if district_cooling.plantLoop.is_initialized
+        chw_loops << district_cooling.plantLoop.get
+        chw_loops = chw_loops.uniq
+      else
+        failure_array << "DistrictCooling #{district_cooling.name} is not connected to a plant loop"
+      end
+    end
+
+    if chw_loops.length > 1
+      failure_array << "Expected 1 CHW Loop; found #{chw_loops.length}"
+    elsif  chw_loops.length == 0
+      failure_array << "Could not find a chilled water loop with a DistrictCooling object"
+    else  
+      chw_loops.each do |chw_loop|  
+        # should be one variable speed pump on the supply side with 16 W/gpm (riding curve if CHW capacity less than 300 tons)
+        constant_speed_supply_pumps = chw_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
+        variable_speed_supply_pumps = chw_loop.supplyComponents('OS_Pump_VariableSpeed'.to_IddObjectType)
+        number_of_pumps = constant_speed_supply_pumps.length + variable_speed_supply_pumps.length
+        # check number of pumps
+        unless number_of_pumps == 1
+          failure_array << "Expected 1 supply-side pump for #{chw_loop.name}; found #{number_of_pumps} pump instead"
+        end
+        # check type of pumps
+        unless number_of_pumps == variable_speed_supply_pumps.length
+          failure_array << "Expected supply-side pump for #{chw_loop.name} to be of type VariableSpeed, but #{number_of_pumps - variable_speed_supply_pumps.length} of #{number_of_pumps} pump(s) is/are of type ConstantSpeed"
+        end
+        # check pump power
+        expected_pump_watts_per_gpm = 16
+        # constant speed
+        constant_speed_supply_pumps.each do |pump|
+          pump = pump.to_PumpConstantSpeed.get
+          motor_efficiency = pump.motorEfficiency
+          impeller_efficiency = 0.78
+          pump_efficiency = motor_efficiency * impeller_efficiency
+          pump_head_pa = pump.ratedPumpHead
+          pump_head_ft = pump_head_pa / (12*249.09)
+          pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+          unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+            failure_array << "Expected supply-side pumps for #{chw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+          end
+        end
+        # variable speed
+        variable_speed_supply_pumps.each do |pump|
+          pump = pump.to_PumpVariableSpeed.get
+          motor_efficiency = pump.motorEfficiency
+          impeller_efficiency = 0.78
+          pump_efficiency = motor_efficiency * impeller_efficiency
+          pump_head_pa = pump.ratedPumpHead
+          pump_head_ft = pump_head_pa / (12*249.09)
+          pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+          unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+            failure_array << "Expected supply-side pumps for #{chw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+          end
+          # check pump curve
+          if total_chilled_water_capacity_tons < 300
+            # riding the curve
+            pump_type = "Riding the Pump Curve"
+            expected_coefficient_1 = 0
+            expected_coefficient_2 = 3.2485
+            expected_coefficient_3 = -4.7443
+            expected_coefficient_4 = 2.5294
+          else
+            # variable speed drive
+            pump_type = "Variable Speed Drive"
+            expected_coefficient_1 = 0
+            expected_coefficient_2 = 0.5726
+            expected_coefficient_3 = -0.301
+            expected_coefficient_4 = 0.7347
+          end
+          # coefficient 1
+          coefficient_1 = pump.coefficient1ofthePartLoadPerformanceCurve
+          unless (coefficient_1 - expected_coefficient_1).abs < 0.01
+            failure_array << "Expected Coefficient 1 for #{pump.name} to be equal to #{expected_coefficient_1} (#{pump_type}); found #{coefficient_1} instead"
+          end
+          # coefficient 2
+          coefficient_2 = pump.coefficient2ofthePartLoadPerformanceCurve
+          unless (coefficient_2 - expected_coefficient_2).abs < 0.01
+            failure_array << "Expected Coefficient 2 for #{pump.name} to be equal to #{expected_coefficient_2} (#{pump_type}); found #{coefficient_2} instead"
+          end
+          # coefficient 3
+          coefficient_3 = pump.coefficient3ofthePartLoadPerformanceCurve
+          unless (coefficient_3 - expected_coefficient_3).abs < 0.01
+            failure_array << "Expected Coefficient 3 for #{pump.name} to be equal to #{expected_coefficient_3} (#{pump_type}); found #{coefficient_3} instead"
+          end
+          # coefficient 4
+          coefficient_4 = pump.coefficient4ofthePartLoadPerformanceCurve
+          unless (coefficient_4 - expected_coefficient_4).abs < 0.01
+            failure_array << "Expected Coefficient 4 for #{pump.name} to be equal to #{expected_coefficient_4} (#{pump_type}); found #{coefficient_4} instead"
+          end
+        end
+      end
+    end
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_cw_pumps(model, number_of_chillers, failure_array)
+    # should be one constant speed pump per cooling tower with 19 W/gpm
+    constant_speed_supply_pumps = []
+    variable_speed_supply_pumps = []
+    # get cw loop(s)
+    cw_loops = []
+    model.getChillerElectricEIRs.each do |chiller|
+      if chiller.secondaryPlantLoop.is_initialized
+        cw_loops << chiller.secondaryPlantLoop.get
+        cw_loops = cw_loops.uniq
+      else
+        failure_array << "Chiller #{chiller.name} is not connected to a condenser loop"
+      end
+    end
+    unless cw_loops.length == number_of_chillers
+      failure_array << "Expected one condenser loop per chiller; model has #{number_of_chillers} chillers but #{cw_loops.length} condenser loop(s)"
+    end
+    # get cw pump(s)
+    cw_loops.each do |cw_loop|
+      # supply side
+      constant_speed_supply_pumps = constant_speed_supply_pumps + cw_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
+      variable_speed_supply_pumps = variable_speed_supply_pumps + cw_loop.supplyComponents('OS_Pump_VariableSpeed'.to_IddObjectType)
+    end
+    # check number of pumps
+    number_of_pumps = constant_speed_supply_pumps.length + variable_speed_supply_pumps.length
+    unless number_of_pumps == number_of_chillers
+      failure_array << "Expected #{number_of_chillers} supply-side condenser pumps because model has #{number_of_chillers} Chillers; found #{number_of_pumps} pump(s) instead"
+    end
+    # check type of pumps
+    unless number_of_pumps == constant_speed_supply_pumps.length
+      failure_array << "Expected supply-side condenser pumps to be of type ConstantSpeed, but #{number_of_pumps - constant_speed_supply_pumps.length} of #{number_of_pumps} pump(s) is/are of type VariableSpeed"
+    end
+    # check pump power
+    expected_pump_watts_per_gpm = 19
+    # constant speed
+    constant_speed_supply_pumps.each do |pump|
+      pump = pump.to_PumpConstantSpeed.get
+      motor_efficiency = pump.motorEfficiency
+      impeller_efficiency = 0.78
+      pump_efficiency = motor_efficiency * impeller_efficiency
+      pump_head_pa = pump.ratedPumpHead
+      pump_head_ft = pump_head_pa / (12*249.09)
+      pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+      unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+        failure_array << "Expected supply-side condenser pumps to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+      end
+    end
+    # variable speed
+    variable_speed_supply_pumps.each do |pump|
+      pump = pump.to_PumpVariableSpeed.get
+      motor_efficiency = pump.motorEfficiency
+      impeller_efficiency = 0.78
+      pump_efficiency = motor_efficiency * impeller_efficiency
+      pump_head_pa = pump.ratedPumpHead
+      pump_head_ft = pump_head_pa / (12*249.09)
+      pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+      unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+        failure_array << "Expected supply-side condenser pumps to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+      end
+    end
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_hw_pumps(model, failure_array)
+    # get floor area served by boiler(s)
+    hw_loops = []
+    hot_water_area_served_ft2 = 0
+    zones_served = []
+    # get hot water loop
+    model.getBoilerHotWaters.each do |boiler|
+      if boiler.plantLoop.is_initialized
+        plant_loop = boiler.plantLoop.get
+        next if plant_loop.name.get.to_s.include? "DHW" or plant_loop.name.get.to_s.include? "Service Water Heating"
+        hw_loops << plant_loop
+        hw_loops = hw_loops.uniq
+      else
+        failure_array << "Boiler #{boiler.name} is not attached to a Plant Loop"
+      end  
+    end  
+    if hw_loops.length > 1
+      failure_array << "Expected only one HW Loop"
+    elsif  hw_loops.length == 0
+      failure_array << "Could not find a hot water loop with a District Heating object"
+    else  
+      # get area served by hot water coils   
+      hw_loops.each do |hw_loop|
+        zones_served = calculate_zones_served_by_hot_water_loop(hw_loop, zones_served)    
+      end  
+      # calculate area served
+      zones_served = zones_served.uniq
+      zones_served.each do |zone|
+        hot_water_area_served_ft2 += zone.floorArea * 10.7639
+      end
+      # should be one supply-side pump with 19 W/gpm
+      if hw_loops.length == 1
+        hw_loops.each do |hw_loop|  
+          # should be one variable speed pump on the supply side with 14 W/gpm (riding curve if HW loop serves less than 120,000 ft2)
+          constant_speed_supply_pumps = hw_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
+          variable_speed_supply_pumps = hw_loop.supplyComponents('OS_Pump_VariableSpeed'.to_IddObjectType)
+          number_of_pumps = constant_speed_supply_pumps.length + variable_speed_supply_pumps.length
+          # check number of pumps
+          unless number_of_pumps == 1
+            failure_array << "Expected 1 supply-side pump for #{hw_loop.name}; found #{number_of_pumps} pump instead"
+          end
+          # check type of pumps
+          unless number_of_pumps == variable_speed_supply_pumps.length
+            failure_array << "Expected supply-side pump for #{hw_loop.name} to be of type VariableSpeed, but #{number_of_pumps - variable_speed_supply_pumps.length} of #{number_of_pumps} pump(s) is/are of type ConstantSpeed"
+          end
+          # check pump power
+          expected_pump_watts_per_gpm = 19
+          # constant speed
+          constant_speed_supply_pumps.each do |pump|
+            pump = pump.to_PumpConstantSpeed.get
+            motor_efficiency = pump.motorEfficiency
+            impeller_efficiency = 0.78
+            pump_efficiency = motor_efficiency * impeller_efficiency
+            pump_head_pa = pump.ratedPumpHead
+            pump_head_ft = pump_head_pa / (12*249.09)
+            pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+            unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+              failure_array << "Expected supply-side pumps for #{hw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+            end
+          end
+          # variable speed
+          variable_speed_supply_pumps.each do |pump|
+            pump = pump.to_PumpVariableSpeed.get
+            motor_efficiency = pump.motorEfficiency
+            impeller_efficiency = 0.78
+            pump_efficiency = motor_efficiency * impeller_efficiency
+            pump_head_pa = pump.ratedPumpHead
+            pump_head_ft = pump_head_pa / (12*249.09)
+            pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+            unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+              failure_array << "Expected supply-side pumps for #{hw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+            end
+            # check pump curve
+            if hot_water_area_served_ft2 < 120000
+              # riding the curve
+              pump_type = "Riding the Pump Curve"
+              expected_coefficient_1 = 0
+              expected_coefficient_2 = 3.2485
+              expected_coefficient_3 = -4.7443
+              expected_coefficient_4 = 2.5294
+            else
+              # variable speed drive
+              pump_type = "Variable Speed Drive"
+              expected_coefficient_1 = 0
+              expected_coefficient_2 = 0.5726
+              expected_coefficient_3 = -0.301
+              expected_coefficient_4 = 0.7347
+            end
+            # coefficient 1
+            coefficient_1 = pump.coefficient1ofthePartLoadPerformanceCurve
+            unless (coefficient_1 - expected_coefficient_1).abs < 0.01
+              failure_array << "Expected Coefficient 1 for #{pump.name} to be equal to #{expected_coefficient_1} (#{pump_type}); found #{coefficient_1} instead"
+            end
+            # coefficient 2
+            coefficient_2 = pump.coefficient2ofthePartLoadPerformanceCurve
+            unless (coefficient_2 - expected_coefficient_2).abs < 0.01
+              failure_array << "Expected Coefficient 2 for #{pump.name} to be equal to #{expected_coefficient_2} (#{pump_type}); found #{coefficient_2} instead"
+            end
+            # coefficient 3
+            coefficient_3 = pump.coefficient3ofthePartLoadPerformanceCurve
+            unless (coefficient_3 - expected_coefficient_3).abs < 0.01
+              failure_array << "Expected Coefficient 3 for #{pump.name} to be equal to #{expected_coefficient_3} (#{pump_type}); found #{coefficient_3} instead"
+            end
+            # coefficient 4
+            coefficient_4 = pump.coefficient4ofthePartLoadPerformanceCurve
+            unless (coefficient_4 - expected_coefficient_4).abs < 0.01
+              failure_array << "Expected Coefficient 4 for #{pump.name} to be equal to #{expected_coefficient_4} (#{pump_type}); found #{coefficient_4} instead"
+            end
+          end
+        end
+      end
+    end  
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_district_hw_pumps(model, failure_array)
+    # get floor area served by district heating
+    hw_loops = []
+    hot_water_area_served_ft2 = 0
+    zones_served = []
+    # get hot water loop
+    model.getDistrictHeatings.each do |district_heating|
+      if district_heating.plantLoop.is_initialized
+        plant_loop = district_heating.plantLoop.get
+        next if plant_loop.name.get.to_s.include? "DHW" or plant_loop.name.get.to_s.include? "Service Water Heating"
+        hw_loops << plant_loop
+        hw_loops = hw_loops.uniq
+      else
+        failure_array << "District Heating #{district_heating.name} is not attached to a Plant Loop"
+      end  
+    end  
+    if hw_loops.length > 1
+      failure_array << "Expected only one HW Loop"
+    elsif  hw_loops.length == 0
+      failure_array << "Could not find a hot water loop with a District Heating object"
+    else
+      # get area served by hot water coils   
+      hw_loops.each do |hw_loop|
+        zones_served = calculate_zones_served_by_hot_water_loop(hw_loop, zones_served)    
+      end  
+      # calculate area served
+      zones_served = zones_served.uniq
+      zones_served.each do |zone|
+        hot_water_area_served_ft2 += zone.floorArea * 10.7639
+      end
+      # should be one supply-side pump with 14 W/gpm
+      if hw_loops.length == 1
+        hw_loops.each do |hw_loop|  
+          # should be one variable speed pump on the supply side with 14 W/gpm (riding curve if HW loop serves less than 120,000 ft2)
+          constant_speed_supply_pumps = hw_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
+          variable_speed_supply_pumps = hw_loop.supplyComponents('OS_Pump_VariableSpeed'.to_IddObjectType)
+          number_of_pumps = constant_speed_supply_pumps.length + variable_speed_supply_pumps.length
+          # check number of pumps
+          unless number_of_pumps == 1
+            failure_array << "Expected 1 supply-side pump for #{hw_loop.name}; found #{number_of_pumps} pump instead"
+          end
+          # check type of pumps
+          unless number_of_pumps == variable_speed_supply_pumps.length
+            failure_array << "Expected supply-side pump for #{hw_loop.name} to be of type VariableSpeed, but #{number_of_pumps - variable_speed_supply_pumps.length} of #{number_of_pumps} pump(s) is/are of type ConstantSpeed"
+          end
+          # check pump power
+          expected_pump_watts_per_gpm = 14
+          # constant speed
+          constant_speed_supply_pumps.each do |pump|
+            pump = pump.to_PumpConstantSpeed.get
+            motor_efficiency = pump.motorEfficiency
+            impeller_efficiency = 0.78
+            pump_efficiency = motor_efficiency * impeller_efficiency
+            pump_head_pa = pump.ratedPumpHead
+            pump_head_ft = pump_head_pa / (12*249.09)
+            pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+            unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+              failure_array << "Expected supply-side pumps for #{hw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+            end
+          end
+          # variable speed
+          variable_speed_supply_pumps.each do |pump|
+            pump = pump.to_PumpVariableSpeed.get
+            motor_efficiency = pump.motorEfficiency
+            impeller_efficiency = 0.78
+            pump_efficiency = motor_efficiency * impeller_efficiency
+            pump_head_pa = pump.ratedPumpHead
+            pump_head_ft = pump_head_pa / (12*249.09)
+            pump_watts_per_gpm = pump_head_ft / (5.302*pump_efficiency)
+            unless (pump_watts_per_gpm - expected_pump_watts_per_gpm).abs < 0.05
+              failure_array << "Expected supply-side pumps for #{hw_loop.name} to be #{expected_pump_watts_per_gpm} W/gpm; #{pump.name} is #{pump_watts_per_gpm.round(2)} W/gpm"
+            end
+            # check pump curve
+            if hot_water_area_served_ft2 < 120000
+              # riding the curve
+              pump_type = "Riding the Pump Curve"
+              expected_coefficient_1 = 0
+              expected_coefficient_2 = 3.2485
+              expected_coefficient_3 = -4.7443
+              expected_coefficient_4 = 2.5294
+            else
+              # variable speed drive
+              pump_type = "Variable Speed Drive"
+              expected_coefficient_1 = 0
+              expected_coefficient_2 = 0.5726
+              expected_coefficient_3 = -0.301
+              expected_coefficient_4 = 0.7347
+            end
+            # coefficient 1
+            coefficient_1 = pump.coefficient1ofthePartLoadPerformanceCurve
+            unless (coefficient_1 - expected_coefficient_1).abs < 0.01
+              failure_array << "Expected Coefficient 1 for #{pump.name} to be equal to #{expected_coefficient_1} (#{pump_type}); found #{coefficient_1} instead"
+            end
+            # coefficient 2
+            coefficient_2 = pump.coefficient2ofthePartLoadPerformanceCurve
+            unless (coefficient_2 - expected_coefficient_2).abs < 0.01
+              failure_array << "Expected Coefficient 2 for #{pump.name} to be equal to #{expected_coefficient_2} (#{pump_type}); found #{coefficient_2} instead"
+            end
+            # coefficient 3
+            coefficient_3 = pump.coefficient3ofthePartLoadPerformanceCurve
+            unless (coefficient_3 - expected_coefficient_3).abs < 0.01
+              failure_array << "Expected Coefficient 3 for #{pump.name} to be equal to #{expected_coefficient_3} (#{pump_type}); found #{coefficient_3} instead"
+            end
+            # coefficient 4
+            coefficient_4 = pump.coefficient4ofthePartLoadPerformanceCurve
+            unless (coefficient_4 - expected_coefficient_4).abs < 0.01
+              failure_array << "Expected Coefficient 4 for #{pump.name} to be equal to #{expected_coefficient_4} (#{pump_type}); found #{coefficient_4} instead"
+            end
+          end
+        end
+      end
+    end  
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_chw_controls(model, failure_array)
+    # get chilled water loops
+    chw_loops = []
+    model.getDistrictCoolings.each do |district_cooling|
+      if district_cooling.plantLoop.is_initialized
+        chw_loops << district_cooling.plantLoop.get
+        chw_loops = chw_loops.uniq
+      else
+        failure_array << "DistrictCooling #{district_cooling.name} is not connected to a plant loop"
+      end
+    end
+    model.getChillerElectricEIRs.each do |chiller|
+      if chiller.plantLoop.is_initialized
+        chw_loops << chiller.plantLoop.get
+        chw_loops = chw_loops.uniq
+      else
+        failure_array << "Chiller #{chiller.name} is not connected to a plant loop"
+      end
+    end
+    if chw_loops.length > 1
+      failure_array << "Expected 1 CHW Loop; found #{chw_loops.length}"
+    elsif  chw_loops.length == 0
+      failure_array << "Could not find a chilled water loop with a Chiller or DistrictCooling object"
+    else
+      chw_loops.each do |chw_loop|
+        found_correct_setpoint_manager = false
+        # get temperature setpoint manager
+        model.getSetpointManagerOutdoorAirResets.each do |oa_reset_manager|
+          next unless oa_reset_manager.plantLoop.is_initialized
+          plant_loop = oa_reset_manager.plantLoop.get
+          next unless plant_loop == chw_loop
+          found_correct_setpoint_manager = true
+          # check setpoint manager inputs
+          expected_oa_high_temp = (80 - 32)/1.8
+          expected_oa_low_temp = (60 - 32)/1.8
+          expected_setpoint_at_oa_high_temp = (44 - 32)/1.8
+          expected_setpoint_at_oa_low_temp = (54 - 32)/1.8
+          oa_high_temp = oa_reset_manager.outdoorHighTemperature
+          oa_low_temp = oa_reset_manager.outdoorLowTemperature
+          setpoint_at_oa_high_temp = oa_reset_manager.setpointatOutdoorHighTemperature
+          setpoint_at_oa_low_temp = oa_reset_manager.setpointatOutdoorLowTemperature
+          unless (expected_oa_high_temp - oa_high_temp).abs < 0.05
+            failure_array << "Expected OA High Temp to be #{(expected_oa_high_temp*1.8+32).round(2)} F for OA Reset Manager on #{chw_loop.name}; found #{(oa_high_temp*1.8+32).round(2)} F instead"
+          end
+          unless (expected_oa_low_temp - oa_low_temp).abs < 0.05
+            failure_array << "Expected OA Low Temp to be #{(expected_oa_low_temp*1.8+32).round(2)} F for OA Reset Manager on #{chw_loop.name}; found #{(oa_low_temp*1.8+32).round(2)} F instead"
+          end
+          unless (expected_setpoint_at_oa_high_temp - setpoint_at_oa_high_temp).abs < 0.05
+            failure_array << "Expected Setpoint at OA High Temp to be #{(expected_setpoint_at_oa_high_temp*1.8+32).round(2)} F for OA Reset Manager on #{chw_loop.name}; found #{(setpoint_at_oa_high_temp*1.8+32).round(2)} F instead"
+          end
+          unless (expected_setpoint_at_oa_low_temp - setpoint_at_oa_low_temp).abs < 0.05
+            failure_array << "Expected Setpoint at OA Low Temp to be #{(expected_setpoint_at_oa_low_temp*1.8+32).round(2)} F for OA Reset Manager on #{chw_loop.name}; found #{(setpoint_at_oa_low_temp*1.8+32).round(2)} F instead"
+          end
+        end
+        unless found_correct_setpoint_manager
+          failure_array << "Expected to find Setpoint Manager of Type OA Reset for #{chw_loop.name} but did not"
+        end
+      end
+    end
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_cw_controls(model, failure_array)
+    # get condenser water loops
+    cw_loops = []
+    model.getCoolingTowerVariableSpeeds.each do |cooling_tower|
+      if cooling_tower.plantLoop.is_initialized
+        cw_loops << cooling_tower.plantLoop.get
+        cw_loops = cw_loops.uniq
+      else
+        failure_array << "Cooling Tower #{cooling_tower.name} is not connected to a plant loop"
+      end
+    end
+    design_wb_f_global = nil
+    expected_offset_temperature_difference_global = nil
+    cw_loops.each do |cw_loop|
+      found_correct_setpoint_manager = false
+      # get temperature setpoint manager
+      model.getSetpointManagerFollowOutdoorAirTemperatures.each do |follow_oa_manager|
+        next unless follow_oa_manager.plantLoop.is_initialized
+        plant_loop = follow_oa_manager.plantLoop.get
+        next unless plant_loop == cw_loop
+        found_correct_setpoint_manager = true
+        # check setpoint manager inputs
+        # control variable
+        control_variable = follow_oa_manager.controlVariable
+        unless control_variable == "Temperature"
+          failure_array << "Expected Control Variable for #{follow_oa_manager.name} to be 'Temperature'; found '#{control_variable}' instead"
+        end
+        # reference temperature type
+        reference_temperature_type = follow_oa_manager.referenceTemperatureType
+        unless reference_temperature_type == "OutdoorAirWetBulb"
+          failure_array << "Expected Reference Temperature Type for #{follow_oa_manager.name} to be 'OutdoorAirWetBulb'; found '#{reference_temperature_type}' instead"
+        end
+        # offset temperature difference
+        offset_temperature_difference_k = follow_oa_manager.offsetTemperatureDifference
+        offset_temperature_difference_r = offset_temperature_difference_k * 1.8
+        # get relevant design day
+        design_wb_f_max = nil
+        model.getDesignDays.each do |design_day|
+          design_day_name = design_day.name.get.to_s
+          next unless design_day.dayType == "SummerDesignDay"
+          next unless design_day_name.include? "WB=>MDB"
+          next unless design_day.humidityIndicatingType == "Wetbulb"
+
+          design_wb_c = design_day.humidityIndicatingConditionsAtMaximumDryBulb
+          design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
+          if design_wb_f_max.nil?
+            design_wb_f_max = design_wb_f
+          else
+            if design_wb_f > design_wb_f_max
+              design_wb_f_max = design_wb_f
+            end
+          end
+        end
+        if design_wb_f_max.nil?
+          design_wb_f_max = 78
+        elsif design_wb_f_max > 80
+          design_wb_f_max = 80
+        elsif  design_wb_f_max < 55
+          design_wb_f_max = 55
+        end
+        design_wb_f_global = design_wb_f_max
+        expected_offset_temperature_difference_r = 25.72 - (0.24 * design_wb_f_max)
+        expected_offset_temperature_difference_global = expected_offset_temperature_difference_r
+        expected_maximum_setpoint_temperature_f = design_wb_f_max + expected_offset_temperature_difference_r
+        if expected_maximum_setpoint_temperature_f < 70
+          expected_maximum_setpoint_temperature_f = 70
+        end
+        # minimum setpoint temperature
+        minimum_setpoint_temperature_c = follow_oa_manager.minimumSetpointTemperature
+        minimum_setpoint_temperature_f = OpenStudio.convert(minimum_setpoint_temperature_c, 'C', 'F').get
+        unless (70 - minimum_setpoint_temperature_f).abs < 0.05
+          failure_array << "Expected Minimum Setpoint Temperature for #{follow_oa_manager.name} to be 70 F; found #{minimum_setpoint_temperature_f.round(2)} F instead"
+        end
+        unless (expected_offset_temperature_difference_r - offset_temperature_difference_r).abs < 0.05
+          failure_array << "Expected Offset Temperature Difference for #{follow_oa_manager.name} to be #{expected_offset_temperature_difference_r.round(2)} F; found #{offset_temperature_difference_r.round(2)} F instead"
+        end
+        # maximum setpoint temperature
+        maximum_setpoint_temperature_c = follow_oa_manager.maximumSetpointTemperature
+        maximum_setpoint_temperature_f = OpenStudio.convert(maximum_setpoint_temperature_c, 'C', 'F').get
+        unless (expected_maximum_setpoint_temperature_f - maximum_setpoint_temperature_f).abs < 0.05
+          failure_array << "Expected Maximum Setpoint Temperature for #{follow_oa_manager.name} to be #{expected_maximum_setpoint_temperature_f.round(2)} F; found #{maximum_setpoint_temperature_f.round(2)} F instead"
+        end
+      end  
+      unless found_correct_setpoint_manager
+        failure_array << "Expected to find Setpoint Manager of Type Follow OA for #{cw_loop.name} but did not"
+      end
+    end
+    # check cooling tower inputs
+    model.getCoolingTowerVariableSpeeds.each do |cooling_tower|
+      next unless cooling_tower.plantLoop.is_initialized
+      # check cooling tower inputs
+      # design oa wb (should match design day condition
+      if cooling_tower.designInletAirWetBulbTemperature.is_initialized
+        design_inlet_air_wb_c = cooling_tower.designInletAirWetBulbTemperature.get
+        design_inlet_air_wb_f = OpenStudio.convert(design_inlet_air_wb_c, 'C', 'F').get
+        next if design_wb_f_global.nil?
+        if design_wb_f_global < 68
+          design_wb_f_global = 68
+        end
+        unless (design_inlet_air_wb_f - design_wb_f_global).abs < 0.05
+          failure_array << "Expected Design Inlet Air WB to be #{design_wb_f_global.round(2)} F (matching WB Design Day condition) for #{cooling_tower.name}; found #{design_inlet_air_wb_f.round(2)} F instead"
+        end
+      else
+        failure_array << "Expected Design Inlet Air WB to be specified for #{cooling_tower.name}"
+      end  
+      # approach (should match setpoint manager temperature difference
+      if cooling_tower.designApproachTemperature.is_initialized
+        approach_k = cooling_tower.designApproachTemperature.get
+        approach_r = approach_k * 1.8
+        next if expected_offset_temperature_difference_global.nil?
+        unless (expected_offset_temperature_difference_global - approach_r).abs < 0.05
+          failure_array << "Expected Approach to be #{expected_offset_temperature_difference_global.round(2)} F for #{cooling_tower.name}; found #{approach_r.round(2)} F instead"
+        end
+      else
+        failure_array << "Expected Approach to be specified for #{cooling_tower.name}"
+      end
+      if cooling_tower.designRangeTemperature.is_initialized
+        # range (10 F)
+        range_k = cooling_tower.designRangeTemperature.get
+        range_r = range_k * 1.8
+        unless (range_r - 10).abs < 0.05
+          failure_array << "Expected Range to be 10 F for #{cooling_tower.name}; found #{range_r.round(2)} F instead"
+        end
+      else
+        failure_array << "Expected Range to be specified for #{cooling_tower.name}"
+      end  
+    end
+    return failure_array
+  end
+  
+  # @author Matt Leach, NORESCO
+  def check_hw_controls(model, failure_array)
+    # get hot water loops
+    hw_loops = []
+    model.getDistrictHeatings.each do |district_heating|
+      if district_heating.plantLoop.is_initialized
+        next if district_heating.plantLoop.get.name.get.to_s.include? "DHW" or district_heating.plantLoop.get.name.get.to_s.include? "Service Water Heating"
+        hw_loops << district_heating.plantLoop.get
+        hw_loops = hw_loops.uniq
+      else
+        failure_array << "DistrictHeating #{district_heating.name} is not connected to a plant loop"
+      end
+    end
+    model.getBoilerHotWaters.each do |boiler|
+      if boiler.plantLoop.is_initialized
+        next if boiler.plantLoop.get.name.get.to_s.include? "DHW" or boiler.plantLoop.get.name.get.to_s.include? "Service Water Heating"
+        hw_loops << boiler.plantLoop.get
+        hw_loops = hw_loops.uniq
+      else
+        failure_array << "Boiler #{boiler.name} is not connected to a plant loop"
+      end
+    end
+    if hw_loops.length > 1
+      failure_array << "Expected 1 HW Loop; found #{hw_loops.length}"
+    elsif  hw_loops.length == 0
+      failure_array << "Could not find a hot water loop with a Boiler or DistrictHeating object"
+    else
+      hw_loops.each do |hw_loop|
+        found_correct_setpoint_manager = false
+        # get temperature setpoint manager
+        model.getSetpointManagerOutdoorAirResets.each do |oa_reset_manager|
+          next unless oa_reset_manager.plantLoop.is_initialized
+          plant_loop = oa_reset_manager.plantLoop.get
+          next unless plant_loop == hw_loop
+          found_correct_setpoint_manager = true
+          # check setpoint manager inputs
+          expected_oa_high_temp = (50 - 32)/1.8
+          expected_oa_low_temp = (20 - 32)/1.8
+          expected_setpoint_at_oa_high_temp = (150 - 32)/1.8
+          expected_setpoint_at_oa_low_temp = (180 - 32)/1.8
+          oa_high_temp = oa_reset_manager.outdoorHighTemperature
+          oa_low_temp = oa_reset_manager.outdoorLowTemperature
+          setpoint_at_oa_high_temp = oa_reset_manager.setpointatOutdoorHighTemperature
+          setpoint_at_oa_low_temp = oa_reset_manager.setpointatOutdoorLowTemperature
+          unless (expected_oa_high_temp - oa_high_temp).abs < 0.05
+            failure_array << "Expected OA High Temp to be #{(expected_oa_high_temp*1.8+32).round(2)} F for OA Reset Manager on #{hw_loop.name}; found #{(oa_high_temp*1.8+32).round(2)} F instead"
+          else
+          end
+          unless (expected_oa_low_temp - oa_low_temp).abs < 0.05
+            failure_array << "Expected OA Low Temp to be #{(expected_oa_low_temp*1.8+32).round(2)} F for OA Reset Manager on #{hw_loop.name}; found #{(oa_low_temp*1.8+32).round(2)} F instead"
+          end
+          unless (expected_setpoint_at_oa_high_temp - setpoint_at_oa_high_temp).abs < 0.05
+            failure_array << "Expected Setpoint at OA High Temp to be #{(expected_setpoint_at_oa_high_temp*1.8+32).round(2)} F for OA Reset Manager on #{hw_loop.name}; found #{(setpoint_at_oa_high_temp*1.8+32).round(2)} F instead"
+          end
+          unless (expected_setpoint_at_oa_low_temp - setpoint_at_oa_low_temp).abs < 0.05
+            failure_array << "Expected Setpoint at OA Low Temp to be #{(expected_setpoint_at_oa_low_temp*1.8+32).round(2)} F for OA Reset Manager on #{hw_loop.name}; found #{(setpoint_at_oa_low_temp*1.8+32).round(2)} F instead"
+          end
+        end
+        unless found_correct_setpoint_manager
+          failure_array << "Expected to find Setpoint Manager of Type OA Reset for #{hw_loop.name} but did not"
+        end
+      end
+    end
+    return failure_array
+  end
+
+  # method to calculate oa rate per space in m3/s
+  # @author Matt Leach, NORESCO
+  def calculate_oa_per_space(space)
+    space_oa_rate = 0
+    if space.spaceType.is_initialized
+      space_type = space.spaceType.get
+      # get space area
+      space_area = space.floorArea
+      # get space volume
+      space_volume = space.volume
+      # get number of people
+      people = 0
+      space_type_name = space_type.name.get.to_s
+      space_type.people.each do |people_object|
+        people_definition = people_object.peopleDefinition
+        # get people calc method
+        people_calc_method = people_definition.numberofPeopleCalculationMethod
+        if people_calc_method == "People"
+          next unless people_definition.numberofPeople.is_initialized
+          people += people_definition.numberofPeople.get
+        elsif people_calc_method == "People/Area"
+          next unless people_definition.peopleperSpaceFloorArea.is_initialized
+          people += (people_definition.peopleperSpaceFloorArea.get * space_area)
+        elsif people_calc_method == "Area/Person"
+          next unless people_definition.spaceFloorAreaperPerson.is_initialized
+          people += (space_area / people_definition.spaceFloorAreaperPerson.get)
+        end
+      end
+      # calculate min flow rate for space from design spec oa object
+      if space_type.designSpecificationOutdoorAir.is_initialized
+        design_oa_spec = space_type.designSpecificationOutdoorAir.get
+        # calculate space outside air requirement from design spec outside air object
+        design_oa_spec_method = design_oa_spec.outdoorAirMethod
+        if design_oa_spec_method == "Flow/Person"
+          space_oa_rate = people*design_oa_spec.outdoorAirFlowperPerson
+        elsif design_oa_spec_method == "Flow/Area"
+          space_oa_rate = space_area*design_oa_spec.outdoorAirFlowperFloorArea
+        elsif design_oa_spec_method == "Flow/Zone"
+          space_oa_rate = design_oa_spec.outdoorAirFlowRate
+        elsif design_oa_spec_method == "AirChanges/Hour"
+          space_oa_rate = space_volume*design_oa_spec.outdoorAirFlowAirChangesperHour/3600
+        elsif design_oa_spec_method == "Sum"
+          space_oa_rate = people*design_oa_spec.outdoorAirFlowperPerson + space_area*design_oa_spec.outdoorAirFlowperFloorArea + design_oa_spec.outdoorAirFlowRate + space_volume*design_oa_spec.outdoorAirFlowAirChangesperHour/3600
+        elsif design_oa_spec_method == "Maximum"
+          space_oa_rate = [people*design_oa_spec.outdoorAirFlowperPerson,space_area*design_oa_spec.outdoorAirFlowperFloorArea,design_oa_spec.outdoorAirFlowRate,space_volume*design_oa_spec.outdoorAirFlowAirChangesperHour/3600].max
+        end
+      end  
+    end
+    return space_oa_rate  
+  end
+
 end
 
 
