@@ -690,7 +690,8 @@ module Baseline9012013
         
         case loop_type
         when 'Heating'
-        # TODO handle cases where loop provides SHW: https://github.com/NREL/EnergyPlus/issues/5613
+          # Don't check Service Water Heating loops
+          next if pl.swh_loop?
         
           # G3.1.3.3 Hot-Water Supply Temperature (Systems 1, 5, 7, and 12)
           prm_min_sec = 'Hot-Water Supply Temperature'
@@ -928,7 +929,7 @@ module Baseline9012013
           elsif cap > prm_cap_gas
             # from standard
             e_t = 0.8
-            sl = cap / 800 + 110 * Math.sqrt(vol) #per 2013 errata
+            sl = cap / 799 + 16.6 * Math.sqrt(vol) #per 2013 errata
             # from PNNL
             ua = sl * e_t / 70
             p_on = cap
