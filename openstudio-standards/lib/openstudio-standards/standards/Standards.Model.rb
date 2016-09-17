@@ -579,6 +579,9 @@ class OpenStudio::Model::Model
     final_groups = []
     occ_and_fuel_groups.each do |gp|
 
+      # Skip unconditioned groups
+      next if gp['fuel'] == 'unconditioned'
+
       heated_only_zones = []
       heated_cooled_zones = []
       gp['zones'].each do |zn|
