@@ -103,6 +103,12 @@ class OpenStudio::Model::PlantLoop
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
         pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+      elsif sc.to_HeaderedPumpsConstantSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsConstantSpeed.get
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+      elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsVariableSpeed.get
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       end
     end
 
@@ -114,6 +120,12 @@ class OpenStudio::Model::PlantLoop
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
         pump.apply_prm_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
+      elsif sc.to_HeaderedPumpsConstantSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsConstantSpeed.get
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+      elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsVariableSpeed.get
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       end
     end
 
@@ -699,7 +711,7 @@ class OpenStudio::Model::PlantLoop
         area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
         # Determine the primary pump type
-        pri_control_type = 'Riding Curve'
+        pri_control_type = 'Constant Flow'
 
         # Determine the secondary pump type
         sec_control_type = 'Riding Curve'
@@ -716,7 +728,7 @@ class OpenStudio::Model::PlantLoop
         cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
 
         # Determine the primary pump type
-        pri_control_type = 'Riding Curve'
+        pri_control_type = 'Constant Flow'
 
         # Determine the secondary pump type
         sec_control_type = 'Riding Curve'
@@ -740,6 +752,9 @@ class OpenStudio::Model::PlantLoop
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
           pump.set_control_type(pri_control_type)
+        elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+          pump = sc.to_HeaderedPumpsVariableSpeed.get
+          pump.set_control_type(control_type)        
         end
       end
 
@@ -748,6 +763,9 @@ class OpenStudio::Model::PlantLoop
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
           pump.set_control_type(sec_control_type)
+        elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+          pump = sc.to_HeaderedPumpsVariableSpeed.get
+          pump.set_control_type(control_type)
         end
       end
 
@@ -756,7 +774,7 @@ class OpenStudio::Model::PlantLoop
       # Condenser water systems
 
       # All condenser water loops are constant flow
-      control_type = 'Riding Curve'
+      control_type = 'Constant Flow'
 
       # Report out the pumping type
       unless control_type.nil?
@@ -767,6 +785,9 @@ class OpenStudio::Model::PlantLoop
       supplyComponents.each do |sc|
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
+          pump.set_control_type(control_type)
+        elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+          pump = sc.to_HeaderedPumpsVariableSpeed.get
           pump.set_control_type(control_type)
         end
       end
@@ -874,11 +895,16 @@ class OpenStudio::Model::PlantLoop
 
     end
 
-    # Get all existing chillers
+    # Get all existing chillers and pumps
     chillers = []
+    pumps = []
     supplyComponents.each do |sc|
       if sc.to_ChillerElectricEIR.is_initialized
         chillers << sc.to_ChillerElectricEIR.get
+      elsif sc.to_PumpConstantSpeed.is_initialized
+        pumps << sc.to_PumpConstantSpeed.get
+      elsif sc.to_PumpVariableSpeed.is_initialized
+        pumps << sc.to_PumpVariableSpeed.get
       end
     end
 
@@ -890,6 +916,18 @@ class OpenStudio::Model::PlantLoop
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
     else
       first_chiller = chillers[0]
+    end
+
+    # Ensure there is only 1 pump to start
+    orig_pump = nil
+    if pumps.size.zero?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{name}, found #{pumps.size} pumps.  A loop must have at least one pump.")
+      return false
+    elsif pumps.size > 1
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{name}, found #{pumps.size} pumps, cannot split up per performance rating method baseline requirements.")
+      return false
+    else
+      orig_pump = pumps[0]
     end
 
     # Determine the per-chiller capacity
@@ -921,6 +959,39 @@ class OpenStudio::Model::PlantLoop
       end
 
       final_chillers << new_chiller
+    end
+
+    # If there is more than one cooling tower,
+    # replace the original pump with a headered pump
+    # of the same type and properties.
+    if final_chillers.size > 1
+      num_pumps = final_chillers.size
+      new_pump = nil
+      if orig_pump.to_PumpConstantSpeed.is_initialized
+        new_pump = OpenStudio::Model::HeaderedPumpsConstantSpeed.new(model)
+        new_pump.setNumberofPumpsinBank(num_pumps)
+        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+        new_pump.setPumpControlType(orig_pump.pumpControlType)
+      elsif orig_pump.to_PumpVariableSpeed.is_initialized
+        new_pump = OpenStudio::Model::HeaderedPumpsVariableSpeed.new(model)
+        new_pump.setNumberofPumpsinBank(num_pumps)
+        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+        new_pump.setPumpControlType(orig_pump.pumpControlType)
+        new_pump.setCoefficient1ofthePartLoadPerformanceCurve(orig_pump.coefficient1ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient2ofthePartLoadPerformanceCurve(orig_pump.coefficient2ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient3ofthePartLoadPerformanceCurve(orig_pump.coefficient3ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient4ofthePartLoadPerformanceCurve(orig_pump.coefficient4ofthePartLoadPerformanceCurve)
+      end
+      # Remove the old pump
+      orig_pump.remove
+      # Attach the new headered pumps
+      new_pump.addToNode(supplyInletNode)
     end
 
     # Set the sizing factor and the chiller types
@@ -1017,36 +1088,50 @@ class OpenStudio::Model::PlantLoop
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{name}, could not clone cooling tower #{orig_twr.name}, cannot apply the performance rating method number of cooling towers.")
         return false
       end
-      final_twrs << new_twr
-
-      # spit out the curve name
-      # puts new_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get.name
-      # new_curve = OpenStudio::Model::CurveCubic.new(model)
-      # new_curve.setName("Net CT Curve")
-      # new_twr.setFanPowerRatioFunctionofAirFlowRateRatioCurve(new_curve)
-      # puts new_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get.name
 
       # Connect the new cooling tower to the CW loop
       addSupplyBranchForComponent(new_twr)
       new_twr_inlet = new_twr.inletModelObject.get.to_Node.get
 
-      # Clone the original pump for the new cooling tower
-      new_pump = orig_pump.clone(model)
-      if new_pump.to_PumpConstantSpeed.is_initialized
-        new_pump = new_pump.to_PumpConstantSpeed.get
-      elsif new_pump.to_PumpVariableSpeed.is_initialized
-        new_pump = new_pump.to_PumpVariableSpeed.get
-      end
-      new_pump.addToNode(new_twr_inlet)
+      final_twrs << new_twr
     end
 
-    # Move the original pump onto the
-    # branch of the original cooling tower
-    orig_twr_inlet_node = orig_twr.inletModelObject.get.to_Node.get
-    orig_pump.addToNode(orig_twr_inlet_node)
+    # If there is more than one cooling tower,
+    # replace the original pump with a headered pump
+    # of the same type and properties.
+    if final_twrs.size > 1
+      num_pumps = final_twrs.size
+      new_pump = nil
+      if orig_pump.to_PumpConstantSpeed.is_initialized
+        new_pump = OpenStudio::Model::HeaderedPumpsConstantSpeed.new(model)
+        new_pump.setNumberofPumpsinBank(num_pumps)
+        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+        new_pump.setPumpControlType(orig_pump.pumpControlType)
+      elsif orig_pump.to_PumpVariableSpeed.is_initialized
+        new_pump = OpenStudio::Model::HeaderedPumpsVariableSpeed.new(model)
+        new_pump.setNumberofPumpsinBank(num_pumps)
+        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+        new_pump.setPumpControlType(orig_pump.pumpControlType)
+        new_pump.setCoefficient1ofthePartLoadPerformanceCurve(orig_pump.coefficient1ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient2ofthePartLoadPerformanceCurve(orig_pump.coefficient2ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient3ofthePartLoadPerformanceCurve(orig_pump.coefficient3ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient4ofthePartLoadPerformanceCurve(orig_pump.coefficient4ofthePartLoadPerformanceCurve)
+      end
+      # Remove the old pump
+      orig_pump.remove
+      # Attach the new headered pumps
+      new_pump.addToNode(supplyInletNode)
+    end
 
     # Set the sizing factors
-    final_twrs.each do |final_cooling_tower|
+    final_twrs.each_with_index do |final_cooling_tower, i|
+      final_cooling_tower.setName("#{final_cooling_tower.name} #{i + 1} of #{final_twrs.size}")      
       final_cooling_tower.setSizingFactor(clg_twr_sizing_factor)
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}, there are #{final_twrs.size} cooling towers, one for each chiller.")

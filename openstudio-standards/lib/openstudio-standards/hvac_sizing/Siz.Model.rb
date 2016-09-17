@@ -51,6 +51,8 @@ class OpenStudio::Model::Model
   require_relative 'Siz.AirConditionerVariableRefrigerantFlow'
   require_relative 'Siz.CoilCoolingDXVariableRefrigerantFlow'
   require_relative 'Siz.CoilHeatingDXVariableRefrigerantFlow'
+  require_relative 'Siz.HeaderedPumpsConstantSpeed'
+  require_relative 'Siz.HeaderedPumpsVariableSpeed'
 
   # Heating and cooling fuel methods
   require_relative 'Siz.HeatingCoolingFuels'

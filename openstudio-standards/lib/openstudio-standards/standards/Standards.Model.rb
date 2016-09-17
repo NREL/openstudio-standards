@@ -85,6 +85,8 @@ class OpenStudio::Model::Model
   require_relative 'Standards.CoolingTowerVariableSpeed'
   require_relative 'Standards.ZoneHVACComponent'
   require_relative 'Standards.HeatExchangerSensLat'
+  require_relative 'Standards.HeaderedPumpsConstantSpeed'
+  require_relative 'Standards.HeaderedPumpsVariableSpeed'
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.
@@ -1992,6 +1994,8 @@ class OpenStudio::Model::Model
     # Pumps
     getPumpConstantSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template) }
     getPumpVariableSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template) }
+    getHeaderedPumpsConstantSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template) }
+    getHeaderedPumpsVariableSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template) }
 
     # Unitary ACs
 
