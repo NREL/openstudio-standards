@@ -890,6 +890,12 @@ class OpenStudio::Model::AirLoopHVAC
       end
     end
 
+    # Reset the limits
+    oa_control.resetEconomizerMaximumLimitDryBulbTemperature
+    oa_control.resetEconomizerMaximumLimitEnthalpy
+    oa_control.resetEconomizerMaximumLimitDewpointTemperature
+    oa_control.resetEconomizerMinimumLimitDryBulbTemperature
+
     # Set the limits
     case economizer_type
     when 'FixedDryBulb'
@@ -1195,6 +1201,12 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Set the economizer type
     oa_control.setEconomizerControlType(economizer_type)
+
+    # Reset the limits
+    oa_control.resetEconomizerMaximumLimitDryBulbTemperature
+    oa_control.resetEconomizerMaximumLimitEnthalpy
+    oa_control.resetEconomizerMaximumLimitDewpointTemperature
+    oa_control.resetEconomizerMinimumLimitDryBulbTemperature
 
     # Set the limits
     case economizer_type
