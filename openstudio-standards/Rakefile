@@ -40,7 +40,8 @@ Rake::TestTask.new('test:gem_group_0') do |task|
   'openstudio-standards/test/test_find_target_eui.rb',
   'openstudio-standards/test/test_find_target_eui_by_end_use.rb',
   'openstudio-standards/test/test_primary_school.rb', # 9 min
-  'openstudio-standards/test/test_warehouse.rb'
+  'openstudio-standards/test/test_warehouse.rb',
+  'openstudio-standards/test/test_create_performance_rating_method_baseline_bldg_2.rb'
   ]
 end
 
