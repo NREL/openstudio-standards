@@ -727,15 +727,31 @@ class OpenStudio::Model::PlantLoop
         cap_w = total_cooling_capacity
         cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
 
-        # Determine the primary pump type
-        pri_control_type = 'Constant Flow'
-
-        # Determine the secondary pump type
-        sec_control_type = 'Riding Curve'
-        if cap_tons > minimum_cap_tons
-          sec_control_type = 'VSD No Reset'
+        # Determine if it a district cooling system
+        has_district_cooling = false
+        supplyComponents.each do |sc|
+          if sc.to_DistrictCooling.is_initialized
+            has_district_cooling = true
+          end
         end
 
+        # Determine the primary and secondary pumping types
+        pri_control_type = nil
+        sec_control_type = nil
+        if has_district_cooling
+          pri_control_type = if cap_tons > minimum_cap_tons
+                               'VSD No Reset'
+                             else
+                               'Riding Curve'
+                             end
+        else
+          pri_control_type = 'Constant Flow'
+          sec_control_type = if cap_tons > minimum_cap_tons
+                               'VSD No Reset'
+                             else
+                               'Riding Curve'
+                             end
+        end
       end
 
       # Report out the pumping type
