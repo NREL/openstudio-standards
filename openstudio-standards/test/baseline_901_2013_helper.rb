@@ -1040,7 +1040,7 @@ module Baseline9012013
           else
             failure_array << "Test Error: unexpected Efficiency Type (#{dx_coil_hash[cooling_coil_name_keyword]["EfficiencyType"]}) for #{cooling_coil_name}; expected 'EER' or 'SEER'"
           end    
-          unless (expected_coil_cop - coil_cop).abs < 0.02
+          unless (expected_coil_cop - coil_cop).abs < 0.1
             failure_array << "Expected COP of #{expected_coil_cop.round(2)} for #{cooling_coil_name}; got #{coil_cop.round(2)} instead"
           end
         else
@@ -1123,6 +1123,8 @@ module Baseline9012013
         
       end
       # check fan curves
+      # Skip single-zone VAV fans
+      next if supply_fan.airLoopHVAC.get.thermalZones.size == 1
       # coefficient 1
       if supply_fan.fanPowerCoefficient1.is_initialized
         expected_coefficient = 0.0013
@@ -1498,23 +1500,45 @@ module Baseline9012013
       failure_array << "Could not find a chilled water loop with a Chiller"
     else  
       chw_loops.each do |chw_loop|  
+        
+        constant_speed_supply_pumps = []
+        variable_speed_supply_pumps = []
+        num_constant_speed_supply_pumps = 0
+        num_variable_speed_supply_pumps = 0
         # supply side
-        constant_speed_supply_pumps = chw_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
-        variable_speed_supply_pumps = chw_loop.supplyComponents('OS_Pump_VariableSpeed'.to_IddObjectType)
-        number_of_pumps = constant_speed_supply_pumps.length + variable_speed_supply_pumps.length
+        chw_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType).each do |hp|
+          num_constant_speed_supply_pumps += 1
+          constant_speed_supply_pumps << hp.to_PumpConstantSpeed.get
+        end
+        chw_loop.supplyComponents('OS_HeaderedPumps_ConstantSpeed'.to_IddObjectType).each do |hp|
+          hp = hp.to_HeaderedPumpsConstantSpeed.get
+          num_constant_speed_supply_pumps += hp.numberofPumpsinBank
+          constant_speed_supply_pumps << hp
+        end
+        chw_loop.supplyComponents('OS_Pump_VariableSpeed'.to_IddObjectType).each do |hp|
+          num_variable_speed_supply_pumps += 1
+          variable_speed_supply_pumps << hp.to_PumpVariableSpeed.get
+        end
+        chw_loop.supplyComponents('OS_HeaderedPumps_VariableSpeed'.to_IddObjectType).each do |hp|
+          hp = hp.to_HeaderedPumpsVariableSpeed.get
+          num_variable_speed_supply_pumps += hp.numberofPumpsinBank
+          variable_speed_supply_pumps << hp
+        end
+        # check number of pumps
+        number_of_pumps = num_constant_speed_supply_pumps + num_variable_speed_supply_pumps
+
         # check number of pumps
         unless number_of_pumps == number_of_chillers
           failure_array << "Expected #{number_of_chillers} supply-side pumps for #{chw_loop.name} because Loop has #{number_of_chillers} Chillers; found #{number_of_pumps} pump(s) instead"
         end
         # check type of pumps
-        unless number_of_pumps == constant_speed_supply_pumps.length
-          failure_array << "Expected supply-side pumps for #{chw_loop.name} to be of type ConstantSpeed, but #{number_of_pumps - constant_speed_supply_pumps.length} of #{number_of_pumps} pump(s) is/are of type VariableSpeed"
+        unless number_of_pumps == num_constant_speed_supply_pumps
+          failure_array << "Expected supply-side pumps for #{chw_loop.name} to be of type ConstantSpeed, but #{number_of_pumps - num_constant_speed_supply_pumps} of #{number_of_pumps} pump(s) is/are of type VariableSpeed"
         end
         # check pump power
         expected_pump_watts_per_gpm = 9
         # constant speed
         constant_speed_supply_pumps.each do |pump|
-          pump = pump.to_PumpConstantSpeed.get
           motor_efficiency = pump.motorEfficiency
           impeller_efficiency = 0.78
           pump_efficiency = motor_efficiency * impeller_efficiency
@@ -1527,7 +1551,6 @@ module Baseline9012013
         end
         # variable speed
         variable_speed_supply_pumps.each do |pump|
-          pump = pump.to_PumpVariableSpeed.get
           motor_efficiency = pump.motorEfficiency
           impeller_efficiency = 0.78
           pump_efficiency = motor_efficiency * impeller_efficiency
@@ -1724,6 +1747,8 @@ module Baseline9012013
     # should be one constant speed pump per cooling tower with 19 W/gpm
     constant_speed_supply_pumps = []
     variable_speed_supply_pumps = []
+    num_constant_speed_supply_pumps = 0
+    num_variable_speed_supply_pumps = 0
     # get cw loop(s)
     cw_loops = []
     model.getChillerElectricEIRs.each do |chiller|
@@ -1734,29 +1759,41 @@ module Baseline9012013
         failure_array << "Chiller #{chiller.name} is not connected to a condenser loop"
       end
     end
-    unless cw_loops.length == number_of_chillers
-      failure_array << "Expected one condenser loop per chiller; model has #{number_of_chillers} chillers but #{cw_loops.length} condenser loop(s)"
-    end
     # get cw pump(s)
     cw_loops.each do |cw_loop|
       # supply side
-      constant_speed_supply_pumps = constant_speed_supply_pumps + cw_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType)
-      variable_speed_supply_pumps = variable_speed_supply_pumps + cw_loop.supplyComponents('OS_Pump_VariableSpeed'.to_IddObjectType)
+      cw_loop.supplyComponents('OS_Pump_ConstantSpeed'.to_IddObjectType).each do |hp|
+        num_constant_speed_supply_pumps += 1
+        constant_speed_supply_pumps << hp.to_PumpConstantSpeed.get
+      end
+      cw_loop.supplyComponents('OS_HeaderedPumps_ConstantSpeed'.to_IddObjectType).each do |hp|
+        hp = hp.to_HeaderedPumpsConstantSpeed.get
+        num_constant_speed_supply_pumps += hp.numberofPumpsinBank
+        constant_speed_supply_pumps << hp
+      end
+      cw_loop.supplyComponents('OS_Pump_VariableSpeed'.to_IddObjectType).each do |hp|
+        num_variable_speed_supply_pumps += 1
+        variable_speed_supply_pumps << hp.to_PumpVariableSpeed.get
+      end
+      cw_loop.supplyComponents('OS_HeaderedPumps_VariableSpeed'.to_IddObjectType).each do |hp|
+        hp = hp.to_HeaderedPumpsVariableSpeed.get        
+        num_variable_speed_supply_pumps += hp.numberofPumpsinBank
+        variable_speed_supply_pumps += hp * hp.numberofPumpsinBank
+      end
     end
     # check number of pumps
-    number_of_pumps = constant_speed_supply_pumps.length + variable_speed_supply_pumps.length
+    number_of_pumps = num_constant_speed_supply_pumps + num_variable_speed_supply_pumps
     unless number_of_pumps == number_of_chillers
       failure_array << "Expected #{number_of_chillers} supply-side condenser pumps because model has #{number_of_chillers} Chillers; found #{number_of_pumps} pump(s) instead"
     end
     # check type of pumps
-    unless number_of_pumps == constant_speed_supply_pumps.length
-      failure_array << "Expected supply-side condenser pumps to be of type ConstantSpeed, but #{number_of_pumps - constant_speed_supply_pumps.length} of #{number_of_pumps} pump(s) is/are of type VariableSpeed"
+    unless number_of_pumps == num_constant_speed_supply_pumps
+      failure_array << "Expected supply-side condenser pumps to be of type ConstantSpeed, but #{number_of_pumps - num_constant_speed_supply_pumps} of #{number_of_pumps} pump(s) is/are of type VariableSpeed"
     end
     # check pump power
     expected_pump_watts_per_gpm = 19
     # constant speed
     constant_speed_supply_pumps.each do |pump|
-      pump = pump.to_PumpConstantSpeed.get
       motor_efficiency = pump.motorEfficiency
       impeller_efficiency = 0.78
       pump_efficiency = motor_efficiency * impeller_efficiency
@@ -1769,7 +1806,6 @@ module Baseline9012013
     end
     # variable speed
     variable_speed_supply_pumps.each do |pump|
-      pump = pump.to_PumpVariableSpeed.get
       motor_efficiency = pump.motorEfficiency
       impeller_efficiency = 0.78
       pump_efficiency = motor_efficiency * impeller_efficiency
