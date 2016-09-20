@@ -1,6 +1,7 @@
 require 'openstudio-standards/version'
 
 module OpenstudioStandards
+ 
   require 'json' # Used to load standards JSON files
 
   # HVAC sizing

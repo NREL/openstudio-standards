@@ -80,11 +80,11 @@ class OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Running with OS 2.0 openstudio-workflow gem.')
 
       # Write OSW file for the simulation
-      require 'JSON'
+      require 'json'
       osw_dir = File.dirname(osm_path.to_s)
       osw_hash = {
-        run_dir: File.join(osw_dir, 'run'),
-        seed_model: File.absolute_path(osm_path.to_s),
+        run_directory: File.join(osw_dir, 'run'),
+        seed_file: File.absolute_path(osm_path.to_s),
         weather_file: File.absolute_path(epw_path.to_s),
         steps: []
       }
@@ -93,6 +93,7 @@ class OpenStudio::Model::Model
 
       # Run workflow.osw
       run_options = {}
+      #run_options[:debug] = true
 
       # jobs for running IDF
       # run_options[:jobs] = [

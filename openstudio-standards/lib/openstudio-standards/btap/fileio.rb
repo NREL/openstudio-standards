@@ -21,7 +21,7 @@
 require "#{File.dirname(__FILE__)}/btap"
 require 'fileutils'
 require 'csv'
-require 'rubygems'
+#require 'rubygems'
 
 
 module BTAP
