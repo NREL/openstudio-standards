@@ -64,7 +64,8 @@ Rake::TestTask.new('test:gem_group_2') do |task|
   'openstudio-standards/test/test_large_hotel.rb', # 5 min
   'openstudio-standards/test/test_large_office.rb', # 4 min
   'openstudio-standards/test/test_quick_service_restaurant.rb', # 1 min
-  'openstudio-standards/test/test_strip_mall.rb' # 2 min
+  'openstudio-standards/test/test_strip_mall.rb', # 2 min
+  'openstudio-standards/test/test_create_performance_rating_method_baseline_bldg_3.rb'
   ]
 end
 
