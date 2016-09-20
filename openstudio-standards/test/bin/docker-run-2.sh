@@ -5,8 +5,9 @@ export CIRCLECI=true
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
-# Go to the correct root folder
+# Install the openstudio-standards gem
 cd /openstudio-standards/openstudio-standards
+bundle install
 
 # Run a specific set of tests on each node.
 # Test groups are defined in the Rakefile.
