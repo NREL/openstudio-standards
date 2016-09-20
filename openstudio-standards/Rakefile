@@ -34,14 +34,13 @@ require 'rake/testtask'
 desc 'Run test group 0'
 Rake::TestTask.new('test:gem_group_0') do |task|
   task.test_files = FileList[
-  'openstudio-standards/test/test_find_ashrae_hot_water_demand.rb',
-  'openstudio-standards/test/test_find_construction_properties_data.rb',
-  'openstudio-standards/test/test_find_space_type_standards_data.rb',
-  'openstudio-standards/test/test_find_target_eui.rb',
-  'openstudio-standards/test/test_find_target_eui_by_end_use.rb',
-  'openstudio-standards/test/test_primary_school.rb', # 9 min
-  'openstudio-standards/test/test_warehouse.rb',
-  'openstudio-standards/test/test_create_performance_rating_method_baseline_bldg_2.rb'
+  # 'openstudio-standards/test/test_find_ashrae_hot_water_demand.rb',
+  # 'openstudio-standards/test/test_find_construction_properties_data.rb',
+  # 'openstudio-standards/test/test_find_space_type_standards_data.rb',
+  # 'openstudio-standards/test/test_find_target_eui.rb',
+  # 'openstudio-standards/test/test_find_target_eui_by_end_use.rb',
+  # 'openstudio-standards/test/test_primary_school.rb', # 9 min
+  'openstudio-standards/test/test_warehouse.rb'
   ]
 end
 
@@ -49,11 +48,11 @@ require 'rake/testtask'
 desc 'Run test group 1'
 Rake::TestTask.new('test:gem_group_1') do |task|
   task.test_files = FileList[
-  'openstudio-standards/test/test_secondary_school.rb', # 70 min
-  'openstudio-standards/test/test_medium_office.rb',
-  'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
-  'openstudio-standards/test/test_high_rise_apartment.rb' # , # 7 min
-    # 'openstudio-standards/test/test_outpatient.rb' #
+  # 'openstudio-standards/test/test_secondary_school.rb', # 70 min
+  # 'openstudio-standards/test/test_medium_office.rb',
+  # 'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
+  # 'openstudio-standards/test/test_high_rise_apartment.rb' # , # 7 min
+    ## 'openstudio-standards/test/test_outpatient.rb' #
   ]
 end
 
@@ -61,11 +60,10 @@ require 'rake/testtask'
 desc 'Run test group 2'
 Rake::TestTask.new('test:gem_group_2') do |task|
   task.test_files = FileList[
-  'openstudio-standards/test/test_large_hotel.rb', # 5 min
-  'openstudio-standards/test/test_large_office.rb', # 4 min
-  'openstudio-standards/test/test_quick_service_restaurant.rb', # 1 min
-  'openstudio-standards/test/test_strip_mall.rb', # 2 min
-  'openstudio-standards/test/test_create_performance_rating_method_baseline_bldg_3.rb'
+  # 'openstudio-standards/test/test_large_hotel.rb', # 5 min
+  # 'openstudio-standards/test/test_large_office.rb', # 4 min
+  # 'openstudio-standards/test/test_quick_service_restaurant.rb', # 1 min
+  # 'openstudio-standards/test/test_strip_mall.rb' # 2 min
   ]
 end
 
@@ -73,11 +71,43 @@ require 'rake/testtask'
 desc 'Run test group 3'
 Rake::TestTask.new('test:gem_group_3') do |task|
   task.test_files = FileList[
-  'openstudio-standards/test/test_small_hotel.rb', # 80 min
-  'openstudio-standards/test/test_retail_standalone.rb', # 6 min
-  'openstudio-standards/test/test_full_service_restaurant.rb', # 10 min
-  'openstudio-standards/test/test_small_office.rb', # 7 min
-  'openstudio-standards/test/test_create_performance_rating_method_baseline_building.rb'
+  # 'openstudio-standards/test/test_small_hotel.rb', # 80 min
+  # 'openstudio-standards/test/test_retail_standalone.rb', # 6 min
+  # 'openstudio-standards/test/test_full_service_restaurant.rb', # 10 min
+  # 'openstudio-standards/test/test_small_office.rb' # 7 min
+  ]
+end
+
+require 'rake/testtask'
+desc 'Run test group 4'
+Rake::TestTask.new('test:gem_group_4') do |task|
+  task.test_files = FileList[
+  #'openstudio-standards/test/test_create_performance_rating_method_baseline_building.rb'  
+  'openstudio-standards/test/test_strip_mall.rb' # 2 min
+  ]
+end
+
+require 'rake/testtask'
+desc 'Run test group 5'
+Rake::TestTask.new('test:gem_group_5') do |task|
+  task.test_files = FileList[
+  #'openstudio-standards/test/test_create_performance_rating_method_baseline_bldg_2.rb'
+  ]
+end
+
+require 'rake/testtask'
+desc 'Run test group 6'
+Rake::TestTask.new('test:gem_group_6') do |task|
+  task.test_files = FileList[
+  #'openstudio-standards/test/test_create_performance_rating_method_baseline_bldg_3.rb'
+  ]
+end
+
+require 'rake/testtask'
+desc 'Run test group 7'
+Rake::TestTask.new('test:gem_group_7') do |task|
+  task.test_files = FileList[
+  
   ]
 end
 
