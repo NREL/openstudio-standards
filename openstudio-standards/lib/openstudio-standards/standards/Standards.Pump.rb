@@ -18,11 +18,41 @@ module Pump
     # Total_Efficiency = Motor_Efficiency * Impeler_Efficiency
     impeller_efficiency = 0.78
 
-    # Get the brake horsepower
-    brake_hp = brake_horsepower
+    # Get flow rate (whether autosized or hard-sized)
+    flow_m3_per_s = 0
+    flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
+                      autosizedRatedFlowRate.get
+                    else
+                      ratedFlowRate.get
+                    end
+    flow_gpm = OpenStudio.convert(flow_m3_per_s, 'm^3/s', 'gal/min').get
 
-    # Find the motor efficiency
-    motor_efficiency, nominal_hp = standard_minimum_motor_efficiency_and_size(template, brake_hp)
+    # Calculate the target total pump motor power consumption
+    target_motor_power_cons_w = target_w_per_gpm * flow_gpm
+    target_motor_power_cons_hp = target_motor_power_cons_w / 745.7 # 745.7 W/HP
+
+    # Find the motor efficiency using total power consumption
+    # Note that this hp is ~5-10% high because it is being looked
+    # up based on the motor consumption, which is always actually higher
+    # than the brake horsepower.  This will bound the possible motor efficiency
+    # values.  If a motor is just above a nominal size, and the next size
+    # down has a lower efficiency value, later motor efficiency setting
+    # methods can mess up the W/gpm.  All this nonsense avoids that.
+    mot_eff_hi_end, nom_hp_hi_end = standard_minimum_motor_efficiency_and_size(template, target_motor_power_cons_hp)
+
+    # Calculate the actual brake horsepower using this efficiency
+    target_motor_bhp = target_motor_power_cons_hp * mot_eff_hi_end
+
+    # Find the motor efficiency using actual bhp
+    mot_eff_lo_end, nom_hp_lo_end = standard_minimum_motor_efficiency_and_size(template, target_motor_bhp)
+
+    # If the efficiency drops you down into a lower band with
+    # a lower efficiency value, use that for the motor efficiency.
+    motor_efficiency = [mot_eff_lo_end, mot_eff_hi_end].min
+    nominal_hp = [nom_hp_lo_end, nom_hp_hi_end].min
+
+    # Calculate the brake horsepower that was assumed
+    target_brake_power_hp = target_motor_power_cons_hp * motor_efficiency
 
     # Change the motor efficiency
     setMotorEfficiency(motor_efficiency)
@@ -38,22 +68,14 @@ module Pump
     setRatedPumpHead(pressure_rise_pa)
 
     # Report
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: brake hp = #{brake_hp.round(2)}HP; motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_efficiency * 100).round(2)}%; #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_pa.round(0)} Pa // #{pressure_rise_ft_h2o.round(2)} ftH2O.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_efficiency * 100).round(2)}%; #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_ft_h2o.round(2)} ftH2O.")
 
     # Calculate the W/gpm for verification
     calculated_w = pump_power
 
-    # Get flow rate (whether autosized or hard-sized)
-    flow_m3_per_s = 0
-    flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
-                      autosizedRatedFlowRate.get
-                    else
-                      ratedFlowRate.get
-                    end
-    flow_gpm = OpenStudio.convert(flow_m3_per_s, 'm^3/s', 'gal/min').get
     calculated_w_per_gpm = calculated_w / flow_gpm
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: calculated W/gpm = #{calculated_w_per_gpm.round(1)}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Pump', "For #{name}: calculated W/gpm = #{calculated_w_per_gpm.round(1)}.")
 
     return true
   end
@@ -68,7 +90,7 @@ module Pump
     # Change the motor efficiency
     setMotorEfficiency(motor_eff)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_eff * 100).round(2)}%.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: brake hp = #{bhp.round(2)}HP, motor nameplate = #{nominal_hp.round(2)}HP, motor eff = #{(motor_eff * 100).round(2)}%.")
 
     return true
   end

@@ -120,7 +120,7 @@ class OpenStudio::Model::Space
         end
 
         surface.subSurfaces.sort.each do |sub_surface|
-          next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow')
+          next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'GlassDoor')
 
           # OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***#{sub_surface.name}***"
           total_window_area += sub_surface.netArea
@@ -557,7 +557,7 @@ class OpenStudio::Model::Space
     surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall'
       surface.subSurfaces.sort.each do |sub_surface|
-        next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow')
+        next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'GlassDoor')
 
         num_sub_surfaces += 1
 
@@ -801,7 +801,7 @@ class OpenStudio::Model::Space
     surfaces.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       surface.subSurfaces.each do |sub_surface|
-        next unless sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'Skylight'
+        next unless sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'Skylight' || sub_surface.subSurfaceType == 'GlassDoor'
         ext_fen_area_m2 += sub_surface.netArea
       end
     end
@@ -827,7 +827,7 @@ class OpenStudio::Model::Space
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
 
       # Do nothing, no daylighting controls required
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, daylighting control not required by this standard.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, daylighting control not required by this standard.")
       return false
 
     when '90.1-2010'
@@ -843,10 +843,10 @@ class OpenStudio::Model::Space
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       else
         # Check effective sidelighted aperture
@@ -855,7 +855,7 @@ class OpenStudio::Model::Space
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
         ###################
         if sidelighted_effective_aperture < 0.1
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
           req_pri_ctrl = false
         end
       end
@@ -866,10 +866,10 @@ class OpenStudio::Model::Space
       # Toplighting
       # Check if the toplit area < 900 ft2
       if areas['toplighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
         req_top_ctrl = false
       elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
         req_top_ctrl = false
       else
         # Check effective sidelighted aperture
@@ -878,7 +878,7 @@ class OpenStudio::Model::Space
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_top = #{sidelighted_effective_aperture}")
         ###################
         if sidelighted_effective_aperture < 0.006
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, toplighting control not required because skylight effective aperture < 0.006 per 9.4.1.5 Exception b.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, toplighting control not required because skylight effective aperture < 0.006 per 9.4.1.5 Exception b.")
           req_top_ctrl = false
         end
       end
@@ -894,15 +894,15 @@ class OpenStudio::Model::Space
       # Primary Sidelighting
       # Check if the primary sidelit area contains less than 150W of lighting
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] * space_lpd_w_per_m2 < 150.0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control not required because less than 150W of lighting are present in the primary daylighted area per 9.4.1.1(e).")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because less than 150W of lighting are present in the primary daylighted area per 9.4.1.1(e).")
         req_pri_ctrl = false
       else
         # Check the size of the windows
-        if areas['total_window_area'] < 20.0
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
+        if areas['total_window_area'] < OpenStudio.convert(20.0, 'ft^2', 'm^2').get
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
           req_pri_ctrl = false
         end
       end
@@ -910,15 +910,15 @@ class OpenStudio::Model::Space
       # Secondary Sidelighting
       # Check if the primary and secondary sidelit areas contains less than 300W of lighting
       if areas['secondary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
-        req_pri_ctrl = false
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
+        req_sec_ctrl = false
       elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 300
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, secondary sidelighting control not required because less than 300W of lighting are present in the combined primary and secondary daylighted areas per 9.4.1.1(e).")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, secondary sidelighting control not required because less than 300W of lighting are present in the combined primary and secondary daylighted areas per 9.4.1.1(e).")
         req_sec_ctrl = false
       else
         # Check the size of the windows
-        if areas['total_window_area'] < 20
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, secondary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
+        if areas['total_window_area'] < OpenStudio.convert(20.0, 'ft^2', 'm^2').get
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, secondary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
           req_sec_ctrl = false
         end
       end
@@ -926,11 +926,11 @@ class OpenStudio::Model::Space
       # Toplighting
       # Check if the toplit area contains less than 150W of lighting
       if areas['toplighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
-        req_pri_ctrl = false
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
+        req_top_ctrl = false
       elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
-        req_sec_ctrl = false
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
+        req_top_ctrl = false
       end
 
     when 'AssetScore'
@@ -946,34 +946,34 @@ class OpenStudio::Model::Space
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       end
 
       # Toplighting
       # Check if the toplit area < 900 ft2
       if areas['toplighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
         req_top_ctrl = false
       elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
         req_top_ctrl = false
       end
 
     end # End of template case statement
 
     # Output the daylight control requirements
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, toplighting control required = #{req_top_ctrl}")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, primary sidelighting control required = #{req_pri_ctrl}")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, secondary sidelighting control required = #{req_sec_ctrl}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, toplighting control required = #{req_top_ctrl}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, primary sidelighting control required = #{req_pri_ctrl}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, secondary sidelighting control required = #{req_sec_ctrl}")
 
     # Stop here if no lighting controls are required.
     # Do not put daylighting control points into the space.
     if !req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, no daylighting control is required.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, no daylighting control is required.")
       return false
     end
 
@@ -1344,13 +1344,13 @@ class OpenStudio::Model::Space
     sorted_skylights = skylights.sort_by { |_skylight, vals| [vals[:facade], vals[:area], vals[:name]] }
 
     # Report out the sorted skylights for debugging
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, Skylights:")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, Skylights:")
     sorted_skylights.each do |sky, p|
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{sky.name} #{p[:facade]}, area = #{p[:area_m2].round(2)} m^2")
     end
 
     # Report out the sorted windows for debugging
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{template} #{name}, Windows:")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, Windows:")
     sorted_windows.each do |win, p|
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{win.name} #{p[:facade]}, area = #{p[:area_m2].round(2)} m^2")
     end
@@ -1408,14 +1408,14 @@ class OpenStudio::Model::Space
         sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2
         sensor_1_window = sorted_windows[0]
         # Sensor 2 controls secondary area
-        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2) / 2
+        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2)
         sensor_2_window = sorted_windows[0]
       elsif req_top_ctrl && !req_pri_ctrl && req_sec_ctrl
         # Sensor 1 controls toplighted area
         sensor_1_frac = areas['toplighted_area'] / space_area_m2
         sensor_1_window = sorted_skylights[0]
         # Sensor 2 controls secondary area
-        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2) / 2
+        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2)
         sensor_2_window = sorted_windows[0]
       elsif req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
         # Sensor 1 controls toplighted area
@@ -1453,10 +1453,10 @@ class OpenStudio::Model::Space
 
     # Sensors
     if sensor_1_frac > 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, sensor 1 controls #{(sensor_1_frac * 100).round}% of the zone lighting.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, sensor 1 controls #{(sensor_1_frac * 100).round}% of the zone lighting.")
     end
     if sensor_2_frac > 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{template} #{name}, sensor 2 controls #{(sensor_2_frac * 100).round}% of the zone lighting.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, sensor 2 controls #{(sensor_2_frac * 100).round}% of the zone lighting.")
     end
 
     # First sensor
@@ -2323,7 +2323,7 @@ class OpenStudio::Model::Space
       msg_log_2.disable
 
       if join_errs_2 > 0 || inner_loop_errs_2 > 0
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, the workaround for joining polygons failed.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{self.name}, the workaround for joining polygons failed.")
       else
 
         # First polygon minus the already combined polygons
@@ -2340,10 +2340,12 @@ class OpenStudio::Model::Space
 
     # Report logged errors to user
     if join_errs > 0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, #{join_errs} of #{polygons.size} #{name} were not joined properly due to limitations of the geometry calculation methods.  The resulting daylighted areas will be smaller than they should be.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{self.name}, #{join_errs} of #{polygons.size} #{name} were not joined properly due to limitations of the geometry calculation methods.  The resulting daylighted areas will be smaller than they should be.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, the #{name.gsub('_polygons','')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
     if inner_loop_errs > 0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, #{inner_loop_errs} of #{polygons.size} #{name} were not joined properly becasue the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{self.name}, #{inner_loop_errs} of #{polygons.size} #{name} were not joined properly becasue the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, the #{name.gsub('_polygons','')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Joined #{polygons.size} #{name} into #{combined_polygons.size} polygons.")

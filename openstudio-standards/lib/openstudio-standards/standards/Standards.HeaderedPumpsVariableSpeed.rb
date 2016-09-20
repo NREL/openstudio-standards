@@ -1,7 +1,35 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::PumpVariableSpeed
+class OpenStudio::Model::HeaderedPumpsVariableSpeed
   include Pump
+
+  # Takes the total rated flow rate and returns per-pump values
+  # as an optional double
+  # @return [OptionalDouble] the total rated flow rate per pump
+  def autosizedRatedFlowRate
+    result = OpenStudio::OptionalDouble.new
+    total_rated_flow_rate = autosizedTotalRatedFlowRate
+    if total_rated_flow_rate.is_initialized
+      per_pump_rated_flow_rate = total_rated_flow_rate.get / numberofPumpsinBank
+      result = OpenStudio::OptionalDouble.new(per_pump_rated_flow_rate)
+    end
+
+    return result
+  end
+
+  # Takes the total rated flow rate and returns per-pump values
+  # as an optional double
+  # @return [OptionalDouble] the total rated flow rate per pump
+  def ratedFlowRate
+    result = OpenStudio::OptionalDouble.new
+    total_rated_flow_rate = totalRatedFlowRate
+    if total_rated_flow_rate.is_initialized
+      per_pump_rated_flow_rate = total_rated_flow_rate.get / numberofPumpsinBank
+      result = OpenStudio::OptionalDouble.new(per_pump_rated_flow_rate)
+    end
+
+    return result
+  end
 
   # Set the pump curve coefficients based
   # on the specified control type.
@@ -36,7 +64,7 @@ class OpenStudio::Model::PumpVariableSpeed
       coeff_c = 0.4101
       coeff_d = 0.5753
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PumpVariableSpeed', "Pump control type '#{control_type}' not recognized, pump coefficients will not be changed.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HeaderedPumpsVariableSpeed', "Pump control type '#{control_type}' not recognized, pump coefficients will not be changed.")
       return false
     end
 

@@ -32337,22 +32337,9 @@ OS:Fan:ConstantVolume,
   AutoSize,                               !- Maximum Flow Rate {m3/s}
   ,                                       !- Motor Efficiency
   ,                                       !- Motor In Airstream Fraction
-  {c1e6ef62-410d-4e0c-b2f4-0bad7576524a}, !- Air Inlet Node Name
+  {1ad3bcf7-5c3a-4a47-b72f-e08918328670}, !- Air Inlet Node Name
   {ce0b5e8e-5548-4454-8487-04757f8f1e1c}, !- Air Outlet Node Name
   ;                                       !- End-Use Subcategory
-
-OS:Coil:Heating:Gas,
-  {08a8cac4-8e12-4f83-a6b7-2cd22861cdaa}, !- Handle
-  Coil Heating Gas 1,                     !- Name
-  {31db4353-a661-4491-96e9-bd82a005e726}, !- Availability Schedule Name
-  0.8,                                    !- Gas Burner Efficiency
-  AutoSize,                               !- Nominal Capacity {W}
-  {41cc170f-31da-494a-96bf-e038f425c00b}, !- Air Inlet Node Name
-  {7c253032-d39b-48f2-bd5d-bfd5be1be36c}, !- Air Outlet Node Name
-  ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
-  ,                                       !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
 
 OS:Curve:Biquadratic,
   {a6ba0295-cef2-47a8-9c4f-30ca0cf38ec2}, !- Handle
@@ -32551,7 +32538,7 @@ OS:Node,
   {e69a954d-2e9a-4467-86a2-66b71a344992}, !- Handle
   Node 121,                               !- Name
   {08566562-fc98-41a7-9c5e-ea502fd62317}, !- Inlet Port
-  {41cc170f-31da-494a-96bf-e038f425c00b}; !- Outlet Port
+  {ea261168-923e-425d-b69f-475052898b37}; !- Outlet Port
 
 OS:Connection,
   {08566562-fc98-41a7-9c5e-ea502fd62317}, !- Handle
@@ -32560,36 +32547,6 @@ OS:Connection,
   9,                                      !- Outlet Port
   {e69a954d-2e9a-4467-86a2-66b71a344992}, !- Target Object
   2;                                      !- Inlet Port
-
-OS:Connection,
-  {41cc170f-31da-494a-96bf-e038f425c00b}, !- Handle
-  Connection 191,                         !- Name
-  {e69a954d-2e9a-4467-86a2-66b71a344992}, !- Source Object
-  3,                                      !- Outlet Port
-  {08a8cac4-8e12-4f83-a6b7-2cd22861cdaa}, !- Target Object
-  5;                                      !- Inlet Port
-
-OS:Node,
-  {68c96219-a62f-4ddb-b255-d793248f63c4}, !- Handle
-  Node 122,                               !- Name
-  {7c253032-d39b-48f2-bd5d-bfd5be1be36c}, !- Inlet Port
-  {c1e6ef62-410d-4e0c-b2f4-0bad7576524a}; !- Outlet Port
-
-OS:Connection,
-  {7c253032-d39b-48f2-bd5d-bfd5be1be36c}, !- Handle
-  Connection 192,                         !- Name
-  {08a8cac4-8e12-4f83-a6b7-2cd22861cdaa}, !- Source Object
-  6,                                      !- Outlet Port
-  {68c96219-a62f-4ddb-b255-d793248f63c4}, !- Target Object
-  2;                                      !- Inlet Port
-
-OS:Connection,
-  {c1e6ef62-410d-4e0c-b2f4-0bad7576524a}, !- Handle
-  Connection 193,                         !- Name
-  {68c96219-a62f-4ddb-b255-d793248f63c4}, !- Source Object
-  3,                                      !- Outlet Port
-  {8d0bb544-e6b7-4032-bf31-c08ada53ec53}, !- Target Object
-  8;                                      !- Inlet Port
 
 OS:Connection,
   {ce0b5e8e-5548-4454-8487-04757f8f1e1c}, !- Handle
@@ -32807,22 +32764,9 @@ OS:Fan:ConstantVolume,
   AutoSize,                               !- Maximum Flow Rate {m3/s}
   ,                                       !- Motor Efficiency
   ,                                       !- Motor In Airstream Fraction
-  {7a74df02-abb9-4342-8fc6-dbc5a82fef91}, !- Air Inlet Node Name
+  {17fe4a3c-6e66-4034-a0c9-38740d11e75e}, !- Air Inlet Node Name
   {e8b1b9ff-d1c7-4643-8917-b1ac2f527b28}, !- Air Outlet Node Name
   ;                                       !- End-Use Subcategory
-
-OS:Coil:Heating:Gas,
-  {c8633946-4ddb-4766-a49c-cba63d59bacd}, !- Handle
-  Coil Heating Gas 2,                     !- Name
-  {31db4353-a661-4491-96e9-bd82a005e726}, !- Availability Schedule Name
-  0.8,                                    !- Gas Burner Efficiency
-  AutoSize,                               !- Nominal Capacity {W}
-  {39bb0893-a2f2-45a4-8e2f-689a0bab80d6}, !- Air Inlet Node Name
-  {d79cf7f2-4314-43dc-80ac-f2fb2ca8eb6e}, !- Air Outlet Node Name
-  ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
-  ,                                       !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
 
 OS:Curve:Biquadratic,
   {22fbe7b1-924d-401e-9b3f-be3704627ae0}, !- Handle
@@ -33021,7 +32965,7 @@ OS:Node,
   {ade2f1f8-f3ab-4317-a9f1-7a08ecc6ba48}, !- Handle
   Node 136,                               !- Name
   {af92df4c-e4ad-4579-865e-8c811eaa3f72}, !- Inlet Port
-  {39bb0893-a2f2-45a4-8e2f-689a0bab80d6}; !- Outlet Port
+  {778eef97-5f23-467b-9ad9-43b5b22225c7}; !- Outlet Port
 
 OS:Connection,
   {af92df4c-e4ad-4579-865e-8c811eaa3f72}, !- Handle
@@ -33030,36 +32974,6 @@ OS:Connection,
   9,                                      !- Outlet Port
   {ade2f1f8-f3ab-4317-a9f1-7a08ecc6ba48}, !- Target Object
   2;                                      !- Inlet Port
-
-OS:Connection,
-  {39bb0893-a2f2-45a4-8e2f-689a0bab80d6}, !- Handle
-  Connection 222,                         !- Name
-  {ade2f1f8-f3ab-4317-a9f1-7a08ecc6ba48}, !- Source Object
-  3,                                      !- Outlet Port
-  {c8633946-4ddb-4766-a49c-cba63d59bacd}, !- Target Object
-  5;                                      !- Inlet Port
-
-OS:Node,
-  {ac3dd2d0-09ea-4aea-b7cb-2579aeeddb9c}, !- Handle
-  Node 137,                               !- Name
-  {d79cf7f2-4314-43dc-80ac-f2fb2ca8eb6e}, !- Inlet Port
-  {7a74df02-abb9-4342-8fc6-dbc5a82fef91}; !- Outlet Port
-
-OS:Connection,
-  {d79cf7f2-4314-43dc-80ac-f2fb2ca8eb6e}, !- Handle
-  Connection 223,                         !- Name
-  {c8633946-4ddb-4766-a49c-cba63d59bacd}, !- Source Object
-  6,                                      !- Outlet Port
-  {ac3dd2d0-09ea-4aea-b7cb-2579aeeddb9c}, !- Target Object
-  2;                                      !- Inlet Port
-
-OS:Connection,
-  {7a74df02-abb9-4342-8fc6-dbc5a82fef91}, !- Handle
-  Connection 224,                         !- Name
-  {ac3dd2d0-09ea-4aea-b7cb-2579aeeddb9c}, !- Source Object
-  3,                                      !- Outlet Port
-  {7bf5503d-786b-468c-8f2e-0fc72e3c4f06}, !- Target Object
-  8;                                      !- Inlet Port
 
 OS:Connection,
   {e8b1b9ff-d1c7-4643-8917-b1ac2f527b28}, !- Handle
@@ -33233,22 +33147,9 @@ OS:Fan:ConstantVolume,
   AutoSize,                               !- Maximum Flow Rate {m3/s}
   ,                                       !- Motor Efficiency
   ,                                       !- Motor In Airstream Fraction
-  {5a349741-1ee9-4ba9-aeaa-9c37cc9f6342}, !- Air Inlet Node Name
+  {dabc1d48-518e-490b-921e-b74013d1530a}, !- Air Inlet Node Name
   {9087d728-deb9-4e73-8482-ef0bbaa9a176}, !- Air Outlet Node Name
   ;                                       !- End-Use Subcategory
-
-OS:Coil:Heating:Gas,
-  {b887ce5d-b799-4d68-9058-d48937911498}, !- Handle
-  Coil Heating Gas 3,                     !- Name
-  {31db4353-a661-4491-96e9-bd82a005e726}, !- Availability Schedule Name
-  0.8,                                    !- Gas Burner Efficiency
-  AutoSize,                               !- Nominal Capacity {W}
-  {15925075-7e32-4df5-982b-bfbdde851e49}, !- Air Inlet Node Name
-  {6c1bd333-11c0-4707-9a8a-4db0fc2bc4e7}, !- Air Outlet Node Name
-  ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
-  ,                                       !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
 
 OS:Curve:Biquadratic,
   {11e26267-68b7-4006-9dd5-264f730d35eb}, !- Handle
@@ -33447,7 +33348,7 @@ OS:Node,
   {4eb5e14e-fd5f-41dc-9826-6b5454bd928f}, !- Handle
   Node 153,                               !- Name
   {a3094a19-2b94-40f2-a9dd-e97ed14ced13}, !- Inlet Port
-  {15925075-7e32-4df5-982b-bfbdde851e49}; !- Outlet Port
+  {1893196f-7b52-4362-8226-2f69829ef6c5}; !- Outlet Port
 
 OS:Connection,
   {a3094a19-2b94-40f2-a9dd-e97ed14ced13}, !- Handle
@@ -33456,36 +33357,6 @@ OS:Connection,
   9,                                      !- Outlet Port
   {4eb5e14e-fd5f-41dc-9826-6b5454bd928f}, !- Target Object
   2;                                      !- Inlet Port
-
-OS:Connection,
-  {15925075-7e32-4df5-982b-bfbdde851e49}, !- Handle
-  Connection 258,                         !- Name
-  {4eb5e14e-fd5f-41dc-9826-6b5454bd928f}, !- Source Object
-  3,                                      !- Outlet Port
-  {b887ce5d-b799-4d68-9058-d48937911498}, !- Target Object
-  5;                                      !- Inlet Port
-
-OS:Node,
-  {318b8b90-d246-40e8-b32b-d97995de1fad}, !- Handle
-  Node 154,                               !- Name
-  {6c1bd333-11c0-4707-9a8a-4db0fc2bc4e7}, !- Inlet Port
-  {5a349741-1ee9-4ba9-aeaa-9c37cc9f6342}; !- Outlet Port
-
-OS:Connection,
-  {6c1bd333-11c0-4707-9a8a-4db0fc2bc4e7}, !- Handle
-  Connection 259,                         !- Name
-  {b887ce5d-b799-4d68-9058-d48937911498}, !- Source Object
-  6,                                      !- Outlet Port
-  {318b8b90-d246-40e8-b32b-d97995de1fad}, !- Target Object
-  2;                                      !- Inlet Port
-
-OS:Connection,
-  {5a349741-1ee9-4ba9-aeaa-9c37cc9f6342}, !- Handle
-  Connection 260,                         !- Name
-  {318b8b90-d246-40e8-b32b-d97995de1fad}, !- Source Object
-  3,                                      !- Outlet Port
-  {9d516eeb-fb49-4e29-a322-cd8f58775de3}, !- Target Object
-  8;                                      !- Inlet Port
 
 OS:Connection,
   {9087d728-deb9-4e73-8482-ef0bbaa9a176}, !- Handle
@@ -33659,22 +33530,9 @@ OS:Fan:ConstantVolume,
   AutoSize,                               !- Maximum Flow Rate {m3/s}
   ,                                       !- Motor Efficiency
   ,                                       !- Motor In Airstream Fraction
-  {9ba837cc-1bd8-44d6-a4e9-49bd6da9cc76}, !- Air Inlet Node Name
+  {c433301b-e1d2-41b2-b468-c62f6ff652da}, !- Air Inlet Node Name
   {7d6b9b4d-99ab-4fba-b614-0b48f8282372}, !- Air Outlet Node Name
   ;                                       !- End-Use Subcategory
-
-OS:Coil:Heating:Gas,
-  {3fcc0625-8089-41f1-ac0c-fc8a406d0e32}, !- Handle
-  Coil Heating Gas 4,                     !- Name
-  {31db4353-a661-4491-96e9-bd82a005e726}, !- Availability Schedule Name
-  0.8,                                    !- Gas Burner Efficiency
-  AutoSize,                               !- Nominal Capacity {W}
-  {5b9dbc9a-6e03-4ce0-91c5-d7b8f20c919b}, !- Air Inlet Node Name
-  {ea649074-f4a8-4e07-96ef-3e76123bd2a0}, !- Air Outlet Node Name
-  ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
-  ,                                       !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
 
 OS:Curve:Biquadratic,
   {31488593-1674-4326-b296-0e00e945e0a7}, !- Handle
@@ -33873,7 +33731,7 @@ OS:Node,
   {3a3b742f-3639-4ee0-926f-df7de10cfe6b}, !- Handle
   Node 170,                               !- Name
   {2165634c-833a-445f-b36d-623ccd9b6183}, !- Inlet Port
-  {5b9dbc9a-6e03-4ce0-91c5-d7b8f20c919b}; !- Outlet Port
+  {3dedb734-4fe7-44fd-b286-0ca8fd4fa7b7}; !- Outlet Port
 
 OS:Connection,
   {2165634c-833a-445f-b36d-623ccd9b6183}, !- Handle
@@ -33882,36 +33740,6 @@ OS:Connection,
   9,                                      !- Outlet Port
   {3a3b742f-3639-4ee0-926f-df7de10cfe6b}, !- Target Object
   2;                                      !- Inlet Port
-
-OS:Connection,
-  {5b9dbc9a-6e03-4ce0-91c5-d7b8f20c919b}, !- Handle
-  Connection 294,                         !- Name
-  {3a3b742f-3639-4ee0-926f-df7de10cfe6b}, !- Source Object
-  3,                                      !- Outlet Port
-  {3fcc0625-8089-41f1-ac0c-fc8a406d0e32}, !- Target Object
-  5;                                      !- Inlet Port
-
-OS:Node,
-  {5e1d3c30-be57-43b5-886f-3bcc37f6cc4b}, !- Handle
-  Node 171,                               !- Name
-  {ea649074-f4a8-4e07-96ef-3e76123bd2a0}, !- Inlet Port
-  {9ba837cc-1bd8-44d6-a4e9-49bd6da9cc76}; !- Outlet Port
-
-OS:Connection,
-  {ea649074-f4a8-4e07-96ef-3e76123bd2a0}, !- Handle
-  Connection 295,                         !- Name
-  {3fcc0625-8089-41f1-ac0c-fc8a406d0e32}, !- Source Object
-  6,                                      !- Outlet Port
-  {5e1d3c30-be57-43b5-886f-3bcc37f6cc4b}, !- Target Object
-  2;                                      !- Inlet Port
-
-OS:Connection,
-  {9ba837cc-1bd8-44d6-a4e9-49bd6da9cc76}, !- Handle
-  Connection 296,                         !- Name
-  {5e1d3c30-be57-43b5-886f-3bcc37f6cc4b}, !- Source Object
-  3,                                      !- Outlet Port
-  {ea9ec9d4-37fb-4ea1-84b7-84852d4eabf6}, !- Target Object
-  8;                                      !- Inlet Port
 
 OS:Connection,
   {7d6b9b4d-99ab-4fba-b614-0b48f8282372}, !- Handle
@@ -34259,7 +34087,7 @@ OS:SetpointManager:MixedAir,
   OS:SetpointManager:MixedAir 1,          ! Name
   Temperature,                            ! Control Variable
   {d9488931-f664-4473-a0ed-4b9dfa8e51a5}, ! Reference Setpoint Node Name
-  {ac3dd2d0-09ea-4aea-b7cb-2579aeeddb9c}, ! Fan Inlet Node Name
+  ,                                       ! Fan Inlet Node Name
   {d9488931-f664-4473-a0ed-4b9dfa8e51a5}, ! Fan Outlet Node Name
   {153d7f7c-229a-42e9-a8bc-d72a66121485}; ! Setpoint Node or NodeList Name
 
@@ -34454,25 +34282,16 @@ OS:SetpointManager:MixedAir,
   OS:SetpointManager:MixedAir 2,          ! Name
   ,                                       ! Control Variable
   {d9488931-f664-4473-a0ed-4b9dfa8e51a5}, ! Reference Setpoint Node Name
-  {ac3dd2d0-09ea-4aea-b7cb-2579aeeddb9c}, ! Fan Inlet Node Name
+  ,                                       ! Fan Inlet Node Name
   {d9488931-f664-4473-a0ed-4b9dfa8e51a5}, ! Fan Outlet Node Name
   {ade2f1f8-f3ab-4317-a9f1-7a08ecc6ba48}; ! Setpoint Node or NodeList Name
-
-OS:SetpointManager:MixedAir,
-  {1bc21534-0855-49c8-b553-2c979a4d467f}, ! Handle
-  OS:SetpointManager:MixedAir 3,          ! Name
-  ,                                       ! Control Variable
-  {d9488931-f664-4473-a0ed-4b9dfa8e51a5}, ! Reference Setpoint Node Name
-  {ac3dd2d0-09ea-4aea-b7cb-2579aeeddb9c}, ! Fan Inlet Node Name
-  {d9488931-f664-4473-a0ed-4b9dfa8e51a5}, ! Fan Outlet Node Name
-  {ac3dd2d0-09ea-4aea-b7cb-2579aeeddb9c}; ! Setpoint Node or NodeList Name
 
 OS:SetpointManager:MixedAir,
   {5e1abb33-bb97-458b-90fb-2cd04a8c7f3f}, ! Handle
   OS:SetpointManager:MixedAir 4,          ! Name
   ,                                       ! Control Variable
   {e61d04e7-8c3b-4cc4-86ae-22ff0ca24ebf}, ! Reference Setpoint Node Name
-  {68c96219-a62f-4ddb-b255-d793248f63c4}, ! Fan Inlet Node Name
+  ,                                       ! Fan Inlet Node Name
   {e61d04e7-8c3b-4cc4-86ae-22ff0ca24ebf}, ! Fan Outlet Node Name
   {a68ff181-b5c5-4664-b60e-5596ef7e21e8}; ! Setpoint Node or NodeList Name
 
@@ -34481,25 +34300,16 @@ OS:SetpointManager:MixedAir,
   OS:SetpointManager:MixedAir 5,          ! Name
   ,                                       ! Control Variable
   {e61d04e7-8c3b-4cc4-86ae-22ff0ca24ebf}, ! Reference Setpoint Node Name
-  {68c96219-a62f-4ddb-b255-d793248f63c4}, ! Fan Inlet Node Name
+  ,                                       ! Fan Inlet Node Name
   {e61d04e7-8c3b-4cc4-86ae-22ff0ca24ebf}, ! Fan Outlet Node Name
   {e69a954d-2e9a-4467-86a2-66b71a344992}; ! Setpoint Node or NodeList Name
-
-OS:SetpointManager:MixedAir,
-  {a75455f7-3b0c-4790-975d-d715d4bb4747}, ! Handle
-  OS:SetpointManager:MixedAir 6,          ! Name
-  ,                                       ! Control Variable
-  {e61d04e7-8c3b-4cc4-86ae-22ff0ca24ebf}, ! Reference Setpoint Node Name
-  {68c96219-a62f-4ddb-b255-d793248f63c4}, ! Fan Inlet Node Name
-  {e61d04e7-8c3b-4cc4-86ae-22ff0ca24ebf}, ! Fan Outlet Node Name
-  {68c96219-a62f-4ddb-b255-d793248f63c4}; ! Setpoint Node or NodeList Name
 
 OS:SetpointManager:MixedAir,
   {28316d05-a130-4cba-9b67-9d51505b2d3d}, ! Handle
   OS:SetpointManager:MixedAir 7,          ! Name
   ,                                       ! Control Variable
   {5bcadb30-7bb6-4479-b4c2-a88558192ffe}, ! Reference Setpoint Node Name
-  {318b8b90-d246-40e8-b32b-d97995de1fad}, ! Fan Inlet Node Name
+  ,                                       ! Fan Inlet Node Name
   {5bcadb30-7bb6-4479-b4c2-a88558192ffe}, ! Fan Outlet Node Name
   {665d09d4-0429-4f2f-9701-541f37f4d901}; ! Setpoint Node or NodeList Name
 
@@ -34508,25 +34318,16 @@ OS:SetpointManager:MixedAir,
   OS:SetpointManager:MixedAir 8,          ! Name
   ,                                       ! Control Variable
   {5bcadb30-7bb6-4479-b4c2-a88558192ffe}, ! Reference Setpoint Node Name
-  {318b8b90-d246-40e8-b32b-d97995de1fad}, ! Fan Inlet Node Name
+  ,                                       ! Fan Inlet Node Name
   {5bcadb30-7bb6-4479-b4c2-a88558192ffe}, ! Fan Outlet Node Name
   {4eb5e14e-fd5f-41dc-9826-6b5454bd928f}; ! Setpoint Node or NodeList Name
-
-OS:SetpointManager:MixedAir,
-  {918cd8e2-4226-46cc-ab94-d8392aa55ca9}, ! Handle
-  OS:SetpointManager:MixedAir 9,          ! Name
-  ,                                       ! Control Variable
-  {5bcadb30-7bb6-4479-b4c2-a88558192ffe}, ! Reference Setpoint Node Name
-  {318b8b90-d246-40e8-b32b-d97995de1fad}, ! Fan Inlet Node Name
-  {5bcadb30-7bb6-4479-b4c2-a88558192ffe}, ! Fan Outlet Node Name
-  {318b8b90-d246-40e8-b32b-d97995de1fad}; ! Setpoint Node or NodeList Name
 
 OS:SetpointManager:MixedAir,
   {bf0cc36b-acbb-4927-96ca-828eef982f07}, ! Handle
   OS:SetpointManager:MixedAir 10,         ! Name
   ,                                       ! Control Variable
   {5f0ecfd2-e6c4-4e03-a0a6-4be016655570}, ! Reference Setpoint Node Name
-  {5e1d3c30-be57-43b5-886f-3bcc37f6cc4b}, ! Fan Inlet Node Name
+  ,                                       ! Fan Inlet Node Name
   {5f0ecfd2-e6c4-4e03-a0a6-4be016655570}, ! Fan Outlet Node Name
   {2d880344-dbc6-41db-b11f-e76a37f87bc6}; ! Setpoint Node or NodeList Name
 
@@ -34535,18 +34336,9 @@ OS:SetpointManager:MixedAir,
   OS:SetpointManager:MixedAir 11,         ! Name
   ,                                       ! Control Variable
   {5f0ecfd2-e6c4-4e03-a0a6-4be016655570}, ! Reference Setpoint Node Name
-  {5e1d3c30-be57-43b5-886f-3bcc37f6cc4b}, ! Fan Inlet Node Name
+  ,                                       ! Fan Inlet Node Name
   {5f0ecfd2-e6c4-4e03-a0a6-4be016655570}, ! Fan Outlet Node Name
   {3a3b742f-3639-4ee0-926f-df7de10cfe6b}; ! Setpoint Node or NodeList Name
-
-OS:SetpointManager:MixedAir,
-  {2ffee69b-0287-44f4-907a-e7afbdc88727}, ! Handle
-  OS:SetpointManager:MixedAir 12,         ! Name
-  ,                                       ! Control Variable
-  {5f0ecfd2-e6c4-4e03-a0a6-4be016655570}, ! Reference Setpoint Node Name
-  {5e1d3c30-be57-43b5-886f-3bcc37f6cc4b}, ! Fan Inlet Node Name
-  {5f0ecfd2-e6c4-4e03-a0a6-4be016655570}, ! Fan Outlet Node Name
-  {5e1d3c30-be57-43b5-886f-3bcc37f6cc4b}; ! Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
   {3af3d130-f22d-470c-b7a5-83d4baa73772}, ! Handle
@@ -34856,21 +34648,21 @@ OS:Pump:VariableSpeed,
   {f157992b-cd53-4c75-9161-1d2e0ed4ccb4}, !- Inlet Node Name
   {6542976b-0380-4e5f-ad0d-b78703ea280d}, !- Outlet Node Name
   ,                                       !- Rated Flow Rate {m3/s}
-  179344.0152,                                       !- Rated Pump Head {Pa}
+  179344.0152,                            !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.9,                                       !- Motor Efficiency
+  0.9,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
-  0,                                       !- Coefficient 1 of the Part Load Performance Curve
-  3.2485,                                       !- Coefficient 2 of the Part Load Performance Curve
-  -4.7443,                                       !- Coefficient 3 of the Part Load Performance Curve
-  2.5294,                                       !- Coefficient 4 of the Part Load Performance Curve
+  0,                                      !- Coefficient 1 of the Part Load Performance Curve
+  3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
+  -4.7443,                                !- Coefficient 3 of the Part Load Performance Curve
+  2.5294,                                 !- Coefficient 4 of the Part Load Performance Curve
   ,                                       !- Minimum Flow Rate {m3/s}
   Intermittent;                           !- Pump Control Type
 
 OS:Boiler:HotWater,
   {91205d9a-a271-4b42-ba0d-c2af245b1877}, !- Handle
   Boiler Hot Water 1,                     !- Name
-  ,                                       !- Fuel Type
+  Electricity,                            !- Fuel Type
   36516655,                               !- Nominal Capacity {W}
   0.97,                                   !- Nominal Thermal Efficiency
   LeavingBoiler,                          !- Efficiency Curve Temperature Evaluation Variable
@@ -35338,14 +35130,14 @@ OS:Pump:VariableSpeed,
   {4ec6085a-3232-4fc5-b998-4ac57bf46d99}, !- Inlet Node Name
   {8a02c5bc-c591-4431-8535-8f716c794196}, !- Outlet Node Name
   ,                                       !- Rated Flow Rate {m3/s}
-  179344.0152,                                       !- Rated Pump Head {Pa}
+  179344.0152,                            !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.9,                                       !- Motor Efficiency
+  0.9,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
-  0,                                       !- Coefficient 1 of the Part Load Performance Curve
-  3.2485,                                       !- Coefficient 2 of the Part Load Performance Curve
-  -4.7443,                                       !- Coefficient 3 of the Part Load Performance Curve
-  2.5294,                                       !- Coefficient 4 of the Part Load Performance Curve
+  0,                                      !- Coefficient 1 of the Part Load Performance Curve
+  3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
+  -4.7443,                                !- Coefficient 3 of the Part Load Performance Curve
+  2.5294,                                 !- Coefficient 4 of the Part Load Performance Curve
   ,                                       !- Minimum Flow Rate {m3/s}
   Intermittent;                           !- Pump Control Type
 
@@ -44159,4 +43951,164 @@ OS:WindowMaterial:SimpleGlazingSystem,
   1.47628,                                ! U-Factor
   0.24,                                   ! Solar Heat Gain Coefficient
   0.65;                                   ! Visible Transmittance
+
+OS:Coil:Heating:Electric,
+  {db6472ee-cd12-4095-b467-f71afa6e7be5}, ! Handle
+  Elec Htg Coil,                          ! Name
+  {05fed737-03aa-46b9-ac62-86af1f8aeabf}, ! Availability Schedule Name
+  ,                                       ! Efficiency
+  ,                                       ! Nominal Capacity {W}
+  {778eef97-5f23-467b-9ad9-43b5b22225c7}, ! Air Inlet Node Name
+  {b1d95487-07c9-4cc5-b181-b0bc017acf49}, ! Air Outlet Node Name
+  {13b91744-1070-4068-9116-40954ff3ded1}; !- Temperature Setpoint Node Name
+
+OS:Node,
+  {13b91744-1070-4068-9116-40954ff3ded1}, !- Handle
+  Node 159,                               !- Name
+  {b1d95487-07c9-4cc5-b181-b0bc017acf49}, !- Inlet Port
+  {17fe4a3c-6e66-4034-a0c9-38740d11e75e}; !- Outlet Port
+
+OS:Connection,
+  {b1d95487-07c9-4cc5-b181-b0bc017acf49}, !- Handle
+  {fe75d384-867c-40d7-8ba9-f3fcb333ae9f}, !- Name
+  {db6472ee-cd12-4095-b467-f71afa6e7be5}, !- Source Object
+  6,                                      !- Outlet Port
+  {13b91744-1070-4068-9116-40954ff3ded1}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:Connection,
+  {17fe4a3c-6e66-4034-a0c9-38740d11e75e}, !- Handle
+  {e6e7b823-1416-4eac-ac0b-bc17df123064}, !- Name
+  {13b91744-1070-4068-9116-40954ff3ded1}, !- Source Object
+  3,                                      !- Outlet Port
+  {7bf5503d-786b-468c-8f2e-0fc72e3c4f06}, !- Target Object
+  8;                                      !- Inlet Port
+
+OS:Connection,
+  {778eef97-5f23-467b-9ad9-43b5b22225c7}, !- Handle
+  {edeaa0b9-6a33-4577-89d0-c7ee6842115a}, !- Name
+  {ade2f1f8-f3ab-4317-a9f1-7a08ecc6ba48}, !- Source Object
+  3,                                      !- Outlet Port
+  {db6472ee-cd12-4095-b467-f71afa6e7be5}, !- Target Object
+  5;                                      !- Inlet Port
+
+OS:Coil:Heating:Electric,
+  {7d120897-1ef4-4b0e-ba25-df240703a52a}, ! Handle
+  Elec Htg Coil 1,                        ! Name
+  {05fed737-03aa-46b9-ac62-86af1f8aeabf}, ! Availability Schedule Name
+  ,                                       ! Efficiency
+  ,                                       ! Nominal Capacity {W}
+  {ea261168-923e-425d-b69f-475052898b37}, ! Air Inlet Node Name
+  {68d7dbcb-81cd-4b47-97f1-4edd120ed0bf}, ! Air Outlet Node Name
+  {854d09b0-94a3-4802-9de7-4c60bc7668df}; !- Temperature Setpoint Node Name
+
+OS:Node,
+  {854d09b0-94a3-4802-9de7-4c60bc7668df}, !- Handle
+  Node 137,                               !- Name
+  {68d7dbcb-81cd-4b47-97f1-4edd120ed0bf}, !- Inlet Port
+  {1ad3bcf7-5c3a-4a47-b72f-e08918328670}; !- Outlet Port
+
+OS:Connection,
+  {68d7dbcb-81cd-4b47-97f1-4edd120ed0bf}, !- Handle
+  {0b2a2dfc-798c-42c8-957c-e7d2fae1c60f}, !- Name
+  {7d120897-1ef4-4b0e-ba25-df240703a52a}, !- Source Object
+  6,                                      !- Outlet Port
+  {854d09b0-94a3-4802-9de7-4c60bc7668df}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:Connection,
+  {1ad3bcf7-5c3a-4a47-b72f-e08918328670}, !- Handle
+  {75d26688-2fbe-4c16-8b13-e2c29c522919}, !- Name
+  {854d09b0-94a3-4802-9de7-4c60bc7668df}, !- Source Object
+  3,                                      !- Outlet Port
+  {8d0bb544-e6b7-4032-bf31-c08ada53ec53}, !- Target Object
+  8;                                      !- Inlet Port
+
+OS:Connection,
+  {ea261168-923e-425d-b69f-475052898b37}, !- Handle
+  {5083fd17-111a-4720-aaff-efe41bd66b96}, !- Name
+  {e69a954d-2e9a-4467-86a2-66b71a344992}, !- Source Object
+  3,                                      !- Outlet Port
+  {7d120897-1ef4-4b0e-ba25-df240703a52a}, !- Target Object
+  5;                                      !- Inlet Port
+
+OS:Coil:Heating:Electric,
+  {dfea9947-248d-4077-9249-d379d5e9ca35}, ! Handle
+  Elec Htg Coil 2,                        ! Name
+  {05fed737-03aa-46b9-ac62-86af1f8aeabf}, ! Availability Schedule Name
+  ,                                       ! Efficiency
+  ,                                       ! Nominal Capacity {W}
+  {3dedb734-4fe7-44fd-b286-0ca8fd4fa7b7}, ! Air Inlet Node Name
+  {a7f053e7-7eb0-4fee-91a6-7ce95d5099e2}, ! Air Outlet Node Name
+  {b6410945-1496-4071-b582-21f65528927a}; !- Temperature Setpoint Node Name
+
+OS:Node,
+  {b6410945-1496-4071-b582-21f65528927a}, !- Handle
+  Node 122,                               !- Name
+  {a7f053e7-7eb0-4fee-91a6-7ce95d5099e2}, !- Inlet Port
+  {c433301b-e1d2-41b2-b468-c62f6ff652da}; !- Outlet Port
+
+OS:Connection,
+  {a7f053e7-7eb0-4fee-91a6-7ce95d5099e2}, !- Handle
+  {068bb730-9f94-4b1c-a7d6-1d208c67660f}, !- Name
+  {dfea9947-248d-4077-9249-d379d5e9ca35}, !- Source Object
+  6,                                      !- Outlet Port
+  {b6410945-1496-4071-b582-21f65528927a}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:Connection,
+  {c433301b-e1d2-41b2-b468-c62f6ff652da}, !- Handle
+  {119643e6-ba54-45a2-948f-b3680d4dab62}, !- Name
+  {b6410945-1496-4071-b582-21f65528927a}, !- Source Object
+  3,                                      !- Outlet Port
+  {ea9ec9d4-37fb-4ea1-84b7-84852d4eabf6}, !- Target Object
+  8;                                      !- Inlet Port
+
+OS:Connection,
+  {3dedb734-4fe7-44fd-b286-0ca8fd4fa7b7}, !- Handle
+  {30db6918-0d82-4118-9c0e-c5d1274b418a}, !- Name
+  {3a3b742f-3639-4ee0-926f-df7de10cfe6b}, !- Source Object
+  3,                                      !- Outlet Port
+  {dfea9947-248d-4077-9249-d379d5e9ca35}, !- Target Object
+  5;                                      !- Inlet Port
+
+OS:Coil:Heating:Electric,
+  {5d8d13af-226a-46e5-9636-d19cbcd161bb}, ! Handle
+  Elec Htg Coil 3,                        ! Name
+  {05fed737-03aa-46b9-ac62-86af1f8aeabf}, ! Availability Schedule Name
+  ,                                       ! Efficiency
+  ,                                       ! Nominal Capacity {W}
+  {1893196f-7b52-4362-8226-2f69829ef6c5}, ! Air Inlet Node Name
+  {50ff5f8d-6c5f-423e-a6c7-0c55745c07db}, ! Air Outlet Node Name
+  {1fc360ff-9e92-4483-8ad4-681c41eefd94}; !- Temperature Setpoint Node Name
+
+OS:Node,
+  {1fc360ff-9e92-4483-8ad4-681c41eefd94}, !- Handle
+  Node 160,                               !- Name
+  {50ff5f8d-6c5f-423e-a6c7-0c55745c07db}, !- Inlet Port
+  {dabc1d48-518e-490b-921e-b74013d1530a}; !- Outlet Port
+
+OS:Connection,
+  {50ff5f8d-6c5f-423e-a6c7-0c55745c07db}, !- Handle
+  {fcc19cdf-b4d6-4d24-a8dd-4e20692977b5}, !- Name
+  {5d8d13af-226a-46e5-9636-d19cbcd161bb}, !- Source Object
+  6,                                      !- Outlet Port
+  {1fc360ff-9e92-4483-8ad4-681c41eefd94}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:Connection,
+  {dabc1d48-518e-490b-921e-b74013d1530a}, !- Handle
+  {4ae02c64-096f-43d0-870a-69efe60d875f}, !- Name
+  {1fc360ff-9e92-4483-8ad4-681c41eefd94}, !- Source Object
+  3,                                      !- Outlet Port
+  {9d516eeb-fb49-4e29-a322-cd8f58775de3}, !- Target Object
+  8;                                      !- Inlet Port
+
+OS:Connection,
+  {1893196f-7b52-4362-8226-2f69829ef6c5}, !- Handle
+  {2300d2b8-e012-42c2-b98d-e1fccce27770}, !- Name
+  {4eb5e14e-fd5f-41dc-9826-6b5454bd928f}, !- Source Object
+  3,                                      !- Outlet Port
+  {5d8d13af-226a-46e5-9636-d19cbcd161bb}, !- Target Object
+  5;                                      !- Inlet Port
 

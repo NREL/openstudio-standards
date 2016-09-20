@@ -17,7 +17,7 @@ def log_messages_to_runner(runner, debug = false)
               msg.logChannel.include?('setFileExtension') || # .ddy extension unexpected
               msg.logChannel.include?('Translator') || # Forward translator and geometry translator
               msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
-              msg.logMessage.include?('EpwFile') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
+              msg.logMessage.include?('Successive data points') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
               msg.logMessage.include?('has multiple parents') # Bogus errors about curves having multiple parents
 
       # Report the message in the correct way
@@ -51,7 +51,7 @@ def log_messages_to_file(file_path, debug = false)
                 msg.logChannel.include?('setFileExtension') || # .ddy extension unexpected
                 msg.logChannel.include?('Translator') || # Forward translator and geometry translator
                 msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
-                msg.logMessage.include?('EpwFile') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
+                msg.logMessage.include?('Successive data points') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
                 msg.logMessage.include?('has multiple parents') # Bogus errors about curves having multiple parents
 
         # Report the message in the correct way
@@ -60,11 +60,11 @@ def log_messages_to_file(file_path, debug = false)
           file.puts(s)
           messages << s
         elsif msg.logLevel == OpenStudio::Warn
-          s = "WARN  [#{msg.logChannel}] #{msg.logMessage}"
+          s = "WARN  #{msg.logMessage}"
           file.puts(s)
           messages << s
         elsif msg.logLevel == OpenStudio::Error
-          s = "ERROR [#{msg.logChannel}] #{msg.logMessage}"
+          s = "ERROR #{msg.logMessage}"
           file.puts(s)
           messages << s
         elsif msg.logLevel == OpenStudio::Debug && debug
@@ -91,7 +91,7 @@ def get_logs(log_type = OpenStudio::Error)
               msg.logChannel.include?('setFileExtension') || # .ddy extension unexpected
               msg.logChannel.include?('Translator') || # Forward translator and geometry translator
               msg.logMessage.include?('UseWeatherFile') || # 'UseWeatherFile' is not yet a supported option for YearDescription
-              msg.logMessage.include?('EpwFile') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
+              msg.logMessage.include?('Successive data points') || # Successive data points (2004-Jan-31 to 2001-Feb-01, ending on line 753) are greater than 1 day apart in EPW file
               msg.logMessage.include?('has multiple parents') # Bogus errors about curves having multiple parents
       # Only fail on the errors
       if msg.logLevel == log_type

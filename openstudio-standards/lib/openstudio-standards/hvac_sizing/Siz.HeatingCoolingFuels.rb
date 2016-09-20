@@ -40,13 +40,30 @@ class OpenStudio::Model::Model
       when 'OS_WaterHeater_HeatPump'
         fuels << 'Electricity'     
       when 'OS_WaterHeater_Mixed'
-        # @Todo: check if connected on demand side
         component = component.to_WaterHeaterMixed.get
-        fuels << component.heaterFuelType
+
+        # Check if the heater actually has a capacity (otherwise it's simply a Storage Tank)
+        if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
+          # If it does, we add the heater Fuel Type
+          fuels << component.heaterFuelType
+        end  # @Todo: not sure about whether it should be an elsif or not
+        # Check the plant loop connection on the source side
+        if component.secondaryPlantLoop.is_initialized
+          fuels += self.plant_loop_heating_fuels(component.secondaryPlantLoop.get)
+        end
       when 'OS_WaterHeater_Stratified'
-        # @Todo: check if connected on demand side
         component = component.to_WaterHeaterStratified.get
-        fuels << component.heaterFuelType
+
+        # Check if the heater actually has a capacity (otherwise it's simply a Storage Tank)
+        if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
+          # If it does, we add the heater Fuel Type
+          fuels << component.heaterFuelType
+        end # @Todo: not sure about whether it should be an elsif or not
+        # Check the plant loop connection on the source side
+        if component.secondaryPlantLoop.is_initialized
+          fuels += self.plant_loop_heating_fuels(component.secondaryPlantLoop.get)
+        end
+
       when 'OS_HeatExchanger_FluidToFluid'
         hx = component.to_HeatExchangerFluidToFluid.get
         cooling_hx_control_types = ["CoolingSetpointModulated", "CoolingSetpointOnOff", "CoolingDifferentialOnOff", "CoolingSetpointOnOffWithComponentOverride"]
@@ -140,13 +157,21 @@ class OpenStudio::Model::Model
       end
     when 'OS_Coil_Heating_Water_BaseboardRadiant'
       heating_coil = heating_coil.to_CoilHeatingWaterBaseboardRadiant.get
-      if heating_coil.plantLoop.is_initialized
+        if heating_coil.plantLoop.is_initialized
         fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
       end  
     when 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit'
       fuels << 'Electricity'
+      heating_coil = heating_coil.to_CoilHeatingWaterToAirHeatPumpEquationFit.get
+      if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end
     when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit'
       fuels << 'Electricity'
+      heating_coil = heating_coil.to_CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit.get
+      if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end
     when 'OS_Coil_WaterHeating_AirToWaterHeatPump'
       fuels << 'Electricity'
     when 'OS_Coil_WaterHeating_Desuperheater'
@@ -282,14 +307,15 @@ class OpenStudio::Model::Model
         fuels << 'Electricity'
       when 'OS_ZoneHVAC_PackagedTerminalAirConditioner'
         equipment = equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
-        fuel_coil = self.coil_heating_fuels(equipment.heatingCoil)
         fuels += self.coil_heating_fuels(equipment.heatingCoil)
       when 'OS_ZoneHVAC_PackagedTerminalHeatPump'
         fuels << 'Electricity'
       when 'OS_ZoneHVAC_TerminalUnit_VariableRefrigerantFlow'
         fuels << 'Electricity'
       when 'OS_ZoneHVAC_WaterToAirHeatPump'
-        fuels << 'Electricity'
+        # We also go check what fuel serves the loop on which the WSHP heating coil is
+        equipment = equipment.to_ZoneHVACWaterToAirHeatPump.get
+        fuels += self.coil_heating_fuels(equipment.heatingCoil)
       else
         #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
       end
@@ -307,14 +333,17 @@ class OpenStudio::Model::Model
       # Get the object type
       obj_type = equipment.iddObjectType.valueName.to_s
       case obj_type    
-      when 'to_AirTerminal_SingleDuct_ConstantVolume_CooledBeam'
+      when 'OS_AirTerminal_SingleDuct_ConstantVolume_CooledBeam'
         equipment = equipment.to_AirTerminalSingleDuctConstantVolumeCooledBeam.get
         fuels += self.coil_cooling_fuels(equipment.coilCoolingCooledBeam)
-      when 'to_AirTerminal_SingleDuct_ConstantVolume_FourPipeInduction'      
+      when 'OS_AirTerminal_SingleDuct_ConstantVolume_FourPipeInduction'      
         equipment = equipment.to_AirTerminalSingleDuctConstantVolumeFourPipeInduction.get
         if equipment.coolingCoil.is_initialized
-          fuels += self.coil_heating_fuels(equipment.coolingCoil.get) 
+          fuels += self.coil_cooling_fuels(equipment.coolingCoil.get) 
         end
+      when 'OS_ZoneHVAC_FourPipeFanCoil'
+        equipment = equipment.to_ZoneHVACFourPipeFanCoil.get
+        fuels += self.coil_cooling_fuels(equipment.coolingCoil)
       when 'OS_Refrigeration_AirChiller'
         fuels << 'Electricity'
       when 'OS_ZoneHVAC_IdealLoadsAirSystem'

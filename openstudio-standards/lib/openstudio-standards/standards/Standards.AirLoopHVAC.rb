@@ -67,29 +67,46 @@ class OpenStudio::Model::AirLoopHVAC
         end
       end
 
-      # VAV Static Pressure Reset
-      # assume all systems have DDC control of VAV terminals
-      has_ddc = true
-      if static_pressure_reset_required?(template, has_ddc)
-        supply_return_exhaust_relief_fans.each do |fan|
-          if fan.to_FanVariableVolume.is_initialized
-            fan.set_control_type('Multi Zone VAV with Static Pressure Reset')
+      # Static Pressure Reset
+      # assume no systems have DDC control of VAV terminals
+      has_ddc = false
+      spr_req = static_pressure_reset_required?(template, has_ddc)
+      supply_return_exhaust_relief_fans.each do |fan|
+        if fan.to_FanVariableVolume.is_initialized
+          plr_req = fan.part_load_fan_power_limitation?(template)
+          # Part Load Fan Pressure Control & Static Pressure Reset
+          if plr_req && spr_req
+            fan.set_control_type('Multi Zone VAV with VSD and Static Pressure Reset')
+          # Part Load Fan Pressure Control only
+          elsif plr_req && !spr_req
+            fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
+          # Static Pressure Reset only
+          elsif !plr_req && spr_req
+            fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
+          # No Control Required
           else
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "For #{name}: there is a constant volume fan on a multizone vav system.  Cannot apply static pressure reset controls.")
+            fan.set_control_type('Multi Zone VAV with AF or BI Riding Curve')
           end
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "For #{name}: there is a constant volume fan on a multizone vav system.  Cannot apply static pressure reset controls.")
         end
       end
 
     end
 
     # Single zone systems
-    # if self.thermalZones.size == 1
+    if self.thermalZones.size == 1
+      supply_return_exhaust_relief_fans.each do |fan|
+        if fan.to_FanVariableVolume.is_initialized
+          fan.set_control_type('Single Zone VAV Fan')
+        end
+      end
     # self.apply_single_zone_controls(template, climate_zone)
-    # end
+    end
 
     # DCV
     if demand_control_ventilation_required?(template, climate_zone)
-      enable_demand_control_ventilation
+      enable_demand_control_ventilation(template, climate_zone)
     end
 
     # SAT reset
@@ -139,6 +156,15 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Multizone VAV Systems
     if multizone_vav_system?
+
+      # VSD no Static Pressure Reset on all VAV systems
+      # per G3.1.3.15
+      supply_return_exhaust_relief_fans.each do |fan|
+        if fan.to_FanVariableVolume.is_initialized
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Setting fan part load curve per G3.1.3.15.")
+          fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
+        end
+      end
 
       # SAT Reset
       # G3.1.3.12 SAT reset required for all Multizone VAV systems,
@@ -864,6 +890,12 @@ class OpenStudio::Model::AirLoopHVAC
       end
     end
 
+    # Reset the limits
+    oa_control.resetEconomizerMaximumLimitDryBulbTemperature
+    oa_control.resetEconomizerMaximumLimitEnthalpy
+    oa_control.resetEconomizerMaximumLimitDewpointTemperature
+    oa_control.resetEconomizerMinimumLimitDryBulbTemperature
+
     # Set the limits
     case economizer_type
     when 'FixedDryBulb'
@@ -1169,6 +1201,12 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Set the economizer type
     oa_control.setEconomizerControlType(economizer_type)
+
+    # Reset the limits
+    oa_control.resetEconomizerMaximumLimitDryBulbTemperature
+    oa_control.resetEconomizerMaximumLimitEnthalpy
+    oa_control.resetEconomizerMaximumLimitDewpointTemperature
+    oa_control.resetEconomizerMinimumLimitDryBulbTemperature
 
     # Set the limits
     case economizer_type
@@ -1651,13 +1689,13 @@ class OpenStudio::Model::AirLoopHVAC
     # Determine if an ERV is required
     # erv_required = nil
     if erv_cfm.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}.")
       erv_required = false
     elsif dsn_flow_cfm < erv_cfm
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Does not exceed minimum flow requirement of #{erv_cfm}cfm.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Does not exceed minimum flow requirement of #{erv_cfm}cfm.")
       erv_required = false
     else
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV required based on #{(pct_oa * 100).round}% OA flow, design flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Exceeds minimum flow requirement of #{erv_cfm}cfm.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, ERV required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Exceeds minimum flow requirement of #{erv_cfm}cfm.")
       erv_required = true
     end
 
@@ -2216,53 +2254,19 @@ class OpenStudio::Model::AirLoopHVAC
       return dcv_required
     end
 
-    # Area, occupant density, and OA flow limits
-    min_area_ft2 = 0
-    min_occ_per_1000_ft2 = 0
+    # OA flow limits
     min_oa_without_economizer_cfm = 0
     min_oa_with_economizer_cfm = 0
     case template
     when '90.1-2004'
-      min_area_ft2 = 0
-      min_occ_per_1000_ft2 = 100
       min_oa_without_economizer_cfm = 3000
       min_oa_with_economizer_cfm = 0
     when '90.1-2007', '90.1-2010'
-      min_area_ft2 = 500
-      min_occ_per_1000_ft2 = 40
       min_oa_without_economizer_cfm = 3000
       min_oa_with_economizer_cfm = 1200
     when '90.1-2013'
-      min_area_ft2 = 500
-      min_occ_per_1000_ft2 = 25
       min_oa_without_economizer_cfm = 3000
       min_oa_with_economizer_cfm = 750
-    end
-
-    # Get the area served and the number of occupants
-    area_served_m2 = 0
-    num_people = 0
-    thermalZones.each do |zone|
-      zone.spaces.each do |space|
-        area_served_m2 += space.floorArea
-        num_people += space.numberOfPeople
-      end
-    end
-
-    # Check the minimum area
-    area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
-    if area_served_ft2 < min_area_ft2
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system serves #{area_served_ft2.round} ft2, but the minimum size is #{min_area_ft2.round} ft2.")
-      return dcv_required
-    end
-
-    # Check the minimum occupancy density
-    occ_per_ft2 = num_people / area_served_ft2
-    occ_per_1000_ft2 = occ_per_ft2 * 1000
-
-    if occ_per_1000_ft2 < min_occ_per_1000_ft2
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
-      return dcv_required
     end
 
     # Get the min OA flow rate
@@ -2300,6 +2304,19 @@ class OpenStudio::Model::AirLoopHVAC
       return dcv_required
     end
 
+    # Check area and density limits
+    # for all of zones on the loop
+    any_zones_req_dcv = false
+    thermalZones.sort.each do |zone|
+      if zone.demand_control_ventilation_required?(template, climate_zone)
+        any_zones_req_dcv = true
+        break
+      end
+    end
+    unless any_zones_req_dcv
+      return dcv_required
+    end
+
     # If here, DCV is required
     dcv_required = true
 
@@ -2307,9 +2324,13 @@ class OpenStudio::Model::AirLoopHVAC
   end
 
   # Enable demand control ventilation (DCV) for this air loop.
+  # Zones on this loop that require DCV preserve
+  # both per-area and per-person OA reqs.
+  # Other zones have OA reqs converted
+  # to per-area values only so that DCV won't impact these zones.
   #
   # @return [Bool] Returns true if required, false if not.
-  def enable_demand_control_ventilation
+  def enable_demand_control_ventilation(template, climate_zone)
     # Get the OA intake
     controller_oa = nil
     controller_mv = nil
@@ -2331,6 +2352,16 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Enable DCV in the controller mechanical ventilation
     controller_mv.setDemandControlledVentilation(true)
+
+    # Zones that require DCV preserve
+    # both per-area and per-person OA reqs.
+    # Other zones have OA reqs converted
+    # to per-area values only so that DCV
+    thermalZones.sort.each do |zone|
+      if zone.demand_control_ventilation_required?(template, climate_zone)
+        zone.convert_oa_req_to_per_area
+      end
+    end
 
     return true
   end
@@ -2415,7 +2446,7 @@ class OpenStudio::Model::AirLoopHVAC
     # supply outlet node of the system.
     sat_warmest_reset.addToNode(supplyOutletNode)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Supply air temperature reset was enabled using a SPM Warmest with a min SAT of #{design_sat_c.round}C // #{design_sat_f.round}F and a max SAT of #{max_sat_c.round}C // #{max_sat_f.round}F.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Supply air temperature reset was enabled using a SPM Warmest with a min SAT of #{design_sat_f.round}F and a max SAT of #{max_sat_f.round}F.")
 
     return true
   end
@@ -2517,6 +2548,25 @@ class OpenStudio::Model::AirLoopHVAC
     return multizone_vav_system
   end
 
+  # Determine if the system has terminal reheat
+  #
+  # @return [Bool] returns true if has one or more reheat terminals, false if it doesn't.
+  def terminal_reheat?
+    has_term_rht = false
+    demandComponents.each do |sc|
+      if sc.to_AirTerminalSingleDuctConstantVolumeReheat.is_initialized ||
+         sc.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized ||
+         sc.to_AirTerminalSingleDuctSeriesPIUReheat.is_initialized ||
+         sc.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized ||
+         sc.to_AirTerminalSingleDuctVAVReheat.is_initialized
+         has_term_rht = true
+         break
+      end
+    end
+
+    return has_term_rht  
+  end
+
   # Determine if the system has energy recovery already
   #
   # @return [Bool] Returns true if an ERV is present, false if not.
@@ -2565,14 +2615,26 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Set the control for any VAV reheat terminals
     # on this airloop.
+    control_type_set = false
     demandComponents.each do |equip|
       if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
         term = equip.to_AirTerminalSingleDuctVAVReheat.get
-        term.setDamperHeatingAction(damper_action_eplus)
+        # Dual maximum only applies to terminals with HW reheat coils
+        if damper_action == 'Dual Maximum'
+          if term.reheatCoil.to_CoilHeatingWater.is_initialized
+            term.setDamperHeatingAction(damper_action_eplus)
+            control_type_set = true
+          end
+        else
+          term.setDamperHeatingAction(damper_action_eplus)
+          control_type_set = true
+        end
       end
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: VAV damper action was set to #{damper_action} control.")
+    if control_type_set
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: VAV damper action was set to #{damper_action} control.")
+    end
 
     return true
   end
@@ -3343,9 +3405,9 @@ class OpenStudio::Model::AirLoopHVAC
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       if has_ddc
         sp_reset_required = true
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: static pressure reset is required because the system has DDC control of VAV terminals.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Static pressure reset is required because the system has DDC control of VAV terminals.")
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: static pressure reset not required because the system does not have DDC control of VAV terminals.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Static pressure reset not required because the system does not have DDC control of VAV terminals.")
       end
     when 'NECB 2011'
       # static pressure reset not required
@@ -3517,5 +3579,103 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     return dc_area_m2
+  end
+
+  # Sets the maximum reheat temperature to the specified
+  # value for all reheat terminals (of any type) on the loop.
+  #
+  # @param max_reheat_c [Double] the maximum reheat temperature, in C
+  # @return [Bool] returns true if successful, false if not.
+  def apply_maximum_reheat_temperature(max_reheat_c)
+    demandComponents.each do |sc|
+      if sc.to_AirTerminalSingleDuctConstantVolumeReheat.is_initialized
+        term = sc.to_AirTerminalSingleDuctConstantVolumeReheat.get
+        term.setMaximumReheatAirTemperature(max_reheat_c)
+      elsif sc.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
+        # No control option available
+      elsif sc.to_AirTerminalSingleDuctSeriesPIUReheat.is_initialized
+        # No control option available
+      elsif sc.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized
+        term = sc.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
+        term.setMaximumReheatAirTemperature(max_reheat_c)
+      elsif sc.to_AirTerminalSingleDuctVAVReheat.is_initialized
+        term = sc.to_AirTerminalSingleDuctVAVReheat.get
+        term.setMaximumReheatAirTemperature(max_reheat_c)
+      end
+    end
+
+    max_reheat_f = OpenStudio.convert(max_reheat_c, 'C', 'F').get
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: reheat terminal maximum set to #{max_reheat_f.round} F.")
+
+    return true
+  end
+
+  # Set the system sizing properties based on the zone sizing information
+  #
+  # @return [Bool] true if successful, false if not.
+  def apply_prm_sizing_temperatures
+    # Get the design heating and cooling SAT information
+    # for all zones served by the system.
+    htg_setpts_c = []
+    clg_setpts_c = []
+    thermalZones.each do |zone|
+      sizing_zone = zone.sizingZone
+      htg_setpts_c << sizing_zone.zoneHeatingDesignSupplyAirTemperature
+      clg_setpts_c << sizing_zone.zoneCoolingDesignSupplyAirTemperature
+    end
+
+    # Cooling SAT set to minimum zone cooling design SAT
+    clg_sat_c = clg_setpts_c.min
+
+    # If the system has terminal reheat,
+    # heating SAT is set to the same value as cooling SAT
+    # and the terminals are expected to do the heating.
+    # If not, heating SAT set to maximum zone heating design SAT.
+    has_term_rht = terminal_reheat?
+    htg_sat_c = if has_term_rht
+                  clg_sat_c
+                else
+                  htg_setpts_c.max
+                end
+
+    # Set the central SAT values
+    sizing_system = sizingSystem
+    sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_sat_c)
+    sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sat_c)
+
+    clg_sat_f = OpenStudio.convert(clg_sat_c, 'C', 'F').get
+    htg_sat_f = OpenStudio.convert(htg_sat_c, 'C', 'F').get
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: central heating SAT set to #{htg_sat_f.round} F, cooling SAT set to #{clg_sat_f.round} F.")
+
+    # If it's a terminal reheat system, set the reheat terminal setpoints too
+    if has_term_rht
+      rht_c = htg_setpts_c.max
+      apply_maximum_reheat_temperature(rht_c)
+    end
+
+    return true
+  end
+
+  # Determine if every zone on the system has an identical
+  # multiplier.  If so, return this number.  If not, return 1.
+  # @return [Integer] an integer representing the system multiplier.
+  def system_multiplier
+    mult = 1
+
+    # Get all the zone multipliers
+    zn_mults = []
+    thermalZones.each do |zone|
+      zn_mults << zone.multiplier
+    end
+ 
+    # Warn if there are different multipliers
+    uniq_mults = zn_mults.uniq
+    if uniq_mults.size > 1
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name}: not all zones on the system have an identical zone multiplier.  Multipliers are: #{uniq_mults.join(', ')}.")
+    else
+      mult = uniq_mults[0]
+    end
+
+    return mult
   end
 end

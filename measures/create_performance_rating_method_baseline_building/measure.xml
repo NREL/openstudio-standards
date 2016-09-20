@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>create_performance_rating_method_baseline_building</name>
   <uid>0474f1c8-11cf-477c-9bd6-2091207ddf42</uid>
-  <version_id>e4585467-144e-4816-b7e1-38353e960bbd</version_id>
-  <version_modified>20160531T165443Z</version_modified>
+  <version_id>518ad830-578e-4942-a15e-f79bbb2ebb7f</version_id>
+  <version_modified>20160818T232858Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>CreatePerformanceRatingMethodBaselineBuilding</class_name>
   <display_name>Create Performance Rating Method Baseline Building</display_name>
@@ -262,7 +262,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>D65E4086</checksum>
+      <checksum>89C21FC0</checksum>
     </file>
   </files>
 </measure>

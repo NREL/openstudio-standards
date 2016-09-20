@@ -103,6 +103,12 @@ class OpenStudio::Model::PlantLoop
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
         pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+      elsif sc.to_HeaderedPumpsConstantSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsConstantSpeed.get
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+      elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsVariableSpeed.get
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       end
     end
 
@@ -114,6 +120,12 @@ class OpenStudio::Model::PlantLoop
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
         pump.apply_prm_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
+      elsif sc.to_HeaderedPumpsConstantSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsConstantSpeed.get
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+      elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsVariableSpeed.get
+        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
       end
     end
 
@@ -257,10 +269,10 @@ class OpenStudio::Model::PlantLoop
         # Limit the OATwb
         if design_oat_wb_f < 55
           design_oat_wb_f = 55
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 55F will be used for sizing the cooling towers because the actual design value is below the limit in G3.1.3.11.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 55F will be used for sizing the cooling towers because the actual design value is below the limit in G3.1.3.11.")
         elsif design_oat_wb_f > 90
           design_oat_wb_f = 90
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 90F will be used for sizing the cooling towers because the actual design value is above the limit in G3.1.3.11.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 90F will be used for sizing the cooling towers because the actual design value is above the limit in G3.1.3.11.")
         end
 
         # Calculate the approach
@@ -299,6 +311,13 @@ class OpenStudio::Model::PlantLoop
       supplyComponents.each do |sc|
         if sc.to_CoolingTowerVariableSpeed.is_initialized
           ct = sc.to_CoolingTowerVariableSpeed.get
+          # E+ has a minimum limit of 68F (20C) for this field.
+          # Check against limit before attempting to set value.
+          eplus_design_oat_wb_c_lim = 20
+          if design_oat_wb_c < eplus_design_oat_wb_c_lim
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}, a design OATwb of 68F will be used for sizing the cooling towers because the actual design value is below the limit EnergyPlus accepts for this input.")
+            design_oat_wb_c = eplus_design_oat_wb_c_lim
+          end
           ct.setDesignInletAirWetBulbTemperature(design_oat_wb_c)
           ct.setDesignApproachTemperature(approach_k)
           ct.setDesignRangeTemperature(range_k)
@@ -324,6 +343,13 @@ class OpenStudio::Model::PlantLoop
       cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(model)
       cw_t_stpt_manager.setName("CW Temp Follows OATwb w/ #{approach_r} deltaF approach min #{float_down_to_f.round(1)} F to max #{leaving_cw_t_f.round(1)}")
       cw_t_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
+      # At low design OATwb, it is possible to calculate
+      # a maximum temperature below the minimum.  In this case,
+      # make the maximum and minimum the same.
+      if leaving_cw_t_c < float_down_to_c
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{name}, the maximum leaving temperature of #{leaving_cw_t_f.round(1)} F is below the minimum of #{float_down_to_f.round(1)} F.  The maximum will be set to the same value as the minimum.")
+        leaving_cw_t_c = float_down_to_c
+      end
       cw_t_stpt_manager.setMaximumSetpointTemperature(leaving_cw_t_c)
       cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
       cw_t_stpt_manager.setOffsetTemperatureDifference(approach_k)
@@ -344,6 +370,12 @@ class OpenStudio::Model::PlantLoop
       return reset_required
 
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+
+      # Not required for service water heating systems
+      if swh_loop?
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}: supply water temperature reset not required for service water heating systems.")
+        return reset_required
+      end
 
       # Not required for variable flow systems
       if variable_flow_system?
@@ -481,6 +513,16 @@ class OpenStudio::Model::PlantLoop
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name} capacity of #{chiller.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
         end
+      # DistrictCooling
+      elsif sc.to_DistrictCooling.is_initialized
+        dist_clg = sc.to_DistrictCooling.get
+        if dist_clg.nominalCapacity.is_initialized
+          total_cooling_capacity_w += dist_clg.nominalCapacity.get
+        elsif dist_clg.autosizedNominalCapacity.is_initialized
+          total_cooling_capacity_w += dist_clg.autosizedNominalCapacity.get
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of DistrictCooling #{dist_clg.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
+        end
       end
     end
 
@@ -494,6 +536,7 @@ class OpenStudio::Model::PlantLoop
   #
   # @return [Double] total heating capacity
   #   units = Watts (W)
+  # @todo Add district heating to plant loop heating capacity
   def total_heating_capacity
     # Sum the heating capacity for all heating components
     # on the plant loop.
@@ -507,13 +550,42 @@ class OpenStudio::Model::PlantLoop
         elsif boiler.autosizedNominalCapacity.is_initialized
           total_heating_capacity_w += boiler.autosizedNominalCapacity.get
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name} capacity of #{boiler.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of Boiler:HotWater ' #{boiler.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
+        end
+      # WaterHeater:Mixed
+      elsif sc.to_WaterHeaterMixed.is_initialized
+        water_heater = sc.to_WaterHeaterMixed.get
+        if water_heater.heaterMaximumCapacity.is_initialized
+          total_heating_capacity_w += water_heater.heaterMaximumCapacity.get
+        elsif water_heater.autosizedHeaterMaximumCapacity.is_initialized
+          total_heating_capacity_w += water_heater.autosizedHeaterMaximumCapacity.get
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of WaterHeater:Mixed #{water_heater.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
+        end
+      # WaterHeater:Stratified
+      elsif sc.to_WaterHeaterStratified.is_initialized
+        water_heater = sc.to_WaterHeaterStratified.get
+        if water_heater.heater1Capacity.is_initialized
+          total_heating_capacity_w += water_heater.heater1Capacity.get
+        end
+        if water_heater.heater2Capacity.is_initialized
+          total_heating_capacity_w += water_heater.heater2Capacity.get
+        end
+      # DistrictHeating
+      elsif sc.to_DistrictHeating.is_initialized
+        dist_htg = sc.to_DistrictHeating.get
+        if dist_htg.nominalCapacity.is_initialized
+          total_heating_capacity_w += dist_htg.nominalCapacity.get
+        elsif dist_htg.autosizedNominalCapacity.is_initialized
+          total_heating_capacity_w += dist_htg.autosizedNominalCapacity.get
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{self.name} capacity of DistrictHeating #{dist_htg.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
         end
       end
-    end
+    end # End loop on supplyComponents
 
-    total_heating_capacity_kbtu_per_hr = OpenStudio.convert(total_heating_capacity_w, 'W', 'tons').get
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}, heating capacity is #{total_heating_capacity_kbtu_per_hr.round} kBtu/hr.")
+    total_heating_capacity_kbtu_per_hr = OpenStudio.convert(total_heating_capacity_w,'W','kBtu/hr').get
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{self.name}, heating capacity is #{total_heating_capacity_kbtu_per_hr.round} kBtu/hr.")
 
     return total_heating_capacity_w
   end
@@ -639,7 +711,7 @@ class OpenStudio::Model::PlantLoop
         area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
         # Determine the primary pump type
-        pri_control_type = 'Riding Curve'
+        pri_control_type = 'Constant Flow'
 
         # Determine the secondary pump type
         sec_control_type = 'Riding Curve'
@@ -655,15 +727,31 @@ class OpenStudio::Model::PlantLoop
         cap_w = total_cooling_capacity
         cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
 
-        # Determine the primary pump type
-        pri_control_type = 'Riding Curve'
-
-        # Determine the secondary pump type
-        sec_control_type = 'Riding Curve'
-        if cap_tons > minimum_cap_tons
-          sec_control_type = 'VSD No Reset'
+        # Determine if it a district cooling system
+        has_district_cooling = false
+        supplyComponents.each do |sc|
+          if sc.to_DistrictCooling.is_initialized
+            has_district_cooling = true
+          end
         end
 
+        # Determine the primary and secondary pumping types
+        pri_control_type = nil
+        sec_control_type = nil
+        if has_district_cooling
+          pri_control_type = if cap_tons > minimum_cap_tons
+                               'VSD No Reset'
+                             else
+                               'Riding Curve'
+                             end
+        else
+          pri_control_type = 'Constant Flow'
+          sec_control_type = if cap_tons > minimum_cap_tons
+                               'VSD No Reset'
+                             else
+                               'Riding Curve'
+                             end
+        end
       end
 
       # Report out the pumping type
@@ -680,6 +768,9 @@ class OpenStudio::Model::PlantLoop
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
           pump.set_control_type(pri_control_type)
+        elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+          pump = sc.to_HeaderedPumpsVariableSpeed.get
+          pump.set_control_type(control_type)        
         end
       end
 
@@ -688,6 +779,9 @@ class OpenStudio::Model::PlantLoop
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
           pump.set_control_type(sec_control_type)
+        elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+          pump = sc.to_HeaderedPumpsVariableSpeed.get
+          pump.set_control_type(control_type)
         end
       end
 
@@ -696,7 +790,7 @@ class OpenStudio::Model::PlantLoop
       # Condenser water systems
 
       # All condenser water loops are constant flow
-      control_type = 'Riding Curve'
+      control_type = 'Constant Flow'
 
       # Report out the pumping type
       unless control_type.nil?
@@ -707,6 +801,9 @@ class OpenStudio::Model::PlantLoop
       supplyComponents.each do |sc|
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
+          pump.set_control_type(control_type)
+        elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+          pump = sc.to_HeaderedPumpsVariableSpeed.get
           pump.set_control_type(control_type)
         end
       end
@@ -814,11 +911,16 @@ class OpenStudio::Model::PlantLoop
 
     end
 
-    # Get all existing chillers
+    # Get all existing chillers and pumps
     chillers = []
+    pumps = []
     supplyComponents.each do |sc|
       if sc.to_ChillerElectricEIR.is_initialized
         chillers << sc.to_ChillerElectricEIR.get
+      elsif sc.to_PumpConstantSpeed.is_initialized
+        pumps << sc.to_PumpConstantSpeed.get
+      elsif sc.to_PumpVariableSpeed.is_initialized
+        pumps << sc.to_PumpVariableSpeed.get
       end
     end
 
@@ -830,6 +932,18 @@ class OpenStudio::Model::PlantLoop
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
     else
       first_chiller = chillers[0]
+    end
+
+    # Ensure there is only 1 pump to start
+    orig_pump = nil
+    if pumps.size.zero?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{name}, found #{pumps.size} pumps.  A loop must have at least one pump.")
+      return false
+    elsif pumps.size > 1
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{name}, found #{pumps.size} pumps, cannot split up per performance rating method baseline requirements.")
+      return false
+    else
+      orig_pump = pumps[0]
     end
 
     # Determine the per-chiller capacity
@@ -861,6 +975,39 @@ class OpenStudio::Model::PlantLoop
       end
 
       final_chillers << new_chiller
+    end
+
+    # If there is more than one cooling tower,
+    # replace the original pump with a headered pump
+    # of the same type and properties.
+    if final_chillers.size > 1
+      num_pumps = final_chillers.size
+      new_pump = nil
+      if orig_pump.to_PumpConstantSpeed.is_initialized
+        new_pump = OpenStudio::Model::HeaderedPumpsConstantSpeed.new(model)
+        new_pump.setNumberofPumpsinBank(num_pumps)
+        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+        new_pump.setPumpControlType(orig_pump.pumpControlType)
+      elsif orig_pump.to_PumpVariableSpeed.is_initialized
+        new_pump = OpenStudio::Model::HeaderedPumpsVariableSpeed.new(model)
+        new_pump.setNumberofPumpsinBank(num_pumps)
+        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+        new_pump.setPumpControlType(orig_pump.pumpControlType)
+        new_pump.setCoefficient1ofthePartLoadPerformanceCurve(orig_pump.coefficient1ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient2ofthePartLoadPerformanceCurve(orig_pump.coefficient2ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient3ofthePartLoadPerformanceCurve(orig_pump.coefficient3ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient4ofthePartLoadPerformanceCurve(orig_pump.coefficient4ofthePartLoadPerformanceCurve)
+      end
+      # Remove the old pump
+      orig_pump.remove
+      # Attach the new headered pumps
+      new_pump.addToNode(supplyInletNode)
     end
 
     # Set the sizing factor and the chiller types
@@ -957,36 +1104,50 @@ class OpenStudio::Model::PlantLoop
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{name}, could not clone cooling tower #{orig_twr.name}, cannot apply the performance rating method number of cooling towers.")
         return false
       end
-      final_twrs << new_twr
-
-      # spit out the curve name
-      # puts new_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get.name
-      # new_curve = OpenStudio::Model::CurveCubic.new(model)
-      # new_curve.setName("Net CT Curve")
-      # new_twr.setFanPowerRatioFunctionofAirFlowRateRatioCurve(new_curve)
-      # puts new_twr.fanPowerRatioFunctionofAirFlowRateRatioCurve.get.name
 
       # Connect the new cooling tower to the CW loop
       addSupplyBranchForComponent(new_twr)
       new_twr_inlet = new_twr.inletModelObject.get.to_Node.get
 
-      # Clone the original pump for the new cooling tower
-      new_pump = orig_pump.clone(model)
-      if new_pump.to_PumpConstantSpeed.is_initialized
-        new_pump = new_pump.to_PumpConstantSpeed.get
-      elsif new_pump.to_PumpVariableSpeed.is_initialized
-        new_pump = new_pump.to_PumpVariableSpeed.get
-      end
-      new_pump.addToNode(new_twr_inlet)
+      final_twrs << new_twr
     end
 
-    # Move the original pump onto the
-    # branch of the original cooling tower
-    orig_twr_inlet_node = orig_twr.inletModelObject.get.to_Node.get
-    orig_pump.addToNode(orig_twr_inlet_node)
+    # If there is more than one cooling tower,
+    # replace the original pump with a headered pump
+    # of the same type and properties.
+    if final_twrs.size > 1
+      num_pumps = final_twrs.size
+      new_pump = nil
+      if orig_pump.to_PumpConstantSpeed.is_initialized
+        new_pump = OpenStudio::Model::HeaderedPumpsConstantSpeed.new(model)
+        new_pump.setNumberofPumpsinBank(num_pumps)
+        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+        new_pump.setPumpControlType(orig_pump.pumpControlType)
+      elsif orig_pump.to_PumpVariableSpeed.is_initialized
+        new_pump = OpenStudio::Model::HeaderedPumpsVariableSpeed.new(model)
+        new_pump.setNumberofPumpsinBank(num_pumps)
+        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+        new_pump.setPumpControlType(orig_pump.pumpControlType)
+        new_pump.setCoefficient1ofthePartLoadPerformanceCurve(orig_pump.coefficient1ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient2ofthePartLoadPerformanceCurve(orig_pump.coefficient2ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient3ofthePartLoadPerformanceCurve(orig_pump.coefficient3ofthePartLoadPerformanceCurve)
+        new_pump.setCoefficient4ofthePartLoadPerformanceCurve(orig_pump.coefficient4ofthePartLoadPerformanceCurve)
+      end
+      # Remove the old pump
+      orig_pump.remove
+      # Attach the new headered pumps
+      new_pump.addToNode(supplyInletNode)
+    end
 
     # Set the sizing factors
-    final_twrs.each do |final_cooling_tower|
+    final_twrs.each_with_index do |final_cooling_tower, i|
+      final_cooling_tower.setName("#{final_cooling_tower.name} #{i + 1} of #{final_twrs.size}")      
       final_cooling_tower.setSizingFactor(clg_twr_sizing_factor)
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}, there are #{final_twrs.size} cooling towers, one for each chiller.")
@@ -1061,4 +1222,130 @@ class OpenStudio::Model::PlantLoop
 
     return maximum_loop_flow_rate
   end
+
+  # Determines if the loop is a Service Water Heating loop by checking if there is a WaterUseConnection on the demand side
+  #
+  # @return [Boolean] true if it's indeed a SHW loop, false otherwise
+  def swh_loop?()
+
+    serves_swh = false
+    self.demandComponents.each do |comp|
+      if comp.to_WaterUseConnections.is_initialized
+        serves_swh = true
+        break
+      end
+    end
+
+    return serves_swh
+  end
+  
+  # Classifies the service water system and returns information
+  # about fuel types, whether it serves both heating and service water heating,
+  # the water storage volume, and the total heating capacity.
+  #
+  # @return [Array<Array<String>, Bool, Double, Double>] An array of:
+  # fuel types, combination_system (true/false), storage_capacity (m^3), total_heating_capacity (W)
+  def swh_system_type
+    combination_system = true
+    storage_capacity = 0
+    primary_fuels = []
+    secondary_fuels = []
+
+    # @Todo: to work correctly, plantloop.total_heating_capacity requires to have either hardsized capacities or a sizing run.
+    primary_heating_capacity = total_heating_capacity
+    secondary_heating_capacity = 0
+
+    supplyComponents.each do |component|
+
+      # Get the object type
+      obj_type = component.iddObjectType.valueName.to_s
+
+      case obj_type
+      when 'OS_DistrictHeating'
+        primary_fuels << 'DistrictHeating'
+        combination_system = false
+      when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
+        primary_fuels << 'Electricity'
+      when 'OS_SolarCollector_FlatPlate_PhotovoltaicThermal'
+        primary_fuels << 'SolarEnergy'
+      when 'OS_SolarCollector_FlatPlate_Water'
+        primary_fuels << 'SolarEnergy'
+      when 'OS_SolarCollector_IntegralCollectorStorage'
+        primary_fuels << 'SolarEnergy'
+      when 'OS_WaterHeater_HeatPump'
+        primary_fuels << 'Electricity'
+      when 'OS_WaterHeater_Mixed'
+        component = component.to_WaterHeaterMixed.get
+        # Check it it's actually a heater, not just a storage tank
+        if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
+          # If it does, we add the heater Fuel Type
+          primary_fuels << component.heaterFuelType
+          # And in this case we'll reuse this object
+          combination_system = false
+        end  # @Todo: not sure about whether it should be an elsif or not
+        # Check the plant loop connection on the source side
+        if component.secondaryPlantLoop.is_initialized
+          source_plant_loop = component.secondaryPlantLoop.get
+          secondary_fuels += plant_loop_heating_fuels(source_plant_loop)
+          secondary_heating_capacity += source_plant_loop.total_heating_capacity
+        end
+
+        # Storage capacity
+        if component.tankVolume.is_initialized
+          storage_capacity = component.tankVolume.get
+        end
+
+      when 'OS_WaterHeater_Stratified'
+        component = component.to_WaterHeaterStratified.get
+
+        # Check if the heater actually has a capacity (otherwise it's simply a Storage Tank)
+        if component.heaterMaximumCapacity.empty? || component.heaterMaximumCapacity.get != 0
+          # If it does, we add the heater Fuel Type
+          primary_fuels << component.heaterFuelType
+          # And in this case we'll reuse this object
+          combination_system = false
+        end # @Todo: not sure about whether it should be an elsif or not
+        # Check the plant loop connection on the source side
+        if component.secondaryPlantLoop.is_initialized
+          source_plant_loop = component.secondaryPlantLoop.get
+          secondary_fuels += plant_loop_heating_fuels(source_plant_loop)
+          secondary_heating_capacity += source_plant_loop.total_heating_capacity
+        end
+
+        # Storage capacity
+        if component.tankVolume.is_initialized
+          storage_capacity = component.tankVolume.get
+        end
+
+      when 'OS_HeatExchanger_FluidToFluid'
+        hx = component.to_HeatExchangerFluidToFluid.get
+        cooling_hx_control_types = ["CoolingSetpointModulated", "CoolingSetpointOnOff", "CoolingDifferentialOnOff", "CoolingSetpointOnOffWithComponentOverride"]
+        cooling_hx_control_types.each {|x| x.downcase!}
+        if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
+          source_plant_loop = hx.secondaryPlantLoop.get
+          secondary_fuels += plant_loop_heating_fuels(source_plant_loop)
+          secondary_heating_capacity += source_plant_loop.total_heating_capacity
+        end
+
+      when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
+        # To avoid extraneous debug messages
+      else
+        #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
+      end
+
+    end
+
+    # @Todo: decide how to handle primary and secondary stuff
+    fuels = primary_fuels + secondary_fuels
+    total_heating_capacity = primary_heating_capacity + secondary_heating_capacity
+    # If the primary heating capacity is bigger than secondary, assume the secondary is just a backup and disregard it?
+    # if primary_heating_capacity > secondary_heating_capacity
+    #   total_heating_capacity = primary_heating_capacity
+    #   fuels = primary_fuels
+    # end
+
+    return fuels.uniq.sort, combination_system, storage_capacity, total_heating_capacity
+
+  end # end classify_swh_system_type  
+  
 end

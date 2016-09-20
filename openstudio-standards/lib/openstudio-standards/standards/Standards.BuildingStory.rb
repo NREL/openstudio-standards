@@ -37,4 +37,39 @@ class OpenStudio::Model::BuildingStory
 
     return floor_multiplier
   end
+
+  # Gets the minimum z-value of the story.
+  # This is considered to be the minimum z value
+  # of any vertex of any surface of any space on the
+  # story, with the exception of plenum spaces.
+  #
+  # @return [Double] the minimum z-value, in m
+  def minimum_z_value
+    z_heights = []
+    spaces.each do |space|
+      # Skip plenum spaces
+      next if space.plenum?
+
+      # Get the z value of the space, which
+      # vertices in space surfaces are relative to.
+      z_origin = space.zOrigin
+
+      # loop through space surfaces to find min z value
+      space.surfaces.each do |surface|
+        surface.vertices.each do |vertex|
+          z_heights << vertex.z + z_origin
+        end
+      end
+    end
+
+    # Error if no z heights were found
+    z = 999.9 
+    if z_heights.size > 0
+      z = z_heights.min
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "For #{name} could not find the minimum_z_value, which means the story has no spaces assigned or the spaces have no surfaces.")
+    end
+
+    return z
+  end
 end

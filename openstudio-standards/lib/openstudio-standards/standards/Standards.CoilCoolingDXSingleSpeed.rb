@@ -106,7 +106,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     capacity_btu_per_hr = find_capacity
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'kBtu/hr').get
 
-    ac_props = model.find_object(standards['unitary_acs'], search_criteria, capacity_btu_per_hr)
+    ac_props = model.find_object(standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Get the minimum efficiency standards
     cop = nil
@@ -266,9 +266,9 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if heat_pump == true
-                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
+                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model.find_object(unitary_acs, search_criteria, capacity_btu_per_hr)
+                 model.find_object(unitary_acs, search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
@@ -335,10 +335,11 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
       # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
       # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
-      capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
-      capacity_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
-      pthp_eer = pthp_eer_coeff_1 - (pthp_eer_coeff_2 * capacity_btu_per_hr / 1000.0)
-      cop = eer_to_cop(pthp_eer)
+      eer_calc_cap_btu_per_hr = capacity_btu_per_hr
+      eer_calc_cap_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
+      eer_calc_cap_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
+      pthp_eer = pthp_eer_coeff_1 - (pthp_eer_coeff_2 * eer_calc_cap_btu_per_hr / 1000.0)
+      cop = eer_to_cop(pthp_eer, OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get)
       new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_eer.round(1)}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{pthp_eer.round(2)}")
     end
@@ -352,10 +353,11 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
       # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
       # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
-      capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
-      capacity_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
-      ptac_eer = ptac_eer_coeff_1 + (ptac_eer_coeff_2 * capacity_btu_per_hr / 1000.0)
-      cop = eer_to_cop(ptac_eer)
+      eer_calc_cap_btu_per_hr = capacity_btu_per_hr      
+      eer_calc_cap_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
+      eer_calc_cap_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
+      ptac_eer = ptac_eer_coeff_1 - (ptac_eer_coeff_2 * eer_calc_cap_btu_per_hr / 1000.0)
+      cop = eer_to_cop(ptac_eer, OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get)
       new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer.round(1)}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{ptac_eer}")
     end
