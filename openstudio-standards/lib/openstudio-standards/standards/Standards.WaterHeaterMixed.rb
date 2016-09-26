@@ -146,6 +146,12 @@ class OpenStudio::Model::WaterHeaterMixed
     # self.setOffCycleParasiticFuelConsumptionRate(??)
     setOffCycleParasiticHeatFractiontoTank(0.8)
 
+    # set part-load performance curve
+    if template == 'NECB 2011' && fuel_type == 'NaturalGas'
+      plf_vs_plr_curve = model.add_curve('SWH-EFFFPLR-NECB2011')
+      setPartLoadFactorCurve(plf_vs_plr_curve)
+    end
+
     # Append the name with standards information
     setName("#{name} #{water_heater_eff.round(3)}Eff")
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{name}; efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr AKA #{ua_btu_per_hr_per_c.round(1)}W/K")
