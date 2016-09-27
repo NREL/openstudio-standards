@@ -1407,9 +1407,6 @@ class OpenStudio::Model::Model
   # Looks through the model and creates an hash of what the baseline
   # system type should be for each zone.
   #
-  # @note This method modifies the model by removing the existing
-  # HVAC and adding ideal loads in order to perform a sizing
-  # run to determine primary vs. secondary zones.
   # @return [Hash] keys are zones, values are system type strings
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
@@ -1424,21 +1421,6 @@ class OpenStudio::Model::Model
 
     # Remove all HVAC from model
     BTAP::Resources::HVAC.clear_all_hvac_from_model(self)
-
-    # Add ideal loads to every zone and run
-    # a sizing run to determine heating/cooling loads,
-    # which will impact which zones go onto secondary
-    # HVAC systems.
-    getThermalZones.each do |zone|
-      ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
-      ideal_loads.addToThermalZone(zone)
-    end
-    # Run sizing run
-    if runSizingRun("#{Dir.pwd}/SizingRunIdeal") == false
-      return false
-    end
-    # Remove ideal loads
-    getZoneHVACIdealLoadsAirSystems.each(&:remove)
 
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
