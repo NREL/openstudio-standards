@@ -813,9 +813,6 @@ class OpenStudio::Model::Model
       else
         thermostat_clone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostat_clone)
-        # Set Ideal loads to thermal zone for sizing.
-        ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
-        ideal_loads.addToThermalZone(zone)
       end
     end
 
