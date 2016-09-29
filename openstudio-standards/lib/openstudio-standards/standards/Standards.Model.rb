@@ -1419,9 +1419,6 @@ class OpenStudio::Model::Model
     # because it requires knowledge of proposed HVAC fuels.
     sys_groups = prm_baseline_system_groups(template, custom)
 
-    # Remove all HVAC from model
-    BTAP::Resources::HVAC.clear_all_hvac_from_model(self)
-
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
     assign_spaces_to_stories
@@ -1436,7 +1433,7 @@ class OpenStudio::Model::Model
                                                  sys_group['fuel'],
                                                  sys_group['area_ft2'],
                                                  sys_group['stories'],
-                                                 custom)
+                                                 custom)[0]
 
       # Record the zone-by-zone system type assignments
       case template
