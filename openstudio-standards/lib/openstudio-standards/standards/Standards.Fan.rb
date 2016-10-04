@@ -73,10 +73,10 @@ module Fan
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_m3_per_s = if to_FanZoneExhaust.empty?
-                              if autosizedMaximumFlowRate.is_initialized
-                                autosizedMaximumFlowRate.get
-                              else
+                              if maximumFlowRate.is_initialized
                                 maximumFlowRate.get
+                              else
+                                autosizedMaximumFlowRate.get
                               end
                             else
                               maximumFlowRate.get
