@@ -3098,7 +3098,11 @@ class OpenStudio::Model::Model
     climate_zone = ''
     getClimateZones.climateZones.each do |cz|
       if cz.institution == 'ASHRAE'
-        climate_zone = "ASHRAE 169-2006-#{cz.value}"
+        if cz.value == '7'||cz.value == '8'
+          climate_zone = "ASHRAE 169-2006-#{cz.value}A"
+        else
+          climate_zone = "ASHRAE 169-2006-#{cz.value}"
+        end
         next
       end
     end
