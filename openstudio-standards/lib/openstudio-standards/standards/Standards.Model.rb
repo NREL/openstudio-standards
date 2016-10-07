@@ -152,6 +152,14 @@ class OpenStudio::Model::Model
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
 
+    # Run a sizing run to calculate VLT for layer-by-layer windows.
+    # Only necessary for 90.1-2010 daylighting control determination.
+    if template == '90.1-2010'
+      if runSizingRun("#{sizing_run_dir}/SizingRunVLT") == false
+        return false
+      end
+    end
+
     # Add daylighting controls to each space
     getSpaces.sort.each do |space|
       added = space.add_daylighting_controls(template, false, false)
