@@ -12,7 +12,6 @@ class OpenStudio::Model::Model
 
   # Load the helper libraries for getting the autosized
   # values for each type of model object.
-<<<<<<< HEAD:openstudio-standards/lib/openstudio-standards/hvac_sizing/Siz.Model.rb
   require_relative 'Siz.AirTermSnglDuctParallelPIUReheat'
   require_relative 'Siz.AirTermSnglDuctVAVReheat'
   require_relative 'Siz.AirTermSnglDuctUncontrolled'
@@ -25,12 +24,15 @@ class OpenStudio::Model::Model
   require_relative 'Siz.CoilHeatingGas'
   require_relative 'Siz.CoilHeatingWater'
   require_relative 'Siz.CoilHeatingDXSingleSpeed'
+  require_relative 'Siz.CoilHeatingDXMultiSpeed'
   require_relative 'Siz.CoilHeatingWaterToAirHeatPumpEquationFit'
   require_relative 'Siz.CoilCoolingWaterToAirHeatPumpEquationFit'
   require_relative 'Siz.CoilCoolingDXSingleSpeed'
   require_relative 'Siz.CoilCoolingDXTwoSpeed'
   require_relative 'Siz.CoilCoolingWater'
   require_relative 'Siz.ControllerOutdoorAir'
+  require_relative 'Siz.DistrictHeating'
+  require_relative 'Siz.DistrictCooling'
   require_relative 'Siz.HeatExchangerAirToAirSensibleAndLatent'
   require_relative 'Siz.PlantLoop'
   require_relative 'Siz.PumpConstantSpeed'
@@ -38,58 +40,19 @@ class OpenStudio::Model::Model
   require_relative 'Siz.BoilerHotWater'
   require_relative 'Siz.ChillerElectricEIR'
   require_relative 'Siz.CoolingTowerSingleSpeed'
+  require_relative 'Siz.CoolingTowerTwoSpeed'
+  require_relative 'Siz.CoolingTowerVariableSpeed'
   require_relative 'Siz.ControllerWaterCoil'
   require_relative 'Siz.SizingSystem'
   require_relative 'Siz.ThermalZone'
-=======
-  require_relative 'HVACSizing.AirTerminalSingleDuctParallelPIUReheat'
-  require_relative 'HVACSizing.AirTerminalSingleDuctVAVReheat'
-  require_relative 'HVACSizing.AirTerminalSingleDuctUncontrolled'
-  require_relative 'HVACSizing.AirLoopHVAC'
-  require_relative 'HVACSizing.AirLoopHVACUnitaryHeatPumpAirToAir'
-  require_relative 'HVACSizing.FanConstantVolume'
-  require_relative 'HVACSizing.FanVariableVolume'
-  require_relative 'HVACSizing.FanOnOff'
-  require_relative 'HVACSizing.CoilHeatingElectric'
-  require_relative 'HVACSizing.CoilHeatingGas'
-  require_relative 'HVACSizing.CoilHeatingWater'
-  require_relative 'HVACSizing.CoilHeatingDXSingleSpeed'
-  require_relative 'HVACSizing.CoilHeatingWaterToAirHeatPumpEquationFit'
-  require_relative 'HVACSizing.CoilCoolingWaterToAirHeatPumpEquationFit'
-  require_relative 'HVACSizing.CoilCoolingDXSingleSpeed'
-  require_relative 'HVACSizing.CoilCoolingDXTwoSpeed'
-  require_relative 'HVACSizing.CoilCoolingWater'
-  require_relative 'HVACSizing.ControllerOutdoorAir'
-  require_relative 'HVACSizing.HeatExchangerAirToAirSensibleAndLatent'
-  require_relative 'HVACSizing.PlantLoop'
-  require_relative 'HVACSizing.PumpConstantSpeed'
-  require_relative 'HVACSizing.PumpVariableSpeed'
-  require_relative 'HVACSizing.BoilerHotWater'
-  require_relative 'HVACSizing.ChillerElectricEIR'
-  require_relative 'HVACSizing.CoolingTowerSingleSpeed'
-  require_relative 'HVACSizing.CoolingTowerTwoSpeed'
-  require_relative 'HVACSizing.CoolingTowerVariableSpeed'
-  require_relative 'HVACSizing.ControllerWaterCoil'
-  require_relative 'HVACSizing.SizingSystem'
-  require_relative 'HVACSizing.ThermalZone'
->>>>>>> origin/ecbc_baseline_automation:openstudio-standards/lib/openstudio-standards/hvac_sizing/HVACSizing.Model.rb
-
-  # Recently added and not fully tested
   require_relative 'Siz.ZoneHVACPackagedTerminalAirConditioner'
   require_relative 'Siz.ZoneHVACPackagedTerminalHeatPump'
   require_relative 'Siz.ZoneHVACTerminalUnitVariableRefrigerantFlow'
   require_relative 'Siz.AirConditionerVariableRefrigerantFlow'
   require_relative 'Siz.CoilCoolingDXVariableRefrigerantFlow'
   require_relative 'Siz.CoilHeatingDXVariableRefrigerantFlow'
-
-  # Methods not yet implemented
-  require_relative 'Siz.AirTermSnglDuctVAVReheat'
-  require_relative 'Siz.AirTermSnglDuctUncontrolled'
-  require_relative 'Siz.AirLoopHVAC'
-  require_relative 'Siz.AirLoopHVACUnitaryHeatPumpAirToAir'
-  require_relative 'Siz.FanConstantVolume'
-  require_relative 'Siz.FanVariableVolume'
-  require_relative 'Siz.FanOnOff'  
+  require_relative 'Siz.HeaderedPumpsConstantSpeed'
+  require_relative 'Siz.HeaderedPumpsVariableSpeed'
 
   # Heating and cooling fuel methods
   require_relative 'Siz.HeatingCoolingFuels'
@@ -98,11 +61,14 @@ class OpenStudio::Model::Model
   # autosizing back into the self.
   def runSizingRun(sizing_run_dir = "#{Dir.pwd}/SizingRun")
 
+
     # Change the simulation to only run the sizing days
     sim_control = self.getSimulationControl
     sim_control.setRunSimulationforSizingPeriods(true)
     sim_control.setRunSimulationforWeatherFileRunPeriods(false)
-    
+
+    #check that all zones have surfaces. 
+    raise ("Error: Sizing Run Failed. Thermal Zones with no surfaces exist.") unless self.do_all_zones_have_surfaces?
     # Run the sizing run
     success = self.run_simulation_and_log_errors(sizing_run_dir)
     
@@ -113,6 +79,89 @@ class OpenStudio::Model::Model
     return success
 
   end
+  
+  #Method to check if all zones have surfaces. This is required to run a simulation. 
+  def do_all_zones_have_surfaces?()
+    error_string = ""
+    error = false
+    #Check to see if all zones have surfaces. 
+    self.getThermalZones.each do |zone|
+      if  0 == BTAP::Geometry::Surfaces::get_surfaces_from_thermal_zones([zone]).size
+        error_string << "Error: Thermal zone #{zone.name} does not contain surfaces.\n"
+        error = true
+      end
+      if error == true
+        puts error_string
+        OpenStudio::logFree(OpenStudio::Error, 'openstudio.Siz.Model', error_string)
+        return false
+      else
+        return true
+      end
+    end
+  end
+  
+  # A helper method to run a sizing run and pull any values calculated during
+  # autosizing back into the self.
+  def runSpaceSizingRun(sizing_run_dir = "#{Dir.pwd}/SpaceSizingRun")
+    puts "*************Runing sizing space Run ***************************"
+    #Make copy of model
+    model = BTAP::FileIO::deep_copy(self, true)
+    space_load_array = []
+    
+    #Make sure the model is good to run. 
+    #1. Ensure External surfaces are set to a construction
+    ext_surfaces =  BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces, ["Outdoors",
+        "Ground",
+        "GroundFCfactorMethod",
+        "GroundSlabPreprocessorAverage",
+        "GroundSlabPreprocessorCore",
+        "GroundSlabPreprocessorPerimeter",
+        "GroundBasementPreprocessorAverageWall",
+        "GroundBasementPreprocessorAverageFloor",
+        "GroundBasementPreprocessorUpperWall",
+        "GroundBasementPreprocessorLowerWall"])
+    fail = false
+    ext_surfaces.each do |surface|
+      if surface.construction.nil?
+        OpenStudio::logFree(OpenStudio::Error,'openstudio.model.Model', "Ext Surface #{surface.name} does not have a construction.Cannot perform sizing.") 
+        fail = true
+      end
+    end
+    puts "#{ext_surfaces.size} External Surfaces counted."
+    raise ("Can't run sizing since envelope is not set.") if fail == true
+    
+    #remove any thermal zones. 
+    model.getThermalZones.each {|zone| zone.remove}
+    
+    #assign a zone to each space. 
+    # Create a thermal zone for each space in the self
+    model.getSpaces.each do |space|
+      zone = OpenStudio::Model::ThermalZone.new(self)
+      zone.setName("#{space.name} ZN")
+      space.setThermalZone(zone)
+    end
+    # Add a thermostat
+    BTAP::Compliance::NECB2011::set_zones_thermostat_schedule_based_on_space_type_schedules(model)
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
+    # Add ideal loads to every zone/space and run
+    # a sizing run to determine heating/cooling loads,
+    # which will impact HVAC systems.
+    model.getThermalZones.each do |zone|
+      ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+      ideal_loads.addToThermalZone(zone)
+    end
+    self.runSizingRun(sizing_run_dir)
+    model.getSpaces.each do |space|
+      if not space.thermalZone.empty?
+        space_load_array << {"space_name"=> space.name, "CoolingDesignLoad" => space.thermalZone.get.coolingDesignLoad, "HeatingDesignLoad" => space.thermalZone.get.heatingDesignLoad }
+      end
+    end
+    puts space_load_array
+    puts "*************Done Runing sizing space Run ***************************"
+    return model
+  end
+  
+  
 
   # Takes the values calculated by the EnergyPlus sizing routines
   # and puts them into all objects model in place of the autosized fields.
@@ -335,13 +384,13 @@ class OpenStudio::Model::Model
     name = object.name.get.upcase
 
     object_type = object.iddObject.type.valueDescription.gsub('OS:','')
-    if(object_type == 'Coil:Heating:Gas:MultiStage') then object_type = 'Coil:Heating:GasMultiStage' end
 
     # Special logic for two coil types which are inconsistently
     # uppercase in the sqlfile:
     object_type = object_type.upcase if object_type == 'Coil:Cooling:WaterToAirHeatPump:EquationFit'
     object_type = object_type.upcase if object_type == 'Coil:Heating:WaterToAirHeatPump:EquationFit'
-      
+		object_type = 'Coil:Heating:GasMultiStage' if object_type == 'Coil:Heating:Gas:MultiStage'
+
     sql = self.sqlFile
 
     if sql.is_initialized
@@ -459,7 +508,7 @@ class OpenStudio::Model::Model
     end
 
     # If a csv path is given, output
-    if !csv_path.nil?
+    if !csv_path.nil? && !table.first.nil?
       CSV.open(csv_path, "wb") do |csv|
         csv << table.first.keys # adds the attributes name on the first line
         table.each do |hash|

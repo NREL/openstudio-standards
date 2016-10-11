@@ -33,11 +33,37 @@ class OpenStudio::Model::ControllerOutdoorAir
   end
   
   # returns the autosized minimum outdoor air flow rate as an optional double
+  # EnergyPlus has a "bug" where if the system is a multizone system,
+  # the Minimum Outdoor Air Flow Rate reported in the Component Sizing
+  # summary does not include zone multipliers.
+  # @todo determine what to do when the airloop has multiple zones
+  # with different multipliers
   def autosizedMinimumOutdoorAirFlowRate
 
-    return self.model.getAutosizedValue(self, 'Minimum Outdoor Air Flow Rate', 'm3/s')
-    
+    oa = self.model.getAutosizedValue(self, 'Minimum Outdoor Air Flow Rate', 'm3/s')
+
+    # Get the airloop connected to this controller
+    if airLoopHVACOutdoorAirSystem.empty?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Siz.ControllerOutdoorAir', "#{name} is not connected to an airLoopHVACOutdoorAirSystem, cannot determine autosizedMinimumOutdoorAirFlowRate accuractely.")
+      return oa
+    end
+    oa_sys = airLoopHVACOutdoorAirSystem.get
+    if oa_sys.airLoop.empty?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Siz.ControllerOutdoorAir', "#{name}'s airLoopHVACOutdoorAirSystem is not assigned to an AirLoop, cannot determine autosizedMinimumOutdoorAirFlowRate accuractely.")
+      return oa
+    end
+    air_loop = oa_sys.airLoop.get
+
+    # If it is a multizone system, get the system multiplier
+    # to work around the bug in EnergyPlus.
+    if air_loop.multizone_vav_system?
+      if oa.is_initialized
+        oa_val = oa.get
+        oa_val *= air_loop.system_multiplier
+        oa = OpenStudio::OptionalDouble.new(oa_val)
+      end
+    end
+
+    return oa
   end
-  
-  
 end

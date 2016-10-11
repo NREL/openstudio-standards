@@ -1,20 +1,16 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
 class OpenStudio::Model::CoolingTowerVariableSpeed
-
   include CoolingTower
 
-  def setStandardEfficiencyAndCurves(standard)
-    
-    self.set_minimum_power_per_flow(standard)
+  def apply_efficiency_and_curves(template)
+    apply_minimum_power_per_flow(template)
 
     # 90.1-2013 6.5.2.2 Multicell heat rejection with VSD
-    if standard == '90.1-2013'
-      self.setCellControl('MaximalCell')
+    if template == '90.1-2013'
+      setCellControl('MaximalCell')
     end
 
     return true
-    
   end
-
 end

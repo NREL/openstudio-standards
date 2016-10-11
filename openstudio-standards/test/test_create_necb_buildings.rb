@@ -5,10 +5,10 @@ $LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FI
 
 #set global variables
 NECB_epw_files_for_cdn_climate_zones = [
-  'CAN_BC_Vancouver.718920_CWEC.epw',#  CZ 5 - Gas HDD = 3019 
-  'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
-  'CAN_PQ_Sherbrooke.716100_CWEC.epw', #CZ 7a - Electric HDD = 5068
-  'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
+#  'CAN_BC_Vancouver.718920_CWEC.epw',#  CZ 5 - Gas HDD = 3019 
+#  'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
+#  'CAN_PQ_Sherbrooke.716100_CWEC.epw', #CZ 7a - Electric HDD = 5068
+#  'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
   'CAN_NU_Resolute.719240_CWEC.epw' # CZ 8  -FuelOil2 HDD = 12570
 ] 
 NECB_climate_zone = ['NECB HDD Method']
@@ -17,9 +17,9 @@ CREATE_MODELS = true
 RUN_MODELS = false
 COMPARE_RESULTS = false
 DEBUG = false
-
-
-#FullServiceRestaurant
+#
+#
+##FullServiceRestaurant
 class TestNECBFullServiceRestaurant < CreateDOEPrototypeBuildingTest
   building_types = ['FullServiceRestaurant']
   templates = NECB_templates
@@ -231,8 +231,8 @@ end
 
 
 ##Developer tests
-#class TestNECBAllBuildings < CreateDOEPrototypeBuildingTest
-#  building_types = [
+class TestNECBAllBuildings < CreateDOEPrototypeBuildingTest
+  building_types = [
 #    'FullServiceRestaurant',
 #    'HighriseApartment',
 #    'LargeHotel',
@@ -248,11 +248,12 @@ end
 #    'SmallHotel',
 #    'SmallOffice',
 #    'RetailStripmall', 
-#    'Warehouse']
-#  
-#  templates = NECB_templates
-#  climate_zones = NECB_climate_zone
-#  epw_files = [
+#    'Warehouse'
+    ]
+  
+  templates = NECB_templates
+  climate_zones = NECB_climate_zone
+  epw_files = [
 #    'CAN_BC_Vancouver.718920_CWEC.epw',
 #    'CAN_BC_Victoria.717990_CWEC.epw',
 #    'CAN_BC_Abbotsford.711080_CWEC.epw',
@@ -332,11 +333,11 @@ end
 #    'CAN_MB_Churchill.719130_CWEC.epw',
 #    'CAN_NT_Inuvik.719570_CWEC.epw',
 #    'CAN_NU_Resolute.719240_CWEC.epw'
-#  ]
-#  create_models = CREATE_MODELS
-#  run_models = RUN_MODELS
-#  compare_results = COMPARE_RESULTS
-#  debug = DEBUG
-#  TestNECBAllBuildings.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
-#  # TestNECBAllBuildings.compare_test_results(building_types, templates, climate_zones, file_ext="")
-#end
+  ]
+  create_models = CREATE_MODELS
+  run_models = RUN_MODELS
+  compare_results = COMPARE_RESULTS
+  debug = DEBUG
+  TestNECBAllBuildings.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
+  # TestNECBAllBuildings.compare_test_results(building_types, templates, climate_zones, file_ext="")
+ end

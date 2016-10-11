@@ -145,7 +145,7 @@ class CreatePerformanceRatingMethodBaselineBuilding < OpenStudio::Ruleset::Model
       Dir.mkdir(osm_directory)
     end
 
-    success = model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug)
+    success = model.create_prm_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug)
 
     log_msgs(debug)
     return success

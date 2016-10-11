@@ -195,7 +195,7 @@ module BTAP
               thickness = 0.1 , 
               conductivity = 0.1 , 
               density = 0.1, 
-              specific_heat = 0.1, 
+              specific_heat = 100, 
               roughness = "Smooth", 
               thermal_absorptance = 0.9, 
               solar_absorptance = 0.7, 

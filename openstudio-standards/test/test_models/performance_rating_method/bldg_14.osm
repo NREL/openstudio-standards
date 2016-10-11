@@ -7698,7 +7698,7 @@ OS:StandardsInformation:Construction,
   {7b1b188f-b92e-4614-b45d-5452f6f0f53a}, !- Handle
   {8fae22d2-753f-49b2-a418-98a1331f48de}, !- Construction Name
   ExteriorWindow,                         !- Intended Surface Type
-  Metal framing (all other),              !- Standards Construction Type
+  ,                                       !- Standards Construction Type
   ,                                       !- Perturbable Layer
   ,                                       !- Perturbable Layer Type
   ,                                       !- Other Perturbable Layer Type
@@ -7707,7 +7707,7 @@ OS:StandardsInformation:Construction,
   ,                                       !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
-  ,                                       !- Fenestration Frame Type
+  Metal Framing,                          !- Fenestration Frame Type
   ,                                       !- Fenestration Divider Type
   ,                                       !- Fenestration Tint
   ;                                       !- Fenestration Gas Fill
@@ -7738,14 +7738,14 @@ OS:Construction,
 OS:StandardsInformation:Construction,
   {5ebabc0e-a8f4-4cb7-bc60-c1f545a2094a}, !- Handle
   {d2572ec8-a669-4859-8b2f-9b7731149e90}, !- Construction Name
-  ExteriorWindow,                         !- Intended Surface Type
-  Metal framing (all other),              !- Standards Construction Type
+  Skylight,                               !- Intended Surface Type
+  ,                                       !- Standards Construction Type
   ,                                       !- Perturbable Layer
   ,                                       !- Perturbable Layer Type
   ,                                       !- Other Perturbable Layer Type
   ASHRAE 90.1-2007,                       !- Construction Standard
   ,                                       !- Construction Standard Source
-  ,                                       !- Fenestration Type
+  Glass Skylight with Curb,               !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
   ,                                       !- Fenestration Frame Type
@@ -19181,7 +19181,7 @@ OS:StandardsInformation:Construction,
   {fa2e80be-94c1-411e-83a9-fa2708a7b995}, !- Handle
   {d0bb14c1-834a-4a8e-a090-6acb72828d78}, !- Construction Name
   ExteriorWindow,                         !- Intended Surface Type
-  Metal framing (all other),              !- Standards Construction Type
+  ,                                       !- Standards Construction Type
   ,                                       !- Perturbable Layer
   ,                                       !- Perturbable Layer Type
   ,                                       !- Other Perturbable Layer Type
@@ -19190,7 +19190,7 @@ OS:StandardsInformation:Construction,
   ,                                       !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
-  ,                                       !- Fenestration Frame Type
+  Metal Framing,                          !- Fenestration Frame Type
   ,                                       !- Fenestration Divider Type
   ,                                       !- Fenestration Tint
   ;                                       !- Fenestration Gas Fill
@@ -19215,14 +19215,14 @@ OS:Construction,
 OS:StandardsInformation:Construction,
   {68ac662f-05aa-48ce-8aef-0a8dc2866053}, !- Handle
   {4a39bd53-b589-4e55-bcab-0663a1316616}, !- Construction Name
-  ExteriorWindow,                         !- Intended Surface Type
-  Metal framing (all other),              !- Standards Construction Type
+  Skylight,                               !- Intended Surface Type
+  ,                                       !- Standards Construction Type
   ,                                       !- Perturbable Layer
   ,                                       !- Perturbable Layer Type
   ,                                       !- Other Perturbable Layer Type
   ASHRAE 90.1-2007,                       !- Construction Standard
   ,                                       !- Construction Standard Source
-  ,                                       !- Fenestration Type
+  Glass Skylight with Curb,               !- Fenestration Type
   ,                                       !- Fenestration Assembly Context
   ,                                       !- Fenestration Number of Panes
   ,                                       !- Fenestration Frame Type
