@@ -8,9 +8,11 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
     template = 'ECBC 2007'
     standard_building_type = 'LargeHotel'
     standard_space_type = 'GuestRoom'
-    intended_surface_type = 'ExteriorWall'
+    intended_surface_type = 'ExteriorRoof'
     standards_construction_type = 'Mass'
     test_climate_zone = 'ECBC Warm and Humid'
+    operation_type = '24 Hr'
+    building_category = 'Nonresidential'
 
     # make an empty model
     model = OpenStudio::Model::Model.new
@@ -24,14 +26,30 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
     climateZones = model.getClimateZones
     climateZones.setClimateZone("ECBC",test_climate_zone)
 
-    # lookup standards data for space type
-    data = space_type.get_construction_properties(template,operation_type,intended_surface_type,standards_construction_type)
+    # get climate_zone_set
+    # climate_zone = model.get_building_climate_zone_and_building_type['climate_zone']
+    # climate_zone_set = model.find_climate_zone_set(climate_zone, template)
+
+    # populate search hash
+    search_criteria = {
+      'template' => template,
+      'climate_zone_set' => test_climate_zone,
+      'intended_surface_type' => intended_surface_type,
+      'standards_construction_type' => standards_construction_type,
+      'operation_type' => operation_type,
+      'building_category' => building_category
+    }
+
+    # switch to use this but update test in standards and measures to load this outside of the method
+    data = model.find_object($os_standards['construction_properties'], search_criteria)
+
+    assert(!data.nil?, "Could not find data for #{search_criteria}")
 
     # gather specific internal load values for testing
     u_value = data['assembly_maximum_u_value']
 
     # check various internal loads. This has ip values
-    assert_in_delta(u_value.to_f, 0.077)
+    assert_in_delta(u_value.to_f, 0.08)
 
   end
 
