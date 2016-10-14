@@ -172,12 +172,22 @@ class OpenStudio::Model::Model
       if heating_coil.plantLoop.is_initialized
         fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
       end
+    when 'OS_Coil_Heating_LowTemperatureRadiant_ConstantFlow'
+      heating_coil = heating_coil.to_CoilHeatingLowTempRadiantConstFlow.get
+      if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end
+    when 'OS_Coil_Heating_LowTemperatureRadiant_VariableFlow'
+      heating_coil = heating_coil.to_CoilHeatingLowTempRadiantVarFlow.get
+      if heating_coil.plantLoop.is_initialized
+        fuels += self.plant_loop_heating_fuels(heating_coil.plantLoop.get)
+      end
     when 'OS_Coil_WaterHeating_AirToWaterHeatPump'
       fuels << 'Electricity'
     when 'OS_Coil_WaterHeating_Desuperheater'
       fuels << 'Electricity'
     else
-      #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
     end
 
     return fuels.uniq.sort 
@@ -219,12 +229,12 @@ class OpenStudio::Model::Model
       if cooling_coil.plantLoop.is_initialized
         fuels += self.plant_loop_cooling_fuels(cooling_coil.plantLoop.get)
       end
-    when 'OS_Coil_Cooling_LowTempRadiant_ConstFlow'
+    when 'OS_Coil_Cooling_LowTemperatureRadiant_ConstantFlow'
       cooling_coil = cooling_coil.to_CoilCoolingLowTempRadiantConstFlow.get
       if cooling_coil.plantLoop.is_initialized
         fuels += self.plant_loop_cooling_fuels(cooling_coil.plantLoop.get)
       end
-    when 'OS_Coil_Cooling_LowTempRadiant_VarFlow'
+    when 'OS_Coil_Cooling_LowTemperatureRadiant_VariableFlow'
       cooling_coil = cooling_coil.to_CoilCoolingLowTempRadiantVarFlow.get
       if cooling_coil.plantLoop.is_initialized
         fuels += self.plant_loop_cooling_fuels(cooling_coil.plantLoop.get)
@@ -235,7 +245,7 @@ class OpenStudio::Model::Model
         fuels += self.plant_loop_cooling_fuels(cooling_coil.plantLoop.get)
       end    
     else
-      #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No cooling fuel types found for #{obj_type}")
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No cooling fuel types found for #{obj_type}")
     end
 
     return fuels.uniq.sort
@@ -280,10 +290,10 @@ class OpenStudio::Model::Model
       when 'OS_ZoneHVAC_FourPipeFanCoil'
         equipment = equipment.to_ZoneHVACFourPipeFanCoil.get
         fuels += self.coil_heating_fuels(equipment.heatingCoil) 
-      when 'OS_ZoneHVAC_LowTempRadiant_ConstFlow'
+      when 'OS_ZoneHVAC_LowTemperatureRadiant_ConstantFlow'
         equipment = equipment.to_ZoneHVACLowTempRadiantConstFlow.get
         fuels += self.coil_heating_fuels(equipment.heatingCoil) 
-      when 'OS_ZoneHVAC_LowTempRadiant_VarFlow'
+      when 'OS_ZoneHVAC_LowTemperatureRadiant_VariableFlow'
         equipment = equipment.to_ZoneHVACLowTempRadiantVarFlow.get
         fuels += self.coil_heating_fuels(equipment.heatingCoil) 
       when 'OS_ZoneHVAC_UnitHeater'
@@ -317,7 +327,7 @@ class OpenStudio::Model::Model
         equipment = equipment.to_ZoneHVACWaterToAirHeatPump.get
         fuels += self.coil_heating_fuels(equipment.heatingCoil)
       else
-        #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
       end
     end
     
@@ -344,6 +354,12 @@ class OpenStudio::Model::Model
       when 'OS_ZoneHVAC_FourPipeFanCoil'
         equipment = equipment.to_ZoneHVACFourPipeFanCoil.get
         fuels += self.coil_cooling_fuels(equipment.coolingCoil)
+      when 'OS_ZoneHVAC_LowTemperatureRadiant_ConstantFlow'
+        equipment = equipment.to_ZoneHVACLowTempRadiantConstFlow.get
+        fuels += self.coil_cooling_fuels(equipment.coolingCoil)
+      when 'OS_ZoneHVAC_LowTemperatureRadiant_VariableFlow'
+        equipment = equipment.to_ZoneHVACLowTempRadiantVarFlow.get
+        fuels += self.coil_cooling_fuels(equipment.coolingCoil)
       when 'OS_Refrigeration_AirChiller'
         fuels << 'Electricity'
       when 'OS_ZoneHVAC_IdealLoadsAirSystem'
@@ -355,7 +371,7 @@ class OpenStudio::Model::Model
       when 'OS_ZoneHVAC_TerminalUnit_VariableRefrigerantFlow'
         fuels << 'Electricity'
       else
-        #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No cooling fuel types found for #{obj_type}")
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No cooling fuel types found for #{obj_type}")
       end
     end
 

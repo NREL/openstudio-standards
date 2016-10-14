@@ -266,6 +266,8 @@ class OpenStudio::Model::ThermalZone
     # Check the zone airloop heating fuels
     fuels += self.model.zone_airloop_heating_fuels(self)
 
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.model.Model', "For #{name}, heating fuels = #{fuels.uniq.sort.join(', ')}.")
+
     return fuels.uniq.sort
     
   end
@@ -288,6 +290,8 @@ class OpenStudio::Model::ThermalZone
 
     # Check the zone airloop cooling fuels
     fuels += self.model.zone_airloop_cooling_fuels(self)
+
+    OpenStudio::logFree(OpenStudio::Debug, 'openstudio.model.Model', "For #{name}, cooling fuels = #{fuels.uniq.sort.join(', ')}.")
 
     return fuels.uniq.sort
     

@@ -152,6 +152,14 @@ class OpenStudio::Model::Model
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
 
+    # Run a sizing run to calculate VLT for layer-by-layer windows.
+    # Only necessary for 90.1-2010 daylighting control determination.
+    if template == '90.1-2010'
+      if runSizingRun("#{sizing_run_dir}/SizingRunVLT") == false
+        return false
+      end
+    end
+
     # Add daylighting controls to each space
     getSpaces.sort.each do |space|
       added = space.add_daylighting_controls(template, false, false)
@@ -454,6 +462,12 @@ class OpenStudio::Model::Model
     # fossilandelectric
     zones = zones_with_occ_and_fuel_type(template, custom)
 
+    # Ensure that there is at least one conditioned zone
+    if zones.size.zero?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.")
+      return []
+    end
+
     # Group the zones by occupancy type
     type_to_area = Hash.new { 0.0 }
     zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
@@ -525,12 +539,19 @@ class OpenStudio::Model::Model
           fuel_to_area[fuel] += zn['area']
         end
       end
-      dom_fuel = fuel_to_area.sort_by { |k, v| v }.reverse[0][0]
+
+      sorted_by_area = fuel_to_area.sort_by { |k, v| v }.reverse
+      dom_fuel = sorted_by_area[0][0]
 
       # Don't allow unconditioned to be the dominant fuel,
       # go to the next biggest
       if dom_fuel == 'unconditioned'
-        dom_fuel = fuel_to_area.sort_by { |k, v| v }.reverse[1][0]
+        if sorted_by_area.size > 1
+          dom_fuel = sorted_by_area[1][0]
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "The fuel type was not able to be determined for any zones in this model.  Run with debug messages enabled to see possible reasons.")
+          return []
+        end
       end
 
       # Get the dominant fuel type group

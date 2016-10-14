@@ -100,6 +100,16 @@ class OpenStudio::Model::Model
       getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
     end
 
+    # For some building types, stories are defined explicitly 
+    if building_type == 'SmallHotel'
+      building_story_map = define_building_story_map(building_type, template, climate_zone)
+      assign_building_story(building_type, template, climate_zone, building_story_map)
+    end
+
+    # Assign building stories to spaces in the building
+    # where stories are not yet assigned.
+    assign_spaces_to_stories
+
     # Perform a sizing run
     if runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
