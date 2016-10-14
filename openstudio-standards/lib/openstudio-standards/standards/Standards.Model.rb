@@ -65,6 +65,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.FanOnOff'
   require_relative 'Standards.FanZoneExhaust'
   require_relative 'Standards.ChillerElectricEIR'
+  require_relative 'Standards.CoilDX'
   require_relative 'Standards.CoilCoolingDXTwoSpeed'
   require_relative 'Standards.CoilCoolingDXSingleSpeed'
   require_relative 'Standards.CoilHeatingDXSingleSpeed'
@@ -1988,7 +1989,7 @@ class OpenStudio::Model::Model
 
     # Unitary ACs
 
-    getCoilCoolingDXTwoSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(template) }
+    getCoilCoolingDXTwoSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
     getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
 
     # Unitary HPs
