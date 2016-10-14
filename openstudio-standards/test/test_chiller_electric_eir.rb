@@ -4,25 +4,27 @@ class TestChillerElectricEir < Minitest::Test
 
   def test_chiller_electric_eir
 
-    # get method inputs
     template = '90.1-2013'
-    standards = 'TBD' #not sure what I'm looking for here
 
-    # make an empty model
+    # make a model
     model = OpenStudio::Model::Model.new
-
-    # make ruleset schedule
+    
+    # add a 75 ton air cooled chiller
     chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
     target_cap_tons = 75
     target_cap_watts = OpenStudio.convert(target_cap_tons,"ton","W").get
     chiller.setReferenceCapacity(target_cap_watts)
-    puts chiller
+    chiller.setName("#{target_cap_tons} ton WithoutCondenser Chiller")
 
     # run standard_minimum_cop
-    min_full_load_eff = chiller.standard_minimum_full_load_efficiency(template, standards)
+    min_full_load_cop = chiller.standard_minimum_full_load_efficiency(template)
 
-    # todo - check that it returns the correct value
-    assert(min_full_load_eff > 0.0)
+    # Minimum kW/ton = 1.188
+    correct_kw_per_ton = 1.188
+    correct_min_cop = kw_per_ton_to_cop(correct_kw_per_ton)
+
+    # Check the lookup against the truth
+    assert_in_delta(min_full_load_cop, correct_min_cop, 0.1, "Expected #{correct_kw_per_ton} kW/ton AKA #{correct_min_cop.round(2)} COP.  Got #{min_full_load_cop} COP instead.")
 
   end
 
