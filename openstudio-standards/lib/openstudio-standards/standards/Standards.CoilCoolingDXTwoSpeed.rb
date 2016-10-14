@@ -14,8 +14,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
       capacity_w = autosizedRatedHighSpeedTotalCoolingCapacity.get
     else
       OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return 0.0
     end
 
     return capacity_w
@@ -108,7 +107,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
     successfully_set_all_properties = true
 
     # Get the search criteria
-    search_criteria = find_search_criteria
+    search_criteria = find_search_criteria(template)
 
     # Get the capacity
     capacity_w = find_capacity
@@ -127,7 +126,7 @@ class OpenStudio::Model::CoilCoolingDXTwoSpeed
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find efficiency info, cannot apply efficiency standard.")
       successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return sql_db_vars_map
     end
 
     # Make the total COOL-CAP-FT curve

@@ -21,8 +21,8 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
           clg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.coolingCoil
         elsif containing_comp.to_AirLoopHVACUnitarySystem.is_initialized
           unitary = containing_comp.to_AirLoopHVACUnitarySystem.get
-          if containing_comp.coolingCoil.is_initialized
-            clg_coil = containing_comp.coolingCoil
+          if unitary.coolingCoil.is_initialized
+            clg_coil = unitary.coolingCoil.get
           end
         end # TODO: Add other unitary systems
       elsif containingZoneHVACComponent.is_initialized
@@ -60,9 +60,8 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
       elsif autosizedRatedTotalHeatingCapacity.is_initialized
         capacity_w = autosizedRatedTotalHeatingCapacity.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{name} capacity is not available, cannot apply efficiency standard.")
-        successfully_set_all_properties = false
-        return successfully_set_all_properties
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{name} capacity is not available, cannot apply efficiency standard to paired DX heating coil.")
+        return 0.0
       end
       return capacity_w
     end
@@ -90,7 +89,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
           if mult > 1
             total_cap = capacity_w
             capacity_w /= mult
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
           end
         end
       end
@@ -112,6 +111,9 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
+    # Get the minimum efficiency standards
+    cop = nil
+
     # find object
     ac_props = model.find_object($os_standards['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
 
@@ -120,9 +122,6 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{name}, cannot find efficiency info, cannot apply efficiency standard.")
       return cop # value of nil
     end
-
-    # Get the minimum efficiency standards
-    cop = nil
 
     # If PTHP, use equations
     if sub_category == 'PTHP'
@@ -177,7 +176,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     successfully_set_all_properties = true
 
     # Get the search criteria
-    search_criteria = find_search_criteria
+    search_criteria = find_search_criteria(template)
 
     # Get the capacity
     capacity_w = find_capacity
@@ -191,7 +190,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{name}, cannot find efficiency info, cannot apply efficiency standard.")
       successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return sql_db_vars_map
     end
 
     # Make the HEAT-CAP-FT curve

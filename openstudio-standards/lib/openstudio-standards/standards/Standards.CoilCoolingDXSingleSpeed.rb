@@ -14,8 +14,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       capacity_w = autosizedRatedTotalCoolingCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return 0.0
     end
 
     # If it's a PTAC or PTHP System, we need to divide the capacity by the potential zone multiplier
@@ -156,7 +155,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     successfully_set_all_properties = true
 
     # Get the search criteria
-    search_criteria = find_search_criteria
+    search_criteria = find_search_criteria(template)
 
     # Get the capacity
     capacity_w = find_capacity
@@ -175,7 +174,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{name}, cannot find efficiency info, cannot apply efficiency standard.")
       successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return sql_db_vars_map
     end
 
     # Make the COOL-CAP-FT curve

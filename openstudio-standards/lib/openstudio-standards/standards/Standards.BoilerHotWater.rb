@@ -119,7 +119,9 @@ class OpenStudio::Model::BoilerHotWater
 
     # Define the criteria to find the boiler properties
     # in the hvac standards data set.
-    search_criteria = find_search_criteria
+    search_criteria = find_search_criteria(template)
+    fuel_type = search_criteria['fuel_type']
+    fluid_type = search_criteria['fluid_type']
 
     # Get the capacity
     capacity_w = find_capacity

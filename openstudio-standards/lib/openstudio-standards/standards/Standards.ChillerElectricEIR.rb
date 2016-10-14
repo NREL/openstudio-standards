@@ -101,13 +101,13 @@ class OpenStudio::Model::ChillerElectricEIR
   # @return [Bool] true if successful, false if not
   def apply_efficiency_and_curves(template, clg_tower_objs)
     chillers = $os_standards['chillers']
-    curve_biquadratics = $os_standards['curve_biquadratics']
-    curve_quadratics = $os_standards['curve_quadratics']
-    curve_bicubics = $os_standards['curve_bicubics']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
-    search_criteria = find_search_criteria
+    search_criteria = find_search_criteria(template)
+    cooling_type = search_criteria['cooling_type']
+    condenser_type = search_criteria['condenser_type']
+    compressor_type = search_criteria['compressor_type']
 
     # Get the chiller capacity
     capacity_w = find_capacity
