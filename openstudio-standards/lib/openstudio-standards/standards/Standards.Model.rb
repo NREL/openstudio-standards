@@ -65,6 +65,7 @@ class OpenStudio::Model::Model
   require_relative 'Standards.FanOnOff'
   require_relative 'Standards.FanZoneExhaust'
   require_relative 'Standards.ChillerElectricEIR'
+  require_relative 'Standards.CoilDX'
   require_relative 'Standards.CoilCoolingDXTwoSpeed'
   require_relative 'Standards.CoilCoolingDXSingleSpeed'
   require_relative 'Standards.CoilHeatingDXSingleSpeed'
@@ -1440,9 +1441,6 @@ class OpenStudio::Model::Model
     # because it requires knowledge of proposed HVAC fuels.
     sys_groups = prm_baseline_system_groups(template, custom)
 
-    # Remove all HVAC from model
-    BTAP::Resources::HVAC.clear_all_hvac_from_model(self)
-
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
     assign_spaces_to_stories
@@ -1457,7 +1455,7 @@ class OpenStudio::Model::Model
                                                  sys_group['fuel'],
                                                  sys_group['area_ft2'],
                                                  sys_group['stories'],
-                                                 custom)
+                                                 custom)[0]
 
       # Record the zone-by-zone system type assignments
       case template
@@ -2010,13 +2008,15 @@ class OpenStudio::Model::Model
     getHeaderedPumpsConstantSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template) }
     getHeaderedPumpsVariableSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template) }
 
-    # Unitary ACs
-
-    getCoilCoolingDXTwoSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(template) }
-    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
-
     # Unitary HPs
+    # set DX HP coils before DX clg coils because when DX HP coils need to first
+    # pull the capacities of their paried DX clg coils, and this does not work
+    # correctly if the DX clg coil efficiencies have been set because they are renamed.
     getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
+
+    # Unitary ACs
+    getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
+    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
 
     # Chillers
     clg_tower_objs = getCoolingTowerSingleSpeeds
@@ -3122,7 +3122,11 @@ class OpenStudio::Model::Model
     climate_zone = ''
     getClimateZones.climateZones.each do |cz|
       if cz.institution == 'ASHRAE'
-        climate_zone = "ASHRAE 169-2006-#{cz.value}"
+        if cz.value == '7'||cz.value == '8'
+          climate_zone = "ASHRAE 169-2006-#{cz.value}A"
+        else
+          climate_zone = "ASHRAE 169-2006-#{cz.value}"
+        end
         next
       end
     end

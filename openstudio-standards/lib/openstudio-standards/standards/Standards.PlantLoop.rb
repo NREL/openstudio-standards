@@ -1286,7 +1286,7 @@ class OpenStudio::Model::PlantLoop
         # Check the plant loop connection on the source side
         if component.secondaryPlantLoop.is_initialized
           source_plant_loop = component.secondaryPlantLoop.get
-          secondary_fuels += plant_loop_heating_fuels(source_plant_loop)
+          secondary_fuels += model.plant_loop_heating_fuels(source_plant_loop)
           secondary_heating_capacity += source_plant_loop.total_heating_capacity
         end
 
@@ -1308,7 +1308,7 @@ class OpenStudio::Model::PlantLoop
         # Check the plant loop connection on the source side
         if component.secondaryPlantLoop.is_initialized
           source_plant_loop = component.secondaryPlantLoop.get
-          secondary_fuels += plant_loop_heating_fuels(source_plant_loop)
+          secondary_fuels += model.plant_loop_heating_fuels(source_plant_loop)
           secondary_heating_capacity += source_plant_loop.total_heating_capacity
         end
 
@@ -1323,7 +1323,7 @@ class OpenStudio::Model::PlantLoop
         cooling_hx_control_types.each {|x| x.downcase!}
         if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
           source_plant_loop = hx.secondaryPlantLoop.get
-          secondary_fuels += plant_loop_heating_fuels(source_plant_loop)
+          secondary_fuels += model.plant_loop_heating_fuels(source_plant_loop)
           secondary_heating_capacity += source_plant_loop.total_heating_capacity
         end
 

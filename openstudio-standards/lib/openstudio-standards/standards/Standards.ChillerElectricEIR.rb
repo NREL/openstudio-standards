@@ -6,11 +6,17 @@ class OpenStudio::Model::ChillerElectricEIR
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [hash] has for search criteria to be used for find object
   def find_search_criteria(template)
-    # Define the criteria to find the chiller properties
-    # in the hvac standards data set.
     search_criteria = {}
     search_criteria['template'] = template
-    cooling_type = condenserType
+
+    # Determine if WaterCooled or AirCooled by
+    # checking if the chiller is connected to a condenser
+    # water loop or not.
+    cooling_type = 'AirCooled'
+    if secondaryPlantLoop.is_initialized
+      cooling_type = 'WaterCooled'
+    end
+
     search_criteria['cooling_type'] = cooling_type
 
     # TODO: Standards replace this with a mechanism to store this
@@ -19,13 +25,13 @@ class OpenStudio::Model::ChillerElectricEIR
     name = self.name.get
     condenser_type = nil
     compressor_type = nil
-    if name.include?('AirCooled')
+    if cooling_type == 'AirCooled'
       if name.include?('WithCondenser')
         condenser_type = 'WithCondenser'
       elsif name.include?('WithoutCondenser')
         condenser_type = 'WithoutCondenser'
       end
-    elsif name.include?('WaterCooled')
+    elsif cooling_type == 'WaterCooled'
       if name.include?('Reciprocating')
         compressor_type = 'Reciprocating'
       elsif name.include?('Rotary Screw')
@@ -46,11 +52,10 @@ class OpenStudio::Model::ChillerElectricEIR
     return search_criteria
   end
 
-  # Finds capacity in tons
+  # Finds capacity in W
   #
-  # @return [Double] capacity in tons to be used for find object
+  # @return [Double] capacity in W to be used for find object
   def find_capacity
-    # Get the chiller capacity
     capacity_w = nil
     if referenceCapacity.is_initialized
       capacity_w = referenceCapacity.get
@@ -62,9 +67,7 @@ class OpenStudio::Model::ChillerElectricEIR
       return successfully_set_all_properties
     end
 
-    capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
-
-    return capacity_tons
+    return capacity_w
   end
 
   # Finds lookup object in standards and return full load efficiency
@@ -72,11 +75,11 @@ class OpenStudio::Model::ChillerElectricEIR
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Double] full load efficiency (COP)
-  def standard_minimum_full_load_efficiency(template, standards)
+  def standard_minimum_full_load_efficiency(template)
     # Get the chiller properties
     search_criteria = find_search_criteria(template)
-    capacity_tons = find_capacity
-    chlr_props = model.find_object(standards['chillers'], search_criteria, capacity_tons, Date.today)
+    capacity_tons = OpenStudio.convert(find_capacity, 'W', 'ton').get 
+    chlr_props = model.find_object($os_standards['chillers'], search_criteria, capacity_tons, Date.today)
 
     # lookup the efficiency value
     kw_per_ton = nil
@@ -98,58 +101,16 @@ class OpenStudio::Model::ChillerElectricEIR
   # @return [Bool] true if successful, false if not
   def apply_efficiency_and_curves(template, clg_tower_objs)
     chillers = $os_standards['chillers']
-    curve_biquadratics = $os_standards['curve_biquadratics']
-    curve_quadratics = $os_standards['curve_quadratics']
-    curve_bicubics = $os_standards['curve_bicubics']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
-    search_criteria = {}
-    search_criteria['template'] = template
-    cooling_type = condenserType
-    search_criteria['cooling_type'] = cooling_type
-
-    # TODO: Standards replace this with a mechanism to store this
-    # data in the chiller object itself.
-    # For now, retrieve the condenser type from the name
-    name = self.name.get
-    condenser_type = nil
-    compressor_type = nil
-    if name.include?('AirCooled')
-      if name.include?('WithCondenser')
-        condenser_type = 'WithCondenser'
-      elsif name.include?('WithoutCondenser')
-        condenser_type = 'WithoutCondenser'
-      end
-    elsif name.include?('WaterCooled')
-      if name.include?('Reciprocating')
-        compressor_type = 'Reciprocating'
-      elsif name.include?('Rotary Screw')
-        compressor_type = 'Rotary Screw'
-      elsif name.include?('Scroll')
-        compressor_type = 'Scroll'
-      elsif name.include?('Centrifugal')
-        compressor_type = 'Centrifugal'
-      end
-    end
-    unless condenser_type.nil?
-      search_criteria['condenser_type'] = condenser_type
-    end
-    unless compressor_type.nil?
-      search_criteria['compressor_type'] = compressor_type
-    end
+    search_criteria = find_search_criteria(template)
+    cooling_type = search_criteria['cooling_type']
+    condenser_type = search_criteria['condenser_type']
+    compressor_type = search_criteria['compressor_type']
 
     # Get the chiller capacity
-    capacity_w = nil
-    if referenceCapacity.is_initialized
-      capacity_w = referenceCapacity.get
-    elsif autosizedReferenceCapacity.is_initialized
-      capacity_w = autosizedReferenceCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
-    end
+    capacity_w = find_capacity
 
     # NECB 2011 requires that all chillers be modulating down to 25% of their capacity
     if template == 'NECB 2011'
