@@ -106,7 +106,10 @@ require 'rake/testtask'
 desc 'Run test group 7'
 Rake::TestTask.new('test:gem_group_7') do |task|
   task.test_files = FileList[
-  
+  'openstudio-standards/test/test_boiler_hot_water.rb',
+  'openstudio-standards/test/test_chiller_electric_eir.rb',
+  'openstudio-standards/test/test_coil_dx.rb',
+  'openstudio-standards/test/test_get_building_climate_zone_and_building_type.rb'
   ]
 end
 
