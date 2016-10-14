@@ -132,6 +132,19 @@ module CoilDX
       search_criteria['heating_type'] = heating_type
     end
 
+    # Unitary heat pumps don't have a heating type
+    # as part of the search
+    if heat_pump?
+      if airLoopHVAC.empty?
+        if containingHVACComponent.is_initialized
+          containing_comp = containingHVACComponent.get
+          if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+            search_criteria['heating_type'] = nil
+          end # TODO: Add other unitary systems
+        end
+      end
+    end
+
     return search_criteria
   end
 end
