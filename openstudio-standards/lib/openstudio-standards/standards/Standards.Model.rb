@@ -1987,13 +1987,15 @@ class OpenStudio::Model::Model
     getHeaderedPumpsConstantSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template) }
     getHeaderedPumpsVariableSpeeds.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template) }
 
-    # Unitary ACs
-
-    getCoilCoolingDXTwoSpeeds.sort.each { |obj| obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
-    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
-
     # Unitary HPs
+    # set DX HP coils before DX clg coils because when DX HP coils need to first
+    # pull the capacities of their paried DX clg coils, and this does not work
+    # correctly if the DX clg coil efficiencies have been set because they are renamed.
     getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
+
+    # Unitary ACs
+    getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
+    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = obj.apply_efficiency_and_curves(template, sql_db_vars_map) }
 
     # Chillers
     clg_tower_objs = getCoolingTowerSingleSpeeds
