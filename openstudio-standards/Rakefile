@@ -98,6 +98,8 @@ Rake::TestTask.new('test:necb-tests') do |task|
     'openstudio-standards/test/test_necb_unitary_rules.rb',
     'openstudio-standards/test/test_necb_hvac_systems.rb',
     'openstudio-standards/test/test_necb_weather.rb',
+    'openstudio-standards/test/test_necb_hrv_rules.rb',
+    'openstudio-standards/test/test_necb_waterheater_rules.rb',
   ]
 end
 
