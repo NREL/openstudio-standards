@@ -48,7 +48,7 @@ def create_ecbc_baseline_model(model_name, standard, climate_zone, building_type
     when 'ECBC Moderate'
       epw_name = 'IND_Bangalore.432950_ISHRAE.epw'
     when 'ECBC Cold'
-      epw_name = 'Andrew could not find a cold city with a weather file.epw'
+      epw_name = 'IND_Shillong.425160_ISHRAE.epw'
     else
       puts "No Weather file set, and CANNOT locate #{climate_zone}"
       return [false, ["No Weather file set, and CANNOT locate #{climate_zone}"]]
