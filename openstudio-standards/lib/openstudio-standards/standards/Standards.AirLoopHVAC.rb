@@ -342,6 +342,12 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Calculate and report the total area for debugging/testing
     floor_area_served_m2 = floor_area_served
+
+    if floor_area_served_m2 == 0
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{name}: area served = 0 ft^2.")
+      return allowable_fan_bhp
+    end
+
     floor_area_served_ft2 = OpenStudio.convert(floor_area_served_m2, 'm^2', 'ft^2').get
     cfm_per_ft2 = dsn_air_flow_cfm / floor_area_served_ft2
     cfm_per_hp = dsn_air_flow_cfm / allowable_fan_bhp
