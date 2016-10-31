@@ -88,7 +88,7 @@ class HVACEfficienciesTest < MiniTest::Test
     for int in 0..test_caps.size - 1
       output_line_text += "#{min_caps[int]},#{max_caps[int]},"
       if efficiency_type[int] == 'Energy Efficiency Ratio (EER)'
-        actual_heatpump_eff[int] = (cop_to_eer(actual_heatpump_cop[int].to_f) + 0.001).round(1)
+        actual_heatpump_eff[int] = (cop_to_eer(actual_heatpump_cop[int].to_f,test_caps[int]) + 0.001).round(1)
         output_line_text += "#{actual_heatpump_eff[int]}\n"
       end
     end

@@ -102,7 +102,6 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
   def apply_efficiency_and_curves(template, sql_db_vars_map)
     successfully_set_all_properties = true
 
-    unitary_hps = $os_standards['heat_pumps']
     heat_pumps = $os_standards['heat_pumps_heating']
 
     # Define the criteria to find the unitary properties
@@ -118,13 +117,13 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     search_criteria['cooling_type'] = 'AirCooled'
 
     # Determine supplemental heating type if unitary
-    unitary = false
+    heat_pump = false
     suppl_heating_type = nil
     if airLoopHVAC.empty?
       if containingHVACComponent.is_initialized
         containing_comp = containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
-          unitary = true
+          heat_pump = true
           htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil
           suppl_heating_type = if htg_coil.to_CoilHeatingElectric.is_initialized
                                  'Electric Resistance or None'
@@ -180,7 +179,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
 
     # Get the coil capacity
     capacity_w = nil
-    if unitary
+    if heat_pump
       containing_comp = containingHVACComponent.get
       heat_pump_comp = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
       ccoil = heat_pump_comp.coolingCoil
@@ -219,11 +218,7 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
 
     # Lookup efficiencies depending on whether it is a unitary HP or a heat pump
     ac_props = nil
-    ac_props = if unitary == true
-                 model.find_object(unitary_hps, search_criteria, capacity_btu_per_hr)
-               else
-                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
-               end
+    ac_props = model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
 
     # Check to make sure properties were found
     if ac_props.nil?
