@@ -106,7 +106,7 @@ class HVACEfficienciesTest < MiniTest::Test
           actual_unitary_eff[heating_type][int] = (cop_to_seer(actual_unitary_cop[heating_type][int].to_f) + 0.001).round(2)
           output_line_text += "#{actual_unitary_eff[heating_type][int]},\n"
         elsif efficiency_type[heating_type][int] == 'Energy Efficiency Ratio (EER)'
-          actual_unitary_eff[heating_type][int] = (cop_to_eer(actual_unitary_cop[heating_type][int].to_f) + 0.001).round(2)
+          actual_unitary_eff[heating_type][int] = (cop_to_eer(actual_unitary_cop[heating_type][int].to_f,heating_type_cap[heating_type][int]) + 0.001).round(2)
           output_line_text += ",#{actual_unitary_eff[heating_type][int]}\n"
         end
       end
