@@ -34856,14 +34856,14 @@ OS:Pump:VariableSpeed,
   {f157992b-cd53-4c75-9161-1d2e0ed4ccb4}, !- Inlet Node Name
   {6542976b-0380-4e5f-ad0d-b78703ea280d}, !- Outlet Node Name
   ,                                       !- Rated Flow Rate {m3/s}
-  ,                                       !- Rated Pump Head {Pa}
+  179344.0152,                                       !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  ,                                       !- Motor Efficiency
+  0.9,                                       !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
-  ,                                       !- Coefficient 1 of the Part Load Performance Curve
-  ,                                       !- Coefficient 2 of the Part Load Performance Curve
-  ,                                       !- Coefficient 3 of the Part Load Performance Curve
-  ,                                       !- Coefficient 4 of the Part Load Performance Curve
+  0,                                       !- Coefficient 1 of the Part Load Performance Curve
+  3.2485,                                       !- Coefficient 2 of the Part Load Performance Curve
+  -4.7443,                                       !- Coefficient 3 of the Part Load Performance Curve
+  2.5294,                                       !- Coefficient 4 of the Part Load Performance Curve
   ,                                       !- Minimum Flow Rate {m3/s}
   Intermittent;                           !- Pump Control Type
 
@@ -35338,14 +35338,14 @@ OS:Pump:VariableSpeed,
   {4ec6085a-3232-4fc5-b998-4ac57bf46d99}, !- Inlet Node Name
   {8a02c5bc-c591-4431-8535-8f716c794196}, !- Outlet Node Name
   ,                                       !- Rated Flow Rate {m3/s}
-  ,                                       !- Rated Pump Head {Pa}
+  179344.0152,                                       !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  ,                                       !- Motor Efficiency
+  0.9,                                       !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
-  ,                                       !- Coefficient 1 of the Part Load Performance Curve
-  ,                                       !- Coefficient 2 of the Part Load Performance Curve
-  ,                                       !- Coefficient 3 of the Part Load Performance Curve
-  ,                                       !- Coefficient 4 of the Part Load Performance Curve
+  0,                                       !- Coefficient 1 of the Part Load Performance Curve
+  3.2485,                                       !- Coefficient 2 of the Part Load Performance Curve
+  -4.7443,                                       !- Coefficient 3 of the Part Load Performance Curve
+  2.5294,                                       !- Coefficient 4 of the Part Load Performance Curve
   ,                                       !- Minimum Flow Rate {m3/s}
   Intermittent;                           !- Pump Control Type
 

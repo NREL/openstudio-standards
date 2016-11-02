@@ -100,6 +100,16 @@ class OpenStudio::Model::Model
       getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
     end
 
+    # For some building types, stories are defined explicitly 
+    if building_type == 'SmallHotel'
+      building_story_map = define_building_story_map(building_type, template, climate_zone)
+      assign_building_story(building_type, template, climate_zone, building_story_map)
+    end
+
+    # Assign building stories to spaces in the building
+    # where stories are not yet assigned.
+    assign_spaces_to_stories
+
     # Perform a sizing run
     if runSizingRun("#{sizing_run_dir}/SizingRun1") == false
       return false
@@ -244,8 +254,7 @@ class OpenStudio::Model::Model
       return false
     end
 
-    lib_dir = File.expand_path('../../..', File.dirname(__FILE__))
-    require "#{lib_dir}/lib/openstudio-standards/prototypes/#{building_methods}"
+    require_relative "#{building_methods}"
 
     return true
   end
@@ -369,8 +378,7 @@ class OpenStudio::Model::Model
     end
 
     # Load the geometry .osm
-    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-    geom_dir = "#{top_dir}/data/geometry"
+    geom_dir = "../../../data/geometry"
     replace_model("#{geom_dir}/#{geometry_file}")
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
@@ -382,21 +390,42 @@ class OpenStudio::Model::Model
   # with the objects in the .osm.  Typically used to
   # load a model as a starting point.
   #
-  # @param path_to_osm [String] the path to a .osm file.
+  # @param rel_path_to_osm [String] the path to an .osm file, relative to this file
   # @return [Bool] returns true if successful, false if not
-  def replace_model(path_to_osm)
+  def replace_model(rel_path_to_osm)
     # Take the existing model and remove all the objects
     # (this is cheesy), but need to keep the same memory block
     handles = OpenStudio::UUIDVector.new
     objects.each { |o| handles << o.handle }
     removeObjects(handles)
 
-    # Load geometry from the saved geometry.osm
-    geom_model = safe_load_model(path_to_osm)
+    model = nil
+    if File.dirname(__FILE__)[0] == ':'
+      # running from embedded location
+    
+      # Load geometry from the saved geometry.osm
+      geom_model_string = load_resource_relative(rel_path_to_osm)
+    
+      # version translate from string
+      version_translator = OpenStudio::OSVersion::VersionTranslator.new
+      model = version_translator.loadModelFromString(geom_model_string)
+    else
+      abs_path = File.join(File.dirname(__FILE__), rel_path_to_osm)
+      
+      # version translate from string
+      version_translator = OpenStudio::OSVersion::VersionTranslator.new
+      model = version_translator.loadModel(abs_path)
+    end
+    
+    if model.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{rel_path_to_osm}")
+      return false
+    end
+    model = model.get
 
     # Add the objects from the geometry model to the working model
-    addObjects(geom_model.toIdfFile.objects)
-
+    addObjects(model.toIdfFile.objects)
+   
     return true
   end
 
@@ -794,9 +823,6 @@ class OpenStudio::Model::Model
       else
         thermostat_clone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostat_clone)
-        # Set Ideal loads to thermal zone for sizing.
-        ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
-        ideal_loads.addToThermalZone(zone)
       end
     end
 

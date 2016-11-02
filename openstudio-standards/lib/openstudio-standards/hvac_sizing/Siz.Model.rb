@@ -31,6 +31,8 @@ class OpenStudio::Model::Model
   require_relative 'Siz.CoilCoolingDXTwoSpeed'
   require_relative 'Siz.CoilCoolingWater'
   require_relative 'Siz.ControllerOutdoorAir'
+  require_relative 'Siz.DistrictHeating'
+  require_relative 'Siz.DistrictCooling'
   require_relative 'Siz.HeatExchangerAirToAirSensibleAndLatent'
   require_relative 'Siz.PlantLoop'
   require_relative 'Siz.PumpConstantSpeed'
@@ -49,6 +51,8 @@ class OpenStudio::Model::Model
   require_relative 'Siz.AirConditionerVariableRefrigerantFlow'
   require_relative 'Siz.CoilCoolingDXVariableRefrigerantFlow'
   require_relative 'Siz.CoilHeatingDXVariableRefrigerantFlow'
+  require_relative 'Siz.HeaderedPumpsConstantSpeed'
+  require_relative 'Siz.HeaderedPumpsVariableSpeed'
 
   # Heating and cooling fuel methods
   require_relative 'Siz.HeatingCoolingFuels'

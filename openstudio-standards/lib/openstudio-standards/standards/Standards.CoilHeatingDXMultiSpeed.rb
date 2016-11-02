@@ -1,10 +1,12 @@
 
 # open the class to add methods to return sizing values
 class OpenStudio::Model::CoilHeatingDXMultiSpeed
-  def apply_efficiency_and_curves(template, standards, sql_db_vars_map)
+  # Applies the standard efficiency ratings and typical performance curves to this object.
+  #
+  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+  # @return [Bool] true if successful, false if not
+  def apply_efficiency_and_curves(template, sql_db_vars_map)
     successfully_set_all_properties = true
-
-    heat_pumps = standards['heat_pumps_heating']
 
     # Define the criteria to find the unitary properties
     # in the hvac standards data set.
@@ -65,7 +67,7 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
     capacity_kbtu_per_hr = OpenStudio.convert(clg_capacity, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
-    hp_props = model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
+    hp_props = model.find_object($os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if hp_props.nil?

@@ -10,7 +10,8 @@ class OpenStudio::Model::Model
     # Save the model to energyplus idf
     idf_name = 'in.idf'
     osm_name = 'in.osm'
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Starting simulation here: #{run_dir}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "Starting simulation here: #{run_dir}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Running simulation #{run_dir}.")
     forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
     idf = forward_translator.translateModel(self)
     idf_path = OpenStudio::Path.new("#{run_dir}/#{idf_name}")
@@ -43,7 +44,7 @@ class OpenStudio::Model::Model
 
     sql_path = nil
     if use_runmanager
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Running with RunManager.')
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Running with RunManager.')
 
       # Find EnergyPlus
       ep_dir = OpenStudio.getEnergyPlusDirectory
@@ -76,14 +77,14 @@ class OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
 
     elsif OpenStudio::Workflow::VERSION >= '1.0.0' # Use the OS 2.0 openstudio-workflow gem
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Running with OS 2.0 openstudio-workflow gem.')
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Running with OS 2.0 openstudio-workflow gem.')
 
       # Write OSW file for the simulation
-      require 'JSON'
+      require 'json'
       osw_dir = File.dirname(osm_path.to_s)
       osw_hash = {
-        run_dir: File.join(osw_dir, 'run'),
-        seed_model: File.absolute_path(osm_path.to_s),
+        run_directory: File.join(osw_dir, 'run'),
+        seed_file: File.absolute_path(osm_path.to_s),
         weather_file: File.absolute_path(epw_path.to_s),
         steps: []
       }
@@ -92,6 +93,7 @@ class OpenStudio::Model::Model
 
       # Run workflow.osw
       run_options = {}
+      #run_options[:debug] = true
 
       # jobs for running IDF
       # run_options[:jobs] = [
@@ -156,7 +158,7 @@ class OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished simulation.')
 
     else # Use the pre OS 2.0 openstudio-workflow gem
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Running with pre OS 2.0 openstudio-workflow gem.')
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Running with pre OS 2.0 openstudio-workflow gem.')
 
       # Copy the weather file to this directory
       FileUtils.copy(epw_path.to_s, run_dir)

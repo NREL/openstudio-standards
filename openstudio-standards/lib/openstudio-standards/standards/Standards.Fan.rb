@@ -59,7 +59,7 @@ module Fan
     # Calculate the new power
     new_power_w = fan_power
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{name}: pressure rise = #{new_pressure_rise_in_h2o.round(1)} in w.c., power = #{new_power_w.round} W // #{motor_horsepower.round(2)}HP.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{name}: pressure rise = #{new_pressure_rise_in_h2o.round(1)} in w.c., power = #{motor_horsepower.round(2)}HP.")
 
     return true
   end
@@ -307,10 +307,16 @@ module Fan
     # Exhaust fan
     if to_FanZoneExhaust.is_initialized
       is_small = true
-    # Fan coil unit
+    # Fan coil unit, unit heater, PTAC, PTHP
     elsif containingZoneHVACComponent.is_initialized
       zone_hvac = containingZoneHVACComponent.get
       if zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
         is_small = true
       end
     # Powered VAV terminal

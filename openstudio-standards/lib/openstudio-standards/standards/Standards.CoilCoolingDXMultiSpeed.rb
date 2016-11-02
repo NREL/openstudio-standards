@@ -4,13 +4,9 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def apply_efficiency_and_curves(template, standards, sql_db_vars_map)
+  def apply_efficiency_and_curves(template, sql_db_vars_map)
     successfully_set_all_properties = true
-
-    unitary_acs = standards['unitary_acs']
-    heat_pumps = standards['heat_pumps']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -119,9 +115,9 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if heat_pump == true
-                 model.find_object(heat_pumps, search_criteria, capacity_btu_per_hr)
+                 model.find_object($os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model.find_object(unitary_acs, search_criteria, capacity_btu_per_hr)
+                 model.find_object($os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found

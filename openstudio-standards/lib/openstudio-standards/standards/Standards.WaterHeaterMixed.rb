@@ -58,16 +58,40 @@ class OpenStudio::Model::WaterHeaterMixed
           # Fixed water heater efficiency per PNNL
           water_heater_eff = 1
           # Calculate the minimum Energy Factor (EF)
-          ef = 0.97 - (0.00132 * volume_gal)
+          base_ef, vol_drt = case template
+                             when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+                               [0.93, 0.00132]
+                             when '90.1-2010'
+                               [0.97, 0.00132]
+                             when '90.1-2013'
+                               [0.97, 0.00035]
+                             end
+
+          ef = base_ef - (vol_drt * volume_gal)
           # Calculate the skin loss coefficient (UA)
           ua_btu_per_hr_per_f = (41_094 * (1 / ef - 1)) / (24 * 67.5)
         else
           # Fixed water heater efficiency per PNNL
           water_heater_eff = 1
-          # Calculate the max allowable standby loss (SL)
-          sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal))
           # Calculate the skin loss coefficient (UA)
-          ua_btu_per_hr_per_f = sl_btu_per_hr / 70
+          case template
+          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
+            # Calculate the max allowable standby loss (SL)
+            sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal)) 
+            # Calculate the skin loss coefficient (UA)
+            ua_btu_per_hr_per_f = sl_btu_per_hr / 70
+          when '90.1-2013'
+            # Calculate the percent loss per hr
+            hrly_loss_pct = (0.3 + 27 / volume_gal) / 100
+            # Convert to Btu/hr, assuming:
+            # Water at 120F, density = 8.25 lb/gal
+            # 1 Btu to raise 1 lb of water 1 F
+            # Therefore 8.25 Btu / gal of water * deg F
+            # 70F delta-T between water and zone
+            hrly_loss_btu_per_hr = hrly_loss_pct * volume_gal * 8.25 * 70
+            # Calculate the skin loss coefficient (UA)
+            ua_btu_per_hr_per_f = hrly_loss_btu_per_hr / 70
+          end
         end
 
       when 'NECB 2011'
@@ -102,7 +126,16 @@ class OpenStudio::Model::WaterHeaterMixed
           # Fixed water heater thermal efficiency per PNNL
           water_heater_eff = 0.82
           # Calculate the minimum Energy Factor (EF)
-          ef = 0.67 - (0.0019 * volume_gal)
+          base_ef, vol_drt = case template
+                             when '90.1-2004', '90.1-2007'
+                               [0.62, 0.0019]
+                             when '90.1-2010'
+                               [0.67, 0.0019]
+                             when '90.1-2013'
+                               [0.67, 0.0005]
+                             end
+
+          ef = base_ef - (vol_drt * volume_gal)
           # Calculate the Recovery Efficiency (RE)
           # based on a fixed capacity of 75,000 Btu/hr
           # and a fixed volume of 40 gallons by solving
@@ -118,7 +151,14 @@ class OpenStudio::Model::WaterHeaterMixed
           # Thermal efficiency requirement from 90.1
           et = 0.8
           # Calculate the max allowable standby loss (SL)
-          sl_btu_per_hr = (capacity_btu_per_hr / 800 + 110 * Math.sqrt(volume_gal))
+          cap_adj, vol_drt = case template
+                   when '90.1-2004', '90.1-2007', '90.1-2010'
+                     [800, 110]
+                   when '90.1-2013'
+                     [799, 16.6]
+                   end
+
+          sl_btu_per_hr = (capacity_btu_per_hr / cap_adj + vol_drt * Math.sqrt(volume_gal))
           # Calculate the skin loss coefficient (UA)
           ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
           # Calculate water heater efficiency
@@ -153,8 +193,8 @@ class OpenStudio::Model::WaterHeaterMixed
     end
 
     # Append the name with standards information
-    setName("#{name} #{water_heater_eff.round(3)}Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{name}; efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr AKA #{ua_btu_per_hr_per_c.round(1)}W/K")
+    setName("#{name} #{water_heater_eff.round(3)} Therm Eff")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
 
     return true
   end
@@ -204,5 +244,28 @@ class OpenStudio::Model::WaterHeaterMixed
     end
 
     return true
+  end
+
+  # Finds capacity in Btu/hr
+  #
+  # @return [Double] capacity in Btu/hr to be used for find object
+  def find_capacity()
+
+    # Get the coil capacity
+    capacity_w = nil
+    if self.heaterMaximumCapacity.is_initialized
+      capacity_w = self.heaterMaximumCapacity.get
+    elsif self.autosizedHeaterMaximumCapacity.is_initialized
+      capacity_w = self.autosizedHeaterMaximumCapacity.get
+    else
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{self.name} capacity is not available.")
+      return false
+    end
+
+    # Convert capacity to Btu/hr
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
+
+    return capacity_btu_per_hr
+
   end
 end

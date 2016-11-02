@@ -57,7 +57,7 @@ class OpenStudio::Model::Model
     if boiler_fuel_type == 'DistrictHeating'
       dist_ht = OpenStudio::Model::DistrictHeating.new(self)
       dist_ht.setName('Purchased Heating')
-      dist_ht.setNominalCapacity(1_000_000)
+      dist_ht.autosizeNominalCapacity
       hot_water_loop.addSupplyBranchForComponent(dist_ht)
     # Boiler
     else
@@ -209,7 +209,7 @@ class OpenStudio::Model::Model
     if cooling_fuel == 'DistrictCooling'
       dist_clg = OpenStudio::Model::DistrictCooling.new(self)
       dist_clg.setName('Purchased Cooling')
-      dist_clg.setNominalCapacity(1_000_000)
+      dist_clg.autosizeNominalCapacity
       chilled_water_loop.addSupplyBranchForComponent(dist_clg)
     # Chiller
     else
@@ -323,17 +323,11 @@ class OpenStudio::Model::Model
       cw_pump.addToNode(condenser_water_loop.supplyInletNode)
     else
       # Condenser water pump #TODO make this into a HeaderedPump:VariableSpeed
-      cw_pump = OpenStudio::Model::PumpVariableSpeed.new(self)
+      cw_pump = OpenStudio::Model::PumpConstantSpeed.new(self)
       cw_pump.setName('Condenser Water Loop Pump')
       cw_pump_head_ft_h2o = 49.7
       cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O', 'Pa').get
       cw_pump.setRatedPumpHead(cw_pump_head_press_pa)
-      # Curve makes it perform like variable speed pump
-      cw_pump.setFractionofMotorInefficienciestoFluidStream(0)
-      cw_pump.setCoefficient1ofthePartLoadPerformanceCurve(0)
-      cw_pump.setCoefficient2ofthePartLoadPerformanceCurve(0.0216)
-      cw_pump.setCoefficient3ofthePartLoadPerformanceCurve(-0.0325)
-      cw_pump.setCoefficient4ofthePartLoadPerformanceCurve(1.0095)
       cw_pump.setPumpControlType('Intermittent')
       cw_pump.addToNode(condenser_water_loop.supplyInletNode)
     end
