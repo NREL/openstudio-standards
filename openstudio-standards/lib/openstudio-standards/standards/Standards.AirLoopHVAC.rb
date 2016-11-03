@@ -1800,7 +1800,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Create an ERV
     erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
     erv.setName("#{name} ERV")
-    if template = 'NECB 2011'
+    if template == 'NECB 2011'
       erv.setSensibleEffectivenessat100HeatingAirFlow(0.5)
       erv.setLatentEffectivenessat100HeatingAirFlow(0.5)
       erv.setSensibleEffectivenessat75HeatingAirFlow(0.5)

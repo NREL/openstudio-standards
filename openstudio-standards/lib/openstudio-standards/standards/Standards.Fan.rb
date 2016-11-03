@@ -190,7 +190,7 @@ module Fan
     # TODO check COMNET and T24 ACM and PNNL 90.1 doc
     fan_impeller_eff = 0.65
 
-    if small_fan?
+    if small_fan? && template != 'NECB 2011'
       fan_impeller_eff = 0.55
     end
 
