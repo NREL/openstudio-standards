@@ -172,7 +172,7 @@ Rake::TestTask.new('test:measures') do |task|
   #'measures/btap_apply_necb_rules/tests/apply_necb_rules_Test.rb',
   # TOO LONG 'measures/btap_campus_classic/tests/btap_coldlake_classic_test.rb',
   #'measures/btap_change_building_location/tests/btap_change_location_test.rb',
-  'measures/btap_create_doe_necb_models/tests/DOE2NECB_Model_Test.rb',
+  #'measures/btap_create_doe_necb_models/tests/DOE2NECB_Model_Test.rb',
   'measures/btap_equest_converter/tests/btap_equest_converter_test.rb',
   #'measures/btap_replace_model/tests/ReplaceModel_Test.rb',
   #'measures/btap_set_default_construction_set/tests/set_default_construction_set_test.rb',
