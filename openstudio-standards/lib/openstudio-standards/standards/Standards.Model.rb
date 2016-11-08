@@ -319,7 +319,7 @@ class OpenStudio::Model::Model
     return true
   end
 
-  # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
+  # Creates a Whole Building Performance Rating Method (aka Appendix G aka LEED) standard building model
   # based on the inputs currently in the model.
   # the current model with this model.
   #
@@ -341,8 +341,8 @@ class OpenStudio::Model::Model
 
     # Reduce the WWR and SRR, if necessary
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-    # TODO apply_prm_baseline_window_to_wall_ratio(template, climate_zone)
-    # TODO apply_prm_baseline_skylight_to_roof_ratio(template)
+    # TODO apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
+    # TODO apply_ecbc_standard_skylight_to_roof_ratio(template)
 
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
@@ -366,11 +366,11 @@ class OpenStudio::Model::Model
     # always-off schedule to those lights.  This is assumed to
     # be the user's intent in the proposed model.
     # TODO
-    # getLightss.each do |lights|
-      # if lights.schedule.empty?
-        # lights.setSchedule(alwaysOffDiscreteSchedule)
-      # end
-    # end
+    getLightss.each do |lights|
+      if lights.schedule.empty?
+        lights.setSchedule(alwaysOffDiscreteSchedule)
+       end
+    end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
 
