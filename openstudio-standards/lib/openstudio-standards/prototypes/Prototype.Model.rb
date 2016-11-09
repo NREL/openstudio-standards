@@ -57,7 +57,7 @@ class OpenStudio::Model::Model
 
 
 
-      debug_incremental_changes = true
+      debug_incremental_changes = false
       load_building_type_methods(building_type, template, climate_zone)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes 
