@@ -231,8 +231,8 @@ end
 
 
 ##Developer tests
-class TestNECBAllBuildings < CreateDOEPrototypeBuildingTest
-  building_types = [
+# class TestNECBAllBuildings < CreateDOEPrototypeBuildingTest
+  # building_types = [
 #    'FullServiceRestaurant',
 #    'HighriseApartment',
 #    'LargeHotel',
@@ -249,11 +249,11 @@ class TestNECBAllBuildings < CreateDOEPrototypeBuildingTest
 #    'SmallOffice',
 #    'RetailStripmall', 
 #    'Warehouse'
-    ]
+    # ]
   
-  templates = NECB_templates
-  climate_zones = NECB_climate_zone
-  epw_files = [
+  # templates = NECB_templates
+  # climate_zones = NECB_climate_zone
+  # epw_files = [
 #    'CAN_BC_Vancouver.718920_CWEC.epw',
 #    'CAN_BC_Victoria.717990_CWEC.epw',
 #    'CAN_BC_Abbotsford.711080_CWEC.epw',
@@ -333,11 +333,11 @@ class TestNECBAllBuildings < CreateDOEPrototypeBuildingTest
 #    'CAN_MB_Churchill.719130_CWEC.epw',
 #    'CAN_NT_Inuvik.719570_CWEC.epw',
 #    'CAN_NU_Resolute.719240_CWEC.epw'
-  ]
-  create_models = CREATE_MODELS
-  run_models = RUN_MODELS
-  compare_results = COMPARE_RESULTS
-  debug = DEBUG
-  TestNECBAllBuildings.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
+  # ]
+  # create_models = CREATE_MODELS
+  # run_models = RUN_MODELS
+  # compare_results = COMPARE_RESULTS
+  # debug = DEBUG
+  # TestNECBAllBuildings.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   # TestNECBAllBuildings.compare_test_results(building_types, templates, climate_zones, file_ext="")
- end
+#  end
