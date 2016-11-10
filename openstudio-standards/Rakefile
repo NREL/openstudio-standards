@@ -41,7 +41,7 @@ Rake::TestTask.new('test:gem_group_0') do |task|
   'openstudio-standards/test/test_find_target_eui_by_end_use.rb',
   'openstudio-standards/test/test_primary_school.rb', # 9 min
   'openstudio-standards/test/test_warehouse.rb',#,
-  'openstudio-standards/test/test_necb_airloop_sizing_parameters.rb', #42s
+  #'openstudio-standards/test/test_necb_airloop_sizing_parameters.rb', #42s
   'openstudio-standards/test/test_necb_boiler_rules.rb',
   'openstudio-standards/test/test_necb_chiller_rules.rb'
   ]
@@ -55,11 +55,8 @@ Rake::TestTask.new('test:gem_group_1') do |task|
   'openstudio-standards/test/test_medium_office.rb',
   'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
   'openstudio-standards/test/test_high_rise_apartment.rb',#, # 7 min
-  'openstudio-standards/test/test_outpatient.rb', #
-  'openstudio-standards/test/test_necb_constructions_fdwr.rb', #19s
-  'openstudio-standards/test/test_necb_coolingtower_rules.rb',
-  'openstudio-standards/test/test_necb_default_spacetypes.rb', #30s
-  'openstudio-standards/test/test_necb_default_system_selection.rb'
+  'openstudio-standards/test/test_outpatient.rb' #
+
   ]
 end
 
@@ -89,7 +86,11 @@ Rake::TestTask.new('test:gem_group_3') do |task|
   'openstudio-standards/test/test_necb_loop_rules.rb',
   'openstudio-standards/test/test_necb_unitary_rules.rb',
   'openstudio-standards/test/test_necb_waterheater_rules.rb',
-  'openstudio-standards/test/test_necb_weather.rb'
+  'openstudio-standards/test/test_necb_weather.rb',
+  'openstudio-standards/test/test_necb_constructions_fdwr.rb', #19s
+  'openstudio-standards/test/test_necb_coolingtower_rules.rb',
+  'openstudio-standards/test/test_necb_default_spacetypes.rb', #30s
+  'openstudio-standards/test/test_necb_default_system_selection.rb'
   ]
 end
 
