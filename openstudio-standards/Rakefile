@@ -90,7 +90,8 @@ Rake::TestTask.new('test:gem_group_3') do |task|
   'openstudio-standards/test/test_necb_constructions_fdwr.rb', #19s
   'openstudio-standards/test/test_necb_coolingtower_rules.rb',
   'openstudio-standards/test/test_necb_default_spacetypes.rb', #30s
-  'openstudio-standards/test/test_necb_default_system_selection.rb'
+  'openstudio-standards/test/test_necb_default_system_selection.rb',
+  'openstudio-standards/test/test_necb_buildings.rb'
   ]
 end
 
