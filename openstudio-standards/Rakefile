@@ -70,8 +70,8 @@ Rake::TestTask.new('test:gem_group_2') do |task|
   'openstudio-standards/test/test_strip_mall.rb', # 2 min
   'openstudio-standards/test/test_necb_fan_rules.rb',
   'openstudio-standards/test/test_necb_heatpump_rules.rb',
-  'openstudio-standards/test/test_necb_hrv_rules.rb',
-  'openstudio-standards/test/test_necb_hvac_systems.rb'
+  'openstudio-standards/test/test_necb_hrv_rules.rb'
+  #'openstudio-standards/test/test_necb_hvac_systems.rb'
   ]
 end
 
