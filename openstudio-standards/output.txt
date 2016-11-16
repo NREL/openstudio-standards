@@ -1,0 +1,2 @@
+bundler: command not found: TESTOPTS=--seed 63469
+Install missing gem executables with `bundle install`

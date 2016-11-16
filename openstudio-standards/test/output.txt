@@ -1,0 +1,753 @@
+(in /home/nrcan/projects/openstudio-standards/openstudio-standards)
+[openstudio.EpwFile] <0> Successive data points (1987-Jan-31 to 1981-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.runmanager.LocalProcess] <1> Starting LocalProcess: /usr/local/share/openstudio-1.13.2/EnergyPlus-8-6-0/energyplus
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.weather.Model] <0> Could not find ground temperatures; will use generic temperatures, which will skew results.
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.runmanager.LocalProcess] <1> Starting LocalProcess: /usr/local/share/openstudio-1.13.2/EnergyPlus-8-6-0/energyplus
+[openstudio.energyplus.ForwardTranslator] <0> Space RestroomFlr1 is not associated with a ThermalZone, it will not be translated.
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'F_GuestRoom206_208_10035_0_10031' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'P_CorridorFlr1_18_0_0' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'P_CorridorFlr1_19_0_0' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'P_FrontLoungeFlr1_2_0_0' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.runmanager.LocalProcess] <1> Starting LocalProcess: /usr/local/share/openstudio-1.13.2/EnergyPlus-8-6-0/energyplus
+[openstudio.model.Model] <0> The run completed but had the following severe errors: Calculation of cooling coil design UA failed for coil COIL COOLING WATER 1    Bad starting values for UA   Coil design UA set to 263.918619 [W/C]
+[openstudio.standards.Fan] <0> For Fan Constant Volume 1, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 17, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 18, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 19, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 20, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 21, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 22, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 23, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 24, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 25, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 26, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 27, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 28, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 29, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 30, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 31, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 32, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 33, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 34, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 35, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Variable Volume 1, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.standards.Fan] <0> For Fan Variable Volume 1, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 1, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 17, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 18, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 19, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 20, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 21, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 22, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 23, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 24, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 25, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 26, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 27, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 28, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 29, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 30, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 31, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 32, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 33, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 34, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 35, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:128:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 1.7051212429200715 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>1.5, "maximum_capacity"=>1.999, "nominal_full_load_efficiency"=>0.865, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>1.5, "maximum_capacity"=>1.999, "nominal_full_load_efficiency"=>0.865, "notes"=>nil}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:143:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 2.01 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>2, "maximum_capacity"=>2.999, "nominal_full_load_efficiency"=>0.865, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>2.0, "maximum_capacity"=>2.999, "nominal_full_load_efficiency"=>0.865, "notes"=>nil}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:128:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.07832612564696814 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0, "maximum_capacity"=>0.08333, "nominal_full_load_efficiency"=>0.29, "notes"=>"NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.0, "maximum_capacity"=>0.08333, "nominal_full_load_efficiency"=>0.29, "notes"=>"NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:143:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.11 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:128:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.10331023885436427 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:143:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 1.01 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>1, "maximum_capacity"=>1.499, "nominal_full_load_efficiency"=>0.855, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>1.0, "maximum_capacity"=>1.499, "nominal_full_load_efficiency"=>0.855, "notes"=>nil}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:128:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.022616513574305785 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0, "maximum_capacity"=>0.08333, "nominal_full_load_efficiency"=>0.29, "notes"=>"NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.0, "maximum_capacity"=>0.08333, "nominal_full_load_efficiency"=>0.29, "notes"=>"NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:143:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.11 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:128:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.01583077429259358 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0, "maximum_capacity"=>0.08333, "nominal_full_load_efficiency"=>0.29, "notes"=>"NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.0, "maximum_capacity"=>0.08333, "nominal_full_load_efficiency"=>0.29, "notes"=>"NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:143:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.11 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:128:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.037579776985306935 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0, "maximum_capacity"=>0.08333, "nominal_full_load_efficiency"=>0.29, "notes"=>"NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.0, "maximum_capacity"=>0.08333, "nominal_full_load_efficiency"=>0.29, "notes"=>"NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:143:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.11 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+[openstudio.standards.CoolingTower] <0> For Cooling Tower Single Speed 1, cannot find heat rejection properties, cannot apply standard efficiencies or curves.
+[openstudio.energyplus.ForwardTranslator] <0> Space RestroomFlr1 is not associated with a ThermalZone, it will not be translated.
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'F_GuestRoom206_208_10035_0_10031' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'P_CorridorFlr1_18_0_0' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'P_CorridorFlr1_19_0_0' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'P_FrontLoungeFlr1_2_0_0' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.weather.Model] <0> Could not find ground temperatures; will use generic temperatures, which will skew results.
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.runmanager.LocalProcess] <1> Starting LocalProcess: /usr/local/share/openstudio-1.13.2/EnergyPlus-8-6-0/energyplus
+[openstudio.energyplus.ForwardTranslator] <0> Space Attic is not associated with a ThermalZone, it will not be translated.
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Core_ZN_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Perimeter_ZN_2_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Perimeter_ZN_3_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Perimeter_ZN_1_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Perimeter_ZN_4_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.runmanager.LocalProcess] <1> Starting LocalProcess: /usr/local/share/openstudio-1.13.2/EnergyPlus-8-6-0/energyplus
+[openstudio.standards.Fan] <0> For Fan Constant Volume 1, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 2, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 3, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 4, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 5, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.standards.Fan] <0> For Fan Constant Volume 1, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 2, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 3, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 4, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 5, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:128:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.11670937089231988 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:143:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 1.01 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>1, "maximum_capacity"=>1.499, "nominal_full_load_efficiency"=>0.855, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>1.0, "maximum_capacity"=>1.499, "nominal_full_load_efficiency"=>0.855, "notes"=>nil}
+[openstudio.energyplus.ForwardTranslator] <0> Space Attic is not associated with a ThermalZone, it will not be translated.
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Core_ZN_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Perimeter_ZN_2_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Perimeter_ZN_3_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Perimeter_ZN_1_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Perimeter_ZN_4_ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.weather.Model] <0> Could not find ground temperatures; will use generic temperatures, which will skew results.
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.runmanager.LocalProcess] <1> Starting LocalProcess: /usr/local/share/openstudio-1.13.2/EnergyPlus-8-6-0/energyplus
+[openstudio.energyplus.ForwardTranslator] <0> Space attic is not associated with a ThermalZone, it will not be translated.
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Kitchen_Ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Dining_Ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+[openstudio.runmanager.LocalProcess] <1> Starting LocalProcess: /usr/local/share/openstudio-1.13.2/EnergyPlus-8-6-0/energyplus
+[openstudio.standards.Fan] <0> For Fan Constant Volume 1, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 2, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.EpwFile] <0> Successive data points (1967-Jan-31 to 1970-Feb-01, ending on line 753) are greater than 1 day apart in EPW file '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw'. Data will be treated as typical (TMY)
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.setFileExtension] <0> Path p, '/home/nrcan/projects/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.ddy', has an unexpected file extension. Was expecting 'idf'.
+[openstudio.energyplus.GeometryTranslator] <0> Could not find GlobalGeometryRules object, assuming defaults
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.energyplus.GeometryTranslator] <0> Could not find Building object, assuming 0 rotation
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.model.YearDescription] <1> 'UseWeatherFile' is not yet a supported option for YearDescription
+[openstudio.standards.Fan] <0> For Fan Constant Volume 1, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Fan] <0> For Fan Constant Volume 2, there is no greater nominal HP.  Use the efficiency of the largest motor category.
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:128:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 0.08389103202847263 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>0.08334, "maximum_capacity"=>0.999, "nominal_full_load_efficiency"=>0.7, "notes"=>nil}
+[openstudio.standards.Model] <0> Find object search criteria returned 2 results, the first one will be returned. Called from /home/nrcan/projects/openstudio-standards/openstudio-standards/lib/openstudio-standards/standards/Standards.Pump.rb:143:in `standard_minimum_motor_efficiency_and_size'. 
+ Search criteria: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed"}, capacity = 1.01 
+  All results: 
+ {"template"=>"NECB 2011", "number_of_poles"=>4, "type"=>"Enclosed", "synchronous_speed"=>1800, "minimum_capacity"=>1, "maximum_capacity"=>1.499, "nominal_full_load_efficiency"=>0.855, "notes"=>nil}
+{"template"=>"NECB 2011", "number_of_poles"=>4.0, "type"=>"Enclosed", "synchronous_speed"=>1800.0, "minimum_capacity"=>1.0, "maximum_capacity"=>1.499, "nominal_full_load_efficiency"=>0.855, "notes"=>nil}
+[openstudio.energyplus.ForwardTranslator] <0> Space attic is not associated with a ThermalZone, it will not be translated.
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Kitchen_Ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[openstudio.energyplus.ForwardTranslator] <0> Surface 'Dining_Ceiling' has blank Outside Boundary Condition Object.  Changing Outside Boundary Condition from 'Surface' to 'Adiabatic'
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always Off Discrete', points to an object named OnOff 1 from field 1, but that object cannot be located.
+[utilities.idf.WorkspaceObject] <0> Object of type 'Schedule:Constant' and named 'Always On Continuous', points to an object named Fractional 1 from field 1, but that object cannot be located.
+DEVELOPERS OF OPENSTUDIO-STANDARDS: Requiring code directly instead of using installed gem.  This avoids having to run rake install every time you make a change.
+Started with run options --seed 63496
+
+TestSmallHotel
+  test_SmallHotel-DOE_Ref_Pre-1980-ASHRAE_169-2006-2A            [32m PASS[0m (36.32s)
+
+TestNECBSmallHotel
+Assigning Stories to Spaces
+end add_sys6_multi_zone_built_up_with_baseboard_heating
+end assign_zones_sys6
+  test_SmallHotel-NECB_2011-NECB_HDD_Method-CAN_NU_Resolute_719240_CWEC_epw[32m PASS[0m (61.81s)
+
+TestNECBSmallOffice
+Assigning Stories to Spaces
+  test_SmallOffice-NECB_2011-NECB_HDD_Method-CAN_NU_Resolute_719240_CWEC_epw[32m PASS[0m (7.99s)
+
+TestNECBFullServiceRestaurant
+Assigning Stories to Spaces
+  test_FullServiceRestaurant-NECB_2011-NECB_HDD_Method-CAN_NU_Resolute_719240_CWEC_epw[32m PASS[0m (6.35s)
+
+Finished in 112.48420s
+4 tests, 4 assertions, [32m0 failures, 0 errors, [0m[33m0 skips[0m
+
+generating ci files
+Coverage report generated for Unit Tests to /home/nrcan/projects/openstudio-standards/coverage. 5038 / 22154 LOC (22.74%) covered.
+[33m[Coveralls] Outside the CI environment, not sending data.[0m
