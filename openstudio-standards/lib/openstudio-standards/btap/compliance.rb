@@ -608,7 +608,7 @@ module BTAP
  
       
       
-      def self.necb_spacetype_system_selection(model, heatingDesignLoad  = nil,coolingDesignLoad = nil, runner = nil  )
+      def self.necb_spacetype_system_selection( model, heatingDesignLoad  = nil,coolingDesignLoad = nil, runner = nil  )
         spacezoning_data = Struct.new( 
           :space,                   # the space object 
           :space_name,              # the space name
