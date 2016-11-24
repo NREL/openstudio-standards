@@ -735,7 +735,7 @@ module BTAP
           when "Warehouse Area - refrigerated"
             system = 5
           when "Wildcard"
-            system = "Wildcard"
+            system = nil
           else
             raise ("NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid")
           end 
@@ -867,11 +867,14 @@ module BTAP
         
         #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
         space_zoning_data_array.each do |space_zone_data|
-          if space_zone_data.system_number == "Wildcard"
+          #If it is a wildcard space.
+          if space_zone_data.system_number.nil?
             #iterate through all adjacent spaces from largest shared wall area to smallest.
             # Set system type to match first space system that is not nil. 
             space_zone_data.space.get_adjacent_spaces_with_shared_wall_areas(true).each do |adj_space|
+              #if there are no adjacent zones near a wh
               raise ("Could not determine adj space to space #{space_zone_data.space.name.get}") if adj_space.nil?
+
               adj_space_data = space_zoning_data_array.find { |data| data.space == adj_space[0] }
               if adj_space_data.system_number.nil?
                 next
@@ -983,8 +986,13 @@ module BTAP
             thermal_zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
             thermal_zone_ideal_loads.addToThermalZone(thermal_zone)
           end
-        end               
-      end
+        end  
+        model.getSpaces.each do |space|
+        if space.thermalZone.empty?
+         raise( "space #{space.name} with spacetype #{space.spaceType.get.name.get}" )
+        end    
+        end         
+      end #
     end
   end #Compliance
 end
