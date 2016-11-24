@@ -986,9 +986,10 @@ module BTAP
             thermal_zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
             thermal_zone_ideal_loads.addToThermalZone(thermal_zone)
           end
-        end  
+        end 
+        #Check to ensure that all spaces are assigned to zones except undefined ones. 
         model.getSpaces.each do |space|
-        if space.thermalZone.empty?
+        if space.thermalZone.empty? and space.spaceType.get.name.get != 'Space Function - undefined -'
          raise( "space #{space.name} with spacetype #{space.spaceType.get.name.get}" )
         end    
         end         
