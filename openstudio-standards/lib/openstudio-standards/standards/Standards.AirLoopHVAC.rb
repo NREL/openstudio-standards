@@ -2610,9 +2610,9 @@ class OpenStudio::Model::AirLoopHVAC
   def apply_vav_damper_action(template)
     damper_action = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', 'NECB 2011'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
       damper_action = 'Single Maximum'
-    when '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       damper_action = 'Dual Maximum'
     end
 
