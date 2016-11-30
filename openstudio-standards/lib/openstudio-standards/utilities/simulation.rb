@@ -16,6 +16,7 @@ class OpenStudio::Model::Model
     idf = forward_translator.translateModel(self)
     idf_path = OpenStudio::Path.new("#{run_dir}/#{idf_name}")
     osm_path = OpenStudio::Path.new("#{run_dir}/#{osm_name}")
+    osw_path = OpenStudio::Path.new("#{run_dir}/in.osw")
     idf.save(idf_path, true)
     save(osm_path, true)
 
@@ -36,7 +37,7 @@ class OpenStudio::Model::Model
     use_runmanager = true
 
     begin
-      require 'openstudio-workflow'
+      workflow = OpenStudio::WorkflowJSON.new
       use_runmanager = false
     rescue LoadError
       use_runmanager = true
@@ -76,100 +77,23 @@ class OpenStudio::Model::Model
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
 
-    elsif OpenStudio::Workflow::VERSION >= '1.0.0' # Use the OS 2.0 openstudio-workflow gem
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Running with OS 2.0 openstudio-workflow gem.')
+    else # method to running simulation within measure using OpenStudio 2.x WorkflowJSON
 
-      # Write OSW file for the simulation
-      require 'json'
-      osw_dir = File.dirname(osm_path.to_s)
-      osw_hash = {
-        run_directory: File.join(osw_dir, 'run'),
-        seed_file: File.absolute_path(osm_path.to_s),
-        weather_file: File.absolute_path(epw_path.to_s),
-        steps: []
-      }
-      osw_path = File.join(osw_dir, 'workflow.osw')
-      File.open(osw_path, 'wb') { |f| f << JSON.pretty_generate(osw_hash) }
-
-      # Run workflow.osw
-      run_options = {}
-      #run_options[:debug] = true
-
-      # jobs for running IDF
-      # run_options[:jobs] = [
-      #  { state: :queued, next_state: :initialization, options: { initial: true } },
-      #  { state: :initialization, next_state: :preprocess, job: :RunInitialization,
-      #    file: 'openstudio/workflow/jobs/run_initialization.rb', options: {} },
-      #  { state: :preprocess, next_state: :simulation, job: :RunPreprocess,
-      #    file: 'openstudio/workflow/jobs/run_preprocess.rb' , options: {} },
-      #  { state: :simulation, next_state: :finished, job: :RunEnergyPlus,
-      #    file: 'openstudio/workflow/jobs/run_energyplus.rb', options: {} },
-      #  { state: :finished },
-      #  { state: :errored }
-      # ]
-
-      # jobs for running OSM
-      run_options[:jobs] = [
-        { state: :queued, next_state: :initialization, options: { initial: true } },
-        { state: :initialization, next_state: :os_measures, job: :RunInitialization,
-          file: 'openstudio/workflow/jobs/run_initialization.rb', options: {} },
-        { state: :os_measures, next_state: :translator, job: :RunOpenStudioMeasures,
-          file: 'openstudio/workflow/jobs/run_os_measures.rb', options: {} },
-        { state: :translator, next_state: :ep_measures, job: :RunTranslation,
-          file: 'openstudio/workflow/jobs/run_translation.rb', options: {} },
-        { state: :ep_measures, next_state: :preprocess, job: :RunEnergyPlusMeasures,
-          file: 'openstudio/workflow/jobs/run_ep_measures.rb', options: {} },
-        { state: :preprocess, next_state: :simulation, job: :RunPreprocess,
-          file: 'openstudio/workflow/jobs/run_preprocess.rb', options: {} },
-        { state: :simulation, next_state: :reporting_measures, job: :RunEnergyPlus,
-          file: 'openstudio/workflow/jobs/run_energyplus.rb', options: {} },
-        { state: :reporting_measures, next_state: :postprocess, job: :RunReportingMeasures,
-          file: 'openstudio/workflow/jobs/run_reporting_measures.rb', options: {} },
-        { state: :postprocess, next_state: :finished, job: :RunPostprocess,
-          file: 'openstudio/workflow/jobs/run_postprocess.rb', options: {} },
-        { state: :finished },
-        { state: :errored }
-      ]
-
-      begin
-        # earlier version of the Workflow::Run method
-
-        # Create local adapters
-        adapter_options = { workflow_filename: File.basename(osw_path), output_directory: File.join(Dir.pwd, 'run') }
-        input_adapter = OpenStudio::Workflow.load_input_adapter 'local', adapter_options
-        output_adapter = OpenStudio::Workflow.load_output_adapter 'local', adapter_options
-
-        k = OpenStudio::Workflow::Run.new input_adapter, output_adapter, File.dirname(osw_path), run_options
-      rescue
-        # current version of the Workflow::Run method
-        k = OpenStudio::Workflow::Run.new osw_path, run_options
-      end
-
-      final_state = k.run
-
-      # Check run status and return the sql_path
-      if final_state == :finished
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
-      else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Run completed with errors.')
-      end
-      sql_path = OpenStudio::Path.new(File.join(osw_dir, 'run/eplusout.sql'))
-
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished simulation.')
-
-    else # Use the pre OS 2.0 openstudio-workflow gem
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Running with pre OS 2.0 openstudio-workflow gem.')
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Running with OS 2.x WorkflowJSON.')
 
       # Copy the weather file to this directory
       FileUtils.copy(epw_path.to_s, run_dir)
 
-      # Run the simulation
-      sim = OpenStudio::Workflow.run_energyplus('Local', run_dir)
-      final_state = sim.run
+      workflow.setSeedFile(File.absolute_path(osm_path.to_s))
+      workflow.setWeatherFile(epw_path)
+      workflow.saveAs(File.absolute_path(osw_path.to_s))
 
-      if final_state == :finished
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
-      end
+      cli_path = OpenStudio.getOpenStudioCLI
+      cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
+      puts cmd
+      system(cmd)
+
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
 
       sql_path = OpenStudio::Path.new("#{run_dir}/run/eplusout.sql")
 
