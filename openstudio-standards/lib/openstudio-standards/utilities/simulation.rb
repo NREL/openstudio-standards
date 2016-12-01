@@ -39,7 +39,7 @@ class OpenStudio::Model::Model
     begin
       workflow = OpenStudio::WorkflowJSON.new
       use_runmanager = false
-    rescue LoadError
+    rescue NameError
       use_runmanager = true
     end
 
