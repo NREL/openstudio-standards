@@ -16,16 +16,16 @@ bundle install
 case $CIRCLE_NODE_INDEX in
   0)
     rake test:measures
-    rake test:gem_group_0
+    rake test:gem_nrel_group_3
     ;;
   1)
-    rake test:gem_group_1
+    rake test:gem_nrel_group_3
     ;;
   2)
-    rake test:gem_group_2
+    rake test:gem_nrel_group_3
     ;;
   3)
-    rake test:gem_group_3
+    rake test:gem_nrel_group_3
     ;;
   *)
 esac
