@@ -77,7 +77,7 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     boiler_fueltypes.each do |boiler_fueltype|
       fuel_type_cap[boiler_fueltype].each do |boiler_cap|
-        name = "sys1_Boiler~#{boiler_fueltype}_boiler_cap~#{boiler_cap}watts}_Mau~#{mau_type}_MauCoil~#{mau_heating_coil_type}_Baseboard~#{baseboard_type}"
+        name = "sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
         puts "***************************************#{name}*******************************************************\n"
         model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
@@ -160,7 +160,7 @@ class HVACEfficienciesTest < MiniTest::Test
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     test_boiler_cap.each do |boiler_cap|
-      name = "sys1_Boiler~#{boiler_fueltype}_boiler_cap~#{boiler_cap}watts'}_HeatingCoilType#~#{heating_coil_type}_Baseboard~#{baseboard_type}"
+      name = "sys1_Boiler-#{boiler_fueltype}_boiler_cap-#{boiler_cap}watts_HeatingCoilType#-#{heating_coil_type}_Baseboard-#{baseboard_type}"
       puts "***************************************#{name}*******************************************************\n"
       model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
@@ -234,7 +234,7 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    name = "sys1_Boiler~#{boiler_fueltype}+_Mau~#{mau_type}_MauCoil~#{mau_heating_coil_type}_Baseboard~#{baseboard_type}"
+    name = "sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
     puts "***************************************#{name}*******************************************************\n"
     BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys1(
       model,
@@ -314,9 +314,9 @@ class HVACEfficienciesTest < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
-      model.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
+      model.apply_prototype_hvac_assumptions(building_type, building_vintage, climate_zone)
       # Apply the HVAC efficiency standard
-      model.applyHVACEfficiencyStandard(building_vintage, climate_zone)
+      model.apply_hvac_efficiency_standard(building_vintage, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")

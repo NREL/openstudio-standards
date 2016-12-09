@@ -145,14 +145,8 @@ end
 # @param [Double] COP
 # @return [Double] Seasonal Energy Efficiency Ratio
 def cop_to_seer(cop)
-  seer = nil
-
-  # First convert COP to EER
-  eer = cop_to_eer(cop)
-
-  # Next convert from EER to SEER
-  delta = 1.1088**2 - 4.0 * 0.0182 * eer
-  seer = (-delta**0.5 + 1.1088) / (2.0 * 0.0182)
+  delta = 0.3796**2 - 4.0 * 0.0076 * cop
+  seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
 
   return seer
 end
@@ -202,14 +196,25 @@ end
 #
 # @param [Double] COP
 # @return [Double] Energy Efficiency Ratio (EER)
-def cop_to_eer(cop)
+def cop_to_eer(cop, capacity_w = nil)
   eer = nil
 
-  # r is the ratio of supply fan power to total equipment power at the rating condition,
-  # assumed to be 0.12 for the reference buildngs per PNNL.
-  r = 0.12
+  if capacity_w.nil?
+    # The PNNL Method.
+    # r is the ratio of supply fan power to total equipment power at the rating condition,
+    # assumed to be 0.12 for the reference buildngs per PNNL.
+    r = 0.12
 
-  eer = 3.413 * (cop * (1 - r) - r)
+    eer = 3.413 * (cop * (1 - r) - r)
+
+  else
+
+    # The 90.1-2013 method
+
+    # Convert the capacity to Btu/hr
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
+    eer = cop / (7.84E-8 * capacity_btu_per_hr + 0.338)
+  end
 
   return eer
 end

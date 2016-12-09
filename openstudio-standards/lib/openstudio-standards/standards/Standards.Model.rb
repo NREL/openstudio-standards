@@ -3899,7 +3899,7 @@ class OpenStudio::Model::Model
           surface.subSurfaces.sort.each do |ss|
             # Reduce the size of the subsurface
             red = 1.0 - mult
-            ss.reduce_area_by_percent_by_shrinking_x(red)
+            ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
           end
         end
       end

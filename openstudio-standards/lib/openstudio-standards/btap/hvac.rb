@@ -3065,7 +3065,6 @@ module BTAP
                 htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-10.0)
                 sizing_zone.setZoneHeatingSizingFactor(1.3)
                 sizing_zone.setZoneCoolingSizingFactor(1.0)
-puts 'test1111'               
               else
                 raise("#{heating_coil_type} is not a valid heating coil type.)")
               end
@@ -3106,8 +3105,8 @@ puts 'test1111'
               # supply air temperature based on the needs of this zone
               setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
               setpoint_mgr_single_zone_reheat.setControlZone(zone)
-              setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(12.8)
-              setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(13.0)
+              setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(13)
+              setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(43)
               setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
 
               # Create a diffuser and attach the zone/diffuser pair to the air loop
@@ -3441,8 +3440,9 @@ puts 'test1111'
               setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
               setpoint_mgr_single_zone_reheat.setControlZone(zone)
               setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(13.0)
+              setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(43.0)
               setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
-
+     
 
               #Create sensible heat exchanger
               #              heat_exchanger = BTAP::Resources::HVAC::Plant::add_hrv(model)
@@ -3623,7 +3623,8 @@ puts 'test1111'
                   #TODO: schedule based on whether the zone is occupied or not as stipulated in 8.4.4.22 of NECB2011
                   min_flow_rate = 0.002*zone.floorArea
                   vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate) 
-	                vav_terminal.setMaximumReheatAirTemperature(43)
+	              vav_terminal.setMaximumReheatAirTemperature(43)
+                  vav_terminal.setDamperHeatingAction("Reverse")
 
                   #Set zone baseboards
                   if ( baseboard_type == "Electric") then
