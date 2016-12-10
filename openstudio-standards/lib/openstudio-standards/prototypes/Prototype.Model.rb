@@ -12,6 +12,7 @@ class OpenStudio::Model::Model
   require_relative 'Prototype.Model.hvac'
   require_relative 'Prototype.Model.swh'
   require_relative '../standards/Standards.Model'
+  require_relative 'Prototype.building_specific_methods'
 
   # Creates a DOE prototype building model and replaces
   # the current model with this model.
@@ -93,7 +94,7 @@ class OpenStudio::Model::Model
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_surface_convection_algorithm.osm")  if debug_incremental_changes 
       
-      add_constructions(lookup_building_type, template, climate_zone)
+      add_constructions(building_type, template, climate_zone)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes 
       
@@ -136,12 +137,12 @@ class OpenStudio::Model::Model
       apply_infiltration_standard(template)
       modify_infiltration_coefficients(building_type, template, climate_zone)
       modify_surface_convection_algorithm(template)
-      add_constructions(lookup_building_type, template, climate_zone)
+      add_constructions(building_type, template, climate_zone)
       create_thermal_zones(building_type, template, climate_zone)
       add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
-      custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+      custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, self)
       add_swh(building_type, template, climate_zone, prototype_input)
-      custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+      custom_swh_tweaks(building_type, template, climate_zone, prototype_input, self)
       add_exterior_lights(building_type, template, climate_zone, prototype_input)
       add_occupancy_sensors(building_type, template, climate_zone)
       add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
@@ -590,6 +591,10 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
     is_residential = 'No' # default is nonresidential for building level
 
+    # The constructions lookup table uses a slightly different list of
+    # building types.
+    lookup_building_type = get_lookup_name(building_type)
+
     # Assign construction to adiabatic construction
     # Assign a material to all internal mass objects
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(self)
@@ -683,7 +688,7 @@ class OpenStudio::Model::Model
     end
 
     # Make the default construction set for the building
-    bldg_def_const_set = add_construction_set(template, climate_zone, building_type, nil, is_residential)
+    bldg_def_const_set = add_construction_set(template, climate_zone, lookup_building_type, nil, is_residential)
 
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
@@ -725,7 +730,7 @@ class OpenStudio::Model::Model
     end
 
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
-    if building_type == 'SmallHotel'
+    if lookup_building_type == 'SmallHotel'
       getBuildingStorys.each do |story|
         next if story.name.get == 'AtticStory'
         puts "story = #{story.name}"
@@ -740,7 +745,7 @@ class OpenStudio::Model::Model
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = find_object($os_standards['space_types'], 'template' => template, 'building_type' => building_type, 'space_type' => space_type_name)
+          data = find_object($os_standards['space_types'], 'template' => template, 'building_type' => lookup_building_type, 'space_type' => space_type_name)
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
@@ -748,7 +753,7 @@ class OpenStudio::Model::Model
         next if is_residential == 'No'
 
         # if the story is identified as residential, assign residential construction set to the spaces on this story.
-        building_story_const_set = add_construction_set(template, climate_zone, building_type, nil, is_residential)
+        building_story_const_set = add_construction_set(template, climate_zone, lookup_building_type, nil, is_residential)
         if building_story_const_set.is_initialized
           story.spaces.each do |space|
             space.setDefaultConstructionSet(building_story_const_set.get)
