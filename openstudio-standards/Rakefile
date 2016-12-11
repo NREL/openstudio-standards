@@ -50,9 +50,8 @@ Rake::TestTask.new('test:gem_group_1') do |task|
   task.test_files = FileList[
   'openstudio-standards/test/test_secondary_school.rb', # 70 min
   'openstudio-standards/test/test_medium_office.rb',
-  'openstudio-standards/test/test_mid_rise_apartment.rb', # 7 min
-  'openstudio-standards/test/test_high_rise_apartment.rb',#, # 7 min
-  'openstudio-standards/test/test_outpatient.rb' #
+  'openstudio-standards/test/test_mid_rise_apartment.rb' # 7 min
+
 
   ]
 end
@@ -64,8 +63,9 @@ Rake::TestTask.new('test:gem_group_2') do |task|
   'openstudio-standards/test/test_large_hotel.rb', # 5 min
   'openstudio-standards/test/test_large_office.rb', # 4 min
   'openstudio-standards/test/test_quick_service_restaurant.rb', # 1 min
-  'openstudio-standards/test/test_strip_mall.rb' # 2 min
-
+  'openstudio-standards/test/test_strip_mall.rb', # 2 min
+  'openstudio-standards/test/test_high_rise_apartment.rb',# 7 min
+  'openstudio-standards/test/test_outpatient.rb' #
 
   
   ]
