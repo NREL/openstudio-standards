@@ -1,7 +1,8 @@
 
-
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+# Modules for building-type specific methods
+module PrototypeBuilding
+module MidriseApartment
+  def self.define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
 
     case template
@@ -91,7 +92,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = [
       { 'type' => 'SAC',
         'space_names' => ['G SW Apartment'] },
@@ -153,7 +154,7 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def define_space_multiplier
+  def self.define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
     space_multiplier_map = {
       'M SW Apartment' => 2,
@@ -169,40 +170,40 @@ class OpenStudio::Model::Model
     return space_multiplier_map
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # adjust the cooling setpoint
-    adjust_clg_setpoint(template, climate_zone)
+    PrototypeBuilding::MidriseApartment.adjust_clg_setpoint(template, climate_zone, model)
     # add elevator and lights&fans for the ground floor corridor
-    add_extra_equip_corridor(template)
+    PrototypeBuilding::MidriseApartment.add_extra_equip_corridor(template, model)
     # add extra infiltration for ground floor corridor
-    add_door_infiltration(template, climate_zone)
+    PrototypeBuilding::MidriseApartment.add_door_infiltration(template, climate_zone, model)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     return true
   end
 
-  def adjust_clg_setpoint(template, climate_zone)
+  def self.adjust_clg_setpoint(template, climate_zone, model)
     space_name = 'Office'
-    space_type_name = getSpaceByName(space_name).get.spaceType.get.name.get
+    space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
     thermostat_name = space_type_name + ' Thermostat'
-    thermostat = getThermostatSetpointDualSetpointByName(thermostat_name).get
+    thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010'
       case climate_zone
       when 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-3B'
-        thermostat.setCoolingSetpointTemperatureSchedule(add_schedule('ApartmentMidRise CLGSETP_OFF_SCH_NO_OPTIMUM'))
+        thermostat.setCoolingSetpointTemperatureSchedule(model.add_schedule('ApartmentMidRise CLGSETP_OFF_SCH_NO_OPTIMUM'))
       end
     end
   end
 
   # add elevator and lights&fans for the ground floor corridor
-  def add_extra_equip_corridor(template)
-    corridor_ground_space = getSpaceByName('G Corridor').get
-    elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
-    elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
+  def self.add_extra_equip_corridor(template, model)
+    corridor_ground_space = model.getSpaceByName('G Corridor').get
+    elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def1.setName('Ground Corridor Electric Equipment Definition1')
     elec_equip_def2.setName('Ground Corridor Electric Equipment Definition2')
     case template
@@ -228,12 +229,12 @@ class OpenStudio::Model::Model
       elec_equip2.setName('Elevators_Lights_Fan')
       elec_equip1.setSpace(corridor_ground_space)
       elec_equip2.setSpace(corridor_ground_space)
-      elec_equip1.setSchedule(add_schedule('ApartmentMidRise BLDG_ELEVATORS'))
+      elec_equip1.setSchedule(model.add_schedule('ApartmentMidRise BLDG_ELEVATORS'))
       case template
       when '90.1-2004', '90.1-2007'
-        elec_equip2.setSchedule(add_schedule('ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7'))
+        elec_equip2.setSchedule(model.add_schedule('ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7'))
       when '90.1-2010', '90.1-2013'
-        elec_equip2.setSchedule(add_schedule('ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF'))
+        elec_equip2.setSchedule(model.add_schedule('ApartmentMidRise ELEV_LIGHT_FAN_SCH_ADD_DF'))
       end
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       elec_equip_def1.setDesignLevel(16_055)
@@ -244,14 +245,14 @@ class OpenStudio::Model::Model
       elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
       elec_equip1.setName('G Corridor_Elevators_Equip')
       elec_equip1.setSpace(corridor_ground_space)
-      elec_equip1.setSchedule(add_schedule('ApartmentMidRise BLDG_ELEVATORS Pre2004'))
+      elec_equip1.setSchedule(model.add_schedule('ApartmentMidRise BLDG_ELEVATORS Pre2004'))
     end
   end
 
-  def update_waterheater_loss_coefficient(template)
+  def self.update_waterheater_loss_coefficient(template, model)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
-      getWaterHeaterMixeds.sort.each do |water_heater|
+      model.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(46.288874618)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(46.288874618)
       end
@@ -259,19 +260,19 @@ class OpenStudio::Model::Model
   end
 
   # add extra infiltration for ground floor corridor
-  def add_door_infiltration(template, climate_zone)
+  def self.add_door_infiltration(template, climate_zone, model)
     case template
     when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
       # no door infiltration in these two vintages
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      g_corridor = getSpaceByName('G Corridor').get
-      infiltration_g_corridor_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+      g_corridor = model.getSpaceByName('G Corridor').get
+      infiltration_g_corridor_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_g_corridor_door.setName('G Corridor door Infiltration')
       infiltration_g_corridor_door.setSpace(g_corridor)
       case template
       when '90.1-2004'
         infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
-        infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
+        infiltration_g_corridor_door.setSchedule(model.add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
       when '90.1-2007'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
@@ -279,7 +280,7 @@ class OpenStudio::Model::Model
         else
           infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
         end
-        infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
+        infiltration_g_corridor_door.setSchedule(model.add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
       when '90.1-2010', '90.1-2013'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
@@ -287,14 +288,15 @@ class OpenStudio::Model::Model
         else
           infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
         end
-        infiltration_g_corridor_door.setSchedule(add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2010_2013'))
+        infiltration_g_corridor_door.setSchedule(model.add_schedule('ApartmentMidRise INFIL_Door_Opening_SCH_2010_2013'))
       end
     end
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(template)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
+    PrototypeBuilding::MidriseApartment.update_waterheater_loss_coefficient(template, model)
 
     return true
   end
+end
 end
