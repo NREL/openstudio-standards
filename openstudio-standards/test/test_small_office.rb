@@ -5,7 +5,7 @@ $LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FI
 
 class TestSmallOffice < CreateDOEPrototypeBuildingTest
   
-  building_types = ['SmallOffice','RetailStandalone']
+  building_types = ['SmallOffice']
   templates = ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010']
   climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
   
