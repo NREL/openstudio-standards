@@ -1,6 +1,6 @@
 require_relative 'minitest_helper'
 
-class TestFindSpaceTypeStandardsData < Minitest::Test
+class TestFindASHRAEHotWaterDemand < Minitest::Test
 
   def test_find_ashrae_hot_water_demand
 
