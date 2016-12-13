@@ -68,7 +68,7 @@ end
 
 require 'rake/testtask'
 desc 'Run test group 3'
-Rake::TestTask.new('test:gem_nrel_group_3') do |task|
+Rake::TestTask.new('test:gem_group_3') do |task|
   task.test_files = FileList[
   'openstudio-standards/test/test_full_service_restaurant.rb', # 1 min
   'openstudio-standards/test/test_retail_standalone.rb', # 6 min
