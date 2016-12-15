@@ -12,6 +12,7 @@ class OpenStudio::Model::Model
   require_relative 'Prototype.Model.hvac'
   require_relative 'Prototype.Model.swh'
   require_relative '../standards/Standards.Model'
+  require_relative 'Prototype.building_specific_methods'
 
   # Creates a DOE prototype building model and replaces
   # the current model with this model.
@@ -93,7 +94,7 @@ class OpenStudio::Model::Model
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_surface_convection_algorithm.osm")  if debug_incremental_changes 
       
-      add_constructions(lookup_building_type, template, climate_zone)
+      add_constructions(building_type, template, climate_zone)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes 
       
@@ -136,12 +137,12 @@ class OpenStudio::Model::Model
       apply_infiltration_standard(template)
       modify_infiltration_coefficients(building_type, template, climate_zone)
       modify_surface_convection_algorithm(template)
-      add_constructions(lookup_building_type, template, climate_zone)
+      add_constructions(building_type, template, climate_zone)
       create_thermal_zones(building_type, template, climate_zone)
       add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
-      custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+      custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, self)
       add_swh(building_type, template, climate_zone, prototype_input)
-      custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+      custom_swh_tweaks(building_type, template, climate_zone, prototype_input, self)
       add_exterior_lights(building_type, template, climate_zone, prototype_input)
       add_occupancy_sensors(building_type, template, climate_zone)
       add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
@@ -157,7 +158,7 @@ class OpenStudio::Model::Model
 
     # For some building types, stories are defined explicitly 
     if building_type == 'SmallHotel'
-      building_story_map = define_building_story_map(building_type, template, climate_zone)
+      building_story_map = PrototypeBuilding::SmallHotel.define_building_story_map(building_type, template, climate_zone)
       assign_building_story(building_type, template, climate_zone, building_story_map)
     end
 
@@ -183,13 +184,13 @@ class OpenStudio::Model::Model
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
     # AHU1 doesn't have economizer
     if building_type == 'Outpatient'
-      modify_oa_controller(template)
+      PrototypeBuilding::Outpatient.modify_oa_controller(template, self)
       # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-      reset_or_room_vav_minimum_damper(prototype_input, template)
+      PrototypeBuilding::Outpatient.reset_or_room_vav_minimum_damper(prototype_input, template, self)
     end
 
     if building_type == 'Hospital'
-      modify_hospital_oa_controller(template)
+      PrototypeBuilding::Hospital.modify_hospital_oa_controller(template, self)
     end
 
     # Apply the HVAC efficiency standard
@@ -199,28 +200,23 @@ class OpenStudio::Model::Model
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
     if building_type == 'LargeHotel'
-      large_hotel_add_daylighting_controls(template)
+      PrototypeBuilding::LargeHotel.large_hotel_add_daylighting_controls(template, self)
     elsif building_type == 'Hospital'
-      hospital_add_daylighting_controls(template)
+      PrototypeBuilding::Hospital.hospital_add_daylighting_controls(template, self)
     else
       add_daylighting_controls(template)
     end
 
-    if building_type == 'QuickServiceRestaurant' || building_type == 'FullServiceRestaurant' || building_type == 'Outpatient'
-      update_exhaust_fan_efficiency(template)
+    if building_type == 'QuickServiceRestaurant'
+      PrototypeBuilding::QuickServiceRestaurant.update_exhaust_fan_efficiency(template, self)
+    elsif building_type == 'FullServiceRestaurant'
+      PrototypeBuilding::FullServiceRestaurant.update_exhaust_fan_efficiency(template, self)
+    elsif building_type == 'Outpatient'
+      PrototypeBuilding::Outpatient.update_exhaust_fan_efficiency(template, self)
     end
 
     if building_type == 'HighriseApartment'
-      update_fan_efficiency
-    end
-
-    # Add output variables for debugging
-    # AHU1 doesn't have economizer
-    if building_type == 'Outpatient'
-      # remove the controller:mechanical ventilation for AHU1 OA
-      modify_oa_controller(template)
-      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-      reset_or_room_vav_minimum_damper(prototype_input, template)
+      PrototypeBuilding::HighriseApartment.update_fan_efficiency(self)
     end
 
     # Add output variables for debugging
@@ -238,7 +234,6 @@ class OpenStudio::Model::Model
   # Get the name of the building type used in lookups
   #
   # @param building_type [String] the building type
-  #   a .osm file in the /resources directory
   # @return [String] returns the lookup name as a string
   # @todo Unify the lookup names and eliminate this method
   def get_lookup_name(building_type)
@@ -590,6 +585,10 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
     is_residential = 'No' # default is nonresidential for building level
 
+    # The constructions lookup table uses a slightly different list of
+    # building types.
+    lookup_building_type = get_lookup_name(building_type)
+
     # Assign construction to adiabatic construction
     # Assign a material to all internal mass objects
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(self)
@@ -683,7 +682,7 @@ class OpenStudio::Model::Model
     end
 
     # Make the default construction set for the building
-    bldg_def_const_set = add_construction_set(template, climate_zone, building_type, nil, is_residential)
+    bldg_def_const_set = add_construction_set(template, climate_zone, lookup_building_type, nil, is_residential)
 
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
@@ -725,7 +724,7 @@ class OpenStudio::Model::Model
     end
 
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
-    if building_type == 'SmallHotel'
+    if lookup_building_type == 'SmallHotel'
       getBuildingStorys.each do |story|
         next if story.name.get == 'AtticStory'
         puts "story = #{story.name}"
@@ -740,7 +739,7 @@ class OpenStudio::Model::Model
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = find_object($os_standards['space_types'], 'template' => template, 'building_type' => building_type, 'space_type' => space_type_name)
+          data = find_object($os_standards['space_types'], 'template' => template, 'building_type' => lookup_building_type, 'space_type' => space_type_name)
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
@@ -748,7 +747,7 @@ class OpenStudio::Model::Model
         next if is_residential == 'No'
 
         # if the story is identified as residential, assign residential construction set to the spaces on this story.
-        building_story_const_set = add_construction_set(template, climate_zone, building_type, nil, is_residential)
+        building_story_const_set = add_construction_set(template, climate_zone, lookup_building_type, nil, is_residential)
         if building_story_const_set.is_initialized
           story.spaces.each do |space|
             space.setDefaultConstructionSet(building_story_const_set.get)
@@ -851,8 +850,14 @@ class OpenStudio::Model::Model
 
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type
-    when 'LargeHotel', 'MidriseApartment', 'LargeOffice', 'Hospital'
-      space_multiplier_map = define_space_multiplier
+    when 'LargeHotel'
+      space_multiplier_map = PrototypeBuilding::LargeHotel.define_space_multiplier
+    when 'MidriseApartment'
+      space_multiplier_map = PrototypeBuilding::MidriseApartment.define_space_multiplier
+    when 'LargeOffice'
+      space_multiplier_map = PrototypeBuilding::LargeOffice.define_space_multiplier
+    when 'Hospital'
+      space_multiplier_map = PrototypeBuilding::Hospital.define_space_multiplier
     else
       space_multiplier_map = {}
     end

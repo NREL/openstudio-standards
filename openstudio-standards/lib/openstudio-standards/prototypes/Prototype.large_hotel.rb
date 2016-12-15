@@ -1,7 +1,8 @@
 
-# Extend the class to add Large Hotel specific stuff
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+# Modules for building-type specific methods
+module PrototypeBuilding
+module LargeHotel
+  def self.define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
     case template
     when 'NECB 2011'
@@ -43,7 +44,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = [
       {
         'type' => 'VAV',
@@ -98,7 +99,7 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def define_space_multiplier
+  def self.define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
     space_multiplier_map = {
       'Room_1_Flr_3' => 4,
@@ -113,7 +114,7 @@ class OpenStudio::Model::Model
     return space_multiplier_map
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # Add Exhaust Fan
@@ -127,26 +128,26 @@ class OpenStudio::Model::Model
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = find_object($os_standards['space_types'], 'template' => template, 'building_type' => building_type, 'space_type' => space_type_name)
+      space_type_data = model.find_object($os_standards['space_types'], 'template' => template, 'building_type' => building_type, 'space_type' => space_type_name)
       if space_type_data.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{template}-#{building_type}-#{space_type_name}")
         return false
       end
 
-      exhaust_schedule = add_schedule(space_type_data['exhaust_schedule'])
+      exhaust_schedule = model.add_schedule(space_type_data['exhaust_schedule'])
       if exhaust_schedule.class.to_s == 'NilClass'
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{template}-#{building_type}-#{space_type_name}")
         return false
       end
 
-      balanced_exhaust_schedule = add_schedule(space_type_data['balanced_exhaust_fraction_schedule'])
+      balanced_exhaust_schedule = model.add_schedule(space_type_data['balanced_exhaust_fraction_schedule'])
 
       space_names = space_type_map[space_type_name]
       space_names.each do |space_name|
-        space = getSpaceByName(space_name).get
+        space = model.getSpaceByName(space_name).get
         thermal_zone = space.thermalZone.get
 
-        zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(self)
+        zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
         zone_exhaust_fan.setName(space.name.to_s + ' Exhaust Fan')
         zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
         zone_exhaust_fan.setFanEfficiency(space_type_data['exhaust_fan_efficiency'])
@@ -162,7 +163,7 @@ class OpenStudio::Model::Model
 
         if !space_type_data['exhaust_fan_power'].nil? && space_type_data['exhaust_fan_power'].to_f.nonzero?
           # Create the electric equipment definition
-          exhaust_fan_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
+          exhaust_fan_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
           exhaust_fan_equip_def.setName("#{space_name} Electric Equipment Definition")
           exhaust_fan_equip_def.setDesignLevel(space_type_data['exhaust_fan_power'].to_f)
           exhaust_fan_equip_def.setFractionLatent(0)
@@ -179,10 +180,10 @@ class OpenStudio::Model::Model
     end
 
     # Update Sizing Zone
-    zone_sizing = getSpaceByName('Kitchen_Flr_6').get.thermalZone.get.sizingZone
+    zone_sizing = model.getSpaceByName('Kitchen_Flr_6').get.thermalZone.get.sizingZone
     zone_sizing.setCoolingMinimumAirFlowFraction(0.7)
 
-    zone_sizing = getSpaceByName('Laundry_Flr_1').get.thermalZone.get.sizingZone
+    zone_sizing = model.getSpaceByName('Laundry_Flr_1').get.thermalZone.get.sizingZone
     zone_sizing.setCoolingMinimumAirFlow(0.23567919336)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
@@ -191,15 +192,16 @@ class OpenStudio::Model::Model
   end # add hvac
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
-  def large_hotel_add_daylighting_controls(template)
+  def self.large_hotel_add_daylighting_controls(template, model)
     space_names = ['Banquet_Flr_6', 'Dining_Flr_6', 'Cafe_Flr_1', 'Lobby_Flr_1']
     space_names.each do |space_name|
-      space = getSpaceByName(space_name).get
+      space = model.getSpaceByName(space_name).get
       space.add_daylighting_controls(template, false, false)
     end
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
     return true
   end
+end
 end

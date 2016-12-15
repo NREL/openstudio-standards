@@ -1,7 +1,8 @@
 
-# Extend the class to add Secondary School specific stuff
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+# Modules for building-type specific methods
+module PrototypeBuilding
+module SecondarySchool
+  def self.define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
 
     case template
@@ -54,7 +55,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = nil
 
     case template
@@ -337,12 +338,12 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-    getSpaces.each do |space|
+    model.getSpaces.each do |space|
       if space.name.get.to_s == 'Mech_ZN_1_FLR_1'
-        add_elevator(template,
+        model.add_elevator(template,
                      space,
                      prototype_input['number_of_elevators'],
                      prototype_input['elevator_type'],
@@ -358,7 +359,8 @@ class OpenStudio::Model::Model
     return true
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
     return true
   end
+end
 end
