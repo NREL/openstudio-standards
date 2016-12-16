@@ -82,7 +82,12 @@ class OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Running with OS 2.x WorkflowJSON.')
 
       # Copy the weather file to this directory
-      FileUtils.copy(epw_path.to_s, run_dir)
+      begin
+        FileUtils.copy(epw_path.to_s, "#{run_dir}/in.epw")
+      rescue
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Due to limitations on Windows file path lengths, this measure won't work unless your project is located in a directory whose filepath is less than 90 characters long, including slashes.")
+        return false
+      end
 
       workflow.setSeedFile(File.absolute_path(osm_path.to_s))
       workflow.setWeatherFile(epw_path)
