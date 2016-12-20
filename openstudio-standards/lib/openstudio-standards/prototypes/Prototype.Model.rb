@@ -106,7 +106,7 @@ class OpenStudio::Model::Model
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes 
       
-      return false if runSizingRun("#{sizing_run_dir}/SizingRun0") == false
+      return false if runSizingRun("#{sizing_run_dir}/SR0") == false
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_sizing_run_0.osm")  if debug_incremental_changes 
       
@@ -167,7 +167,7 @@ class OpenStudio::Model::Model
     assign_spaces_to_stories
 
     # Perform a sizing run
-    if runSizingRun("#{sizing_run_dir}/SizingRun1") == false
+    if runSizingRun("#{sizing_run_dir}/SR1") == false
       return false
     end
 
