@@ -1,6 +1,6 @@
 require_relative 'minitest_helper'
 
-class TestFindSpaceTypeStandardsData < Minitest::Test
+class TestFindConstructionPropertiesData < Minitest::Test
 
   def test_find_construction_properties_data
 

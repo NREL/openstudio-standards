@@ -196,12 +196,12 @@ class OpenStudio::Model::Model
       else
 
         # Attaches the end uses if specified by space type
+        space_type_map = define_space_type_map(building_type, template, climate_zone)
 
         if template == 'NECB 2011'
           building_type = 'Space Function'
         end
 
-        space_type_map = define_space_type_map(building_type, template, climate_zone)
         space_type_map.each do |space_type_name, space_names|
           search_criteria = {
             'template' => template,

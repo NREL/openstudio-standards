@@ -1,7 +1,8 @@
 
-# Extend the class to add Medium Office specific stuff
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+# Modules for building-type specific methods
+module PrototypeBuilding
+module Outpatient
+  def self.define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
     case template
     when 'NECB 2011'
@@ -133,7 +134,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       system_to_space_map = [
@@ -302,18 +303,18 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
-    system_to_space_map = define_hvac_system_map(building_type, template, climate_zone)
+    system_to_space_map = PrototypeBuilding::Outpatient.define_hvac_system_map(building_type, template, climate_zone)
 
     # add elevator for the elevator pump room (the fan&lights are already added via standard spreadsheet)
-    add_extra_equip_elevator_pump_room(template)
+    PrototypeBuilding::Outpatient.add_extra_equip_elevator_pump_room(template, model)
     # adjust cooling setpoint at vintages 1B,2B,3B
-    adjust_clg_setpoint(template, climate_zone)
+    PrototypeBuilding::Outpatient.adjust_clg_setpoint(template, climate_zone, model)
     # Get the hot water loop
     hot_water_loop = nil
-    getPlantLoops.each do |loop|
+    model.getPlantLoops.each do |loop|
       # If it has a boiler:hotwater, it is the correct loop
       unless loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).empty?
         hot_water_loop = loop
@@ -321,27 +322,27 @@ class OpenStudio::Model::Model
     end
     # add humidifier to AHU1 (contains operating room 1)
     if hot_water_loop
-      add_humidifier(template, hot_water_loop)
+      PrototypeBuilding::Outpatient.add_humidifier(template, hot_water_loop, model)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find hot water loop to attach humidifier to.')
     end
     # adjust infiltration for vintages 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-    adjust_infiltration(template)
+    PrototypeBuilding::Outpatient.adjust_infiltration(template, model)
     # add door infiltration for vertibule
-    add_door_infiltration(template, climate_zone)
+    PrototypeBuilding::Outpatient.add_door_infiltration(template, climate_zone, model)
     # reset boiler sizing factor to 0.3 (default 1)
-    reset_boiler_sizing_factor
+    PrototypeBuilding::Outpatient.reset_boiler_sizing_factor(model)
     # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone
-    apply_minimum_total_ach(building_type, template)
+    PrototypeBuilding::Outpatient.apply_minimum_total_ach(building_type, template, model)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
 
     return true
   end
 
-  def add_extra_equip_elevator_pump_room(template)
-    elevator_pump_room = getSpaceByName('Floor 1 Elevator Pump Room').get
-    elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
+  def self.add_extra_equip_elevator_pump_room(template, model)
+    elevator_pump_room = model.getSpaceByName('Floor 1 Elevator Pump Room').get
+    elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def.setName('Elevator Pump Room Electric Equipment Definition')
     elec_equip_def.setFractionLatent(0)
     elec_equip_def.setFractionRadiant(0.1)
@@ -352,33 +353,33 @@ class OpenStudio::Model::Model
     elec_equip.setSpace(elevator_pump_room)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      elec_equip.setSchedule(add_schedule('OutPatientHealthCare BLDG_ELEVATORS'))
+      elec_equip.setSchedule(model.add_schedule('OutPatientHealthCare BLDG_ELEVATORS'))
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      elec_equip.setSchedule(add_schedule('OutPatientHealthCare BLDG_ELEVATORS_Pre2004'))
+      elec_equip.setSchedule(model.add_schedule('OutPatientHealthCare BLDG_ELEVATORS_Pre2004'))
     end
     return true
   end
 
-  def adjust_clg_setpoint(template, climate_zone)
-    getSpaceTypes.sort.each do |space_type|
+  def self.adjust_clg_setpoint(template, climate_zone, model)
+    model.getSpaceTypes.sort.each do |space_type|
       space_type_name = space_type.name.get
       thermostat_name = space_type_name + ' Thermostat'
-      thermostat = getThermostatSetpointDualSetpointByName(thermostat_name).get
+      thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
       case template
       when '90.1-2004', '90.1-2007', '90.1-2010'
         case climate_zone
         when 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-3B'
-          thermostat.setCoolingSetpointTemperatureSchedule(add_schedule('OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM'))
+          thermostat.setCoolingSetpointTemperatureSchedule(model.add_schedule('OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM'))
         end
       end
     end
     return true
   end
 
-  def adjust_infiltration(template)
+  def self.adjust_infiltration(template, model)
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      getSpaces.sort.each do |space|
+      model.getSpaces.sort.each do |space|
         space_type = space.spaceType.get
         # Skip interior spaces
         next if space.exterior_wall_and_window_area <= 0
@@ -396,14 +397,14 @@ class OpenStudio::Model::Model
           infil_ach = infiltration_space_type.airChangesperHour.get
         end
         # Create an infiltration rate object for this space
-        infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+        infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
         infiltration.setName("#{space.name} Infiltration")
         infiltration.setFlowperExteriorSurfaceArea(infil_rate) unless infil_rate.nil? || infil_rate.to_f.zero?
         infiltration.setAirChangesperHour(infil_ach) unless infil_ach.nil? || infil_ach.to_f.zero?
         infiltration.setSchedule(infil_sch)
         infiltration.setSpace(space)
       end
-      getSpaceTypes.each do |space_type|
+      model.getSpaceTypes.each do |space_type|
         space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
       end
     else
@@ -411,28 +412,28 @@ class OpenStudio::Model::Model
     end
   end
 
-  def add_door_infiltration(template, climate_zone)
+  def self.add_door_infiltration(template, climate_zone, model)
     # add extra infiltration for vestibule door
     case template
     when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
       return true
     else
-      vestibule_space = getSpaceByName('Floor 1 Vestibule').get
-      infiltration_vestibule_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+      vestibule_space = model.getSpaceByName('Floor 1 Vestibule').get
+      infiltration_vestibule_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_vestibule_door.setName('Vestibule door Infiltration')
       infiltration_rate_vestibule_door = 0
       case template
       when '90.1-2004'
         infiltration_rate_vestibule_door = 1.186002811
-        infiltration_vestibule_door.setSchedule(add_schedule('OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
+        infiltration_vestibule_door.setSchedule(model.add_schedule('OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
       when '90.1-2007', '90.1-2010', '90.1-2013'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
           infiltration_rate_vestibule_door = 1.186002811
-          infiltration_vestibule_door.setSchedule(add_schedule('OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
+          infiltration_vestibule_door.setSchedule(model.add_schedule('OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
         else
           infiltration_rate_vestibule_door = 0.776824762
-          infiltration_vestibule_door.setSchedule(add_schedule('OutPatientHealthCare INFIL_Door_Opening_SCH_0.131'))
+          infiltration_vestibule_door.setSchedule(model.add_schedule('OutPatientHealthCare INFIL_Door_Opening_SCH_0.131'))
         end
       end
       infiltration_vestibule_door.setDesignFlowRate(infiltration_rate_vestibule_door)
@@ -440,10 +441,10 @@ class OpenStudio::Model::Model
     end
   end
 
-  def update_waterheater_loss_coefficient(template)
+  def self.update_waterheater_loss_coefficient(template, model)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
-      getWaterHeaterMixeds.sort.each do |water_heater|
+      model.getWaterHeaterMixeds.sort.each do |water_heater|
         if water_heater.name.to_s.include?('Booster')
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
           water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
@@ -456,16 +457,16 @@ class OpenStudio::Model::Model
   end
 
   # add humidifier to AHU1 (contains operating room1)
-  def add_humidifier(template, hot_water_loop)
-    operatingroom1_space = getSpaceByName('Floor 1 Operating Room 1').get
+  def self.add_humidifier(template, hot_water_loop, model)
+    operatingroom1_space = model.getSpaceByName('Floor 1 Operating Room 1').get
     operatingroom1_zone = operatingroom1_space.thermalZone.get
-    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
-    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(add_schedule('OutPatientHealthCare MinRelHumSetSch'))
-    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(add_schedule('OutPatientHealthCare MaxRelHumSetSch'))
+    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(model)
+    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('OutPatientHealthCare MinRelHumSetSch'))
+    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('OutPatientHealthCare MaxRelHumSetSch'))
     operatingroom1_zone.setZoneControlHumidistat(humidistat)
-    getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.each do |air_loop|
       if air_loop.thermalZones.include? operatingroom1_zone
-        humidifier = OpenStudio::Model::HumidifierSteamElectric.new(self)
+        humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
         humidifier.setRatedCapacity(3.72E-5)
         humidifier.setRatedPower(100_000)
         humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
@@ -479,12 +480,12 @@ class OpenStudio::Model::Model
         heating_coil_outlet_node = htg_coil.airOutletModelObject.get.to_Node.get
         supply_outlet_node = air_loop.supplyOutletNode
         humidifier.addToNode(heating_coil_outlet_node)
-        humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(self)
+        humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
         case template
         when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-          extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOnDiscreteSchedule)
+          extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
           extra_elec_htg_coil.setName('AHU1 extra Electric Htg Coil')
-          extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(self, alwaysOnDiscreteSchedule)
+          extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
           extra_water_htg_coil.setName('AHU1 extra Water Htg Coil')
           hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
           extra_elec_htg_coil.addToNode(supply_outlet_node)
@@ -499,52 +500,52 @@ class OpenStudio::Model::Model
 
   # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
   # AHU1 doesn't have economizer
-  def modify_oa_controller(template)
-    getAirLoopHVACs.each do |air_loop|
+  def self.modify_oa_controller(template, model)
+    model.getAirLoopHVACs.each do |air_loop|
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
       controller_mv = controller_oa.controllerMechanicalVentilation
       # AHU1 OA doesn't have controller:mechanicalventilation
       if air_loop.name.to_s.include? 'Outpatient F1'
-        controller_mv.setAvailabilitySchedule(alwaysOffDiscreteSchedule)
+        controller_mv.setAvailabilitySchedule(model.alwaysOffDiscreteSchedule)
         # add minimum fraction of outdoor air schedule to AHU1
-        controller_oa.setMinimumFractionofOutdoorAirSchedule(add_schedule('OutPatientHealthCare AHU-1_OAminOAFracSchedule'))
+        controller_oa.setMinimumFractionofOutdoorAirSchedule(model.add_schedule('OutPatientHealthCare AHU-1_OAminOAFracSchedule'))
       # for AHU2, at vintages '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', the minimum OA schedule is not the same as
       # airloop availability schedule, but separately assigned.
       elsif template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'
-        controller_oa.setMinimumOutdoorAirSchedule(add_schedule('OutPatientHealthCare BLDG_OA_SCH'))
+        controller_oa.setMinimumOutdoorAirSchedule(model.add_schedule('OutPatientHealthCare BLDG_OA_SCH'))
         # add minimum fraction of outdoor air schedule to AHU2
-        controller_oa.setMinimumFractionofOutdoorAirSchedule(add_schedule('OutPatientHealthCare BLDG_OA_FRAC_SCH'))
+        controller_oa.setMinimumFractionofOutdoorAirSchedule(model.add_schedule('OutPatientHealthCare BLDG_OA_FRAC_SCH'))
       end
     end
   end
 
   # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-  def reset_or_room_vav_minimum_damper(prototype_input, template)
+  def self.reset_or_room_vav_minimum_damper(prototype_input, template, model)
     case template
     when '90.1-2004', '90.1-2007'
       return true
     when '90.1-2010', '90.1-2013'
-      getAirTerminalSingleDuctVAVReheats.sort.each do |airterminal|
+      model.getAirTerminalSingleDuctVAVReheats.sort.each do |airterminal|
         airterminal_name = airterminal.name.get
         if airterminal_name.include?('Floor 1 Operating Room 1') || airterminal_name.include?('Floor 1 Operating Room 2')
           airterminal.setZoneMinimumAirFlowMethod('Scheduled')
-          airterminal.setMinimumAirFlowFractionSchedule(add_schedule('OutPatientHealthCare OR_MinSA_Sched'))
+          airterminal.setMinimumAirFlowFractionSchedule(model.add_schedule('OutPatientHealthCare OR_MinSA_Sched'))
         end
       end
     end
   end
 
-  def reset_boiler_sizing_factor
-    getBoilerHotWaters.sort.each do |boiler|
+  def self.reset_boiler_sizing_factor(model)
+    model.getBoilerHotWaters.sort.each do |boiler|
       boiler.setSizingFactor(0.3)
     end
   end
 
-  def update_exhaust_fan_efficiency(template)
+  def self.update_exhaust_fan_efficiency(template, model)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      getFanZoneExhausts.sort.each do |exhaust_fan|
+      model.getFanZoneExhausts.sort.each do |exhaust_fan|
         fan_name = exhaust_fan.name.to_s
         if (fan_name.include? 'X-Ray') || (fan_name.include? 'MRI Room')
           exhaust_fan.setFanEfficiency(0.16)
@@ -555,7 +556,7 @@ class OpenStudio::Model::Model
         end
       end
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      getFanZoneExhausts.sort.each do |exhaust_fan|
+      model.getFanZoneExhausts.sort.each do |exhaust_fan|
         exhaust_fan.setFanEfficiency(0.338)
         exhaust_fan.setPressureRise(125)
       end
@@ -563,15 +564,15 @@ class OpenStudio::Model::Model
   end
 
   # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone
-  def apply_minimum_total_ach(building_type, template)
-    getSpaces.each do |space|
+  def self.apply_minimum_total_ach(building_type, template, model)
+    model.getSpaces.each do |space|
       space_type_name = space.spaceType.get.standardsSpaceType.get
       search_criteria = {
         'template' => template,
         'building_type' => building_type,
         'space_type' => space_type_name
       }
-      data = find_object($os_standards['space_types'], search_criteria)
+      data = model.find_object($os_standards['space_types'], search_criteria)
 
       # skip space type without minimum total air changes
       next if data['minimum_total_air_changes'].nil?
@@ -595,9 +596,10 @@ class OpenStudio::Model::Model
     end
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(template)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
+    PrototypeBuilding::Outpatient.update_waterheater_loss_coefficient(template, model)
 
     return true
   end
+end
 end

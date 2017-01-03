@@ -75,7 +75,7 @@ class HVACEfficienciesTest < MiniTest::Test
         coil.setRatedAirFlowRate(flow_rate)
       end
       # run the standards
-      result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+      result = self.run_the_measure(model, "#{output_folder}/#{name}/sizing")
       actual_heatpump_cop << model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
       # Save the model
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
@@ -88,7 +88,7 @@ class HVACEfficienciesTest < MiniTest::Test
     for int in 0..test_caps.size - 1
       output_line_text += "#{min_caps[int]},#{max_caps[int]},"
       if efficiency_type[int] == 'Energy Efficiency Ratio (EER)'
-        actual_heatpump_eff[int] = (cop_to_eer(actual_heatpump_cop[int].to_f) + 0.001).round(1)
+        actual_heatpump_eff[int] = (cop_to_eer(actual_heatpump_cop[int].to_f,test_caps[int]) + 0.001).round(1)
         output_line_text += "#{actual_heatpump_eff[int]}\n"
       end
     end
@@ -223,9 +223,9 @@ class HVACEfficienciesTest < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
-      model.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
+      model.apply_prototype_hvac_assumptions(building_type, building_vintage, climate_zone)
       # Apply the HVAC efficiency standard
-      model.applyHVACEfficiencyStandard(building_vintage, climate_zone)
+      model.apply_hvac_efficiency_standard(building_vintage, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")

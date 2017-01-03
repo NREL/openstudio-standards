@@ -1253,732 +1253,732 @@ Warehouse Area - refrigerated,Warehouse - refrigerated-WholeBuilding,4,20.0,21,5
 Warehouse Area - refrigerated,Warehouse - refrigerated-WholeBuilding,5,20.0,0,5
 Warehouse Area - refrigerated,Warehouse - refrigerated-WholeBuilding,5,20.0,20,5
 Warehouse Area - refrigerated,Warehouse - refrigerated-WholeBuilding,5,20.0,21,5
-Wildcard,Space Function-Corr. < 2.4m wide-sch-A,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-A,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-A,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-A,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-A,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-A,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-A,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-A,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-A,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-B,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-B,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-B,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-B,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-B,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-B,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-B,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-B,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-B,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-C,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-C,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-C,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-C,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-C,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-C,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-C,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-C,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-C,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-D,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-D,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-D,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-D,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-D,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-D,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-D,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-D,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-D,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-E,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-E,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-E,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-E,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-E,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-E,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-E,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-E,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-E,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-F,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-F,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-F,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-F,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-F,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-F,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-F,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-F,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-F,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-G,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-G,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-G,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-G,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-G,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-G,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-G,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-G,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-G,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-H,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-H,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-H,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-H,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-H,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-H,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-H,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-H,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-H,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-I,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-I,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-I,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-I,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-I,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-I,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-I,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-I,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. < 2.4m wide-sch-I,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,5,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,2,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,2,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,2,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,4,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,4,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,4,20.0,21,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,5,20.0,0,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,5,20.0,20,Wildcard
-Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,5,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-A,2,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-A,2,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-A,2,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-A,4,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-A,4,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-A,4,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-A,5,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-A,5,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-A,5,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-B,2,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-B,2,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-B,2,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-B,4,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-B,4,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-B,4,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-B,5,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-B,5,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-B,5,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-C,2,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-C,2,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-C,2,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-C,4,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-C,4,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-C,4,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-C,5,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-C,5,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-C,5,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-D,2,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-D,2,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-D,2,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-D,4,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-D,4,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-D,4,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-D,5,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-D,5,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-D,5,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-E,2,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-E,2,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-E,2,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-E,4,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-E,4,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-E,4,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-E,5,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-E,5,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-E,5,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-F,2,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-F,2,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-F,2,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-F,4,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-F,4,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-F,4,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-F,5,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-F,5,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-F,5,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-G,2,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-G,2,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-G,2,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-G,4,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-G,4,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-G,4,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-G,5,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-G,5,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-G,5,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-H,2,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-H,2,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-H,2,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-H,4,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-H,4,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-H,4,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-H,5,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-H,5,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-H,5,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-I,2,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-I,2,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-I,2,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-I,4,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-I,4,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-I,4,20.0,21,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-I,5,20.0,0,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-I,5,20.0,20,Wildcard
-Wildcard,Space Function-Electrical/Mechanical-sch-I,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,5,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,2,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,2,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,2,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,4,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,4,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,4,20.0,21,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,5,20.0,0,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,5,20.0,20,Wildcard
-Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,5,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,2,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,2,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,2,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,4,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,4,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,4,20.0,21,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,5,20.0,0,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,5,20.0,20,Wildcard
-Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,5,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-A,2,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-A,2,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-A,2,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-A,4,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-A,4,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-A,4,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-A,5,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-A,5,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-A,5,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-B,2,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-B,2,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-B,2,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-B,4,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-B,4,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-B,4,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-B,5,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-B,5,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-B,5,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-C,2,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-C,2,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-C,2,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-C,4,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-C,4,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-C,4,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-C,5,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-C,5,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-C,5,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-D,2,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-D,2,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-D,2,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-D,4,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-D,4,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-D,4,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-D,5,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-D,5,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-D,5,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-E,2,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-E,2,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-E,2,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-E,4,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-E,4,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-E,4,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-E,5,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-E,5,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-E,5,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-F,2,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-F,2,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-F,2,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-F,4,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-F,4,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-F,4,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-F,5,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-F,5,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-F,5,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-G,2,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-G,2,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-G,2,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-G,4,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-G,4,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-G,4,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-G,5,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-G,5,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-G,5,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-H,2,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-H,2,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-H,2,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-H,4,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-H,4,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-H,4,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-H,5,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-H,5,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-H,5,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-I,2,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-I,2,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-I,2,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-I,4,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-I,4,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-I,4,20.0,21,Wildcard
-Wildcard,Space Function-Stairway-sch-I,5,20.0,0,Wildcard
-Wildcard,Space Function-Stairway-sch-I,5,20.0,20,Wildcard
-Wildcard,Space Function-Stairway-sch-I,5,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-A,2,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-A,2,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-A,2,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-A,4,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-A,4,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-A,4,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-A,5,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-A,5,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-A,5,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-B,2,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-B,2,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-B,2,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-B,4,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-B,4,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-B,4,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-B,5,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-B,5,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-B,5,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-C,2,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-C,2,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-C,2,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-C,4,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-C,4,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-C,4,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-C,5,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-C,5,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-C,5,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-D,2,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-D,2,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-D,2,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-D,4,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-D,4,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-D,4,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-D,5,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-D,5,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-D,5,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-E,2,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-E,2,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-E,2,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-E,4,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-E,4,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-E,4,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-E,5,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-E,5,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-E,5,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-F,2,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-F,2,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-F,2,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-F,4,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-F,4,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-F,4,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-F,5,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-F,5,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-F,5,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-G,2,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-G,2,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-G,2,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-G,4,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-G,4,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-G,4,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-G,5,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-G,5,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-G,5,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-H,2,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-H,2,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-H,2,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-H,4,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-H,4,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-H,4,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-H,5,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-H,5,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-H,5,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-I,2,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-I,2,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-I,2,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-I,4,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-I,4,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-I,4,20.0,21,Wildcard
-Wildcard,Space Function-Washroom-sch-I,5,20.0,0,Wildcard
-Wildcard,Space Function-Washroom-sch-I,5,20.0,20,Wildcard
-Wildcard,Space Function-Washroom-sch-I,5,20.0,21,Wildcard
+Wildcard,Space Function-Corr. < 2.4m wide-sch-A,2,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-A,2,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-A,2,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-A,4,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-A,4,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-A,4,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-A,5,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-A,5,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-A,5,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-B,2,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-B,2,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-B,2,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-B,4,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-B,4,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-B,4,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-B,5,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-B,5,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-B,5,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-C,2,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-C,2,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-C,2,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-C,4,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-C,4,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-C,4,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-C,5,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-C,5,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-C,5,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-D,2,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-D,2,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-D,2,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-D,4,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-D,4,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-D,4,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-D,5,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-D,5,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-D,5,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-E,2,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-E,2,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-E,2,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-E,4,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-E,4,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-E,4,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-E,5,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-E,5,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-E,5,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-F,2,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-F,2,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-F,2,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-F,4,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-F,4,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-F,4,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-F,5,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-F,5,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-F,5,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-G,2,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-G,2,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-G,2,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-G,4,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-G,4,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-G,4,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-G,5,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-G,5,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-G,5,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-H,2,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-H,2,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-H,2,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-H,4,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-H,4,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-H,4,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-H,5,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-H,5,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-H,5,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-I,2,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-I,2,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-I,2,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-I,4,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-I,4,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-I,4,20.0,21,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-I,5,20.0,0,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-I,5,20.0,20,""
+Wildcard,Space Function-Corr. < 2.4m wide-sch-I,5,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,2,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,2,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,2,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,4,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,4,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,4,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,5,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,5,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-A,5,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,2,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,2,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,2,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,4,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,4,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,4,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,5,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,5,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-B,5,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,2,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,2,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,2,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,4,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,4,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,4,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,5,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,5,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-C,5,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,2,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,2,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,2,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,4,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,4,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,4,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,5,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,5,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-D,5,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,2,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,2,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,2,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,4,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,4,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,4,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,5,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,5,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-E,5,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,2,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,2,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,2,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,4,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,4,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,4,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,5,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,5,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-F,5,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,2,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,2,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,2,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,4,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,4,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,4,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,5,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,5,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-G,5,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,2,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,2,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,2,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,4,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,4,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,4,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,5,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,5,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-H,5,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,2,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,2,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,2,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,4,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,4,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,4,20.0,21,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,5,20.0,0,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,5,20.0,20,""
+Wildcard,Space Function-Corr. >= 2.4m wide-sch-I,5,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-A,2,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-A,2,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-A,2,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-A,4,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-A,4,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-A,4,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-A,5,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-A,5,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-A,5,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-B,2,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-B,2,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-B,2,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-B,4,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-B,4,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-B,4,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-B,5,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-B,5,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-B,5,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-C,2,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-C,2,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-C,2,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-C,4,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-C,4,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-C,4,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-C,5,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-C,5,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-C,5,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-D,2,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-D,2,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-D,2,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-D,4,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-D,4,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-D,4,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-D,5,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-D,5,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-D,5,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-E,2,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-E,2,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-E,2,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-E,4,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-E,4,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-E,4,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-E,5,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-E,5,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-E,5,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-F,2,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-F,2,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-F,2,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-F,4,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-F,4,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-F,4,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-F,5,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-F,5,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-F,5,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-G,2,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-G,2,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-G,2,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-G,4,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-G,4,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-G,4,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-G,5,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-G,5,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-G,5,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-H,2,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-H,2,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-H,2,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-H,4,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-H,4,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-H,4,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-H,5,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-H,5,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-H,5,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-I,2,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-I,2,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-I,2,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-I,4,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-I,4,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-I,4,20.0,21,""
+Wildcard,Space Function-Electrical/Mechanical-sch-I,5,20.0,0,""
+Wildcard,Space Function-Electrical/Mechanical-sch-I,5,20.0,20,""
+Wildcard,Space Function-Electrical/Mechanical-sch-I,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-A,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-B,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-C,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-D,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-E,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-F,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-G,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-H,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. < 2.4m-sch-I,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-A,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-B,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-C,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-D,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-E,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-F,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-G,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-H,5,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,2,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,2,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,2,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,4,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,4,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,4,20.0,21,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,5,20.0,0,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,5,20.0,20,""
+Wildcard,Space Function-Hospital corr. >= 2.4m-sch-I,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-A,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-B,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-C,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-D,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-E,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-F,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-G,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-H,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. < 2.4m-sch-I,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-A,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-B,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-C,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-D,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-E,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-F,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-G,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-H,5,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,2,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,2,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,2,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,4,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,4,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,4,20.0,21,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,5,20.0,0,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,5,20.0,20,""
+Wildcard,Space Function-Mfg - corr. >= 2.4m-sch-I,5,20.0,21,""
+Wildcard,Space Function-Stairway-sch-A,2,20.0,0,""
+Wildcard,Space Function-Stairway-sch-A,2,20.0,20,""
+Wildcard,Space Function-Stairway-sch-A,2,20.0,21,""
+Wildcard,Space Function-Stairway-sch-A,4,20.0,0,""
+Wildcard,Space Function-Stairway-sch-A,4,20.0,20,""
+Wildcard,Space Function-Stairway-sch-A,4,20.0,21,""
+Wildcard,Space Function-Stairway-sch-A,5,20.0,0,""
+Wildcard,Space Function-Stairway-sch-A,5,20.0,20,""
+Wildcard,Space Function-Stairway-sch-A,5,20.0,21,""
+Wildcard,Space Function-Stairway-sch-B,2,20.0,0,""
+Wildcard,Space Function-Stairway-sch-B,2,20.0,20,""
+Wildcard,Space Function-Stairway-sch-B,2,20.0,21,""
+Wildcard,Space Function-Stairway-sch-B,4,20.0,0,""
+Wildcard,Space Function-Stairway-sch-B,4,20.0,20,""
+Wildcard,Space Function-Stairway-sch-B,4,20.0,21,""
+Wildcard,Space Function-Stairway-sch-B,5,20.0,0,""
+Wildcard,Space Function-Stairway-sch-B,5,20.0,20,""
+Wildcard,Space Function-Stairway-sch-B,5,20.0,21,""
+Wildcard,Space Function-Stairway-sch-C,2,20.0,0,""
+Wildcard,Space Function-Stairway-sch-C,2,20.0,20,""
+Wildcard,Space Function-Stairway-sch-C,2,20.0,21,""
+Wildcard,Space Function-Stairway-sch-C,4,20.0,0,""
+Wildcard,Space Function-Stairway-sch-C,4,20.0,20,""
+Wildcard,Space Function-Stairway-sch-C,4,20.0,21,""
+Wildcard,Space Function-Stairway-sch-C,5,20.0,0,""
+Wildcard,Space Function-Stairway-sch-C,5,20.0,20,""
+Wildcard,Space Function-Stairway-sch-C,5,20.0,21,""
+Wildcard,Space Function-Stairway-sch-D,2,20.0,0,""
+Wildcard,Space Function-Stairway-sch-D,2,20.0,20,""
+Wildcard,Space Function-Stairway-sch-D,2,20.0,21,""
+Wildcard,Space Function-Stairway-sch-D,4,20.0,0,""
+Wildcard,Space Function-Stairway-sch-D,4,20.0,20,""
+Wildcard,Space Function-Stairway-sch-D,4,20.0,21,""
+Wildcard,Space Function-Stairway-sch-D,5,20.0,0,""
+Wildcard,Space Function-Stairway-sch-D,5,20.0,20,""
+Wildcard,Space Function-Stairway-sch-D,5,20.0,21,""
+Wildcard,Space Function-Stairway-sch-E,2,20.0,0,""
+Wildcard,Space Function-Stairway-sch-E,2,20.0,20,""
+Wildcard,Space Function-Stairway-sch-E,2,20.0,21,""
+Wildcard,Space Function-Stairway-sch-E,4,20.0,0,""
+Wildcard,Space Function-Stairway-sch-E,4,20.0,20,""
+Wildcard,Space Function-Stairway-sch-E,4,20.0,21,""
+Wildcard,Space Function-Stairway-sch-E,5,20.0,0,""
+Wildcard,Space Function-Stairway-sch-E,5,20.0,20,""
+Wildcard,Space Function-Stairway-sch-E,5,20.0,21,""
+Wildcard,Space Function-Stairway-sch-F,2,20.0,0,""
+Wildcard,Space Function-Stairway-sch-F,2,20.0,20,""
+Wildcard,Space Function-Stairway-sch-F,2,20.0,21,""
+Wildcard,Space Function-Stairway-sch-F,4,20.0,0,""
+Wildcard,Space Function-Stairway-sch-F,4,20.0,20,""
+Wildcard,Space Function-Stairway-sch-F,4,20.0,21,""
+Wildcard,Space Function-Stairway-sch-F,5,20.0,0,""
+Wildcard,Space Function-Stairway-sch-F,5,20.0,20,""
+Wildcard,Space Function-Stairway-sch-F,5,20.0,21,""
+Wildcard,Space Function-Stairway-sch-G,2,20.0,0,""
+Wildcard,Space Function-Stairway-sch-G,2,20.0,20,""
+Wildcard,Space Function-Stairway-sch-G,2,20.0,21,""
+Wildcard,Space Function-Stairway-sch-G,4,20.0,0,""
+Wildcard,Space Function-Stairway-sch-G,4,20.0,20,""
+Wildcard,Space Function-Stairway-sch-G,4,20.0,21,""
+Wildcard,Space Function-Stairway-sch-G,5,20.0,0,""
+Wildcard,Space Function-Stairway-sch-G,5,20.0,20,""
+Wildcard,Space Function-Stairway-sch-G,5,20.0,21,""
+Wildcard,Space Function-Stairway-sch-H,2,20.0,0,""
+Wildcard,Space Function-Stairway-sch-H,2,20.0,20,""
+Wildcard,Space Function-Stairway-sch-H,2,20.0,21,""
+Wildcard,Space Function-Stairway-sch-H,4,20.0,0,""
+Wildcard,Space Function-Stairway-sch-H,4,20.0,20,""
+Wildcard,Space Function-Stairway-sch-H,4,20.0,21,""
+Wildcard,Space Function-Stairway-sch-H,5,20.0,0,""
+Wildcard,Space Function-Stairway-sch-H,5,20.0,20,""
+Wildcard,Space Function-Stairway-sch-H,5,20.0,21,""
+Wildcard,Space Function-Stairway-sch-I,2,20.0,0,""
+Wildcard,Space Function-Stairway-sch-I,2,20.0,20,""
+Wildcard,Space Function-Stairway-sch-I,2,20.0,21,""
+Wildcard,Space Function-Stairway-sch-I,4,20.0,0,""
+Wildcard,Space Function-Stairway-sch-I,4,20.0,20,""
+Wildcard,Space Function-Stairway-sch-I,4,20.0,21,""
+Wildcard,Space Function-Stairway-sch-I,5,20.0,0,""
+Wildcard,Space Function-Stairway-sch-I,5,20.0,20,""
+Wildcard,Space Function-Stairway-sch-I,5,20.0,21,""
+Wildcard,Space Function-Washroom-sch-A,2,20.0,0,""
+Wildcard,Space Function-Washroom-sch-A,2,20.0,20,""
+Wildcard,Space Function-Washroom-sch-A,2,20.0,21,""
+Wildcard,Space Function-Washroom-sch-A,4,20.0,0,""
+Wildcard,Space Function-Washroom-sch-A,4,20.0,20,""
+Wildcard,Space Function-Washroom-sch-A,4,20.0,21,""
+Wildcard,Space Function-Washroom-sch-A,5,20.0,0,""
+Wildcard,Space Function-Washroom-sch-A,5,20.0,20,""
+Wildcard,Space Function-Washroom-sch-A,5,20.0,21,""
+Wildcard,Space Function-Washroom-sch-B,2,20.0,0,""
+Wildcard,Space Function-Washroom-sch-B,2,20.0,20,""
+Wildcard,Space Function-Washroom-sch-B,2,20.0,21,""
+Wildcard,Space Function-Washroom-sch-B,4,20.0,0,""
+Wildcard,Space Function-Washroom-sch-B,4,20.0,20,""
+Wildcard,Space Function-Washroom-sch-B,4,20.0,21,""
+Wildcard,Space Function-Washroom-sch-B,5,20.0,0,""
+Wildcard,Space Function-Washroom-sch-B,5,20.0,20,""
+Wildcard,Space Function-Washroom-sch-B,5,20.0,21,""
+Wildcard,Space Function-Washroom-sch-C,2,20.0,0,""
+Wildcard,Space Function-Washroom-sch-C,2,20.0,20,""
+Wildcard,Space Function-Washroom-sch-C,2,20.0,21,""
+Wildcard,Space Function-Washroom-sch-C,4,20.0,0,""
+Wildcard,Space Function-Washroom-sch-C,4,20.0,20,""
+Wildcard,Space Function-Washroom-sch-C,4,20.0,21,""
+Wildcard,Space Function-Washroom-sch-C,5,20.0,0,""
+Wildcard,Space Function-Washroom-sch-C,5,20.0,20,""
+Wildcard,Space Function-Washroom-sch-C,5,20.0,21,""
+Wildcard,Space Function-Washroom-sch-D,2,20.0,0,""
+Wildcard,Space Function-Washroom-sch-D,2,20.0,20,""
+Wildcard,Space Function-Washroom-sch-D,2,20.0,21,""
+Wildcard,Space Function-Washroom-sch-D,4,20.0,0,""
+Wildcard,Space Function-Washroom-sch-D,4,20.0,20,""
+Wildcard,Space Function-Washroom-sch-D,4,20.0,21,""
+Wildcard,Space Function-Washroom-sch-D,5,20.0,0,""
+Wildcard,Space Function-Washroom-sch-D,5,20.0,20,""
+Wildcard,Space Function-Washroom-sch-D,5,20.0,21,""
+Wildcard,Space Function-Washroom-sch-E,2,20.0,0,""
+Wildcard,Space Function-Washroom-sch-E,2,20.0,20,""
+Wildcard,Space Function-Washroom-sch-E,2,20.0,21,""
+Wildcard,Space Function-Washroom-sch-E,4,20.0,0,""
+Wildcard,Space Function-Washroom-sch-E,4,20.0,20,""
+Wildcard,Space Function-Washroom-sch-E,4,20.0,21,""
+Wildcard,Space Function-Washroom-sch-E,5,20.0,0,""
+Wildcard,Space Function-Washroom-sch-E,5,20.0,20,""
+Wildcard,Space Function-Washroom-sch-E,5,20.0,21,""
+Wildcard,Space Function-Washroom-sch-F,2,20.0,0,""
+Wildcard,Space Function-Washroom-sch-F,2,20.0,20,""
+Wildcard,Space Function-Washroom-sch-F,2,20.0,21,""
+Wildcard,Space Function-Washroom-sch-F,4,20.0,0,""
+Wildcard,Space Function-Washroom-sch-F,4,20.0,20,""
+Wildcard,Space Function-Washroom-sch-F,4,20.0,21,""
+Wildcard,Space Function-Washroom-sch-F,5,20.0,0,""
+Wildcard,Space Function-Washroom-sch-F,5,20.0,20,""
+Wildcard,Space Function-Washroom-sch-F,5,20.0,21,""
+Wildcard,Space Function-Washroom-sch-G,2,20.0,0,""
+Wildcard,Space Function-Washroom-sch-G,2,20.0,20,""
+Wildcard,Space Function-Washroom-sch-G,2,20.0,21,""
+Wildcard,Space Function-Washroom-sch-G,4,20.0,0,""
+Wildcard,Space Function-Washroom-sch-G,4,20.0,20,""
+Wildcard,Space Function-Washroom-sch-G,4,20.0,21,""
+Wildcard,Space Function-Washroom-sch-G,5,20.0,0,""
+Wildcard,Space Function-Washroom-sch-G,5,20.0,20,""
+Wildcard,Space Function-Washroom-sch-G,5,20.0,21,""
+Wildcard,Space Function-Washroom-sch-H,2,20.0,0,""
+Wildcard,Space Function-Washroom-sch-H,2,20.0,20,""
+Wildcard,Space Function-Washroom-sch-H,2,20.0,21,""
+Wildcard,Space Function-Washroom-sch-H,4,20.0,0,""
+Wildcard,Space Function-Washroom-sch-H,4,20.0,20,""
+Wildcard,Space Function-Washroom-sch-H,4,20.0,21,""
+Wildcard,Space Function-Washroom-sch-H,5,20.0,0,""
+Wildcard,Space Function-Washroom-sch-H,5,20.0,20,""
+Wildcard,Space Function-Washroom-sch-H,5,20.0,21,""
+Wildcard,Space Function-Washroom-sch-I,2,20.0,0,""
+Wildcard,Space Function-Washroom-sch-I,2,20.0,20,""
+Wildcard,Space Function-Washroom-sch-I,2,20.0,21,""
+Wildcard,Space Function-Washroom-sch-I,4,20.0,0,""
+Wildcard,Space Function-Washroom-sch-I,4,20.0,20,""
+Wildcard,Space Function-Washroom-sch-I,4,20.0,21,""
+Wildcard,Space Function-Washroom-sch-I,5,20.0,0,""
+Wildcard,Space Function-Washroom-sch-I,5,20.0,20,""
+Wildcard,Space Function-Washroom-sch-I,5,20.0,21,""
