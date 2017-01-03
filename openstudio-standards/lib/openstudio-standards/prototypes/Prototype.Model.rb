@@ -816,8 +816,6 @@ class OpenStudio::Model::Model
        space_multiplier_map = PrototypeBuilding::LargeOffice.define_space_multiplier 
      when 'Hospital' 
        space_multiplier_map = PrototypeBuilding::Hospital.define_space_multiplier 
-	 when 'LargeOfficeDetail' 
-       space_multiplier_map = PrototypeBuilding::LargeOfficeDetail.define_space_multiplier 
      else 
        space_multiplier_map = {} 
      end 
