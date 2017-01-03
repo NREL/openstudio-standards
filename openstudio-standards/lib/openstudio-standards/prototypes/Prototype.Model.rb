@@ -196,6 +196,8 @@ class OpenStudio::Model::Model
       lookup_name = 'Office'
     when 'LargeOffice'
       lookup_name = 'Office'
+	when 'LargeOfficeDetail'
+      lookup_name = 'Office'
     when 'RetailStandalone'
       lookup_name = 'Retail'
     when 'RetailStripmall'
@@ -227,6 +229,8 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.medium_office'
     when 'LargeOffice'
       building_methods = 'Prototype.large_office'
+	when 'LargeOfficeDetail'
+      building_methods = 'Prototype.large_office_detail'  
     when 'SmallHotel'
       building_methods = 'Prototype.small_hotel'
     when 'LargeHotel'
@@ -303,6 +307,14 @@ class OpenStudio::Model::Model
       else
         geometry_file = 'Geometry.large_office_2010.osm'
       end
+	when 'LargeOfficeDetail'
+      alt_search_name = 'Office'
+      case template
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'DOE Ref 2004'
+        geometry_file = 'Geometry.large_office_reference.osm'
+      else
+        geometry_file = 'Geometry.large_office_detail_2010.osm'
+      end  
     when 'SmallHotel'
       case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -796,7 +808,7 @@ class OpenStudio::Model::Model
 
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type
-    when 'LargeHotel', 'MidriseApartment', 'LargeOffice', 'Hospital'
+    when 'LargeHotel', 'MidriseApartment', 'LargeOffice', 'Hospital','LargeOfficeDetail'
       space_multiplier_map = define_space_multiplier
     else
       space_multiplier_map = {}
@@ -1082,7 +1094,7 @@ class OpenStudio::Model::Model
       end
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       case building_type
-      when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'Outpatient', 'PrimarySchool'
+      when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'LargeOfficeDetail','Outpatient', 'PrimarySchool'
         clg = 1.0
         htg = 1.0
       end

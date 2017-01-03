@@ -40,7 +40,7 @@ class OpenStudio::Model::Model
             condenser_water_loop = nil
             number_cooling_towers = 1
             num_chillers = 1
-            if building_type == 'Hospital' || building_type == 'LargeOffice'
+            if building_type == 'Hospital' || building_type == 'LargeOffice' || building_type == 'LargeOfficeDetail'
               case template
               when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
                 number_cooling_towers = 2

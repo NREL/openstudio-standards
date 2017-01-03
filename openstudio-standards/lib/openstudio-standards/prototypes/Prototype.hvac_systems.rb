@@ -448,7 +448,7 @@ class OpenStudio::Model::Model
     hp_pump.addToNode(heat_pump_water_loop.supplyInletNode)
 
     # Cooling towers
-    if building_type == 'LargeOffice'
+    if building_type == 'LargeOffice' || building_type == 'LargeOfficeDetail'
       # TODO: For some reason the FluidCoolorTwoSpeed is causing simulation failures.
       # might need to look into the defaults
       # cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
