@@ -807,12 +807,21 @@ class OpenStudio::Model::Model
     getThermalZones.each(&:remove)
 
     # This map define the multipliers for spaces with multipliers not equals to 1
-    case building_type
-    when 'LargeHotel', 'MidriseApartment', 'LargeOffice', 'Hospital','LargeOfficeDetail'
-      space_multiplier_map = define_space_multiplier
-    else
-      space_multiplier_map = {}
-    end
+    case building_type 
+     when 'LargeHotel' 
+       space_multiplier_map = PrototypeBuilding::LargeHotel.define_space_multiplier 
+     when 'MidriseApartment' 
+       space_multiplier_map = PrototypeBuilding::MidriseApartment.define_space_multiplier 
+     when 'LargeOffice' 
+       space_multiplier_map = PrototypeBuilding::LargeOffice.define_space_multiplier 
+     when 'Hospital' 
+       space_multiplier_map = PrototypeBuilding::Hospital.define_space_multiplier 
+	 when 'LargeOfficeDetail' 
+       space_multiplier_map = PrototypeBuilding::LargeOfficeDetail.define_space_multiplier 
+     else 
+       space_multiplier_map = {} 
+     end 
+
 
     # Create a thermal zone for each space in the self
     getSpaces.each do |space|
