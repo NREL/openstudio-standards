@@ -6,7 +6,7 @@ This library has been developed with three main use-cases in mind:
 2. Create a code baseline model from a proposed model
 3. Check a model against a code/standard (not yet implemented)
 
-These three things are all highly related, and share many common subtasks.  For example, since the DOE Prototype Buildings are supposed to be minimally code-compliant buildings, you need to set DX coil efficiencies.  When you are creating a code baseline model, you also need to set DX coil efficiencies.  When you are checking against a code/standard, you need to look up these same DX coil efficiencies. Additionally, all of these methods require access to the information about  the minimum efficiencies, u-values, etc. that are defined in the `/data/standards` directory.
+These three things are all highly related, and share many common subtasks.  For example, since the DOE Prototype Buildings are supposed to be minimally code-compliant buildings, you need to set DX coil efficiencies.  When you are creating a code baseline model, you also need to set DX coil efficiencies.  When you are checking against a code/standard, you need to look up these same DX coil efficiencies. Additionally, all of these methods require access to the information about the minimum efficiencies, u-values, etc. that are defined in the `/data/standards` directory.
 
 The code has been structured such that several higher level methods may all call the same lower level method. For example, both of the methods below eventually call `SpaceType.add_loads`.  Rather than having two copies of this code inside of the two top level methods, there is one method.
 
