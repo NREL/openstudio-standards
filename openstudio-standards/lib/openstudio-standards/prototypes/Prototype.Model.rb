@@ -134,6 +134,13 @@ class OpenStudio::Model::Model
       yearDescription.get.setDayofWeekforStartDay('Sunday')
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setDayofWeekforStartDay.osm")  if debug_incremental_changes 
+      
+      #set a larger tolerance for unmet hours from default 0.2 to 1.0C
+      getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
+      getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setTolerances.osm")  if debug_incremental_changes 
+    
     else
 
       load_building_type_methods(building_type, template, climate_zone)
