@@ -107,6 +107,12 @@ class OpenStudio::Model::Model
       apply_prm_construction_types(template)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes 
+      
+      # Reduce the WWR and SRR, if necessary
+      apply_prm_baseline_window_to_wall_ratio(template,nil)
+      apply_prm_baseline_skylight_to_roof_ratio(template)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_fdwr_srr_rules.osm")  if debug_incremental_changes 
         
       create_thermal_zones(building_type, template, climate_zone)
       osm_file_increment += 1
