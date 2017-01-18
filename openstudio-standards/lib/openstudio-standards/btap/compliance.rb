@@ -956,6 +956,24 @@ module BTAP
 
         #Create and assign the zones to the systems.
         unless use_ideal_air_loads == true
+          hw_loop_needed = false
+		  system_zone_array.each_with_index do |zones,system_index|
+            if(system_index == 1 && (mau_heating_coil_type == 'Hot Water' || baseboard_type == 'Hot Water'))
+              hw_loop_needed = true
+            elsif(system_index == 2 || system_index == 5 || system_index == 7)
+              hw_loop_needed = true
+            elsif((system_index == 3 || system_index == 4) && baseboard_type == 'Hot Water')
+              hw_loop_needed = true
+            elsif(system_index == 6 && (heating_coil_type == 'Hot Water' || baseboard_type == 'Hot Water'))
+              hw_loop_needed = true
+            end
+			if(hw_loop_needed) then break end
+          end
+          if(hw_loop_needed)
+            hw_loop = OpenStudio::Model::PlantLoop.new(model)
+            always_on = model.alwaysOnDiscreteSchedule
+            BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+          end
           system_zone_array.each_with_index do |zones,system_index|
             #skip if no thermal zones for this system.
             next if zones.size == 0
@@ -965,17 +983,17 @@ module BTAP
             when 0 , nil
               #Do nothing no system assigned to zone. Used for Unconditioned spaces
             when 1
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(model, zones, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type)            
+              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(model, zones, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, hw_loop)            
             when 2
               BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(model, zones, boiler_fueltype, chiller_type, mua_cooling_type)
             when 3
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(model, zones, boiler_fueltype, heating_coil_types_sys3, baseboard_type)
+              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(model, zones, boiler_fueltype, heating_coil_types_sys3, baseboard_type, hw_loop)
             when 4
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys4(model, zones, boiler_fueltype, heating_coil_types_sys4, baseboard_type)
+              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys4(model, zones, boiler_fueltype, heating_coil_types_sys4, baseboard_type, hw_loop)
             when 5
               BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys5(model, zones, boiler_fueltype, chiller_type, mua_cooling_type)
             when 6
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(model, zones, boiler_fueltype, heating_coil_types_sys6, baseboard_type, chiller_type, fan_type)              
+              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(model, zones, boiler_fueltype, heating_coil_types_sys6, baseboard_type, chiller_type, fan_type, hw_loop)            
             when 7
               BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys7(model, zones, boiler_fueltype, chiller_type, mua_cooling_type)
             end
