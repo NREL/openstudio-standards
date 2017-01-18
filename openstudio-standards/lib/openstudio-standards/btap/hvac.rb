@@ -2301,45 +2301,45 @@ module BTAP
         module NECB2011
 
           #wrapper methods for the auto_zoner
-          def self.assign_zones_sys1( model, zones, boiler_fueltype, mau, mau_heating_coil_type, baseboard_type )
-            return self.add_sys1_unitary_ac_baseboard_heating( model,zones,boiler_fueltype,mau,mau_heating_coil_type,baseboard_type)
+          def self.assign_zones_sys1( model, zones, boiler_fueltype, mau, mau_heating_coil_type, baseboard_type,  hw_loop)
+            return self.add_sys1_unitary_ac_baseboard_heating( model, zones, boiler_fueltype, mau,mau_heating_coil_type, baseboard_type, hw_loop)
           end
 
-          def self.assign_zones_sys2(model, zones, boiler_fueltype,chiller_type,mua_cooling_type)
-            self.add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype,chiller_type,"FPFC",mua_cooling_type)
+          def self.assign_zones_sys2(model, zones, boiler_fueltype, chiller_type, mua_cooling_type, hw_loop)
+            self.add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype,chiller_type, "FPFC", mua_cooling_type, hw_loop)
           end
 
-          def self.assign_zones_sys3(model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
+          def self.assign_zones_sys3(model, zones, boiler_fueltype,  heating_coil_type, baseboard_type, hw_loop)
             #if(heating_coil_type == "DX")
-              self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
+              self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type, hw_loop)
             #else
               #self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
             #end              
           end
           
-          def self.assign_zones_sys4( model, zones, boiler_fueltype, heating_coil_type, baseboard_type)
-            self.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating( model, zones, boiler_fueltype, heating_coil_type, baseboard_type)
+          def self.assign_zones_sys4( model, zones, boiler_fueltype, heating_coil_type, baseboard_type, hw_loop)
+            self.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating( model, zones, boiler_fueltype, heating_coil_type, baseboard_type, hw_loop)
             return model
           end
           
-          def self.assign_zones_sys5(model, zones, boiler_fueltype,chiller_type,mua_cooling_type)
-            self.add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype,chiller_type,"TPFC",mua_cooling_type)
+          def self.assign_zones_sys5(model, zones, boiler_fueltype, chiller_type, mua_cooling_type, hw_loop)
+            self.add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype, chiller_type, "TPFC", mua_cooling_type, hw_loop)
           end
           
           #To do: must unravel story vav assignment. 
-          def self.assign_zones_sys6( model ,zones,  boiler_fueltype, heating_coil_type, baseboard_type, chiller_type, fan_type )
-            self.add_sys6_multi_zone_built_up_system_with_baseboard_heating( model ,zones,  boiler_fueltype, heating_coil_type, baseboard_type, chiller_type, fan_type )
+          def self.assign_zones_sys6( model ,zones,  boiler_fueltype, heating_coil_type, baseboard_type, chiller_type, fan_type, hw_loop )
+            self.add_sys6_multi_zone_built_up_system_with_baseboard_heating( model ,zones,  boiler_fueltype, heating_coil_type, baseboard_type, chiller_type, fan_type, hw_loop )
             puts "end assign_zones_sys6"
           end
           
-          def self.assign_zones_sys7(model, zones, boiler_fueltype,chiller_type,mua_cooling_type)
+          def self.assign_zones_sys7(model, zones, boiler_fueltype, chiller_type, mua_cooling_type, hw_loop)
             #System 7 
-            self.add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype,chiller_type,"FPFC",mua_cooling_type)
+            self.add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype, chiller_type, "FPFC", mua_cooling_type, hw_loop)
           end
           
     
 
-          def self.add_sys1_unitary_ac_baseboard_heating(model,zones, boiler_fueltype, mau ,mau_heating_coil_type,baseboard_type)
+          def self.add_sys1_unitary_ac_baseboard_heating(model,zones, boiler_fueltype, mau ,mau_heating_coil_type,baseboard_type, hw_loop)
 
             # System Type 1: PTAC with no heating (unitary AC) 
             # Zone baseboards, electric or hot water depending on argument baseboard_type
@@ -2358,21 +2358,10 @@ module BTAP
             
             # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 
-
             always_on = model.alwaysOnDiscreteSchedule
             
             # define always off schedule for ptac heating coil
             always_off = BTAP::Resources::Schedules::StandardSchedules::ON_OFF::always_off(model)
-
-            # Create a hot water loop; MAU hydronic heating coil and hot water baseboards will be
-            # connected to this loop (if MAU and its heating coil is hydronic or if baseboard type is hydronic)
-
-            if ( (mau == true and mau_heating_coil_type == "Hot Water") or baseboard_type == "Hot Water" ) then
-
-              hw_loop = OpenStudio::Model::PlantLoop.new(model)
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop,boiler_fueltype, always_on)
-
-            end  #of if statement
             
             #Create MAU 
             # TO DO: MAU sizing, characteristics (fan operation schedules, temperature setpoints, outdoor air, etc)
@@ -2542,7 +2531,7 @@ module BTAP
             
           end #sys1_unitary_ac_baseboard_heating
 
-          def self.add_sys1_unitary_ac_baseboard_heating_multi_speed(model,zones, boiler_fueltype, mau ,mau_heating_coil_type,baseboard_type)
+          def self.add_sys1_unitary_ac_baseboard_heating_multi_speed(model,zones, boiler_fueltype, mau ,mau_heating_coil_type,baseboard_type, hw_loop)
 
             # System Type 1: PTAC with no heating (unitary AC) 
             # Zone baseboards, electric or hot water depending on argument baseboard_type
@@ -2582,17 +2571,7 @@ module BTAP
                 end
               end
             end
-
-            # Create a hot water loop; MAU hydronic heating coil and hot water baseboards will be
-            # connected to this loop (if MAU and its heating coil is hydronic or if baseboard type is hydronic)
-
-            if ( (mau == true and mau_heating_coil_type == "Hot Water") or baseboard_type == "Hot Water" ) then
-
-              hw_loop = OpenStudio::Model::PlantLoop.new(model)
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop,boiler_fueltype, always_on)
-
-            end  #of if statement
-            
+        
             #Create MAU 
             # TO DO: MAU sizing, characteristics (fan operation schedules, temperature setpoints, outdoor air, etc)
            
@@ -2790,7 +2769,7 @@ module BTAP
             
           end #sys1_unitary_ac_baseboard_heating
 
-          def self.add_sys2_FPFC_sys5_TPFC( model,zones, boiler_fueltype,chiller_type,fan_coil_type,mua_cooling_type )
+          def self.add_sys2_FPFC_sys5_TPFC( model,zones, boiler_fueltype,chiller_type,fan_coil_type,mua_cooling_type, hw_loop )
 
             # System Type 2: FPFC or System 5: TPFC
             # This measure creates:
@@ -2856,11 +2835,6 @@ module BTAP
               day_schedule.addValue(twenty_four_hrs,sch_clg_value[i])
 
             end
-
-            # Create a hot water loop
-
-            hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop,boiler_fueltype,tpfc_htg_availability_sch)
 
             # Create a chilled water loop
 
@@ -2988,7 +2962,7 @@ module BTAP
 
           end  # add_sys2_FPFC_sys5_TPFC
 
-          def self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
+          def self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type, hw_loop)
             # System Type 3: PSZ-AC
             # This measure creates:
             # -a constant volume packaged single-zone A/C unit
@@ -3001,15 +2975,6 @@ module BTAP
             # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
 
             always_on = model.alwaysOnDiscreteSchedule
-
-            # Create a hot water loop (if baseboard type is hydronic); hot water baseboards will be connected to this loop
-
-            if ( baseboard_type == "Hot Water" ) then
-
-              hw_loop = OpenStudio::Model::PlantLoop.new(model)
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop,boiler_fueltype, always_on)
-
-            end  #of if statement
 
             zones.each do |zone|
 
@@ -3138,7 +3103,7 @@ module BTAP
             return true
           end  #end add_sys3_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed
           
-          def self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type)
+          def self.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed( model, zones, boiler_fueltype,  heating_coil_type, baseboard_type, hw_loop)
             # System Type 3: PSZ-AC
             # This measure creates:
             # -a constant volume packaged single-zone A/C unit
@@ -3151,15 +3116,6 @@ module BTAP
             # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
 
             always_on = model.alwaysOnDiscreteSchedule
-
-            # Create a hot water loop (if baseboard type is hydronic); hot water baseboards will be connected to this loop
-
-            if ( baseboard_type == "Hot Water" ) then
-
-              hw_loop = OpenStudio::Model::PlantLoop.new(model)
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop,boiler_fueltype, always_on)
-
-            end  #of if statement
 
             #TODO: Heating and cooling temperature set point schedules are set somewhere else
             #TODO: For now fetch the schedules and use them in setting up the heat pump system
@@ -3324,7 +3280,7 @@ module BTAP
             return true
           end  #end add_sys3_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed
 
-          def self.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating( model, zones, boiler_fueltype, heating_coil_type, baseboard_type)
+          def self.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating( model, zones, boiler_fueltype, heating_coil_type, baseboard_type, hw_loop)
             # System Type 4: PSZ-AC
             # This measure creates:
             # -a constant volume packaged single-zone A/C unit
@@ -3340,19 +3296,6 @@ module BTAP
 
 
             always_on = model.alwaysOnDiscreteSchedule
-
-            # Create a hot water loop; hot water baseboards will be connected to this loop
-
-            #TO DO: Include logic to determine whether baseboards should be hydronic or electric
-
-            #Create hot water loop if baseboard type is hydronic
-
-            if ( baseboard_type == "Hot Water" ) then
-
-              hw_loop = OpenStudio::Model::PlantLoop.new(model)
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop,boiler_fueltype, always_on)
-
-            end  #of if statement
 
             # Create a PSZ for each zone
             # TO DO: need to apply this system to space types:
@@ -3491,7 +3434,7 @@ module BTAP
             return true
           end  #end add_sys4_single_zone_make_up_air_unit_with_baseboard_heating
 
-          def self.add_sys6_multi_zone_built_up_system_with_baseboard_heating( model ,zones,  boiler_fueltype, heating_coil_type, baseboard_type, chiller_type, fan_type )
+          def self.add_sys6_multi_zone_built_up_system_with_baseboard_heating( model ,zones,  boiler_fueltype, heating_coil_type, baseboard_type, chiller_type, fan_type, hw_loop )
 
             # System Type 6: VAV w/ Reheat
             # This measure creates:
@@ -3509,15 +3452,6 @@ module BTAP
             # "fan_type": "AF_or_BI_rdg_fancurve";"AF_or_BI_inletvanes";"fc_inletvanes";"var_speed_drive"  
             
             always_on = model.alwaysOnDiscreteSchedule
-
-            #Create hot water loop if baseboard or heating coil type is hydronic
-
-            if ( baseboard_type == "Hot Water" ) || ( heating_coil_type == "Hot Water") then
-
-              hw_loop =  OpenStudio::Model::PlantLoop.new(model)
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop,boiler_fueltype, always_on)
-
-            end  #of if statement
 
             # Chilled Water Plant
 

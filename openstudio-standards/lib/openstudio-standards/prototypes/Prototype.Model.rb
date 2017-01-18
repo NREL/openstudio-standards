@@ -61,11 +61,21 @@ class OpenStudio::Model::Model
       load_building_type_methods(building_type, template, climate_zone)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes 
-
+      
+     
       load_geometry(building_type, template, climate_zone)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes 
-
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes
+      
+      add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes 
+      puts weatherFile.get.path.get.to_s
+      if weatherFile.empty? or weatherFile.get.path.empty? or not File.exists?(weatherFile.get.path.get.to_s)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Weatherfile is not defined.")
+        raise()
+      end
+      
       getBuilding.setName("#{template}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_set_name.osm")  if debug_incremental_changes 
@@ -85,10 +95,6 @@ class OpenStudio::Model::Model
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_infiltration.osm")  if debug_incremental_changes 
       
-      modify_infiltration_coefficients(building_type, template, climate_zone) # does not apply to NECB 2011 but left here for consistency
-      osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_infiltation_coefficients.osm")  if debug_incremental_changes 
-      
       modify_surface_convection_algorithm(template)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_surface_convection_algorithm.osm")  if debug_incremental_changes 
@@ -97,13 +103,22 @@ class OpenStudio::Model::Model
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes 
       
+      # Modify Constructions to NECB reference levels
+      apply_prm_construction_types(template)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes 
+      
+      # Reduce the WWR and SRR, if necessary
+      apply_prm_baseline_window_to_wall_ratio(template,nil)
+      apply_prm_baseline_skylight_to_roof_ratio(template)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_fdwr_srr_rules.osm")  if debug_incremental_changes 
+        
       create_thermal_zones(building_type, template, climate_zone)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_create_thermal_zones.osm")  if debug_incremental_changes 
       
-      add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
-      osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes 
+
       
       return false if runSizingRun("#{sizing_run_dir}/SizingRun0") == false
       osm_file_increment += 1
@@ -125,6 +140,13 @@ class OpenStudio::Model::Model
       yearDescription.get.setDayofWeekforStartDay('Sunday')
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setDayofWeekforStartDay.osm")  if debug_incremental_changes 
+      
+      #set a larger tolerance for unmet hours from default 0.2 to 1.0C
+      getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
+      getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setTolerances.osm")  if debug_incremental_changes 
+    
     else
 
       load_building_type_methods(building_type, template, climate_zone)
@@ -330,22 +352,22 @@ class OpenStudio::Model::Model
     case building_type
     when 'SecondarySchool'
       geometry_file = if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
-                        'Geometry.secondary_school_pre_1980_to_2004.osm'
-                      else
-                        'Geometry.secondary_school.osm'
-                      end
+        'Geometry.secondary_school_pre_1980_to_2004.osm'
+      else
+        'Geometry.secondary_school.osm'
+      end
     when 'PrimarySchool'
       geometry_file = if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
-                        'Geometry.primary_school_pre_1980_to_2004.osm'
-                      else
-                        'Geometry.primary_school.osm'
-                      end
+        'Geometry.primary_school_pre_1980_to_2004.osm'
+      else
+        'Geometry.primary_school.osm'
+      end
     when 'SmallOffice'
       geometry_file = if template == 'DOE Ref Pre-1980'
-                        'Geometry.small_office_pre_1980.osm'
-                      else
-                        'Geometry.small_office.osm'
-                      end
+        'Geometry.small_office_pre_1980.osm'
+      else
+        'Geometry.small_office.osm'
+      end
       alt_search_name = 'Office'
     when 'MediumOffice'
       geometry_file = 'Geometry.medium_office.osm'
@@ -408,14 +430,14 @@ class OpenStudio::Model::Model
         'Geometry.quick_service_restaurant_pre1980.osm'
       else # 'DOE Ref 1980-2004','90.1-2010','90.1-2007','90.1-2004','90.1-2013'
         'Geometry.quick_service_restaurant_allothers.osm'
-                      end
+      end
     when 'FullServiceRestaurant'
       geometry_file = case template
       when 'DOE Ref Pre-1980'
         'Geometry.full_service_restaurant_pre1980.osm'
       else # 'DOE Ref 1980-2004','90.1-2010','90.1-2007','90.1-2004','90.1-2013'
         'Geometry.full_service_restaurant_allothers.osm'
-                      end
+      end
     when 'Hospital'
       geometry_file = 'Geometry.hospital.osm'
     when 'Outpatient'
@@ -799,8 +821,8 @@ class OpenStudio::Model::Model
     # add internal mass
     # not required for NECB 2011
     unless (template == 'NECB 2011') ||
-           ((building_type == 'SmallHotel') &&
-             (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'))
+        ((building_type == 'SmallHotel') &&
+          (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(self)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
@@ -814,6 +836,7 @@ class OpenStudio::Model::Model
         end
       end
     end
+    
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
 
@@ -1364,10 +1387,10 @@ class OpenStudio::Model::Model
       run_manager_db_path = OpenStudio::Path.new("#{run_dir}/run.db")
       run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true, false, false, false)
       job = OpenStudio::Runmanager::JobFactory.createEnergyPlusJob(ep_tool,
-                                                                   idd_path,
-                                                                   idf_path,
-                                                                   epw_path,
-                                                                   output_path)
+        idd_path,
+        idf_path,
+        epw_path,
+        output_path)
 
       run_manager.enqueue(job, true)
 
@@ -1539,20 +1562,20 @@ class OpenStudio::Model::Model
     is_solar_diffusing = false
 
     standard_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_standard_glazing(self,
-                                                                                                      name,
-                                                                                                      thickness,
-                                                                                                      conductivity,
-                                                                                                      solar_trans_normal,
-                                                                                                      front_solar_ref_normal,
-                                                                                                      back_solar_ref_normal, vlt,
-                                                                                                      front_vis_ref_normal,
-                                                                                                      back_vis_ref_normal,
-                                                                                                      ir_trans_normal,
-                                                                                                      front_ir_emis,
-                                                                                                      back_ir_emis,
-                                                                                                      optical_data_type,
-                                                                                                      dirt_correction_factor,
-                                                                                                      is_solar_diffusing)
+      name,
+      thickness,
+      conductivity,
+      solar_trans_normal,
+      front_solar_ref_normal,
+      back_solar_ref_normal, vlt,
+      front_vis_ref_normal,
+      back_vis_ref_normal,
+      ir_trans_normal,
+      front_ir_emis,
+      back_ir_emis,
+      optical_data_type,
+      dirt_correction_factor,
+      is_solar_diffusing)
 
     # Define Constructions
     # # Surfaces
@@ -1612,10 +1635,10 @@ class OpenStudio::Model::Model
     new_values = []
     values.each do |value|
       new_values << if value > limit
-                      value * multiplier
-                    else
-                      value
-                    end
+        value * multiplier
+      else
+        value
+      end
     end
 
     # Add the revised time/value pairs to the schedule
