@@ -664,7 +664,7 @@ module BTAP
           cooling_load = coolingDesignLoad
           heating_load = heatingDesignLoad
           
-          if space.spaceType.get.standardsSpaceType.get == "- undefined -" || space.spaceType.get.standardsSpaceType.get == "Attic"
+          if space.spaceType.get.standardsSpaceType.get == "- undefined -"
             cooling_load = 0.0
             heating_load = 0.0
           else
