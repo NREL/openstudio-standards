@@ -4297,6 +4297,122 @@ class OpenStudio::Model::Model
     end
   end
 
+  # Create sorted hash of stories with data need to determine effective number of stories above and below grade
+  # the key should be the story object, which would allow other measures the ability to for example loop through spaces of the bottom story
+  #
+  # @return [hash] hash of space types with data in value necessary to determine effective number of stories above and below grade
+  def create_story_hash
+
+    story_hash = {}
+
+    # loop through stories
+    self.getBuildingStorys.each do |story|
+
+      # skip of story doesn't have any spaces
+      next if story.spaces.size == 0
+
+      story_min_z = nil
+      story_zone_multipliers = []
+      story_spaces_part_of_floor_area = []
+      story_spaces_not_part_of_floor_area = []
+      story_ext_wall_area = 0.0
+      story_ground_wall_area = 0.0
+
+      # loop through space surfaces to find min z value
+      story.spaces.each do |space|
+
+        # skip of space doesn't have any geometry
+        next if space.surfaces.size == 0
+
+        # get space multiplier
+        story_zone_multipliers << space.multiplier
+
+        # space part of floor area check
+        if space.partofTotalFloorArea
+          story_spaces_part_of_floor_area << space
+        else
+          story_spaces_not_part_of_floor_area << space
+        end
+
+        # update exterior wall area (not sure if this is net or gross)
+        story_ext_wall_area += space.exteriorWallArea
+
+        space_min_z = nil
+        z_points = []
+        space.surfaces.each do |surface|
+          surface.vertices.each do |vertex|
+            z_points << vertex.z
+          end
+
+          # update count of ground wall areas
+          next if not surface.surfaceType == "Wall"
+          next if not surface.outsideBoundaryCondition == "Ground" # todo - make more flexible for slab/basement modeling
+          story_ground_wall_area += surface.grossArea
+
+        end
+
+        # skip if surface had no vertices
+        next if z_points.size == 0
+
+        # update story min_z
+        space_min_z = z_points.min + space.zOrigin
+        if story_min_z.nil? or story_min_z > space_min_z
+          story_min_z = space_min_z
+        end
+
+      end
+
+      # update story hash
+      story_hash[story] = {}
+      story_hash[story][:min_z] = story_min_z
+      story_hash[story][:multipliers] = story_zone_multipliers
+      story_hash[story][:part_of_floor_area] = story_spaces_part_of_floor_area
+      story_hash[story][:not_part_of_floor_area] = story_spaces_not_part_of_floor_area
+      story_hash[story][:ext_wall_area] = story_ext_wall_area
+      story_hash[story][:ground_wall_area] = story_ground_wall_area
+
+    end
+
+    # sort hash by min_z low to high
+    story_hash = story_hash.sort_by{|k,v| v[:min_z]}.to_h
+
+    return story_hash
+
+  end
+
+  # populate this method
+  # Determine the effective number of stories above and below grade
+  #
+  # @return hash with effective_num_stories_below_grade and effective_num_stories_above_grade
+  def effective_num_stories
+
+    below_grade = 0
+    above_grade = 0
+
+    # call create_story_hash
+    self.create_story_hash.each do |story,hash|
+
+      # skip if no spaces in story are included in the building area
+      next if hash[:part_of_floor_area].size == 0
+
+      # only count as below grade if ground wall area is greater than ext wall area and story below is also below grade
+      if above_grade == 0 and hash[:ground_wall_area] > hash[:ext_wall_area]
+        below_grade += 1 * hash[:multipliers].min
+      else
+        above_grade += 1 * hash[:multipliers].min
+      end
+
+    end
+
+    # populate hash
+    effective_num_stories = {}
+    effective_num_stories[:below_grade] = below_grade
+    effective_num_stories[:above_grade] = above_grade
+
+    return effective_num_stories
+
+  end
+
   private
 
   # Helper method to fill in hourly values
@@ -4401,4 +4517,5 @@ class OpenStudio::Model::Model
     return true
     
   end
+
 end
