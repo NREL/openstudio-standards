@@ -15,9 +15,11 @@ class TestAddElevators < Minitest::Test
     template = '90.1-2013'
     elevators = model.add_elevators(template)
 
-    # check recommendation
-    #assert(effective_num_stories[:below_grade] == 1)
+    puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
+    puts elevators
 
+    # check recommendation
+    assert(elevators.multiplier > 1.0)
   end
 
 end

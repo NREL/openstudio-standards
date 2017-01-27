@@ -583,4 +583,7 @@ class OpenStudio::Model::SpaceType
 
     return construction_properties
   end
+
+  # Create hash of misc space type data
+
 end

@@ -3137,19 +3137,10 @@ class OpenStudio::Model::Model
       building_type = getBuilding.standardsBuildingType.get
     end
 
-    # prototype small office approx 500 m^2
-    # prototype medium office approx 5000 m^2
-    # prototype large office approx 50,000 m^2
     # map office building type to small medium or large
     if building_type == 'Office' && remap_office
       open_studio_area = getBuilding.floorArea
-      building_type = if open_studio_area < 2750
-                        'SmallOffice'
-                      elsif open_studio_area < 25_250
-                        'MediumOffice'
-                      else
-                        'LargeOffice'
-                      end
+      building_type = self.remap_office(open_studio_area)
     end
 
     results = {}
@@ -3157,6 +3148,23 @@ class OpenStudio::Model::Model
     results['building_type'] = building_type
 
     return results
+  end
+
+  # remap office to one of the protptye buildings
+  # @param [Double] floor area
+  # @return [String] SmallOffice, MediumOffice, LargeOffice
+  def remap_office(floor_area)
+    # prototype small office approx 500 m^2
+    # prototype medium office approx 5000 m^2
+    # prototype large office approx 50,000 m^2
+    # map office building type to small medium or large
+    building_type = if floor_area < 2750
+                      'SmallOffice'
+                    elsif floor_area < 25_250
+                      'MediumOffice'
+                    else
+                      'LargeOffice'
+                    end
   end
 
   # user needs to pass in template as string. The building type and climate zone will come from the model.
@@ -4390,7 +4398,9 @@ class OpenStudio::Model::Model
     above_grade = 0
 
     # call create_story_hash
-    self.create_story_hash.each do |story,hash|
+    story_hash = self.create_story_hash
+
+    story_hash.each do |story,hash|
 
       # skip if no spaces in story are included in the building area
       next if hash[:part_of_floor_area].size == 0
@@ -4408,9 +4418,59 @@ class OpenStudio::Model::Model
     effective_num_stories = {}
     effective_num_stories[:below_grade] = below_grade
     effective_num_stories[:above_grade] = above_grade
+    effective_num_stories[:story_hash] = story_hash
 
     return effective_num_stories
 
+  end
+
+  # create space_type_hash with info such as effective_num_spaces, num_units, num_meds, num_meals
+  #
+  # @param template [String]
+  # @param trust_effective_num_spaces [Bool] defaults to false - set to true if modeled every space as a real rpp, vs. space as collection of rooms
+  # @return [hash] hash of space types with misc information
+  def create_space_type_hash(template,trust_effective_num_spaces = false)
+
+    space_type_hash = {}
+    self.getSpaceTypes.each do |space_type|
+
+      # get standards info
+      stds_bldg_type = space_type.standardsBuildingType
+      stds_space_type = space_type.standardsSpaceType
+      if stds_bldg_type.is_initialized and stds_space_type.is_initialized and space_type.spaces.size > 0
+        effective_num_spaces = 0
+        floor_area = 0.0
+        num_people = 0.0
+        num_units = nil
+        num_beds = nil
+        num_meals = nil
+        # determine num_elevators in another method
+        # determine num_parking_spots in another method
+
+        # loop through spaces to get mis values
+        space_type.spaces.each do |space|
+          next if not space.partofTotalFloorArea
+          effective_num_spaces += space.multiplier
+          floor_area += space.floorArea * space.multiplier
+          num_people += space.numberOfPeople * space.multiplier
+        end
+
+        space_type_hash[space_type] = {}
+        space_type_hash[space_type][:stds_bldg_type] = stds_bldg_type.get
+        space_type_hash[space_type][:stds_space_type] = stds_space_type.get
+        space_type_hash[space_type][:effective_num_spaces] = effective_num_spaces
+        space_type_hash[space_type][:floor_area] = floor_area
+        space_type_hash[space_type][:num_people] = num_people
+        space_type_hash[space_type][:num_units] = num_units
+        space_type_hash[space_type][:num_beds] = num_beds
+        space_type_hash[space_type][:num_meals] = num_beds
+
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Cannot identify standards buidling type and space type for #{space_type.name}, it won't be added to space_type_hash.")
+      end
+    end
+
+    return space_type_hash
   end
 
   private
