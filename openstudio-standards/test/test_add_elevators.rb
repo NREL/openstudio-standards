@@ -79,25 +79,6 @@ class TestAddElevators < Minitest::Test
     assert(elevators.multiplier >= 1.0)
   end
 
-  def test_add_elevators_highrise
-
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/HighriseApartment_1A_2010.osm")
-    model = translator.loadModel(path)
-    model = model.get
-
-    # create story hash
-    template = '90.1-2010'
-    elevators = model.add_elevators(template)
-
-    puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
-    puts elevators
-
-    # check recommendation
-    assert(elevators.multiplier >= 1.0)
-  end
-
   def test_add_elevators_hospital
 
     # Load the test model
@@ -116,6 +97,82 @@ class TestAddElevators < Minitest::Test
     # check recommendation
     assert(elevators.multiplier >= 6.5)
     assert(elevators.definition.to_ElectricEquipmentDefinition.get.fractionLost == 1.0)
+  end
+
+  def test_add_elevators_outpatient
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/Outpatient_7A_2010.osm")
+    model = translator.loadModel(path)
+    model = model.get
+
+    # create story hash
+    template = '90.1-2010'
+    elevators = model.add_elevators(template)
+
+    puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
+    puts elevators
+
+    # check recommendation
+    assert(elevators.multiplier == 0.0)
+  end
+
+  def test_add_elevators_secondary
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchool_6A_1980-2004.osm")
+    model = translator.loadModel(path)
+    model = model.get
+
+    # create story hash
+    template = 'DOE Ref 1980-2004'
+    elevators = model.add_elevators(template)
+
+    puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
+    puts elevators
+
+    # check recommendation
+    assert(elevators.multiplier >= 1.0)
+  end
+
+  def test_add_elevators_multi_story_retail
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/MultiStoryRetail.osm")
+    model = translator.loadModel(path)
+    model = model.get
+
+    # create story hash
+    template = 'DOE Ref 1980-2004'
+    elevators = model.add_elevators(template)
+
+    puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
+    puts elevators
+
+    # check recommendation
+    assert(elevators.multiplier >= 1.0)
+  end
+
+  def test_add_elevators_multi_story_warehouse
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/MultiStoryWarehouse.osm")
+    model = translator.loadModel(path)
+    model = model.get
+
+    # create story hash
+    template = 'DOE Ref 1980-2004'
+    elevators = model.add_elevators(template)
+
+    puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
+    puts elevators
+
+    # check recommendation
+    assert(elevators.multiplier >= 1.0)
   end
 
 end
