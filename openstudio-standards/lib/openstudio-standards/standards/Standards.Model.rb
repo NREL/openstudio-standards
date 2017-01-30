@@ -4438,9 +4438,12 @@ class OpenStudio::Model::Model
       stds_bldg_type = space_type.standardsBuildingType
       stds_space_type = space_type.standardsSpaceType
       if stds_bldg_type.is_initialized and stds_space_type.is_initialized and space_type.spaces.size > 0
+        stds_bldg_type = stds_bldg_type.get
+        stds_space_type = stds_space_type.get
         effective_num_spaces = 0
         floor_area = 0.0
         num_people = 0.0
+        num_people_bldg_total = nil
         num_units = nil
         num_beds = nil
         num_meals = nil
@@ -4455,9 +4458,31 @@ class OpenStudio::Model::Model
           num_people += space.numberOfPeople * space.multiplier
         end
 
+        # determine number of units
+        if stds_bldg_type == "SmallHotel" && stds_space_type.include?("GuestRoom") # doesn't always == GuestRoom so use include?
+          avg_unit_size = OpenStudio::convert(354.2,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == "LargeHotel" && stds_space_type.include?("GuestRoom")
+          avg_unit_size = OpenStudio::convert(279.7,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == "MidriseApartment" && stds_space_type.include?("Apartment")
+          avg_unit_size = OpenStudio::convert(949.9,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == "HighriseApartment" && stds_space_type.include?("Apartment")
+          avg_unit_size = OpenStudio::convert(949.9,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        end
+
+        # determine number of beds
+        if stds_bldg_type == "Hospital" && ["PatRoom","ICU_PatRm","ICU_Open"].include?(stds_space_type)
+          num_beds = num_people
+        end
+
+        # todo - determine count toward number of people building total
+
         space_type_hash[space_type] = {}
-        space_type_hash[space_type][:stds_bldg_type] = stds_bldg_type.get
-        space_type_hash[space_type][:stds_space_type] = stds_space_type.get
+        space_type_hash[space_type][:stds_bldg_type] = stds_bldg_type
+        space_type_hash[space_type][:stds_space_type] = stds_space_type
         space_type_hash[space_type][:effective_num_spaces] = effective_num_spaces
         space_type_hash[space_type][:floor_area] = floor_area
         space_type_hash[space_type][:num_people] = num_people
