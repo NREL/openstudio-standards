@@ -847,12 +847,12 @@ module BTAP
           BTAP::runner_register("ERROR","fan_type = #{fan_type}",runner)
           return false
         end
-      
+        # REPEATED CODE!!
         unless ["Electric", "Hot Water"].include?(heating_coil_types_sys6)
           BTAP::runner_register("ERROR","heating_coil_types_sys6 = #{heating_coil_types_sys6}",runner)
           return false
         end
-        
+        # REPEATED CODE!!
         unless ["Electric", "Gas"].include?(heating_coil_types_sys4)
           BTAP::runner_register("ERROR","heating_coil_types_sys4 = #{heating_coil_types_sys4}",runner)
           return false
@@ -954,7 +954,7 @@ module BTAP
         #Create and assign the zones to the systems.
         unless use_ideal_air_loads == true
           hw_loop_needed = false
-		  system_zone_array.each_with_index do |zones,system_index|
+          system_zone_array.each_with_index do |zones,system_index|
             if(system_index == 1 && (mau_heating_coil_type == 'Hot Water' || baseboard_type == 'Hot Water'))
               hw_loop_needed = true
             elsif(system_index == 2 || system_index == 5 || system_index == 7)
@@ -964,7 +964,7 @@ module BTAP
             elsif(system_index == 6 && (heating_coil_type == 'Hot Water' || baseboard_type == 'Hot Water'))
               hw_loop_needed = true
             end
-			if(hw_loop_needed) then break end
+            if(hw_loop_needed) then break end
           end
           if(hw_loop_needed)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
