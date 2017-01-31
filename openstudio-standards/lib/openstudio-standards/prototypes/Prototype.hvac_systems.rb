@@ -4063,6 +4063,8 @@ class OpenStudio::Model::Model
     water_fixture.setFlowRateFractionSchedule(schedule)
     water_fixture.setName("#{space_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     swh_connection.addWaterUseEquipment(water_fixture)
+    #Set space to water usage only for NECB 2011. Used for validation.. Hopefully will not skew zonal heat balance. Plopez. 
+    water_fixture.setSpace(space) if template == 'NECB 2011'
 
     # Connect the water use connection to the SWH loop
     swh_loop.addDemandBranchForComponent(swh_connection)
