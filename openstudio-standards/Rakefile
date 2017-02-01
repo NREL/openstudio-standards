@@ -15,22 +15,12 @@ Rake::TestTask.new('test:weather') do |task|
   task.test_files = FileList['openstudio-standards/test/test_weather.rb']
 end
 
-require 'rake/testtask'
 desc 'Run the compliance file tests'
 Rake::TestTask.new('test:compliance') do |task|
   task.libs << 'test'
   task.test_files = FileList['openstudio-standards/test/test_compliance.rb']
 end
 
-require 'rake/testtask'
-desc 'Run test PRM'
-Rake::TestTask.new('test:prm') do |task|
-  task.test_files = FileList[
-  'openstudio-standards/test/test_create_prm_dummy_office.rb' # Takes about a minute for me
-  ]
-end
-
-require 'rake/testtask'
 desc 'Run test group 0'
 Rake::TestTask.new('test:gem_group_0') do |task|
   task.test_files = FileList[
@@ -44,7 +34,6 @@ Rake::TestTask.new('test:gem_group_0') do |task|
   ]
 end
 
-require 'rake/testtask'
 desc 'Run test group 1'
 Rake::TestTask.new('test:gem_group_1') do |task|
   task.test_files = FileList[
@@ -54,7 +43,6 @@ Rake::TestTask.new('test:gem_group_1') do |task|
   ]
 end
 
-require 'rake/testtask'
 desc 'Run test group 2'
 Rake::TestTask.new('test:gem_group_2') do |task|
   task.test_files = FileList[
@@ -66,7 +54,6 @@ Rake::TestTask.new('test:gem_group_2') do |task|
   ]
 end
 
-require 'rake/testtask'
 desc 'Run test group 3'
 Rake::TestTask.new('test:gem_group_3') do |task|
   task.test_files = FileList[
@@ -107,7 +94,6 @@ Rake::TestTask.new('test:gem_group_3') do |task|
   ]
 end
 
-require 'rake/testtask'
 desc 'Run test group 4'
 Rake::TestTask.new('test:gem_group_4') do |task|
   task.test_files = FileList[
@@ -115,7 +101,6 @@ Rake::TestTask.new('test:gem_group_4') do |task|
   ]
 end
 
-require 'rake/testtask'
 desc 'Run test group 5'
 Rake::TestTask.new('test:gem_group_5') do |task|
   task.test_files = FileList[
@@ -123,7 +108,6 @@ Rake::TestTask.new('test:gem_group_5') do |task|
   ]
 end
 
-require 'rake/testtask'
 desc 'Run test group 6'
 Rake::TestTask.new('test:gem_group_6') do |task|
   task.test_files = FileList[
@@ -131,7 +115,6 @@ Rake::TestTask.new('test:gem_group_6') do |task|
   ]
 end
 
-require 'rake/testtask'
 desc 'Run test group 7'
 Rake::TestTask.new('test:gem_group_7') do |task|
   task.test_files = FileList[
@@ -143,7 +126,6 @@ Rake::TestTask.new('test:gem_group_7') do |task|
   ]
 end
 
-require 'rake/testtask'
 desc 'Run test'
 Rake::TestTask.new('test:necb-buildings') do |task|
   task.libs << 'test'
@@ -180,36 +162,20 @@ Rake::TestTask.new('test:necb-buildings') do |task|
   ]
 end
 
-require 'rake/testtask'
 desc 'Run the NECB 2011 HVAC Tests'
 Rake::TestTask.new('test:necb-hvac') do |task|
   task.libs << 'test'
   task.test_files = FileList['openstudio-standards/test/test_create_necb_hvac.rb']
 end
 
-require 'rake/testtask'
-desc 'Run the measure tests'
-Rake::TestTask.new('test:large_office') do |task|
-  task.libs << 'test'
-  task.test_files = FileList['openstudio-standards/test/test_one_building_office_2010.rb']
-end
-
-require 'rake/testtask'
-desc 'Run the measure tests'
-Rake::TestTask.new('test:one_building') do |task|
-  task.libs << 'test'
-  task.test_files = FileList['openstudio-standards/test/test_one_building.rb']
-end
-
-require 'rake/testtask'
-desc 'Run the measure tests'
+desc 'Run the gem tests'
 Rake::TestTask.new('test:gem') do |task|
   task.libs << 'test'
   task.test_files = FileList['openstudio-standards/test/test_*.rb']
 end
 
 desc 'Run all tests'
-task 'test:all' => ['test:prm', 'test:gem', 'test:measures']
+task 'test:all' => ['test:prm', 'test:gem']
 
 
 
@@ -259,7 +225,7 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.fail_on_error = false
 end
 
-desc 'Build, install, test gem & measures'
+desc 'Build, install, test gem'
 task btest: [:install, 'test:all']
 
 task default: :btest
