@@ -1,4 +1,4 @@
-require 'openstudio-standards/version'
+require_relative 'openstudio-standards/version'
 
 module OpenstudioStandards
  
