@@ -3,7 +3,7 @@
     {
       "exterior_lighting_zone_number": 0.0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "lighting_standard": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -35,7 +35,7 @@
     {
       "exterior_lighting_zone_number": 1.0,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "lighting_standard": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -67,7 +67,7 @@
     {
       "exterior_lighting_zone_number": 2.0,
       "exerior_lighting_zone_name": "Neighborhood",
-      "lighting_standard": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -99,7 +99,7 @@
     {
       "exterior_lighting_zone_number": 3.0,
       "exerior_lighting_zone_name": "All Other Areas",
-      "lighting_standard": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -131,7 +131,7 @@
     {
       "exterior_lighting_zone_number": 4.0,
       "exerior_lighting_zone_name": "High Activity",
-      "lighting_standard": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -163,7 +163,7 @@
     {
       "exterior_lighting_zone_number": 0.0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "lighting_standard": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -195,7 +195,7 @@
     {
       "exterior_lighting_zone_number": 1.0,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "lighting_standard": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -227,7 +227,7 @@
     {
       "exterior_lighting_zone_number": 2.0,
       "exerior_lighting_zone_name": "Neighborhood",
-      "lighting_standard": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -259,7 +259,7 @@
     {
       "exterior_lighting_zone_number": 3.0,
       "exerior_lighting_zone_name": "All Other Areas",
-      "lighting_standard": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -291,7 +291,7 @@
     {
       "exterior_lighting_zone_number": 4.0,
       "exerior_lighting_zone_name": "High Activity",
-      "lighting_standard": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.3,
@@ -323,7 +323,7 @@
     {
       "exterior_lighting_zone_number": 0.0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "lighting_standard": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -355,7 +355,7 @@
     {
       "exterior_lighting_zone_number": 1.0,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "lighting_standard": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -387,7 +387,7 @@
     {
       "exterior_lighting_zone_number": 2.0,
       "exerior_lighting_zone_name": "Neighborhood",
-      "lighting_standard": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -419,7 +419,7 @@
     {
       "exterior_lighting_zone_number": 3.0,
       "exerior_lighting_zone_name": "All Other Areas",
-      "lighting_standard": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -451,7 +451,7 @@
     {
       "exterior_lighting_zone_number": 4.0,
       "exerior_lighting_zone_name": "High Activity",
-      "lighting_standard": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -483,7 +483,7 @@
     {
       "exterior_lighting_zone_number": 0.0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "lighting_standard": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -515,7 +515,7 @@
     {
       "exterior_lighting_zone_number": 1.0,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "lighting_standard": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -547,7 +547,7 @@
     {
       "exterior_lighting_zone_number": 2.0,
       "exerior_lighting_zone_name": "Neighborhood",
-      "lighting_standard": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -579,7 +579,7 @@
     {
       "exterior_lighting_zone_number": 3.0,
       "exerior_lighting_zone_name": "All Other Areas",
-      "lighting_standard": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -611,7 +611,7 @@
     {
       "exterior_lighting_zone_number": 4.0,
       "exerior_lighting_zone_name": "High Activity",
-      "lighting_standard": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": 1,
       "occupancy_setback_reduction": 0.0,
@@ -643,7 +643,7 @@
     {
       "exterior_lighting_zone_number": 0.0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "lighting_standard": "DOE Ref 1980-2004",
+      "template": "DOE Ref 1980-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -675,7 +675,7 @@
     {
       "exterior_lighting_zone_number": 1.0,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "lighting_standard": "DOE Ref 1980-2004",
+      "template": "DOE Ref 1980-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -707,7 +707,7 @@
     {
       "exterior_lighting_zone_number": 2.0,
       "exerior_lighting_zone_name": "Neighborhood",
-      "lighting_standard": "DOE Ref 1980-2004",
+      "template": "DOE Ref 1980-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -739,7 +739,7 @@
     {
       "exterior_lighting_zone_number": 3.0,
       "exerior_lighting_zone_name": "All Other Areas",
-      "lighting_standard": "DOE Ref 1980-2004",
+      "template": "DOE Ref 1980-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -771,7 +771,7 @@
     {
       "exterior_lighting_zone_number": 4.0,
       "exerior_lighting_zone_name": "High Activity",
-      "lighting_standard": "DOE Ref 1980-2004",
+      "template": "DOE Ref 1980-2004",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -803,7 +803,7 @@
     {
       "exterior_lighting_zone_number": 0.0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "lighting_standard": "DOE Ref Pre-1980",
+      "template": "DOE Ref Pre-1980",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -835,7 +835,7 @@
     {
       "exterior_lighting_zone_number": 1.0,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "lighting_standard": "DOE Ref Pre-1980",
+      "template": "DOE Ref Pre-1980",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -867,7 +867,7 @@
     {
       "exterior_lighting_zone_number": 2.0,
       "exerior_lighting_zone_name": "Neighborhood",
-      "lighting_standard": "DOE Ref Pre-1980",
+      "template": "DOE Ref Pre-1980",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -899,7 +899,7 @@
     {
       "exterior_lighting_zone_number": 3.0,
       "exerior_lighting_zone_name": "All Other Areas",
-      "lighting_standard": "DOE Ref Pre-1980",
+      "template": "DOE Ref Pre-1980",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -931,7 +931,7 @@
     {
       "exterior_lighting_zone_number": 4.0,
       "exerior_lighting_zone_name": "High Activity",
-      "lighting_standard": "DOE Ref Pre-1980",
+      "template": "DOE Ref Pre-1980",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
