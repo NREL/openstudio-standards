@@ -14,6 +14,7 @@ class OpenStudio::Model::Model
   require_relative '../standards/Standards.Model'
   require_relative 'Prototype.building_specific_methods'
   require_relative 'Prototype.Model.elevators'
+  require_relative 'Prototype.Model.exterior_lights'
 
   # Creates a DOE prototype building model and replaces
   # the current model with this model.

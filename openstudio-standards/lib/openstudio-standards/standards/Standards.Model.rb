@@ -26,6 +26,7 @@ def load_openstudio_standards_json
   standards_files << 'OpenStudio_Standards_templates.json'
   standards_files << 'OpenStudio_Standards_unitary_acs.json'
   standards_files << 'OpenStudio_Standards_heat_rejection.json'
+  standards_files << 'OpenStudio_Standards_exterior_lighting.json'
   #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
 
   # Combine the data from the JSON files into a single hash
