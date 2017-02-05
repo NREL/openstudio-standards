@@ -27,6 +27,8 @@ def load_openstudio_standards_json
   standards_files << 'OpenStudio_Standards_unitary_acs.json'
   standards_files << 'OpenStudio_Standards_heat_rejection.json'
   standards_files << 'OpenStudio_Standards_exterior_lighting.json'
+  standards_files << 'OpenStudio_Standards_illuminated_parking_area.json'
+  standards_files << 'OpenStudio_Standards_exterior_lighting_assumptions.json'
   #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
 
   # Combine the data from the JSON files into a single hash
@@ -4444,7 +4446,8 @@ class OpenStudio::Model::Model
         effective_num_spaces = 0
         floor_area = 0.0
         num_people = 0.0
-        num_people_bldg_total = nil
+        num_students = 0.0
+        num_people_bldg_total = nil # may need this in future, not same as sumo of people for all space types.
         num_units = nil
         num_beds = nil
         num_meals = nil
@@ -4457,6 +4460,12 @@ class OpenStudio::Model::Model
           effective_num_spaces += space.multiplier
           floor_area += space.floorArea * space.multiplier
           num_people += space.numberOfPeople * space.multiplier
+
+          # determine number of students
+          if ["PrimarySchool","SecondarySchool"].include?(stds_bldg_type) && stds_space_type == "Clasroom"
+            num_students += space.numberOfPeople * space.multiplier
+          end
+
         end
 
         # determine number of units
@@ -4479,7 +4488,6 @@ class OpenStudio::Model::Model
           num_beds = num_people
         end
 
-        # todo - determine count toward number of people building total
 
         space_type_hash[space_type] = {}
         space_type_hash[space_type][:stds_bldg_type] = stds_bldg_type
