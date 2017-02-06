@@ -5,7 +5,7 @@ class OpenStudio::Model::Model
   #
   # @param template [String] Valid choices are
   # @param exterior_lighting_zone_number [Integer] Valid choices are
-  # @return [Hash] the resulting elevator
+  # @return [Hash] the resulting exterior lights
   # @todo - would be nice to add argument for some building types (SmallHotel, MidriseApartment, PrimarySchool, SecondarySchool, RetailStripmall) if it has interior or exterior circulation.
   def add_typical_exterior_lights(template,exterior_lighting_zone_number,onsite_parking_fraction = 1.0, add_base_site_allowance = false, use_model_for_entries_and_canopies = false)
 
@@ -19,30 +19,184 @@ class OpenStudio::Model::Model
     
     # load exterior_lighting_properties
     exterior_lighting_properties = self.find_object($os_standards['exterior_lighting'], search_criteria)
-    puts "hello1"
-    puts exterior_lighting_properties
 
-    # get building types and ratio (needed to get correct schedules, parking area, and entires)
+    # get building types and ratio (needed to get correct schedules, parking area, entries, canopies, and drive throughs)
     space_type_hash = self.create_space_type_hash(template)
-    puts "hello2"
-    puts space_type_hash
 
-    # todo - get model specific values to map to exterior_lighting_properties
+    # get model specific values to map to exterior_lighting_properties
     area_length_count_hash = self.create_exterior_lighting_area_length_count_hash(template,space_type_hash,onsite_parking_fraction,use_model_for_entries_and_canopies)
-    puts "hello3"
-    puts area_length_count_hash
 
+    # todo - replace this schedule as needed
     # todo - lookup appropriate schedules (there may be up to three, one of which may be always on)
+    always_on = self.alwaysOnDiscreteSchedule
 
+    # add exterior lights for parking area
+    if area_length_count_hash[:parking_area_and_drives_area] > 0
 
-    # todo - determine the area and linear feet values needed to apply codes
+      # lighting values
+      multiplier = area_length_count_hash[:parking_area_and_drives_area]
+      power = exterior_lighting_properties["parking_areas_and_drives"]
+      name_prefix = "Parking Areas and Drives"
 
+      # create ext light def
+      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of parking area.")
+      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
+      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
+      ext_lights_def.setDesignLevel(power)
 
-    # todo - add building type specific logic based on assumptions from prototype models
+      # create ext light inst
+      #creating exterior lights object
+      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def,always_on)
+      ext_lights.setMultiplier(multiplier)
+      ext_lights.setName(name_prefix)
+      ext_lights.setControlOption(exterior_lighting_properties["control_option"])
+      ext_lights.setEndUseSubcategory(name_prefix)
+      exterior_lights[name_prefix] = ext_lights
+    end
 
+    # add exterior lights for facades
+    if area_length_count_hash[:building_facades] > 0
 
-    # todo - add exterior lights
+      # lighting values
+      multiplier = area_length_count_hash[:building_facades]
+      power = exterior_lighting_properties["building_facades"]
+      name_prefix = "Building Facades"
 
+      # create ext light def
+      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building facade area.")
+      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
+      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
+      ext_lights_def.setDesignLevel(power)
+
+      # create ext light inst
+      #creating exterior lights object
+      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def,always_on)
+      ext_lights.setMultiplier(multiplier)
+      ext_lights.setName(name_prefix)
+      ext_lights.setControlOption(exterior_lighting_properties["control_option"])
+      ext_lights.setEndUseSubcategory(name_prefix)
+      exterior_lights[name_prefix] = ext_lights
+    end
+
+    # add exterior lights for main entries
+    if area_length_count_hash[:main_entries] > 0
+
+      # lighting values
+      multiplier = area_length_count_hash[:main_entries]
+      power = exterior_lighting_properties["main_entries"]
+      name_prefix = "Main Entries"
+
+      # create ext light def
+      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of main entry length.")
+      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
+      ext_lights_def.setName("#{name_prefix} Def (W/ft)")
+      ext_lights_def.setDesignLevel(power)
+
+      # create ext light inst
+      #creating exterior lights object
+      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def,always_on)
+      ext_lights.setMultiplier(multiplier)
+      ext_lights.setName(name_prefix)
+      ext_lights.setControlOption(exterior_lighting_properties["control_option"])
+      ext_lights.setEndUseSubcategory(name_prefix)
+      exterior_lights[name_prefix] = ext_lights
+    end
+
+    # add exterior lights for other doors
+    if area_length_count_hash[:other_doors] > 0
+
+      # lighting values
+      multiplier = area_length_count_hash[:other_doors]
+      power = exterior_lighting_properties["other_doors"]
+      name_prefix = "Other Doors"
+
+      # create ext light def
+      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of other doors.")
+      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
+      ext_lights_def.setName("#{name_prefix} Def (W/ft)")
+      ext_lights_def.setDesignLevel(power)
+
+      # create ext light inst
+      #creating exterior lights object
+      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def,always_on)
+      ext_lights.setMultiplier(multiplier)
+      ext_lights.setName(name_prefix)
+      ext_lights.setControlOption(exterior_lighting_properties["control_option"])
+      ext_lights.setEndUseSubcategory(name_prefix)
+      exterior_lights[name_prefix] = ext_lights
+    end
+
+    # add axterior lights for entry canopies
+    if area_length_count_hash[:canopy_entry_area] > 0
+
+      # lighting values
+      multiplier = area_length_count_hash[:canopy_entry_area]
+      power = exterior_lighting_properties["entry_canopies"]
+      name_prefix = "Entry Canopies"
+
+      # create ext light def
+      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building entry canopies.")
+      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
+      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
+      ext_lights_def.setDesignLevel(power)
+
+      # create ext light inst
+      #creating exterior lights object
+      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def,always_on)
+      ext_lights.setMultiplier(multiplier)
+      ext_lights.setName(name_prefix)
+      ext_lights.setControlOption(exterior_lighting_properties["control_option"])
+      ext_lights.setEndUseSubcategory(name_prefix)
+      exterior_lights[name_prefix] = ext_lights
+    end
+
+    # add exterior lights for emergency canopies
+    if area_length_count_hash[:canopy_emergency_area] > 0
+
+      # lighting values
+      multiplier = area_length_count_hash[:canopy_emergency_area]
+      power = exterior_lighting_properties["emergency_canopies"]
+      name_prefix = "Emergency Canopies"
+
+      # create ext light def
+      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building emergency canopies.")
+      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
+      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
+      ext_lights_def.setDesignLevel(power)
+
+      # create ext light inst
+      #creating exterior lights object
+      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def,always_on)
+      ext_lights.setMultiplier(multiplier)
+      ext_lights.setName(name_prefix)
+      ext_lights.setControlOption(exterior_lighting_properties["control_option"])
+      ext_lights.setEndUseSubcategory(name_prefix)
+      exterior_lights[name_prefix] = ext_lights
+    end
+
+    # add exterior lights for drive through windows
+    if area_length_count_hash[:drive_through_windows] > 0
+
+      # lighting values
+      multiplier = area_length_count_hash[:drive_through_windows]
+      power = exterior_lighting_properties["drive_through_windows_and_doors"]
+      name_prefix = "Drive Through Windows"
+
+      # create ext light def
+      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/drive through window of lighting for #{multiplier} drie through windows.")
+      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
+      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
+      ext_lights_def.setDesignLevel(power)
+
+      # create ext light inst
+      #creating exterior lights object
+      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def,always_on)
+      ext_lights.setMultiplier(multiplier)
+      ext_lights.setName(name_prefix)
+      ext_lights.setControlOption(exterior_lighting_properties["control_option"])
+      ext_lights.setEndUseSubcategory(name_prefix)
+      exterior_lights[name_prefix] = ext_lights
+    end
 
     return exterior_lights
 
@@ -52,6 +206,7 @@ class OpenStudio::Model::Model
   #
   # @return [hash] hash of exterior lighting value types and building type and model specific values
   # @todo - add code in to determine number of entries and canopy area from model geoemtry
+  # @todo - come up with better logic for entry widths
   def create_exterior_lighting_area_length_count_hash(template,space_type_hash,onsite_parking_fraction,use_model_for_entries_and_canopies)
 
     area_length_count_hash = {}
@@ -113,15 +268,19 @@ class OpenStudio::Model::Model
       # load illuninated_parking_area_properties
       search_criteria = {'building_type' => building_type}
       exterior_lighting_assumptions_lookup = self.find_object($os_standards['exterior_lighting_assumptions'], search_criteria)
-      puts exterior_lighting_assumptions_lookup
 
       # lookup doors
       if use_model_for_entries_and_canopies
         # todo - get number of entries and canopy size from model geometry
       else
+
+        # no source for width of different entry types
+        main_entry_width_ip = 8 # ft
+        other_doors_width_ip = 4 # ft
+
         # rollup not used
-        main_entries += (floor_area_ip/10000.0) * exterior_lighting_assumptions_lookup["entrance_doors_per_10,000"]
-        other_doors += (floor_area_ip/10000.0) * exterior_lighting_assumptions_lookup["others_doors_per_10,000"]
+        main_entries += (floor_area_ip/10000.0) * exterior_lighting_assumptions_lookup["entrance_doors_per_10,000"] * main_entry_width_ip
+        other_doors += (floor_area_ip/10000.0) * exterior_lighting_assumptions_lookup["others_doors_per_10,000"] * other_doors_width_ip
         if not exterior_lighting_assumptions_lookup["floor_area_per_drive_through_window"].nil?
           drive_through_windows += floor_area_ip / exterior_lighting_assumptions_lookup["floor_area_per_drive_through_window"].to_f
         end
@@ -157,7 +316,6 @@ class OpenStudio::Model::Model
     # reference buildings uses first story and plenum area all around
     # prototype uses Table 4.19 by building type lit facde vs. total facade.
     area_length_count_hash[:building_facades] = ground_story_ext_wall_area_ip
-
 
     return area_length_count_hash
 

@@ -4463,7 +4463,7 @@ class OpenStudio::Model::Model
 
           # determine number of students
           if ["PrimarySchool","SecondarySchool"].include?(stds_bldg_type) && stds_space_type == "Clasroom"
-            num_students += space.numberOfPeople * space.multiplier
+            num_students += (space.numberOfPeople - 1.0) * space.multiplier
           end
 
         end
