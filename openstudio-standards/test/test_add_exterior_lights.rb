@@ -28,6 +28,84 @@ class TestAddExteriorLights < Minitest::Test
     assert(exterior_lights["Parking Areas and Drives"].multiplier == 93150.0)
   end
 
+  def test_add_exterior_lights_base_site_allowance_power
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/example_model_multipliers.osm")
+    model = translator.loadModel(path)
+    model = model.get
+    puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
+
+    # gather inputs
+    template = '90.1-2013'
+    exterior_lighting_zone_number = 3
+
+    # add lights
+    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number,1.0,true)
+
+    # check results
+    assert(exterior_lights.size == 5)
+    assert(exterior_lights.has_key?("Parking Areas and Drives"))
+    assert(exterior_lights.has_key?("Building Facades"))
+    assert(exterior_lights.has_key?("Main Entries"))
+    assert(exterior_lights.has_key?("Other Doors"))
+    assert(exterior_lights.has_key?("Base Site Allowance"))
+    assert(exterior_lights["Base Site Allowance"].exteriorLightsDefinition.designLevel == 750.0)
+  end
+
+  def test_add_exterior_lights_base_site_allowance_fraction
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/example_model_multipliers.osm")
+    model = translator.loadModel(path)
+    model = model.get
+    puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
+
+    # gather inputs
+    template = '90.1-2004'
+    exterior_lighting_zone_number = 3
+
+    # add lights
+    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number,1.0,true)
+
+    # check results
+    assert(exterior_lights.size == 5)
+    assert(exterior_lights.has_key?("Parking Areas and Drives"))
+    assert(exterior_lights.has_key?("Building Facades"))
+    assert(exterior_lights.has_key?("Main Entries"))
+    assert(exterior_lights.has_key?("Other Doors"))
+    assert(exterior_lights.has_key?("Base Site Allowance"))
+    assert(exterior_lights["Base Site Allowance"].exteriorLightsDefinition.designLevel > 0.0)
+  end
+
+  def test_add_exterior_lights_base_site_allowance_nil
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/example_model_multipliers.osm")
+    model = translator.loadModel(path)
+    model = model.get
+    puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
+
+    # gather inputs
+    template = 'DOE Ref 1980-2004'
+    exterior_lighting_zone_number = 3
+
+    # add lights
+    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number,1.0,true)
+
+    # check results
+    assert(exterior_lights.size == 5)
+    assert(exterior_lights.has_key?("Parking Areas and Drives"))
+    assert(exterior_lights.has_key?("Building Facades"))
+    assert(exterior_lights.has_key?("Main Entries"))
+    assert(exterior_lights.has_key?("Other Doors"))
+    assert(exterior_lights.has_key?("Base Site Allowance"))
+    assert(exterior_lights["Base Site Allowance"].exteriorLightsDefinition.designLevel == 0.0)
+  end
+
   def test_add_exterior_lights_small_hotel
 
     # Load the test model
@@ -111,10 +189,14 @@ class TestAddExteriorLights < Minitest::Test
 
     # add lights
     exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number)
-    #exterior_lights.each do |key,light|
+    exterior_lights.each do |key,light|
     #  puts light
     #  puts light.exteriorLightsDefinition
-    #end
+    #  puts light.schedule.get.to_ScheduleConstant.get
+
+      # assert all schedules are to_ScheduleConstant (e.g. they do not have setback or shuttoff)
+      assert(light.schedule.get.to_ScheduleConstant.is_initialized)
+    end
 
     # check results
     assert(exterior_lights.size == 4)
@@ -142,10 +224,14 @@ class TestAddExteriorLights < Minitest::Test
 
     # add lights
     exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number)
-    #exterior_lights.each do |key,light|
+    exterior_lights.each do |key,light|
     #  puts light
     #  puts light.exteriorLightsDefinition
-    #end
+    #  puts light.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
+
+      # assert all schedules are scheduleRuleset (e.g. they have setback or shuttoff)
+      assert(light.schedule.get.to_ScheduleRuleset.is_initialized)
+    end
 
     # check results
     assert(exterior_lights.size == 5)
