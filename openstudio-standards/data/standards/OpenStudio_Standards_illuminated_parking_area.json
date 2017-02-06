@@ -40,7 +40,7 @@
       "building_type": "RetailStripmall",
       "building_area_per_spot": 215.0,
       "units_per_spot": null,
-      "students_per_spot": 17.0,
+      "students_per_spot": null,
       "beds_per_spot": null,
       "parking_area_per_spot": 405.0,
       "notes": null
@@ -49,7 +49,7 @@
       "building_type": "PrimarySchool",
       "building_area_per_spot": null,
       "units_per_spot": null,
-      "students_per_spot": 8.0,
+      "students_per_spot": 17.0,
       "beds_per_spot": null,
       "parking_area_per_spot": 405.0,
       "notes": null
@@ -58,7 +58,7 @@
       "building_type": "SecondarySchool",
       "building_area_per_spot": null,
       "units_per_spot": null,
-      "students_per_spot": null,
+      "students_per_spot": 8.0,
       "beds_per_spot": null,
       "parking_area_per_spot": 405.0,
       "notes": null

@@ -97,7 +97,7 @@
       "emergency_canopies": 1.0,
       "canopy_size": 720,
       "floor_area_per_drive_through_window": null,
-      "notes": "No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
+      "notes": "No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
     },
     {
       "building_type": "SmallHotel",
@@ -108,7 +108,7 @@
       "emergency_canopies": null,
       "canopy_size": 720,
       "floor_area_per_drive_through_window": null,
-      "notes": "SmallHotel appears to have exterior entries for all units, No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
+      "notes": "SmallHotel appears to have exterior entries for all units, No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
     },
     {
       "building_type": "LargeHotel",
@@ -119,7 +119,7 @@
       "emergency_canopies": null,
       "canopy_size": 1620,
       "floor_area_per_drive_through_window": null,
-      "notes": "No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
+      "notes": "No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
     },
     {
       "building_type": "Warehouse",
@@ -141,7 +141,7 @@
       "emergency_canopies": null,
       "canopy_size": null,
       "floor_area_per_drive_through_window": 2500.0,
-      "notes": "No source for drive through count, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate drive through lighting. 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
+      "notes": "No source for drive through count, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate drive through lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
     },
     {
       "building_type": "FullServiceRestaurant",

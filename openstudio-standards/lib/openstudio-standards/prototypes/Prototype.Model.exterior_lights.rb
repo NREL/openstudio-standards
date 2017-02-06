@@ -126,7 +126,7 @@ class OpenStudio::Model::Model
       exterior_lights[name_prefix] = ext_lights
     end
 
-    # add axterior lights for entry canopies
+    # add exterior lights for entry canopies
     if area_length_count_hash[:canopy_entry_area] > 0
 
       # lighting values
@@ -155,7 +155,7 @@ class OpenStudio::Model::Model
 
       # lighting values
       multiplier = area_length_count_hash[:canopy_emergency_area]
-      power = exterior_lighting_properties["emergency_canopies"]
+      power = exterior_lighting_properties["loading_areas_for_emergency_vehicles"]
       name_prefix = "Emergency Canopies"
 
       # create ext light def
@@ -249,7 +249,7 @@ class OpenStudio::Model::Model
       floor_area_ip = OpenStudio::convert(hash[:floor_area],"m^2","ft^2").get
       num_spots = 0.0
 
-      # load illuninated_parking_area_properties
+      # load illuminated_parking_area_properties
       search_criteria = {'building_type' => building_type}
       illuminated_parking_area_lookup = self.find_object($os_standards['illuminated_parking_area'], search_criteria)
       if not illuminated_parking_area_lookup["building_area_per_spot"].nil?

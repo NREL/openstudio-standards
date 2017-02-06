@@ -4434,6 +4434,9 @@ class OpenStudio::Model::Model
   # @return [hash] hash of space types with misc information
   def create_space_type_hash(template,trust_effective_num_spaces = false)
 
+    # assumed class size to deduct teachers from occupant count for classrooms
+    typical_class_size = 20.0
+
     space_type_hash = {}
     self.getSpaceTypes.each do |space_type|
 
@@ -4447,9 +4450,9 @@ class OpenStudio::Model::Model
         floor_area = 0.0
         num_people = 0.0
         num_students = 0.0
+        num_units = 0.0
+        num_beds = 0.0
         num_people_bldg_total = nil # may need this in future, not same as sumo of people for all space types.
-        num_units = nil
-        num_beds = nil
         num_meals = nil
         # determine num_elevators in another method
         # determine num_parking_spots in another method
@@ -4460,11 +4463,6 @@ class OpenStudio::Model::Model
           effective_num_spaces += space.multiplier
           floor_area += space.floorArea * space.multiplier
           num_people += space.numberOfPeople * space.multiplier
-
-          # determine number of students
-          if ["PrimarySchool","SecondarySchool"].include?(stds_bldg_type) && stds_space_type == "Clasroom"
-            num_students += (space.numberOfPeople - 1.0) * space.multiplier
-          end
 
         end
 
@@ -4488,6 +4486,10 @@ class OpenStudio::Model::Model
           num_beds = num_people
         end
 
+        # determine number of students
+        if ["PrimarySchool","SecondarySchool"].include?(stds_bldg_type) && stds_space_type == "Classroom"
+          num_students += num_people * ((typical_class_size - 1.0)/typical_class_size)
+        end
 
         space_type_hash[space_type] = {}
         space_type_hash[space_type][:stds_bldg_type] = stds_bldg_type
@@ -4495,9 +4497,9 @@ class OpenStudio::Model::Model
         space_type_hash[space_type][:effective_num_spaces] = effective_num_spaces
         space_type_hash[space_type][:floor_area] = floor_area
         space_type_hash[space_type][:num_people] = num_people
+        space_type_hash[space_type][:num_students] = num_students
         space_type_hash[space_type][:num_units] = num_units
         space_type_hash[space_type][:num_beds] = num_beds
-        space_type_hash[space_type][:num_meals] = num_beds
 
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Cannot identify standards buidling type and space type for #{space_type.name}, it won't be added to space_type_hash.")
