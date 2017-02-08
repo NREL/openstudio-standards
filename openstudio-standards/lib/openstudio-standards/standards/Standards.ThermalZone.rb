@@ -1401,4 +1401,73 @@ class OpenStudio::Model::ThermalZone
 
     return dcv_required
   end
+
+  # Add Exhaust Fans based on space type lookup
+  #
+  # @param template [String] Valid choices are
+  # @return [Array] Array of newly made exhaust fan objects
+  # @todo - Add in makeup air using zone mixing from Dining,Cafeteria, or Cafe zones to Kitchen zones (if use this also use Balanced Exhaust Fraction)
+  # @todo - Add method that calls this in Protype.Model.exhaust file (doesn't exist yet) it will loop through zones in model with this method
+  def add_exhaust(template)
+
+    exhaust_fans = []
+
+    # hash to store space type information
+    space_type_hash = {} # key is space type value is floor_area_si
+
+    # get space type ratio for spaces in zone, making more than one exhaust fan if necessary
+    self.spaces.each do |space|
+      next if not space.spaceType.is_initialized
+      next if not space.partofTotalFloorArea
+      space_type = space.spaceType.get
+      if space_type_hash.has_key?(space_type)
+        space_type_hash[space_type] += space.floorArea * space.multiplier
+      else
+        next if not space_type.standardsBuildingType.is_initialized
+        next if not space_type.standardsSpaceType.is_initialized
+        space_type_hash[space_type] = space.floorArea * space.multiplier
+      end
+
+    end
+
+    # loop through space type hash and add exhaust as needed
+    space_type_hash.each do |space_type,floor_area|
+
+      space_type_properties = space_type.get_standards_data(template)
+      exhaust_per_area = space_type_properties['exhaust_per_area']
+      next if exhaust_per_area.nil?
+      maximum_flow_rate_ip = exhaust_per_area * OpenStudio.convert(floor_area,'m^2','ft^2').get
+      maximum_flow_rate_si = OpenStudio.convert(maximum_flow_rate_ip,'cfm','m^3/s').get
+      if space_type_properties['exhaust_schedule'].nil?
+        exhaust_schedule = model.alwaysOnDiscreteSchedule
+      else
+        sch_name = space_type_properties['exhaust_schedule']
+        exhaust_schedule = model.add_schedule(sch_name)
+      end
+
+      # add exhaust fans
+      zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
+      zone_exhaust_fan.setName(self.name.to_s + ' Exhaust Fan')
+      zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
+      zone_exhaust_fan.setMaximumFlowRate(maximum_flow_rate_si)
+
+      # set fan pressure rise
+      zone_exhaust_fan.apply_prototype_fan_pressure_rise
+
+      # update efficiency and pressure rise
+      zone_exhaust_fan.apply_prototype_fan_efficiency(template)
+
+      puts "final fan eff is #{zone_exhaust_fan.fanEfficiency}"
+      puts "final fan pressure rise is #{zone_exhaust_fan.pressureRise}"
+
+      zone_exhaust_fan.setEndUseSubcategory('Zone Exhaust Fans')
+      zone_exhaust_fan.addToThermalZone(self)
+      exhaust_fans << zone_exhaust_fan
+
+    end
+
+    return exhaust_fans
+
+  end
+
 end

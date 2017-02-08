@@ -195,7 +195,7 @@ def export_spreadsheet_to_json
   # cols_to_skip << 'service_water_heating_fraction_sensible'
   # cols_to_skip << 'service_water_heating_fraction_latent'
   # cols_to_skip << 'service_water_heating_schedule'
-  cols_to_skip << 'exhaust_per_area'
+  # cols_to_skip << 'exhaust_per_area'
   cols_to_skip << 'exhaust_per_unit'
   cols_to_skip << 'exhaust_fan_power_per_area'
   
