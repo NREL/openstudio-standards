@@ -1403,14 +1403,14 @@ class OpenStudio::Model::ThermalZone
   end
 
   # Add Exhaust Fans based on space type lookup
+  # This measure doesn't look if DCV is needed. Others methods can check if DCV needed and add it
   #
   # @param template [String] Valid choices are
-  # @return [Array] Array of newly made exhaust fan objects
+  # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
   # @todo - Add in makeup air using zone mixing from Dining,Cafeteria, or Cafe zones to Kitchen zones (if use this also use Balanced Exhaust Fraction)
-  # @todo - Add method that calls this in Protype.Model.exhaust file (doesn't exist yet) it will loop through zones in model with this method
-  def add_exhaust(template)
+  def add_exhaust(template,fraction_balanced_by_transfer_air = nil,transfer_air_source_zones = nil)
 
-    exhaust_fans = []
+    exhaust_fans = {} # key is primary exhaust value is hash of arrays of secondary objects
 
     # hash to store space type information
     space_type_hash = {} # key is space type value is floor_area_si
@@ -1449,7 +1449,11 @@ class OpenStudio::Model::ThermalZone
       zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
       zone_exhaust_fan.setName(self.name.to_s + ' Exhaust Fan')
       zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
+      # not using zone_exhaust_fan.setFlowFractionSchedule. Exhaust fans are on when available
       zone_exhaust_fan.setMaximumFlowRate(maximum_flow_rate_si)
+      zone_exhaust_fan.setEndUseSubcategory('Zone Exhaust Fans')
+      zone_exhaust_fan.addToThermalZone(self)
+      exhaust_fans[zone_exhaust_fan] = {} # keys are :zone_mixing and :transfer_air_source_zone_exhaust
 
       # set fan pressure rise
       zone_exhaust_fan.apply_prototype_fan_pressure_rise
@@ -1457,16 +1461,48 @@ class OpenStudio::Model::ThermalZone
       # update efficiency and pressure rise
       zone_exhaust_fan.apply_prototype_fan_efficiency(template)
 
-      puts "final fan eff is #{zone_exhaust_fan.fanEfficiency}"
-      puts "final fan pressure rise is #{zone_exhaust_fan.pressureRise}"
+      # todo - map zone to transfer zone type
 
-      zone_exhaust_fan.setEndUseSubcategory('Zone Exhaust Fans')
-      zone_exhaust_fan.addToThermalZone(self)
-      exhaust_fans << zone_exhaust_fan
+      # todo - determine fraction_balanced_by_transfer_air for this zone if not provided
+
+      # todo - add dummy exhaust fan to a transfer_air_source_zones
+
+      # todo - make zone mixing schedule by combining exhaust availability and fraction flow
+
+      # todo - add zone mixing
+
+      # todo - add balanced schedule to zone_exhaust_fan
+
+      # todo - when multiple transfer_air_source_zones transfer is proportional to zone floor area
 
     end
 
     return exhaust_fans
+
+  end
+
+  # returns true if DCV is required for exhaust fan for specified tempate
+  #
+  # @param template [String] Valid choices are
+  # @return [Bool] returns true if DCV is required for exhaust fan for specified tempate
+  def exhaust_fan_dcv_required?(template)
+
+  end
+
+  # Add DCV to exhaust fan and if requsted to related objects
+  #
+  # @param template [Bool] defaults to true to change associated objects
+  # @param template [Array] related zone mixing objects
+  # @param template [Array] related transfer_air_source_zones
+  # @param template [Bool] defaults to true to change associated objects
+  # @return [Bool] not sure if there is anything to turn here other than if it was sucessful, no new objects made?
+  def add_exhaust_fan_dcv(change_related_objects = true,zone_mixing_objects = [],transfer_air_source_zones = [])
+
+    # set flow fraction schedule for all zone exhaust fans and then set zone mixing schedule to the intersection of exhaust avaialability and exhaust fractional schedule
+
+    # are there associated zone mixing or dummy exhaust objects that need to change when this changes?
+    # How are these ojects identifed?
+    # If this is run directly after add_exhaust it will return a hash where each key is an exhaust object and hash is a hash of related zone mizing and dummy exhaust from the source zone
 
   end
 

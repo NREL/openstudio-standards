@@ -113,7 +113,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "FullServiceRestaurant Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantSitDown Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -703,7 +703,7 @@
       "exhaust_fan_pressure_rise": 0.5024115756,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "Hospital Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -1529,7 +1529,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "LargeHotel Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "HotelLarge Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -4951,7 +4951,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "PrimarySchool Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolPrimary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -5364,7 +5364,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "QuickServiceRestaurant Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -5954,7 +5954,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SecondarySchool Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -7724,7 +7724,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantSitDown Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantSitDown Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -8727,7 +8727,7 @@
       "exhaust_fan_pressure_rise": 124.5,
       "exhaust_fan_maximum_flow_rate": 7200.0,
       "exhaust_schedule": "Hospital Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -9848,7 +9848,7 @@
       "exhaust_fan_pressure_rise": 125.0,
       "exhaust_fan_maximum_flow_rate": 4000.0,
       "exhaust_schedule": "HotelLarge Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "HotelLarge Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -13978,7 +13978,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolPrimary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolPrimary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -14450,7 +14450,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantFastFood Hours_of_operation",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -15040,7 +15040,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolSecondary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -17400,7 +17400,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantSitDown Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantSitDown Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -18403,7 +18403,7 @@
       "exhaust_fan_pressure_rise": 124.5,
       "exhaust_fan_maximum_flow_rate": 7200.0,
       "exhaust_schedule": "Hospital Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -19760,7 +19760,7 @@
       "exhaust_fan_pressure_rise": 125.0,
       "exhaust_fan_maximum_flow_rate": 4000.0,
       "exhaust_schedule": "HotelLarge Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "HotelLarge Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -23890,7 +23890,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolPrimary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolPrimary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -24362,7 +24362,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantFastFood Hours_of_operation",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -24952,7 +24952,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolSecondary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -27312,7 +27312,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantSitDown Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantSitDown Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -33566,7 +33566,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolPrimary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolPrimary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -34038,7 +34038,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantFastFood Hours_of_operation",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -34628,7 +34628,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolSecondary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -36988,7 +36988,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantSitDown Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantSitDown Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -37991,7 +37991,7 @@
       "exhaust_fan_pressure_rise": 124.5,
       "exhaust_fan_maximum_flow_rate": 7200.0,
       "exhaust_schedule": "Hospital Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -43242,7 +43242,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolPrimary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolPrimary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -43714,7 +43714,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantFastFood Hours_of_operation",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -44304,7 +44304,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolSecondary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -51266,7 +51266,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "FullServiceRestaurant Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantSitDown Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -51915,7 +51915,7 @@
       "exhaust_fan_pressure_rise": 0.5024115756,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "Hospital Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -53036,7 +53036,7 @@
       "exhaust_fan_pressure_rise": 1.0e-05,
       "exhaust_fan_maximum_flow_rate": 94.2477825,
       "exhaust_schedule": "HotelLarge Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "HotelLarge Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -56753,7 +56753,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "PrimarySchool Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolPrimary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -57225,7 +57225,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "QuickServiceRestaurant Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -57874,7 +57874,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SecondarySchool Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -59762,7 +59762,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "FullServiceRestaurant Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantSitDown Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -60411,7 +60411,7 @@
       "exhaust_fan_pressure_rise": 0.5024115756,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "Hospital Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -61532,7 +61532,7 @@
       "exhaust_fan_pressure_rise": 1.0e-05,
       "exhaust_fan_maximum_flow_rate": 94.2477825,
       "exhaust_schedule": "HotelLarge Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "HotelLarge Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -65249,7 +65249,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "PrimarySchool Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolPrimary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -65662,7 +65662,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "QuickServiceRestaurant Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -66311,7 +66311,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SecondarySchool Kitchen Exhaust",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -81474,7 +81474,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantSitDown Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantSitDown Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -82064,7 +82064,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "Hospital Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -86607,7 +86607,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolPrimary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolPrimary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -87079,7 +87079,7 @@
       "exhaust_fan_pressure_rise": 0.502411575562701,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "RestaurantFastFood Hours_of_operation",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "RestaurantFastFood Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule_2004",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null
@@ -87669,7 +87669,7 @@
       "exhaust_fan_pressure_rise": 0.5,
       "exhaust_fan_maximum_flow_rate": null,
       "exhaust_schedule": "SchoolSecondary Kitchen_Exhaust_SCH",
-      "balanced_exhaust_fraction_schedule": null,
+      "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
       "is_residential": null,
       "necb_hvac_system_selection_type": null,
       "necb_schedule_type": null

@@ -896,6 +896,27 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
   end
 
+  # Loop through thermal zones and run thermal_zone.add_exhaust
+  #
+  # @param template [String] Valid choices are
+  # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
+  def add_exhaust(template)
+
+    zone_exhaust_fans = {}
+
+    # loop through thermal zones
+    self.getThermalZones.each do |thermal_zone|
+      zone_exhaust_hash = thermal_zone.add_exhaust(template)
+
+      # pouplate zone_exhaust_fans
+      zone_exhaust_fans.merge!(zone_exhaust_hash)
+
+    end
+
+    return zone_exhaust_fans
+
+  end
+
   # Adds occupancy sensors to certain space types per
   # the PNNL documentation.
   #
