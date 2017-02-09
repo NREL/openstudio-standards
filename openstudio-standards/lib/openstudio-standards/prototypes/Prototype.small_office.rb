@@ -1,7 +1,8 @@
 
 # Extend the class to add Small Office specific stuff
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+module PrototypeBuilding
+module SmallOffice
+  def self.define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
 
     space_type_map = case template
@@ -20,7 +21,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = [
       {
         'type' => 'PSZ-AC',
@@ -67,11 +68,12 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     return true
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
     return true
   end
+end
 end

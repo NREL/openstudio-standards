@@ -15,7 +15,6 @@ bundle install
 # than 2 hrs.
 case $CIRCLE_NODE_INDEX in
   0)
-    rake test:measures
     rake test:gem_group_0
     ;;
   1)
@@ -29,19 +28,3 @@ case $CIRCLE_NODE_INDEX in
     ;;
   *)
 esac
-    
-# Loop through the test files and run
-# every nth test, where n is determined
-# by the total number of CI nodes and
-# the index of this particular node.
-# Note: this command is running
-# ON EACH NODE.
-# i=0
-# files=()
-# for testfile in $(find test/ -name "test_*.rb" | sort); do
-  # if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]
-  # then
-    # ruby $testfile
-  # fi
-  # ((i=i+1))
-# done

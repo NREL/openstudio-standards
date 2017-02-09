@@ -59,7 +59,7 @@ class OpenStudio::Model::Model
   
   # A helper method to run a sizing run and pull any values calculated during
   # autosizing back into the self.
-  def runSizingRun(sizing_run_dir = "#{Dir.pwd}/SizingRun")
+  def runSizingRun(sizing_run_dir = "#{Dir.pwd}/SR")
 
 
     # Change the simulation to only run the sizing days
@@ -102,7 +102,7 @@ class OpenStudio::Model::Model
   
   # A helper method to run a sizing run and pull any values calculated during
   # autosizing back into the self.
-  def runSpaceSizingRun(sizing_run_dir = "#{Dir.pwd}/SpaceSizingRun")
+  def runSpaceSizingRun(sizing_run_dir = "#{Dir.pwd}/SpaceSR")
     puts "*************Runing sizing space Run ***************************"
     #Make copy of model
     model = BTAP::FileIO::deep_copy(self, true)

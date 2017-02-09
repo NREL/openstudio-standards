@@ -1,0 +1,30 @@
+{
+    "version": "0.1.0",
+    "command": "bash",
+    "args": [
+        "-c"
+    ],
+    "isShellCommand": true,
+    "showOutput": "always",
+    "suppressTaskName": true,
+    "tasks": [
+        {
+            "taskName": "ruby:run file",
+            "args": [
+                "ruby ${file}"
+            ]
+        },
+        {
+            "taskName": "bundle install",
+            "args": [
+                "cd ${workspaceRoot}/openstudio-standards && bundle install"
+            ]
+        },
+        {
+            "taskName": "run cirleci_tests_linux",
+            "args": [
+                "cd ${workspaceRoot}/openstudio-standards && xterm -e 'bundle exec rake test:gem_group_0 | less' & cd ${workspaceRoot}/openstudio-standards && xterm -e 'bundle exec rake test:gem_group_1 | less' & cd ${workspaceRoot}/openstudio-standards && xterm -e 'bundle exec rake test:gem_group_2 | less' & cd ${workspaceRoot}/openstudio-standards && xterm -e 'bundle exec rake test:gem_group_3 | less' "
+            ]
+        }
+    ]
+}

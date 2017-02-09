@@ -156,7 +156,7 @@ class OpenStudio::Model::Model
     # Run a sizing run to calculate VLT for layer-by-layer windows.
     # Only necessary for 90.1-2010 daylighting control determination.
     if template == '90.1-2010'
-      if runSizingRun("#{sizing_run_dir}/SizingRunVLT") == false
+      if runSizingRun("#{sizing_run_dir}/SRVLT") == false
         return false
       end
     end
@@ -249,7 +249,7 @@ class OpenStudio::Model::Model
     apply_prm_sizing_parameters    
 
     # Run sizing run with the HVAC equipment
-    if runSizingRun("#{sizing_run_dir}/SizingRun1") == false
+    if runSizingRun("#{sizing_run_dir}/SR1") == false
       return false
     end
 
@@ -286,7 +286,7 @@ class OpenStudio::Model::Model
 
     # Run sizing run with the new chillers, boilers, and
     # cooling towers to determine capacities
-    if runSizingRun("#{sizing_run_dir}/SizingRun2") == false
+    if runSizingRun("#{sizing_run_dir}/SR2") == false
       return false
     end
 
@@ -3899,7 +3899,7 @@ class OpenStudio::Model::Model
           surface.subSurfaces.sort.each do |ss|
             # Reduce the size of the subsurface
             red = 1.0 - mult
-            ss.reduce_area_by_percent_by_shrinking_x(red)
+            ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
           end
         end
       end
