@@ -1889,6 +1889,426 @@
       "maximum_capacity": 9999.0,
       "nominal_full_load_efficiency": 0.954,
       "notes": null
+    },
+    {
+      "template": "CEC Pre-1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.825,
+      "notes": "Office - 1 story"
+    },
+    {
+      "template": "CEC Pre-1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.825,
+      "notes": "Office -2 stories"
+    },
+    {
+      "template": "CEC Pre-1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.825,
+      "notes": "Office - 3 stories"
+    },
+    {
+      "template": "CEC Pre-1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.825,
+      "notes": "Retail small"
+    },
+    {
+      "template": "CEC Pre-1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.825,
+      "notes": "Retail medium"
+    },
+    {
+      "template": "CEC Pre-1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.825,
+      "notes": "Mixed use - 2 stories"
+    },
+    {
+      "template": "CEC Pre-1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.825,
+      "notes": "Mixed use - 3 stories"
+    },
+    {
+      "template": "CEC T24 1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Office - 1 story"
+    },
+    {
+      "template": "CEC T24 1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Office -2 stories"
+    },
+    {
+      "template": "CEC T24 1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Office - 3 stories"
+    },
+    {
+      "template": "CEC T24 1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Retail small"
+    },
+    {
+      "template": "CEC T24 1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Retail medium"
+    },
+    {
+      "template": "CEC T24 1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Mixed use - 2 stories"
+    },
+    {
+      "template": "CEC T24 1978",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Mixed use - 3 stories"
+    },
+    {
+      "template": "CEC T24 1992",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Office - 1 story"
+    },
+    {
+      "template": "CEC T24 1992",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Office -2 stories"
+    },
+    {
+      "template": "CEC T24 1992",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Office - 3 stories"
+    },
+    {
+      "template": "CEC T24 1992",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Retail small"
+    },
+    {
+      "template": "CEC T24 1992",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Retail medium"
+    },
+    {
+      "template": "CEC T24 1992",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Mixed use - 2 stories"
+    },
+    {
+      "template": "CEC T24 1992",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.875,
+      "notes": "Mixed use - 3 stories"
+    },
+    {
+      "template": "CEC T24 2001",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Office - 1 story"
+    },
+    {
+      "template": "CEC T24 2001",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Office -2 stories"
+    },
+    {
+      "template": "CEC T24 2001",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Office - 3 stories"
+    },
+    {
+      "template": "CEC T24 2001",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Retail small"
+    },
+    {
+      "template": "CEC T24 2001",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Retail medium"
+    },
+    {
+      "template": "CEC T24 2001",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Mixed use - 2 stories"
+    },
+    {
+      "template": "CEC T24 2001",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Mixed use - 3 stories"
+    },
+    {
+      "template": "CEC T24 2005",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Office - 1 story"
+    },
+    {
+      "template": "CEC T24 2005",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Office -2 stories"
+    },
+    {
+      "template": "CEC T24 2005",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Office - 3 stories"
+    },
+    {
+      "template": "CEC T24 2005",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Retail small"
+    },
+    {
+      "template": "CEC T24 2005",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Retail medium"
+    },
+    {
+      "template": "CEC T24 2005",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Mixed use - 2 stories"
+    },
+    {
+      "template": "CEC T24 2005",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Mixed use - 3 stories"
+    },
+    {
+      "template": "CEC T24 2008",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Office - 1 story"
+    },
+    {
+      "template": "CEC T24 2008",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Office -2 stories"
+    },
+    {
+      "template": "CEC T24 2008",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Office - 3 stories"
+    },
+    {
+      "template": "CEC T24 2008",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Retail small"
+    },
+    {
+      "template": "CEC T24 2008",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Retail medium"
+    },
+    {
+      "template": "CEC T24 2008",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Mixed use - 2 stories"
+    },
+    {
+      "template": "CEC T24 2008",
+      "number_of_poles": 4.0,
+      "type": "Enclosed",
+      "synchronous_speed": 1800.0,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "nominal_full_load_efficiency": 0.91,
+      "notes": "Mixed use - 3 stories"
     }
   ]
 }
