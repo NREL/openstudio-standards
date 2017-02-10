@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 
 
 #This test verifies that we can read in the weatherfile data from all the 

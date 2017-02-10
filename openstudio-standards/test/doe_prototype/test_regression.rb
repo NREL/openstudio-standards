@@ -1,4 +1,4 @@
-require_relative '../minitest_helper'
+require_relative '../helpers/minitest_helper'
 require_relative 'doe_prototype_regression_helper'
 
 class DOEPrototypeRegressionTest < Minitest::Test

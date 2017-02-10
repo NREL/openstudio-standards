@@ -17,12 +17,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
   def setup
     # Make a directory to save the resulting models
-    @test_dir = "#{File.dirname(__FILE__)}/output"
+    @test_dir = "#{Dir.pwd}/output"
     if !Dir.exists?(@test_dir)
       Dir.mkdir(@test_dir)
     end
     # Make a file to store the model comparisons
-    @results_csv_file = "#{File.dirname(__FILE__)}/output/prototype_buildings_results.csv"
+    @results_csv_file = "#{@test_dir}/prototype_buildings_results.csv"
     # Add a header row on file creation
     if !File.exist?(@results_csv_file)
       File.open(@results_csv_file, 'a') do |file|
@@ -30,7 +30,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       end
     end
     # Make a file that combines all the run logs
-    @combined_results_log = "#{File.dirname(__FILE__)}/output/prototype_buildings_run.log"
+    @combined_results_log = "#{@test_dir}/prototype_buildings_run.log"
     if !File.exist?(@combined_results_log)
       File.open(@combined_results_log, 'a') do |file|
         file.puts "Started @ #{Time.new}"

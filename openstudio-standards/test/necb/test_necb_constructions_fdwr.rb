@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 
 
 # This class will perform tests that are HDD driven, A Test model will be created

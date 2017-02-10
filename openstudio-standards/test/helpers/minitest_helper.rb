@@ -21,7 +21,7 @@ SimpleCov.start do
   add_filter 'version'  
 end
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('../../../lib', __FILE__)
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'openstudio'
@@ -30,10 +30,12 @@ require 'json'
 require 'fileutils'
 
 # Require local version instead of installed version for developers
-if require_relative '../lib/openstudio-standards.rb'
+begin
+  require_relative '../../lib/openstudio-standards.rb'
   puts 'DEVELOPERS OF OPENSTUDIO-STANDARDS: Requiring code directly instead of using installed gem.  This avoids having to run rake install every time you make a change.' 
-else
+rescue
   require 'openstudio-standards'
+  puts 'Using installed openstudio-standards gem.' 
 end
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new # spec-like progress

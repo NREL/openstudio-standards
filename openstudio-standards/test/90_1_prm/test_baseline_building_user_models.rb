@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 require_relative 'create_performance_rating_method_helper'
 
 class Baseline9012013UserTest < Minitest::Test

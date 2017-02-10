@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 
 class TestChillerElectricEir < Minitest::Test
 

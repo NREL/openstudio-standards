@@ -1,6 +1,6 @@
-require_relative 'minitest_helper'
-require_relative 'create_doe_prototype_helper'
-$LOAD_PATH.unshift File.expand_path('../../../../openstudio-standards/lib', __FILE__)
+require_relative '../helpers/minitest_helper'
+require_relative '../helpers/create_doe_prototype_helper'
+
 
 
 

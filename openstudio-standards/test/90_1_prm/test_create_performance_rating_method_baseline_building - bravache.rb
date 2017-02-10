@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 
 def create_baseline_model(model_name, standard, climate_zone, building_type, debug)
 
