@@ -9,7 +9,7 @@ class OpenStudio::Model::FanVariableVolume
   def apply_prototype_fan_pressure_rise(building_type, template, climate_zone)
     # NECB
     if template == 'NECB 2011'
-      pressure_rise_pa = 1000.0
+      pressure_rise_pa = 1458.33 # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
       setPressureRise(pressure_rise_pa)
       return true
     end

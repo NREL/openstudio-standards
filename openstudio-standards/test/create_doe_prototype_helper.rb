@@ -80,11 +80,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       run_models,
       compare_results,
       debug )
-    
+
+    method_name = nil
     case template
     when 'NECB 2011'
 
-      method_name = "test_#{building_type}-#{template}-#{climate_zone}-#{epw_file}".gsub(' ','_').gsub('.','_')
+      method_name = "test_#{building_type}-#{template}-#{climate_zone}-#{File.basename(epw_file.to_s,'.epw')}".gsub(' ','_').gsub('.','_')
       
     else
       method_name = "test_#{building_type}-#{template}-#{climate_zone}".gsub(' ','_')
@@ -101,9 +102,10 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             
       # Paths for this test run
       
+    model_name = nil
     case template
     when 'NECB 2011'
-      model_name = "test_#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
+      model_name = "#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
     else
       model_name = "#{building_type}-#{template}-#{climate_zone}"
     end

@@ -3,6 +3,10 @@ OS:Version,
   {0d11209e-173f-49a4-ba0c-c15657a72b3e}, !- Handle
   1.13.1;                                 !- Version Identifier
 
+OS:Timestep,
+  {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
+  6;                                      !- Number of Timesteps per Hour
+
 OS:YearDescription,
   {2759562d-6e36-40de-aa86-5c2198a9d34c}, !- Handle
   ,                                       !- Calendar Year

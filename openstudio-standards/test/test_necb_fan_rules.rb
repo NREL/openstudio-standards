@@ -49,7 +49,7 @@ class HVACEfficienciesTest < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       vavfans = model.getFanVariableVolumes
       vavfans.each do |ifan|
-        deltaP = 1000.0  # necb pressure rise for vav fans
+        deltaP = 1458.33  # necb pressure rise for vav fans
         fan_eff = 0.65  # assumed fan mechanical efficiency
         flow_rate = cap * fan_eff/deltaP
         ifan.setMaximumFlowRate(flow_rate)
@@ -62,7 +62,7 @@ class HVACEfficienciesTest < MiniTest::Test
       vavfans = model.getFanVariableVolumes
       vavfans.each do |ifan|
         deltaP = ifan.pressureRise
-        necb_deltaP = 1000.0
+        necb_deltaP = 1458.33
         diff = (deltaP - necb_deltaP).abs / necb_deltaP
         deltaP_set_properly = true
         if diff > tol then deltaP_set_properly = false end
@@ -204,9 +204,9 @@ class HVACEfficienciesTest < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
-      model.applyPrototypeHVACAssumptions(building_type, building_vintage, climate_zone)
+      model.apply_prototype_hvac_assumptions(building_type, building_vintage, climate_zone)
       # Apply the HVAC efficiency standard
-      model.applyHVACEfficiencyStandard(building_vintage, climate_zone)
+      model.apply_hvac_efficiency_standard(building_vintage, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
