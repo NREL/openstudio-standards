@@ -4479,6 +4479,9 @@ class OpenStudio::Model::Model
         elsif stds_bldg_type == "HighriseApartment" && stds_space_type.include?("Apartment")
           avg_unit_size = OpenStudio::convert(949.9,"ft^2","m^2").get # calculated from prototype
           num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == "RetailStripmall"
+          avg_unit_size = OpenStudio::convert(22500.0/10.0,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
         end
 
         # determine number of beds

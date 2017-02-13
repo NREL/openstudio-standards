@@ -277,4 +277,83 @@ class OpenStudio::Model::Model
 
     return true
   end # add swh
+
+  # add typical swh demand and supply to model
+  #
+  # @param [String] template
+  # @param [Bool] trust_effective_num_spaces
+  # @param [String] fuel (gas, electric, nil) nil is smart
+  # @param [Double] pipe_insul_in
+  # @param [String] circulating, (circulating, noncirculating, nil) nil is smart
+  # @return [Hash] :water_use_equipment, :water_heater, :hot_water_loop
+  def add_typical_swh(template, trust_effective_num_spaces = false, fuel = nil, pipe_insul_in = 0.0, circulating = nil)
+
+    # array of equipment that will be made
+    swh_equip = {}
+    swh_equip[:water_use_equipment] = []
+    swh_equip[:water_heater] = []
+    swh_equip[:hot_water_loop] = []
+
+    # create space type hash (need num_units for MidriseApartment and RetailStripmall)
+    space_type_hash = self.create_space_type_hash(template,trust_effective_num_spaces = false)
+
+    # todo - create shared water temperature schedules? (or if make on fly don't make duplicates)
+    temp_schedules = {} # key is temp F value is schedule
+
+    # loop through space types adding demand side of swh
+    self.getSpaceTypes.each do |space_type|
+      next if not space_type.standardsBuildingType.is_initialized
+      next if not space_type.standardsSpaceType.is_initialized
+      stds_bldg_type = space_type.standardsBuildingType.get
+      stds_space_type = space_type.standardsSpaceType.get
+
+      # todo - remap space type names as needed (e.g. RetailStripMall to Retail, etc.)
+      # todo - update this method and then use it in other places, I feel like I've done it by hand in many places
+
+      # lookup space_type_properties
+      space_type_properties = space_type.get_standards_data(template)
+      gal_hr_per_area_ip = space_type_properties['service_water_heating_peak_flow_per_area']
+
+      # next if no service water heating demand
+      # todo - Retail uses service_water_heating_peak_flow_rate instead of normalized, it is getting stopped here
+      next if not gal_hr_per_area_ip.to_f > 0.0
+
+      if stds_bldg_type == "MidriseApartment" && stds_space_type.include?("Apartment")
+        num_units = space_type_hash[space_type][:num_units]
+        puts "testing #{space_type.name}, it has #{num_units} units, need to determine water/hr per unit."
+      elsif stds_bldg_type == "RetailStripmall"
+        num_units = space_type_hash[space_type][:num_units]
+        puts "testing #{space_type.name}, it has #{num_units} units, need to determine water/hr per unit."
+      else
+        puts "testing #{space_type.name}, it has flow of #{gal_hr_per_area_ip}."
+      end
+
+      # todo - when using multiple units use size of equipment from prototype (MidriseApartment and Stripmall)
+      # todo - when using multiple units add supply side for each demand side
+
+      # todo - pick fuel if required
+
+      # todo - build dedicated demand and supply system for Laundry (Hospital and Kitchen) and all Kitchens
+      # todo - Prototype models don't seem to be making multiple hot water loops for Midrise Units or for Kitchens
+
+      # todo - add booster to all kitchens except for QuickServiceRestaurant
+
+      # todo - when determining swh demand make sure to included zone multipler
+
+      # todo - connect water use equipment to space (largest space if shared system, each space if per unit or kitchen/laundry)
+
+      # todo - should I have water use connection for each water use equipment, or maybe just one per loop
+
+    end
+
+    # todo - add non-dedicated system(s) here. Separate systems for water use equipment from different building types
+
+    # todo - add in losses from tank and pipe insulation, parasitic, etc.
+
+    # todo - set system efficiencies
+
+    return swh_equip
+
+  end
+
 end
