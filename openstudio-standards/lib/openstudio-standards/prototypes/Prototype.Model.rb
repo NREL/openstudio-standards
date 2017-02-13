@@ -904,7 +904,7 @@ class OpenStudio::Model::Model
   # @param template [String] Valid choices are
   # @param kitchen_makeup [String] Valid choices are
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
-  def add_exhaust(template,kitchen_makeup = "Adjacent") # kitchen_makup options are (None, Largest Zone, Adjacent)
+  def add_exhaust(template,kitchen_makeup = "Adjacent") # kitchen_makeup options are (None, Largest Zone, Adjacent)
 
     zone_exhaust_fans = {}
 
@@ -1065,7 +1065,63 @@ class OpenStudio::Model::Model
 
       else #kitchen_makeup == "Adjacent"
 
-        # todo - populate adajcent code
+        zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust run on it
+
+        standard_space_types_with_makup_air.each do |makeup_target,makeup_source|
+          if zones_by_standards.has_key?(makeup_target)
+            # process zones of each makeup_target
+            zones_by_standards[makeup_target].each do |thermal_zone,space_type_hash|
+
+              # get adjacent zones
+              adjacent_zones = thermal_zone.get_adjacent_zones_with_shared_wall_areas
+
+              # find adjacent zones matching key and value from standard_space_types_with_makup_air
+              first_adjacent_makeup_source = nil
+              adjacent_zones.each do |adjacent_zone|
+
+                next if not first_adjacent_makeup_source.nil?
+
+                if zones_by_standards.has_key?(makeup_source) and zones_by_standards[makeup_source].has_key?(adjacent_zone)
+                  first_adjacent_makeup_source = adjacent_zone
+
+                  # todo - add in extra arguments for makeup air
+                  exhaust_makeup_inputs = {}
+                  exhaust_makeup_inputs[makeup_target] = {} # for now only one makeup target per zone, but method could have multiple
+                  exhaust_makeup_inputs[makeup_target][:source_zone] = first_adjacent_makeup_source
+
+                  # add exhaust
+                  zone_exhaust_hash = thermal_zone.add_exhaust(template,exhaust_makeup_inputs)
+                  zones_applied << thermal_zone
+                  zone_exhaust_fans.merge!(zone_exhaust_hash)
+                end
+
+              end
+
+              if first_adjacent_makeup_source.nil?
+
+                # issue warning that makeup air wont be made but still make exhaust
+                OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Model has zone with #{makeup_target} but no adjacent zone with #{makeup_source}. Exhaust will be added, but no makeup air.")
+
+                # add exhaust
+                zone_exhaust_hash = thermal_zone.add_exhaust(template)
+                zones_applied << thermal_zone
+                zone_exhaust_fans.merge!(zone_exhaust_hash)
+
+              end
+
+            end
+
+          end
+        end
+
+        # add exhaust for rest of zones
+        self.getThermalZones.each do |thermal_zone|
+          next if zones_applied.include?(thermal_zone)
+
+          # add exhaust
+          zone_exhaust_hash = thermal_zone.add_exhaust(template)
+          zone_exhaust_fans.merge!(zone_exhaust_hash)
+        end
 
       end
 

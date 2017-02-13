@@ -62,6 +62,69 @@ class TestAddExhaust < Minitest::Test
 
   end
 
+  def test_model_add_exhaust_secondary_adjacent
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchool_6A_1980-2004.osm")
+    model = translator.loadModel(path)
+    model = model.get
+
+    # create story hash
+    template = 'DOE Ref 1980-2004'
+
+    # add exhaust
+    zone_exhaust_fans = model.add_exhaust(template,"Adjacent")
+
+    zone_exhaust_fans.each do |zone_exhaust_fan,hash|
+
+      puts zone_exhaust_fan
+
+      if zone_exhaust_fan.name.to_s.include?("Kitchen")
+        # assert that these objects were made
+        assert(hash.has_key?(:zone_mixing))
+        assert(hash.has_key?(:transfer_air_source_zone_exhaust))
+
+        puts hash[:zone_mixing]
+        puts hash[:transfer_air_source_zone_exhaust]
+
+      end
+
+    end
+
+    # check results
+    assert(zone_exhaust_fans.size == 3) # two bathrooms and a kitchen
+
+  end
+
+  def test_model_add_exhaust_secondary_adjacent_missing_source
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchoolSlicedBar.osm")
+    model = translator.loadModel(path)
+    model = model.get
+
+    # create story hash
+    template = 'DOE Ref 1980-2004'
+
+    # add exhaust
+    zone_exhaust_fans = model.add_exhaust(template,"Adjacent")
+
+    zone_exhaust_fans.each do |zone_exhaust_fan,hash|
+
+      if zone_exhaust_fan.name.to_s.include?("Kitchen")
+        # assert that these objects were made
+        assert(hash.size == 0)
+      end
+
+    end
+
+    # check results
+    assert(zone_exhaust_fans.size == 6) # three bathrooms and three kitchens
+
+  end
+
   def test_model_add_exhaust_secondary_largest_zone_makup
 
     # Load the test model

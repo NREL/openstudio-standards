@@ -1476,7 +1476,7 @@ class OpenStudio::Model::ThermalZone
 
         # add balanced schedule to zone_exhaust_fan
         balanced_sch_name = space_type_properties['balanced_exhaust_fraction_schedule']
-        balanced_exhaust_schedule = model.add_schedule(balanced_sch_name)
+        balanced_exhaust_schedule = model.add_schedule(balanced_sch_name).to_ScheduleRuleset.get
         zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_exhaust_schedule)
 
         # use max value of balanced exhaust fraction schedule for maximum flow rate
@@ -1510,6 +1510,30 @@ class OpenStudio::Model::ThermalZone
     end
 
     return exhaust_fans
+
+  end
+
+  # returns adjacant_zones_with_shared_wall_areas
+  #
+  # @param [Bool] same_floor (only valid option for now is true)
+  # @return [Array] adjacent zones
+  def get_adjacent_zones_with_shared_wall_areas(same_floor = true)
+
+    adjacent_zones = []
+
+    self.spaces.each do |space|
+      adj_spaces = space.get_adjacent_spaces_with_shared_wall_areas
+      adj_spaces.each do |k,v|
+        # skip if space is in current thermal zone.
+        next if not space.thermalZone.is_initialized
+        next if k.thermalZone.get == self
+        adjacent_zones << k.thermalZone.get
+      end
+    end
+
+    adjacent_zones = adjacent_zones.uniq
+
+    return adjacent_zones
 
   end
 
