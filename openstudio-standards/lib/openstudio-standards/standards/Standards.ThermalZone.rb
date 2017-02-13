@@ -1407,8 +1407,8 @@ class OpenStudio::Model::ThermalZone
   #
   # @param template [String] Valid choices are
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
-  # @todo - Add in makeup air using zone mixing from Dining,Cafeteria, or Cafe zones to Kitchen zones (if use this also use Balanced Exhaust Fraction)
-  def add_exhaust(template,fraction_balanced_by_transfer_air = nil,transfer_air_source_zones = nil)
+  # @todo - Combine availability and fraction flow schedule to make zone mixing schedule
+  def add_exhaust(template,exhaust_makeup_inputs = {})
 
     exhaust_fans = {} # key is primary exhaust value is hash of arrays of secondary objects
 
@@ -1421,11 +1421,11 @@ class OpenStudio::Model::ThermalZone
       next if not space.partofTotalFloorArea
       space_type = space.spaceType.get
       if space_type_hash.has_key?(space_type)
-        space_type_hash[space_type] += space.floorArea * space.multiplier
+        space_type_hash[space_type] += space.floorArea # excluding space.multiplier since used to calc loads in zone
       else
         next if not space_type.standardsBuildingType.is_initialized
         next if not space_type.standardsSpaceType.is_initialized
-        space_type_hash[space_type] = space.floorArea * space.multiplier
+        space_type_hash[space_type] = space.floorArea # excluding space.multiplier since used to calc loads in zone
       end
 
     end
@@ -1433,10 +1433,20 @@ class OpenStudio::Model::ThermalZone
     # loop through space type hash and add exhaust as needed
     space_type_hash.each do |space_type,floor_area|
 
+      # get floor custom or calculated floor area for max flow rate calculation
+      makeup_target = [space_type.standardsBuildingType.get,space_type.standardsSpaceType.get]
+      if exhaust_makeup_inputs.has_key?(makeup_target) and exhaust_makeup_inputs[makeup_target].has_key?(:target_effective_floor_area)
+        # pass in custom floor area
+        floor_area_si = exhaust_makeup_inputs[makeup_target][:target_effective_floor_area] / self.multiplier.to_f
+        floor_area_ip = OpenStudio.convert(floor_area_si,'m^2','ft^2').get
+      else
+        floor_area_ip = OpenStudio.convert(floor_area,'m^2','ft^2').get
+      end
+
       space_type_properties = space_type.get_standards_data(template)
       exhaust_per_area = space_type_properties['exhaust_per_area']
       next if exhaust_per_area.nil?
-      maximum_flow_rate_ip = exhaust_per_area * OpenStudio.convert(floor_area,'m^2','ft^2').get
+      maximum_flow_rate_ip = exhaust_per_area * floor_area_ip
       maximum_flow_rate_si = OpenStudio.convert(maximum_flow_rate_ip,'cfm','m^3/s').get
       if space_type_properties['exhaust_schedule'].nil?
         exhaust_schedule = model.alwaysOnDiscreteSchedule
@@ -1461,19 +1471,41 @@ class OpenStudio::Model::ThermalZone
       # update efficiency and pressure rise
       zone_exhaust_fan.apply_prototype_fan_efficiency(template)
 
-      # todo - map zone to transfer zone type
+      # add and alter objectxs related to zone exhaust makeup air
+      if exhaust_makeup_inputs.has_key?(makeup_target) and exhaust_makeup_inputs[makeup_target][:source_zone]
 
-      # todo - determine fraction_balanced_by_transfer_air for this zone if not provided
+        # add balanced schedule to zone_exhaust_fan
+        balanced_sch_name = space_type_properties['balanced_exhaust_fraction_schedule']
+        balanced_exhaust_schedule = model.add_schedule(balanced_sch_name)
+        zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_exhaust_schedule)
 
-      # todo - add dummy exhaust fan to a transfer_air_source_zones
+        # use max value of balanced exhaust fraction schedule for maximum flow rate
+        max_sch_val = balanced_exhaust_schedule.annual_min_max_value['max']
+        transfer_air_zone_mixing_si = maximum_flow_rate_si * max_sch_val
 
-      # todo - make zone mixing schedule by combining exhaust availability and fraction flow
+        # add dummy exhaust fan to a transfer_air_source_zones
+        transfer_air_source_zone_exhaust = OpenStudio::Model::FanZoneExhaust.new(model)
+        transfer_air_source_zone_exhaust.setName(self.name.to_s + ' Transfer Air Source')
+        transfer_air_source_zone_exhaust.setAvailabilitySchedule(exhaust_schedule)
+        # not using zone_exhaust_fan.setFlowFractionSchedule. Exhaust fans are on when available
+        transfer_air_source_zone_exhaust.setMaximumFlowRate(transfer_air_zone_mixing_si)
+        transfer_air_source_zone_exhaust.setFanEfficiency(1.0)
+        transfer_air_source_zone_exhaust.setPressureRise(0.0)
+        transfer_air_source_zone_exhaust.setEndUseSubcategory('Zone Exhaust Fans')
+        transfer_air_source_zone_exhaust.addToThermalZone(exhaust_makeup_inputs[makeup_target][:source_zone])
+        exhaust_fans[zone_exhaust_fan][:transfer_air_source_zone_exhaust] = transfer_air_source_zone_exhaust
 
-      # todo - add zone mixing
+        # todo - make zone mixing schedule by combining exhaust availability and fraction flow
+        zone_mixing_schedule = exhaust_schedule
 
-      # todo - add balanced schedule to zone_exhaust_fan
+        # add zone mixing
+        zone_mixing = OpenStudio::Model::ZoneMixing.new(self)
+        zone_mixing.setSchedule(zone_mixing_schedule)
+        zone_mixing.setSourceZone(exhaust_makeup_inputs[makeup_target][:source_zone])
+        zone_mixing.setDesignFlowRate(transfer_air_zone_mixing_si)
+        exhaust_fans[zone_exhaust_fan][:zone_mixing] = zone_mixing
 
-      # todo - when multiple transfer_air_source_zones transfer is proportional to zone floor area
+      end
 
     end
 

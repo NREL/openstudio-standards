@@ -22,10 +22,11 @@ class OpenStudio::Model::Model
     end
 
     # determine space to put elevator load in
-    # largest bottom story (including basement) space
+    # largest bottom story (including basement) space that has multiplier of 1
     bottom_spaces = {}
     bottom_story = effective_num_stories[:story_hash].keys.first
     bottom_story.spaces.each do |space|
+      next if space.multiplier > 1
       bottom_spaces[space] = space.floorArea
     end
     target_space = bottom_spaces.key(bottom_spaces.values.max)
