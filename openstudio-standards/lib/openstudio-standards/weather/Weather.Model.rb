@@ -338,7 +338,10 @@ module BTAP
                     :typical_summer_wet_week,
                     :typical_winter_dry_week,
                     :typical_autumn_week,
-                    :typical_spring_week
+                    :typical_spring_week,
+                    :epw_filepath,
+                    :ddy_filepath,
+                    :stat_filepath
 
       YEAR = 0
       MONTH = 1
