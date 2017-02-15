@@ -221,11 +221,11 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     end # Template vintage loop
     
     #Write test report file. 
-    test_result_file = File.join(File.dirname(__FILE__),'regression_files','compliance_envelope_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__),'data','compliance_envelope_test_results.csv')
     File.open(test_result_file, 'w') {|f| f.write( @header_output + @output) }
     
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__),'regression_files','compliance_envelope_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__),'data','compliance_envelope_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__),'envelope_test.osm'))
     assert( b_result, 

@@ -14,7 +14,7 @@ class HVACEfficienciesTest < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/heatpump_efficiency"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    heatpump_expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_heatpump_efficiencies_expected_results.csv')
+    heatpump_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_heatpump_efficiencies_expected_results.csv')
 
     # Initialize hashes for storing expected heat pump efficiency data from file
     min_caps = []
@@ -95,10 +95,10 @@ class HVACEfficienciesTest < MiniTest::Test
     heatpump_res_file_output_text += output_line_text
     
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_heatpump_efficiencies_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_heatpump_efficiencies_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(heatpump_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_heatpump_efficiencies_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_heatpump_efficiencies_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
            "test_heatpump_efficiency: Heat pump efficiency test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
@@ -109,7 +109,7 @@ class HVACEfficienciesTest < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/heatpump_curves"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    heatpump_expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_heatpump_curves_expected_results.csv')
+    heatpump_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_heatpump_curves_expected_results.csv')
     heatpump_curve_names = []
     CSV.foreach(heatpump_expected_result_file, headers: true) do |data|
       heatpump_curve_names << data['Curve Name']
@@ -165,10 +165,10 @@ class HVACEfficienciesTest < MiniTest::Test
         "#{'%.5E' % heatpump_plfvsplr__curve.minimumValueofx},#{'%.5E' % heatpump_plfvsplr__curve.maximumValueofx}\n"
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_heatpump_curves_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_heatpump_curves_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(heatpump_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_heatpump_curves_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_heatpump_curves_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
     "Heat pump performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")

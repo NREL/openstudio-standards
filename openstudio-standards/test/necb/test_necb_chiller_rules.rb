@@ -14,7 +14,7 @@ class HVACEfficienciesTest < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/chiller_cop"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    chiller_expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_chiller_cop_expected_results.csv')
+    chiller_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_cop_expected_results.csv')
 
     # Initialize hashes for storing expected chiller cop data from file
     chiller_type_min_cap = {}
@@ -109,10 +109,10 @@ class HVACEfficienciesTest < MiniTest::Test
     end
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_chiller_cop_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_cop_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'regression_files','compliance_chiller_cop_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data','compliance_chiller_cop_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     assert( b_result,
     "Chiller COP test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
@@ -205,7 +205,7 @@ class HVACEfficienciesTest < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/chiller_curves"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    chiller_expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_chiller_curves_expected_results.csv')
+    chiller_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_curves_expected_results.csv')
     chiller_curve_names = {}
     chiller_curve_names['Scroll'] = []
     chiller_curve_names['Reciprocating'] = []
@@ -261,10 +261,10 @@ class HVACEfficienciesTest < MiniTest::Test
     end
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_chiller_curves_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_curves_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_chiller_curves_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_curves_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
     "Chiller performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")

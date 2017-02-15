@@ -14,7 +14,7 @@ class HVACEfficienciesTest < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/unitary_efficiency"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    unitary_expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_unitary_efficiencies_expected_results.csv')
+    unitary_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_unitary_efficiencies_expected_results.csv')
 
     # Initialize hashes for storing expected unitary efficiency data from file
     heating_type_min_cap = {}
@@ -114,10 +114,10 @@ class HVACEfficienciesTest < MiniTest::Test
     end
     
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_unitary_efficiencies_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_unitary_efficiencies_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(unitary_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_unitary_efficiencies_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_unitary_efficiencies_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
            "test_unitary_efficiency: Unitary efficiency test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
@@ -128,7 +128,7 @@ class HVACEfficienciesTest < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/unitary_curves"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    unitary_expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_unitary_curves_expected_results.csv')
+    unitary_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_unitary_curves_expected_results.csv')
     unitary_curve_names = []
     CSV.foreach(unitary_expected_result_file, headers: true) do |data|
       unitary_curve_names << data['Curve Name']
@@ -185,10 +185,10 @@ class HVACEfficienciesTest < MiniTest::Test
         "#{'%.5E' % unitary_plfvsplr__curve.minimumValueofx},#{'%.5E' % unitary_plfvsplr__curve.maximumValueofx}\n"
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_unitary_curves_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_unitary_curves_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(unitary_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_unitary_curves_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_unitary_curves_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
     "Unitary performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")

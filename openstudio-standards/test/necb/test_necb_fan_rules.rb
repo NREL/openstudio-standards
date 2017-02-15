@@ -13,7 +13,7 @@ class HVACEfficienciesTest < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/vavfan_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    vavfan_expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_vavfan_curves_expected_results.csv')
+    vavfan_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_vavfan_curves_expected_results.csv')
     vavfan_curve_names = []
     CSV.foreach(vavfan_expected_result_file, headers: true) do |data|
       vavfan_curve_names << data['Curve Name']
@@ -91,10 +91,10 @@ class HVACEfficienciesTest < MiniTest::Test
     end
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_vavfan_curves_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_vavfan_curves_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(vavfan_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_vavfan_curves_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_vavfan_curves_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
     "Variable volume fan performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")

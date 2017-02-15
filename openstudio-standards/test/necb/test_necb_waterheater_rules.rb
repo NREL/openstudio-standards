@@ -13,7 +13,7 @@ class SHWTests < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/shw_curves"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    shw_expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_shw_curves_expected_results.csv')
+    shw_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_shw_curves_expected_results.csv')
     shw_curve_names = []
     CSV.foreach(shw_expected_result_file, headers: true) do |data|
       shw_curve_names << data['Curve Name']
@@ -70,10 +70,10 @@ class SHWTests < MiniTest::Test
         "#{'%.5E' % shw_plfvsplr_curve.coefficient3xPOW2},#{'%.5E' % shw_plfvsplr_curve.coefficient4xPOW3},#{'%.5E' % shw_plfvsplr_curve.minimumValueofx}," +
         "#{'%.5E' % shw_plfvsplr_curve.maximumValueofx}\n"
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_shw_curves_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_shw_curves_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(shw_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'regression_files', 'compliance_shw_curves_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_shw_curves_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
     "SHW performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")

@@ -227,11 +227,11 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
       end #loop spacetypes
     end #loop Template
     #Write test report file. 
-    test_result_file = File.join(File.dirname(__FILE__),'regression_files','space_type_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__),'data','space_type_test_results.csv')
     File.open(test_result_file, 'w') {|f| f.write(header_output + output) }
       
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__),'regression_files','space_type_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__),'data','space_type_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     assert( b_result, 
       "Spacetype test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"

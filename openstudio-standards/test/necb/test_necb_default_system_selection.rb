@@ -72,7 +72,7 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
         end
       end
     end
-    test_result_file = File.join(File.dirname(__FILE__),'regression_files','space_type_system_selection_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__),'data','space_type_system_selection_test_results.csv')
     #remove duplicates if any. 
     results_array.uniq!
     #sort array. 
@@ -85,7 +85,7 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
     end#csv
     
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__),'regression_files','space_type_system_selection_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__),'data','space_type_system_selection_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     assert( b_result, 
       "Spacetype test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"

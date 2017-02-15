@@ -13,15 +13,15 @@ class WeatherTests < Minitest::Test
     #todo Must deal with ground temperatures..They are currently not correct for NECB.
     BTAP::Environment::create_climate_index_file(
       File.join(File.dirname(__FILE__),'..','data','weather'), 
-      File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv') 
+      File.join(File.dirname(__FILE__),'data','weather_test_results.csv') 
     )
     
     test = FileUtils.compare_file(
-        File.join(File.dirname(__FILE__),'regression_files','weather_expected_results.csv'), 
-        File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv') )
+        File.join(File.dirname(__FILE__),'data','weather_expected_results.csv'), 
+        File.join(File.dirname(__FILE__),'data','weather_test_results.csv') )
       
     assert( test ,
-        "Weather output from test does not match what is expected. Compare #{File.join(File.dirname(__FILE__),'regression_files','weather_expected_results.csv')} with #{File.join(File.dirname(__FILE__),'regression_files','weather_test_results.csv')}"
+        "Weather output from test does not match what is expected. Compare #{File.join(File.dirname(__FILE__),'data','weather_expected_results.csv')} with #{File.join(File.dirname(__FILE__),'data','weather_test_results.csv')}"
     )
   end
 end
