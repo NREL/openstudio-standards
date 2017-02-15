@@ -25,7 +25,7 @@ class HVACEfficienciesTest < MiniTest::Test
     heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     test_chiller_cap = [1000000.0, 4000000.0]
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -35,7 +35,7 @@ class HVACEfficienciesTest < MiniTest::Test
         tower_cap = chiller_cap * (1.0 + 1.0/necb2011_refCOP)
         name = "sys6_ChillerType_#{chiller_type}~TowerCap~#{tower_cap}watts"
         puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+        model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
         BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys6(
           model,

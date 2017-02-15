@@ -57,7 +57,7 @@ class HVACEfficienciesTest < MiniTest::Test
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
     unitary_heating_types = ['Electric Resistance','All Other']
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -70,7 +70,7 @@ class HVACEfficienciesTest < MiniTest::Test
       heating_type_cap[heating_type].each do |unitary_cap|
         name = "sys3_MuaHtgCoilType~#{heating_coil_type}_UnitaryCap~#{unitary_cap}watts"
         puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+        model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
         BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
             model, 
@@ -138,7 +138,7 @@ class HVACEfficienciesTest < MiniTest::Test
     boiler_fueltype = 'NaturalGas'
     chiller_type = 'Scroll'
     mua_cooling_type = 'DX'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")

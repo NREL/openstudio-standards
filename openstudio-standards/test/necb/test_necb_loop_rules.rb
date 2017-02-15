@@ -19,7 +19,7 @@ class HVACEfficienciesTest < MiniTest::Test
     chiller_type = 'Scroll'
     heating_coil_type = 'Electric'
     fan_type = 'AF_or_BI_rdg_fancurve'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -84,7 +84,7 @@ class HVACEfficienciesTest < MiniTest::Test
     boiler_fueltype = 'Electricity'
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'DX'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -150,7 +150,7 @@ class HVACEfficienciesTest < MiniTest::Test
     boiler_fueltype = 'Electricity'
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'DX'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")

@@ -67,7 +67,7 @@ class HVACEfficienciesTest < MiniTest::Test
     boiler_fueltype = 'Electricity'
     chiller_types = ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
     mua_cooling_type = 'Hydronic'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -135,7 +135,7 @@ class HVACEfficienciesTest < MiniTest::Test
     heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     test_chiller_cap = [1000000.0, 3000000.0]
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -143,7 +143,7 @@ class HVACEfficienciesTest < MiniTest::Test
       test_chiller_cap.each do |chiller_cap|
         name = "sys6_ChillerType_#{chiller_type}~Chiller_cap~#{chiller_cap}watts"
         puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+        model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
         BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys6(
           model,
@@ -219,14 +219,14 @@ class HVACEfficienciesTest < MiniTest::Test
     boiler_fueltype = 'NaturalGas'
     chiller_types = ['Scroll', 'Reciprocating', 'Rotary Screw', 'Centrifugal']
     mua_cooling_type = 'Hydronic'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     chiller_types.each do |chiller_type|
       name = "sys5_ChillerType_#{chiller_type}"
       puts "***************************************#{name}*******************************************************\n"
-      model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+      model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
       BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys5(
           model,
