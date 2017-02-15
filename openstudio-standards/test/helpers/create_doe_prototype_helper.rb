@@ -187,7 +187,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         acceptable_error_percentage = 10 # Max % error for any end use/fuel type combo
 
         # Load the legacy idf results JSON file into a ruby hash
-        temp = File.read("#{File.dirname(__FILE__)}/legacy_idf_results.json")
+        temp = File.read("#{Dir.pwd}/data/legacy_idf_results.json")
         legacy_idf_results = JSON.parse(temp)
 
         # List of all fuel types

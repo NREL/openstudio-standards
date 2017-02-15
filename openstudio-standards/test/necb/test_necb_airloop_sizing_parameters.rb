@@ -25,7 +25,7 @@ begin
     tol = 1.0e-3
     name = 'sys6'
     puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
       model, 
@@ -109,7 +109,7 @@ begin
     tol = 1.0e-3
     name = 'sys3'
     puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
       model, 
