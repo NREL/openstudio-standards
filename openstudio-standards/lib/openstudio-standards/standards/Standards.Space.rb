@@ -824,7 +824,7 @@ class OpenStudio::Model::Space
 
     # Determine the type of control required
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'ECBC 2007'
 
       # Do nothing, no daylighting controls required
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, daylighting control not required by this standard.")
