@@ -3,7 +3,7 @@ def load_test_model(model_name)
 
   # Load the test model
   translator = OpenStudio::OSVersion::VersionTranslator.new
-  path = OpenStudio::Path.new("#{Dir.pwd}/models/#{model_name}.osm")
+  path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/#{model_name}.osm")
   model = translator.loadModel(path)
   assert(model.is_initialized, "Could not load test model '#{model_name}.osm' from /models.  Check name for typos.")
   model = model.get
