@@ -175,7 +175,7 @@ class OpenStudio::Model::Model
     # Remove all HVAC from model,
     # excluding service water heating
     remove_prm_hvac
-
+    
     # Modify the service water heating loops
     # per the baseline rules
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
@@ -185,7 +185,7 @@ class OpenStudio::Model::Model
     # the groups of zones and add that system type.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
     sys_groups.each do |sys_group|
-      # Determine the primary baseline system type
+      # Determine the primary baseline system type 
       system_type = prm_baseline_system_type(template,
                                              climate_zone,
                                              sys_group['occ'],
@@ -300,6 +300,7 @@ class OpenStudio::Model::Model
       if curve.parent.empty?
         # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
         curve.remove
+        
       end
     end
 
@@ -341,8 +342,8 @@ class OpenStudio::Model::Model
 
     # Reduce the WWR and SRR, if necessary
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-    # TODO apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
-    # TODO apply_ecbc_standard_skylight_to_roof_ratio(template)
+    self.apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
+    self.apply_ecbc_baseline_skylight_to_roof_ratio(template)
 
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
@@ -375,24 +376,24 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
 
     # Add daylighting controls to each space
-    # getSpaces.sort.each do |space|
-      # TODO added = space.add_daylighting_controls(template, false, false)
-    # end
+    getSpaces.sort.each do |space|
+      added = space.add_daylighting_controls(template, false, false)
+   end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
 
     # Modify some of the construction types as necessary
-    # TODO apply_prm_construction_types(template)
+    apply_prm_construction_types(template)
 
     # Set the construction properties of all the surfaces in the model
-    # TODO apply_standard_constructions(template, climate_zone)
+    apply_standard_constructions(template, climate_zone)
 
     # Get the groups of zones that define the
     # baseline HVAC systems for later use.
     # This must be done before removing the HVAC systems
     # because it requires knowledge of proposed HVAC fuels.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
-    # TODO sys_groups = prm_baseline_system_groups(template, custom)
+    sys_groups = prm_baseline_system_groups(template, custom)
 
     # Remove all HVAC from model,
     # excluding service water heating
@@ -401,50 +402,51 @@ class OpenStudio::Model::Model
     # Modify the service water heating loops
     # per the baseline rules
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
-    # TODO apply_baseline_swh_loops(template, building_type)
+    apply_baseline_swh_loops(template, building_type)
 
     # Determine the baseline HVAC system type for each of
     # the groups of zones and add that system type.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
-    # sys_groups.each do |sys_group|
+    #sys_groups.each do |sys_group|
       # Determine the primary baseline system type
-      # TODO system_type = prm_baseline_system_type(template,
-                                             # climate_zone,
-                                             # sys_group['occ'],
-                                             # sys_group['fuel'],
-                                             # sys_group['area_ft2'],
-                                             # sys_group['stories'],
-                                             # custom)
+     #system_type = prm_baseline_system_type(template,
+                                             #climate_zone,
+                                           # sys_group['occ'],
+                                           #  sys_group['fuel'],
+                                            # sys_group['area_ft2'],
+                                            # sys_group['stories'],
+                                           # custom)
 
-      # TODO sys_group['zones'].sort.each_slice(5) do |zone_list|
-        # zone_names = []
-        # zone_list.each do |zone|
-          # zone_names << zone.name.get.to_s
-        # end
-        # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+      #sys_group['zones'].sort.each_slice(5) do |zone_list|
+       # zone_names = []
+        #zone_list.each do |zone|
+        # zone_names << zone.name.get.to_s
+       # end
+        #OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
       # end
 
       # Add the system type for these zones
-      # TODO add_prm_baseline_system(template,
-                              # system_type[0],
-                              # system_type[1],
-                              # system_type[2],
-                              # system_type[3],
-                              # sys_group['zones'])
-    # end
+      
+      #add_prm_baseline_system(template,
+       #                       system_type[0],
+        #                      system_type[1],
+         #                     system_type[2],
+          #                    system_type[3],
+           #                   sys_group['zones'])
+    #end
 
     # Set the zone sizing SAT for each zone in the model
-    # TODO getThermalZones.each(&:apply_prm_baseline_supply_temperatures)
+    #getThermalZones.each(&:apply_prm_baseline_supply_temperatures)
 
     # Set the system sizing properties based on the zone sizing information
-    # TODO getAirLoopHVACs.each(&:apply_prm_sizing_temperatures)
+    #getAirLoopHVACs.each(&:apply_prm_sizing_temperatures)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
 
     # SAT reset, economizers
-    # getAirLoopHVACs.sort.each do |air_loop|
-      # TODO air_loop.apply_prm_baseline_controls(template, climate_zone)
-    # end
+    #getAirLoopHVACs.sort.each do |air_loop|
+     #air_loop.apply_prm_baseline_controls(template, climate_zone)
+    #end
 
     # Apply the minimum damper positions, assuming no DDC control of VAV terminals
     # getAirLoopHVACs.sort.each do |air_loop|
@@ -473,59 +475,59 @@ class OpenStudio::Model::Model
     # TODO apply_multizone_vav_outdoor_air_sizing(template)
 
     # Set the baseline fan power for all airloops
-    # getAirLoopHVACs.sort.each do |air_loop|
-      # TODO air_loop.apply_prm_baseline_fan_power(template)
-    # end
+    #getAirLoopHVACs.sort.each do |air_loop|
+     #air_loop.apply_prm_baseline_fan_power(template)
+    #end
 
     # Set the baseline fan power for all zone HVAC
-    # getZoneHVACComponents.sort.each do |zone_hvac|
-      # TODO zone_hvac.apply_prm_baseline_fan_power(template)
-    # end
+   # getZoneHVACComponents.sort.each do |zone_hvac|
+    #  zone_hvac.apply_prm_baseline_fan_power(template)
+    #end
 
     # Set the baseline number of boilers and chillers
-    # getPlantLoops.sort.each do |plant_loop|
+    #getPlantLoops.sort.each do |plant_loop|
       # Skip the SWH loops
-      # next if plant_loop.swh_loop?
-      # TODO plant_loop.apply_prm_number_of_boilers(template)
-      # TODO plant_loop.apply_prm_number_of_chillers(template)
-    # end
+     #next if plant_loop.swh_loop?
+      #plant_loop.apply_prm_number_of_boilers(template)
+      #plant_loop.apply_prm_number_of_chillers(template)
+    #end
 
     # Set the baseline number of cooling towers
     # Must be done after all chillers are added
-    # getPlantLoops.sort.each do |plant_loop|
+    #getPlantLoops.sort.each do |plant_loop|
       # Skip the SWH loops
-      # next if plant_loop.swh_loop?
-      # plant_loop.apply_prm_number_of_cooling_towers(template)
-    # end
+     # next if plant_loop.swh_loop?
+      #plant_loop.apply_prm_number_of_cooling_towers(template)
+    #end
 
     # Run sizing run with the new chillers, boilers, and
     # cooling towers to determine capacities
-    # TODO 
-    # if runSizingRun("#{sizing_run_dir}/SizingRun2") == false
-      # return false
-    # end
+    
+   # if runSizingRun("#{sizing_run_dir}/SizingRun2") == false
+    #  return false
+    #end
 
     # Set the pumping control strategy and power
     # Must be done after sizing components
-    # getPlantLoops.sort.each do |plant_loop|
+   # getPlantLoops.sort.each do |plant_loop|
       # Skip the SWH loops
-      # next if plant_loop.swh_loop?
-      # TODO plant_loop.apply_prm_baseline_pump_power(template)
-      # TODO plant_loop.apply_prm_baseline_pumping_type(template)
-    # end
+    #  next if plant_loop.swh_loop?
+     # plant_loop.apply_prm_baseline_pump_power(template)
+      #plant_loop.apply_prm_baseline_pumping_type(template)
+    #end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
 
     # Apply the HVAC efficiency standard
-    # TODO apply_hvac_efficiency_standard(template, climate_zone)
+   # apply_hvac_efficiency_standard(template, climate_zone)
 
     # Delete all the unused curves
-    # getCurves.sort.each do |curve|
-      # if curve.parent.empty?
+    #getCurves.sort.each do |curve|
+     # if curve.parent.empty?
         # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
-        # curve.remove
-      # end
-    # end
+      #  curve.remove
+      #end
+    #end
 
     # TODO: turn off self shading
     # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
@@ -651,7 +653,7 @@ class OpenStudio::Model::Model
     # of 90.1
     exception_min_area_ft2 = nil
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010'
+    when '90.1-2004', '90.1-2007', '90.1-2010','ECBC-2007'
       exception_min_area_ft2 = 20_000
     when '90.1-2013'
       exception_min_area_ft2 = 20_000
@@ -1140,7 +1142,7 @@ class OpenStudio::Model::Model
   # @todo add 90.1-2013 systems 11-13
   def add_prm_baseline_system(template, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013','ECBC-2007'
 
       case system_type
       when 'PTAC' # System 1
@@ -3659,7 +3661,7 @@ class OpenStudio::Model::Model
       return true
     else
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'ECBC-2007'
         types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
         types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
         types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
@@ -3710,7 +3712,7 @@ class OpenStudio::Model::Model
     # Create an array of surface types
     # each standard applies to.
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'ECBC-2007'
       types_to_modify << ['Outdoors', 'Floor']
       types_to_modify << ['Outdoors', 'Wall']
       types_to_modify << ['Outdoors', 'RoofCeiling']
@@ -4050,6 +4052,371 @@ class OpenStudio::Model::Model
     return true
   end
 
+# ECBC code starts for window-to-wall ratio as per App-B (ECBC-2007)
+# Fenestration areas shall be equal to that in the proposed design or 40% to 60 %
+  # of gross above grade wall area, whichever is smaller 
+  # and shall be distributed uniformly in horizontal bands across the four orientations 
+  
+def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
+    # Loop through all spaces in the model, and
+    # per the PNNL PRM Reference Manual, find the areas
+    # of each space conditioning category (res, nonres, semi-heated)
+    # separately.  Include space multipliers.
+    nr_wall_m2 = 0.001 # Avoids divide by zero errors later
+    nr_wind_m2 = 0
+    res_wall_m2 = 0.001
+    res_wind_m2 = 0
+    sh_wall_m2 = 0.001
+    sh_wind_m2 = 0
+    total_wall_m2 = 0.001
+    total_subsurface_m2 = 0.0
+    # Store the space conditioning category for later use
+    space_cats = {}
+    getSpaces.each do |space|
+      # Loop through all surfaces in this space
+      wall_area_m2 = 0
+      wind_area_m2 = 0
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType.casecmp('wall').zero?
+        # This wall's gross area (including window area)
+        wall_area_m2 += surface.grossArea * space.multiplier
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          if 'ECBC 2007' == template
+            wind_area_m2 += ss.netArea * space.multiplier
+          elsif ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+            wind_area_m2 += ss.netArea * space.multiplier
+          else
+            next
+          end
+        end
+      end
+
+      # Determine the space category
+      # TODO This should really use the heating/cooling loads
+      # from the proposed building.  However, in an attempt
+      # to avoid another sizing run just for this purpose,
+      # conditioned status is based on heating/cooling
+      # setpoints.  If heated-only, will be assumed Semiheated.
+      # The full-bore method is on the next line in case needed.
+      # cat = space.conditioning_category(template, climate_zone)
+      cooled = space.cooled?
+      heated = space.heated?
+      cat = 'Unconditioned'
+      # Unconditioned
+      if !heated && !cooled
+        cat = 'Unconditioned'
+      # Heated-Only
+      elsif heated && !cooled
+        cat = 'Semiheated'
+      # Heated and Cooled
+      else
+        res = space.residential?(template)
+        cat = if res
+                'ResConditioned'
+              else
+                'NonResConditioned'
+              end
+      end
+      space_cats[space] = cat
+
+      # Add to the correct category
+      case cat
+      when 'Unconditioned'
+        next # Skip unconditioned spaces
+      when 'NonResConditioned'
+        nr_wall_m2 += wall_area_m2
+        nr_wind_m2 += wind_area_m2
+      when 'ResConditioned'
+        res_wall_m2 += wall_area_m2
+        res_wind_m2 += wind_area_m2
+      when 'Semiheated'
+        sh_wall_m2 += wall_area_m2
+        sh_wind_m2 += wind_area_m2
+      end
+      # keep track of totals for NECB
+      total_wall_m2 += wall_area_m2
+      total_subsurface_m2 += wind_area_m2 # this contains doors as well.
+    end
+
+    # Calculate the WWR of each category
+    wwr_nr = ((nr_wind_m2 / nr_wall_m2) * 100.0).round(1)
+    wwr_res = ((res_wind_m2 / res_wall_m2) * 100).round(1)
+    wwr_sh = ((sh_wind_m2 / sh_wall_m2) * 100).round(1)
+    fdwr = ((total_subsurface_m2 / total_wall_m2) * 100).round(1) # used by NECB 2011
+
+    # Convert to IP and report
+    nr_wind_ft2 = OpenStudio.convert(nr_wind_m2, 'm^2', 'ft^2').get
+    nr_wall_ft2 = OpenStudio.convert(nr_wall_m2, 'm^2', 'ft^2').get
+
+    res_wind_ft2 = OpenStudio.convert(res_wind_m2, 'm^2', 'ft^2').get
+    res_wall_ft2 = OpenStudio.convert(res_wall_m2, 'm^2', 'ft^2').get
+
+    sh_wind_ft2 = OpenStudio.convert(sh_wind_m2, 'm^2', 'ft^2').get
+    sh_wall_ft2 = OpenStudio.convert(sh_wall_m2, 'm^2', 'ft^2').get
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR NonRes = #{wwr_nr.round}%; window = #{nr_wind_ft2.round} ft2, wall = #{nr_wall_ft2.round} ft2.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Res = #{wwr_res.round}%; window = #{res_wind_ft2.round} ft2, wall = #{res_wall_ft2.round} ft2.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{wwr_sh.round}%; window = #{sh_wind_ft2.round} ft2, wall = #{sh_wall_ft2.round} ft2.")
+
+    # WWR limit
+    wwr_lim = 60.0
+
+    # Check against WWR limit
+    red_nr = wwr_nr > wwr_lim ? true : false
+    red_res = wwr_res > wwr_lim ? true : false
+    red_sh = wwr_sh > wwr_lim ? true : false
+
+    case template
+    when 'NECB 2011'
+      # NECB FDWR limit
+      hdd = BTAP::Environment::WeatherFile.new(weatherFile.get.path.get).hdd18
+      fdwr_lim = (BTAP::Compliance::NECB2011.max_fwdr(hdd) * 100.0).round(1)
+
+      # Stop here unless windows / doors need reducing
+      return true unless fdwr > fdwr_lim
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{wwr_lim.round}%.")
+      # Determine the factors by which to reduce the window / door area
+      mult = fdwr_lim / fdwr
+      # Reduce the window area if any of the categories necessary
+      getSpaces.each do |space|
+        # Loop through all surfaces in this space
+        space.surfaces.sort.each do |surface|
+          # Skip non-outdoor surfaces
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          # Skip non-walls
+          next unless surface.surfaceType == 'Wall'
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |ss|
+            # Reduce the size of the window
+            red = 1.0 - mult
+            ss.reduce_area_by_percent_by_raising_sill(red)
+          end
+        end
+      end
+    else # all other template types
+      # Stop here unless windows need reducing
+      return true unless red_nr || red_res || red_sh
+
+      # Determine the factors by which to reduce the window area
+      mult_nr_red = wwr_lim / wwr_nr
+      mult_res_red = wwr_lim / wwr_res
+      mult_sh_red = wwr_lim / wwr_sh
+
+      # Reduce the window area if any of the categories necessary
+      getSpaces.each do |space|
+        # Determine the space category
+        # from the previously stored values
+        cat = space_cats[space]
+
+        # Get the correct multiplier
+        case cat
+        when 'Unconditioned'
+          next # Skip unconditioned spaces
+        when 'NonResConditioned'
+          next unless red_nr
+          mult = mult_nr_red
+        when 'ResConditioned'
+          next unless red_res
+          mult = mult_res_red
+        when 'Semiheated'
+          next unless red_sh
+          mult = mult_sh_red
+        end
+
+        # Loop through all surfaces in this space
+        space.surfaces.sort.each do |surface|
+          # Skip non-outdoor surfaces
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          # Skip non-walls
+          next unless surface.surfaceType.casecmp('wall').zero?
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |ss|
+            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+            # Reduce the size of the window
+            # If a vertical rectangle, raise sill height to avoid
+            # impacting daylighting areas, otherwise
+            # reduce toward centroid.
+            red = 1.0 - mult
+            if ss.vertical_rectangle?
+              ss.reduce_area_by_percent_by_raising_sill(red)
+            else
+              ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
+            end
+          end
+        end
+      end
+
+    end
+
+    return true
+  end
+  
+  # ECBC code ends for Window-to-wall ratio
+  
+  def apply_ecbc_baseline_skylight_to_roof_ratio(template)
+    # Loop through all spaces in the model, and
+    # per the PNNL PRM Reference Manual, find the areas
+    # of each space conditioning category (res, nonres, semi-heated)
+    # separately.  Include space multipliers.
+    nr_wall_m2 = 0.001 # Avoids divide by zero errors later
+    nr_sky_m2 = 0
+    res_wall_m2 = 0.001
+    res_sky_m2 = 0
+    sh_wall_m2 = 0.001
+    sh_sky_m2 = 0
+    total_roof_m2 = 0.001
+    total_subsurface_m2 = 0
+    getSpaces.each do |space|
+      # Loop through all surfaces in this space
+      wall_area_m2 = 0
+      sky_area_m2 = 0
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'RoofCeiling'
+        # This wall's gross area (including skylight area)
+        wall_area_m2 += surface.grossArea * space.multiplier
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless 'NECB 2011' == template || (ss.subSurfaceType == 'Skylight')
+          sky_area_m2 += ss.netArea * space.multiplier
+        end
+      end
+
+      # Determine the space category
+      cat = 'NonRes'
+      if space.residential?(template)
+        cat = 'Res'
+      end
+      # if space.is_semiheated
+      # cat = 'Semiheated'
+      # end
+
+      # Add to the correct category
+      case cat
+      when 'NonRes'
+        nr_wall_m2 += wall_area_m2
+        nr_sky_m2 += sky_area_m2
+      when 'Res'
+        res_wall_m2 += wall_area_m2
+        res_sky_m2 += sky_area_m2
+      when 'Semiheated'
+        sh_wall_m2 += wall_area_m2
+        sh_sky_m2 += sky_area_m2
+      end
+      total_roof_m2 += wall_area_m2
+      total_subsurface_m2 += sky_area_m2
+    end
+
+    # Calculate the SRR of each category
+    srr_nr = ((nr_sky_m2 / nr_wall_m2) * 100).round(1)
+    srr_res = ((res_sky_m2 / res_wall_m2) * 100).round(1)
+    srr_sh = ((sh_sky_m2 / sh_wall_m2) * 100).round(1)
+    srr = ((total_subsurface_m2 / total_roof_m2) * 100.0).round(1)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
+
+    # SRR limit
+    srr_lim = nil
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010', 'NECB 2011','ECBC 2007'
+      srr_lim = 5.0
+    when '90.1-2013'
+      srr_lim = 3.0
+    end
+
+    # Check against SRR limit
+    red_nr = srr_nr > srr_lim ? true : false
+    red_res = srr_res > srr_lim ? true : false
+    red_sh = srr_sh > srr_lim ? true : false
+
+    case template
+    when 'NECB 2011'
+      # Stop here unless windows need reducing
+      return true unless srr > srr_lim
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{srr_lim.round}%.")
+      # Determine the factors by which to reduce the window / door area
+      mult = srr_lim / srr
+
+      # Reduce the subsurface areas
+      getSpaces.each do |space|
+        # Loop through all surfaces in this space
+        space.surfaces.sort.each do |surface|
+          # Skip non-outdoor surfaces
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          # Skip non-walls
+          next unless surface.surfaceType == 'RoofCeiling'
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |ss|
+            # Reduce the size of the subsurface
+            red = 1.0 - mult
+            ss.reduce_area_by_percent_by_shrinking_x(red)
+          end
+        end
+      end
+
+    else
+
+      # Stop here unless skylights need reducing
+      return true unless red_nr || red_res || red_sh
+
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all skylights equally down to the limit of #{srr_lim.round}%.")
+
+      # Determine the factors by which to reduce the skylight area
+      mult_nr_red = srr_lim / srr_nr
+      mult_res_red = srr_lim / srr_res
+      # mult_sh_red = srr_lim / srr_sh
+
+      # Reduce the skylight area if any of the categories necessary
+      getSpaces.each do |space|
+        # Determine the space category
+        cat = 'NonRes'
+        if space.residential?(template)
+          cat = 'Res'
+        end
+        # if space.is_semiheated
+        # cat = 'Semiheated'
+        # end
+
+        # Skip spaces whose skylights don't need to be reduced
+        case cat
+        when 'NonRes'
+          next unless red_nr
+          mult = mult_nr_red
+        when 'Res'
+          next unless red_res
+          mult = mult_res_red
+        when 'Semiheated'
+          next unless red_sh
+          # mult = mult_sh_red
+        end
+
+        # Loop through all surfaces in this space
+        space.surfaces.sort.each do |surface|
+          # Skip non-outdoor surfaces
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          # Skip non-walls
+          next unless surface.surfaceType == 'RoofCeiling'
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |ss|
+            next unless ss.subSurfaceType == 'Skylight'
+            # Reduce the size of the skylight
+            red = 1.0 - mult
+            ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
+        end
+        end
+      end
+    end # template case
+    return true
+  end
+  
+  # ECBC code ends for Skylight-roof-ratio as per ECBC 2007 (Appendix-B) 
+  
+  
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
   #
@@ -4654,4 +5021,5 @@ class OpenStudio::Model::Model
     return true
     
   end
+
 end
