@@ -245,7 +245,7 @@ class OpenStudio::Model::PlantLoop
       approach_r = nil
       range_r = nil
       case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010','ECBC 2007'
         # G3.1.3.11 - CW supply temp = 85F or 10F approaching design wet bulb temperature,
         # whichever is lower.  Design range = 10F
         # Design Temperature rise of 10F => Range: 10F
@@ -664,7 +664,7 @@ class OpenStudio::Model::PlantLoop
       # pumping type.
       minimum_area_ft2 = nil
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'ECBC 2007'
         minimum_area_ft2 = 120_000
       end
 
@@ -821,7 +821,7 @@ class OpenStudio::Model::PlantLoop
     # number of boilers.
     minimum_area_ft2 = nil
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'ECBC 2007'
       minimum_area_ft2 = 15_000
     end
 
@@ -885,7 +885,7 @@ class OpenStudio::Model::PlantLoop
     chiller_cooling_type = nil
     chiller_compressor_type = nil
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013','ECBC 2007'
 
       # Determine the capacity of the loop
       cap_w = total_cooling_capacity
