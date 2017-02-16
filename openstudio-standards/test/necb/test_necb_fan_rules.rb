@@ -35,7 +35,7 @@ class HVACEfficienciesTest < MiniTest::Test
     vavfan_caps.each do |cap|
       name = "sys6_vavfancap~#{cap}watts"
       puts "***************************************#{name}*******************************************************\n"
-      model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/5ZoneNoHVAC.osm")
+      model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
       BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
       BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
         model, 
