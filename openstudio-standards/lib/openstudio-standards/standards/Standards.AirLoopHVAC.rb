@@ -20,7 +20,7 @@ class OpenStudio::Model::AirLoopHVAC
     # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
     # (2) AHU1 in 2004-2013
     if multizone_vav_system? && !(name.to_s.include? 'Outpatient F1')
-      adjust_minimum_vav_damper_positions
+      adjust_minimum_vav_damper_positions(template)
     end
 
     # Second time adjustment:
@@ -2018,7 +2018,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def adjust_minimum_vav_damper_positions
+  def adjust_minimum_vav_damper_positions(template)
     # Total uncorrected outdoor airflow rate
     v_ou = 0.0
     thermalZones.each do |zone|
@@ -2085,6 +2085,9 @@ class OpenStudio::Model::AirLoopHVAC
       # Get the minimum damper position
       mdp_term = 1.0
       min_zn_flow = 0.0
+      max_zn_flow = 0.0
+	  zn_reheat_coil_cap = 0.0
+      term = nil
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.get
@@ -2101,7 +2104,19 @@ class OpenStudio::Model::AirLoopHVAC
           term = equip.to_AirTerminalSingleDuctVAVReheat.get
           mdp_term = term.constantMinimumAirFlowFraction
           min_zn_flow = term.fixedMinimumAirFlowRate
+		  max_zn_flow = term.autosizedMaximumAirFlowRate.get
+		  zn_reheat_coil = term.reheatCoil.to_CoilHeatingWater.get
+		  zn_reheat_coil_cap = zn_reheat_coil.autosizedRatedCapacity.get
         end
+      end
+
+      # For NECB 2011 the minimum zone supply air flow is 2 L/s-m2
+      if template == 'NECB 2011' && term
+        min_flow = 0.002 * zone.floorArea
+		if min_flow > max_zn_flow
+          term.setMaximumAirFlowRate(min_flow)
+		  v_pz = min_flow
+		end
       end
 
       # For VAV Reheat terminals, min flow is greater of mdp

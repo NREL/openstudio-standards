@@ -3553,8 +3553,6 @@ module BTAP
                   vav_terminal.setZoneMinimumAirFlowMethod("FixedFlowRate")
                   #TODO: currently the minimum flow rate is set to 2 L/s-m2. In fact we need to create a minimum flow rate
                   #TODO: schedule based on whether the zone is occupied or not as stipulated in 8.4.4.22 of NECB2011
-                  min_flow_rate = 0.002*zone.floorArea
-                  vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate) 
 	              vav_terminal.setMaximumReheatAirTemperature(43)
                   vav_terminal.setDamperHeatingAction("Reverse")
 
@@ -3592,8 +3590,8 @@ module BTAP
             sizing_plant.setLoopDesignTemperatureDifference(16.0)
 
             #pump (set to variable speed for now till fix to run away plant temperature is found)
-            #pump = OpenStudio::Model::PumpConstantSpeed.new(model)
-            pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+            pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+            #pump = OpenStudio::Model::PumpVariableSpeed.new(model)
             #TODO: the keyword "setPumpFlowRateSchedule" does not seem to work. A message
             #was sent to NREL to let them know about this. Once there is a fix for this,
             #use the proper pump schedule depending on whether we have two-pipe or four-pipe
