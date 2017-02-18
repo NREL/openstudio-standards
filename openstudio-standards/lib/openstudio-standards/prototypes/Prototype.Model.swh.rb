@@ -288,17 +288,17 @@ class OpenStudio::Model::Model
   # @return [Hash] :water_use_equipment, :water_heater, :hot_water_loop
   def add_typical_swh(template, trust_effective_num_spaces = false, fuel = nil, pipe_insul_in = 0.0, circulating = nil)
 
-    # array of equipment that will be made
-    swh_equip = {}
-    swh_equip[:water_use_equipment] = []
-    swh_equip[:water_heater] = []
-    swh_equip[:hot_water_loop] = []
+    # array of hot water loops
+    swh_systems = []
+
+    # hash of general water use equipment awaiting loop
+    water_use_equipment_hash = {} # key is standards building type value is array of water use equipment
 
     # create space type hash (need num_units for MidriseApartment and RetailStripmall)
     space_type_hash = self.create_space_type_hash(template,trust_effective_num_spaces = false)
 
-    # todo - create shared water temperature schedules? (or if make on fly don't make duplicates)
-    temp_schedules = {} # key is temp F value is schedule
+    # add temperate schedules to hash so they can be shared across water use equipment
+    water_use_def_schedules = {} # key is temp C value is schedule
 
     # loop through space types adding demand side of swh
     self.getSpaceTypes.each do |space_type|
@@ -307,43 +307,134 @@ class OpenStudio::Model::Model
       stds_bldg_type = space_type.standardsBuildingType.get
       stds_space_type = space_type.standardsSpaceType.get
 
-      # todo - remap space type names as needed (e.g. RetailStripMall to Retail, etc.)
-      # todo - update this method and then use it in other places, I feel like I've done it by hand in many places
-
       # lookup space_type_properties
       space_type_properties = space_type.get_standards_data(template)
-      gal_hr_per_area_ip = space_type_properties['service_water_heating_peak_flow_per_area']
+      gal_hr_per_area = space_type_properties['service_water_heating_peak_flow_per_area']
+      gal_hr_peak_flow_rate = space_type_properties['service_water_heating_peak_flow_rate']
+      flow_rate_fraction_schedule = self.add_schedule(space_type_properties['service_water_heating_schedule'])
+      service_water_temperature_si = space_type_properties['service_water_heating_target_temperature']
+      service_water_fraction_sensible = space_type_properties['service_water_heating_fraction_sensible']
+      service_water_fraction_latent = space_type_properties['service_water_heating_fraction_latent']
+      floor_area_si = space_type_hash[space_type][:floor_area]
+      floor_area_ip = OpenStudio::convert(floor_area_si,"m^2","ft^2").get
 
       # next if no service water heating demand
-      # todo - Retail uses service_water_heating_peak_flow_rate instead of normalized, it is getting stopped here
-      next if not gal_hr_per_area_ip.to_f > 0.0
+      next if not (gal_hr_per_area.to_f > 0.0 || gal_hr_peak_flow_rate.to_f > 0.0)
 
-      if stds_bldg_type == "MidriseApartment" && stds_space_type.include?("Apartment")
-        num_units = space_type_hash[space_type][:num_units]
-        puts "testing #{space_type.name}, it has #{num_units} units, need to determine water/hr per unit."
-      elsif stds_bldg_type == "RetailStripmall"
-        num_units = space_type_hash[space_type][:num_units]
-        puts "testing #{space_type.name}, it has #{num_units} units, need to determine water/hr per unit."
+      if (stds_bldg_type == "MidriseApartment" && stds_space_type.include?("Apartment")) || stds_bldg_type == "StripMall"
+        num_units = space_type_hash[space_type][:num_units].round
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating to #{num_units} #{space_type.name} units, each with max flow rate of #{gal_hr_peak_flow_rate} gal/hr per.")
+
+        # add water use equipment definition
+        water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
+        peak_flow_rate_si = OpenStudio::convert(gal_hr_peak_flow_rate,"gal/hr","m^3/s").get
+        water_use_equip_def.setPeakFlowRate(peak_flow_rate_si)
+        target_temp = service_water_temperature_si # in spreadsheet in si, no conversion needed unless that changes
+        name = "#{target_temp} C"
+        if water_use_def_schedules.has_key?(name)
+          target_temperature_sch = water_use_def_schedules[name]
+        else
+          target_temperature_sch = self.add_constant_schedule_ruleset(target_temp,name)
+          water_use_def_schedules[name] = target_temperature_sch
+        end
+        water_use_equip_def.setTargetTemperatureSchedule(target_temperature_sch)
+        name = "#{service_water_fraction_sensible} Fraction"
+        if water_use_def_schedules.has_key?(name)
+          service_water_fraction_sensible_sch = water_use_def_schedules[name]
+        else
+          service_water_fraction_sensible_sch = self.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          water_use_def_schedules[name] = service_water_fraction_sensible_sch
+        end
+        water_use_equip_def.setSensibleFractionSchedule(service_water_fraction_sensible_sch)
+        name = "#{service_water_fraction_latent} Fraction"
+        if water_use_def_schedules.has_key?(name)
+          service_water_fraction_latent_sch = water_use_def_schedules[name]
+        else
+          service_water_fraction_latent_sch = self.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          water_use_def_schedules[name] = service_water_fraction_latent_sch
+        end
+        water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
+
+        # add water use equipment for each def
+        num_units.times do |i|
+          water_use_equip = OpenStudio::Model::WaterUseEquipment.new(water_use_equip_def)
+          water_use_equip.setFlowRateFractionSchedule(flow_rate_fraction_schedule)
+
+          # add water use connection
+          water_use_connection = OpenStudio::Model::WaterUseConnections.new(self)
+          water_use_connection.addWaterUseEquipment(water_use_equip)
+
+          # gather inputs for add_swh_loop
+          # default fuel, capacity, and volume from Table A.1. Water Heating Equipment Enhancements to ASHRAE Standard 90.1 Prototype Building Models
+          # temperature, pump head, motor efficency, and parasitic load from Prototype Inputs
+          sys_name = "#{space_type.name} Service Water Loop #{i+1}"
+          water_heater_thermal_zone = nil
+          service_water_temperature = service_water_temperature_si
+          service_water_pump_head = 0.01
+          service_water_pump_motor_efficiency = 1.0
+          if fuel.nil?
+            water_heater_fuel = "Electric"
+          else
+            water_heater_fuel = fuel
+          end
+          if stds_bldg_type == "MidriseApartment"
+            water_heater_capacity = OpenStudio::convert(15.0,"kBtu/hr","W").get
+            water_heater_volume = OpenStudio::convert(50.0,"gal","m^3").get
+            parasitic_fuel_consumption_rate = 0.0 # Prototype inputs has 87.75W but prototype IDF's use 0
+          else # StripMall
+            water_heater_capacity = OpenStudio::convert(12.0,"kBtu/hr","W").get
+            water_heater_volume = OpenStudio::convert(40.0,"gal","m^3").get
+            parasitic_fuel_consumption_rate = 173.0
+          end
+
+          # make loop for each unit and add on water use equipment
+          midrise_hot_water_loop = add_swh_loop(template,
+                                                   sys_name,
+                                                   water_heater_thermal_zone,
+                                                   service_water_temperature,
+                                                   service_water_pump_head,
+                                                   service_water_pump_motor_efficiency,
+                                                   water_heater_capacity,
+                                                   water_heater_volume,
+                                                   water_heater_fuel,
+                                                   parasitic_fuel_consumption_rate,
+                                                stds_bldg_type)
+
+          # apply efficiency to hot water heater
+          midrise_hot_water_loop.supplyComponents.each do |component|
+            next if not component.to_WaterHeaterMixed.is_initialized
+            component = component.to_WaterHeaterMixed.get
+            component.apply_efficiency(template)
+          end
+
+          # add to list of systems
+          swh_systems << midrise_hot_water_loop
+
+        end
+
+      elsif stds_space_type.include?("Kitchen") || stds_space_type.include?("Laundry")
+        puts "testing #{space_type.name}, it has and area of #{floor_area_ip.round} ft^2 and a max flow rate of #{gal_hr_per_area} gal/hr per ft^2."
+        puts " * #{stds_space_type} should be on dedicated hot water heater"
+
+        # todo - use water_heater_mixed.set_capacity_and_volume to size water heater
+
+        # todo - add booster to all kitchens except for QuickServiceRestaurant
+        # todo - boosters are all 6 gal elec but heating capacity varies from 3 to 19 kW (kBtu/hr)
+
+        # todo - set system efficiencies
+
       else
-        puts "testing #{space_type.name}, it has flow of #{gal_hr_per_area_ip}."
+        puts "testing #{space_type.name}, it has and area of #{floor_area_ip.round} ft^2 and a max flow rate of #{gal_hr_per_area} gal/hr per ft^2."
+        # todo - store water use equip by building type in array so can add general building type hot water loop
       end
 
-      # todo - when using multiple units use size of equipment from prototype (MidriseApartment and Stripmall)
-      # todo - when using multiple units add supply side for each demand side
+    end
 
-      # todo - pick fuel if required
-
-      # todo - build dedicated demand and supply system for Laundry (Hospital and Kitchen) and all Kitchens
-      # todo - Prototype models don't seem to be making multiple hot water loops for Midrise Units or for Kitchens
-
-      # todo - add booster to all kitchens except for QuickServiceRestaurant
-
-      # todo - when determining swh demand make sure to included zone multipler
-
-      # todo - connect water use equipment to space (largest space if shared system, each space if per unit or kitchen/laundry)
-
-      # todo - should I have water use connection for each water use equipment, or maybe just one per loop
-
+    # todo - add rest of inputs to make swervice water heating loop
+    if fuel.nil?
+      water_heater_fuel = "Electric"
+    else
+      water_heater_fuel = fuel
     end
 
     # todo - add non-dedicated system(s) here. Separate systems for water use equipment from different building types
@@ -352,7 +443,7 @@ class OpenStudio::Model::Model
 
     # todo - set system efficiencies
 
-    return swh_equip
+    return swh_systems
 
   end
 

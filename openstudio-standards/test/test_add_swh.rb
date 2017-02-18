@@ -18,9 +18,7 @@ class TestAddSwh < Minitest::Test
     typical_swh = model.add_typical_swh(template)
 
     # check results
-    assert(typical_swh[:water_use_equipment].size == 0)
-    assert(typical_swh[:water_heater].size == 0)
-    assert(typical_swh[:hot_water_loop].size == 0)
+    assert(typical_swh.size == 0)
 
   end
 
@@ -38,11 +36,12 @@ class TestAddSwh < Minitest::Test
 
     # add_typical_swh
     typical_swh = model.add_typical_swh(template)
+    typical_swh.each do |loop|
+      puts loop.name
+    end
 
     # check results
-    assert(typical_swh[:water_use_equipment].size == 0)
-    assert(typical_swh[:water_heater].size == 0)
-    assert(typical_swh[:hot_water_loop].size == 0)
+    assert(typical_swh.size == 31)
 
   end
 
@@ -58,13 +57,18 @@ class TestAddSwh < Minitest::Test
     # gather inputs
     template = '90.1-2004'
 
+    model.getPlantLoops.each do |loop|
+      loop.remove
+    end
+
     # add_typical_swh
     typical_swh = model.add_typical_swh(template)
+    typical_swh.each do |loop|
+      puts loop.name
+    end
 
     # check results
-    assert(typical_swh[:water_use_equipment].size == 0)
-    assert(typical_swh[:water_heater].size == 0)
-    assert(typical_swh[:hot_water_loop].size == 0)
+    assert(typical_swh.size == 11)
 
   end
 

@@ -2319,6 +2319,22 @@ class OpenStudio::Model::Model
     return desired_object
   end
 
+  # Create constant ScheduleRuleset
+  #
+  # @param [double] constant value
+  # @param [string] name
+  # @return schedule
+  def add_constant_schedule_ruleset(value,name = nil)
+    schedule = OpenStudio::Model::ScheduleRuleset.new(self)
+    if not name.nil?
+      schedule.setName(name)
+      schedule.defaultDaySchedule.setName("#{name} Default")
+    end
+    schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
+
+    return schedule
+  end
+
   # Create a schedule from the openstudio standards dataset and
   # add it to the model.
   #
@@ -4432,6 +4448,7 @@ class OpenStudio::Model::Model
   # @param template [String]
   # @param trust_effective_num_spaces [Bool] defaults to false - set to true if modeled every space as a real rpp, vs. space as collection of rooms
   # @return [hash] hash of space types with misc information
+  # @todo - add code when determining number of units to makeuse of trust_effective_num_spaces arg
   def create_space_type_hash(template,trust_effective_num_spaces = false)
 
     # assumed class size to deduct teachers from occupant count for classrooms
@@ -4479,7 +4496,7 @@ class OpenStudio::Model::Model
         elsif stds_bldg_type == "HighriseApartment" && stds_space_type.include?("Apartment")
           avg_unit_size = OpenStudio::convert(949.9,"ft^2","m^2").get # calculated from prototype
           num_units = floor_area / avg_unit_size
-        elsif stds_bldg_type == "RetailStripmall"
+        elsif stds_bldg_type == "StripMall"
           avg_unit_size = OpenStudio::convert(22500.0/10.0,"ft^2","m^2").get # calculated from prototype
           num_units = floor_area / avg_unit_size
         end
