@@ -16,9 +16,12 @@ class TestAddSwh < Minitest::Test
 
     # add_typical_swh
     typical_swh = model.add_typical_swh(template)
+    typical_swh.each do |loop|
+      puts loop.name
+    end
 
     # check results
-    assert(typical_swh.size == 0)
+    assert(typical_swh.size == 1)
 
   end
 

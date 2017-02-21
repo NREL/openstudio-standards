@@ -268,19 +268,4 @@ class OpenStudio::Model::WaterHeaterMixed
 
   end
 
-  # set capacity and volume
-  #
-  # @ todo - add in default values for forumla
-  def set_capacity_and_volume()
-
-    water_heater_sizing = {}
-    water_heater_sizing[:capacity] = 9999
-    water_heater_sizing[:volume] = 9999
-
-    # use formula to calculate volume and capacity based on analysis of combined water use equipment maximum flow rates and schedules
-
-    return water_heater_sizing
-
-  end
-
 end

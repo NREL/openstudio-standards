@@ -323,10 +323,11 @@ class OpenStudio::Model::Model
 
       if (stds_bldg_type == "MidriseApartment" && stds_space_type.include?("Apartment")) || stds_bldg_type == "StripMall"
         num_units = space_type_hash[space_type][:num_units].round
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating to #{num_units} #{space_type.name} units, each with max flow rate of #{gal_hr_peak_flow_rate} gal/hr per.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating fpr #{num_units} #{space_type.name} units, each with max flow rate of #{gal_hr_peak_flow_rate} gal/hr per.")
 
         # add water use equipment definition
         water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
+        water_use_equip_def.setName("#{space_type.name} SWH def")
         peak_flow_rate_si = OpenStudio::convert(gal_hr_peak_flow_rate,"gal/hr","m^3/s").get
         water_use_equip_def.setPeakFlowRate(peak_flow_rate_si)
         target_temp = service_water_temperature_si # in spreadsheet in si, no conversion needed unless that changes
@@ -355,18 +356,20 @@ class OpenStudio::Model::Model
         end
         water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
 
-        # add water use equipment for each def
+        # add water use equipment, connection, and loop for each unit
         num_units.times do |i|
           water_use_equip = OpenStudio::Model::WaterUseEquipment.new(water_use_equip_def)
           water_use_equip.setFlowRateFractionSchedule(flow_rate_fraction_schedule)
+          water_use_equip.setName("#{space_type.name} SWH #{i+1}")
 
           # add water use connection
           water_use_connection = OpenStudio::Model::WaterUseConnections.new(self)
           water_use_connection.addWaterUseEquipment(water_use_equip)
+          water_use_connection.setName("#{space_type.name} WUC #{i+1}")
 
           # gather inputs for add_swh_loop
           # default fuel, capacity, and volume from Table A.1. Water Heating Equipment Enhancements to ASHRAE Standard 90.1 Prototype Building Models
-          # temperature, pump head, motor efficency, and parasitic load from Prototype Inputs
+          # temperature, pump head, motor efficiency, and parasitic load from Prototype Inputs
           sys_name = "#{space_type.name} Service Water Loop #{i+1}"
           water_heater_thermal_zone = nil
           service_water_temperature = service_water_temperature_si
@@ -413,15 +416,127 @@ class OpenStudio::Model::Model
         end
 
       elsif stds_space_type.include?("Kitchen") || stds_space_type.include?("Laundry")
-        puts "testing #{space_type.name}, it has and area of #{floor_area_ip.round} ft^2 and a max flow rate of #{gal_hr_per_area} gal/hr per ft^2."
-        puts " * #{stds_space_type} should be on dedicated hot water heater"
+        gal_hr_peak_flow_rate = gal_hr_per_area * floor_area_ip
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate} gal/hr per.")
 
-        # todo - use water_heater_mixed.set_capacity_and_volume to size water heater
+        # add water use equipment definition
+        water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
+        water_use_equip_def.setName("#{space_type.name} SWH def")
+        peak_flow_rate_si = OpenStudio::convert(gal_hr_peak_flow_rate,"gal/hr","m^3/s").get
+        water_use_equip_def.setPeakFlowRate(peak_flow_rate_si)
+        target_temp = service_water_temperature_si # in spreadsheet in si, no conversion needed unless that changes
+        name = "#{target_temp} C"
+        if water_use_def_schedules.has_key?(name)
+          target_temperature_sch = water_use_def_schedules[name]
+        else
+          target_temperature_sch = self.add_constant_schedule_ruleset(target_temp,name)
+          water_use_def_schedules[name] = target_temperature_sch
+        end
+        water_use_equip_def.setTargetTemperatureSchedule(target_temperature_sch)
+        name = "#{service_water_fraction_sensible} Fraction"
+        if water_use_def_schedules.has_key?(name)
+          service_water_fraction_sensible_sch = water_use_def_schedules[name]
+        else
+          service_water_fraction_sensible_sch = self.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          water_use_def_schedules[name] = service_water_fraction_sensible_sch
+        end
+        water_use_equip_def.setSensibleFractionSchedule(service_water_fraction_sensible_sch)
+        name = "#{service_water_fraction_latent} Fraction"
+        if water_use_def_schedules.has_key?(name)
+          service_water_fraction_latent_sch = water_use_def_schedules[name]
+        else
+          service_water_fraction_latent_sch = self.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          water_use_def_schedules[name] = service_water_fraction_latent_sch
+        end
+        water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
+
+        # add water use equipment
+        water_use_equip = OpenStudio::Model::WaterUseEquipment.new(water_use_equip_def)
+        water_use_equip.setFlowRateFractionSchedule(flow_rate_fraction_schedule)
+        water_use_equip.setName("#{space_type.name} SWH")
+
+        # add water use connection
+        water_use_connection = OpenStudio::Model::WaterUseConnections.new(self)
+        water_use_connection.addWaterUseEquipment(water_use_equip)
+        water_use_connection.setName("#{space_type.name} WUC")
+
+        # gather inputs for add_swh_loop
+        sys_name = "#{space_type.name} Service Water Loop"
+        water_heater_thermal_zone = nil
+        # lower temp for water heater if it will have a booster added downstream
+        if stds_space_type.include?("Kitchen") && stds_bldg_type != "QuickServiceRestaurant"
+          service_water_temperature = 43.3 # C
+        else
+          service_water_temperature = service_water_temperature_si
+        end
+        service_water_pump_head = 0.01
+        service_water_pump_motor_efficiency = 1.0
+        if fuel.nil?
+          water_heater_fuel = "Gas"
+        else
+          water_heater_fuel = fuel
+        end
+        water_use_equipment_array = [water_use_equip]
+        water_heater_sizing = find_water_heater_capacity_volume_and_parasitic(water_use_equipment_array)
+        water_heater_capacity = water_heater_sizing[:water_heater_capacity]
+        water_heater_volume = water_heater_sizing[:water_heater_volume]
+        parasitic_fuel_consumption_rate = water_heater_sizing[:parasitic_fuel_consumption_rate]
+
+        # make loop for each unit and add on water use equipment
+        hot_water_loop = add_swh_loop(template,
+                                              sys_name,
+                                              water_heater_thermal_zone,
+                                              service_water_temperature,
+                                              service_water_pump_head,
+                                              service_water_pump_motor_efficiency,
+                                              water_heater_capacity,
+                                              water_heater_volume,
+                                              water_heater_fuel,
+                                              parasitic_fuel_consumption_rate,
+                                              stds_bldg_type)
+
+        # find water heater
+        hot_water_loop.supplyComponents.each do |component|
+          next if not component.to_WaterHeaterMixed.is_initialized
+          water_heater = component.to_WaterHeaterMixed.get
+
+          # apply efficiency to hot water heater
+          water_heater.apply_efficiency(template)
+
+        end
+
+        # add to list of systems
+        swh_systems << hot_water_loop
 
         # todo - add booster to all kitchens except for QuickServiceRestaurant
         # todo - boosters are all 6 gal elec but heating capacity varies from 3 to 19 kW (kBtu/hr)
+        if stds_space_type.include?("Kitchen") && stds_bldg_type != "QuickServiceRestaurant"
 
-        # todo - set system efficiencies
+          # gather inputs for add_swh_booster
+          water_heater_capacity = OpenStudio::convert(8.0,"kBtu/hr","W").get # todo - come up with sizing logic for this
+          water_heater_volume = OpenStudio::convert(6,"gal",'m^3').get
+          water_heater_fuel = "Electric"
+          booster_water_temperature = service_water_temperature_si
+          parasitic_fuel_consumption_rate = 0.0 # todo - come up with sizing logic for this
+          booster_water_heater_thermal_zone = nil
+
+          # add_swh_booster
+          booster_service_water_loop = add_swh_booster(template,
+                                                      hot_water_loop,
+                                                      water_heater_capacity,
+                                                      water_heater_volume,
+                                                      water_heater_fuel,
+                                                      booster_water_temperature,
+                                                      parasitic_fuel_consumption_rate,
+                                                      booster_water_heater_thermal_zone,
+                                                      stds_bldg_type)
+
+
+          # rename booster loop
+          booster_service_water_loop.setName("#{space_type.name} Booster Service Water Loop")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding Electric Booster water heater for #{space_type.name} on a loop named #{booster_service_water_loop.name}.")
+
+        end
 
       else
         puts "testing #{space_type.name}, it has and area of #{floor_area_ip.round} ft^2 and a max flow rate of #{gal_hr_per_area} gal/hr per ft^2."
@@ -441,9 +556,30 @@ class OpenStudio::Model::Model
 
     # todo - add in losses from tank and pipe insulation, parasitic, etc.
 
+    # todo - use water_heater_mixed.set_capacity_and_volume to size water heater
+
     # todo - set system efficiencies
 
     return swh_systems
+
+  end
+
+  # set capacity, volume, and parasitic
+  #
+  # @param [Array] array of water use equipment objects that will be using this water heater
+  # @return [Hash] hash with values needed to size water heater made with downstream method
+  # @todo - replace default values with formula generated values
+  def find_water_heater_capacity_volume_and_parasitic(water_use_equipment_array)
+
+    water_heater_sizing = {}
+
+    # todo - use formula to calculate volume and capacity based on analysis of combined water use equipment maximum flow rates and schedules
+
+    water_heater_sizing[:water_heater_capacity] = OpenStudio::convert(12.0,"kBtu/hr","W").get
+    water_heater_sizing[:water_heater_volume] = OpenStudio::convert(40.0,"gal","m^3").get
+    water_heater_sizing[:parasitic_fuel_consumption_rate] = 173.0
+
+    return water_heater_sizing
 
   end
 
