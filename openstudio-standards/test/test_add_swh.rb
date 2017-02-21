@@ -21,7 +21,7 @@ class TestAddSwh < Minitest::Test
     end
 
     # check results
-    assert(typical_swh.size == 1)
+    assert(typical_swh.size == 2)
 
   end
 
@@ -72,6 +72,33 @@ class TestAddSwh < Minitest::Test
 
     # check results
     assert(typical_swh.size == 11)
+
+  end
+
+  def test_add_swh_multiuse
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/Multiuse_Office_LargeHotel.osm")
+    model = translator.loadModel(path)
+    model = model.get
+    puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
+
+    # gather inputs
+    template = '90.1-2010'
+
+    model.getPlantLoops.each do |loop|
+      loop.remove
+    end
+
+    # add_typical_swh
+    typical_swh = model.add_typical_swh(template)
+    typical_swh.each do |loop|
+      puts loop.name
+    end
+
+    # check results
+    assert(typical_swh.size == 2)
 
   end
 
