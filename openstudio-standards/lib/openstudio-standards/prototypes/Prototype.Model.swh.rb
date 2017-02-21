@@ -484,7 +484,7 @@ class OpenStudio::Model::Model
           water_heater_fuel = fuel
         end
 
-        # todo - find_water_heater_capacity_volume_and_parasitic
+        # find_water_heater_capacity_volume_and_parasitic
         water_use_equipment_array = [water_use_equip]
         water_heater_sizing = find_water_heater_capacity_volume_and_parasitic(water_use_equipment_array)
         water_heater_capacity = water_heater_sizing[:water_heater_capacity]
@@ -523,8 +523,14 @@ class OpenStudio::Model::Model
         # todo - boosters are all 6 gal elec but heating capacity varies from 3 to 19 kW (kBtu/hr)
         if stds_space_type.include?("Kitchen") && stds_bldg_type != "QuickServiceRestaurant"
 
-          # gather inputs for add_swh_booster
-          water_heater_capacity = OpenStudio::convert(8.0,"kBtu/hr","W").get # todo - come up with sizing logic for this
+          # find_water_heater_capacity_volume_and_parasitic
+          # todo - is this valid for booster, I'm only using for capacity, not volume
+          water_use_equipment_array = [water_use_equip]
+          water_heater_sizing = find_water_heater_capacity_volume_and_parasitic(water_use_equipment_array,1.0,1.0,120.0,160.0)
+          water_heater_capacity = water_heater_sizing[:water_heater_capacity]
+
+          # gather additional inputs for add_swh_booster
+          water_heater_capacity = OpenStudio::convert(8.0,"kBtu/hr","W").get
           water_heater_volume = OpenStudio::convert(6,"gal",'m^3').get
           water_heater_fuel = "Electric"
           booster_water_temperature = service_water_temperature_si
@@ -542,6 +548,15 @@ class OpenStudio::Model::Model
                                                       booster_water_heater_thermal_zone,
                                                       stds_bldg_type)
 
+
+          # find water heater
+          booster_service_water_loop.supplyComponents.each do |component|
+            next if not component.to_WaterHeaterMixed.is_initialized
+            water_heater = component.to_WaterHeaterMixed.get
+
+            # apply efficiency to hot water heater
+            water_heater.apply_efficiency(template)
+          end
 
           # rename booster loop
           booster_service_water_loop.setName("#{space_type.name} Booster Service Water Loop")
@@ -607,21 +622,42 @@ class OpenStudio::Model::Model
       sys_name = "#{stds_bldg_type} Shared Service Water Loop"
       water_heater_thermal_zone = nil
 
-      # todo - find highest temp fixture and use that value?
+      # find highest temp fixture and use that value, with floor of 43 C
       service_water_temperature = 43.3 # C
+      water_use_equipment_array.each do |water_use_equip|
+        water_use_eqip_def = water_use_equip.waterUseEquipmentDefinition
+        target_temp_sch = water_use_eqip_def.targetTemperatureSchedule
+        if target_temp_sch.is_initialized and target_temp_sch.get.to_ScheduleRuleset.is_initialized
+          target_temp_sch = target_temp_sch.get.to_ScheduleRuleset.get
+          max_value = target_temp_sch.annual_min_max_value['max']
+          if max_value > service_water_temperature
+            service_water_temperature = max_value
+          end
+        end
+      end
 
-      # todo - find pump values when circulating system
-      service_water_pump_head = 0.01
-      service_water_pump_motor_efficiency = 1.0
+      # find pump values
+      # Table A.2 in PrototypeModelEnhancements_2014_0.pdf shows 10ft on everything except SecondarySchool which has 11.4ft
+      # todo - if SmallOffice then shouldn't have circulating pump
+      if ["Office","PrimarySchool","Outpatient","Hospital","SmallHotel","LargeHotel","FullServiceRestaurant","HighriseApartment"].include?(stds_bldg_type)
+        service_water_pump_head = OpenStudio::convert(10.0,"ftH_{2}O","Pa").get
+        service_water_pump_motor_efficiency = 0.3
+      elsif ["PrimarySchool"].include?(stds_bldg_type)
+        service_water_pump_head = OpenStudio::convert(11.4,"ftH_{2}O","Pa").get
+        service_water_pump_motor_efficiency = 0.3
+      else # values for non-circulating pump
+        service_water_pump_head = 0.01
+        service_water_pump_motor_efficiency = 1.0
+      end
 
-      # todo - add building type or sice specific logic or just assume gas?
+      # todo - add building type or sice specific logic or just assume Gas?
       if fuel.nil?
         water_heater_fuel = "Gas"
       else
         water_heater_fuel = fuel
       end
 
-      # todo - find_water_heater_capacity_volume_and_parasitic
+      # find_water_heater_capacity_volume_and_parasitic
       water_heater_sizing = find_water_heater_capacity_volume_and_parasitic(water_use_equipment_array)
       water_heater_capacity = water_heater_sizing[:water_heater_capacity]
       water_heater_volume = water_heater_sizing[:water_heater_volume]
@@ -674,17 +710,60 @@ class OpenStudio::Model::Model
   # set capacity, volume, and parasitic
   #
   # @param [Array] array of water use equipment objects that will be using this water heater
+  # @param [Double] storage_to_cap_ratio gal of storage to kBtu/hr of capacitiy
+  # @param [Double] htg_eff fraction
+  # @param [Double] cld_wtr_temp_ip cold water temperature F
+  # @param [Double] target_temp F
   # @return [Hash] hash with values needed to size water heater made with downstream method
-  # @todo - replace default values with formula generated values
-  def find_water_heater_capacity_volume_and_parasitic(water_use_equipment_array)
+  # @todo - replace default parasitic value with calculated value
+  def find_water_heater_capacity_volume_and_parasitic(water_use_equipment_array, storage_to_cap_ratio = 1.0,htg_eff = 0.8,cld_wtr_temp_ip = 40.0,target_temp_ip = 120.0)
+
+    # A.1.4 Total Storage Volume and Water Heater Capacity of PrototypeModelEnhancements_2014_0.pdf shows 1 gallon of storage to 1 kBtu/h of capacity
 
     water_heater_sizing = {}
 
-    # todo - use formula to calculate volume and capacity based on analysis of combined water use equipment maximum flow rates and schedules
+    # get water use equipment
+    max_flow_rate_array = [] # gallons per hour
+    water_use_equipment_array.each do |water_use_equip|
+      water_use_equip_sch = water_use_equip.flowRateFractionSchedule
+      next if not water_use_equip_sch.is_initialized and water_use_equip_sch.get.to_ScheduleRuleset.is_initialized
+      water_use_equip_sch = water_use_equip_sch.get.to_ScheduleRuleset.get
+      max_sch_value = water_use_equip_sch.annual_min_max_value['max']
 
-    water_heater_sizing[:water_heater_capacity] = OpenStudio::convert(12.0,"kBtu/hr","W").get
-    water_heater_sizing[:water_heater_volume] = OpenStudio::convert(40.0,"gal","m^3").get
-    water_heater_sizing[:parasitic_fuel_consumption_rate] = 173.0
+      # get water_use_equip_def to get max flow rate
+      water_use_equip_def = water_use_equip.waterUseEquipmentDefinition
+      peak_flow_rate = water_use_equip_def.peakFlowRate
+
+      # calculate adjusted flow rate
+      adjusted_peak_flow_rate_si = max_sch_value * peak_flow_rate
+      adjusted_peak_flow_rate_ip = OpenStudio::convert(adjusted_peak_flow_rate_si,"m^3/s","gal/min").get
+      max_flow_rate_array << adjusted_peak_flow_rate_ip * 60.0 # min per hour
+    end
+
+    # warn if max_flow_rate_array size doesn't match equipment size (one or more didn't have ruleset schedule)
+    if max_flow_rate_array.size != water_use_equipment_array.size
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "One or more Water Use Equipment Fraction Flow Rate Scheules were not Schedule Rulestes and were excluding from Water Heating Sizing.")
+    end
+
+    # sum gpm values from water use equipment to use in formula
+    adjusted_flow_rate_sum = max_flow_rate_array.inject(:+)
+
+    # use formula to calculate volume and capacity based on analysis of combined water use equipment maximum flow rates and schedules
+    # Max gal/hr * 8.4 lb/gal * 1 Btu/lb F * (120F - 40F)/0.8 = Btu/hr
+    cld_wtr_temp_si = OpenStudio::convert(cld_wtr_temp_ip,"F","C").get
+    water_heater_capacity_ip = adjusted_flow_rate_sum * 8.4 * 1.0 * (target_temp_ip - cld_wtr_temp_si) / htg_eff
+    water_heater_capacity_si = OpenStudio::convert(water_heater_capacity_ip,"Btu/hr","W").get
+    water_heater_volume_ip = OpenStudio::convert(water_heater_capacity_ip,"Btu/hr","kBtu/hr").get
+    # increase tank size to 40 galons if calculated value is smaller
+    if water_heater_volume_ip < 40.0 # gal
+      water_heater_volume_ip = 40.0
+    end
+    water_heater_volume_si = OpenStudio::convert(water_heater_volume_ip,"gal","m^3").get
+
+    # populate return hash
+    water_heater_sizing[:water_heater_capacity] = water_heater_capacity_si
+    water_heater_sizing[:water_heater_volume] = water_heater_volume_si
+    water_heater_sizing[:parasitic_fuel_consumption_rate] = 173.0 # todo - replace this
 
     return water_heater_sizing
 
