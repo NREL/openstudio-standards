@@ -3516,7 +3516,7 @@ module BTAP
                 clg_coil.addToNode(supply_inlet_node)
                 oa_system.addToNode(supply_inlet_node)
               
-                #              return_inlet_node = air_loop.returnAirNode
+                #return_inlet_node = air_loop.returnAirNode
 
                 # Add a setpoint manager to control the
                 # supply air to a constant temperature
@@ -3550,14 +3550,12 @@ module BTAP
                   
                   vav_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model,always_on,reheat_coil)
                   air_loop.addBranchForZone(zone,vav_terminal.to_StraightComponent)
-                  vav_terminal.setZoneMinimumAirFlowMethod("FixedFlowRate")
-                  #TODO: currently the minimum flow rate is set to 2 L/s-m2. In fact we need to create a minimum flow rate
-                  #TODO: schedule based on whether the zone is occupied or not as stipulated in 8.4.4.22 of NECB2011
-                  min_flow_rate = 0.002*zone.floorArea
+				  # NECB 2011 minimum zone airflow setting 
+                  min_flow_rate = 0.002 * zone.floorArea
                   vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate) 
 	              vav_terminal.setMaximumReheatAirTemperature(43)
-                  vav_terminal.setDamperHeatingAction("Reverse")
-
+                  vav_terminal.setDamperHeatingAction("Normal")
+               
                   #Set zone baseboards
                   if ( baseboard_type == "Electric") then
                     zone_elec_baseboard = BTAP::Resources::HVAC::Plant::add_elec_baseboard(model)
