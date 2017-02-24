@@ -178,17 +178,13 @@ module BTAP
             scale_ground_floor,
             scale_ground_roof,
             scale_door,
-            scale_window)
+            scale_window) 
         end
+        #sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type. 
+        model.getPlanarSurfaces.each { |item| item.resetConstruction }
+        #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
+        BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces( model, nil)
       end
-
-
-
-
-
-
-
-
 
       #This model gets the climate zone column index from tables 3.2.2.x
       #@author phylroy.lopez@nrcan.gc.ca
@@ -668,8 +664,8 @@ module BTAP
             cooling_load = 0.0
             heating_load = 0.0
           else
-              cooling_load = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if cooling_load.nil? 
-              heating_load = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heating_load.nil?
+            cooling_load = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if cooling_load.nil? 
+            heating_load = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heating_load.nil?
           end 
           
           #identify space-system_index and assign the right NECB system type 1-7. 
@@ -1004,9 +1000,9 @@ module BTAP
         end 
         #Check to ensure that all spaces are assigned to zones except undefined ones. 
         model.getSpaces.each do |space|
-        if space.thermalZone.empty? and space.spaceType.get.name.get != 'Space Function - undefined -'
-         raise( "space #{space.name} with spacetype #{space.spaceType.get.name.get}" )
-        end    
+          if space.thermalZone.empty? and space.spaceType.get.name.get != 'Space Function - undefined -'
+            raise( "space #{space.name} with spacetype #{space.spaceType.get.name.get}" )
+          end    
         end         
       end #
     end
