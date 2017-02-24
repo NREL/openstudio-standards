@@ -3868,7 +3868,7 @@ class OpenStudio::Model::Model
     # SRR limit
     srr_lim = nil
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', 'NECB 2011'
+    when '90.1-2004', '90.1-2007', '90.1-2010', 'NECB 2011', 'OEESC 2014'
       srr_lim = 5.0
     when '90.1-2013'
       srr_lim = 3.0
