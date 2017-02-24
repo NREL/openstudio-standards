@@ -5,7 +5,7 @@ class OEESCBaselineTest < Minitest::Test
 
   def test_basic_creation
 
-    model = create_baseline_model('bldg_1', 'OEESC 2014', 'ASHRAE 169-2006-5B', 'MediumOffice', nil, false, true)
+    model = create_baseline_model('bldg_1', 'OEESC 2014', 'ASHRAE 169-2006-5B', 'MediumOffice', nil, debug = true, false)
 
     assert(model.getSpaces.size > 0, 'model has no spaces')
 
