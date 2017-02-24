@@ -932,7 +932,7 @@ class OpenStudio::Model::Model
       standard_space_types_with_makup_air[["Hospital","Kitchen"]] = ["Hospital","Dining"]
       standard_space_types_with_makup_air[["SecondarySchool","Kitchen"]] = ["SecondarySchool","Cafeteria"]
       standard_space_types_with_makup_air[["PrimarySchool","Kitchen"]] = ["PrimarySchool","Cafeteria"]
-      standard_space_types_with_makup_air[["LargeHotel","Kitchen"]] = ["PrimarySchool","Cafe"]
+      standard_space_types_with_makup_air[["LargeHotel","Kitchen"]] = ["LargeHotel","Cafe"]
 
       # gather information on zones organized by standards building type and space type. zone may be in this multiple times if it has multiple space types
       zones_by_standards = {}

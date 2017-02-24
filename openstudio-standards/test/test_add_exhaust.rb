@@ -187,6 +187,33 @@ class TestAddExhaust < Minitest::Test
 
   end
 
+
+  def test_model_add_exhaust_large_hotel_largest_zone_makup
+
+    # Load the test model
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/LargeHotel_3A_2010.osm")
+    model = translator.loadModel(path)
+    model = model.get
+
+    # create story hash
+    template = '90.1-2010'
+
+    # add exhaust
+    zone_exhaust_fans = model.add_exhaust(template,"Largest Zone")
+
+    puts"hellotest"
+    puts zone_exhaust_fans
+
+    zone_exhaust_fans.each do |zone_exhaust_fan,hash|
+      puts zone_exhaust_fan
+    end
+
+    # check results
+    #assert(zone_exhaust_fans.size == 4) # three bathrooms and a kitchen
+
+  end
+
   # todo - add test with multiple space types in zone where both zones needs exhaust
 
 
