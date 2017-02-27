@@ -1,6 +1,102 @@
 {
   "climate_zone_sets": [
     {
+      "name": "CEC CZ 1",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 1"
+      ]
+    },
+    {
+      "name": "CEC CZ 10",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 10"
+      ]
+    },
+    {
+      "name": "CEC CZ 11",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 11"
+      ]
+    },
+    {
+      "name": "CEC CZ 12",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 12"
+      ]
+    },
+    {
+      "name": "CEC CZ 13",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 13"
+      ]
+    },
+    {
+      "name": "CEC CZ 14",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 14"
+      ]
+    },
+    {
+      "name": "CEC CZ 15",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 15"
+      ]
+    },
+    {
+      "name": "CEC CZ 16",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 16"
+      ]
+    },
+    {
+      "name": "CEC CZ 2",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 2"
+      ]
+    },
+    {
+      "name": "CEC CZ 3",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 3"
+      ]
+    },
+    {
+      "name": "CEC CZ 4",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 4"
+      ]
+    },
+    {
+      "name": "CEC CZ 5",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 5"
+      ]
+    },
+    {
+      "name": "CEC CZ 6",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 6"
+      ]
+    },
+    {
+      "name": "CEC CZ 7",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 7"
+      ]
+    },
+    {
+      "name": "CEC CZ 8",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 8"
+      ]
+    },
+    {
+      "name": "CEC CZ 9",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 9"
+      ]
+    },
+    {
       "name": "ClimateZone 1",
       "climate_zones": [
         "ASHRAE 169-2006-1A",
