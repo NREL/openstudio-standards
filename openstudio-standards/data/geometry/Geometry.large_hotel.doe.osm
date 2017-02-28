@@ -1,7 +1,7 @@
 
 OS:Version,
-  {3ad926ab-4efa-4c5e-bf55-ba93699e724b}, !- Handle
-  1.6.0;                                  !- Version Identifier
+  {875b567f-d7ae-47e3-9de5-46861eb255d1}, !- Handle
+  1.14.0;                                 !- Version Identifier
 
 OS:Site,
   {12c2abec-3cad-4298-b4b4-430bc75d6bbf}, !- Handle
@@ -60,7 +60,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {3af14674-a1c2-4dca-abcc-1d3b6a859fd1}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -82,7 +82,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {3af14674-a1c2-4dca-abcc-1d3b6a859fd1}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -121,7 +121,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {83e0b341-edb1-4401-b0e7-bff2dbe5f8c0}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -143,7 +143,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {3af14674-a1c2-4dca-abcc-1d3b6a859fd1}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -184,7 +184,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {83e0b341-edb1-4401-b0e7-bff2dbe5f8c0}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -223,7 +223,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2a4ed892-5cf4-4a93-9c42-06c020d7ebed}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -262,7 +262,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2a4ed892-5cf4-4a93-9c42-06c020d7ebed}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -318,7 +318,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2a4ed892-5cf4-4a93-9c42-06c020d7ebed}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -340,7 +340,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {3af14674-a1c2-4dca-abcc-1d3b6a859fd1}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -379,7 +379,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2a4ed892-5cf4-4a93-9c42-06c020d7ebed}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -418,7 +418,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {3af14674-a1c2-4dca-abcc-1d3b6a859fd1}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -491,7 +491,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {83e0b341-edb1-4401-b0e7-bff2dbe5f8c0}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -581,7 +581,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {83e0b341-edb1-4401-b0e7-bff2dbe5f8c0}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -637,7 +637,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {83e0b341-edb1-4401-b0e7-bff2dbe5f8c0}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -676,7 +676,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {83e0b341-edb1-4401-b0e7-bff2dbe5f8c0}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -800,7 +800,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {3af14674-a1c2-4dca-abcc-1d3b6a859fd1}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -839,7 +839,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2a4ed892-5cf4-4a93-9c42-06c020d7ebed}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -878,7 +878,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {83e0b341-edb1-4401-b0e7-bff2dbe5f8c0}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -981,7 +981,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2a4ed892-5cf4-4a93-9c42-06c020d7ebed}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -1020,7 +1020,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {b124d6e8-eb78-4417-af52-fa3befd342e5}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -1047,7 +1047,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2a4ed892-5cf4-4a93-9c42-06c020d7ebed}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -1102,7 +1102,7 @@ OS:Surface,
   86.563, 0, 0,                           !- X,Y,Z Vertex 3 {m}
   86.563, 0, 3.9624;                      !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {2803c269-1805-4ad1-a810-7d81eeb4b273}, !- Handle
   WaterSystems:Gas,                       !- Name
   hourly,                                 !- Reporting Frequency
@@ -1148,7 +1148,7 @@ OS:Surface,
 OS:HeatBalanceAlgorithm,
   {217790f2-24cb-4a1f-abba-706a55aef902}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {F}
+  200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:Surface,
   {eea3f5e2-ba19-409c-918d-94b47e729555}, !- Handle
@@ -1186,7 +1186,7 @@ OS:Surface,
   79.858, 16.154, 7.008,                  !- X,Y,Z Vertex 5 {m}
   79.858, 22.86, 7.008;                   !- X,Y,Z Vertex 6 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {5b664d25-72a3-4aec-bb51-94ac8add754e}, !- Handle
   Gas:Facility,                           !- Name
   hourly,                                 !- Reporting Frequency
@@ -1415,7 +1415,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {3af14674-a1c2-4dca-abcc-1d3b6a859fd1}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -1657,7 +1657,7 @@ OS:SubSurface,
   0, 15.072, 17.264,                      !- X,Y,Z Vertex 3 {m}
   0, 15.072, 18.484;                      !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {1f10f17f-dd06-422c-80d4-cf899363fd69}, !- Handle
   WaterSystems:Electricity,               !- Name
   hourly,                                 !- Reporting Frequency
@@ -1698,14 +1698,14 @@ OS:Surface,
   0, 14.326, 10.056,                      !- X,Y,Z Vertex 3 {m}
   0, 5.791, 10.056;                       !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {c83803ad-ee37-4ced-a6e1-6ceab6eda887}, !- Handle
   Fans:Electricity,                       !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {313d51a9-663a-4b47-9056-4d027f434f11}, !- Handle
   ExteriorLights:Electricity,             !- Name
   hourly,                                 !- Reporting Frequency
@@ -2190,7 +2190,7 @@ OS:Surface,
   0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
   0, 5.791, 0;                            !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {a20e38d3-3bef-4aab-95ee-7b9a7c181fc5}, !- Handle
   Humidifier:Electricity,                 !- Name
   hourly,                                 !- Reporting Frequency
@@ -2214,7 +2214,7 @@ OS:Surface,
   76.2, 5.791, 7.008,                     !- X,Y,Z Vertex 3 {m}
   76.2, 5.791, 10.056;                    !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {ae216d1a-f03b-4943-8309-98434190a510}, !- Handle
   InteriorLights:Electricity,             !- Name
   hourly,                                 !- Reporting Frequency
@@ -2516,7 +2516,7 @@ OS:Surface,
   0, 12.497, 0,                           !- X,Y,Z Vertex 3 {m}
   0, 12.497, 3.9624;                      !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {31a06921-7ba4-4e78-ab5a-0dbc067e2ad0}, !- Handle
   Refrigeration:Electricity,              !- Name
   hourly,                                 !- Reporting Frequency
@@ -3105,7 +3105,7 @@ OS:Surface,
   86.563, 5.791, 0,                       !- X,Y,Z Vertex 3 {m}
   86.563, 5.791, 3.9624;                  !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {b2840a25-bbfb-4a41-a4a5-f6fabcb6bc26}, !- Handle
   InteriorEquipment:Electricity,          !- Name
   hourly,                                 !- Reporting Frequency
@@ -3148,7 +3148,7 @@ OS:Surface,
   64.922, 9.449, 19.2,                    !- X,Y,Z Vertex 5 {m}
   64.922, 5.791, 19.2;                    !- X,Y,Z Vertex 6 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {ab4aeb99-2d1f-4a57-a729-a55f55ea7507}, !- Handle
   ExteriorEquipment:Electricity,          !- Name
   hourly,                                 !- Reporting Frequency
@@ -3191,7 +3191,7 @@ OS:Surface,
   81.991, 12.497, 19.2,                   !- X,Y,Z Vertex 5 {m}
   81.991, 5.791, 19.2;                    !- X,Y,Z Vertex 6 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {270bc127-46d8-4c2f-af19-5342490b449d}, !- Handle
   Electricity:Facility,                   !- Name
   hourly,                                 !- Reporting Frequency
@@ -3334,7 +3334,7 @@ OS:Surface,
   69.799, 12.497, 0,                      !- X,Y,Z Vertex 3 {m}
   69.799, 12.497, 3.9624;                 !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {a333d5b0-6887-496a-927d-4ea7c214bae1}, !- Handle
   Heating:Electricity,                    !- Name
   hourly,                                 !- Reporting Frequency
@@ -3549,7 +3549,7 @@ OS:SubSurface,
   10.043, 5.791, 8.1128,                  !- X,Y,Z Vertex 3 {m}
   10.043, 5.791, 9.3318;                  !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {27070367-8124-4823-9d1d-d446e7b3864c}, !- Handle
   Pumps:Electricity,                      !- Name
   hourly,                                 !- Reporting Frequency
@@ -3624,7 +3624,7 @@ OS:SubSurface,
   0, 6.538, 17.264,                       !- X,Y,Z Vertex 3 {m}
   0, 6.538, 18.484;                       !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {991963b7-3144-4c63-8466-2aeb9daf82e4}, !- Handle
   Heating:Gas,                            !- Name
   hourly,                                 !- Reporting Frequency
@@ -3665,7 +3665,7 @@ OS:SubSurface,
   86.163, 5.791, 8.1128,                  !- X,Y,Z Vertex 3 {m}
   86.163, 5.791, 9.3318;                  !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {0ed88100-ecde-4783-8d3f-8ea083b71325}, !- Handle
   Cooling:Electricity,                    !- Name
   hourly,                                 !- Reporting Frequency
@@ -3859,7 +3859,7 @@ OS:Surface,
   86.563, 22.86, -2.439,                  !- X,Y,Z Vertex 3 {m}
   86.563, 22.86, 0;                       !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {cc550ddf-bb9d-4700-b806-2e91185c7972}, !- Handle
   InteriorEquipment:Gas,                  !- Name
   hourly,                                 !- Reporting Frequency
@@ -3985,7 +3985,7 @@ OS:Surface,
   53.95, 22.86, 0,                        !- X,Y,Z Vertex 3 {m}
   53.95, 22.86, 3.9624;                   !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {83896fab-ff0d-454a-bf10-512a4c2c7ed2}, !- Handle
   HeatRejection:Electricity,              !- Name
   hourly,                                 !- Reporting Frequency
@@ -4257,4 +4257,40 @@ OS:SubSurface,
 
 OS:Facility,
   {f5013b2f-867d-46d4-9e12-e6e340a81189}; !- Handle
+
+OS:BuildingStory,
+  {b124d6e8-eb78-4417-af52-fa3befd342e5}, !- Handle
+  Building Story 1,                       !- Name
+  -2.439,                                 !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
+
+OS:BuildingStory,
+  {83e0b341-edb1-4401-b0e7-bff2dbe5f8c0}, !- Handle
+  Building Story 2,                       !- Name
+  0,                                      !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
+
+OS:BuildingStory,
+  {3af14674-a1c2-4dca-abcc-1d3b6a859fd1}, !- Handle
+  Building Story 3,                       !- Name
+  7.008,                                  !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
+
+OS:BuildingStory,
+  {2a4ed892-5cf4-4a93-9c42-06c020d7ebed}, !- Handle
+  Building Story 4,                       !- Name
+  16.152,                                 !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
 

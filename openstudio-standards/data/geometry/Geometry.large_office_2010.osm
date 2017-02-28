@@ -1,7 +1,7 @@
 
 OS:Version,
-  {0d11209e-173f-49a4-ba0c-c15657a72b3e}, !- Handle
-  1.13.1;                                 !- Version Identifier
+  {8608b512-3ff6-4d54-a327-e479c4ac3d46}, !- Handle
+  1.14.0;                                 !- Version Identifier
 
 OS:YearDescription,
   {2759562d-6e36-40de-aa86-5c2198a9d34c}, !- Handle
@@ -26,7 +26,7 @@ OS:Space,
   5.4876,                                 !- X Origin {m}
   4.5732,                                 !- Y Origin {m}
   19.816,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {90e8f18c-4e90-4136-9df3-52f333e3fb0e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -65,7 +65,7 @@ OS:Space,
   4.5732,                                 !- X Origin {m}
   4.5732,                                 !- Y Origin {m}
   43.5952,                                !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {f4d26ab6-6069-4f95-a4bb-2505ee54b65c}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
@@ -122,7 +122,7 @@ OS:Space,
   68.534,                                 !- X Origin {m}
   0,                                      !- Y Origin {m}
   19.816,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {90e8f18c-4e90-4136-9df3-52f333e3fb0e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -161,7 +161,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   19.816,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {90e8f18c-4e90-4136-9df3-52f333e3fb0e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -183,7 +183,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   22.56,                                  !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {90e8f18c-4e90-4136-9df3-52f333e3fb0e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   No,                                     !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -241,7 +241,7 @@ OS:Space,
   4.5732,                                 !- X Origin {m}
   4.5732,                                 !- Y Origin {m}
   19.816,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {90e8f18c-4e90-4136-9df3-52f333e3fb0e}, !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -262,7 +262,7 @@ OS:Space,
   5.4876,                                 !- X Origin {m}
   4.5732,                                 !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {1bf14578-5317-4bb7-bb78-67bfc4cef2af}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -318,7 +318,7 @@ OS:Space,
   -7.21911419532262e-16,                  !- X Origin {m}
   44.165,                                 !- Y Origin {m}
   43.5952,                                !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {f4d26ab6-6069-4f95-a4bb-2505ee54b65c}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -357,7 +357,7 @@ OS:Space,
   5.4876,                                 !- X Origin {m}
   4.5732,                                 !- Y Origin {m}
   43.5952,                                !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {f4d26ab6-6069-4f95-a4bb-2505ee54b65c}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -396,7 +396,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   44.165,                                 !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {1bf14578-5317-4bb7-bb78-67bfc4cef2af}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -452,9 +452,11 @@ OS:Space,
   16.0794,                                !- X Origin {m}
   0,                                      !- Y Origin {m}
   -2.439,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {34fed859-ffd9-4b75-89d6-fc353a47f793}, !- Building Story Name
   ,                                       !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {4ac6ea44-6fad-4d22-9242-726039b5b7bb}, !- Handle
@@ -491,9 +493,11 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {1bf14578-5317-4bb7-bb78-67bfc4cef2af}, !- Building Story Name
   ,                                       !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {348fd855-e97f-4cdb-a25d-8816afdd6950}, !- Handle
@@ -581,7 +585,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   44.165,                                 !- Y Origin {m}
   19.816,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {90e8f18c-4e90-4136-9df3-52f333e3fb0e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -654,7 +658,7 @@ OS:Space,
   68.534,                                 !- X Origin {m}
   0,                                      !- Y Origin {m}
   43.5952,                                !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {f4d26ab6-6069-4f95-a4bb-2505ee54b65c}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
@@ -728,7 +732,7 @@ OS:Space,
   -7.21911419532262e-16,                  !- X Origin {m}
   0,                                      !- Y Origin {m}
   43.5952,                                !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {f4d26ab6-6069-4f95-a4bb-2505ee54b65c}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -786,7 +790,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   19.816,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {90e8f18c-4e90-4136-9df3-52f333e3fb0e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -825,7 +829,7 @@ OS:Space,
   -7.21911419532262e-16,                  !- X Origin {m}
   0,                                      !- Y Origin {m}
   46.3392,                                !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {f4d26ab6-6069-4f95-a4bb-2505ee54b65c}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   No,                                     !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -900,7 +904,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   2.744,                                  !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {1bf14578-5317-4bb7-bb78-67bfc4cef2af}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   No,                                     !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -992,7 +996,7 @@ OS:Space,
   -7.21911419532262e-16,                  !- X Origin {m}
   0,                                      !- Y Origin {m}
   43.5952,                                !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {f4d26ab6-6069-4f95-a4bb-2505ee54b65c}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -1116,7 +1120,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   -2.439,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {34fed859-ffd9-4b75-89d6-fc353a47f793}, !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1273,7 +1277,7 @@ OS:Space,
   68.534,                                 !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {1bf14578-5317-4bb7-bb78-67bfc4cef2af}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -1329,7 +1333,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {1bf14578-5317-4bb7-bb78-67bfc4cef2af}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -1634,8 +1638,8 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  73.1072, 0, 2.744,                      !- X,Y,Z Vertex 1 {m}
-  73.1072, 0, 0,                          !- X,Y,Z Vertex 2 {m}
+  73.1072, 4.08374768133815e-015, 2.744,  !- X,Y,Z Vertex 1 {m}
+  73.1072, 4.08374768133815e-015, 0,      !- X,Y,Z Vertex 2 {m}
   68.534, 4.5732, 0,                      !- X,Y,Z Vertex 3 {m}
   68.534, 4.5732, 2.744;                  !- X,Y,Z Vertex 4 {m}
 
@@ -1787,8 +1791,8 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  4.083703031917e-15, 4.5731, 2.744,      !- X,Y,Z Vertex 1 {m}
-  4.083703031917e-15, 4.5731, 0,          !- X,Y,Z Vertex 2 {m}
+  4.083703031917e-015, 4.5731, 2.744,     !- X,Y,Z Vertex 1 {m}
+  4.083703031917e-015, 4.5731, 0,         !- X,Y,Z Vertex 2 {m}
   4.5732, 0, 0,                           !- X,Y,Z Vertex 3 {m}
   4.5732, 0, 2.744;                       !- X,Y,Z Vertex 4 {m}
 
@@ -1878,7 +1882,7 @@ OS:Space,
   4.5732,                                 !- X Origin {m}
   4.5732,                                 !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {1bf14578-5317-4bb7-bb78-67bfc4cef2af}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -1966,8 +1970,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   4.5732, 44.165, 2.744,                  !- X,Y,Z Vertex 1 {m}
   4.5732, 44.165, 0,                      !- X,Y,Z Vertex 2 {m}
-  0, 48.7381, 0,                          !- X,Y,Z Vertex 3 {m}
-  0, 48.7381, 2.744;                      !- X,Y,Z Vertex 4 {m}
+  4.08370303191701e-015, 48.7381, 0,      !- X,Y,Z Vertex 3 {m}
+  4.08370303191701e-015, 48.7381, 2.744;  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {391dc8f1-8a29-442c-b115-ef910343caeb}, !- Handle
@@ -2049,8 +2053,8 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  0, 4.5731, 2.744,                       !- X,Y,Z Vertex 1 {m}
-  0, 4.5731, 0,                           !- X,Y,Z Vertex 2 {m}
+  -2.55231439494813e-016, 4.5731, 2.744,  !- X,Y,Z Vertex 1 {m}
+  -2.55231439494813e-016, 4.5731, 0,      !- X,Y,Z Vertex 2 {m}
   4.5732, 0, 0,                           !- X,Y,Z Vertex 3 {m}
   4.5732, 0, 2.744;                       !- X,Y,Z Vertex 4 {m}
 
@@ -2066,8 +2070,8 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  0, 4.5731, 2.744,                       !- X,Y,Z Vertex 1 {m}
-  0, 4.5731, 0,                           !- X,Y,Z Vertex 2 {m}
+  -2.55231439494813e-016, 4.5731, 2.744,  !- X,Y,Z Vertex 1 {m}
+  -2.55231439494813e-016, 4.5731, 0,      !- X,Y,Z Vertex 2 {m}
   4.5732, 0, 0,                           !- X,Y,Z Vertex 3 {m}
   4.5732, 0, 2.744;                       !- X,Y,Z Vertex 4 {m}
 
@@ -2117,10 +2121,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  0, 4.5732, 2.744,                       !- X,Y,Z Vertex 1 {m}
-  0, 4.5732, 0,                           !- X,Y,Z Vertex 2 {m}
-  4.5732, 0, 0,                           !- X,Y,Z Vertex 3 {m}
-  4.5732, 0, 2.744;                       !- X,Y,Z Vertex 4 {m}
+  2.55234230083634e-016, 4.5732, 2.744,   !- X,Y,Z Vertex 1 {m}
+  2.55234230083634e-016, 4.5732, 0,       !- X,Y,Z Vertex 2 {m}
+  4.5732, 2.55234230083634e-016, 0,       !- X,Y,Z Vertex 3 {m}
+  4.5732, 2.55234230083634e-016, 2.744;   !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {3a8bc761-afcd-446c-955c-8e3f0810fe12}, !- Handle
@@ -2304,8 +2308,8 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
-  -3.33066907387547e-16, 0, 2.744,        !- X,Y,Z Vertex 1 {m}
-  -3.33066907387547e-16, 0, 0,            !- X,Y,Z Vertex 2 {m}
+  -3.33066907387547e-016, 0, 2.744,       !- X,Y,Z Vertex 1 {m}
+  -3.33066907387547e-016, 0, 0,           !- X,Y,Z Vertex 2 {m}
   0.9144, 0, 0,                           !- X,Y,Z Vertex 3 {m}
   0.9144, 0, 2.744;                       !- X,Y,Z Vertex 4 {m}
 
@@ -2471,8 +2475,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   0.9144, 39.5918, 2.744,                 !- X,Y,Z Vertex 1 {m}
   0.9144, 39.5918, 0,                     !- X,Y,Z Vertex 2 {m}
-  -3.33066907387547e-16, 39.5918, 0,      !- X,Y,Z Vertex 3 {m}
-  -3.33066907387547e-16, 39.5918, 2.744;  !- X,Y,Z Vertex 4 {m}
+  -3.33066907387547e-016, 39.5918, 0,     !- X,Y,Z Vertex 3 {m}
+  -3.33066907387547e-016, 39.5918, 2.744; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {561780d0-96ef-47fb-b60d-7ddaed864176}, !- Handle
@@ -2624,8 +2628,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   4.5732, 44.165, 2.744,                  !- X,Y,Z Vertex 1 {m}
   4.5732, 44.165, 0,                      !- X,Y,Z Vertex 2 {m}
-  8.16740606383402e-15, 48.7381, 0,       !- X,Y,Z Vertex 3 {m}
-  8.16740606383402e-15, 48.7381, 2.744;   !- X,Y,Z Vertex 4 {m}
+  8.16740606383402e-015, 48.7381, 0,      !- X,Y,Z Vertex 3 {m}
+  8.16740606383402e-015, 48.7381, 2.744;  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {3ca4f15a-47d9-4a55-88ea-98e1de03d901}, !- Handle
@@ -2826,10 +2830,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  5.10468460167268e-16, 4.5732, 2.744,    !- X,Y,Z Vertex 1 {m}
-  5.10468460167268e-16, 4.5732, 0,        !- X,Y,Z Vertex 2 {m}
-  4.5732, 4.08374768133815e-15, 0,        !- X,Y,Z Vertex 3 {m}
-  4.5732, 4.08374768133815e-15, 2.744;    !- X,Y,Z Vertex 4 {m}
+  5.10468460167268e-016, 4.5732, 2.744,   !- X,Y,Z Vertex 1 {m}
+  5.10468460167268e-016, 4.5732, 0,       !- X,Y,Z Vertex 2 {m}
+  4.5732, 4.08374768133815e-015, 0,       !- X,Y,Z Vertex 3 {m}
+  4.5732, 4.08374768133815e-015, 2.744;   !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {c721c59d-459a-4ccb-8759-6f4a63ce20c6}, !- Handle
@@ -3064,10 +3068,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  0, 4.5732, 2.744,                       !- X,Y,Z Vertex 1 {m}
-  0, 4.5732, 0,                           !- X,Y,Z Vertex 2 {m}
-  4.5732, 0, 0,                           !- X,Y,Z Vertex 3 {m}
-  4.5732, 0, 2.744;                       !- X,Y,Z Vertex 4 {m}
+  2.55234230083634e-016, 4.5732, 2.744,   !- X,Y,Z Vertex 1 {m}
+  2.55234230083634e-016, 4.5732, 0,       !- X,Y,Z Vertex 2 {m}
+  4.5732, 2.55234230083634e-016, 0,       !- X,Y,Z Vertex 3 {m}
+  4.5732, 2.55234230083634e-016, 2.744;   !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {814b60dc-836e-421b-99c0-f8a854e3e4e5}, !- Handle
@@ -3202,8 +3206,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   0.9144, 39.5918, 0,                     !- X,Y,Z Vertex 1 {m}
   0.9144, 0, 0,                           !- X,Y,Z Vertex 2 {m}
-  -3.33066907387547e-16, 0, 0,            !- X,Y,Z Vertex 3 {m}
-  -3.33066907387547e-16, 39.5918, 0;      !- X,Y,Z Vertex 4 {m}
+  -3.33066907387547e-016, 0, 0,           !- X,Y,Z Vertex 3 {m}
+  -3.33066907387547e-016, 39.5918, 0;     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {2b4012bf-b312-44ff-8dd0-16e5aff0039b}, !- Handle
@@ -3321,8 +3325,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   4.5732, 44.165, 2.744,                  !- X,Y,Z Vertex 1 {m}
   4.5732, 44.165, 0,                      !- X,Y,Z Vertex 2 {m}
-  0, 48.7381, 0,                          !- X,Y,Z Vertex 3 {m}
-  0, 48.7381, 2.744;                      !- X,Y,Z Vertex 4 {m}
+  4.08370303191701e-015, 48.7381, 0,      !- X,Y,Z Vertex 3 {m}
+  4.08370303191701e-015, 48.7381, 2.744;  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {b531b2fe-9de1-4032-9f51-f0c2e2f54078}, !- Handle
@@ -3336,10 +3340,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
-  -3.33066907387547e-16, 39.5918, 2.744,  !- X,Y,Z Vertex 1 {m}
-  -3.33066907387547e-16, 39.5918, 0,      !- X,Y,Z Vertex 2 {m}
-  -3.33066907387547e-16, 0, 0,            !- X,Y,Z Vertex 3 {m}
-  -3.33066907387547e-16, 0, 2.744;        !- X,Y,Z Vertex 4 {m}
+  -3.33066907387547e-016, 39.5918, 2.744, !- X,Y,Z Vertex 1 {m}
+  -3.33066907387547e-016, 39.5918, 0,     !- X,Y,Z Vertex 2 {m}
+  -3.33066907387547e-016, 0, 0,           !- X,Y,Z Vertex 3 {m}
+  -3.33066907387547e-016, 0, 2.744;       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {2b4a080c-6c41-4063-838c-6a7e4b99f33e}, !- Handle
@@ -3353,8 +3357,8 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  73.1072, 0, 2.744,                      !- X,Y,Z Vertex 1 {m}
-  73.1072, 0, 0,                          !- X,Y,Z Vertex 2 {m}
+  73.1072, 4.08374768133815e-015, 2.744,  !- X,Y,Z Vertex 1 {m}
+  73.1072, 4.08374768133815e-015, 0,      !- X,Y,Z Vertex 2 {m}
   68.534, 4.5732, 0,                      !- X,Y,Z Vertex 3 {m}
   68.534, 4.5732, 2.744;                  !- X,Y,Z Vertex 4 {m}
 
@@ -3389,8 +3393,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   0.9144, 0, 2.744,                       !- X,Y,Z Vertex 1 {m}
   0.9144, 39.5918, 2.744,                 !- X,Y,Z Vertex 2 {m}
-  -3.33066907387547e-16, 39.5918, 2.744,  !- X,Y,Z Vertex 3 {m}
-  -3.33066907387547e-16, 0, 2.744;        !- X,Y,Z Vertex 4 {m}
+  -3.33066907387547e-016, 39.5918, 2.744, !- X,Y,Z Vertex 3 {m}
+  -3.33066907387547e-016, 0, 2.744;       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {75c88fd3-ebc1-4c31-8d28-9e805fc36558}, !- Handle
@@ -3574,8 +3578,8 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  73.1072, 4.08374768133815e-15, 2.744,   !- X,Y,Z Vertex 1 {m}
-  73.1072, 4.08374768133815e-15, 0,       !- X,Y,Z Vertex 2 {m}
+  73.1072, 4.08374768133815e-015, 2.744,  !- X,Y,Z Vertex 1 {m}
+  73.1072, 4.08374768133815e-015, 0,      !- X,Y,Z Vertex 2 {m}
   68.534, 4.5732, 0,                      !- X,Y,Z Vertex 3 {m}
   68.534, 4.5732, 2.744;                  !- X,Y,Z Vertex 4 {m}
 
@@ -3632,4 +3636,93 @@ OS:Surface,
 
 OS:Facility,
   {b0eaecf4-1175-401e-9aec-08ebfb4c0691}; !- Handle
+
+OS:BuildingStory,
+  {34fed859-ffd9-4b75-89d6-fc353a47f793}, !- Handle
+  Basement Story 0,                       !- Name
+  -2.439,                                 !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {85371851-82ce-46da-92ed-da000dc6b265}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
+
+OS:BuildingStory,
+  {1bf14578-5317-4bb7-bb78-67bfc4cef2af}, !- Handle
+  Building Story 1,                       !- Name
+  0,                                      !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {28dd5cfb-b740-429a-ab29-2d4e06f24875}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
+
+OS:BuildingStory,
+  {90e8f18c-4e90-4136-9df3-52f333e3fb0e}, !- Handle
+  Building Story 2,                       !- Name
+  19.816,                                 !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {a8daab30-8ff2-4fed-adfa-86711aabd4cb}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
+
+OS:BuildingStory,
+  {f4d26ab6-6069-4f95-a4bb-2505ee54b65c}, !- Handle
+  Building Story 3,                       !- Name
+  43.5952,                                !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {50999ae9-aa34-4fb5-9f4b-2a63a00ddc22}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
+
+OS:Rendering:Color,
+  {85371851-82ce-46da-92ed-da000dc6b265}, !- Handle
+  Rendering Color 1,                      !- Name
+  175,                                    !- Rendering Red Value
+  238,                                    !- Rendering Green Value
+  238;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {28dd5cfb-b740-429a-ab29-2d4e06f24875}, !- Handle
+  Rendering Color 2,                      !- Name
+  211,                                    !- Rendering Red Value
+  211,                                    !- Rendering Green Value
+  211;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {50999ae9-aa34-4fb5-9f4b-2a63a00ddc22}, !- Handle
+  Rendering Color 3,                      !- Name
+  119,                                    !- Rendering Red Value
+  136,                                    !- Rendering Green Value
+  153;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {a8daab30-8ff2-4fed-adfa-86711aabd4cb}, !- Handle
+  Rendering Color 4,                      !- Name
+  153,                                    !- Rendering Red Value
+  50,                                     !- Rendering Green Value
+  204;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {6f6ef26f-e57e-4bfa-bd78-408adebbbaa4}, !- Handle
+  Rendering Color 5,                      !- Name
+  255,                                    !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {51ca7261-126c-4381-a536-5fbb395737e5}, !- Handle
+  Rendering Color 6,                      !- Name
+  148,                                    !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  211;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {79831c26-f4fb-4cee-b6be-50213d3b4bfb}, !- Handle
+  Rendering Color 7,                      !- Name
+  50,                                     !- Rendering Red Value
+  205,                                    !- Rendering Green Value
+  50;                                     !- Rendering Blue Value
 

@@ -1,7 +1,7 @@
 
 OS:Version,
-  {7fa85a8a-e928-4d74-9667-857843b629bd}, !- Handle
-  1.9.0;                                  !- Version Identifier
+  {24ab30a2-f32e-46b6-9d91-479ebc0d27f3}, !- Handle
+  1.14.0;                                 !- Version Identifier
 
 OS:Site,
   {780cebd4-d970-49f6-8a67-996a6b51b6bf}, !- Handle
@@ -52,12 +52,12 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {28f49d8d-3737-4296-b4ec-3bf67b00f788}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
-OS:Meter,
+OS:Output:Meter,
   {2c504f0f-1677-4791-a625-c9fdceff2175}, !- Handle
   ElectricityNet:Facility,                !- Name
   Hourly,                                 !- Reporting Frequency
@@ -91,7 +91,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {28f49d8d-3737-4296-b4ec-3bf67b00f788}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -121,7 +121,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   3.0488,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {f0fd8038-c2dd-4caa-93ad-11e3bdfa35ec}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   No,                                     !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
@@ -396,7 +396,7 @@ OS:Surface,
   0, 16.4427, 0,                          !- X,Y,Z Vertex 3 {m}
   0, 16.4427, 3.0488;                     !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {691ea4a2-e815-4852-aa14-ac1ce9bfcf5c}, !- Handle
   Gas:Facility,                           !- Name
   Hourly,                                 !- Reporting Frequency
@@ -408,7 +408,7 @@ OS:ConvergenceLimits,
   1,                                      !- Minimum System Timestep {minutes}
   20;                                     !- Maximum HVAC Iterations
 
-OS:Meter,
+OS:Output:Meter,
   {ceae7f14-5ab7-4a91-9729-89b3f9655715}, !- Handle
   Electricity:Facility,                   !- Name
   Hourly,                                 !- Reporting Frequency
@@ -498,4 +498,22 @@ OS:SubSurface,
 
 OS:Facility,
   {8630d1c8-2694-4622-ac46-ec75f253c7ea}; !- Handle
+
+OS:BuildingStory,
+  {28f49d8d-3737-4296-b4ec-3bf67b00f788}, !- Handle
+  Building Story 1,                       !- Name
+  0,                                      !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
+
+OS:BuildingStory,
+  {f0fd8038-c2dd-4caa-93ad-11e3bdfa35ec}, !- Handle
+  Building Story 2,                       !- Name
+  3.0488,                                 !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
 

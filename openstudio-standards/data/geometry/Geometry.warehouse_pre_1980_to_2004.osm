@@ -1,7 +1,7 @@
 
 OS:Version,
-  {e200cfc6-af57-4565-aee0-56e4eb76343f}, !- Handle
-  1.9.0;                                  !- Version Identifier
+  {979f357e-4eee-44b0-a846-1fd71cad2de0}, !- Handle
+  1.14.0;                                 !- Version Identifier
 
 OS:Site,
   {b3bae159-aaf6-44b7-a7a5-8215c4c73a3c}, !- Handle
@@ -52,12 +52,12 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {001ceb82-bea5-4d44-b449-16a0a76c1182}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
-OS:Meter,
+OS:Output:Meter,
   {603bb984-d5d1-481d-883f-931975bd1e2e}, !- Handle
   ExteriorEquipment:Electricity,          !- Name
   hourly,                                 !- Reporting Frequency
@@ -110,7 +110,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {001ceb82-bea5-4d44-b449-16a0a76c1182}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
@@ -142,7 +142,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {001ceb82-bea5-4d44-b449-16a0a76c1182}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
@@ -232,7 +232,7 @@ OS:Surface,
   25.9067, 9.1435, 0,                     !- X,Y,Z Vertex 3 {m}
   25.9067, 9.1435, 4.267;                 !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {9483256b-f20c-4383-81e8-45d37a661196}, !- Handle
   WaterSystems:Electricity,               !- Name
   hourly,                                 !- Reporting Frequency
@@ -273,7 +273,7 @@ OS:Surface,
   25.9067, 0, 0,                          !- X,Y,Z Vertex 3 {m}
   25.9067, 0, 4.267;                      !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {710831a5-a129-4751-8284-c65857306fae}, !- Handle
   HeatRejection:Electricity,              !- Name
   hourly,                                 !- Reporting Frequency
@@ -314,7 +314,7 @@ OS:Surface,
   0, 30.4785, 0,                          !- X,Y,Z Vertex 3 {m}
   0, 100.579, 0;                          !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {ea3e89b5-ebbe-4fab-a4d9-770a77c40c24}, !- Handle
   Refrigeration:Electricity,              !- Name
   hourly,                                 !- Reporting Frequency
@@ -372,7 +372,7 @@ OS:Surface,
   45.7178, 0, 0,                          !- X,Y,Z Vertex 3 {m}
   45.7178, 0, 8.534;                      !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {47551cc4-32d4-40bb-8d48-5968769890a9}, !- Handle
   ExteriorLights:Electricity,             !- Name
   hourly,                                 !- Reporting Frequency
@@ -413,21 +413,21 @@ OS:Surface,
   45.7178, 100.579, 0,                    !- X,Y,Z Vertex 3 {m}
   45.7178, 100.579, 8.534;                !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {f430a7be-b99a-438a-a1a0-3c54576dff6a}, !- Handle
   Pumps:Electricity,                      !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {2c5f3b93-c7d5-4b56-ad3c-65fecf93d781}, !- Handle
   Gas:Facility,                           !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {3d76f705-847e-4aae-80f0-804592108f59}, !- Handle
   InteriorLights:Electricity,             !- Name
   hourly,                                 !- Reporting Frequency
@@ -534,14 +534,14 @@ OS:Surface,
   0, 100.579, 0,                          !- X,Y,Z Vertex 3 {m}
   0, 100.579, 8.534;                      !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {20ec8313-0ef6-4925-8296-9bdcfdd6c567}, !- Handle
   InteriorEquipment:Electricity,          !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {17e2bc5d-790d-4b62-afce-a223a1727851}, !- Handle
   Cooling:Electricity,                    !- Name
   hourly,                                 !- Reporting Frequency
@@ -604,7 +604,7 @@ OS:ShadowCalculation,
   7,                                      !- Calculation Frequency
   15000;                                  !- Maximum Figures in Shadow Overlap Calculations
 
-OS:Meter,
+OS:Output:Meter,
   {04aeeb8e-8084-4df7-88aa-b5e4fa87ef39}, !- Handle
   Fans:Electricity,                       !- Name
   hourly,                                 !- Reporting Frequency
@@ -645,7 +645,7 @@ OS:Surface,
   0, 9.1435, 0,                           !- X,Y,Z Vertex 3 {m}
   0, 9.1435, 8.534;                       !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {f1916e9b-5a8e-428c-b428-56591748e1d4}, !- Handle
   InteriorEquipment:Gas,                  !- Name
   hourly,                                 !- Reporting Frequency
@@ -669,7 +669,7 @@ OS:SubSurface,
   0, 46.1749, 0,                          !- X,Y,Z Vertex 3 {m}
   0, 46.1749, 3.0478;                     !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {d1416307-64d1-49c3-a44c-1f71460b45ff}, !- Handle
   Humidifier:Electricity,                 !- Name
   hourly,                                 !- Reporting Frequency
@@ -800,7 +800,7 @@ OS:Surface,
   0, 0, 4.267,                            !- X,Y,Z Vertex 3 {m}
   0, 9.1435, 4.267;                       !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {9fe1f051-0bd0-410a-956f-9ecf692ce296}, !- Handle
   Heating:Gas,                            !- Name
   hourly,                                 !- Reporting Frequency
@@ -824,14 +824,14 @@ OS:SubSurface,
   0, 73.377, 0,                           !- X,Y,Z Vertex 3 {m}
   0, 73.377, 3.0478;                      !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {b5763071-4d8d-49ae-bfdb-921e4ee0b22e}, !- Handle
   WaterSystems:Gas,                       !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {6c6b0477-41f3-4d9a-a2ca-ea1b2f674663}, !- Handle
   Electricity:Facility,                   !- Name
   hourly,                                 !- Reporting Frequency
@@ -857,7 +857,7 @@ OS:Surface,
   0, 9.1435, 0,                           !- X,Y,Z Vertex 5 {m}
   0, 30.4785, 0;                          !- X,Y,Z Vertex 6 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {5cf3cc4c-6715-4bbe-a690-b9ab6333dadb}, !- Handle
   Heating:Electricity,                    !- Name
   hourly,                                 !- Reporting Frequency
@@ -917,4 +917,13 @@ OS:LifeCycleCost:Parameters,
 
 OS:Facility,
   {06d841f5-0f4a-4621-a22b-ba384cbcc432}; !- Handle
+
+OS:BuildingStory,
+  {001ceb82-bea5-4d44-b449-16a0a76c1182}, !- Handle
+  Building Story 1,                       !- Name
+  0,                                      !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
 

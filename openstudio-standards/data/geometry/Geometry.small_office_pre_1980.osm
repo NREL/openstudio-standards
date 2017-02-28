@@ -1,7 +1,7 @@
 
 OS:Version,
-  {a9c7835c-bb2f-49aa-bb5f-88663eca0939}, !- Handle
-  1.7.0;                                  !- Version Identifier
+  {dddcc690-f05f-4960-9105-7b00c7ee94b5}, !- Handle
+  1.14.0;                                 !- Version Identifier
 
 OS:Site,
   {e3a6b036-609a-46c6-b2fe-ae55ac3dd830}, !- Handle
@@ -60,7 +60,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {c3cc3a8e-ea59-4b92-9699-a15f0919f56e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -82,7 +82,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {c3cc3a8e-ea59-4b92-9699-a15f0919f56e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -104,18 +104,18 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {c3cc3a8e-ea59-4b92-9699-a15f0919f56e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
-OS:Meter,
+OS:Output:Meter,
   {3ed363dd-658f-4f47-a3e6-d0e3db162eed}, !- Handle
   WaterSystems:Electricity,               !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {b38b0b2a-eeb2-4913-8ea6-34219fb98f43}, !- Handle
   InteriorEquipment:Gas,                  !- Name
   hourly,                                 !- Reporting Frequency
@@ -297,18 +297,18 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {c3cc3a8e-ea59-4b92-9699-a15f0919f56e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
-OS:Meter,
+OS:Output:Meter,
   {96732ead-28b5-46b1-8b55-57cee19a2f7e}, !- Handle
   HeatRejection:Electricity,              !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {85460d42-97c4-4c86-b31b-8c473c3f5ad1}, !- Handle
   Pumps:Electricity,                      !- Name
   hourly,                                 !- Reporting Frequency
@@ -350,7 +350,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {c3cc3a8e-ea59-4b92-9699-a15f0919f56e}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -388,14 +388,14 @@ OS:Surface,
   0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
   5, 5, 0;                                !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {a29f7257-cfca-4259-9850-82e3db9c2e2b}, !- Handle
   Fans:Electricity,                       !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {b9a0820f-3857-4d98-8b15-432902f9fed2}, !- Handle
   ExteriorEquipment:Electricity,          !- Name
   hourly,                                 !- Reporting Frequency
@@ -419,7 +419,7 @@ OS:SubSurface,
   17.07, 0, 0.9,                          !- X,Y,Z Vertex 3 {m}
   17.07, 0, 2.424;                        !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {cbedb613-f753-4865-8fe1-c79d91c029d0}, !- Handle
   ExteriorLights:Electricity,             !- Name
   hourly,                                 !- Reporting Frequency
@@ -431,7 +431,7 @@ OS:ShadowCalculation,
   15000,                                  !- Calculation Frequency
   15000;                                  !- Maximum Figures in Shadow Overlap Calculations
 
-OS:Meter,
+OS:Output:Meter,
   {ed942360-c5b3-4cb2-bb01-1ac732a90355}, !- Handle
   Humidifier:Electricity,                 !- Name
   hourly,                                 !- Reporting Frequency
@@ -540,7 +540,7 @@ OS:Surface,
   22.69, 5, 0,                            !- X,Y,Z Vertex 3 {m}
   22.69, 5, 3.05;                         !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {1ccc9a30-914a-4679-a2ac-c627db19afa1}, !- Handle
   Electricity:Facility,                   !- Name
   hourly,                                 !- Reporting Frequency
@@ -564,7 +564,7 @@ OS:Surface,
   5, 5, 3.05,                             !- X,Y,Z Vertex 3 {m}
   0, 0, 3.05;                             !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {bbeb91ad-9c1d-41f7-9f2b-376e1ea4f832}, !- Handle
   Refrigeration:Electricity,              !- Name
   hourly,                                 !- Reporting Frequency
@@ -690,7 +690,7 @@ OS:SubSurface,
   26.3, 0, 0.9,                           !- X,Y,Z Vertex 3 {m}
   26.3, 0, 2.424;                         !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {46f4473e-9668-4b6f-b199-7dbfa7007c4b}, !- Handle
   Heating:Gas,                            !- Name
   hourly,                                 !- Reporting Frequency
@@ -731,7 +731,7 @@ OS:SubSurface,
   27.69, 12.45, 0.9,                      !- X,Y,Z Vertex 3 {m}
   27.69, 12.45, 2.424;                    !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {cc1d85e6-1cb9-4df8-b0ea-f71b091cf990}, !- Handle
   InteriorLights:Electricity,             !- Name
   hourly,                                 !- Reporting Frequency
@@ -755,7 +755,7 @@ OS:Surface,
   5, 5, 0,                                !- X,Y,Z Vertex 3 {m}
   5, 5, 3.05;                             !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {15b2b842-700a-4860-aacf-f609e4965e2e}, !- Handle
   InteriorEquipment:Electricity,          !- Name
   hourly,                                 !- Reporting Frequency
@@ -917,7 +917,7 @@ OS:YearDescription,
   ,                                       !- Calendar Year
   Sunday;                                 !- Day of Week for Start Day
 
-OS:Meter,
+OS:Output:Meter,
   {55f20a5a-92e5-4212-999e-acc542b19c82}, !- Handle
   Heating:Electricity,                    !- Name
   hourly,                                 !- Reporting Frequency
@@ -958,7 +958,7 @@ OS:Surface,
   5, 13.46, 3.05,                         !- X,Y,Z Vertex 3 {m}
   5, 5, 3.05;                             !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {d709c582-a9b3-43fc-9c88-d748dca1237d}, !- Handle
   WaterSystems:Gas,                       !- Name
   hourly,                                 !- Reporting Frequency
@@ -1016,14 +1016,14 @@ OS:SubSurface,
   0, 6.01, 0.9,                           !- X,Y,Z Vertex 3 {m}
   0, 6.01, 2.424;                         !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {51e32cb7-cd03-4a78-94c6-1d98775602fc}, !- Handle
   Cooling:Electricity,                    !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {cfb774f1-e94d-4899-a419-9d24c8932473}, !- Handle
   Gas:Facility,                           !- Name
   hourly,                                 !- Reporting Frequency
@@ -1084,7 +1084,7 @@ OS:Surface,
 OS:HeatBalanceAlgorithm,
   {3049eb4d-955d-4bdd-8d6c-09a3a45d047a}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {F}
+  200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:ConvergenceLimits,
   {d5b34d23-05c3-4044-9a6f-1f6c2665b554}, !- Handle
@@ -1174,4 +1174,13 @@ OS:SubSurface,
 
 OS:Facility,
   {07d8b17d-6103-466a-8bce-17ae3c314e30}; !- Handle
+
+OS:BuildingStory,
+  {c3cc3a8e-ea59-4b92-9699-a15f0919f56e}, !- Handle
+  Building Story 1,                       !- Name
+  0,                                      !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
 

@@ -1,7 +1,7 @@
 
 OS:Version,
-  {94f060e0-e8d1-4e9a-bdf2-a2cbe7c311a5}, !- Handle
-  1.7.0;                                  !- Version Identifier
+  {63f26377-8208-40e3-a281-7a920f3ad2a9}, !- Handle
+  1.14.0;                                 !- Version Identifier
 
 OS:Connection,
   {7c23088f-d129-42d1-a7ee-6448a98209f6}, !- Handle
@@ -21,7 +21,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {dffbf2d6-63e1-4315-934a-4eb89b5a4978}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -60,7 +60,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {dffbf2d6-63e1-4315-934a-4eb89b5a4978}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -116,7 +116,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   3.0488,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {eda954b9-f265-4c8f-aaba-f35a1be55d73}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   No;                                     !- Part of Total Floor Area
 
@@ -469,4 +469,22 @@ OS:Building,
 
 OS:Facility,
   {0b9e347b-cb3f-4252-96ba-08f2ef0e587b}; !- Handle
+
+OS:BuildingStory,
+  {dffbf2d6-63e1-4315-934a-4eb89b5a4978}, !- Handle
+  Building Story 1,                       !- Name
+  0,                                      !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
+
+OS:BuildingStory,
+  {eda954b9-f265-4c8f-aaba-f35a1be55d73}, !- Handle
+  Building Story 2,                       !- Name
+  3.0488,                                 !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
 
