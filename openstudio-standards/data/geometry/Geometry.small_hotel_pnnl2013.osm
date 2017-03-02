@@ -1,7 +1,7 @@
 
 OS:Version,
-  {f6742013-ab3d-4bba-980d-3c7c47adec76}, !- Handle
-  1.14.0;                                 !- Version Identifier
+  {c1f9363d-6931-4297-83f2-a6eda61470fc}, !- Handle
+  1.7.0;                                  !- Version Identifier
 
 OS:Site,
   {b24a8c8c-c603-4c71-9293-1675139ee819}, !- Handle
@@ -60,7 +60,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -81,7 +81,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -119,7 +119,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -157,7 +157,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -178,7 +178,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -199,7 +199,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -220,7 +220,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -258,7 +258,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -296,7 +296,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -317,7 +317,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -338,7 +338,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -384,7 +384,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -405,7 +405,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -426,7 +426,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -464,7 +464,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -519,7 +519,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -557,7 +557,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -612,7 +612,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -650,7 +650,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -671,7 +671,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -726,7 +726,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -798,7 +798,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -836,7 +836,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -874,7 +874,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -912,7 +912,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -967,7 +967,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -1022,7 +1022,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -1077,7 +1077,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1115,7 +1115,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1153,7 +1153,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -1174,7 +1174,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1229,7 +1229,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -1250,7 +1250,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1305,7 +1305,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1343,7 +1343,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1381,7 +1381,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -1436,7 +1436,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1474,7 +1474,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1580,7 +1580,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -1635,7 +1635,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1690,7 +1690,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1728,7 +1728,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1817,7 +1817,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1855,7 +1855,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1893,7 +1893,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1948,7 +1948,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -1986,7 +1986,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Connection,
@@ -2007,7 +2007,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2113,7 +2113,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2168,7 +2168,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -2223,7 +2223,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2278,7 +2278,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2333,7 +2333,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2371,7 +2371,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2409,7 +2409,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2498,7 +2498,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2791,7 +2791,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2829,7 +2829,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2935,7 +2935,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -2990,7 +2990,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -3236,7 +3236,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -3291,7 +3291,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -3499,7 +3499,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -3966,7 +3966,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -4055,7 +4055,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:SubSurface,
@@ -4620,7 +4620,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -4862,7 +4862,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Building Story Name
+  ,                                       !- Building Story Name
   ;                                       !- Thermal Zone Name
 
 OS:Surface,
@@ -7249,7 +7249,7 @@ OS:Surface,
   32.66228442, 10.1078292198, 8.8392,     !- X,Y,Z Vertex 3 {m}
   32.66228442, 10.1078292198, 11.5824;    !- X,Y,Z Vertex 4 {m}
 
-OS:Output:Meter,
+OS:Meter,
   {a9ad05ab-cd10-453f-b9f5-68244dd5a72c}, !- Handle
   Gas:Facility,                           !- Name
   Hourly,                                 !- Reporting Frequency
@@ -8007,7 +8007,7 @@ OS:Surface,
 OS:HeatBalanceAlgorithm,
   {7a761efb-c3f5-476a-b958-a77150029cb1}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {C}
+  200;                                    !- Surface Temperature Upper Limit {F}
 
 OS:Surface,
   {5e83c3ed-84e2-4fce-b1e5-dfee00f033df}, !- Handle
@@ -9046,7 +9046,7 @@ OS:Surface,
   28.69988442, 10.1078292198, 6.096,      !- X,Y,Z Vertex 3 {m}
   28.69988442, 10.1078292198, 8.8392;     !- X,Y,Z Vertex 4 {m}
 
-OS:Output:Meter,
+OS:Meter,
   {bec5d822-6047-443e-ab3f-722aaae30155}, !- Handle
   ElectricityNet:Facility,                !- Name
   Hourly,                                 !- Reporting Frequency
@@ -11282,7 +11282,7 @@ OS:SubSurface,
   43.1378844242, 0.04884522, 4.0024,      !- X,Y,Z Vertex 3 {m}
   43.1378844242, 0.04884522, 5.4464;      !- X,Y,Z Vertex 4 {m}
 
-OS:Output:Meter,
+OS:Meter,
   {9af4ae6a-7ecf-4f5d-bae3-a906c652fb27}, !- Handle
   Electricity:Facility,                   !- Name
   Hourly,                                 !- Reporting Frequency
@@ -11546,40 +11546,4 @@ OS:Surface,
 
 OS:Facility,
   {cf8b22cb-09f8-4c43-888d-8b8496abd0b0}; !- Handle
-
-OS:BuildingStory,
-  {fc5575e7-3d80-4a66-882a-fca11c68fc36}, !- Handle
-  Building Story 1,                       !- Name
-  0,                                      !- Nominal Z Coordinate {m}
-  ,                                       !- Nominal Floor to Floor Height {m}
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
-
-OS:BuildingStory,
-  {34eb958d-62ab-4a58-97b5-30caf3b32f24}, !- Handle
-  Building Story 2,                       !- Name
-  3.3528,                                 !- Nominal Z Coordinate {m}
-  ,                                       !- Nominal Floor to Floor Height {m}
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
-
-OS:BuildingStory,
-  {cc8a2e12-b111-4b6e-a59d-506a06e0a44a}, !- Handle
-  Building Story 3,                       !- Name
-  6.096,                                  !- Nominal Z Coordinate {m}
-  ,                                       !- Nominal Floor to Floor Height {m}
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
-
-OS:BuildingStory,
-  {5a29b251-7048-4c26-8a39-e5737ff82422}, !- Handle
-  Building Story 4,                       !- Name
-  8.8392,                                 !- Nominal Z Coordinate {m}
-  ,                                       !- Nominal Floor to Floor Height {m}
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
 
