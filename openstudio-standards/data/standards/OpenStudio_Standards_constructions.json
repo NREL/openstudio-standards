@@ -71,6 +71,42 @@
       ]
     },
     {
+      "name": "Ground FloorGround_Floor_R11_T2013",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Ground_Floor_R11_T2013",
+        "Plywood - 5/8 in.",
+        "Carpet - 3/4 in."
+      ]
+    },
+    {
+      "name": "Ground FloorGround_Floor_R17_T2013",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Ground_Floor_R17_T2013",
+        "Plywood - 5/8 in.",
+        "Carpet - 3/4 in."
+      ]
+    },
+    {
+      "name": "Ground FloorGround_Floor_R22_T2013",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Ground_Floor_R22_T2013",
+        "Plywood - 5/8 in.",
+        "Carpet - 3/4 in."
+      ]
+    },
+    {
       "name": "LargeHotel Interior Ceiling",
       "intended_surface_type": "InteriorCeiling",
       "standards_construction_type": null,
@@ -103,6 +139,219 @@
       "materials": [
         "G01 13mm gypsum board",
         "G01 13mm gypsum board"
+      ]
+    },
+    {
+      "name": "Metal framed wallsW1_R8.60",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W1_R8.60",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW2_R11.13",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W2_R11.13",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW3_R11.36",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W3_R11.36",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW4_R12.62",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W4_R12.62",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW_T24_2013_R13.99",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W_T24_2013_R13.99",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW_m1_R15",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W_m1_R15",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW_m2_R19",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W_m2_R19",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW_m3_R21",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W_m3_R21",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal roofR1_R14.20",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R1_R14.20"
+      ]
+    },
+    {
+      "name": "Metal roofR2_R12.90",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R2_R12.90"
+      ]
+    },
+    {
+      "name": "Metal roofR3_R17.74",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R3_R17.74"
+      ]
+    },
+    {
+      "name": "Metal roofR4_R20.28",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R4_R20.28"
+      ]
+    },
+    {
+      "name": "Metal roofR_R30",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R_R30"
+      ]
+    },
+    {
+      "name": "Metal roofR_R38",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R_R38"
+      ]
+    },
+    {
+      "name": "Metal roofR_T24_2013_24.86",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R_T24_2013_24.86"
+      ]
+    },
+    {
+      "name": "NACM_Drop Ceiling",
+      "intended_surface_type": "InteriorCeiling",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "NACM_Acoustic Tile 3/4in"
+      ]
+    },
+    {
+      "name": "NACM_Interior Floor",
+      "intended_surface_type": "InteriorFloor",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "NACM_Carpet 3/4in",
+        "NACM_Carpet 3/4in"
+      ]
+    },
+    {
+      "name": "NACM_Interior Wall",
+      "intended_surface_type": "InteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "NACM_Gypsum Board 5/8in",
+        "NACM_Gypsum Board 5/8in"
       ]
     },
     {
@@ -2014,6 +2263,156 @@
       ]
     },
     {
+      "name": "Window10",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window10"
+      ]
+    },
+    {
+      "name": "Window11",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window11"
+      ]
+    },
+    {
+      "name": "Window12",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window12"
+      ]
+    },
+    {
+      "name": "Window2",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window2"
+      ]
+    },
+    {
+      "name": "Window3",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window3"
+      ]
+    },
+    {
+      "name": "Window4",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window4"
+      ]
+    },
+    {
+      "name": "Window5",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window5"
+      ]
+    },
+    {
+      "name": "Window6",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window6"
+      ]
+    },
+    {
+      "name": "Window7",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window7"
+      ]
+    },
+    {
+      "name": "Window8",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window8"
+      ]
+    },
+    {
+      "name": "Window9",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window9"
+      ]
+    },
+    {
+      "name": "Window_Skylt_T24_2013",
+      "intended_surface_type": "Skylight",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window_Skylt_T24_2013"
+      ]
+    },
+    {
+      "name": "Window_m1",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window_m1"
+      ]
+    },
+    {
+      "name": "Window_m2",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window_m2"
+      ]
+    },
+    {
+      "name": "Window_u2_T24_2013",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window_u2_T24_2013"
+      ]
+    },
+    {
       "name": "WoodWallU110",
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
@@ -2099,6 +2498,16 @@
       "materials": [
         "1/2 in. Gypsum Board",
         "1/2 in. Gypsum Board"
+      ]
+    },
+    {
+      "name": "window1",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "window1"
       ]
     }
   ]

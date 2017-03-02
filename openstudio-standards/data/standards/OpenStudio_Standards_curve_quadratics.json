@@ -210,6 +210,105 @@
       "notes": "From PNNL Prototype Buildings OutPatientHealtCare, RestaurantFastFood, RestaurantSitDown, SchoolPrimary, SchoolSecondary"
     },
     {
+      "name": "Curve Quadratic 1",
+      "coeff_1": 0.8,
+      "coeff_2": 0.2,
+      "coeff_3": 0.0,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Office -2 stories, Retail medium"
+    },
+    {
+      "name": "Curve Quadratic 2",
+      "coeff_1": 1.1552,
+      "coeff_2": -0.1808,
+      "coeff_3": 0.0256,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Office -2 stories, Retail medium"
+    },
+    {
+      "name": "Curve Quadratic 3",
+      "coeff_1": 0.85,
+      "coeff_2": 0.15,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Office -2 stories, Retail medium"
+    },
+    {
+      "name": "Curve Quadratic 4",
+      "coeff_1": 0.8,
+      "coeff_2": 0.2,
+      "coeff_3": 0.0,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Office -3 stories, Mixed use - 2 stories"
+    },
+    {
+      "name": "Curve Quadratic 5",
+      "coeff_1": 1.1552,
+      "coeff_2": -0.1808,
+      "coeff_3": 0.0256,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Office -3 stories, Mixed use - 2 stories"
+    },
+    {
+      "name": "Curve Quadratic 6",
+      "coeff_1": 0.85,
+      "coeff_2": 0.15,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Office -3 stories, Mixed use - 2 stories"
+    },
+    {
+      "name": "Curve Quadratic 7",
+      "coeff_1": 0.8,
+      "coeff_2": 0.2,
+      "coeff_3": 0.0,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Mixed use - 3 stories"
+    },
+    {
+      "name": "Curve Quadratic 8",
+      "coeff_1": 1.1552,
+      "coeff_2": -0.1808,
+      "coeff_3": 0.0256,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Mixed use - 3 stories"
+    },
+    {
+      "name": "Curve Quadratic 9",
+      "coeff_1": 0.85,
+      "coeff_2": 0.15,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Mixed use - 3 stories"
+    },
+    {
       "name": "DOE Ref DX Clg Coil Cool-PLF-fPLR",
       "coeff_1": 0.90949556,
       "coeff_2": 0.09864773,
@@ -406,6 +505,72 @@
       "min_out": null,
       "max_out": null,
       "notes": "From NECB 2011"
+    },
+    {
+      "name": "back perimeter space Cooling capacity of flow",
+      "coeff_1": 0.8,
+      "coeff_2": 0.2,
+      "coeff_3": 0.0,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Office - 1 story"
+    },
+    {
+      "name": "back perimeter space Energy input ration of flow",
+      "coeff_1": 1.156,
+      "coeff_2": -0.1816,
+      "coeff_3": 0.0256,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Office - 1 story"
+    },
+    {
+      "name": "back perimeter space Heating coil part load 1",
+      "coeff_1": 1.0,
+      "coeff_2": 0.0,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Office - 1 story"
+    },
+    {
+      "name": "sale space Cooling capacity of flow",
+      "coeff_1": 0.8,
+      "coeff_2": 0.2,
+      "coeff_3": 0.0,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Retail small"
+    },
+    {
+      "name": "sale space Energy input ration of flow",
+      "coeff_1": 1.156,
+      "coeff_2": -0.1816,
+      "coeff_3": 0.0256,
+      "min_x": 0.5,
+      "max_x": 1.5,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Retail small"
+    },
+    {
+      "name": "sale space Heating coil part load 1",
+      "coeff_1": 1.0,
+      "coeff_2": 0.0,
+      "coeff_3": 0.0,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "Retail small"
     }
   ]
 }
