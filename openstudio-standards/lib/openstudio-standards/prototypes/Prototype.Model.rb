@@ -115,6 +115,11 @@ class OpenStudio::Model::Model
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_fdwr_srr_rules.osm")  if debug_incremental_changes 
         
       create_thermal_zones(building_type, template, climate_zone)
+      # For some building types, stories are defined explicitly 
+      if building_type == 'SmallHotel'
+        building_story_map = define_building_story_map(building_type, template, climate_zone)
+        assign_building_story(building_type, template, climate_zone, building_story_map)
+      end
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_create_thermal_zones.osm")  if debug_incremental_changes 
       
