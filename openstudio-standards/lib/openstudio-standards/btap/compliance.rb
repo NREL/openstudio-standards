@@ -284,7 +284,7 @@ module BTAP
       
 
 
-       # this method will look up the json file in the data geometry folder to determine the actual number of floors.. This is hard to do programattically due to the nature of the doe geometries and how they use zone multipliers.
+       # This method will look up the json file in the data geometry folder to determine the actual number of floors.. This is hard to do programattically due to the nature of the doe geometries and how they use zone multipliers.
       def self.get_number_of_above_ground_floors(building_type, template = "NECB 2011", runner)
         geometry_data = JSON.parse(File.read("#{File.dirname(__FILE__)}/../../../data/geometry/geometry.json"))
         if geometry_data[template].nil? or geometry_data[template][building_type].nil? or geometry_data[template][building_type]["above_ground_floors"].nil?
