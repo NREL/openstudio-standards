@@ -1,0 +1,56 @@
+{
+  "NECB 2011": {
+    "FullServiceRestaurant": {
+      "above_ground_floors": 2,
+      "below_ground_floors": 0
+    },
+    "LargeHotel": {
+      "above_ground_floors": 3,
+      "below_ground_floors": 1
+    },
+    "LargeOffice": {
+      "above_ground_floors": 3,
+      "below_ground_floors": 1
+    },
+    "MediumOffice": {
+      "above_ground_floors": 3,
+      "below_ground_floors": 0
+    },
+    "MidriseApartment": {
+      "above_ground_floors": 3,
+      "below_ground_floors": 0
+    },
+    "Outpatient": {
+      "above_ground_floors": 3,
+      "below_ground_floors": 0
+    },
+    "PrimarySchool": {
+      "above_ground_floors": 1,
+      "below_ground_floors": 0
+    },
+    "QuickServiceRestaurant": {
+      "above_ground_floors": 2,
+      "below_ground_floors": 0
+    },
+    "RetailStandalone": {
+      "above_ground_floors": 1,
+      "below_ground_floors": 0
+    },
+    "RetailStripmall": {
+      "above_ground_floors": 1,
+      "below_ground_floors": 0
+    },
+    "SecondarySchool": {
+      "above_ground_floors": 2,
+      "below_ground_floors": 0
+    },
+    "SmallOffice": {
+      "above_ground_floors": 2,
+      "below_ground_floors": 0
+    },
+    "Warehouse": {
+      "above_ground_floors": 1,
+      "below_ground_floors": 0
+    }
+  }
+}
