@@ -5,11 +5,11 @@
       "below_ground_floors": 0
     },
     "LargeHotel": {
-      "above_ground_floors": 3,
+      "above_ground_floors": 6,
       "below_ground_floors": 1
     },
     "LargeOffice": {
-      "above_ground_floors": 3,
+      "above_ground_floors": 12,
       "below_ground_floors": 1
     },
     "MediumOffice": {
@@ -17,7 +17,7 @@
       "below_ground_floors": 0
     },
     "MidriseApartment": {
-      "above_ground_floors": 3,
+      "above_ground_floors": 4,
       "below_ground_floors": 0
     },
     "Outpatient": {
@@ -50,6 +50,10 @@
     },
     "Warehouse": {
       "above_ground_floors": 1,
+      "below_ground_floors": 0
+    },
+    "SmallHotel": {
+      "above_ground_floors": 4,
       "below_ground_floors": 0
     }
   }
