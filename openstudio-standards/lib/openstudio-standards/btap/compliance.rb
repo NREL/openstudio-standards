@@ -285,10 +285,15 @@ module BTAP
 
 
        # This method will look up the json file in the data geometry folder to determine the actual number of floors.. This is hard to do programattically due to the nature of the doe geometries and how they use zone multipliers.
-      def self.get_number_of_above_ground_floors(building_type, template = "NECB 2011", runner)
+      def self.get_number_of_above_ground_floors(model, building_type, template = "NECB 2011", runner)
+        if template.nil? or building_type.nil?
+          BTAP::runner_register("Warning: ttemplate and/or building_type is undefined..using actual number of building stories for NECB system selection.",runner)
+          return model.getBuildingStorys.size
+        end
         geometry_data = JSON.parse(File.read("#{File.dirname(__FILE__)}/../../../data/geometry/geometry.json"))
         if geometry_data[template].nil? or geometry_data[template][building_type].nil? or geometry_data[template][building_type]["above_ground_floors"].nil?
-          BTAP::runner_register("Error: Number of floors for #{building_type} of template #{template} not found in #{File.dirname(__FILE__)}/../../../data/geometry/geometry.json. If you are adding an archetype please edit this file with the correct information.",runner)
+          BTAP::runner_register("Error: Number of floors for #{building_type} of template #{template} not found in #{File.dirname(__FILE__)}/../../../data/geometry/geometry.json. If you are adding an archetype please edit this file with the correct information. Now using number of acutual stories.",runner)
+          return false
         else
           return geometry_data[template][building_type]["above_ground_floors"].to_i
         end
@@ -634,7 +639,7 @@ module BTAP
 
   
         #find the number of stories in the model this include multipliers.  
-        number_of_stories = self.get_number_of_above_ground_floors(building_type, "NECB 2011", runner)
+        number_of_stories = self.get_number_of_above_ground_floors(model, building_type, "NECB 2011", runner)
         #set up system array containers. These will contain the spaces associated with the system types. 
         space_zoning_data_array = []
         
