@@ -4401,9 +4401,15 @@ class OpenStudio::Model::Model
     end
 
     # sort hash by min_z low to high
-    story_hash = story_hash.sort_by{|k,v| v[:min_z]}.to_h
+    story_hash = story_hash.sort_by{|k,v| v[:min_z]}
 
-    return story_hash
+    # reassemble into hash after sorting
+    hash = {}
+    story_hash.each do |story, props|
+      hash[story] = props
+    end
+
+    return hash
 
   end
 
