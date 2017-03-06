@@ -1,11 +1,11 @@
 require 'simplecov'
-require 'coveralls'
+require 'codecov'
 
 # Get the code coverage in html for local viewing
-# and in JSON for coveralls
+# and in JSON for codecov
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
+  SimpleCov::Formatter::Codecov
 ])
 
 # Ignore some of the code in coverage testing
