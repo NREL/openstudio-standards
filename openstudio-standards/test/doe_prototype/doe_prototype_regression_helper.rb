@@ -68,20 +68,20 @@ def load_or_create_sql(bldg_type, vintage, climate_zone)
       osm_path = "#{Dir.pwd}/output/#{bldg_type}-#{vintage}-#{climate_zone}/final.osm"
       unless File.exists?(osm_path)
         errs << "#{bldg_type}-#{vintage}-#{climate_zone} Could not find OSM to run sizing run to create sql file."
-        [nil, errs]
+        return [nil, errs]
       end
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
       model = version_translator.loadModel(osm_path)
       if model.empty?
         errs << "#{bldg_type}-#{vintage}-#{climate_zone} Could not load OSM to run sizing run to create sql file."
-        [nil, errs]
+        return [nil, errs]
       end
       model = model.get
       
       # Run the sizing run
       if model.runSizingRun(sizing_run_dir) == false
         errs << "#{bldg_type}-#{vintage}-#{climate_zone} Sizing run to create sql file failed."
-        [nil, errs]
+        return [nil, errs]
       end
 
     end
