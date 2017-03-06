@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 
 class TestModelCreateSpaceTypeHash < Minitest::Test
 
@@ -6,7 +6,7 @@ class TestModelCreateSpaceTypeHash < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/example_model_multipliers.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/example_model_multipliers.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -23,7 +23,6 @@ class TestModelCreateSpaceTypeHash < Minitest::Test
     # create story hash
     template = '90.1-2013'
     space_type_hash = model.create_space_type_hash(template)
-    puts "hello"
     puts space_type_hash.size
     space_type_hash.each do |k,v|
       puts k.name

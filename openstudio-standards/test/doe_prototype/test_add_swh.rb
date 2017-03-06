@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 
 class TestAddSwh < Minitest::Test
 
@@ -6,7 +6,7 @@ class TestAddSwh < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchool_6A_1980-2004.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SecondarySchool_6A_1980-2004.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -21,7 +21,7 @@ class TestAddSwh < Minitest::Test
     non_booster_capacity = 0.0 # combine kitchen and shared
     non_booster_volume = 0.0 # combine kitchen and shared
     typical_swh.each do |loop|
-      puts loop.name
+      # puts loop.name
 
       # find water heater
       water_heater = nil
@@ -79,7 +79,7 @@ class TestAddSwh < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/LargeHotel_3A_2010.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/LargeHotel_3A_2010.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -94,7 +94,7 @@ class TestAddSwh < Minitest::Test
     non_booster_capacity = 0.0 # combine kitchen and shared
     non_booster_volume = 0.0 # combine kitchen and shared
     typical_swh.each do |loop|
-      puts loop.name
+      # puts loop.name
 
       # find water heater
       water_heater = nil
@@ -106,12 +106,10 @@ class TestAddSwh < Minitest::Test
       # check kitchen and shared systems
       if loop.name.to_s == "LargeHotel Shared Service Water Loop"
         non_booster_capacity += water_heater.heaterMaximumCapacity.get
-        puts "hello1"
         non_booster_volume += water_heater.tankVolume.get
       elsif loop.name.to_s == "LargeHotel Kitchen Service Water Loop"
         non_booster_capacity += water_heater.heaterMaximumCapacity.get
         non_booster_volume += water_heater.tankVolume.get
-        puts "hello2"
 
         # get booster water heater and check values
         water_heater = nil
@@ -161,7 +159,7 @@ class TestAddSwh < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/MidriseApartment_2A_2013.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/MidriseApartment_2A_2013.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -184,7 +182,7 @@ class TestAddSwh < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/RetailStripmall_2A_2004.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/RetailStripmall_2A_2004.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -211,7 +209,7 @@ class TestAddSwh < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/Multiuse_Office_LargeHotel.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/Multiuse_Office_LargeHotel.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."

@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 
 class TestAddExhaust < Minitest::Test
 
@@ -7,7 +7,7 @@ class TestAddExhaust < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchool_6A_1980-2004.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SecondarySchool_6A_1980-2004.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -43,7 +43,7 @@ class TestAddExhaust < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchool_6A_1980-2004.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SecondarySchool_6A_1980-2004.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -66,7 +66,7 @@ class TestAddExhaust < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchool_6A_1980-2004.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SecondarySchool_6A_1980-2004.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -101,7 +101,7 @@ class TestAddExhaust < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchoolSlicedBar.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SecondarySchoolSlicedBar.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -129,7 +129,7 @@ class TestAddExhaust < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchoolSlicedBar.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SecondarySchoolSlicedBar.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -168,7 +168,7 @@ class TestAddExhaust < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/ExhaustMissingMakeUpTest.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/ExhaustMissingMakeUpTest.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -192,7 +192,7 @@ class TestAddExhaust < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/LargeHotel_3A_2010.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/LargeHotel_3A_2010.osm")
     model = translator.loadModel(path)
     model = model.get
 

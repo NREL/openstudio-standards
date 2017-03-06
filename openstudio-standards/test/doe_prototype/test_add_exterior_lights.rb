@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 
 class TestAddExteriorLights < Minitest::Test
 
@@ -6,7 +6,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/example_model_multipliers.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/example_model_multipliers.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -32,7 +32,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/example_model_multipliers.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/example_model_multipliers.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -58,7 +58,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/example_model_multipliers.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/example_model_multipliers.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -84,7 +84,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/example_model_multipliers.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/example_model_multipliers.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -110,7 +110,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SmallHotel_5B_2004.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SmallHotel_5B_2004.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -145,7 +145,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/Hospital_4B_Pre1980.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/Hospital_4B_Pre1980.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -178,7 +178,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchool_6A_1980-2004.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SecondarySchool_6A_1980-2004.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."
@@ -213,7 +213,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/QuickServiceRestaurant_2A_2010.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/QuickServiceRestaurant_2A_2010.osm")
     model = translator.loadModel(path)
     model = model.get
     puts "Test building area is #{OpenStudio::convert(model.getBuilding.floorArea,"m^2","ft^2").get.round} ft^2."

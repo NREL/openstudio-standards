@@ -1,4 +1,4 @@
-require_relative 'minitest_helper'
+require_relative '../helpers/minitest_helper'
 
 class TestAddElevators < Minitest::Test
 
@@ -7,7 +7,7 @@ class TestAddElevators < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/example_model_multipliers.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/example_model_multipliers.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -26,7 +26,7 @@ class TestAddElevators < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SmallHotel_5B_2004.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SmallHotel_5B_2004.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -45,7 +45,7 @@ class TestAddElevators < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/LargeHotel_3A_2010.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/LargeHotel_3A_2010.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -64,7 +64,7 @@ class TestAddElevators < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/MidriseApartment_2A_2013.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/MidriseApartment_2A_2013.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -83,7 +83,7 @@ class TestAddElevators < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/Hospital_4B_Pre1980.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/Hospital_4B_Pre1980.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -103,7 +103,7 @@ class TestAddElevators < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/Outpatient_7A_2010.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/Outpatient_7A_2010.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -122,7 +122,7 @@ class TestAddElevators < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/SecondarySchool_6A_1980-2004.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SecondarySchool_6A_1980-2004.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -141,7 +141,7 @@ class TestAddElevators < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/MultiStoryRetail.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/MultiStoryRetail.osm")
     model = translator.loadModel(path)
     model = model.get
 
@@ -160,7 +160,7 @@ class TestAddElevators < Minitest::Test
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/test_models/MultiStoryWarehouse.osm")
+    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/MultiStoryWarehouse.osm")
     model = translator.loadModel(path)
     model = model.get
 
