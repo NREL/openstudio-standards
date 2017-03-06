@@ -125,7 +125,7 @@ class OpenStudio::Model::SpaceType
       end
 
       # Modify the definition of the instance
-      instances.each do |inst|
+      people.sort.each do |inst|
         definition = inst.peopleDefinition
         unless occupancy_per_area.zero?
           definition.setPeopleperSpaceFloorArea(OpenStudio.convert(occupancy_per_area / 1000, 'people/ft^2', 'people/m^2').get)
@@ -207,7 +207,7 @@ class OpenStudio::Model::SpaceType
       end
 
       # Modify the definition of the instance
-      instances.each do |inst|
+      lights.sort.each do |inst|
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
@@ -276,7 +276,7 @@ class OpenStudio::Model::SpaceType
       end
 
       # Modify the definition of the instance
-      instances.each do |inst|
+      electricEquipment.sort.each do |inst|
         definition = inst.electricEquipmentDefinition
         unless elec_equip_per_area.zero?
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(elec_equip_per_area.to_f, 'W/ft^2', 'W/m^2').get)
@@ -324,7 +324,7 @@ class OpenStudio::Model::SpaceType
       end
 
       # Modify the definition of the instance
-      instances.each do |inst|
+      gasEquipment.sort.each do |inst|
         definition = inst.gasEquipmentDefinition
         unless gas_equip_per_area.zero?
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(gas_equip_per_area.to_f, 'Btu/hr*ft^2', 'W/m^2').get)
@@ -419,7 +419,7 @@ class OpenStudio::Model::SpaceType
       end
 
       # Modify each instance
-      instances.each do |inst|
+      spaceInfiltrationDesignFlowRates.sort.each do |inst|
         unless infiltration_per_area_ext.zero?
           inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")

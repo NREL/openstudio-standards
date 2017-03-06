@@ -1,7 +1,8 @@
 
-# Extend the class to add Small Hotel specific stuff
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+# Modules for building-type specific methods
+module PrototypeBuilding
+module SmallHotel
+  def self.define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
 
     case template
@@ -90,7 +91,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = nil
 
     case template
@@ -469,7 +470,7 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def define_building_story_map(building_type, template, climate_zone)
+  def self.define_building_story_map(building_type, template, climate_zone)
     building_story_map = nil
 
     building_story_map = {
@@ -486,14 +487,14 @@ class OpenStudio::Model::Model
     return building_story_map
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add extra infiltration for corridor1 door
-    corridor_space = getSpaceByName('CorridorFlr1')
+    corridor_space = model.getSpaceByName('CorridorFlr1')
     corridor_space = corridor_space.get
     unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-      infiltration_corridor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+      infiltration_corridor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_corridor.setName('Corridor1 door Infiltration')
       infiltration_per_zone = 0
       infiltration_per_zone = if template == '90.1-2010' || template == '90.1-2007'
@@ -502,13 +503,13 @@ class OpenStudio::Model::Model
                                 0.91557718
                               end
       infiltration_corridor.setDesignFlowRate(infiltration_per_zone)
-      infiltration_corridor.setSchedule(add_schedule('HotelSmall INFIL_Door_Opening_SCH'))
+      infiltration_corridor.setSchedule(model.add_schedule('HotelSmall INFIL_Door_Opening_SCH'))
       infiltration_corridor.setSpace(corridor_space)
     end
 
     # hardsize corridor1. put in standards in the future  #TODO
     unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-      getZoneHVACPackagedTerminalAirConditioners.sort.each do |ptac|
+      model.getZoneHVACPackagedTerminalAirConditioners.sort.each do |ptac|
         zone = ptac.thermalZone.get
         if zone.spaces.include?(corridor_space)
           ptac.setSupplyAirFlowRateDuringCoolingOperation(0.13)
@@ -528,7 +529,8 @@ class OpenStudio::Model::Model
     return true
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
     return true
   end
+end
 end

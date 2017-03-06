@@ -385,6 +385,18 @@
       "notes": "From Prototype Buildings"
     },
     {
+      "name": "SWH-EFFFPLR-NECB2011",
+      "coeff_1": 0.7576,
+      "coeff_2": 1.0071,
+      "coeff_3": -1.4443,
+      "coeff_4": 0.6844,
+      "min_x": 0.0,
+      "max_x": 1.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "From NECB 2011"
+    },
+    {
       "name": "SchoolPrimary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZERSingleShelfHorizontal_LatentEnergyMult",
       "coeff_1": 0.0236,
       "coeff_2": 0.0006,

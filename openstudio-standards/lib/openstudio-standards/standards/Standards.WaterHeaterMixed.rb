@@ -96,7 +96,7 @@ class OpenStudio::Model::WaterHeaterMixed
 
       when 'NECB 2011'
         volume_l_per_s = volume_m3 * 1000
-        if capacity_btu_per_hr <= OpenStudio.convert(12, 'kW', 'Btu/hr')
+        if capacity_btu_per_hr <= OpenStudio.convert(12, 'kW', 'Btu/hr').get
           # Fixed water heater efficiency per PNNL
           water_heater_eff = 1
           # Calculate the max allowable standby loss (SL)
@@ -129,7 +129,7 @@ class OpenStudio::Model::WaterHeaterMixed
           base_ef, vol_drt = case template
                              when '90.1-2004', '90.1-2007'
                                [0.62, 0.0019]
-                             when '90.1-2010'
+                             when '90.1-2010', 'NECB 2011'
                                [0.67, 0.0019]
                              when '90.1-2013'
                                [0.67, 0.0005]
@@ -152,12 +152,11 @@ class OpenStudio::Model::WaterHeaterMixed
           et = 0.8
           # Calculate the max allowable standby loss (SL)
           cap_adj, vol_drt = case template
-                   when '90.1-2004', '90.1-2007', '90.1-2010'
+                   when '90.1-2004', '90.1-2007', '90.1-2010', 'NECB 2011'
                      [800, 110]
                    when '90.1-2013'
                      [799, 16.6]
                    end
-
           sl_btu_per_hr = (capacity_btu_per_hr / cap_adj + vol_drt * Math.sqrt(volume_gal))
           # Calculate the skin loss coefficient (UA)
           ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
@@ -185,6 +184,12 @@ class OpenStudio::Model::WaterHeaterMixed
     setOffCycleParasiticFuelType(fuel_type)
     # self.setOffCycleParasiticFuelConsumptionRate(??)
     setOffCycleParasiticHeatFractiontoTank(0.8)
+
+    # set part-load performance curve
+    if template == 'NECB 2011' && fuel_type == 'NaturalGas'
+      plf_vs_plr_curve = model.add_curve('SWH-EFFFPLR-NECB2011')
+      setPartLoadFactorCurve(plf_vs_plr_curve)
+    end
 
     # Append the name with standards information
     setName("#{name} #{water_heater_eff.round(3)} Therm Eff")
