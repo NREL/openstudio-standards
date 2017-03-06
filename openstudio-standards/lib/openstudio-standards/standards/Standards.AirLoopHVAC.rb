@@ -344,7 +344,8 @@ class OpenStudio::Model::AirLoopHVAC
     floor_area_served_m2 = floor_area_served
 
     if floor_area_served_m2 == 0
-      OpenStudio.logFree(OpenStudio::Error,'openstudio.standards.AirLoopHVAC', "AirLoopHVAC #{self.name.to_s} serves zero floor area. Check that it has thermal zones attached to it, and that they have non-zero floor area'.")
+      OpenStudio.logFree(OpenStudio::Warn,'openstudio.standards.AirLoopHVAC', "AirLoopHVAC #{self.name.to_s} serves zero floor area. Check that it has thermal zones attached to it, and that they have non-zero floor area'.")
+      return allowable_fan_bhp
     end
 
     floor_area_served_ft2 = OpenStudio.convert(floor_area_served_m2, 'm^2', 'ft^2').get
