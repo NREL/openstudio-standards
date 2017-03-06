@@ -123,6 +123,12 @@ Rake::TestTask.new('test:gem_group_7') do |task|
   'openstudio-standards/test/90_1_general/test_coil_dx.rb',
   'openstudio-standards/test/90_1_general/test_get_building_climate_zone_and_building_type.rb',
   'openstudio-standards/test/doe_prototype/test_high_rise_apartment.rb', # 54 min
+  'openstudio-standards/test/doe_prototype/test_add_elevators.rb',
+  'openstudio-standards/test/doe_prototype/test_add_exhaust.rb',
+  'openstudio-standards/test/doe_prototype/test_add_exterior_lights.rb',
+  'openstudio-standards/test/doe_prototype/test_add_swh.rb',
+  'openstudio-standards/test/doe_prototype/test_effective_num_stories.rb',
+  'openstudio-standards/test/doe_prototype/test_space_type_hash.rb'
   ]
 end
 
