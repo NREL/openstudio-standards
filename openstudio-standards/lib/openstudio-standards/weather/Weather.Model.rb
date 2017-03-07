@@ -42,7 +42,11 @@ class OpenStudio::Model::Model
     }
 
     # Get the weather file name from the hash
+    if epw_file.nil? or epw_file.to_s.strip == ""
     weather_file_name = climate_zone_weather_file_map[climate_zone]
+    else
+      weather_file_name = epw_file.to_s
+    end
     if weather_file_name.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}.")
       return false
@@ -456,7 +460,7 @@ module BTAP
       # This method returns the Thermal Zone based on cdd10 and hdd18
       # @author padmassun.rajakareyar@canada.ca
       # @return [String] thermal_zone
-      def a169_2006_climate_zone
+      def a169_2006_climate_zone()
         cdd10 = self.cdd10.to_f
         hdd18 = self.hdd18.to_f
         
@@ -492,10 +496,10 @@ module BTAP
           return 'ASHRAE 169-2006-6A' #and 'ASHRAE 169-2006-6B'
           
         when (5000 < hdd18 and hdd18 <= 7000) #Very Cold (7)
-          return 'ASHRAE 169-2006-7'
+          return 'ASHRAE 169-2006-7A'
           
         when (7000 < hdd18) #Subarctic/Arctic (8)
-          return 'ASHRAE 169-2006-8'
+          return 'ASHRAE 169-2006-8A'
           
         else
           #raise ("invalid cdd10 of #{cdd10} or hdd18 of #{hdd18}")

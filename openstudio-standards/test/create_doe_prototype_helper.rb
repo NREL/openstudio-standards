@@ -50,17 +50,16 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       compare_results = true,
       debug = false)
 
-    
     building_types.each do |building_type|
       templates.each do |template|
         climate_zones.each do |climate_zone|
           #need logic to go through weather files only for Canada's NECB 2011. It will ignore the ASHRAE climate zone. 
-          if template == 'NECB 2011'
+          if climate_zone == 'NECB HDD Method'
             epw_files.each do |epw_file|
               create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
             end 
           else
-            #otherwise it will go as normal with the american method. 
+            #otherwise it will go as normal with the american method and wipe the epw_file variable. 
             epw_file = ""
             create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
           end

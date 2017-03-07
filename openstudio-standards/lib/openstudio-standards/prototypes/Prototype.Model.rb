@@ -25,6 +25,7 @@ class OpenStudio::Model::Model
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
 
   def create_prototype_building(building_type, template, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+    
     osm_file_increment = 0 
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == 'HighriseApartment'
@@ -154,7 +155,13 @@ class OpenStudio::Model::Model
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setTolerances.osm")  if debug_incremental_changes 
     
     else
-
+      #optionally  determine the climate zone from the epw and stat files. 
+      if climate_zone == 'NECB HDD Method'
+        climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone()
+      else
+        #this is required to be blank otherwise it may cause side effects. 
+        epw_file = ""
+      end
       load_building_type_methods(building_type, template, climate_zone)
       load_geometry(building_type, template, climate_zone)
       getBuilding.setName("#{template}-#{building_type}-#{climate_zone} created: #{Time.new}")
