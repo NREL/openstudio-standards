@@ -42,7 +42,11 @@ class OpenStudio::Model::Model
     }
 
     # Get the weather file name from the hash
+    if epw_file.nil? or epw_file.to_s.strip == ""
     weather_file_name = climate_zone_weather_file_map[climate_zone]
+    else
+      weather_file_name = epw_file.to_s
+    end
     if weather_file_name.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}.")
       return false
@@ -313,35 +317,35 @@ module BTAP
 
     class WeatherFile
       attr_accessor :location_name,
-                    :energy_plus_location_name,
-                    :latitude,
-                    :longitude,
-                    :elevation,
-                    :city,
-                    :state_province_region,
-                    :country,
-                    :hdd18,
-                    :cdd18,
-                    :hdd10,
-                    :cdd10,
-                    :heating_design_info,
-                    :cooling_design_info,
-                    :extremes_design_info,
-                    :monthly_dry_bulb,
-                    :delta_dry_bulb,
-                    :climate_zone,
-                    :standard,
-                    :summer_wet_months,
-                    :winter_dry_months,
-                    :autumn_months,
-                    :spring_months,
-                    :typical_summer_wet_week,
-                    :typical_winter_dry_week,
-                    :typical_autumn_week,
-                    :typical_spring_week,
-                    :epw_filepath,
-                    :ddy_filepath,
-                    :stat_filepath
+        :energy_plus_location_name,
+        :latitude,
+        :longitude,
+        :elevation,
+        :city,
+        :state_province_region,
+        :country,
+        :hdd18,
+        :cdd18,
+        :hdd10,
+        :cdd10,
+        :heating_design_info,
+        :cooling_design_info,
+        :extremes_design_info,
+        :monthly_dry_bulb,
+        :delta_dry_bulb,
+        :climate_zone,
+        :standard,
+        :summer_wet_months,
+        :winter_dry_months,
+        :autumn_months,
+        :spring_months,
+        :typical_summer_wet_week,
+        :typical_winter_dry_week,
+        :typical_autumn_week,
+        :typical_spring_week,
+        :epw_filepath,
+        :ddy_filepath,
+        :stat_filepath
 
       YEAR = 0
       MONTH = 1
@@ -452,7 +456,57 @@ module BTAP
         @typical_spring_week = @stat_file.typical_spring_week
         return self
       end
-
+      
+      # This method returns the Thermal Zone based on cdd10 and hdd18
+      # @author padmassun.rajakareyar@canada.ca
+      # @return [String] thermal_zone
+      def a169_2006_climate_zone()
+        cdd10 = self.cdd10.to_f
+        hdd18 = self.hdd18.to_f
+        
+        case
+        when (6000 < cdd10) #Extremely Hot  Humid (0A), Dry (0B)
+          return 'ASHRAE 169-2006-0A'
+          
+        when (5000 < cdd10 and cdd10 <= 6000) #Very Hot  Humid (1A), Dry (1B)
+          return 'ASHRAE 169-2006-1A'
+          
+        when (3500 < cdd10 and cdd10 <= 5000) #Hot  Humid (2A), Dry (2B)
+          return 'ASHRAE 169-2006-2A'
+          
+        when ((2500 < cdd10 and cdd10 < 3500) and (hdd18 <= 2000)) #Warm  Humid (3A), Dry (3B)
+          return 'ASHRAE 169-2006-3A' #and 'ASHRAE 169-2006-3B'
+          
+        when ((cdd10 <= 2500) and (hdd18 <= 2000)) #Warm  Marine (3C)
+          return 'ASHRAE 169-2006-3C'
+          
+        when ((1500 < cdd10 and cdd10 < 3500) and (2000 < hdd18 and hdd18 <= 3000)) #Mixed  Humid (4A), Dry (4B)
+          return 'ASHRAE 169-2006-4A' #and 'ASHRAE 169-2006-4B'
+          
+        when ((1500 >= cdd10) and (2000 < hdd18 and hdd18 <= 3000)) #Mixed  Marine
+          return 'ASHRAE 169-2006-4C'
+          
+        when ((1000 < cdd10 and cdd10 <= 3500) and (3000 < hdd18 and hdd18 <= 4000)) #Cool Humid (5A), Dry (5B)
+          return 'ASHRAE 169-2006-5A' #and 'ASHRAE 169-2006-5B'
+          
+        when ((1000 >= cdd10) and (3000 < hdd18 and hdd18 <= 4000)) #Cool  Marine (5C)
+          return 'ASHRAE 169-2006-5C'
+          
+        when (4000 < hdd18 and hdd18 <= 5000) #Cold  Humid (6A), Dry (6B)
+          return 'ASHRAE 169-2006-6A' #and 'ASHRAE 169-2006-6B'
+          
+        when (5000 < hdd18 and hdd18 <= 7000) #Very Cold (7)
+          return 'ASHRAE 169-2006-7A'
+          
+        when (7000 < hdd18) #Subarctic/Arctic (8)
+          return 'ASHRAE 169-2006-8A'
+          
+        else
+          #raise ("invalid cdd10 of #{cdd10} or hdd18 of #{hdd18}")
+          return '[INVALID]'
+        end
+      end
+      
       # This method will set the weather file and returns a log string.
       # @author phylroy.lopez@nrcan.gc.ca
       # @param model [OpenStudio::model::Model] A model object

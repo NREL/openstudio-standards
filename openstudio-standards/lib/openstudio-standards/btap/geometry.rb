@@ -2275,6 +2275,35 @@ module BTAP
         return story
       end
       
+      def self.getStoryAboveGround(model)
+        count = 0
+        model.getBuildingStorys.each do |story|
+          z = story.nominalZCoordinate
+          unless z.empty?
+            if z.to_f >= 0
+              puts story.name.get
+              count += 1
+            end
+          end
+        end
+        return count
+      end
+      
+      
+      def self.getStoryBelowGround(model)
+        count = 0
+        model.getBuildingStorys.each do |story|
+          z = story.nominalZCoordinate
+          unless z.empty?
+            if z.to_f < 0
+              puts story.name.get
+              count += 1
+            end
+          end
+        end
+        return count
+      end
+      
     end
 
 

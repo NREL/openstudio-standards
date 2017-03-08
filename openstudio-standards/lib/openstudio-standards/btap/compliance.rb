@@ -17,7 +17,7 @@
 # *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 # **********************************************************************/
 
-
+require 'json'
 require "#{File.dirname(__FILE__)}/btap"
 
 
@@ -284,9 +284,20 @@ module BTAP
       
 
 
-
-
-
+       # This method will look up the json file in the data geometry folder to determine the actual number of floors.. This is hard to do programattically due to the nature of the doe geometries and how they use zone multipliers.
+      def self.get_number_of_above_ground_floors(model, building_type, template = "NECB 2011", runner)
+        if template.nil? or building_type.nil?
+          BTAP::runner_register("Warning: ttemplate and/or building_type is undefined..using actual number of building stories for NECB system selection.",runner)
+          return model.getBuildingStorys.size
+        end
+        geometry_data = JSON.parse(File.read("#{File.dirname(__FILE__)}/../../../data/geometry/geometry.json"))
+        if geometry_data[template].nil? or geometry_data[template][building_type].nil? or geometry_data[template][building_type]["above_ground_floors"].nil?
+          BTAP::runner_register("Error: Number of floors for #{building_type} of template #{template} not found in #{File.dirname(__FILE__)}/../../../data/geometry/geometry.json. If you are adding an archetype please edit this file with the correct information. Now using number of acutual stories.",runner)
+          return false
+        else
+          return geometry_data[template][building_type]["above_ground_floors"].to_i
+        end
+      end
 
 
 
@@ -604,7 +615,7 @@ module BTAP
  
       
       
-      def self.necb_spacetype_system_selection( model, heatingDesignLoad  = nil,coolingDesignLoad = nil, runner = nil  )
+      def self.necb_spacetype_system_selection( model, heatingDesignLoad  = nil,coolingDesignLoad = nil, runner = nil , building_type = nil  )
         spacezoning_data = Struct.new( 
           :space,                   # the space object 
           :space_name,              # the space name
@@ -626,10 +637,9 @@ module BTAP
    
 
 
-        
-        #find the number of stories in the model. 
-        number_of_stories = model.getBuildingStorys.size
-        
+  
+        #find the number of stories in the model this include multipliers.  
+        number_of_stories = self.get_number_of_above_ground_floors(model, building_type, "NECB 2011", runner)
         #set up system array containers. These will contain the spaces associated with the system types. 
         space_zoning_data_array = []
         
@@ -849,11 +859,12 @@ module BTAP
           return false
         end
         
-        # Reassign / set floors if required. 
-        BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
+        # Ensure that floors have been assigned by user. 
+        raise("No building stories have been defined.. User must define building stories and spaces in model.") unless model.getBuildingStorys.size > 0 
+        #BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
 
         #this method will determine the spaces that should be set to each system
-        schedule_type_array , space_zoning_data_array = self.necb_spacetype_system_selection(model)
+        schedule_type_array , space_zoning_data_array = self.necb_spacetype_system_selection(model, nil, nil, runner, building_type)
         
         #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
         space_zoning_data_array.each do |space_zone_data|

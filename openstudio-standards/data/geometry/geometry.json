@@ -1,0 +1,230 @@
+{
+  "NECB 2011": {
+    "FullServiceRestaurant": {
+      "above_ground_floors": 2,
+      "below_ground_floors": 0
+    },
+    "LargeHotel": {
+      "above_ground_floors": 6,
+      "below_ground_floors": 1
+    },
+    "LargeOffice": {
+      "above_ground_floors": 12,
+      "below_ground_floors": 1
+    },
+    "MediumOffice": {
+      "above_ground_floors": 3,
+      "below_ground_floors": 0
+    },
+    "MidriseApartment": {
+      "above_ground_floors": 4,
+      "below_ground_floors": 0
+    },
+    "Outpatient": {
+      "above_ground_floors": 3,
+      "below_ground_floors": 0
+    },
+    "PrimarySchool": {
+      "above_ground_floors": 1,
+      "below_ground_floors": 0
+    },
+    "QuickServiceRestaurant": {
+      "above_ground_floors": 2,
+      "below_ground_floors": 0
+    },
+    "RetailStandalone": {
+      "above_ground_floors": 1,
+      "below_ground_floors": 0
+    },
+    "RetailStripmall": {
+      "above_ground_floors": 1,
+      "below_ground_floors": 0
+    },
+    "SecondarySchool": {
+      "above_ground_floors": 2,
+      "below_ground_floors": 0
+    },
+    "SmallOffice": {
+      "above_ground_floors": 2,
+      "below_ground_floors": 0
+    },
+    "Warehouse": {
+      "above_ground_floors": 1,
+      "below_ground_floors": 0
+    },
+    "SmallHotel": {
+      "above_ground_floors": 4,
+      "below_ground_floors": 0,
+      "_comment": "Spacetype Map below maps the spaces in the osm geometry file to the NECB spacetypes",
+      "space_type_map": {
+        "Corr. >= 2.4m wide-sch-F": [
+          "CorridorFlr1",
+          "CorridorFlr2",
+          "CorridorFlr3",
+          "CorridorFlr4"
+        ],
+        "Lobby-elevator": [
+          "ElevatorCoreFlr1",
+          "ElevatorCoreFlr2",
+          "ElevatorCoreFlr3",
+          "ElevatorCoreFlr4"
+        ],
+        "Lounge/recreation": [
+          "EmployeeLoungeFlr1"
+        ],
+        "Gym-fitness": [
+          "ExerciseCenterFlr1"
+        ],
+        "Hotel/Motel-lobby": [
+          "FrontLoungeFlr1"
+        ],
+        "Office-enclosed": [
+          "FrontOfficeFlr1"
+        ],
+        "Stairway-sch-F": [
+          "FrontStairsFlr1",
+          "FrontStairsFlr2",
+          "FrontStairsFlr3",
+          "FrontStairsFlr4",
+          "RearStairsFlr1",
+          "RearStairsFlr2",
+          "RearStairsFlr3",
+          "RearStairsFlr4"
+        ],
+        "Storagearea": [
+          "FrontStorageFlr1",
+          "FrontStorageFlr2",
+          "FrontStorageFlr3",
+          "FrontStorageFlr4",
+          "LaundryRoomFlr1",
+          "RearStorageFlr1",
+          "RearStorageFlr2",
+          "RearStorageFlr3",
+          "RearStorageFlr4"
+        ],
+        "Hwaylodging-rooms": [
+          "GuestRoom101",
+          "GuestRoom102",
+          "GuestRoom103",
+          "GuestRoom104",
+          "GuestRoom105",
+          "GuestRoom201",
+          "GuestRoom202_205",
+          "GuestRoom206_208",
+          "GuestRoom209_212",
+          "GuestRoom213",
+          "GuestRoom214",
+          "GuestRoom215_218",
+          "GuestRoom219",
+          "GuestRoom220_223",
+          "GuestRoom224",
+          "GuestRoom301",
+          "GuestRoom302_305",
+          "GuestRoom306_308",
+          "GuestRoom309_312",
+          "GuestRoom313",
+          "GuestRoom314",
+          "GuestRoom315_318",
+          "GuestRoom319",
+          "GuestRoom320_323",
+          "GuestRoom324",
+          "GuestRoom401",
+          "GuestRoom402_405",
+          "GuestRoom406_408",
+          "GuestRoom409_412",
+          "GuestRoom413",
+          "GuestRoom414",
+          "GuestRoom415_418",
+          "GuestRoom419",
+          "GuestRoom420_423",
+          "GuestRoom424"
+        ],
+        "Electrical/Mechanical-sch-F": [
+          "MechanicalRoomFlr1",
+          "MeetingRoomFlr1"
+        ],
+        "Washroom-sch-F": [
+          "RestroomFlr1"
+        ]
+      },
+      "_comment": "This maps the spaces to building stories. This does not account for multipliers. If this is not present standards will simply use the buildng stories assigned in teh ",
+      "building_story_map": {
+        "BuildingStory1": [
+          "GuestRoom101",
+          "GuestRoom102",
+          "GuestRoom103",
+          "GuestRoom104",
+          "GuestRoom105",
+          "CorridorFlr1",
+          "ElevatorCoreFlr1",
+          "EmployeeLoungeFlr1",
+          "ExerciseCenterFlr1",
+          "FrontLoungeFlr1",
+          "FrontOfficeFlr1",
+          "FrontStairsFlr1",
+          "RearStairsFlr1",
+          "FrontStorageFlr1",
+          "RearStorageFlr1",
+          "LaundryRoomFlr1",
+          "MechanicalRoomFlr1",
+          "MeetingRoomFlr1",
+          "RestroomFlr1"
+        ],
+        "BuildingStory2": [
+          "GuestRoom201",
+          "GuestRoom202_205",
+          "GuestRoom206_208",
+          "GuestRoom209_212",
+          "GuestRoom213",
+          "GuestRoom214",
+          "GuestRoom215_218",
+          "GuestRoom219",
+          "GuestRoom220_223",
+          "GuestRoom224",
+          "CorridorFlr2",
+          "FrontStairsFlr2",
+          "RearStairsFlr2",
+          "FrontStorageFlr2",
+          "RearStorageFlr2",
+          "ElevatorCoreFlr2"
+        ],
+        "BuildingStory3": [
+          "GuestRoom301",
+          "GuestRoom302_305",
+          "GuestRoom306_308",
+          "GuestRoom309_312",
+          "GuestRoom313",
+          "GuestRoom314",
+          "GuestRoom315_318",
+          "GuestRoom319",
+          "GuestRoom320_323",
+          "GuestRoom324",
+          "CorridorFlr3",
+          "FrontStairsFlr3",
+          "RearStairsFlr3",
+          "FrontStorageFlr3",
+          "RearStorageFlr3",
+          "ElevatorCoreFlr3"
+        ],
+        "BuildingStory4": [
+          "GuestRoom401",
+          "GuestRoom402_405",
+          "GuestRoom406_408",
+          "GuestRoom409_412",
+          "GuestRoom413",
+          "GuestRoom414",
+          "GuestRoom415_418",
+          "GuestRoom419",
+          "GuestRoom420_423",
+          "GuestRoom424",
+          "CorridorFlr4",
+          "FrontStairsFlr4",
+          "RearStairsFlr4",
+          "FrontStorageFlr4",
+          "RearStorageFlr4",
+          "ElevatorCoreFlr4"
+        ]
+      }
+    }
+  }
+}
