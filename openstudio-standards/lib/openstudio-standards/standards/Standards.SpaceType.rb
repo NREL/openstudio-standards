@@ -210,7 +210,22 @@ class OpenStudio::Model::SpaceType
       instances.each do |inst|
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
-          definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
+          occSensLPDfactor = 1.0
+          if template == "NECB 2011"
+            # NECB 2011 space types that require a reduction in the LPD to account for 
+            # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))
+            reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
+              "Conf./meet./multi-purpose", "Washroom-sch-A", "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", 
+              "Washroom-sch-E", "Washroom-sch-F", "Washroom-sch-G", "Washroom-sch-H", "Washroom-sch-I", 
+              "Dress./fitt. - performance arts", "Locker room", "Retail - dressing/fitting"]
+            if reduceLPDSpaces.include?(standardsSpaceType.get)
+              # Note that "Storage area" and "Office - enclosed" LPD should only be reduced if their space areas are 
+              # less than 100 m2 and 25 m2 respectively. This is checked in a space loop after this function in 
+              # the calling routine.
+              occSensLPDfactor = 0.9
+            end
+          end
+          definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occSensLPDfactor, 'W/ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set LPD to #{lighting_per_area} W/ft^2.")
         end
         unless lighting_per_person.zero?
