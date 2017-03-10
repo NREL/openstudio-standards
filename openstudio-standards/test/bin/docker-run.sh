@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt-get install -y libglu1-mesa libjpeg8 libfreetype6 libdbus-glib-1-2 libfontconfig1 libsm6 libxi6
+sudo apt-get install -y libglu1-mesa libjpeg8 libfreetype6 libdbus-glib-1-2 libfontconfig1 libsm6 libxi6
 
 export CI=true
 export CIRCLECI=true
