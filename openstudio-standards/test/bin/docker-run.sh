@@ -1,6 +1,8 @@
 #!/bin/bash
 
-sudo apt-get install -y libglu1-mesa libjpeg8 libfreetype6 libdbus-glib-1-2 libfontconfig1 libsm6 libxi6
+# Temporary fix; should be done by OpenStudio 2.0.6 installer
+apt-get update
+apt-get install -y libglu1-mesa libjpeg8 libfreetype6 libdbus-glib-1-2 libfontconfig1 libsm6 libxi6
 
 export CI=true
 export CIRCLECI=true
