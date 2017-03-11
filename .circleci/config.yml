@@ -16,5 +16,18 @@ jobs:
           name: Test OpenStudio availability
           command: openstudio -h
       - run:
+          name: Change directories
+          command: cd openstudio-standards
+      - run:
+          name: List directory contents
+          command: ls -a
+      - run:
+          name: Change directories again
+          command: cd openstudio-standards
+      - run:
+          name: List directory contents again
+          command: ls -a      
+      - run:
           name: Install Dependencies
-          command: cd openstudio-standards && bundle install
+          command: bundle install
+
