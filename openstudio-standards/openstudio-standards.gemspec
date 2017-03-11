@@ -32,4 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'activesupport', '4.2.5' # pairs with google-api-client, > 5.0.0 does not work
   spec.add_development_dependency 'google-api-client', '0.8.6' # to download Openstudio_Standards Google Spreadsheet
   spec.add_development_dependency 'codecov' # to perform code coverage checking
+  spec.add_development_dependency 'coveralls' # to perform code coverage checking
 end
