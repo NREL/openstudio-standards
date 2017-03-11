@@ -1,33 +1,20 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/ci
+    working_directory: ~/openstudio-standards
     docker:
-      - image: nrel/openstudio
+      - image: nrel/openstudio:latest
     steps:
       - checkout
+      - run: ls -a
+      - run: cd openstudio-standards && ~/.rbenv/shims/bundle install
       - run:
-          name: Test Hello World Command
-          command: echo "hello world"
-      - run:
-          name: Install Missing OpenStudio dependencies
+          name: Install Missing OpenStudio Dependencies
           command: apt-get update && apt-get install -y libglu1-mesa libjpeg8 libfreetype6 libdbus-glib-1-2 libfontconfig1 libsm6 libxi6
       - run:
-          name: Test OpenStudio availability
+          name: Test OpenStudio Availability
           command: openstudio -h
       - run:
-          name: Change directories
-          command: cd openstudio-standards
-      - run:
-          name: List directory contents
-          command: ls -a
-      - run:
-          name: Change directories again
-          command: cd openstudio-standards
-      - run:
-          name: List directory contents again
-          command: ls -a      
-      - run:
-          name: Install Dependencies
-          command: bundle install
+          name: Run Tests Directly Using Rake
+          command: cd openstudio-standards && ~/.rbenv/shims/bundle exec rake test:gem_group_0
 
