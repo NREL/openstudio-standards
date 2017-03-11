@@ -32,3 +32,9 @@ jobs:
             ~/.rbenv/shims/bundle exec rake test:circleci
       - store_test_results:
           path: test/reports/
+      - store_artifacts:
+          path: openstudio-standards/test/doe_prototype/output/prototype_buildings_results.csv
+          destination: doe_prototype
+      - store_artifacts:
+          path: openstudio-standards/test/doe_prototype/output/prototype_buildings_run.log
+          destination: doe_prototype
