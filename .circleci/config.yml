@@ -6,16 +6,20 @@ jobs:
       - image: nrel/openstudio:latest
     steps:
       - checkout
-      - run: ls -a
-      - run: cd openstudio-standards && ~/.rbenv/shims/bundle install
       - run:
-          name: Install Missing OpenStudio Dependencies
+          name: Show Working Directory Contents
+          command: ls -a
+      - run:
+          name: Install OpenStudio Standards Dependencies
+          command: cd openstudio-standards && ~/.rbenv/shims/bundle install
+      - run:
+          name: Install Missing OpenStudio Dependencies # TODO Remove after 2.0.6
           command: apt-get update && apt-get install -y libglu1-mesa libjpeg8 libfreetype6 libdbus-glib-1-2 libfontconfig1 libsm6 libxi6
       - run:
-          name: Test OpenStudio Availability
-          command: openstudio -h
+          name: Show OpenStudio Version
+          command: openstudio openstudio_version
       - run:
-          name: Run Tests Directly Using Rake
-          command: cd openstudio-standards && ~/.rbenv/shims/bundle exec rake test:gem_group_0
+          name: Run Tests
+          command: cd openstudio-standards && ~/.rbenv/shims/bundle exec rake test:circleci
       - store_test_results:
           path: test/reports/
