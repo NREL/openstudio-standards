@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/ci
+    docker:
+      - image: nrel/openstudio
+    steps:
+      - checkout
+      - run:
+          name: Test Hello World Command
+          command: echo "hello world"
+      - run:
+          name: Install Missing OpenStudio dependencies
+          command: apt-get update && apt-get install -y libglu1-mesa libjpeg8 libfreetype6 libdbus-glib-1-2 libfontconfig1 libsm6 libxi6
+      - run:
+          name: Test OpenStudio availability
+          command: openstudio -h
+      - run:
+          name: Install Dependencies
+          command: cd openstudio-standards && bundle install
