@@ -1,14 +1,10 @@
 require 'simplecov'
-require 'coveralls'
 require 'codecov'
 
 # Get the code coverage in html for local viewing
 # and in JSON for CI codecov
 if ENV['CI'] == 'true'
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-    Coveralls::SimpleCov::Formatter,
-    SimpleCov::Formatter::Codecov
-  ])
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
 else
   SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
 end
