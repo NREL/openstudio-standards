@@ -7,6 +7,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Confirm Environment Variables
+          command: printenv
+      - run:
           name: Show Working Directory Contents
           command: ls -a
       - run:
