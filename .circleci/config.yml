@@ -17,4 +17,5 @@ jobs:
       - run:
           name: Run Tests Directly Using Rake
           command: cd openstudio-standards && ~/.rbenv/shims/bundle exec rake test:gem_group_0
-
+      - store_test_results:
+          path: test/reports/
