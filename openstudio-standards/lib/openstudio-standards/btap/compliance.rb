@@ -111,10 +111,7 @@ module BTAP
         end
         hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
         
-        old_name = ""
-        unless default_surface_construction_set.getAttribute("name").empty? 
-          old_name =  default_surface_construction_set.getAttribute("name").get.valueAsString
-        end
+        old_name = default_surface_construction_set.name.get.to_s
         
    
         climate_zone_index = get_climate_zone_index(hdd)

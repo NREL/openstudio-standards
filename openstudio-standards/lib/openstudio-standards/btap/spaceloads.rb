@@ -187,7 +187,7 @@ module BTAP
             infiltration_load.setDesignFlowRate( setDesignFlowRate ) unless setDesignFlowRate.nil?
             infiltration_load.setFlowperSpaceFloorArea(setFlowperSpaceFloorArea ) unless setFlowperSpaceFloorArea.nil?
             infiltration_load.setFlowperExteriorSurfaceArea(setFlowperExteriorSurfaceArea ) unless setFlowperExteriorSurfaceArea.nil?
-            table << infiltration_load.getAttribute("name").get.valueAsString << ","
+            table << infiltration_load.name.get.to_s << ","
             table << infiltration_load.designFlowRateCalculationMethod << ","
             infiltration_load.airChangesperHour.empty? ? ach = "NA" : ach = infiltration_load.airChangesperHour.get
             infiltration_load.designFlowRate.empty? ? dfr = "NA" :  dfr = infiltration_load.designFlowRate.get
