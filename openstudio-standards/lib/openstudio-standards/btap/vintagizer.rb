@@ -96,7 +96,7 @@ class Vintagizer
     #Remove all existing constructions from model.
     BTAP::Resources::Envelope::remove_all_envelope_information( constructions_model )
     #Save to model.
-    new_construction_set.setAttribute("name",construction_id)
+    new_construction_set.setName(construction_id)
     constructions_model.building.get.setDefaultConstructionSet( new_construction_set.clone( constructions_model ).to_DefaultConstructionSet.get )
 
     #Give adiabatic surfaces a construction. Does not matter what. This is a bug in Openstudio that leave these surfaces unassigned by the default construction set.

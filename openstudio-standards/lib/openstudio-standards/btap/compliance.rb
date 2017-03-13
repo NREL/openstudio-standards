@@ -931,7 +931,7 @@ module BTAP
                   #create new zone and add the spaces to it. 
                   name = "Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement}"
                   thermal_zone = BTAP::Geometry::Zones::create_thermal_zone(model, space_array)
-                  thermal_zone.setAttribute("name",name)
+                  thermal_zone.setName(name)
                   #Set Thermostat bases on 
                   
                   # Add a thermostat based on the first space
