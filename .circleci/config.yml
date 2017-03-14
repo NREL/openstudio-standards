@@ -37,6 +37,3 @@ jobs:
             ~/.rbenv/shims/bundle exec rake test:circleci2
       - store_test_results:
           path: test/reports/
-      - store_artifacts:
-          path: test/reports/
-          destination: reports
