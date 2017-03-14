@@ -2,7 +2,3 @@ source 'http://rubygems.org'
 
 # Specify your gem's dependencies in openstudio-standards.gemspec
 gemspec
-
-group :test do  
-  gem 'minitest-ci', git: 'https://github.com/circleci/minitest-ci.git' # For CircleCI Automatic test metadata collection
-end
