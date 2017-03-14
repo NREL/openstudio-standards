@@ -26,10 +26,15 @@ jobs:
           name: Show OpenStudio Version
           command: openstudio openstudio_version
       - run:
-          name: Run Tests
+          name: Run Test Group 1 of 2
           command: |
             cd openstudio-standards
-            ~/.rbenv/shims/bundle exec rake test:circleci
+            ~/.rbenv/shims/bundle exec rake test:circleci1
+      - run:
+          name: Run Test Group 2 of 2
+          command: |
+            cd openstudio-standards
+            ~/.rbenv/shims/bundle exec rake test:circleci2
       - store_test_results:
           path: test/reports/
       - store_artifacts:
