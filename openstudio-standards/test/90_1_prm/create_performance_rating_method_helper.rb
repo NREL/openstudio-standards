@@ -179,7 +179,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   
   # Run a sizing run for the baseline model
   # so that the sql matches the actual equipment names
-  if model.runSizingRun("#{osm_directory}/SizingRunBaseline") == false
+  if model.runSizingRun("#{osm_directory}/SRB") == false
     return false
   end
   
@@ -208,8 +208,8 @@ def load_baseline_model(model_name, standard, climate_zone, building_type, custo
   end
     
   # Attach the sql file from the last sizing run
-  sql_path_1x = OpenStudio::Path.new("#{osm_directory}/SizingRunBaseline/EnergyPlus/eplusout.sql")
-  sql_path_2x = OpenStudio::Path.new("#{osm_directory}/SizingRunBaseline/run/eplusout.sql")
+  sql_path_1x = OpenStudio::Path.new("#{osm_directory}/SRB/EnergyPlus/eplusout.sql")
+  sql_path_2x = OpenStudio::Path.new("#{osm_directory}/SRB/run/eplusout.sql")
   if OpenStudio::exists(sql_path_1x)
     sql = OpenStudio::SqlFile.new(sql_path_1x)
     # Check to make sure the sql file is readable,
