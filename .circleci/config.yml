@@ -38,8 +38,11 @@ jobs:
       - store_test_results:
           path: test/reports/
       - store_artifacts:
-          path: openstudio-standards/test/doe_prototype/output/prototype_buildings_results.csv
+          path: openstudio-standards/test/doe_prototype/output
           destination: doe_prototype
       - store_artifacts:
-          path: openstudio-standards/test/doe_prototype/output/prototype_buildings_run.log
-          destination: doe_prototype
+          path: openstudio-standards/test/90_1_prm/output
+          destination: 90_1_prm
+      - store_artifacts:
+          path: test/reports/
+          destination: reports
