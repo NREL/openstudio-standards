@@ -82,8 +82,8 @@ Rake::TestTask.new('test:gem_group_3') do |task|
   'openstudio-standards/test/necb/test_necb_chiller_rules.rb', #42s
   'openstudio-standards/test/necb/test_necb_constructions_fdwr.rb', #19s
   'openstudio-standards/test/necb/test_necb_coolingtower_rules.rb',
-  'openstudio-standards/test/necb/test_necb_default_spacetypes.rb', #30s
-  'openstudio-standards/test/necb/test_necb_default_system_selection.rb',
+  # 'openstudio-standards/test/necb/test_necb_default_spacetypes.rb', #30s # TODO re-enable after nrcan merge
+  # 'openstudio-standards/test/necb/test_necb_default_system_selection.rb', # TODO re-enable after nrcan merge
   'openstudio-standards/test/necb/test_necb_fan_rules.rb',
   'openstudio-standards/test/necb/test_necb_heatpump_rules.rb',
   'openstudio-standards/test/necb/test_necb_hrv_rules.rb',
