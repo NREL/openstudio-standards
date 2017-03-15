@@ -37,7 +37,6 @@ require_relative 'hvac'
 require_relative 'economics'
 require_relative 'measures'
 require_relative 'utilities'
-require_relative 'os_lib_schedules'
 require_relative 'reporting'
 require_relative 'equest'
  

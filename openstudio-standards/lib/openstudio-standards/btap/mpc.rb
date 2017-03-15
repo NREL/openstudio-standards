@@ -253,7 +253,7 @@ module BTAP
 
         # GBase no hvac
         gbaseModel = BTAP::FileIO::deep_copy(model)
-        gbaseModel.building.get.setAttribute("name","Gbase")
+        gbaseModel.building.get.setName("Gbase")
         BTAP::Site::set_weather_file(gbaseModel, @original_file)
         BTAP::Resources::HVAC::clear_all_hvac_from_model(gbaseModel)
         gbaseModel.getThermalZones.each  do |thermalzone| 
@@ -266,7 +266,7 @@ module BTAP
 
         # Gfloating
         gfloatModel = BTAP::FileIO::deep_copy(model)
-        gfloatModel.building.get.setAttribute("name","Gfloating")
+        gfloatModel.building.get.setName("Gfloating")
         BTAP::Site::set_weather_file(gfloatModel, @original_file)
         BTAP::Resources::HVAC::clear_all_hvac_from_model(gfloatModel)
         gfloatModel.getThermalZones.each  do |thermalzone| 
@@ -282,7 +282,7 @@ module BTAP
 
         #        # Gideal
         #        gidealModel = BTAP::FileIO::deep_copy(model)
-        #        gidealModel.building.get.setAttribute("name","Gideal")
+        #        gidealModel.building.get.setName("Gideal")
         #        BTAP::Site::set_weather_file(gidealModel, @original_file)
         #        gidealModel.getThermalZones.each do |thermalzone|
         #          thermalzone.setThermostatSetpointDualSetpoint(@mpc_21C_setpoint)
@@ -295,7 +295,7 @@ module BTAP
         #
         #        # Gadiabatic
         #        gadiabaticModel = BTAP::FileIO::deep_copy(model)
-        #        gadiabaticModel.building.get.setAttribute("name","Gadiabatic")
+        #        gadiabaticModel.building.get.setName("Gadiabatic")
         #        BTAP::Site::set_weather_file(gadiabaticModel, @original_file)
         #        gadiabaticModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_21C_setpoint)}
         #        self.set_internal_gains_to_zero(gadiabaticModel)
@@ -308,7 +308,7 @@ module BTAP
         #
         #        # Gsteadystate
         #        gsteadystateModel = BTAP::FileIO::deep_copy(model)
-        #        gsteadystateModel.building.get.setAttribute("name","Gsteadystate")
+        #        gsteadystateModel.building.get.setName("Gsteadystate")
         #        BTAP::Site::set_weather_file(gsteadystateModel, @all_off)
         #        self.set_internal_gains_to_zero(gsteadystateModel)
         #        gsteadystateModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_21C_setpoint)}
@@ -319,7 +319,7 @@ module BTAP
         #
         #        # Gig
         #        gigModel = BTAP::FileIO::deep_copy(model)
-        #        gigModel.building.get.setAttribute("name","Gig")
+        #        gigModel.building.get.setName("Gig")
         #        BTAP::Site::set_weather_file(gigModel, @all_off)
         #        gigModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
         #        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( gigModel.getSurfaces, ["Ground"] )
@@ -329,7 +329,7 @@ module BTAP
         #
         #        # Gsg
         #        gsgModel = BTAP::FileIO::deep_copy(model)
-        #        gsgModel.building.get.setAttribute("name","Gsg")
+        #        gsgModel.building.get.setName("Gsg")
         #        BTAP::Site::set_weather_file( gsgModel,@solar_radiation_only_temp_constant)
         #        self.set_internal_gains_to_zero(gsgModel)
         #        gsgModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
@@ -340,7 +340,7 @@ module BTAP
         #
         #        # Gext
         #        gextModel = BTAP::FileIO::deep_copy(model)
-        #        gextModel.building.get.setAttribute("name","Gext")
+        #        gextModel.building.get.setName("Gext")
         #        BTAP::Site::set_weather_file( gextModel,@solar_radiation_off_temp_normal )
         #        self.set_internal_gains_to_zero(gextModel)
         #        gextModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
@@ -350,7 +350,7 @@ module BTAP
         #
         #        # Gh
         #        ghModel = BTAP::FileIO::deep_copy(model)
-        #        ghModel.building.get.setAttribute("name","Gh")
+        #        ghModel.building.get.setName("Gh")
         #        BTAP::Site::set_weather_file(ghModel,@all_off )
         #        self.set_internal_gains_to_zero(ghModel)
         #        ghModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_cooling)}
@@ -360,7 +360,7 @@ module BTAP
         #
         #        # Gc
         #        gcModel = BTAP::FileIO::deep_copy(model)
-        #        gcModel.building.get.setAttribute("name","Gc")
+        #        gcModel.building.get.setName("Gc")
         #        BTAP::Site::set_weather_file(gcModel,@solar_radiation_off_temp_normal)
         #        self.set_internal_gains_to_zero(gcModel)
         #        gcModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heating)}
@@ -370,7 +370,7 @@ module BTAP
         #
         #        # Goff
         #        goffModel = BTAP::FileIO::deep_copy(model)
-        #        goffModel.building.get.setAttribute("name","Goff")
+        #        goffModel.building.get.setName("Goff")
         #        BTAP::Site::set_weather_file(goffModel,@all_off)
         #        self.set_internal_gains_to_zero(goffModel)
         #        BTAP::Resources::SpaceLoads::ScaleLoads::scale_inflitration_loads(goffModel, 0.0)
@@ -462,7 +462,7 @@ module BTAP
           #          # Gsg Solar gains
           #          gsgModel = BTAP::FileIO::deep_copy(model)
           #          thermal_zones = gsgModel.getThermalZones
-          #          gsgModel.building.get.setAttribute("name","Gsg-" + thermal_zones[zone_number].name.get)
+          #          gsgModel.building.get.setName("Gsg-" + thermal_zones[zone_number].name.get)
           #          BTAP::Site::set_weather_file(gsgModel,@solar_radiation_only_temp_constant )
           #          self.set_internal_gains_to_zero(gsgModel)
           #          thermal_zones[zone_number].setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)
@@ -475,7 +475,7 @@ module BTAP
           #          # Gig - internal gains
           #          gigModel = BTAP::FileIO::deep_copy(model)
           #          thermal_zones = gigModel.getThermalZones
-          #          gigModel.building.get.setAttribute("name","Gig-" + thermal_zones[zone_number].name.get)
+          #          gigModel.building.get.setName("Gig-" + thermal_zones[zone_number].name.get)
           #          BTAP::Site::set_weather_file(gigModel,@all_off )
           #          thermal_zones[zone_number].setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)
           #          zone_surfaces = BTAP::Geometry::Surfaces::get_surfaces_from_thermal_zones([thermal_zones[zone_number]])
@@ -487,7 +487,7 @@ module BTAP
           #          # Gext external gains
           #          gextModel = BTAP::FileIO::deep_copy(model)
           #          thermal_zones = gextModel.getThermalZones
-          #          gextModel.building.get.setAttribute("name","Gext-" + thermal_zones[zone_number].name.get)
+          #          gextModel.building.get.setName("Gext-" + thermal_zones[zone_number].name.get)
           #          BTAP::Site::set_weather_file(gextModel,@solar_radiation_off_temp_normal )
           #          self.set_internal_gains_to_zero(gextModel)
           #          thermal_zones[zone_number].setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)
@@ -499,7 +499,7 @@ module BTAP
           #          # Gh - no cooling
           #          ghModel = BTAP::FileIO::deep_copy(model)
           #          thermal_zones = ghModel.getThermalZones
-          #          ghModel.building.get.setAttribute("name","Gh-"  + thermal_zones[zone_number].name.get)
+          #          ghModel.building.get.setName("Gh-"  + thermal_zones[zone_number].name.get)
           #          BTAP::Site::set_weather_file(ghModel,@all_off )
           #          self.set_internal_gains_to_zero(ghModel)
           #          thermal_zones[zone_number].setThermostatSetpointDualSetpoint(@mpc_no_cooling)
@@ -511,7 +511,7 @@ module BTAP
           #          # Gc no heating
           #          gcModel = BTAP::FileIO::deep_copy(model)
           #          thermal_zones = gcModel.getThermalZones
-          #          gcModel.building.get.setAttribute("name","Gc-" + thermal_zones[zone_number].name.get)
+          #          gcModel.building.get.setName("Gc-" + thermal_zones[zone_number].name.get)
           #          BTAP::Site::set_weather_file(gcModel, @solar_radiation_off_temp_normal)
           #          self.set_internal_gains_to_zero(gcModel)
           #          thermal_zones[zone_number].setThermostatSetpointDualSetpoint(@mpc_no_heating)
@@ -523,7 +523,7 @@ module BTAP
           #          # Gideal
           #          gidealModel = BTAP::FileIO::deep_copy(model)
           #          thermal_zones = gidealModel.getThermalZones
-          #          gidealModel.building.get.setAttribute("name","Gideal-" + thermal_zones[zone_number].name.get)
+          #          gidealModel.building.get.setName("Gideal-" + thermal_zones[zone_number].name.get)
           #          BTAP::Site::set_weather_file( gidealModel, @original_file )
           #          thermal_zones[zone_number].setThermostatSetpointDualSetpoint(@mpc_21C_setpoint)
           #          zone_surfaces = BTAP::Geometry::Surfaces::get_surfaces_from_thermal_zones([thermal_zones[zone_number]])
@@ -534,7 +534,7 @@ module BTAP
           #          # Gfloating
           #          gfloatModel = BTAP::FileIO::deep_copy(model)
           #          thermal_zones = gfloatModel.getThermalZones
-          #          gfloatModel.building.get.setAttribute("name","Gfloating-" + thermal_zones[zone_number].name.get)
+          #          gfloatModel.building.get.setName("Gfloating-" + thermal_zones[zone_number].name.get)
           #          BTAP::Site::set_weather_file(gfloatModel, @original_file)
           #          thermal_zones[zone_number].setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)
           #          ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( gfloatModel.getSurfaces, ["Ground"] )

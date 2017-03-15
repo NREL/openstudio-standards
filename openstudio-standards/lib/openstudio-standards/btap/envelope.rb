@@ -568,7 +568,7 @@ module BTAP
               end
             end
             if construction.insulation.empty? and construction.isOpaque
-              raise ("construction #{construction.getAttribute("name").get.to_s} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
+              raise ("construction #{construction.name.get.to_s} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
             end
 
             insulating_layers << return_material

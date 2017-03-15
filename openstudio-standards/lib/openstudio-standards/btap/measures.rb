@@ -799,7 +799,7 @@ module BTAP
           model.getFanVariableVolumes.each do |fan|
             fan.setFanEfficiency( @fan_total_eff  ) unless @fan_total_eff.nil?
             fan.setMotorEfficiency( @fan_motor_eff  ) unless @fan_motor_eff.nil?
-            log  << fan.getAttribute("name").get.valueAsString << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
+            log  << fan.name.get.to_s << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
           end
         end
 
@@ -808,7 +808,7 @@ module BTAP
           model.getFanConstantVolumes.each do |fan|
             fan.setFanEfficiency(  @fan_total_eff ) unless @fan_total_eff.nil?
             fan.setMotorEfficiency( @fan_motor_eff ) unless @fan_motor_eff.nil?
-            log  << fan.getAttribute("name").get.valueAsString << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
+            log  << fan.name.get.to_s << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
           end
           
         end
@@ -818,7 +818,7 @@ module BTAP
         when "VariableVolume"
           model.getFanConstantVolumes.each do |fan_const|
             #check that this is indeed connected to an airloop.
-            log << "Found Const Vol Fan #{fan_const.getAttribute("name").get.valueAsString}"
+            log << "Found Const Vol Fan #{fan_const.name.get.to_s}"
             unless fan_const.loop.empty?
               fan_variable = OpenStudio::Model::FanVariableVolume.new(model,fan_const.availabilitySchedule)
               #pass information from old fan as much as possible.
@@ -839,13 +839,13 @@ module BTAP
               fan_variable.addToNode(air_loop.supplyOutletNode())
               #Remove FanConstantVolume
               fan_const.remove()
-              log << "Replaced by Variable Vol Fan #{fan_variable.getAttribute("name").get.valueAsString}"
+              log << "Replaced by Variable Vol Fan #{fan_variable.name.get.to_s}"
             end
           end
         when "ConstantVolume"
           model.getFanVariableVolumes.each do |fan|
             #check that this is indeed connected to an airloop.
-            log << "Found Const Vol Fan #{fan.getAttribute("name").get.valueAsString}"
+            log << "Found Const Vol Fan #{fan.name.get.to_s}"
             unless fan.loop.empty?
               new_fan = OpenStudio::Model::FanConstantVolume.new(model,fan.availabilitySchedule)
               #pass information from constant speed fan as much as possible.
@@ -860,7 +860,7 @@ module BTAP
               new_fan.addToNode(air_loop.supplyOutletNode())
               #Remove FanConstantVolume
               fan.remove()
-              log << "Replaced by Constant Vol Fan #{new_fan.getAttribute("name").get.valueAsString}"
+              log << "Replaced by Constant Vol Fan #{new_fan.name.get.to_s}"
             end
           end
         when nil
@@ -885,7 +885,7 @@ module BTAP
           model.getPumpVariableSpeeds.each do |pump|
             pump.setMotorEfficiency( @pump_motor_eff.to_f ) unless @pump_motor_eff.nil?
             pump.setPumpControlType( @pump_control_type ) unless @pump_control_type.nil?
-            log  << pump.getAttribute("name").get.valueAsString << ",#{pump.motorEfficiency}\n"
+            log  << pump.name.get.to_s << ",#{pump.motorEfficiency}\n"
           end
         end
         unless model.getPumpConstantSpeeds.empty?
@@ -893,7 +893,7 @@ module BTAP
           model.getPumpConstantSpeeds.each do |pump|
             pump.setMotorEfficiency( @pump_motor_eff.to_f  ) unless @pump_motor_eff.nil?
             pump.setPumpControlType( @pump_control_type ) unless @pump_control_type.nil?
-            log  << pump.getAttribute("name").get.valueAsString << ",#{pump.motorEfficiency}\n"
+            log  << pump.name.get.to_s << ",#{pump.motorEfficiency}\n"
           end
         end
 
@@ -901,7 +901,7 @@ module BTAP
         case @pump_speed_type
         when "VariableSpeed"
           model.getPumpConstantSpeeds.each do |pump_const|
-            log << "Found Const Vol Fan #{pump_const.getAttribute("name").get.valueAsString}"
+            log << "Found Const Vol Fan #{pump_const.name.get.to_s}"
             #check that this is indeed connected to an plant loop.
             unless pump_const.plantLoop.empty?
               pump_variable = OpenStudio::Model::PumpVariableSpeed.new(model)
@@ -921,12 +921,12 @@ module BTAP
               pump_const.remove()
               #add
               pump_variable.addToNode(hw_loop.supplyInletNode)
-              log << "Replaced by Variable Vol Pump #{pump_variable.getAttribute("name").get.valueAsString}"
+              log << "Replaced by Variable Vol Pump #{pump_variable.name.get.to_s}"
             end
           end #end loop PumpConstantSpeeds
         when "ConstantSpeed"
           model.getPumpVariableSpeeds.each do |pump|
-            log << "Found Variable Speed Pump #{pump.getAttribute("name").get.valueAsString}"
+            log << "Found Variable Speed Pump #{pump.name.get.to_s}"
             #check that this is indeed connected to an plant loop.
             unless pump.plantLoop.empty?
               new_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
@@ -947,7 +947,7 @@ module BTAP
               #add the pump to loop.
               new_pump.addToNode(hw_loop.supplyInletNode)
 
-              log << "Replaced by constant speed Pump #{new_pump.getAttribute("name").get.valueAsString}"
+              log << "Replaced by constant speed Pump #{new_pump.name.get.to_s}"
             end
           end #end loop Pump variable Speeds
         when nil
@@ -975,7 +975,7 @@ module BTAP
             cooling_coil.setRatedCOP( OpenStudio::OptionalDouble.new( @cop ) ) unless @cop.nil?
             cop = "NA"
             cop = cooling_coil.ratedCOP.get unless cooling_coil.ratedCOP.empty?
-            log  << cooling_coil.getAttribute("name").get.valueAsString << ",#{cop}\n"
+            log  << cooling_coil.name.get.to_s << ",#{cop}\n"
 
           end
         end
@@ -989,7 +989,7 @@ module BTAP
             cop_high = cooling_coil.ratedHighSpeedCOP.get unless cooling_coil.ratedHighSpeedCOP.empty?
             cop_low = "NA"
             cop_low = cooling_coil.ratedLowSpeedCOP.get unless cooling_coil.ratedLowSpeedCOP.empty?
-            log  << cooling_coil.getAttribute("name").get.valueAsString << ",#{cop_high},#{cop_low}\n"
+            log  << cooling_coil.name.get.to_s << ",#{cop_high},#{cop_low}\n"
           end
         end
         return log
@@ -1071,7 +1071,7 @@ module BTAP
           end
           item.setHeaterFuelType(@shw_heater_fuel_type) unless @shw_heater_fuel_type.nil?
           item.setHeaterThermalEfficiency(@shw_thermal_eff) unless @shw_thermal_eff.nil?
-          log  << item.getAttribute("name").get.valueAsString << ",#{item.setpointTemperatureSchedule},#{item.heaterFuelType},#{item.getHeaterThermalEfficiency.get}\n"
+          log  << item.name.get.to_s << ",#{item.setpointTemperatureSchedule},#{item.heaterFuelType},#{item.getHeaterThermalEfficiency.get}\n"
         end
         return log
       end
@@ -1174,7 +1174,7 @@ module BTAP
                 oar_stpt_manager.setSetpointatOutdoorLowTemperature(@hw_boiler_reset_highsupplytemp) unless @hw_boiler_reset_highsupplytemp.nil?
                 oar_stpt_manager.setOutdoorLowTemperature(@hw_boiler_reset_outsidehighsupplytemp) unless @hw_boiler_reset_outsidehighsupplytemp.nil?
               end
-              table  << boiler.getAttribute("name").get.valueAsString << ","
+              table  << boiler.name.get.to_s << ","
               boiler.designWaterOutletTemperature.empty? ? dowt = "NA" : dowt = boiler.designWaterOutletTemperature.get
               table << "#{dowt},#{boiler.fuelType},#{boiler.nominalThermalEfficiency}\n"
             end

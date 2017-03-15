@@ -179,7 +179,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   
   # Run a sizing run for the baseline model
   # so that the sql matches the actual equipment names
-  if model.runSizingRun("#{osm_directory}/SizingRunBaseline") == false
+  if model.runSizingRun("#{osm_directory}/SRB") == false
     return false
   end
   
@@ -208,19 +208,30 @@ def load_baseline_model(model_name, standard, climate_zone, building_type, custo
   end
     
   # Attach the sql file from the last sizing run
-  sql_path = OpenStudio::Path.new("#{osm_directory}/SizingRunBaseline/EnergyPlus/eplusout.sql")   
-  if OpenStudio::exists(sql_path)
-    sql = OpenStudio::SqlFile.new(sql_path)
+  sql_path_1x = OpenStudio::Path.new("#{osm_directory}/SRB/EnergyPlus/eplusout.sql")
+  sql_path_2x = OpenStudio::Path.new("#{osm_directory}/SRB/run/eplusout.sql")
+  if OpenStudio::exists(sql_path_1x)
+    sql = OpenStudio::SqlFile.new(sql_path_1x)
     # Check to make sure the sql file is readable,
     # which won't be true if EnergyPlus crashed during simulation.
     if !sql.connectionOpen
-      puts "The sizing run failed, cannot create model.  Look at the eplusout.err file in #{File.dirname(sql_path.to_s)} to see the cause."
+      puts "The sizing run failed, cannot create model.  Look at the eplusout.err file in #{File.dirname(sql_path_1x.to_s)} to see the cause."
+      return false
+    end
+    # Attach the sql file from the run to the model
+    model.setSqlFile(sql)
+  elsif OpenStudio::exists(sql_path_2x)
+    sql = OpenStudio::SqlFile.new(sql_path_2x)
+    # Check to make sure the sql file is readable,
+    # which won't be true if EnergyPlus crashed during simulation.
+    if !sql.connectionOpen
+      puts "The sizing run failed, cannot create model.  Look at the eplusout.err file in #{File.dirname(sql_path_2x.to_s)} to see the cause."
       return false
     end
     # Attach the sql file from the run to the model
     model.setSqlFile(sql)
   else 
-    puts "Results for the sizing run couldn't be found here: #{sql_path}."
+    puts "Results for the sizing run couldn't be found here: #{sql_path_1x} or here: #{sql_path_2x}."
     return false
   end  
   

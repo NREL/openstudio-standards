@@ -459,7 +459,7 @@ module BTAP
           BTAP::runner_register("Info", "Thermal Zone contains a NO-SHAPE space named. OS does not support no shape spaces.  Thermal Zone will not be created.",runner)
         else
           os_zone = OpenStudio::Model::ThermalZone.new(model)
-          os_zone.setAttribute("name", self.name)
+          os_zone.setName(self.name)
           #set space to thermal zone
           OpenStudio::Model::getSpaceByName(model,self.space.name).get.setThermalZone(os_zone)
           BTAP::runner_register("Info", "\tThermalZone: " + self.name + " created",runner)
@@ -825,7 +825,7 @@ module BTAP
         
         os_surface = OpenStudio::Model::Surface.new(surface_points, model)
         #set the name of the surface. 
-        os_surface.setAttribute("name", self.name)
+        os_surface.setName(self.name)
         case self.commandName
           #Set the surface boundary condition if it is a ground surface.
         
@@ -854,7 +854,7 @@ module BTAP
           new_array.insert(0,first).reverse!
           #...then add the reverse surface to the model and assign the name with a mirror suffix. 
           os_surface_mirror = OpenStudio::Model::Surface.new(new_array, model)
-          os_surface_mirror.setAttribute("name", self.name + "-mirror" )
+          os_surface_mirror.setName(self.name + "-mirror" )
           #Assign the mirror surface to the parent space that is NEXT-TO
           os_surface_mirror.setSpace(OpenStudio::Model::getSpaceByName(model,get_keyword_value("NEXT-TO")).get)
           #output to console for debugging. 
@@ -898,14 +898,14 @@ module BTAP
               #Debug subsurface
               os_sub_surface = OpenStudio::Model::Surface.new(surface_points, model)
               #set the name of the surface. 
-              os_sub_surface.setAttribute("name", child.name)
+              os_sub_surface.setName(child.name)
               #Add to parent space that was already created. 
               os_sub_surface.setSpace(OpenStudio::Model::getSpaceByName( model,self.get_parent("SPACE").name).get )
             else
               #Add the subsurface to the new openstudio model. 
               os_sub_surface = OpenStudio::Model::SubSurface.new(surface_points, model)
               #set the name of the surface. 
-              os_sub_surface.setAttribute("name", child.name )
+              os_sub_surface.setName(child.name)
               #Add to parent space that was already created. 
               os_sub_surface.setSurface(os_surface)
               #output to console for debugging. 
@@ -1677,7 +1677,7 @@ module BTAP
           BTAP::runner_register("Info", "OpenStudio does not support NO-SHAPE SPACE definitions currently. Not importing the space #{self.name}.",runner)
         else
           os_space = OpenStudio::Model::Space.new(model)
-          os_space.setAttribute("name", self.name)
+          os_space.setName(self.name)
           #set floor
           os_space.setBuildingStory(OpenStudio::Model::getBuildingStoryByName(model,self.get_parent("FLOOR").name).get)
           BTAP::runner_register("Info", "\tSpace: " + self.name + " created",runner)
@@ -1761,7 +1761,7 @@ module BTAP
 
       def convert_to_openstudio(model,runner = nil)
         floor = OpenStudio::Model::BuildingStory.new(model)
-        floor.setAttribute("name", self.name)
+        floor.setName(self.name)
         BTAP::runner_register("Info", "\tBuildingStory: " + self.name + " created",runner)
       end
 

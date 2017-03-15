@@ -111,10 +111,7 @@ module BTAP
         end
         hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
         
-        old_name = ""
-        unless default_surface_construction_set.getAttribute("name").empty? 
-          old_name =  default_surface_construction_set.getAttribute("name").get.valueAsString
-        end
+        old_name = default_surface_construction_set.name.get.to_s
         
    
         climate_zone_index = get_climate_zone_index(hdd)
@@ -931,7 +928,7 @@ module BTAP
                   #create new zone and add the spaces to it. 
                   name = "Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement}"
                   thermal_zone = BTAP::Geometry::Zones::create_thermal_zone(model, space_array)
-                  thermal_zone.setAttribute("name",name)
+                  thermal_zone.setName(name)
                   #Set Thermostat bases on 
                   
                   # Add a thermostat based on the first space
