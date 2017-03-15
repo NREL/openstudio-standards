@@ -21,7 +21,7 @@ jobs:
           name: Parallelize Tests
           command: |
             >node_tests.txt
-            circleci tests split --split-by=timings --index=1 --total=4 openstudio-standards/test/circleci_tests.txt > node_tests.txt
+            circleci tests split --split-by=timings openstudio-standards/test/circleci_tests.txt > node_tests.txt
       - run:
           name: Run Tests
           command: |
