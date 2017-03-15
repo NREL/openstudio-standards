@@ -35,7 +35,7 @@ namespace :test do
         # Skip comments the CLI may have included
         next unless line.include?('.rb')
         # Ensure the file exists
-        pth = File.expand_path("test/#{line}")
+        pth = "test/#{line}"
         unless File.exist?(pth)
           puts "Skipped #{pth} because it does not exist"
           # next
