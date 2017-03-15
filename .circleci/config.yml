@@ -3,14 +3,14 @@ jobs:
   build:
     working_directory: ~/openstudio-standards
     docker:
-      - image: nrel/openstudio:latest
+      - image: nrel/openstudio
     steps:
       - checkout
       - run:
-          name: Show Environment Variables
+          name: Environment Variables
           command: printenv
       - run:
-          name: Show Working Directory Contents
+          name: Working Directory Contents
           command: ls -a
       - run:
           name: Install OpenStudio Standards Dependencies
@@ -18,22 +18,15 @@ jobs:
             cd openstudio-standards
             ~/.rbenv/shims/bundle install
       - run:
-          name: Install Missing OpenStudio Dependencies TODO Remove after 2.0.6
+          name: Parallelize Tests
           command: |
-            apt-get update
-            apt-get install -y libglu1-mesa libjpeg8 libfreetype6 libdbus-glib-1-2 libfontconfig1 libsm6 libxi6
+            >node_tests.txt
+            circleci tests split --split-by=timings --index=1 --total=4 openstudio-standards/test/circleci_tests.txt > node_tests.txt
       - run:
-          name: Show OpenStudio Version
-          command: openstudio openstudio_version
-      - run:
-          name: Run Test Group 1 of 2
+          name: Run Tests
           command: |
             cd openstudio-standards
-            ~/.rbenv/shims/bundle exec rake test:circleci1
-      - run:
-          name: Run Test Group 2 of 2
-          command: |
-            cd openstudio-standards
-            ~/.rbenv/shims/bundle exec rake test:circleci2
+            ls -a
+            ~/.rbenv/shims/bundle exec rake test:circleci
       - store_test_results:
           path: test/reports/
