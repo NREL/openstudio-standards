@@ -25,7 +25,6 @@ namespace :test do
 
   desc 'Run CircleCI tests'
   Rake::TestTask.new('circleci') do |t|
-    puts "Dir.pwd = #{Dir.pwd}"
     # Create a FileList for this task
     test_list = FileList.new
     # Read the parallelized list of tests
@@ -34,15 +33,16 @@ namespace :test do
       f.each_line do |line|
         # Skip comments the CLI may have included
         next unless line.include?('.rb')
+        # Remove whitespaces
+        line = line.strip
         # Ensure the file exists
-        pth = "test/#{line}"
+        pth = File.absolute_path("test/#{line}")
         unless File.exist?(pth)
-          puts "Skipped #{pth} because it does not exist"
-          # next
+          puts "Skipped #{line} because this file doesn't exist"
+          next
         end
         # Add this test to the list
         test_list.add(pth)
-        # puts "Added   #{line}"
       end
     end
     # Assign the tests to this task
