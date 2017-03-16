@@ -141,14 +141,16 @@ def get_schedule_max_delta_t(model, surface)
 end
 #LargeOffice
 class TestNECBSurfaces8426Custom < CreateDOEPrototypeBuildingTest
+  
   building_types = [
-    'LargeOffice',
-    'LargeHotel',
-    'FullServiceRestaurant',
-    'Outpatient',
+    #'LargeOffice',
+    #'LargeHotel',
+    #'FullServiceRestaurant',
+    #'Outpatient',
     'PrimarySchool'
   ]
 
+  changes = []
   templates = [ 'NECB 2011']
   climate_zones = ['NECB HDD Method']
   epw_files = [
@@ -188,16 +190,37 @@ class TestNECBSurfaces8426Custom < CreateDOEPrototypeBuildingTest
         hash[:"Space: #{space.name}"][:"No Adjacent surface"] = []
         surfaces = BTAP::Geometry::Surfaces::get_surfaces_from_spaces([space])
         surfaces.each do |surface|
-          max_delta_t = get_schedule_max_delta_t(model, surface)
-          unless max_delta_t.nil?
-            hash[:"Space: #{space.name}"][:"With Adjacent Surface"][:"#{surface.name}"] = max_delta_t
-          else
-            hash[:"Space: #{space.name}"][:"No Adjacent surface"] << surface.name
+          surface_is_adiabatic = false
+          
+          puts "Surface:[#{surface.name}] is #{surface.outsideBoundaryCondition()}"
+          if surface.outsideBoundaryCondition() == 'Adiabatic'
+            surface_is_adiabatic = true
           end
+          
+          unless surface_is_adiabatic
+            max_delta_t = get_schedule_max_delta_t(model, surface)
+            unless max_delta_t.nil? #unless (the surface does not have adjacent surface)
+              hash[:"Space: #{space.name}"][:"With Adjacent Surface"][:"#{surface.name}"] = max_delta_t
+              if max_delta_t <= 10 and max_delta_t >= 0
+                #change conductance to adiabatic
+                #BTAP::Geometry::Surfaces::set_surfaces_boundary_condition( model , surface, "Adiabatic")
+                surface.setOutsideBoundaryCondition("Adiabatic")
+                changes << "changed [#{surface.name}] boundary condition to Adiabatic"
+              elsif max_delta_t > 10
+                #set conductance to 0.35 W/(m^2*K)
+                BTAP::Geometry::Surfaces::set_surfaces_construction_conductance( [surface], 0.35 )
+                changes << "changed #{surface.name} construction_conductance to 0.35"
+              end
+            else
+              hash[:"Space: #{space.name}"][:"No Adjacent surface"] << surface.name
+            end
+          end 
         end
       end
+      puts changes
       #model.save(model_out_path(test_name), true)
       File.open("#{output_folder}/max_delta_t.json", 'w') {|f| f.write(JSON.pretty_generate(hash)) }
+      model.save("#{output_folder}/ExampleModel.osm", true)
     end
   end
     
