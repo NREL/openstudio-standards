@@ -206,7 +206,17 @@ class OpenStudio::Model::Model
           # Add a service water use for each space
           space_names.each do |space_name|
             space = getSpaceByName(space_name).get
-            space_multiplier = space.multiplier
+            space_multiplier =  nil
+            case template
+            when 'NECB 2011'
+            #Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes. 
+              space_multiplier = 1
+            else
+              space_multiplier = space.multiplier 
+            end
+            
+
+            
             add_swh_end_uses_by_space(get_lookup_name(building_type),
                                       template,
                                       climate_zone,
