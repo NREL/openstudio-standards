@@ -7,13 +7,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Environment Variables
-          command: printenv
-      - run:
-          name: Working Directory Contents
-          command: ls -a
-      - run:
-          name: Install OpenStudio Standards Dependencies
+          name: Install openstudio-standards test dependencies
           command: |
             cd openstudio-standards
             ~/.rbenv/shims/bundle install
@@ -24,10 +18,17 @@ jobs:
             circleci tests split --split-by=timings openstudio-standards/test/circleci_tests.txt > node_tests.txt
             cat node_tests.txt
       - run:
-          name: Run Tests
+          name: Run tests
           command: |
             cd openstudio-standards
-            ls -a
             ~/.rbenv/shims/bundle exec rake test:circleci
+      - run:
+          name: Summarize test times
+          command: |
+            cd openstudio-standards
+            ~/.rbenv/shims/bundle exec rake test:times
       - store_test_results:
           path: test/reports/
+      - store_artifacts:
+          path: /timing
+          destination: test_timing_summary
