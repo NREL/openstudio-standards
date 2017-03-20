@@ -27,17 +27,6 @@ jobs:
           command: |
             cd openstudio-standards
             ~/.rbenv/shims/bundle exec rake test:times
-      - run:
-          name: Show test times
-          command: |
-            ls -a
-            cat timing/test_by_file.html
-            cat timing/test_by_name.html
-      - run:
-          name: Show directory contents
-          command: |
-            cd ..            
-            ls -a
       - store_test_results:
           path: test/reports/
       - store_artifacts:
