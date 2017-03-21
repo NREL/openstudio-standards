@@ -34,7 +34,7 @@
       "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
-      "building_type": "RetailStandalone",
+      "building_type": "Retail",
       "rollup_doors_per_10,000": 1.84,
       "entrance_doors_per_10,000": 1.0,
       "others_doors_per_10,000": 2.93,
@@ -45,7 +45,7 @@
       "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
     },
     {
-      "building_type": "RetailStripmall",
+      "building_type": "StripMall",
       "rollup_doors_per_10,000": 0.05,
       "entrance_doors_per_10,000": 6.0,
       "others_doors_per_10,000": 6.6,

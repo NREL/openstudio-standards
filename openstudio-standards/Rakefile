@@ -23,83 +23,92 @@ namespace :test do
     t.test_files = FileList['openstudio-standards/test/necb/test_compliance.rb']
   end
 
-  desc 'Run CircleCI tests'
-  Rake::TestTask.new('circleci') do |t|
-    # Create a FileList for this task
-    test_list = FileList.new
-    # Read the parallelized list of tests
-    # created by the circleci CLI in config.yml
-    File.open("../node_tests.txt", "r") do |f|
-      f.each_line do |line|
-        # Skip comments the CLI may have included
-        next unless line.include?('.rb')
-        # Remove whitespaces
-        line = line.strip
-        # Ensure the file exists
-        pth = File.absolute_path("test/#{line}")
-        unless File.exist?(pth)
-          puts "Skipped #{line} because this file doesn't exist"
-          next
+  # These tests only available in the CI environment
+  if ENV['CI'] == 'true'
+
+    desc 'Run CircleCI tests'
+    Rake::TestTask.new('circleci') do |t|
+      # Create a FileList for this task
+      test_list = FileList.new
+      # Read the parallelized list of tests
+      # created by the circleci CLI in config.yml
+      if File.exist?("../node_tests.txt")
+        File.open("../node_tests.txt", "r") do |f|
+          f.each_line do |line|
+            # Skip comments the CLI may have included
+            next unless line.include?('.rb')
+            # Remove whitespaces
+            line = line.strip
+            # Ensure the file exists
+            pth = File.absolute_path("test/#{line}")
+            unless File.exist?(pth)
+              puts "Skipped #{line} because this file doesn't exist"
+              next
+            end
+            # Add this test to the list
+            test_list.add(pth)
+          end
         end
-        # Add this test to the list
-        test_list.add(pth)
+        # Assign the tests to this task
+        t.test_files = test_list
+      else
+        puts "Could not find parallelized list of CI tests."
       end
     end
-    # Assign the tests to this task
-    t.test_files = test_list
-  end
 
-  desc 'Summarize the test timing'
-  task 'times' do |t|
-    require 'nokogiri'
+    desc 'Summarize the test timing'
+    task 'times' do |t|
+      require 'nokogiri'
 
-    files_to_times = {}
-    tests_to_times = {}
-    Dir['test/reports/*.xml'].each do |xml|
-      doc = File.open(xml) { |f| Nokogiri::XML(f) }
-      doc.css('testcase').each do |testcase|
-        time = testcase.attr('time').to_f
-        file = testcase.attr('file')
-        name = testcase.attr('name')
-        # Add to total for this file
-        if files_to_times[file].nil?
-          files_to_times[file] = time
-        else
-          files_to_times[file] += time        
+      files_to_times = {}
+      tests_to_times = {}
+      Dir['test/reports/*.xml'].each do |xml|
+        doc = File.open(xml) { |f| Nokogiri::XML(f) }
+        doc.css('testcase').each do |testcase|
+          time = testcase.attr('time').to_f
+          file = testcase.attr('file')
+          name = testcase.attr('name')
+          # Add to total for this file
+          if files_to_times[file].nil?
+            files_to_times[file] = time
+          else
+            files_to_times[file] += time        
+          end
+          # Record for this test itself
+          if tests_to_times[name].nil?
+            tests_to_times[name] = time
+          else
+            tests_to_times[name] += time        
+          end
+
         end
-        # Record for this test itself
-        if tests_to_times[name].nil?
-          tests_to_times[name] = time
-        else
-          tests_to_times[name] += time        
+      end
+
+      # Write out the test results to file
+      folder = "#{Dir.pwd}/timing"
+      Dir.mkdir(folder) unless File.exists?(folder)
+
+      # By file
+      File.open("#{Dir.pwd}/timing/test_by_file.html", 'w') do |html|
+        html.puts '<table><tr><th>File Name</th><th>Time (min)</th></tr>'
+        files_to_times.each do |f, t|
+          s = (t/60).round(1) # convert time from sec to min
+          html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
         end
+        html.puts '</table>'
+      end
 
+      # By name
+      File.open("#{Dir.pwd}/timing/test_by_name.html", 'w') do |html|
+        html.puts '<table><tr><th>Test Name</th><th>Time (min)</th></tr>'
+        tests_to_times.each do |f, t|
+          s = (t/60).round(1) # convert time from sec to min
+          html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
+        end
+        html.puts '</table>'
       end
     end
 
-    # Write out the test results to file
-    folder = "#{Dir.pwd}/timing"
-    Dir.mkdir(folder) unless File.exists?(folder)
-
-    # By file
-    File.open("#{Dir.pwd}/timing/test_by_file.html", 'w') do |html|
-      html.puts '<table><tr><th>File Name</th><th>Time (min)</th></tr>'
-      files_to_times.each do |f, t|
-        s = (t/60).round(1) # convert time from sec to min
-        html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
-      end
-      html.puts '</table>'
-    end
-
-    # By name
-    File.open("#{Dir.pwd}/timing/test_by_name.html", 'w') do |html|
-      html.puts '<table><tr><th>Test Name</th><th>Time (min)</th></tr>'
-      tests_to_times.each do |f, t|
-        s = (t/60).round(1) # convert time from sec to min
-        html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
-      end
-      html.puts '</table>'
-    end
   end
 
   desc 'Run the NECB building creation tests'

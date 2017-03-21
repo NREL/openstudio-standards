@@ -318,13 +318,13 @@ module BTAP
               #Get the occupancy schedule.
               occ_schedule = people.numberofPeopleSchedule.get
               #Convert schedule to timeseries and sum up timeseries objects for this space / zone.
-              occ_time_series = OsLib_Schedules.create_timeseries_from_schedule_ruleset(model,occ_schedule)
+              occ_time_series = create_timeseries_from_schedule_ruleset(model,occ_schedule)
               timeseries = timeseries + occ_time_series
             end
           end
         end
         #return the timeseries converted to
-        return OsLib_Schedules.create_schedule_variable_interval_from_time_series(model,timeseries)
+        return create_schedule_variable_interval_from_time_series(model,timeseries)
       end
 
 
@@ -895,6 +895,39 @@ module BTAP
       # value - value to be used over 24 hours.
       def self.create_annual_constant_ruleset_schedule(model, name,type,value)
         return create_annual_ruleset_schedule(model, name,type, [Array.new(24){value}, Array.new(24){value},Array.new(24){value}])
+      end
+
+      # Creates TimeSeries from ScheduleRuleset
+      # @author david.goldwasser@nrel.gov
+      # @param model [OpenStudio::Model::Model] A model object
+      # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] A schedule ruleset
+      # @return [OpenStudio::TimeSeries] A TimeSeries object
+      def self.create_timeseries_from_schedule_ruleset(model, schedule_ruleset)
+        yd = model.getYearDescription
+        start_date = yd.makeDate(1, 1)
+        end_date = yd.makeDate(12, 31)
+
+        values = OpenStudio::DoubleVector.new
+        day = OpenStudio::Time.new(1.0)
+        interval = OpenStudio::Time.new(1.0 / 48.0)
+        day_schedules = schedule_ruleset.to_ScheduleRuleset.get.getDaySchedules(start_date, end_date)
+        day_schedules.each do |day_schedule|
+          time = interval
+          while time < day
+            values << day_schedule.getValue(time)
+            time += interval
+          end
+        end
+        time_series = OpenStudio::TimeSeries.new(start_date, interval, OpenStudio.createVector(values), "")
+      end
+
+      # Creates ScheduleVariableInterval from TimeSeries
+      # @author david.goldwasser@nrel.gov
+      # @param model [OpenStudio::model::Model] A model object
+      # @param time_series [OpenStudio::TimeSeries] A TimeSeries object
+      # @return [OpenStudio::Model::ScheduleInterval] An interval schedule
+      def self.create_schedule_variable_interval_from_time_series(model, time_series)
+        result = OpenStudio::Model::ScheduleInterval.fromTimeSeries(time_series, model).get
       end
 
     end #module Schedules
