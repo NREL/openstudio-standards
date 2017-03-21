@@ -83,7 +83,7 @@ namespace :test do
 
     # By file
     File.open("#{Dir.pwd}/timing/test_by_file.html", 'w') do |html|
-      html.puts '<table><tr><th>File Name</th><th>Time (s)</th></tr>'
+      html.puts '<table><tr><th>File Name</th><th>Time (min)</th></tr>'
       files_to_times.each do |f, t|
         s = (t/60).round(1) # convert time from sec to min
         html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
@@ -93,7 +93,7 @@ namespace :test do
 
     # By name
     File.open("#{Dir.pwd}/timing/test_by_name.html", 'w') do |html|
-      html.puts '<table><tr><th>Test Name</th><th>Time (s)</th></tr>'
+      html.puts '<table><tr><th>Test Name</th><th>Time (min)</th></tr>'
       tests_to_times.each do |f, t|
         s = (t/60).round(1) # convert time from sec to min
         html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
