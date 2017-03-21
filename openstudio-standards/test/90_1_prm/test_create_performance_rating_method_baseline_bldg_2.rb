@@ -36,7 +36,7 @@ class Baseline9012013Test2 < Minitest::Test
   
   # Test LPDs for bldg_2
   # @author Matt Leach, NORESCO
-  def dont_test_lpd_bldg2
+  def test_lpd_bldg2
 
     model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -63,7 +63,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test LPDs for bldg_3
   # @author Matt Leach, NORESCO
-  def dont_test_lpd_bldg3
+  def test_lpd_bldg3
 
     model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -120,7 +120,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test LPDs for bldg_5
   # @author Matt Leach, NORESCO
-  def dont_test_lpd_bldg5
+  def test_lpd_bldg5
 
     model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -147,7 +147,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test LPDs for bldg_7
   # @author Matt Leach, NORESCO
-  def dont_test_lpd_bldg7
+  def test_lpd_bldg7
 
     model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -259,7 +259,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test Daylighting for bldg_3
   # @author Matt Leach, NORESCO
-  def dont_test_daylighting_bldg3
+  def test_daylighting_bldg3
 
     model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', true, true)
     failure_array = []
@@ -494,7 +494,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test System Type for bldg_2
   # @author Matt Leach, NORESCO
-  def dont_test_system_type_bldg2
+  def test_system_type_bldg2
 
     model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -629,7 +629,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test System Type for bldg_3
   # @author Matt Leach, NORESCO
-  def dont_test_system_type_bldg3
+  def test_system_type_bldg3
 
     model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -869,7 +869,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test System Type for bldg_4
   # @author Matt Leach, NORESCO
-  def dont_test_system_type_bldg4
+  def test_system_type_bldg4
 
     model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -991,7 +991,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test System Type for bldg_5
   # @author Matt Leach, NORESCO
-  def dont_test_system_type_bldg5
+  def test_system_type_bldg5
 
     model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -1179,7 +1179,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test System Type for bldg_7
   # @author Matt Leach, NORESCO
-  def dont_test_system_type_bldg7
+  def test_system_type_bldg7
 
     model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -1339,7 +1339,7 @@ class Baseline9012013Test2 < Minitest::Test
 
   # Test System Type for bldg_7
   # @author Matt Leach, NORESCO
-  def dont_test_system_type_bldg7_electric
+  def test_system_type_bldg7_electric
 
     model = create_baseline_model('bldg_7_electric', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
