@@ -3019,7 +3019,12 @@ class OpenStudio::Model::Model
     standards_data_dir = "#{top_dir}/data/standards"
 
     # Load the legacy idf results JSON file into a ruby hash
-    temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
+    temp = ''
+    begin
+      temp = load_resource_relative("../../../data/standards/legacy_idf_results.json", 'r:UTF-8')
+    rescue NoMethodError 
+      temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
+    end
     legacy_idf_results = JSON.parse(temp)
 
     # List of all fuel types
