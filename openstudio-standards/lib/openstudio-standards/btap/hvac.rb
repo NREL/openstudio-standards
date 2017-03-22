@@ -2370,7 +2370,6 @@ module BTAP
               
               mau_air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
 
-
               mau_air_loop.setName("Make-up air unit")
 
               # When an air_loop is constructed, its constructor creates a sizing:system object
@@ -2379,18 +2378,18 @@ module BTAP
               # this systems is a constant volume system with no VAV terminals,
               # and therfore needs different default settings
               air_loop_sizing = mau_air_loop.sizingSystem # TODO units
-              air_loop_sizing.setTypeofLoadtoSizeOn("Sensible")
+              air_loop_sizing.setTypeofLoadtoSizeOn("VentilationRequirement")
               air_loop_sizing.autosizeDesignOutdoorAirFlowRate
               air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
               air_loop_sizing.setPreheatDesignTemperature(7.0)
               air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
               air_loop_sizing.setPrecoolDesignTemperature(13.0)
               air_loop_sizing.setPrecoolDesignHumidityRatio(0.008)
-              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(13.0)
-              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(43.0)
+              air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(13)
+              air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(43)
               air_loop_sizing.setSizingOption("NonCoincident")
-              air_loop_sizing.setAllOutdoorAirinCooling(false)
-              air_loop_sizing.setAllOutdoorAirinHeating(false)
+              air_loop_sizing.setAllOutdoorAirinCooling(true)
+              air_loop_sizing.setAllOutdoorAirinHeating(true)
               air_loop_sizing.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
               air_loop_sizing.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
               air_loop_sizing.setCoolingDesignAirFlowMethod("DesignDay")
@@ -2401,7 +2400,6 @@ module BTAP
 
               mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
                             
-
               if ( mau_heating_coil_type == "Electric") then           # electric coil
                 mau_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
               end
@@ -2411,7 +2409,6 @@ module BTAP
                 hw_loop.addDemandBranchForComponent(mau_htg_coil)
               end
 
-
               # Set up DX coil with default curves (set to NECB);
 
               mau_clg_coil = BTAP::Resources::HVAC::Plant::add_onespeed_DX_coil(model,always_on)
@@ -2419,7 +2416,6 @@ module BTAP
               #oa_controller 
               oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
               #oa_controller.setEconomizerControlType("DifferentialEnthalpy")
-
 
               #oa_system 
               oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
@@ -2431,24 +2427,20 @@ module BTAP
               mau_htg_coil.addToNode(supply_inlet_node)
               mau_clg_coil.addToNode(supply_inlet_node)
               oa_system.addToNode(supply_inlet_node)
+			  
+              # Add a setpoint manager to control the supply air temperature 
+              sat = 20.0
+              sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+              sat_sch.setName("Makeup-Air Unit Supply Air Temp")
+              sat_sch.defaultDaySchedule().setName("Makeup Air Unit Supply Air Temp Default")
+              sat_sch.defaultDaySchedule().addValue(OpenStudio::Time.new(0,24,0,0),sat)
+              setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model,sat_sch)
+              setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
 
-              # Add a setpoint manager single zone reheat to control the
-              # supply air temperature 
-              setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
-              setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(13.0)
-              setpoint_mgr_single_zone_reheat.addToNode(mau_air_loop.supplyOutletNode)
-              
-              # TO DO: Which zone is the control zone? 
-              #setpoint_mgr_single_zone_reheat.setControlZone(zone)             
-
-             
             end # Create MAU
-
-
 
             # Create a PTAC for each zone:
             # PTAC DX Cooling with electric heating coil; electric heating coil is always off 
-            
             
             # TO DO: need to apply this system to space types:
             #(1) data processing area: control room, data centre
@@ -2459,7 +2451,6 @@ module BTAP
 
             #TO DO: PTAC characteristics: sizing, fan schedules, temperature setpoints, interaction with MAU
             
-            
             zones.each do |zone|
 
               # Zone sizing temperature
@@ -2468,23 +2459,19 @@ module BTAP
               sizing_zone.setZoneHeatingDesignSupplyAirTemperature(43.0)
               sizing_zone.setZoneCoolingSizingFactor(1.1)
               sizing_zone.setZoneHeatingSizingFactor(1.3)
-              
+
               # Set up PTAC heating coil; apply always off schedule            
  
               # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
               htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model,always_off)
             
               
-              
               # Set up PTAC DX coil with NECB performance curve characteristics;
               clg_coil = BTAP::Resources::HVAC::Plant::add_onespeed_DX_coil(model,always_on)
-              
               
               # Set up PTAC constant volume supply fan
               fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)         
               fan.setPressureRise(640)
-                        
-              
 
               ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model,
                 always_on,
@@ -2515,7 +2502,6 @@ module BTAP
                 
               end
               
-              
               #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
               if (mau == true) then
           
@@ -2523,9 +2509,8 @@ module BTAP
                 mau_air_loop.addBranchForZone(zone,diffuser.to_StraightComponent)
                  
               end #components for MAU
-                          
+			  
             end # of zone loop
-            
 
             return true
             
@@ -3553,9 +3538,9 @@ module BTAP
 				  # NECB 2011 minimum zone airflow setting 
                   min_flow_rate = 0.002 * zone.floorArea
                   vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate) 
-	              vav_terminal.setMaximumReheatAirTemperature(43)
+	              vav_terminal.setMaximumReheatAirTemperature(43.0)
                   vav_terminal.setDamperHeatingAction("Normal")
-               
+
                   #Set zone baseboards
                   if ( baseboard_type == "Electric") then
                     zone_elec_baseboard = BTAP::Resources::HVAC::Plant::add_elec_baseboard(model)

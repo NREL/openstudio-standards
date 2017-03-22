@@ -19,7 +19,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Only applies to multi-zone vav systems
     # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
     # (2) AHU1 in 2004-2013
-    if multizone_vav_system? && !(name.to_s.include? 'Outpatient F1')
+    if multizone_vav_system? && !(name.to_s.include? 'Outpatient F1') && template != 'NECB 2011'
       adjust_minimum_vav_damper_positions
     end
 

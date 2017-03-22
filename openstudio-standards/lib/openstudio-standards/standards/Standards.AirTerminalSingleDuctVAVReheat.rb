@@ -40,4 +40,18 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
 
     return true
   end
+
+  def set_heating_cap
+    flow_rate_fraction = constantMinimumAirFlowFraction
+    if reheatCoil.to_CoilHeatingWater.is_initialized
+      reheat_coil = reheatCoil.to_CoilHeatingWater.get
+      if reheat_coil.autosizedRatedCapacity.to_f < 1.0e-6
+        cap = 1.2 * 1000.0 * constantMinimumAirFlowFraction * autosizedMaximumAirFlowRate.to_f * (18.0 - 13.0)
+	    reheat_coil.setPerformanceInputMethod("NominalCapacity")
+        reheat_coil.setRatedCapacity(cap)
+        setMaximumReheatAirTemperature(18.0)
+	  end
+    end
+  end
+
 end

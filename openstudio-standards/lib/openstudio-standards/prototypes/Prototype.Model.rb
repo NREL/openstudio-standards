@@ -211,6 +211,11 @@ class OpenStudio::Model::Model
     # following the ventilation rate procedure from 62.1
     apply_multizone_vav_outdoor_air_sizing(template)
 
+    # This is needed for NECB 2011 as a workaround for sizing the reheat boxes
+    if template == 'NECB 2011'
+      getAirTerminalSingleDuctVAVReheats.each { |iobj| iobj.set_heating_cap }
+    end
+
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
