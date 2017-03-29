@@ -1,7 +1,8 @@
 
-# Extend the class to add Secondary School specific stuff
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+# Modules for building-type specific methods
+module PrototypeBuilding
+module PrimarySchool
+  def self.define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
     case template
     when 'NECB 2011'
@@ -34,89 +35,9 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = nil
 
-    # case template
-    # when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-    # system_to_space_map = [
-    # {
-    # 'type' => 'PVAV',
-    # 'name' => 'PVAV_POD_1',
-    # 'space_names' =>
-    # [
-    # 'Corner_Class_1_Pod_1_ZN_1_FLR_1',
-    # 'Mult_Class_1_Pod_1_ZN_1_FLR_1',
-    # 'Corridor_Pod_1_ZN_1_FLR_1',
-    # 'Corner_Class_2_Pod_1_ZN_1_FLR_1',
-    # 'Mult_Class_2_Pod_1_ZN_1_FLR_1',
-    # 'Corner_Class_1_Pod_2_ZN_1_FLR_1'
-    # ]
-    # },
-    # {
-    # 'type' => 'PVAV',
-    # 'name' => 'PVAV_POD_2',
-    # 'space_names' =>
-    # [
-    # 'Mult_Class_1_Pod_2_ZN_1_FLR_1',
-    # 'Corridor_Pod_2_ZN_1_FLR_1',
-    # 'Corner_Class_2_Pod_2_ZN_1_FLR_1',
-    # 'Mult_Class_2_Pod_2_ZN_1_FLR_1'
-    # ]
-    # },
-    # {
-    # 'type' => 'PVAV',
-    # 'name' => 'PVAV_POD_3',
-    # 'space_names' =>
-    # [
-    # 'Corner_Class_1_Pod_3_ZN_1_FLR_1',
-    # 'Mult_Class_1_Pod_3_ZN_1_FLR_1',
-    # 'Corridor_Pod_3_ZN_1_FLR_1',
-    # 'Corner_Class_2_Pod_3_ZN_1_FLR_1',
-    # 'Mult_Class_2_Pod_3_ZN_1_FLR_1'
-    # ]
-    # },
-    # {
-    # 'type' => 'PVAV',
-    # 'name' => 'PVAV_OTHER',
-    # 'space_names' =>
-    # [
-    # 'Computer_Class_ZN_1_FLR_1',
-    # 'Main_Corridor_ZN_1_FLR_1',
-    # 'Lobby_ZN_1_FLR_1',
-    # 'Mech_ZN_1_FLR_1',
-    # 'Bath_ZN_1_FLR_1',
-    # 'Offices_ZN_1_FLR_1',
-    # 'Library_Media_Center_ZN_1_FLR_1'
-    # ]
-    # },
-    # {
-    # 'type' => 'PSZ-AC',
-    # 'name' => 'PSZ-AC_1-6',
-    # 'space_names' =>
-    # [
-    # 'Kitchen_ZN_1_FLR_1'
-    # ]
-    # },
-    # {
-    # 'type' => 'PSZ-AC',
-    # 'name' => 'PSZ-AC_2-5',
-    # 'space_names' =>
-    # [
-    # 'Gym_ZN_1_FLR_1'
-    # ]
-    # },
-    # {
-    # 'type' => 'PSZ-AC',
-    # 'name' => 'PSZ-AC_2-7',
-    # 'space_names' =>
-    # [
-    # 'Cafeteria_ZN_1_FLR_1'
-    # ]
-    # }
-    # ]
-
-    # when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
     system_to_space_map = [
       {
         'type' => 'PVAV',
@@ -228,16 +149,15 @@ class OpenStudio::Model::Model
       }
     ]
 
-    # end
-
     return system_to_space_map
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     return true
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
     return true
   end
+end
 end

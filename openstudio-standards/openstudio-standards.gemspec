@@ -20,16 +20,17 @@ Gem::Specification.new do |spec|
   # spec.test_files = Dir['test/**/*']
   spec.require_paths = ['lib']
 
-  # spec.add_development_dependency "activesupport", "<= 4.2.4"
+  spec.add_development_dependency 'nokogiri', '<= 1.6.8.1' # last version of nokogiri that works with Ruby 2.0.0p594
   spec.add_development_dependency "nokogiri", "<= 1.6.8.1"
   spec.add_development_dependency 'bundler', '~> 1.9'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'yard', '~> 0.8'
   spec.add_development_dependency 'rubocop', '~> 0.42'
   spec.add_development_dependency 'rubocop-checkstyle_formatter', '~> 0.1.1'
+  spec.add_development_dependency 'minitest-ci' # For CircleCI Automatic test metadata collection
   spec.add_development_dependency 'minitest-reporters'
   spec.add_development_dependency 'rubyXL', '3.3.8' # install rubyXL gem to export excel files to json
   spec.add_development_dependency 'activesupport', '4.2.5' # pairs with google-api-client, > 5.0.0 does not work
   spec.add_development_dependency 'google-api-client', '0.8.6' # to download Openstudio_Standards Google Spreadsheet
-  spec.add_development_dependency 'coveralls' # to perform code coverage checking
+  spec.add_development_dependency 'codecov' # to perform code coverage checking
 end

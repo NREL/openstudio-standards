@@ -2630,7 +2630,7 @@ module BTAP
         surfaces.each do |surface|
           result = surface.setWindowToWallRatio(ratio,offset,height_offset_from_floor)
           raise( "Unable to set FWR for surface " +
-              surface.getAttribute("name").to_s +
+              surface.name.get.to_s +
               " . Possible reasons are  if the surface is not a wall, if the surface
           is not rectangular in face coordinates, if requested ratio is too large
           (window area ~= surface area) or too small (min dimension of window < 1 foot),

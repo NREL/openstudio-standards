@@ -3,6 +3,10 @@ OS:Version,
   {8fa027f3-f936-4274-a837-8c563206892f}, !- Handle
   1.14.0;                                 !- Version Identifier
 
+OS:Timestep,
+  {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
+  6;                                      !- Number of Timesteps per Hour
+
 OS:Surface,
   {536547a8-0ff7-41c8-95f3-7331a5af3d86}, !- Handle
   ER_Exam3_Mult4_Flr_1_Wall_East,         !- Name

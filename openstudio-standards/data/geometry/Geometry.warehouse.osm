@@ -3,6 +3,10 @@ OS:Version,
   {3b71eeeb-a177-44ef-95d9-2881f211adbe}, !- Handle
   1.14.0;                                 !- Version Identifier
 
+OS:Timestep,
+  {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
+  6;                                      !- Number of Timesteps per Hour
+
 OS:Connection,
   {b742b2ef-79b6-4b4e-bc85-5c20c1c8300f}, !- Handle
   {15de7a4c-1724-4ba3-a1e6-a66b0ba90514}, !- Name

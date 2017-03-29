@@ -10,13 +10,14 @@ class OpenStudio::Model::Model
     # Save the model to energyplus idf
     idf_name = 'in.idf'
     osm_name = 'in.osm'
+    osw_name = 'in.osw'
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "Starting simulation here: #{run_dir}.")
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Running simulation #{run_dir}.")
     forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
     idf = forward_translator.translateModel(self)
     idf_path = OpenStudio::Path.new("#{run_dir}/#{idf_name}")
     osm_path = OpenStudio::Path.new("#{run_dir}/#{osm_name}")
-    osw_path = OpenStudio::Path.new("#{run_dir}/in.osw")
+    osw_path = OpenStudio::Path.new("#{run_dir}/#{osw_name}")
     idf.save(idf_path, true)
     save(osm_path, true)
 
@@ -82,10 +83,16 @@ class OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Running with OS 2.x WorkflowJSON.')
 
       # Copy the weather file to this directory
-      FileUtils.copy(epw_path.to_s, run_dir)
+      epw_name = 'in.epw'
+      begin
+        FileUtils.copy(epw_path.to_s, "#{run_dir}/#{epw_name}")
+      rescue
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Due to limitations on Windows file path lengths, this measure won't work unless your project is located in a directory whose filepath is less than 90 characters long, including slashes.")
+        return false
+      end
 
-      workflow.setSeedFile(File.absolute_path(osm_path.to_s))
-      workflow.setWeatherFile(epw_path)
+      workflow.setSeedFile(osm_name)
+      workflow.setWeatherFile(epw_name)
       workflow.saveAs(File.absolute_path(osw_path.to_s))
 
       cli_path = OpenStudio.getOpenStudioCLI

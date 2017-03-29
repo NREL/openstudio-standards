@@ -46,8 +46,8 @@ module BTAP
     # @author Phylroy A. Lopez
     # @return [String] the name of the model.
     def self.get_name(model)
-      unless model.building.get.getAttribute("name").empty?
-        return model.building.get.getAttribute("name").get.valueAsString
+      unless model.building.get.name.empty?
+        return model.building.get.name.get.to_s
       else
         return ""
       end

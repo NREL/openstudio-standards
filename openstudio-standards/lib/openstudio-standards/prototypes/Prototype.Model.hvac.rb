@@ -384,7 +384,7 @@ class OpenStudio::Model::Model
     # Get the space
     space = getSpaceByName(system['return_plenum'])
     if space.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{system['return_plenum']} was found in the model")
       return return_plenum
     end
     space = space.get
@@ -392,7 +392,7 @@ class OpenStudio::Model::Model
     # Get the space's zone
     zone = space.thermalZone
     if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Space #{space_name} has no thermal zone; cannot be a return plenum.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Space #{space.name} has no thermal zone; cannot be a return plenum.")
       return return_plenum
     end
 

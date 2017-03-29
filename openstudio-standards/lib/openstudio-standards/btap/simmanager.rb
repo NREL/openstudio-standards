@@ -231,7 +231,7 @@ module BTAP
       #@return [String] self
       def addModel(model, folder = @analysisFolder  )
 
-        run_name = model.building.get.getAttribute("name").get.valueAsString
+        run_name = model.building.get.name.get.to_s
         working_folder = OpenStudio::Path.new(folder.to_s + "\\simulations\\" + run_name )
         osm_save_path = OpenStudio::Path.new(folder.to_s + "\\simulations\\" + run_name + "\\" + run_name + ".osm" )
         model.save(OpenStudio::Path.new(osm_save_path), true);
