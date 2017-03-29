@@ -630,7 +630,7 @@ module BTAP
                                       :heating_capacity,
                                       :cooling_capacity,
                                       :is_dwelling_unit,           #Checks if it is a dwelling unit.
-                                     )
+                                      :is_wildcard)
 
 
 
