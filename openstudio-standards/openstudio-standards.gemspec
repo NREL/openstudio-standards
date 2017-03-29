@@ -19,8 +19,8 @@ Gem::Specification.new do |spec|
   spec.files = Dir['License.txt', 'lib/**/*', 'data/**/*']
   # spec.test_files = Dir['test/**/*']
   spec.require_paths = ['lib']
-
-  spec.add_development_dependency 'nokogiri', '<= 1.6.8.1' # last version of nokogiri that works with Ruby 2.0.0p594
+   
+  spec.add_development_dependency 'parallel_tests'
   spec.add_development_dependency "nokogiri", "<= 1.6.8.1"
   spec.add_development_dependency 'bundler', '~> 1.9'
   spec.add_development_dependency 'rake', '~> 10.0'

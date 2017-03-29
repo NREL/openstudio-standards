@@ -122,7 +122,7 @@ class OpenStudio::Model::Model
       # For some building types, stories are defined explicitly 
       if building_type == 'SmallHotel'
         getBuildingStorys.each { |item| item.remove }
-        building_story_map = define_building_story_map(building_type, template, climate_zone)
+        building_story_map = PrototypeBuilding::SmallHotel::define_building_story_map(building_type, template, climate_zone)
         assign_building_story(building_type, template, climate_zone, building_story_map)
       end
       osm_file_increment += 1

@@ -976,7 +976,7 @@ module BTAP
                   if single_spaces.size > 0 
                     thermal_zone = BTAP::Geometry::Zones::create_thermal_zone(model, single_spaces)
                     name = "Sp-#{single_spaces[0].name} Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement}"
-                  thermal_zone.setName(name)t
+                  thermal_zone.setName(name)
 
                     # Add a thermostat based on the first space
                     space_type_name = single_spaces[0].spaceType.get.name.get
