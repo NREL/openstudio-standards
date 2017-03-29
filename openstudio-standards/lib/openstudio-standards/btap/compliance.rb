@@ -627,7 +627,7 @@ module BTAP
                                       :heating_capacity,
                                       :cooling_capacity,
                                       :is_dwelling_unit,           #Checks if it is a dwelling unit.
-                                     )
+                                      :is_wildcard)
 
 
 
@@ -936,61 +936,62 @@ module BTAP
                       space_array << space_info.space
                     end
                   end
-                end
-                #create Thermal Zone if space_array is not empty.
-                if space_array.size > 0
-                  # Process spaces that have multipliers associated with them first. 
-                  # This map define the multipliers for spaces with multipliers not equals to 1
-                  space_multiplier_map = {}
-                  case building_type
-                  when 'LargeHotel', 'MidriseApartment', 'LargeOffice', 'Hospital'
-                    space_multiplier_map = model.define_space_multiplier
-                  end
 
-                  #create new zone and add the spaces to it.
-                  single_spaces = []
-                  space_array.each do |space|
-                    #check to see if it is part of the mulitplier list. Since zones can only have a mulitplier in E+
-                    # the space will have to be it's own zone. 
-                    if not space_multiplier_map[space.name.to_s].nil?
-                      thermal_zone = OpenStudio::Model::ThermalZone.new(model)
-                      thermal_zone.setName("Sp-#{space.name} Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement} ZN")
-                      thermal_zone.setMultiplier(space_multiplier_map[space.name.to_s])
-                      space.setThermalZone(thermal_zone)
+                  #create Thermal Zone if space_array is not empty.
+                  if space_array.size > 0
+                    # Process spaces that have multipliers associated with them first. 
+                    # This map define the multipliers for spaces with multipliers not equals to 1
+                    space_multiplier_map = {}
+                    case building_type
+                    when 'LargeHotel', 'MidriseApartment', 'LargeOffice', 'Hospital'
+                      space_multiplier_map = model.define_space_multiplier
+                    end
+
+                    #create new zone and add the spaces to it.
+                    single_spaces = []
+                    space_array.each do |space|
+                      #check to see if it is part of the mulitplier list. Since zones can only have a mulitplier in E+
+                      # the space will have to be it's own zone. 
+                      if not space_multiplier_map[space.name.to_s].nil?
+                        thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+                        thermal_zone.setName("Sp-#{space.name} Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement} ZN")
+                        thermal_zone.setMultiplier(space_multiplier_map[space.name.to_s])
+                        space.setThermalZone(thermal_zone)
+                        # Add a thermostat based on the first space
+                        space_type_name = space.spaceType.get.name.get
+                        thermostat_name = space_type_name + ' Thermostat'
+                        thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
+                        if thermostat.empty?
+                          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name} ZN")
+                          raise (" Thermostat #{thermostat_name} not found for space name: #{space.name}")
+                        else
+                          thermostatClone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
+                          thermal_zone.setThermostatSetpointDualSetpoint(thermostatClone)
+                        end
+                        system_zone_array[system_number] << thermal_zone
+                      else
+                        single_spaces << space 
+                      end
+                    end 
+                    if single_spaces.size > 0 
+                      thermal_zone = BTAP::Geometry::Zones::create_thermal_zone(model, single_spaces)
+                      name = "Sp-#{single_spaces[0].name} Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement}"
+                  thermal_zone.setName(name)
+
                       # Add a thermostat based on the first space
-                      space_type_name = space.spaceType.get.name.get
+                      space_type_name = single_spaces[0].spaceType.get.name.get
                       thermostat_name = space_type_name + ' Thermostat'
                       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
                       if thermostat.empty?
-                        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name} ZN")
-                        raise (" Thermostat #{thermostat_name} not found for space name: #{space.name}")
+                        OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{single_spaces[0].name}")
+                        raise (" Thermostat #{thermostat_name} not found for space name: #{single_spaces[0].name}")
                       else
                         thermostatClone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
                         thermal_zone.setThermostatSetpointDualSetpoint(thermostatClone)
                       end
+                      #add thermal zone to system array.
                       system_zone_array[system_number] << thermal_zone
-                    else
-                      single_spaces << space 
                     end
-                  end 
-                  if single_spaces.size > 0 
-                    thermal_zone = BTAP::Geometry::Zones::create_thermal_zone(model, single_spaces)
-                    name = "Sp-#{single_spaces[0].name} Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement}"
-                  thermal_zone.setName(name)
-
-                    # Add a thermostat based on the first space
-                    space_type_name = single_spaces[0].spaceType.get.name.get
-                    thermostat_name = space_type_name + ' Thermostat'
-                    thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
-                    if thermostat.empty?
-                      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{single_spaces[0].name}")
-                      raise (" Thermostat #{thermostat_name} not found for space name: #{single_spaces[0].name}")
-                    else
-                      thermostatClone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
-                      thermal_zone.setThermostatSetpointDualSetpoint(thermostatClone)
-                    end
-                    #add thermal zone to system array.
-                    system_zone_array[system_number] << thermal_zone
                   end
                 end
               end
