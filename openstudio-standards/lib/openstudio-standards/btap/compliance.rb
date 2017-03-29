@@ -942,11 +942,19 @@ module BTAP
                     # Process spaces that have multipliers associated with them first. 
                     # This map define the multipliers for spaces with multipliers not equals to 1
                     space_multiplier_map = {}
+                    # This map define the multipliers for spaces with multipliers not equals to 1
                     case building_type
-                    when 'LargeHotel', 'MidriseApartment', 'LargeOffice', 'Hospital'
-                      space_multiplier_map = model.define_space_multiplier
+                    when 'LargeHotel'
+                        space_multiplier_map = PrototypeBuilding::LargeHotel.define_space_multiplier
+                    when 'MidriseApartment'
+                        space_multiplier_map = PrototypeBuilding::MidriseApartment.define_space_multiplier
+                    when 'LargeOffice'
+                        space_multiplier_map = PrototypeBuilding::LargeOffice.define_space_multiplier
+                    when 'Hospital'
+                        space_multiplier_map = PrototypeBuilding::Hospital.define_space_multiplier
+                    else
+                        space_multiplier_map = {}
                     end
-
                     #create new zone and add the spaces to it.
                     single_spaces = []
                     space_array.each do |space|
