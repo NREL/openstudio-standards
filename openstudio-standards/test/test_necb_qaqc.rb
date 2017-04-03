@@ -46,8 +46,8 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     'RetailStripmall', 
     'Warehouse'
   ]
-  templates = [ 'NECB 2011']
-  climate_zones = ['NECB HDD Method']
+  templates =  'NECB 2011'
+  climate_zones = 'NECB HDD Method'
   epw_files = [
     'CAN_BC_Vancouver.718920_CWEC.epw',#  CZ 5 - Gas HDD = 3019 
     'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
@@ -80,36 +80,9 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
       BTAP::Environment::WeatherFile.new(weather).set_weather_file(model)
       model.run_simulation_and_log_errors(run_dir(test_name))
       qaqc = BTAP.perform_qaqc(model)
-      #model.save("#{output_folder}/ExampleModel.osm", true)
       File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc)) }
       puts JSON.pretty_generate(qaqc)
     }
-    #    epw_files.each do |weather|
-    #      test_name = "#{building}_#{weather}"
-    #      unless File.exist?(run_dir(test_name))
-    #        FileUtils.mkdir_p(run_dir(test_name))
-    #      end
-    #      #assert(File.exist?(run_dir(test_name)))
-    #
-    #      if File.exist?(report_path(test_name))
-    #        FileUtils.rm(report_path(test_name))
-    #      end
-    #
-    #      #assert(File.exist?(model_in_path))
-    #
-    #      if File.exist?(model_out_path(test_name))
-    #        FileUtils.rm(model_out_path(test_name))
-    #      end
-    #      output_folder = "#{File.dirname(__FILE__)}/output/#{test_name}"
-    #      model = OpenStudio::Model::Model.new
-    #      model.create_prototype_building(building,'NECB 2011','NECB HDD Method',weather,output_folder)
-    #      BTAP::Environment::WeatherFile.new(weather).set_weather_file(model)
-    #      model.run_simulation_and_log_errors(run_dir(test_name))
-    #      qaqc = BTAP.perform_qaqc(model)
-    #      #model.save("#{output_folder}/ExampleModel.osm", true)
-    #      File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc)) }
-    #      puts JSON.pretty_generate(qaqc)
-    #    end
-  end
+ end
 
 end
