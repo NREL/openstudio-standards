@@ -39,7 +39,8 @@ require_relative 'measures'
 require_relative 'utilities'
 require_relative 'reporting'
 require_relative 'equest'
- 
+require_relative 'btap_result'
+
 class String
   #This method converts to Boolean.
   #@author phylroy.lopez@nrcan.gc.ca
