@@ -27,6 +27,14 @@ namespace :test do
         t.libs << 'test'
         t.test_files = FileList['openstudio-standards/test/necb/test_weather.rb']
     end
+    
+    desc 'Run BTAP.perform_qaqc() test'
+    Rake::TestTask.new(:btap_json_test) do |t|
+      file_list = FileList.new('openstudio-standards/test/test_necb_qaqc.rb')
+      t.libs << 'test'
+      t.test_files = file_list
+      t.verbose = true
+    end
 
     desc 'Run the compliance file tests'
     Rake::TestTask.new('compliance') do |t|
