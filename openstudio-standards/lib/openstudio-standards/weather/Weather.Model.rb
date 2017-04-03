@@ -514,7 +514,9 @@ module BTAP
       def set_weather_file(model, runner = nil)
         BTAP.runner_register('Info', 'BTAP::Environment::WeatherFile::set_weather', runner)
         OpenStudio::Model::WeatherFile.setWeatherFile(model, @epw_file)
-        BTAP.runner_register('Info', "Set model \"#{model.building.get.name}\" to weather file #{model.weatherFile.get.path.get}.\n", runner)
+        building_name = model.building.get.name
+        weather_file_path = model.weatherFile.get.path.get
+        BTAP.runner_register('Info', "Set model \"#{building_name}\" to weather file #{weather_file_path}.\n", runner)
 
         # Add or update site data
         site = model.getSite

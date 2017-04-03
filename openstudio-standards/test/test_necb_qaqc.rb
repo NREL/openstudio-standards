@@ -29,23 +29,20 @@ end
 class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
   building_types = [
-    'FullServiceRestaurant',
-    'HighriseApartment',
-    'LargeHotel',
-    'LargeOffice',
-    'MediumOffice',
-    'MidriseApartment',
-    'Outpatient',
-    'PrimarySchool',
-    'QuickServiceRestaurant',
-    'RetailStandAlone',
-    'RetailStripMall',
-    'SecondarySchool',
-    'SmallHotel',
-    'SmallOffice',
-    'RetailStripmall', 
-    'Warehouse'
-  ]
+    "FullServiceRestaurant",
+    "LargeHotel",
+    "LargeOffice",
+    "MediumOffice",
+    "MidriseApartment",
+    "Outpatient",
+    "PrimarySchool",
+    "QuickServiceRestaurant",
+    "RetailStandalone",
+    "RetailStripmall",
+    "SmallHotel",
+    "SmallOffice",
+    "Warehouse"]
+ 
   templates =  'NECB 2011'
   climate_zones = 'NECB HDD Method'
   epw_files = [
