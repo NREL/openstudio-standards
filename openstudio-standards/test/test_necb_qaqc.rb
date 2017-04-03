@@ -64,10 +64,9 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
       model = OpenStudio::Model::Model.new
       model.create_prototype_building(building,'NECB 2011','NECB HDD Method',weather,output_folder)
       BTAP::Environment::WeatherFile.new(weather).set_weather_file(model)
-      sqlFile = OpenStudio::SqlFile.new(OpenStudio::Path.new(sql_path(test_name)))
-      model.setSqlFile(sqlFile)
+      model.run_simulation_and_log_errors(run_dir(test_name))
       qaqc = BTAP.perform_qaqc(model)
-      model.save("#{output_folder}/ExampleModel.osm", true)
+      #model.save("#{output_folder}/ExampleModel.osm", true)
       File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc)) }
       puts JSON.pretty_generate(qaqc)
     end
