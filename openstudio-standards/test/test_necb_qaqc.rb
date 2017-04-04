@@ -42,7 +42,7 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     "SmallHotel",
     "SmallOffice",
     "Warehouse"]
- 
+
   templates =  'NECB 2011'
   climate_zones = 'NECB HDD Method'
   epw_files = [
@@ -52,34 +52,41 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
     'CAN_NU_Resolute.719240_CWEC.epw', # CZ 8  -FuelOil2 HDD = 12570
   ]
+
+  run_argument_array = []
+  building_types.each do |building|
+    epw_files.each do |epw|
+      run_argument_array << { 'building'=> building, 'epw'=>epw }
+    end
+  end
+
   processess =  (Parallel::processor_count - 1)
   puts "processess #{processess}"
-  building_types.each do |building|
-    Parallel.map(epw_files, in_processes: processess) { |weather| 
-      test_name = "#{building}_#{weather}"
-      unless File.exist?(run_dir(test_name))
-        FileUtils.mkdir_p(run_dir(test_name))
-      end
-      #assert(File.exist?(run_dir(test_name)))
+  Parallel.map(run_argument_array, in_processes: processess) { |info| 
+    test_name = "#{info['building']}_#{info['epw']}"
+    puts info
+    puts "creating #{test_name}"
+    unless File.exist?(run_dir(test_name))
+      FileUtils.mkdir_p(run_dir(test_name))
+    end
+    #assert(File.exist?(run_dir(test_name)))
 
-      if File.exist?(report_path(test_name))
-        FileUtils.rm(report_path(test_name))
-      end
+    if File.exist?(report_path(test_name))
+      FileUtils.rm(report_path(test_name))
+    end
 
-      #assert(File.exist?(model_in_path))
+    #assert(File.exist?(model_in_path))
 
-      if File.exist?(model_out_path(test_name))
-        FileUtils.rm(model_out_path(test_name))
-      end
-      output_folder = "#{File.dirname(__FILE__)}/output/#{test_name}"
-      model = OpenStudio::Model::Model.new
-      model.create_prototype_building(building, templates, climate_zones, weather, output_folder)
-      BTAP::Environment::WeatherFile.new(weather).set_weather_file(model)
-      model.run_simulation_and_log_errors(run_dir(test_name))
-      qaqc = BTAP.perform_qaqc(model)
-      File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc)) }
-      puts JSON.pretty_generate(qaqc)
-    }
- end
-
+    if File.exist?(model_out_path(test_name))
+      FileUtils.rm(model_out_path(test_name))
+    end
+    output_folder = "#{File.dirname(__FILE__)}/output/#{test_name}"
+    model = OpenStudio::Model::Model.new
+    model.create_prototype_building(info['building'], templates, climate_zones, info['epw'], output_folder)
+    BTAP::Environment::WeatherFile.new(info['epw']).set_weather_file(model)
+    model.run_simulation_and_log_errors(run_dir(test_name))
+    qaqc = BTAP.perform_qaqc(model)
+    File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc)) }
+    puts JSON.pretty_generate(qaqc)
+  }
 end
