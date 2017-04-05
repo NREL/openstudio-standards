@@ -21,6 +21,7 @@
 require "#{File.dirname(__FILE__)}/btap"
 require 'fileutils'
 require 'csv'
+require 'securerandom'
 #require 'rubygems'
 
 
@@ -693,8 +694,27 @@ module BTAP
       return si_quantity.value
     end
 
-      
-
+    def self.compile_qaqc_results(output_folder)
+      full_json = []
+      Dir.foreach("#{output_folder}") do |folder|
+        next if folder == '.' or folder == '..'
+        Dir.glob("#{output_folder}/#{folder}/qaqc.json") { |item| 
+          json = JSON.parse(File.read(item))
+          json['eplusout_err']['warnings'] = json['eplusout_err']['warnings'].size
+          json['eplusout_err']['severe'] = json['eplusout_err']['warnings'].size
+          json['eplusout_err']['fatal'] = json['eplusout_err']['warnings'].size
+          json['run_uuid'] = SecureRandom.uuid
+          bldg = json['building']['name'].split('-')
+          json['building_type'] = bldg[1]
+          json['template'] = bldg[0]
+        
+          
+          full_json << json
+        }
+      end
+      File.open("RESULTS-#{Time.now.strftime("%m-%d-%Y")}.json", 'w') {|f| f.write(JSON.pretty_generate(full_json)) }
+    end
+    
     # This is a simple example which uses rubyzip to
     # recursively generate a zip file from the contents of
     # a specified directory. The directory itself is not
