@@ -945,15 +945,15 @@ module BTAP
                     # This map define the multipliers for spaces with multipliers not equals to 1
                     case building_type
                     when 'LargeHotel'
-                        space_multiplier_map = PrototypeBuilding::LargeHotel.define_space_multiplier
+                      space_multiplier_map = PrototypeBuilding::LargeHotel.define_space_multiplier
                     when 'MidriseApartment'
-                        space_multiplier_map = PrototypeBuilding::MidriseApartment.define_space_multiplier
+                      space_multiplier_map = PrototypeBuilding::MidriseApartment.define_space_multiplier
                     when 'LargeOffice'
-                        space_multiplier_map = PrototypeBuilding::LargeOffice.define_space_multiplier
+                      space_multiplier_map = PrototypeBuilding::LargeOffice.define_space_multiplier
                     when 'Hospital'
-                        space_multiplier_map = PrototypeBuilding::Hospital.define_space_multiplier
+                      space_multiplier_map = PrototypeBuilding::Hospital.define_space_multiplier
                     else
-                        space_multiplier_map = {}
+                      space_multiplier_map = {}
                     end
                     #create new zone and add the spaces to it.
                     single_spaces = []
@@ -984,7 +984,7 @@ module BTAP
                     if single_spaces.size > 0 
                       thermal_zone = BTAP::Geometry::Zones::create_thermal_zone(model, single_spaces)
                       name = "Sp-#{single_spaces[0].name} Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement}"
-                  thermal_zone.setName(name)
+                      thermal_zone.setName(name)
 
                       # Add a thermostat based on the first space
                       space_type_name = single_spaces[0].spaceType.get.name.get
