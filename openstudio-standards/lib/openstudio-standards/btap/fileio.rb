@@ -699,6 +699,7 @@ module BTAP
       Dir.foreach("#{output_folder}") do |folder|
         next if folder == '.' or folder == '..'
         Dir.glob("#{output_folder}/#{folder}/qaqc.json") { |item| 
+          puts "Reading #{output_folder}/#{folder}/qaqc.json"
           json = JSON.parse(File.read(item))
           json['eplusout_err']['warnings'] = json['eplusout_err']['warnings'].size
           json['eplusout_err']['severe'] = json['eplusout_err']['warnings'].size
@@ -707,12 +708,10 @@ module BTAP
           bldg = json['building']['name'].split('-')
           json['building_type'] = bldg[1]
           json['template'] = bldg[0]
-        
-          
           full_json << json
         }
       end
-      File.open("RESULTS-#{Time.now.strftime("%m-%d-%Y")}.json", 'w') {|f| f.write(JSON.pretty_generate(full_json)) }
+      File.open("#{output_folder}/../RESULTS-#{Time.now.strftime("%m-%d-%Y")}.json", 'w') {|f| f.write(JSON.pretty_generate(full_json)) }
     end
     
     # This is a simple example which uses rubyzip to
