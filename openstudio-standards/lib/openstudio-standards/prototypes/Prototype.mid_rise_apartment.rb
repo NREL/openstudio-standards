@@ -85,7 +85,7 @@ module MidriseApartment
                                'T N1 Apartment', 'T N2 Apartment', 'T NE Apartment',
                                'T NW Apartment', 'T S1 Apartment', 'T S2 Apartment',
                                'T SE Apartment', 'T SW Apartment'],
-        'Office - enclosed' => ['Office']
+        'Conf./meet./multi-purpose' => ['Office']
       }
     end
 
