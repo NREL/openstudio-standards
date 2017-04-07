@@ -84,7 +84,7 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     if File.exist?(model_out_path(test_name))
       FileUtils.rm(model_out_path(test_name))
     end
-    output_folder = "#{File.dirname(__FILE__)}/output/#{test_name}"
+    output_folder = "#{File.dirname(__FILE__)}/output#{Time.now.strftime("%m-%d")}/#{test_name}"
     model = OpenStudio::Model::Model.new
     model.create_prototype_building(info['building'], templates, climate_zones, info['epw'], output_folder)
     BTAP::Environment::WeatherFile.new(info['epw']).set_weather_file(model)
@@ -93,6 +93,6 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc)) }
     puts JSON.pretty_generate(qaqc)
   }
-  BTAP::FileIO.compile_qaqc_results("#{File.dirname(__FILE__)}/output")
+  BTAP::FileIO.compile_qaqc_results("#{File.dirname(__FILE__)}/output#{Time.now.strftime("%m-%d")}")
   puts "completed in #{Time.now - start} secs"
 end
