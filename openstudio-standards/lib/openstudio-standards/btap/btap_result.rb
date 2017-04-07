@@ -416,13 +416,14 @@ module BTAP
         air_loop_info[:supply_fan][:fan_efficiency] = fan.fanEfficiency
         air_loop_info[:supply_fan][:motor_efficiency] = fan.motorEfficiency
         air_loop_info[:supply_fan][:pressure_rise] = fan.pressureRise
-        air_loop_info[:supply_fan][:max_air_flow_rate]  = -1.0
+        air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]  = -1.0
        
         max_air_flow_info = model.sqlFile().get().execAndReturnVectorOfString("SELECT RowName FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Max Air Flow Rate' AND Units='m3/s' ")
         max_air_flow_info = validate_optional(max_air_flow_info, model, "N/A")
         unless max_air_flow_info == "N/A"
-          if max_air_flow_info.include? "#{air_loop_info[:supply_fan][:name]}"
-            air_loop_info[:supply_fan][:max_air_flow_rate] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Max Air Flow Rate' AND Units='m3/s' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ").get
+          if max_air_flow_info.include? "#{air_loop_info[:supply_fan][:name].to_s.upcase}"
+            air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Max Air Flow Rate' AND Units='m3/s' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ").get
+            air_loop_info[:supply_fan][:rated_electric_power_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Rated Electric Power' AND Units='W' AND RowName='#{air_loop_info[:supply_fan][:name].upcase}' ").get
           else
             error_warning <<  "#{air_loop_info[:supply_fan][:name]} does not exist in sql file WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Fans' AND ColumnName='Max Air Flow Rate' AND Units='m3/s'"
           end
@@ -455,6 +456,9 @@ module BTAP
           coil[:name]=gas.name.get
           coil[:type]="Gas"
           coil[:efficency] = gas.gasBurnerEfficiency
+          #coil[:nominal_capacity]= gas.nominalCapacity()
+          coil[:nominal_capacity]= model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Heating Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].to_s.upcase}'")
+          coil[:nominal_capacity]=validate_optional(coil[:nominal_capacity],model,-1.0 )
         end
         if supply_comp.to_CoilHeatingElectric.is_initialized
           coil={}
@@ -462,6 +466,8 @@ module BTAP
           electric = supply_comp.to_CoilHeatingElectric.get
           coil[:name]= electric.name.get
           coil[:type]= "Electric"
+          coil[:nominal_capacity]= model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Heating Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].to_s.upcase}'")
+          coil[:nominal_capacity]=validate_optional(coil[:nominal_capacity],model,-1.0 )
         end
         if supply_comp.to_CoilHeatingWater.is_initialized
           coil={}
@@ -469,6 +475,8 @@ module BTAP
           water = supply_comp.to_CoilHeatingWater.get
           coil[:name]= water.name.get
           coil[:type]= "Water"
+          coil[:nominal_capacity]= model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Heating Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].to_s.upcase}'")
+          coil[:nominal_capacity]=validate_optional(coil[:nominal_capacity],model,-1.0 )
         end
       end
       
@@ -485,7 +493,7 @@ module BTAP
           coil[:name] = single_speed.name.get
           coil[:cop] = single_speed.getRatedCOP.get
           coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
-          coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model)
+          coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
         end
         if supply_comp.to_CoilCoolingDXTwoSpeed.is_initialized
           coil = {}
@@ -495,7 +503,7 @@ module BTAP
           coil[:cop_low] = two_speed.getRatedLowSpeedCOP.get
           coil[:cop_high] =  two_speed.getRatedHighSpeedCOP.get
           coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
-          coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w] , model)
+          coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w] , model,-1.0)
         end
       end
       qaqc[:air_loops] << air_loop_info
@@ -920,9 +928,67 @@ def necb_2011_qaqc(qaqc)
     end
   end	
   #Air flow sizing check
+  #determine correct economizer usage according to section 5.2.2.7 of NECB 2011
+  necb_section_name = "NECB2011-5.2.2.7"
   qaqc[:air_loops].each do |air_loop_info|
-    air_loop_info[:name] 
-    air_loop_info[:thermal_zones] 
-    air_loop_info[:total_floor_area_served] 
+#    air_loop_info[:name] 
+#    air_loop_info[:thermal_zones] 
+#    air_loop_info[:total_floor_area_served]
+#    air_loop_info[:cooling_coils][:dx_single_speed]
+#    air_loop_info[:cooling_coils][:dx_two_speed]
+#    air_loop_info[:supply_fan][:max_air_flow_rate]
+#    
+#    air_loop_info[:heating_coils][:coil_heating_gas][:nominal_capacity]
+#    air_loop_info[:heating_coils][:coil_heating_electric][:nominal_capacity]
+#    air_loop_info[:heating_coils][:coil_heating_water][:nominal_capacity]
+#    
+#    air_loop_info[:economizer][:control_type]
+    
+    capacity = -1.0
+    
+    if !air_loop_info[:heating_coils][:coil_heating_gas][0].nil?
+      puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
+      capacity = air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]
+    elsif !air_loop_info[:heating_coils][:coil_heating_electric][0].nil?
+      puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
+      capacity = air_loop_info[:heating_coils][:coil_heating_electric][0][:nominal_capacity]
+    elsif !air_loop_info[:heating_coils][:coil_heating_water][0].nil?
+      puts "air_loop_info[:heating_coils][:coil_heating_water]"
+      capacity = air_loop_info[:heating_coils][:coil_heating_water][0][:nominal_capacity]
+    end
+    puts capacity
+    if capacity == -1.0
+      #This should not happen
+      puts "air_loop_info[:heating_coils] does not have a capacity or the type is not gas/electric/water for #{air_loop_info[:name]}"
+    else
+      #check for correct economizer usage
+      puts "air_loop_info[:supply_fan][:max_air_flow_rate]: #{air_loop_info[:supply_fan][:max_air_flow_rate]}"
+      unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
+        #capacity should be in kW
+        if capacity > 20000 or air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000 >1500
+          #diff enth
+          puts "diff"
+          necb_section_test( 
+            qaqc,
+            "DifferentialEnthalpy",
+            '==',
+            air_loop_info[:economizer][:control_type],
+            necb_section_name,
+            "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]"
+          )
+        else
+          #no economizer
+          puts "no econ"
+          necb_section_test( 
+            qaqc,
+            'NoEconomizer',
+            '==',
+            air_loop_info[:economizer][:control_type],
+            necb_section_name,
+            "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]"
+          )
+        end
+      end
+    end
   end
 end
