@@ -957,10 +957,15 @@ module BTAP
                     end
                     #create new zone and add the spaces to it.
                     space_array.each do |space|
-                        thermal_zone = OpenStudio::Model::ThermalZone.new(model)
-                        thermal_zone.setName("Sp-#{space.name} Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement} ZN")
-                        thermal_zone.setMultiplier(space_multiplier_map[space.name.to_s]) unless space_multiplier_map[space.name.to_s].nil?
-                        space.setThermalZone(thermal_zone)
+                      # Create thermalzone for each space. 
+                      thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+                      # Create a more informative space name.  
+                      thermal_zone.setName("Sp-#{space.name} Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement} ZN")
+                      # Add zone mulitplier if required. 
+                      thermal_zone.setMultiplier(space_multiplier_map[space.name.to_s]) unless space_multiplier_map[space.name.to_s].nil?
+                      # Space to thermal zone. (for archetype work it is one to one) 
+                      space.setThermalZone(thermal_zone)
+                      # Get thermostat for space type if it already exists.
                         space_type_name = space.spaceType.get.name.get
                         thermostat_name = space_type_name + ' Thermostat'
                         thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
@@ -971,6 +976,7 @@ module BTAP
                           thermostatClone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
                           thermal_zone.setThermostatSetpointDualSetpoint(thermostatClone)
                         end
+                        # Add thermal to zone system number. 
                         system_zone_array[system_number] << thermal_zone
                     end 
                   end

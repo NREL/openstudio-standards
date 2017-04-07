@@ -63,7 +63,7 @@ namespace :test do
                 File.open("../node_tests.txt", "r") do |f|
                     f.each_line do |line|
                         # Skip comments the CLI may have included
-                        next unless line.include?('.rb')
+                        next unless line.include?('.rb') 
                         # Remove whitespaces
                         line = line.strip
                         # Ensure the file exists
