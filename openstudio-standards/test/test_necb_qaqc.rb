@@ -7,7 +7,7 @@ require 'etc'
 $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
 def run_dir(test_name)
   # always generate test output in specially named 'output' directory so result files are not made part of the measure
-  "#{File.dirname(__FILE__)}/output/#{test_name}"
+  "#{File.dirname(__FILE__)}/output#{Time.now.strftime("%m-%d")}/#{test_name}"
 end
 
 def model_out_path(test_name)
