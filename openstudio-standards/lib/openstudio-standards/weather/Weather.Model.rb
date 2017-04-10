@@ -345,7 +345,8 @@ module BTAP
         :typical_spring_week,
         :epw_filepath,
         :ddy_filepath,
-        :stat_filepath
+        :stat_filepath,
+        :db990
 
       YEAR = 0
       MONTH = 1
@@ -454,6 +455,7 @@ module BTAP
         @typical_winter_dry_week = @stat_file.typical_winter_dry_week
         @typical_autumn_week = @stat_file.typical_autumn_week
         @typical_spring_week = @stat_file.typical_spring_week
+        @db990 = @heating_design_info[2]
         return self
       end
       
