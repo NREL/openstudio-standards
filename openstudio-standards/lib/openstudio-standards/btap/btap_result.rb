@@ -396,9 +396,20 @@ module BTAP
       air_loop_info[:name] = air_loop.name.get
       air_loop_info[:thermal_zones] = []
       air_loop_info[:total_floor_area_served] = 0.0
+      air_loop_info[:total_breathing_zone_outdoor_airflow_vbz] = 0.0
       air_loop.thermalZones.each do |zone|
         air_loop_info[:thermal_zones] << zone.name.get
+        vbz = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='Zone Ventilation Parameters' AND ColumnName='Breathing Zone Outdoor Airflow - Vbz' AND Units='m3/s' AND RowName='#{zone.name.get.to_s.upcase}' ")
+        vbz = validate_optional(vbz, model, 0)
+        air_loop_info[:total_breathing_zone_outdoor_airflow_vbz] += vbz
         air_loop_info[:total_floor_area_served] += zone.floorArea
+      end
+      air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='System Ventilation Parameters' AND ColumnName='Area Outdoor Air Rate - Ra' AND Units='m3/s-m2' AND RowName='#{air_loop_info[:name].to_s.upcase}' ")
+      air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] = validate_optional(air_loop_info[:area_outdoor_air_rate_m3_per_s_m2], model, -1.0)
+      
+      air_loop_info[:outdoor_air_L_per_s] = -1.0
+      unless air_loop_info[:area_outdoor_air_rate_m3_per_s_m2] ==-1.0
+        air_loop_info[:outdoor_air_L_per_s] = air_loop_info[:area_outdoor_air_rate_m3_per_s_m2]*air_loop_info[:total_floor_area_served]*1000
       end
       #Fan
 
@@ -538,7 +549,7 @@ module BTAP
           pump_info[:head_pa] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Head' AND RowName='#{pump_info[:name].upcase}' ")
           pump_info[:head_pa] = validate_optional(pump_info[:head_pa], model)
           pump_info[:water_flow_m3_per_s] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Water Flow' AND RowName='#{pump_info[:name].upcase}' ")
-          pump_info[:water_flow_m3_per_s] = validate_optional(pump_info[:water_flow_m3_per_s], model)
+          pump_info[:water_flow_m3_per_s] = validate_optional(pump_info[:water_flow_m3_per_s], model, -1.0)
           pump_info[:electric_power_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Electric Power' AND RowName='#{pump_info[:name].upcase}' ")
           pump_info[:electric_power_w] = validate_optional(pump_info[:electric_power_w], model)
           pump_info[:motor_efficency] = pump.getMotorEfficiency.value() 
@@ -552,7 +563,7 @@ module BTAP
           pump_info[:name] = pump.name.get
           pump_info[:type] = "Pump:VariableSpeed" 
           pump_info[:head_pa] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Head' AND RowName='#{pump_info[:name].upcase}' ")
-          pump_info[:head_pa] = validate_optional(pump_info[:head_pa], model)
+          pump_info[:head_pa] = validate_optional(pump_info[:head_pa], model, -1.0)
           pump_info[:water_flow_m3_per_s] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Water Flow' AND RowName='#{pump_info[:name].upcase}' ")
           pump_info[:water_flow_m3_per_s] = validate_optional(pump_info[:water_flow_m3_per_s], model)
           pump_info[:electric_power_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Electric Power' AND RowName='#{pump_info[:name].upcase}' ")
@@ -620,7 +631,7 @@ module BTAP
        
     
     # Perform qaqc
-    necb_2011_qaqc(qaqc) if qaqc[:building][:name].include?("NECB 2011") #had to nodify this because this is specifically for "NECB-2011" standard
+    necb_2011_qaqc(qaqc, model) if qaqc[:building][:name].include?("NECB 2011") #had to nodify this because this is specifically for "NECB-2011" standard
     sanity_check(qaqc)
     return qaqc
   end
@@ -722,6 +733,10 @@ def sanity_check(qaqc)
   #Padmassun's code for isConditioned start
   qaqc[:thermal_zones].each do |zoneinfo|
     zoneinfo[:spaces].each do |space|
+      #skip plenums and undefined spaces/zones
+      if zoneinfo[:name].to_s.include?"- undefined -"
+        next
+      end
       if zoneinfo[:space_type_name].to_s.include?"Space Function - undefined -"
         if zoneinfo[:is_conditioned].to_s == "No"
           qaqc[:sanity_check][:pass] << "[TEST-PASS][SANITY_CHECK-PASS] for [SPACE][#{space[:name]}] and [THERMAL ZONE] [#{zoneinfo[:name]}] where isConditioned is supposed to be [""No""] and found as #{zoneinfo[:is_conditioned]}"
@@ -731,7 +746,7 @@ def sanity_check(qaqc)
       else
         if zoneinfo[:is_conditioned].to_s == "Yes"
           qaqc[:sanity_check][:pass] << "[TEST-PASS][SANITY_CHECK-PASS] for [SPACE][#{space[:name]}] and [THERMAL ZONE] [#{zoneinfo[:name]}] where isConditioned is supposed to be [""Yes""] and found as #{zoneinfo[:is_conditioned]}"
-        else
+        elsif zoneinfo[:name]
           qaqc[:sanity_check][:fail] << "[ERROR][SANITY_CHECK-FAIL] for [SPACE][#{space[:name]}] and [THERMAL ZONE] [#{zoneinfo[:name]}] where isConditioned is supposed to be [""Yes""] but found as #{zoneinfo[:is_conditioned]}"
         end          
       end
@@ -743,7 +758,7 @@ def sanity_check(qaqc)
 end
   
   
-def necb_2011_qaqc(qaqc)
+def necb_2011_qaqc(qaqc, model)
   #Now perform basic QA/QC on items for necb 2011 
   qaqc[:information] = []
   qaqc[:warnings] =[]
@@ -909,6 +924,10 @@ def necb_2011_qaqc(qaqc)
   #Zone Sizing and design supply temp tests
   necb_section_name = "NECB2011-?"
   qaqc[:thermal_zones].each do |zoneinfo|
+#    skipping undefined schedules
+    if zoneinfo[:name].to_s.include?"- undefined -"
+      next
+    end
     data = {}
     data[:heating_sizing_factor] = [1.3 , zoneinfo[:heating_sizing_factor]]
     data[:cooling_sizing_factor] = [1.1 ,zoneinfo[:cooling_sizing_factor]]
@@ -931,30 +950,27 @@ def necb_2011_qaqc(qaqc)
   #determine correct economizer usage according to section 5.2.2.7 of NECB 2011
   necb_section_name = "NECB2011-5.2.2.7"
   qaqc[:air_loops].each do |air_loop_info|
-#    air_loop_info[:name] 
-#    air_loop_info[:thermal_zones] 
-#    air_loop_info[:total_floor_area_served]
-#    air_loop_info[:cooling_coils][:dx_single_speed]
-#    air_loop_info[:cooling_coils][:dx_two_speed]
-#    air_loop_info[:supply_fan][:max_air_flow_rate]
-#    
-#    air_loop_info[:heating_coils][:coil_heating_gas][:nominal_capacity]
-#    air_loop_info[:heating_coils][:coil_heating_electric][:nominal_capacity]
-#    air_loop_info[:heating_coils][:coil_heating_water][:nominal_capacity]
-#    
-#    air_loop_info[:economizer][:control_type]
+    #    air_loop_info[:name] 
+    #    air_loop_info[:thermal_zones] 
+    #    air_loop_info[:total_floor_area_served]
+    #    air_loop_info[:cooling_coils][:dx_single_speed]
+    #    air_loop_info[:cooling_coils][:dx_two_speed]
+    #    air_loop_info[:supply_fan][:max_air_flow_rate]
+    #    
+    #    air_loop_info[:heating_coils][:coil_heating_gas][:nominal_capacity]
+    #    air_loop_info[:heating_coils][:coil_heating_electric][:nominal_capacity]
+    #    air_loop_info[:heating_coils][:coil_heating_water][:nominal_capacity]
+    #    
+    #    air_loop_info[:economizer][:control_type]
     
     capacity = -1.0
     
-    if !air_loop_info[:heating_coils][:coil_heating_gas][0].nil?
+    if !air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w].nil?
       puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
-      capacity = air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]
-    elsif !air_loop_info[:heating_coils][:coil_heating_electric][0].nil?
+      capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]
+    elsif !air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high].nil?
       puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
-      capacity = air_loop_info[:heating_coils][:coil_heating_electric][0][:nominal_capacity]
-    elsif !air_loop_info[:heating_coils][:coil_heating_water][0].nil?
-      puts "air_loop_info[:heating_coils][:coil_heating_water]"
-      capacity = air_loop_info[:heating_coils][:coil_heating_water][0][:nominal_capacity]
+      capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]
     end
     puts capacity
     if capacity == -1.0
@@ -967,7 +983,7 @@ def necb_2011_qaqc(qaqc)
         #capacity should be in kW
         if capacity > 20000 or air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000 >1500
           #diff enth
-          puts "diff"
+          #puts "diff"
           necb_section_test( 
             qaqc,
             "DifferentialEnthalpy",
@@ -978,7 +994,7 @@ def necb_2011_qaqc(qaqc)
           )
         else
           #no economizer
-          puts "no econ"
+          #puts "no econ"
           necb_section_test( 
             qaqc,
             'NoEconomizer',
@@ -990,5 +1006,53 @@ def necb_2011_qaqc(qaqc)
         end
       end
     end
+  end
+  
+  #*TODO*
+  necb_section_name = "NECB2011-5.2.10.1"
+  qaqc[:air_loops].each do |air_loop_info|
+    unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
+      hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
+      hrv_reqd = hrv_calc > 150 ? true : false
+    end
+  end
+  
+  necb_section_name = "NECB2011-5.2.3.3"
+  qaqc[:air_loops].each do |air_loop_info|
+    #necb_clg_cop = air_loop_info[:cooling_coils][:dx_single_speed][:cop] #*assuming that the cop is defined correctly*
+    necb_supply_fan_w = air_loop_info[:outdoor_air_L_per_s]*1.6
+    supply_fan_w = air_loop_info[:supply_fan][:rated_electric_power_w]
+    
+    percent_diff = (necb_supply_fan_w - supply_fan_w).to_f.abs/necb_supply_fan_w * 100
+    necb_section_test( 
+      qaqc,
+      10,
+      '>=',
+      percent_diff,
+      necb_section_name,
+      "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Percent Diff from NECB value [#{necb_supply_fan_w}]"
+    )
+  end
+  
+  necb_section_name = "SANITY-??"
+  qaqc[:plant_loops].each do |plant_loop_info|  
+    pump_head = plant_loop_info[:pumps][0][:head_pa]
+    flow_rate = plant_loop_info[:pumps][0][:water_flow_m3_per_s]*1000
+    hp_check = ((flow_rate*60*60)/1000*1000*9.81*pump_head*0.000101997)/3600000
+    puts "\npump_head #{pump_head}"
+    puts "flow_rate #{flow_rate}"
+    puts "hp_check #{hp_check}\n"
+    pump_power_hp = plant_loop_info[:pumps][0][:electric_power_w]/1000*0.746
+    
+    percent_diff = (hp_check - pump_power_hp).to_f.abs/hp_check * 100
+    necb_section_test( 
+      qaqc,
+      20, #diff of 20%
+      '>=',
+      percent_diff,
+      necb_section_name,
+      "[PLANT LOOP][#{plant_loop_info[:name]}][:pumps][0][:electric_power_hp] [#{pump_power_hp}] Percent Diff from NECB value [#{hp_check}]"
+    )
+    
   end
 end
