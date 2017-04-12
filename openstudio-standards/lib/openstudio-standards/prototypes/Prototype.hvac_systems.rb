@@ -3,12 +3,14 @@
 class OpenStudio::Model::Model
   require_relative 'Prototype.AirTerminalSingleDuctVAVReheat'
 
-  # Creates a hot water loop with one boiler or district heating
-  # and add it to the model.
+  # Creates a hot water loop with a boiler, district heating, or a
+  # water-to-water heat pump and adds it to the model.
   #
-  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2, DistrictHeating
+  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2, DistrictHeating, HeatPump
+  # @param ambient_loop [OpenStudio::Model::PlantLoop] The condenser loop for the heat pump.
+  # Only used when boiler_fuel_type is HeatPump.
   # @return [OpenStudio::Model::PlantLoop] the resulting hot water loop
-  def add_hw_loop(boiler_fuel_type, building_type = nil)
+  def add_hw_loop(boiler_fuel_type, building_type=nil, ambient_loop=nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding hot water loop.')
 
     # hot water loop
@@ -53,14 +55,20 @@ class OpenStudio::Model::Model
     hw_pump.setPumpControlType('Intermittent')
     hw_pump.addToNode(hot_water_loop.supplyInletNode)
 
-    # DistrictHeating
-    if boiler_fuel_type == 'DistrictHeating'
+    case boiler_fuel_type
+    # District Heating
+    when 'DistrictHeating'
       dist_ht = OpenStudio::Model::DistrictHeating.new(self)
       dist_ht.setName('Purchased Heating')
       dist_ht.autosizeNominalCapacity
       hot_water_loop.addSupplyBranchForComponent(dist_ht)
+    # Ambient Loop    
+    when 'HeatPump'
+      water_to_water_hp = OpenStudio::Model::HeatPumpWaterToWaterEquationFitHeating.new(self)
+      hot_water_loop.addSupplyBranchForComponent(water_to_water_hp)
+      ambient_loop.addDemandBranchForComponent(water_to_water_hp)
     # Boiler
-    else
+    when 'Electricity', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
       boiler_max_t_f = 203
       boiler_max_t_c = OpenStudio.convert(boiler_max_t_f, 'F', 'C').get
       boiler = OpenStudio::Model::BoilerHotWater.new(self)
@@ -87,6 +95,8 @@ class OpenStudio::Model::Model
       # boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,hw_temp_sch)
       # boiler_stpt_manager.setName("Boiler outlet setpoint manager")
       # boiler_stpt_manager.addToNode(boiler.outletModelObject.get.to_Node.get)
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Boiler fuel type #{boiler_fuel_type} is not valid, no boiler will be added.")
     end
 
     # hot water loop pipes
@@ -101,7 +111,7 @@ class OpenStudio::Model::Model
     demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(self)
     demand_outlet_pipe.addToNode(hot_water_loop.demandOutletNode)
 
-    return hot_water_loop
+    return hot_water_loop  
   end
 
   # Creates a chilled water loop and adds it to the model.
