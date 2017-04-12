@@ -4583,6 +4583,87 @@ class OpenStudio::Model::Model
 
   end
 
+  # Adds zone level water-to-air heat pumps for each zone.
+  #
+  # @param condenser_loop [OpenStudio::Model::PlantLoop] the condenser loop for the heat pumps
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add heat pumps to.
+  # @param ventilation [Bool] if true, ventilation will be supplied through the unit.  If false,
+  # no ventilation will be supplied through the unit, with the expectation that it will be provided
+  # by a DOAS or separate system.
+  # @return [Array<OpenStudio::Model::ZoneHVACWaterToAirHeatPump>] an array of heat pumps
+  def add_zone_water_to_air_hp(condenser_loop,
+                               thermal_zones,
+                               ventilation=true)
+  
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding zone water-to-air heat pump.")
+
+    water_to_air_hp_systems = []
+    thermal_zones.each do |zone|
+    
+      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, self.alwaysOnDiscreteSchedule)
+  
+      htg_coil = OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit.new(self)
+      htg_coil.setName("Water-to-Air HP Htg Coil")
+      htg_coil.setRatedHeatingCoefficientofPerformance(4.2)
+      htg_coil.setHeatingCapacityCoefficient1(0.237847462869254)
+      htg_coil.setHeatingCapacityCoefficient2(-3.35823796081626)
+      htg_coil.setHeatingCapacityCoefficient3(3.80640467406376)
+      htg_coil.setHeatingCapacityCoefficient4(0.179200417311554)
+      htg_coil.setHeatingCapacityCoefficient5(0.12860719846082)
+      htg_coil.setHeatingPowerConsumptionCoefficient1(-3.79175529243238)
+      htg_coil.setHeatingPowerConsumptionCoefficient2(3.38799239505527)
+      htg_coil.setHeatingPowerConsumptionCoefficient3(1.5022612076303)
+      htg_coil.setHeatingPowerConsumptionCoefficient4(-0.177653510577989)
+      htg_coil.setHeatingPowerConsumptionCoefficient5(-0.103079864171839)
+
+      condenser_loop.addDemandBranchForComponent(htg_coil)
+
+      clg_coil = OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit.new(self)
+      clg_coil.setName("Water-to-Air HP Clg Coil")
+      clg_coil.setRatedCoolingCoefficientofPerformance(3.4)
+      clg_coil.setTotalCoolingCapacityCoefficient1(-4.30266987344639)
+      clg_coil.setTotalCoolingCapacityCoefficient2(7.18536990534372)
+      clg_coil.setTotalCoolingCapacityCoefficient3(-2.23946714486189)
+      clg_coil.setTotalCoolingCapacityCoefficient4(0.139995928440879)
+      clg_coil.setTotalCoolingCapacityCoefficient5(0.102660179888915)
+      clg_coil.setSensibleCoolingCapacityCoefficient1(6.0019444814887)
+      clg_coil.setSensibleCoolingCapacityCoefficient2(22.6300677244073)
+      clg_coil.setSensibleCoolingCapacityCoefficient3(-26.7960783730934)
+      clg_coil.setSensibleCoolingCapacityCoefficient4(-1.72374720346819)
+      clg_coil.setSensibleCoolingCapacityCoefficient5(0.490644802367817)
+      clg_coil.setSensibleCoolingCapacityCoefficient6(0.0693119353468141)
+      clg_coil.setCoolingPowerConsumptionCoefficient1(-5.67775976415698)
+      clg_coil.setCoolingPowerConsumptionCoefficient2(0.438988156976704)
+      clg_coil.setCoolingPowerConsumptionCoefficient3(5.845277342193)
+      clg_coil.setCoolingPowerConsumptionCoefficient4(0.141605667000125)
+      clg_coil.setCoolingPowerConsumptionCoefficient5(-0.168727936032429)        
+  
+      condenser_loop.addDemandBranchForComponent(clg_coil)    
+  
+      # add fan
+      fan = OpenStudio::Model::FanOnOff.new(self, self.alwaysOnDiscreteSchedule)
+      fan.setName("#{zone.name} Water-to_Air HP Fan")
+      fan_static_pressure_in_h2o = 1.33
+      fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, "inH_{2}O","Pa").get
+      fan.setPressureRise(fan_static_pressure_pa)
+      fan.setFanEfficiency(0.52)
+      fan.setMotorEfficiency(0.8)
+  
+      water_to_air_hp_system = OpenStudio::Model::ZoneHVACWaterToAirHeatPump.new(self, self.alwaysOnDiscreteSchedule, fan, htg_coil, clg_coil, supplemental_htg_coil)
+      unless ventilation
+        water_to_air_hp_system.setOutdoorAirFlowRateDuringHeatingOperation(OpenStudio::OptionalDouble.new(0))
+        water_to_air_hp_system.setOutdoorAirFlowRateDuringCoolingOperation(OpenStudio::OptionalDouble.new(0))
+        water_to_air_hp_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(OpenStudio::OptionalDouble.new(0))
+      end
+      water_to_air_hp_system.addToThermalZone(zone)
+
+      water_to_air_hp_systems << water_to_air_hp_system
+      
+    end
+
+    return water_to_air_hp_systems                                                                                
+  end
+
   # Add an elevator the the specified space
   #
   # @param template [String] Valid choices are
