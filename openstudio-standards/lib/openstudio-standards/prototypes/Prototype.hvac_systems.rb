@@ -4664,6 +4664,65 @@ class OpenStudio::Model::Model
     return water_to_air_hp_systems                                                                                
   end
 
+  # Adds zone level ERVs for each zone.
+  #
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add heat pumps to.
+  # @return [Array<OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator>] an array of zone ERVs
+  # @todo need to revise parameters for ERV itself, including OA flow rate
+  def add_zone_erv(thermal_zones)
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding zone ERV for #{thermal_zones.size} zones.")
+    thermal_zones.each do |zone|
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
+    end    
+
+    erv_systems = []
+    thermal_zones.each do |zone|
+
+      supply_fan = OpenStudio::Model::FanOnOff.new(self)
+      # supply_fan.setFanEfficiency(OpenStudio::convert(300.0 / 0.3,"cfm","m^3/s").get)
+      # supply_fan.setPressureRise(300.0)
+      # supply_fan.setMaximumFlowRate(OpenStudio::convert(mech_vent.whole_house_vent_rate,"cfm","m^3/s").get)
+      # supply_fan.setMotorEfficiency(1)
+      # supply_fan.setMotorInAirstreamFraction(1)
+
+      exhaust_fan = OpenStudio::Model::FanOnOff.new(self)
+      # exhaust_fan.setFanEfficiency(OpenStudio::convert(300.0 / 0.3,"cfm","m^3/s").get)
+      # exhaust_fan.setPressureRise(300.0)
+      # exhaust_fan.setMaximumFlowRate(OpenStudio::convert(mech_vent.whole_house_vent_rate,"cfm","m^3/s").get)
+      # exhaust_fan.setMotorEfficiency(1)
+      # exhaust_fan.setMotorInAirstreamFraction(0)
+
+      erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(self)
+      # erv_controller.setExhaustAirTemperatureLimit("NoExhaustAirTemperatureLimit")
+      # erv_controller.setExhaustAirEnthalpyLimit("NoExhaustAirEnthalpyLimit")
+      # erv_controller.setTimeofDayEconomizerFlowControlSchedule(self.alwaysOnDiscreteSchedule)
+      # erv_controller.setHighHumidityControlFlag(false)
+
+      heat_exchanger = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(self)
+      # heat_exchanger.setHeatExchangerType("Plate")
+      # heat_exchanger.setEconomizerLockout(true)
+      # heat_exchanger.setSupplyAirOutletTemperatureControl(false)      
+      # heat_exchanger.setSensibleEffectivenessat100HeatingAirFlow(0.76)
+      # heat_exchanger.setSensibleEffectivenessat75HeatingAirFlow(0.81)
+      # heat_exchanger.setLatentEffectivenessat100HeatingAirFlow(0.68)
+      # heat_exchanger.setLatentEffectivenessat75HeatingAirFlow(0.73)      
+      # heat_exchanger.setSensibleEffectivenessat100CoolingAirFlow(0.76)
+      # heat_exchanger.setSensibleEffectivenessat75CoolingAirFlow(0.81)
+      # heat_exchanger.setLatentEffectivenessat100CoolingAirFlow(0.68)
+      # heat_exchanger.setLatentEffectivenessat75CoolingAirFlow(0.73)      
+
+      zone_hvac = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(self, heat_exchanger, supply_fan, exhaust_fan)
+      zone_hvac.setController(erv_controller)     
+      zone_hvac.addToThermalZone(zone)      
+
+      erv_systems << zone_hvac
+
+    end
+
+    return erv_systems
+  end
+
   # Add an elevator the the specified space
   #
   # @param template [String] Valid choices are
