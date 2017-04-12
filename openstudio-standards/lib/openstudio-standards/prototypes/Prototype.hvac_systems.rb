@@ -4323,6 +4323,256 @@ class OpenStudio::Model::Model
     return air_loop
   end
 
+  # Adds hydronic or electric baseboard heating to each zone.
+  #
+  # @param template [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop]
+  # the hot water loop that serves the baseboards.  If nil, baseboards are electric.
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add baseboards to.
+  # @return [Array<OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric, OpenStudio::Model::ZoneHVACBaseboardConvectiveWater>]
+  # array of baseboard heaters.
+  def add_baseboards(template,
+                     hot_water_loop,
+                     thermal_zones)
+
+    # Make a baseboard heater for each zone
+    baseboards = []
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding baseboard heat for #{zone.name}.")
+
+      if hot_water_loop.nil?
+        baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(self)
+        baseboard.setName("#{zone.name} Electric Baseboard")
+        baseboard.addToThermalZone(zone)
+        baseboards << baseboard
+      else
+        htg_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(self)
+        htg_coil.setName("#{zone.name} Hydronic Baseboard Coil")
+        hot_water_loop.addDemandBranchForComponent(htg_coil)
+        baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(self, alwaysOnDiscreteSchedule, htg_coil)
+        baseboard.setName("#{zone.name} Hydronic Baseboard")
+        baseboard.addToThermalZone(zone)
+        baseboards << baseboard
+      end
+
+    end
+
+    return baseboards
+
+  end
+
+  # Adds four pipe fan coil units to each zone.
+  #
+  # @param template [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop]
+  # the hot water loop that serves the fan coils.  If nil, a zero-capacity,
+  # electric heating coil set to Always-Off will be included in the unit.
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop]
+  # the chilled water loop that serves the fan coils.
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
+  # @return [Array<OpenStudio::Model::ZoneHVACFourPipeFanCoil>]
+  # array of fan coil units.
+  def add_four_pipe_fan_coils(template,
+                              hot_water_loop,
+                              chilled_water_loop,
+                              thermal_zones)
+
+    # Supply temps used across all zones
+    zn_dsn_clg_sa_temp_f = 55
+    zn_dsn_htg_sa_temp_f = 104
+
+    zn_dsn_clg_sa_temp_c = OpenStudio.convert(zn_dsn_clg_sa_temp_f, 'F', 'C').get
+    zn_dsn_htg_sa_temp_c = OpenStudio.convert(zn_dsn_htg_sa_temp_f, 'F', 'C').get
+
+    # Make a fan coil unit for each zone
+    fcus = []
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding baseboard heat for #{zone.name}.")
+
+      zone_sizing = zone.sizingZone
+      zone_sizing.setZoneCoolingDesignSupplyAirTemperature(zn_dsn_clg_sa_temp_c)
+      zone_sizing.setZoneHeatingDesignSupplyAirTemperature(zn_dsn_htg_sa_temp_c)
+
+      fcu_clg_coil = nil
+      if chilled_water_loop
+        fcu_clg_coil = OpenStudio::Model::CoilCoolingWater.new(self, alwaysOnDiscreteSchedule)
+        fcu_clg_coil.setName("#{zone.name} 'FCU Cooling Coil")
+        chilled_water_loop.addDemandBranchForComponent(fcu_clg_coil)
+        fcu_clg_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Fan coil units require a chilled water loop, but none was provided.")
+        return fcus
+      end
+
+      fcu_htg_coil = nil
+      if hot_water_loop
+        fcu_htg_coil = OpenStudio::Model::CoilHeatingWater.new(self, alwaysOnDiscreteSchedule)
+        fcu_htg_coil.setName("#{zone.name} FCU Heating Coil")
+        hot_water_loop.addDemandBranchForComponent(fcu_htg_coil)
+        fcu_htg_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
+      else
+        # Zero-capacity, always-off electric heating coil
+        fcu_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOffDiscreteSchedule)
+        fcu_htg_coil.setName("#{zone.name} No Heat")
+        fcu_htg_coil.setNominalCapacity(0)
+      end
+
+      fcu_fan = OpenStudio::Model::FanOnOff.new(self, alwaysOnDiscreteSchedule)
+      fcu_fan.setName("#{zone.name} Fan Coil fan")
+      fcu_fan.setFanEfficiency(0.16)
+      fcu_fan.setPressureRise(270.9) # Pa
+      fcu_fan.autosizeMaximumFlowRate
+      fcu_fan.setMotorEfficiency(0.29)
+      fcu_fan.setMotorInAirstreamFraction(1.0)
+      fcu_fan.setEndUseSubcategory('FCU Fans')
+
+      fcu = OpenStudio::Model::ZoneHVACFourPipeFanCoil.new(self,
+                                                           alwaysOnDiscreteSchedule,
+                                                           fcu_fan,
+                                                           fcu_clg_coil,
+                                                           fcu_htg_coil)
+      fcu.setName("#{zone.name} FCU")
+      fcu.setCapacityControlMethod('CyclingFan')
+      fcu.autosizeMaximumSupplyAirFlowRate
+      fcu.setMaximumOutdoorAirFlowRate(0)
+      fcu.addToThermalZone(zone)
+      fcus << fcu
+
+    end
+
+    return fcus
+  end
+
+  # Adds a window air conditioner to each zone.
+  # Code taken from:
+  # https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACRoomAirConditioner/measure.rb
+  #
+  # @param template [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
+  # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] and array of PTACs used as window AC units
+  def add_window_ac(template,
+                    thermal_zones)
+
+    # Defaults
+    eer = 8.5 # Btu/W-h
+    shr = 0.65 # The sensible heat ratio (ratio of the sensible portion of the load to the total load) at the nominal rated capacity
+    airflow_cfm_per_ton = 350.0 # cfm/ton
+
+    # Performance curves
+    # From Frigidaire 10.7 EER unit in Winkler et. al. Lab Testing of Window ACs (2013)
+    # NOTE: These coefficients are in SI UNITS
+    cool_CAP_FT_SPEC_coefficients = [0.6405, 0.01568, 0.0004531, 0.001615, -0.0001825, 0.00006614]
+    cool_EIR_FT_SPEC_coefficients = [2.287, -0.1732, 0.004745, 0.01662, 0.000484, -0.001306]
+    cool_CAP_FFLOW_SPEC_coefficients = [0.887, 0.1128, 0]
+    cool_EIR_FFLOW_SPEC_coefficients = [1.763, -0.6081, 0]
+    cool_PLF_FPLR = [0.78, 0.22, 0]
+    supply.cfm_TON_Rated = [312]    # medium speed
+
+    roomac_cap_ft = OpenStudio::Model::CurveBiquadratic.new(self)
+    roomac_cap_ft.setName("RoomAC-Cap-fT")
+    roomac_cap_ft.setCoefficient1Constant(cool_CAP_FT_SPEC_coefficients[0])
+    roomac_cap_ft.setCoefficient2x(cool_CAP_FT_SPEC_coefficients[1])
+    roomac_cap_ft.setCoefficient3xPOW2(cool_CAP_FT_SPEC_coefficients[2])
+    roomac_cap_ft.setCoefficient4y(cool_CAP_FT_SPEC_coefficients[3])
+    roomac_cap_ft.setCoefficient5yPOW2(cool_CAP_FT_SPEC_coefficients[4])
+    roomac_cap_ft.setCoefficient6xTIMESY(cool_CAP_FT_SPEC_coefficients[5])
+    roomac_cap_ft.setMinimumValueofx(0)
+    roomac_cap_ft.setMaximumValueofx(100)
+    roomac_cap_ft.setMinimumValueofy(0)
+    roomac_cap_ft.setMaximumValueofy(100)
+
+    roomac_cap_fff = OpenStudio::Model::CurveQuadratic.new(self)
+    roomac_cap_fff.setName("RoomAC-Cap-fFF")
+    roomac_cap_fff.setCoefficient1Constant(cool_CAP_FFLOW_SPEC_coefficients[0])
+    roomac_cap_fff.setCoefficient2x(cool_CAP_FFLOW_SPEC_coefficients[1])
+    roomac_cap_fff.setCoefficient3xPOW2(cool_CAP_FFLOW_SPEC_coefficients[2])
+    roomac_cap_fff.setMinimumValueofx(0)
+    roomac_cap_fff.setMaximumValueofx(2)
+    roomac_cap_fff.setMinimumCurveOutput(0)
+    roomac_cap_fff.setMaximumCurveOutput(2)
+
+    roomac_eir_ft = OpenStudio::Model::CurveBiquadratic.new(self)
+    roomac_eir_ft.setName("RoomAC-EIR-fT")
+    roomac_eir_ft.setCoefficient1Constant(cool_EIR_FT_SPEC_coefficients[0])
+    roomac_eir_ft.setCoefficient2x(cool_EIR_FT_SPEC_coefficients[1])
+    roomac_eir_ft.setCoefficient3xPOW2(cool_EIR_FT_SPEC_coefficients[2])
+    roomac_eir_ft.setCoefficient4y(cool_EIR_FT_SPEC_coefficients[3])
+    roomac_eir_ft.setCoefficient5yPOW2(cool_EIR_FT_SPEC_coefficients[4])
+    roomac_eir_ft.setCoefficient6xTIMESY(cool_EIR_FT_SPEC_coefficients[5])
+    roomac_eir_ft.setMinimumValueofx(0)
+    roomac_eir_ft.setMaximumValueofx(100)
+    roomac_eir_ft.setMinimumValueofy(0)
+    roomac_eir_ft.setMaximumValueofy(100)
+
+    roomcac_eir_fff = OpenStudio::Model::CurveQuadratic.new(self)
+    roomcac_eir_fff.setName("RoomAC-EIR-fFF")
+    roomcac_eir_fff.setCoefficient1Constant(cool_EIR_FFLOW_SPEC_coefficients[0])
+    roomcac_eir_fff.setCoefficient2x(cool_EIR_FFLOW_SPEC_coefficients[1])
+    roomcac_eir_fff.setCoefficient3xPOW2(cool_EIR_FFLOW_SPEC_coefficients[2])
+    roomcac_eir_fff.setMinimumValueofx(0)
+    roomcac_eir_fff.setMaximumValueofx(2)
+    roomcac_eir_fff.setMinimumCurveOutput(0)
+    roomcac_eir_fff.setMaximumCurveOutput(2)
+
+    roomac_plf_fplr = OpenStudio::Model::CurveQuadratic.new(self)
+    roomac_plf_fplr.setName("RoomAC-PLF-fPLR")
+    roomac_plf_fplr.setCoefficient1Constant(cool_PLF_FPLR[0])
+    roomac_plf_fplr.setCoefficient2x(cool_PLF_FPLR[1])
+    roomac_plf_fplr.setCoefficient3xPOW2(cool_PLF_FPLR[2])
+    roomac_plf_fplr.setMinimumValueofx(0)
+    roomac_plf_fplr.setMaximumValueofx(1)
+    roomac_plf_fplr.setMinimumCurveOutput(0)
+    roomac_plf_fplr.setMaximumCurveOutput(1)
+
+    acs = []
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding window AC for #{zone.name}.")
+
+      clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(self,
+                                                                 alwaysOnDiscreteSchedule,
+                                                                 roomac_cap_ft,
+                                                                 roomac_cap_fff,
+                                                                 roomac_eir_ft,
+                                                                 roomcac_eir_fff,
+                                                                 roomac_plf_fplr)
+      clg_coil.setName(obj_name + " cooling coil")
+      clg_coil.setRatedSensibleHeatRatio(shr)
+      clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(OpenStudio.convert(roomaceer, "Btu/h", "W").get))
+      clg_coil.setRatedEvaporatorFanPowerPerVolumeFlowRate(OpenStudio::OptionalDouble.new(773.3))
+      clg_coil.setEvaporativeCondenserEffectiveness(OpenStudio::OptionalDouble.new(0.9))
+      clg_coil.setMaximumOutdoorDryBulbTemperatureForCrankcaseHeaterOperation(OpenStudio::OptionalDouble.new(10))
+      clg_coil.setBasinHeaterSetpointTemperature(OpenStudio::OptionalDouble.new(2))
+
+      fan = OpenStudio::Model::FanOnOff.new(self, alwaysOnDiscreteSchedule)
+      fan.setName(obj_name + " supply fan")
+      fan.setFanEfficiency(1)
+      fan.setPressureRise(0)
+      fan.setMotorEfficiency(1)
+      fan.setMotorInAirstreamFraction(0)
+
+      htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOffDiscreteSchedule)
+      htg_coil.setName(obj_name + " always off heating coil")
+
+      ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(self, 
+                                                                           alwaysOnDiscreteSchedule,
+                                                                           fan,
+                                                                           htg_coil,
+                                                                           clg_coil)
+      ptac.setName(obj_name + " zone ptac")
+      ptac.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
+      ptac.addToThermalZone(control_zone)
+
+      acs << ptac
+
+    end
+
+    return acs
+
+  end
+
   # Add an elevator the the specified space
   #
   # @param template [String] Valid choices are
