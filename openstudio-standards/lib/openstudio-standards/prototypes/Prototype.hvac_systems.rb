@@ -1543,9 +1543,9 @@ class OpenStudio::Model::Model
   # or nil in which case will be defaulted to always open
   # @param fan_location [Double] valid choices are BlowThrough, DrawThrough
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
-  # @param heating_type [Double] valid choices are Gas, Water,
+  # @param heating_type [Double] valid choices are NaturalGas, Water, nil (no heat)
   # Single Speed Heat Pump, Water To Air Heat Pump
-  # @param supplemental_heating_type [Double] valid choices are Electric, Gas
+  # @param supplemental_heating_type [Double] valid choices are Electricity, NaturalGas,  nil (no heat)
   # @param cooling_type [String] valid choices are Water, Two Speed DX AC,
   # Single Speed DX AC, Single Speed Heat Pump, Water To Air Heat Pump
   # @param building_type [String] the building type
@@ -1680,14 +1680,18 @@ class OpenStudio::Model::Model
       end
 
       htg_coil = nil
-      if heating_type == 'Gas'
+      if heating_type == 'NaturalGas'
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, alwaysOnDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} Gas Htg Coil")
 
         if template == 'DOE Ref Pre-1980'
           htg_coil.setGasBurnerEfficiency(0.78)
         end
-
+      elsif heating_type.nil?
+        # Zero-capacity, always-off electric heating coil
+        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOffDiscreteSchedule)
+        htg_coil.setName("#{air_loop.name} No Heat")
+        htg_coil.setNominalCapacity(0)
       elsif heating_type == 'Water'
         if hot_water_loop.nil?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
@@ -1793,12 +1797,17 @@ class OpenStudio::Model::Model
       end
 
       supplemental_htg_coil = nil
-      if supplemental_heating_type == 'Electric'
+      if supplemental_heating_type == 'Electricity'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOnDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} Electric Backup Htg Coil")
-      elsif supplemental_heating_type == 'Gas'
+      elsif supplemental_heating_type == 'NaturalGas'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, alwaysOnDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} Gas Backup Htg Coil")
+      elsif supplemental_heating_type.nil?
+        # Zero-capacity, always-off electric heating coil
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOffDiscreteSchedule)
+        supplemental_htg_coil.setName("#{air_loop.name} No Backup Heat")
+        supplemental_htg_coil.setNominalCapacity(0)
       end
 
       clg_coil = nil
@@ -2902,7 +2911,7 @@ class OpenStudio::Model::Model
   # @param thermal_zones [String] zones to connect to this system
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
   # @param heating_type [Double] valid choices are
-  # Gas, Electric, Water
+  # NaturalGas, Electricity, Water, nil (no heat)
   # @param cooling_type [String] valid choices are
   # Two Speed DX AC, Single Speed DX AC
   # @param building_type [String] the building type
@@ -2963,12 +2972,16 @@ class OpenStudio::Model::Model
 
       # add heating coil
       htg_coil = nil
-      if heating_type == 'Gas'
+      if heating_type == 'NaturalGas'
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, alwaysOnDiscreteSchedule)
         htg_coil.setName("#{zone.name} PTAC Gas Htg Coil")
-      elsif heating_type == 'Electric'
+      elsif heating_type == 'Electricity'
         htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOnDiscreteSchedule)
         htg_coil.setName("#{zone.name} PTAC Electric Htg Coil")
+      elsif heating_type.nil?
+        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOffDiscreteSchedule)
+        htg_coil.setName("#{zone.name} PTAC No Heat")
+        htg_coil.setNominalCapacity(0)
       elsif heating_type == 'Water'
         if hot_water_loop.nil?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
