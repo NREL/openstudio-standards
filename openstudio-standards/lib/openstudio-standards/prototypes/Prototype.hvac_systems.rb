@@ -4372,14 +4372,30 @@ class OpenStudio::Model::Model
     vent_rate_acm = 1 # air changes per minute
     vent_rate_cfm = volume_ft3 / vent_rate_acm
     vent_pwr_per_flow_w_per_cfm = 0.33
+	
+    # (1) make elevator ventilation fan power be code dependent and (2) assign 0.5 of fraction radiant
     vent_pwr_w = vent_pwr_per_flow_w_per_cfm * vent_rate_cfm
-
+    elec_equip_frac_radiant = 0.5
+    if template == '90.1-2013'
+        # addendum 90.1-2007 aj has requirement on efficiency
+      	vent_pwr_w = vent_pwr_w * 0.29 / 0.70  
+	end
+	
     # Lighting assumptions
     design_ltg_lm_per_ft2 = 30
     light_loss_factor = 0.75
-    pct_incandescent = 0.7
-    pct_led = 0.3
-    incandescent_efficacy_lm_per_w = 10.0
+	
+    # (1) make elevator lighting and ventilation fan power be code dependent and (2) assign 0.5 of fraction radiant
+    case template
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004','90.1-2004', '90.1-2007'
+      pct_incandescent = 0.7
+      pct_led = 0.3
+    when '90.1-2010', '90.1-2013'
+      pct_incandescent = 0.0
+      pct_led = 1.0
+    end
+    
+	incandescent_efficacy_lm_per_w = 10.0
     led_efficacy_lm_per_w = 35.0
     target_ltg_lm_per_ft2 = design_ltg_lm_per_ft2 / light_loss_factor # 40
     target_ltg_lm = target_ltg_lm_per_ft2 * area_ft2 # 1132.2
@@ -4393,6 +4409,10 @@ class OpenStudio::Model::Model
     elevator_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
     elevator_definition.setName('Elevator Lift Motor')
     elevator_definition.setDesignLevel(lift_pwr_w)
+	
+    # assign 0.5 for fraction radiant for lift motor
+    elevator_definition.setFractionRadiant(elec_equip_frac_radiant)	
+
 
     elevator_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_definition)
     elevator_equipment.setName("#{number_of_elevators.round} Elevator Lift Motors")
@@ -4408,6 +4428,9 @@ class OpenStudio::Model::Model
     elevator_fan_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
     elevator_fan_definition.setName('Elevator Fan')
     elevator_fan_definition.setDesignLevel(vent_pwr_w)
+	
+    # assign 0.5 for fraction radiant for lift motor
+    elevator_fan_definition.setFractionRadiant(elec_equip_frac_radiant)		
 
     elevator_fan_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_fan_definition)
     elevator_fan_equipment.setName("#{number_of_elevators.round} Elevator Fans")
@@ -4415,11 +4438,14 @@ class OpenStudio::Model::Model
     elevator_fan_equipment.setSchedule(elevator_fan_sch)
     elevator_fan_equipment.setSpace(space)
     elevator_fan_equipment.setMultiplier(number_of_elevators)
-
+	
     # Elevator lights
     elevator_lights_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
     elevator_lights_definition.setName('Elevator Lights')
     elevator_lights_definition.setDesignLevel(lighting_pwr_w)
+	
+    # assign 0.5 for fraction radiant for lift motor
+    elevator_lights_definition.setFractionRadiant(elec_equip_frac_radiant)	
 
     elevator_lights_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_lights_definition)
     elevator_lights_equipment.setName("#{number_of_elevators.round} Elevator Lights")

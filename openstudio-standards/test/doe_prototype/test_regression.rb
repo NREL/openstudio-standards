@@ -7,7 +7,7 @@ class DOEPrototypeRegressionTest < Minitest::Test
 	@building_types = [
 		# 'SmallOffice'
 		# 'MediumOffice'
-		# 'LargeOffice'
+		'LargeOffice'
 		# 'RetailStandalone'
 		# 'RetailStripmall'
 		# 'PrimarySchool'
@@ -19,7 +19,7 @@ class DOEPrototypeRegressionTest < Minitest::Test
 		# 'QuickServiceRestaurant',
 		# 'FullServiceRestaurant'
 		# 'MidriseApartment'
-		'HighriseApartment'
+		# 'HighriseApartment'
 	  ]
     # @building_types = ['MediumOffice']
     @templates = ['90.1-2013']

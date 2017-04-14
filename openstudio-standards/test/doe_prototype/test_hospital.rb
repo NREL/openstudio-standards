@@ -25,7 +25,7 @@ class TestHospital < CreateDOEPrototypeBuildingTest
                'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw']
                
   create_models = true
-  run_models = true
+  run_models = false
   compare_results = false
 
   debug = false

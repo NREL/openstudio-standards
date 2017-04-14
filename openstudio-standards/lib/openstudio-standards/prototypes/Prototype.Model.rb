@@ -589,6 +589,7 @@ class OpenStudio::Model::Model
 
     # The constructions lookup table uses a slightly different list of
     # building types.
+    lookup_building_type = get_lookup_name(building_type)
     # TODO this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
     case building_type
