@@ -708,7 +708,7 @@ module BTAP
             system = 2
 
           when "Hospital Area" #[3],
-            system = 6
+            system = 3
 
           when "Indoor Arena" #,[7],
             system = 7
