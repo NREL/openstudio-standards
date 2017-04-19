@@ -308,7 +308,7 @@ module BTAP
         spaceinfo[:occ_per_m2] = space.spaceType.get.people[0].peopleDefinition.peopleperSpaceFloorArea.get.round(3) unless space.spaceType.get.people[0].nil? 
         unless space.spaceType.get.lights[0].nil?
           spaceinfo[:lighting_w_per_m2] = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea#.get.round(3) unless space.spaceType.get.lights[0].nil?
-          spaceinfo[:lighting_w_per_m2] = validate_optional(spaceinfo[:lighting_w_per_m2], model)
+          spaceinfo[:lighting_w_per_m2] = validate_optional(spaceinfo[:lighting_w_per_m2], model, -1.0)
           unless spaceinfo[:lighting_w_per_m2].nil?
             spaceinfo[:lighting_w_per_m2] = spaceinfo[:lighting_w_per_m2].round(3)
           end
@@ -547,11 +547,11 @@ module BTAP
           pump_info[:name] = pump.name.get
           pump_info[:type] = "Pump:ConstantSpeed"
           pump_info[:head_pa] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Head' AND RowName='#{pump_info[:name].upcase}' ")
-          pump_info[:head_pa] = validate_optional(pump_info[:head_pa], model)
+          pump_info[:head_pa] = validate_optional(pump_info[:head_pa], model, -1.0)
           pump_info[:water_flow_m3_per_s] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Water Flow' AND RowName='#{pump_info[:name].upcase}' ")
           pump_info[:water_flow_m3_per_s] = validate_optional(pump_info[:water_flow_m3_per_s], model, -1.0)
           pump_info[:electric_power_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Electric Power' AND RowName='#{pump_info[:name].upcase}' ")
-          pump_info[:electric_power_w] = validate_optional(pump_info[:electric_power_w], model)
+          pump_info[:electric_power_w] = validate_optional(pump_info[:electric_power_w], model, -1.0)
           pump_info[:motor_efficency] = pump.getMotorEfficiency.value() 
         end
         
@@ -565,9 +565,9 @@ module BTAP
           pump_info[:head_pa] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Head' AND RowName='#{pump_info[:name].upcase}' ")
           pump_info[:head_pa] = validate_optional(pump_info[:head_pa], model, -1.0)
           pump_info[:water_flow_m3_per_s] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Water Flow' AND RowName='#{pump_info[:name].upcase}' ")
-          pump_info[:water_flow_m3_per_s] = validate_optional(pump_info[:water_flow_m3_per_s], model)
+          pump_info[:water_flow_m3_per_s] = validate_optional(pump_info[:water_flow_m3_per_s], model, -1.0)
           pump_info[:electric_power_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Pumps' AND ColumnName='Electric Power' AND RowName='#{pump_info[:name].upcase}' ")
-          pump_info[:electric_power_w] = validate_optional(pump_info[:electric_power_w], model)
+          pump_info[:electric_power_w] = validate_optional(pump_info[:electric_power_w], model, -1.0)
           pump_info[:motor_efficency] = pump.getMotorEfficiency.value() 
         end
         
@@ -580,7 +580,7 @@ module BTAP
           boiler_info[:type] = "Boiler:HotWater" 
           boiler_info[:fueltype] = boiler.fuelType
           boiler_info[:nominal_capacity] = boiler.nominalCapacity
-          boiler_info[:nominal_capacity] = validate_optional(boiler_info[:nominal_capacity], model)
+          boiler_info[:nominal_capacity] = validate_optional(boiler_info[:nominal_capacity], model, -1.0)
         end
         
         # Collect ChillerElectricEIR
@@ -590,7 +590,7 @@ module BTAP
           plant_loop_info[:chiller_electric_eir] << chiller_info
           chiller_info[:name] = chiller.name.get
           chiller_info[:type] = "Chiller:Electric:EIR" 
-          chiller_info[:reference_capacity] = validate_optional(chiller.referenceCapacity, model)
+          chiller_info[:reference_capacity] = validate_optional(chiller.referenceCapacity, model, -1.0)
           chiller_info[:reference_leaving_chilled_water_temperature] =chiller.referenceLeavingChilledWaterTemperature
         end
         
@@ -601,7 +601,7 @@ module BTAP
           plant_loop_info[:cooling_tower_single_speed] << coolingTower_info
           coolingTower_info[:name] = coolingTower.name.get
           coolingTower_info[:type] = "CoolingTower:SingleSpeed" 
-          coolingTower_info[:fan_power_at_design_air_flow_rate] = validate_optional(coolingTower.fanPoweratDesignAirFlowRate, model)
+          coolingTower_info[:fan_power_at_design_air_flow_rate] = validate_optional(coolingTower.fanPoweratDesignAirFlowRate, model, -1.0)
 
         end
 
@@ -965,10 +965,10 @@ def necb_2011_qaqc(qaqc, model)
     
     capacity = -1.0
     
-    if !air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w].nil?
+    if !air_loop_info[:cooling_coils][:dx_single_speed][0].nil?
       puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
       capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]
-    elsif !air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high].nil?
+    elsif !air_loop_info[:cooling_coils][:dx_two_speed][0].nil?
       puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
       capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]
     end
@@ -1043,8 +1043,12 @@ def necb_2011_qaqc(qaqc, model)
     puts "flow_rate #{flow_rate}"
     puts "hp_check #{hp_check}\n"
     pump_power_hp = plant_loop_info[:pumps][0][:electric_power_w]/1000*0.746
-    
     percent_diff = (hp_check - pump_power_hp).to_f.abs/hp_check * 100
+    
+    if percent_diff.nan?
+      error_warning << "(hp_check - pump_power_hp).to_f.abs/hp_check * 100 for #{plant_loop_info[:name]} is NaN"
+    end
+    
     necb_section_test( 
       qaqc,
       20, #diff of 20%
