@@ -240,6 +240,11 @@ class OpenStudio::Model::Model
                    prototype_input['doas_economizer_control_type'],
                    building_type)
 
+          add_four_pipe_fan_coils(template,
+                                  hot_water_loop,
+                                  chilled_water_loop,
+                                  thermal_zones)
+
         when 'DC' # Data Center
 
           # Retrieve the existing hot water loop
