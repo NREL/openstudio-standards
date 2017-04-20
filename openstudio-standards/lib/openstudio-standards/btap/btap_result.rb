@@ -1040,13 +1040,16 @@ def necb_2011_qaqc(qaqc, model)
     flow_rate = plant_loop_info[:pumps][0][:water_flow_m3_per_s]*1000
     hp_check = ((flow_rate*60*60)/1000*1000*9.81*pump_head*0.000101997)/3600000
     puts "\npump_head #{pump_head}"
+    puts "name: #{qaqc[:building][:name]}"
+    puts "name: #{plant_loop_info[:name]}"
     puts "flow_rate #{flow_rate}"
     puts "hp_check #{hp_check}\n"
     pump_power_hp = plant_loop_info[:pumps][0][:electric_power_w]/1000*0.746
     percent_diff = (hp_check - pump_power_hp).to_f.abs/hp_check * 100
     
     if percent_diff.nan?
-      error_warning << "(hp_check - pump_power_hp).to_f.abs/hp_check * 100 for #{plant_loop_info[:name]} is NaN"
+      qaqc[:ruby_warnings] << "(hp_check - pump_power_hp).to_f.abs/hp_check * 100 for #{plant_loop_info[:name]} is NaN"
+      next
     end
     
     necb_section_test( 
