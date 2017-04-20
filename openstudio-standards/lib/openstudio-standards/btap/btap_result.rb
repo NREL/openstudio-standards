@@ -458,6 +458,9 @@ module BTAP
       air_loop_info[:heating_coils][:coil_heating_gas] = []
       air_loop_info[:heating_coils][:coil_heating_electric]= []
       air_loop_info[:heating_coils][:coil_heating_water]= []
+
+      #Heat Excahnger
+      air_loop_info[:heat_exchanger] = {}
       
       air_loop.supplyComponents.each do |supply_comp|
         if supply_comp.to_CoilHeatingGas.is_initialized
@@ -488,6 +491,10 @@ module BTAP
           coil[:type]= "Water"
           coil[:nominal_capacity]= model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Heating Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].to_s.upcase}'")
           coil[:nominal_capacity]=validate_optional(coil[:nominal_capacity],model,-1.0 )
+        end
+        if supply_comp.to_HeatExchangerAirToAirSensibleAndLatent.is_initialized
+          heatExchanger = supply_comp.to_HeatExchangerAirToAirSensibleAndLatent.get
+          air_loop_info[:heat_exchanger][:name] = heatExchanger.name.get
         end
       end
       
@@ -633,6 +640,12 @@ module BTAP
     # Perform qaqc
     necb_2011_qaqc(qaqc, model) if qaqc[:building][:name].include?("NECB 2011") #had to nodify this because this is specifically for "NECB-2011" standard
     sanity_check(qaqc)
+    
+    qaqc[:information] = qaqc[:information].sort
+    qaqc[:warnings] = qaqc[:warnings].sort
+    qaqc[:errors] = qaqc[:errors].sort
+    qaqc[:unique_errors]= qaqc[:unique_errors].sort
+    
     return qaqc
   end
 end
@@ -924,7 +937,7 @@ def necb_2011_qaqc(qaqc, model)
   #Zone Sizing and design supply temp tests
   necb_section_name = "NECB2011-?"
   qaqc[:thermal_zones].each do |zoneinfo|
-#    skipping undefined schedules
+    #    skipping undefined schedules
     if zoneinfo[:name].to_s.include?"- undefined -"
       next
     end
@@ -1014,6 +1027,20 @@ def necb_2011_qaqc(qaqc, model)
     unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
       hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
       hrv_reqd = hrv_calc > 150 ? true : false
+      #qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
+      hrv_present = false
+      unless air_loop_info[:heat_exchanger].empty?
+        hrv_present = true
+      end
+      necb_section_test( 
+        qaqc,
+        hrv_reqd,
+        '==',
+        hrv_present,
+        necb_section_name,
+        "[AIR LOOP][:heat_exchanger] for [#{air_loop_info[:name]}] is present?"
+      )
+      
     end
   end
   
