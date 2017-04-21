@@ -254,7 +254,7 @@ class OpenStudio::Model::PlantLoop
         # Determine the leaving CW temp
         max_leaving_cw_t_f = 85
         leaving_cw_t_10f_approach_f = design_oat_wb_f + 10
-        leaving_cw_t_f = [max_leaving_cw_t_f, leaving_cw_t_10f_approach_f].max
+        leaving_cw_t_f = [max_leaving_cw_t_f, leaving_cw_t_10f_approach_f].min
 
         # Calculate the approach
         approach_r = leaving_cw_t_f - design_oat_wb_f
