@@ -71,7 +71,9 @@ OS:Timestep,
   6;                                      !- Number of Timesteps per Hour
 
 OS:OutputControl:ReportingTolerances,
-  {275082a5-6cfd-4756-972e-8810ab253e29}; !- Handle
+  {275082a5-6cfd-4756-972e-8810ab253e29}, !- Handle
+  0.555555555555556,                      !- Tolerance for Time Heating Setpoint Not Met {deltaC}
+  0.555555555555556;                      !- Tolerance for Time Cooling Setpoint Not Met {deltaC}
 
 OS:ConvergenceLimits,
   {fcca1605-8471-4f2f-a485-a59582311771}; !- Handle
