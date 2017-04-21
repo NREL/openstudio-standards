@@ -70,7 +70,6 @@ class OpenStudio::Model::Model
     return site_eui_kbtu_per_ft2
   end
 
-
   def net_conditioned_floor_area
 
     sql = self.sql_file
@@ -94,6 +93,32 @@ class OpenStudio::Model::Model
     end
 
     return area_m2.get
+  end
+
+  def annual_energy_by_fuel_and_enduse(fuel_type, end_use)
+
+    sql = self.sql_file
+
+    # setup the queries
+    query = "SELECT Value
+             FROM TabularDataWithStrings
+             WHERE ReportName='AnnualBuildingUtilityPerformanceSummary'
+             AND ReportForString='Entire Facility'
+             AND TableName='End Uses'
+             AND RowName = '#{end_use}'
+             AND ColumnName='#{fuel_type}'"
+
+    # get the info
+    energy_gj = sql.execAndReturnFirstDouble(query)
+    
+    # make sure all the data are availalbe
+    if energy_gj.empty?
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not get energy for #{fuel_type} #{end_use}.")
+      return 0.0
+    end
+
+    return energy_gj.get
+
   end
 
 end
