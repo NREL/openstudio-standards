@@ -798,6 +798,21 @@ def necb_2011_qaqc(qaqc, model)
       qaqc[:ruby_warnings] << "space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]"
       puts "space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]"
     else
+      #correct the data from the csv file to include a multiplier of 0.9 for specific space types.
+      
+      reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
+        "Washroom-sch-A", "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", "Washroom-sch-E", 
+        "Washroom-sch-F", "Washroom-sch-G", "Washroom-sch-H", "Washroom-sch-I", "Dress./fitt. - performance arts", 
+        "Locker room", "Retail - dressing/fitting","Locker room-sch-A","Locker room-sch-B","Locker room-sch-C",
+        "Locker room-sch-D","Locker room-sch-E","Locker room-sch-F","Locker room-sch-G","Locker room-sch-H",
+        "Locker room-sch-I", "Office - open plan - occsens", "Office - enclosed - occsens", "Storage area - occsens",
+        "Hospital - medical supply - occsens", "Storage area - refrigerated - occsens"]
+      
+      if reduceLPDSpaces.include?(space_type)
+        row[3] = row[3]*0.9
+        puts "\n============================\nspace_type: #{space_type}\n============================\n"
+      end
+      
       # Start of Space Compliance
       necb_section_name = "NECB2011-Section 8.4.3.6"
       data = {}
@@ -813,7 +828,7 @@ def necb_2011_qaqc(qaqc, model)
           value[1],
           value[2],
           value[3],
-          "[SPACE][#{space[:name]}]-#{key}",
+          "[SPACE][#{space[:name]}]-[TYPE:][#{space_type}]#{key}",
           value[4]
         )
       end
