@@ -42,7 +42,7 @@ class OpenStudio::Model::ThermalZone
       oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
       oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
       oa_rate = dsn_oa.outdoorAirFlowRate
-      oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour
+      oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour / 3600
 
       # First check if this space uses the Maximum method and other spaces do not
       if dsn_oa.outdoorAirMethod == 'Maximum'
