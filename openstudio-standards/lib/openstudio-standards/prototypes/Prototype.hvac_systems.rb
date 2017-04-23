@@ -1785,7 +1785,7 @@ class OpenStudio::Model::Model
 
       htg_coil = nil
       case heating_type
-      when 'NaturalGas'
+      when 'NaturalGas', 'Gas'
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, alwaysOnDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} Gas Htg Coil")
 
@@ -1899,19 +1899,20 @@ class OpenStudio::Model::Model
         htg_coil.setHeatingPowerConsumptionCoefficient5(-0.103079864171839)
 
         hot_water_loop.addDemandBranchForComponent(htg_coil)
-      when 'Electricity'
+      when 'Electricity', 'Electric'
         htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOnDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} Electric Htg Coil")
       end
 
       supplemental_htg_coil = nil
-      if supplemental_heating_type == 'Electricity'
+      case supplemental_heating_type
+      when 'Electricity', 'Electric' # TODO change spreadsheet to Electricity
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOnDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} Electric Backup Htg Coil")
-      elsif supplemental_heating_type == 'NaturalGas'
+      when 'NaturalGas', 'Gas'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, alwaysOnDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} Gas Backup Htg Coil")
-      elsif supplemental_heating_type.nil?
+      when nil
         # Zero-capacity, always-off electric heating coil
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOffDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} No Backup Heat")
@@ -3080,17 +3081,18 @@ class OpenStudio::Model::Model
 
       # add heating coil
       htg_coil = nil
-      if heating_type == 'NaturalGas'
+      case heating_type
+      when 'NaturalGas', 'Gas'
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, alwaysOnDiscreteSchedule)
         htg_coil.setName("#{zone.name} PTAC Gas Htg Coil")
-      elsif heating_type == 'Electricity'
+      when 'Electricity', 'Electric'
         htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOnDiscreteSchedule)
         htg_coil.setName("#{zone.name} PTAC Electric Htg Coil")
-      elsif heating_type.nil?
+      when nil
         htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOffDiscreteSchedule)
         htg_coil.setName("#{zone.name} PTAC No Heat")
         htg_coil.setNominalCapacity(0)
-      elsif heating_type == 'Water'
+      when 'Water'
         if hot_water_loop.nil?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
           return false
@@ -4131,7 +4133,8 @@ class OpenStudio::Model::Model
     }
     data = find_object($os_standards['space_types'], search_criteria)
     if data.nil?
-      puts "Error: #{search_criteria}"
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find space type for: #{search_criteria}.")
+      return nil
     end
     space = getSpaceByName(space_name)
     space = space.get
@@ -4225,7 +4228,6 @@ class OpenStudio::Model::Model
     mixed_water_temp_f = OpenStudio.convert(water_use_temperature, 'F', 'C').get
     mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get)
-    puts mixed_water_temp_sch
     water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
 
     # Water use equipment

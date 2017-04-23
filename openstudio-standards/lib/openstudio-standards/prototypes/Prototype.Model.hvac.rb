@@ -240,7 +240,7 @@ class OpenStudio::Model::Model
                    prototype_input['doas_economizer_control_type'],
                    building_type)
 
-          add_four_pipe_fan_coils(template,
+          add_four_pipe_fan_coil(template,
                                   hot_water_loop,
                                   chilled_water_loop,
                                   thermal_zones)
