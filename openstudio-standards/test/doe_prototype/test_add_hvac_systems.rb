@@ -137,7 +137,7 @@ class TestAddHVACSystems < Minitest::Test
 
       # Check the unmet hours
       unmet_hrs = model.annual_occupied_unmet_hours
-      max_unmet_hrs = 300
+      max_unmet_hrs = 550
       if unmet_hrs
         errs << "For #{type_desc} there were #{unmet_hrs} unmet occupied heating and cooling hours, more than the limit of #{max_unmet_hrs}." if unmet_hrs > max_unmet_hrs
       else
