@@ -52,7 +52,12 @@ class HVACEfficienciesTest < MiniTest::Test
           chiller_type_cap[type] << (OpenStudio.convert(chiller_type_min_cap[type][1].to_f, 'Btu/hr', 'W').to_f + 10000.0)
         else
           chiller_type_cap[type] << 0.5 * (OpenStudio.convert(chiller_type_min_cap[type][1].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(chiller_type_min_cap[type][2].to_f, 'Btu/hr', 'W').to_f)
-          chiller_type_cap[type] << (chiller_type_min_cap[type][2].to_f + 10000.0)
+          if min_caps.size == 3
+            chiller_type_cap[type] << (OpenStudio.convert(chiller_type_min_cap[type][2].to_f, 'Btu/hr', 'W').to_f + 10000.0)
+          else
+            chiller_type_cap[type] << 0.5 * (OpenStudio.convert(chiller_type_min_cap[type][2].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(chiller_type_min_cap[type][3].to_f, 'Btu/hr', 'W').to_f)
+            chiller_type_cap[type] << (OpenStudio.convert(chiller_type_min_cap[type][3].to_f, 'Btu/hr', 'W').to_f + 10000.0)
+          end
         end
       end
     end
@@ -97,7 +102,7 @@ class HVACEfficienciesTest < MiniTest::Test
         assert_equal(true, result, "Failure in Standards for #{name}")
         model.getChillerElectricEIRs.each do |ichiller|
           if ichiller.referenceCapacity.to_f > 1
-            actual_chiller_cop[chiller_type] << ichiller.referenceCOP.round(1)
+            actual_chiller_cop[chiller_type] << ichiller.referenceCOP.round(3)
             break
           end
         end

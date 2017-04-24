@@ -6,7 +6,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2004 Table 6.8.1G"
     },
     {
@@ -24,7 +24,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2004 Table 6.8.1G"
     },
     {
@@ -42,7 +42,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2004 Table 6.8.1G"
     },
     {
@@ -60,7 +60,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2004 Table 6.8.1G"
     },
     {
@@ -78,7 +78,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2004 Table 6.8.1G"
     },
     {
@@ -96,7 +96,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2004 Table 6.8.1G"
     },
     {
@@ -114,7 +114,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2007 Table 6.8.1G"
     },
     {
@@ -132,7 +132,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2007 Table 6.8.1G"
     },
     {
@@ -150,7 +150,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2010 Table 6.8.1 G"
     },
     {
@@ -168,7 +168,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 7.0,
+      "minimum_performance": 7,
       "notes": "From 90.1-2010 Table 6.8.1 G"
     },
     {
@@ -177,7 +177,7 @@
       "fan_type": "Propeller or Axial",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 14.0,
+      "minimum_performance": 14,
       "notes": "From 90.1-2010 Table 6.8.1 G"
     },
     {
@@ -186,7 +186,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance": 20,
       "notes": "From 90.1-2013 Table 6.8.1-7"
     },
     {
@@ -204,7 +204,7 @@
       "fan_type": "Centrifugal",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 7.0,
+      "minimum_performance": 7,
       "notes": "From 90.1-2013 Table 6.8.1-7"
     },
     {
@@ -213,7 +213,7 @@
       "fan_type": "Propeller or Axial",
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 14.0,
+      "minimum_performance": 14,
       "notes": "From 90.1-2013 Table 6.8.1-7"
     }
   ]
