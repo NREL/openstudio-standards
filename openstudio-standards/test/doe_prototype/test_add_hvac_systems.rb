@@ -31,8 +31,8 @@ class TestAddHVACSystems < Minitest::Test
       ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
 
       # Ambient Loop, Ambient Loop, forced air
-      ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
-      ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
+      # ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
+      # ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
 
       # Gas, District Chilled Water, forced air
       ['PSZ-AC', 'NaturalGas', nil, 'DistrictCooling'],
