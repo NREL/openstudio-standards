@@ -217,11 +217,13 @@ class OpenStudio::Model::SpaceType
             reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
               "Conf./meet./multi-purpose", "Washroom-sch-A", "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", 
               "Washroom-sch-E", "Washroom-sch-F", "Washroom-sch-G", "Washroom-sch-H", "Washroom-sch-I", 
-              "Dress./fitt. - performance arts", "Locker room", "Retail - dressing/fitting"]
+              "Dress./fitt. - performance arts", "Locker room", "Locker room-sch-A", "Locker room-sch-B", 
+              "Locker room-sch-C", "Locker room-sch-D", "Locker room-sch-E", "Locker room-sch-F", "Locker room-sch-G",
+              "Locker room-sch-H", "Locker room-sch-I", "Retail - dressing/fitting"]
             if reduceLPDSpaces.include?(standardsSpaceType.get)
-              # Note that "Storage area" and "Office - enclosed" LPD should only be reduced if their space areas are 
-              # less than 100 m2 and 25 m2 respectively. This is checked in a space loop after this function in 
-              # the calling routine.
+              # Note that "Storage area", "Storage area - refrigerated", "Hospital - medical supply" and "Office - enclosed" 
+              # LPD should only be reduced if their space areas are less than specific area values. 
+              # This is checked in a space loop after this function in the calling routine.
               occSensLPDfactor = 0.9
             end
           end

@@ -561,6 +561,7 @@ class OpenStudio::Model::Model
           space_type_name_occsens = space_type_name + " - occsens"
           if((space_type_name=='Storage area' && space.floorArea < 100) || 
             (space_type_name=='Storage area - refrigerated' && space.floorArea < 100) || 
+            (space_type_name=='Hospital - medical supply' && space.floorArea < 100) ||
             (space_type_name=='Office - enclosed' && space.floorArea < 25))
             # If there is only one space assigned to this space type, then reassign this stub 
             # to the template duplicate with appendage " - occsens", otherwise create a new stub
