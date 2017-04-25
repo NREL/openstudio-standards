@@ -1670,23 +1670,21 @@ class OpenStudio::Model::Model
                  cooling_type,
                  building_type = nil)
 
-    unless hot_water_loop.nil? || chilled_water_loop.nil?
-      hw_temp_f = 180 # HW setpoint 180F
-      hw_delta_t_r = 20 # 20F delta-T
-      hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
-      hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
+    hw_temp_f = 180 # HW setpoint 180F
+    hw_delta_t_r = 20 # 20F delta-T
+    hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
+    hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
 
-      # control temps used across all air handlers
-      clg_sa_temp_f = 55 # Central deck clg temp 55F
-      prehtg_sa_temp_f = 44.6 # Preheat to 44.6F
-      htg_sa_temp_f = 55 # Central deck htg temp 55F
-      rht_sa_temp_f = 104 # VAV box reheat to 104F
+    # control temps used across all air handlers
+    clg_sa_temp_f = 55 # Central deck clg temp 55F
+    prehtg_sa_temp_f = 44.6 # Preheat to 44.6F
+    htg_sa_temp_f = 55 # Central deck htg temp 55F
+    rht_sa_temp_f = 104 # VAV box reheat to 104F
 
-      clg_sa_temp_c = OpenStudio.convert(clg_sa_temp_f, 'F', 'C').get
-      prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f, 'F', 'C').get
-      htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f, 'F', 'C').get
-      rht_sa_temp_c = OpenStudio.convert(rht_sa_temp_f, 'F', 'C').get
-    end
+    clg_sa_temp_c = OpenStudio.convert(clg_sa_temp_f, 'F', 'C').get
+    prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f, 'F', 'C').get
+    htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f, 'F', 'C').get
+    rht_sa_temp_c = OpenStudio.convert(rht_sa_temp_f, 'F', 'C').get
 
     # hvac operation schedule
     hvac_op_sch = if hvac_op_sch.nil?
@@ -4608,7 +4606,6 @@ class OpenStudio::Model::Model
     cool_CAP_FFLOW_SPEC_coefficients = [0.887, 0.1128, 0]
     cool_EIR_FFLOW_SPEC_coefficients = [1.763, -0.6081, 0]
     cool_PLF_FPLR = [0.78, 0.22, 0]
-    supply.cfm_TON_Rated = [312]    # medium speed
 
     roomac_cap_ft = OpenStudio::Model::CurveBiquadratic.new(self)
     roomac_cap_ft.setName("RoomAC-Cap-fT")
@@ -4666,6 +4663,8 @@ class OpenStudio::Model::Model
     roomac_plf_fplr.setMinimumCurveOutput(0)
     roomac_plf_fplr.setMaximumCurveOutput(1)
 
+    roomaceer = 8.5
+
     acs = []
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding window AC for #{zone.name}.")
@@ -4677,7 +4676,7 @@ class OpenStudio::Model::Model
                                                                  roomac_eir_ft,
                                                                  roomcac_eir_fff,
                                                                  roomac_plf_fplr)
-      clg_coil.setName(obj_name + " cooling coil")
+      clg_coil.setName("Window AC Clg Coil")
       clg_coil.setRatedSensibleHeatRatio(shr)
       clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(OpenStudio.convert(roomaceer, "Btu/h", "W").get))
       clg_coil.setRatedEvaporatorFanPowerPerVolumeFlowRate(OpenStudio::OptionalDouble.new(773.3))
@@ -4686,14 +4685,14 @@ class OpenStudio::Model::Model
       clg_coil.setBasinHeaterSetpointTemperature(OpenStudio::OptionalDouble.new(2))
 
       fan = OpenStudio::Model::FanOnOff.new(self, alwaysOnDiscreteSchedule)
-      fan.setName(obj_name + " supply fan")
+      fan.setName("Window AC Supply Fan")
       fan.setFanEfficiency(1)
       fan.setPressureRise(0)
       fan.setMotorEfficiency(1)
       fan.setMotorInAirstreamFraction(0)
 
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOffDiscreteSchedule)
-      htg_coil.setName(obj_name + " always off heating coil")
+      htg_coil.setName("Window AC Always Off Htg Coil")
 
       ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(self, 
                                                                            alwaysOnDiscreteSchedule,
@@ -4702,7 +4701,7 @@ class OpenStudio::Model::Model
                                                                            clg_coil)
       ptac.setName("#{zone.name} Window AC")
       ptac.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
-      ptac.addToThermalZone(control_zone)
+      ptac.addToThermalZone(zone)
 
       acs << ptac
 
