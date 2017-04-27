@@ -48,7 +48,57 @@ class OpenStudio::Model::Model
  
     return heating_or_cooling_setpoint_unmet
   end
+
+  def annual_occupied_unmet_heating_hours
+
+    sql = self.sql_file
+
+    # setup the queries
+    heating_setpoint_unmet_query = "SELECT Value
+                                    FROM TabularDataWithStrings
+                                    WHERE ReportName='SystemSummary'
+                                    AND ReportForString='Entire Facility'
+                                    AND TableName='Time Setpoint Not Met'
+                                    AND RowName = 'Facility'
+                                    AND ColumnName='During Occupied Heating'"
+
+    # get the info
+    heating_setpoint_unmet = sql.execAndReturnFirstDouble(heating_setpoint_unmet_query)
     
+    # make sure all the data are availalbe
+    if heating_setpoint_unmet.empty?
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not get unmet heating hours information.')
+      return false
+    end
+
+    return heating_setpoint_unmet.get
+  end
+
+  def annual_occupied_unmet_cooling_hours
+
+    sql = self.sql_file
+
+    # setup the queries
+    cooling_setpoint_unmet_query = "SELECT Value
+                                    FROM TabularDataWithStrings
+                                    WHERE ReportName='SystemSummary'
+                                    AND ReportForString='Entire Facility'
+                                    AND TableName='Time Setpoint Not Met'
+                                    AND RowName = 'Facility'
+                                    AND ColumnName='During Occupied Cooling'"
+
+    # get the info
+    cooling_setpoint_unmet = sql.execAndReturnFirstDouble(cooling_setpoint_unmet_query)
+    
+    # make sure all the data are availalbe
+    if cooling_setpoint_unmet.empty?
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not get unmet cooling hours information.')
+      return false
+    end
+
+    return cooling_setpoint_unmet.get
+  end
+
   def annual_eui_kbtu_per_ft2
 
     sql = self.sql_file
