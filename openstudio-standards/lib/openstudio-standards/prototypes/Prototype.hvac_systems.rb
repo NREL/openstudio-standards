@@ -3623,6 +3623,180 @@ class OpenStudio::Model::Model
     return rad_heaters
   end
 
+# Creates an evaporative cooler for each zone and adds it to the model.
+  #
+  # @param template [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param thermal_zones [String] zones to connect to this system
+  # @param building_type [String] the building type
+  # @return [Array<OpenStudio::Model::AirLoopHVAC>] the resulting evaporative coolers
+  def add_evap_cooler(template,
+                      thermal_zones,
+                      building_type = nil)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding evaporative coolers for #{thermal_zones.size} zones.")
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
+    end
+
+    # Evap cooler control temperatures
+    min_sa_temp_f = 55
+    clg_sa_temp_f = 70
+    max_sa_temp_f = 78
+    htg_sa_temp_f = 122 # Not used
+
+    min_sa_temp_c = OpenStudio.convert(min_sa_temp_f, 'F', 'C').get
+    clg_sa_temp_c = OpenStudio.convert(clg_sa_temp_f, 'F', 'C').get
+    max_sa_temp_c = OpenStudio.convert(max_sa_temp_f, 'F', 'C').get
+    htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f, 'F', 'C').get
+
+    approach_r = 3 # WetBulb approach
+    approach_k = OpenStudio.convert(approach_r, 'R', 'K').get
+
+    fan_static_pressure_in_h2o = 0.25
+    fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, "inH_{2}O","Pa").get
+
+    # EMS programs
+    programs = []
+
+    # Make an evap cooler for each zone
+    evap_coolers = []
+    thermal_zones.each do |zone|
+      
+      zone_name_clean = zone.name.get.gsub(':', '')
+
+      # Air loop
+      air_loop = OpenStudio::Model::AirLoopHVAC.new(self)
+      air_loop.setName("#{zone_name_clean} Evap Cooler")
+
+      # Schedule to control the airloop availability
+      air_loop_avail_sch = OpenStudio::Model::ScheduleConstant.new(self)
+      air_loop_avail_sch.setName("#{air_loop.name} Availability Sch")
+      air_loop_avail_sch.setValue(1)
+      air_loop.setAvailabilitySchedule(air_loop_avail_sch)
+
+      # EMS to turn on Evap Cooler if
+      # there is a cooling load in the target zone.
+      # Without this EMS, the airloop runs 24/7-365,
+      # even when there is no load in the zone.
+
+      # Create a sensor to read the zone load
+      zn_load_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(self, 'Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate')
+      zn_load_sensor.setName("#{zone_name_clean} Clg Load Sensor")
+      zn_load_sensor.setKeyName("#{zone.handle}")
+
+      # Create an actuator to set the airloop availability
+      air_loop_avail_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(air_loop_avail_sch, 'Schedule:Constant', 'Schedule Value')
+      air_loop_avail_actuator.setName("#{air_loop.name} Availability Actuator")
+
+      # Create a program to turn on Evap Cooler if
+      # there is a cooling load in the target zone.
+      # Load < 0.0 is a cooling load.
+      avail_program = OpenStudio::Model::EnergyManagementSystemProgram.new(self)
+      avail_program.setName("#{air_loop.name} Availability Control")
+      avail_program_body = <<-EMS
+        IF #{zn_load_sensor.handle} < 0.0
+          SET #{air_loop_avail_actuator.handle} = 1
+        ELSE
+          SET #{air_loop_avail_actuator.handle} = 0
+        ENDIF
+      EMS
+      avail_program.setBody(avail_program_body)
+
+      programs << avail_program
+
+      # Setpoint follows OAT WetBulb
+      evap_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(self)
+      evap_stpt_manager.setName("#{approach_r} F above OATwb")
+      evap_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
+      evap_stpt_manager.setMaximumSetpointTemperature(max_sa_temp_c)
+      evap_stpt_manager.setMinimumSetpointTemperature(min_sa_temp_c)
+      evap_stpt_manager.setOffsetTemperatureDifference(approach_k)
+      evap_stpt_manager.addToNode(air_loop.supplyOutletNode)
+
+      # Air handler sizing
+      sizing_system = air_loop.sizingSystem
+      sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
+      sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
+      sizing_system.setAllOutdoorAirinCooling(true)
+      sizing_system.setAllOutdoorAirinHeating(true)
+      sizing_system.setSystemOutdoorAirMethod('ZoneSum')
+
+      # Direct Evap Cooler
+      # TODO better assumptions for evap cooler performance
+      # and fan pressure rise
+      evap = OpenStudio::Model::EvaporativeCoolerDirectResearchSpecial.new(self, alwaysOnDiscreteSchedule)
+      evap.setName("#{zone.name} Evap Media")
+      evap.autosizePrimaryAirDesignFlowRate
+      evap.addToNode(air_loop.supplyInletNode)
+
+      # Fan (cycling), must be inside unitary system to cycle on airloop
+      fan = OpenStudio::Model::FanOnOff.new(self, alwaysOnDiscreteSchedule)
+      fan.setName("#{zone.name} Evap Cooler Supply Fan")
+      fan.setFanEfficiency(0.55)
+      fan.setPressureRise(fan_static_pressure_pa)
+
+      # Dummy zero-capacity cooling coil
+      clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(self)
+      clg_coil.setName("Zero-capacity DX Coil")
+      clg_coil.setAvailabilitySchedule(alwaysOffDiscreteSchedule)
+
+      unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(self)
+      unitary_system.setName("#{zone.name} Evap Cooler Cycling Fan")
+      unitary_system.setSupplyFan(fan)
+      unitary_system.setCoolingCoil(clg_coil)
+      unitary_system.setControllingZoneorThermostatLocation(zone)
+      unitary_system.setMaximumSupplyAirTemperature(50)
+      unitary_system.setFanPlacement('BlowThrough')
+      unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
+      unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
+      unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+      unitary_system.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
+      unitary_system.addToNode(air_loop.supplyInletNode)
+
+      # Outdoor air intake system
+      oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
+      oa_intake_controller.setName("#{air_loop.name} OA Controller")
+      oa_intake_controller.setMinimumLimitType('FixedMinimum')
+      oa_intake_controller.setMinimumFractionofOutdoorAirSchedule(alwaysOnDiscreteSchedule)
+
+      controller_mv = oa_intake_controller.controllerMechanicalVentilation
+      controller_mv.setName("#{air_loop.name} Vent Controller")
+      controller_mv.setSystemOutdoorAirMethod('ZoneSum')
+
+      oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
+      oa_intake.setName("#{air_loop.name} OA Sys")
+      oa_intake.addToNode(air_loop.supplyInletNode)
+
+      # make an air terminal for the zone
+      air_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(self, alwaysOnDiscreteSchedule)
+      air_terminal.setName("#{zone.name} Air Terminal")
+
+      # attach new terminal to the zone and to the airloop
+      air_loop.addBranchForZone(zone, air_terminal.to_StraightComponent)
+
+      sizing_zone = zone.sizingZone
+      sizing_zone.setCoolingDesignAirFlowMethod('DesignDay')
+      sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
+      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
+      sizing_zone.setZoneHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
+
+      evap_coolers << air_loop
+
+    end
+
+    # Create a programcallingmanager
+    avail_pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(self)
+    avail_pcm.setName('Evap Cooler Availability Program Calling Manager')
+    avail_pcm.setCallingPoint('AfterPredictorAfterHVACManagers')
+    programs.each do |program|
+      avail_pcm.addProgram(program)
+    end
+
+    return evap_coolers
+  end
+
   # Creates a service water heating loop.
   #
   # @param template [String] Valid choices are 90.1-2004,
@@ -4885,6 +5059,26 @@ class OpenStudio::Model::Model
     return erv_systems
   end
 
+  # Adds ideal air loads systems for each zone.
+  #
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add heat pumps to.
+  # @return [Array<OpenStudio::Model::ZoneHVACIdealLoadsAirSystem>] an array of ideal air loads systems
+  # @todo review the default ventilation settings
+  def add_ideal_air_loads(template, thermal_zones)
+
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding ideal air loads for #{thermal_zones.size} zones.")
+
+    ideal_systems = []
+    thermal_zones.each do |zone|
+      ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
+      ideal_loads.addToThermalZone(zone)
+      ideal_systems << ideal_loads
+    end
+
+    return ideal_systems
+
+  end
+
   # Add an elevator the the specified space
   #
   # @param template [String] Valid choices are
@@ -5640,6 +5834,14 @@ class OpenStudio::Model::Model
 
     when 'ERVs'
       add_zone_erv(template, zones)
+
+    when 'Evaporative Cooler'
+      add_evap_cooler(template,
+                      zones)
+
+    when 'Ideal Air Loads'
+      add_ideal_air_loads(template,
+                          zones)
 
     ### Combination Systems ###
     when 'Water Source Heat Pumps with ERVs'
