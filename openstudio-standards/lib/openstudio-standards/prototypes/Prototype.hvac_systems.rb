@@ -527,6 +527,110 @@ class OpenStudio::Model::Model
     return heat_pump_water_loop
   end
 
+  # Creates loop that roughly mimics a properly sized ground heat exchanger.
+  # 
+  #   for supplemental heating/cooling and adds it to the model.
+  #
+  # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
+  def add_ground_hx_loop
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding ground source loop.')
+
+    # Ground source loop
+    ground_hx_loop = OpenStudio::Model::PlantLoop.new(self)
+    ground_hx_loop.setName('Ground HX Loop')
+    ground_hx_loop.setMaximumLoopTemperature(80)
+    ground_hx_loop.setMinimumLoopTemperature(5)
+
+    # Loop controls
+    max_delta_t_r = 12 # temp change at high and low entering condition
+    min_inlet_f = 30 # low entering condition.
+    max_inlet_f = 90 # high entering condition
+
+    delta_t_k = OpenStudio.convert(max_delta_t_r,'R','K').get
+    min_inlet_c = OpenStudio.convert(min_inlet_f,'F','C').get
+    max_inlet_c = OpenStudio.convert(max_inlet_f,'F','C').get
+
+    # Calculate the linear formula that defines outlet
+    # temperature based on inlet temperature of the ground hx.
+    min_outlet_c = min_inlet_c + delta_t_k
+    max_outlet_c = max_inlet_c - delta_t_k
+    slope_c_per_c = (max_outlet_c - min_outlet_c)/(max_inlet_c - min_inlet_c) 
+    intercept_c = min_outlet_c - (slope_c_per_c * min_inlet_c)
+
+    sizing_plant = ground_hx_loop.sizingPlant
+    sizing_plant.setLoopType('Heating')
+    sizing_plant.setDesignLoopExitTemperature(max_outlet_c)
+    sizing_plant.setLoopDesignTemperatureDifference(delta_t_k)
+
+    # Pump
+    pump = OpenStudio::Model::PumpConstantSpeed.new(self)
+    pump.setName("#{ground_hx_loop.name} Pump")
+    pump_head_ft_h2o = 60
+    pump_head_press_pa = OpenStudio.convert(pump_head_ft_h2o, 'ftH_{2}O', 'Pa').get
+    pump.setRatedPumpHead(pump_head_press_pa)
+    pump.setPumpControlType('Intermittent')
+    pump.addToNode(ground_hx_loop.supplyInletNode)
+
+    # Use EMS and a PlantComponentTemperatureSource to mimic the operation
+    # of the ground heat exchanger.
+
+    # Schedule to actuate ground HX outlet temperature
+    hx_temp_sch = OpenStudio::Model::ScheduleConstant.new(self)
+    hx_temp_sch.setName('Ground HX Temp Sch')
+    hx_temp_sch.setValue(24) # TODO
+
+    hx = OpenStudio::Model::PlantComponentTemperatureSource.new(self)
+    hx.setName('Ground HX')
+    hx.setTemperatureSpecificationType('Scheduled')
+    hx.setSourceTemperatureSchedule(hx_temp_sch)
+    ground_hx_loop.addSupplyBranchForComponent(hx)
+
+    hx_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self, hx_temp_sch)
+    hx_stpt_manager.setName("#{hx.name} Supply Outlet Setpoint")
+    hx_stpt_manager.addToNode(hx.outletModelObject.get.to_Node.get)
+
+    loop_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self, hx_temp_sch)
+    loop_stpt_manager.setName("#{ground_hx_loop.name} Supply Outlet Setpoint")
+    loop_stpt_manager.addToNode(ground_hx_loop.supplyOutletNode)
+
+    # Sensor to read supply inlet temperature
+    supply_inlet_node = ground_hx_loop.supplyInletNode
+
+    inlet_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(self, 'System Node Temperature')
+    inlet_temp_sensor.setName("#{hx.name} Inlet Temp Sensor")
+    inlet_temp_sensor.setKeyName("#{supply_inlet_node.handle}")
+
+    # Actuator to set supply outlet temperature
+    outlet_temp_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hx_temp_sch, 'Schedule:Constant', 'Schedule Value')
+    outlet_temp_actuator.setName("#{hx.name} Outlet Temp Actuator")
+
+    # Actuator to set supply outlet temperature
+    outlet_temp_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hx_temp_sch, 'Schedule:Constant', 'Schedule Value')
+    outlet_temp_actuator.setName("#{hx.name} Outlet Temp Actuator")
+
+    # Program to control outlet temperature
+    # Adjusts delta-t based on calculation of
+    # slope and intercept from control temperatures
+    program = OpenStudio::Model::EnergyManagementSystemProgram.new(self)
+    program.setName("#{hx.name} Temp Control")
+    program_body = <<-EMS
+      SET Tin = #{inlet_temp_sensor.handle}
+      SET Tout = #{slope_c_per_c.round(2)} * Tin + #{intercept_c.round(1)}
+      SET #{outlet_temp_actuator.handle} = Tout
+    EMS
+    program.setBody(program_body)
+
+    # Program calling manager
+    pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(self)
+    pcm.setName("#{program.name} Calling Mgr")
+    pcm.setCallingPoint('InsideHVACSystemIterationLoop')
+    pcm.addProgram(program)
+
+    return ground_hx_loop
+
+  end
+
   # Adds an ambient condenser water loop that will be used in a district
   # to connect buildings as a shared sink/source for heat pumps.
   #
@@ -5563,6 +5667,23 @@ class OpenStudio::Model::Model
     return ambient_water_loop
   end
 
+  # Either get the existing ground heat exchanger loop in the model or  
+  # add a new one if there isn't one already.
+  #
+  def get_or_add_ground_hx_loop
+
+    # Retrieve the existing ground HX loop
+    # or add a new one if necessary.
+    ground_hx_loop = nil
+    ground_hx_loop = if getPlantLoopByName('Ground HX Loop').is_initialized
+                       getPlantLoopByName('Ground HX Loop').get
+                     else
+                       add_ground_hx_loop
+                     end
+
+    return ground_hx_loop
+  end
+
   # Either get the existing heat pump loop in the model or  
   # add a new one if there isn't one already.
   #
@@ -5808,11 +5929,11 @@ class OpenStudio::Model::Model
       add_water_source_hp(condenser_loop,
                           zones,
                           ventilation=false)
-    
+
     when 'Ground Source Heat Pumps'
       # TODO replace condenser loop w/ ground HX model
       # that does not involve district objects
-      condenser_loop = get_or_add_ambient_water_loop
+      condenser_loop = get_or_add_ground_hx_loop
       add_water_source_hp(condenser_loop,
                           zones,
                           ventilation=false)
