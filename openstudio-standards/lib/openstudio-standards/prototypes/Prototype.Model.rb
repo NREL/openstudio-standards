@@ -139,7 +139,7 @@ class OpenStudio::Model::Model
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_hvac.osm")  if debug_incremental_changes 
       
       osm_file_increment += 1
-      add_swh(building_type, template, climate_zone, prototype_input)
+      add_swh(building_type, template, climate_zone, prototype_input, epw_file)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_swh.osm")  if debug_incremental_changes 
       
