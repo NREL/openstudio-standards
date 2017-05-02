@@ -178,7 +178,7 @@ class OpenStudio::Model::Model
       create_thermal_zones(building_type, template, climate_zone)
       add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
       custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, self)
-      add_swh(building_type, template, climate_zone, prototype_input)
+      add_swh(building_type, template, climate_zone, prototype_input, epw_file)
       custom_swh_tweaks(building_type, template, climate_zone, prototype_input, self)
       add_exterior_lights(building_type, template, climate_zone, prototype_input)
       add_occupancy_sensors(building_type, template, climate_zone)
