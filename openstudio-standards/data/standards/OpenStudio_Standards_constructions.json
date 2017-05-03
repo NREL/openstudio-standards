@@ -5,7 +5,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 160,
+      "sort": 160.0,
       "materials": [
         "Theoretical Glass [167]"
       ]
@@ -15,7 +15,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 161,
+      "sort": 161.0,
       "materials": [
         "Theoretical Glass [197]"
       ]
@@ -25,7 +25,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 162,
+      "sort": 162.0,
       "materials": [
         "Theoretical Glass [202]"
       ]
@@ -35,7 +35,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 163,
+      "sort": 163.0,
       "materials": [
         "Theoretical Glass [207]"
       ]
@@ -45,7 +45,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 165,
+      "sort": 165.0,
       "materials": [
         "Theoretical Glass [216]"
       ]
@@ -55,7 +55,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 166,
+      "sort": 166.0,
       "materials": [
         "Theoretical Glass [221]"
       ]
@@ -65,9 +65,45 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 164,
+      "sort": 164.0,
       "materials": [
         "Theoretical Glass [216]"
+      ]
+    },
+    {
+      "name": "Ground FloorGround_Floor_R11_T2013",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Ground_Floor_R11_T2013",
+        "Plywood - 5/8 in.",
+        "Carpet - 3/4 in."
+      ]
+    },
+    {
+      "name": "Ground FloorGround_Floor_R17_T2013",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Ground_Floor_R17_T2013",
+        "Plywood - 5/8 in.",
+        "Carpet - 3/4 in."
+      ]
+    },
+    {
+      "name": "Ground FloorGround_Floor_R22_T2013",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Ground_Floor_R22_T2013",
+        "Plywood - 5/8 in.",
+        "Carpet - 3/4 in."
       ]
     },
     {
@@ -106,6 +142,219 @@
       ]
     },
     {
+      "name": "Metal framed wallsW1_R8.60",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W1_R8.60",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW2_R11.13",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W2_R11.13",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW3_R11.36",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W3_R11.36",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW4_R12.62",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W4_R12.62",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW_T24_2013_R13.99",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W_T24_2013_R13.99",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW_m1_R15",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W_m1_R15",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW_m2_R19",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W_m2_R19",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal framed wallsW_m3_R21",
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Stucco - 7/8 in.",
+        "W_m3_R21",
+        "Air - Metal Wall Framing - 16 or 24 in. OC",
+        "Gypsum Board - 1/2 in."
+      ]
+    },
+    {
+      "name": "Metal roofR1_R14.20",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R1_R14.20"
+      ]
+    },
+    {
+      "name": "Metal roofR2_R12.90",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R2_R12.90"
+      ]
+    },
+    {
+      "name": "Metal roofR3_R17.74",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R3_R17.74"
+      ]
+    },
+    {
+      "name": "Metal roofR4_R20.28",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R4_R20.28"
+      ]
+    },
+    {
+      "name": "Metal roofR_R30",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R_R30"
+      ]
+    },
+    {
+      "name": "Metal roofR_R38",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R_R38"
+      ]
+    },
+    {
+      "name": "Metal roofR_T24_2013_24.86",
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "R_T24_2013_24.86"
+      ]
+    },
+    {
+      "name": "NACM_Drop Ceiling",
+      "intended_surface_type": "InteriorCeiling",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "NACM_Acoustic Tile 3/4in"
+      ]
+    },
+    {
+      "name": "NACM_Interior Floor",
+      "intended_surface_type": "InteriorFloor",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "NACM_Carpet 3/4in",
+        "NACM_Carpet 3/4in"
+      ]
+    },
+    {
+      "name": "NACM_Interior Wall",
+      "intended_surface_type": "InteriorWall",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "NACM_Gypsum Board 5/8in",
+        "NACM_Gypsum Board 5/8in"
+      ]
+    },
+    {
       "name": "Smallhotel 2010 Slab Floor",
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
@@ -121,7 +370,7 @@
       "intended_surface_type": "AtticFloor",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": "Typical Insulation",
-      "sort": 1,
+      "sort": 1.0,
       "materials": [
         "1/2IN Gypsum",
         "Typical Insulation",
@@ -133,7 +382,7 @@
       "intended_surface_type": "AtticWall",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 12,
+      "sort": 12.0,
       "materials": [
         "5/8 in. Plywood"
       ]
@@ -143,7 +392,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "IEAD",
       "insulation_layer": "Typical Insulation",
-      "sort": 24,
+      "sort": 24.0,
       "materials": [
         "Built-up Roofing",
         "Typical Insulation",
@@ -155,7 +404,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "IEAD",
       "insulation_layer": "Typical Insulation",
-      "sort": 24,
+      "sort": 24.0,
       "materials": [
         "Built-up Roofing - Highly Reflective",
         "Typical Insulation",
@@ -167,7 +416,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 21,
+      "sort": 21.0,
       "materials": [
         "MAT-CC05 4 HW CONCRETE",
         "Typical Carpet Pad"
@@ -178,7 +427,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
-      "sort": 169,
+      "sort": 169.0,
       "materials": [
         "6 in. Normalweight Concrete Floor",
         "Typical Carpet Pad"
@@ -189,7 +438,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
-      "sort": 170,
+      "sort": 170.0,
       "materials": [
         "8 in. Concrete Block Basement Wall",
         "Typical Carpet Pad"
@@ -200,7 +449,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "IEAD",
       "insulation_layer": "Typical Insulation",
-      "sort": 27,
+      "sort": 27.0,
       "materials": [
         "Roof Membrane",
         "Typical Insulation",
@@ -212,7 +461,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "IEAD",
       "insulation_layer": "Typical Insulation",
-      "sort": 27,
+      "sort": 27.0,
       "materials": [
         "Roof Membrane - Highly Reflective",
         "Typical Insulation",
@@ -262,7 +511,7 @@
       "sort": null,
       "materials": [
         "Typical Insulation",
-        "8 in. Concrete Block Basement Wall",
+        "8 in. Normalweight Concrete Floor",
         "Typical Carpet Pad"
       ]
     },
@@ -271,7 +520,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
-      "sort": 16,
+      "sort": 16.0,
       "materials": [
         "Typical Insulation",
         "4 in. Normalweight Concrete Floor",
@@ -283,7 +532,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
-      "sort": 17,
+      "sort": 17.0,
       "materials": [
         "Typical Carpet Pad",
         "4 in. Normalweight Concrete Floor",
@@ -295,7 +544,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
-      "sort": 115,
+      "sort": 115.0,
       "materials": [
         "1IN Stucco",
         "8IN CONCRETE HW RefBldg",
@@ -308,7 +557,7 @@
       "intended_surface_type": "InteriorWall",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": "Typical Insulation",
-      "sort": 180,
+      "sort": 180.0,
       "materials": [
         "25mm Stucco",
         "5/8 in. Gypsum Board",
@@ -322,7 +571,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "Metal",
       "insulation_layer": "Typical Insulation",
-      "sort": 25,
+      "sort": 25.0,
       "materials": [
         "Metal Roof Surface",
         "Typical Insulation"
@@ -333,7 +582,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "Metal",
       "insulation_layer": "Typical Insulation",
-      "sort": 25,
+      "sort": 25.0,
       "materials": [
         "Metal Roof Surface - Highly Reflective",
         "Typical Insulation"
@@ -344,7 +593,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "Metal",
       "insulation_layer": "Typical Insulation",
-      "sort": 113,
+      "sort": 113.0,
       "materials": [
         "Metal Siding",
         "Typical Insulation",
@@ -356,7 +605,7 @@
       "intended_surface_type": "ExteriorDoor",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
-      "sort": 15,
+      "sort": 15.0,
       "materials": [
         "F08 Metal surface",
         "Typical Insulation"
@@ -381,7 +630,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "SteelFramed",
       "insulation_layer": "Typical Insulation",
-      "sort": 109,
+      "sort": 109.0,
       "materials": [
         "25mm Stucco",
         "5/8 in. Gypsum Board",
@@ -408,7 +657,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": "Typical Insulation",
-      "sort": 36,
+      "sort": 36.0,
       "materials": [
         "25mm Stucco",
         "5/8 in. Gypsum Board",
@@ -421,7 +670,7 @@
       "intended_surface_type": "InteriorCeiling",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 174,
+      "sort": 174.0,
       "materials": [
         "CP02 CARPET PAD",
         "100mm Normalweight concrete floor"
@@ -432,7 +681,7 @@
       "intended_surface_type": "InteriorDoor",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 175,
+      "sort": 175.0,
       "materials": [
         "G05 25mm wood"
       ]
@@ -442,7 +691,7 @@
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 177,
+      "sort": 177.0,
       "materials": [
         "100mm Normalweight concrete floor",
         "CP02 CARPET PAD"
@@ -453,7 +702,7 @@
       "intended_surface_type": "InteriorPartition",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 178,
+      "sort": 178.0,
       "materials": [
         "G05 25mm wood"
       ]
@@ -463,7 +712,7 @@
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
-      "sort": 176,
+      "sort": 176.0,
       "materials": [
         "4 in. Normalweight Concrete Floor",
         "Typical Carpet Pad"
@@ -474,7 +723,7 @@
       "intended_surface_type": "InteriorWall",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 182,
+      "sort": 182.0,
       "materials": [
         "G01 13mm gypsum board",
         "G01 13mm gypsum board"
@@ -485,7 +734,7 @@
       "intended_surface_type": "InteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 184,
+      "sort": 184.0,
       "materials": [
         "Clear 3mm"
       ]
@@ -495,7 +744,7 @@
       "intended_surface_type": "ExteriorDoor",
       "standards_construction_type": "RollUp",
       "insulation_layer": "Typical Insulation",
-      "sort": 14,
+      "sort": 14.0,
       "materials": [
         "Typical Insulation"
       ]
@@ -505,7 +754,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 22,
+      "sort": 22.0,
       "materials": [
         "MAT-CC05 4 HW CONCRETE"
       ]
@@ -515,7 +764,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
-      "sort": 159,
+      "sort": 159.0,
       "materials": [
         "6 in. Normalweight Concrete Floor"
       ]
@@ -525,7 +774,7 @@
       "intended_surface_type": "GroundContactWall",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
-      "sort": 171,
+      "sort": 171.0,
       "materials": [
         "8 in. Concrete Block Basement Wall"
       ]
@@ -535,7 +784,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
-      "sort": 116,
+      "sort": 116.0,
       "materials": [
         "1IN Stucco",
         "8IN CONCRETE HW RefBldg",
@@ -547,7 +796,7 @@
       "intended_surface_type": "InteriorWall",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": null,
-      "sort": 179,
+      "sort": 179.0,
       "materials": [
         "1/2 in. Gypsum Board",
         "1/2 in. Gypsum Board"
@@ -558,7 +807,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "Metal",
       "insulation_layer": null,
-      "sort": 26,
+      "sort": 26.0,
       "materials": [
         "Metal Roofing"
       ]
@@ -568,7 +817,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "Metal",
       "insulation_layer": null,
-      "sort": 26,
+      "sort": 26.0,
       "materials": [
         "Metal Roofing - Highly Reflective"
       ]
@@ -578,7 +827,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "Metal",
       "insulation_layer": null,
-      "sort": 114,
+      "sort": 114.0,
       "materials": [
         "Metal Siding",
         "1/2IN Gypsum"
@@ -589,7 +838,7 @@
       "intended_surface_type": "AtticRoof",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": null,
-      "sort": 8,
+      "sort": 8.0,
       "materials": [
         "Roof Membrane",
         "Metal Decking"
@@ -600,7 +849,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "SteelFramed",
       "insulation_layer": null,
-      "sort": 110,
+      "sort": 110.0,
       "materials": [
         "Wood Siding",
         "1/2IN Gypsum"
@@ -611,7 +860,7 @@
       "intended_surface_type": "ExteriorDoor",
       "standards_construction_type": "Swinging",
       "insulation_layer": "Typical Insulation",
-      "sort": 13,
+      "sort": 13.0,
       "materials": [
         "Typical Insulation"
       ]
@@ -621,7 +870,7 @@
       "intended_surface_type": "AtticRoof",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 11,
+      "sort": 11.0,
       "materials": [
         "Asphalt Shingles",
         "5/8 in. Plywood"
@@ -632,7 +881,7 @@
       "intended_surface_type": "AtticFloor",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": "Typical Insulation",
-      "sort": 2,
+      "sort": 2.0,
       "materials": [
         "5/8 in. Gypsum Board",
         "Typical Insulation"
@@ -643,7 +892,7 @@
       "intended_surface_type": "AtticFloor",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": null,
-      "sort": 3,
+      "sort": 3.0,
       "materials": [
         "Typical Insulation",
         "5/8 in. Gypsum Board"
@@ -654,7 +903,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 6,
+      "sort": 6.0,
       "materials": [
         "BRONZE 6MM",
         "AIR 13MM",
@@ -668,7 +917,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 29,
+      "sort": 29.0,
       "materials": [
         "ECABS-2 COLORED 6MM",
         "ARGON 13MM",
@@ -680,7 +929,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 30,
+      "sort": 30.0,
       "materials": [
         "ECABS-2 COLORED 6MM",
         "ARGON 13MM",
@@ -692,7 +941,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 100,
+      "sort": 100.0,
       "materials": [
         "LoE SPEC SEL TINT 6MM",
         "ARGON 13MM",
@@ -704,7 +953,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 103,
+      "sort": 103.0,
       "materials": [
         "LoE TINT 6MM",
         "ARGON 13MM",
@@ -716,7 +965,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 34,
+      "sort": 34.0,
       "materials": [
         "ECREF-2 COLORED 6MM",
         "AIR 13MM",
@@ -728,7 +977,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 31,
+      "sort": 31.0,
       "materials": [
         "ECABS-2 COLORED 6MM",
         "AIR 13MM",
@@ -740,7 +989,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 7,
+      "sort": 7.0,
       "materials": [
         "BRONZE 6MM",
         "AIR 6MM",
@@ -754,7 +1003,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 102,
+      "sort": 102.0,
       "materials": [
         "LoE TINT 6MM",
         "AIR 13MM",
@@ -766,7 +1015,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 35,
+      "sort": 35.0,
       "materials": [
         "ECREF-2 COLORED 6MM",
         "AIR 13MM",
@@ -778,7 +1027,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 106,
+      "sort": 106.0,
       "materials": [
         "LoE TINT 6MM",
         "AIR 13MM",
@@ -790,7 +1039,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 10,
+      "sort": 10.0,
       "materials": [
         "CLEAR 3MM",
         "AIR 6MM",
@@ -804,7 +1053,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 105,
+      "sort": 105.0,
       "materials": [
         "LoE TINT 6MM",
         "AIR 13MM",
@@ -816,7 +1065,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 119,
+      "sort": 119.0,
       "materials": [
         "PYR B CLEAR 6MM",
         "AIR 13MM",
@@ -828,7 +1077,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 142,
+      "sort": 142.0,
       "materials": [
         "REF C CLEAR MID 6MM",
         "ARGON 13MM",
@@ -840,7 +1089,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 104,
+      "sort": 104.0,
       "materials": [
         "LoE TINT 6MM",
         "AIR 13MM",
@@ -852,7 +1101,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 99,
+      "sort": 99.0,
       "materials": [
         "LoE SPEC SEL TINT 6MM",
         "AIR 6MM",
@@ -864,7 +1113,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 134,
+      "sort": 134.0,
       "materials": [
         "REF B TINT HI 6MM",
         "ARGON 13MM",
@@ -876,7 +1125,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 127,
+      "sort": 127.0,
       "materials": [
         "REF B CLEAR HI 6MM",
         "ARGON 13MM",
@@ -888,7 +1137,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 168,
+      "sort": 168.0,
       "materials": [
         "Theoretical Glass 347"
       ]
@@ -898,7 +1147,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 167,
+      "sort": 167.0,
       "materials": [
         "Theoretical Glass 297"
       ]
@@ -908,7 +1157,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 98,
+      "sort": 98.0,
       "materials": [
         "LoE SPEC SEL CLEAR 3MM",
         "AIR 6MM",
@@ -920,7 +1169,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 98,
+      "sort": 98.0,
       "materials": [
         "ECABS-2 BLEACHED 6MM",
         "AIR 6MM",
@@ -932,7 +1181,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 107,
+      "sort": 107.0,
       "materials": [
         "LoE TINT 6MM",
         "AIR 6MM",
@@ -944,7 +1193,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 108,
+      "sort": 108.0,
       "materials": [
         "LoE TINT 6MM",
         "AIR 6MM",
@@ -956,7 +1205,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 144,
+      "sort": 144.0,
       "materials": [
         "REF D CLEAR 6MM",
         "ARGON 13MM",
@@ -968,7 +1217,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 130,
+      "sort": 130.0,
       "materials": [
         "REF B CLEAR HI 6MM",
         "AIR 13MM",
@@ -980,7 +1229,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 101,
+      "sort": 101.0,
       "materials": [
         "LoE SPEC SEL TINT 6MM",
         "AIR 6MM",
@@ -992,7 +1241,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 133,
+      "sort": 133.0,
       "materials": [
         "REF B TINT HI 6MM",
         "AIR 13MM",
@@ -1004,7 +1253,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 129,
+      "sort": 129.0,
       "materials": [
         "REF B CLEAR HI 6MM",
         "AIR 13MM",
@@ -1016,7 +1265,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 128,
+      "sort": 128.0,
       "materials": [
         "REF B CLEAR HI 6MM",
         "AIR 13MM",
@@ -1028,7 +1277,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 97,
+      "sort": 97.0,
       "materials": [
         "GREY 6MM",
         "AIR 13MM",
@@ -1040,7 +1289,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 145,
+      "sort": 145.0,
       "materials": [
         "REF D CLEAR 6MM",
         "AIR 13MM",
@@ -1052,7 +1301,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 132,
+      "sort": 132.0,
       "materials": [
         "REF B CLEAR LO 6MM",
         "AIR 6MM",
@@ -1074,7 +1323,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 146,
+      "sort": 146.0,
       "materials": [
         "REF D CLEAR 6MM",
         "AIR 13MM",
@@ -1106,7 +1355,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 121,
+      "sort": 121.0,
       "materials": [
         "REF A CLEAR LO 6MM",
         "AIR 13MM",
@@ -1118,7 +1367,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 122,
+      "sort": 122.0,
       "materials": [
         "REF A TINT MID 6MM",
         "AIR 6MM",
@@ -1130,7 +1379,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 137,
+      "sort": 137.0,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1142,7 +1391,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 150,
+      "sort": 150.0,
       "materials": [
         "Glass_2175_LayerAvg",
         "Gap_1_W_0_0032",
@@ -1154,7 +1403,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 150,
+      "sort": 150.0,
       "materials": [
         "REF D TINT 6MM",
         "AIR 6MM",
@@ -1166,7 +1415,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 149,
+      "sort": 149.0,
       "materials": [
         "REF D TINT 6MM",
         "AIR 6MM",
@@ -1178,7 +1427,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 9,
+      "sort": 9.0,
       "materials": [
         "CLEAR 3MM",
         "AIR 6MM",
@@ -1190,7 +1439,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 138,
+      "sort": 138.0,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1202,7 +1451,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 147,
+      "sort": 147.0,
       "materials": [
         "REF D CLEAR 6MM",
         "AIR 6MM",
@@ -1214,7 +1463,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 4,
+      "sort": 4.0,
       "materials": [
         "BLUE 6MM",
         "AIR 6MM",
@@ -1288,7 +1537,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 139,
+      "sort": 139.0,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1300,7 +1549,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 148,
+      "sort": 148.0,
       "materials": [
         "REF D CLEAR 6MM",
         "AIR 6MM",
@@ -1322,7 +1571,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 5,
+      "sort": 5.0,
       "materials": [
         "BLUE 6MM",
         "AIR 6MM",
@@ -1334,7 +1583,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 140,
+      "sort": 140.0,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1356,7 +1605,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 117,
+      "sort": 117.0,
       "materials": [
         "PYR B CLEAR 3MM"
       ]
@@ -1426,7 +1675,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 136,
+      "sort": 136.0,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1438,7 +1687,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 135,
+      "sort": 135.0,
       "materials": [
         "REF B TINT MID 6MM"
       ]
@@ -1508,7 +1757,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 118,
+      "sort": 118.0,
       "materials": [
         "PYR B CLEAR 6MM"
       ]
@@ -1568,7 +1817,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 120,
+      "sort": 120.0,
       "materials": [
         "REF A CLEAR LO 6MM"
       ]
@@ -1578,7 +1827,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 32,
+      "sort": 32.0,
       "materials": [
         "ECREF-1 COLORED 6MM"
       ]
@@ -1608,7 +1857,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 124,
+      "sort": 124.0,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -1618,7 +1867,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 123,
+      "sort": 123.0,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -1678,7 +1927,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 125,
+      "sort": 125.0,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -1698,7 +1947,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 143,
+      "sort": 143.0,
       "materials": [
         "REF D CLEAR 6MM"
       ]
@@ -1728,7 +1977,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 94,
+      "sort": 94.0,
       "materials": [
         "GREEN 3MM"
       ]
@@ -1748,7 +1997,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 33,
+      "sort": 33.0,
       "materials": [
         "ECREF-1 COLORED 6MM"
       ]
@@ -1768,7 +2017,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 141,
+      "sort": 141.0,
       "materials": [
         "REF C CLEAR HI 6MM"
       ]
@@ -1778,7 +2027,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 131,
+      "sort": 131.0,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -1798,7 +2047,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 96,
+      "sort": 96.0,
       "materials": [
         "GREEN 6MM"
       ]
@@ -1968,7 +2217,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 126,
+      "sort": 126.0,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -1998,7 +2247,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
-      "sort": 95,
+      "sort": 95.0,
       "materials": [
         "GREEN 6MM"
       ]
@@ -2014,11 +2263,161 @@
       ]
     },
     {
+      "name": "Window10",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window10"
+      ]
+    },
+    {
+      "name": "Window11",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window11"
+      ]
+    },
+    {
+      "name": "Window12",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window12"
+      ]
+    },
+    {
+      "name": "Window2",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window2"
+      ]
+    },
+    {
+      "name": "Window3",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window3"
+      ]
+    },
+    {
+      "name": "Window4",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window4"
+      ]
+    },
+    {
+      "name": "Window5",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window5"
+      ]
+    },
+    {
+      "name": "Window6",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window6"
+      ]
+    },
+    {
+      "name": "Window7",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window7"
+      ]
+    },
+    {
+      "name": "Window8",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window8"
+      ]
+    },
+    {
+      "name": "Window9",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window9"
+      ]
+    },
+    {
+      "name": "Window_Skylt_T24_2013",
+      "intended_surface_type": "Skylight",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window_Skylt_T24_2013"
+      ]
+    },
+    {
+      "name": "Window_m1",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window_m1"
+      ]
+    },
+    {
+      "name": "Window_m2",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window_m2"
+      ]
+    },
+    {
+      "name": "Window_u2_T24_2013",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Window_u2_T24_2013"
+      ]
+    },
+    {
       "name": "WoodWallU110",
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": null,
-      "sort": 156,
+      "sort": 156.0,
       "materials": [
         "Plywood - 5/8 in.",
         "Compliance Insulation R6.46",
@@ -2099,6 +2498,16 @@
       "materials": [
         "1/2 in. Gypsum Board",
         "1/2 in. Gypsum Board"
+      ]
+    },
+    {
+      "name": "window1",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "window1"
       ]
     }
   ]
