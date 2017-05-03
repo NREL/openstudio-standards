@@ -1062,18 +1062,39 @@ def necb_2011_qaqc(qaqc, model)
   necb_section_name = "NECB2011-5.2.3.3"
   qaqc[:air_loops].each do |air_loop_info|
     #necb_clg_cop = air_loop_info[:cooling_coils][:dx_single_speed][:cop] #*assuming that the cop is defined correctly*
-    necb_supply_fan_w = air_loop_info[:outdoor_air_L_per_s]*1.6
-    supply_fan_w = air_loop_info[:supply_fan][:rated_electric_power_w]
-    
-    percent_diff = (necb_supply_fan_w - supply_fan_w).to_f.abs/necb_supply_fan_w * 100
-    necb_section_test( 
-      qaqc,
-      10,
-      '>=',
-      percent_diff,
-      necb_section_name,
-      "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Percent Diff from NECB value [#{necb_supply_fan_w}]"
-    )
+    necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)
+
+    if air_loop_info[:name].include? "PSZ"
+      necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)
+    elsif air_loop_info[:name].include? "VAV"
+      necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*2.65).round(2)
+    end
+
+    supply_fan_w = (air_loop_info[:supply_fan][:rated_electric_power_w]).round(3)
+    absolute_diff = (necb_supply_fan_w - supply_fan_w).to_f.abs
+    if absolute_diff < 10
+      #This case should ALWAYS PASS
+      necb_section_test(
+        qaqc,
+        10,
+        '>=',
+        absolute_diff,
+        necb_section_name,
+        "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Absolute Difference from NECB value [#{necb_supply_fan_w}]"
+      )
+      next
+    else
+      #The test should pass if and only if the percent difference is less than 10%
+      percent_diff = ((necb_supply_fan_w - supply_fan_w).to_f.abs/necb_supply_fan_w * 100).round(3)
+      necb_section_test( 
+        qaqc,
+        10,
+        '>=',
+        percent_diff,
+        necb_section_name,
+        "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Percent Diff from NECB value [#{necb_supply_fan_w}]"
+      )
+      end
   end
   
   necb_section_name = "SANITY-??"

@@ -29,11 +29,9 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    necb2011_refCOP = 2.5
     chiller_types.each do |chiller_type|
       test_chiller_cap.each do |chiller_cap|
-        tower_cap = chiller_cap * (1.0 + 1.0/necb2011_refCOP)
-        name = "sys6_ChillerType_#{chiller_type}~TowerCap~#{tower_cap}watts"
+        name = "sys6_ChillerType_#{chiller_type}~#{chiller_cap}watts"
         puts "***************************************#{name}*******************************************************\n"
         model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
@@ -57,6 +55,11 @@ class HVACEfficienciesTest < MiniTest::Test
         # Save the model
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
         assert_equal(true, result, "Failure in Standards for #{name}")
+        necb2011_refCOP = 5.0
+        model.getChillerElectricEIRs.each do |ichiller|
+          if ichiller.name.to_s.include? 'Primary' then necb2011_refCOP = ichiller.referenceCOP end
+	    end
+        tower_cap = chiller_cap * (1.0 + 1.0/necb2011_refCOP)
         this_is_the_first_cap_range = false
         this_is_the_second_cap_range = false
         if tower_cap < first_cutoff_twr_cap

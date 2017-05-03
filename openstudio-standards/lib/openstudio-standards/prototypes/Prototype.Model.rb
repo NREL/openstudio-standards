@@ -139,7 +139,7 @@ class OpenStudio::Model::Model
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_hvac.osm")  if debug_incremental_changes 
       
       osm_file_increment += 1
-      add_swh(building_type, template, climate_zone, prototype_input)
+      add_swh(building_type, template, climate_zone, prototype_input, epw_file)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_swh.osm")  if debug_incremental_changes 
       
@@ -178,7 +178,7 @@ class OpenStudio::Model::Model
       create_thermal_zones(building_type, template, climate_zone)
       add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
       custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, self)
-      add_swh(building_type, template, climate_zone, prototype_input)
+      add_swh(building_type, template, climate_zone, prototype_input, epw_file)
       custom_swh_tweaks(building_type, template, climate_zone, prototype_input, self)
       add_exterior_lights(building_type, template, climate_zone, prototype_input)
       add_occupancy_sensors(building_type, template, climate_zone)
@@ -545,46 +545,42 @@ class OpenStudio::Model::Model
       stub_space_type.apply_rendering_color(template)
 
       stub_space_type_occsens = nil
+      occsensSpaceTypeCreated = false # Flag to determine need for another space type
+      occsensSpaceTypeCount = 0
       
       space_names.each do |space_name|
         space = getSpaceByName(space_name)
         next if space.empty?
         space = space.get
-
-        occsensSpaceTypeCreated = false # Flag to determine need for another space type
+        
         occsensSpaceTypeUsed = false
-        occsensSpaceTypeCount = 0
+
         if template == "NECB 2011"
           # Check if space type for this space matches NECB 2011 specific space type 
           # for occupancy sensor that is area dependent. Note: space.floorArea in m2.
           space_type_name_occsens = space_type_name + " - occsens"
           if((space_type_name=='Storage area' && space.floorArea < 100) || 
             (space_type_name=='Storage area - refrigerated' && space.floorArea < 100) || 
+            (space_type_name=='Hospital - medical supply' && space.floorArea < 100) ||
             (space_type_name=='Office - enclosed' && space.floorArea < 25))
             # If there is only one space assigned to this space type, then reassign this stub 
             # to the template duplicate with appendage " - occsens", otherwise create a new stub
             # for this space. Required to use reduced LPD by NECB 2011 0.9 factor.
             occsensSpaceTypeUsed = true
-            if space_names.length > 1
-              if !occsensSpaceTypeCreated
-                # create a new space type just once for space_type_name appended with " - occsens"
-                stub_space_type_occsens = OpenStudio::Model::SpaceType.new(self)
-                stub_space_type_occsens.setStandardsBuildingType(building_type)
-                stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
-                stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
-                stub_space_type_occsens.apply_rendering_color(template)
-                occsensSpaceTypeCreated = true
-                occsensSpaceTypeCount += 1
-              else  
-                # reassign space type stub already created...
-                stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
-                stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
-                occsensSpaceTypeCount += 1
-              end
-            else
-              # reassign space type stub created at entry
-              stub_space_type.setStandardsSpaceType(space_type_name_occsens)
-              stub_space_type.setName("#{building_type} #{space_type_name_occsens}")
+            if !occsensSpaceTypeCreated
+              # create a new space type just once for space_type_name appended with " - occsens"
+              stub_space_type_occsens = OpenStudio::Model::SpaceType.new(self)
+              stub_space_type_occsens.setStandardsBuildingType(building_type)
+              stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
+              stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
+              stub_space_type_occsens.apply_rendering_color(template)
+              occsensSpaceTypeCreated = true
+              occsensSpaceTypeCount += 1
+            else  
+              # reassign occsens space type stub already created...
+              stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
+              stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
+              occsensSpaceTypeCount += 1
             end
           end
         end

@@ -158,7 +158,7 @@ class HVACEfficienciesTest < MiniTest::Test
       oa_sys = iloop.airLoopHVACOutdoorAirSystem.get
       oa_ctl = oa_sys.getControllerOutdoorAir
       econ_is_diff_enthalpy = true
-      if oa_ctl.getEconomizerControlType.to_s != 'DifferentialEnthalpy' then econ_is_diff_enthalpy = false end
+      if oa_ctl.getEconomizerControlType.to_s != 'NoEconomizer' && oa_ctl.getEconomizerControlType.to_s != 'DifferentialEnthalpy' then econ_is_diff_enthalpy = false end
       assert(econ_is_diff_enthalpy, "test_vavfan_rules: Economizer control does not match necb requirement #{name}")
     end
   end

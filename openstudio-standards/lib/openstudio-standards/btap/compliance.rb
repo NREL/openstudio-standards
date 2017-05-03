@@ -800,6 +800,7 @@ module BTAP
         heating_coil_types_sys4 = "Gas",
         heating_coil_types_sys6 = "Hot Water",
         fan_type = "AF_or_BI_rdg_fancurve", 
+        swh_fueltype = "NaturalGas",
         building_type = nil)
 
         #Create a data struct for the space to system to placement information. 
