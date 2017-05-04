@@ -73,10 +73,10 @@ module Fan
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_m3_per_s = if to_FanZoneExhaust.empty?
-                              if autosizedMaximumFlowRate.is_initialized
-                                autosizedMaximumFlowRate.get
-                              else
+                              if maximumFlowRate.is_initialized
                                 maximumFlowRate.get
+                              else
+                                autosizedMaximumFlowRate.get
                               end
                             else
                               maximumFlowRate.get
@@ -190,7 +190,7 @@ module Fan
     # TODO check COMNET and T24 ACM and PNNL 90.1 doc
     fan_impeller_eff = 0.65
 
-    if small_fan?
+    if small_fan? && template != 'NECB 2011'
       fan_impeller_eff = 0.55
     end
 
@@ -225,6 +225,7 @@ module Fan
     # Assuming all fan motors are 4-pole ODP
     template_mod = template.dup
     if template == 'NECB 2011'
+
       if self.class.name == 'OpenStudio::Model::FanConstantVolume'
         template_mod += '-CONSTANT'
       elsif self.class.name == 'OpenStudio::Model::FanVariableVolume'
@@ -247,6 +248,8 @@ module Fan
         setFanPowerCoefficient2(power_vs_flow_curve.coefficient2x)
         setFanPowerCoefficient3(power_vs_flow_curve.coefficient3xPOW2)
         setFanPowerCoefficient4(power_vs_flow_curve.coefficient4xPOW3)
+      else
+        raise("")
       end
     end
 

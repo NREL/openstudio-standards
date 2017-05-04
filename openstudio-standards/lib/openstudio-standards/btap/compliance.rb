@@ -111,10 +111,7 @@ module BTAP
         end
         hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
         
-        old_name = ""
-        unless default_surface_construction_set.getAttribute("name").empty? 
-          old_name =  default_surface_construction_set.getAttribute("name").get.valueAsString
-        end
+        old_name = default_surface_construction_set.name.get.to_s
         
    
         climate_zone_index = get_climate_zone_index(hdd)
@@ -608,7 +605,7 @@ module BTAP
  
       
       
-      def self.necb_spacetype_system_selection(model, heatingDesignLoad  = nil,coolingDesignLoad = nil, runner = nil  )
+      def self.necb_spacetype_system_selection( model, heatingDesignLoad  = nil,coolingDesignLoad = nil, runner = nil  )
         spacezoning_data = Struct.new( 
           :space,                   # the space object 
           :space_name,              # the space name
@@ -651,8 +648,9 @@ module BTAP
             space_system_index = nil
           else
             space_type_property = space.model.find_object($os_standards["space_types"], { "template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get,"building_type" => space.spaceType.get.standardsBuildingType.get })
+            raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
             necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
-            raise("could not find necb system selection type for space: #{space.get.name}") if space_type_property.nil?
+            
           end
           
           
@@ -734,7 +732,7 @@ module BTAP
           when "Warehouse Area - refrigerated"
             system = 5
           when "Wildcard"
-            system = "Wildcard"
+            system = nil
           else
             raise ("NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid")
           end 
@@ -866,11 +864,14 @@ module BTAP
         
         #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
         space_zoning_data_array.each do |space_zone_data|
-          if space_zone_data.system_number == "Wildcard"
+          #If it is a wildcard space.
+          if space_zone_data.system_number.nil?
             #iterate through all adjacent spaces from largest shared wall area to smallest.
             # Set system type to match first space system that is not nil. 
             space_zone_data.space.get_adjacent_spaces_with_shared_wall_areas(true).each do |adj_space|
+              #if there are no adjacent zones near a wh
               raise ("Could not determine adj space to space #{space_zone_data.space.name.get}") if adj_space.nil?
+
               adj_space_data = space_zoning_data_array.find { |data| data.space == adj_space[0] }
               if adj_space_data.system_number.nil?
                 next
@@ -915,7 +916,7 @@ module BTAP
                   #puts "Spacename: #{space_info.space.name}:#{space_info.space.spaceType.get.name}"
                   if space_info.system_number == system_number and 
                       space_info.space.spaceType.get.name.get.include?("- undefined -") == false and
-                      space_info.story == story and
+                      space_info.space.buildingStory.get == story and
                       BTAP::Compliance::NECB2011::determine_necb_schedule_type(space_info.space).to_s == schedule_type and
                       space_info.horizontal_placement == horizontal_placement
 
@@ -927,7 +928,7 @@ module BTAP
                   #create new zone and add the spaces to it. 
                   name = "Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement}"
                   thermal_zone = BTAP::Geometry::Zones::create_thermal_zone(model, space_array)
-                  thermal_zone.setAttribute("name",name)
+                  thermal_zone.setName(name)
                   #Set Thermostat bases on 
                   
                   # Add a thermostat based on the first space
@@ -982,8 +983,14 @@ module BTAP
             thermal_zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
             thermal_zone_ideal_loads.addToThermalZone(thermal_zone)
           end
-        end               
-      end
+        end 
+        #Check to ensure that all spaces are assigned to zones except undefined ones. 
+        model.getSpaces.each do |space|
+        if space.thermalZone.empty? and space.spaceType.get.name.get != 'Space Function - undefined -'
+         raise( "space #{space.name} with spacetype #{space.spaceType.get.name.get}" )
+        end    
+        end         
+      end #
     end
   end #Compliance
 end

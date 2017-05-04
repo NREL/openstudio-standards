@@ -1,6 +1,8 @@
-# Extend the class to add Medium Office specific stuff
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+
+# Modules for building-type specific methods
+module PrototypeBuilding
+module LargeOffice
+  def self.define_space_type_map(building_type, template, climate_zone)
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       space_type_map = {
@@ -27,7 +29,7 @@ class OpenStudio::Model::Model
     when 'NECB 2011'
       # Dom is A
       space_type_map = {
-        'Electrical/Mechanical' => ['Basement'],
+        'Electrical/Mechanical-sch-A' => ['Basement'],
 
         'Office - open plan' => ['Core_bottom', 'Core_mid', 'Core_top', 'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4', 'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4', 'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4', 'DataCenter_basement_ZN_6', 'DataCenter_bot_ZN_6', 'DataCenter_mid_ZN_6', 'DataCenter_top_ZN_6'],
         '- undefined -' => ['GroundFloor_Plenum', 'TopFloor_Plenum', 'MidFloor_Plenum']
@@ -36,7 +38,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       system_to_space_map = [
@@ -145,7 +147,7 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def define_space_multiplier
+  def self.define_space_multiplier
     # This map define the multipliers for spaces with multipliers not equals to 1
     space_multiplier_map = {
       'DataCenter_mid_ZN_6' => 10,
@@ -159,14 +161,14 @@ class OpenStudio::Model::Model
     return space_multiplier_map
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     system_to_space_map = define_hvac_system_map(building_type, template, climate_zone)
 
     system_to_space_map.each do |system|
       # find all zones associated with these spaces
       thermal_zones = []
       system['space_names'].each do |space_name|
-        space = getSpaceByName(space_name)
+        space = model.getSpaceByName(space_name)
         if space.empty?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
           return false
@@ -182,7 +184,7 @@ class OpenStudio::Model::Model
 
       return_plenum = nil
       unless system['return_plenum'].nil?
-        return_plenum_space = getSpaceByName(system['return_plenum'])
+        return_plenum_space = model.getSpaceByName(system['return_plenum'])
         if return_plenum_space.empty?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{system['return_plenum']} was found in the model")
           return false
@@ -200,18 +202,19 @@ class OpenStudio::Model::Model
     return true
   end
 
-  def update_waterheater_loss_coefficient(template)
+  def self.update_waterheater_loss_coefficient(template, model)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
-      getWaterHeaterMixeds.sort.each do |water_heater|
+      model.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.25413987)
       end
     end
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(template)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
+    PrototypeBuilding::LargeOffice.update_waterheater_loss_coefficient(template, model)
     return true
   end
+end
 end

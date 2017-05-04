@@ -1,7 +1,7 @@
-
-# Creat new supermarket prototype buildings
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+# Modules for building-type specific methods
+module PrototypeBuilding
+module SuperMarket
+  def self.define_space_type_map(building_type, template, climate_zone)
   case template
     when 'NECB 2011'
       space_type_map = {
@@ -37,7 +37,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
 	case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       system_to_space_map = [
@@ -134,6 +134,7 @@ class OpenStudio::Model::Model
           ]
         },
 		{
+		# Refrigeration system Rack A: 4 cases and 1 walkin freezer
 		'type' =>'Refrigeration_system',
 		'compressor_type' => 'Low Temp',
         'sys_name' =>'Rack A',
@@ -177,6 +178,8 @@ class OpenStudio::Model::Model
           ]
         },
         {
+		# Refrigeration system Rack B: 3 cases and 1 walkin freezer
+		
 		'type' =>'Refrigeration_system',
 		'compressor_type' => 'Low Temp',
         'sys_name' =>'Rack B',
@@ -209,7 +212,9 @@ class OpenStudio::Model::Model
             'Main Sales'
           ]
         },
-{
+       # Refrigeration system Rack C: 9 cases and 2 walkin freezer
+		{
+
 		'type' =>'Refrigeration_system',
         'compressor_type' => 'Med Temp',
         'sys_name' =>'Rack C',
@@ -292,7 +297,8 @@ class OpenStudio::Model::Model
             'Main Sales'
           ]
         },
-{
+	# Refrigeration system Rack D: 9 cases and 6 walkin freezer
+	{
 		'type' =>'Refrigeration_system',
         'compressor_type' => 'Med Temp',
         'sys_name' =>'Rack D',
@@ -452,27 +458,67 @@ class OpenStudio::Model::Model
 
     return system_to_space_map
   end
-  
- def add_humidistat(space_name, template) 
-    space = getSpaceByName(space_name).get
-    zone = space.thermalZone.get
-    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(self)
-    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(add_schedule('SuperMarket MinRelHumSetSch'))
-    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(add_schedule('SuperMarket MaxRelHumSetSch'))
-    zone.setZoneControlHumidistat(humidistat)
-   end 
  
- def update_exhaust_fan_efficiency(template)
-      getFanZoneExhausts.sort.each do |exhaust_fan|
-        exhaust_fan.setFanEfficiency(0.45)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
+
+       
+	OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+    
+	# additional kitchen loads
+	PrototypeBuilding::SuperMarket.add_extra_equip_kitchen(template, model)
+    # add humidistat to all spaces
+    PrototypeBuilding::SuperMarket.add_humidistat(template, model)
+    # reset bakery & deli OA reset
+	PrototypeBuilding::SuperMarket.reset_bakery_deli_oa(template, model)   
+
+	OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
+	 
+   return true
+  end
+ 
+   def self.add_extra_equip_kitchen(template, model)
+     	space_names = ['Deli','Bakery']	
+		space_names.each do |space_name|
+			space = model.getSpaceByName(space_name).get
+			kitchen_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+			kitchen_definition.setName("kitchen load")
+			kitchen_definition.setDesignLevel(24714.25)
+            kitchen_definition.setFractionLatent(0.25)
+            kitchen_definition.setFractionRadiant(0.3)
+            kitchen_definition.setFractionLost(0.2)
+    
+			kitchen_equipment = OpenStudio::Model::ElectricEquipment.new(kitchen_definition)
+			kitchen_equipment.setName("kitchen equipment")
+			kitchen_sch = model.add_schedule("SuperMarketEle Kit Equip Sch")
+			kitchen_equipment.setSchedule(kitchen_sch)
+			kitchen_equipment.setSpace(space)
+	    end
+	end	
+
+  def self.add_humidistat(template, model)
+        space_names = ['Main Sales','Produce','West Perimeter Sales','East Perimeter Sales','Deli','Bakery',
+		'Enclosed Office','Meeting Room','Dining Room','Restroom','Mechanical Room','Corridor','Vestibule','Active Storage']
+	    space_names.each do |space_name|
+	      space = model.getSpaceByName(space_name).get
+          zone = space.thermalZone.get
+          humidistat = OpenStudio::Model::ZoneControlHumidistat.new(model)
+          humidistat.setHumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('SuperMarket MinRelHumSetSch'))
+          humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('SuperMarket MaxRelHumSetSch'))
+          zone.setZoneControlHumidistat(humidistat)
+	    end	
+	end
+
+ def self.update_exhaust_fan_efficiency(template, model)
+      model.getFanZoneExhausts.sort.each do |exhaust_fan|
+	    exhaust_fan.setFanEfficiency(0.45)
         exhaust_fan.setPressureRise(125)
      end
  end
 	
-  def reset_bakery_deli_oa(template)
-        space_names = ['Deli','Bakery']	
+  def self.reset_bakery_deli_oa(template, model)
+    space_names = ['Deli','Bakery']	
 		space_names.each do |space_name|
-		space_kitchen = getSpaceByName(space_name).get
+		space_kitchen = model.getSpaceByName(space_name).get
 	    ventilation = space_kitchen.designSpecificationOutdoorAir.get
         ventilation.setOutdoorAirFlowperPerson(0.0075)
         ventilation.setOutdoorAirFlowperFloorArea(0)
@@ -487,50 +533,20 @@ class OpenStudio::Model::Model
     end
   end	
   
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
-
-        space_names = ['Main Sales','Produce','West Perimeter Sales','East Perimeter Sales','Deli','Bakery',
-		'Enclosed Office','Meeting Room','Dining Room','Restroom','Mechanical Room','Corridor','Vestibule','Active Storage']
-        space_names.each do |space_name|
-          add_humidistat(space_name, template)
-        end
-	
-		space_names = ['Deli','Bakery']	
-		space_names.each do |space_name|
-			space = getSpaceByName(space_name).get
-			kitchen_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
-			kitchen_definition.setName("kitchen load")
-			kitchen_definition.setDesignLevel(24714.25)
-            kitchen_definition.setFractionLatent(0.25)
-            kitchen_definition.setFractionRadiant(0.3)
-            kitchen_definition.setFractionLost(0.2)
-    
-			kitchen_equipment = OpenStudio::Model::ElectricEquipment.new(kitchen_definition)
-			kitchen_equipment.setName("kitchen equipment")
-			kitchen_sch = add_schedule("SuperMarketEle Kit Equip Sch")
-			kitchen_equipment.setSchedule(kitchen_sch)
-			kitchen_equipment.setSpace(space)
-	    end
-		
-		reset_bakery_deli_oa(template)
-		update_exhaust_fan_efficiency(template)
-			
-   return true
-  end
-
-  def update_waterheater_loss_coefficient(template)
+  def self.update_waterheater_loss_coefficient(template, model)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
-      getWaterHeaterMixeds.sort.each do |water_heater|
+      model.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(0.798542707)
       end
     end
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(template)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
+    PrototypeBuilding::SuperMarket.update_waterheater_loss_coefficient(template, model)
 
     return true
   end
+end
 end

@@ -22,15 +22,109 @@
 # and open the template in the editor.
 require "#{File.dirname(__FILE__)}/btap"
 
+class OSMArg
+  ARGUMENT_TYPES = [
+    "BOOL",         
+    "STRING",       
+    "INTEGER",      
+    "FLOAT",        
+    "STRINGCHOICE",
+    "WSCHOICE"     
+  ]
+        
+        
+        
+  attr_accessor :runner, 
+    :variable_name, 
+    :type,
+    :required,  
+    :model_dependant,
+    :display_name, 
+    :default_value, 
+    :min_value,  
+    :max_value,  
+    :string_choice_array,  	
+    :os_object_type
+        
+  def self.bool( variable_name,display_name,required,default_value )
+    raise "#{default_value} defaut value is not a bool." unless default_value.is_a?(Bool)
+    default_value.respond_to?(:to_s)
+    arg = OSMArg.new( "BOOL", variable_name, display_name, required)
+    arg.default_value = default_value
+    return arg
+  end
+        
+  def self.string( variable_name,display_name,required,default_value )
+    raise "#{default_value} defaut value is not a string." unless default_value.respond_to?(:to_s)
+    arg = OSMArg.new( "STRING", variable_name, display_name, required)
+    arg.default_value = default_value
+    return arg
+  end
+        
+  def self.integer( variable_name,display_name,required,default_value,min_value,max_value )
+    raise "#{default_value} defaut value is not a integer." unless default_value.respond_to?(:to_i)
+    arg = OSMArg.new( "INTEGER", variable_name, display_name, required)
+    arg.default_value = default_value
+    arg.min_value = min_value
+    arg.max_value = max_value
+    return arg          
+  end
+        
+  def self.float( variable_name, display_name, required,default_value,min_value, max_value )
+    raise "#{default_value} defaut value is not a float." unless default_value.respond_to?(:to_f)
+    arg = OSMArg.new( "INTEGER", variable_name, display_name, required)
+    arg.default_value = default_value
+    arg.min_value = min_value
+    arg.max_value = max_value
+    return arg          
+  end
+        
+  def self.choice(variable_name,display_name,required,default_value,string_choice_array)
+    raise "#{default_value} defaut value is not an array." unless default_value.is_a?(Array)    
+    arg = OSMArg.new( "STRINGCHOICE", variable_name, display_name, required)
+    arg.default_value = default_value
+    arg.string_choice_array = string_choice_array
+    return arg
+  end
+        
+  def self.wschoice( variable_name, display_name, required, default_value, os_object_type)
+    arg = OSMArg.new( "WSCHOICE", variable_name, display_name, required )
+    arg.default_value = default_value
+    arg.os_object_type = os_object_type
+    return arg          
+  end
+        
+  def initialize( type, variable_name, display_name, required )
+    self.type = type
+    self.variable_name = variable_name
+    self.display_name = display_name
+    self.required = required
+    self.model_dependant = false
+    if self.type == "WSCHOICE"
+      self.model_dependant = true
+    else
+      self.model_dependant = false
+    end
+    return self
+  end  
+end
+      
+
+
 
 
 module BTAP
   module Measures
     module OSMeasures
+      
+      
+      
+      
       class BTAPModelUserScript < OpenStudio::Ruleset::ModelUserScript
         #if and E+ measure replace OpenStudio::Ruleset::ModelUserScript with OpenStudio::Ruleset::WorkspaceUserScript
         #Array containing information of all inputs required by measure.
         attr_accessor :argument_array_of_arrays
+        attr_accessor :argument_array
         attr_accessor :file
         #Name of measure
         #attr_accessor :name
@@ -38,6 +132,7 @@ module BTAP
         #if and E+ measure replace OpenStudio::Ruleset::ModelUserScript with OpenStudio::Ruleset::WorkspaceUserScript
         def name
           "BTAPModelUserScript"
+          OSMArgument.new
         end
         
         #this method will output the ruby macro to perform the change. 
@@ -51,61 +146,6 @@ module BTAP
           BTAP::runner_register("MACRO", "#{self.class.name}.new.set_user_arguments_and_apply(model,argument_values,runner)",runner)
           BTAP::runner_register("MACRO", "\##{self.class.name} Measure End", runner)
         end
-
-        def arguments(model,argument_array_of_arrays)
-          #IF and E+ measure replace model with workspace as the argument
-
-          #Create an argument vector
-          args = OpenStudio::Ruleset::OSArgumentVector.new
-
-          @argument_array_of_arrays = argument_array_of_arrays
-
-          #***boilerplate code starts. Do not edit...
-          # this converts the 2D array to a array hash for better readability and makes
-          # column data accessible by name.
-          @argument_array_of_hashes = []
-          @argument_array_of_arrays[1..-1].each do |row|   # [1..-1] skips the first row
-            hsh = {}; @argument_array_of_arrays[0].each_with_index{ |header, idx|   hsh[header] = row[idx] }
-            @argument_array_of_hashes << hsh
-          end
-
-          #iterate through array of hashes and make arguments based on type and set
-          # max and min values where applicable.
-          @argument_array_of_hashes.each do |row|
-            arg = nil
-            case row["type"]
-            when "BOOL"
-              arg = OpenStudio::Ruleset::OSArgument::makeBoolArgument(row["variable_name"],row["required"],row["model_dependant"])
-            when "STRING"
-              arg = OpenStudio::Ruleset::OSArgument::makeStringArgument(row["variable_name"],row["required"],row["model_dependant"])
-            when "INTEGER"
-              arg = OpenStudio::Ruleset::OSArgument::makeIntegerArgument(row["variable_name"],row["required"],row["model_dependant"])
-              arg.setMaxValue( row["max_value"].to_i ) unless row["min_value"].nil?
-              arg.setMaxValue( row["max_value"].to_i ) unless  row["max_value"].nil?
-            when "FLOAT"
-              arg = OpenStudio::Ruleset::OSArgument::makeDoubleArgument(row["variable_name"],row["required"],row["model_dependant"])
-              arg.setMaxValue( row["max_value"].to_f ) unless row["min_value"].nil?
-              arg.setMaxValue( row["max_value"].to_f ) unless  row["max_value"].nil?
-            when "STRINGCHOICE"
-              # #add string choices one by one.
-              chs = OpenStudio::StringVector.new
-              row["string_choice_array"].each {|choice| chs << choice}
-              arg = OpenStudio::Ruleset::OSArgument::makeChoiceArgument(row["variable_name"], chs,row["required"],row["model_dependant"])
-            when "PATH"
-              arg = OpenStudio::Ruleset::OSArgument::makePathArgument("alternativeModelPath",true,"osm")
-            when "WSCHOICE"
-              arg = OpenStudio::Ruleset::makeChoiceArgumentOfWorkspaceObjects( row["variable_name"], row["os_object_type"].to_IddObjectType , model, row["required"])
-            end
-            # #common argument aspects.
-            unless arg.nil?
-              arg.setDisplayName(row["display_name"])
-              arg.setDefaultValue(row["default_value"]) unless row["default_value"].nil?
-              args << arg
-            end
-          end
-          return args
-        end
-
 
         def set_user_arguments_and_apply(model,argument_values,runner)
           message = "Settting Arguments"
@@ -158,48 +198,44 @@ module BTAP
           generate_ruby_macro(model,runner)
           return result
         end # end method run
-  
-        def argument_setter(args)
+
+        def argument_setter(model,args)
           #***boilerplate code starts. Do not edit...
-          # this converts the 2D array to a array hash for better readability and makes
-          # column data accessible by name.
-          @argument_array_of_hashes = []
-          @argument_array_of_arrays[1..-1].each do |row|   # [1..-1] skips the first row
-            hsh = {}; @argument_array_of_arrays[0].each_with_index{ |header, idx|   hsh[header] = row[idx] }
-            @argument_array_of_hashes << hsh
-          end
+          
 
           #iterate through array of hashes and make arguments based on type and set
           # max and min values where applicable.
-          @argument_array_of_hashes.each do |row|
+          @argument_array.each do |row|
+            #strip out first char that contains the @ symbol
+            row.variable_name[0] = ''
             arg = nil
-            case row["type"]
+            case row.type
             when "BOOL"
-              arg = OpenStudio::Ruleset::OSArgument::makeBoolArgument(row["variable_name"],row["required"],row["model_dependant"])
+              arg = OpenStudio::Ruleset::OSArgument::makeBoolArgument(row.variable_name,row.required,row.model_dependant)
             when "STRING"
-              arg = OpenStudio::Ruleset::OSArgument::makeStringArgument(row["variable_name"],row["required"],row["model_dependant"])
+              arg = OpenStudio::Ruleset::OSArgument::makeStringArgument(row.variable_name,row.required,row.model_dependant)
             when "INTEGER"
-              arg = OpenStudio::Ruleset::OSArgument::makeIntegerArgument(row["variable_name"],row["required"],row["model_dependant"])
-              arg.setMaxValue( row["max_value"].to_i ) unless row["min_value"].nil?
-              arg.setMaxValue( row["max_value"].to_i ) unless  row["max_value"].nil?
+              arg = OpenStudio::Ruleset::OSArgument::makeIntegerArgument(row.variable_name,row.required,row.model_dependant)
+              arg.setMaxValue( row.max_value.to_i ) unless row.min_value.nil?
+              arg.setMaxValue( row.max_value.to_i ) unless  row.max_value.nil?
             when "FLOAT"
-              arg = OpenStudio::Ruleset::OSArgument::makeDoubleArgument(row["variable_name"],row["required"],row["model_dependant"])
-              arg.setMaxValue( row["max_value"].to_f ) unless row["min_value"].nil?
-              arg.setMaxValue( row["max_value"].to_f ) unless  row["max_value"].nil?
+              arg = OpenStudio::Ruleset::OSArgument::makeDoubleArgument(row.variable_name,row.required,row.model_dependant)
+              arg.setMaxValue( row.max_value.to_f ) unless row.min_value.nil?
+              arg.setMaxValue( row.max_value.to_f ) unless  row.max_value.nil?
             when "STRINGCHOICE"
               # #add string choices one by one.
               chs = OpenStudio::StringVector.new
-              row["string_choice_array"].each {|choice| chs << choice}
-              arg = OpenStudio::Ruleset::OSArgument::makeChoiceArgument(row["variable_name"], chs,row["required"],row["model_dependant"])
+              row.string_choice_array.each {|choice| chs << choice}
+              arg = OpenStudio::Ruleset::OSArgument::makeChoiceArgument(row.variable_name, chs,row.required,row.model_dependant)
             when "PATH"
               arg = OpenStudio::Ruleset::OSArgument::makePathArgument("alternativeModelPath",true,"osm")
             when "WSCHOICE"
-              arg = OpenStudio::Ruleset::makeChoiceArgumentOfWorkspaceObjects( row["variable_name"], row["os_object_type"].to_IddObjectType , model, row["required"])
+              arg = OpenStudio::Ruleset::makeChoiceArgumentOfWorkspaceObjects( row.variable_name, row.os_object_type.to_IddObjectType , model, row.required)
             end
             # #common argument aspects.
             unless arg.nil?
-              arg.setDisplayName(row["display_name"])
-              arg.setDefaultValue(row["default_value"]) unless row["default_value"].nil?
+              arg.setDisplayName(row.display_name)
+              arg.setDefaultValue(row.default_value) unless row.default_value.nil?
               args << arg
             end
           end
@@ -208,11 +244,11 @@ module BTAP
 
         def argument_getter(model, runner,user_arguments)
           @arg_table = []
-          unless @argument_array_of_hashes == nil
-            @argument_array_of_hashes.each do |row|
-              name = row["variable_name"]
+          unless @argument_array == nil
+            @argument_array.each do |row|
+              name = row.variable_name
             
-              case row["type"]
+              case row.type
               when "BOOL"
                 value = runner.getBoolArgumentValue(name, user_arguments)
                 instance_variable_set("@#{name}",value)
@@ -225,8 +261,8 @@ module BTAP
                 value = runner.getIntegerArgumentValue(name, user_arguments)
                 instance_variable_set("@#{name}",value)
                 @arg_table << [name,value]
-                if ( not row["min_value"].nil?  and instance_variable_get("@#{name}") < row["min_value"] ) or ( not row["max_value"].nil? and instance_variable_get("@#{name}") > row["max_value"] )
-                  runner.registerError("#{row["display_name"]} must be greater than or equal to #{row["min_value"]} and less than or equal to #{row["max_value"]}.  You entered #{instance_variable_get("@#{name}")}.")
+                if ( not row.min_value.nil?  and instance_variable_get("@#{name}") < row.min_value ) or ( not row.max_value.nil? and instance_variable_get("@#{name}") > row.max_value )
+                  runner.registerError("#{row.display_name} must be greater than or equal to #{row.min_value} and less than or equal to #{row.max_value}.  You entered #{instance_variable_get("@#{name}")}.")
                   return false
                 end
               when "FLOAT"
@@ -234,8 +270,8 @@ module BTAP
                 instance_variable_set("@#{name}",value)
                 @arg_table << [name,value]
                 
-                if ( not row["min_value"].nil?  and instance_variable_get("@#{name}") < row["min_value"] ) or ( not row["max_value"].nil? and instance_variable_get("@#{name}") > row["max_value"] )
-                  runner.registerError("#{row["display_name"]} must be greater than or equal to #{row["min_value"]} and less than or equal to #{row["max_value"]}.  You entered #{instance_variable_get("@#{name}")}.")
+                if ( not row.min_value.nil?  and instance_variable_get("@#{name}") < row.min_value ) or ( not row.max_value.nil? and instance_variable_get("@#{name}") > row.max_value )
+                  runner.registerError("#{row.display_name} must be greater than or equal to #{row.min_value} and less than or equal to #{row.max_value}.  You entered #{instance_variable_get("@#{name}")}.")
                   return false
                 end
               when "STRINGCHOICE"
@@ -254,7 +290,6 @@ module BTAP
           return @arg_table
         end        
         
-        
       end
       #Measure Template simplified. 
       class TemplateModelMeasure < BTAPModelUserScript
@@ -265,17 +300,19 @@ module BTAP
 
         def arguments(model)
 
-          #list of arguments as they will appear in the interface. They are available in the run command as @variable_name.
-          @argument_array_of_arrays = [
-            [    "variable_name",          "type",          "required",  "model_dependant","display_name",                 "default_value",  "min_value",  "max_value",  "string_choice_array",  	"os_object_type"	],
-            [    "boolean_argument_name",  "BOOL",          true,        false,            "boolean interface name",       false,            nil,          nil,          nil,                    	nil					],
-            [    "string_argument_name",   "STRING",        true,        false,            "string interface name",        "default",        nil,          nil,          nil,                    	nil					],
-            [    "integer_argument_name",  "INTEGER",       true,        false,            "integer interface name(units)", 0,               0,           100,         	 nil,                   	nil					],
-            [    "float_argument_name",    "FLOAT",         true,        false,            "float interface name(units)",   0.0,             0.0,         100.0,         nil,                   	nil					],
-            [    "choice_argument_name",   "STRINGCHOICE",  true,        false,            "choice interface name",        "choice1",        nil,          nil,          ["choice1","choice2"],  	nil					],
-            [    "ws_choice_argument_name","WSCHOICE",      true,        true,             "wschoice interface name",      nil,              nil,          nil,          nil,                    	"OS_ThermalZone"	]
-          ]
-          args = super(model,@argument_array_of_arrays)
+          #bool
+          @argument_array << OSMArgument.bool(variable_name,display_name,required,default_value)
+          #string
+          @argument_array << OSMArgument.string(variable_name,display_name,required,default_value)
+          #integer
+          @argument_array << OSMArgument.integer(variable_name,display_name,required,default_value,min_value,max_value)
+          #float
+          @argument_array << OSMArgument.float(variable_name,display_name,required,default_value,min_value,max_value)
+          #Choice
+          @argument_array << OSMArgument.choice(variable_name,display_name,required,default_value,string_choice_array)
+          #Workspace choice (using zones as an example)
+          @argument_array << OSMArgument.wschoice(variable_name,display_name,required,default_value,string_choice_array)
+          args = super(model,@argument_array)
           return args
         end
 
@@ -404,9 +441,7 @@ module BTAP
         end
       end
     end
-    module EPMeasures
-    
-    end
+
     class CSV_Measures
       def initialize(
           csv_file,
@@ -764,7 +799,7 @@ module BTAP
           model.getFanVariableVolumes.each do |fan|
             fan.setFanEfficiency( @fan_total_eff  ) unless @fan_total_eff.nil?
             fan.setMotorEfficiency( @fan_motor_eff  ) unless @fan_motor_eff.nil?
-            log  << fan.getAttribute("name").get.valueAsString << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
+            log  << fan.name.get.to_s << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
           end
         end
 
@@ -773,7 +808,7 @@ module BTAP
           model.getFanConstantVolumes.each do |fan|
             fan.setFanEfficiency(  @fan_total_eff ) unless @fan_total_eff.nil?
             fan.setMotorEfficiency( @fan_motor_eff ) unless @fan_motor_eff.nil?
-            log  << fan.getAttribute("name").get.valueAsString << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
+            log  << fan.name.get.to_s << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
           end
           
         end
@@ -783,7 +818,7 @@ module BTAP
         when "VariableVolume"
           model.getFanConstantVolumes.each do |fan_const|
             #check that this is indeed connected to an airloop.
-            log << "Found Const Vol Fan #{fan_const.getAttribute("name").get.valueAsString}"
+            log << "Found Const Vol Fan #{fan_const.name.get.to_s}"
             unless fan_const.loop.empty?
               fan_variable = OpenStudio::Model::FanVariableVolume.new(model,fan_const.availabilitySchedule)
               #pass information from old fan as much as possible.
@@ -804,13 +839,13 @@ module BTAP
               fan_variable.addToNode(air_loop.supplyOutletNode())
               #Remove FanConstantVolume
               fan_const.remove()
-              log << "Replaced by Variable Vol Fan #{fan_variable.getAttribute("name").get.valueAsString}"
+              log << "Replaced by Variable Vol Fan #{fan_variable.name.get.to_s}"
             end
           end
         when "ConstantVolume"
           model.getFanVariableVolumes.each do |fan|
             #check that this is indeed connected to an airloop.
-            log << "Found Const Vol Fan #{fan.getAttribute("name").get.valueAsString}"
+            log << "Found Const Vol Fan #{fan.name.get.to_s}"
             unless fan.loop.empty?
               new_fan = OpenStudio::Model::FanConstantVolume.new(model,fan.availabilitySchedule)
               #pass information from constant speed fan as much as possible.
@@ -825,7 +860,7 @@ module BTAP
               new_fan.addToNode(air_loop.supplyOutletNode())
               #Remove FanConstantVolume
               fan.remove()
-              log << "Replaced by Constant Vol Fan #{new_fan.getAttribute("name").get.valueAsString}"
+              log << "Replaced by Constant Vol Fan #{new_fan.name.get.to_s}"
             end
           end
         when nil
@@ -850,7 +885,7 @@ module BTAP
           model.getPumpVariableSpeeds.each do |pump|
             pump.setMotorEfficiency( @pump_motor_eff.to_f ) unless @pump_motor_eff.nil?
             pump.setPumpControlType( @pump_control_type ) unless @pump_control_type.nil?
-            log  << pump.getAttribute("name").get.valueAsString << ",#{pump.motorEfficiency}\n"
+            log  << pump.name.get.to_s << ",#{pump.motorEfficiency}\n"
           end
         end
         unless model.getPumpConstantSpeeds.empty?
@@ -858,7 +893,7 @@ module BTAP
           model.getPumpConstantSpeeds.each do |pump|
             pump.setMotorEfficiency( @pump_motor_eff.to_f  ) unless @pump_motor_eff.nil?
             pump.setPumpControlType( @pump_control_type ) unless @pump_control_type.nil?
-            log  << pump.getAttribute("name").get.valueAsString << ",#{pump.motorEfficiency}\n"
+            log  << pump.name.get.to_s << ",#{pump.motorEfficiency}\n"
           end
         end
 
@@ -866,7 +901,7 @@ module BTAP
         case @pump_speed_type
         when "VariableSpeed"
           model.getPumpConstantSpeeds.each do |pump_const|
-            log << "Found Const Vol Fan #{pump_const.getAttribute("name").get.valueAsString}"
+            log << "Found Const Vol Fan #{pump_const.name.get.to_s}"
             #check that this is indeed connected to an plant loop.
             unless pump_const.plantLoop.empty?
               pump_variable = OpenStudio::Model::PumpVariableSpeed.new(model)
@@ -886,12 +921,12 @@ module BTAP
               pump_const.remove()
               #add
               pump_variable.addToNode(hw_loop.supplyInletNode)
-              log << "Replaced by Variable Vol Pump #{pump_variable.getAttribute("name").get.valueAsString}"
+              log << "Replaced by Variable Vol Pump #{pump_variable.name.get.to_s}"
             end
           end #end loop PumpConstantSpeeds
         when "ConstantSpeed"
           model.getPumpVariableSpeeds.each do |pump|
-            log << "Found Variable Speed Pump #{pump.getAttribute("name").get.valueAsString}"
+            log << "Found Variable Speed Pump #{pump.name.get.to_s}"
             #check that this is indeed connected to an plant loop.
             unless pump.plantLoop.empty?
               new_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
@@ -912,7 +947,7 @@ module BTAP
               #add the pump to loop.
               new_pump.addToNode(hw_loop.supplyInletNode)
 
-              log << "Replaced by constant speed Pump #{new_pump.getAttribute("name").get.valueAsString}"
+              log << "Replaced by constant speed Pump #{new_pump.name.get.to_s}"
             end
           end #end loop Pump variable Speeds
         when nil
@@ -940,7 +975,7 @@ module BTAP
             cooling_coil.setRatedCOP( OpenStudio::OptionalDouble.new( @cop ) ) unless @cop.nil?
             cop = "NA"
             cop = cooling_coil.ratedCOP.get unless cooling_coil.ratedCOP.empty?
-            log  << cooling_coil.getAttribute("name").get.valueAsString << ",#{cop}\n"
+            log  << cooling_coil.name.get.to_s << ",#{cop}\n"
 
           end
         end
@@ -954,7 +989,7 @@ module BTAP
             cop_high = cooling_coil.ratedHighSpeedCOP.get unless cooling_coil.ratedHighSpeedCOP.empty?
             cop_low = "NA"
             cop_low = cooling_coil.ratedLowSpeedCOP.get unless cooling_coil.ratedLowSpeedCOP.empty?
-            log  << cooling_coil.getAttribute("name").get.valueAsString << ",#{cop_high},#{cop_low}\n"
+            log  << cooling_coil.name.get.to_s << ",#{cop_high},#{cop_low}\n"
           end
         end
         return log
@@ -1036,7 +1071,7 @@ module BTAP
           end
           item.setHeaterFuelType(@shw_heater_fuel_type) unless @shw_heater_fuel_type.nil?
           item.setHeaterThermalEfficiency(@shw_thermal_eff) unless @shw_thermal_eff.nil?
-          log  << item.getAttribute("name").get.valueAsString << ",#{item.setpointTemperatureSchedule},#{item.heaterFuelType},#{item.getHeaterThermalEfficiency.get}\n"
+          log  << item.name.get.to_s << ",#{item.setpointTemperatureSchedule},#{item.heaterFuelType},#{item.getHeaterThermalEfficiency.get}\n"
         end
         return log
       end
@@ -1139,7 +1174,7 @@ module BTAP
                 oar_stpt_manager.setSetpointatOutdoorLowTemperature(@hw_boiler_reset_highsupplytemp) unless @hw_boiler_reset_highsupplytemp.nil?
                 oar_stpt_manager.setOutdoorLowTemperature(@hw_boiler_reset_outsidehighsupplytemp) unless @hw_boiler_reset_outsidehighsupplytemp.nil?
               end
-              table  << boiler.getAttribute("name").get.valueAsString << ","
+              table  << boiler.name.get.to_s << ","
               boiler.designWaterOutletTemperature.empty? ? dowt = "NA" : dowt = boiler.designWaterOutletTemperature.get
               table << "#{dowt},#{boiler.fuelType},#{boiler.nominalThermalEfficiency}\n"
             end

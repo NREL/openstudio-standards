@@ -12,6 +12,9 @@ class OpenStudio::Model::Model
   require_relative 'Prototype.Model.hvac'
   require_relative 'Prototype.Model.swh'
   require_relative '../standards/Standards.Model'
+  require_relative 'Prototype.building_specific_methods'
+  require_relative 'Prototype.Model.elevators'
+  require_relative 'Prototype.Model.exterior_lights'
 
   # Creates a DOE prototype building model and replaces
   # the current model with this model.
@@ -25,6 +28,7 @@ class OpenStudio::Model::Model
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
 
   def create_prototype_building(building_type, template, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+    osm_file_increment = 0 
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == 'HighriseApartment'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
@@ -53,23 +57,77 @@ class OpenStudio::Model::Model
 
     case template
     when 'NECB 2011'
+
+
+
+      debug_incremental_changes = false
       load_building_type_methods(building_type, template, climate_zone)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes 
+
       load_geometry(building_type, template, climate_zone)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes 
+
       getBuilding.setName("#{template}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_set_name.osm")  if debug_incremental_changes 
+
       space_type_map = define_space_type_map(building_type, template, climate_zone)
+      File.open("#{sizing_run_dir}/space_type_map.json", 'w') {|f| f.write(JSON.pretty_generate(space_type_map)) }
+      
       assign_space_type_stubs('Space Function', template, space_type_map) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_assign_space_type_stubs.osm")  if debug_incremental_changes 
+      
       add_loads(template, climate_zone)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_loads.osm")  if debug_incremental_changes 
+      
       apply_infiltration_standard(template)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_infiltration.osm")  if debug_incremental_changes 
+      
       modify_infiltration_coefficients(building_type, template, climate_zone) # does not apply to NECB 2011 but left here for consistency
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_infiltation_coefficients.osm")  if debug_incremental_changes 
+      
       modify_surface_convection_algorithm(template)
-      add_constructions(lookup_building_type, template, climate_zone)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_surface_convection_algorithm.osm")  if debug_incremental_changes 
+      
+      add_constructions(building_type, template, climate_zone)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes 
+      
       create_thermal_zones(building_type, template, climate_zone)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_create_thermal_zones.osm")  if debug_incremental_changes 
+      
       add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
-      return false if runSizingRun("#{sizing_run_dir}/SizingRun0") == false
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes 
+      
+      return false if runSizingRun("#{sizing_run_dir}/SR0") == false
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_sizing_run_0.osm")  if debug_incremental_changes 
+      
       add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_hvac.osm")  if debug_incremental_changes 
+      
+      osm_file_increment += 1
       add_swh(building_type, template, climate_zone, prototype_input)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_swh.osm")  if debug_incremental_changes 
+      
       apply_sizing_parameters(building_type, template)
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_sizing_paramaters.osm")  if debug_incremental_changes 
+      
       yearDescription.get.setDayofWeekforStartDay('Sunday')
+      osm_file_increment += 1
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setDayofWeekforStartDay.osm")  if debug_incremental_changes 
     else
 
       load_building_type_methods(building_type, template, climate_zone)
@@ -81,12 +139,12 @@ class OpenStudio::Model::Model
       apply_infiltration_standard(template)
       modify_infiltration_coefficients(building_type, template, climate_zone)
       modify_surface_convection_algorithm(template)
-      add_constructions(lookup_building_type, template, climate_zone)
+      add_constructions(building_type, template, climate_zone)
       create_thermal_zones(building_type, template, climate_zone)
       add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
-      custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+      custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, self)
       add_swh(building_type, template, climate_zone, prototype_input)
-      custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
+      custom_swh_tweaks(building_type, template, climate_zone, prototype_input, self)
       add_exterior_lights(building_type, template, climate_zone, prototype_input)
       add_occupancy_sensors(building_type, template, climate_zone)
       add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
@@ -102,7 +160,7 @@ class OpenStudio::Model::Model
 
     # For some building types, stories are defined explicitly 
     if building_type == 'SmallHotel'
-      building_story_map = define_building_story_map(building_type, template, climate_zone)
+      building_story_map = PrototypeBuilding::SmallHotel.define_building_story_map(building_type, template, climate_zone)
       assign_building_story(building_type, template, climate_zone, building_story_map)
     end
 
@@ -111,7 +169,7 @@ class OpenStudio::Model::Model
     assign_spaces_to_stories
 
     # Perform a sizing run
-    if runSizingRun("#{sizing_run_dir}/SizingRun1") == false
+    if runSizingRun("#{sizing_run_dir}/SR1") == false
       return false
     end
 
@@ -128,13 +186,13 @@ class OpenStudio::Model::Model
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
     # AHU1 doesn't have economizer
     if building_type == 'Outpatient'
-      modify_oa_controller(template)
+      PrototypeBuilding::Outpatient.modify_oa_controller(template, self)
       # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-      reset_or_room_vav_minimum_damper(prototype_input, template)
+      PrototypeBuilding::Outpatient.reset_or_room_vav_minimum_damper(prototype_input, template, self)
     end
 
     if building_type == 'Hospital'
-      modify_hospital_oa_controller(template)
+      PrototypeBuilding::Hospital.modify_hospital_oa_controller(template, self)
     end
 
     # Apply the HVAC efficiency standard
@@ -144,28 +202,25 @@ class OpenStudio::Model::Model
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
     if building_type == 'LargeHotel'
-      large_hotel_add_daylighting_controls(template)
+      PrototypeBuilding::LargeHotel.large_hotel_add_daylighting_controls(template, self)
     elsif building_type == 'Hospital'
-      hospital_add_daylighting_controls(template)
+      PrototypeBuilding::Hospital.hospital_add_daylighting_controls(template, self)
     else
       add_daylighting_controls(template)
     end
 
-    if building_type == 'QuickServiceRestaurant' || building_type == 'FullServiceRestaurant' || building_type == 'Outpatient' || building_type == 'SuperMarket'
-      update_exhaust_fan_efficiency(template)
+    if building_type == 'QuickServiceRestaurant'
+      PrototypeBuilding::QuickServiceRestaurant.update_exhaust_fan_efficiency(template, self)
+    elsif building_type == 'FullServiceRestaurant'
+      PrototypeBuilding::FullServiceRestaurant.update_exhaust_fan_efficiency(template, self)
+    elsif building_type == 'Outpatient'
+      PrototypeBuilding::Outpatient.update_exhaust_fan_efficiency(template, self)
+    elsif building_type == 'SuperMarket'
+	  PrototypeBuilding::SuperMarket.update_exhaust_fan_efficiency(template, self)
     end
-
-    if building_type == 'HighriseApartment'
-      update_fan_efficiency
-    end
-
-    # Add output variables for debugging
-    # AHU1 doesn't have economizer
-    if building_type == 'Outpatient'
-      # remove the controller:mechanical ventilation for AHU1 OA
-      modify_oa_controller(template)
-      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-      reset_or_room_vav_minimum_damper(prototype_input, template)
+	
+	if building_type == 'HighriseApartment'
+      PrototypeBuilding::HighriseApartment.update_fan_efficiency(self)
     end
 
     # Add output variables for debugging
@@ -183,7 +238,6 @@ class OpenStudio::Model::Model
   # Get the name of the building type used in lookups
   #
   # @param building_type [String] the building type
-  #   a .osm file in the /resources directory
   # @return [String] returns the lookup name as a string
   # @todo Unify the lookup names and eliminate this method
   def get_lookup_name(building_type)
@@ -559,6 +613,10 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
     is_residential = 'No' # default is nonresidential for building level
 
+    # The constructions lookup table uses a slightly different list of
+    # building types.
+    lookup_building_type = get_lookup_name(building_type)
+
     # Assign construction to adiabatic construction
     # Assign a material to all internal mass objects
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(self)
@@ -652,7 +710,7 @@ class OpenStudio::Model::Model
     end
 
     # Make the default construction set for the building
-    bldg_def_const_set = add_construction_set(template, climate_zone, building_type, nil, is_residential)
+    bldg_def_const_set = add_construction_set(template, climate_zone, lookup_building_type, nil, is_residential)
 
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
@@ -694,7 +752,7 @@ class OpenStudio::Model::Model
     end
 
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
-    if building_type == 'SmallHotel'
+    if lookup_building_type == 'SmallHotel'
       getBuildingStorys.each do |story|
         next if story.name.get == 'AtticStory'
         puts "story = #{story.name}"
@@ -709,7 +767,7 @@ class OpenStudio::Model::Model
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = find_object($os_standards['space_types'], 'template' => template, 'building_type' => building_type, 'space_type' => space_type_name)
+          data = find_object($os_standards['space_types'], 'template' => template, 'building_type' => lookup_building_type, 'space_type' => space_type_name)
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
@@ -717,7 +775,7 @@ class OpenStudio::Model::Model
         next if is_residential == 'No'
 
         # if the story is identified as residential, assign residential construction set to the spaces on this story.
-        building_story_const_set = add_construction_set(template, climate_zone, building_type, nil, is_residential)
+        building_story_const_set = add_construction_set(template, climate_zone, lookup_building_type, nil, is_residential)
         if building_story_const_set.is_initialized
           story.spaces.each do |space|
             space.setDefaultConstructionSet(building_story_const_set.get)
@@ -820,9 +878,7 @@ class OpenStudio::Model::Model
 
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type
-    when 'LargeOfficeDetail'
-      space_multiplier_map = PrototypeBuilding::LargeOfficeDetail.define_space_multiplier
-	when 'LargeHotel'
+    when 'LargeHotel'
       space_multiplier_map = PrototypeBuilding::LargeHotel.define_space_multiplier
     when 'MidriseApartment'
       space_multiplier_map = PrototypeBuilding::MidriseApartment.define_space_multiplier
@@ -856,10 +912,250 @@ class OpenStudio::Model::Model
       else
         thermostat_clone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostat_clone)
+        if template == 'NECB 2011'
+          #Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing. 
+          ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
+          ideal_loads.addToThermalZone(zone)
+        end
       end
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
+  end
+
+  # Loop through thermal zones and run thermal_zone.add_exhaust
+  # If kitchen_makeup is "None" then exhaust will be modeled in every kitchen zone without makeup air
+  # If kitchen_makeup is "Adjacent" then exhaust will be modeled in every kitchen zone. Makeup air will be provided when there as an adjacent dining,cafe, or cafeteria zone of the same buidling type.
+  # If kitchen_makeup is "Largest Zone" then exhaust will only be modeled in the largest kitchen zone, but the flow rate will be based on the kitchen area for all zones. Makeup air will be modeled in the largest dining,cafe, or cafeteria zone of the same building type.
+  #
+  # @param template [String] Valid choices are
+  # @param kitchen_makeup [String] Valid choices are
+  # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
+  def add_exhaust(template,kitchen_makeup = "Adjacent") # kitchen_makeup options are (None, Largest Zone, Adjacent)
+
+    zone_exhaust_fans = {}
+
+    # apply use specified kitchen_makup logic
+    if not ["Adjacent","Largest Zone"].include?(kitchen_makeup)
+
+      if not kitchen_makeup == "None"
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
+      end
+
+      # loop through thermal zones
+      self.getThermalZones.each do |thermal_zone|
+        zone_exhaust_hash = thermal_zone.add_exhaust(template)
+
+        # populate zone_exhaust_fans
+        zone_exhaust_fans.merge!(zone_exhaust_hash)
+      end
+
+    else # common code for Adjacent and Largest Zone
+
+      # populate standard_space_types_with_makup_air
+      standard_space_types_with_makup_air = {}
+      standard_space_types_with_makup_air[["FullServiceRestaurant","Kitchen"]] = ["FullServiceRestaurant","Dining"]
+      standard_space_types_with_makup_air[["QuickServiceRestaurant","Kitchen"]] = ["QuickServiceRestaurant","Dining"]
+      standard_space_types_with_makup_air[["Hospital","Kitchen"]] = ["Hospital","Dining"]
+      standard_space_types_with_makup_air[["SecondarySchool","Kitchen"]] = ["SecondarySchool","Cafeteria"]
+      standard_space_types_with_makup_air[["PrimarySchool","Kitchen"]] = ["PrimarySchool","Cafeteria"]
+      standard_space_types_with_makup_air[["LargeHotel","Kitchen"]] = ["LargeHotel","Cafe"]
+
+      # gather information on zones organized by standards building type and space type. zone may be in this multiple times if it has multiple space types
+      zones_by_standards = {}
+
+      self.getThermalZones.each do |thermal_zone|
+
+        # get space type ratio for spaces in zone
+        space_type_hash = {} # key is  space type,  value hash with floor area, standards building type, standards space type, and array of adjacent zones
+        thermal_zone.spaces.each do |space|
+          next if not space.spaceType.is_initialized
+          next if not space.partofTotalFloorArea
+          space_type = space.spaceType.get
+          next if not space_type.standardsBuildingType.is_initialized
+          next if not space_type.standardsSpaceType.is_initialized
+
+          # add entry in hash for space_type_standardsif it doesn't already exist
+          if not space_type_hash.has_key?(space_type)
+            space_type_hash[space_type] = {}
+            space_type_hash[space_type][:effective_floor_area] = 0.0
+            space_type_hash[space_type][:standards_array] =[space_type.standardsBuildingType.get,space_type.standardsSpaceType.get]
+            if kitchen_makeup == "Adjacent"
+              space_type_hash[space_type][:adjacent_zones] = []
+            end
+          end
+
+          # populate floor area
+          space_type_hash[space_type][:effective_floor_area] += space.floorArea * space.multiplier
+
+          # todo - populate adjacent zones (need to add methods to space and zone for this)
+          if kitchen_makeup == "Adjacent"
+            space_type_hash[space_type][:adjacent_zones] << nil
+          end
+
+          # populate zones_by_standards
+          if not zones_by_standards.has_key?(space_type_hash[space_type][:standards_array])
+            zones_by_standards[space_type_hash[space_type][:standards_array]] = {}
+          end
+          zones_by_standards[space_type_hash[space_type][:standards_array]][thermal_zone] = space_type_hash
+
+        end
+
+      end
+
+      if kitchen_makeup == "Largest Zone"
+
+        zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust run on it
+
+        # loop through standard_space_types_with_makup_air
+        standard_space_types_with_makup_air.each do |makeup_target,makeup_source|
+
+          # hash to manage lookups
+          markup_target_effective_floor_area = {}
+          markup_source_effective_floor_area = {}
+
+          if zones_by_standards.has_key?(makeup_target)
+
+            # process zones of each makeup_target
+            zones_by_standards[makeup_target].each do |thermal_zone,space_type_hash|
+              effective_floor_area = 0.0
+              space_type_hash.each do |space_type,hash|
+                effective_floor_area += space_type_hash[space_type][:effective_floor_area]
+              end
+              markup_target_effective_floor_area[thermal_zone] = effective_floor_area
+            end
+
+            # find zone with largest effective area of this space type
+            largest_target_zone = markup_target_effective_floor_area.key(markup_target_effective_floor_area.values.max)
+
+            # find total effective area to calculate exhaust, then divide by zone multiplier when add exhaust
+            target_effective_floor_area = markup_target_effective_floor_area.values.reduce(0, :+)
+
+            # find zones that match makeup_target with makeup_source
+            if zones_by_standards.has_key?(makeup_source)
+
+              # process zones of each makeup_source
+              zones_by_standards[makeup_source].each do |thermal_zone,space_type_hash|
+                effective_floor_area = 0.0
+                space_type_hash.each do |space_type,hash|
+                  effective_floor_area += space_type_hash[space_type][:effective_floor_area]
+                end
+
+                markup_source_effective_floor_area[thermal_zone] = effective_floor_area
+              end
+              # find zone with largest effective area of this space type
+              largest_source_zone = markup_source_effective_floor_area.key(markup_source_effective_floor_area.values.max)
+            else
+
+              # issue warning that makeup air wont be made but still make exhaust
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Model has zone with #{makeup_target} but not #{makeup_source}. Exhaust will be added, but no makeup air.")
+              next
+
+            end
+
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Largest #{makeup_target} is #{largest_target_zone.name} which will provide exahust for #{target_effective_floor_area} m^2")
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Largest #{makeup_source} is #{largest_source_zone.name} which will provide makeup air for #{makeup_target}")
+
+            # add in extra arguments for makeup air
+            exhaust_makeup_inputs = {}
+            exhaust_makeup_inputs[makeup_target] = {} # for now only one makeup target per zone, but method could have multiple
+            exhaust_makeup_inputs[makeup_target][:target_effective_floor_area] = target_effective_floor_area
+            exhaust_makeup_inputs[makeup_target][:source_zone] = largest_source_zone
+
+
+            # add exhaust
+            next if zones_applied.include?(largest_target_zone) # would only hit this if zone has two space types each requesting makeup air
+            zone_exhaust_hash = largest_target_zone.add_exhaust(template,exhaust_makeup_inputs)
+            zones_applied << largest_target_zone
+            zone_exhaust_fans.merge!(zone_exhaust_hash)
+
+          end
+
+        end
+
+        # add exhaust to zones that did not contain space types with standard_space_types_with_makup_air
+        zones_by_standards.each do |standards_array,zones_hash|
+          next if standard_space_types_with_makup_air.has_key?(standards_array)
+
+          # loop through zones adding exhaust
+          zones_hash.each do |thermal_zone,space_type_hash|
+            next if zones_applied.include?(thermal_zone)
+
+            # add exhaust
+            zone_exhaust_hash = thermal_zone.add_exhaust(template)
+            zones_applied << thermal_zone
+            zone_exhaust_fans.merge!(zone_exhaust_hash)
+          end
+
+        end
+
+
+      else #kitchen_makeup == "Adjacent"
+
+        zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust run on it
+
+        standard_space_types_with_makup_air.each do |makeup_target,makeup_source|
+          if zones_by_standards.has_key?(makeup_target)
+            # process zones of each makeup_target
+            zones_by_standards[makeup_target].each do |thermal_zone,space_type_hash|
+
+              # get adjacent zones
+              adjacent_zones = thermal_zone.get_adjacent_zones_with_shared_wall_areas
+
+              # find adjacent zones matching key and value from standard_space_types_with_makup_air
+              first_adjacent_makeup_source = nil
+              adjacent_zones.each do |adjacent_zone|
+
+                next if not first_adjacent_makeup_source.nil?
+
+                if zones_by_standards.has_key?(makeup_source) and zones_by_standards[makeup_source].has_key?(adjacent_zone)
+                  first_adjacent_makeup_source = adjacent_zone
+
+                  # todo - add in extra arguments for makeup air
+                  exhaust_makeup_inputs = {}
+                  exhaust_makeup_inputs[makeup_target] = {} # for now only one makeup target per zone, but method could have multiple
+                  exhaust_makeup_inputs[makeup_target][:source_zone] = first_adjacent_makeup_source
+
+                  # add exhaust
+                  zone_exhaust_hash = thermal_zone.add_exhaust(template,exhaust_makeup_inputs)
+                  zones_applied << thermal_zone
+                  zone_exhaust_fans.merge!(zone_exhaust_hash)
+                end
+
+              end
+
+              if first_adjacent_makeup_source.nil?
+
+                # issue warning that makeup air wont be made but still make exhaust
+                OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Model has zone with #{makeup_target} but no adjacent zone with #{makeup_source}. Exhaust will be added, but no makeup air.")
+
+                # add exhaust
+                zone_exhaust_hash = thermal_zone.add_exhaust(template)
+                zones_applied << thermal_zone
+                zone_exhaust_fans.merge!(zone_exhaust_hash)
+
+              end
+
+            end
+
+          end
+        end
+
+        # add exhaust for rest of zones
+        self.getThermalZones.each do |thermal_zone|
+          next if zones_applied.include?(thermal_zone)
+
+          # add exhaust
+          zone_exhaust_hash = thermal_zone.add_exhaust(template)
+          zone_exhaust_fans.merge!(zone_exhaust_hash)
+        end
+
+      end
+
+    end
+
+    return zone_exhaust_fans
+
   end
 
   # Adds occupancy sensors to certain space types per

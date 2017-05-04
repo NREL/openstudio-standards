@@ -3,6 +3,10 @@ OS:Version,
   {92c527f7-298b-4932-a009-bf2f15a39385}, !- Handle
   1.7.0;                                  !- Version Identifier
 
+OS:Timestep,
+  {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
+  6;                                      !- Number of Timesteps per Hour
+
 OS:SubSurface,
   {14a25927-c7c1-4cd4-bfed-b91ae977fc4d}, !- Handle
   SMstore2_Wall_1_Window_1,               !- Name

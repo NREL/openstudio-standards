@@ -44,7 +44,7 @@ class OpenStudio::Model::AirLoopHVAC
   def apply_standard_controls(template, climate_zone)
     # Energy Recovery Ventilation
     if energy_recovery_ventilator_required?(template, climate_zone)
-      apply_energy_recovery_ventilator
+      apply_energy_recovery_ventilator(template)
     end
 
     # Economizers
@@ -342,6 +342,12 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Calculate and report the total area for debugging/testing
     floor_area_served_m2 = floor_area_served
+
+    if floor_area_served_m2 == 0
+      OpenStudio.logFree(OpenStudio::Warn,'openstudio.standards.AirLoopHVAC', "AirLoopHVAC #{self.name.to_s} serves zero floor area. Check that it has thermal zones attached to it, and that they have non-zero floor area'.")
+      return allowable_fan_bhp
+    end
+
     floor_area_served_ft2 = OpenStudio.convert(floor_area_served_m2, 'm^2', 'ft^2').get
     cfm_per_ft2 = dsn_air_flow_cfm / floor_area_served_ft2
     cfm_per_hp = dsn_air_flow_cfm / allowable_fan_bhp
@@ -1787,7 +1793,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def apply_energy_recovery_ventilator
+  def apply_energy_recovery_ventilator(template)
     # Get the oa system
     oa_system = nil
     if airLoopHVACOutdoorAirSystem.is_initialized
@@ -1800,14 +1806,25 @@ class OpenStudio::Model::AirLoopHVAC
     # Create an ERV
     erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
     erv.setName("#{name} ERV")
-    erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    if template == 'NECB 2011'
+      erv.setSensibleEffectivenessat100HeatingAirFlow(0.5)
+      erv.setLatentEffectivenessat100HeatingAirFlow(0.5)
+      erv.setSensibleEffectivenessat75HeatingAirFlow(0.5)
+      erv.setLatentEffectivenessat75HeatingAirFlow(0.5)
+      erv.setSensibleEffectivenessat100CoolingAirFlow(0.5)
+      erv.setLatentEffectivenessat100CoolingAirFlow(0.5)
+      erv.setSensibleEffectivenessat75CoolingAirFlow(0.5)
+      erv.setLatentEffectivenessat75CoolingAirFlow(0.5)
+    else
+      erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
+      erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
+      erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
+      erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
+      erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+      erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
+      erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
+      erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    end
     erv.setSupplyAirOutletTemperatureControl(true)
     erv.setHeatExchangerType('Rotary')
     erv.setFrostControlType('ExhaustOnly')
@@ -2599,9 +2616,9 @@ class OpenStudio::Model::AirLoopHVAC
   def apply_vav_damper_action(template)
     damper_action = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', 'NECB 2011'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
       damper_action = 'Single Maximum'
-    when '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       damper_action = 'Dual Maximum'
     end
 

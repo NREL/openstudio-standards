@@ -1,7 +1,8 @@
 
-# Extend the class to add Medium Office specific stuff
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
+# Modules for building-type specific methods
+module PrototypeBuilding
+module RetailStripmall
+  def self.define_space_type_map(building_type, template, climate_zone)
     space_type_map = nil
     case template
 
@@ -20,7 +21,7 @@ class OpenStudio::Model::Model
     return space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def self.define_hvac_system_map(building_type, template, climate_zone)
     system_to_space_map = [
       {
         'type' => 'PSZ-AC',
@@ -84,10 +85,10 @@ class OpenStudio::Model::Model
     return system_to_space_map
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input)
+  def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-    system_to_space_map = define_hvac_system_map(building_type, template, climate_zone)
+    system_to_space_map = PrototypeBuilding::RetailStripmall.define_hvac_system_map(building_type, template, climate_zone)
 
     # Add infiltration door opening
     # Spaces names to design infiltration rates (m3/s)
@@ -98,13 +99,13 @@ class OpenStudio::Model::Model
 
       door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|
         space_names.each do |space_name|
-          space = getSpaceByName(space_name).get
+          space = model.getSpaceByName(space_name).get
           # Create the infiltration object and hook it up to the space type
-          infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(self)
+          infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
           infiltration.setName("#{space_name} Door Open Infiltration")
           infiltration.setSpace(space)
           infiltration.setDesignFlowRate(infiltration_design_flowrate)
-          infiltration_schedule = add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
+          infiltration_schedule = model.add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
           if infiltration_schedule.nil?
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Can't find schedule (RetailStripmall INFIL_Door_Opening_SCH).")
             return false
@@ -119,19 +120,20 @@ class OpenStudio::Model::Model
     return true
   end # add hvac
 
-  def update_waterheater_loss_coefficient(template)
+  def self.update_waterheater_loss_coefficient(template, model)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
-      getWaterHeaterMixeds.sort.each do |water_heater|
+      model.getWaterHeaterMixeds.sort.each do |water_heater|
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.205980747)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.205980747)
       end
     end
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(template)
+  def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
+    PrototypeBuilding::RetailStripmall.update_waterheater_loss_coefficient(template, model)
 
     return true
   end
+end
 end

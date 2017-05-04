@@ -26,6 +26,9 @@ def load_openstudio_standards_json
   standards_files << 'OpenStudio_Standards_templates.json'
   standards_files << 'OpenStudio_Standards_unitary_acs.json'
   standards_files << 'OpenStudio_Standards_heat_rejection.json'
+  standards_files << 'OpenStudio_Standards_exterior_lighting.json'
+  standards_files << 'OpenStudio_Standards_parking.json'
+  standards_files << 'OpenStudio_Standards_entryways.json'
   #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
 
   # Combine the data from the JSON files into a single hash
@@ -156,7 +159,7 @@ class OpenStudio::Model::Model
     # Run a sizing run to calculate VLT for layer-by-layer windows.
     # Only necessary for 90.1-2010 daylighting control determination.
     if template == '90.1-2010'
-      if runSizingRun("#{sizing_run_dir}/SizingRunVLT") == false
+      if runSizingRun("#{sizing_run_dir}/SRVLT") == false
         return false
       end
     end
@@ -249,7 +252,7 @@ class OpenStudio::Model::Model
     apply_prm_sizing_parameters    
 
     # Run sizing run with the HVAC equipment
-    if runSizingRun("#{sizing_run_dir}/SizingRun1") == false
+    if runSizingRun("#{sizing_run_dir}/SR1") == false
       return false
     end
 
@@ -286,7 +289,7 @@ class OpenStudio::Model::Model
 
     # Run sizing run with the new chillers, boilers, and
     # cooling towers to determine capacities
-    if runSizingRun("#{sizing_run_dir}/SizingRun2") == false
+    if runSizingRun("#{sizing_run_dir}/SR2") == false
       return false
     end
 
@@ -2316,6 +2319,22 @@ class OpenStudio::Model::Model
     return desired_object
   end
 
+  # Create constant ScheduleRuleset
+  #
+  # @param [double] constant value
+  # @param [string] name
+  # @return schedule
+  def add_constant_schedule_ruleset(value,name = nil)
+    schedule = OpenStudio::Model::ScheduleRuleset.new(self)
+    if not name.nil?
+      schedule.setName(name)
+      schedule.defaultDaySchedule.setName("#{name} Default")
+    end
+    schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
+
+    return schedule
+  end
+
   # Create a schedule from the openstudio standards dataset and
   # add it to the model.
   #
@@ -3000,7 +3019,12 @@ class OpenStudio::Model::Model
     standards_data_dir = "#{top_dir}/data/standards"
 
     # Load the legacy idf results JSON file into a ruby hash
-    temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
+    temp = ''
+    begin
+      temp = load_resource_relative("../../../data/standards/legacy_idf_results.json", 'r:UTF-8')
+    rescue NoMethodError 
+      temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
+    end
     legacy_idf_results = JSON.parse(temp)
 
     # List of all fuel types
@@ -3137,19 +3161,10 @@ class OpenStudio::Model::Model
       building_type = getBuilding.standardsBuildingType.get
     end
 
-    # prototype small office approx 500 m^2
-    # prototype medium office approx 5000 m^2
-    # prototype large office approx 50,000 m^2
     # map office building type to small medium or large
     if building_type == 'Office' && remap_office
       open_studio_area = getBuilding.floorArea
-      building_type = if open_studio_area < 2750
-                        'SmallOffice'
-                      elsif open_studio_area < 25_250
-                        'MediumOffice'
-                      else
-                        'LargeOffice'
-                      end
+      building_type = self.remap_office(open_studio_area)
     end
 
     results = {}
@@ -3157,6 +3172,23 @@ class OpenStudio::Model::Model
     results['building_type'] = building_type
 
     return results
+  end
+
+  # remap office to one of the protptye buildings
+  # @param [Double] floor area
+  # @return [String] SmallOffice, MediumOffice, LargeOffice
+  def remap_office(floor_area)
+    # prototype small office approx 500 m^2
+    # prototype medium office approx 5000 m^2
+    # prototype large office approx 50,000 m^2
+    # map office building type to small medium or large
+    building_type = if floor_area < 2750
+                      'SmallOffice'
+                    elsif floor_area < 25_250
+                      'MediumOffice'
+                    else
+                      'LargeOffice'
+                    end
   end
 
   # user needs to pass in template as string. The building type and climate zone will come from the model.
@@ -3899,7 +3931,7 @@ class OpenStudio::Model::Model
           surface.subSurfaces.sort.each do |ss|
             # Reduce the size of the subsurface
             red = 1.0 - mult
-            ss.reduce_area_by_percent_by_shrinking_x(red)
+            ss.reduce_area_by_percent_by_shrinking_toward_centroid(red)
           end
         end
       end
@@ -4297,6 +4329,217 @@ class OpenStudio::Model::Model
     end
   end
 
+  # Create sorted hash of stories with data need to determine effective number of stories above and below grade
+  # the key should be the story object, which would allow other measures the ability to for example loop through spaces of the bottom story
+  #
+  # @return [hash] hash of space types with data in value necessary to determine effective number of stories above and below grade
+  def create_story_hash
+
+    story_hash = {}
+
+    # loop through stories
+    self.getBuildingStorys.each do |story|
+
+      # skip of story doesn't have any spaces
+      next if story.spaces.size == 0
+
+      story_min_z = nil
+      story_zone_multipliers = []
+      story_spaces_part_of_floor_area = []
+      story_spaces_not_part_of_floor_area = []
+      story_ext_wall_area = 0.0
+      story_ground_wall_area = 0.0
+
+      # loop through space surfaces to find min z value
+      story.spaces.each do |space|
+
+        # skip of space doesn't have any geometry
+        next if space.surfaces.size == 0
+
+        # get space multiplier
+        story_zone_multipliers << space.multiplier
+
+        # space part of floor area check
+        if space.partofTotalFloorArea
+          story_spaces_part_of_floor_area << space
+        else
+          story_spaces_not_part_of_floor_area << space
+        end
+
+        # update exterior wall area (not sure if this is net or gross)
+        story_ext_wall_area += space.exteriorWallArea
+
+        space_min_z = nil
+        z_points = []
+        space.surfaces.each do |surface|
+          surface.vertices.each do |vertex|
+            z_points << vertex.z
+          end
+
+          # update count of ground wall areas
+          next if not surface.surfaceType == "Wall"
+          next if not surface.outsideBoundaryCondition == "Ground" # todo - make more flexible for slab/basement modeling
+          story_ground_wall_area += surface.grossArea
+
+        end
+
+        # skip if surface had no vertices
+        next if z_points.size == 0
+
+        # update story min_z
+        space_min_z = z_points.min + space.zOrigin
+        if story_min_z.nil? or story_min_z > space_min_z
+          story_min_z = space_min_z
+        end
+
+      end
+
+      # update story hash
+      story_hash[story] = {}
+      story_hash[story][:min_z] = story_min_z
+      story_hash[story][:multipliers] = story_zone_multipliers
+      story_hash[story][:part_of_floor_area] = story_spaces_part_of_floor_area
+      story_hash[story][:not_part_of_floor_area] = story_spaces_not_part_of_floor_area
+      story_hash[story][:ext_wall_area] = story_ext_wall_area
+      story_hash[story][:ground_wall_area] = story_ground_wall_area
+
+    end
+
+    # sort hash by min_z low to high
+    story_hash = story_hash.sort_by{|k,v| v[:min_z]}
+
+    # reassemble into hash after sorting
+    hash = {}
+    story_hash.each do |story, props|
+      hash[story] = props
+    end
+
+    return hash
+
+  end
+
+  # populate this method
+  # Determine the effective number of stories above and below grade
+  #
+  # @return hash with effective_num_stories_below_grade and effective_num_stories_above_grade
+  def effective_num_stories
+
+    below_grade = 0
+    above_grade = 0
+
+    # call create_story_hash
+    story_hash = self.create_story_hash
+
+    story_hash.each do |story,hash|
+
+      # skip if no spaces in story are included in the building area
+      next if hash[:part_of_floor_area].size == 0
+
+      # only count as below grade if ground wall area is greater than ext wall area and story below is also below grade
+      if above_grade == 0 and hash[:ground_wall_area] > hash[:ext_wall_area]
+        below_grade += 1 * hash[:multipliers].min
+      else
+        above_grade += 1 * hash[:multipliers].min
+      end
+
+    end
+
+    # populate hash
+    effective_num_stories = {}
+    effective_num_stories[:below_grade] = below_grade
+    effective_num_stories[:above_grade] = above_grade
+    effective_num_stories[:story_hash] = story_hash
+
+    return effective_num_stories
+
+  end
+
+  # create space_type_hash with info such as effective_num_spaces, num_units, num_meds, num_meals
+  #
+  # @param template [String]
+  # @param trust_effective_num_spaces [Bool] defaults to false - set to true if modeled every space as a real rpp, vs. space as collection of rooms
+  # @return [hash] hash of space types with misc information
+  # @todo - add code when determining number of units to makeuse of trust_effective_num_spaces arg
+  def create_space_type_hash(template,trust_effective_num_spaces = false)
+
+    # assumed class size to deduct teachers from occupant count for classrooms
+    typical_class_size = 20.0
+
+    space_type_hash = {}
+    self.getSpaceTypes.each do |space_type|
+
+      # get standards info
+      stds_bldg_type = space_type.standardsBuildingType
+      stds_space_type = space_type.standardsSpaceType
+      if stds_bldg_type.is_initialized and stds_space_type.is_initialized and space_type.spaces.size > 0
+        stds_bldg_type = stds_bldg_type.get
+        stds_space_type = stds_space_type.get
+        effective_num_spaces = 0
+        floor_area = 0.0
+        num_people = 0.0
+        num_students = 0.0
+        num_units = 0.0
+        num_beds = 0.0
+        num_people_bldg_total = nil # may need this in future, not same as sumo of people for all space types.
+        num_meals = nil
+        # determine num_elevators in another method
+        # determine num_parking_spots in another method
+
+        # loop through spaces to get mis values
+        space_type.spaces.each do |space|
+          next if not space.partofTotalFloorArea
+          effective_num_spaces += space.multiplier
+          floor_area += space.floorArea * space.multiplier
+          num_people += space.numberOfPeople * space.multiplier
+
+        end
+
+        # determine number of units
+        if stds_bldg_type == "SmallHotel" && stds_space_type.include?("GuestRoom") # doesn't always == GuestRoom so use include?
+          avg_unit_size = OpenStudio::convert(354.2,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == "LargeHotel" && stds_space_type.include?("GuestRoom")
+          avg_unit_size = OpenStudio::convert(279.7,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == "MidriseApartment" && stds_space_type.include?("Apartment")
+          avg_unit_size = OpenStudio::convert(949.9,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == "HighriseApartment" && stds_space_type.include?("Apartment")
+          avg_unit_size = OpenStudio::convert(949.9,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == "StripMall"
+          avg_unit_size = OpenStudio::convert(22500.0/10.0,"ft^2","m^2").get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        end
+
+        # determine number of beds
+        if stds_bldg_type == "Hospital" && ["PatRoom","ICU_PatRm","ICU_Open"].include?(stds_space_type)
+          num_beds = num_people
+        end
+
+        # determine number of students
+        if ["PrimarySchool","SecondarySchool"].include?(stds_bldg_type) && stds_space_type == "Classroom"
+          num_students += num_people * ((typical_class_size - 1.0)/typical_class_size)
+        end
+
+        space_type_hash[space_type] = {}
+        space_type_hash[space_type][:stds_bldg_type] = stds_bldg_type
+        space_type_hash[space_type][:stds_space_type] = stds_space_type
+        space_type_hash[space_type][:effective_num_spaces] = effective_num_spaces
+        space_type_hash[space_type][:floor_area] = floor_area
+        space_type_hash[space_type][:num_people] = num_people
+        space_type_hash[space_type][:num_students] = num_students
+        space_type_hash[space_type][:num_units] = num_units
+        space_type_hash[space_type][:num_beds] = num_beds
+
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Cannot identify standards buidling type and space type for #{space_type.name}, it won't be added to space_type_hash.")
+      end
+    end
+
+    return space_type_hash
+  end
+
   private
 
   # Helper method to fill in hourly values
@@ -4401,4 +4644,5 @@ class OpenStudio::Model::Model
     return true
     
   end
+
 end
