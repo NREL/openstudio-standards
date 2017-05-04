@@ -4161,7 +4161,22 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
     wwr_sh = ((sh_wind_m2 / sh_wall_m2) * 100).round(1)
     fdwr = ((total_subsurface_m2 / total_wall_m2) * 100).round(1) # used by NECB 2011    
     
+    # ECBC code for uniform distribution across four orientations
+  
+    if (wwr_nr <= 40.0) 
+      # WWR should be maintatined as it is and then distribute the WWR uniformly in horizontal bands across the four orientations 
+      
+      #new_window = s.setWindowToWallRatio (wwr_nr, nil, true)
+           
+      
+    elsif (wwr_nr > 40.0) 
+      #set it to 40.0
+      wwr_nr = 40.0
+      # distribute the WWR uniformly in horizontal bands across the four orientations 
 
+    end
+
+     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "wwr = #{wwr_nr}")
    
 
     
@@ -4185,24 +4200,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
     # WWR limit
     wwr_lim = 40.0
 
-     # ECBC code for uniform distribution across four orientations
-
-    if (wwr_nr <= wwr_lim)
-      # WWR should be maintatined as it is and then distribute the WWR uniformly in horizontal bands across the four orientations 
-      
-      #new_window = s.setWindowToWallRatio (wwr_nr, nil, true)
-           
      
- 
-    elsif (wwr_nr > wwr_lim)
-      #set it to 40.0
-      wwr_nr = wwr_lim
-      # distribute the WWR uniformly in horizontal bands across the four orientations 
-
-    end
-
-     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "wwr = #{wwr_nr}")
-     byebug
     # Check against WWR limit
     red_nr = wwr_nr > wwr_lim ? true : false
     red_res = wwr_res > wwr_lim ? true : false
