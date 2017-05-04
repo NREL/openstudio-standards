@@ -1991,6 +1991,8 @@ class OpenStudio::Model::AirLoopHVAC
       controller_oa = oa_system.getControllerOutdoorAir
       controller_mv = controller_oa.controllerMechanicalVentilation
       controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+      # Change the min flow rate in the controller outdoor air
+      controller_oa.setMinimumOutdoorAirFlowRate(0.0)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name}, cannot enable multizone vav optimization because the system has no OA intake.")
       return false
