@@ -1,4 +1,4 @@
-
+require "byebug"
 # Loads the openstudio standards dataset.
 #
 # @return [Hash] a hash of standards data
@@ -112,8 +112,9 @@ class OpenStudio::Model::Model
   # @return [Bool] returns true if successful, false if not
   def create_prm_baseline_building(building_type, template, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
     lookup_building_type = get_lookup_name(building_type)
-
+    
     getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
+   
 
     # Remove external shading devices
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
@@ -123,7 +124,7 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
     apply_prm_baseline_window_to_wall_ratio(template, climate_zone)
     apply_prm_baseline_skylight_to_roof_ratio(template)
-
+   
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
     assign_spaces_to_stories
@@ -174,7 +175,7 @@ class OpenStudio::Model::Model
 
     # Remove all HVAC from model,
     # excluding service water heating
-    remove_prm_hvac
+    remove_prm_hvac 
     
     # Modify the service water heating loops
     # per the baseline rules
@@ -333,17 +334,22 @@ class OpenStudio::Model::Model
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
   def create_ecbc_baseline_building(building_type, template, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-
+    #
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Name = #{getBuilding}")
     getBuilding.setName("#{template}-#{building_type}-#{climate_zone} ECBC baseline created: #{Time.new}")
 
+
+    
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Name = #{getBuilding}")
+    
     # Remove external shading devices
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
-    remove_external_shading_devices
-
+    remove_external_shading_devices    
+   
     # Reduce the WWR and SRR, if necessary
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
     self.apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
-    self.apply_ecbc_baseline_skylight_to_roof_ratio(template)
+    #self.apply_ecbc_baseline_skylight_to_roof_ratio(template)
 
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
@@ -393,7 +399,7 @@ class OpenStudio::Model::Model
     # This must be done before removing the HVAC systems
     # because it requires knowledge of proposed HVAC fuels.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
-    sys_groups = prm_baseline_system_groups(template, custom)
+    #sys_groups = prm_baseline_system_groups(template, custom)
 
     # Remove all HVAC from model,
     # excluding service water heating
@@ -1651,6 +1657,8 @@ class OpenStudio::Model::Model
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
     assign_spaces_to_stories
+
+
 
     # Determine the baseline HVAC system type for each of
     # the groups of zones and add that system type.
@@ -3472,7 +3480,7 @@ class OpenStudio::Model::Model
 
     # From default construction sets
     getDefaultConstructionSets.each do |const_set|
-      ext_surfs = const_set.defaultExteriorSurfaceConstructions
+      ext_surfs = const_set.defaultExteriorSurfaceConstructions     
       int_surfs = const_set.defaultInteriorSurfaceConstructions
       gnd_surfs = const_set.defaultGroundContactSurfaceConstructions
       ext_subsurfs = const_set.defaultExteriorSubSurfaceConstructions
@@ -3521,7 +3529,7 @@ class OpenStudio::Model::Model
       when 'ExteriorWindow'
         constructions << ext_subsurfs.fixedWindowConstruction
         constructions << ext_subsurfs.operableWindowConstruction
-      when 'ExteriorDoor'
+      when 'ExteriorDoor' 
         constructions << ext_subsurfs.doorConstruction
       when 'GlassDoor'
         constructions << ext_subsurfs.glassDoorConstruction
@@ -3536,9 +3544,9 @@ class OpenStudio::Model::Model
         # Interior SubSurfaces
       when 'InteriorWindow'
         constructions << int_subsurfs.fixedWindowConstruction
-        constructions << int_subsurfs.operableWindowConstruction
+        constructions << int_subsurfs.operableWindowConstruction        
       when 'InteriorDoor'
-        constructions << int_subsurfs.doorConstruction
+        constructions << int_subsurfs.doorConstruction        
       end
     end
 
@@ -4063,7 +4071,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
     # of each space conditioning category (res, nonres, semi-heated)
     # separately.  Include space multipliers.
     nr_wall_m2 = 0.001 # Avoids divide by zero errors later
-    nr_wind_m2 = 0
+    nr_wind_m2 = 0    
     res_wall_m2 = 0.001
     res_wind_m2 = 0
     sh_wall_m2 = 0.001
@@ -4073,10 +4081,12 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
     # Store the space conditioning category for later use
     space_cats = {}
     getSpaces.each do |space|
+      
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       wind_area_m2 = 0
       space.surfaces.sort.each do |surface|
+        
         # Skip non-outdoor surfaces
         next unless surface.outsideBoundaryCondition == 'Outdoors'
         # Skip non-walls
@@ -4085,6 +4095,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
         wall_area_m2 += surface.grossArea * space.multiplier
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
+          
           if 'ECBC 2007' == template
             wind_area_m2 += ss.netArea * space.multiplier
           elsif ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
@@ -4094,7 +4105,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           end
         end
       end
-
+     
       # Determine the space category
       # TODO This should really use the heating/cooling loads
       # from the proposed building.  However, in an attempt
@@ -4122,6 +4133,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
               end
       end
       space_cats[space] = cat
+      
 
       # Add to the correct category
       case cat
@@ -4141,12 +4153,18 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
       total_wall_m2 += wall_area_m2
       total_subsurface_m2 += wind_area_m2 # this contains doors as well.
     end
+    
 
     # Calculate the WWR of each category
     wwr_nr = ((nr_wind_m2 / nr_wall_m2) * 100.0).round(1)
     wwr_res = ((res_wind_m2 / res_wall_m2) * 100).round(1)
     wwr_sh = ((sh_wind_m2 / sh_wall_m2) * 100).round(1)
-    fdwr = ((total_subsurface_m2 / total_wall_m2) * 100).round(1) # used by NECB 2011
+    fdwr = ((total_subsurface_m2 / total_wall_m2) * 100).round(1) # used by NECB 2011    
+    
+
+   
+
+    
 
     # Convert to IP and report
     nr_wind_ft2 = OpenStudio.convert(nr_wind_m2, 'm^2', 'ft^2').get
@@ -4162,14 +4180,34 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Res = #{wwr_res.round}%; window = #{res_wind_ft2.round} ft2, wall = #{res_wall_ft2.round} ft2.")
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{wwr_sh.round}%; window = #{sh_wind_ft2.round} ft2, wall = #{sh_wall_ft2.round} ft2.")
 
+    # Code for Uniform distribution on all orientations - ECBC 2007 
+    byebug
     # WWR limit
-    wwr_lim = 60.0
+    wwr_lim = 40.0
 
+     # ECBC code for uniform distribution across four orientations
+
+    if (wwr_nr <= wwr_lim)
+      # WWR should be maintatined as it is and then distribute the WWR uniformly in horizontal bands across the four orientations 
+      
+      #new_window = s.setWindowToWallRatio (wwr_nr, nil, true)
+           
+     
+ 
+    elsif (wwr_nr > wwr_lim)
+      #set it to 40.0
+      wwr_nr = wwr_lim
+      # distribute the WWR uniformly in horizontal bands across the four orientations 
+
+    end
+
+     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "wwr = #{wwr_nr}")
+     byebug
     # Check against WWR limit
     red_nr = wwr_nr > wwr_lim ? true : false
     red_res = wwr_res > wwr_lim ? true : false
     red_sh = wwr_sh > wwr_lim ? true : false
-
+     
     case template
     when 'NECB 2011'
       # NECB FDWR limit
@@ -4185,6 +4223,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
       getSpaces.each do |space|
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
+          
           # Skip non-outdoor surfaces
           next unless surface.outsideBoundaryCondition == 'Outdoors'
           # Skip non-walls
@@ -4197,6 +4236,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           end
         end
       end
+      
     else # all other template types
       # Stop here unless windows need reducing
       return true unless red_nr || red_res || red_sh
@@ -4205,7 +4245,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
       mult_nr_red = wwr_lim / wwr_nr
       mult_res_red = wwr_lim / wwr_res
       mult_sh_red = wwr_lim / wwr_sh
-
+      
       # Reduce the window area if any of the categories necessary
       getSpaces.each do |space|
         # Determine the space category
@@ -4226,7 +4266,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           next unless red_sh
           mult = mult_sh_red
         end
-
+        
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
           # Skip non-outdoor surfaces
@@ -4236,6 +4276,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           # Subsurfaces in this surface
           surface.subSurfaces.sort.each do |ss|
             next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+            
             # Reduce the size of the window
             # If a vertical rectangle, raise sill height to avoid
             # impacting daylighting areas, otherwise
@@ -4249,12 +4290,14 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           end
         end
       end
+      
 
     end
 
     return true
   end
-  
+ 
+
   # ECBC code ends for Window-to-wall ratio
   
   def apply_ecbc_baseline_skylight_to_roof_ratio(template)
@@ -4614,20 +4657,23 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
   # Site shading will not be impacted.
   # @return [Bool] returns true if successful, false if not.
   def remove_external_shading_devices
-    shading_surfaces_removed = 0
-    getShadingSurfaceGroups.each do |shade_group|
+    shading_surfaces_removed = 0    
+    getShadingSurfaceGroups.each do |shade_group|    
       # Skip Site shading
       next if shade_group.shadingSurfaceType == 'Site'
       # Space shading surfaces should be removed
-      shading_surfaces_removed += shade_group.shadingSurfaces.size
+      shading_surfaces_removed += shade_group.shadingSurfaces.size     
       shade_group.remove
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Removed #{shading_surfaces_removed} external shading devices.")
+     #OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Surfaces? = #{shadingSurfaces}")
+      #OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Size? = #{size}")
+      #OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "removed? = #{shading_surfaces_removed}")
 
     return true
-  end
-
+  end  
+  
   # Changes the sizing parameters to the PRM specifications.
   def apply_prm_sizing_parameters
 
@@ -4960,7 +5006,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           htg_fuels.include?('Coal') ||
           htg_fuels.include?('Diesel') ||
           htg_fuels.include?('Gasoline')
-        electric = false
+        electric = false        
       end
 
       # Per Table G3.1 11.e, if the baseline system was a combination of 
@@ -4995,6 +5041,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           fossil_fuel_type = fuels[0]
           water_heater.setHeaterFuelType(fossil_fuel_type)
           water_heater.setHeaterThermalEfficiency(0.8)
+          
         end
       # If it's not a combination heating and service water heating system
       # just change the fuel type of all water heaters on the system
