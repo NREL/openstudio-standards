@@ -25,12 +25,17 @@ class TestMediumOffice < CreateDOEPrototypeBuildingTest
                'USA_VT_Burlington.Intl.AP.726170_TMY3.epw',              'USA_MT_Helena.Rgnl.AP.727720_TMY3.epw',
                'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
                'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw']
-               
+  
+  climate_zones = ['ASHRAE 169-2006-1A']
+
+  # not used for ASHRAE/DOE archetypes, but required for call
+  epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw']
+			   
   create_models = true
   run_models = true
   compare_results = false
   
-  debug = false
+  debug = true
   
   TestMediumOffice.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   

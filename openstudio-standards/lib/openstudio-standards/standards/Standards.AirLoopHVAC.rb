@@ -68,30 +68,46 @@ class OpenStudio::Model::AirLoopHVAC
       end
 
       # Static Pressure Reset
-      # assume no systems have DDC control of VAV terminals
-      has_ddc = false
-      spr_req = static_pressure_reset_required?(template, has_ddc)
+      # Per 5.2.2.16 (Halverson et al 2014), all multiple zone VAV systems are assumed to have DDC for all years of DOE 90.1 prototypes, so the has_ddc is not used any more. 
       supply_return_exhaust_relief_fans.each do |fan|
         if fan.to_FanVariableVolume.is_initialized
           plr_req = fan.part_load_fan_power_limitation?(template)
-          # Part Load Fan Pressure Control & Static Pressure Reset
-          if plr_req && spr_req
-            fan.set_control_type('Multi Zone VAV with VSD and Static Pressure Reset')
-          # Part Load Fan Pressure Control only
-          elsif plr_req && !spr_req
-            fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
-          # Static Pressure Reset only
-          elsif !plr_req && spr_req
-            fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
-          # No Control Required
+		  # Part Load Fan Pressure Control 
+          if plr_req 
+            fan.set_control_type('Multi Zone VAV with VSD and SP Setpoint Reset')
+          # No Part Load Fan Pressure Control 
           else
-            fan.set_control_type('Multi Zone VAV with AF or BI Riding Curve')
+            fan.set_control_type('Multi Zone VAV with discharge dampers')
           end
         else
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "For #{name}: there is a constant volume fan on a multizone vav system.  Cannot apply static pressure reset controls.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{fan}: This is not a multizone VAV fan system.")
         end
-      end
+	 end
 
+      ## # Static Pressure Reset
+      ## # assume no systems have DDC control of VAV terminals		
+      ## has_ddc = false
+      ## spr_req = static_pressure_reset_required?(template, has_ddc)
+      ## supply_return_exhaust_relief_fans.each do |fan|
+      ##   if fan.to_FanVariableVolume.is_initialized
+      ##     plr_req = fan.part_load_fan_power_limitation?(template)
+      ##     # Part Load Fan Pressure Control & Static Pressure Reset
+      ##     if plr_req && spr_req
+      ##       fan.set_control_type('Multi Zone VAV with VSD and Static Pressure Reset')
+      ##     # Part Load Fan Pressure Control only
+      ##     elsif plr_req && !spr_req
+      ##       fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
+      ##     # Static Pressure Reset only
+      ##     elsif !plr_req && spr_req
+      ##       fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
+      ##     # No Control Required
+      ##     else
+      ##       fan.set_control_type('Multi Zone VAV with AF or BI Riding Curve')
+      ##     end
+      ##   else
+      ##     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "For #{name}: there is a constant volume fan on a multizone vav system.  Cannot apply static pressure reset controls.")
+      ##   end
+      ## end
     end
 
     # Single zone systems

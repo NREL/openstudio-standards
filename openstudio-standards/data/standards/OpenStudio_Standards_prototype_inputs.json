@@ -86,7 +86,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -174,7 +175,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -262,7 +264,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -350,7 +353,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -438,7 +442,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -526,7 +531,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -614,7 +620,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 8.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -702,7 +709,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 8.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -790,7 +798,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 8.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": null,
@@ -878,7 +887,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -966,7 +976,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 8.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -1054,7 +1065,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 8.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1142,7 +1154,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 8.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -1230,7 +1243,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 6.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -1318,7 +1332,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 6.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -1406,7 +1421,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 6.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -1494,7 +1510,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 6.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -1582,7 +1599,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 6.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -1670,7 +1688,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 6.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -1758,7 +1777,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -1846,7 +1866,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -1934,7 +1955,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -2022,7 +2044,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -2110,7 +2133,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -2198,7 +2222,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -2286,7 +2311,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "OfficeMedium BLDG_ELEVATORS",
-      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -2374,7 +2400,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "OfficeMedium BLDG_ELEVATORS",
-      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -2462,7 +2489,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "OfficeMedium BLDG_ELEVATORS",
-      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_ADD_DF"
+      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_ADD_DF",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -2550,7 +2578,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "OfficeMedium BLDG_ELEVATORS",
-      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_ADD_DF"
+      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_ADD_DF",
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -2638,7 +2667,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "Medium Office BLDG ELEVATORS",
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -2726,7 +2756,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "Medium Office BLDG ELEVATORS",
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -2814,7 +2845,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -2902,7 +2934,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -2990,7 +3023,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -3078,7 +3112,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -3166,7 +3201,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -3254,7 +3290,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -3342,7 +3379,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -3430,7 +3468,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -3518,7 +3557,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -3606,7 +3646,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -3694,7 +3735,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 3.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -3782,7 +3824,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 3.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -3870,7 +3913,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 3.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -3958,7 +4002,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 3.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -4046,7 +4091,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 3.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -4134,7 +4180,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 3.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -4222,7 +4269,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -4310,7 +4358,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -4398,7 +4447,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -4486,7 +4536,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -4574,7 +4625,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -4662,7 +4714,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -4750,7 +4803,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -4838,7 +4892,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -4926,7 +4981,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -5014,7 +5070,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -5102,7 +5159,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -5190,7 +5248,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -5278,7 +5337,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -5366,7 +5426,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -5454,7 +5515,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -5542,7 +5604,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -5630,7 +5693,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -5718,7 +5782,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -5806,7 +5871,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -5894,7 +5960,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -5982,7 +6049,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -6070,7 +6138,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -6158,7 +6227,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -6246,7 +6316,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -6334,7 +6405,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "SchoolSecondary BLDG_ELEVATORS",
-      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -6422,7 +6494,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "SchoolSecondary BLDG_ELEVATORS",
-      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -6510,7 +6583,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "SchoolSecondary BLDG_ELEVATORS",
-      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_ADD_DF"
+      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_ADD_DF",
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -6598,7 +6672,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "SchoolSecondary BLDG_ELEVATORS",
-      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_ADD_DF"
+      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_ADD_DF",
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -6686,7 +6761,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "SecondarySchool BLDG ELEVATORS",
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -6774,7 +6850,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "SecondarySchool BLDG ELEVATORS",
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -6862,7 +6939,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -6950,7 +7028,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -7038,7 +7117,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -7126,7 +7206,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -7214,7 +7295,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -7302,7 +7384,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -7390,7 +7473,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -7478,7 +7562,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -7566,7 +7651,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -7654,7 +7740,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -7742,7 +7829,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -7830,7 +7918,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -7918,7 +8007,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -8006,7 +8096,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -8094,7 +8185,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -8182,7 +8274,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref 1980-2004",
@@ -8270,7 +8363,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "DOE Ref Pre-1980",
@@ -8358,7 +8452,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -8446,7 +8541,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -8534,7 +8630,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 12.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -8622,7 +8719,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -8710,7 +8808,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 8.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -8798,7 +8897,8 @@
       "elevator_type": "Traction",
       "number_of_elevators": 6.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -8886,7 +8986,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -8974,7 +9075,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 1.0,
       "elevator_schedule": "ApartmentMidRise BLDG_ELEVATORS",
-      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7"
+      "elevator_fan_schedule": "ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7",
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9062,7 +9164,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9150,7 +9253,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 3.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9238,7 +9342,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9326,7 +9431,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9414,7 +9520,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9502,7 +9609,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "SchoolSecondary BLDG_ELEVATORS",
-      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_ADD_DF"
+      "elevator_fan_schedule": "SchoolSecondary ELEV_LIGHT_FAN_SCH_ADD_DF",
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9590,7 +9698,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9678,7 +9787,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9766,7 +9876,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9854,7 +9965,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -9942,7 +10054,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -10030,7 +10143,8 @@
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
       "elevator_schedule": "OfficeMedium BLDG_ELEVATORS",
-      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_ADD_DF"
+      "elevator_fan_schedule": "OfficeMedium ELEV_LIGHT_FAN_SCH_ADD_DF",
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -10118,7 +10232,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "NECB 2011",
@@ -10206,7 +10321,8 @@
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -10294,7 +10410,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -10382,7 +10499,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -10470,7 +10588,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -10558,7 +10677,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC Pre-1978",
@@ -10646,7 +10766,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC Pre-1978",
@@ -10734,7 +10855,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC Pre-1978",
@@ -10822,7 +10944,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC Pre-1978",
@@ -10910,7 +11033,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC Pre-1978",
@@ -10998,7 +11122,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC Pre-1978",
@@ -11086,7 +11211,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC Pre-1978",
@@ -11174,7 +11300,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1978",
@@ -11262,7 +11389,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1978",
@@ -11350,7 +11478,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1978",
@@ -11438,7 +11567,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1978",
@@ -11526,7 +11656,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1978",
@@ -11614,7 +11745,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1978",
@@ -11702,7 +11834,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1978",
@@ -11790,7 +11923,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1992",
@@ -11878,7 +12012,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1992",
@@ -11966,7 +12101,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1992",
@@ -12054,7 +12190,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1992",
@@ -12142,7 +12279,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1992",
@@ -12230,7 +12368,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1992",
@@ -12318,7 +12457,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 1992",
@@ -12406,7 +12546,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2001",
@@ -12494,7 +12635,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2001",
@@ -12582,7 +12724,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2001",
@@ -12670,7 +12813,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2001",
@@ -12758,7 +12902,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2001",
@@ -12846,7 +12991,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2001",
@@ -12934,7 +13080,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2001",
@@ -13022,7 +13169,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2005",
@@ -13110,7 +13258,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2005",
@@ -13198,7 +13347,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2005",
@@ -13286,7 +13436,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2005",
@@ -13374,7 +13525,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2005",
@@ -13462,7 +13614,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2005",
@@ -13550,7 +13703,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2005",
@@ -13638,7 +13792,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2008",
@@ -13726,7 +13881,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2008",
@@ -13814,7 +13970,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2008",
@@ -13902,7 +14059,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2008",
@@ -13990,7 +14148,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2008",
@@ -14078,7 +14237,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2008",
@@ -14166,7 +14326,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "CEC T24 2008",
@@ -14254,7 +14415,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2004",
@@ -14284,7 +14446,7 @@
       "exterior_fuel_equipment2_schedule": null,
       "main_water_heater_volume": 250.0,
       "main_water_heater_fuel": "Natural Gas",
-      "main_water_heater_capacity": 300000.0,
+      "main_water_heater_capacity": 2883259.0,
       "main_service_water_temperature": 140.0,
       "main_service_water_flowrate_schedule": "SuperMarket Bldg Swh",
       "main_service_water_peak_flowrate": 4.46,
@@ -14342,7 +14504,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2007",
@@ -14362,17 +14525,17 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 62787.0,
-      "occ_sensing_exterior_lighting_schedule": "OfficeLarge Exterior_lighting_schedule_b",
-      "nondimming_exterior_lighting_power": 12979.2,
-      "nondimming_exterior_lighting_schedule": "OfficeLarge Exterior_lighting_schedule_a",
+      "occ_sensing_exterior_lighting_power": null,
+      "occ_sensing_exterior_lighting_schedule": null,
+      "nondimming_exterior_lighting_power": 15187.0,
+      "nondimming_exterior_lighting_schedule": "Always On",
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
       "exterior_fuel_equipment2_schedule": null,
       "main_water_heater_volume": 250.0,
       "main_water_heater_fuel": "Natural Gas",
-      "main_water_heater_capacity": 300000.0,
+      "main_water_heater_capacity": 2883259.0,
       "main_service_water_temperature": 140.0,
       "main_service_water_flowrate_schedule": "SuperMarket Bldg Swh",
       "main_service_water_peak_flowrate": 4.46,
@@ -14430,7 +14593,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2010",
@@ -14450,17 +14614,17 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 43305.08874,
-      "occ_sensing_exterior_lighting_schedule": "OfficeLarge Exterior_lighting_schedule_b",
-      "nondimming_exterior_lighting_power": 12979.2,
-      "nondimming_exterior_lighting_schedule": "OfficeLarge Exterior_lighting_schedule_a",
+      "occ_sensing_exterior_lighting_power": 10125.0,
+      "occ_sensing_exterior_lighting_schedule": "SuperMarket Exterior_lighting_schedule_b",
+      "nondimming_exterior_lighting_power": null,
+      "nondimming_exterior_lighting_schedule": null,
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
       "exterior_fuel_equipment2_schedule": null,
       "main_water_heater_volume": 250.0,
       "main_water_heater_fuel": "Natural Gas",
-      "main_water_heater_capacity": 300000.0,
+      "main_water_heater_capacity": 2883259.0,
       "main_service_water_temperature": 140.0,
       "main_service_water_flowrate_schedule": "SuperMarket Bldg Swh",
       "main_service_water_peak_flowrate": 4.46,
@@ -14518,7 +14682,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     },
     {
       "template": "90.1-2013",
@@ -14538,17 +14703,17 @@
       "pszac_oa_damper_schedule_2": null,
       "pszac_operation_schedule_3": null,
       "pszac_oa_damper_schedule_3": null,
-      "occ_sensing_exterior_lighting_power": 43305.08874,
-      "occ_sensing_exterior_lighting_schedule": "OfficeLarge Exterior_lighting_schedule_b",
-      "nondimming_exterior_lighting_power": 12979.2,
-      "nondimming_exterior_lighting_schedule": "OfficeLarge Exterior_lighting_schedule_a",
+      "occ_sensing_exterior_lighting_power": 10125.0,
+      "occ_sensing_exterior_lighting_schedule": "SuperMarket Exterior_lighting_schedule_b",
+      "nondimming_exterior_lighting_power": null,
+      "nondimming_exterior_lighting_schedule": null,
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
       "exterior_fuel_equipment2_schedule": null,
       "main_water_heater_volume": 250.0,
       "main_water_heater_fuel": "Natural Gas",
-      "main_water_heater_capacity": 300000.0,
+      "main_water_heater_capacity": 2883259.0,
       "main_service_water_temperature": 140.0,
       "main_service_water_flowrate_schedule": "SuperMarket Bldg Swh",
       "main_service_water_peak_flowrate": 4.46,
@@ -14606,7 +14771,8 @@
       "elevator_type": null,
       "number_of_elevators": null,
       "elevator_schedule": null,
-      "elevator_fan_schedule": null
+      "elevator_fan_schedule": null,
+      "nonmetal_framing": null
     }
   ]
 }

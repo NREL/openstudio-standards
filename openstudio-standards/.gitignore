@@ -10,3 +10,11 @@
 /.idea
 /netbeans
 /.rubocop
+
+.gitignore
+*.log
+*.json
+/test/doe_prototype/output
+/test/doe_prototype/output
+/data/
+

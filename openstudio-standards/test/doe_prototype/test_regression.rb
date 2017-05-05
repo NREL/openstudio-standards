@@ -6,8 +6,8 @@ class DOEPrototypeRegressionTest < Minitest::Test
   def setup
 	@building_types = [
 		# 'SmallOffice'
-		# 'MediumOffice'
-		'LargeOffice'
+		'MediumOffice'
+		# 'LargeOffice'
 		# 'RetailStandalone'
 		# 'RetailStripmall'
 		# 'PrimarySchool'

@@ -49,6 +49,30 @@
       "notes": "From Regression of Prototype Building EMS"
     },
     {
+      "name": "Coffin Defrost Curve",
+      "coeff_1": 0.3475,
+      "coeff_2": 0.0296,
+      "coeff_3": 0.0007,
+      "coeff_4": 3.0e-05,
+      "min_x": -55.0,
+      "max_x": 55.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "For SuperMarket Prototype Buildings"
+    },
+    {
+      "name": "Coffin Latent Curve",
+      "coeff_1": 0.3379,
+      "coeff_2": 0.0309,
+      "coeff_3": 0.0005,
+      "coeff_4": 4.0e-05,
+      "min_x": -55.0,
+      "max_x": 55.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "For SuperMarket Prototype Buildings"
+    },
+    {
       "name": "CoilClgDXDblEIRRatio_fCFMRatio",
       "coeff_1": 1.007948,
       "coeff_2": 0.345441,
@@ -217,6 +241,30 @@
       "notes": "From NECB 2011"
     },
     {
+      "name": "Glass Door Defrost Curve",
+      "coeff_1": 0.3475,
+      "coeff_2": 0.0296,
+      "coeff_3": 0.0007,
+      "coeff_4": 3.0e-05,
+      "min_x": -55.0,
+      "max_x": 55.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "For SuperMarket Prototype Buildings"
+    },
+    {
+      "name": "Glass Door Latent Curve",
+      "coeff_1": 0.3379,
+      "coeff_2": 0.0309,
+      "coeff_3": 0.0005,
+      "coeff_4": 4.0e-05,
+      "min_x": -55.0,
+      "max_x": 55.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "For SuperMarket Prototype Buildings"
+    },
+    {
       "name": "HPACHeatCapFFF",
       "coeff_1": 0.84,
       "coeff_2": 0.16,
@@ -323,6 +371,18 @@
       "min_out": null,
       "max_out": null,
       "notes": "From Reference Buildings"
+    },
+    {
+      "name": "Open Latent Curve",
+      "coeff_1": -0.0187,
+      "coeff_2": 0.0458,
+      "coeff_3": 0.0011,
+      "coeff_4": 5.0e-05,
+      "min_x": -55.0,
+      "max_x": 55.0,
+      "min_out": null,
+      "max_out": null,
+      "notes": "For SuperMarket Prototype Buildings"
     },
     {
       "name": "PSZ-Fine Storage Heating Coil PLF-FPLR",
