@@ -137,7 +137,7 @@ class OpenStudio::Model::Model
     end
 
     # assign schedules
-    if ["Office","SmallOffice","MediumOffice","MidriseApartment","HighriseApartment","SecondarySchool"].include?(building_type)
+    if ["Office","MediumOffice","MidriseApartment","HighriseApartment","SecondarySchool"].include?(building_type)
       elevator_schedule = prototype_input['elevator_schedule']
       elevator_fan_schedule = prototype_input['elevator_fan_schedule']
       elevator_lights_schedule = prototype_input['elevator_fan_schedule']
