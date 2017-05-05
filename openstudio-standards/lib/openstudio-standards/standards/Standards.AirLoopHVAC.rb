@@ -2685,6 +2685,7 @@ class OpenStudio::Model::AirLoopHVAC
         else
           term.setDamperHeatingAction(damper_action_eplus)
           control_type_set = true
+          term.setMaximumFlowFractionDuringReheat(0.5)
         end
       end
     end
