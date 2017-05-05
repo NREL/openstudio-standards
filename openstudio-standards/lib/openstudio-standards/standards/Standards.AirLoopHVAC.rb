@@ -123,6 +123,26 @@ class OpenStudio::Model::AirLoopHVAC
     # DCV
     if demand_control_ventilation_required?(template, climate_zone)
       enable_demand_control_ventilation(template, climate_zone)
+      # For systems that require DCV,
+      # all individual zones that require DCV preserve
+      # both per-area and per-person OA requirements.
+      # Other zones have OA requirements converted
+      # to per-area values only so DCV performance is only
+      # based on the subset of zones that required DCV.
+      thermalZones.sort.each do |zone|
+        if zone.demand_control_ventilation_required?(template, climate_zone)
+          zone.convert_oa_req_to_per_area
+        end
+      end
+    else
+      # For systems that do not require DCV,
+      # convert OA requirements to per-area values
+      # so that other features such as
+      # multizone VAV optimization do not
+      # incorrectly take variable occupancy into account.
+      thermalZones.sort.each do |zone|
+        zone.convert_oa_req_to_per_area
+      end
     end
 
     # SAT reset
@@ -148,6 +168,17 @@ class OpenStudio::Model::AirLoopHVAC
       remove_motorized_oa_damper
     end
 
+    # Zones that require DCV preserve
+    # both per-area and per-person OA reqs.
+    # Other zones have OA reqs converted
+    # to per-area values only so that DCV
+    thermalZones.sort.each do |zone|
+      if zone.demand_control_ventilation_required?(template, climate_zone)
+        zone.convert_oa_req_to_per_area
+      end
+    end
+    
+    
     # TODO: Optimum Start
     # for systems exceeding 10,000 cfm
     # Don't think that OS will be able to do this.
@@ -2011,6 +2042,7 @@ class OpenStudio::Model::AirLoopHVAC
       controller_oa = oa_system.getControllerOutdoorAir
       controller_mv = controller_oa.controllerMechanicalVentilation
       controller_mv.setSystemOutdoorAirMethod('ZoneSum')
+      controller_oa.autosizeMinimumOutdoorAirFlowRate
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name}, cannot disable multizone vav optimization because the system has no OA intake.")
       return false
@@ -2387,16 +2419,6 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Enable DCV in the controller mechanical ventilation
     controller_mv.setDemandControlledVentilation(true)
-
-    # Zones that require DCV preserve
-    # both per-area and per-person OA reqs.
-    # Other zones have OA reqs converted
-    # to per-area values only so that DCV
-    thermalZones.sort.each do |zone|
-      if zone.demand_control_ventilation_required?(template, climate_zone)
-        zone.convert_oa_req_to_per_area
-      end
-    end
 
     return true
   end
