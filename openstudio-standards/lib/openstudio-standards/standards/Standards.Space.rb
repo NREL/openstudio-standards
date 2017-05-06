@@ -1297,7 +1297,7 @@ class OpenStudio::Model::Space
         sub_surface = sensor_1_window[0]
         window_outward_normal = sub_surface.outwardNormal
         window_centroid = OpenStudio.getCentroid(sub_surface.vertices).get
-        window_outward_normal.setLength(sensor_1_window[1][:head_height_m])
+        window_outward_normal.setLength(sensor_1_window[1][:head_height_m] * 0.66)
         vertex = window_centroid + window_outward_normal.reverseVector
         vertex_on_floorplane = floor_surface.plane.project(vertex)
         floor_outward_normal = floor_surface.outwardNormal
@@ -1339,7 +1339,7 @@ class OpenStudio::Model::Space
         sub_surface = sensor_2_window[0]
         window_outward_normal = sub_surface.outwardNormal
         window_centroid = OpenStudio.getCentroid(sub_surface.vertices).get
-        window_outward_normal.setLength(sensor_2_window[1][:head_height_m])
+        window_outward_normal.setLength(sensor_2_window[1][:head_height_m] * 1.33)
         vertex = window_centroid + window_outward_normal.reverseVector
         vertex_on_floorplane = floor_surface.plane.project(vertex)
         floor_outward_normal = floor_surface.outwardNormal
