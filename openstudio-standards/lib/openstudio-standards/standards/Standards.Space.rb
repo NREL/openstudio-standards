@@ -1082,315 +1082,52 @@ class OpenStudio::Model::Space
     end # next surface
 
     # Determine the illuminance setpoint for the controls based on space type
-    # From IESNA Handbook 10th Edition - Applications
-	# YLX: to test OfficeMedium, manually change 300 to 375.  This tentative solution will put wrong values for other space in other prototypes.
-	## puts "*********** building type: #{building_type}: "
     daylight_stpt_lux = 375
-	
-    # find the specific space_type properties from standard.json
-    space_type = self.spaceType  # spaceType is a OS method
-    if space_type.empty?
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "Space #{space_type} is an unknown space type, assuming Office and 300 Lux daylight setpoint")
-    else
-      space_type_name = space_type.get
-      standards_building_type = if space_type_name.standardsBuildingType.is_initialized
-                                   space_type_name.standardsBuildingType.get
-                                end
-      standards_space_type = if space_type_name.standardsSpaceType.is_initialized
-                                space_type_name.standardsSpaceType.get
-                             end
-	end
-	
-	# use the building type (standards_building_type) and space type (standards_space_type) as well as template to locate the data row in the google standard spreadsheet
-    search_criteria = {
-       'template' => template,
-       'building_type' => standards_building_type,
-       'space_type' => standards_space_type
-    }
-	OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "space_type_name: #{space_type_name}")
-	OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "standards_space_type: #{standards_space_type}")
-	OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "standards_building_type: #{standards_building_type}" )
-	OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "template: #{template}")
-	
-	# puts "building type: #{standards_building_type}"
-	# puts "space type name: #{standards_space_type}"
-    # extract the data row from google spreadsheet tab "space_types" using the search criteria defined
-	data = model.find_object($os_standards['space_types'], search_criteria)
-   
-    # check the data extracted
-    if data.nil?
-      # puts "Error: #{search_criteria}"
-	  OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "no data available in the space_types tab for Space #{space_type_name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a 375 Lux daylight setpoint!")
-	  daylight_stpt_lux = 375
-    else 
-      # read the building-space type-code year depedent illiuminance setpoint value
-	  daylight_stpt_lux = data['target_illuminance_setpoint'].to_f 
-	
-	  # for the three office prototypes, the non-geometrical daylightable fractiosn are also available
-	  # note the definition of building type varies between the "prototype_inputs" tab and "space_types" tab of the google standards spreadsheet
-	  if standards_building_type == 'Office'
-        psa_nongeo_frac = data['psa_nongeometry_fraction'].to_f 
-	    ssa_nongeo_frac = data['ssa_nongeometry_fraction'].to_f 
-		OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "Space #{space_type_name}: #{standards_space_type} of #{standards_building_type} at #{template}: illuminance setpoint: #{daylight_stpt_lux}, psa_nongeo_frac: #{psa_nongeo_frac}, ssa_nongeo_frac: #{ssa_nongeo_frac}!")
-	  else
-	    OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "Space #{space_type_name}: #{standards_space_type} of #{standards_building_type} at #{template}: illuminance setpoint: #{daylight_stpt_lux}, psa_nongeo_frac: #{psa_nongeo_frac}, ssa_nongeo_frac: #{ssa_nongeo_frac}!")
-	  end
-	end
-	
-    # if daylight_stpt_lux?
-    #   daylight_stpt_lux = 375
-    # end	
-    # for three office, further adjust the sensor controlled fractions
-	#### if building_type == 'LargeOffice' || building_type == 'MediumOffice' || building_type == 'SmallOffice'
-	#### 	sensor_1_frac = sensor_1_frac * psa_nongeo_frac if psa_nongeo_frac != nil
-	#### 	sensor_2_frac = sensor_2_frac * ssa_nongeo_frac if ssa_nongeo_frac != nil
-	#### end
-    #
-    #
-    #     space_type = self.space_type
-    #     if space_type.empty?
-    #       OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Space #{space.name} is an unknown space type, assuming Office and 300 Lux daylight setpoint")
-    #     else
-    #       space_type = space_type.get
-    #       std_spc_type = space_type.standardsSpaceType
-    #       if std_spc_type.empty?
-    #         OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Space #{space.name} does not have a defined standards space type, assuming Office and 300 Lux daylight setpoint")
-    #       else
-    #         std_spc_type = std_spc_type.get
-    #         case std_spc_type
-    #         when
-    #         Storage = 50
-    #         Corridor = 50
-    #         Corridor2 = 50
-    #         when
-    # PatCorridor = 100
-    #         'Banquet = 100
-    #         Basement = 100
-    # Cafe = 100
-    # Lobby = 100
-    # when
-    # Dining = 150
-    # GuestRoom = 150
-    # GuestRoom2 = 150
-    # GuestRoom3 = 150
-    # GuestRoom4 = 150
-    # when
-    # Mechanical = 200
-    # Retail = 200
-    # Retail2 = 200
-    # when
-    # Laundry = 300
-    # Office = 300
-    # when
-    # ER_NurseStn = 500
-    # ICU_Open = 500
-    # ICU_PatRm = 500
-    # Kitchen = 500
-    # Lab = 500
-    # NurseStn = 500
-    # ICU_NurseStn = 500
-    # PatRoom = 500
-    # PhysTherapy = 500
-    # Radiology = 500
-    # when
-    # ER_Exam = 1000
-    # ER_Trauma = 1000
-    # ER_Triage = 1000
-    # when
-    # OR = 2000
-    #
-    # FullServiceRestaurant.Dining
-    # FullServiceRestaurant
-    #
-    # Hospital.Corridor
-    # Hospital.Dining
-    # Hospital.ER_Exam
-    # Hospital.ER_NurseStn
-    # Hospital.ER_Trauma
-    # Hospital.ER_Triage
-    # Hospital.ICU_NurseStn
-    # Hospital.ICU_Open
-    # Hospital.ICU_PatRm
-    # Hospital.Kitchen
-    # Hospital.Lab
-    # Hospital.Lobby
-    # Hospital.NurseStn
-    # Hospital.Office
-    # Hospital.OR
-    # Hospital.PatCorridor
-    # Hospital.PatRoom
-    # Hospital.PhysTherapy
-    # Hospital.Radiology
-    #
-    # LargeHotel.Banquet
-    # LargeHotel.Basement
-    # LargeHotel.Cafe
-    # LargeHotel.Corridor
-    # LargeHotel.Corridor2
-    # LargeHotel.GuestRoom
-    # LargeHotel.GuestRoom2
-    # LargeHotel.GuestRoom3
-    # LargeHotel.GuestRoom4
-    # LargeHotel.Kitchen
-    # LargeHotel.Laundry
-    # LargeHotel.Lobby
-    # LargeHotel.Mechanical
-    # LargeHotel.Retail
-    # LargeHotel.Retail2
-    # LargeHotel.Storage
-    #
-    # MidriseApartment.Apartment
-    # MidriseApartment.Corridor
-    # MidriseApartment.Office
-    #
-    # Office
-    # Office.Attic
-    # Office.BreakRoom
-    # Office.ClosedOffice
-    # Office.Conference
-    # Office.Corridor
-    # Office.Elec/MechRoom
-    # Office.IT_Room
-    # Office.Lobby
-    # Office.OpenOffice
-    # Office.PrintRoom
-    # Office.Restroom
-    # Office.Stair
-    # Office.Storage
-    # Office.Vending
-    # Office.WholeBuilding - Lg Office
-    # Office.WholeBuilding - Md Office
-    # Office.WholeBuilding - Sm Office
-    #
-    # Outpatient.Anesthesia
-    # Outpatient.BioHazard
-    # Outpatient.Cafe
-    # Outpatient.CleanWork
-    # Outpatient.Conference
-    # Outpatient.DressingRoom
-    # Outpatient.Elec/MechRoom
-    # Outpatient.Exam
-    # Outpatient.Hall
-    # Outpatient.IT_Room
-    # Outpatient.Janitor
-    # Outpatient.Lobby
-    # Outpatient.LockerRoom
-    # Outpatient.Lounge
-    # Outpatient.MedGas
-    # Outpatient.MRI
-    # Outpatient.MRI_Control
-    # Outpatient.NurseStation
-    # Outpatient.Office
-    # Outpatient.OR
-    # Outpatient.PACU
-    # Outpatient.PhysicalTherapy
-    # Outpatient.PreOp
-    # Outpatient.ProcedureRoom
-    # Outpatient.Soil Work
-    # Outpatient.Stair
-    # Outpatient.Toilet
-    # Outpatient.Xray
-    #
-    # PrimarySchool.Cafeteria
-    # PrimarySchool.Classroom
-    # PrimarySchool.Corridor
-    # PrimarySchool.Gym
-    # PrimarySchool.Kitchen
-    # PrimarySchool.Library
-    # PrimarySchool.Lobby
-    # PrimarySchool.Mechanical
-    # PrimarySchool.Office
-    # PrimarySchool.Restroom
-    #
-    # QuickServiceRestaurant.Dining
-    # QuickServiceRestaurant.Kitchen
-    #
-    # Retail.Back_Space
-    # Retail.Entry
-    # Retail.Point_of_Sale
-    # Retail.Retail
-    #
-    # SecondarySchool.Auditorium
-    # SecondarySchool.Cafeteria
-    # SecondarySchool.Classroom
-    # SecondarySchool.Corridor
-    # SecondarySchool.Gym
-    # SecondarySchool.Kitchen
-    # SecondarySchool.Library
-    # SecondarySchool.Lobby
-    # SecondarySchool.Mechanical
-    # SecondarySchool.Office
-    # SecondarySchool.Restroom
-    #
-    # SmallHotel.Attic
-    # SmallHotel.Corridor
-    # SmallHotel.Corridor4
-    # SmallHotel.Elec/MechRoom
-    # SmallHotel.ElevatorCore
-    # SmallHotel.ElevatorCore4
-    # SmallHotel.Exercise
-    # SmallHotel.GuestLounge
-    # SmallHotel.GuestRoom
-    # SmallHotel.GuestRoom123Occ
-    # SmallHotel.GuestRoom123Vac
-    # SmallHotel.GuestRoom4Occ
-    # SmallHotel.GuestRoom4Vac
-    # SmallHotel.Laundry
-    # SmallHotel.Mechanical
-    # SmallHotel.Meeting
-    # SmallHotel.Office
-    # SmallHotel.PublicRestroom
-    # SmallHotel.StaffLounge
-    # SmallHotel.Stair
-    # SmallHotel.Stair4
-    # SmallHotel.Storage
-    # SmallHotel.Storage4
-    #
-    # StripMall.WholeBuilding
-    #
-    # SuperMarket.Deli/Bakery
-    # SuperMarket.DryStorage
-    # SuperMarket.Office
-    # SuperMarket.Sales/Produce
-    #
-    # Warehouse.Bulk
-    # Warehouse.Fine
-    # Warehouse.Office
-    #
-    #
-    #         if std_spc_type.match(/post-office/i)# Post Office 500 Lux
-    #           daylight_stpt_lux = 500
-    #         elsif std_spc_type.match(/medical-office/i)# Medical Office 3000 Lux
-    #           daylight_stpt_lux = 3000
-    #         elsif std_spc_type.match(/office/i)# Office 500 Lux
-    #           daylight_stpt_lux = 500
-    #         elsif std_spc_type.match(/education/i)# School 500 Lux
-    #           daylight_stpt_lux = 500
-    #         elsif std_spc_type.match(/retail/i)# Retail 1000 Lux
-    #           daylight_stpt_lux = 1000
-    #         elsif std_spc_type.match(/warehouse/i)# Warehouse 200 Lux
-    #           daylight_stpt_lux = 200
-    #         elsif std_spc_type.match(/hotel/i)# Hotel 300 Lux
-    #           daylight_stpt_lux = 300
-    #         elsif std_spc_type.match(/multifamily/i)# Apartment 200 Lux
-    #           daylight_stpt_lux = 200
-    #         elsif std_spc_type.match(/courthouse/i)# Courthouse 300 Lux
-    #           daylight_stpt_lux = 300
-    #         elsif std_spc_type.match(/library/i)# Library 500 Lux
-    #           daylight_stpt_lux = 500
-    #         elsif std_spc_type.match(/community-center/i)# Community Center 300 Lux
-    #           daylight_stpt_lux = 300
-    #         elsif std_spc_type.match(/senior-center/i)# Senior Center 1000 Lux
-    #           daylight_stpt_lux = 1000
-    #         elsif std_spc_type.match(/city-hall/i)# City Hall 500 Lux
-    #           daylight_stpt_lux = 500
-    #         else
-    #           OpenStudio::logFree(OpenStudio::Warn, "openstudio.model.Space", "Space #{std_spc_type} is an unknown space type, assuming office and 300 Lux daylight setpoint")
-    #           daylight_stpt_lux = 300
-    #         end
-    #       end
-    #     end
 
+    # find the specific space_type properties
+    space_type = self.spaceType
+    if space_type.empty?
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "Space #{space_type} is an unknown space type, assuming #{daylight_stpt_lux} Lux daylight setpoint")
+    else
+      space_type = space_type.get
+      standards_building_type = if space_type.standardsBuildingType.is_initialized
+                                   space_type.standardsBuildingType.get
+                                end
+      standards_space_type = if space_type.standardsSpaceType.is_initialized
+                                space_type.standardsSpaceType.get
+                             end
+
+      # use the building type (standards_building_type) and space type (standards_space_type)
+      # as well as template to locate the space type data 
+      search_criteria = {
+         'template' => template,
+         'building_type' => standards_building_type,
+         'space_type' => standards_space_type
+      }
+
+      data = model.find_object($os_standards['space_types'], search_criteria)
+      if data.nil?
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
+      else 
+        # read the building-space type-code year depedent illiuminance setpoint value
+        daylight_stpt_lux = data['target_illuminance_setpoint'].to_f
+        if daylight_stpt_lux.zero?
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: daylighting is not appropriate for this space type.")
+          return true
+        else
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: illuminance setpoint = #{daylight_stpt_lux} Lux")
+        end
+        # for the office prototypes where core and perimeter zoning is used,
+        # there are additional assumptions about how much of the daylit area can be used.
+        if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
+          psa_nongeo_frac = data['psa_nongeometry_fraction'].to_f 
+          ssa_nongeo_frac = data['ssa_nongeometry_fraction'].to_f 
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: assuming only #{(psa_nongeo_frac*100).round}% of the primary sidelit area is daylightable based on typical design practice.")
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: assuming only #{(ssa_nongeo_frac*100).round}% of the secondary sidelit area is daylightable based on typical design practice.")
+        end
+      end
+    end
+    
     # Get the zone that the space is in
     zone = thermalZone
     if zone.empty?
@@ -1491,35 +1228,21 @@ class OpenStudio::Model::Space
         sensor_1_frac = areas['secondary_sidelighted_area'] / space_area_m2
         sensor_1_window = sorted_windows[0]
       end
-	  
-	  # # YLX: for testing, reset to 0.3835 and 0.1395 for testing Medium Office
-	  # OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, sensor 1 controls #{(sensor_1_frac * 100).round}% of the zone lighting.")
-	  # OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, sensor 2 controls #{(sensor_2_frac * 100).round}% of the zone lighting.")
-	  # sensor_1_frac = 0.3835
-	  # sensor_2_frac = 0.1395
 
-    end # End of template case statement
+    end
 
-	# further adjust the sensor controlled fraction for the three office prototypes for 90.1-2010 and 90.1-2013
-	OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space_type_name}: sensor 1 controls #{(sensor_1_frac * 100).round}% and sensor 2 controls #{(sensor_2_frac * 100).round}% of the zone lighting before further adjustment.")
-	case template
-	when '90.1-2010', '90.1-2013'
-	
-	# note the definition of building type varies between the "prototype_inputs" tab and "space_types" tab of the google standards spreadsheet
-	  if standards_building_type == 'Office'
-	    sensor_1_frac = sensor_1_frac * psa_nongeo_frac if psa_nongeo_frac != nil
-	    sensor_2_frac = sensor_2_frac * ssa_nongeo_frac if ssa_nongeo_frac != nil
-	   end
-	end # End of template case statement
-	OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space_type_name}: sensor 1 controls #{(sensor_1_frac * 100).round}% and sensor 2 controls #{(sensor_2_frac * 100).round}% of the zone lighting after further adjustment.")
-	
-	#### if building_type == 'LargeOffice' || building_type == 'MediumOffice' || building_type == 'SmallOffice'
-	#### 	sensor_1_frac = sensor_1_frac * psa_nongeo_frac if psa_nongeo_frac != nil
-	#### 	sensor_2_frac = sensor_2_frac * ssa_nongeo_frac if ssa_nongeo_frac != nil
-	#### end
-	
-	
-	
+    # Further adjust the sensor controlled fraction for the three
+    # office prototypes for 90.1-2010 and 90.1-2013
+    # based on assumptions about geometry that is not explicitly
+    # defined in the model.
+    case template
+    when '90.1-2010', '90.1-2013'
+      if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
+        sensor_1_frac = sensor_1_frac * psa_nongeo_frac unless psa_nongeo_frac.nil?
+        sensor_2_frac = sensor_2_frac * ssa_nongeo_frac unless ssa_nongeo_frac.nil?
+       end
+    end
+
     # Place the sensors and set control fractions
     # get the zone that the space is in
     zone = thermalZone
@@ -1540,10 +1263,10 @@ class OpenStudio::Model::Space
 
     # Sensors
     if sensor_1_frac > 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, sensor 1 controls #{(sensor_1_frac * 100).round}% of the zone lighting.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}: sensor 1 controls #{(sensor_1_frac * 100).round}% of the zone lighting.")
     end
     if sensor_2_frac > 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, sensor 2 controls #{(sensor_2_frac * 100).round}% of the zone lighting.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}: sensor 2 controls #{(sensor_2_frac * 100).round}% of the zone lighting.")
     end
 
     # First sensor
@@ -1556,15 +1279,12 @@ class OpenStudio::Model::Space
       sensor_1.setIlluminanceSetpoint(daylight_stpt_lux)
       sensor_1.setLightingControlType('Stepped')
       sensor_1.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
-	  
-	  # YLX: add default input to  Minimum Input Power Fraction for Continuous or ContinuousOff Dimming Control & Minimum Light Output Fraction for Continuous or ContinuousOff Dimming Control
-	  # https://openstudio-sdk-documentation.s3.amazonaws.com/cpp/OpenStudio-1.14.0-doc/model/html/classopenstudio_1_1model_1_1_daylighting_control.html
-	  sensor_1.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
-	  sensor_1.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)	
-      sensor_1.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)	  
-	  sensor_1.setMaximumAllowableDiscomfortGlareIndex(22.0)
-	  
-      # Place sensor depending on skylight or window  (YLX: change the height to 2.5 feet (0.762 meter)
+      sensor_1.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
+      sensor_1.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
+      sensor_1.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
+      sensor_1.setMaximumAllowableDiscomfortGlareIndex(22.0)
+  
+      # Place sensor depending on skylight or window
       sensor_vertex = nil
       if sensor_1_window[1][:facade] == '0-Up'
         sub_surface = sensor_1_window[0]
@@ -1581,15 +1301,11 @@ class OpenStudio::Model::Space
         vertex = window_centroid + window_outward_normal.reverseVector
         vertex_on_floorplane = floor_surface.plane.project(vertex)
         floor_outward_normal = floor_surface.outwardNormal
-        floor_outward_normal.setLength(OpenStudio.convert(3.0, 'ft', 'm').get)
+        floor_outward_normal.setLength(OpenStudio.convert(2.5, 'ft', 'm').get)
         sensor_vertex = vertex_on_floorplane + floor_outward_normal.reverseVector
       end
       sensor_1.setPosition(sensor_vertex)
-	  
-	  # YLX for testing Medium Office, manual change the Z coordinates
-	  # sensor_1.setPositionZCoordinate(0.762)
 
-	  
       # TODO: rotate sensor to face window (only needed for glare calcs)
       zone.setPrimaryDaylightingControl(sensor_1)
       zone.setFractionofZoneControlledbyPrimaryDaylightingControl(sensor_1_frac)
@@ -1605,16 +1321,12 @@ class OpenStudio::Model::Space
       sensor_2.setIlluminanceSetpoint(daylight_stpt_lux)
       sensor_2.setLightingControlType('Stepped')
       sensor_2.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
-	  
-	  # YLX: add default input to  Minimum Input Power Fraction for Continuous or ContinuousOff Dimming Control & Minimum Light Output Fraction for Continuous or ContinuousOff Dimming Control
-	  # https://openstudio-sdk-documentation.s3.amazonaws.com/cpp/OpenStudio-1.14.0-doc/model/html/classopenstudio_1_1model_1_1_daylighting_control.html
-	  sensor_2.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
-	  sensor_2.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
-	  sensor_2.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
-	  sensor_2.setMaximumAllowableDiscomfortGlareIndex(22.0)
-	  
-	  
-      # Place sensor depending on skylight or window (YLX: change the height to 2.5 feet (0.762 meter)
+      sensor_2.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
+      sensor_2.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
+      sensor_2.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
+      sensor_2.setMaximumAllowableDiscomfortGlareIndex(22.0)
+
+      # Place sensor depending on skylight or window
       sensor_vertex = nil
       if sensor_2_window[1][:facade] == '0-Up'
         sub_surface = sensor_2_window[0]
@@ -1631,14 +1343,11 @@ class OpenStudio::Model::Space
         vertex = window_centroid + window_outward_normal.reverseVector
         vertex_on_floorplane = floor_surface.plane.project(vertex)
         floor_outward_normal = floor_surface.outwardNormal
-        floor_outward_normal.setLength(OpenStudio.convert(3.0, 'ft', 'm').get)
+        floor_outward_normal.setLength(OpenStudio.convert(2.5, 'ft', 'm').get)
         sensor_vertex = vertex_on_floorplane + floor_outward_normal.reverseVector
       end
       sensor_2.setPosition(sensor_vertex)
-	  
-	  # YLX for testing Medium Office, manual change the Z coordinates
-	  # sensor_2.setPositionZCoordinate(0.762)
-	  
+
       # TODO: rotate sensor to face window (only needed for glare calcs)
       zone.setSecondaryDaylightingControl(sensor_2)
       zone.setFractionofZoneControlledbySecondaryDaylightingControl(sensor_2_frac)
