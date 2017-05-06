@@ -117,7 +117,7 @@ class OpenStudio::Model::AirLoopHVAC
           fan.set_control_type('Single Zone VAV Fan')
         end
       end
-    # self.apply_single_zone_controls(template, climate_zone)
+      self.apply_single_zone_controls(template, climate_zone)
     end
 
     # DCV
@@ -3090,9 +3090,8 @@ class OpenStudio::Model::AirLoopHVAC
 
   # Generate the EMS used to implement the economizer
   # and staging controls for packaged single zone units.
-  # @note The resulting EMS doesn't actually get added to
-  # the IDF yet.
   #
+  # @return [Bool] returns true if successful, false if not
   def apply_single_zone_controls(template, climate_zone)
     # Number of stages is determined by the template
     num_stages = nil
@@ -3116,7 +3115,7 @@ class OpenStudio::Model::AirLoopHVAC
     zn_name_clean = zone_name.gsub(/\W/, '_')
 
     # Zone air node
-    zone_air_node_name = zone.zoneAirNode.name.get
+    zone_air_node = zone.zoneAirNode
 
     # Get the OA system and OA controller
     oa_sys = airLoopHVACOutdoorAirSystem
@@ -3126,16 +3125,14 @@ class OpenStudio::Model::AirLoopHVAC
       return false # No OA system
     end
     oa_control = oa_sys.getControllerOutdoorAir
-    oa_control_name = oa_control.name.get
-    oa_node_name = oa_sys.outboardOANode.get.name.get
-
+    oa_node = oa_sys.outboardOANode.get
+    
     # Get the name of the min oa schedule
-    min_oa_sch_name = nil
-    min_oa_sch_name = if oa_control.minimumOutdoorAirSchedule.is_initialized
-                        oa_control.minimumOutdoorAirSchedule.get.name.get
-                      else
-                        model.alwaysOnDiscreteSchedule.name.get
-                      end
+    min_oa_sch = if oa_control.minimumOutdoorAirSchedule.is_initialized
+                   oa_control.minimumOutdoorAirSchedule.get
+                 else
+                   model.alwaysOnDiscreteSchedule
+                 end
 
     # Get the supply fan
     if supplyFan.empty?
@@ -3143,11 +3140,9 @@ class OpenStudio::Model::AirLoopHVAC
       return false
     end
     fan = supplyFan.get
-    fan_name = fan.name.get
 
     # Supply outlet node
     sup_out_node = supplyOutletNode
-    sup_out_node_name = sup_out_node.name.get
 
     # DX Cooling Coil
     dx_coil = nil
@@ -3162,8 +3157,6 @@ class OpenStudio::Model::AirLoopHVAC
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: No DX cooling coil found, cannot apply DX fan/economizer control.")
       return false
     end
-    dx_coil_name = dx_coil.name.get
-    dx_coilsys_name = "#{dx_coil_name} CoilSystem"
 
     # Heating Coil
     htg_coil = nil
@@ -3180,7 +3173,6 @@ class OpenStudio::Model::AirLoopHVAC
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: No heating coil found, cannot apply DX fan/economizer control.")
       return false
     end
-    htg_coil_name = htg_coil.name.get
 
     # Create an economizer maximum OA fraction schedule with
     # a maximum of 70% to reflect damper leakage per PNNL
@@ -3191,249 +3183,242 @@ class OpenStudio::Model::AirLoopHVAC
     max_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
     oa_control.setMaximumFractionofOutdoorAirSchedule(max_oa_sch)
 
-    ems = "
+    # Sensors
 
-    ! Sensors
+    oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
+    oat_db_c_sen.setName("OATF")
+    oat_db_c_sen.setKeyName("Environment")
+    
+    oat_wb_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Wetbulb Temperature')
+    oat_wb_c_sen.setName("OAWBC")
+    oat_wb_c_sen.setKeyName("Environment")
+    
+    oa_sch_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+    oa_sch_sen.setName("#{snc}OASch")
+    oa_sch_sen.setKeyName("#{min_oa_sch.handle}")
 
-    EnergyManagementSystem:Sensor,
-      #{snc}OASch,
-      #{min_oa_sch_name},         !- Output:Variable or Output:Meter Index Key Name,
-      Schedule Value;          !- Output:Variable or Output:Meter Name
+    zn_temp_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Temperature')
+    zn_temp_sen.setName("#{zn_name_clean}Temp")
+    zn_temp_sen.setKeyName("#{zone_air_node.handle}")
 
-    EnergyManagementSystem:Sensor,
-      #{zn_name_clean}Temp,
-      #{zone_air_node_name},  !- Output:Variable or Output:Meter Index Key Name
-      System Node Temperature; !- Output:Variable or Output:Meter Name
+    oa_flow_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Mass Flow Rate')
+    oa_flow_sen.setName("#{snc}OAFlowMass")
+    oa_flow_sen.setKeyName("#{oa_node.handle}")
 
-    EnergyManagementSystem:Sensor,
-      #{snc}OAFlowMass,
-      #{oa_node_name}, !- Output:Variable or Output:Meter Index Key Name
-      System Node Mass Flow Rate;  !- Output:Variable or Output:Meter Name
+    htg_rtf_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Heating Coil Runtime Fraction')
+    htg_rtf_sen.setName("#{snc}HeatingRTF")
+    htg_rtf_sen.setKeyName("#{htg_coil.handle}")
 
-    EnergyManagementSystem:Sensor,
-      #{snc}HeatingRTF,
-      #{htg_coil_name},        !- Output:Variable or Output:Meter Index Key Name
-      Heating Coil Runtime Fraction;  !- Output:Variable or Output:Meter Name
+    clg_rtf_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Cooling Coil Runtime Fraction')
+    clg_rtf_sen.setName("#{snc}RTF")
+    clg_rtf_sen.setKeyName("#{dx_coil.handle}")
 
-    EnergyManagementSystem:Sensor,
-      #{snc}RTF,
-      #{dx_coil_name}, !- Output:Variable or Output:Meter Index Key Name
-      Cooling Coil Runtime Fraction;  !- Output:Variable or Output:Meter Name
+    spd_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Coil System Compressor Speed Ratio')
+    spd_sen.setName("#{snc}SpeedRatio")
+    spd_sen.setKeyName("#{dx_coil.handle} CoilSystem")
 
-    EnergyManagementSystem:Sensor,
-      #{snc}SpeedRatio,
-      #{dx_coilsys_name},        !- Output:Variable or Output:Meter Index Key Name
-      Coil System Compressor Speed Ratio;  !- Output:Variable or Output:Meter Name
+    dat_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Setpoint Temperature')
+    dat_sen.setName("#{snc}DATRqd")
+    dat_sen.setKeyName("#{sup_out_node.handle}")
 
-    EnergyManagementSystem:Sensor,
-      #{snc}DATRqd,
-      #{sup_out_node_name},  !- Output:Variable or Output:Meter Index Key Name
-      System Node Setpoint Temperature;  !- Output:Variable or Output:Meter Name
+    # Internal Variables
 
-    EnergyManagementSystem:Sensor,
-      #{snc}EconoStatus,
-      #{sn},              !- Output:Variable or Output:Meter Index Key Name
-      Air System Outdoor Air Economizer Status;  !- Output:Variable or Output:Meter Name
+    fan_pres_var = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Fan Nominal Pressure Rise')
+    fan_pres_var.setName("#{snc}FanDesignPressure")
+    fan_pres_var.setInternalDataIndexKeyName("#{fan.handle}")
 
-    ! Internal Variables
+    dsn_flow_var = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Outdoor Air Controller Maximum Mass Flow Rate')
+    dsn_flow_var.setName("#{snc}DesignFlowMass")
+    dsn_flow_var.setInternalDataIndexKeyName("#{oa_control.handle}")
 
-    EnergyManagementSystem:InternalVariable,
-      #{snc}FanDesignPressure,
-      #{fan_name},          !- Internal Data Index Key Name
-      Fan Nominal Pressure Rise;  !- Internal Data Type
+    oa_flow_var = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Outdoor Air Controller Minimum Mass Flow Rate')
+    oa_flow_var.setName("#{snc}OADesignMass")
+    oa_flow_var.setInternalDataIndexKeyName("#{oa_control.handle}")
+      
+    # Actuators
 
-    EnergyManagementSystem:InternalVariable,
-      #{snc}DesignFlowMass,
-      #{oa_control_name},!- Internal Data Index Key Name
-      Outdoor Air Controller Maximum Mass Flow Rate;  !- Internal Data Type
+    fan_pres_act = OpenStudio::Model::EnergyManagementSystemActuator.new(fan, 'Fan', 'Fan Pressure Rise')
+    fan_pres_act.setName("#{snc}FanPressure")
 
-    EnergyManagementSystem:InternalVariable,
-      #{snc}OADesignMass,
-      #{oa_control_name},!- Internal Data Index Key Name
-      Outdoor Air Controller Minimum Mass Flow Rate;  !- Internal Data Type
+    econ_eff_act = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_sch, 'Schedule:Year', 'Schedule Value')
+    econ_eff_act.setName("#{snc}TimestepEconEff")
 
-    ! Actuators
+    # Global Variables
 
-    EnergyManagementSystem:Actuator,
-      #{snc}FanPressure,
-      #{fan_name},          !- Actuated Component Unique Name
-      Fan,                     !- Actuated Component Type
-      Fan Pressure Rise;       !- Actuated Component Control Type
+    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}FanPwrExp")
+    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}Stg1Spd")
+    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}Stg2Spd")
+    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}HeatSpeed")
+    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}VenSpeed")
+    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}NumberofStages")
 
-    EnergyManagementSystem:Actuator,
-      #{snc}TimestepEconEff,!- Name
-      #{max_oa_sch_name},  !- Actuated Component Unique Name
-      Schedule:Year,       !- Actuated Component Type
-      Schedule Value;          !- Actuated Component Control Type
+    # Programs
 
-    EnergyManagementSystem:GlobalVariable,
-      #{snc}FanPwrExp,   !- Erl Variable 1 Name
-      #{snc}Stg1Spd,      !- Erl Variable 2 Name
-      #{snc}Stg2Spd,      !- Erl Variable 3 Name
-      #{snc}HeatSpeed,
-      #{snc}VenSpeed,
-      #{snc}NumberofStages;
+    econ_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    econ_prg.setName("#{snc}EconomizerCTRLProg")
+    econ_prg_body = <<-EMS
+      SET #{econ_eff_act.handle} = 0.7
+      SET MaxE = 0.7
+      SET #{dat_sen.handle} = (#{dat_sen.handle}*1.8)+32
+      SET OATF = (#{oat_db_c_sen.handle}*1.8)+32
+      SET OAwbF = (#{oat_wb_c_sen.handle}*1.8)+32
+      IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+        SET EconoActive = 1
+      ELSE
+        SET EconoActive = 0
+      ENDIF
+      SET dTNeeded = 75-#{dat_sen.handle}
+      SET CoolDesdT = ((98*0.15)+(75*(1-0.15)))-55
+      SET CoolLoad = dTNeeded/ CoolDesdT
+      IF CoolLoad > 1
+        SET CoolLoad = 1
+      ELSEIF CoolLoad < 0
+        SET CoolLoad = 0
+      ENDIF
+      IF EconoActive == 1
+        SET Stage = #{snc}NumberofStages
+        IF Stage == 2
+          IF CoolLoad < 0.6
+            SET #{econ_eff_act.handle} = MaxE
+          ELSE
+            SET ECOEff = 0-2.18919863612305
+            SET ECOEff = ECOEff+(0-0.674461284910428*CoolLoad)
+            SET ECOEff = ECOEff+(0.000459106275872404*(OATF^2))
+            SET ECOEff = ECOEff+(0-0.00000484778537945252*(OATF^3))
+            SET ECOEff = ECOEff+(0.182915713033586*OAwbF)
+            SET ECOEff = ECOEff+(0-0.00382838660261133*(OAwbF^2))
+            SET ECOEff = ECOEff+(0.0000255567460240583*(OAwbF^3))
+            SET #{econ_eff_act.handle} = ECOEff
+          ENDIF
+        ELSE
+          SET ECOEff = 2.36337942464462
+          SET ECOEff = ECOEff+(0-0.409939515512619*CoolLoad)
+          SET ECOEff = ECOEff+(0-0.0565205596792225*OAwbF)
+          SET ECOEff = ECOEff+(0-0.0000632612294169389*(OATF^2))
+          SET #{econ_eff_act.handle} = ECOEff+(0.000571724868775081*(OAwbF^2))
+        ENDIF
+        IF #{econ_eff_act.handle} > MaxE
+          SET #{econ_eff_act.handle} = MaxE
+        ELSEIF #{econ_eff_act.handle} < (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+          SET #{econ_eff_act.handle} = (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+        ENDIF
+      ENDIF
+    EMS
+    econ_prg.setBody(econ_prg_body)
+    
+    fan_par_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    fan_par_prg.setName("#{snc}SetFanPar")
+    fan_par_prg_body = <<-EMS
+      IF #{snc}NumberofStages == 1
+        Return
+      ENDIF
+      SET #{snc}FanPwrExp = 2.2
+      SET OAFrac = #{oa_flow_sen.handle}/#{dsn_flow_var.handle}
+      IF  OAFrac < 0.66
+        SET #{snc}VenSpeed = 0.66
+        SET #{snc}Stg1Spd = 0.66
+      ELSE
+        SET #{snc}VenSpeed = OAFrac
+        SET #{snc}Stg1Spd = OAFrac
+      ENDIF
+      SET #{snc}Stg2Spd = 1.0
+      SET #{snc}HeatSpeed = 1.0
+    EMS
+    fan_par_prg.setBody(fan_par_prg_body)
 
-    EnergyManagementSystem:Program,
-      #{snc}EconomizerCTRLProg,
-      SET #{snc}TimestepEconEff = 0.7,
-      SET #{snc}MaxE = 0.7,
-      SET #{snc}DATRqd = (#{snc}DATRqd*1.8)+32,
-      SET OATF = (OATF*1.8)+32,
-      SET OAwbF = (OAwbF*1.8)+32,
-      IF #{snc}OAFlowMass > (#{snc}OADesignMass*#{snc}OASch),
-      SET #{snc}EconoActive = 1,
-      ELSE,
-      SET #{snc}EconoActive = 0,
-      ENDIF,
-      SET #{snc}dTNeeded = 75-#{snc}DATRqd,
-      SET #{snc}CoolDesdT = ((98*0.15)+(75*(1-0.15)))-55,
-      SET #{snc}CoolLoad = #{snc}dTNeeded/ #{snc}CoolDesdT,
-      IF #{snc}CoolLoad > 1,
-      SET #{snc}CoolLoad = 1,
-      ELSEIF #{snc}CoolLoad < 0,
-      SET #{snc}CoolLoad = 0,
-      ENDIF,
-      IF #{snc}EconoActive == 1,
-      SET #{snc}Stage = #{snc}NumberofStages,
-      IF #{snc}Stage == 2,
-      IF #{snc}CoolLoad < 0.6,
-      SET #{snc}TimestepEconEff = #{snc}MaxE,
-      ELSE,
-      SET #{snc}ECOEff = 0-2.18919863612305,
-      SET #{snc}ECOEff = #{snc}ECOEff+(0-0.674461284910428*#{snc}CoolLoad),
-      SET #{snc}ECOEff = #{snc}ECOEff+(0.000459106275872404*(OATF^2)),
-      SET #{snc}ECOEff = #{snc}ECOEff+(0-0.00000484778537945252*(OATF^3)),
-      SET #{snc}ECOEff = #{snc}ECOEff+(0.182915713033586*OAwbF),
-      SET #{snc}ECOEff = #{snc}ECOEff+(0-0.00382838660261133*(OAwbF^2)),
-      SET #{snc}ECOEff = #{snc}ECOEff+(0.0000255567460240583*(OAwbF^3)),
-      SET #{snc}TimestepEconEff = #{snc}ECOEff,
-      ENDIF,
-      ELSE,
-      SET #{snc}ECOEff = 2.36337942464462,
-      SET #{snc}ECOEff = #{snc}ECOEff+(0-0.409939515512619*#{snc}CoolLoad),
-      SET #{snc}ECOEff = #{snc}ECOEff+(0-0.0565205596792225*OAwbF),
-      SET #{snc}ECOEff = #{snc}ECOEff+(0-0.0000632612294169389*(OATF^2)),
-      SET #{snc}TimestepEconEff = #{snc}ECOEff+(0.000571724868775081*(OAwbF^2)),
-      ENDIF,
-      IF #{snc}TimestepEconEff > #{snc}MaxE,
-      SET #{snc}TimestepEconEff = #{snc}MaxE,
-      ELSEIF #{snc}TimestepEconEff < (#{snc}OADesignMass*#{snc}OASch),
-      SET #{snc}TimestepEconEff = (#{snc}OADesignMass*#{snc}OASch),
-      ENDIF,
-      ENDIF;
+    fan_ctrl_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    fan_ctrl_prg.setName("#{snc}FanControl")
+    fan_ctrl_prg_body = <<-EMS
+      IF #{snc}NumberofStages == 1
+        Return
+      ENDIF
+      IF #{htg_rtf_sen.handle} > 0
+        SET Heating = #{htg_rtf_sen.handle}
+        SET Ven = 1-#{htg_rtf_sen.handle}
+        SET Eco = 0
+        SET Stage1 = 0
+        SET Stage2 = 0
+      ELSE
+        SET Heating = 0
+        SET EcoSpeed = #{snc}VenSpeed
+        IF #{spd_sen.handle} == 0
+          IF #{clg_rtf_sen.handle} > 0
+            SET Stage1 = #{clg_rtf_sen.handle}
+            SET Stage2 = 0
+            SET Ven = 1-#{clg_rtf_sen.handle}
+            SET Eco = 0
+            IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+              SET #{snc}Stg1Spd = 1.0
+            ENDIF
+          ELSE
+            SET Stage1 = 0
+            SET Stage2 = 0
+            IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+              SET Eco = 1.0
+              SET Ven = 0
+              !Calculate the expected discharge air temperature if the system runs at its low speed
+              SET ExpDAT = #{dat_sen.handle}-(1-#{snc}VenSpeed)*#{zn_temp_sen.handle}
+              SET ExpDAT = ExpDAT/#{snc}VenSpeed
+              IF #{oat_db_c_sen.handle} > ExpDAT
+                SET EcoSpeed = #{snc}Stg2Spd
+              ENDIF
+            ELSE
+              SET Eco = 0
+              SET Ven = 1.0
+            ENDIF
+          ENDIF
+        ELSE
+          SET Stage1 = 1-#{spd_sen.handle}
+          SET Stage2 = #{spd_sen.handle}
+          SET Ven = 0
+          SET Eco = 0
+          IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+            SET #{snc}Stg1Spd = 1.0
+          ENDIF
+        ENDIF
+      ENDIF
+      ! For each mode (percent time in mode)*(fanSpeer^PwrExp) is the contribution to weighted fan power over time step
+      SET FPR = Ven*(#{snc}VenSpeed ^ #{snc}FanPwrExp)
+      SET FPR = FPR+Eco*(EcoSpeed^#{snc}FanPwrExp)
+      SET FPR1 = Stage1*(#{snc}Stg1Spd^#{snc}FanPwrExp)
+      SET FPR = FPR+FPR1
+      SET FPR2 = Stage2*(#{snc}Stg2Spd^#{snc}FanPwrExp)
+      SET FPR = FPR+FPR2
+      SET FPR3 = Heating*(#{snc}HeatSpeed^#{snc}FanPwrExp)
+      SET FanPwrRatio = FPR+ FPR3
+      ! system fan power is directly proportional to static pressure so this change linearly adjusts fan energy for speed control
+      SET #{fan_pres_act.handle} = #{fan_pres_var.handle}*FanPwrRatio
+    EMS
+    fan_ctrl_prg.setBody(fan_ctrl_prg_body)
 
-    EnergyManagementSystem:Program,
-      #{snc}SetFanPar,
-      IF #{snc}NumberofStages == 1,
-      Return,
-      ENDIF,
-      SET #{snc}FanPwrExp = 2.2,
-      SET #{snc}OAFrac = #{snc}OAFlowMass/#{snc}DesignFlowMass,
-      IF  #{snc}OAFrac < 0.66,
-      SET #{snc}VenSpeed = 0.66,
-      SET #{snc}Stg1Spd = 0.66,
-      ELSE,
-      SET #{snc}VenSpeed = #{snc}OAFrac,
-      SET #{snc}Stg1Spd = #{snc}OAFrac,
-      ENDIF,
-      SET #{snc}Stg2Spd = 1.0,
-      SET #{snc}HeatSpeed = 1.0;
+    num_stg_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    num_stg_prg.setName("#{snc}SetNumberofStages")
+    num_stg_prg_body = <<-EMS
+      SET #{snc}NumberofStages = #{num_stages}
+    EMS
+    num_stg_prg.setBody(num_stg_prg_body)
 
-    EnergyManagementSystem:Program,
-      #{snc}FanControl,
-      IF #{snc}NumberofStages == 1,
-      Return,
-      ENDIF,
-      IF #{snc}HeatingRTF > 0,
-      SET #{snc}Heating = #{snc}HeatingRTF,
-      SET #{snc}Ven = 1-#{snc}HeatingRTF,
-      SET #{snc}Eco = 0,
-      SET #{snc}Stage1 = 0,
-      SET #{snc}Stage2 = 0,
-      ELSE,
-      SET #{snc}Heating = 0,
-      SET #{snc}EcoSpeed = #{snc}VenSpeed,
-      IF #{snc}SpeedRatio == 0,
-      IF #{snc}RTF > 0,
-      SET #{snc}Stage1 = #{snc}RTF,
-      SET #{snc}Stage2 = 0,
-      SET #{snc}Ven = 1-#{snc}RTF,
-      SET #{snc}Eco = 0,
-      IF #{snc}OAFlowMass > (#{snc}OADesignMass*#{snc}OASch),
-      SET #{snc}Stg1Spd = 1.0,
-      ENDIF,
-      ELSE,
-      SET #{snc}Stage1 = 0,
-      SET #{snc}Stage2 = 0,
-      IF #{snc}OAFlowMass > (#{snc}OADesignMass*#{snc}OASch),
-      SET #{snc}Eco = 1.0,
-      SET #{snc}Ven = 0,
-      !Calculate the expected discharge air temperature if the system runs at its low speed
-      SET #{snc}ExpDAT = #{snc}DATRqd-(1-#{snc}VenSpeed)*#{zn_name_clean}Temp,
-      SET #{snc}ExpDAT = #{snc}ExpDAT/#{snc}VenSpeed,
-      IF OATF > #{snc}ExpDAT,
-      SET #{snc}EcoSpeed = #{snc}Stg2Spd,
-      ENDIF,
-      ELSE,
-      SET #{snc}Eco = 0,
-      SET #{snc}Ven = 1.0,
-      ENDIF,
-      ENDIF,
-      ELSE,
-      SET #{snc}Stage1 = 1-#{snc}SpeedRatio,
-      SET #{snc}Stage2 = #{snc}SpeedRatio,
-      SET #{snc}Ven = 0,
-      SET #{snc}Eco = 0,
-      IF #{snc}OAFlowMass > (#{snc}OADesignMass*#{snc}OASch),
-      SET #{snc}Stg1Spd = 1.0,
-      ENDIF,
-      ENDIF,
-      ENDIF,
-      ! For each mode, (percent time in mode)*(fanSpeer^PwrExp) is the contribution to weighted fan power over time step
-      SET #{snc}FPR = #{snc}Ven*(#{snc}VenSpeed ^ #{snc}FanPwrExp),
-      SET #{snc}FPR = #{snc}FPR+#{snc}Eco*(#{snc}EcoSpeed^#{snc}FanPwrExp),
-      SET #{snc}FPR1 = #{snc}Stage1*(#{snc}Stg1Spd^#{snc}FanPwrExp),
-      SET #{snc}FPR = #{snc}FPR+#{snc}FPR1,
-      SET #{snc}FPR2 = #{snc}Stage2*(#{snc}Stg2Spd^#{snc}FanPwrExp),
-      SET #{snc}FPR = #{snc}FPR+#{snc}FPR2,
-      SET #{snc}FPR3 = #{snc}Heating*(#{snc}HeatSpeed^#{snc}FanPwrExp),
-      SET #{snc}FanPwrRatio = #{snc}FPR+ #{snc}FPR3,
-      ! system fan power is directly proportional to static pressure, so this change linearly adjusts fan energy for speed control
-      SET #{snc}FanPressure = #{snc}FanDesignPressure*#{snc}FanPwrRatio;
+    # Program Calling Managers
+    
+    # Note that num_stg_prg must be listed before fan_par_prg
+    # because it initializes a variable used by fan_par_prg.
+    setup_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    setup_mgr.setName("#{snc}SetNumberofStagesCallingManager")
+    setup_mgr.setCallingPoint('BeginNewEnvironment')
+    setup_mgr.addProgram(num_stg_prg)
+    setup_mgr.addProgram(fan_par_prg)
 
-    EnergyManagementSystem:Program,
-      #{snc}SetNumberofStages,
-      SET #{snc}NumberofStages =  #{num_stages};
+    econ_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    econ_mgr.setName("#{snc}EcoManager")
+    econ_mgr.setCallingPoint('InsideHVACSystemIterationLoop')
+    econ_mgr.addProgram(econ_prg)
 
-    EnergyManagementSystem:ProgramCallingManager,
-      #{snc}SetNumberofStagesCallingManager,
-      BeginNewEnvironment,
-      #{snc}SetNumberofStages;  !- Program Name 1
+    fan_ctrl_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    fan_ctrl_mgr.setName("#{snc}FanMainManager")
+    fan_ctrl_mgr.setCallingPoint('BeginTimestepBeforePredictor')
+    fan_ctrl_mgr.addProgram(fan_ctrl_prg)
 
-    EnergyManagementSystem:ProgramCallingManager,
-      #{snc}ECOManager,
-      InsideHVACSystemIterationLoop,  !- EnergyPlus Model Calling Point
-      #{snc}EconomizerCTRLProg;  !- Program Name 1
-
-    EnergyManagementSystem:ProgramCallingManager,
-      #{snc}FanParametermanager,
-      BeginNewEnvironment,
-      #{snc}SetFanPar;
-
-    EnergyManagementSystem:ProgramCallingManager,
-      #{snc}FanMainManager,
-      BeginTimestepBeforePredictor,
-      #{snc}FanControl;
-
-    "
-
-    # Write the ems out
-    # File.open("#{Dir.pwd}/#{snc}_ems.idf", 'w') do |file|
-    # file.puts ems
-    # end
-
-    return ems
+    return true
   end
 
   # Determine if static pressure reset is required for this

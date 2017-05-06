@@ -307,6 +307,10 @@ class OpenStudio::Model::Model
     # Apply the HVAC efficiency standard
     apply_hvac_efficiency_standard(template, climate_zone)
 
+    # Fix EMS references.
+    # Temporary workaround for OS issue #2598
+    temp_fix_ems_references
+
     # Delete all the unused curves
     getCurves.sort.each do |curve|
       if curve.parent.empty?
@@ -4640,4 +4644,29 @@ class OpenStudio::Model::Model
     
   end
 
+  # This method goes through certain types of EnergyManagementSystem
+  # variables and replaces UIDs with object names.  This should
+  # be done by the forward translator, and this code should be
+  # removed after this bug is fixed:
+  # https://github.com/NREL/OpenStudio/issues/2598
+  #
+  # @todo remove this method after OpenStudio issue #2598 is fixed.
+  def temp_fix_ems_references
+
+    # Internal Variables
+    getEnergyManagementSystemInternalVariables.each do |var|
+      # Get the reference field value
+      ref = var.internalDataIndexKeyName
+      # Convert to UUID
+      uid = OpenStudio.toUUID(ref)
+      # Get the model object with this UID
+      obj = getModelObject(uid)
+      # If it exists, replace the UID with the object name
+      if obj.is_initialized
+        var.setInternalDataIndexKeyName(obj.get.name.get)
+      end
+    end
+
+    return true
+  end
 end

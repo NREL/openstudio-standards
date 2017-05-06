@@ -198,6 +198,10 @@ class OpenStudio::Model::Model
     # Apply the HVAC efficiency standard
     apply_hvac_efficiency_standard(template, climate_zone)
 
+    # Fix EMS references.
+    # Temporary workaround for OS issue #2598
+    temp_fix_ems_references
+
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
