@@ -1,4 +1,4 @@
-require "byebug"
+
 # Loads the openstudio standards dataset.
 #
 # @return [Hash] a hash of standards data
@@ -335,7 +335,7 @@ class OpenStudio::Model::Model
   # @return [Bool] returns true if successful, false if not
   def create_ecbc_baseline_building(building_type, template, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
     #
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Name = #{getBuilding}")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Name = #{getBuilding.name}")
     getBuilding.setName("#{template}-#{building_type}-#{climate_zone} ECBC baseline created: #{Time.new}")
 
 
@@ -387,12 +387,17 @@ class OpenStudio::Model::Model
    end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
+    
+    # Applying baseline construction for ECBC 2007 
 
+       # construction.apply_ecbc_construction_requirements(building_vintage, climate_zone_set,operation_type, intended_surface_type, standards_construction_type, building_category)
+       
     # Modify some of the construction types as necessary
-    apply_prm_construction_types(template)
+    #apply_prm_construction_types(template)
+    
 
     # Set the construction properties of all the surfaces in the model
-    apply_standard_constructions(template, climate_zone)
+    #apply_standard_constructions(template, climate_zone)
 
     # Get the groups of zones that define the
     # baseline HVAC systems for later use.
@@ -403,7 +408,7 @@ class OpenStudio::Model::Model
 
     # Remove all HVAC from model,
     # excluding service water heating
-    remove_prm_hvac
+    #remove_prm_hvac
 
     # Modify the service water heating loops
     # per the baseline rules
@@ -2794,9 +2799,11 @@ class OpenStudio::Model::Model
       end
     end
     construction.setLayers(layers)
-
     # Modify the R value of the insulation to hit the specified U-value, C-Factor, or F-Factor.
-    # Doesn't currently operate on glazing constructions
+    
+    # check whether we have any insulation in the layers 
+
+    
     if construction_props
       # Determine the target U-value, C-factor, and F-factor
       target_u_value_ip = construction_props['assembly_maximum_u_value']
@@ -2841,7 +2848,7 @@ class OpenStudio::Model::Model
     # AKA the info in Tables 5.5-1-5.5-8
 
     props = find_object($os_standards['construction_properties'], 'template' => template,
-                                                                  'climate_zone_set' => climate_zone_set,
+                                                                  'climate_zone_set' => climate_zone_set,                                                                  
                                                                   'intended_surface_type' => intended_surface_type,
                                                                   'standards_construction_type' => standards_construction_type,
                                                                   'building_category' => building_category)
@@ -3485,7 +3492,7 @@ class OpenStudio::Model::Model
       gnd_surfs = const_set.defaultGroundContactSurfaceConstructions
       ext_subsurfs = const_set.defaultExteriorSubSurfaceConstructions
       int_subsurfs = const_set.defaultInteriorSubSurfaceConstructions
-
+      
       # Can't handle incomplete construction sets
       if ext_surfs.empty? ||
          int_surfs.empty? ||
@@ -3502,7 +3509,7 @@ class OpenStudio::Model::Model
       gnd_surfs = gnd_surfs.get
       ext_subsurfs = ext_subsurfs.get
       int_subsurfs = int_subsurfs.get
-
+      
       case type
         # Exterior Surfaces
       when 'ExteriorWall', 'AtticWall'
@@ -3592,6 +3599,107 @@ class OpenStudio::Model::Model
     return all_constructions
   end
 
+  # ECBC code starts for construction types 
+
+   # Go through the default construction sets and hard-assigned
+  # constructions. Clone the existing constructions and set their
+  # intended surface type and standards construction type per
+  # the PRM.  For some standards, this will involve making
+  # modifications.  For others, it will not.
+  #
+  # @param template [String] valid choices are ECBC 2007, 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @return [Bool] returns true if successful, false if not
+  def apply_ecbc_construction_types(template)
+    types_to_modify = []
+   
+    # Possible boundary conditions are
+    # Adiabatic
+    # Surface
+    # Outdoors
+    # Ground
+
+    # Possible surface types are
+    # AtticFloor
+    # AtticWall
+    # AtticRoof
+    # DemisingFloor
+    # DemisingWall
+    # DemisingRoof
+    # ExteriorFloor
+    # ExteriorWall
+    # ExteriorRoof
+    # ExteriorWindow
+    # ExteriorDoor
+    # GlassDoor
+    # GroundContactFloor
+    # GroundContactWall
+    # GroundContactRoof
+    # InteriorFloor
+    # InteriorWall
+    # InteriorCeiling
+    # InteriorPartition
+    # InteriorWindow
+    # InteriorDoor
+    # OverheadDoor
+    # Skylight
+    # TubularDaylightDome
+    # TubularDaylightDiffuser
+
+    # Possible standards construction types
+    # Mass
+    # SteelFramed
+    # WoodFramed
+    # IEAD
+    # View
+    # Daylight
+    # Swinging
+    # NonSwinging
+    # Heated
+    # Unheated
+    # RollUp
+    # Sliding
+    # Metal
+    # Nonmetal framing (all)
+    # Metal framing (curtainwall/storefront)
+    # Metal framing (entrance door)
+    # Metal framing (all other)
+    # Metal Building
+    # Attic and Other
+    # Glass with Curb
+    # Plastic with Curb
+    # Without Curb
+
+    # Create an array of types
+
+    case template
+    when 'NECB 2011'
+      BTAP::Compliance::NECB2011.set_all_construction_sets_to_necb!(self, runner = nil)
+      return true
+    else
+      case template
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'ECBC 2007'
+        types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
+        types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
+        types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+        types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
+        types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
+      end
+      # Modify all constructions of each type
+      types_to_modify.each do |boundary_cond, surf_type, const_type|
+        constructions = find_constructions(boundary_cond, surf_type)
+        
+        constructions.sort.each do |const|
+          standards_info = const.standardsInformation
+          standards_info.setIntendedSurfaceType(surf_type)
+          standards_info.setStandardsConstructionType(const_type)
+        end
+      end
+      return true
+    end
+    return false
+  end
+
   # Go through the default construction sets and hard-assigned
   # constructions. Clone the existing constructions and set their
   # intended surface type and standards construction type per
@@ -3603,7 +3711,7 @@ class OpenStudio::Model::Model
   # @return [Bool] returns true if successful, false if not
   def apply_prm_construction_types(template)
     types_to_modify = []
-
+   
     # Possible boundary conditions are
     # Adiabatic
     # Surface
@@ -3679,7 +3787,7 @@ class OpenStudio::Model::Model
       # Modify all constructions of each type
       types_to_modify.each do |boundary_cond, surf_type, const_type|
         constructions = find_constructions(boundary_cond, surf_type)
-
+        
         constructions.sort.each do |const|
           standards_info = const.standardsInformation
           standards_info.setIntendedSurfaceType(surf_type)
@@ -3720,7 +3828,7 @@ class OpenStudio::Model::Model
     # Create an array of surface types
     # each standard applies to.
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'ECBC-2007'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'ECBC 2007'
       types_to_modify << ['Outdoors', 'Floor']
       types_to_modify << ['Outdoors', 'Wall']
       types_to_modify << ['Outdoors', 'RoofCeiling']
@@ -3768,60 +3876,6 @@ class OpenStudio::Model::Model
     end
 
     return true
-  end
-
- # Starts ECBC - Thermal capacity of opaque(such as wall & roof) construction in basecase must be same as proposed case 
- def apply_ecbc_construction_requirements(building_vintage, climate_zone_set,operation_type, intended_surface_type, standards_construction_type, building_category)
- 
-    # Get the construction properties,
-    # which specifies properties by construction category by climate zone set.
-    # AKA the info in Tables 4.3.2(Opaque Walls)
-
-    props = self.find_object($os_standards['construction_properties'], {'template'=>building_vintage,
-                                                                    'climate_zone_set'=> climate_zone_set,
-                                                                    'operation_type'=> operation_type,
-                                                                    'intended_surface_type'=> intended_surface_type,
-                                                                    'standards_construction_type'=> standards_construction_type,
-                                                                    'building_category' => building_category
-                                                                    })
-
-    if !props
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{building_vintage}-#{climate_zone_set}-#{operation_type}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
-      # Return an empty construction
-      construction = OpenStudio::Model::Construction.new(self)
-      construction.setName("Could not find construction properties set to Adiabatic ")
-      almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(self, "Smooth", 500)
-      construction.insertLayer(0, almost_adiabatic)
-      return construction
-    else
-      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{building_vintage}-#{climate_zone_set}-#{operation_type}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
-    end
-
-    # Make sure that a construction is specified
-    if props['construction'].nil?
-      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No typical construction is specified for construction properties of: #{building_vintage}-#{climate_zone_set}-#{operation_type}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.  Make sure it is entered in the spreadsheet.")
-      # Return an empty construction
-      construction = OpenStudio::Model::Construction.new(self)
-      construction.setName("No typical construction was specified")
-      return construction
-    end
-
-    # Add the construction, modifying properties as necessary
-    #construction = add_construction(props['construction'], props)
-  
-    #return construction
-    if construction_props
-      # Determine the target U-value, C-factor, and F-factor
-      target_u_value_ip = construction_props['assembly_maximum_u_value']
-      target_f_factor_ip = construction_props['assembly_maximum_f_factor']
-      target_c_factor_ip = construction_props['assembly_maximum_c_factor']
-
-      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
-
-      if target_u_value_ip && !(data['intended_surface_type'] == 'ExteriorRoof') 
-        construction.set_u_value(target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], true)
-      end
-    end
   end
 
   # Returns standards data for selected construction
@@ -4133,7 +4187,6 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
               end
       end
       space_cats[space] = cat
-      
 
       # Add to the correct category
       case cat
@@ -4148,11 +4201,8 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
       when 'Semiheated'
         sh_wall_m2 += wall_area_m2
         sh_wind_m2 += wind_area_m2
-      end
-      # keep track of totals for NECB
-      total_wall_m2 += wall_area_m2
-      total_subsurface_m2 += wind_area_m2 # this contains doors as well.
-    end
+      end 
+    end         
     
 
     # Calculate the WWR of each category
@@ -4160,28 +4210,51 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
     wwr_res = ((res_wind_m2 / res_wall_m2) * 100).round(1)
     wwr_sh = ((sh_wind_m2 / sh_wall_m2) * 100).round(1)
     fdwr = ((total_subsurface_m2 / total_wall_m2) * 100).round(1) # used by NECB 2011    
-    
-    # ECBC code for uniform distribution across four orientations
-  
-    if (wwr_nr <= 40.0) 
-      # WWR should be maintatined as it is and then distribute the WWR uniformly in horizontal bands across the four orientations 
-      
-      #new_window = s.setWindowToWallRatio (wwr_nr, nil, true)
-           
-      
-    elsif (wwr_nr > 40.0) 
-      #set it to 40.0
-      wwr_nr = 40.0
-      # distribute the WWR uniformly in horizontal bands across the four orientations 
 
+    # ECBC code for uniform distribution across four orientations
+    if (wwr_nr > 40)
+      wwr_nr = 0.40
+    else
+      wwr_nr = (wwr_nr/100).to_f
     end
 
-     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "wwr = #{wwr_nr}")
-   
+    if (wwr_res > 40)
+      wwr_res = 0.40
+    else
+      wwr_res = (wwr_res/100).to_f
+    end
 
-    
+    if (wwr_sh > 40)
+      wwr_sh = 0.40
+    else
+      wwr_sh = (wwr_sh/100).to_f
+    end
 
-    # Convert to IP and report
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "wwr = #{wwr_nr}")
+      #
+
+    getSpaces.each do |space|
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType.casecmp('wall').zero?
+         
+        case space_cats[space]
+        when 'Unconditioned'
+          next # Skip unconditioned spaces
+        when 'NonResConditioned'
+          surface.setWindowToWallRatio(wwr_nr)
+        when 'ResConditioned'
+          surface.setWindowToWallRatio(wwr_res)
+        when 'Semiheated'
+          surface.setWindowToWallRatio(wwr_sh)
+        end
+      end 
+      
+    end     
+    # vert to IP and report
     nr_wind_ft2 = OpenStudio.convert(nr_wind_m2, 'm^2', 'ft^2').get
     nr_wall_ft2 = OpenStudio.convert(nr_wall_m2, 'm^2', 'ft^2').get
 
@@ -4194,18 +4267,15 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR NonRes = #{wwr_nr.round}%; window = #{nr_wind_ft2.round} ft2, wall = #{nr_wall_ft2.round} ft2.")
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Res = #{wwr_res.round}%; window = #{res_wind_ft2.round} ft2, wall = #{res_wall_ft2.round} ft2.")
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{wwr_sh.round}%; window = #{sh_wind_ft2.round} ft2, wall = #{sh_wall_ft2.round} ft2.")
-
-    # Code for Uniform distribution on all orientations - ECBC 2007 
-    byebug
-    # WWR limit
+    
+    
     wwr_lim = 40.0
-
-     
+   
     # Check against WWR limit
     red_nr = wwr_nr > wwr_lim ? true : false
     red_res = wwr_res > wwr_lim ? true : false
     red_sh = wwr_sh > wwr_lim ? true : false
-     
+    
     case template
     when 'NECB 2011'
       # NECB FDWR limit
@@ -4221,7 +4291,6 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
       getSpaces.each do |space|
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
-          
           # Skip non-outdoor surfaces
           next unless surface.outsideBoundaryCondition == 'Outdoors'
           # Skip non-walls
@@ -4234,7 +4303,6 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           end
         end
       end
-      
     else # all other template types
       # Stop here unless windows need reducing
       return true unless red_nr || red_res || red_sh
@@ -4243,7 +4311,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
       mult_nr_red = wwr_lim / wwr_nr
       mult_res_red = wwr_lim / wwr_res
       mult_sh_red = wwr_lim / wwr_sh
-      
+
       # Reduce the window area if any of the categories necessary
       getSpaces.each do |space|
         # Determine the space category
@@ -4264,7 +4332,7 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           next unless red_sh
           mult = mult_sh_red
         end
-        
+
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
           # Skip non-outdoor surfaces
@@ -4274,7 +4342,6 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           # Subsurfaces in this surface
           surface.subSurfaces.sort.each do |ss|
             next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
-            
             # Reduce the size of the window
             # If a vertical rectangle, raise sill height to avoid
             # impacting daylighting areas, otherwise
@@ -4288,12 +4355,12 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
           end
         end
       end
-      
 
-    end
-
+    end    
+    
     return true
   end
+  
  
 
   # ECBC code ends for Window-to-wall ratio
@@ -5066,5 +5133,5 @@ def apply_ecbc_standard_window_to_wall_ratio(template, climate_zone)
     return true
     
   end
-
 end
+
