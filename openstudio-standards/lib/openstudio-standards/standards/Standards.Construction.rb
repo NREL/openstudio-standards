@@ -1,4 +1,4 @@
-
+#require ''
 # Reopen the OpenStudio class to add methods to apply standards to this object
 class OpenStudio::Model::Construction
   # Sets the U-value of a construction to a specified value
@@ -118,6 +118,7 @@ class OpenStudio::Model::Construction
     # Determine the difference between the desired R-value
     # and the R-value of the non-insulation layers and air films.
     # This is the desired R-value of the insulation.
+  
     ins_r_value_si = target_r_value_si - other_layer_r_value_si
     if ins_r_value_si <= 0.0
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{name} is too low given the other materials in the construction; insulation layer will not be modified.")
@@ -130,7 +131,7 @@ class OpenStudio::Model::Construction
       next unless layer.name.get == insulation_layer_name
       if layer.to_StandardOpaqueMaterial.is_initialized
         layer = layer.to_StandardOpaqueMaterial.get
-        layer.setThickness(ins_r_value_si * layer.getConductivity)
+        layer.setThickness(ins_r_value_si * layer.getConductivity.to_s.to_f) # used for ECBC
         layer.setName("#{layer.name} R-#{ins_r_value_ip.round(2)}")
         break # Stop looking for the insulation layer once found
       elsif layer.to_MasslessOpaqueMaterial.is_initialized
@@ -140,7 +141,7 @@ class OpenStudio::Model::Construction
         break # Stop looking for the insulation layer once found
       elsif layer.to_AirGap.is_initialized
         layer = layer.to_AirGap.get
-        target_thickness = ins_r_value_si * layer.thermalConductivity
+        target_thickness = ins_r_value_si * layer.thermalConductivity.to_s.to_f # used for ECBC
         layer.setThickness(target_thickness)
         layer.setName("#{layer.name} R-#{ins_r_value_ip.round(2)}")
         break # Stop looking for the insulation layer once found
@@ -408,4 +409,78 @@ class OpenStudio::Model::Construction
 
     return other_layer_r_value_si
   end
+  # Starts ECBC - Thermal capacity of opaque(such as wall & roof) construction in basecase must be same as proposed case 
+ def apply_ecbc_construction_requirements(building_vintage, climate_zone_set,operation_type, intended_surface_type, standards_construction_type, building_category)
+ 
+    # Get the construction properties,
+    # which specifies properties by construction category by climate zone set.
+    # AKA the info in Tables 4.3.2(Opaque Walls)
+
+    props = self.find_object($os_standards['construction_properties'], {'template'=>building_vintage,
+                                                                    'climate_zone_set'=> climate_zone_set,
+                                                                    'operation_type'=> operation_type,
+                                                                    'intended_surface_type'=> intended_surface_type,
+                                                                    'standards_construction_type'=> standards_construction_type,
+                                                                    'building_category' => building_category
+                                                                    })
+
+    if !props
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{building_vintage}-#{climate_zone_set}-#{operation_type}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
+      # Return an empty construction
+      construction = OpenStudio::Model::Construction.new(self)
+      construction.setName("Could not find construction properties set to Adiabatic ")
+      almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(self, "Smooth", 500)
+      construction.insertLayer(0, almost_adiabatic)
+      return construction
+    else
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{building_vintage}-#{climate_zone_set}-#{operation_type}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
+    end
+
+    # Make sure that a construction is specified
+    if props['construction'].nil?
+      OpenStudio::logFree(OpenStudio::Error, 'openstudio.standards.Model', "No typical construction is specified for construction properties of: #{building_vintage}-#{climate_zone_set}-#{operation_type}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.  Make sure it is entered in the spreadsheet.")
+      # Return an empty construction
+      construction = OpenStudio::Model::Construction.new(self)
+      construction.setName("No typical construction was specified")
+      return construction
+    end
+
+    # Add the construction, modifying properties as necessary
+    construction = add_construction(props['construction'], props)
+
+    # Get construction 
+    getConstructions.each do |construction|
+
+      # Loop through all surfaces in this space
+      getSpaces.sort.each do |space|
+        space.surfaces.sort.each do |surface|
+          # Skip non-outdoor surfaces
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+
+        # Skip non-walls
+          next unless surface.surfaceType.casecmp('wall').zero?
+
+          # skip heated surfaces        
+        
+        end
+      end
+    end
+
+    
+  
+    #return construction
+    if construction_props
+      # Determine the target U-value, C-factor, and F-factor
+      target_u_value_ip = construction_props['assembly_maximum_u_value']
+      target_f_factor_ip = construction_props['assembly_maximum_f_factor']
+      target_c_factor_ip = construction_props['assembly_maximum_c_factor']
+
+      OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
+
+      if target_u_value_ip && !(data['intended_surface_type'] == 'ExteriorRoof') 
+        construction.set_u_value(target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], true)
+      end
+    end
+  end
+
 end
