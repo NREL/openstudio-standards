@@ -389,8 +389,15 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
     
     # Applying baseline construction for ECBC 2007 
-
-       # construction.apply_ecbc_construction_requirements(building_vintage, climate_zone_set,operation_type, intended_surface_type, standards_construction_type, building_category)
+    getConstructions.each do |construction|
+      if construction.name.to_s == 'Interior Wall'
+        material = add_material('Wall Insulation [36]')
+        construction.insertLayer(0, material)
+        # construction.apply_ecbc_construction_requirements(building_vintage, climate_zone_set,operation_type, intended_surface_type, standards_construction_type, building_category)
+        
+        construction.set_u_value(0.07, 'Wall Insulation [36]')
+      end
+    end
        
     # Modify some of the construction types as necessary
     #apply_prm_construction_types(template)
@@ -2798,11 +2805,16 @@ class OpenStudio::Model::Model
         layers << material
       end
     end
+     
+
+    material = add_material('XPSSS INSULATION')
+    if material
+      layer << material
+    end
     construction.setLayers(layers)
     # Modify the R value of the insulation to hit the specified U-value, C-Factor, or F-Factor.
-    
-    # check whether we have any insulation in the layers 
-
+    # Add a new layer 
+    construction.insertLayer(layerindex,  material)
     
     if construction_props
       # Determine the target U-value, C-factor, and F-factor
