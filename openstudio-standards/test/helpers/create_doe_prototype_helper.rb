@@ -198,9 +198,13 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               
         sql_path_string = "#{@test_dir}/#{model_name}/AnnualRun/EnergyPlus/eplusout.sql"
         sql_path = OpenStudio::Path.new(sql_path_string)
+        sql_path_string_2 = "#{@test_dir}/#{model_name}/AnnualRun/run/eplusout.sql"
+        sql_path_2 = OpenStudio::Path.new(sql_path_string_2)        
         sql = nil
         if OpenStudio.exists(sql_path)
           sql = OpenStudio::SqlFile.new(sql_path)
+        elsif OpenStudio.exists(sql_path_2)
+          sql = OpenStudio::SqlFile.new(sql_path_2)
         else
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find sql file, could not compare results.")
         end
