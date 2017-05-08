@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'json'
 require 'roo'
-
+require 'rest-client'
 
 costing = {}
 # Path to the xlsx file
@@ -67,4 +67,11 @@ end
 File.open("costing.json","w") do |f|
   f.write(JSON.pretty_generate(costing))
 end
+
+def get_rsmeans_imp_opn_unit_costs( unit_id, location_id='ca-on-ottawa', release_id='2016-an' )
+  auth = JSON.parse(File.read("#{Dir.home}/rs_means_auth.json"))
+  path = "https://dataapi-sb.gordian.com/v1/costdata/unit/catalogs/cnc-mf-imp-opn-#{release_id}-#{location_id}/costlines/#{unit_id}"
+  return RestClient.get( path ,auth) 
+end
+
 
