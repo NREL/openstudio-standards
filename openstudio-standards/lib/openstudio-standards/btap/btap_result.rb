@@ -1063,12 +1063,21 @@ def necb_2011_qaqc(qaqc, model)
   necb_section_name = "NECB2011-5.2.3.3"
   qaqc[:air_loops].each do |air_loop_info|
     #necb_clg_cop = air_loop_info[:cooling_coils][:dx_single_speed][:cop] #*assuming that the cop is defined correctly*
+    if air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s].nil?
+      qaqc[:ruby_warnings] << "air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] is nil"
+      next
+    end
     necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)
 
     if air_loop_info[:name].include? "PSZ"
       necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)
     elsif air_loop_info[:name].include? "VAV"
       necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*2.65).round(2)
+    end
+
+    if air_loop_info[:supply_fan][:rated_electric_power_w].nil?
+      qaqc[:ruby_warnings] << "air_loop_info[:supply_fan][:rated_electric_power_w] is nil"
+      next
     end
 
     supply_fan_w = (air_loop_info[:supply_fan][:rated_electric_power_w]).round(3)
@@ -1095,7 +1104,7 @@ def necb_2011_qaqc(qaqc, model)
         necb_section_name,
         "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Percent Diff from NECB value [#{necb_supply_fan_w}]"
       )
-      end
+    end
   end
   
   necb_section_name = "SANITY-??"
