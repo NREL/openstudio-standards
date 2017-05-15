@@ -345,10 +345,6 @@ class OpenStudio::Model::Model
 	    	when 'Refrigeration_system'
 		
 		add_refrigeration_system(template,
-						      #system['cop'],
-                              #system['cop_f_of_t_curve_name'],
-                              #system['condenser_fan_pwr'],
-                              #system['condenser_fan_pwr_curve_name'],
 						      system['compressor_type'],
 							  system['sys_name'],
 							  system['cases'],

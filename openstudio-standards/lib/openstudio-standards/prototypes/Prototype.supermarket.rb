@@ -116,8 +116,7 @@ module SuperMarket
           'name' => 'Bakery Exahust Fan',
           'availability_sch_name' => 'SuperMarket MinOA_MotorizedDamper_Sched',
           'flow_rate' => OpenStudio.convert(9050, 'cfm', 'm^3/s').get,
-		  'balanced_exhaust_fraction_schedule_name' => 'SuperMarket Exhaust Fan Balanced Exhaust Fraction Schedule',
-          'space_names' =>
+		  'space_names' =>
           [
             'Bakery'
           ]
@@ -127,14 +126,12 @@ module SuperMarket
           'name' => 'Deli Exahust Fan',
           'availability_sch_name' => 'SuperMarket MinOA_MotorizedDamper_Sched',
           'flow_rate' => OpenStudio.convert(9050, 'cfm', 'm^3/s').get,
-		  'balanced_exhaust_fraction_schedule_name' => 'SuperMarket Exhaust Fan Balanced Exhaust Fraction Schedule',
-          'space_names' =>
+		  'space_names' =>
           [
             'Deli'
           ]
         },
-		{
-		# Refrigeration system Rack A: 4 cases and 1 walkin freezer
+	   {
 		'type' =>'Refrigeration_system',
 		'compressor_type' => 'Low Temp',
         'sys_name' =>'Rack A',
@@ -172,14 +169,9 @@ module SuperMarket
  		    'number_of_walkins' => 1
 		}
 		],
-		'space_names' =>
-          [
-            'Main Sales'
-          ]
+		'space_names' => ['Main Sales']
         },
         {
-		# Refrigeration system Rack B: 3 cases and 1 walkin freezer
-		
 		'type' =>'Refrigeration_system',
 		'compressor_type' => 'Low Temp',
         'sys_name' =>'Rack B',
@@ -207,14 +199,9 @@ module SuperMarket
 		   'number_of_walkins' => 1
         }
 		],
-		'space_names' =>
-          [
-            'Main Sales'
-          ]
+		'space_names' => ['Main Sales']
         },
-       # Refrigeration system Rack C: 9 cases and 2 walkin freezer
 		{
-
 		'type' =>'Refrigeration_system',
         'compressor_type' => 'Med Temp',
         'sys_name' =>'Rack C',
@@ -292,13 +279,9 @@ module SuperMarket
 		   'number_of_walkins' => 1
 		}
 		],
-		'space_names' =>
-          [
-            'Main Sales'
-          ]
+		'space_names' => ['Main Sales']
         },
-	# Refrigeration system Rack D: 9 cases and 6 walkin freezer
-	{
+       {
 		'type' =>'Refrigeration_system',
         'compressor_type' => 'Med Temp',
         'sys_name' =>'Rack D',
@@ -436,7 +419,7 @@ module SuperMarket
            ],
 		   'number_of_walkins' => 1
 		},
-				{
+		{
 		   'walkin_type' => 'Walk-In Cooler',
 		   'walkin_name' => 'Fish Cooler',
 		   'insulated_floor_area' => 7,
@@ -447,27 +430,24 @@ module SuperMarket
 		   'number_of_walkins' => 1
 		}
 		],
-		
-		'space_names' =>
-          [
-            'Main Sales'
-          ]
+		'space_names' => ['Main Sales']
         }  		
 		]
     end
 
     return system_to_space_map
   end
- 
+
   def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
 
-       
-	OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
-    
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+	  
+	# add humidistat to all spaces
+    PrototypeBuilding::SuperMarket.add_humidistat(template, model)
+	
 	# additional kitchen loads
 	PrototypeBuilding::SuperMarket.add_extra_equip_kitchen(template, model)
-    # add humidistat to all spaces
-    PrototypeBuilding::SuperMarket.add_humidistat(template, model)
+    
     # reset bakery & deli OA reset
 	PrototypeBuilding::SuperMarket.reset_bakery_deli_oa(template, model)   
 
@@ -476,6 +456,7 @@ module SuperMarket
    return true
   end
  
+ # define additional kitchen loads based on AEDG baseline model
    def self.add_extra_equip_kitchen(template, model)
      	space_names = ['Deli','Bakery']	
 		space_names.each do |space_name|
@@ -495,6 +476,7 @@ module SuperMarket
 	    end
 	end	
 
+# add humidistat to all spaces
   def self.add_humidistat(template, model)
         space_names = ['Main Sales','Produce','West Perimeter Sales','East Perimeter Sales','Deli','Bakery',
 		'Enclosed Office','Meeting Room','Dining Room','Restroom','Mechanical Room','Corridor','Vestibule','Active Storage']
@@ -507,14 +489,15 @@ module SuperMarket
           zone.setZoneControlHumidistat(humidistat)
 	    end	
 	end
-
+ # Update exhuast fan efficiency 
  def self.update_exhaust_fan_efficiency(template, model)
       model.getFanZoneExhausts.sort.each do |exhaust_fan|
 	    exhaust_fan.setFanEfficiency(0.45)
         exhaust_fan.setPressureRise(125)
      end
  end
-	
+
+ #reset bakery & deli OA from AEDG baseline model
   def self.reset_bakery_deli_oa(template, model)
     space_names = ['Deli','Bakery']	
 		space_names.each do |space_name|
@@ -523,15 +506,11 @@ module SuperMarket
         ventilation.setOutdoorAirFlowperPerson(0.0075)
         ventilation.setOutdoorAirFlowperFloorArea(0)
     case template
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
       ventilation.setOutdoorAirFlowRate(4.27112436)
-    when '90.1-2007'
-      ventilation.setOutdoorAirFlowRate(4.27112436)
-    when '90.1-2004'
-      ventilation.setOutdoorAirFlowRate(4.27112436)
-    end
     end
   end	
+  end
   
   def self.update_waterheater_loss_coefficient(template, model)
     case template

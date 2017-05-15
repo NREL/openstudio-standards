@@ -4691,7 +4691,7 @@ class OpenStudio::Model::Model
     return true
 	end
 	
-	# added for supermarket refrigeration system which has multiple cases
+# added for supermarket refrigeration system which has multiple cases
 	def add_refrigeration_case (template,
 	                            case_)
 								#case_type,
@@ -5016,6 +5016,15 @@ class OpenStudio::Model::Model
   end
   
   # added for supermarket refrigeration system which has multiple WalkIns
+  
+  # It is suggested that the user input the insulated floor area of the walk-in (m2), and then the following items will be determined:
+  #     •	Rated coil cooling capacity (function of floor area)
+  #     •	Rated cooling coil fan power (function of cooling capacity)
+  #     •	Rated total lighting power (function of floor area)
+  #     •	Defrost power (function of cooling capacity)
+  # Coil fan power and total lighting power are given for both “old (2004, 2007, and 2010)” and “new (2013)” walk-ins.  
+  # It is assumed that only walk-in freezers have electric defrost while walk-in coolers use off-cycle defrost.
+
   def add_refrigeration_walkin (template,
 								walkin_)
 								
@@ -5031,7 +5040,7 @@ class OpenStudio::Model::Model
 	
 	case walkin_type 
     when 'Walk-In Freezer'
-	  cooling_capacity = -0.3087*(insulated_floor_area^2)+152.9*(insulated_floor_area)+1060
+	  cooling_capacity = -0.3087*(insulated_floor_area^2)+152.9*(insulated_floor_area)+1060 
 	  defrost_control_type ='TemperatureTermination'
       operating_temp = -26.1
 	  source_temp = -31.7
@@ -5163,31 +5172,20 @@ class OpenStudio::Model::Model
     return ref_walkin
   end
   
-  
-   
-  
 def add_refrigeration_system (template,
-						      #cop,
-                              #cop_f_of_t_curve_name,
-                              #condenser_fan_pwr,
-                              #condenser_fan_pwr_curve_name,
-						      compressor_type,
+                              compressor_type,
 							  sys_name,
 							  cases,
 							  walkins,
 							  thermal_zone)
 
 
-	# Compressor
-    # TODO set compressor properties since prototypes use simple
-    # refrigeration rack instead of detailed
- 
-
     # Refrigeration system
 	ref_sys = OpenStudio::Model::RefrigerationSystem.new(self)
 	ref_sys.setName("#{sys_name}")
-
-    for i in 0 ... 20
+    ref_sys.setSuctionPipingZone(thermal_zone)
+	
+    for i in 0 ... 20 # add 20 compressors for each system
 	    compressor =  OpenStudio::Model::RefrigerationCompressor.new(self)
 		case template
            when '90.1-2004', '90.1-2007', '90.1-2010'
@@ -5226,9 +5224,16 @@ def add_refrigeration_system (template,
 		   cooling_cap = cooling_cap + ref_walkin.ratedCoilCoolingCapacity() # calculate total cooling capacity of the cases + walkins
 	    end
 	end	
-    #puts cooling_cap
+    #Condenser Capacity
+    #The heat rejection rate from the condenser is equal to the rated capacity of all the display cases and walk-ins connected to the compressor rack 
+	#plus the power rating of the compressors making up the compressor rack.  
+    #Assuming a COP of 1.3 for low-temperature compressor racks and a COP of 2.0 for medium-temperature compressor racks, 
+	#the required condenser capacity is approximated as follows:
+	
 	if compressor_type == 'Low Temp'
 	   condensor_cap = 1.2*cooling_cap*(1+1/(1.3))
+	
+	#Note the factor 1.2 has been included to over-estimate the condenser size.  The total capacity of the display cases can be calculated from their rated cooling capacity times the length of the cases.  The capacity of each of the walk-ins is specified directly.
 	else
   	   condensor_cap = 1.2*cooling_cap*(1+1/(2.0))
 	end   
@@ -5238,19 +5243,18 @@ def add_refrigeration_system (template,
 	condenser_curve.setCoefficient2x(condenser_coefficient_2)
 	condenser_curve.setMinimumValueofx(1.4)
 	condenser_curve.setMaximumValueofx(33.3)
-    
+    # The condenser fan power can be estimated from the heat rejection capacity of the condenser as follows:
 	condenser_fan_pwr = 0.0441*condensor_cap + 695
-	
-	# Condenser
+
     condenser = OpenStudio::Model::RefrigerationCondenserAirCooled.new(self)
 	condenser.setRatedFanPower(condenser_fan_pwr)
 	condenser.setRatedEffectiveTotalHeatRejectionRateCurve(condenser_curve)
 	condenser.setCondenserFanSpeedControlType('Fixed')
 	condenser.setMinimumFanAirFlowRatio(0.1) 
-	
+  	
 	ref_sys.setRefrigerationCondenser(condenser)
-    ref_sys.setSuctionPipingZone(thermal_zone)
-
+    
+	
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Refrigeration System')
 
     return true
