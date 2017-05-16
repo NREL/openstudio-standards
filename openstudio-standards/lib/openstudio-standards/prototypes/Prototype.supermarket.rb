@@ -115,7 +115,7 @@ module SuperMarket
           'type' => 'Exhaust Fan',
           'name' => 'Bakery Exahust Fan',
           'availability_sch_name' => 'SuperMarket MinOA_MotorizedDamper_Sched',
-          'flow_rate' => OpenStudio.convert(9050, 'cfm', 'm^3/s').get,
+          'flow_rate' => OpenStudio.convert(750, 'cfm', 'm^3/s').get,
 		  'space_names' =>
           [
             'Bakery'
@@ -125,7 +125,7 @@ module SuperMarket
           'type' => 'Exhaust Fan',
           'name' => 'Deli Exahust Fan',
           'availability_sch_name' => 'SuperMarket MinOA_MotorizedDamper_Sched',
-          'flow_rate' => OpenStudio.convert(9050, 'cfm', 'm^3/s').get,
+          'flow_rate' => OpenStudio.convert(715, 'cfm', 'm^3/s').get,
 		  'space_names' =>
           [
             'Deli'
@@ -463,7 +463,7 @@ module SuperMarket
 			space = model.getSpaceByName(space_name).get
 			kitchen_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
 			kitchen_definition.setName("kitchen load")
-			kitchen_definition.setDesignLevel(24714.25)
+			kitchen_definition.setDesignLevel(11674.5)
             kitchen_definition.setFractionLatent(0.25)
             kitchen_definition.setFractionRadiant(0.3)
             kitchen_definition.setFractionLost(0.2)
@@ -503,12 +503,12 @@ module SuperMarket
 		space_names.each do |space_name|
 		space_kitchen = model.getSpaceByName(space_name).get
 	    ventilation = space_kitchen.designSpecificationOutdoorAir.get
-        ventilation.setOutdoorAirFlowperPerson(0.0075)
-        ventilation.setOutdoorAirFlowperFloorArea(0)
-    case template
-    when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
-      ventilation.setOutdoorAirFlowRate(4.27112436)
-    end
+        ventilation.setOutdoorAirFlowperPerson(0)
+        ventilation.setOutdoorAirFlowperFloorArea(0.0015)
+    #case template
+    #when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
+    #  ventilation.setOutdoorAirFlowRate(4.27112436)
+    #end
   end	
   end
   
