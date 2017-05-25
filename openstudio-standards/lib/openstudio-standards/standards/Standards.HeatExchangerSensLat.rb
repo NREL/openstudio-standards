@@ -6,16 +6,17 @@ class OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent
     # Assumed to be sensible and latent at all flow    
     min_effct = 0.5
 
-    setSensibleEffectivenessat100HeatingAirFlow(min_effct)
-    setLatentEffectivenessat100HeatingAirFlow(min_effct)
-    setSensibleEffectivenessat75HeatingAirFlow(min_effct)
-    setLatentEffectivenessat75HeatingAirFlow(min_effct)
-    setSensibleEffectivenessat100CoolingAirFlow(min_effct)
-    setLatentEffectivenessat100CoolingAirFlow(min_effct)
-    setSensibleEffectivenessat75CoolingAirFlow(min_effct)
-    setLatentEffectivenessat75CoolingAirFlow(min_effct)
+#    setSensibleEffectivenessat100HeatingAirFlow(min_effct)
+#    setLatentEffectivenessat100HeatingAirFlow(min_effct)
+#    setSensibleEffectivenessat75HeatingAirFlow(min_effct)
+#    setLatentEffectivenessat75HeatingAirFlow(min_effct)
+#    setSensibleEffectivenessat100CoolingAirFlow(min_effct)
+#    setLatentEffectivenessat100CoolingAirFlow(min_effct)
+#    setSensibleEffectivenessat75CoolingAirFlow(min_effct)
+#    setLatentEffectivenessat75CoolingAirFlow(min_effct)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HeatExchangerAirToAirSensibleAndLatent', "For #{name}: Set sensible and latent effectiveness to #{(min_effct * 100).round}%.")
+#    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HeatExchangerAirToAirSensibleAndLatent', "For #{name}: Set sensible and latent effectiveness to #{(min_effct * 100).round}%.")
+#	end
 
     return true
   end
