@@ -16,16 +16,18 @@ class OpenStudio::Model::Space
           average_surface_height += point3d.z / surface.vertices.size
           projected_vertices << OpenStudio::Point3d.new(point3d.x, point3d.y, 0)
         end
-        total_floor_area += OpenStudio::Model::Surface.new(	projected_vertices ,temp_model).grossArea
-        floor_datum += average_surface_height * surface.grossArea
+        projected_surface_area =  OpenStudio::Model::Surface.new(projected_vertices ,temp_model).grossArea
+        total_roof_area += projected_surface_area        
+        floor_datum += average_surface_height * projected_surface_area
       elsif surface.surfaceType == "RoofCeiling"
         average_surface_height = 0
         surface.vertices.each do |point3d|
           average_surface_height += point3d.z / surface.vertices.size
           projected_vertices << OpenStudio::Point3d.new(point3d.x, point3d.y, 0)
         end
-        total_roof_area += OpenStudio::Model::Surface.new(	projected_vertices ,temp_model).grossArea
-        roof_datum += average_surface_height * surface.grossArea
+        projected_surface_area =  OpenStudio::Model::Surface.new(projected_vertices ,temp_model).grossArea
+        total_roof_area += projected_surface_area        
+        roof_datum += average_surface_height * projected_surface_area
       end
     end
     if total_floor_area > 0 and total_roof_area > 0
