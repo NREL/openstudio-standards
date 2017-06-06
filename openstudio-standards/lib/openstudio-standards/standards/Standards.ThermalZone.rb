@@ -1453,6 +1453,10 @@ class OpenStudio::Model::ThermalZone
       else
         sch_name = space_type_properties['exhaust_schedule']
         exhaust_schedule = model.add_schedule(sch_name)
+        unless exhaust_schedule
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "Could not find an exhaust schedule called #{sch_name}, exhaust fans will run continuously.")
+          exhaust_schedule = model.alwaysOnDiscreteSchedule
+        end
       end
 
       # add exhaust fans
