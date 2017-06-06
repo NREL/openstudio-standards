@@ -742,8 +742,14 @@ class OpenStudio::Model::Model
     max_flow_rate_array = [] # gallons per hour
     water_use_equipment_array.each do |water_use_equip|
       water_use_equip_sch = water_use_equip.flowRateFractionSchedule
-      next if not water_use_equip_sch.is_initialized and water_use_equip_sch.get.to_ScheduleRuleset.is_initialized
-      water_use_equip_sch = water_use_equip_sch.get.to_ScheduleRuleset.get
+      next if water_use_equip_sch.empty?
+      if water_use_equip_sch.to_ScheduleRuleset.is_initialized
+        water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get
+      elsif water_use_equip_sch.to_ScheduleConstant.is_initialized
+        water_use_equip_sch = water_use_equip_sch.to_ScheduleConstant.get
+      elsif water_use_equip_sch.to_ScheduleCompact.is_initialized
+        water_use_equip_sch = water_use_equip_sch.to_ScheduleCompact.get
+      end
       max_sch_value = water_use_equip_sch.annual_min_max_value['max']
 
       # get water_use_equip_def to get max flow rate
