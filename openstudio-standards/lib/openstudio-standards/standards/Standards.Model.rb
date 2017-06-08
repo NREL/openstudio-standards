@@ -1244,9 +1244,9 @@ class OpenStudio::Model::Model
         end
 
         # If electric zone heat
-        electric_reheat = false
+        reheat_type = 'Water'
         if zone_heat_fuel == 'Electricity'
-          electric_reheat = true
+          reheat_type = 'Electricity'
         end
 
         # Group zones by story
@@ -1288,7 +1288,7 @@ class OpenStudio::Model::Model
                            0.9,
                            OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
                            nil,
-                           electric_reheat,
+                           reheat_type,
                            nil)
           end
 

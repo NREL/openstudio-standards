@@ -738,8 +738,7 @@ class OpenStudio::Model::Model
   # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa
   # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as
   # the supply plenum, or nil, in which case no return plenum will be used.
-  # @param electric_reheat [Bool] if true, this system will have electric reheat coils,
-  # but if false, the reheat coils will be served by the hot_water_loop.
+  # @param reheat_type [String] valid options are NaturalGas, Electricity, Water, nil (no heat)
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
   def add_vav_reheat(template,
@@ -753,7 +752,7 @@ class OpenStudio::Model::Model
                      vav_fan_motor_efficiency,
                      vav_fan_pressure_rise,
                      return_plenum,
-                     electric_reheat = false,
+                     reheat_type = 'Water',
                      building_type = nil)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding VAV system for #{thermal_zones.size} zones.")
@@ -865,21 +864,27 @@ class OpenStudio::Model::Model
     fan.setEndUseSubcategory('VAV system Fans')
 
     # heating coil
-    htg_coil = OpenStudio::Model::CoilHeatingWater.new(self, alwaysOnDiscreteSchedule)
-    htg_coil.addToNode(air_loop.supplyInletNode)
-    hot_water_loop.addDemandBranchForComponent(htg_coil)
-    htg_coil.setName("#{air_loop.name} Main Htg Coil")
-    htg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Main Htg Coil Controller")
-    htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-    htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
-    htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-    htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
-    if building_type == 'LargeHotel'
-      htg_coil.setRatedInletAirTemperature(htg_sa_temp_c)
-      htg_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
+    if hot_water_loop.nil?
+      htg_coil = OpenStudio::Model::CoilHeatingGas.new(self, alwaysOnDiscreteSchedule)
+      htg_coil.setName("#{air_loop.name} Main Htg Coil")
+      htg_coil.addToNode(air_loop.supplyInletNode)
     else
+      htg_coil = OpenStudio::Model::CoilHeatingWater.new(self, alwaysOnDiscreteSchedule)
+      htg_coil.addToNode(air_loop.supplyInletNode)
+      hot_water_loop.addDemandBranchForComponent(htg_coil)
+      htg_coil.setName("#{air_loop.name} Main Htg Coil")
+      htg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Main Htg Coil Controller")
+      htg_coil.setRatedInletWaterTemperature(hw_temp_c)
       htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
+      htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
       htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
+      if building_type == 'LargeHotel'
+        htg_coil.setRatedInletAirTemperature(htg_sa_temp_c)
+        htg_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
+      else
+        htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
+        htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
+      end
     end
 
     # cooling coil
@@ -919,10 +924,14 @@ class OpenStudio::Model::Model
     thermal_zones.each do |zone|
       # reheat coil
       rht_coil = nil
-      if electric_reheat
+      case reheat_type
+      when 'NaturalGas'
+        rht_coil = OpenStudio::Model::CoilHeatingGas.new(self, alwaysOnDiscreteSchedule)
+        rht_coil.setName("#{zone.name} Rht Coil")
+      when 'Electricity'
         rht_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
-      else
+      when 'Water'
         rht_coil = OpenStudio::Model::CoilHeatingWater.new(self, alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
         rht_coil.setRatedInletWaterTemperature(hw_temp_c)
@@ -930,6 +939,11 @@ class OpenStudio::Model::Model
         rht_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
         rht_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
         hot_water_loop.addDemandBranchForComponent(rht_coil)
+      when nil
+        # Zero-capacity, always-off electric heating coil
+        rht_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOffDiscreteSchedule)
+        rht_coil.setName("#{zone.name} No Reheat")
+        rht_coil.setNominalCapacity(0)
       end
 
       # vav terminal
@@ -5851,9 +5865,9 @@ class OpenStudio::Model::Model
       hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
       chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
 
-      electric_reheat = false
+      reheat_type = 'Water'
       if zone_heat_fuel == 'Electricity'
-        electric_reheat = true
+        reheat_type = 'Electricity'
       end
 
       add_vav_reheat(template,
@@ -5867,7 +5881,39 @@ class OpenStudio::Model::Model
                      vav_fan_motor_efficiency=0.9,
                      vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
                      return_plenum=nil,
-                     electric_reheat)
+                     reheat_type)
+
+    when 'VAV No Reheat'
+      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+
+      add_vav_reheat(template,
+                     sys_name=nil,
+                     hot_water_loop,
+                     chilled_water_loop,
+                     zones,
+                     hvac_op_sch=nil,
+                     oa_damper_sch=nil,
+                     vav_fan_efficiency=0.62,
+                     vav_fan_motor_efficiency=0.9,
+                     vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                     return_plenum=nil,
+                     reheat_type=nil)
+
+    when 'VAV Gas Reheat'
+      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+
+      add_vav_reheat(template,
+                     sys_name=nil,
+                     hot_water_loop,
+                     chilled_water_loop,
+                     zones,
+                     hvac_op_sch=nil,
+                     oa_damper_sch=nil,
+                     vav_fan_efficiency=0.62,
+                     vav_fan_motor_efficiency=0.9,
+                     vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                     return_plenum=nil,
+                     reheat_type='NaturalGas')
 
     when 'PVAV Reheat'
       hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)

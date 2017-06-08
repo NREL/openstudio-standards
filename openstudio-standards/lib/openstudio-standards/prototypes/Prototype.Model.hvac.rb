@@ -79,7 +79,7 @@ class OpenStudio::Model::Model
                          prototype_input['vav_fan_motor_efficiency'],
                          prototype_input['vav_fan_pressure_rise'],
                          return_plenum,
-                         electric_reheat = false,
+                         reheat_type = 'Water',
                          building_type)
 
         when 'CAV'
