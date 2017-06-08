@@ -743,6 +743,7 @@ class OpenStudio::Model::Model
     water_use_equipment_array.each do |water_use_equip|
       water_use_equip_sch = water_use_equip.flowRateFractionSchedule
       next if water_use_equip_sch.empty?
+      water_use_equip_sch = water_use_equip_sch.get
       if water_use_equip_sch.to_ScheduleRuleset.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get
       elsif water_use_equip_sch.to_ScheduleConstant.is_initialized
