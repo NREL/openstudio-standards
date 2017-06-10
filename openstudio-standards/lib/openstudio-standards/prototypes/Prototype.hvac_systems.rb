@@ -4875,7 +4875,7 @@ class OpenStudio::Model::Model
   end
 
   # Adds a window air conditioner to each zone.
-  # Code taken from:
+  # Code adapted from:
   # https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACRoomAirConditioner/measure.rb
   #
   # @param template [String] Valid choices are 90.1-2004,
@@ -4893,69 +4893,18 @@ class OpenStudio::Model::Model
     # Performance curves
     # From Frigidaire 10.7 EER unit in Winkler et. al. Lab Testing of Window ACs (2013)
     # NOTE: These coefficients are in SI UNITS
-    cool_CAP_FT_SPEC_coefficients = [0.6405, 0.01568, 0.0004531, 0.001615, -0.0001825, 0.00006614]
-    cool_EIR_FT_SPEC_coefficients = [2.287, -0.1732, 0.004745, 0.01662, 0.000484, -0.001306]
-    cool_CAP_FFLOW_SPEC_coefficients = [0.887, 0.1128, 0]
-    cool_EIR_FFLOW_SPEC_coefficients = [1.763, -0.6081, 0]
-    cool_PLF_FPLR = [0.78, 0.22, 0]
+    cool_cap_ft_coeffs_si = [0.6405, 0.01568, 0.0004531, 0.001615, -0.0001825, 0.00006614]
+    cool_eir_ft_coeffs_si = [2.287, -0.1732, 0.004745, 0.01662, 0.000484, -0.001306]
+    cool_cap_fflow_coeffs = [0.887, 0.1128, 0]
+    cool_eir_fflow_coeffs  = [1.763, -0.6081, 0]
+    cool_plf_fplr_coeffs = [0.78, 0.22, 0]
 
-    roomac_cap_ft = OpenStudio::Model::CurveBiquadratic.new(self)
-    roomac_cap_ft.setName("RoomAC-Cap-fT")
-    roomac_cap_ft.setCoefficient1Constant(cool_CAP_FT_SPEC_coefficients[0])
-    roomac_cap_ft.setCoefficient2x(cool_CAP_FT_SPEC_coefficients[1])
-    roomac_cap_ft.setCoefficient3xPOW2(cool_CAP_FT_SPEC_coefficients[2])
-    roomac_cap_ft.setCoefficient4y(cool_CAP_FT_SPEC_coefficients[3])
-    roomac_cap_ft.setCoefficient5yPOW2(cool_CAP_FT_SPEC_coefficients[4])
-    roomac_cap_ft.setCoefficient6xTIMESY(cool_CAP_FT_SPEC_coefficients[5])
-    roomac_cap_ft.setMinimumValueofx(0)
-    roomac_cap_ft.setMaximumValueofx(100)
-    roomac_cap_ft.setMinimumValueofy(0)
-    roomac_cap_ft.setMaximumValueofy(100)
-
-    roomac_cap_fff = OpenStudio::Model::CurveQuadratic.new(self)
-    roomac_cap_fff.setName("RoomAC-Cap-fFF")
-    roomac_cap_fff.setCoefficient1Constant(cool_CAP_FFLOW_SPEC_coefficients[0])
-    roomac_cap_fff.setCoefficient2x(cool_CAP_FFLOW_SPEC_coefficients[1])
-    roomac_cap_fff.setCoefficient3xPOW2(cool_CAP_FFLOW_SPEC_coefficients[2])
-    roomac_cap_fff.setMinimumValueofx(0)
-    roomac_cap_fff.setMaximumValueofx(2)
-    roomac_cap_fff.setMinimumCurveOutput(0)
-    roomac_cap_fff.setMaximumCurveOutput(2)
-
-    roomac_eir_ft = OpenStudio::Model::CurveBiquadratic.new(self)
-    roomac_eir_ft.setName("RoomAC-EIR-fT")
-    roomac_eir_ft.setCoefficient1Constant(cool_EIR_FT_SPEC_coefficients[0])
-    roomac_eir_ft.setCoefficient2x(cool_EIR_FT_SPEC_coefficients[1])
-    roomac_eir_ft.setCoefficient3xPOW2(cool_EIR_FT_SPEC_coefficients[2])
-    roomac_eir_ft.setCoefficient4y(cool_EIR_FT_SPEC_coefficients[3])
-    roomac_eir_ft.setCoefficient5yPOW2(cool_EIR_FT_SPEC_coefficients[4])
-    roomac_eir_ft.setCoefficient6xTIMESY(cool_EIR_FT_SPEC_coefficients[5])
-    roomac_eir_ft.setMinimumValueofx(0)
-    roomac_eir_ft.setMaximumValueofx(100)
-    roomac_eir_ft.setMinimumValueofy(0)
-    roomac_eir_ft.setMaximumValueofy(100)
-
-    roomcac_eir_fff = OpenStudio::Model::CurveQuadratic.new(self)
-    roomcac_eir_fff.setName("RoomAC-EIR-fFF")
-    roomcac_eir_fff.setCoefficient1Constant(cool_EIR_FFLOW_SPEC_coefficients[0])
-    roomcac_eir_fff.setCoefficient2x(cool_EIR_FFLOW_SPEC_coefficients[1])
-    roomcac_eir_fff.setCoefficient3xPOW2(cool_EIR_FFLOW_SPEC_coefficients[2])
-    roomcac_eir_fff.setMinimumValueofx(0)
-    roomcac_eir_fff.setMaximumValueofx(2)
-    roomcac_eir_fff.setMinimumCurveOutput(0)
-    roomcac_eir_fff.setMaximumCurveOutput(2)
-
-    roomac_plf_fplr = OpenStudio::Model::CurveQuadratic.new(self)
-    roomac_plf_fplr.setName("RoomAC-PLF-fPLR")
-    roomac_plf_fplr.setCoefficient1Constant(cool_PLF_FPLR[0])
-    roomac_plf_fplr.setCoefficient2x(cool_PLF_FPLR[1])
-    roomac_plf_fplr.setCoefficient3xPOW2(cool_PLF_FPLR[2])
-    roomac_plf_fplr.setMinimumValueofx(0)
-    roomac_plf_fplr.setMaximumValueofx(1)
-    roomac_plf_fplr.setMinimumCurveOutput(0)
-    roomac_plf_fplr.setMaximumCurveOutput(1)
-
-    roomaceer = 8.5
+    # Make the curves
+    roomac_cap_ft = create_curve_biquadratic(cool_cap_ft_coeffs_si, "RoomAC-Cap-fT", 0, 100, 0, 100, nil, nil)
+    roomac_cap_fff = create_curve_quadratic(cool_cap_fflow_coeffs, "RoomAC-Cap-fFF", 0, 2, 0, 2, is_dimensionless=true)
+    roomac_eir_ft = create_curve_biquadratic(cool_eir_ft_coeffs_si, "RoomAC-EIR-fT", 0, 100, 0, 100, nil, nil)
+    roomac_eir_fff = create_curve_quadratic(cool_eir_fflow_coeffs, "RoomAC-EIR-fFF", 0, 2, 0, 2, is_dimensionless=true)
+    roomac_plf_fplr = create_curve_quadratic(cool_plf_fplr_coeffs, "RoomAC-PLF-fPLR", 0, 1, 0, 1, is_dimensionless=true)
 
     acs = []
     thermal_zones.each do |zone|
@@ -4966,11 +4915,11 @@ class OpenStudio::Model::Model
                                                                  roomac_cap_ft,
                                                                  roomac_cap_fff,
                                                                  roomac_eir_ft,
-                                                                 roomcac_eir_fff,
+                                                                 roomac_eir_fff,
                                                                  roomac_plf_fplr)
       clg_coil.setName("Window AC Clg Coil")
       clg_coil.setRatedSensibleHeatRatio(shr)
-      clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(OpenStudio.convert(roomaceer, "Btu/h", "W").get))
+      clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(OpenStudio.convert(eer, "Btu/h", "W").get))
       clg_coil.setRatedEvaporatorFanPowerPerVolumeFlowRate(OpenStudio::OptionalDouble.new(773.3))
       clg_coil.setEvaporativeCondenserEffectiveness(OpenStudio::OptionalDouble.new(0.9))
       clg_coil.setMaximumOutdoorDryBulbTemperatureForCrankcaseHeaterOperation(OpenStudio::OptionalDouble.new(10))
@@ -5001,6 +4950,348 @@ class OpenStudio::Model::Model
 
     return acs
 
+  end
+
+  # Adds a forced air furnace or central AC to each zone.
+  # Code adapted from:
+  # https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACFurnaceFuel/measure.rb
+  #
+  # @param template [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
+  # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
+  # @param cooling [Bool] if true, the unit will include a DX cooling coil
+  # @param ventilation [Bool] if true, the unit will include an OA intake
+  # @return [Array<OpenStudio::Model::AirLoopHVAC>] and array of air loops representing the furnaces
+  def add_furnace_central_ac(template,
+                             thermal_zones,
+                             heating,
+                             cooling,
+                             ventilation)
+
+    equip_name = nil
+    if heating && cooling
+      equip_name = "Central Heating and AC"
+    elsif heating && !cooling
+      equip_name = "Furnace"
+    elsif cooling && !heating
+      equip_name = "Central AC"
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Heating and cooling both disabled, not a valid Furnace or Central AC selection, no equipment was added.")
+      return []
+    end
+
+    # Defaults
+    fan_pressure_rise_in = 0.5 # 0.5 in W.C.
+    afue = 0.78
+    seer = 13
+    eer = 11.1
+    shr = 0.73
+    ac_w_per_cfm = 0.365
+    sat_htg_f = 120
+    sat_clg_f = 55
+    crank_case_heat_w = 0
+    crank_case_max_temp_f = 55
+    
+    # Performance curves
+    # These coefficients are in IP UNITS
+    cool_cap_ft_coeffs_ip = [3.670270705, -0.098652414, 0.000955906, 0.006552414, -0.0000156, -0.000131877]
+    cool_eir_ft_coeffs_ip = [-3.302695861, 0.137871531, -0.001056996, -0.012573945, 0.000214638, -0.000145054]
+    cool_cap_fflow_coeffs = [0.718605468, 0.410099989, -0.128705457]
+    cool_eir_fflow_coeffs = [1.32299905, -0.477711207, 0.154712157]
+    cool_plf_fplr_coeffs = [0.8, 0.2, 0]
+
+    # Convert coefficients from IP to SI
+    cool_cap_ft_coeffs_si = convert_curve_biquadratic(cool_cap_ft_coeffs_ip)
+    cool_eir_ft_coeffs_si = convert_curve_biquadratic(cool_eir_ft_coeffs_ip)
+
+    # Make the curves
+    ac_cap_ft = create_curve_biquadratic(cool_cap_ft_coeffs_si, "AC-Cap-fT", 0, 100, 0, 100, nil, nil)
+    ac_cap_fff = create_curve_quadratic(cool_cap_fflow_coeffs, "AC-Cap-fFF", 0, 2, 0, 2, is_dimensionless=true)
+    ac_eir_ft = create_curve_biquadratic(cool_eir_ft_coeffs_si, "AC-EIR-fT", 0, 100, 0, 100, nil, nil)
+    ac_eir_fff = create_curve_quadratic(cool_eir_fflow_coeffs, "AC-EIR-fFF", 0, 2, 0, 2, is_dimensionless=true)
+    ac_plf_fplr = create_curve_quadratic(cool_plf_fplr_coeffs, "AC-PLF-fPLR", 0, 1, 0, 1, is_dimensionless=true)
+    
+    # Unit conversion
+    fan_pressure_rise_pa = OpenStudio.convert(fan_pressure_rise_in, 'inH_{2}O', 'Pa').get
+ 
+    furnaces = []
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding furnace AC for #{zone.name}.")
+
+      air_loop_name = "#{zone.name} #{equip_name}"
+      air_loop = OpenStudio::Model::AirLoopHVAC.new(self)
+      air_loop.setName("#{air_loop_name}")
+
+      # Heating Coil
+      htg_coil = nil
+      if heating
+        htg_coil = OpenStudio::Model::CoilHeatingGas.new(self)
+        htg_coil.setName("#{air_loop_name} htg coil")
+        htg_coil.setGasBurnerEfficiency(afue_to_thermal_eff(afue))
+        htg_coil.setParasiticElectricLoad(0)
+        htg_coil.setParasiticGasLoad(0)
+      end
+
+      # Cooling Coil
+      clg_coil = nil
+      if cooling
+        clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(self, 
+                                                                   alwaysOnDiscreteSchedule, 
+                                                                   ac_cap_ft, 
+                                                                   ac_cap_fff, 
+                                                                   ac_eir_ft, 
+                                                                   ac_eir_fff, 
+                                                                   ac_plf_fplr)
+        clg_coil.setName("#{air_loop_name} cooling coil")
+        clg_coil.setRatedSensibleHeatRatio(shr)
+        clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(eer_to_cop(eer)))
+        clg_coil.setRatedEvaporatorFanPowerPerVolumeFlowRate(OpenStudio::OptionalDouble.new(ac_w_per_cfm / OpenStudio::convert(1.0,"cfm","m^3/s").get))
+        clg_coil.setNominalTimeForCondensateRemovalToBegin(OpenStudio::OptionalDouble.new(1000.0))
+        clg_coil.setRatioOfInitialMoistureEvaporationRateAndSteadyStateLatentCapacity(OpenStudio::OptionalDouble.new(1.5))
+        clg_coil.setMaximumCyclingRate(OpenStudio::OptionalDouble.new(3.0))
+        clg_coil.setLatentCapacityTimeConstant(OpenStudio::OptionalDouble.new(45.0))
+        clg_coil.setCondenserType("AirCooled")
+        clg_coil.setCrankcaseHeaterCapacity(OpenStudio::OptionalDouble.new(crank_case_heat_w))
+        clg_coil.setMaximumOutdoorDryBulbTemperatureForCrankcaseHeaterOperation(OpenStudio::OptionalDouble.new(OpenStudio::convert(crank_case_max_temp_f,"F","C").get))
+      end
+
+      # Fan
+      fan = OpenStudio::Model::FanOnOff.new(self, alwaysOnDiscreteSchedule)
+      fan.setName("#{air_loop_name} supply fan")
+      fan.setEndUseSubcategory('residential hvac fan')
+      fan.setFanEfficiency(0.6) # Overall Efficiency of the Supply Fan, Motor and Drive
+      fan.setPressureRise(fan_pressure_rise_pa)
+      fan.setMotorEfficiency(1)
+      fan.setMotorInAirstreamFraction(1)  
+
+      # Outdoor Air Intake
+      oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
+      oa_intake_controller.setName("#{air_loop.name} OA Controller")        
+      oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
+      oa_intake.setName("#{air_loop.name} OA Sys")
+      oa_intake.addToNode(air_loop.supplyInletNode)
+      if !ventilation
+        # Disable the OA
+        oa_intake_controller.setMinimumOutdoorAirSchedule(alwaysOffDiscreteSchedule)
+      end
+
+      # Unitary System (holds the coils and fan)
+      unitary = OpenStudio::Model::AirLoopHVACUnitarySystem.new(self)
+      unitary.setName("#{air_loop_name} zoneunitary system")
+      unitary.setAvailabilitySchedule(alwaysOnDiscreteSchedule)
+      unitary.setMaximumSupplyAirTemperature(OpenStudio::convert(120.0,"F","C").get)
+      unitary.setControllingZoneorThermostatLocation(zone)
+      unitary.addToNode(air_loop.supplyInletNode)
+
+      # Set flow rates during different conditions
+      unitary.setSupplyAirFlowRateDuringHeatingOperation(0) unless heating
+      unitary.setSupplyAirFlowRateDuringCoolingOperation(0) unless cooling
+      unitary.setSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(0) unless ventilation
+
+      # Attach the coils and fan
+      unitary.setHeatingCoil(htg_coil) if htg_coil
+      unitary.setCoolingCoil(clg_coil) if clg_coil
+      unitary.setSupplyFan(fan)
+      unitary.setFanPlacement("BlowThrough")
+      unitary.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
+
+      # Diffuser
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(self, alwaysOnDiscreteSchedule)
+      diffuser.setName(" #{zone.name} direct air")
+      air_loop.addBranchForZone(zone, diffuser)
+
+      furnaces << air_loop
+    end
+
+    return furnaces
+  end
+
+  # Adds an air source heat pump to each zone.
+  # Code adapted from:
+  # https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACAirSourceHeatPumpSingleSpeed/measure.rb
+  #
+  # @param template [String] Valid choices are 90.1-2004,
+  # 90.1-2007, 90.1-2010, 90.1-2013
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
+  # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
+  # @param cooling [Bool] if true, the unit will include a DX cooling coil
+  # @param ventilation [Bool] if true, the unit will include an OA intake
+  # @return [Array<OpenStudio::Model::AirLoopHVAC>] and array of air loops representing the heat pumps
+  def add_central_air_source_heat_pump(template,
+                                       thermal_zones,
+                                       heating,
+                                       cooling,
+                                       ventilation)
+
+    equip_name = "Central Air Source HP"
+
+    # Defaults
+    fan_pressure_rise_in = 0.5 # 0.5 in W.C.
+    hspf = 7.7
+    seer = 13
+    eer = 11.4
+    cop = 3.05
+    shr = 0.73
+    ac_w_per_cfm = 0.365
+    min_hp_oat_f = 0
+    sat_htg_f = 120
+    sat_clg_f = 55
+    crank_case_heat_w = 0
+    crank_case_max_temp_f = 55
+
+    # Unit conversion
+    fan_pressure_rise_pa = OpenStudio.convert(fan_pressure_rise_in, 'inH_{2}O', 'Pa').get
+
+    # Performance curves
+    # These coefficients are in IP UNITS
+    cool_cap_ft_coeffs_ip = [3.68637657, -0.098352478, 0.000956357, 0.005838141, -0.0000127, -0.000131702]
+    cool_eir_ft_coeffs_ip = [-3.437356399, 0.136656369, -0.001049231, -0.0079378, 0.000185435, -0.0001441]
+    cool_cap_fflow_coeffs = [0.718664047, 0.41797409, -0.136638137]
+    cool_eir_fflow_coeffs = [1.143487507, -0.13943972, -0.004047787]
+    cool_plf_fplr_coeffs = [0.8, 0.2, 0]
+
+    heat_cap_ft_coeffs_ip = [0.566333415, -0.000744164, -0.0000103, 0.009414634, 0.0000506, -0.00000675]
+    heat_eir_ft_coeffs_ip = [0.718398423, 0.003498178, 0.000142202, -0.005724331, 0.00014085, -0.000215321]
+    heat_cap_fflow_coeffs = [0.694045465, 0.474207981, -0.168253446]
+    heat_eir_fflow_coeffs = [2.185418751, -1.942827919, 0.757409168]
+    heat_plf_fplr_coeffs = [0.8, 0.2, 0]
+
+    defrost_eir_coeffs = [0.1528, 0, 0, 0, 0, 0]
+
+    # Convert coefficients from IP to SI
+    cool_cap_ft_coeffs_si = convert_curve_biquadratic(cool_cap_ft_coeffs_ip)
+    cool_eir_ft_coeffs_si = convert_curve_biquadratic(cool_eir_ft_coeffs_ip)
+    heat_cap_ft_coeffs_si = convert_curve_biquadratic(heat_cap_ft_coeffs_ip)
+    heat_eir_ft_coeffs_si = convert_curve_biquadratic(heat_eir_ft_coeffs_ip)
+
+    # Make the curves
+    cool_cap_ft = create_curve_biquadratic(cool_cap_ft_coeffs_si, "Cool-Cap-fT", 0, 100, 0, 100, nil, nil)
+    cool_cap_fff = create_curve_quadratic(cool_cap_fflow_coeffs, "Cool-Cap-fFF", 0, 2, 0, 2, is_dimensionless=true)
+    cool_eir_ft = create_curve_biquadratic(cool_eir_ft_coeffs_si, "Cool-EIR-fT", 0, 100, 0, 100, nil, nil)
+    cool_eir_fff = create_curve_quadratic(cool_eir_fflow_coeffs, "Cool-EIR-fFF", 0, 2, 0, 2, is_dimensionless=true)
+    cool_plf_fplr = create_curve_quadratic(cool_plf_fplr_coeffs, "Cool-PLF-fPLR", 0, 1, 0, 1, is_dimensionless=true)
+
+    heat_cap_ft = create_curve_biquadratic(heat_cap_ft_coeffs_si, "Heat-Cap-fT", 0, 100, 0, 100, nil, nil)
+    heat_cap_fff = create_curve_quadratic(heat_cap_fflow_coeffs, "Heat-Cap-fFF", 0, 2, 0, 2, is_dimensionless=true)
+    heat_eir_ft = create_curve_biquadratic(heat_eir_ft_coeffs_si, "Heat-EIR-fT", 0, 100, 0, 100, nil, nil)
+    heat_eir_fff = create_curve_quadratic(heat_eir_fflow_coeffs, "Heat-EIR-fFF", 0, 2, 0, 2, is_dimensionless=true)
+    heat_plf_fplr = create_curve_quadratic(heat_plf_fplr_coeffs, "Heat-PLF-fPLR", 0, 1, 0, 1, is_dimensionless=true)
+
+    # Heating defrost curve for reverse cycle
+    defrost_eir_curve = create_curve_biquadratic(defrost_eir_coeffs, "DefrostEIR", -100, 100, -100, 100, nil, nil)
+
+    # Unit conversion
+    fan_pressure_rise_pa = OpenStudio.convert(fan_pressure_rise_in, 'inH_{2}O', 'Pa').get
+ 
+    hps = []
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding furnace AC for #{zone.name}.")
+
+      air_loop_name = "#{zone.name} #{equip_name}"
+      air_loop = OpenStudio::Model::AirLoopHVAC.new(self)
+      air_loop.setName("#{air_loop_name}")
+
+      # Heating Coil
+      htg_coil = nil
+      supp_htg_coil = nil
+      if heating
+        htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(self,
+                                                                   alwaysOnDiscreteSchedule,
+                                                                   heat_cap_ft,
+                                                                   heat_cap_fff,
+                                                                   heat_eir_ft,
+                                                                   heat_eir_fff,
+                                                                   heat_plf_fplr)
+        htg_coil.setName("#{air_loop_name} heating coil")
+        htg_coil.setRatedCOP(hspf_to_cop_heating_no_fan(hspf))
+        htg_coil.setRatedSupplyFanPowerPerVolumeFlowRate(ac_w_per_cfm / OpenStudio::convert(1.0,"cfm","m^3/s").get)
+        htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(defrost_eir_curve)
+        htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(OpenStudio::convert(min_hp_oat_f,"F","C").get)
+        htg_coil.setMaximumOutdoorDryBulbTemperatureforDefrostOperation(OpenStudio::convert(40.0,"F","C").get)
+        htg_coil.setCrankcaseHeaterCapacity(crank_case_heat_w)
+        htg_coil.setMaximumOutdoorDryBulbTemperatureforCrankcaseHeaterOperation(OpenStudio::convert(crank_case_max_temp_f,"F","C").get)
+        htg_coil.setDefrostStrategy("ReverseCycle")
+        htg_coil.setDefrostControl("OnDemand")
+
+        # Supplemental Heating Coil
+        supp_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(self, alwaysOnDiscreteSchedule)
+        supp_htg_coil.setName("#{air_loop_name} supp htg coil")
+        supp_htg_coil.setEfficiency(1)
+      end
+
+      # Cooling Coil
+      clg_coil = nil
+      if cooling
+        clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(self, 
+                                                                   alwaysOnDiscreteSchedule, 
+                                                                   cool_cap_ft, 
+                                                                   cool_cap_fff, 
+                                                                   cool_eir_ft, 
+                                                                   cool_eir_fff, 
+                                                                   cool_plf_fplr)
+        clg_coil.setName("#{air_loop_name} cooling coil")
+        clg_coil.setRatedSensibleHeatRatio(shr)
+        clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(cop))
+        clg_coil.setRatedEvaporatorFanPowerPerVolumeFlowRate(OpenStudio::OptionalDouble.new(ac_w_per_cfm / OpenStudio::convert(1.0,"cfm","m^3/s").get))
+        clg_coil.setNominalTimeForCondensateRemovalToBegin(OpenStudio::OptionalDouble.new(1000.0))
+        clg_coil.setRatioOfInitialMoistureEvaporationRateAndSteadyStateLatentCapacity(OpenStudio::OptionalDouble.new(1.5))
+        clg_coil.setMaximumCyclingRate(OpenStudio::OptionalDouble.new(3.0))
+        clg_coil.setLatentCapacityTimeConstant(OpenStudio::OptionalDouble.new(45.0))
+        clg_coil.setCondenserType("AirCooled")
+        clg_coil.setCrankcaseHeaterCapacity(OpenStudio::OptionalDouble.new(crank_case_heat_w))
+        clg_coil.setMaximumOutdoorDryBulbTemperatureForCrankcaseHeaterOperation(OpenStudio::OptionalDouble.new(OpenStudio::convert(crank_case_max_temp_f,"F","C").get))
+      end
+
+      # Fan
+      fan = OpenStudio::Model::FanOnOff.new(self, alwaysOnDiscreteSchedule)
+      fan.setName("#{air_loop_name} supply fan")
+      fan.setEndUseSubcategory('residential hvac fan')
+      fan.setFanEfficiency(0.6) # Overall Efficiency of the Supply Fan, Motor and Drive
+      fan.setPressureRise(fan_pressure_rise_pa)
+      fan.setMotorEfficiency(1)
+      fan.setMotorInAirstreamFraction(1)  
+
+      # Outdoor Air Intake
+      oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
+      oa_intake_controller.setName("#{air_loop.name} OA Controller")        
+      oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
+      oa_intake.setName("#{air_loop.name} OA Sys")
+      oa_intake.addToNode(air_loop.supplyInletNode)
+      if !ventilation
+        # Disable the OA
+        oa_intake_controller.setMinimumOutdoorAirSchedule(alwaysOffDiscreteSchedule)
+      end
+
+      # Unitary System (holds the coils and fan)
+      unitary = OpenStudio::Model::AirLoopHVACUnitarySystem.new(self)
+      unitary.setName("#{air_loop_name} zoneunitary system")
+      unitary.setAvailabilitySchedule(alwaysOnDiscreteSchedule)
+      unitary.setMaximumSupplyAirTemperature(OpenStudio::convert(170.0,"F","C").get) # higher temp for supplemental heat as to not severely limit its use, resulting in unmet hours.
+      unitary.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio::convert(40.0,"F","C").get)
+      unitary.setControllingZoneorThermostatLocation(zone)
+      unitary.addToNode(air_loop.supplyInletNode)
+
+      # Set flow rates during different conditions
+      unitary.setSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(0) unless ventilation
+
+      # Attach the coils and fan
+      unitary.setHeatingCoil(htg_coil) if htg_coil
+      unitary.setCoolingCoil(clg_coil) if clg_coil
+      unitary.setSupplementalHeatingCoil(supp_htg_coil) if supp_htg_coil
+      unitary.setSupplyFan(fan)
+      unitary.setFanPlacement("BlowThrough")
+      unitary.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
+
+      # Diffuser
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(self, alwaysOnDiscreteSchedule)
+      diffuser.setName(" #{zone.name} direct air")
+      air_loop.addBranchForZone(zone, diffuser)
+
+      hps << air_loop
+    end
+
+    return hps
   end
 
   # Adds zone level water-to-air heat pumps for each zone.
@@ -5860,6 +6151,38 @@ class OpenStudio::Model::Model
     when 'Window AC'
       add_window_ac(template,
                     zones)
+
+    when 'Residential AC'
+      add_furnace_central_ac(template,
+                             zones,
+                             heating=false,
+                             cooling=true,
+                             ventilation=false)
+
+    when 'Forced Air Furnace'
+      add_furnace_central_ac(template,
+                             zones,
+                             heating=true,
+                             cooling=false,
+                             ventilation=true)
+
+    when 'Residential Forced Air Furnace'
+      add_furnace_central_ac(template,
+                             zones,
+                             heating=true,
+                             cooling=false,
+                             ventilation=false)
+
+
+    when 'Residential Air Source Heat Pump'
+      heating = true unless main_heat_fuel.nil?
+      cooling = true unless cool_fuel.nil?
+    
+      add_central_air_source_heat_pump(template,
+                                       zones,
+                                       heating,
+                                       cooling,
+                                       ventilation=false)
 
     when 'VAV Reheat'
       hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
