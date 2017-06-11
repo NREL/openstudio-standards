@@ -137,11 +137,11 @@ class OpenStudio::Model::Model
     end
 
     # assign schedules
-    if ["Office","SmallOffice","MediumOffice","LargeOffice","MidriseApartment","HighriseApartment","SecondarySchool"].include?(building_type)
+    if ["Office","MediumOffice","MidriseApartment","HighriseApartment","SecondarySchool"].include?(building_type)
       elevator_schedule = prototype_input['elevator_schedule']
       elevator_fan_schedule = prototype_input['elevator_fan_schedule']
       elevator_lights_schedule = prototype_input['elevator_fan_schedule']
-    elsif ["LargeHotel","Hospital"].include?(building_type)
+    elsif ["LargeHotel","Hospital","LargeOffice"].include?(building_type)
       elevator_schedule = prototype_input['exterior_fuel_equipment1_schedule']
       elevator_fan_schedule = prototype_input['exterior_fuel_equipment2_schedule']
       elevator_lights_schedule = prototype_input['exterior_fuel_equipment2_schedule']
@@ -153,7 +153,20 @@ class OpenStudio::Model::Model
         next if not building_type.include?(hash[:stds_bldg_type])
         space_type_size[space_type] = hash[:floor_area]
       end
-      occ_sch = space_type_size.key(space_type_size.values.max).defaultScheduleSet.get.numberofPeopleSchedule.get
+
+      # Get the largest space type
+      largest_space_type = space_type_size.key(space_type_size.values.max)
+
+      # Get the occ sch, if one is specified
+      occ_sch = nil
+      if largest_space_type.defaultScheduleSet.is_initialized
+        if largest_space_type.defaultScheduleSet.get.numberofPeopleSchedule.is_initialized
+          occ_sch = largest_space_type.defaultScheduleSet.get.numberofPeopleSchedule.get
+        end
+      else
+        occ_sch = alwaysOffDiscreteSchedule
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "No occupancy schedule was specified for #{largest_space_type.name}, an always off schedule will be used for the elvevators and the elevators will never run.")
+      end
 
       # clone and assign to elevator
       elev_sch = occ_sch.clone(self)

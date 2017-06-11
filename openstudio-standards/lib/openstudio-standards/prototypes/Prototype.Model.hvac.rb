@@ -79,7 +79,7 @@ class OpenStudio::Model::Model
                          prototype_input['vav_fan_motor_efficiency'],
                          prototype_input['vav_fan_pressure_rise'],
                          return_plenum,
-                         electric_reheat = false,
+                         reheat_type = 'Water',
                          building_type)
 
         when 'CAV'
@@ -239,6 +239,11 @@ class OpenStudio::Model::Model
                    prototype_input['doas_fan_maximum_flow_rate'],
                    prototype_input['doas_economizer_control_type'],
                    building_type)
+
+          add_four_pipe_fan_coil(template,
+                                  hot_water_loop,
+                                  chilled_water_loop,
+                                  thermal_zones)
 
         when 'DC' # Data Center
 
