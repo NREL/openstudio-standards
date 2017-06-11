@@ -1,4 +1,4 @@
-
+#require byebug
 # Loads the openstudio standards dataset.
 #
 # @return [Hash] a hash of standards data
@@ -333,7 +333,7 @@ class OpenStudio::Model::Model
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
-  def create_ecbc_baseline_building(building_type, template, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
+  def create_ecbc_baseline_building(building_type, template, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false, operation_type = "Daytime")
     #
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Name = #{getBuilding.name}")
     getBuilding.setName("#{template}-#{building_type}-#{climate_zone} ECBC baseline created: #{Time.new}")
@@ -389,22 +389,34 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
     
     # Applying baseline construction for ECBC 2007 
+    # Set the construction properties of all the surfaces in the model
+    
     getConstructions.each do |construction|
-      if construction.name.to_s == 'Interior Wall'
-        material = add_material('Wall Insulation [36]')
-        construction.insertLayer(0, material)
-        # construction.apply_ecbc_construction_requirements(building_vintage, climate_zone_set,operation_type, intended_surface_type, standards_construction_type, building_category)
-        
-        construction.set_u_value(0.07, 'Wall Insulation [36]')
+      surf_type = ''
+      surf_type_modified = false
+      if !construction.standardsInformation.intendedSurfaceType.empty?
+       surf_type = construction.standardsInformation.intendedSurfaceType.get
+      end
+     # byebug
+      if surf_type == "ExteriorWall" || surf_type == "ExteriorRoof"
+        construction.layers.each_with_index do |layer, layer_index|
+          if layer.to_StandardOpaqueMaterial.is_initialized
+            k_value = layer.to_StandardOpaqueMaterial.get.getConductivity.to_s.to_f
+            if k_value < 0.1
+              surf_type_modified = true
+              props = find_object($os_standards['construction_properties'], 'template' => template, 'climate_zone_set' => climate_zone, 'intended_surface_type' => surf_type, 'operation_type' => operation_type)
+              modify_u_value = construction.set_u_value(props["assembly_maximum_u_value"], layer.name.to_s)
+            end
+          end
+        end
+        if !surf_type_modified
+          material = add_material('ECBC Insulation [10]')
+          construction.insertLayer(0, material)
+          construction.set_u_value(props["assembly_maximum_u_value"], 'ECBC Insulation [10]')
+          end
       end
     end
-       
-    # Modify some of the construction types as necessary
-    #apply_prm_construction_types(template)
-    
 
-    # Set the construction properties of all the surfaces in the model
-    #apply_standard_constructions(template, climate_zone)
 
     # Get the groups of zones that define the
     # baseline HVAC systems for later use.
@@ -2223,6 +2235,7 @@ class OpenStudio::Model::Model
 
     ##### Apply equipment efficiencies
 
+    
     # Fans
     getFanVariableVolumes.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template, obj.brake_horsepower) }
     getFanConstantVolumes.sort.each { |obj| obj.apply_standard_minimum_motor_efficiency(template, obj.brake_horsepower) }
@@ -3869,7 +3882,7 @@ class OpenStudio::Model::Model
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.subSurfaceType == surface_type
         surfaces_to_modify << surf
-      end
+      end        
     end
 
     # Modify these surfaces
@@ -3877,6 +3890,8 @@ class OpenStudio::Model::Model
     surfaces_to_modify.sort.each do |surf|
       prev_created_consts = surf.apply_standard_construction(template, climate_zone, prev_created_consts)
     end
+
+
 
     # List the unique array of constructions
     if prev_created_consts.size.zero?
