@@ -1,4 +1,5 @@
 
+
 def load_test_model(model_name)
 
   # Load the test model
@@ -12,7 +13,7 @@ def load_test_model(model_name)
   
 end
 
-def create_ecbc_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false, load_existing_model = true)
+def create_ecbc_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false, load_existing_model = true, operation_type = "Daytime")
 
   # If requested, first attempt to load baseline model
   # from file instead of recreating it.
@@ -107,7 +108,7 @@ def create_ecbc_baseline_model(model_name, standard, climate_zone, building_type
 
   # Create the baseline model from the
   # supplied proposed test model
-  model.create_ecbc_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug)
+  model.create_ecbc_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug, operation_type)
 
   # Show the output messages
   errs = []
