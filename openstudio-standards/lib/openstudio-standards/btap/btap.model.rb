@@ -54,7 +54,7 @@ class OpenStudio::Model::Construction
                 construction,
                 conductance,
                 solarTransmittanceatNormalIncidence = nil,
-                visibleTransmittance = nil,
+                visibleTransmittance = nil
                 )
 
     if self.isOpaque
