@@ -1720,8 +1720,15 @@ class OpenStudio::Model::AirLoopHVAC
       # zone loop
       zones.each do |zone|
         # get design heat temperature for each zone; this is equivalent to design exhaust temperature
-        zone_sizing = zone.sizingZone
-        heat_design_t = zone_sizing.zoneHeatingDesignSupplyAirTemperature
+        heat_design_t = 21.0
+        zone_thermostat = zone.thermostat.get
+        if zone_thermostat.to_ThermostatSetpointDualSetpoint.is_initialized
+          dual_thermostat = zone_thermostat.to_ThermostatSetpointDualSetpoint.get
+          htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
+          htg_temp_sch_ruleset = htg_temp_sch.to_ScheduleRuleset.get
+          winter_dd_sch = htg_temp_sch_ruleset.winterDesignDaySchedule
+          heat_design_t = winter_dd_sch.values.max
+        end
 
         # initialize counter
         zone_oa = 0.0
@@ -1732,15 +1739,12 @@ class OpenStudio::Model::AirLoopHVAC
         spaces.each do |space|
           unless space.designSpecificationOutdoorAir.empty? # if empty, don't do anything
             outdoor_air = space.designSpecificationOutdoorAir.get
-
-            # in bTAP, outdoor air specified as outdoor air per person (m3/s/person)
-            oa_flow_per_person = outdoor_air.outdoorAirFlowperPerson
-            num_people = space.peoplePerFloorArea * space.floorArea
-            oa_flow = oa_flow_per_person * num_people # oa flow for the space
+            # in bTAP, outdoor air specified as outdoor air per 
+            oa_flow_per_floor_area = outdoor_air.outdoorAirFlowperFloorArea
+            oa_flow = oa_flow_per_floor_area * space.floorArea * zone.multiplier # oa flow for the space
             zone_oa += oa_flow # add up oa flow for all spaces to get zone air flow
           end
         end # space loop
-
         sum_zone_oa += zone_oa # sum of all zone oa flows to get system oa flow
         sum_zone_oa_times_heat_design_t += (zone_oa * heat_design_t) # calculated to get oa flow weighted average of design exhaust temperature
       end # zone loop
