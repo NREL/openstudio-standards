@@ -157,6 +157,9 @@ class OpenStudio::Model::Model
     if climate_zone.include? 'ASHRAE 169-2006-'
       getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
     end
+    if climate_zone.include? 'CEC T24-'
+      getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-', ''))
+    end
 
     # For some building types, stories are defined explicitly 
     if building_type == 'SmallHotel'
@@ -338,7 +341,7 @@ class OpenStudio::Model::Model
                         'Geometry.primary_school.osm'
                       end
     when 'SmallOffice'
-      geometry_file = if template == 'DOE Ref Pre-1980'
+      geometry_file = if template == 'DOE Ref Pre-1980' || template == 'CEC Pre-1978' || template == 'CEC T24 1978'
                         'Geometry.small_office_pre_1980.osm'
                       else
                         'Geometry.small_office.osm'
@@ -388,7 +391,7 @@ class OpenStudio::Model::Model
       end
     when 'RetailStandalone'
       case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'DOE Ref 2004'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'DOE Ref 2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
         geometry_file = 'Geometry.retail_standalone.pre1980_post1980.osm'
       when '90.1-2004', '90.1-2007'
         geometry_file = 'Geometry.retail_standalone.2004_2007.osm'
@@ -689,6 +692,7 @@ class OpenStudio::Model::Model
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
     else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Template- #{template} climate_zone- #{climate_zone} lookup_building_type- #{lookup_building_type} is_residential- #{is_residential}") # SHL delete later
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not create default construction set for the building.')
       return false
     end
@@ -1356,7 +1360,7 @@ class OpenStudio::Model::Model
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('DOE-2')
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('TARP')
     end
@@ -1442,7 +1446,7 @@ class OpenStudio::Model::Model
         # in the prototype buildings, which depends on climate zone.
         economizer_type = nil
         case template
-        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
           economizer_type = 'DifferentialDryBulb'
         when '90.1-2010', '90.1-2013'
           case climate_zone

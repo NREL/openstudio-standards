@@ -824,7 +824,7 @@ class OpenStudio::Model::Space
 
     # Determine the type of control required
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
 
       # Do nothing, no daylighting controls required
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, daylighting control not required by this standard.")
@@ -1362,7 +1362,7 @@ class OpenStudio::Model::Space
     sensor_2_window = nil
 
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
 
       # Do nothing, no daylighting controls required
 
@@ -1537,7 +1537,7 @@ class OpenStudio::Model::Space
   # Set the infiltration rate for this space to include
   # the impact of air leakage requirements in the standard.
   #
-  # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+  # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
   def apply_infiltration_rate(template)
@@ -1545,7 +1545,7 @@ class OpenStudio::Model::Space
     basic_infil_rate_cfm_per_ft2 = nil
     infil_type = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, infiltration rates are not defined using this method, no changes have been made to the model.")
       return true
     when '90.1-2004', '90.1-2007'
@@ -1587,7 +1587,7 @@ class OpenStudio::Model::Space
       # exterior surface area (for the E+ input field) this will include the exterior floor if present.
       all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / exteriorArea
 
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
       adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
       adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
       # Get the exterior wall area
@@ -1653,7 +1653,7 @@ class OpenStudio::Model::Space
 
   # Determine the component infiltration rate for this space
   #
-  # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+  # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
   # @return [Double] infiltration rate
   #   @units cubic meters per second (m^3/s)
   # @todo handle floors over unconditioned spaces
@@ -1663,10 +1663,10 @@ class OpenStudio::Model::Space
     basic_infil_rate_cfm_per_ft2 = nil
     infil_type = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, infiltration rates are not defined using this method, no changes have been made to the model.")
       return true
-    when '90.1-2004', '90.1-2007'
+    when '90.1-2004', '90.1-2007', 'CEC T24 2005', 'CEC T24 2008'
       basic_infil_rate_cfm_per_ft2 = 1.8
     when '90.1-2010', '90.1-2013'
       basic_infil_rate_cfm_per_ft2 = 1.0
