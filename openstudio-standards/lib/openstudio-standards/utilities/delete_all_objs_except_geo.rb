@@ -24,3 +24,8 @@ model.getLoops.each {|iobj| iobj.remove}
 
 osm_path = OpenStudio::Path.new("#{osm_outfile_name}")
 model.save(osm_path, true)
+
+puts "Spaces list:"
+model.getSpaces.each do |space|
+  puts space.name.get
+end
