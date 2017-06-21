@@ -35,9 +35,9 @@ class OpenStudio::Model::Model
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
         OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{building_type} at template #{template} are not available, the measure is disabled for this specific type.")
         return false
-      elsif template == 'NECB 2011'
-        OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at template #{template} is not available, the measure is disabled for this specific type.")
-        return false
+      #elsif template == 'NECB 2011'
+      #  OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at template #{template} is not available, the measure is disabled for this specific type.")
+      #  return false
       end
     end
 
