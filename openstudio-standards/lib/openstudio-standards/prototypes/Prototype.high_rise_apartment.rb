@@ -7,6 +7,7 @@ module HighriseApartment
     case template
 
     when 'NECB 2011'
+      sch = 'G'
       space_type_map = {
         'Office - enclosed' => ['Office'],
         "Corr. < 2.4m wide-sch-#{sch}" => ['T Corridor', 'G Corridor', 'F2 Corridor', 'F3 Corridor', 'F4 Corridor', 'M Corridor', 'F6 Corridor', 'F7 Corridor', 'F8 Corridor', 'F9 Corridor'],
