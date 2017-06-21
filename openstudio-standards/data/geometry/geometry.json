@@ -52,6 +52,10 @@
       "above_ground_floors": 1,
       "below_ground_floors": 0
     },
+    "Hospital": {
+      "above_ground_floors": 6,
+      "below_ground_floors": 0
+    },
     "SmallHotel": {
       "above_ground_floors": 4,
       "below_ground_floors": 0,

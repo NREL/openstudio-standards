@@ -66,8 +66,9 @@ class OpenStudio::Model::Model
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes 
       
-     
+     # Ensure that surfaces are intersected properly.
       load_geometry(building_type, template, climate_zone)
+      getSpaces.each { |space1| getSpaces.each { |space2| space1.intersectSurfaces(space2) } }
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes
       

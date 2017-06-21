@@ -8,7 +8,7 @@ module Hospital
     when 'NECB 2011'
       sch = 'B'
       space_type_map = {
-        "Electrical/Mechanical-sch-#{sch}" => ['Basement'],
+
         "Hospital corr. >= 2.4m-sch-#{sch}" => ['Corridor_Flr_1', 'Corridor_Flr_2', 'Corridor_Flr_5', 'Corridor_NW_Flr_3', 'Corridor_NW_Flr_4', 'Corridor_SE_Flr_3', 'Corridor_SE_Flr_4'],
         'Dining - bar lounge/leisure' => ['Dining_Flr_5'],
         'Hospital - emergency' => ['ER_Exam1_Mult4_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1'],
@@ -16,7 +16,7 @@ module Hospital
         'Hospital - patient room' => ['IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', 'PatRoom1_Mult10_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_3', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_3', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_3', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_3', 'PatRoom5_Mult10_Flr_4', 'PatRoom6_Flr_3', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_3', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_3', 'PatRoom8_Flr_4'],
         'Hospital - recovery' => ['ICU_Flr_2'],
         'Food preparation' => ['Kitchen_Flr_5'],
-        'Lab - research' => ['Lab_Flr_3', 'Lab_Flr_4'],
+        'Lab - research' => ['Lab_Flr_3', 'Lab_Flr_4','Basement'],
         'Office - enclosed' => ['Lobby_Records_Flr_1', 'Office1_Flr_5', 'Office1_Mult4_Flr_1', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5'],
         'Hospital - operating room' => ['OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2'],
         'Hospital - physical therapy' => ['PhysTherapy_Flr_3'],
