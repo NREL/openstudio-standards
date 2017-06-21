@@ -4,6 +4,10 @@
       "above_ground_floors": 2,
       "below_ground_floors": 0
     },
+	"HighriseApartment": {
+      "above_ground_floors": 10,
+      "below_ground_floors": 0
+    },
     "LargeHotel": {
       "above_ground_floors": 6,
       "below_ground_floors": 1
