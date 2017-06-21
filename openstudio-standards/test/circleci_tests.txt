@@ -34,6 +34,7 @@ doe_prototype/test_add_exterior_lights.rb
 doe_prototype/test_add_swh.rb
 doe_prototype/test_effective_num_stories.rb
 doe_prototype/test_space_type_hash.rb
+doe_prototype/test_add_hvac_systems.rb
 
 necb/test_necb_airloop_sizing_parameters.rb
 necb/test_necb_bldg_full_service_restaurant.rb

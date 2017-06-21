@@ -341,6 +341,13 @@ class OpenStudio::Model::Model
       # next if no service water heating demand
       next if not (gal_hr_per_area.to_f > 0.0 || gal_hr_peak_flow_rate.to_f > 0.0)
 
+      # If there is no SWH schedule specified, assume
+      # that there should be no SWH consumption for this space type.
+      unless flow_rate_fraction_schedule
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "No service water heating schedule was specified for #{space_type.name}, an always off schedule will be used and no water will be used.")
+        flow_rate_fraction_schedule = alwaysOffDiscreteSchedule
+      end
+
       if (stds_bldg_type == "MidriseApartment" && stds_space_type.include?("Apartment")) || stds_bldg_type == "StripMall"
         num_units = space_type_hash[space_type][:num_units].round
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating fpr #{num_units} #{space_type.name} units, each with max flow rate of #{gal_hr_peak_flow_rate} gal/hr per.")
@@ -753,8 +760,15 @@ class OpenStudio::Model::Model
     max_flow_rate_array = [] # gallons per hour
     water_use_equipment_array.each do |water_use_equip|
       water_use_equip_sch = water_use_equip.flowRateFractionSchedule
-      next if not water_use_equip_sch.is_initialized and water_use_equip_sch.get.to_ScheduleRuleset.is_initialized
-      water_use_equip_sch = water_use_equip_sch.get.to_ScheduleRuleset.get
+      next if water_use_equip_sch.empty?
+      water_use_equip_sch = water_use_equip_sch.get
+      if water_use_equip_sch.to_ScheduleRuleset.is_initialized
+        water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get
+      elsif water_use_equip_sch.to_ScheduleConstant.is_initialized
+        water_use_equip_sch = water_use_equip_sch.to_ScheduleConstant.get
+      elsif water_use_equip_sch.to_ScheduleCompact.is_initialized
+        water_use_equip_sch = water_use_equip_sch.to_ScheduleCompact.get
+      end
       max_sch_value = water_use_equip_sch.annual_min_max_value['max']
 
       # get water_use_equip_def to get max flow rate
