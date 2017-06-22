@@ -22,11 +22,6 @@ namespace :test do
         return false
     end
 
-    desc 'Run the weather file tests'
-    Rake::TestTask.new('weather') do |t|
-        t.libs << 'test'
-        t.test_files = FileList['openstudio-standards/test/necb/test_weather.rb']
-    end
     
     desc 'Run BTAP.perform_qaqc() test'
     Rake::TestTask.new(:btap_json_test) do |t|
@@ -36,11 +31,6 @@ namespace :test do
       t.verbose = true
     end
 
-    desc 'Run the compliance file tests'
-    Rake::TestTask.new('compliance') do |t|
-        t.libs << 'test'
-        t.test_files = FileList['openstudio-standards/test/necb/test_compliance.rb']
-    end
     ['90_1_prm','90_1_general','doe_prototype','necb'].each do |type|
         desc "Manual Run CircleCI tests #{type}"
         Rake::TestTask.new("circ-#{type}") do |t|
@@ -49,6 +39,17 @@ namespace :test do
             t.test_files = array
         end
     end
+
+
+  
+    desc "Manual Run All CircleCI tests"
+    Rake::TestTask.new("circ-all-tests") do |t|
+        array = full_file_list
+        t.libs << 'test'
+        t.test_files = array
+    end
+    
+
 
     # These tests only available in the CI environment
     if ENV['CI'] == 'true'
@@ -136,48 +137,6 @@ namespace :test do
             end
         end
 
-    end
-
-    desc 'Run the NECB building creation tests'
-    Rake::TestTask.new('necb-buildings') do |t|
-        t.libs << 'test'
-        t.test_files = FileList[
-            'openstudio-standards/test/necb/test_necb_airloop_sizing_parameters.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_full_service_restaurant.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_high_rise_apartment.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_large_hotel.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_large_office.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_medium_office.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_midrise_apartment_office.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_outpatient.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_primary_school.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_quick_service_restaurant.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_retail_standalone.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_retail_stripmall.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_secondary_school.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_small_hotel.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_small_office.rb',
-            'openstudio-standards/test/necb/test_necb_bldg_warehouse.rb',
-            'openstudio-standards/test/necb/test_necb_boiler_rules.rb',
-            'openstudio-standards/test/necb/test_necb_chiller_rules.rb', #42s
-            'openstudio-standards/test/necb/test_necb_constructions_fdwr.rb', #19s
-            'openstudio-standards/test/necb/test_necb_coolingtower_rules.rb',
-            'openstudio-standards/test/necb/test_necb_default_spacetypes.rb', #30s
-            'openstudio-standards/test/necb/test_necb_default_system_selection.rb',
-            'openstudio-standards/test/necb/test_necb_fan_rules.rb',
-            'openstudio-standards/test/necb/test_necb_heatpump_rules.rb',
-            'openstudio-standards/test/necb/test_necb_hrv_rules.rb',
-            'openstudio-standards/test/necb/test_necb_loop_rules.rb',
-            'openstudio-standards/test/necb/test_necb_unitary_rules.rb',
-            'openstudio-standards/test/necb/test_necb_waterheater_rules.rb',
-            'openstudio-standards/test/necb/test_necb_weather.rb'
-        ]
-    end
-
-    desc 'Run the NECB 2011 HVAC Tests'
-    Rake::TestTask.new('necb-hvac') do |t|
-        t.libs << 'test'
-        t.test_files = FileList['openstudio-standards/test/necb/test_create_necb_hvac.rb']
     end
 
 end

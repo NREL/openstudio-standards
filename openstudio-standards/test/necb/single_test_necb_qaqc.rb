@@ -1,10 +1,10 @@
-require_relative 'helpers/minitest_helper'
-require_relative 'helpers/create_doe_prototype_helper'
+require_relative '../helpers/minitest_helper'
+require_relative '../helpers/create_doe_prototype_helper'
 require 'json'
 require 'parallel'
 require 'etc'
 
-$LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 def run_dir(test_name)
   # always generate test output in specially named 'output' directory so result files are not made part of the measure
   "#{File.dirname(__FILE__)}/output#{Time.now.strftime("%m-%d")}/#{test_name}"
