@@ -16,7 +16,7 @@ model.getDefaultConstructionSets.each {|iobj| iobj.remove}
 model.getLayeredConstructions.each {|iobj| iobj.remove}
 model.getSpaceLoadDefinitions.each {|iobj| iobj.remove}
 model.getSpaceTypes.each {|iobj| iobj.remove}
-model.getBuildingStorys.each {|iobj| iobj.remove}
+#model.getBuildingStorys.each {|iobj| iobj.remove}
 model.getShadingSurfaceGroups.each {|iobj| iobj.remove}
 model.getExteriorLightss.each {|iobj| iobj.remove}
 model.getThermalZones.each {|iobj| iobj.remove}
