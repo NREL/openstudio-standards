@@ -1,0 +1,678 @@
+{
+  "FullServiceRestaurant": {
+    "DOE Ref Pre-1980" :{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"]
+    },
+    "DOE Ref 1980-2004":{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "90.1-2010":{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "90.1-2007":{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "90.1-2004":{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "90.1-2013":{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "NECB 2011":{
+      "- undefined -" : ["attic"],
+      "Dining - family space" : ["Dining"],
+      "Food preparation" : ["Kitchen"]
+    },
+    "default":{
+      "- undefined -" : ["attic"],
+      "Dining - family space" : ["Dining"],
+      "Food preparation" : ["Kitchen"]
+    }
+  },
+  "HighriseApartment":{
+
+    "NECB 2011" :{
+      "Office - enclosed" : ["Office"],
+      "Corr. < 2.4m wide-sch-G" : ["T Corridor", "G Corridor", "F2 Corridor", "F3 Corridor", "F4 Corridor", "M Corridor", "F6 Corridor", "F7 Corridor", "F8 Corridor", "F9 Corridor"],
+      "Dwelling Unit(s)" : ["G SW Apartment", "G NW Apartment", "G NE Apartment", "G N1 Apartment", "G N2 Apartment", "G S1 Apartment", "G S2 Apartment", "F2 SW Apartment", "F2 NW Apartment", "F2 SE Apartment", "F2 NE Apartment", "F2 N1 Apartment", "F2 N2 Apartment", "F2 S1 Apartment", "F2 S2 Apartment", "F3 SW Apartment", "F3 NW Apartment", "F3 SE Apartment", "F3 NE Apartment", "F3 N1 Apartment", "F3 N2 Apartment", "F3 S1 Apartment", "F3 S2 Apartment", "F4 SW Apartment", "F4 NW Apartment", "F4 SE Apartment", "F4 NE Apartment", "F4 N1 Apartment", "F4 N2 Apartment", "F4 S1 Apartment", "F4 S2 Apartment", "M SW Apartment", "M NW Apartment", "M SE Apartment", "M NE Apartment", "M N1 Apartment", "M N2 Apartment", "M S1 Apartment", "M S2 Apartment", "F6 SW Apartment", "F6 NW Apartment", "F6 SE Apartment", "F6 NE Apartment", "F6 N1 Apartment", "F6 N2 Apartment", "F6 S1 Apartment", "F6 S2 Apartment", "F7 SW Apartment", "F7 NW Apartment", "F7 SE Apartment", "F7 NE Apartment", "F7 N1 Apartment", "F7 N2 Apartment", "F7 S1 Apartment", "F7 S2 Apartment", "F8 SW Apartment", "F8 NW Apartment", "F8 SE Apartment", "F8 NE Apartment", "F8 N1 Apartment", "F8 N2 Apartment", "F8 S1 Apartment", "F8 S2 Apartment", "F9 SW Apartment", "F9 NW Apartment", "F9 SE Apartment", "F9 NE Apartment", "F9 N1 Apartment", "F9 N2 Apartment", "F9 S1 Apartment", "F9 S2 Apartment", "T SW Apartment", "T NW Apartment", "T SE Apartment", "T NE Apartment", "T N1 Apartment", "T N2 Apartment", "T S1 Apartment", "T S2 Apartment"]
+    },
+    "default" :{
+      "Office" : ["Office"],
+      "Corridor" : ["G Corridor", "F2 Corridor", "F3 Corridor", "F4 Corridor", "M Corridor", "F6 Corridor", "F7 Corridor", "F8 Corridor", "F9 Corridor"],
+      "Corridor_topfloor" : ["T Corridor"],
+      "Apartment" : ["G SW Apartment", "G NW Apartment", "G NE Apartment", "G N1 Apartment", "G N2 Apartment", "G S1 Apartment", "G S2 Apartment", "F2 SW Apartment", "F2 NW Apartment", "F2 SE Apartment", "F2 NE Apartment", "F2 N1 Apartment", "F2 N2 Apartment", "F2 S1 Apartment", "F2 S2 Apartment", "F3 SW Apartment", "F3 NW Apartment", "F3 SE Apartment", "F3 NE Apartment", "F3 N1 Apartment", "F3 N2 Apartment", "F3 S1 Apartment", "F3 S2 Apartment", "F4 SW Apartment", "F4 NW Apartment", "F4 SE Apartment", "F4 NE Apartment", "F4 N1 Apartment", "F4 N2 Apartment", "F4 S1 Apartment", "F4 S2 Apartment", "M SW Apartment", "M NW Apartment", "M SE Apartment", "M NE Apartment", "M N1 Apartment", "M N2 Apartment", "M S1 Apartment", "M S2 Apartment", "F6 SW Apartment", "F6 NW Apartment", "F6 SE Apartment", "F6 NE Apartment", "F6 N1 Apartment", "F6 N2 Apartment", "F6 S1 Apartment", "F6 S2 Apartment", "F7 SW Apartment", "F7 NW Apartment", "F7 SE Apartment", "F7 NE Apartment", "F7 N1 Apartment", "F7 N2 Apartment", "F7 S1 Apartment", "F7 S2 Apartment", "F8 SW Apartment", "F8 NW Apartment", "F8 SE Apartment", "F8 NE Apartment", "F8 N1 Apartment", "F8 N2 Apartment", "F8 S1 Apartment", "F8 S2 Apartment", "F9 SW Apartment", "F9 NW Apartment", "F9 SE Apartment", "F9 NE Apartment", "F9 N1 Apartment", "F9 N2 Apartment", "F9 S1 Apartment", "F9 S2 Apartment"],
+      "Apartment_topfloor_WE" : ["T SW Apartment", "T NW Apartment", "T SE Apartment", "T NE Apartment"],
+      "Apartment_topfloor_NS" : ["T N1 Apartment", "T N2 Apartment", "T S1 Apartment", "T S2 Apartment"]
+    }
+  },
+  "Hospital":{
+    "NECB 2011" :{
+      "Hospital corr. >= 2.4m-sch-B" : ["Corridor_Flr_1", "Corridor_Flr_2", "Corridor_Flr_5", "Corridor_NW_Flr_3", "Corridor_NW_Flr_4", "Corridor_SE_Flr_3", "Corridor_SE_Flr_4"],
+      "Dining - bar lounge/leisure" : ["Dining_Flr_5"],
+      "Hospital - emergency" : ["ER_Exam1_Mult4_Flr_1", "ER_Exam3_Mult4_Flr_1", "ER_Trauma1_Flr_1", "ER_Trauma2_Flr_1", "ER_Triage_Mult4_Flr_1"],
+      "Hospital - nurses' station" : ["ER_NurseStn_Lobby_Flr_1", "ICU_NurseStn_Lobby_Flr_2", "NurseStn_Lobby_Flr_3", "NurseStn_Lobby_Flr_4", "NurseStn_Lobby_Flr_5", "OR_NurseStn_Lobby_Flr_2"],
+      "Hospital - patient room" : ["IC_PatRoom1_Mult5_Flr_2", "IC_PatRoom2_Flr_2", "IC_PatRoom3_Mult6_Flr_2", "PatRoom1_Mult10_Flr_3", "PatRoom1_Mult10_Flr_4", "PatRoom2_Flr_3", "PatRoom2_Flr_4", "PatRoom3_Mult10_Flr_3", "PatRoom3_Mult10_Flr_4", "PatRoom4_Flr_3", "PatRoom4_Flr_4", "PatRoom5_Mult10_Flr_3", "PatRoom5_Mult10_Flr_4", "PatRoom6_Flr_3", "PatRoom6_Flr_4", "PatRoom7_Mult10_Flr_3", "PatRoom7_Mult10_Flr_4", "PatRoom8_Flr_3", "PatRoom8_Flr_4"],
+      "Hospital - recovery" : ["ICU_Flr_2"],
+      "Food preparation" : ["Kitchen_Flr_5"],
+      "Lab - research" : ["Lab_Flr_3", "Lab_Flr_4", "Basement"],
+      "Office - enclosed" : ["Lobby_Records_Flr_1", "Office1_Flr_5", "Office1_Mult4_Flr_1", "Office2_Mult5_Flr_5", "Office3_Flr_5", "Office4_Mult6_Flr_5"],
+      "Hospital - operating room" : ["OR1_Flr_2", "OR2_Mult5_Flr_2", "OR3_Flr_2", "OR4_Flr_2"],
+      "Hospital - physical therapy" : ["PhysTherapy_Flr_3"],
+      "Hospital - radiology/imaging" : ["Radiology_Flr_4"]
+    },
+    "default" :{
+      "Corridor" : ["Corridor_Flr_1", "Corridor_Flr_2", "Corridor_SE_Flr_3", "Corridor_NW_Flr_3", "Corridor_SE_Flr_4", "Corridor_NW_Flr_4", "Corridor_Flr_5"],
+      "Dining" : ["Dining_Flr_5"],
+      "ER_Exam" : ["ER_Exam1_Mult4_Flr_1", "ER_Exam3_Mult4_Flr_1"],
+      "ER_NurseStn" : ["ER_NurseStn_Lobby_Flr_1"],
+      "ER_Trauma" : ["ER_Trauma1_Flr_1", "ER_Trauma2_Flr_1"],
+      "ER_Triage" : ["ER_Triage_Mult4_Flr_1"],
+      "ICU_NurseStn" : ["ICU_NurseStn_Lobby_Flr_2"],
+      "ICU_Open" : ["ICU_Flr_2"],
+      "ICU_PatRm" : ["IC_PatRoom1_Mult5_Flr_2", "IC_PatRoom2_Flr_2", "IC_PatRoom3_Mult6_Flr_2"],
+      "Kitchen" : ["Kitchen_Flr_5"],
+      "Lab" : ["Lab_Flr_3", "Lab_Flr_4"],
+      "Lobby" : ["Lobby_Records_Flr_1"],
+      "NurseStn" : ["OR_NurseStn_Lobby_Flr_2", "NurseStn_Lobby_Flr_3", "NurseStn_Lobby_Flr_4", "NurseStn_Lobby_Flr_5"],
+      "OR" : ["OR1_Flr_2", "OR2_Mult5_Flr_2", "OR3_Flr_2", "OR4_Flr_2"],
+      "Office" : ["Office1_Mult4_Flr_1", "Office1_Flr_5", "Office2_Mult5_Flr_5", "Office3_Flr_5", "Office4_Mult6_Flr_5"],
+      "Basement" : ["Basement"],
+      "PatRoom" : ["PatRoom1_Mult10_Flr_3", "PatRoom2_Flr_3", "PatRoom3_Mult10_Flr_3", "PatRoom4_Flr_3", "PatRoom5_Mult10_Flr_3", "PatRoom6_Flr_3", "PatRoom7_Mult10_Flr_3", "PatRoom8_Flr_3", "PatRoom1_Mult10_Flr_4", "PatRoom2_Flr_4", "PatRoom3_Mult10_Flr_4", "PatRoom4_Flr_4", "PatRoom5_Mult10_Flr_4", "PatRoom6_Flr_4", "PatRoom7_Mult10_Flr_4", "PatRoom8_Flr_4"],
+      "PhysTherapy" : ["PhysTherapy_Flr_3"],
+      "Radiology" : ["Radiology_Flr_4"]
+    }
+  },
+  "LargeHotel":{
+    "NECB 2011" :{
+      "Hotel/Motel - dining" : ["Banquet_Flr_6", "Dining_Flr_6"],
+      "Storage area" : ["Basement", "Storage_Flr_1"],
+      "Retail - mall concourse" : ["Cafe_Flr_1"],
+      "Corr. >= 2.4m wide-sch-E" : ["Corridor_Flr_3", "Corridor_Flr_6"],
+      "Food preparation" : ["Kitchen_Flr_6"],
+      "Hospital - laundry/washing" : ["Laundry_Flr_1"],
+      "Hotel/Motel - lobby" : ["Lobby_Flr_1"],
+      "Electrical/Mechanical-sch-E" : ["Mech_Flr_1"],
+      "Retail - sales" : ["Retail_1_Flr_1", "Retail_2_Flr_1"],
+      "Hotel/Motel - rooms" : ["Room_1_Flr_3", "Room_1_Flr_6", "Room_2_Flr_3", "Room_2_Flr_6", "Room_3_Mult19_Flr_3", "Room_3_Mult9_Flr_6", "Room_4_Mult19_Flr_3", "Room_5_Flr_3", "Room_6_Flr_3"]
+      
+    },
+    "default":{
+      "Banquet" : ["Banquet_Flr_6", "Dining_Flr_6"],
+      "Basement" : ["Basement"],
+      "Cafe" : ["Cafe_Flr_1"],
+      "Corridor" : ["Corridor_Flr_6"],
+      "Corridor2" : ["Corridor_Flr_3"],
+      "GuestRoom" : ["Room_1_Flr_3", "Room_2_Flr_3", "Room_5_Flr_3", "Room_6_Flr_3"],
+      "GuestRoom2" : ["Room_3_Mult19_Flr_3", "Room_4_Mult19_Flr_3"],
+      "GuestRoom3" : ["Room_1_Flr_6", "Room_2_Flr_6"],
+      "GuestRoom4" : ["Room_3_Mult9_Flr_6"],
+      "Kitchen" : ["Kitchen_Flr_6"],
+      "Laundry" : ["Laundry_Flr_1"],
+      "Lobby" : ["Lobby_Flr_1"],
+      "Mechanical" : ["Mech_Flr_1"],
+      "Retail" : ["Retail_1_Flr_1"],
+      "Retail2" : ["Retail_2_Flr_1"],
+      "Storage" : ["Storage_Flr_1"]
+    }
+  },
+  "LargeOffice":{
+    "DOE Ref Pre-1980" :{
+      "WholeBuilding - Lg Office" : [
+        "Basement", "Core_bottom", "Core_mid", "Core_top",
+        "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4",
+        "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4",
+        "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"
+      ]
+    },
+    "DOE Ref 1980-2004": {
+      "WholeBuilding - Lg Office" : [
+        "Basement", "Core_bottom", "Core_mid", "Core_top",
+        "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4",
+        "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4",
+        "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"
+      ]
+    },
+    "90.1-2004" : {
+      "WholeBuilding - Lg Office" : [
+        "Basement", "Core_bottom", "Core_mid", "Core_top",
+        "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4",
+        "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4",
+        "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"
+      ],
+      "OfficeLarge Data Center" : ["DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", "DataCenter_top_ZN_6"],
+      "OfficeLarge Main Data Center" : [
+        "DataCenter_basement_ZN_6"
+      ]
+    },
+    "90.1-2007" : {
+      "WholeBuilding - Lg Office" : [
+        "Basement", "Core_bottom", "Core_mid", "Core_top", 
+        "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4",
+        "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4",
+        "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"
+      ],
+      "OfficeLarge Data Center" : ["DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", "DataCenter_top_ZN_6"],
+      "OfficeLarge Main Data Center" : [
+        "DataCenter_basement_ZN_6"
+      ]
+    },
+    "90.1-2010" : {
+      "WholeBuilding - Lg Office" : [
+        "Basement", "Core_bottom", "Core_mid", "Core_top", 
+        "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4",
+        "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4",
+        "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"
+      ],
+      "OfficeLarge Data Center" : ["DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", "DataCenter_top_ZN_6"],
+      "OfficeLarge Main Data Center" : [
+        "DataCenter_basement_ZN_6"
+      ]
+    },
+    "90.1-2013" : {
+      "WholeBuilding - Lg Office" : [
+        "Basement", "Core_bottom", "Core_mid", "Core_top", 
+        "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4",
+        "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4",
+        "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"
+      ],
+      "OfficeLarge Data Center" : ["DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", "DataCenter_top_ZN_6"],
+      "OfficeLarge Main Data Center" : [
+        "DataCenter_basement_ZN_6"
+      ]
+    },
+    "NECB 2011":{
+      "Electrical/Mechanical-sch-A" : ["Basement"],
+      "Office - open plan" : ["Core_bottom", "Core_mid", "Core_top", "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4", "DataCenter_basement_ZN_6", "DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", "DataCenter_top_ZN_6"],
+      "- undefined -" : ["GroundFloor_Plenum", "TopFloor_Plenum", "MidFloor_Plenum"]
+      
+    },
+    "default":{
+      "Electrical/Mechanical-sch-A" : ["Basement"],
+      "Office - open plan" : ["Core_bottom", "Core_mid", "Core_top", "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4", "DataCenter_basement_ZN_6", "DataCenter_bot_ZN_6", "DataCenter_mid_ZN_6", "DataCenter_top_ZN_6"],
+      "- undefined -" : ["GroundFloor_Plenum", "TopFloor_Plenum", "MidFloor_Plenum"]
+      
+    }
+  },
+  "MediumOffice":{
+    "NECB 2011":{
+        "- undefined -" : ["FirstFloor_Plenum", "TopFloor_Plenum", "MidFloor_Plenum"],
+        "Office - open plan" : ["Core_bottom", "Core_mid", "Core_top", "Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4"]
+
+      },
+    "default" : {
+        "WholeBuilding - Md Office" : ["Perimeter_bot_ZN_1", "Perimeter_bot_ZN_2", "Perimeter_bot_ZN_3", "Perimeter_bot_ZN_4", "Core_bottom", "Perimeter_mid_ZN_1", "Perimeter_mid_ZN_2", "Perimeter_mid_ZN_3", "Perimeter_mid_ZN_4", "Core_mid", "Perimeter_top_ZN_1", "Perimeter_top_ZN_2", "Perimeter_top_ZN_3", "Perimeter_top_ZN_4", "Core_top"]
+      }
+
+  },
+  "MidriseApartment":{
+    "90.1-2004" :{
+      "Office" : ["Office"],
+      "Corridor" : ["G Corridor", "M Corridor"],
+      "Corridor_topfloor" : ["T Corridor"],
+      "Apartment" : ["G SW Apartment","G NW Apartment","G NE Apartment","G N1 Apartment","G N2 Apartment","G S1 Apartment","G S2 Apartment","M SW Apartment","M NW Apartment","M SE Apartment","M NE Apartment","M N1 Apartment","M N2 Apartment","M S1 Apartment","M S2 Apartment"],
+      "Apartment_topfloor_WE" : ["T SW Apartment","T NW Apartment","T SE Apartment","T NE Apartment"],
+      "Apartment_topfloor_NS" : ["T N1 Apartment","T N2 Apartment","T S1 Apartment","T S2 Apartment"]
+    },
+    "90.1-2007" :{
+      "Office" : ["Office"],
+      "Corridor" : ["G Corridor", "M Corridor"],
+      "Corridor_topfloor" : ["T Corridor"],
+      "Apartment" : ["G SW Apartment","G NW Apartment","G NE Apartment","G N1 Apartment","G N2 Apartment","G S1 Apartment","G S2 Apartment","M SW Apartment","M NW Apartment","M SE Apartment","M NE Apartment","M N1 Apartment","M N2 Apartment","M S1 Apartment","M S2 Apartment"],
+      "Apartment_topfloor_WE" : ["T SW Apartment","T NW Apartment","T SE Apartment","T NE Apartment"],
+      "Apartment_topfloor_NS" : ["T N1 Apartment","T N2 Apartment","T S1 Apartment","T S2 Apartment"]
+    }, 
+    "90.1-2010" :{
+      "Office" : ["Office"],
+      "Corridor" : ["G Corridor", "M Corridor"],
+      "Corridor_topfloor" : ["T Corridor"],
+      "Apartment" : ["G SW Apartment","G NW Apartment","G NE Apartment","G N1 Apartment","G N2 Apartment","G S1 Apartment","G S2 Apartment","M SW Apartment","M NW Apartment","M SE Apartment","M NE Apartment","M N1 Apartment","M N2 Apartment","M S1 Apartment","M S2 Apartment"],
+      "Apartment_topfloor_WE" : ["T SW Apartment","T NW Apartment","T SE Apartment","T NE Apartment"],
+      "Apartment_topfloor_NS" : ["T N1 Apartment","T N2 Apartment","T S1 Apartment","T S2 Apartment"]
+    }, 
+    "90.1-2013" :{
+      "Office" : ["Office"],
+      "Corridor" : ["G Corridor", "M Corridor"],
+      "Corridor_topfloor" : ["T Corridor"],
+      "Apartment" : ["G SW Apartment","G NW Apartment","G NE Apartment","G N1 Apartment","G N2 Apartment","G S1 Apartment","G S2 Apartment","M SW Apartment","M NW Apartment","M SE Apartment","M NE Apartment","M N1 Apartment","M N2 Apartment","M S1 Apartment","M S2 Apartment"],
+      "Apartment_topfloor_WE" : ["T SW Apartment","T NW Apartment","T SE Apartment","T NE Apartment"],
+      "Apartment_topfloor_NS" : ["T N1 Apartment","T N2 Apartment","T S1 Apartment","T S2 Apartment"]
+    },
+    "DOE Ref 1980-2004" :{
+      "Office" : ["Office"],
+      "Corridor" : ["G Corridor", "M Corridor", "T Corridor"],
+      "Apartment" : ["G SW Apartment", "G NW Apartment", "G NE Apartment", "G N1 Apartment", "G N2 Apartment", "G S1 Apartment", "G S2 Apartment", "M SW Apartment", "M NW Apartment", "M SE Apartment", "M NE Apartment", "M N1 Apartment", "M N2 Apartment", "M S1 Apartment", "M S2 Apartment", "T SW Apartment", "T NW Apartment", "T SE Apartment", "T NE Apartment", "T N1 Apartment", "T N2 Apartment", "T S1 Apartment", "T S2 Apartment"]
+    },
+    "DOE Ref Pre-1980" :{
+      "Office" : ["Office"],
+      "Corridor" : ["G Corridor", "M Corridor", "T Corridor"],
+      "Apartment" : ["G SW Apartment", "G NW Apartment", "G NE Apartment", "G N1 Apartment", "G N2 Apartment", "G S1 Apartment", "G S2 Apartment", "M SW Apartment", "M NW Apartment", "M SE Apartment", "M NE Apartment", "M N1 Apartment", "M N2 Apartment", "M S1 Apartment", "M S2 Apartment", "T SW Apartment", "T NW Apartment", "T SE Apartment", "T NE Apartment", "T N1 Apartment", "T N2 Apartment", "T S1 Apartment", "T S2 Apartment"]
+    },
+    "NECB 2011" : {
+      "Corr. < 2.4m wide-sch-G" : ["G Corridor", "M Corridor", "T Corridor"],
+      "Dwelling Unit(s)" : ["G N1 Apartment", "G N2 Apartment", "G NE Apartment",
+                             "G NW Apartment", "G S1 Apartment", "G S2 Apartment",
+                             "G SW Apartment", "M N1 Apartment", "M N2 Apartment",
+                             "M NE Apartment", "M NW Apartment", "M S1 Apartment",
+                             "M S2 Apartment", "M SE Apartment", "M SW Apartment",
+                             "T N1 Apartment", "T N2 Apartment", "T NE Apartment",
+                             "T NW Apartment", "T S1 Apartment", "T S2 Apartment",
+                             "T SE Apartment", "T SW Apartment"],
+      "Conf./meet./multi-purpose" : ["Office"]
+    },
+    "default" : {
+      "Corr. < 2.4m wide-sch-G" : ["G Corridor", "M Corridor", "T Corridor"],
+      "Dwelling Unit(s)" : ["G N1 Apartment", "G N2 Apartment", "G NE Apartment",
+                             "G NW Apartment", "G S1 Apartment", "G S2 Apartment",
+                             "G SW Apartment", "M N1 Apartment", "M N2 Apartment",
+                             "M NE Apartment", "M NW Apartment", "M S1 Apartment",
+                             "M S2 Apartment", "M SE Apartment", "M SW Apartment",
+                             "T N1 Apartment", "T N2 Apartment", "T NE Apartment",
+                             "T NW Apartment", "T S1 Apartment", "T S2 Apartment",
+                             "T SE Apartment", "T SW Apartment"],
+      "Conf./meet./multi-purpose" : ["Office"]
+    }
+  },
+  "Outpatient":{
+    "NECB 2011": {
+      "Hospital - operating room" : ["Floor 1 Anesthesia", "Floor 1 Operating Room 1", 
+              "Floor 1 Operating Room 2", "Floor 1 Operating Room 3", "Floor 1 Procedure Room"],
+      "Hospital - patient room" : ["Floor 1 Pre-Op Room 1", "Floor 1 Pre-Op Room 2"],
+      "Hospital - exam" : ["Floor 2 Exam 1", "Floor 2 Exam 2", "Floor 2 Exam 3", "Floor 2 Exam 4", 
+              "Floor 2 Exam 5", "Floor 2 Exam 6", "Floor 2 Exam 7", "Floor 2 Exam 8", "Floor 2 Exam 9", "Floor 3 Treatment"],
+      "Hospital corr. >= 2.4m-sch-H"  : ["Floor 1 IT Hall", "Floor 1 Lobby Hall", "Floor 1 Vestibule", "Floor 1 Locker Room Hall", 
+              "Floor 1 MRI Hall", "Floor 1 Nurse Hall", "Floor 1 Pre-Op Hall", "Floor 1 Reception Hall", 
+              "Floor 1 Sterile Hall", "Floor 1 Scrub", "Floor 1 Utility Hall", "Floor 2 Exam Hall 1", 
+              "Floor 2 Exam Hall 2", "Floor 2 Exam Hall 3", "Floor 2 Exam Hall 4", "Floor 2 Exam Hall 5", 
+              "Floor 2 Exam Hall 6", "Floor 2 Office Hall", "Floor 2 Reception Hall", "Floor 2 Work Hall", 
+              "Floor 3 Elevator Hall", "Floor 3 Mechanical Hall", "Floor 3 Office Hall"], 
+      "Hospital - lounge/recreation" : ["Floor 1 Lounge", "Floor 2 Lounge", "Floor 3 Lounge", "Floor 1 Step Down"],
+      "Hospital - nurses' station" : ["Floor 1 Nurse Station", "Floor 2 Nurse Station 2", "Floor 2 Nurse Station 1", "Floor 1 Nourishment"],
+      "Hospital - radiology/imaging" : ["Floor 1 MRI Control Room", "Floor 1 MRI Room", "Floor 2 X-Ray"],
+      "Locker room-sch-H" : ["Floor 3 Locker", "Floor 1 Locker Room", "Floor 1 PACU"],
+      "Lobby - elevator"  : ["NW Elevator", "Floor 1 Lobby"],
+      "Office - enclosed" : ["Floor 1 Office","Floor 1 Scheduling", "Floor 2 Office", "Floor 2 Scheduling 1", 
+              "Floor 2 Scheduling 2", "Floor 3 Office", "Floor 1 Dictation","Floor 1 Dressing Room", "Floor 1 IT Room", 
+              "Floor 2 Dictation", "Floor 3 Dressing Room", "Floor 2 Work", "Floor 3 Work", "Floor 1 Humid", "Floor 3 Humid"],
+      "Stairway-sch-H" : ["NE Stair", "NW Stair", "SW Stair"],
+      "Washroom-sch-H" : ["Floor 1 Lobby Toilet", "Floor 1 MRI Toilet", "Floor 1 Nurse Toilet", "Floor 1 Pre-Op Toilet", 
+              "Floor 2 Conference Toilet", "Floor 2 Reception Toilet", "Floor 2 Work Toilet", "Floor 3 Lounge Toilet", 
+              "Floor 3 Office Toilet", "Floor 3 Physical Therapy Toilet"],
+      "Storage area" : ["Floor 1 Bio Haz", "Floor 1 Med Gas", "Floor 1 Nurse Janitor", "Floor 1 Sterile Storage", "Floor 1 Storage", 
+              "Floor 1 Sub-Sterile", "Floor 1 Utility Janitor", "Floor 2 Janitor", "Floor 3 Janitor", "Floor 2 Storage 1", 
+              "Floor 2 Storage 2", "Floor 2 Storage 3", "Floor 1 Utility Room", "Floor 2 Utility", "Floor 3 Utility", 
+              "Floor 3 Storage 1", "Floor 3 Storage 2", "Floor 3 Undeveloped 1", "Floor 3 Undeveloped 2"],
+      "Hospital - physical therapy" : ["Floor 3 Physical Therapy 1", "Floor 3 Physical Therapy 2"],
+      "Hospital - recovery" : ["Floor 1 Recovery Room"], 
+      "Hospital - laundry/washing" : ["Floor 1 Clean", "Floor 1 Clean Work", "Floor 1 Soil Hold", "Floor 1 Soil", "Floor 1 Soil Work"],
+      "Conf./meet./multi-purpose" : ["Floor 1 Reception", "Floor 2 Reception", "Floor 2 Conference"],
+      "Electrical/Mechanical-sch-H" : ["Floor 1 Electrical Room", "Floor 1 Elevator Pump Room", "Floor 3 Mechanical"],
+      "Dining - bar lounge/leisure" : ["Floor 1 Cafe"]
+    },
+    "default":{
+      "Anesthesia" : ["Floor 1 Anesthesia"],
+      "BioHazard" : ["Floor 1 Bio Haz"],
+      "Cafe" : ["Floor 1 Cafe"],
+      "CleanWork" : ["Floor 1 Clean", "Floor 1 Clean Work"],
+      "Conference" : ["Floor 2 Conference"],
+      "DressingRoom" : ["Floor 1 Dressing Room", "Floor 3 Dressing Room"],
+      "Elec/MechRoom" : ["Floor 1 Electrical Room", "Floor 3 Mechanical"],
+      "ElevatorPumpRoom" : ["Floor 1 Elevator Pump Room"],
+      "Exam" : ["Floor 2 Exam 1", "Floor 2 Exam 2", "Floor 2 Exam 3", "Floor 2 Exam 4", "Floor 2 Exam 5", "Floor 2 Exam 6", "Floor 2 Exam 7",
+                "Floor 2 Exam 8", "Floor 2 Exam 9", "Floor 3 Treatment"],
+      "Hall" : ["Floor 1 IT Hall", "Floor 1 Lobby Hall", "Floor 1 Locker Room Hall", "Floor 1 MRI Hall", "Floor 1 Nurse Hall", "Floor 1 Pre-Op Hall",
+                "Floor 1 Reception Hall", "Floor 1 Sterile Hall", "Floor 2 Exam Hall 1", "Floor 2 Exam Hall 2", "Floor 2 Exam Hall 3",
+                "Floor 2 Exam Hall 4", "Floor 2 Exam Hall 5", "Floor 2 Exam Hall 6", "Floor 2 Office Hall", "Floor 2 Reception Hall", "Floor 2 Work Hall",
+                "Floor 3 Mechanical Hall", "Floor 1 Scrub"],
+      "Hall_infil" : ["Floor 1 Utility Hall", "Floor 1 Sub-Sterile", "Floor 1 Vestibule", "Floor 3 Elevator Hall", "Floor 3 Office Hall"],
+      "IT_Room" : ["Floor 1 IT Room"],
+      "Janitor" : ["Floor 1 Nurse Janitor", "Floor 1 Utility Janitor", "Floor 2 Janitor", "Floor 3 Janitor", "Floor 1 Sterile Storage",
+                   "Floor 1 Storage", "Floor 1 Utility Room", "Floor 2 Storage 1", "Floor 2 Storage 2", "Floor 2 Storage 3", "Floor 2 Utility",
+                   "Floor 3 Storage 1", "Floor 3 Storage 2", "Floor 3 Utility"],
+      "Lobby" : ["Floor 1 Lobby"],
+      "LockerRoom" : ["Floor 1 Locker Room", "Floor 3 Locker"],
+      "Lounge" : ["Floor 1 Lounge", "Floor 2 Lounge", "Floor 3 Lounge"],
+      "MRI" : ["Floor 1 MRI Room"],
+      "MRI_Control" : ["Floor 1 MRI Control Room"],
+      "MedGas" : ["Floor 1 Med Gas"],
+      "NurseStation" : ["Floor 1 Nurse Station", "Floor 1 Nourishment", "Floor 2 Nurse Station 1", "Floor 2 Nurse Station 2"],
+      "OR" : ["Floor 1 Operating Room 1", "Floor 1 Operating Room 2", "Floor 1 Operating Room 3"],
+      "Office" : ["Floor 1 Office", "Floor 2 Office", "Floor 3 Office", "Floor 1 Dictation", "Floor 1 Humid", "Floor 1 Scheduling",
+                  "Floor 2 Dictation", "Floor 2 Scheduling 1", "Floor 2 Scheduling 2", "Floor 2 Work", "Floor 3 Humid", "Floor 3 Work"],
+      "PACU" : ["Floor 1 PACU", "Floor 1 Recovery Room", "Floor 1 Step Down"],
+      "PhysicalTherapy" : ["Floor 3 Physical Therapy 1", "Floor 3 Physical Therapy 2"],
+      "PreOp" : ["Floor 1 Pre-Op Room 1", "Floor 1 Pre-Op Room 2"],
+      "ProcedureRoom" : ["Floor 1 Procedure Room"],
+      "Soil Work" : ["Floor 1 Soil", "Floor 1 Soil Hold", "Floor 1 Soil Work"],
+      "Stair" : ["NE Stair", "NW Stair", "SW Stair", "NW Elevator"],
+      "Toilet" : ["Floor 1 Nurse Toilet", "Floor 1 Pre-Op Toilet", "Floor 1 Lobby Toilet", "Floor 1 MRI Toilet", "Floor 2 Conference Toilet",
+                  "Floor 2 Reception Toilet", "Floor 2 Work Toilet", "Floor 3 Lounge Toilet", "Floor 3 Office Toilet", "Floor 3 Physical Therapy Toilet"],
+      "Xray" : ["Floor 2 X-Ray"],
+      "Reception" : ["Floor 1 Reception", "Floor 2 Reception"],
+      "Undeveloped" : ["Floor 3 Undeveloped 1", "Floor 3 Undeveloped 2"]
+    }
+  },
+  "PrimarySchool":{
+    "NECB 2011" :{
+      "Washroom-sch-D" : ["Bath_ZN_1_FLR_1"],
+      "Conf./meet./multi-purpose" : ["Cafeteria_ZN_1_FLR_1"],
+      "Classroom/lecture/training" : ["Computer_Class_ZN_1_FLR_1","Corner_Class_1_Pod_1_ZN_1_FLR_1", "Corner_Class_1_Pod_2_ZN_1_FLR_1", "Corner_Class_1_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_1", "Corner_Class_2_Pod_2_ZN_1_FLR_1", "Corner_Class_2_Pod_3_ZN_1_FLR_1", "Mult_Class_1_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_2_ZN_1_FLR_1", "Mult_Class_1_Pod_3_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_2_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_3_ZN_1_FLR_1"],
+      "Corr. >= 2.4m wide-sch-D" : ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_1", "Main_Corridor_ZN_1_FLR_1"],
+      "Gym - play" : ["Gym_ZN_1_FLR_1"],
+      "Food preparation" : ["Kitchen_ZN_1_FLR_1"],
+      "Library - reading" : ["Library_Media_Center_ZN_1_FLR_1"],
+      "Lobby - elevator" : ["Lobby_ZN_1_FLR_1"],
+      "Electrical/Mechanical-sch-D" : ["Mech_ZN_1_FLR_1"],
+      "Office - enclosed" : ["Offices_ZN_1_FLR_1"]
+    },
+    "default" :{
+      "Office" : ["Offices_ZN_1_FLR_1"],
+      "Lobby" : ["Lobby_ZN_1_FLR_1"],
+      "Gym" : ["Gym_ZN_1_FLR_1"],
+      "Mechanical" : ["Mech_ZN_1_FLR_1"],
+      "Cafeteria" : ["Cafeteria_ZN_1_FLR_1"],
+      "Kitchen" : ["Kitchen_ZN_1_FLR_1"],
+      "Restroom" : ["Bath_ZN_1_FLR_1", "Bathrooms_ZN_1_FLR_1"],
+      "Corridor" : ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_1", "Main_Corridor_ZN_1_FLR_1"],
+      "Classroom" : ["Computer_Class_ZN_1_FLR_1", "Corner_Class_1_Pod_1_ZN_1_FLR_1", "Corner_Class_1_Pod_2_ZN_1_FLR_1", "Corner_Class_1_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_1", "Corner_Class_2_Pod_2_ZN_1_FLR_1", "Corner_Class_2_Pod_3_ZN_1_FLR_1", "Library_Media_Center_ZN_1_FLR_1", "Mult_Class_1_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_2_ZN_1_FLR_1", "Mult_Class_1_Pod_3_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_2_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_3_ZN_1_FLR_1"]
+    }
+  },
+  "QuickServiceRestaurant":{
+    "DOE Ref Pre-1980": {
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"]
+    },
+    "DOE Ref 1980-2004" :{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "90.1-2010" :{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "90.1-2007" :{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "90.1-2004" :{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "90.1-2013" :{
+      "Dining" : ["Dining"],
+      "Kitchen" : ["Kitchen"],
+      "Attic" : ["attic"]
+    },
+    "NECB 2011" :{
+      "- undefined -" : ["attic"],
+      "Dining - bar lounge/leisure" : ["Dining"],
+      "Food preparation" : ["Kitchen"]
+    },
+    "default" :{
+      "- undefined -" : ["attic"],
+      "Dining - bar lounge/leisure" : ["Dining"],
+      "Food preparation" : ["Kitchen"]
+    }
+  },
+  "RetailStandalone":{
+    "NECB 2011" : {
+      "Storage area" : ["Back_Space"],
+      "Retail - sales" : ["Core_Retail", "Front_Retail", "Point_Of_Sale"],
+      "Lobby - elevator" : ["Front_Entry"]
+    },
+    "default":{
+      "Back_Space" : ["Back_Space"],
+      "Entry" : ["Front_Entry"],
+      "Point_of_Sale" : ["Point_Of_Sale"],
+      "Retail" : ["Core_Retail", "Front_Retail"]
+    }
+  },
+  "RetailStripmall":{
+    "NECB 2011" : {
+      "Retail - sales" : ["LGstore1", "LGstore2", "SMstore1", "SMstore2", "SMstore3", "SMstore4", "SMstore5", "SMstore6", "SMstore7", "SMstore8"]
+    },
+    "default":{
+      "Strip mall - type 1" : ["LGstore1", "SMstore1"],
+      "Strip mall - type 2" : ["SMstore2", "SMstore3", "SMstore4"],
+      "Strip mall - type 3" : ["LGstore2", "SMstore5", "SMstore6", "SMstore7", "SMstore8"]
+    }
+  },
+  "SecondarySchool":{
+    "DOE Ref Pre-1980" :{
+      "Office" : ["Offices_ZN_1_FLR_1", "Offices_ZN_1_FLR_2"],
+      "Lobby" : ["Lobby_ZN_1_FLR_2", "Lobby_ZN_1_FLR_1"],
+      "Gym" : ["Gym_ZN_1_FLR_1"],
+      "Gym - audience" : ["Aux_Gym_ZN_1_FLR_1"],
+      "Mechanical" : ["Mech_ZN_1_FLR_2", "Mech_ZN_1_FLR_1"],
+      "Cafeteria" : ["Cafeteria_ZN_1_FLR_1"],
+      "Kitchen" : ["Kitchen_ZN_1_FLR_1"],
+      "Restroom" : ["Bathrooms_ZN_1_FLR_2", "Bathrooms_ZN_1_FLR_1"],
+      "Auditorium" : ["Auditorium_ZN_1_FLR_1"],
+      "Library" : ["LIBRARY_MEDIA_CENTER_ZN_1_FLR_2"],
+      "Corridor" : ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_1", "Corridor_Pod_1_ZN_1_FLR_2", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_2"],
+      "Classroom" : ["Mult_Class_2_Pod_2_ZN_1_FLR_2", "Mult_Class_2_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_1_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_2_ZN_1_FLR_2", "Mult_Class_1_Pod_1_ZN_1_FLR_2", "Corner_Class_2_Pod_2_ZN_1_FLR_2", "Mult_Class_2_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_3_ZN_1_FLR_2", "Corner_Class_1_Pod_3_ZN_1_FLR_1", "Mult_Class_1_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_2_ZN_1_FLR_2", "Mult_Class_1_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_3_ZN_1_FLR_1", "Corner_Class_1_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_2_ZN_1_FLR_1", "Corner_Class_2_Pod_2_ZN_1_FLR_1", "Corner_Class_1_Pod_3_ZN_1_FLR_2", "Mult_Class_1_Pod_3_ZN_1_FLR_2", "Corner_Class_2_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_3_ZN_1_FLR_2"]
+    }, 
+    "DOE Ref 1980-2004" :{
+      "Office" : ["Offices_ZN_1_FLR_1", "Offices_ZN_1_FLR_2"],
+      "Lobby" : ["Lobby_ZN_1_FLR_2", "Lobby_ZN_1_FLR_1"],
+      "Gym" : ["Gym_ZN_1_FLR_1"],
+      "Gym - audience" : ["Aux_Gym_ZN_1_FLR_1"],
+      "Mechanical" : ["Mech_ZN_1_FLR_2", "Mech_ZN_1_FLR_1"],
+      "Cafeteria" : ["Cafeteria_ZN_1_FLR_1"],
+      "Kitchen" : ["Kitchen_ZN_1_FLR_1"],
+      "Restroom" : ["Bathrooms_ZN_1_FLR_2", "Bathrooms_ZN_1_FLR_1"],
+      "Auditorium" : ["Auditorium_ZN_1_FLR_1"],
+      "Library" : ["LIBRARY_MEDIA_CENTER_ZN_1_FLR_2"],
+      "Corridor" : ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_1", "Corridor_Pod_1_ZN_1_FLR_2", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_2"],
+      "Classroom" : ["Mult_Class_2_Pod_2_ZN_1_FLR_2", "Mult_Class_2_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_1_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_2_ZN_1_FLR_2", "Mult_Class_1_Pod_1_ZN_1_FLR_2", "Corner_Class_2_Pod_2_ZN_1_FLR_2", "Mult_Class_2_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_3_ZN_1_FLR_2", "Corner_Class_1_Pod_3_ZN_1_FLR_1", "Mult_Class_1_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_2_ZN_1_FLR_2", "Mult_Class_1_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_3_ZN_1_FLR_1", "Corner_Class_1_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_2_ZN_1_FLR_1", "Corner_Class_2_Pod_2_ZN_1_FLR_1", "Corner_Class_1_Pod_3_ZN_1_FLR_2", "Mult_Class_1_Pod_3_ZN_1_FLR_2", "Corner_Class_2_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_3_ZN_1_FLR_2"]
+    },
+    "NECB 2011":{
+      "Office" : ["Offices_ZN_1_FLR_1", "Offices_ZN_1_FLR_2"],
+      "Lobby" : ["Lobby_ZN_1_FLR_2", "Lobby_ZN_1_FLR_1"],
+      "Gym" : ["Gym_ZN_1_FLR_1", "Aux_Gym_ZN_1_FLR_1"],
+      "Mechanical" : ["Mech_ZN_1_FLR_2", "Mech_ZN_1_FLR_1"],
+      "Cafeteria" : ["Cafeteria_ZN_1_FLR_1"],
+      "Kitchen" : ["Kitchen_ZN_1_FLR_1"],
+      "Restroom" : ["Bathrooms_ZN_1_FLR_2", "Bathrooms_ZN_1_FLR_1"],
+      "Auditorium" : ["Auditorium_ZN_1_FLR_1"],
+      "Library" : ["LIBRARY_MEDIA_CENTER_ZN_1_FLR_2"],
+      "Corridor" : ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_1", "Corridor_Pod_1_ZN_1_FLR_2", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_2"],
+      "Classroom" : ["Mult_Class_2_Pod_2_ZN_1_FLR_2", "Mult_Class_2_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_1_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_2_ZN_1_FLR_2", "Mult_Class_1_Pod_1_ZN_1_FLR_2", "Corner_Class_2_Pod_2_ZN_1_FLR_2", "Mult_Class_2_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_3_ZN_1_FLR_2", "Corner_Class_1_Pod_3_ZN_1_FLR_1", "Mult_Class_1_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_2_ZN_1_FLR_2", "Mult_Class_1_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_3_ZN_1_FLR_1", "Corner_Class_1_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_2_ZN_1_FLR_1", "Corner_Class_2_Pod_2_ZN_1_FLR_1", "Corner_Class_1_Pod_3_ZN_1_FLR_2", "Mult_Class_1_Pod_3_ZN_1_FLR_2", "Corner_Class_2_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_3_ZN_1_FLR_2"]
+    },
+    "default": {
+      "Office" : ["Offices_ZN_1_FLR_1", "Offices_ZN_1_FLR_2"],
+      "Lobby" : ["Lobby_ZN_1_FLR_2", "Lobby_ZN_1_FLR_1"],
+      "Gym" : ["Gym_ZN_1_FLR_1", "Aux_Gym_ZN_1_FLR_1"],
+      "Mechanical" : ["Mech_ZN_1_FLR_2", "Mech_ZN_1_FLR_1"],
+      "Cafeteria" : ["Cafeteria_ZN_1_FLR_1"],
+      "Kitchen" : ["Kitchen_ZN_1_FLR_1"],
+      "Restroom" : ["Bathrooms_ZN_1_FLR_2", "Bathrooms_ZN_1_FLR_1"],
+      "Auditorium" : ["Auditorium_ZN_1_FLR_1"],
+      "Library" : ["LIBRARY_MEDIA_CENTER_ZN_1_FLR_2"],
+      "Corridor" : ["Corridor_Pod_1_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_2", "Main_Corridor_ZN_1_FLR_1", "Corridor_Pod_3_ZN_1_FLR_1", "Corridor_Pod_1_ZN_1_FLR_2", "Corridor_Pod_2_ZN_1_FLR_1", "Corridor_Pod_2_ZN_1_FLR_2"],
+      "Classroom" : ["Mult_Class_2_Pod_2_ZN_1_FLR_2", "Mult_Class_2_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_1_ZN_1_FLR_1", "Corner_Class_2_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_2_ZN_1_FLR_2", "Mult_Class_1_Pod_1_ZN_1_FLR_2", "Corner_Class_2_Pod_2_ZN_1_FLR_2", "Mult_Class_2_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_3_ZN_1_FLR_2", "Corner_Class_1_Pod_3_ZN_1_FLR_1", "Mult_Class_1_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_2_ZN_1_FLR_2", "Mult_Class_1_Pod_2_ZN_1_FLR_1", "Mult_Class_2_Pod_1_ZN_1_FLR_1", "Mult_Class_1_Pod_3_ZN_1_FLR_1", "Corner_Class_1_Pod_1_ZN_1_FLR_2", "Corner_Class_1_Pod_2_ZN_1_FLR_1", "Corner_Class_2_Pod_2_ZN_1_FLR_1", "Corner_Class_1_Pod_3_ZN_1_FLR_2", "Mult_Class_1_Pod_3_ZN_1_FLR_2", "Corner_Class_2_Pod_3_ZN_1_FLR_1", "Corner_Class_2_Pod_3_ZN_1_FLR_2"]
+    }
+  },
+  "SmallHotel":{
+    "DOE Ref Pre-1980": {
+        "Corridor" : ["CorridorFlr1", "CorridorFlr2", "CorridorFlr3", "CorridorFlr4"],
+        "Elec/MechRoom" : ["ElevatorCoreFlr1"],
+        "ElevatorCore" : ["ElevatorCoreFlr2", "ElevatorCoreFlr3", "ElevatorCoreFlr4"],
+        "StaffLounge" : ["EmployeeLoungeFlr1"],
+        "Exercise" : ["ExerciseCenterFlr1"],
+        "GuestLounge" : ["FrontLoungeFlr1"],
+        "Office" : ["FrontOfficeFlr1"],
+        "Stair" : ["FrontStairsFlr1", "FrontStairsFlr2", "FrontStairsFlr3", "FrontStairsFlr4", "RearStairsFlr1", "RearStairsFlr2", "RearStairsFlr3", "RearStairsFlr4"],
+        "Storage" : ["FrontStorageFlr1", "FrontStorageFlr2", "FrontStorageFlr3", "FrontStorageFlr4", "RearStorageFlr1", "RearStorageFlr2", "RearStorageFlr3", "RearStorageFlr4"],
+        "GuestRoom" : ["GuestRoom101", "GuestRoom102", "GuestRoom103", "GuestRoom104", "GuestRoom105", "GuestRoom201", "GuestRoom202_205", "GuestRoom206_208", "GuestRoom209_212", "GuestRoom213", "GuestRoom214", "GuestRoom215_218", "GuestRoom219", "GuestRoom220_223", "GuestRoom224", "GuestRoom301", "GuestRoom302_305", "GuestRoom306_308", "GuestRoom309_312", "GuestRoom313", "GuestRoom314", "GuestRoom315_318", "GuestRoom319", "GuestRoom320_323", "GuestRoom324", "GuestRoom401", "GuestRoom402_405", "GuestRoom406_408", "GuestRoom409_412", "GuestRoom413", "GuestRoom414", "GuestRoom415_418", "GuestRoom419", "GuestRoom420_423", "GuestRoom424"],
+        "Laundry" : ["LaundryRoomFlr1"],
+        "Mechanical" : ["MechanicalRoomFlr1"],
+        "Meeting" : ["MeetingRoomFlr1"],
+        "PublicRestroom" : ["RestroomFlr1"],
+        "Attic" : ["Attic"]
+      },
+    "DOE Ref 1980-2004":{
+        "Corridor" : ["CorridorFlr1", "CorridorFlr2", "CorridorFlr3", "CorridorFlr4"],
+        "Elec/MechRoom" : ["ElevatorCoreFlr1"],
+        "ElevatorCore" : ["ElevatorCoreFlr2", "ElevatorCoreFlr3", "ElevatorCoreFlr4"],
+        "StaffLounge" : ["EmployeeLoungeFlr1"],
+        "Exercise" : ["ExerciseCenterFlr1"],
+        "GuestLounge" : ["FrontLoungeFlr1"],
+        "Office" : ["FrontOfficeFlr1"],
+        "Stair" : ["FrontStairsFlr1", "FrontStairsFlr2", "FrontStairsFlr3", "FrontStairsFlr4", "RearStairsFlr1", "RearStairsFlr2", "RearStairsFlr3", "RearStairsFlr4"],
+        "Storage" : ["FrontStorageFlr1", "FrontStorageFlr2", "FrontStorageFlr3", "FrontStorageFlr4", "RearStorageFlr1", "RearStorageFlr2", "RearStorageFlr3", "RearStorageFlr4"],
+        "GuestRoom" : ["GuestRoom101", "GuestRoom102", "GuestRoom103", "GuestRoom104", "GuestRoom105", "GuestRoom201", "GuestRoom202_205", "GuestRoom206_208", "GuestRoom209_212", "GuestRoom213", "GuestRoom214", "GuestRoom215_218", "GuestRoom219", "GuestRoom220_223", "GuestRoom224", "GuestRoom301", "GuestRoom302_305", "GuestRoom306_308", "GuestRoom309_312", "GuestRoom313", "GuestRoom314", "GuestRoom315_318", "GuestRoom319", "GuestRoom320_323", "GuestRoom324", "GuestRoom401", "GuestRoom402_405", "GuestRoom406_408", "GuestRoom409_412", "GuestRoom413", "GuestRoom414", "GuestRoom415_418", "GuestRoom419", "GuestRoom420_423", "GuestRoom424"],
+        "Laundry" : ["LaundryRoomFlr1"],
+        "Mechanical" : ["MechanicalRoomFlr1"],
+        "Meeting" : ["MeetingRoomFlr1"],
+        "PublicRestroom" : ["RestroomFlr1"],
+        "Attic" : ["Attic"]
+      },
+    "90.1-2010" :{
+        "Corridor" : ["CorridorFlr1", "CorridorFlr2", "CorridorFlr3"],
+        "Corridor4" : ["CorridorFlr4"],
+        "Elec/MechRoom" : ["ElevatorCoreFlr1"],
+        "ElevatorCore" : ["ElevatorCoreFlr2", "ElevatorCoreFlr3"],
+        "ElevatorCore4" : ["ElevatorCoreFlr4"],
+        "StaffLounge" : ["EmployeeLoungeFlr1"],
+        "Exercise" : ["ExerciseCenterFlr1"],
+        "GuestLounge" : ["FrontLoungeFlr1"],
+        "Office" : ["FrontOfficeFlr1"],
+        "Stair" : ["FrontStairsFlr1", "FrontStairsFlr2", "FrontStairsFlr3", "RearStairsFlr1", "RearStairsFlr2", "RearStairsFlr3"],
+        "Stair4" : ["FrontStairsFlr4", "RearStairsFlr4"],
+        "Storage" : ["FrontStorageFlr1", "FrontStorageFlr2", "FrontStorageFlr3", "RearStorageFlr1", "RearStorageFlr2", "RearStorageFlr3"],
+        "Storage4Front" : ["FrontStorageFlr4"],
+        "Storage4Rear" : ["RearStorageFlr4"],
+        "GuestRoom123Occ" : ["GuestRoom103", "GuestRoom104", "GuestRoom105", "GuestRoom202_205", "GuestRoom206_208", "GuestRoom209_212", "GuestRoom213", "GuestRoom214", "GuestRoom219", "GuestRoom220_223", "GuestRoom224", "GuestRoom309_312", "GuestRoom314", "GuestRoom315_318", "GuestRoom320_323"],
+        "GuestRoom123Vac" : ["GuestRoom101", "GuestRoom102", "GuestRoom201", "GuestRoom215_218", "GuestRoom301", "GuestRoom302_305", "GuestRoom306_308", "GuestRoom313", "GuestRoom319", "GuestRoom324"],
+        "GuestRoom4Occ" : ["GuestRoom401", "GuestRoom409_412", "GuestRoom415_418", "GuestRoom419", "GuestRoom420_423", "GuestRoom424"],
+        "GuestRoom4Vac" : ["GuestRoom402_405", "GuestRoom406_408", "GuestRoom413", "GuestRoom414"],
+        "Laundry" : ["LaundryRoomFlr1"],
+        "Mechanical" : ["MechanicalRoomFlr1"],
+        "Meeting" : ["MeetingRoomFlr1"],
+        "PublicRestroom" : ["RestroomFlr1"]
+      },
+    "90.1-2007":{
+        "Corridor" : ["CorridorFlr1", "CorridorFlr2", "CorridorFlr3"],
+        "Corridor4" : ["CorridorFlr4"],
+        "Elec/MechRoom" : ["ElevatorCoreFlr1"],
+        "ElevatorCore" : ["ElevatorCoreFlr2", "ElevatorCoreFlr3"],
+        "ElevatorCore4" : ["ElevatorCoreFlr4"],
+        "StaffLounge" : ["EmployeeLoungeFlr1"],
+        "Exercise" : ["ExerciseCenterFlr1"],
+        "GuestLounge" : ["FrontLoungeFlr1"],
+        "Office" : ["FrontOfficeFlr1"],
+        "Stair" : ["FrontStairsFlr1", "FrontStairsFlr2", "FrontStairsFlr3", "RearStairsFlr1", "RearStairsFlr2", "RearStairsFlr3"],
+        "Stair4" : ["FrontStairsFlr4", "RearStairsFlr4"],
+        "Storage" : ["FrontStorageFlr1", "FrontStorageFlr2", "FrontStorageFlr3", "RearStorageFlr1", "RearStorageFlr2", "RearStorageFlr3"],
+        "Storage4Front" : ["FrontStorageFlr4"],
+        "Storage4Rear" : ["RearStorageFlr4"],
+        "GuestRoom123Occ" : ["GuestRoom103", "GuestRoom104", "GuestRoom105", "GuestRoom202_205", "GuestRoom206_208", "GuestRoom209_212", "GuestRoom213", "GuestRoom214", "GuestRoom219", "GuestRoom220_223", "GuestRoom224", "GuestRoom309_312", "GuestRoom314", "GuestRoom315_318", "GuestRoom320_323"],
+        "GuestRoom123Vac" : ["GuestRoom101", "GuestRoom102", "GuestRoom201", "GuestRoom215_218", "GuestRoom301", "GuestRoom302_305", "GuestRoom306_308", "GuestRoom313", "GuestRoom319", "GuestRoom324"],
+        "GuestRoom4Occ" : ["GuestRoom401", "GuestRoom409_412", "GuestRoom415_418", "GuestRoom419", "GuestRoom420_423", "GuestRoom424"],
+        "GuestRoom4Vac" : ["GuestRoom402_405", "GuestRoom406_408", "GuestRoom413", "GuestRoom414"],
+        "Laundry" : ["LaundryRoomFlr1"],
+        "Mechanical" : ["MechanicalRoomFlr1"],
+        "Meeting" : ["MeetingRoomFlr1"],
+        "PublicRestroom" : ["RestroomFlr1"]
+      },
+    "90.1-2004":{
+        "Corridor" : ["CorridorFlr1", "CorridorFlr2", "CorridorFlr3"],
+        "Corridor4" : ["CorridorFlr4"],
+        "Elec/MechRoom" : ["ElevatorCoreFlr1"],
+        "ElevatorCore" : ["ElevatorCoreFlr2", "ElevatorCoreFlr3"],
+        "ElevatorCore4" : ["ElevatorCoreFlr4"],
+        "StaffLounge" : ["EmployeeLoungeFlr1"],
+        "Exercise" : ["ExerciseCenterFlr1"],
+        "GuestLounge" : ["FrontLoungeFlr1"],
+        "Office" : ["FrontOfficeFlr1"],
+        "Stair" : ["FrontStairsFlr1", "FrontStairsFlr2", "FrontStairsFlr3", "RearStairsFlr1", "RearStairsFlr2", "RearStairsFlr3"],
+        "Stair4" : ["FrontStairsFlr4", "RearStairsFlr4"],
+        "Storage" : ["FrontStorageFlr1", "FrontStorageFlr2", "FrontStorageFlr3", "RearStorageFlr1", "RearStorageFlr2", "RearStorageFlr3"],
+        "Storage4Front" : ["FrontStorageFlr4"],
+        "Storage4Rear" : ["RearStorageFlr4"],
+        "GuestRoom123Occ" : ["GuestRoom103", "GuestRoom104", "GuestRoom105", "GuestRoom202_205", "GuestRoom206_208", "GuestRoom209_212", "GuestRoom213", "GuestRoom214", "GuestRoom219", "GuestRoom220_223", "GuestRoom224", "GuestRoom309_312", "GuestRoom314", "GuestRoom315_318", "GuestRoom320_323"],
+        "GuestRoom123Vac" : ["GuestRoom101", "GuestRoom102", "GuestRoom201", "GuestRoom215_218", "GuestRoom301", "GuestRoom302_305", "GuestRoom306_308", "GuestRoom313", "GuestRoom319", "GuestRoom324"],
+        "GuestRoom4Occ" : ["GuestRoom401", "GuestRoom409_412", "GuestRoom415_418", "GuestRoom419", "GuestRoom420_423", "GuestRoom424"],
+        "GuestRoom4Vac" : ["GuestRoom402_405", "GuestRoom406_408", "GuestRoom413", "GuestRoom414"],
+        "Laundry" : ["LaundryRoomFlr1"],
+        "Mechanical" : ["MechanicalRoomFlr1"],
+        "Meeting" : ["MeetingRoomFlr1"],
+        "PublicRestroom" : ["RestroomFlr1"]
+      },
+    "90.1-2013" :{
+        "Corridor" : ["CorridorFlr1", "CorridorFlr2", "CorridorFlr3"],
+        "Corridor4" : ["CorridorFlr4"],
+        "Elec/MechRoom" : ["ElevatorCoreFlr1"],
+        "ElevatorCore" : ["ElevatorCoreFlr2", "ElevatorCoreFlr3"],
+        "ElevatorCore4" : ["ElevatorCoreFlr4"],
+        "StaffLounge" : ["EmployeeLoungeFlr1"],
+        "Exercise" : ["ExerciseCenterFlr1"],
+        "GuestLounge" : ["FrontLoungeFlr1"],
+        "Office" : ["FrontOfficeFlr1"],
+        "Stair" : ["FrontStairsFlr1", "FrontStairsFlr2", "FrontStairsFlr3", "RearStairsFlr1", "RearStairsFlr2", "RearStairsFlr3"],
+        "Stair4" : ["FrontStairsFlr4", "RearStairsFlr4"],
+        "Storage" : ["FrontStorageFlr1", "FrontStorageFlr2", "FrontStorageFlr3", "RearStorageFlr1", "RearStorageFlr2", "RearStorageFlr3"],
+        "Storage4Front" : ["FrontStorageFlr4"],
+        "Storage4Rear" : ["RearStorageFlr4"],
+        "GuestRoom123Occ" : ["GuestRoom103", "GuestRoom104", "GuestRoom105", "GuestRoom202_205", "GuestRoom206_208", "GuestRoom209_212", "GuestRoom213", "GuestRoom214", "GuestRoom219", "GuestRoom220_223", "GuestRoom224", "GuestRoom309_312", "GuestRoom314", "GuestRoom315_318", "GuestRoom320_323"],
+        "GuestRoom123Vac" : ["GuestRoom101", "GuestRoom102", "GuestRoom201", "GuestRoom215_218", "GuestRoom301", "GuestRoom302_305", "GuestRoom306_308", "GuestRoom313", "GuestRoom319", "GuestRoom324"],
+        "GuestRoom4Occ" : ["GuestRoom401", "GuestRoom409_412", "GuestRoom415_418", "GuestRoom419", "GuestRoom420_423", "GuestRoom424"],
+        "GuestRoom4Vac" : ["GuestRoom402_405", "GuestRoom406_408", "GuestRoom413", "GuestRoom414"],
+        "Laundry" : ["LaundryRoomFlr1"],
+        "Mechanical" : ["MechanicalRoomFlr1"],
+        "Meeting" : ["MeetingRoomFlr1"],
+        "PublicRestroom" : ["RestroomFlr1"]
+      },
+    "NECB 2011" :{
+      "Corr. >= 2.4m wide-sch-F" : ["CorridorFlr1", "CorridorFlr2", "CorridorFlr3", "CorridorFlr4"],
+      "Lobby - elevator" : ["ElevatorCoreFlr1", "ElevatorCoreFlr2", "ElevatorCoreFlr3", "ElevatorCoreFlr4"],
+      "Lounge/recreation" : ["EmployeeLoungeFlr1"],
+      "Gym - fitness" : ["ExerciseCenterFlr1"],
+      "Hotel/Motel - lobby" : ["FrontLoungeFlr1"],
+      "Office - enclosed" : ["FrontOfficeFlr1"],
+      "Stairway-sch-F" : ["FrontStairsFlr1", "FrontStairsFlr2", "FrontStairsFlr3", "FrontStairsFlr4", "RearStairsFlr1", "RearStairsFlr2", "RearStairsFlr3", "RearStairsFlr4"],
+      "Storage area" : ["FrontStorageFlr1", "FrontStorageFlr2", "FrontStorageFlr3", "FrontStorageFlr4", "LaundryRoomFlr1", "RearStorageFlr1", "RearStorageFlr2", "RearStorageFlr3", "RearStorageFlr4"],
+      "Hway lodging - rooms" : ["GuestRoom101", "GuestRoom102", "GuestRoom103", "GuestRoom104", "GuestRoom105", "GuestRoom201", "GuestRoom202_205", "GuestRoom206_208", "GuestRoom209_212", "GuestRoom213", "GuestRoom214", "GuestRoom215_218", "GuestRoom219", "GuestRoom220_223", "GuestRoom224", "GuestRoom301", "GuestRoom302_305", "GuestRoom306_308", "GuestRoom309_312", "GuestRoom313", "GuestRoom314", "GuestRoom315_318", "GuestRoom319", "GuestRoom320_323", "GuestRoom324", "GuestRoom401", "GuestRoom402_405", "GuestRoom406_408", "GuestRoom409_412", "GuestRoom413", "GuestRoom414", "GuestRoom415_418", "GuestRoom419", "GuestRoom420_423", "GuestRoom424"],
+      "Electrical/Mechanical-sch-F" : ["MechanicalRoomFlr1", "MeetingRoomFlr1"],
+      "Washroom-sch-F" : ["RestroomFlr1"]
+    }
+
+  },
+  "SmallOffice":{
+    "NECB 2011" :{
+      "- undefined -" : ["Attic"],
+      "Office - enclosed" : ["Core_ZN", "Perimeter_ZN_1", "Perimeter_ZN_2", "Perimeter_ZN_3", "Perimeter_ZN_4"]
+    },
+    "default":{
+      "WholeBuilding - Sm Office" : ["Perimeter_ZN_1", "Perimeter_ZN_2", "Perimeter_ZN_3", "Perimeter_ZN_4", "Core_ZN"],
+      "Attic" : ["Attic"]
+    }
+  },
+  "Warehouse":{
+    "NECB 2011" :{
+      "Warehouse - med/blk" : ["Zone3 Bulk Storage"],
+      "Warehouse - fine" : ["Zone2 Fine Storage"],
+      "Office - enclosed" : ["Zone1 Office"]
+    },
+    "default":{
+      "Bulk" : ["Zone3 Bulk Storage"],
+      "Fine" : ["Zone2 Fine Storage"],
+      "Office" : ["Zone1 Office"]
+    }
+  }
+}

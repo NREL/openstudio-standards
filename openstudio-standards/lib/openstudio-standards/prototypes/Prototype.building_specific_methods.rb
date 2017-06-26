@@ -1,7 +1,33 @@
-
+require 'json'
 # Extend the class to add Medium Office specific stuff
 class OpenStudio::Model::Model
   def define_space_type_map(building_type, template, climate_zone)
+    #OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding geometry')
+    space_type_map_json = File.join(File.dirname(__FILE__),"../../../data/geometry/spacetype_to_space.json")
+    puts "\n#{space_type_map_json}\nEXIST: #{File.exists?(space_type_map_json)}\n"
+    begin
+      space_type_map = JSON.parse(File.read(space_type_map_json))
+    rescue JSON::ParserError => e
+      puts "THE CONTENTS OF THE JSON FILE AT #{space_type_map_json} IS NOT VALID"
+      raise e
+    end
+
+    if space_type_map.has_key?(building_type)
+      if space_type_map[building_type].has_key?(template)
+        puts space_type_map[building_type][template]
+        return space_type_map[building_type][template]
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{building_type}] was not found for Building Type = [#{building_type}] at #{space_type_map_json}. Attempting to use value from 'default' key from space_type_map[\"#{building_type}\"][\"default\"]")
+        if space_type_map[building_type].has_key?("default")
+          puts space_type_map[building_type]["default"]
+          return space_type_map[building_type]["default"]
+        end
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Building Type = #{building_type} was not found at #{space_type_map_json}")
+      return false
+    end
+=begin
     case building_type
     when 'SecondarySchool'
       return PrototypeBuilding::SecondarySchool.define_space_type_map(building_type, template, climate_zone)
@@ -39,6 +65,7 @@ class OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Building Type = #{building_type} not recognized")
       return false
     end
+=end
   end
 
   def define_hvac_system_map(building_type, template, climate_zone)
