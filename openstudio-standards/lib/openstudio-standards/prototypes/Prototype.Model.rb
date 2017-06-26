@@ -366,6 +366,31 @@ class OpenStudio::Model::Model
     # based on building_type and template
     # NECB 2011 geometry is not explicitly defined; for NECB 2011 template, latest ASHRAE 90.1 geometry file is assigned (implicitly)
 
+    building_type_to_geometry_json = File.join(File.dirname(__FILE__),"../../../data/geometry/template_building_type_to_geometry_file.json")
+    puts "\n#{building_type_to_geometry_json}\nEXIST: #{File.exists?(building_type_to_geometry_json)}\n"
+    begin
+      building_type_to_geometry = JSON.parse(File.read(building_type_to_geometry_json))
+    rescue JSON::ParserError => e
+      puts "THE CONTENTS OF THE JSON FILE AT #{building_type_to_geometry_json} IS NOT VALID"
+      raise e
+    end
+
+    if building_type_to_geometry.has_key?(building_type)
+      if building_type_to_geometry[building_type].has_key?(template)
+        puts building_type_to_geometry[building_type][template]
+        geometry_file = building_type_to_geometry[building_type][template]
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{building_type}] was not found for Building Type = [#{building_type}] at #{building_type_to_geometry_json}. Attempting to use value from 'default' key from space_type_map[\"#{building_type}\"][\"default\"]")
+        if building_type_to_geometry[building_type].has_key?("default")
+          puts building_type_to_geometry[building_type]["default"]
+          geometry_file = building_type_to_geometry[building_type]["default"]
+        end
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Building Type = #{building_type} was not found at #{building_type_to_geometry_json}")
+      return false
+    end
+=begin
     case building_type
     when 'SecondarySchool'
       geometry_file = if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
@@ -470,7 +495,7 @@ class OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Building Type = #{building_type} not recognized")
       return false
     end
-
+=end
     # Load the geometry .osm
     geom_dir = "../../../data/geometry"
     replace_model("#{geom_dir}/#{geometry_file}")
