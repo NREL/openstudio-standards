@@ -7,7 +7,7 @@
   "PrimarySchool": {
     "DOE Ref Pre-1980": "Geometry.primary_school_pre_1980_to_2004.osm",
     "DOE Ref 1980-2004": "Geometry.primary_school_pre_1980_to_2004.osm",
-    "default": "Geometry.secondary_school.osm"
+    "default": "Geometry.primary_school.osm"
   },
   "SmallOffice": {
     "DOE Ref Pre-1980": "Geometry.small_office_pre_1980.osm",
@@ -19,7 +19,8 @@
   "LargeOffice": {
     "DOE Ref Pre-1980": "Geometry.large_office_reference.osm",
     "DOE Ref 1980-2004": "Geometry.large_office_reference.osm",
-    "DOE Ref 2004": "Geometry.large_office_reference.osm"
+    "DOE Ref 2004": "Geometry.large_office_reference.osm",
+    "default": "Geometry.large_office_2010.osm"
   },
   "SmallHotel": {
     "DOE Ref Pre-1980": "Geometry.small_hotel_doe.osm",
