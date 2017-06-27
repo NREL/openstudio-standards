@@ -3467,8 +3467,12 @@ class OpenStudio::Model::AirLoopHVAC
   # Shut off the system during unoccupied periods.
   # During these times, systems will cycle on briefly
   # if temperature drifts below setpoint.  For systems
-  # with fan-powered terminals, only the terminal fans will
-  # cycle on.  If the system already has a schedule other than
+  # with fan-powered terminals, the whole system
+  # (not just the terminal fans) will cycle on.
+  # Terminal-only night cycling is not used because the terminals cannot
+  # provide cooling, so terminal-only night cycling leads to excessive
+  # unmet cooling hours during unoccupied periods.
+  # If the system already has a schedule other than
   # Always-On, no change will be made.  If the system has
   # an Always-On schedule assigned, a new schedule will be created.
   # In this case, occupied is defined as the total percent
@@ -3479,12 +3483,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @return [Bool] true if successful, false if not
   def enable_unoccupied_fan_shutoff(min_occ_pct = 0.15)
     # Set the system to night cycle
-    night_cycle_type = 'CycleOnAny'
-    # For VAV with PFP boxes, cycle zone fans only
-    unless demandComponents('OS:AirTerminal:SingleDuct:ParallelPIU:Reheat'.to_IddObjectType).empty?
-      night_cycle_type = 'CycleOnAnyZoneFansOnly'
-    end
-    setNightCycleControlType(night_cycle_type)
+    setNightCycleControlType('CycleOnAny')
 
     # Check if already using a schedule other than always on
     avail_sch = availabilitySchedule
