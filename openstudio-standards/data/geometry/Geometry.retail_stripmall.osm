@@ -1,7 +1,7 @@
 
 OS:Version,
-  {96d5db01-5031-4de8-9d06-8e724c4a0d60}, !- Handle
-  1.14.0;                                 !- Version Identifier
+  {c29da8d5-962f-4b67-b85c-6fa1fe7b21d7}, !- Handle
+  2.1.1;                                  !- Version Identifier
 
 OS:Timestep,
   {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
@@ -2113,7 +2113,9 @@ OS:Building,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
-  ;                                       !- Default Schedule Set Name
+  ,                                       !- Default Schedule Set Name
+  1,                                      !- Standards Number of Stories
+  1;                                      !- Standards Number of Above Ground Stories
 
 OS:Facility,
   {f8a539f1-cbba-4b22-9cfd-0026609e44a8}; !- Handle

@@ -1,7 +1,7 @@
 
 OS:Version,
-  {06de06b4-b4e2-462c-9a16-0b896913b74f}, !- Handle
-  1.14.0;                                 !- Version Identifier
+  {fa3a0122-b976-4b29-9575-9eb0a8822d90}, !- Handle
+  2.1.1;                                  !- Version Identifier
 
 OS:Site,
   {60c4cd85-d64b-4e19-b936-8f6a234d9ff1}, !- Handle
@@ -5148,8 +5148,8 @@ OS:Building,
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Standards Number of Stories
-  ,                                       !- Standards Number of Above Ground Stories
+  3,                                      !- Standards Number of Stories
+  3,                                      !- Standards Number of Above Ground Stories
   ;                                       !- Standards Building Type
 
 OS:Surface,

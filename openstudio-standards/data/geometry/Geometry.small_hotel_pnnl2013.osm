@@ -1,7 +1,7 @@
 
 OS:Version,
-  {c1f9363d-6931-4297-83f2-a6eda61470fc}, !- Handle
-  1.7.0;                                  !- Version Identifier
+  {eb8f7541-2ee0-49bf-b6a0-6d361f45055a}, !- Handle
+  2.1.1;                                  !- Version Identifier
 
 OS:Site,
   {b24a8c8c-c603-4c71-9293-1675139ee819}, !- Handle
@@ -5218,8 +5218,8 @@ OS:Building,
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Standards Number of Stories
-  ,                                       !- Standards Number of Above Ground Stories
+  4,                                      !- Standards Number of Stories
+  4,                                      !- Standards Number of Above Ground Stories
   ;                                       !- Standards Building Type
 
 OS:SubSurface,
@@ -7249,7 +7249,7 @@ OS:Surface,
   32.66228442, 10.1078292198, 8.8392,     !- X,Y,Z Vertex 3 {m}
   32.66228442, 10.1078292198, 11.5824;    !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {a9ad05ab-cd10-453f-b9f5-68244dd5a72c}, !- Handle
   Gas:Facility,                           !- Name
   Hourly,                                 !- Reporting Frequency
@@ -8007,7 +8007,7 @@ OS:Surface,
 OS:HeatBalanceAlgorithm,
   {7a761efb-c3f5-476a-b958-a77150029cb1}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {F}
+  200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:Surface,
   {5e83c3ed-84e2-4fce-b1e5-dfee00f033df}, !- Handle
@@ -9046,7 +9046,7 @@ OS:Surface,
   28.69988442, 10.1078292198, 6.096,      !- X,Y,Z Vertex 3 {m}
   28.69988442, 10.1078292198, 8.8392;     !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {bec5d822-6047-443e-ab3f-722aaae30155}, !- Handle
   ElectricityNet:Facility,                !- Name
   Hourly,                                 !- Reporting Frequency
@@ -11282,7 +11282,7 @@ OS:SubSurface,
   43.1378844242, 0.04884522, 4.0024,      !- X,Y,Z Vertex 3 {m}
   43.1378844242, 0.04884522, 5.4464;      !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {9af4ae6a-7ecf-4f5d-bae3-a906c652fb27}, !- Handle
   Electricity:Facility,                   !- Name
   Hourly,                                 !- Reporting Frequency
