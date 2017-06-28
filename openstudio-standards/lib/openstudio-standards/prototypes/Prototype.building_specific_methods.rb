@@ -2,9 +2,7 @@ require 'json'
 # Extend the class to add Medium Office specific stuff
 class OpenStudio::Model::Model
   def define_space_type_map(building_type, template, climate_zone)
-    #OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding geometry')
-    space_type_map_json = File.join(File.dirname(__FILE__),"../../../data/geometry/spacetype_to_space.json")
-    puts "\n#{space_type_map_json}\nEXIST: #{File.exists?(space_type_map_json)}\n"
+    space_type_map_json = File.absolute_path(File.join(File.dirname(__FILE__),"../../../data/geometry/spacetype_to_space.json")) 
     begin
       space_type_map = JSON.parse(File.read(space_type_map_json))
     rescue JSON::ParserError => e
@@ -13,16 +11,35 @@ class OpenStudio::Model::Model
     end
 
     if space_type_map.has_key?(building_type)
-      if space_type_map[building_type].has_key?(template)
-        puts space_type_map[building_type][template]
-        return space_type_map[building_type][template]
-      else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{building_type}] was not found for Building Type = [#{building_type}] at #{space_type_map_json}. Attempting to use value from 'default' key from space_type_map[\"#{building_type}\"][\"default\"]")
-        if space_type_map[building_type].has_key?("default")
-          puts space_type_map[building_type]["default"]
-          return space_type_map[building_type]["default"]
+
+      template_found = false
+      #search for template within building_type key
+      space_type_map[building_type].each_with_index do |item, index|  
+        if item["template"].include?(template)
+          template_found = true
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{template}] found for Building Type = [#{building_type}] in [\"#{building_type}\"][#{index}][\"space_type_map\"]")
+          puts item["space_type_map"]
+          return item["space_type_map"]
         end
       end
+
+      default_found = false
+      unless template_found # attempt to use default space type mapping
+        space_type_map[building_type].each_with_index do |item, index|  
+          if item["template"].include?("default")
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{template}] was not found for Building Type = [#{building_type}] at #{space_type_map_json}. Using value from 'default' key from space_type_map[\"#{building_type}\"][#{index}][\"space_type_map\"]")
+            default_found = true
+            puts item["space_type_map"]
+            return item["space_type_map"]
+          end
+        end
+      end
+
+      unless default_found #throw error because default space type mapping was not found
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Neither Template = [#{template}] nor default space type mapping was found for Building Type = [#{building_type}] at #{space_type_map_json}.")
+        return false 
+      end
+
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Building Type = #{building_type} was not found at #{space_type_map_json}")
       return false
