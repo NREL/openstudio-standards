@@ -155,18 +155,9 @@ module MidriseApartment
   end
 
   def self.define_space_multiplier
+    building_type = 'MidriseApartment'
     # This map define the multipliers for spaces with multipliers not equals to 1
-    space_multiplier_map = {
-      'M SW Apartment' => 2,
-      'M NW Apartment' => 2,
-      'M SE Apartment' => 2,
-      'M NE Apartment' => 2,
-      'M N1 Apartment' => 2,
-      'M N2 Apartment' => 2,
-      'M S1 Apartment' => 2,
-      'M S2 Apartment' => 2,
-      'M Corridor' => 2
-    }
+    space_multiplier_map = JSON.parse(File.read(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json")))[building_type]['space_multiplier_map']
     return space_multiplier_map
   end
 

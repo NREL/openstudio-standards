@@ -121,6 +121,16 @@
           ]
         }
       }
-    ]
+    ],
+    "space_multiplier_map" : {
+      "Corridor_Flr_3" : 4,
+      "Room_1_Flr_3" : 4,
+      "Room_2_Flr_3" : 4,
+      "Room_3_Mult19_Flr_3" : 76,
+      "Room_3_Mult9_Flr_6" : 9,
+      "Room_4_Mult19_Flr_3" : 76,
+      "Room_5_Flr_3" : 4,
+      "Room_6_Flr_3" : 4
+    }
   }
 }

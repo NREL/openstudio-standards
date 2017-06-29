@@ -144,6 +144,17 @@
         "space_type_map": {
         }
       }
-    ]
+    ],
+    "space_multiplier_map": {
+      "M SW Apartment" : 2,
+      "M NW Apartment" : 2,
+      "M SE Apartment" : 2,
+      "M NE Apartment" : 2,
+      "M N1 Apartment" : 2,
+      "M N2 Apartment" : 2,
+      "M S1 Apartment" : 2,
+      "M S2 Apartment" : 2,
+      "M Corridor" : 2
+    }
   }
 }

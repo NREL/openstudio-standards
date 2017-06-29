@@ -255,25 +255,9 @@ module Hospital
   end
 
   def self.define_space_multiplier
-    space_multiplier_map = {
-      'ER_Exam1_Mult4_Flr_1' => 4,
-      'ER_Exam3_Mult4_Flr_1' => 4,
-      'ER_Triage_Mult4_Flr_1' => 4,
-      'Office1_Mult4_Flr_1' => 5,
-      'OR2_Mult5_Flr_2' => 5,
-      'IC_PatRoom1_Mult5_Flr_2' => 5,
-      'IC_PatRoom3_Mult6_Flr_2' => 6,
-      'PatRoom1_Mult10_Flr_3' => 10,
-      'PatRoom3_Mult10_Flr_3' => 10,
-      'PatRoom5_Mult10_Flr_3' => 10,
-      'PatRoom7_Mult10_Flr_3' => 10,
-      'PatRoom1_Mult10_Flr_4' => 10,
-      'PatRoom3_Mult10_Flr_4' => 10,
-      'PatRoom5_Mult10_Flr_4' => 10,
-      'PatRoom7_Mult10_Flr_4' => 10,
-      'Office2_Mult5_Flr_5' => 5,
-      'Office4_Mult6_Flr_5' => 6
-    }
+    building_type = 'Hospital'
+    # This map define the multipliers for spaces with multipliers not equals to 1
+    space_multiplier_map = JSON.parse(File.read(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json")))[building_type]['space_multiplier_map']
     return space_multiplier_map
   end
 
