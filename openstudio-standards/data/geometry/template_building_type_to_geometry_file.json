@@ -33,7 +33,7 @@
     "90.1-2004": "Geometry.small_hotel_pnnl2004.osm",
     "90.1-2007": "Geometry.small_hotel_pnnl2007.osm",
     "90.1-2010": "Geometry.small_hotel_pnnl2010.osm",
-    "NECB 2011": "Geometry.small_hotel_pnnl2013.osm",
+    "NECB 2011": "Geometry.small_hotel_pnnl2013_necb.osm",
     "default"  : "Geometry.small_hotel_pnnl2013.osm"
   },
   "LargeHotel": {

@@ -121,7 +121,7 @@ class OpenStudio::Model::Model
         
       create_thermal_zones(building_type, template, climate_zone)
       # For some building types, stories are defined explicitly 
-      if building_type == 'SmallHotel'
+      if building_type == 'SmallHotel' && template != 'NECB 2011'
         getBuildingStorys.each { |item| item.remove }
         building_story_map = PrototypeBuilding::SmallHotel::define_building_story_map(building_type, template, climate_zone)
         assign_building_story(building_type, template, climate_zone, building_story_map)
@@ -840,7 +840,7 @@ class OpenStudio::Model::Model
     end
 
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
-    if lookup_building_type == 'SmallHotel'
+    if lookup_building_type == 'SmallHotel' && template != 'NECB 2011'
       getBuildingStorys.each do |story|
         next if story.name.get == 'AtticStory'
         puts "story = #{story.name}"
