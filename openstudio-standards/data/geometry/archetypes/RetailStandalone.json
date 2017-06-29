@@ -1,0 +1,53 @@
+{
+  "RetailStandalone": {
+    "geometry": {
+      "DOE Ref Pre-1980": "Geometry.retail_standalone.pre1980_post1980.osm",
+      "DOE Ref 1980-2004": "Geometry.retail_standalone.pre1980_post1980.osm",
+      "DOE Ref 2004": "Geometry.retail_standalone.pre1980_post1980.osm",
+      "90.1-2004": "Geometry.retail_standalone.2004_2007.osm",
+      "90.1-2007": "Geometry.retail_standalone.2004_2007.osm",
+      "NECB 2011": "Geometry.retail_standalone.2010_2013.osm",
+      "default": "Geometry.retail_standalone.2010_2013.osm"
+    },
+    "space_map": [
+      {
+        "template": [
+          "NECB 2011"
+        ],
+        "space_type_map": {
+          "Storage area": [
+            "Back_Space"
+          ],
+          "Retail - sales": [
+            "Core_Retail",
+            "Front_Retail",
+            "Point_Of_Sale"
+          ],
+          "Lobby - elevator": [
+            "Front_Entry"
+          ]
+        }
+      },
+      {
+        "template": [
+          "default"
+        ],
+        "space_type_map": {
+          "Back_Space": [
+            "Back_Space"
+          ],
+          "Entry": [
+            "Front_Entry"
+          ],
+          "Point_of_Sale": [
+            "Point_Of_Sale"
+          ],
+          "Retail": [
+            "Core_Retail",
+            "Front_Retail"
+          ]
+        }
+      }
+    ]
+  }
+}

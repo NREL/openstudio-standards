@@ -366,7 +366,7 @@ class OpenStudio::Model::Model
     # based on building_type and template
     # NECB 2011 geometry is not explicitly defined; for NECB 2011 template, latest ASHRAE 90.1 geometry file is assigned (implicitly)
 
-    building_type_to_geometry_json = File.join(File.dirname(__FILE__),"../../../data/geometry/template_building_type_to_geometry_file.json")
+    building_type_to_geometry_json = File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json")
     puts "\n#{building_type_to_geometry_json}\nEXIST: #{File.exists?(building_type_to_geometry_json)}\n"
     begin
       building_type_to_geometry = JSON.parse(File.read(building_type_to_geometry_json))
@@ -376,14 +376,14 @@ class OpenStudio::Model::Model
     end
 
     if building_type_to_geometry.has_key?(building_type)
-      if building_type_to_geometry[building_type].has_key?(template)
-        puts building_type_to_geometry[building_type][template]
-        geometry_file = building_type_to_geometry[building_type][template]
+      if building_type_to_geometry[building_type]['geometry'].has_key?(template)
+        puts building_type_to_geometry[building_type]['geometry'][template]
+        geometry_file = building_type_to_geometry[building_type]['geometry'][template]
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{building_type}] was not found for Building Type = [#{building_type}] at #{building_type_to_geometry_json}. Attempting to use value from 'default' key from space_type_map[\"#{building_type}\"][\"default\"]")
-        if building_type_to_geometry[building_type].has_key?("default")
-          puts building_type_to_geometry[building_type]["default"]
-          geometry_file = building_type_to_geometry[building_type]["default"]
+        if building_type_to_geometry[building_type]['geometry'].has_key?("default")
+          puts building_type_to_geometry[building_type]['geometry']["default"]
+          geometry_file = building_type_to_geometry[building_type]['geometry']["default"]
         end
       end
     else
