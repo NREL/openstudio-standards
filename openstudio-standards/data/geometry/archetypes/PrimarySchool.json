@@ -4,7 +4,10 @@
       "DOE Ref Pre-1980": "Geometry.primary_school_pre_1980_to_2004.osm",
       "DOE Ref 1980-2004": "Geometry.primary_school_pre_1980_to_2004.osm",
       "NECB 2011": "Geometry.primary_school.osm",
-      "default": "Geometry.primary_school.osm"
+      "90.1-2004": "Geometry.primary_school.osm",
+      "90.1-2007": "Geometry.primary_school.osm",
+      "90.1-2010": "Geometry.primary_school.osm",
+      "90.1-2013": "Geometry.primary_school.osm"
     },
     "space_map": [
       {
@@ -61,7 +64,12 @@
       },
       {
         "template": [
-          "default"
+          "90.1-2004",
+          "90.1-2007",
+          "90.1-2010",
+          "90.1-2013",
+          "DOE Ref 1980-2004",
+          "DOE Ref Pre-1980"
         ],
         "space_type_map": {
           "Office": [

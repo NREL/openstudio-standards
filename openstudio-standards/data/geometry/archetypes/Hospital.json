@@ -2,7 +2,12 @@
   "Hospital": {
     "geometry": {
       "NECB 2011": "Geometry.hospital_new.osm",
-      "default": "Geometry.hospital.osm"
+      "90.1-2004": "Geometry.hospital.osm",
+      "90.1-2007": "Geometry.hospital.osm",
+      "90.1-2010": "Geometry.hospital.osm",
+      "90.1-2013": "Geometry.hospital.osm",
+      "DOE Ref 1980-2004": "Geometry.hospital.osm",
+      "DOE Ref Pre-1980": "Geometry.hospital.osm"
     },
     "space_map": [
       {
@@ -93,7 +98,12 @@
       },
       {
         "template": [
-          "default"
+          "90.1-2004",
+          "90.1-2007",
+          "90.1-2010",
+          "90.1-2013",
+          "DOE Ref 1980-2004",
+          "DOE Ref Pre-1980"
         ],
         "space_type_map": {
           "Corridor": [
@@ -192,24 +202,24 @@
         }
       }
     ],
-    "space_multiplier_map" :{
-      "ER_Exam1_Mult4_Flr_1" : 4,
-      "ER_Exam3_Mult4_Flr_1" : 4,
-      "ER_Triage_Mult4_Flr_1" : 4,
-      "IC_PatRoom1_Mult5_Flr_2" : 5,
-      "IC_PatRoom3_Mult6_Flr_2" : 6,
-      "Office1_Mult4_Flr_1" : 5,
-      "Office2_Mult5_Flr_5" : 5,
-      "Office4_Mult6_Flr_5" : 6,
-      "OR2_Mult5_Flr_2" : 5,
-      "PatRoom1_Mult10_Flr_3" : 10,
-      "PatRoom1_Mult10_Flr_4" : 10,
-      "PatRoom3_Mult10_Flr_3" : 10,
-      "PatRoom3_Mult10_Flr_4" : 10,
-      "PatRoom5_Mult10_Flr_3" : 10,
-      "PatRoom5_Mult10_Flr_4" : 10,
-      "PatRoom7_Mult10_Flr_3" : 10,
-      "PatRoom7_Mult10_Flr_4" : 10
+    "space_multiplier_map": {
+      "ER_Exam1_Mult4_Flr_1": 4,
+      "ER_Exam3_Mult4_Flr_1": 4,
+      "ER_Triage_Mult4_Flr_1": 4,
+      "IC_PatRoom1_Mult5_Flr_2": 5,
+      "IC_PatRoom3_Mult6_Flr_2": 6,
+      "Office1_Mult4_Flr_1": 5,
+      "Office2_Mult5_Flr_5": 5,
+      "Office4_Mult6_Flr_5": 6,
+      "OR2_Mult5_Flr_2": 5,
+      "PatRoom1_Mult10_Flr_3": 10,
+      "PatRoom1_Mult10_Flr_4": 10,
+      "PatRoom3_Mult10_Flr_3": 10,
+      "PatRoom3_Mult10_Flr_4": 10,
+      "PatRoom5_Mult10_Flr_3": 10,
+      "PatRoom5_Mult10_Flr_4": 10,
+      "PatRoom7_Mult10_Flr_3": 10,
+      "PatRoom7_Mult10_Flr_4": 10
     }
   }
 }

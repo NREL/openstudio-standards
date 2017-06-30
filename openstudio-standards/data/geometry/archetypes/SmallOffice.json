@@ -3,7 +3,11 @@
     "geometry": {
       "DOE Ref Pre-1980": "Geometry.small_office_pre_1980.osm",
       "NECB 2011": "Geometry.small_office.osm",
-      "default": "Geometry.small_office.osm"
+      "90.1-2004": "Geometry.small_office.osm",
+      "90.1-2007": "Geometry.small_office.osm",
+      "90.1-2010": "Geometry.small_office.osm",
+      "90.1-2013": "Geometry.small_office.osm",
+      "DOE Ref 1980-2004": "Geometry.small_office.osm"
     },
     "space_map": [
       {
@@ -25,7 +29,12 @@
       },
       {
         "template": [
-          "default"
+          "90.1-2004",
+          "90.1-2007",
+          "90.1-2010",
+          "90.1-2013",
+          "DOE Ref 1980-2004",
+          "DOE Ref Pre-1980"
         ],
         "space_type_map": {
           "WholeBuilding - Sm Office": [

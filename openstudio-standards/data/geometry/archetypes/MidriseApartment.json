@@ -2,7 +2,12 @@
   "MidriseApartment": {
     "geometry": {
       "NECB 2011": "Geometry.mid_rise_apartment.osm",
-      "default": "Geometry.mid_rise_apartment.osm"
+      "90.1-2004": "Geometry.mid_rise_apartment.osm",
+      "90.1-2007": "Geometry.mid_rise_apartment.osm",
+      "90.1-2010": "Geometry.mid_rise_apartment.osm",
+      "90.1-2013": "Geometry.mid_rise_apartment.osm",
+      "DOE Ref 1980-2004": "Geometry.mid_rise_apartment.osm",
+      "DOE Ref Pre-1980": "Geometry.mid_rise_apartment.osm"
     },
     "space_map": [
       {
@@ -97,8 +102,7 @@
       },
       {
         "template": [
-          "NECB 2011",
-          "default"
+          "NECB 2011"
         ],
         "space_type_map": {
           "Corr. < 2.4m wide-sch-G": [
@@ -146,15 +150,15 @@
       }
     ],
     "space_multiplier_map": {
-      "M SW Apartment" : 2,
-      "M NW Apartment" : 2,
-      "M SE Apartment" : 2,
-      "M NE Apartment" : 2,
-      "M N1 Apartment" : 2,
-      "M N2 Apartment" : 2,
-      "M S1 Apartment" : 2,
-      "M S2 Apartment" : 2,
-      "M Corridor" : 2
+      "M SW Apartment": 2,
+      "M NW Apartment": 2,
+      "M SE Apartment": 2,
+      "M NE Apartment": 2,
+      "M N1 Apartment": 2,
+      "M N2 Apartment": 2,
+      "M S1 Apartment": 2,
+      "M S2 Apartment": 2,
+      "M Corridor": 2
     }
   }
 }

@@ -380,11 +380,8 @@ class OpenStudio::Model::Model
         puts building_type_to_geometry[building_type]['geometry'][template]
         geometry_file = building_type_to_geometry[building_type]['geometry'][template]
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{building_type}] was not found for Building Type = [#{building_type}] at #{building_type_to_geometry_json}. Attempting to use value from 'default' key from space_type_map[\"#{building_type}\"][\"default\"]")
-        if building_type_to_geometry[building_type]['geometry'].has_key?("default")
-          puts building_type_to_geometry[building_type]['geometry']["default"]
-          geometry_file = building_type_to_geometry[building_type]['geometry']["default"]
-        end
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Template = [#{building_type}] was not found for Building Type = [#{building_type}] at #{building_type_to_geometry_json}.")
+        return false
       end
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Building Type = #{building_type} was not found at #{building_type_to_geometry_json}")
