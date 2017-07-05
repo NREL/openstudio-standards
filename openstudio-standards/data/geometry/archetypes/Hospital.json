@@ -1,7 +1,7 @@
 {
   "Hospital": {
     "geometry": {
-      "NECB 2011": "Geometry.hospital_new.osm",
+      "NECB 2011": "Geometry.hospital.necb_2011.osm",
       "90.1-2004": "Geometry.hospital.osm",
       "90.1-2007": "Geometry.hospital.osm",
       "90.1-2010": "Geometry.hospital.osm",
