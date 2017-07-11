@@ -6240,7 +6240,12 @@ class OpenStudio::Model::Model
 
     when 'PVAV Reheat'
       hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+      chilled_water_loop = case cool_fuel
+                           when 'Electricity'
+                             nil
+                           when
+                             get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+                           end
 
       electric_reheat = false
       if zone_heat_fuel == 'Electricity'
