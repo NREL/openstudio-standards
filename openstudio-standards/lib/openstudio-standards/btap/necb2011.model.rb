@@ -58,7 +58,7 @@ class NECB_2011 < OpenStudio::Model::Model
     getBuilding.setStandardsBuildingType(building_type)
     load_building_type_methods(building_type)
     load_geometry(building_type, template)
-    add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
+    add_design_days_and_weather_file(climate_zone, epw_file)
     check_weather_file()
     getBuilding.setName("#{template}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
     assign_space_type_stubs('Space Function', template, define_space_type_map(building_type, template, climate_zone)) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)

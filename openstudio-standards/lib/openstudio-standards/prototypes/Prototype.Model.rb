@@ -72,7 +72,7 @@ class OpenStudio::Model::Model
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes
       
-      add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
+      add_design_days_and_weather_file(climate_zone, epw_file)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes 
       puts weatherFile.get.path.get.to_s
@@ -183,7 +183,7 @@ class OpenStudio::Model::Model
       custom_swh_tweaks(building_type, template, climate_zone, prototype_input, self)
       add_exterior_lights(building_type, template, climate_zone, prototype_input)
       add_occupancy_sensors(building_type, template, climate_zone)
-      add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
+      add_design_days_and_weather_file(climate_zone, epw_file)
       apply_sizing_parameters(building_type, template)
       yearDescription.get.setDayofWeekforStartDay('Sunday')
 

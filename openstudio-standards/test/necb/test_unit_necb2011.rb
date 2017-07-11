@@ -17,7 +17,8 @@ class TestNECBLargeOffice < CreateDOEPrototypeBuildingTest
 
   model = NECB_2011.new()
   model.load_building_type_methods(building_type, template, climate_zone)
-  model.add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
+  model.add_design_days_and_weather_file( climate_zone, epw_file)
+  model.set_ground_temperatures(building_type, climate_zone, template)
   model.check_weather_file()
 
   puts JSON.pretty_generate($os_standards["necb_fdwr"])
