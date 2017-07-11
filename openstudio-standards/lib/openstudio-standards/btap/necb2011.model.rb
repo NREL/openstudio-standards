@@ -25,6 +25,7 @@ class NECB_2011 < OpenStudio::Model::Model
   def initialize()
     super()
     @standard = "NECB 2011"
+    @climate_zone = 'NECB HDD Method'
   end
 
   def check_weather_file()
@@ -34,10 +35,10 @@ class NECB_2011 < OpenStudio::Model::Model
     end
   end
 
-
-
-  def create_prototype_building(building_type, template, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+  #this method will create a new prototype building based on the NECB 2011
+  def create_prototype_building(building_type, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
     template = @standard
+    climate_zone = @climate_zone
     lookup_building_type = get_lookup_name(building_type)
 
     # Retrieve the Prototype Inputs from JSON
@@ -55,14 +56,13 @@ class NECB_2011 < OpenStudio::Model::Model
     debug_incremental_changes = false
     # set climate zone and building type
     getBuilding.setStandardsBuildingType(building_type)
-    load_building_type_methods(building_type, template, climate_zone)
-    load_geometry(building_type, template, climate_zone)
-    getSpaces.each {|space1| getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
+    load_building_type_methods(building_type)
+    load_geometry(building_type, template)
     add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
     check_weather_file()
     getBuilding.setName("#{template}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
     assign_space_type_stubs('Space Function', template, define_space_type_map(building_type, template, climate_zone)) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
-    add_loads(template, climate_zone)
+    add_loads(template)
     apply_infiltration_standard(template)
     modify_surface_convection_algorithm(template)
     add_constructions(building_type, template, climate_zone)
@@ -171,7 +171,6 @@ class NECB_2011 < OpenStudio::Model::Model
     return true
   end
 
-
   #This model determines the dominant NECB schedule type
   #@param self [OpenStudio::model::Model] A model object
   #return s.each [String]
@@ -234,7 +233,6 @@ class NECB_2011 < OpenStudio::Model::Model
     space_type_properties = space.model.find_object($os_standards["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
     return space_type_properties['necb_schedule_type'].strip
   end
-
 
   # This method will return the FWDR required by the hdd
   #@author phylroy.lopez@nrcan.gc.ca
@@ -366,7 +364,6 @@ class NECB_2011 < OpenStudio::Model::Model
     #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(self, nil)
   end
-
 
   def self.necb_spacetype_system_selection(heatingDesignLoad = nil, coolingDesignLoad = nil, runner = nil, building_type = nil)
     spacezoning_data = Struct.new(
@@ -522,7 +519,6 @@ class NECB_2011 < OpenStudio::Model::Model
 
     return schedule_type_array.uniq!, space_zoning_data_array
   end
-
 
   # This method will take a model that uses NECB 2011 spacetypes , and..
   # 1. Create a building story schema.
@@ -805,7 +801,6 @@ class NECB_2011 < OpenStudio::Model::Model
       raise(" #{errors}")
     end
   end
-
 
 end
 

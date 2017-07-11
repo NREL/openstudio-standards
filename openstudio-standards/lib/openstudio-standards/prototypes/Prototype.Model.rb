@@ -62,12 +62,12 @@ class OpenStudio::Model::Model
 
 
       debug_incremental_changes = false
-      load_building_type_methods(building_type, template, climate_zone)
+      load_building_type_methods(building_type)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes 
       
      # Ensure that surfaces are intersected properly.
-      load_geometry(building_type, template, climate_zone)
+      load_geometry(building_type, template)
       getSpaces.each { |space1| getSpaces.each { |space2| space1.intersectSurfaces(space2) } }
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes
@@ -92,7 +92,7 @@ class OpenStudio::Model::Model
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_assign_space_type_stubs.osm")  if debug_incremental_changes 
       
-      add_loads(template, climate_zone)
+      add_loads(template)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_loads.osm")  if debug_incremental_changes 
       
@@ -166,12 +166,12 @@ class OpenStudio::Model::Model
         #this is required to be blank otherwise it may cause side effects. 
         epw_file = ""
       end
-      load_building_type_methods(building_type, template, climate_zone)
-      load_geometry(building_type, template, climate_zone)
+      load_building_type_methods(building_type)
+      load_geometry(building_type, template)
       getBuilding.setName("#{template}-#{building_type}-#{climate_zone} created: #{Time.new}")
       space_type_map = define_space_type_map(building_type, template, climate_zone)
       assign_space_type_stubs(lookup_building_type, template, space_type_map)
-      add_loads(template, climate_zone)
+      add_loads(template)
       apply_infiltration_standard(template)
       modify_infiltration_coefficients(building_type, template, climate_zone)
       modify_surface_convection_algorithm(template)
@@ -307,7 +307,7 @@ class OpenStudio::Model::Model
   # @param template [String] the template
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
-  def load_building_type_methods(building_type, template, climate_zone)
+  def load_building_type_methods(building_type)
     building_methods = nil
 
     case building_type
@@ -359,7 +359,7 @@ class OpenStudio::Model::Model
   # @param template [String] the template
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
-  def load_geometry(building_type, template, climate_zone)
+  def load_geometry(building_type, template)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding geometry')
 
     # Determine which geometry file to use
@@ -393,7 +393,8 @@ class OpenStudio::Model::Model
     replace_model("#{geom_dir}/#{geometry_file}")
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
-
+    #ensure that model is intersected correctly.
+    getSpaces.each {|space1| getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
     return true
   end
 
@@ -558,7 +559,7 @@ class OpenStudio::Model::Model
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
 
-  def add_loads(template, climate_zone = nil)
+  def add_loads(template)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
     # Loop through all the space types currently in the model,
