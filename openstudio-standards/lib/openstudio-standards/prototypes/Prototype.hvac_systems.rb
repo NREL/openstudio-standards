@@ -6243,7 +6243,7 @@ class OpenStudio::Model::Model
       chilled_water_loop = case cool_fuel
                            when 'Electricity'
                              nil
-                           when
+                           else
                              get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
                            end
 
