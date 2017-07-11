@@ -21,27 +21,27 @@
       "notes": "Lighting and ventilation taken from 90.1-2013.  Equipment and infiltration taken from 189.1-2009 template.  Schedules and occupancy taken from DOE Ref 2004 template."
     },
     {
-      "name": "CEC CBES 1978",
+      "name": "CEC Pre-1978",
       "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
     },
     {
-      "name": "CEC CBES 1992",
+      "name": "CEC T24 1978",
       "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
     },
     {
-      "name": "CEC CBES 2001",
+      "name": "CEC T24 1992",
       "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
     },
     {
-      "name": "CEC CBES 2005",
+      "name": "CEC T24 2001",
       "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
     },
     {
-      "name": "CEC CBES 2008",
+      "name": "CEC T24 2005",
       "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
     },
     {
-      "name": "CEC CBES Pre-1978",
+      "name": "CEC T24 2008",
       "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
     },
     {
@@ -63,6 +63,10 @@
     {
       "name": "NECB 2011",
       "notes": "Taken from the Canadian NECB 2011"
+    },
+    {
+      "name": "NREL ZNE Ready 2017",
+      "notes": "National Renewable Energy Laboratory Zero Net Energy Ready 2017"
     },
     {
       "name": "OEESC 2014",

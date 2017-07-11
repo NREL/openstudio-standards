@@ -3178,6 +3178,23 @@
       "eirft": null,
       "eirfplr": null,
       "notes": null
+    },
+    {
+      "template": "NREL ZNE Ready 2017",
+      "cooling_type": "WaterCooled",
+      "condenser_type": null,
+      "compressor_type": "Rotary Screw",
+      "absorption_type": null,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "start_date": "9/9/1919",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_full_load_efficiency": 0.62,
+      "minimum_integrated_part_load_value": 0.54,
+      "capft": "ChlrWtrPosDispPathAAllQRatio_fTchwsTcwsSI",
+      "eirft": "ChlrWtrPosDispPathAAllEIRRatio_fTchwsTcwsSI",
+      "eirfplr": "ChlrWtrPosDispPathAAllEIRRatio_fQRatio",
+      "notes": "Same as large water cooled screw chillers from 90.1-2013"
     }
   ]
 }

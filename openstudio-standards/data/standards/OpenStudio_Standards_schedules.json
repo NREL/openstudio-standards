@@ -2,6 +2,55 @@
   "schedules": [
     {
       "name": "Always Off",
+      "category": "Elevator",
+      "units": null,
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Hourly",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        0.05,
+        0.05,
+        0.05,
+        0.05,
+        0.1,
+        0.2,
+        0.4,
+        0.5,
+        0.5,
+        0.35,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.35,
+        0.5,
+        0.5,
+        0.4,
+        0.4,
+        0.3,
+        0.2,
+        0.1
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Thermostat Setpoint",
+      "units": "C",
+      "day_types": "Default",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        29.4
+      ]
+    },
+    {
+      "name": "Always Off",
       "category": "Thermostat Setpoint",
       "units": "C",
       "day_types": "Default",
@@ -41,51 +90,67 @@
     },
     {
       "name": "Always Off",
-      "category": "Thermostat Setpoint",
-      "units": "C",
-      "day_types": "Default",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Reference Buildings ",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Reference Buildings ",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
-        29.4
+        95.0
       ]
     },
     {
       "name": "Always Off",
-      "category": "Elevator",
+      "category": "Unknown",
       "units": null,
-      "day_types": "Default",
+      "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Hourly",
+      "type": "Constant",
       "notes": "From DOE Prototype Buildings",
       "values": [
-        0.05,
-        0.05,
-        0.05,
-        0.05,
-        0.1,
-        0.2,
-        0.4,
-        0.5,
-        0.5,
-        0.35,
-        0.15,
-        0.15,
-        0.15,
-        0.15,
-        0.15,
-        0.15,
-        0.35,
-        0.5,
-        0.5,
-        0.4,
-        0.4,
-        0.3,
-        0.2,
-        0.1
+        0.0
+      ]
+    },
+    {
+      "name": "Always Off",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        1.0
       ]
     },
     {
@@ -152,45 +217,6 @@
     },
     {
       "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        1.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Prototype Buildings",
-      "values": [
-        0.0
-      ]
-    },
-    {
-      "name": "Always Off",
       "category": "Thermostat Setpoint",
       "units": "C",
       "day_types": "Default|WntrDsn|SmrDsn",
@@ -217,39 +243,13 @@
     },
     {
       "name": "Always Off",
-      "category": "Activity",
-      "units": "W",
+      "category": "Unknown",
+      "units": null,
       "day_types": "Default|WntrDsn|SmrDsn",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
       "type": "Constant",
       "notes": "From DOE Prototype Buildings",
-      "values": [
-        95.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Reference Buildings ",
-      "values": [
-        1.0
-      ]
-    },
-    {
-      "name": "Always Off",
-      "category": "Unknown",
-      "units": null,
-      "day_types": "Default|WntrDsn|SmrDsn",
-      "start_date": "2014-01-01T00:00:00+00:00",
-      "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": "From DOE Reference Buildings ",
       "values": [
         0.0
       ]
@@ -88111,16 +88111,65 @@
       ]
     },
     {
+      "name": "SuperMarket MaxRelHumSetSch",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        55.0
+      ]
+    },
+    {
       "name": "SuperMarket MinOA_MotorizedDamper_Sched",
       "category": "OA Air",
       "units": null,
       "day_types": "Default",
       "start_date": "2014-01-01T00:00:00+00:00",
       "end_date": "2014-12-31T00:00:00+00:00",
-      "type": "Constant",
-      "notes": null,
+      "type": "Hourly",
+      "notes": "Same to HVAC operational Schedule",
       "values": [
-        1.0
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "SuperMarket MinRelHumSetSch",
+      "category": "Unknown",
+      "units": null,
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "From DOE Prototype Buildings",
+      "values": [
+        30.0
       ]
     },
     {

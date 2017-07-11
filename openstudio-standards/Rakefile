@@ -22,7 +22,7 @@ namespace :test do
         return false
     end
 
-    
+
     desc 'Run BTAP.perform_qaqc() test'
     Rake::TestTask.new(:btap_json_test) do |t|
       file_list = FileList.new('openstudio-standards/test/test_necb_qaqc.rb')
@@ -31,7 +31,7 @@ namespace :test do
       t.verbose = true
     end
 
-    ['90_1_prm','90_1_general','doe_prototype','necb'].each do |type|
+    ['90_1_prm','90_1_general','doe_prototype','necb','necb_bldg'].each do |type|
         desc "Manual Run CircleCI tests #{type}"
         Rake::TestTask.new("circ-#{type}") do |t|
             array = full_file_list.select { |item| item.include?("#{type}") }
@@ -41,14 +41,14 @@ namespace :test do
     end
 
 
-  
+
     desc "Manual Run All CircleCI tests"
     Rake::TestTask.new("circ-all-tests") do |t|
         array = full_file_list
         t.libs << 'test'
         t.test_files = array
     end
-    
+
 
 
     # These tests only available in the CI environment
@@ -64,7 +64,7 @@ namespace :test do
                 File.open("../node_tests.txt", "r") do |f|
                     f.each_line do |line|
                         # Skip comments the CLI may have included
-                        next unless line.include?('.rb') 
+                        next unless line.include?('.rb')
                         # Remove whitespaces
                         line = line.strip
                         # Ensure the file exists
@@ -100,13 +100,13 @@ namespace :test do
                     if files_to_times[file].nil?
                         files_to_times[file] = time
                     else
-                        files_to_times[file] += time        
+                        files_to_times[file] += time
                     end
                     # Record for this test itself
                     if tests_to_times[name].nil?
                         tests_to_times[name] = time
                     else
-                        tests_to_times[name] += time        
+                        tests_to_times[name] += time
                     end
 
                 end
