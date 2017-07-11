@@ -110,7 +110,7 @@ module LargeHotel
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # Add Exhaust Fan
-    space_type_map = define_space_type_map(building_type, template, climate_zone)
+    space_type_map = model.define_space_type_map(building_type, template, climate_zone)
     exhaust_fan_space_types = []
     case template
     when '90.1-2004', '90.1-2007'

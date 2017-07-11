@@ -12,7 +12,6 @@ class OpenStudio::Model::Model
     end
 
     if space_type_map.has_key?(building_type)
-
       template_found = false
       #search for template within building_type key
       space_type_map[building_type]['space_map'].each_with_index do |item, index|  
@@ -33,45 +32,6 @@ class OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Building Type = #{building_type} was not found at #{space_type_map_json}")
       return false
     end
-=begin
-    case building_type
-    when 'SecondarySchool'
-      return PrototypeBuilding::SecondarySchool.define_space_type_map(building_type, template, climate_zone)
-    when 'PrimarySchool'
-      return PrototypeBuilding::PrimarySchool.define_space_type_map(building_type, template, climate_zone)
-    when 'SmallOffice'
-      return PrototypeBuilding::SmallOffice.define_space_type_map(building_type, template, climate_zone)
-    when 'MediumOffice'
-      return PrototypeBuilding::MediumOffice.define_space_type_map(building_type, template, climate_zone)
-    when 'LargeOffice'
-      return PrototypeBuilding::LargeOffice.define_space_type_map(building_type, template, climate_zone)
-    when 'SmallHotel'
-      return PrototypeBuilding::SmallHotel.define_space_type_map(building_type, template, climate_zone)
-    when 'LargeHotel'
-      return PrototypeBuilding::LargeHotel.define_space_type_map(building_type, template, climate_zone)
-    when 'Warehouse'
-      return PrototypeBuilding::Warehouse.define_space_type_map(building_type, template, climate_zone)
-    when 'RetailStandalone'
-      return PrototypeBuilding::RetailStandalone.define_space_type_map(building_type, template, climate_zone)
-    when 'RetailStripmall'
-      return PrototypeBuilding::RetailStripmall.define_space_type_map(building_type, template, climate_zone)
-    when 'QuickServiceRestaurant'
-      return PrototypeBuilding::QuickServiceRestaurant.define_space_type_map(building_type, template, climate_zone)
-    when 'FullServiceRestaurant'
-      return PrototypeBuilding::FullServiceRestaurant.define_space_type_map(building_type, template, climate_zone)
-    when 'Hospital'
-      return PrototypeBuilding::Hospital.define_space_type_map(building_type, template, climate_zone)
-    when 'Outpatient'
-      return PrototypeBuilding::Outpatient.define_space_type_map(building_type, template, climate_zone)
-    when 'MidriseApartment'
-      return PrototypeBuilding::MidriseApartment.define_space_type_map(building_type, template, climate_zone)
-    when 'HighriseApartment'
-      return PrototypeBuilding::HighriseApartment.define_space_type_map(building_type, template, climate_zone)
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Building Type = #{building_type} not recognized")
-      return false
-    end
-=end
   end
 
   def define_hvac_system_map(building_type, template, climate_zone)
