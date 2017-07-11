@@ -115,7 +115,7 @@ class TestAddHVACSystems < Minitest::Test
 
         # Assign a weather file
         model.add_design_days_and_weather_file('ASHRAE 169-2006-7A', '')
-        model.set_ground_temperatures('MediumOffice', template, 'ASHRAE 169-2006-7A')
+        model.add_ground_temperatures('MediumOffice', template, 'ASHRAE 169-2006-7A')
         # Add the HVAC
         model.add_hvac_system(template, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, model.getThermalZones)
 

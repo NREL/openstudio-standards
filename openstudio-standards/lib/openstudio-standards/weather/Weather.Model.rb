@@ -137,7 +137,7 @@ class OpenStudio::Model::Model
     return true
   end
 
-  def set_ground_temperatures(building_type, climate_zone, template)
+  def add_ground_temperatures(building_type, climate_zone, template)
     ground_temp_vals = find_object($os_standards['ground_temperatures'], 'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type)
     if ground_temp_vals && ground_temp_vals['jan']
       ground_temp = getSiteGroundTemperatureBuildingSurface

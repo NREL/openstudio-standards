@@ -136,7 +136,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       
         #Add weather file, HDD.
         @model.add_design_days_and_weather_file('NECB HDD Method', File.basename(weather_file))
-        @model.set_ground_temperatures('HighriseApartment', 'NECB HDD Method', template)
+        @model.add_ground_temperatures('HighriseApartment', 'NECB HDD Method', template)
         # Reduce the WWR and SRR, if necessary
         @model.apply_prm_baseline_window_to_wall_ratio(template,nil)
         @model.apply_prm_baseline_skylight_to_roof_ratio(template)
