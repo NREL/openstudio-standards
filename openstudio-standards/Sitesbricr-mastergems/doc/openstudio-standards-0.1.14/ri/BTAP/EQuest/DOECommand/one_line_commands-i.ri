@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"one_line_commands:ETI"/BTAP::EQuest::DOECommand#one_line_commands;TI"RW;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I";A list of all the one line commands (no keyword pairs);T:
+@fileI",lib/openstudio-standards/btap/equest.rb;T:0@omit_headings_from_table_of_contents_below0F@I"BTAP::EQuest::DOECommand;TcRDoc::NormalClass0
