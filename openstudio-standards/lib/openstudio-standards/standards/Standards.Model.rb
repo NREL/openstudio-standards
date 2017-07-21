@@ -3543,7 +3543,7 @@ class OpenStudio::Model::Model
     # Create an array of surface types
     # each standard applies to.
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       types_to_modify << ['Outdoors', 'Floor']
       types_to_modify << ['Outdoors', 'Wall']
       types_to_modify << ['Outdoors', 'RoofCeiling']
@@ -4274,7 +4274,7 @@ class OpenStudio::Model::Model
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       result = possible_climate_zones.sort.last
-    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'NREL ZNE Ready 2017'
       result = possible_climate_zones.sort.first
     when '90.1-2004'
       result = if possible_climate_zones.include? 'ClimateZone 3'
@@ -4531,6 +4531,14 @@ class OpenStudio::Model::Model
         space_type_hash[space_type][:num_students] = num_students
         space_type_hash[space_type][:num_units] = num_units
         space_type_hash[space_type][:num_beds] = num_beds
+
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, floor area = #{OpenStudio.convert(floor_area,'m^2','ft^2').get.round} ft^2.") unless floor_area == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of spaces = #{effective_num_spaces}.") unless effective_num_spaces == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of units = #{num_units}.") unless num_units == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of people = #{num_people}.") unless num_people == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of students = #{num_students}.") unless num_students == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of beds = #{num_beds}.") unless num_beds == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of meals = #{num_meals}.") unless num_meals
 
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Cannot identify standards buidling type and space type for #{space_type.name}, it won't be added to space_type_hash.")

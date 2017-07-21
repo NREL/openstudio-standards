@@ -369,7 +369,7 @@ class OpenStudio::Model::PlantLoop
       # Not required before 90.1-2004
       return reset_required
 
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
 
       # Not required for service water heating systems
       if swh_loop?

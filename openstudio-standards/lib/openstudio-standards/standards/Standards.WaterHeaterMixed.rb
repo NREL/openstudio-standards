@@ -52,7 +52,7 @@ class OpenStudio::Model::WaterHeaterMixed
     case fuel_type
     when 'Electricity'
       case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
 
         if capacity_w <= 12_000 # I think this should be 12000W, use variable capacity_w instead of capacity_btu_per_hr (as per PNNL doc)
           # Fixed water heater efficiency per PNNL
@@ -63,7 +63,7 @@ class OpenStudio::Model::WaterHeaterMixed
                                [0.93, 0.00132]
                              when '90.1-2010'
                                [0.97, 0.00132]
-                             when '90.1-2013'
+                             when '90.1-2013', 'NREL ZNE Ready 2017'
                                [0.97, 0.00035]
                              end
 
@@ -80,7 +80,7 @@ class OpenStudio::Model::WaterHeaterMixed
             sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal)) 
             # Calculate the skin loss coefficient (UA)
             ua_btu_per_hr_per_f = sl_btu_per_hr / 70
-          when '90.1-2013'
+          when '90.1-2013', 'NREL ZNE Ready 2017'
             # Calculate the percent loss per hr
             hrly_loss_pct = (0.3 + 27 / volume_gal) / 100
             # Convert to Btu/hr, assuming:
@@ -121,7 +121,7 @@ class OpenStudio::Model::WaterHeaterMixed
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         water_heater_eff = 0.78
         ua_btu_per_hr_per_f = 11.37
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'NREL ZNE Ready 2017'
         if capacity_btu_per_hr <= 75_000
           # Fixed water heater thermal efficiency per PNNL
           water_heater_eff = 0.82
@@ -131,7 +131,7 @@ class OpenStudio::Model::WaterHeaterMixed
                                [0.62, 0.0019]
                              when '90.1-2010', 'NECB 2011'
                                [0.67, 0.0019]
-                             when '90.1-2013'
+                             when '90.1-2013', 'NREL ZNE Ready 2017'
                                [0.67, 0.0005]
                              end
 
@@ -154,7 +154,7 @@ class OpenStudio::Model::WaterHeaterMixed
           cap_adj, vol_drt = case template
                    when '90.1-2004', '90.1-2007', '90.1-2010', 'NECB 2011'
                      [800, 110]
-                   when '90.1-2013'
+                   when '90.1-2013', 'NREL ZNE Ready 2017'
                      [799, 16.6]
                    end
           sl_btu_per_hr = (capacity_btu_per_hr / cap_adj + vol_drt * Math.sqrt(volume_gal))

@@ -170,7 +170,7 @@ class OpenStudio::Model::AirLoopHVAC
       # G3.1.3.12 SAT reset required for all Multizone VAV systems,
       # even if not required by prescriptive section.
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         enable_supply_air_temperature_reset_warmest_zone(template)
       end
 
@@ -720,7 +720,7 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-6B'
         minimum_capacity_btu_per_hr = 65_000
       end
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       if is_dc # data center / computer room
         case climate_zone
         when 'ASHRAE 169-2006-1A',
@@ -866,7 +866,7 @@ class OpenStudio::Model::AirLoopHVAC
         drybulb_limit_f = 75
         dewpoint_limit_f = 55
       end
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       case economizer_type
       when 'FixedDryBulb'
         case climate_zone
@@ -1007,7 +1007,7 @@ class OpenStudio::Model::AirLoopHVAC
           integrated_economizer_required = true
         end
       end
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       integrated_economizer_required = true
     when 'NECB 2011'
       # this means that compressor allowed to turn on when economizer is open
@@ -1076,7 +1076,7 @@ class OpenStudio::Model::AirLoopHVAC
         min_int_area_served_ft2 = 10_000
         min_ext_area_served_ft2 = 25_000
       end
-    when '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       case climate_zone
       when 'ASHRAE 169-2006-1A',
           'ASHRAE 169-2006-1B',
@@ -1163,7 +1163,7 @@ class OpenStudio::Model::AirLoopHVAC
         economizer_type = 'FixedDryBulb'
         drybulb_limit_f = 65
       end
-    when '90.1-2013'
+    when '90.1-2013', 'NREL ZNE Ready 2017'
       case climate_zone
       when 'ASHRAE 169-2006-1B',
           'ASHRAE 169-2006-2B',
@@ -1302,7 +1302,7 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-6A',
           prohibited_types = []
       end
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       case climate_zone
       when 'ASHRAE 169-2006-1B',
           'ASHRAE 169-2006-2B',
@@ -1520,7 +1520,7 @@ class OpenStudio::Model::AirLoopHVAC
           erv_cfm = 0
         end
       end
-    when '90.1-2013'
+    when '90.1-2013', 'NREL ZNE Ready 2017'
       # Calculate the number of system operating hours
       # based on the availability schedule.
       ann_op_hrs = 0.0
@@ -1882,7 +1882,7 @@ class OpenStudio::Model::AirLoopHVAC
       # Not required before 90.1-2010
       return multizone_opt_required
 
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
 
       # Not required for systems with fan-powered terminals
       num_fan_powered_terminals = 0
@@ -2267,8 +2267,13 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Not required for systems that require an ERV
     if energy_recovery?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system has Energy Recovery.")
-      return dcv_required
+      case template
+      when 'NREL ZNE Ready 2017'
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV may be required although the system has Energy Recovery.")
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system has Energy Recovery.")
+        return dcv_required
+      end
     end
 
     # OA flow limits
@@ -2284,6 +2289,9 @@ class OpenStudio::Model::AirLoopHVAC
     when '90.1-2013'
       min_oa_without_economizer_cfm = 3000
       min_oa_with_economizer_cfm = 750
+    when 'NREL ZNE Ready 2017'
+      min_oa_without_economizer_cfm = 1500 # half of 90.1-2013 req
+      min_oa_with_economizer_cfm = 375 # half of 90.1-2013 req
     end
 
     # Get the min OA flow rate
@@ -2398,7 +2406,7 @@ class OpenStudio::Model::AirLoopHVAC
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
       return is_sat_reset_required
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       case climate_zone
       when 'ASHRAE 169-2006-1A',
         'ASHRAE 169-2006-2A',
@@ -2443,7 +2451,7 @@ class OpenStudio::Model::AirLoopHVAC
     when '90.1-2004'
       # 2004 has a 10F sat reset
       sat_reset_r = 10
-    when '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       sat_reset_r = 5
     end
 
@@ -2618,7 +2626,7 @@ class OpenStudio::Model::AirLoopHVAC
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
       damper_action = 'Single Maximum'
-    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'NREL ZNE Ready 2017'
       damper_action = 'Dual Maximum'
     end
 
@@ -2699,7 +2707,7 @@ class OpenStudio::Model::AirLoopHVAC
         minimum_oa_flow_cfm = 300
         maximum_stories = 3
       end
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       case climate_zone
       when 'ASHRAE 169-2006-1A',
           'ASHRAE 169-2006-1B',
@@ -3061,7 +3069,7 @@ class OpenStudio::Model::AirLoopHVAC
       return true
     when '90.1-2004', '90.1-2007'
       num_stages = 1
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       num_stages = 2
     end
 
@@ -3419,7 +3427,7 @@ class OpenStudio::Model::AirLoopHVAC
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       # static pressure reset not required
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       if has_ddc
         sp_reset_required = true
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Static pressure reset is required because the system has DDC control of VAV terminals.")
@@ -3445,7 +3453,7 @@ class OpenStudio::Model::AirLoopHVAC
     # must turn off when unoccupied.
     minimum_fan_hp = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'NREL ZNE Ready 2017'
       minimum_fan_hp = 0.75
     end
 

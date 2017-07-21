@@ -59,7 +59,7 @@ module CoolingTower
     # 90.1 6.5.5.3 Limit on Centrifugal Fan
     # Open Circuit Cooling Towers.
     case template
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       if fan_type == 'Centrifugal'
         gpm_limit = 1100
         if design_water_flow_gpm >= gpm_limit
