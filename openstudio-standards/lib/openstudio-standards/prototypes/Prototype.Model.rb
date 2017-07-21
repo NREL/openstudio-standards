@@ -801,7 +801,7 @@ class OpenStudio::Model::Model
     # not required for NECB 2011
     unless (template == 'NECB 2011') ||
            ((building_type == 'SmallHotel') &&
-             (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'))
+             (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(self)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
@@ -1305,13 +1305,12 @@ class OpenStudio::Model::Model
   # @param (see #add_constructions)
   # @return [Bool] returns true if successful, false if not
   # @todo Consistency - make prototype and reference vintages consistent
-  # @todo Add 90.1-2013?
   def modify_infiltration_coefficients(building_type, template, climate_zone)
     # Select the terrain type, which
     # impacts wind speed, and in turn infiltration
     terrain = 'City'
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       case building_type
       when 'Warehouse'
         terrain = 'Urban'
@@ -1322,24 +1321,27 @@ class OpenStudio::Model::Model
     # Set the terrain type
     getSite.setTerrain(terrain)
 
-    # modify the infiltration coefficients for 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013
-    return true unless template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NECB 2011'
+    # modify the infiltration coefficients
+    case template
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      # TODO make this consistent with newer prototypes
+      const_coeff = 1.0
+      temp_coeff = 0.0
+      velo_coeff = 0.0
+      velo_sq_coeff = 0.0
+    else
+      # Includes a wind-velocity-based term
+      const_coeff = 0.0
+      temp_coeff = 0.0
+      velo_coeff = 0.224
+      velo_sq_coeff = 0.0
+    end
 
-    # The pre-1980 and 1980-2004 buildings have this:
-    # 1.0000,                  !- Constant Term Coefficient
-    # 0.0000,                  !- Temperature Term Coefficient
-    # 0.0000,                  !- Velocity Term Coefficient
-    # 0.0000;                  !- Velocity Squared Term Coefficient
-    # The 90.1-2010 buildings have this:
-    # 0.0000,                  !- Constant Term Coefficient
-    # 0.0000,                  !- Temperature Term Coefficient
-    # 0.224,                   !- Velocity Term Coefficient
-    # 0.0000;                  !- Velocity Squared Term Coefficient
     getSpaceInfiltrationDesignFlowRates.each do |infiltration|
-      infiltration.setConstantTermCoefficient(0.0)
-      infiltration.setTemperatureTermCoefficient(0.0)
-      infiltration.setVelocityTermCoefficient(0.224)
-      infiltration.setVelocitySquaredTermCoefficient(0.0)
+      infiltration.setConstantTermCoefficient(const_coeff)
+      infiltration.setTemperatureTermCoefficient(temp_coeff)
+      infiltration.setVelocityTermCoefficient(velo_coeff)
+      infiltration.setVelocitySquaredTermCoefficient(velo_sq_coeff)
     end
   end
 
@@ -1356,7 +1358,7 @@ class OpenStudio::Model::Model
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('DOE-2')
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+    else
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('TARP')
     end
@@ -1391,6 +1393,10 @@ class OpenStudio::Model::Model
     when 'NECB 2011'
       clg = 1.3
       htg = 1.3
+    else
+      # Use the sizing factors from 90.1 PRM
+      clg = 1.15
+      htg = 1.25
     end
 
     sizing_params = getSizingParameters
@@ -1444,7 +1450,7 @@ class OpenStudio::Model::Model
         case template
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
           economizer_type = 'DifferentialDryBulb'
-        when '90.1-2010', '90.1-2013'
+        when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
           case climate_zone
           when 'ASHRAE 169-2006-1A',
               'ASHRAE 169-2006-2A',
@@ -1835,6 +1841,116 @@ class OpenStudio::Model::Model
     getBuilding.setDefaultConstructionSet(default_construction_set)
 
     return default_construction_set
+  end
+
+  # Split all zones in the model into groups that are big enough
+  # to justify their own HVAC system type.  Similar to the logic from
+  # 90.1 Appendix G, but without regard to the fuel type of the
+  # existing HVAC system (because the model may not have one).
+  #
+  # @param min_area_m2[Double] the minimum area required to justify
+  # a different system type.
+  # @return [Array<Hash>] an array of hashes of area information,
+  # with keys area_ft2, type, stories, and zones (an array of zones)
+  def group_zones_by_type(min_area_m2=20_000)
+    min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
+
+    # Get occupancy type, fuel type, and area information for all zones,
+    # excluding unconditioned zones.
+    # Occupancy types are:
+    # Residential
+    # NonResidential
+    # Use 90.1-2010 so that retail and publicassembly are not split out
+    zones = zones_with_occ_and_fuel_type('90.1-2010', nil)
+
+    # Ensure that there is at least one conditioned zone
+    if zones.size.zero?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', "The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.")
+      return []
+    end
+
+    # Group the zones by occupancy type
+    type_to_area = Hash.new { 0.0 }
+    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
+
+    # Determine the dominant occupancy type by area
+    zones_grouped_by_occ.each do |occ_type, zns|
+      zns.each do |zn|
+        type_to_area[occ_type] += zn['area']
+      end
+    end
+    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
+
+    # Get the dominant occupancy type group
+    dom_occ_group = zones_grouped_by_occ[dom_occ]
+
+    # Check the non-dominant occupancy type groups to see if they
+    # are big enough to trigger the occupancy exception.
+    # If they are, leave the group standing alone.
+    # If they are not, add the zones in that group 
+    # back to the dominant occupancy type group.
+    occ_groups = []
+    zones_grouped_by_occ.each do |occ_type, zns|
+      # Skip the dominant occupancy type
+      next if occ_type == dom_occ
+
+      # Add up the floor area of the group
+      area_m2 = 0
+      zns.each do |zn|
+        area_m2 += zn['area']
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+
+      # If the non-dominant group is big enough, preserve that group.
+      if area_ft2 > min_area_ft2
+        occ_groups << [occ_type, zns]
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with an occupancy type of #{occ_type} is bigger than the minimum area of #{min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
+      # Otherwise, add the zones back to the dominant group.
+      else
+        dom_occ_group += zns
+      end
+
+    end
+    # Add the dominant occupancy group to the list
+    occ_groups << [dom_occ, dom_occ_group]
+
+    # Calculate the area for each of the final groups
+    # and replace the zone hashes with an array of zone objects
+    final_groups = []
+    occ_groups.each do |occ_type, zns|
+      # Sum the area and put all zones into an array
+      area_m2 = 0.0
+      gp_zns = []
+      zns.each do |zn|
+        area_m2 += zn['area']
+        gp_zns << zn['zone']
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+
+      # Determine the number of stories this group spans
+      num_stories = num_stories_spanned(gp_zns)
+
+      # Create a hash representing this group
+      group = {}
+      group['area_ft2'] = area_ft2
+      group['type'] = occ_type
+      group['stories'] = num_stories
+      group['zones'] = gp_zns
+      final_groups << group
+      
+      # Report out the final grouping
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['type']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
+      group['zones'].sort.each_slice(5) do |zone_list|
+        zone_names = []
+        zone_list.each do |zone|
+          zone_names << zone.name.get.to_s
+        end
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+      end
+ 
+    end
+
+    return final_groups
   end
 
   private
