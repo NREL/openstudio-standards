@@ -61,9 +61,8 @@ class OpenStudio::Model::Model
         # The hotels have one elevator for every 75 rooms, and the large hotel includes one service elevator for every two public elevators,
         # plus one additional elevator for the dining and banquet facilities on the top floor.
         units_per_pass_elevator = 75.0
-        freight_elevators_per_unit = units_per_pass_elevator/2.0
         number_of_pass_elevators += hash[:num_units]/units_per_pass_elevator
-        number_of_freight_elevators += hash[:num_units]/freight_elevators_per_unit
+        number_of_freight_elevators = number_of_pass_elevators / 2.0
       elsif["LargeHotel"].include?(hash[:stds_bldg_type]) && ["Banquet","Cafe"].include?(hash[:stds_space_type])
         pass_elevator_per_area = OpenStudio::convert(10000.0,"ft^2","m^2").get
         number_of_pass_elevators += hash[:floor_area]/pass_elevator_per_area
@@ -110,6 +109,8 @@ class OpenStudio::Model::Model
     end
     number_of_elevators = number_of_pass_elevators + number_of_freight_elevators
 
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{number_of_pass_elevators} passenger elevators.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{number_of_freight_elevators} freight elevators.")
 
     building_type = building_type_hash.key(building_type_hash.values.max)
     # rename space types as needed
@@ -132,8 +133,8 @@ class OpenStudio::Model::Model
 
     prototype_input = find_object($os_standards['prototype_inputs'], search_criteria, nil)
     if prototype_input.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'Prototype.Model.elevators', "Could not find prototype inputs for #{search_criteria}.")
-      return false
+      OpenStudio.logFree(OpenStudio::Error, 'Prototype.Model.elevators', "Could not find prototype inputs for #{search_criteria}, cannot add elevators.")
+      return nil
     end
 
     # assign schedules
