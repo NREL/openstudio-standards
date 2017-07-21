@@ -21,6 +21,12 @@ class OpenStudio::Model::Model
     # load exterior_lighting_properties
     exterior_lighting_properties = self.find_object($os_standards['exterior_lighting'], search_criteria)
 
+    # make sure lighting properties were found
+    if exterior_lighting_properties.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'Prototype.Model.exterior_lights', "Exterior lighting properties not found for #{template}, ext lighting zone #{exterior_lighting_zone_number}, none will be added to model.")
+      return exterior_lights
+    end
+
     # get building types and ratio (needed to get correct schedules, parking area, entries, canopies, and drive throughs)
     space_type_hash = self.create_space_type_hash(template)
 
