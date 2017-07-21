@@ -75,99 +75,6 @@ class OpenStudio::Model::Model
                            building_type)
         end
 
-      #
-      #       elsif building_type == 'LargeHotel'
-      #
-      #         # Add water use equipment to each space
-      #         guess_room_water_use_schedule = "HotelLarge GuestRoom_SWH_Sch"
-      #         kitchen_water_use_schedule = "HotelLarge BLDG_SWH_SCH"
-      #
-      #         water_end_uses = []
-      #         space_type_map = self.define_space_type_map(building_type, template, climate_zone)
-      #         space_multipliers = define_space_multiplier
-      #
-      #         kitchen_space_types = ['Kitchen']
-      #         kitchen_space_use_rate = 2.22 # gal/min, from PNNL prototype building
-      #
-      #         guess_room_water_use_rate = 0.020833333 # gal/min, Reference: NREL Reference building report 5.1.6
-      #
-      #         # Create a list of water use rates and associated room multipliers
-      #         case template
-      #         when "90.1-2004", "90.1-2007", "90.1-2010", "90.1-2013"
-      #           guess_room_space_types =['GuestRoom','GuestRoom2','GuestRoom3','GuestRoom4']
-      #         else
-      #           guess_room_space_types =['GuestRoom','GuestRoom3']
-      #           guess_room_space_types1 = ['GuestRoom2']
-      #           guess_room_space_types2 = ['GuestRoom4']
-      #           guess_room_water_use_rate1 = 0.395761032 # gal/min, Reference building
-      #           guess_room_water_use_rate2 = 0.187465752 # gal/min, Reference building
-      #
-      #           laundry_water_use_schedule = "HotelLarge LaundryRoom_Eqp_Elec_Sch"
-      #           laundry_space_types = ['Laundry']
-      #           laundry_room_water_use_rate = 2.6108244 # gal/min, Reference building
-      #
-      #           guess_room_space_types1.each do |space_type|
-      #             space_names = space_type_map[space_type]
-      #             space_names.each do |space_name|
-      #               space_multiplier = 1
-      #               space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #               water_end_uses.push([space_name, guess_room_water_use_rate1 * space_multiplier,guess_room_water_use_schedule])
-      #             end
-      #           end
-      #
-      #           guess_room_space_types2.each do |space_type|
-      #             space_names = space_type_map[space_type]
-      #             space_names.each do |space_name|
-      #               space_multiplier = 1
-      #               space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #               water_end_uses.push([space_name, guess_room_water_use_rate2 * space_multiplier,guess_room_water_use_schedule])
-      #             end
-      #           end
-      #
-      #           laundry_space_types.each do |space_type|
-      #             space_names = space_type_map[space_type]
-      #             space_names.each do |space_name|
-      #               space_multiplier = 1
-      #               space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #               water_end_uses.push([space_name, laundry_room_water_use_rate * space_multiplier,laundry_water_use_schedule])
-      #             end
-      #           end
-      #         end
-      #
-      #         guess_room_space_types.each do |space_type|
-      #           space_names = space_type_map[space_type]
-      #           space_names.each do |space_name|
-      #             space_multiplier = 1
-      #             space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #             water_end_uses.push([space_name, guess_room_water_use_rate * space_multiplier,guess_room_water_use_schedule])
-      #           end
-      #         end
-      #
-      #         kitchen_space_types.each do |space_type|
-      #           space_names = space_type_map[space_type]
-      #           space_names.each do |space_name|
-      #             space_multiplier = 1
-      #             space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #             water_end_uses.push([space_name, kitchen_space_use_rate * space_multiplier,kitchen_water_use_schedule])
-      #           end
-      #         end
-      #
-      #         # Connect the water use equipment to the loop
-      #         water_end_uses.each do |water_end_use|
-      #           space_name = water_end_use[0]
-      #           use_rate = water_end_use[1] # in gal/min
-      #           use_schedule = water_end_use[2]
-      #
-      #           self.add_swh_end_uses(template,
-      #                               'Main',
-      #                               main_swh_loop,
-      #                               OpenStudio.convert(use_rate,'gal/min','m^3/s').get,
-      #                               use_schedule,
-      #                               OpenStudio.convert(prototype_input['main_water_use_temperature'],'F','C').get,
-      #                               space_name,
-      #                               building_type)
-      #         end
-
       elsif prototype_input['main_service_water_peak_flowrate']
 
         # Attaches the end uses if specified as a lump value in the prototype_input
@@ -431,7 +338,7 @@ class OpenStudio::Model::Model
 
       elsif stds_space_type.include?("Kitchen") || stds_space_type.include?("Laundry")
         gal_hr_peak_flow_rate = gal_hr_per_area * floor_area_ip
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate} gal/hr.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate.round} gal/hr.")
 
         # add water use equipment definition
         water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
@@ -570,7 +477,7 @@ class OpenStudio::Model::Model
       else # store water use equip by building type in hash so can add general building type hot water loop
 
         gal_hr_peak_flow_rate = gal_hr_per_area * floor_area_ip
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate} gal/hr on a shared loop.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate.round} gal/hr on a shared loop.")
 
         # add water use equipment definition
         water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
@@ -677,7 +584,7 @@ class OpenStudio::Model::Model
       water_heater_volume = water_heater_sizing[:water_heater_volume]
       parasitic_fuel_consumption_rate = water_heater_sizing[:parasitic_fuel_consumption_rate]
       if parasitic_fuel_consumption_rate > 0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding parasitic loss for #{stds_bldg_type} loopo of #{parasitic_fuel_consumption_rate.round} Btu/hr.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding parasitic loss for #{stds_bldg_type} loop of #{parasitic_fuel_consumption_rate.round} Btu/hr.")
       end
 
       # make loop for each unit and add on water use equipment
@@ -773,9 +680,10 @@ class OpenStudio::Model::Model
 
     # use formula to calculate volume and capacity based on analysis of combined water use equipment maximum flow rates and schedules
     # Max gal/hr * 8.4 lb/gal * 1 Btu/lb F * (120F - 40F)/0.8 = Btu/hr
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Capacity is #{peak_flow_fraction} * #{adjusted_flow_rate_sum} gal/hr * 8.4 * 1.0 * (#{target_temp_ip} - #{inlet_temp_ip}/ #{htg_eff}).")
     water_heater_capacity_ip = peak_flow_fraction * adjusted_flow_rate_sum * 8.4 * 1.0 * (target_temp_ip - inlet_temp_ip) / htg_eff
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Capacity of #{water_heater_capacity_ip} Btu/hr = #{peak_flow_fraction} peak fraction * #{adjusted_flow_rate_sum.round} gal/hr * 8.4 lb/gal * 1.0 Btu/lb F * (#{target_temp_ip.round} - #{inlet_temp_ip.round} deltaF / #{htg_eff} htg eff).")
     water_heater_capacity_si = OpenStudio::convert(water_heater_capacity_ip,"Btu/hr","W").get
+    # Assume 1 gal of volume per 1 kBtu/hr of heating capacity
     water_heater_volume_ip = OpenStudio::convert(water_heater_capacity_ip,"Btu/hr","kBtu/hr").get
     # increase tank size to 40 galons if calculated value is smaller
     if water_heater_volume_ip < 40.0 # gal
