@@ -46,7 +46,7 @@ end
 
 # This class will have all the common methods used by all vintages/templates/standards. This will include methods to
 # look up stuff in the json files. There will also be stubs for incremental methods as required for each vintage.
-class Standards_Model
+class Standards_Model < OpenStudio::Model::Model
   def intialized()
     @template = "standard"
   end
@@ -104,9 +104,22 @@ end
 
 
 NECB.create_prototype("toronto.epw", "CZ-3", type: :LargeOffice).what_am_i
-puts
+#>>I'm a special case!
+#>>Adding NECB HVAC
+#>>NECB 2011_LargeOffice_I am a common prototype method
+
 NECB.create_prototype("toronto.epw", "CZ-3", type: :LargeHotel).what_am_i
-puts
+#>>assign LargeHotelSpaces for NECB 2011
+#>>Adding NECB HVAC
+#>>NECB 2011_LargeHotel_I am a common prototype method
+
+
 A90_1.create_prototype("toronto.epw", "CZ-3", type: :LargeOffice).what_am_i
-puts
+#>>I'm a special case!
+#>>Adding A90.1 HVAC
+#>>ASHRAE 90.1_LargeOffice_I am a common prototype method
+
 A90_1.create_prototype("toronto.epw", "CZ-3", type: :LargeHotel).what_am_i
+#>>assign LargeHotelSpaces for ASHRAE 90.1
+#>>Adding A90.1 HVAC
+#>>ASHRAE 90.1_LargeHotel_I am a common prototype method
