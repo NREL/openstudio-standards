@@ -46,7 +46,7 @@ end
 
 # This class will have all the common methods used by all vintages/templates/standards. This will include methods to
 # look up stuff in the json files. There will also be stubs for incremental methods as required for each vintage.
-class Standards_Model < OpenStudio::Model::Model
+class Standards_Model
   def intialized()
     @template = "standard"
   end
@@ -61,6 +61,7 @@ class Standards_Model < OpenStudio::Model::Model
     prototype_model.assign_space_types()  #building_type Method
 
     prototype_model.add_hvac() #Child Class
+    puts type.to_s.class
     return prototype_model
   end
 
