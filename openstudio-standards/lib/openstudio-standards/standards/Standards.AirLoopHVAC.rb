@@ -2688,7 +2688,14 @@ class OpenStudio::Model::AirLoopHVAC
     if damper_action == 'Single Maximum'
       damper_action_eplus = 'Normal'
     elsif damper_action == 'Dual Maximum'
-      damper_action_eplus = 'Reverse'
+      # EnergyPlus 8.7 changed the meaning of 'Reverse'.
+      # For versions of OpenStudio using E+ 8.6 or lower
+      if self.model.version < OpenStudio::VersionString.new('2.0.5')
+        damper_action_eplus = 'Reverse'
+      # For versions of OpenStudio using E+ 8.7 or higher
+      else
+        damper_action_eplus = 'ReverseWithLimits'
+      end
     end
 
     # Set the control for any VAV reheat terminals
