@@ -1910,6 +1910,27 @@ class OpenStudio::Model::AirLoopHVAC
     # Apply the prototype Heat Exchanger power assumptions.
     erv.apply_prototype_nominal_electric_power
 
+    # Determine if the system is a DOAS based on
+    # whether there is 100% OA in heating and cooling sizing.
+    is_doas = false
+    sizing_system = sizingSystem
+    if sizing_system.allOutdoorAirinCooling && sizing_system.allOutdoorAirinHeating
+      is_doas = true
+    end
+
+    # Set the bypass control type
+    # If DOAS system, BypassWhenWithinEconomizerLimits
+    # to disable ERV during economizing.
+    # Otherwise, BypassWhenOAFlowGreaterThanMinimum
+    # to disable ERV during economizing and when OA
+    # is also greater than minimum.
+    bypass_ctrl_type = if is_doas
+                         'BypassWhenWithinEconomizerLimits'
+                       else
+                         'BypassWhenOAFlowGreaterThanMinimum'
+                       end
+    oa_sys.getControllerOutdoorAir.setHeatRecoveryBypassControlType(bypass_ctrl_type)
+
     return true
   end
 

@@ -687,7 +687,6 @@ class OpenStudio::Model::Model
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
-    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
@@ -695,7 +694,6 @@ class OpenStudio::Model::Model
 
     if building_type == 'LargeHotel'
       oa_intake_controller.setEconomizerControlType('DifferentialEnthalpy')
-      oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
       oa_intake_controller.resetMaximumFractionofOutdoorAirSchedule
       oa_intake_controller.resetEconomizerMinimumLimitDryBulbTemperature
     end
@@ -878,7 +876,6 @@ class OpenStudio::Model::Model
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
-    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
@@ -1264,7 +1261,6 @@ class OpenStudio::Model::Model
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
-    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
@@ -1468,7 +1464,6 @@ class OpenStudio::Model::Model
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     # oa_intake_controller.setMinimumOutdoorAirSchedule(motorized_oa_damper_sch)
     oa_intake_controller.setMinimumFractionofOutdoorAirSchedule(oa_damper_sch)
-    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
@@ -2050,7 +2045,6 @@ class OpenStudio::Model::Model
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
       oa_controller.setName("#{air_loop.name} OA Sys Controller")
       oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
-      oa_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_controller)
       oa_system.setName("#{air_loop.name} OA Sys")
       econ_eff_sch = add_schedule('RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
