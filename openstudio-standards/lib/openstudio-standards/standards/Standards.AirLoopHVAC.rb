@@ -3121,6 +3121,12 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @return [Bool] returns true if successful, false if not
   def apply_single_zone_controls(template, climate_zone)
+    # These controls only apply to systems with DX cooling
+    unless dx_cooling?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Single zone controls not applicable because no DX cooling.")
+      return true
+    end
+
     # Number of stages is determined by the template
     num_stages = nil
     case template
@@ -3130,8 +3136,23 @@ class OpenStudio::Model::AirLoopHVAC
     when '90.1-2004', '90.1-2007'
       num_stages = 1
     when '90.1-2010', '90.1-2013'
-      num_stages = 2
+      min_clg_cap_btu_per_hr = 65_000
+      clg_cap_btu_per_hr = OpenStudio.convert(total_cooling_capacity, 'W', 'Btu/hr').get
+      if clg_cap_btu_per_hr >= min_clg_cap_btu_per_hr
+        num_stages = 2
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: two-stage control is required since cooling capacity of #{clg_cap_btu_per_hr.round} Btu/hr exceeds the minimum of #{min_clg_cap_btu_per_hr.round} Btu/hr .")
+      else
+        num_stages = 1
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: two-stage control is not required since cooling capacity of #{clg_cap_btu_per_hr.round} Btu/hr is less than the minimum of #{min_clg_cap_btu_per_hr.round} Btu/hr .")
+      end
     end
+
+    # Fan control program only used for systems with two-stage DX coils
+    fan_control = if multi_stage_dx_cooling?
+                    true
+                  else
+                    false
+                  end
 
     # Scrub special characters from the system name
     sn = name.get.to_s
@@ -3211,77 +3232,57 @@ class OpenStudio::Model::AirLoopHVAC
     max_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
     oa_control.setMaximumFractionofOutdoorAirSchedule(max_oa_sch)
 
+    ### EMS shared by both programs ###
     # Sensors
-
     oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
     oat_db_c_sen.setName("OATF")
     oat_db_c_sen.setKeyName("Environment")
-    
+
     oat_wb_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Wetbulb Temperature')
     oat_wb_c_sen.setName("OAWBC")
     oat_wb_c_sen.setKeyName("Environment")
-    
+
     oa_sch_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
     oa_sch_sen.setName("#{snc}OASch")
     oa_sch_sen.setKeyName("#{min_oa_sch.handle}")
 
-    zn_temp_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Temperature')
-    zn_temp_sen.setName("#{zn_name_clean}Temp")
-    zn_temp_sen.setKeyName("#{zone_air_node.handle}")
-
     oa_flow_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Mass Flow Rate')
     oa_flow_sen.setName("#{snc}OAFlowMass")
     oa_flow_sen.setKeyName("#{oa_node.handle}")
-
-    htg_rtf_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Heating Coil Runtime Fraction')
-    htg_rtf_sen.setName("#{snc}HeatingRTF")
-    htg_rtf_sen.setKeyName("#{htg_coil.handle}")
-
-    clg_rtf_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Cooling Coil Runtime Fraction')
-    clg_rtf_sen.setName("#{snc}RTF")
-    clg_rtf_sen.setKeyName("#{dx_coil.handle}")
-
-    spd_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Coil System Compressor Speed Ratio')
-    spd_sen.setName("#{snc}SpeedRatio")
-    spd_sen.setKeyName("#{dx_coil.handle} CoilSystem")
 
     dat_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Setpoint Temperature')
     dat_sen.setName("#{snc}DATRqd")
     dat_sen.setKeyName("#{sup_out_node.handle}")
 
     # Internal Variables
-
-    fan_pres_var = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Fan Nominal Pressure Rise')
-    fan_pres_var.setName("#{snc}FanDesignPressure")
-    fan_pres_var.setInternalDataIndexKeyName("#{fan.handle}")
-
-    dsn_flow_var = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Outdoor Air Controller Maximum Mass Flow Rate')
-    dsn_flow_var.setName("#{snc}DesignFlowMass")
-    dsn_flow_var.setInternalDataIndexKeyName("#{oa_control.handle}")
-
     oa_flow_var = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Outdoor Air Controller Minimum Mass Flow Rate')
     oa_flow_var.setName("#{snc}OADesignMass")
     oa_flow_var.setInternalDataIndexKeyName("#{oa_control.handle}")
-      
-    # Actuators
-
-    fan_pres_act = OpenStudio::Model::EnergyManagementSystemActuator.new(fan, 'Fan', 'Fan Pressure Rise')
-    fan_pres_act.setName("#{snc}FanPressure")
-
-    econ_eff_act = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_sch, 'Schedule:Year', 'Schedule Value')
-    econ_eff_act.setName("#{snc}TimestepEconEff")
 
     # Global Variables
-
-    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}FanPwrExp")
-    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}Stg1Spd")
-    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}Stg2Spd")
-    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}HeatSpeed")
-    gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}VenSpeed")
     gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}NumberofStages")
 
     # Programs
+    num_stg_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    num_stg_prg.setName("#{snc}SetNumberofStages")
+    num_stg_prg_body = <<-EMS
+      SET #{snc}NumberofStages = #{num_stages}
+    EMS
+    num_stg_prg.setBody(num_stg_prg_body)
 
+    # Program Calling Managers
+    setup_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    setup_mgr.setName("#{snc}SetNumberofStagesCallingManager")
+    setup_mgr.setCallingPoint('BeginNewEnvironment')
+    setup_mgr.addProgram(num_stg_prg)
+
+    ### Economizer Control ###
+
+    # Actuators
+    econ_eff_act = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_sch, 'Schedule:Year', 'Schedule Value')
+    econ_eff_act.setName("#{snc}TimestepEconEff")
+
+    # Programs
     econ_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     econ_prg.setName("#{snc}EconomizerCTRLProg")
     econ_prg_body = <<-EMS
@@ -3333,118 +3334,150 @@ class OpenStudio::Model::AirLoopHVAC
       ENDIF
     EMS
     econ_prg.setBody(econ_prg_body)
-    
-    fan_par_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    fan_par_prg.setName("#{snc}SetFanPar")
-    fan_par_prg_body = <<-EMS
-      IF #{snc}NumberofStages == 1
-        Return
-      ENDIF
-      SET #{snc}FanPwrExp = 2.2
-      SET OAFrac = #{oa_flow_sen.handle}/#{dsn_flow_var.handle}
-      IF  OAFrac < 0.66
-        SET #{snc}VenSpeed = 0.66
-        SET #{snc}Stg1Spd = 0.66
-      ELSE
-        SET #{snc}VenSpeed = OAFrac
-        SET #{snc}Stg1Spd = OAFrac
-      ENDIF
-      SET #{snc}Stg2Spd = 1.0
-      SET #{snc}HeatSpeed = 1.0
-    EMS
-    fan_par_prg.setBody(fan_par_prg_body)
-
-    fan_ctrl_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    fan_ctrl_prg.setName("#{snc}FanControl")
-    fan_ctrl_prg_body = <<-EMS
-      IF #{snc}NumberofStages == 1
-        Return
-      ENDIF
-      IF #{htg_rtf_sen.handle} > 0
-        SET Heating = #{htg_rtf_sen.handle}
-        SET Ven = 1-#{htg_rtf_sen.handle}
-        SET Eco = 0
-        SET Stage1 = 0
-        SET Stage2 = 0
-      ELSE
-        SET Heating = 0
-        SET EcoSpeed = #{snc}VenSpeed
-        IF #{spd_sen.handle} == 0
-          IF #{clg_rtf_sen.handle} > 0
-            SET Stage1 = #{clg_rtf_sen.handle}
-            SET Stage2 = 0
-            SET Ven = 1-#{clg_rtf_sen.handle}
-            SET Eco = 0
-            IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
-              SET #{snc}Stg1Spd = 1.0
-            ENDIF
-          ELSE
-            SET Stage1 = 0
-            SET Stage2 = 0
-            IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
-              SET Eco = 1.0
-              SET Ven = 0
-              !Calculate the expected discharge air temperature if the system runs at its low speed
-              SET ExpDAT = #{dat_sen.handle}-(1-#{snc}VenSpeed)*#{zn_temp_sen.handle}
-              SET ExpDAT = ExpDAT/#{snc}VenSpeed
-              IF #{oat_db_c_sen.handle} > ExpDAT
-                SET EcoSpeed = #{snc}Stg2Spd
-              ENDIF
-            ELSE
-              SET Eco = 0
-              SET Ven = 1.0
-            ENDIF
-          ENDIF
-        ELSE
-          SET Stage1 = 1-#{spd_sen.handle}
-          SET Stage2 = #{spd_sen.handle}
-          SET Ven = 0
-          SET Eco = 0
-          IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
-            SET #{snc}Stg1Spd = 1.0
-          ENDIF
-        ENDIF
-      ENDIF
-      ! For each mode (percent time in mode)*(fanSpeer^PwrExp) is the contribution to weighted fan power over time step
-      SET FPR = Ven*(#{snc}VenSpeed ^ #{snc}FanPwrExp)
-      SET FPR = FPR+Eco*(EcoSpeed^#{snc}FanPwrExp)
-      SET FPR1 = Stage1*(#{snc}Stg1Spd^#{snc}FanPwrExp)
-      SET FPR = FPR+FPR1
-      SET FPR2 = Stage2*(#{snc}Stg2Spd^#{snc}FanPwrExp)
-      SET FPR = FPR+FPR2
-      SET FPR3 = Heating*(#{snc}HeatSpeed^#{snc}FanPwrExp)
-      SET FanPwrRatio = FPR+ FPR3
-      ! system fan power is directly proportional to static pressure so this change linearly adjusts fan energy for speed control
-      SET #{fan_pres_act.handle} = #{fan_pres_var.handle}*FanPwrRatio
-    EMS
-    fan_ctrl_prg.setBody(fan_ctrl_prg_body)
-
-    num_stg_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    num_stg_prg.setName("#{snc}SetNumberofStages")
-    num_stg_prg_body = <<-EMS
-      SET #{snc}NumberofStages = #{num_stages}
-    EMS
-    num_stg_prg.setBody(num_stg_prg_body)
 
     # Program Calling Managers
-    
-    # Note that num_stg_prg must be listed before fan_par_prg
-    # because it initializes a variable used by fan_par_prg.
-    setup_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    setup_mgr.setName("#{snc}SetNumberofStagesCallingManager")
-    setup_mgr.setCallingPoint('BeginNewEnvironment')
-    setup_mgr.addProgram(num_stg_prg)
-    setup_mgr.addProgram(fan_par_prg)
-
     econ_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
     econ_mgr.setName("#{snc}EcoManager")
     econ_mgr.setCallingPoint('InsideHVACSystemIterationLoop')
     econ_mgr.addProgram(econ_prg)
 
-    fan_ctrl_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    fan_ctrl_mgr.setName("#{snc}FanMainManager")
-    fan_ctrl_mgr.setCallingPoint('BeginTimestepBeforePredictor')
-    fan_ctrl_mgr.addProgram(fan_ctrl_prg)
+    ### Fan Control ###
+    if fan_control
+
+      # Sensors
+      zn_temp_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Temperature')
+      zn_temp_sen.setName("#{zn_name_clean}Temp")
+      zn_temp_sen.setKeyName("#{zone_air_node.handle}")
+
+      htg_rtf_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Heating Coil Runtime Fraction')
+      htg_rtf_sen.setName("#{snc}HeatingRTF")
+      htg_rtf_sen.setKeyName("#{htg_coil.handle}")
+
+      clg_rtf_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Cooling Coil Runtime Fraction')
+      clg_rtf_sen.setName("#{snc}RTF")
+      clg_rtf_sen.setKeyName("#{dx_coil.handle}")
+
+      spd_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Coil System Compressor Speed Ratio')
+      spd_sen.setName("#{snc}SpeedRatio")
+      spd_sen.setKeyName("#{dx_coil.handle} CoilSystem")
+
+      # Internal Variables
+      fan_pres_var = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Fan Nominal Pressure Rise')
+      fan_pres_var.setName("#{snc}FanDesignPressure")
+      fan_pres_var.setInternalDataIndexKeyName("#{fan.handle}")
+
+      dsn_flow_var = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Outdoor Air Controller Maximum Mass Flow Rate')
+      dsn_flow_var.setName("#{snc}DesignFlowMass")
+      dsn_flow_var.setInternalDataIndexKeyName("#{oa_control.handle}")
+
+      # Actuators
+      fan_pres_act = OpenStudio::Model::EnergyManagementSystemActuator.new(fan, 'Fan', 'Fan Pressure Rise')
+      fan_pres_act.setName("#{snc}FanPressure")
+
+      # Global Variables
+      gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}FanPwrExp")
+      gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}Stg1Spd")
+      gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}Stg2Spd")
+      gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}HeatSpeed")
+      gvar = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, "#{snc}VenSpeed")
+
+      # Programs
+      fan_par_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      fan_par_prg.setName("#{snc}SetFanPar")
+      fan_par_prg_body = <<-EMS
+        IF #{snc}NumberofStages == 1
+          Return
+        ENDIF
+        SET #{snc}FanPwrExp = 2.2
+        SET OAFrac = #{oa_flow_sen.handle}/#{dsn_flow_var.handle}
+        IF  OAFrac < 0.66
+          SET #{snc}VenSpeed = 0.66
+          SET #{snc}Stg1Spd = 0.66
+        ELSE
+          SET #{snc}VenSpeed = OAFrac
+          SET #{snc}Stg1Spd = OAFrac
+        ENDIF
+        SET #{snc}Stg2Spd = 1.0
+        SET #{snc}HeatSpeed = 1.0
+      EMS
+      fan_par_prg.setBody(fan_par_prg_body)
+
+      fan_ctrl_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      fan_ctrl_prg.setName("#{snc}FanControl")
+      fan_ctrl_prg_body = <<-EMS
+        IF #{snc}NumberofStages == 1
+          Return
+        ENDIF
+        IF #{htg_rtf_sen.handle} > 0
+          SET Heating = #{htg_rtf_sen.handle}
+          SET Ven = 1-#{htg_rtf_sen.handle}
+          SET Eco = 0
+          SET Stage1 = 0
+          SET Stage2 = 0
+        ELSE
+          SET Heating = 0
+          SET EcoSpeed = #{snc}VenSpeed
+          IF #{spd_sen.handle} == 0
+            IF #{clg_rtf_sen.handle} > 0
+              SET Stage1 = #{clg_rtf_sen.handle}
+              SET Stage2 = 0
+              SET Ven = 1-#{clg_rtf_sen.handle}
+              SET Eco = 0
+              IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+                SET #{snc}Stg1Spd = 1.0
+              ENDIF
+            ELSE
+              SET Stage1 = 0
+              SET Stage2 = 0
+              IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+                SET Eco = 1.0
+                SET Ven = 0
+                !Calculate the expected discharge air temperature if the system runs at its low speed
+                SET ExpDAT = #{dat_sen.handle}-(1-#{snc}VenSpeed)*#{zn_temp_sen.handle}
+                SET ExpDAT = ExpDAT/#{snc}VenSpeed
+                IF #{oat_db_c_sen.handle} > ExpDAT
+                  SET EcoSpeed = #{snc}Stg2Spd
+                ENDIF
+              ELSE
+                SET Eco = 0
+                SET Ven = 1.0
+              ENDIF
+            ENDIF
+          ELSE
+            SET Stage1 = 1-#{spd_sen.handle}
+            SET Stage2 = #{spd_sen.handle}
+            SET Ven = 0
+            SET Eco = 0
+            IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+              SET #{snc}Stg1Spd = 1.0
+            ENDIF
+          ENDIF
+        ENDIF
+        ! For each mode (percent time in mode)*(fanSpeer^PwrExp) is the contribution to weighted fan power over time step
+        SET FPR = Ven*(#{snc}VenSpeed ^ #{snc}FanPwrExp)
+        SET FPR = FPR+Eco*(EcoSpeed^#{snc}FanPwrExp)
+        SET FPR1 = Stage1*(#{snc}Stg1Spd^#{snc}FanPwrExp)
+        SET FPR = FPR+FPR1
+        SET FPR2 = Stage2*(#{snc}Stg2Spd^#{snc}FanPwrExp)
+        SET FPR = FPR+FPR2
+        SET FPR3 = Heating*(#{snc}HeatSpeed^#{snc}FanPwrExp)
+        SET FanPwrRatio = FPR+ FPR3
+        ! system fan power is directly proportional to static pressure so this change linearly adjusts fan energy for speed control
+        SET #{fan_pres_act.handle} = #{fan_pres_var.handle}*FanPwrRatio
+      EMS
+      fan_ctrl_prg.setBody(fan_ctrl_prg_body)
+
+      # Program Calling Managers
+      # Note that num_stg_prg must be listed before fan_par_prg
+      # because it initializes a variable used by fan_par_prg.
+      setup_mgr.addProgram(fan_par_prg)
+
+      fan_ctrl_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      fan_ctrl_mgr.setName("#{snc}FanMainManager")
+      fan_ctrl_mgr.setCallingPoint('BeginTimestepBeforePredictor')
+      fan_ctrl_mgr.addProgram(fan_ctrl_prg)  
+
+    end
 
     return true
   end
@@ -3748,5 +3781,95 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     return mult
+  end
+
+  # Determine if this Air Loop uses DX cooling.
+  #
+  # @return [Bool] true if uses DX cooling, false if not.
+  def dx_cooling?
+    dx_clg = false
+
+    # Check for all DX coil types
+    dx_types = [
+      'OS_Coil_Cooling_DX_MultiSpeed',
+      'OS_Coil_Cooling_DX_SingleSpeed',
+      'OS_Coil_Cooling_DX_TwoSpeed',
+      'OS_Coil_Cooling_DX_TwoStageWithHumidityControlMode',
+      'OS_Coil_Cooling_DX_VariableRefrigerantFlow',
+      'OS_Coil_Cooling_DX_VariableSpeed',
+      'OS_CoilSystem_Cooling_DX_HeatExchangerAssisted'
+    ]
+
+    supplyComponents.each do |component|
+      # Get the object type, getting the internal coil
+      # type if inside a unitary system.
+      obj_type = component.iddObjectType.valueName.to_s
+      case obj_type
+      when 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
+        component = component.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get
+        obj_type = component.coolingCoil.iddObjectType.valueName.to_s
+      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir'
+        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
+        obj_type = component.coolingCoil.iddObjectType.valueName.to_s
+      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed'
+        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
+        obj_type = component.coolingCoil.iddObjectType.valueName.to_s
+      when 'OS_AirLoopHVAC_UnitarySystem'
+        component = component.to_AirLoopHVACUnitarySystem.get
+        if component.coolingCoil.is_initialized
+          obj_type = component.coolingCoil.get.iddObjectType.valueName.to_s
+        end
+      end
+      # See if the object type is a DX coil
+      if dx_types.include?(obj_type)
+        dx_clg = true
+        break # Stop if find a DX coil
+      end
+    end
+
+    return dx_clg
+  end
+
+  # Determine if this Air Loop uses multi-stage DX cooling.
+  #
+  # @return [Bool] true if uses multi-stage DX cooling, false if not.
+  def multi_stage_dx_cooling?
+    dx_clg = false
+
+    # Check for all DX coil types
+    dx_types = [
+      'OS_Coil_Cooling_DX_MultiSpeed',
+      'OS_Coil_Cooling_DX_TwoSpeed',
+      'OS_Coil_Cooling_DX_TwoStageWithHumidityControlMode'
+    ]
+
+    supplyComponents.each do |component|
+      # Get the object type, getting the internal coil
+      # type if inside a unitary system.
+      obj_type = component.iddObjectType.valueName.to_s
+      case obj_type
+      when 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
+        component = component.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get
+        obj_type = component.coolingCoil.iddObjectType.valueName.to_s
+      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir'
+        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
+        obj_type = component.coolingCoil.iddObjectType.valueName.to_s
+      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed'
+        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
+        obj_type = component.coolingCoil.iddObjectType.valueName.to_s
+      when 'OS_AirLoopHVAC_UnitarySystem'
+        component = component.to_AirLoopHVACUnitarySystem.get
+        if component.coolingCoil.is_initialized
+          obj_type = component.coolingCoil.get.iddObjectType.valueName.to_s
+        end
+      end
+      # See if the object type is a DX coil
+      if dx_types.include?(obj_type)
+        dx_clg = true
+        break # Stop if find a DX coil
+      end
+    end
+
+    return dx_clg
   end
 end
