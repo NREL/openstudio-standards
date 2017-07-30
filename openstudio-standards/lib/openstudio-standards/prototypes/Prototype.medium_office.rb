@@ -14,7 +14,7 @@ module MediumOffice
     else
       { 
         'WholeBuilding - Md Office' => ['Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4', 'Core_bottom', 'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4', 'Core_mid', 'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4', 'Core_top'],
-		'- undefined -' => ['FirstFloor_Plenum', 'TopFloor_Plenum', 'MidFloor_Plenum']
+    '- undefined -' => ['FirstFloor_Plenum', 'TopFloor_Plenum', 'MidFloor_Plenum']
       }
                      end
     return space_type_map
@@ -74,10 +74,10 @@ module MediumOffice
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
-		    # add extra infiltration for entry door
+    # add extra infiltration for entry door
     PrototypeBuilding::MediumOffice.add_door_infiltration(template, climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Added door infiltration')
-	
+  
     return true
   end # add hvac
 
@@ -105,7 +105,7 @@ module MediumOffice
       infiltration_entrydoor.setSpace(entry_space)
     end
   end  
-  
+
   def self.update_waterheater_loss_coefficient(template, model)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
