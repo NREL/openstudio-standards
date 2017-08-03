@@ -3,138 +3,128 @@ require 'json'
 require 'roo'
 require 'rest-client'
 require 'openssl'
+require 'aes'
+require 'geocoder'
+
+class CostingDatabase
+
+
+  def apply_baseline_constructions_based_on_rsi(model)
+    #Scan for spacetypes and determine contructions used.
+    model.getSpacesTypes.each do |space|
+      #Ensure space type is of NECB type otherwise raise error.
+      #Look up space type construction types based on building stories
+      #Generate SpaceType Construction set, avoiding duplication of constructions
+      ## The construction id type will match the cost construction id.
+      # U-values will be set to reference levels by default.
+      # assign construction set to space type.
+      #Construction names should be now listed along with U values and m2 for costing.
+    end
+  end
+
+  def distance (loc1, loc2)
+    rad_per_deg = Math::PI/180 # PI / 180
+    rkm = 6371 # Earth radius in kilometers
+    rm = rkm * 1000 # Radius in meters
+
+    dlat_rad = (loc2[0]-loc1[0]) * rad_per_deg # Delta, converted to rad
+    dlon_rad = (loc2[1]-loc1[1]) * rad_per_deg
+
+    lat1_rad, lon1_rad = loc1.map {|i| i * rad_per_deg}
+    lat2_rad, lon2_rad = loc2.map {|i| i * rad_per_deg}
+
+    a = Math.sin(dlat_rad/2)**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad/2)**2
+    c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1-a))
+    rm * c # Delta in meters
+  end
+
+
 # Method to obtain the unit costs from the New Construtions library via the RS-means API.
 # You will need to place your secret hash into a file named rs_means_auth in your home folder as ruby sees it.
 # Your hash will need to be updated as your swagger session expires (within an hour) otherwise you will get a
-# 401 not authorized error. 
-def get_rsmeans_costs( rs_type, rs_catalog_id, rs_id )
-  auth = File.read("#{Dir.home}/rs_means_auth").strip
-  auth = { :Authorization => "bearer #{auth}"}
-  path = "https://dataapi-sb.gordian.com/v1/costdata/#{rs_type.downcase.strip}/catalogs/#{rs_catalog_id.strip}/costlines/#{rs_id.strip}"
-  return JSON.parse(RestClient.get( path ,auth).body) 
-end
-
-#Hash to contain public costing information.
-costing = {}
-
-# Path to the xlsx file
-xlsx_path = "#{File.dirname(__FILE__)}/btap-costing-envelope.xlsx"
-
-# Open workbook
-workbook = Roo::Spreadsheet.open(xlsx_path)
-
-#Add array to keep btap contructions. 
-constructions = []
-
-#Add above array to costing hash. 
-costing[:constructions] = constructions
-
-#Load Constructions data sheet from workbook and convert to a csv object. 
-sheet = CSV.parse(workbook.sheet('constructions').to_csv, 
-                  {  headers:           true,
-                     header_converters: :symbol })
-
-#Iterate through each row in the constructions sheet.  
-sheet.each_with_index do |row,index|
-  #Skip if row is empty or nil. 
-  unless row[:construction_id].nil? or row[:construction_id].to_s.strip == ""
-    
-    #Create hash to contain contruction information. 
-    construction = {}
-    
-    #Create array of headers that are used in sheet.  
-    headers = [
-      :construction_id, 
-      :surface_type, 
-      :type_code, 
-      :zone, 
-      :rsi,
-      :description,
-      :material_id,
-    ]
-
-    #Iterate through each header and assign to contruction hash
-    headers.each { |header| construction[header] = row[header] }
-    #Create an array of materials to contain material ids
-    construction[:materials] = []
-    construction[:materials]  << row[:material_id]
-    #This loads in nested material id until a new construction, or EOF
-    #is detected. 
-    counter = index
-    loop do
-      counter += 1
-      nextrow = sheet[counter]
-      #Break if new construction is detected or EOF.
-      break if  nextrow.nil? or not nextrow[:construction_id].nil? or not nextrow[:construction_id].to_s.strip == ""
-      #Push material into materials array. 
-      construction[:materials] << nextrow[:material_id]
-    end 
-    #push construction into contstructions array
-    constructions << construction
-  end
-end
-
-#Create btap materials array
-materials = []
-
-#Add materials to costing hash. 
-costing[:materials] = materials
-
-#Load materials sheet into and convert to csv object. 
-sheet = CSV.parse(workbook.sheet('materials').to_csv,
-                  {  headers:           true,
-                     header_converters: :symbol })
-#Iterate though materials sheet. 
-sheet.each_with_index do |row|
-  #Skip if empty or nil. 
-  unless row[:material_id].nil? or row[:material_id].to_s.strip == ""
-    #create hash to store material info
-    material= {}
-    #Array of headers present in materials sheet. 
-    headers = [:material_id,
-               :source,
-               :type,
-               :catalog_id,
-               :id,
-               :component,
-               :unit,
-               :material_mult, 
-               :labour_mult,
-               :comment] 
-    # for each item store data into materials array. 
-    headers.each do |header|
-      #store material info into hash
-      material[header] = row[header]
+# 401 not authorized error. The hash_id (the weird long piece of text) is the only thing required in the file.
+  def get_rsmeans_costs(rs_type, rs_catalog_id, rs_id)
+    puts "Trying #{rs_catalog_id}, #{rs_id}"
+    auth = File.read("#{Dir.home}/rs_means_auth").strip
+    auth = {:Authorization => "bearer #{auth}"}
+    path = "https://dataapi-sb.gordian.com/v1/costdata/#{rs_type.downcase.strip}/catalogs/#{rs_catalog_id.strip}/costlines/#{rs_id.strip}"
+    begin
+      values = JSON.parse(RestClient.get(path, auth).body)
+      #puts JSON.pretty_generate(values)
+      return values
+    rescue Exception => e
+      puts e
+      if e.to_s.strip == "401 Unauthorized"
+        raise("Authenication failed with RSMeans. Ensure you have created your secret hash from the website and saved it in your home folder as rs_means_auth")
+      end
+      @not_found_in_rsmeans_api << " #{rs_catalog_id}, #{rs_id}"
     end
-    #store material into array
-    materials << material
+    return values
   end
-end
 
-#Create secret envelope costing data. 
-# Find all unique rs means assemblies and units
-#Create array to store rsmeans data. 
-rs_means_info = Array.new
 
-# Find all unique rs means assemblies and units
-rs_means_unique_ids = materials.map {|material| {:type => material[:type],:catalog_id => material[:catalog_id],:id => material[:id]} if material[:source]='rs-means'}.compact.uniq.sort_by { |k| k[:id] }
-#Iterate through all rs_means items. 
-rs_means_unique_ids.each do |material|
-  puts "processing #{material[:id]}"
-  #perform api call to get costing hash from RS-means and  store into array. 
-  rs_means_info <<  get_rsmeans_costs( material[:type], material[:catalog_id], material[:id] )
-end
+#This will convert a sheet in a given workbook into an array of hashes with the headers as symbols.
+  def convert_workbook_sheet_to_array_of_hashes(xlsx_path, sheet_name)
+    #Load Constructions data sheet from workbook and convert to a csv object.
+    data = Roo::Spreadsheet.open(xlsx_path).sheet(sheet_name).to_csv
+    csv = CSV.new(data, {headers: true, header_converters: :symbol})
+    return csv.to_a.map {|row| row.to_hash}
+  end
 
+  def get_costs_for_materials(materials)
+    new_materials = Array.new
+    materials.each do |material|
+
+      material['rs_means_api'] = get_rsmeans_costs(material[:type], material[:catalog_id], material[:id])
+      material['btap_total_cost_op'] = material['rs_means_api']['baseCosts'][:materialOpCost].to_f * material[:material_mult].to_f +
+          material['rs_means_api']['baseCosts'][:labourOpCost].to_f * material[:labour_mult].to_f +
+          material['rs_means_api']['baseCosts'][:equipmentOpCost].to_f
+
+      material['btap_total_cost'] = material['rs_means_api']['baseCosts'][:materialCost].to_f * material[:material_mult].to_f +
+          material['rs_means_api']['baseCosts'][:labourCost].to_f * material[:labour_mult].to_f +
+          material['rs_means_api']['baseCosts'][:equipmentCost].to_f
+      new_materials << material
+    end
+    return new_materials
+  end
+
+
+  def generate_encrypted_costing_database()
+    @not_found_in_rsmeans_api = Array.new
+    @costing_database = Hash.new()
+# Path to the xlsx file
+    xlsx_path = "#{File.dirname(__FILE__)}/national_average_cost_information.xlsm"
+
+
+
+    @costing_database[:constructions_opaque] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'constructions-opaque')
+    @costing_database[:materials_opaque] = get_costs_for_materials(convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'materials-opaque'))
+    @costing_database[:materials_glazing] = get_costs_for_materials(convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'materials-glazing'))
+
+
+        key = AES.key
 #Write public cost information to a json file. This will be used by the standards and measures. To create
-#create the openstudio construction names and costing objects. 
-File.open("btap-costing-envelope-public.json","w") do |f|
-  f.write(JSON.pretty_generate(costing))
+#create the openstudio construction names and costing objects.
+    File.open("costing_e.json", "w") do |f|
+      f.write(encrypt_hash(key, @costing_database))
+    end
+    puts "the decryption key is:#{key}"
+
+  end
+
+
+  def encrypt_hash(key, hash)
+    return b64 = AES.encrypt(JSON.pretty_generate(hash), key)
+  end
+
+  def decrypt_hash(key, string)
+    begin
+      json = JSON.parse(AES.decrypt(b64, key))
+    rescue OpenSSL::Cipher::CipherError => detail
+      puts "Could not decrypt string, perhaps key is invalid? #{detail}"
+    end
+  end
+
 end
 
-#Write secret cost information to a json file. We should think of 
-# encrypting this file using the openssl gem to make the rs-means data
-# super safe.
-File.open("btap-costing-envelope-private.json","w") do |f|
-  f.write(JSON.pretty_generate(rs_means_info))
-end
-
+CostingDatabase.new.generate_encrypted_costing_database()
