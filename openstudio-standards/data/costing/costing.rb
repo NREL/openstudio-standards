@@ -6,7 +6,7 @@ require 'openssl'
 require 'aes'
 require 'geocoder'
 
-class CostingDatabase
+class BTAPCosting
 # A list of the table and fields in the Excel database. Please keep up to date.
 #RSMeansLocations
 # province-state
@@ -43,13 +43,14 @@ class CostingDatabase
 # ext_tubular_domes
 # ext_tubular_diffusers
 #ConstructionsOpaque
+# construction_opaque_id
 # surface_type
 # construction_type_name
 # author
 # intended_surface_type
 # standards_construction_type
 # type_index
-# zone
+# climate_zone
 # rsi_k_m2_per_w
 # u_w_per_m2_k
 # description
@@ -152,7 +153,9 @@ class CostingDatabase
             end
           end
         end
-        new_construction = {'province-state' => location['province-state'],
+
+        new_construction = {'index' => counter,
+                            'province-state' => location['province-state'],
                             'city' => location['city'],
                             "construction_type_name" => construction["construction_type_name"],
                             'intended_surface_type'	=> construction["intended_surface_type"],
@@ -235,7 +238,7 @@ class CostingDatabase
             material['error'] = e
             @costing_database['rs_mean_errors'] << material
           else
-            raise("Unknown Error Occured #{e}")
+            raise("Error Occured #{e}")
           end
         end
       end
@@ -270,5 +273,5 @@ class CostingDatabase
   end
 end
 
-#CostingDatabase.new.generate_encrypted_materials_database()
+CostingDatabase.new.generate_encrypted_materials_database()
 CostingDatabase.new.get_costing_for_constructions_for_all_regions()
