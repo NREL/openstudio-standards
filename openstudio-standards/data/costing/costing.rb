@@ -7,6 +7,7 @@ require 'aes'
 require 'geocoder'
 
 class BTAPCosting
+  attr_accessor :costing_database
 # A list of the table and fields in the Excel database. Please keep up to date.
 #RSMeansLocations
 # province-state
@@ -105,9 +106,7 @@ class BTAPCosting
   # You will need to place your secret hash into a file named rs_means_auth in your home folder as ruby sees it.
   # Your hash will need to be updated as your swagger session expires (within an hour) otherwise you will get a
   # 401 not authorized error. The hash_id (the weird long piece of text) is the only thing required in the file.
-  def get_rsmeans_costs(rs_type, rs_catalog_id, rs_id)
 
-  end
 
 
   #This will convert a sheet in a given workbook into an array of hashes with the headers as symbols.
@@ -120,19 +119,16 @@ class BTAPCosting
 
 
   def get_costing_for_constructions_for_all_regions()
-
-
     @costing_database = JSON.parse(File.read('costing.json'))
     @costing_database['constructions_costs']= Array.new
     counter = 0
     @costing_database['raw']['RSMeansLocations'].each do |location|
-      puts location
+      puts "#{location["province-state"]},#{location['city']}"
       @costing_database["raw"]['ConstructionsOpaque'].each do |construction|
         #puts "Getting cost for Construction type #{construction["construction_type_name"]} at RSI #{construction['rsi_k_m2_per_w']}"
         total_with_op = 0.0
         materials_string = ''
         construction['material_opaque_id_layers'].split(',').reject {|c| c.empty?}.each do |material_index|
-
           material = @costing_database["raw"]['MaterialsOpaque'].find {|material| material['materials_opaque_id'].to_s == material_index.to_s}
           if material.nil?
             puts "material error..could not find material #{material_index} in #{@costing_database["raw"]['MaterialsOpaque']}"
@@ -153,33 +149,22 @@ class BTAPCosting
             end
           end
         end
-
         new_construction = {'index' => counter,
                             'province-state' => location['province-state'],
                             'city' => location['city'],
                             "construction_type_name" => construction["construction_type_name"],
-                            'intended_surface_type'	=> construction["intended_surface_type"],
+                            'description' => construction["description"],
+                            'intended_surface_type' => construction["intended_surface_type"],
                             'standards_construction_type' => construction["standards_construction_type"],
+                            'material_opaque_id_layers' => construction['material_opaque_id_layers'],
                             'rsi_k_m2_per_w ' => construction['rsi_k_m2_per_w'].to_f,
                             'zone' => construction['zone'],
                             'materials_string' => materials_string,
-                            'total_with_op' => total_with_op }
-
-
+                            'total_with_op' => total_with_op}
         @costing_database['constructions_costs'] << new_construction
         counter += 1
       end
     end
-    puts counter
-    #For debugging
-    File.open("costing.json", "w") do |f|
-      f.write(JSON.pretty_generate(@costing_database))
-    end
-    File.open("just_costing.json", "w") do |f|
-      f.write(JSON.pretty_generate(@costing_database['constructions_costs']))
-    end
-
-
   end
 
   def get_regional_cost_factors(provincestate, city, material)
@@ -197,7 +182,7 @@ class BTAPCosting
   end
 
 
-  def generate_encrypted_materials_database()
+  def generate_materials_database()
     @not_found_in_rsmeans_api = Array.new
     @costing_database = Hash.new()
     # Path to the xlsx file
@@ -206,7 +191,7 @@ class BTAPCosting
     #Get Raw Data from files.
     @costing_database['raw'] = {}
     @costing_database['rs_mean_errors']=[]
-    @costing_database['raw']['SpaceTypeRules'] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'SpaceTypeRules')
+    @costing_database['raw']['ConstructionSets'] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'ConstructionSets')
     @costing_database['raw']['RSMeansLocations'] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'RSMeansLocations')
     @costing_database['raw']['RSMeansLocalFactors'] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'RSMeansLocalFactors')
     @costing_database['raw']['MaterialsOpaque'] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'MaterialsOpaque')
@@ -244,9 +229,10 @@ class BTAPCosting
       end
       puts "Elapsed time in sec #{Time.now - start}"
     end
+    self.get_costing_for_constructions_for_all_regions()
+  end
 
-
-    key = AES.key
+  def encrypt_database(key )
     #Write public cost information to a json file. This will be used by the standards and measures. To create
     #create the openstudio construction names and costing objects.
     File.open("costing_e.json", "w") do |f|
@@ -261,17 +247,31 @@ class BTAPCosting
 
 
   def encrypt_hash(key, hash)
-    return b64 = AES.encrypt(JSON.pretty_generate(hash), key)
+    return b64 = AES.encrypt(Zlib::Deflate.deflate(JSON.pretty_generate(hash)), key)
   end
 
-  def decrypt_hash(key, string)
+  def decrypt_hash(key, encrypted_string)
+    json = nil
     begin
-      json = JSON.parse(AES.decrypt(b64, key))
+      json = JSON.parse(Zlib::Inflate.inflate(AES.decrypt(encrypted_string, key)))
+      #puts JSON.pretty_generate(json)
     rescue OpenSSL::Cipher::CipherError => detail
       puts "Could not decrypt string, perhaps key is invalid? #{detail}"
     end
+    return json
+  end
+
+  def load_encrypted_database(key, file = "costing_e.json")
+    encrypted_string = File.read(file)
+    @costing_database = decrypt_hash(key, encrypted_string)
   end
 end
 
-CostingDatabase.new.generate_encrypted_materials_database()
-CostingDatabase.new.get_costing_for_constructions_for_all_regions()
+costing = BTAPCosting.new
+#costing.generate_materials_database()
+costing.load_encrypted_database('')
+#costing.get_costing_for_constructions_for_all_regions()
+#costing.encrypt_database('' )
+puts JSON.pretty_generate(costing.costing_database['constructions_costs'])
+
+
