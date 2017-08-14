@@ -128,6 +128,8 @@ class BTAPCosting
         #puts "Getting cost for Construction type #{construction["construction_type_name"]} at RSI #{construction['rsi_k_m2_per_w']}"
         total_with_op = 0.0
         materials_string = ''
+        material_cost_string = ''
+        material_cost_pairs = []
         construction['material_opaque_id_layers'].split(',').reject {|c| c.empty?}.each do |material_index|
           material = @costing_database["raw"]['MaterialsOpaque'].find {|material| material['materials_opaque_id'].to_s == material_index.to_s}
           if material.nil?
@@ -144,8 +146,12 @@ class BTAPCosting
               material_cost = rs_means_data['baseCosts']['materialOpCost'].to_f * material['quantity'].to_f * material['material_mult'].to_f
               labour_cost = rs_means_data['baseCosts']['labourOpCost'].to_f * material['labour_mult'].to_f
               equipment_cost = rs_means_data['baseCosts']['equipmentOpCost'].to_f
-              total_with_op += (material_cost * regional_material / 100.0) + (labour_cost * regional_installation / 100.0) + equipment_cost
-              materials_string += "\n#{material['description']}"
+              layer_cost = ((material_cost * regional_material / 100.0) + (labour_cost * regional_installation / 100.0) + equipment_cost).round(2)
+              #materials_string += "\n#{material['description']}"
+              #material_cost_string += "\n#{layer_cost.to_s}"
+              material_cost_pairs << {  'materials_opaque_id' => material_index,
+                                        'cost' => layer_cost}
+              total_with_op += layer_cost
             end
           end
         end
@@ -156,11 +162,11 @@ class BTAPCosting
                             'description' => construction["description"],
                             'intended_surface_type' => construction["intended_surface_type"],
                             'standards_construction_type' => construction["standards_construction_type"],
-                            'material_opaque_id_layers' => construction['material_opaque_id_layers'],
                             'rsi_k_m2_per_w ' => construction['rsi_k_m2_per_w'].to_f,
-                            'zone' => construction['zone'],
-                            'materials_string' => materials_string,
-                            'total_with_op' => total_with_op}
+                            'zone' => construction['climate_zone'],
+                            'materials' => material_cost_pairs,
+                            'total_cost_with_op' => total_with_op}
+
         @costing_database['constructions_costs'] << new_construction
         counter += 1
       end
@@ -266,12 +272,18 @@ class BTAPCosting
     @costing_database = decrypt_hash(key, encrypted_string)
   end
 end
-
+key = File.read('keyfile')
 costing = BTAPCosting.new
 #costing.generate_materials_database()
-costing.load_encrypted_database('')
-#costing.get_costing_for_constructions_for_all_regions()
-#costing.encrypt_database('' )
-puts JSON.pretty_generate(costing.costing_database['constructions_costs'])
+costing.load_encrypted_database(key)
+costing.get_costing_for_constructions_for_all_regions()
+costing.encrypt_database(key)
+File.open("mike.json", "w") do |f|
+  f.write(JSON.pretty_generate(costing.costing_database['constructions_costs']))
+end
+File.open("rs_means.json", "w") do |f|
+  f.write(JSON.pretty_generate(costing.costing_database['rsmean_api_data']))
+end
+#puts JSON.pretty_generate(costing.costing_database['raw']['ConstructionSets'])
 
 
