@@ -106,6 +106,7 @@ class BTAPCosting
 
   def initialize(key = nil)
     @key = key
+    @rs_means_auth_hash_path = "#{File.dirname(__FILE__)}/rs_means_auth"
     @xlsx_path = "#{File.dirname(__FILE__)}/national_average_cost_information.xlsm"
     @keyfile = "#{File.dirname(__FILE__)}/keyfile"
     @encrypted_file = "#{File.dirname(__FILE__)}/costing_e.json"
@@ -113,6 +114,7 @@ class BTAPCosting
       @key = load_local_keyfile()
     end
     load_encrypted_database(@key)
+
   end
 
 #This will convert a sheet in a given workbook into an array of hashes with the headers as symbols.
@@ -125,7 +127,6 @@ class BTAPCosting
 
 
   def get_costing_for_constructions_for_all_regions()
-    @costing_database = JSON.parse(File.read('costing.json'))
     @costing_database['constructions_costs']= Array.new
     counter = 0
     @costing_database['raw']['RSMeansLocations'].each do |location|
@@ -191,15 +192,18 @@ class BTAPCosting
         end
       end
     end
-    raise("Could not find regional adjustment factor for rs-means material #{material['id']}")
+    error = [material,"Could not find regional adjustment factor for rs-means material"]
+    @costing_database['rs_mean_errors'] << error unless @costing_database['rs_mean_errors'].include?(error)
+    return 100.0, 100.0
   end
 
 
   def generate_materials_database()
+    auth_hash = nil
     @not_found_in_rsmeans_api = Array.new
     @costing_database = Hash.new()
-    if File.exist?("rs_means_auth")
-      auth_hash = File.read("rs_means_auth").strip
+    if File.exist?(@rs_means_auth_hash_path)
+      auth_hash = File.read(@rs_means_auth_hash_path).strip
     else
       raise ("
        You will need to place your secret RS-Means hash into a file named rs_means_auth in your home folder as ruby sees it.
@@ -219,11 +223,18 @@ class BTAPCosting
     #Get Raw Data from files.
     @costing_database['raw'] = {}
     @costing_database['rs_mean_errors']=[]
-    @costing_database['raw']['ConstructionSets'] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, 'ConstructionSets')
-    @costing_database['raw']['RSMeansLocations'] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, 'RSMeansLocations')
-    @costing_database['raw']['RSMeansLocalFactors'] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, 'RSMeansLocalFactors')
-    @costing_database['raw']['MaterialsOpaque'] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, 'MaterialsOpaque')
-    @costing_database['raw']['ConstructionsOpaque'] = convert_workbook_sheet_to_array_of_hashes("#{File.dirname(__FILE__)}/national_average_cost_information.xlsm", 'ConstructionsOpaque')
+    ['RSMeansLocations',
+     'RSMeansLocalFactors',
+     'ConstructionSets',
+     'ConstructionsOpaque',
+     'MaterialsOpaque',
+     'IncompleteConstructionsGlazing',
+     'MaterialsGlazing',
+     'Constructions',
+     'ConstructionProperties'
+     ].each do |sheet|
+      @costing_database['raw'][sheet] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, sheet)
+    end
     @costing_database['rsmean_api_data']= Array.new
     @costing_database['constructions_costs']= Array.new
 
@@ -248,26 +259,20 @@ class BTAPCosting
             raise("Authenication failed with RSMeans. Ensure you have created your secret hash from the website and saved it in your home folder as rs_means_auth")
           elsif e.to_s.strip == "404 Not Found"
             material['error'] = e
-            @costing_database['rs_mean_errors'] << material
+            @costing_database['rs_mean_errors'] << [material,e.to_s.strip]
           else
             raise("Error Occured #{e}")
           end
         end
       end
-
     end
-    self.get_costing_for_constructions_for_all_regions()
   end
 
   def encrypt_database(key)
     #Write public cost information to a json file. This will be used by the standards and measures. To create
     #create the openstudio construction names and costing objects.
-    File.open("costing_ecrypted.json", "w") do |f|
+    File.open(@encrypted_file, "w") do |f|
       f.write(encrypt_hash(key, @costing_database))
-    end
-    #For debugging
-    File.open("costing.json", "w") do |f|
-      f.write(JSON.pretty_generate(@costing_database))
     end
     puts "the decryption key is:#{key}"
   end
@@ -313,7 +318,9 @@ class BTAPCosting
     start = Time.now
     self.generate_materials_database()
     self.get_costing_for_constructions_for_all_regions()
+    puts JSON.pretty_generate(@costing_database['rs_mean_errors']) unless @costing_database['rs_mean_errors'].empty?
     self.encrypt_database(@key)
+
   end
 end
 
