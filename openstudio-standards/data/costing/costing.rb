@@ -5,8 +5,11 @@ require 'rest-client'
 require 'openssl'
 require 'aes'
 require 'geocoder'
+require 'singleton'
 
 class BTAPCosting
+
+  include Singleton
   attr_accessor :costing_database
 # A list of the table and fields in the Excel database. Please keep up to date.
 #RSMeansLocations
@@ -84,7 +87,7 @@ class BTAPCosting
   end
 
 
-  #Enter in [latitude, logitude] for each loc and this method will return the distance.
+#Enter in [latitude, logitude] for each loc and this method will return the distance.
   def distance (loc1, loc2)
     rad_per_deg = Math::PI/180 # PI / 180
     rkm = 6371 # Earth radius in kilometers
@@ -101,15 +104,18 @@ class BTAPCosting
     rm * c # Delta in meters
   end
 
+  def initialize(key = nil)
+    @key = key
+    @xlsx_path = "#{File.dirname(__FILE__)}/national_average_cost_information.xlsm"
+    @keyfile = "#{File.dirname(__FILE__)}/keyfile"
+    @encrypted_file = "#{File.dirname(__FILE__)}/costing_e.json"
+    if @key.nil?
+      @key = load_local_keyfile()
+    end
+    load_encrypted_database(@key)
+  end
 
-  # Method to obtain the unit costs from the New Construtions library via the RS-means API.
-  # You will need to place your secret hash into a file named rs_means_auth in your home folder as ruby sees it.
-  # Your hash will need to be updated as your swagger session expires (within an hour) otherwise you will get a
-  # 401 not authorized error. The hash_id (the weird long piece of text) is the only thing required in the file.
-
-
-
-  #This will convert a sheet in a given workbook into an array of hashes with the headers as symbols.
+#This will convert a sheet in a given workbook into an array of hashes with the headers as symbols.
   def convert_workbook_sheet_to_array_of_hashes(xlsx_path, sheet_name)
     #Load Constructions data sheet from workbook and convert to a csv object.
     data = Roo::Spreadsheet.open(xlsx_path).sheet(sheet_name).to_csv
@@ -149,8 +155,8 @@ class BTAPCosting
               layer_cost = ((material_cost * regional_material / 100.0) + (labour_cost * regional_installation / 100.0) + equipment_cost).round(2)
               #materials_string += "\n#{material['description']}"
               #material_cost_string += "\n#{layer_cost.to_s}"
-              material_cost_pairs << {  'materials_opaque_id' => material_index,
-                                        'cost' => layer_cost}
+              material_cost_pairs << {'materials_opaque_id' => material_index,
+                                      'cost' => layer_cost}
               total_with_op += layer_cost
             end
           end
@@ -171,6 +177,7 @@ class BTAPCosting
         counter += 1
       end
     end
+    puts "#{counter} contructions created for #{@costing_database['raw']['RSMeansLocations'].size} cities"
   end
 
   def get_regional_cost_factors(provincestate, city, material)
@@ -191,16 +198,31 @@ class BTAPCosting
   def generate_materials_database()
     @not_found_in_rsmeans_api = Array.new
     @costing_database = Hash.new()
+    if File.exist?("rs_means_auth")
+      auth_hash = File.read("rs_means_auth").strip
+    else
+      raise ("
+       You will need to place your secret RS-Means hash into a file named rs_means_auth in your home folder as ruby sees it.
+       Your hash will need to be updated as your swagger session expires (within an hour) otherwise you will get a
+       401 not authorized error. The hash_id (the weird long piece of text) is the only thing required in the file.
+      ")
+
+    end
+
     # Path to the xlsx file
-    xlsx_path = "#{File.dirname(__FILE__)}/national_average_cost_information.xlsm"
+
+
+    unless File.exist?(@xlsx_path)
+      raise("could not find the national_average_cost_information.xlsm in location #{@xlsx_path}. This is a proprietary file manage by Natural resources Canada.")
+    end
 
     #Get Raw Data from files.
     @costing_database['raw'] = {}
     @costing_database['rs_mean_errors']=[]
-    @costing_database['raw']['ConstructionSets'] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'ConstructionSets')
-    @costing_database['raw']['RSMeansLocations'] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'RSMeansLocations')
-    @costing_database['raw']['RSMeansLocalFactors'] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'RSMeansLocalFactors')
-    @costing_database['raw']['MaterialsOpaque'] = convert_workbook_sheet_to_array_of_hashes(xlsx_path, 'MaterialsOpaque')
+    @costing_database['raw']['ConstructionSets'] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, 'ConstructionSets')
+    @costing_database['raw']['RSMeansLocations'] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, 'RSMeansLocations')
+    @costing_database['raw']['RSMeansLocalFactors'] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, 'RSMeansLocalFactors')
+    @costing_database['raw']['MaterialsOpaque'] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, 'MaterialsOpaque')
     @costing_database['raw']['ConstructionsOpaque'] = convert_workbook_sheet_to_array_of_hashes("#{File.dirname(__FILE__)}/national_average_cost_information.xlsm", 'ConstructionsOpaque')
     @costing_database['rsmean_api_data']= Array.new
     @costing_database['constructions_costs']= Array.new
@@ -208,12 +230,11 @@ class BTAPCosting
     #Get RSMeans Materials data and store errors if encountered
     [@costing_database['raw']['MaterialsOpaque']].each do |materials|
       lookup_list = materials.map {|material| {'type' => material['type'], 'catalog_id' => material['catalog_id'], 'id' => material['id']}}.uniq
-      start = Time.now
       lookup_list.each do |material|
 
         puts "Trying to look up #{material}"
-        auth = File.read("#{Dir.home}/rs_means_auth").strip
-        auth = {:Authorization => "bearer #{auth}"}
+
+        auth = {:Authorization => "bearer #{auth_hash}"}
         path = "https://dataapi-sb.gordian.com/v1/costdata/#{material['type'].downcase.strip}/catalogs/#{material['catalog_id'].strip}/costlines/#{material['id'].strip}"
         value = nil
         begin
@@ -233,15 +254,15 @@ class BTAPCosting
           end
         end
       end
-      puts "Elapsed time in sec #{Time.now - start}"
+
     end
     self.get_costing_for_constructions_for_all_regions()
   end
 
-  def encrypt_database(key )
+  def encrypt_database(key)
     #Write public cost information to a json file. This will be used by the standards and measures. To create
     #create the openstudio construction names and costing objects.
-    File.open("costing_e.json", "w") do |f|
+    File.open("costing_ecrypted.json", "w") do |f|
       f.write(encrypt_hash(key, @costing_database))
     end
     #For debugging
@@ -260,30 +281,45 @@ class BTAPCosting
     json = nil
     begin
       json = JSON.parse(Zlib::Inflate.inflate(AES.decrypt(encrypted_string, key)))
-      #puts JSON.pretty_generate(json)
+        #puts JSON.pretty_generate(json)
     rescue OpenSSL::Cipher::CipherError => detail
       puts "Could not decrypt string, perhaps key is invalid? #{detail}"
     end
     return json
   end
 
-  def load_encrypted_database(key, file = "costing_e.json")
-    encrypted_string = File.read(file)
-    @costing_database = decrypt_hash(key, encrypted_string)
+  def load_encrypted_database(key, file = @encrypted_file)
+    if FileUtils.uptodate?(file, [@xlsx_path])
+      @costing_database = decrypt_hash(key, File.read(file))
+    else
+      self.recreate_database()
+    end
+  end
+
+
+  def load_local_keyfile()
+    puts "loading local key"
+    @key = nil
+    if File.exist?(@keyfile)
+      @key = File.read(@keyfile)
+    else
+      puts "could not file nrcan's secret keyfile hash."
+    end
+    puts "this is the key #{@key}"
+    return @key
+  end
+
+  def recreate_database()
+    start = Time.now
+    self.generate_materials_database()
+    self.get_costing_for_constructions_for_all_regions()
+    self.encrypt_database(@key)
   end
 end
-key = File.read('keyfile')
-costing = BTAPCosting.new
-#costing.generate_materials_database()
-costing.load_encrypted_database(key)
-costing.get_costing_for_constructions_for_all_regions()
-costing.encrypt_database(key)
-File.open("mike.json", "w") do |f|
-  f.write(JSON.pretty_generate(costing.costing_database['constructions_costs']))
-end
-File.open("rs_means.json", "w") do |f|
-  f.write(JSON.pretty_generate(costing.costing_database['rsmean_api_data']))
-end
-#puts JSON.pretty_generate(costing.costing_database['raw']['ConstructionSets'])
+
+BTAPCosting.instance()
+BTAPCosting.instance.costing_database
+
+
 
 
