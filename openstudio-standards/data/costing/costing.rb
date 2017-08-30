@@ -154,8 +154,6 @@ class BTAPCosting
               labour_cost = rs_means_data['baseCosts']['labourOpCost'].to_f * material['labour_mult'].to_f
               equipment_cost = rs_means_data['baseCosts']['equipmentOpCost'].to_f
               layer_cost = ((material_cost * regional_material / 100.0) + (labour_cost * regional_installation / 100.0) + equipment_cost).round(2)
-              #materials_string += "\n#{material['description']}"
-              #material_cost_string += "\n#{layer_cost.to_s}"
               material_cost_pairs << {'materials_opaque_id' => material_index,
                                       'cost' => layer_cost}
               total_with_op += layer_cost
@@ -243,7 +241,7 @@ class BTAPCosting
       lookup_list = materials.map {|material| {'type' => material['type'], 'catalog_id' => material['catalog_id'], 'id' => material['id']}}.uniq
       lookup_list.each do |material|
 
-        puts "Trying to look up #{material}"
+        puts "Obtained #{material['id']} costing"
 
         auth = {:Authorization => "bearer #{auth_hash}"}
         path = "https://dataapi-sb.gordian.com/v1/costdata/#{material['type'].downcase.strip}/catalogs/#{material['catalog_id'].strip}/costlines/#{material['id'].strip}"
@@ -320,12 +318,10 @@ class BTAPCosting
     self.get_costing_for_constructions_for_all_regions()
     puts JSON.pretty_generate(@costing_database['rs_mean_errors']) unless @costing_database['rs_mean_errors'].empty?
     self.encrypt_database(@key)
-
+    puts "Cost Database regenerated in #{Time.now - start} seconds"
   end
 end
 
-BTAPCosting.instance()
-BTAPCosting.instance.costing_database
 
 
 
