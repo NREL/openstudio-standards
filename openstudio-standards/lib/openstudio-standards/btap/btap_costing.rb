@@ -1,3 +1,4 @@
+require "#{File.dirname(__FILE__)}/btap"
 require 'rubygems'
 require 'json'
 require 'roo'
@@ -9,6 +10,7 @@ require 'singleton'
 
 class BTAPCosting
 
+  PATH_TO_COSTING_DATA = "../../../data/costing"
   include Singleton
   attr_accessor :costing_database
 # A list of the table and fields in the Excel database. Please keep up to date.
@@ -73,16 +75,33 @@ class BTAPCosting
 # material_mult
 # labour_mult	op_mult
 
-  def apply_baseline_constructions_based_on_rsi(model)
-    #Scan for spacetypes and determine contructions used.
-    model.getSpacesTypes.each do |space|
-      #Ensure space type is of NECB type otherwise raise error.
-      #Look up space type construction types based on building stories
-      #Generate SpaceType Construction set, avoiding duplication of constructions
-      ## The construction id type will match the cost construction id.
-      # U-values will be set to reference levels by default.
-      # assign construction set to space type.
-      #Construction names should be now listed along with U values and m2 for costing.
+#Brute force interpolation...Could be improved easily. Only use for small amount of points.
+  def interpolate(x_y_array, x2)
+    array = x_y_array.sort {|a, b| a[0] <=> b[0]}
+    if x2 < array.first[0].to_f or x2 > array.last[0].to_f
+      return nil
+    else
+      #ugly hack to interpolate...but it works.
+      array.each_index do |counter|
+
+        #skip last value.
+        next if array[counter] == array.last
+
+        x0 = array[counter][0]
+        y0 = array[counter][1]
+        x1 = array[counter+1][0]
+        y1 = array[counter+1][1]
+
+        #skip if x2 is not between x0 and x1
+        next if x2 < x0 and x2 > x1
+
+        #Do interpolation
+        y2 = 0
+        y2 = y0.to_f + ((y1-y0).to_f*(x2-x0).to_f/(x1-x0).to_f)
+        log ("y2 = #{y2}")
+        y2 = y2.ceil
+        return y2
+      end
     end
   end
 
@@ -104,12 +123,25 @@ class BTAPCosting
     rm * c # Delta in meters
   end
 
+  def get_closest_cost_city(lat, long)
+    dist = 1000000000000000000000.0
+    closest_city = nil
+    #province-state	city	latitude	longitude	source
+    @costing_database['raw']['RSMeansLocations'].each do |location|
+      if distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f]) < dist
+        closest_city = location
+        dist = distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f])
+      end
+    end
+    return closest_city
+  end
+
   def initialize(key = nil)
     @key = key
-    @rs_means_auth_hash_path = "#{File.dirname(__FILE__)}/rs_means_auth"
-    @xlsx_path = "#{File.dirname(__FILE__)}/national_average_cost_information.xlsm"
-    @keyfile = "#{File.dirname(__FILE__)}/keyfile"
-    @encrypted_file = "#{File.dirname(__FILE__)}/costing_e.json"
+    @rs_means_auth_hash_path = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/rs_means_auth"
+    @xlsx_path = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/national_average_cost_information.xlsm"
+    @keyfile = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/keyfile"
+    @encrypted_file = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/costing_e.json"
     if @key.nil?
       @key = load_local_keyfile()
     end
@@ -167,7 +199,7 @@ class BTAPCosting
                             'description' => construction["description"],
                             'intended_surface_type' => construction["intended_surface_type"],
                             'standards_construction_type' => construction["standards_construction_type"],
-                            'rsi_k_m2_per_w ' => construction['rsi_k_m2_per_w'].to_f,
+                            'rsi_k_m2_per_w' => construction['rsi_k_m2_per_w'].to_f,
                             'zone' => construction['climate_zone'],
                             'materials' => material_cost_pairs,
                             'total_cost_with_op' => total_with_op}
@@ -190,7 +222,7 @@ class BTAPCosting
         end
       end
     end
-    error = [material,"Could not find regional adjustment factor for rs-means material"]
+    error = [material, "Could not find regional adjustment factor for rs-means material"]
     @costing_database['rs_mean_errors'] << error unless @costing_database['rs_mean_errors'].include?(error)
     return 100.0, 100.0
   end
@@ -208,7 +240,6 @@ class BTAPCosting
        Your hash will need to be updated as your swagger session expires (within an hour) otherwise you will get a
        401 not authorized error. The hash_id (the weird long piece of text) is the only thing required in the file.
       ")
-
     end
 
     # Path to the xlsx file
@@ -230,7 +261,7 @@ class BTAPCosting
      'MaterialsGlazing',
      'Constructions',
      'ConstructionProperties'
-     ].each do |sheet|
+    ].each do |sheet|
       @costing_database['raw'][sheet] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, sheet)
     end
     @costing_database['rsmean_api_data']= Array.new
@@ -257,7 +288,7 @@ class BTAPCosting
             raise("Authenication failed with RSMeans. Ensure you have created your secret hash from the website and saved it in your home folder as rs_means_auth")
           elsif e.to_s.strip == "404 Not Found"
             material['error'] = e
-            @costing_database['rs_mean_errors'] << [material,e.to_s.strip]
+            @costing_database['rs_mean_errors'] << [material, e.to_s.strip]
           else
             raise("Error Occured #{e}")
           end
@@ -320,7 +351,100 @@ class BTAPCosting
     self.encrypt_database(@key)
     puts "Cost Database regenerated in #{Time.now - start} seconds"
   end
+
+  def cost_audit_envelope(model)
+
+    if model.getBuilding.standardsBuildingType.empty? or
+        model.getBuilding.standardsNumberOfAboveGroundStories
+      raise("Building information is not complete, please ensure that the standardsBuildingType and standardsNumberOfAboveGroundStories are entered in the model. ")
+    end
+
+    #collect building information required
+    num_of_above_ground_stories = model.getBuilding.standardsNumberOfAboveGroundStories
+
+
+    model.getThermalZones.each do |zone|
+      multiplier = zone.multiplier
+      zone.spaces.each do |space|
+
+        #Get SpaceType
+        if space.spaceType.empty? or space.spaceType.get.standardsSpaceType.empty? or space.spaceType.get.standardsBuildingType.empty?
+          raise ("standards Space type and building type is not defined for space:#{space.name.get}. Skipping this space for costing.")
+        end
+
+        #Get Spacetype names.
+        space_type = space.spaceType.get.standardsSpaceType
+        building_type = space.spaceType.get.standardsBuildingType
+
+        #Get standard constructions based on collected information.
+        construction_set = @costing_database['raw']['ConstructionSets'].select {|data|
+          data['building_type'].to_s == building_type and
+              data['space_type'].to_s == space_type and
+              data['min_stories'].to_i <= num_of_above_ground_stories and
+              data['max_stories'].to_i >= num_of_above_ground_stories
+        }.first
+
+
+        surfaces = {}
+        #Exterior
+        exterior_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Outdoors")
+        surfaces["ExteriorWall"] = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
+        surfaces["ExteriorRoof"]= BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
+        surfaces["ExteriorFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Floor")
+        #Exterior Subsurface
+        exterior_subsurfaces = BTAP::Geometry::Surfaces::get_subsurfaces_from_surfaces(exterior_surfaces)
+        surfaces["ExteriorFixedWindow"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["FixedWindow"])
+        surfaces["ExteriorOperableWindow"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OperableWindow"])
+        surfaces["ExteriorSkylight"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["Skylight"])
+        surfaces["ExteriorTubularDaylightDiffuser"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["TubularDaylightDiffuser"])
+        surfaces["ExteriorTubularDaylightDome"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["TubularDaylightDome"])
+        surfaces["ExteriorDoor"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["Door"])
+        surfaces["ExteriorGlassDoor"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["GlassDoor"])
+        surfaces["ExteriorOverheadDoor"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OverheadDoor"])
+
+        #Ground
+        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Ground")
+        surfaces["GroundContactWall"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Wall")
+        surfaces["GroundContactRoof"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling")
+        surfaces["GroundContactFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor")
+
+        ["ExteriorWall"].each do |surface_type|
+          #Get Costs for this construction type.
+          cost_range_hash = @costing_database['constructions_costs'].select {|construction|
+            construction['construction_type_name'] == construction_set[surface_type] and
+                construction['province-state'] == province_state and
+                construction['city'] == city
+          }
+          #Create an array just with the cost for difference RSI values and cost. Sort it as well.
+          cost_range_array = cost_range_hash.map {|cost|
+            [cost['rsi_k_m2_per_w'], cost['total_cost_with_op']]
+          }
+          #Sort based on rsi.
+          cost_range_array.sort! {|a, b| a[0] <=> b[0]}
+
+          surfaces[surface_type].each do |surface|
+            #get area of surface in m2
+            area = surface.netArea
+
+            #get RSI of surface.
+            rsi = BTAP::Resources::Envelope::Constructions::get_rsi(OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get)
+
+            #interpolate cost and get surface cost.
+            cost = interpolate(cost_range_array, rsi)
+            surface_cost = cost * area
+          end
+        end
+      end
+    end
+  end
 end
+
+BTAPCosting.instance()
+
+
+
+
+
 
 
 
