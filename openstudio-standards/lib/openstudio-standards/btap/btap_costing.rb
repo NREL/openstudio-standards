@@ -438,7 +438,6 @@ class BTAPCosting
   end
 end
 
-BTAPCosting.instance()
 
 
 
