@@ -353,6 +353,7 @@ class BTAPCosting
 
   def cost_audit_envelope(model)
     costing_report = {}
+    costing_report["Envelope"] = {}
     if model.getBuilding.standardsBuildingType.empty? or
         model.getBuilding.standardsNumberOfAboveGroundStories
       raise("Building information is not complete, please ensure that the standardsBuildingType and standardsNumberOfAboveGroundStories are entered in the model. ")
@@ -452,12 +453,20 @@ class BTAPCosting
                      and #{cost_range_array.last[0]} "
             end
 
-            surface_cost = cost * surface.netArea * zone.multiplier
+            #bin costing by construction standard type and rsi
+            name = "#{construction_set[surface_type]}_#{rsi}"
+            if costing_report["Envelope"].has_key?(name)
+              costing_report["Envelope"][name]['area'] += (surface.netArea * zone.multiplier)
+              costing_report["Envelope"][name]['total_cost'] += (cost * surface.netArea * zone.multiplier)
+            else
+              costing_report["Envelope"][name]={'area' => (surface.netArea * zone.multiplier), 'total_cost' => (cost * surface.netArea * zone.multiplier)}
+            end
 
           end #surfaces of surface type
         end #surface_type
       end #spaces
     end #thermalzone
+    puts costing_report
   end
 end
 
