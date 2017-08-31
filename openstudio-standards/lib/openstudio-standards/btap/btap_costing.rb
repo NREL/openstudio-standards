@@ -279,8 +279,7 @@ class BTAPCosting
         value = nil
         begin
           api_return = JSON.parse(RestClient.get(path, auth).body)
-          JSON.pretty_generate(api_return)
-          puts api_return
+
           @costing_database['rsmean_api_data'] << api_return
         rescue Exception => e
           puts e

@@ -176,7 +176,6 @@ YARD::Rake::YardocTask.new(:doc) do |t|
   Dir.chdir('../')
   t.stats_options = ['--list-undoc']
 end
-git git dfsd
 desc 'Show the documentation in a web browser'
 task 'doc:show' => [:doc] do
   link = "#{Dir.pwd}/openstudio-standards/doc/index.html"
