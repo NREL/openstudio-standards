@@ -352,7 +352,7 @@ class BTAPCosting
   end
 
   def cost_audit_envelope(model)
-
+    costing_report = {}
     if model.getBuilding.standardsBuildingType.empty? or
         model.getBuilding.standardsNumberOfAboveGroundStories
       raise("Building information is not complete, please ensure that the standardsBuildingType and standardsNumberOfAboveGroundStories are entered in the model. ")
@@ -363,7 +363,6 @@ class BTAPCosting
 
 
     model.getThermalZones.each do |zone|
-      multiplier = zone.multiplier
       zone.spaces.each do |space|
 
         #Get SpaceType
@@ -375,7 +374,7 @@ class BTAPCosting
         space_type = space.spaceType.get.standardsSpaceType
         building_type = space.spaceType.get.standardsBuildingType
 
-        #Get standard constructions based on collected information.
+        #Get standard constructions based on collected information (spacetype, no of stories, etc..)
         construction_set = @costing_database['raw']['ConstructionSets'].select {|data|
           data['building_type'].to_s == building_type and
               data['space_type'].to_s == space_type and
@@ -407,34 +406,58 @@ class BTAPCosting
         surfaces["GroundContactRoof"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling")
         surfaces["GroundContactFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor")
 
-        ["ExteriorWall"].each do |surface_type|
-          #Get Costs for this construction type.
+        #These are the only envelope costing items we are considering.
+        [
+            "ExteriorWall",
+            "ExteriorRoof",
+            "ExteriorFloor",
+            "ExteriorFixedWindow",
+            "ExteriorOperableWindow",
+            "ExteriorSkylight",
+            "ExteriorTubularDaylightDiffuser",
+            "ExteriorTubularDaylightDome",
+            "ExteriorDoor",
+            "ExteriorGlassDoor",
+            "ExteriorOverheadDoor",
+            "GroundContactWall",
+            "GroundContactRoof",
+            "GroundContactFloor"
+        ].each do |surface_type|
+          #Get Costs for this construction type. This will get the cost for the particular construction type for all rsi
+          # levels for that city. This has been collected by RS means.
           cost_range_hash = @costing_database['constructions_costs'].select {|construction|
             construction['construction_type_name'] == construction_set[surface_type] and
                 construction['province-state'] == province_state and
                 construction['city'] == city
           }
-          #Create an array just with the cost for difference RSI values and cost. Sort it as well.
+          #We don't need all the information, just the rsi and cost....
           cost_range_array = cost_range_hash.map {|cost|
             [cost['rsi_k_m2_per_w'], cost['total_cost_with_op']]
           }
-          #Sort based on rsi.
+          #Sorted based on rsi.
           cost_range_array.sort! {|a, b| a[0] <=> b[0]}
 
+          #Not we iterate through that actual surfaces in the model of surface_type.
           surfaces[surface_type].each do |surface|
-            #get area of surface in m2
-            area = surface.netArea
-
-            #get RSI of surface.
+            #get RSI of surface existing surface.
             rsi = BTAP::Resources::Envelope::Constructions::get_rsi(OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get)
 
-            #interpolate cost and get surface cost.
+            #Use the cost_range_array to interpolate the estimated cost for the given rsi.
             cost = interpolate(cost_range_array, rsi)
-            surface_cost = cost * area
-          end
-        end
-      end
-    end
+
+            #If the cost is nil, that means the rsi is out of range. This should be flagged in the report.
+            if cost.nil?
+            notes = "The RSI of #{rsi} for this surface is out of the range of the NRCan Database. The range available
+                     for #{construction_set[surface_type]} is between #{cost_range_array.first[0]}
+                     and #{cost_range_array.last[0]} "
+            end
+
+            surface_cost = cost * surface.netArea * zone.multiplier
+
+          end #surfaces of surface type
+        end #surface_type
+      end #spaces
+    end #thermalzone
   end
 end
 
