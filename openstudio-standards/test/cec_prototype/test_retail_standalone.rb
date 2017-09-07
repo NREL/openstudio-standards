@@ -5,9 +5,9 @@ require_relative '../helpers/create_doe_prototype_helper'
 
 class TestRetailStandalone < CreateDOEPrototypeBuildingTest
   
-  building_types = ['RetailStandalone']
+  building_types = ['MediumOffice']
 
-  templates = ['DOE Ref Pre-1980']
+  templates = ['DOE Ref Pre-1980', '90.1-2004']
   climate_zones = ['ASHRAE 169-2006-3C']
   # templates = ['DOE Ref Pre-1980']
   # climate_zones = ['ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A','ASHRAE 169-2006-2B',
