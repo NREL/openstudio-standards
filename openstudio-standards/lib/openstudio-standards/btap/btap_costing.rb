@@ -7,6 +7,7 @@ require 'openssl'
 require 'aes'
 require 'geocoder'
 require 'singleton'
+require "highline/import"
 
 class BTAPCosting
 
@@ -163,6 +164,7 @@ class BTAPCosting
     counter = 0
     @costing_database['raw']['RSMeansLocations'].each do |location|
       puts "#{location["province-state"]},#{location['city']}"
+
       @costing_database["raw"]['ConstructionsOpaque'].each do |construction|
         #puts "Getting cost for Construction type #{construction["construction_type_name"]} at RSI #{construction['rsi_k_m2_per_w']}"
         total_with_op = 0.0
@@ -257,7 +259,7 @@ class BTAPCosting
      'ConstructionSets',
      'ConstructionsOpaque',
      'MaterialsOpaque',
-     'IncompleteConstructionsGlazing',
+     'ConstructionsGlazing',
      'MaterialsGlazing',
      'Constructions',
      'ConstructionProperties'
@@ -268,29 +270,33 @@ class BTAPCosting
     @costing_database['constructions_costs']= Array.new
 
     #Get RSMeans Materials data and store errors if encountered
-    [@costing_database['raw']['MaterialsOpaque']].each do |materials|
-      lookup_list = materials.map {|material| {'type' => material['type'], 'catalog_id' => material['catalog_id'], 'id' => material['id']}}.uniq
-      lookup_list.each do |material|
 
-        puts "Obtained #{material['id']} costing"
+    [@costing_database['raw']['MaterialsOpaque'], @costing_database['raw']['MaterialsGlazing']].each do |mat_lib|
+      [mat_lib].each do |materials|
+        lookup_list = materials.map {|material| {'type' => material['type'], 'catalog_id' => material['catalog_id'], 'id' => material['id']}}.uniq
+        lookup_list.each do |material|
 
-        auth = {:Authorization => "bearer #{auth_hash}"}
-        path = "https://dataapi-sb.gordian.com/v1/costdata/#{material['type'].downcase.strip}/catalogs/#{material['catalog_id'].strip}/costlines/#{material['id'].strip}"
-        value = nil
-        begin
-          api_return = JSON.parse(RestClient.get(path, auth).body)
+          auth = {:Authorization => "bearer #{auth_hash}"}
+          path = "https://dataapi-sb.gordian.com/v1/costdata/#{material['type'].downcase.strip}/catalogs/#{material['catalog_id'].strip}/costlines/#{material['id'].strip}"
+          value = nil
+          begin
+            api_return = JSON.parse(RestClient.get(path, auth).body)
 
-          @costing_database['rsmean_api_data'] << api_return
-        rescue Exception => e
-          puts e
-          if e.to_s.strip == "401 Unauthorized"
-            raise("Authenication failed with RSMeans. Ensure you have created your secret hash from the website and saved it in your home folder as rs_means_auth")
-          elsif e.to_s.strip == "404 Not Found"
-            material['error'] = e
-            @costing_database['rs_mean_errors'] << [material, e.to_s.strip]
-          else
-            raise("Error Occured #{e}")
+            @costing_database['rsmean_api_data'] << api_return
+          rescue Exception => e
+            puts e
+            if e.to_s.strip == "401 Unauthorized"
+              #username = ask "Username:"
+              #password = ask "Password:"
+              abort ("Authenication failed with RSMeans. Ensure you have created your secret hash from the website and saved it in your home folder as rs_means_auth")
+            elsif e.to_s.strip == "404 Not Found"
+              material['error'] = e
+              @costing_database['rs_mean_errors'] << [material, e.to_s.strip]
+            else
+              raise("Error Occured #{e}")
+            end
           end
+          puts "Obtained #{material['id']} costing"
         end
       end
     end
@@ -448,7 +454,7 @@ class BTAPCosting
 
             #If the cost is nil, that means the rsi is out of range. This should be flagged in the report.
             if cost.nil?
-            notes = "The RSI of #{rsi} for this surface is out of the range of the NRCan Database. The range available
+              notes = "The RSI of #{rsi} for this surface is out of the range of the NRCan Database. The range available
                      for #{construction_set[surface_type]} is between #{cost_range_array.first[0]}
                      and #{cost_range_array.last[0]} "
             end
