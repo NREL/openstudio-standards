@@ -475,7 +475,7 @@ class BTAPCosting
   def authenticate_rs_means_v1()
     puts '
        Your RSMeans Bearer code is out of date. It usually lasts 60 minutes.  Please do the following.
-       1. Go to https://dataapi-sb.gordian.com/swagger/ui/index.html#!/CostData-Assembly-Catalogs/CostdataAssemblyCatalogsGet
+       1. Use Chrome and go here https://dataapi-sb.gordian.com/swagger/ui/index.html#!/CostData-Assembly-Catalogs/CostdataAssemblyCatalogsGet
        2. Click on the the off switch at the top right corner of the first table open.
        3. Select the checkbox rsm_api:costdata.
        4. Click authorize.
