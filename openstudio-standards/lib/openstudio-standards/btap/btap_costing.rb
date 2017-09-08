@@ -8,6 +8,7 @@ require 'aes'
 require 'geocoder'
 require 'singleton'
 require "highline/import"
+require 'launchy'
 
 class BTAPCosting
 
@@ -231,27 +232,24 @@ class BTAPCosting
 
 
   def generate_materials_database()
-    auth_hash = nil
+    @auth_hash = nil
     @not_found_in_rsmeans_api = Array.new
     @costing_database = Hash.new()
     if File.exist?(@rs_means_auth_hash_path)
-      auth_hash = File.read(@rs_means_auth_hash_path).strip
+      @auth_hash = File.read(@rs_means_auth_hash_path).strip
     else
-      raise ("
-       You will need to place your secret RS-Means hash into a file named rs_means_auth in your home folder as ruby sees it.
-       Your hash will need to be updated as your swagger session expires (within an hour) otherwise you will get a
-       401 not authorized error. The hash_id (the weird long piece of text) is the only thing required in the file.
-      ")
+      self.authenticate_rs_means_v1()
     end
 
-    # Path to the xlsx file
+
+# Path to the xlsx file
 
 
     unless File.exist?(@xlsx_path)
       raise("could not find the national_average_cost_information.xlsm in location #{@xlsx_path}. This is a proprietary file manage by Natural resources Canada.")
     end
 
-    #Get Raw Data from files.
+#Get Raw Data from files.
     @costing_database['raw'] = {}
     @costing_database['rs_mean_errors']=[]
     ['RSMeansLocations',
@@ -269,14 +267,14 @@ class BTAPCosting
     @costing_database['rsmean_api_data']= Array.new
     @costing_database['constructions_costs']= Array.new
 
-    #Get RSMeans Materials data and store errors if encountered
+#Get RSMeans Materials data and store errors if encountered
 
     [@costing_database['raw']['MaterialsOpaque'], @costing_database['raw']['MaterialsGlazing']].each do |mat_lib|
       [mat_lib].each do |materials|
         lookup_list = materials.map {|material| {'type' => material['type'], 'catalog_id' => material['catalog_id'], 'id' => material['id']}}.uniq
         lookup_list.each do |material|
 
-          auth = {:Authorization => "bearer #{auth_hash}"}
+          auth = {:Authorization => "bearer #{@auth_hash}"}
           path = "https://dataapi-sb.gordian.com/v1/costdata/#{material['type'].downcase.strip}/catalogs/#{material['catalog_id'].strip}/costlines/#{material['id'].strip}"
           value = nil
           begin
@@ -286,9 +284,7 @@ class BTAPCosting
           rescue Exception => e
             puts e
             if e.to_s.strip == "401 Unauthorized"
-              #username = ask "Username:"
-              #password = ask "Password:"
-              abort ("Authenication failed with RSMeans. Ensure you have created your secret hash from the website and saved it in your home folder as rs_means_auth")
+              self.authenticate_rs_means_v1()
             elsif e.to_s.strip == "404 Not Found"
               material['error'] = e
               @costing_database['rs_mean_errors'] << [material, e.to_s.strip]
@@ -474,6 +470,32 @@ class BTAPCosting
     end #thermalzone
     puts costing_report
   end
+
+
+  def authenticate_rs_means_v1()
+    puts '
+       Your RSMeans Bearer code is out of date. It usually lasts 60 minutes.  Please do the following.
+       1. Go to https://dataapi-sb.gordian.com/swagger/ui/index.html#!/CostData-Assembly-Catalogs/CostdataAssemblyCatalogsGet
+       2. Click on the the off switch at the top right corner of the first table open.
+       3. Select the checkbox rsm_api:costdata.
+       4. Click authorize.
+       5. Enter your rsmeans api username and password when prompted.
+       6. When you return to the main page, click the "try it out" button at the bottom left of the first table.
+       7. Copy the entire string in the curl command field.
+       8. Paste it below.
+      '
+    rs_auth_bearer = ask "Paste RSMeans API Curl String and hit enter:"
+    m = rs_auth_bearer.match(/.*Bearer (?<bearer>[^']+).*$/)
+    if m[:bearer].to_s.size != 934
+      abort "Bearer key is not 934 charecters long. Please ensure that you copied the full curl string from the API Explorer."
+    else
+      #store auth_key in class variable
+      @auth_hash = m[:bearer].to_s
+      #Store to disk to subsequent runs if required.
+      File.write(@rs_means_auth_hash_path, @auth_hash)
+    end
+  end
+
 end
 
 
