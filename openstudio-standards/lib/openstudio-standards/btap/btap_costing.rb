@@ -241,10 +241,7 @@ class BTAPCosting
       self.authenticate_rs_means_v1()
     end
 
-
 # Path to the xlsx file
-
-
     unless File.exist?(@xlsx_path)
       raise("could not find the national_average_cost_information.xlsm in location #{@xlsx_path}. This is a proprietary file manage by Natural resources Canada.")
     end
@@ -325,8 +322,10 @@ class BTAPCosting
 
   def load_encrypted_database(key, file = @encrypted_file)
     if FileUtils.uptodate?(file, [@xlsx_path])
+      puts "National Costing Excel Sheet is older than database, using stored encrypted database."
       @costing_database = decrypt_hash(key, File.read(file))
     else
+      puts "National Costing Excel Sheet is newer than database, updating..."
       self.recreate_database()
     end
   end
