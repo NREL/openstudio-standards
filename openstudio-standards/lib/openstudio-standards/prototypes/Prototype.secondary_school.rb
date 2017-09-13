@@ -19,7 +19,7 @@ module SecondarySchool
         'Auditorium' => ['Auditorium_ZN_1_FLR_1'],
         'Library' => ['LIBRARY_MEDIA_CENTER_ZN_1_FLR_2'],
         'Corridor' => ['Corridor_Pod_1_ZN_1_FLR_1', 'Corridor_Pod_3_ZN_1_FLR_2', 'Main_Corridor_ZN_1_FLR_2', 'Main_Corridor_ZN_1_FLR_1', 'Corridor_Pod_3_ZN_1_FLR_1', 'Corridor_Pod_1_ZN_1_FLR_2', 'Corridor_Pod_2_ZN_1_FLR_1', 'Corridor_Pod_2_ZN_1_FLR_2'],
-        'Classroom' => ['Mult_Class_2_Pod_2_ZN_1_FLR_2', 'Mult_Class_2_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_1_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_2_ZN_1_FLR_2', 'Mult_Class_1_Pod_1_ZN_1_FLR_2', 'Corner_Class_2_Pod_2_ZN_1_FLR_2', 'Mult_Class_2_Pod_2_ZN_1_FLR_1', 'Mult_Class_2_Pod_3_ZN_1_FLR_2', 'Corner_Class_1_Pod_3_ZN_1_FLR_1', 'Mult_Class_1_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_2_ZN_1_FLR_2', 'Mult_Class_1_Pod_2_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_3_ZN_1_FLR_1', 'Corner_Class_1_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_2_ZN_1_FLR_1', 'Corner_Class_2_Pod_2_ZN_1_FLR_1', 'Corner_Class_1_Pod_3_ZN_1_FLR_2', 'Mult_Class_1_Pod_3_ZN_1_FLR_2', 'Corner_Class_2_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_3_ZN_1_FLR_2']
+        'Classroom' => ['Mult_Class_2_Pod_2_ZN_1_FLR_2', 'Mult_Class_2_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_1_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_2_ZN_1_FLR_2', 'Mult_Class_1_Pod_1_ZN_1_FLR_2', 'Corner_Class_2_Pod_2_ZN_1_FLR_2', 'Mult_Class_2_Pod_2_ZN_1_FLR_1',  'Corner_Class_1_Pod_3_ZN_1_FLR_1', 'Mult_Class_1_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_2_ZN_1_FLR_2', 'Mult_Class_1_Pod_2_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_3_ZN_1_FLR_1', 'Corner_Class_1_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_2_ZN_1_FLR_1', 'Corner_Class_2_Pod_2_ZN_1_FLR_1', 'Corner_Class_1_Pod_3_ZN_1_FLR_2', 'Mult_Class_1_Pod_3_ZN_1_FLR_2', 'Corner_Class_2_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_3_ZN_1_FLR_2']
       }
     when 'NECB 2011'
       sch = 'D'
@@ -48,7 +48,8 @@ module SecondarySchool
         'Auditorium' => ['Auditorium_ZN_1_FLR_1'],
         'Library' => ['LIBRARY_MEDIA_CENTER_ZN_1_FLR_2'],
         'Corridor' => ['Corridor_Pod_1_ZN_1_FLR_1', 'Corridor_Pod_3_ZN_1_FLR_2', 'Main_Corridor_ZN_1_FLR_2', 'Main_Corridor_ZN_1_FLR_1', 'Corridor_Pod_3_ZN_1_FLR_1', 'Corridor_Pod_1_ZN_1_FLR_2', 'Corridor_Pod_2_ZN_1_FLR_1', 'Corridor_Pod_2_ZN_1_FLR_2'],
-        'Classroom' => ['Mult_Class_2_Pod_2_ZN_1_FLR_2', 'Mult_Class_2_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_1_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_2_ZN_1_FLR_2', 'Mult_Class_1_Pod_1_ZN_1_FLR_2', 'Corner_Class_2_Pod_2_ZN_1_FLR_2', 'Mult_Class_2_Pod_2_ZN_1_FLR_1', 'Mult_Class_2_Pod_3_ZN_1_FLR_2', 'Corner_Class_1_Pod_3_ZN_1_FLR_1', 'Mult_Class_1_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_2_ZN_1_FLR_2', 'Mult_Class_1_Pod_2_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_3_ZN_1_FLR_1', 'Corner_Class_1_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_2_ZN_1_FLR_1', 'Corner_Class_2_Pod_2_ZN_1_FLR_1', 'Corner_Class_1_Pod_3_ZN_1_FLR_2', 'Mult_Class_1_Pod_3_ZN_1_FLR_2', 'Corner_Class_2_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_3_ZN_1_FLR_2']
+        'Classroom' => ['Mult_Class_2_Pod_2_ZN_1_FLR_2', 'Mult_Class_2_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_1_ZN_1_FLR_1', 'Corner_Class_2_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_2_ZN_1_FLR_2', 'Mult_Class_1_Pod_1_ZN_1_FLR_2', 'Corner_Class_2_Pod_2_ZN_1_FLR_2', 'Mult_Class_2_Pod_2_ZN_1_FLR_1', 'Corner_Class_1_Pod_3_ZN_1_FLR_1', 'Mult_Class_1_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_2_ZN_1_FLR_2', 'Mult_Class_1_Pod_2_ZN_1_FLR_1', 'Mult_Class_2_Pod_1_ZN_1_FLR_1', 'Mult_Class_1_Pod_3_ZN_1_FLR_1', 'Corner_Class_1_Pod_1_ZN_1_FLR_2', 'Corner_Class_1_Pod_2_ZN_1_FLR_1', 'Corner_Class_2_Pod_2_ZN_1_FLR_1', 'Corner_Class_1_Pod_3_ZN_1_FLR_2',  'Corner_Class_2_Pod_3_ZN_1_FLR_1', 'Corner_Class_2_Pod_3_ZN_1_FLR_2'],
+        'ComputerRoom' => ['Mult_Class_2_Pod_3_ZN_1_FLR_2','Mult_Class_1_Pod_3_ZN_1_FLR_2']
       }
     end
 
@@ -341,6 +342,10 @@ module SecondarySchool
   def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
+    # 
+    # add extra equipment for kitchen
+    PrototypeBuilding::SecondarySchool.add_extra_equip_kitchen(template, model)
+    
     model.getSpaces.each do |space|
       if space.name.get.to_s == 'Mech_ZN_1_FLR_1'
         model.add_elevator(template,
@@ -359,6 +364,42 @@ module SecondarySchool
     return true
   end
 
+  # add extra equipment for kitchen
+  def self.add_extra_equip_kitchen(template, model)
+    kitchen_space = model.getSpaceByName('Kitchen_ZN_1_FLR_1')
+    kitchen_space = kitchen_space.get
+    kitchen_space_type = kitchen_space.spaceType.get
+    elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
+    elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      elec_equip_def1.setFractionLatent(0)
+      elec_equip_def1.setFractionRadiant(0.25)
+      elec_equip_def1.setFractionLost(0)
+      elec_equip_def2.setFractionLatent(0)
+      elec_equip_def2.setFractionRadiant(0.25)
+      elec_equip_def2.setFractionLost(0)
+      if template == '90.1-2013'
+        elec_equip_def1.setDesignLevel(915)
+        elec_equip_def2.setDesignLevel(570)
+      else
+        elec_equip_def1.setDesignLevel(99999.88)
+        elec_equip_def2.setDesignLevel(99999.99)
+      end
+      # Create the electric equipment instance and hook it up to the space type
+      elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
+      elec_equip2 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def2)
+      elec_equip1.setName('Kitchen_Reach-in-Freezer')
+      elec_equip2.setName('Kitchen_Reach-in-Refrigerator')
+      elec_equip1.setSpaceType(kitchen_space_type)
+      elec_equip2.setSpaceType(kitchen_space_type)
+      elec_equip1.setSchedule(model.add_schedule('SchoolSecondary ALWAYS_ON'))
+      elec_equip2.setSchedule(model.add_schedule('SchoolSecondary ALWAYS_ON'))
+    end
+  end  
+  
   def self.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
     return true
   end

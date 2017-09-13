@@ -5,22 +5,21 @@ class DOEPrototypeRegressionTest < Minitest::Test
 
   def setup
 	@building_types = [
-		'SmallOffice'
-		'MediumOffice'
-		'LargeOffice'
-		'RetailStandalone'
-		'RetailStripmall'
-		'PrimarySchool'
-		'SecondarySchool'
-		'Outpatient'
-		'Hospital'
-		'SmallHotel'
-		'LargeHotel'
+		'SmallOffice',
+		'MediumOffice',
+		'LargeOffice',
+		'RetailStandalone',
+		'RetailStripmall',
+		'PrimarySchool',
+		'SecondarySchool',
+		'Outpatient',
+		'Hospital',
+		'SmallHotel',
+		'LargeHotel',
 		'QuickServiceRestaurant',
-		'FullServiceRestaurant'
-		'MidriseApartment'
-		'HighriseApartment'
-	  ]
+		'FullServiceRestaurant',
+		'MidriseApartment',
+		'HighriseApartment']
     # @building_types = ['MediumOffice']
     @templates = ['90.1-2013']
     @climate_zones = ['ASHRAE 169-2006-1A', 

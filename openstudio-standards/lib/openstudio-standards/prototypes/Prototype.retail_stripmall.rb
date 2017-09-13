@@ -13,7 +13,8 @@ module RetailStripmall
       }
     else
       space_type_map = {
-        'Strip mall - type 1' => ['LGstore1', 'SMstore1'],
+        'Strip mall - type 0A' => ['LGstore1'],
+        'Strip mall - type 0B' => ['SMstore1'],
         'Strip mall - type 2' => ['SMstore2', 'SMstore3', 'SMstore4'],
         'Strip mall - type 3' => ['LGstore2', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8']
       }

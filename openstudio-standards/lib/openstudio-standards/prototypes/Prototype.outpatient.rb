@@ -112,8 +112,10 @@ module Outpatient
         # ['Floor 1 Dictation', 'Floor 1 Humid','Floor 1 Scheduling', 'Floor 2 Dictation', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', ...
         # 'Floor 2 Work', 'Floor 3 Humid', 'Floor 3 Work'] same as 'Office', 'IT Room' and 'Dressing Room'
         # TODO 'Floor 2 Work' has slightly different equipment density
+        # split "Floor 2 Work" out from "Office" zone list to account for the different power density
         'Office' => ['Floor 1 Office', 'Floor 2 Office', 'Floor 3 Office', 'Floor 1 Dictation', 'Floor 1 Humid', 'Floor 1 Scheduling',
-                     'Floor 2 Dictation', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 2 Work', 'Floor 3 Humid', 'Floor 3 Work'],
+                     'Floor 2 Dictation', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 3 Humid', 'Floor 3 Work'],
+        'OutpatientFloor2Work' => ['Floor 2 Work'],                     
         # 'Floor 1 Recovery Room' and 'Floor 1 Step Down' same as 'PACU'
         'PACU' => ['Floor 1 PACU', 'Floor 1 Recovery Room', 'Floor 1 Step Down'],
         'PhysicalTherapy' => ['Floor 3 Physical Therapy 1', 'Floor 3 Physical Therapy 2'],
@@ -574,6 +576,11 @@ module Outpatient
       }
       data = model.find_object($os_standards['space_types'], search_criteria)
 
+      if data.nil?  ###
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Could not find data for #{search_criteria}")
+        next
+      end
+      
       # skip space type without minimum total air changes
       next if data['minimum_total_air_changes'].nil?
 

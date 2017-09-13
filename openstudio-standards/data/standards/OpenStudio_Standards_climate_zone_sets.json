@@ -97,6 +97,27 @@
       ]
     },
     {
+      "name": "CEC CZ All",
+      "climate_zones": [
+        "CEC TITLE 24 CZ 1",
+        "CEC TITLE 24 CZ 2",
+        "CEC TITLE 24 CZ 3",
+        "CEC TITLE 24 CZ 4",
+        "CEC TITLE 24 CZ 5",
+        "CEC TITLE 24 CZ 6",
+        "CEC TITLE 24 CZ 7",
+        "CEC TITLE 24 CZ 8",
+        "CEC TITLE 24 CZ 9",
+        "CEC TITLE 24 CZ 10",
+        "CEC TITLE 24 CZ 11",
+        "CEC TITLE 24 CZ 12",
+        "CEC TITLE 24 CZ 13",
+        "CEC TITLE 24 CZ 14",
+        "CEC TITLE 24 CZ 15",
+        "CEC TITLE 24 CZ 16"
+      ]
+    },
+    {
       "name": "ClimateZone 1",
       "climate_zones": [
         "ASHRAE 169-2006-1A",

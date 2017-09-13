@@ -6,6 +6,7 @@ class TestHospital < CreateDOEPrototypeBuildingTest
   building_types = ['Hospital']
   templates = ['90.1-2013']
   climate_zones = ['ASHRAE 169-2006-1A', 
+  
                    'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B',
                    'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 
                    'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C', 
@@ -25,10 +26,10 @@ class TestHospital < CreateDOEPrototypeBuildingTest
                'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw']
                
   create_models = true
-  run_models = true
-  compare_results = true
+  run_models = false
+  compare_results = false
 
-  debug = true
+  debug = false
   
   TestHospital.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   

@@ -1929,7 +1929,7 @@ class OpenStudio::Model::AirLoopHVAC
                        else
                          'BypassWhenOAFlowGreaterThanMinimum'
                        end
-    oa_sys.getControllerOutdoorAir.setHeatRecoveryBypassControlType(bypass_ctrl_type)
+    oa_system.getControllerOutdoorAir.setHeatRecoveryBypassControlType(bypass_ctrl_type)
 
     return true
   end
@@ -2196,8 +2196,8 @@ class OpenStudio::Model::AirLoopHVAC
       # Zone discharge air fraction
       z_d = v_oz / v_dz
 
-      # Zone ventilation effectiveness
-      e_vz = 1 + x_s - z_d
+      # Zone ventilation effectiveness  !!!
+      e_vz = 1.0 + x_s - z_d
 
       # Store the ventilation effectiveness
       e_vzs << e_vz
@@ -2210,7 +2210,7 @@ class OpenStudio::Model::AirLoopHVAC
       if e_vz < 0.6
 
         # Adjusted discharge air fraction
-        z_d_adj = 1 + x_s - 0.6
+        z_d_adj = 1.0 + x_s - 0.6
 
         # Adjusted min discharge airflow rate
         v_dz_adj = v_oz / z_d_adj
@@ -2224,7 +2224,7 @@ class OpenStudio::Model::AirLoopHVAC
         end
 
         # Zone ventilation effectiveness
-        e_vz_adj = 1 + x_s - z_d_adj
+        e_vz_adj = 1.0 + x_s - z_d_adj
 
         # Store the ventilation effectiveness
         e_vzs_adj << e_vz_adj
