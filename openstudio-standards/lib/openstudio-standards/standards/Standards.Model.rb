@@ -4266,7 +4266,6 @@ class OpenStudio::Model::Model
 
     # Check the results
     if possible_climate_zones.size.zero?
-      puts "TEST"
       # OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim} #{climate_zone}")
     elsif possible_climate_zones.size > 2
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
