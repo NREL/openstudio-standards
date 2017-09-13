@@ -39,4 +39,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'aes','0.5.0'
   spec.add_development_dependency 'geocoder', '1.4.4'
   spec.add_development_dependency 'highline'
+  spec.add_development_dependency 'launchy' 
 end

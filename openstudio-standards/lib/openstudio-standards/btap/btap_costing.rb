@@ -129,7 +129,7 @@ class BTAPCosting
     dist = 1000000000000000000000.0
     closest_city = nil
     #province-state	city	latitude	longitude	source
-    @costing_database['raw']['RSMeansLocations'].each do |location|
+    @costing_database['raw']['rsmeans_locations'].each do |location|
       if distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f]) < dist
         closest_city = location
         dist = distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f])
@@ -139,16 +139,26 @@ class BTAPCosting
   end
 
   def initialize(key = nil)
+
     @key = key
+    #paths to files all set here.
     @rs_means_auth_hash_path = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/rs_means_auth"
     @xlsx_path = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/national_average_cost_information.xlsm"
     @keyfile = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/keyfile"
     @encrypted_file = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/costing_e.json"
+    @plaintext_file = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/costing.json"
+    @error_log = "#{File.dirname(__FILE__)}/#{PATH_TO_COSTING_DATA}/errors.json"
+
     if @key.nil?
       @key = load_local_keyfile()
     end
-    load_encrypted_database(@key)
-
+    if FileUtils.uptodate?(@encrypted_file, [@xlsx_path])
+      puts "National Costing Excel Sheet is older than database, using stored encrypted database."
+      @costing_database = decrypt_hash(@key, File.read(@encrypted_file))
+    else
+      puts "National Costing Excel Sheet is newer than database, updating..."
+      self.recreate_database()
+    end
   end
 
 #This will convert a sheet in a given workbook into an array of hashes with the headers as symbols.
@@ -160,62 +170,78 @@ class BTAPCosting
   end
 
 
-  def get_costing_for_constructions_for_all_regions()
+  def generate_construction_cost_database()
     @costing_database['constructions_costs']= Array.new
     counter = 0
-    @costing_database['raw']['RSMeansLocations'].each do |location|
-      puts "#{location["province-state"]},#{location['city']}"
+    @costing_database['raw']['rsmeans_locations'].each do |location|
+      puts "Costing for: #{location["province-state"]},#{location['city']}"
+      @costing_database["raw"]['constructions_opaque'].each do |construction|
+        #puts "Costing: #{location["province-state"]},#{location['city']} #{construction["construction_type_name"]} atRSI #{construction['rsi_k_m2_per_w']}"
+        cost_construction(construction, counter, location, 'opaque')
+      end
 
-      @costing_database["raw"]['ConstructionsOpaque'].each do |construction|
-        #puts "Getting cost for Construction type #{construction["construction_type_name"]} at RSI #{construction['rsi_k_m2_per_w']}"
-        total_with_op = 0.0
-        materials_string = ''
-        material_cost_string = ''
-        material_cost_pairs = []
-        construction['material_opaque_id_layers'].split(',').reject {|c| c.empty?}.each do |material_index|
-          material = @costing_database["raw"]['MaterialsOpaque'].find {|material| material['materials_opaque_id'].to_s == material_index.to_s}
-          if material.nil?
-            puts "material error..could not find material #{material_index} in #{@costing_database["raw"]['MaterialsOpaque']}"
-            raise()
-          else
-            rs_means_data = @costing_database['rsmean_api_data'].select {|data| data['id'].to_s == material['id']}.first
-            if rs_means_data.nil?
-              #puts "This material id #{material['id']} was not found in the rs-means api. Skipping. This construction will be inaccurate. "
-              next
-            else
-              regional_material, regional_installation = get_regional_cost_factors(location['province-state'], location['city'], material)
-              #Get RSMeans cost information from lookup.
-              material_cost = rs_means_data['baseCosts']['materialOpCost'].to_f * material['quantity'].to_f * material['material_mult'].to_f
-              labour_cost = rs_means_data['baseCosts']['labourOpCost'].to_f * material['labour_mult'].to_f
-              equipment_cost = rs_means_data['baseCosts']['equipmentOpCost'].to_f
-              layer_cost = ((material_cost * regional_material / 100.0) + (labour_cost * regional_installation / 100.0) + equipment_cost).round(2)
-              material_cost_pairs << {'materials_opaque_id' => material_index,
-                                      'cost' => layer_cost}
-              total_with_op += layer_cost
-            end
-          end
+      @costing_database["raw"]['constructions_glazing'].each do |construction|
+        #puts "Costing: #{location["province-state"]},#{location['city']} #{construction["construction_type_name"]} at U #{construction['u_w_per_m2_k']}"
+        cost_construction(construction, counter, location, 'glazing')
+      end
+
+    end
+  end
+
+  def cost_construction(construction, counter, location, type = 'opaque')
+
+    material_layers = "material_#{type}_id_layers"
+    material_id = "materials_#{type}_id"
+    materials_database = @costing_database["raw"]["materials_#{type}"]
+
+
+    total_with_op = 0.0
+    material_cost_pairs = []
+    construction[material_layers].split(',').reject {|c| c.empty?}.each do |material_index|
+      material = materials_database.find {|data| data[material_id].to_s == material_index.to_s}
+      if material.nil?
+        puts "material error..could not find material #{material_index} in #{materials_database}"
+        raise()
+      else
+
+
+        rs_means_data = @costing_database['rsmean_api_data'].detect {|data| data['id'].to_s.upcase == material['id'].to_s.upcase}
+        if rs_means_data.nil?
+          puts "This material id #{material['id']} was not found in the rs-means api. Skipping. This construction will be inaccurate. "
+          raise()
+        else
+          regional_material, regional_installation = get_regional_cost_factors(location['province-state'], location['city'], material)
+          #Get RSMeans cost information from lookup.
+          material_cost = rs_means_data['baseCosts']['materialOpCost'].to_f * material['quantity'].to_f * material['material_mult'].to_f
+          labour_cost = rs_means_data['baseCosts']['labourOpCost'].to_f * material['labour_mult'].to_f
+          equipment_cost = rs_means_data['baseCosts']['equipmentOpCost'].to_f
+          layer_cost = ((material_cost * regional_material / 100.0) + (labour_cost * regional_installation / 100.0) + equipment_cost).round(2)
+          material_cost_pairs << {material_id.to_s => material_index,
+                                  'cost' => layer_cost}
+          total_with_op += layer_cost
         end
-        new_construction = {'index' => counter,
-                            'province-state' => location['province-state'],
-                            'city' => location['city'],
-                            "construction_type_name" => construction["construction_type_name"],
-                            'description' => construction["description"],
-                            'intended_surface_type' => construction["intended_surface_type"],
-                            'standards_construction_type' => construction["standards_construction_type"],
-                            'rsi_k_m2_per_w' => construction['rsi_k_m2_per_w'].to_f,
-                            'zone' => construction['climate_zone'],
-                            'materials' => material_cost_pairs,
-                            'total_cost_with_op' => total_with_op}
-
-        @costing_database['constructions_costs'] << new_construction
-        counter += 1
       end
     end
-    puts "#{counter} contructions created for #{@costing_database['raw']['RSMeansLocations'].size} cities"
+    new_construction = {
+        'index' => counter,
+        'province-state' => location['province-state'],
+        'city' => location['city'],
+        "construction_type_name" => construction["construction_type_name"],
+        'description' => construction["description"],
+        'intended_surface_type' => construction["intended_surface_type"],
+        'standards_construction_type' => construction["standards_construction_type"],
+        'rsi_k_m2_per_w' => construction['rsi_k_m2_per_w'].to_f,
+        'zone' => construction['climate_zone'],
+        'fenestration_type' => construction['fenestration_type'],
+        'u_w_per_m2_k' => construction['u_w_per_m2_k'],
+        'materials' => material_cost_pairs,
+        'total_cost_with_op' => total_with_op}
+
+    @costing_database['constructions_costs'] << new_construction
   end
 
   def get_regional_cost_factors(provincestate, city, material)
-    @costing_database['raw']['RSMeansLocalFactors'].select {|code| code['province-state'] == provincestate and code['city'] == city}.each do |code|
+    @costing_database['raw']['rsmeans_local_factors'].select {|code| code['province-state'] == provincestate and code['city'] == city}.each do |code|
       id = material['id'].to_s
       prefixes = code["code_prefixes"].split(',')
       prefixes.each do |prefix|
@@ -231,55 +257,60 @@ class BTAPCosting
   end
 
 
-  def generate_materials_database()
-    @auth_hash = nil
-    @not_found_in_rsmeans_api = Array.new
-    @costing_database = Hash.new()
-    if File.exist?(@rs_means_auth_hash_path)
-      @auth_hash = File.read(@rs_means_auth_hash_path).strip
-    else
-      self.authenticate_rs_means_v1()
-    end
-
-# Path to the xlsx file
+  def load_data_from_excel
     unless File.exist?(@xlsx_path)
       raise("could not find the national_average_cost_information.xlsm in location #{@xlsx_path}. This is a proprietary file manage by Natural resources Canada.")
     end
 
 #Get Raw Data from files.
+    @costing_database['rsmean_api_data']= Array.new
+    @costing_database['constructions_costs']= Array.new
     @costing_database['raw'] = {}
     @costing_database['rs_mean_errors']=[]
-    ['RSMeansLocations',
-     'RSMeansLocalFactors',
-     'ConstructionSets',
-     'ConstructionsOpaque',
-     'MaterialsOpaque',
-     'ConstructionsGlazing',
-     'MaterialsGlazing',
+    ['rsmeans_locations',
+     'rsmeans_local_factors',
+     'construction_sets',
+     'constructions_opaque',
+     'materials_opaque',
+     'constructions_glazing',
+     'materials_glazing',
      'Constructions',
      'ConstructionProperties'
     ].each do |sheet|
       @costing_database['raw'][sheet] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, sheet)
     end
-    @costing_database['rsmean_api_data']= Array.new
-    @costing_database['constructions_costs']= Array.new
 
-#Get RSMeans Materials data and store errors if encountered
+  end
 
-    [@costing_database['raw']['MaterialsOpaque'], @costing_database['raw']['MaterialsGlazing']].each do |mat_lib|
+  def generate_materials_cost_database
+
+    [
+        @costing_database['raw']['materials_glazing'], @costing_database['raw']['materials_opaque']].each do |mat_lib|
       [mat_lib].each do |materials|
-        lookup_list = materials.map {|material| {'type' => material['type'], 'catalog_id' => material['catalog_id'], 'id' => material['id']}}.uniq
+
+        lookup_list = materials.map {|material|
+          {'type' => material['type'],
+           'catalog_id' => material['catalog_id'],
+           'id' => material['id']}
+        }
+
         lookup_list.each do |material|
+          #check if it's already in our database with right catalog year.
+          api_return = @costing_database['rsmean_api_data'].detect {|rs_means|
+            rs_means['id'] == material['id'] and rs_means['catalog']['id'] == material['catalog_id']
+          }
+          unless api_return.nil?
+            puts "skipping duplicate entry #{material["id"]}"
+            next
+          end
 
           auth = {:Authorization => "bearer #{@auth_hash}"}
           path = "https://dataapi-sb.gordian.com/v1/costdata/#{material['type'].downcase.strip}/catalogs/#{material['catalog_id'].strip}/costlines/#{material['id'].strip}"
-          value = nil
           begin
             api_return = JSON.parse(RestClient.get(path, auth).body)
-
             @costing_database['rsmean_api_data'] << api_return
+
           rescue Exception => e
-            puts e
             if e.to_s.strip == "401 Unauthorized"
               self.authenticate_rs_means_v1()
             elsif e.to_s.strip == "404 Not Found"
@@ -290,9 +321,12 @@ class BTAPCosting
             end
           end
           puts "Obtained #{material['id']} costing"
+          raise('rs_means_database empty! ') if @costing_database['rsmean_api_data'].empty?
         end
       end
+
     end
+
   end
 
   def encrypt_database(key)
@@ -300,6 +334,9 @@ class BTAPCosting
     #create the openstudio construction names and costing objects.
     File.open(@encrypted_file, "w") do |f|
       f.write(encrypt_hash(key, @costing_database))
+    end
+    File.open(@plaintext_file, "w") do |f|
+      f.write( JSON.pretty_generate(@costing_database))
     end
     puts "the decryption key is:#{key}"
   end
@@ -320,16 +357,6 @@ class BTAPCosting
     return json
   end
 
-  def load_encrypted_database(key, file = @encrypted_file)
-    if FileUtils.uptodate?(file, [@xlsx_path])
-      puts "National Costing Excel Sheet is older than database, using stored encrypted database."
-      @costing_database = decrypt_hash(key, File.read(file))
-    else
-      puts "National Costing Excel Sheet is newer than database, updating..."
-      self.recreate_database()
-    end
-  end
-
 
   def load_local_keyfile()
     puts "loading local key"
@@ -345,11 +372,36 @@ class BTAPCosting
 
   def recreate_database()
     start = Time.now
-    self.generate_materials_database()
-    self.get_costing_for_constructions_for_all_regions()
-    puts JSON.pretty_generate(@costing_database['rs_mean_errors']) unless @costing_database['rs_mean_errors'].empty?
-    self.encrypt_database(@key)
+
+    @auth_hash = nil
+    @not_found_in_rsmeans_api = Array.new
+    @costing_database = Hash.new()
+    if File.exist?(@rs_means_auth_hash_path)
+      @auth_hash = File.read(@rs_means_auth_hash_path).strip
+    else
+      self.authenticate_rs_means_v1()
+    end
+
+    self.load_data_from_excel()
+    self.generate_materials_cost_database()
+
+    self.generate_construction_cost_database()
+
+
+    puts "the decryption key is:#{@key}"
     puts "Cost Database regenerated in #{Time.now - start} seconds"
+    puts "#{@costing_database['rsmean_api_data'].size} Unique RSMeans items."
+    puts "#{@costing_database['constructions_costs'].size} Costed Constructions."
+    puts "#{@costing_database['raw']['rsmeans_locations'].size} Canadian Locations."
+    unless @costing_database['rs_mean_errors'].empty?
+      File.open(@error_log, "w") do |f|
+        f.write(JSON.pretty_generate(@costing_database['rs_mean_errors']))
+      end
+      puts "#{@costing_database['rs_mean_errors'].size} Errors in Parsing Costing! See #{@error_log} for listing of errors."
+    end
+    self.encrypt_database(@key)
+
+
   end
 
   def cost_audit_envelope(model)
