@@ -1224,6 +1224,7 @@ class OpenStudio::Model::PlantLoop
   end
 
   # Determines if the loop is a Service Water Heating loop by checking if there is a WaterUseConnection on the demand side
+  # or a WaterHeaterMixed on the supply side
   #
   # @return [Boolean] true if it's indeed a SHW loop, false otherwise
   def swh_loop?()
@@ -1231,6 +1232,12 @@ class OpenStudio::Model::PlantLoop
     serves_swh = false
     self.demandComponents.each do |comp|
       if comp.to_WaterUseConnections.is_initialized
+        serves_swh = true
+        break
+      end
+    end
+    self.supplyComponents.each do |comp|
+      if comp.to_WaterHeaterMixed.is_initialized
         serves_swh = true
         break
       end
