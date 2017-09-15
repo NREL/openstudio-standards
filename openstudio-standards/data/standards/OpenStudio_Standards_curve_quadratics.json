@@ -218,7 +218,7 @@
       "max_x": 1.5,
       "min_out": null,
       "max_out": null,
-      "notes": "Office -2 stories, Retail medium"
+      "notes": "CBES StandAloneRetail"
     },
     {
       "name": "Curve Quadratic 2",
@@ -229,7 +229,7 @@
       "max_x": 1.5,
       "min_out": null,
       "max_out": null,
-      "notes": "Office -2 stories, Retail medium"
+      "notes": "CBES StandAloneRetail"
     },
     {
       "name": "Curve Quadratic 3",
@@ -240,7 +240,7 @@
       "max_x": 1.0,
       "min_out": null,
       "max_out": null,
-      "notes": "Office -2 stories, Retail medium"
+      "notes": "CBES StandAloneRetail"
     },
     {
       "name": "Curve Quadratic 4",
@@ -251,7 +251,7 @@
       "max_x": 1.5,
       "min_out": null,
       "max_out": null,
-      "notes": "Office -3 stories, Mixed use - 2 stories"
+      "notes": "CBES Medium Office"
     },
     {
       "name": "Curve Quadratic 5",
@@ -262,7 +262,7 @@
       "max_x": 1.5,
       "min_out": null,
       "max_out": null,
-      "notes": "Office -3 stories, Mixed use - 2 stories"
+      "notes": "CBES Medium Office"
     },
     {
       "name": "Curve Quadratic 6",
@@ -273,40 +273,7 @@
       "max_x": 1.0,
       "min_out": null,
       "max_out": null,
-      "notes": "Office -3 stories, Mixed use - 2 stories"
-    },
-    {
-      "name": "Curve Quadratic 7",
-      "coeff_1": 0.8,
-      "coeff_2": 0.2,
-      "coeff_3": 0.0,
-      "min_x": 0.5,
-      "max_x": 1.5,
-      "min_out": null,
-      "max_out": null,
-      "notes": "Mixed use - 3 stories"
-    },
-    {
-      "name": "Curve Quadratic 8",
-      "coeff_1": 1.1552,
-      "coeff_2": -0.1808,
-      "coeff_3": 0.0256,
-      "min_x": 0.5,
-      "max_x": 1.5,
-      "min_out": null,
-      "max_out": null,
-      "notes": "Mixed use - 3 stories"
-    },
-    {
-      "name": "Curve Quadratic 9",
-      "coeff_1": 0.85,
-      "coeff_2": 0.15,
-      "coeff_3": 0.0,
-      "min_x": 0.0,
-      "max_x": 1.0,
-      "min_out": null,
-      "max_out": null,
-      "notes": "Mixed use - 3 stories"
+      "notes": "CBES Medium Office"
     },
     {
       "name": "DOE Ref DX Clg Coil Cool-PLF-fPLR",
@@ -515,7 +482,7 @@
       "max_x": 1.5,
       "min_out": null,
       "max_out": null,
-      "notes": "Office - 1 story"
+      "notes": "CBES Small Office"
     },
     {
       "name": "back perimeter space Energy input ration of flow",
@@ -526,7 +493,7 @@
       "max_x": 1.5,
       "min_out": null,
       "max_out": null,
-      "notes": "Office - 1 story"
+      "notes": "CBES Small Office"
     },
     {
       "name": "back perimeter space Heating coil part load 1",
@@ -537,40 +504,7 @@
       "max_x": 1.0,
       "min_out": null,
       "max_out": null,
-      "notes": "Office - 1 story"
-    },
-    {
-      "name": "sale space Cooling capacity of flow",
-      "coeff_1": 0.8,
-      "coeff_2": 0.2,
-      "coeff_3": 0.0,
-      "min_x": 0.5,
-      "max_x": 1.5,
-      "min_out": null,
-      "max_out": null,
-      "notes": "Retail small"
-    },
-    {
-      "name": "sale space Energy input ration of flow",
-      "coeff_1": 1.156,
-      "coeff_2": -0.1816,
-      "coeff_3": 0.0256,
-      "min_x": 0.5,
-      "max_x": 1.5,
-      "min_out": null,
-      "max_out": null,
-      "notes": "Retail small"
-    },
-    {
-      "name": "sale space Heating coil part load 1",
-      "coeff_1": 1.0,
-      "coeff_2": 0.0,
-      "coeff_3": 0.0,
-      "min_x": 0.0,
-      "max_x": 1.0,
-      "min_out": null,
-      "max_out": null,
-      "notes": "Retail small"
+      "notes": "CBES Small Office"
     }
   ]
 }
