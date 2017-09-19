@@ -4,6 +4,7 @@ jobs:
     working_directory: ~/openstudio-standards
     docker:
       - image: nrel/openstudio
+    parallelism: 7
     steps:
       - checkout
       - run:
