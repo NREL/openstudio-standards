@@ -13,5 +13,5 @@ module OpenstudioStandards
     end
     return 'git-not-found-on-this-system'
   end
-  VERSION = '0.1.15-nrcan'.freeze
+  VERSION = '0.1.15'.freeze
 end
