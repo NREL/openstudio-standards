@@ -3754,8 +3754,8 @@ class OpenStudio::Model::Model
       # NECB FDWR limit
       hdd = BTAP::Environment::WeatherFile.new(weatherFile.get.path.get).hdd18
       fdwr_lim = (BTAP::Compliance::NECB2011.max_fwdr(hdd) * 100.0).round(1)
-      puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
-      puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
+      #puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
+      #puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
       # Stop here unless windows / doors need reducing
       return true unless fdwr > fdwr_lim
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{wwr_lim.round}%.")

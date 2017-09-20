@@ -34,14 +34,14 @@ module BTAP
         end
         counter = 1
         spaces.each do |space|
-          puts "old space name : #{space.name}"
+          #puts "old space name : #{space.name}"
           if prepend_name == true
             space.setName("#{story.name}-#{counter.to_s}:#{space.name}")
           else
             space.setName("#{story.name}-#{counter.to_s}")
           end
           counter = counter + 1
-          puts "new space name : #{space.name}"
+          p#uts "new space name : #{space.name}"
         end
       end
     end
@@ -51,7 +51,7 @@ module BTAP
 
       # loop through thermal zones
       model.getThermalZones.each do |thermal_zone| # this is going through all, not just selection
-        puts "old zone name : #{thermal_zone.name}"
+        #puts "old zone name : #{thermal_zone.name}"
         # reset the array of spaces to be empty
         spaces_in_thermal_zone = []
         # reset length of array of spaces
@@ -86,7 +86,7 @@ module BTAP
         else
           puts "#{thermal_zone.name.to_s} did not have any spaces, and will not be renamed." 
         end
-        puts "new zone name : #{thermal_zone.name}"
+        #puts "new zone name : #{thermal_zone.name}"
       end
     end
     
@@ -97,7 +97,7 @@ module BTAP
     #    ZoneHVACUnitHeater
    
     def self.prefix_equipment_with_zone_name(model)
-      puts "Renaming zone equipment."
+      #puts "Renaming zone equipment."
       # get all thermal zones
       thermal_zones = model.getThermalZones
 
@@ -112,17 +112,17 @@ module BTAP
             equip.setName("#{thermal_zone.name}:AirTerminalSingleDuctVAVReheat")
             reheat_coil = equip.to_AirTerminalSingleDuctVAVReheat.get.reheatCoil
             reheat_coil.setName("#{thermal_zone.name}:ReheatCoil")
-            puts reheat_coil.name
+            #puts reheat_coil.name
           elsif not equip.to_ZoneHVACBaseboardConvectiveWater.empty?
             equip.setName("#{thermal_zone.name}:ZoneHVACBaseboardConvectiveWater")
             heatingCoil = equip.to_ZoneHVACBaseboardConvectiveWater.get.heatingCoil
             heatingCoil.setName("#{thermal_zone.name}:Baseboard HW Htg Coil")
-            puts heatingCoil.name
+            #puts heatingCoil.name
           elsif not equip.to_ZoneHVACUnitHeater.empty?
             equip.setName("#{thermal_zone.name}:ZoneHVACUnitHeater")
             heatingCoil = equip.to_ZoneHVACUnitHeater.get.heatingCoil
             heatingCoil.setName("#{thermal_zone.name}:Unit Heater Htg Coil")
-            puts heatingCoil.name
+            #puts heatingCoil.name
             #Add more cases if you wish!!!!!
           else #if the equipment does not follow the above cases, rename
             # it generically and not touch the underlying coils, etc. 
@@ -131,7 +131,7 @@ module BTAP
           
         end
       end
-      puts "Done zone renaming equipment"
+      #puts "Done zone renaming equipment"
     end
       
       
@@ -2225,7 +2225,7 @@ module BTAP
         # get all spaces
         spaces = model.getSpaces
     
-        puts("Assigning Stories to Spaces")
+        #puts("Assigning Stories to Spaces")
   
         # make has of spaces and minz values
         sorted_spaces = Hash.new
@@ -2281,7 +2281,7 @@ module BTAP
           z = story.nominalZCoordinate
           unless z.empty?
             if z.to_f >= 0
-              puts story.name.get
+              #puts story.name.get
               count += 1
             end
           end
@@ -2296,7 +2296,7 @@ module BTAP
           z = story.nominalZCoordinate
           unless z.empty?
             if z.to_f < 0
-              puts story.name.get
+              #puts story.name.get
               count += 1
             end
           end

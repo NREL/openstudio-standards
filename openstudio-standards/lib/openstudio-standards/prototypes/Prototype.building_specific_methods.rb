@@ -2,8 +2,7 @@ require 'json'
 # Extend the class to add Medium Office specific stuff
 class OpenStudio::Model::Model
   def define_space_type_map(building_type, template, climate_zone)
-    space_type_map_json = File.absolute_path(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json")) 
-    puts File.exist?(space_type_map_json)
+    space_type_map_json = File.absolute_path(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json"))
     begin
       space_type_map = JSON.parse(File.read(space_type_map_json))
     rescue JSON::ParserError => e
@@ -18,7 +17,6 @@ class OpenStudio::Model::Model
         if item["template"].include?(template)
           template_found = true
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{template}] found for Building Type = [#{building_type}] in [\"#{building_type}\"]['space_map'][#{index}][\"space_type_map\"]")
-          puts item["space_type_map"]
           return item["space_type_map"]
         end
       end

@@ -88,7 +88,7 @@ class OpenStudio::Model::Model
       add_ground_temperatures(building_type, climate_zone, template)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes 
-      puts weatherFile.get.path.get.to_s
+      # puts weatherFile.get.path.get.to_s
       if weatherFile.empty? or weatherFile.get.path.empty? or not File.exists?(weatherFile.get.path.get.to_s)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Weatherfile is not defined.")
         raise()
@@ -100,7 +100,7 @@ class OpenStudio::Model::Model
 
       space_type_map = define_space_type_map(building_type, template, climate_zone)
       File.open("#{sizing_run_dir}/space_type_map.json", 'w') {|f| f.write(JSON.pretty_generate(space_type_map)) }
-      
+
       assign_space_type_stubs('Space Function', template, space_type_map) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_assign_space_type_stubs.osm")  if debug_incremental_changes 
@@ -382,7 +382,7 @@ class OpenStudio::Model::Model
     # NECB 2011 geometry is not explicitly defined; for NECB 2011 template, latest ASHRAE 90.1 geometry file is assigned (implicitly)
 
     building_type_to_geometry_json = File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json")
-    puts "\n#{building_type_to_geometry_json}\nEXIST: #{File.exists?(building_type_to_geometry_json)}\n"
+    # puts "\n#{building_type_to_geometry_json}\nEXIST: #{File.exists?(building_type_to_geometry_json)}\n"
     begin
       building_type_to_geometry = JSON.parse(File.read(building_type_to_geometry_json))
     rescue JSON::ParserError => e
@@ -392,7 +392,7 @@ class OpenStudio::Model::Model
 
     if building_type_to_geometry.has_key?(building_type)
       if building_type_to_geometry[building_type]['geometry'].has_key?(template)
-        puts building_type_to_geometry[building_type]['geometry'][template]
+        #puts building_type_to_geometry[building_type]['geometry'][template]
         geometry_file = building_type_to_geometry[building_type]['geometry'][template]
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Template = [#{building_type}] was not found for Building Type = [#{building_type}] at #{building_type_to_geometry_json}.")
@@ -751,7 +751,7 @@ class OpenStudio::Model::Model
     if lookup_building_type == 'SmallHotel' && template != 'NECB 2011'
       getBuildingStorys.each do |story|
         next if story.name.get == 'AtticStory'
-        puts "story = #{story.name}"
+        # puts "story = #{story.name}"
         is_residential = 'No' # default for building story level
         exterior_spaces_area = 0
         story_exterior_residential_area = 0
@@ -1050,7 +1050,7 @@ class OpenStudio::Model::Model
             end
 
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Largest #{makeup_target} is #{largest_target_zone.name} which will provide exahust for #{target_effective_floor_area} m^2")
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Largest #{makeup_source} is #{largest_source_zone.name} which will provide makeup air for #{makeup_target}")
+            OpenStudio.logFree(OpesnStudio::Info, 'openstudio.model.Model', "Largest #{makeup_source} is #{largest_source_zone.name} which will provide makeup air for #{makeup_target}")
 
             # add in extra arguments for makeup air
             exhaust_makeup_inputs = {}
@@ -2013,7 +2013,7 @@ class NECB_2011 < Standard
         add_ground_temperatures(building_type, climate_zone, template)
         osm_file_increment += 1
         BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes
-        puts weatherFile.get.path.get.to_s
+        #puts weatherFile.get.path.get.to_s
         if weatherFile.empty? or weatherFile.get.path.empty? or not File.exists?(weatherFile.get.path.get.to_s)
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Weatherfile is not defined.")
           raise()

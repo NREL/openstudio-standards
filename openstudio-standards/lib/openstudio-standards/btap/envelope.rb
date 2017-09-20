@@ -68,10 +68,12 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.assign_interior_surface_construction_to_adiabatic_surfaces(model, runner = nil)
-        BTAP::runner_register("Info","assign_interior_surface_construction_to_adiabatic_surfaces(#{model},#{runner}", runner) 
+        BTAP::runner_register("Info","assign_interior_surface_construction_to_adiabatic_surfaces", runner)
         unless model.building.get.defaultConstructionSet.empty? or model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.empty? or model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.empty?
           #Give adiabatic surfaces a construction. Does not matter what. This is a bug in Openstudio that leave these surfaces unassigned by the default construction set.
+
           all_adiabatic_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces, "Adiabatic")
+
           unless all_adiabatic_surfaces.empty?
             wall_construction = model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.get
             BTAP::Geometry::Surfaces::set_surfaces_construction( all_adiabatic_surfaces, wall_construction)
@@ -841,7 +843,7 @@ module BTAP
           new_materials_array = Array.new()
           new_materials_array << glazing
           new_materials_array.concat(shading_material_array) unless shading_material_array.empty?
-          puts new_materials_array.size
+          #puts new_materials_array.size
           return self.create_construction(construction.model, cons_name, new_materials_array)
         end
         

@@ -412,14 +412,15 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     bldg_types.sort.each do |building_type|
       vintages.sort.each do |building_vintage|
         climate_zones.sort.each do |climate_zone|
-          puts "**********#{building_type}-#{building_vintage}-#{climate_zone}******************"
+
+          #puts "**********#{building_type}-#{building_vintage}-#{climate_zone}******************"
           # Open the sql file, skipping if not found
           model_name = "#{building_type}-#{building_vintage}-#{climate_zone}"
           sql_path_string = "#{Dir.pwd}/output/#{model_name}/AnnualRun/EnergyPlus/eplusout.sql"
           sql_path = OpenStudio::Path.new(sql_path_string)
           sql = nil
           if OpenStudio.exists(sql_path)
-            puts "Found SQL file."
+            #puts "Found SQL file."
             sql = OpenStudio::SqlFile.new(sql_path)
           else
             failures << "****Error - #{model_name} - Could not find sql file"
