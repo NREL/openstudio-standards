@@ -216,7 +216,7 @@ class OpenStudio::Model::Model
     elsif building_type == 'Outpatient'
       PrototypeBuilding::Outpatient.update_exhaust_fan_efficiency(template, self)
     elsif building_type == 'SuperMarket'
-	  PrototypeBuilding::SuperMarket.update_exhaust_fan_efficiency(template, self)
+      PrototypeBuilding::SuperMarket.update_exhaust_fan_efficiency(template, self)
     end
 	
 	if building_type == 'HighriseApartment'
@@ -307,7 +307,7 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.mid_rise_apartment'
     when 'HighriseApartment'
       building_methods = 'Prototype.high_rise_apartment'
-	when 'SuperMarket'
+    when 'SuperMarket'
       building_methods = 'Prototype.supermarket'  
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Building Type = #{building_type} not recognized")
@@ -333,7 +333,7 @@ class OpenStudio::Model::Model
     # NECB 2011 geometry is not explicitly defined; for NECB 2011 template, latest ASHRAE 90.1 geometry file is assigned (implicitly)
 
     case building_type
-     when 'SuperMarket'
+    when 'SuperMarket'
       case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'DOE Ref 2004'
         geometry_file = 'Geometry.supermarket.osm'
@@ -342,8 +342,7 @@ class OpenStudio::Model::Model
       else # '90.1-2010', '90.1-2013'
         geometry_file = 'Geometry.supermarket_2010_2013.osm'
       end
-	
-     when 'SecondarySchool'
+    when 'SecondarySchool'
       geometry_file = if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
                         'Geometry.secondary_school_pre_1980_to_2004.osm'
                       else
