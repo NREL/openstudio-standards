@@ -18,7 +18,7 @@ module SuperMarket
 		'Vestibule' => ['Vestibule'],
 		'DryStorage' => ['Active Storage']
       }
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       space_type_map = {
         'Sales' => ['Main Sales','West Perimeter Sales','East Perimeter Sales'],
 		'Produce' => ['Produce'],
@@ -39,7 +39,7 @@ module SuperMarket
 
   def self.define_hvac_system_map(building_type, template, climate_zone)
 	case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       system_to_space_map = [
         {
           'type' => 'PSZ-AC',
@@ -111,328 +111,328 @@ module SuperMarket
           'name' => 'PSZ_14',
           'space_names' => ['Active Storage']
         },
-		{
+        {
           'type' => 'Exhaust Fan',
           'name' => 'Bakery Exahust Fan',
           'availability_sch_name' => 'SuperMarket MinOA_MotorizedDamper_Sched',
           'flow_rate' => OpenStudio.convert(750, 'cfm', 'm^3/s').get,
-		  'space_names' =>
-          [
-            'Bakery'
-          ]
+          'space_names' =>
+              [
+                'Bakery'
+              ]
         },
-		  {
+        {
           'type' => 'Exhaust Fan',
           'name' => 'Deli Exahust Fan',
           'availability_sch_name' => 'SuperMarket MinOA_MotorizedDamper_Sched',
           'flow_rate' => OpenStudio.convert(715, 'cfm', 'm^3/s').get,
-		  'space_names' =>
-          [
-            'Deli'
-          ]
-        },
-	   {
-		'type' =>'Refrigeration_system',
-		'compressor_type' => 'Low Temp',
-        'sys_name' =>'Rack A',
-		'cases' => [
-		{
-			'case_type' => 'LT Reach-In Ice Cream',
-			'case_name' => 'A Ice Cream Reach-Ins',
-			'length' => 14.6,
-			'number_of_cases' => 3,
-		   'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-		{
-			'case_type' => 'LT Coffin Ice Cream',
-			'case_name' => 'A Ice Cream Coffins',
-			'length' => 2.4,
-			'number_of_cases' => 1,
-			   'space_names' =>
-           [
-            'Main Sales'
-           ]
-		}
-		],
-		'walkins' => [
-		{
-		   'walkin_type' => 'Walk-In Freezer',
-		   'walkin_name' => 'Grocery Freezer',
-		   'insulated_floor_area' => 48,
-		   'space_names' =>
-           [
-            'Active Storage'
-           ],
- 		    'number_of_walkins' => 1
-		}
-		],
-		'space_names' => ['Main Sales']
+          'space_names' =>
+              [
+                'Deli'
+              ]
         },
         {
-		'type' =>'Refrigeration_system',
-		'compressor_type' => 'Low Temp',
-        'sys_name' =>'Rack B',
-		'cases' => [
-		{
-			'case_type' => 'LT Reach-In Frozen Food',
-			'case_name' => 'B Frozen Food Reach-Ins',
-			'length' => 13.8,
-			'number_of_cases' => 3,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		}
-		],
-	    'walkins' => [
-		{
-		   'walkin_type' => 'Walk-In Freezer',
-		   'walkin_name' => 'Bakery Freezer',
-		   'insulated_floor_area' => 12,
-		   'space_names' =>
-           [
-            'Bakery'
-           ],
-		   'number_of_walkins' => 1
-        }
-		],
-		'space_names' => ['Main Sales']
+          'type' =>'Refrigeration_system',
+          'compressor_type' => 'Low Temp',
+          'sys_name' =>'Rack A',
+          'cases' => [
+            {
+              'case_type' => 'LT Reach-In Ice Cream',
+              'case_name' => 'A Ice Cream Reach-Ins',
+              'length' => 14.6,
+              'number_of_cases' => 3,
+               'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+            {
+              'case_type' => 'LT Coffin Ice Cream',
+              'case_name' => 'A Ice Cream Coffins',
+              'length' => 2.4,
+              'number_of_cases' => 1,
+                 'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            }
+          ],
+          'walkins' => [
+            {
+              'walkin_type' => 'Walk-In Freezer',
+              'walkin_name' => 'Grocery Freezer',
+              'insulated_floor_area' => 48,
+              'space_names' =>
+                 [
+                  'Active Storage'
+                 ],
+              'number_of_walkins' => 1
+            }
+          ],
+          'space_names' => ['Main Sales']
         },
-		{
-		'type' =>'Refrigeration_system',
-        'compressor_type' => 'Med Temp',
-        'sys_name' =>'Rack C',
-		'cases' => [
-		{
-			'case_type' => 'LT Reach-In Frozen Food',
-			'case_name' => 'C Deli cases',
-			'length' => 8.5,
-			'number_of_cases' => 3,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-		{
-			'case_type' => 'MT Vertical Open',
-			'case_name' => 'C Dairy cases',
-			'length' => 7.3,
-			'number_of_cases' => 1,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-			{
-			'case_type' => 'MT Vertical Open',
-			'case_name' => 'C Dairy_Meat cases',
-			'length' => 6.1,
-			'number_of_cases' => 3,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-		{
-			'case_type' => 'MT Vertical Open',
-			'case_name' => 'C Meat cases',
-			'length' => 6.1,
-			'number_of_cases' => 1,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-		{
-			'case_type' => 'MT Service',
-			'case_name' => 'C Service Meat cases',
-			'length' => 6.1,
-			'number_of_cases' => 1,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		}
-		],
-		'walkins' => [
-		{
-		   'walkin_type' => 'Walk-In Cooler Glass Door',
-		   'walkin_name' => 'Dairy Cooler',
-		   'insulated_floor_area' => 62,
-		   'space_names' =>
-           [
-            'Active Storage'
-           ],
-		   'number_of_walkins' => 1
-		},
-		{
-		 'walkin_type' => 'Walk-In Cooler Glass Door',
-		   'walkin_name' => 'Beer Cooler',
-		   'insulated_floor_area' => 44,
-		   'space_names' =>
-           [
-            'Active Storage'
-           ],
-		   'number_of_walkins' => 1
-		}
-		],
-		'space_names' => ['Main Sales']
+        {
+          'type' =>'Refrigeration_system',
+          'compressor_type' => 'Low Temp',
+          'sys_name' =>'Rack B',
+          'cases' => [
+          {
+            'case_type' => 'LT Reach-In Frozen Food',
+            'case_name' => 'B Frozen Food Reach-Ins',
+            'length' => 13.8,
+            'number_of_cases' => 3,
+            'space_names' =>
+              [
+              'Main Sales'
+              ]
+          }
+          ],
+          'walkins' => [
+          {
+             'walkin_type' => 'Walk-In Freezer',
+             'walkin_name' => 'Bakery Freezer',
+             'insulated_floor_area' => 12,
+             'space_names' =>
+                [
+                'Bakery'
+                ],
+             'number_of_walkins' => 1
+              }
+          ],
+          'space_names' => ['Main Sales']
+        },
+        {
+          'type' =>'Refrigeration_system',
+          'compressor_type' => 'Med Temp',
+          'sys_name' =>'Rack C',
+          'cases' => [
+            {
+              'case_type' => 'LT Reach-In Frozen Food',
+              'case_name' => 'C Deli cases',
+              'length' => 8.5,
+              'number_of_cases' => 3,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+            {
+              'case_type' => 'MT Vertical Open',
+              'case_name' => 'C Dairy cases',
+              'length' => 7.3,
+              'number_of_cases' => 1,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+              {
+              'case_type' => 'MT Vertical Open',
+              'case_name' => 'C Dairy_Meat cases',
+              'length' => 6.1,
+              'number_of_cases' => 3,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+            {
+              'case_type' => 'MT Vertical Open',
+              'case_name' => 'C Meat cases',
+              'length' => 6.1,
+              'number_of_cases' => 1,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+            {
+              'case_type' => 'MT Service',
+              'case_name' => 'C Service Meat cases',
+              'length' => 6.1,
+              'number_of_cases' => 1,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            }
+          ],
+          'walkins' => [
+            {
+               'walkin_type' => 'Walk-In Cooler Glass Door',
+               'walkin_name' => 'Dairy Cooler',
+               'insulated_floor_area' => 62,
+               'space_names' =>
+                   [
+                    'Active Storage'
+                   ],
+               'number_of_walkins' => 1
+            },
+            {
+             'walkin_type' => 'Walk-In Cooler Glass Door',
+               'walkin_name' => 'Beer Cooler',
+               'insulated_floor_area' => 44,
+               'space_names' =>
+                   [
+                    'Active Storage'
+                   ],
+               'number_of_walkins' => 1
+            }
+          ],
+          'space_names' => ['Main Sales']
         },
        {
-		'type' =>'Refrigeration_system',
-        'compressor_type' => 'Med Temp',
-        'sys_name' =>'Rack D',
-		'cases' => [
-		{
-			'case_type' => 'MT Vertical Open',
-			'case_name' => 'D Beverage cases',
-			'length' => 4.9,
-			'number_of_cases' => 1,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-		{
-			'case_type' => 'MT Service',
-			'case_name' => 'D Service Deli',
-			'length' => 13.4,
-			'number_of_cases' => 1,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-			{
-			'case_type' => 'MT Vertical Open',
-			'case_name' => 'D Salad_Produce cases',
-			'length' => 7.3,
-			'number_of_cases' => 2,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-		{
-			'case_type' => 'MT Coffin',
-			'case_name' => 'D Produce cases',
-			'length' => 7.3,
-			'number_of_cases' => 1,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-			
-		},
-		{
-			'case_type' => 'MT Coffin',
-			'case_name' => 'D Produce Islands',
-			'length' => 11,
-			'number_of_cases' => 1,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-		{
-			'case_type' => 'MT Vertical Open',
-			'case_name' => 'D Floral',
-			'length' => 3.7,
-			'number_of_cases' => 1,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-				{
-			'case_type' => 'MT Service',
-			'case_name' => 'D Service Bakery',
-			'length' => 2.4,
-			'number_of_cases' => 1,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		},
-		{
-			'case_type' => 'MT Vertical Open',
-			'case_name' => 'D Prepared Food',
-			'length' => 8.5,
-			'number_of_cases' => 2,
-			'space_names' =>
-           [
-            'Main Sales'
-           ]
-		}
-		],
-		'walkins' => [
-		{
-		   'walkin_type' => 'Walk-In Cooler',
-		   'walkin_name' => 'Meat Cooler',
-		   'insulated_floor_area' => 38,
-		   'space_names' =>
-           [
-            'Active Storage'
-           ],
-		   'number_of_walkins' => 1
-		},
-				{
-		   'walkin_type' => 'Walk-In Cooler',
-		   'walkin_name' => 'Meat Prep',
-		   'insulated_floor_area' => 56,
-		   'space_names' =>
-           [
-            'Deli'
-           ],
-		   'number_of_walkins' => 1
-		},
-				{
-		   'walkin_type' => 'Walk-In Cooler',
-		   'walkin_name' => 'Bloom Box',
-		   'insulated_floor_area' => 6,
-		   'space_names' =>
-           [
-            'Active Storage'
-           ],
-		   'number_of_walkins' => 1
-		},
-				{
-		   'walkin_type' => 'Walk-In Cooler',
-		   'walkin_name' => 'Deli Cooler',
-		   'insulated_floor_area' => 11,
-		   'space_names' =>
-           [
-            'Deli'
-           ],
-		   'number_of_walkins' => 1
-		},
-				{
-		   'walkin_type' => 'Walk-In Cooler',
-		   'walkin_name' => 'Produce Cooler',
-		   'insulated_floor_area' => 37,
-		   'space_names' =>
-           [
-            'Active Storage'
-           ],
-		   'number_of_walkins' => 1
-		},
-		{
-		   'walkin_type' => 'Walk-In Cooler',
-		   'walkin_name' => 'Fish Cooler',
-		   'insulated_floor_area' => 7,
-		   'space_names' =>
-           [
-            'Active Storage'
-           ],
-		   'number_of_walkins' => 1
-		}
-		],
-		'space_names' => ['Main Sales']
+          'type' =>'Refrigeration_system',
+          'compressor_type' => 'Med Temp',
+          'sys_name' =>'Rack D',
+          'cases' => [
+            {
+              'case_type' => 'MT Vertical Open',
+              'case_name' => 'D Beverage cases',
+              'length' => 4.9,
+              'number_of_cases' => 1,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+            {
+              'case_type' => 'MT Service',
+              'case_name' => 'D Service Deli',
+              'length' => 13.4,
+              'number_of_cases' => 1,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+              {
+              'case_type' => 'MT Vertical Open',
+              'case_name' => 'D Salad_Produce cases',
+              'length' => 7.3,
+              'number_of_cases' => 2,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+            {
+              'case_type' => 'MT Coffin',
+              'case_name' => 'D Produce cases',
+              'length' => 7.3,
+              'number_of_cases' => 1,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+              
+            },
+            {
+              'case_type' => 'MT Coffin',
+              'case_name' => 'D Produce Islands',
+              'length' => 11,
+              'number_of_cases' => 1,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+            {
+              'case_type' => 'MT Vertical Open',
+              'case_name' => 'D Floral',
+              'length' => 3.7,
+              'number_of_cases' => 1,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+                {
+              'case_type' => 'MT Service',
+              'case_name' => 'D Service Bakery',
+              'length' => 2.4,
+              'number_of_cases' => 1,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            },
+            {
+              'case_type' => 'MT Vertical Open',
+              'case_name' => 'D Prepared Food',
+              'length' => 8.5,
+              'number_of_cases' => 2,
+              'space_names' =>
+                   [
+                    'Main Sales'
+                   ]
+            }
+          ],
+          'walkins' => [
+            {
+              'walkin_type' => 'Walk-In Cooler',
+              'walkin_name' => 'Meat Cooler',
+              'insulated_floor_area' => 38,
+              'space_names' =>
+                 [
+                  'Active Storage'
+                 ],
+              'number_of_walkins' => 1
+            },
+            {
+              'walkin_type' => 'Walk-In Cooler',
+              'walkin_name' => 'Meat Prep',
+              'insulated_floor_area' => 56,
+              'space_names' =>
+                 [
+                  'Deli'
+                 ],
+              'number_of_walkins' => 1
+            },
+            {
+              'walkin_type' => 'Walk-In Cooler',
+              'walkin_name' => 'Bloom Box',
+              'insulated_floor_area' => 6,
+              'space_names' =>
+               [
+                'Active Storage'
+               ],
+              'number_of_walkins' => 1
+            },
+            {
+              'walkin_type' => 'Walk-In Cooler',
+              'walkin_name' => 'Deli Cooler',
+              'insulated_floor_area' => 11,
+              'space_names' =>
+                 [
+                  'Deli'
+                 ],
+              'number_of_walkins' => 1
+            },
+            {
+              'walkin_type' => 'Walk-In Cooler',
+              'walkin_name' => 'Produce Cooler',
+              'insulated_floor_area' => 37,
+              'space_names' =>
+                 [
+                  'Active Storage'
+                 ],
+              'number_of_walkins' => 1
+            },
+            {
+              'walkin_type' => 'Walk-In Cooler',
+              'walkin_name' => 'Fish Cooler',
+              'insulated_floor_area' => 7,
+              'space_names' =>
+                 [
+                  'Active Storage'
+                 ],
+              'number_of_walkins' => 1
+            }
+          ],
+          'space_names' => ['Main Sales']
         }  		
-		]
+      ]
     end
 
     return system_to_space_map

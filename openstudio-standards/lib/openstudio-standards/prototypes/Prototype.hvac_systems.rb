@@ -4546,15 +4546,12 @@ class OpenStudio::Model::Model
   # of a single compressor and a single air-cooled condenser.
   #
   # @note The legacy prototype IDF files use the simplified
-  # Refreigeration:ComprssorRack object, but this object is
+  # Refrigeration:CompressorRack object, but this object is
   # not included in OpenStudio.  Instead, a detailed rack
   # with similar performance is added.
   # @todo Set compressor properties since prototypes use simple
   # refrigeration rack instead of detailed
   # @todo fix latent case credit curve setter
-  
-  
-  
   def add_refrigeration(template,
                         case_type,
                         cooling_capacity_per_length,
@@ -4691,9 +4688,8 @@ class OpenStudio::Model::Model
     return true
 	end
 	
-# added for supermarket refrigeration system which has multiple cases
-	def add_refrigeration_case (template,
-	                            case_)
+  # Add supermarket refrigeration system which has multiple cases
+	def add_refrigeration_case(template, case_)
 								#case_type,
 								#case_name,
 								#cooling_capacity_per_length,
@@ -4707,288 +4703,297 @@ class OpenStudio::Model::Model
 
     # Default properties based on the case type (8 different types)
     # case_type = 
-	#'LT Coffin Ice Cream','LT Coffin Frozen Food','LT Reach-In Ice Cream','LT Reach-In Frozen Food,
-	#'MT Coffin','MT Vertical Open','MT Service','MT Reach-In'
+    #'LT Coffin Ice Cream','LT Coffin Frozen Food','LT Reach-In Ice Cream','LT Reach-In Frozen Food,
+    #'MT Coffin','MT Vertical Open','MT Service','MT Reach-In'
     
     case_type = case_['case_type']
-	case_name = case_['case_name']
-	length = case_['length']
-	thermal_zones = get_zones_from_spaces_on_system(case_)
-	
+    case_name = case_['case_name']
+    length = case_['length']
+    thermal_zones = get_zones_from_spaces_on_system(case_)
+    
+    length_ft = OpenStudio.convert(length, 'm', 'ft').get
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{length_ft.round} ft #{case_type}") 
+  
     case_temp = nil
     latent_heat_ratio = nil
     runtime_fraction = nil
     fraction_antisweat_to_case = nil
     latent_case_credit_curve_name = nil
     defrost_type = nil
-	defrost_correction_curve_name = nil
+    defrost_correction_curve_name = nil
     restocking_sch_name = 'Always Off'
 	
-	case case_type 
+    # Capacity, defrost, anti-sweat
+    case case_type 
     when 'LT Coffin Frozen Food'
-	  latent_heat_ratio = 0.2
-	  runtime_fraction = 0.85
-	  latent_case_credit_curve_name = 'Coffin Latent Curve'
-	  defrost_type ='ElectricwithTemperatureTermination'
-	  anti_sweat_type = 'Constant'
-	  defrost_correction_curve_name = 'Coffin Defrost Curve'
-	  defrost_correction_type = 'DewpointMethod'
-	  
-	  case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
-	    case_temp = -22.8
-		cooling_capacity_per_length = 588.5
-		evaporator_fan_pwr_per_length = 23.62
-        lighting_per_length = 0
-		defrost_pwr_per_length = 1430.4
-        anti_power = 254.6
-		evapo_temp = -26.7
-	  when '90.1-2013'
-	    case_temp = -22.8
-		cooling_capacity_per_length = 435.6
-		evaporator_fan_pwr_per_length = 6.63
-        lighting_per_length = 0
-		defrost_pwr_per_length = 856.3
-        anti_power = 78.7
-		evapo_temp = -26.7
-      end 	
-	when 'LT Coffin Ice Cream'
-	  latent_heat_ratio = 0.2
-	  runtime_fraction = 0.85
-	  latent_case_credit_curve_name = 'Coffin Latent Curve'
-	  defrost_type ='ElectricwithTemperatureTermination'
-	  anti_sweat_type = 'Constant'
-	  defrost_correction_curve_name = 'Coffin Defrost Curve'	 
-	  defrost_correction_type = 'DewpointMethod'
-	  case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
-	    case_temp = -26.1
-		cooling_capacity_per_length = 695.2
-		evaporator_fan_pwr_per_length = 23.6
-        lighting_per_length = 0
-		defrost_pwr_per_length = 1430.4
-        anti_power = 254.6
-		evapo_temp = -30
-	  when '90.1-2013'
-	    case_temp = -28.3
-		cooling_capacity_per_length = 521.2
-		evaporator_fan_pwr_per_length = 5.48
-        lighting_per_length = 0
-		defrost_pwr_per_length = 839.9
-        anti_power = 78.7
-		evapo_temp = -30
-      end 		
-    when 'LT Reach-In Frozen Food'
-	  latent_heat_ratio = 0.1
-	  runtime_fraction = 0.85
-	  latent_case_credit_curve_name = 'Glass Door Latent Curve'
-	  defrost_type ='ElectricwithTemperatureTermination'
-	  anti_sweat_type = 'Constant'
-	  defrost_correction_curve_name = 'Glass Door Defrost Curve'
-	  defrost_correction_type = 'DewpointMethod'
-	  case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
-	    case_temp = -20
-		cooling_capacity_per_length = 583.7
-		evaporator_fan_pwr_per_length = 70.21
-        lighting_per_length = 99.08
-		defrost_pwr_per_length = 1221.5
-        anti_power = 286.7
-		evapo_temp = -27.4
-	  when '90.1-2013'
-	    case_temp = -20.0
-		cooling_capacity_per_length = 426.0
-		evaporator_fan_pwr_per_length = 29.53
-        lighting_per_length = 25.72
-		defrost_pwr_per_length = 971.1
-        anti_power = 139.4
-		evapo_temp = -23.5
-      end 	
-	when 'LT Reach-In Ice Cream'
-	  latent_heat_ratio = 0.1
-	  runtime_fraction = 0.85
-	  latent_case_credit_curve_name = 'Glass Door Latent Curve'
-	  defrost_type ='ElectricwithTemperatureTermination'
-	  anti_sweat_type = 'Constant'
-	  defrost_correction_curve_name = 'Glass Door Defrost Curve'	 
-	  defrost_correction_type = 'DewpointMethod'
+      latent_heat_ratio = 0.2
+      runtime_fraction = 0.85
+      latent_case_credit_curve_name = 'Coffin Latent Curve'
+      defrost_type ='ElectricwithTemperatureTermination'
+      anti_sweat_type = 'Constant'
+      defrost_correction_curve_name = 'Coffin Defrost Curve'
+      defrost_correction_type = 'DewpointMethod'
 
-	  case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
-	    case_temp = -23.9
-		cooling_capacity_per_length = 617.4
-		evaporator_fan_pwr_per_length = 70.21
-        lighting_per_length = 99.08
-		defrost_pwr_per_length = 1221.5
-        anti_power = 286.7
-		evapo_temp = -27.4
-	  when '90.1-2013'
-	    case_temp = -23.9
-		cooling_capacity_per_length = 452.0
-		evaporator_fan_pwr_per_length = 29.53
-        lighting_per_length = 25.72
-		defrost_pwr_per_length = 971.1
-        anti_power = 139.4
-		evapo_temp = -27.4
-      end 	
-	when 'MT Coffin'
-	  latent_heat_ratio = 0.2
-	  runtime_fraction = 0.85
-	  latent_case_credit_curve_name = 'Coffin Latent Curve'
-	  anti_sweat_type = 'Constant'
-	  defrost_correction_type = 'None'
-	  defrost_correction_curve_name = 'Coffin Defrost Curve'
-	  defrost_type ='ElectricwithTemperatureTermination'
-	  case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
-	    case_temp = -2.9
-		cooling_capacity_per_length = 410
-		evaporator_fan_pwr_per_length = 50.85
-        lighting_per_length = 0
-		defrost_pwr_per_length = 856.3
-        anti_power = 63.6
-		evapo_temp = -6.4
-
-	  when '90.1-2013'
-	    case_temp = -2.9
-		cooling_capacity_per_length = 302.9
-		evaporator_fan_pwr_per_length = 6.66
-        lighting_per_length = 0
-		defrost_pwr_per_length = 856.3
-        anti_power = 63.6
-		evapo_temp = -6.4
-	    defrost_type ='ElectricwithTemperatureTermination'
-      end 		
-    when 'MT Service'
-	  latent_heat_ratio = 0.1
-	  runtime_fraction = 0.85
-	  latent_case_credit_curve_name = 'Glass Door Latent Curve'
-	  defrost_type ='OffCycle'
-	  anti_sweat_type = 'Constant'
-	  defrost_correction_type = 'None'
-	  defrost_correction_curve_name = 'Coffin Defrost Curve'
       case template
       when '90.1-2004', '90.1-2007', '90.1-2010'
-	    case_temp = -2.9
-		cooling_capacity_per_length = 808
-		evaporator_fan_pwr_per_length = 31.82
-        lighting_per_length = 71.52
-		defrost_pwr_per_length = 0
-        anti_power = 0
-		evapo_temp = -6.4
-	  when '90.1-2013'
-	    case_temp = -2.9
-		cooling_capacity_per_length = 599.1
-		evaporator_fan_pwr_per_length = 20.41
-        lighting_per_length = 17.72
-		defrost_pwr_per_length = 0
-        anti_power = 63.3
-		evapo_temp = -6.4
-      end 	
-	when 'MT Vertical Open'
-	  latent_heat_ratio = 0.3
-	  runtime_fraction = 0.85
-	  latent_case_credit_curve_name = 'Open Latent Curve'
-	  defrost_type ='OffCycle'
-	  anti_sweat_type = 'None'
-	  defrost_correction_type = 'None'
-	  defrost_correction_curve_name = 'Coffin Defrost Curve'
-	  case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
-	    case_temp = 0.6
-		cooling_capacity_per_length = 1437.6
-		evaporator_fan_pwr_per_length = 42.98
-        lighting_per_length = 72.51
-		defrost_pwr_per_length = 0
-        anti_power = 0
-		evapo_temp = -3.9
-	  when '90.1-2013'
-	    case_temp = 0.6
-		cooling_capacity_per_length = 1143.4
-		evaporator_fan_pwr_per_length = 16.14
-        lighting_per_length = 16.34
-		defrost_pwr_per_length = 0
-        anti_power = 0
-		evapo_temp = -3.9
-      end 
-	when 'MT Reach-Ins'
-	  latent_heat_ratio = 0.1
-	  runtime_fraction = 0.85
-	  latent_case_credit_curve_name = 'Glass Door Latent Curve'
-	  defrost_type ='OffCycle'
-	  anti_sweat_type = 'Constant'
-	  defrost_correction_curve_name = 'Glass Door Defrost Curve'
-	  defrost_correction_type = 'DewpointMethod'
-      case_temp = 1.5
-	  cooling_capacity_per_length = 308.7
-	  evaporator_fan_pwr_per_length = 17.62
-      lighting_per_length = 22.47
-	  defrost_pwr_per_length = 0
-      anti_power = 43
-	  evapo_temp = -2.2
-    end
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Refrigeration System')
+        case_temp = -22.8
+        cooling_capacity_per_length = 588.5
+        evaporator_fan_pwr_per_length = 23.62
+        lighting_per_length = 0
+        defrost_pwr_per_length = 1430.4
+        anti_power = 254.6
+        evapo_temp = -26.7
+      when '90.1-2013'
+        case_temp = -22.8
+        cooling_capacity_per_length = 435.6
+        evaporator_fan_pwr_per_length = 6.63
+        lighting_per_length = 0
+        defrost_pwr_per_length = 856.3
+        anti_power = 78.7
+        evapo_temp = -26.7
+      end
 
-	# Defrost schedule
+    when 'LT Coffin Ice Cream'
+      latent_heat_ratio = 0.2
+      runtime_fraction = 0.85
+      latent_case_credit_curve_name = 'Coffin Latent Curve'
+      defrost_type ='ElectricwithTemperatureTermination'
+      anti_sweat_type = 'Constant'
+      defrost_correction_curve_name = 'Coffin Defrost Curve'	 
+      defrost_correction_type = 'DewpointMethod'
+      case template
+      when '90.1-2004', '90.1-2007', '90.1-2010'
+        case_temp = -26.1
+        cooling_capacity_per_length = 695.2
+        evaporator_fan_pwr_per_length = 23.6
+        lighting_per_length = 0
+        defrost_pwr_per_length = 1430.4
+        anti_power = 254.6
+        evapo_temp = -30
+      when '90.1-2013'
+        case_temp = -28.3
+        cooling_capacity_per_length = 521.2
+        evaporator_fan_pwr_per_length = 5.48
+        lighting_per_length = 0
+        defrost_pwr_per_length = 839.9
+        anti_power = 78.7
+        evapo_temp = -30
+      end
+
+    when 'LT Reach-In Frozen Food'
+      latent_heat_ratio = 0.1
+      runtime_fraction = 0.85
+      latent_case_credit_curve_name = 'Glass Door Latent Curve'
+      defrost_type ='ElectricwithTemperatureTermination'
+      anti_sweat_type = 'Constant'
+      defrost_correction_curve_name = 'Glass Door Defrost Curve'
+      defrost_correction_type = 'DewpointMethod'
+      case template
+      when '90.1-2004', '90.1-2007', '90.1-2010'
+        case_temp = -20
+        cooling_capacity_per_length = 583.7
+        evaporator_fan_pwr_per_length = 70.21
+        lighting_per_length = 99.08
+        defrost_pwr_per_length = 1221.5
+        anti_power = 286.7
+        evapo_temp = -27.4
+      when '90.1-2013'
+        case_temp = -20.0
+        cooling_capacity_per_length = 426.0
+        evaporator_fan_pwr_per_length = 29.53
+        lighting_per_length = 25.72
+        defrost_pwr_per_length = 971.1
+        anti_power = 139.4
+        evapo_temp = -23.5
+      end
+
+    when 'LT Reach-In Ice Cream'
+      latent_heat_ratio = 0.1
+      runtime_fraction = 0.85
+      latent_case_credit_curve_name = 'Glass Door Latent Curve'
+      defrost_type ='ElectricwithTemperatureTermination'
+      anti_sweat_type = 'Constant'
+      defrost_correction_curve_name = 'Glass Door Defrost Curve'	 
+      defrost_correction_type = 'DewpointMethod'
+      case template
+      when '90.1-2004', '90.1-2007', '90.1-2010'
+        case_temp = -23.9
+        cooling_capacity_per_length = 617.4
+        evaporator_fan_pwr_per_length = 70.21
+        lighting_per_length = 99.08
+        defrost_pwr_per_length = 1221.5
+        anti_power = 286.7
+        evapo_temp = -27.4
+      when '90.1-2013'
+        case_temp = -23.9
+        cooling_capacity_per_length = 452.0
+        evaporator_fan_pwr_per_length = 29.53
+        lighting_per_length = 25.72
+        defrost_pwr_per_length = 971.1
+        anti_power = 139.4
+        evapo_temp = -27.4
+      end
+
+    when 'MT Coffin'
+      latent_heat_ratio = 0.2
+      runtime_fraction = 0.85
+      latent_case_credit_curve_name = 'Coffin Latent Curve'
+      anti_sweat_type = 'Constant'
+      defrost_correction_type = 'None'
+      defrost_correction_curve_name = 'Coffin Defrost Curve'
+      defrost_type ='ElectricwithTemperatureTermination'
+      case template
+      when '90.1-2004', '90.1-2007', '90.1-2010'
+        case_temp = -2.9
+        cooling_capacity_per_length = 410
+        evaporator_fan_pwr_per_length = 50.85
+        lighting_per_length = 0
+        defrost_pwr_per_length = 856.3
+        anti_power = 63.6
+        evapo_temp = -6.4
+      when '90.1-2013'
+        case_temp = -2.9
+        cooling_capacity_per_length = 302.9
+        evaporator_fan_pwr_per_length = 6.66
+        lighting_per_length = 0
+        defrost_pwr_per_length = 856.3
+        anti_power = 63.6
+        evapo_temp = -6.4
+        defrost_type ='ElectricwithTemperatureTermination'
+      end
+      
+    when 'MT Service'
+      latent_heat_ratio = 0.1
+      runtime_fraction = 0.85
+      latent_case_credit_curve_name = 'Glass Door Latent Curve'
+      defrost_type ='OffCycle'
+      anti_sweat_type = 'Constant'
+      defrost_correction_type = 'None'
+      defrost_correction_curve_name = 'Coffin Defrost Curve'
+        case template
+        when '90.1-2004', '90.1-2007', '90.1-2010'
+          case_temp = -2.9
+          cooling_capacity_per_length = 808
+          evaporator_fan_pwr_per_length = 31.82
+          lighting_per_length = 71.52
+          defrost_pwr_per_length = 0
+          anti_power = 0
+          evapo_temp = -6.4
+        when '90.1-2013'
+          case_temp = -2.9
+          cooling_capacity_per_length = 599.1
+          evaporator_fan_pwr_per_length = 20.41
+          lighting_per_length = 17.72
+          defrost_pwr_per_length = 0
+          anti_power = 63.3
+          evapo_temp = -6.4
+        end
+
+    when 'MT Vertical Open'
+      latent_heat_ratio = 0.3
+      runtime_fraction = 0.85
+      latent_case_credit_curve_name = 'Open Latent Curve'
+      defrost_type ='OffCycle'
+      anti_sweat_type = 'None'
+      defrost_correction_type = 'None'
+      defrost_correction_curve_name = 'Coffin Defrost Curve'
+      case template
+      when '90.1-2004', '90.1-2007', '90.1-2010'
+        case_temp = 0.6
+        cooling_capacity_per_length = 1437.6
+        evaporator_fan_pwr_per_length = 42.98
+        lighting_per_length = 72.51
+        defrost_pwr_per_length = 0
+        anti_power = 0
+        evapo_temp = -3.9
+      when '90.1-2013'
+        case_temp = 0.6
+        cooling_capacity_per_length = 1143.4
+        evaporator_fan_pwr_per_length = 16.14
+        lighting_per_length = 16.34
+        defrost_pwr_per_length = 0
+        anti_power = 0
+        evapo_temp = -3.9
+      end
+
+    when 'MT Reach-Ins'
+      latent_heat_ratio = 0.1
+      runtime_fraction = 0.85
+      latent_case_credit_curve_name = 'Glass Door Latent Curve'
+      defrost_type ='OffCycle'
+      anti_sweat_type = 'Constant'
+      defrost_correction_curve_name = 'Glass Door Defrost Curve'
+      defrost_correction_type = 'DewpointMethod'
+      case_temp = 1.5
+      cooling_capacity_per_length = 308.7
+      evaporator_fan_pwr_per_length = 17.62
+      lighting_per_length = 22.47
+      defrost_pwr_per_length = 0
+      anti_power = 43
+      evapo_temp = -2.2
+    end
+
+    # Defrost schedule
     defrost_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     defrost_sch.setName('Refrigeration Defrost Schedule')
     defrost_sch.defaultDaySchedule.setName('Refrigeration Defrost Schedule Default')
 	  if case_type ==  'MT Vertical Open'
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 30, 0), 1)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 30, 0), 1)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 6, 0, 0), 0)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 6, 30, 0), 1)	
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 30, 0), 1)
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 0, 0), 0)
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 30, 0), 1)
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 30, 0), 1)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 0, 0), 0)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 30, 0), 1)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
 	  elsif case_type ==  'MT Service'
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 40, 0), 1)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 40, 0), 1)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 6, 0, 0), 0)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 6, 40, 0), 1)	
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 40, 0), 1)
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 0, 0), 0)
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 40, 0), 1)
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
-      else #when 'LT Coffin Frozen Food','LT Coffin Ice Cream','LT Reach-In Ice Cream','LT Reach-In Frozen Food',
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 40, 0), 1)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 0, 0), 0)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 40, 0), 1)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+    else #when 'LT Coffin Frozen Food','LT Coffin Ice Cream','LT Reach-In Ice Cream','LT Reach-In Frozen Food',
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 45, 0), 1)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
-      end
+    end
+
     # Dripdown schedule
     defrost_dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     defrost_dripdown_sch.setName('Refrigeration Case Defrost DripDown Schedule')
     defrost_dripdown_sch.defaultDaySchedule.setName('Refrigeration Defrost DripDown Schedule Default')
 	  if case_type ==  'MT Vertical Open'
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 40, 0), 1)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 40, 0), 1)
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 6, 0, 0), 0)
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 6, 40, 0), 1)	
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 40, 0), 1)
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 0, 0), 0)
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 40, 0), 1)
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 40, 0), 1)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 0, 0), 0)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 40, 0), 1)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
 	  elsif case_type ==  'MT Service'
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 50, 0), 1)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 50, 0), 1)
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 6, 0, 0), 0)
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 6, 50, 0), 1)	
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 50, 0), 1)
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 0, 0), 0)
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 50, 0), 1)
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
-      else #when 'LT Coffin Frozen Food','LT Coffin Ice Cream','LT Reach-In Ice Cream','LT Reach-In Frozen Food',
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 50, 0), 1)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 0, 0), 0)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 18, 50, 0), 1)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+    else #when 'LT Coffin Frozen Food','LT Coffin Ice Cream','LT Reach-In Ice Cream','LT Reach-In Frozen Food',
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 55, 0), 1)
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
-      end
+    end
 	
     # Case
     ref_case = OpenStudio::Model::RefrigerationCase.new(self, defrost_sch)
     ref_case.setName("#{case_name}")
     ref_case.setAvailabilitySchedule(alwaysOnDiscreteSchedule)
-	thermal_zones.each do |zone_|
-        ref_case.setThermalZone(zone_)
-	end
+    thermal_zones.each do |zone_|
+      ref_case.setThermalZone(zone_)
+    end
     ref_case.setRatedTotalCoolingCapacityperUnitLength(cooling_capacity_per_length)
     ref_case.setCaseLength(length)
     ref_case.setCaseOperatingTemperature(case_temp)
@@ -5010,13 +5015,13 @@ class OpenStudio::Model::Model
     ref_case.setLatentCaseCreditCurve(add_curve(latent_case_credit_curve_name))
     ref_case.setCaseHeight(0)
     ref_case.setRefrigeratedCaseRestockingSchedule(add_schedule(restocking_sch_name))
-	ref_case.setDefrostEnergyCorrectionCurveType(defrost_correction_type)
+    ref_case.setDefrostEnergyCorrectionCurveType(defrost_correction_type)
     ref_case.setDefrostEnergyCorrectionCurve(add_curve(defrost_correction_curve_name))
+
     return ref_case
   end
   
-  # added for supermarket refrigeration system which has multiple WalkIns
-  
+  # Adds walkin
   # It is suggested that the user input the insulated floor area of the walk-in (m2), and then the following items will be determined:
   #     •	Rated coil cooling capacity (function of floor area)
   #     •	Rated cooling coil fan power (function of cooling capacity)
@@ -5024,117 +5029,122 @@ class OpenStudio::Model::Model
   #     •	Defrost power (function of cooling capacity)
   # Coil fan power and total lighting power are given for both “old (2004, 2007, and 2010)” and “new (2013)” walk-ins.  
   # It is assumed that only walk-in freezers have electric defrost while walk-in coolers use off-cycle defrost.
-
-  def add_refrigeration_walkin (template,
-								walkin_)
+  def add_refrigeration_walkin(template, walkin_)
 								
-	walkin_type = walkin_['walkin_type']
-	walkin_name = walkin_['walkin_name']
-	insulated_floor_area = walkin_['insulated_floor_area']
-	thermal_zones = get_zones_from_spaces_on_system(walkin_)
+    walkin_type = walkin_['walkin_type']
+    walkin_name = walkin_['walkin_name']
+    insulated_floor_area = walkin_['insulated_floor_area']
+    thermal_zones = get_zones_from_spaces_on_system(walkin_)
 	
     operating_temp = nil
     source_temp = nil
-	defrost_type = nil
-	always_off_name = 'Always Off'
+    defrost_type = nil
+    always_off_name = 'Always Off'
 	
-	case walkin_type 
+    insulated_floor_area_ft2 = OpenStudio.convert(length, 'm^2', 'ft^2').get
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{insulated_floor_area_ft2.round} ft2 #{walkin_type}")
+  
+    # Capacity, defrost, lighting
+    case walkin_type 
     when 'Walk-In Freezer'
-	  cooling_capacity = -0.3087*(insulated_floor_area^2)+152.9*(insulated_floor_area)+1060 
-	  defrost_control_type ='TemperatureTermination'
+      cooling_capacity = -0.3087*(insulated_floor_area^2)+152.9*(insulated_floor_area)+1060 
+      defrost_control_type ='TemperatureTermination'
       operating_temp = -26.1
-	  source_temp = -31.7
-	  defrost_type = 'Electric'
-	  defrost_power = 0.79*cooling_capacity
-	  insulated_floor_U = 0.203
-	  insulated_surface_area = 1.7226*insulated_floor_area+28.653
-	  insulated_surface_U = 0.177
-	  reachin_door_area = 0
-	  stocking_door_U = 0.177
-	  case template
+      source_temp = -31.7
+      defrost_type = 'Electric'
+      defrost_power = 0.79*cooling_capacity
+      insulated_floor_U = 0.203
+      insulated_surface_area = 1.7226*insulated_floor_area+28.653
+      insulated_surface_U = 0.177
+      reachin_door_area = 0
+      stocking_door_U = 0.177
+      case template
       when '90.1-2004', '90.1-2007', '90.1-2010'
-	    fan_power = 0.080*cooling_capacity
-		lighting_power = 10.8*insulated_floor_area
-	  when '90.1-2013'
-	    fan_power = 0.052*cooling_capacity
-		lighting_power = 5.4*insulated_floor_area
-      end 	
-	when 'Walk-In Cooler'
-	  cooling_capacity = -0.3387*(insulated_floor_area^2) + 181.0*(insulated_floor_area) + 941.2
-	  defrost_control_type ='TimeSchedule'
+        fan_power = 0.080*cooling_capacity
+        lighting_power = 10.8*insulated_floor_area
+      when '90.1-2013'
+        fan_power = 0.052*cooling_capacity
+        lighting_power = 5.4*insulated_floor_area
+      end
+
+    when 'Walk-In Cooler'
+      cooling_capacity = -0.3387*(insulated_floor_area^2) + 181.0*(insulated_floor_area) + 941.2
+      defrost_control_type ='TimeSchedule'
       operating_temp = 1.67
-	  source_temp = -3.89
-	  defrost_type = 'OffCycle'
-	  defrost_power = 0
-	  insulated_floor_U = 2.27
-	  insulated_surface_area = 1.7226*insulated_floor_area + 28.653
-	  insulated_surface_U = 0.203
-	  reachin_door_area = 0
-	  stocking_door_U = 0.203
-	  case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
-	    fan_power = 0.080*cooling_capacity
-		lighting_power = 10.8*insulated_floor_area
-	  when '90.1-2013'
-	    fan_power = 0.052*cooling_capacity
-		lighting_power = 5.4*insulated_floor_area
-      end 	
+      source_temp = -3.89
+      defrost_type = 'OffCycle'
+      defrost_power = 0
+      insulated_floor_U = 2.27
+      insulated_surface_area = 1.7226*insulated_floor_area + 28.653
+      insulated_surface_U = 0.203
+      reachin_door_area = 0
+      stocking_door_U = 0.203
+      case template
+        when '90.1-2004', '90.1-2007', '90.1-2010'
+        fan_power = 0.080*cooling_capacity
+        lighting_power = 10.8*insulated_floor_area
+      when '90.1-2013'
+        fan_power = 0.052*cooling_capacity
+        lighting_power = 5.4*insulated_floor_area
+      end
+      
     when 'Walk-In Cooler Glass Door'
-	  cooling_capacity = -0.3387*(insulated_floor_area^2)+181.0*(insulated_floor_area)+941.2
-	  defrost_control_type ='TimeSchedule'
+      cooling_capacity = -0.3387*(insulated_floor_area^2)+181.0*(insulated_floor_area)+941.2
+      defrost_control_type ='TimeSchedule'
       operating_temp = 1.67
-	  source_temp = -3.89
-	  defrost_type = 'OffCycle'
-	  defrost_power = 0
-	  insulated_floor_U = 2.27
-	  insulated_surface_area = 1.7226*insulated_floor_area+28.653
-	  insulated_surface_U = 0.203
-	  reachin_door_area = 0.35*insulated_floor_area
-	  stocking_door_U = 0.203
-	  case template
+      source_temp = -3.89
+      defrost_type = 'OffCycle'
+      defrost_power = 0
+      insulated_floor_U = 2.27
+      insulated_surface_area = 1.7226*insulated_floor_area+28.653
+      insulated_surface_U = 0.203
+      reachin_door_area = 0.35*insulated_floor_area
+      stocking_door_U = 0.203
+      case template
       when '90.1-2004', '90.1-2007', '90.1-2010'
-	    fan_power = 0.080*cooling_capacity
-		lighting_power = 10.8*insulated_floor_area
-	  when '90.1-2013'
-	    fan_power = 0.052*cooling_capacity
-		lighting_power = 5.4*insulated_floor_area
+        fan_power = 0.080*cooling_capacity
+        lighting_power = 10.8*insulated_floor_area
+      when '90.1-2013'
+        fan_power = 0.052*cooling_capacity
+        lighting_power = 5.4*insulated_floor_area
       end 	  
     end
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Refrigeration System')
 
-	# Defrost schedule
+    # Defrost schedule
     defrost_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     defrost_sch.setName('Refrigeration WaklIn Defrost Schedule')
     defrost_sch.defaultDaySchedule.setName('Refrigeration Defrost Schedule Default')
 	  if walkin_type ==  'Walk-In Freezer'
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 45, 0), 1)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 45, 0), 1)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 45, 0), 1)	
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
 	  else
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 1,  0, 0), 1)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 1,  0, 0), 1)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 13, 0, 0), 1)	
-	  defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
-      end
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+    end
+
     # Dripdown schedule
     defrost_dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     defrost_dripdown_sch.setName('Refrigeration WalkIn Defrost DripDown Schedule')
     defrost_dripdown_sch.defaultDaySchedule.setName('Refrigeration Defrost DripDown Schedule Default')
 	  if walkin_type ==  'Walk-In Freezer'
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 55, 0), 1)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 0, 55, 0), 1)
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 55, 0), 1)	
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
 	  else
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 1, 0, 0), 1)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 1, 0, 0), 1)
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 12, 0, 0), 0)
       defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 13, 0, 0), 1)	
-	  defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+      defrost_dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
     end
-	
-	walkin_door_sch = 'SuperMarket Walk-In Door Sch'
-	
+
+    # Door schedule
+    walkin_door_sch = 'SuperMarket Walk-In Door Sch'
+
     # Walk-In
     ref_walkin = OpenStudio::Model::RefrigerationWalkIn.new(self, defrost_sch)
     ref_walkin.setName("#{walkin_name}")
@@ -5142,119 +5152,125 @@ class OpenStudio::Model::Model
     ref_walkin.setRatedCoilCoolingCapacity(cooling_capacity)
     ref_walkin.setOperatingTemperature(operating_temp)
     ref_walkin.setRatedCoolingSourceTemperature(source_temp)
-	ref_walkin.setRatedTotalHeatingPower(0)
-	ref_walkin.setHeatingPowerSchedule(add_schedule(always_off_name))
-	ref_walkin.setRatedCoolingCoilFanPower(fan_power)
-	ref_walkin.setRatedCirculationFanPower(0)
-	ref_walkin.setRatedTotalLightingPower(lighting_power)
-	ref_walkin.setLightingSchedule(alwaysOnDiscreteSchedule)
-	ref_walkin.setDefrostType(defrost_type)
-	ref_walkin.setDefrostControlType(defrost_control_type)
-	ref_walkin.setDefrostSchedule(defrost_sch)
-	ref_walkin.setDefrostDripDownSchedule(defrost_dripdown_sch)
-	ref_walkin.setDefrostPower(defrost_power)
-	ref_walkin.setTemperatureTerminationDefrostFractiontoIce(0.7)
-	ref_walkin.setRestockingSchedule(add_schedule(always_off_name))
-	ref_walkin.setInsulatedFloorSurfaceArea(insulated_floor_area)
-	ref_walkin.setInsulatedFloorUValue(insulated_floor_U)
-	thermal_zones.each do |zone_|
-	   ref_walkin.setZoneBoundaryThermalZone(zone_)
-	   ref_walkin.setZoneBoundaryTotalInsulatedSurfaceAreaFacingZone(insulated_surface_area)
-	   ref_walkin.setZoneBoundaryInsulatedSurfaceUValueFacingZone(insulated_surface_U) 	
-	   ref_walkin.setZoneBoundaryAreaofGlassReachInDoorsFacingZone(reachin_door_area)	
-	   ref_walkin.setZoneBoundaryHeightofGlassReachInDoorsFacingZone(1.83)
-	   ref_walkin.setZoneBoundaryGlassReachInDoorUValueFacingZone(2.27)
-	   ref_walkin.setZoneBoundaryAreaofStockingDoorsFacingZone(3.3)
-	   ref_walkin.setZoneBoundaryHeightofStockingDoorsFacingZone(2.1)
-	   ref_walkin.setZoneBoundaryStockingDoorUValueFacingZone(stocking_door_U)
-	   ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(add_schedule(walkin_door_sch))
-	end
+    ref_walkin.setRatedTotalHeatingPower(0)
+    ref_walkin.setHeatingPowerSchedule(add_schedule(always_off_name))
+    ref_walkin.setRatedCoolingCoilFanPower(fan_power)
+    ref_walkin.setRatedCirculationFanPower(0)
+    ref_walkin.setRatedTotalLightingPower(lighting_power)
+    ref_walkin.setLightingSchedule(alwaysOnDiscreteSchedule)
+    ref_walkin.setDefrostType(defrost_type)
+    ref_walkin.setDefrostControlType(defrost_control_type)
+    ref_walkin.setDefrostSchedule(defrost_sch)
+    ref_walkin.setDefrostDripDownSchedule(defrost_dripdown_sch)
+    ref_walkin.setDefrostPower(defrost_power)
+    ref_walkin.setTemperatureTerminationDefrostFractiontoIce(0.7)
+    ref_walkin.setRestockingSchedule(add_schedule(always_off_name))
+    ref_walkin.setInsulatedFloorSurfaceArea(insulated_floor_area)
+    ref_walkin.setInsulatedFloorUValue(insulated_floor_U)
+    thermal_zones.each do |zone_|
+      ref_walkin.setZoneBoundaryThermalZone(zone_)
+      ref_walkin.setZoneBoundaryTotalInsulatedSurfaceAreaFacingZone(insulated_surface_area)
+      ref_walkin.setZoneBoundaryInsulatedSurfaceUValueFacingZone(insulated_surface_U) 	
+      ref_walkin.setZoneBoundaryAreaofGlassReachInDoorsFacingZone(reachin_door_area)	
+      ref_walkin.setZoneBoundaryHeightofGlassReachInDoorsFacingZone(1.83)
+      ref_walkin.setZoneBoundaryGlassReachInDoorUValueFacingZone(2.27)
+      ref_walkin.setZoneBoundaryAreaofStockingDoorsFacingZone(3.3)
+      ref_walkin.setZoneBoundaryHeightofStockingDoorsFacingZone(2.1)
+      ref_walkin.setZoneBoundaryStockingDoorUValueFacingZone(stocking_door_U)
+      ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(add_schedule(walkin_door_sch))
+    end
+
     return ref_walkin
   end
   
-def add_refrigeration_system (template,
-                              compressor_type,
-							  sys_name,
-							  cases,
-							  walkins,
-							  thermal_zone)
-
+  def add_refrigeration_system(template,
+                               compressor_type,
+                               sys_name,
+                               cases,
+                               walkins,
+                               thermal_zone)
 
     # Refrigeration system
-	ref_sys = OpenStudio::Model::RefrigerationSystem.new(self)
-	ref_sys.setName("#{sys_name}")
+    ref_sys = OpenStudio::Model::RefrigerationSystem.new(self)
+    ref_sys.setName("#{sys_name}")
     ref_sys.setSuctionPipingZone(thermal_zone)
-	
-    for i in 0 ... 20 # add 20 compressors for each system
-	    compressor =  OpenStudio::Model::RefrigerationCompressor.new(self)
-		case template
-           when '90.1-2004', '90.1-2007', '90.1-2010'
-	       if compressor_type == 'Low Temp'
-		   compressor.setRefrigerationCompressorPowerCurve(add_curve('Old_Low_Temp_Comp_Pwr_Curve'))
-		   compressor.setRefrigerationCompressorCapacityCurve(add_curve('Old_Low_Temp_Comp_Cap_Curve'))
-		   else
-		   compressor.setRefrigerationCompressorPowerCurve(add_curve('Old_Med_Temp_Comp_Pwr_Curve'))
-		   compressor.setRefrigerationCompressorCapacityCurve(add_curve('Old_Med_Temp_Comp_Cap_Curve'))
-		   end
-	    when '90.1-2013'
-	       if compressor_type == 'Low Temp'
-		   compressor.setRefrigerationCompressorPowerCurve(add_curve('New_Low_Temp_Comp_Pwr_Curve'))
-		   compressor.setRefrigerationCompressorCapacityCurve(add_curve('New_Low_Temp_Comp_Cap_Curve'))
-		   else
-		   compressor.setRefrigerationCompressorPowerCurve(add_curve('New_Med_Temp_Comp_Pwr_Curve'))
-		   compressor.setRefrigerationCompressorCapacityCurve(add_curve('New_Med_Temp_Comp_Cap_Curve'))
-		   end
-		end
-	 	ref_sys.addCompressor(compressor)
-    end
-    cooling_cap = 0
-	cases.each do |case_|
-		for i in 0 ... case_['number_of_cases']
-			ref_case = add_refrigeration_case(template, 
-			                                  case_)
-			ref_sys.addCase(ref_case)
-			cooling_cap = cooling_cap + (ref_case.ratedTotalCoolingCapacityperUnitLength() * ref_case.caseLength()) # calculate total cooling capacity of the cases
-			end
-		end
-	walkins.each do |walkin_|
-	    for i in 0 ... walkin_['number_of_walkins']
-	       ref_walkin = add_refrigeration_walkin(template, 
-	                                      walkin_)
-           ref_sys.addWalkin(ref_walkin)
-		   cooling_cap = cooling_cap + ref_walkin.ratedCoilCoolingCapacity() # calculate total cooling capacity of the cases + walkins
-	    end
-	end	
-    #Condenser Capacity
-    #The heat rejection rate from the condenser is equal to the rated capacity of all the display cases and walk-ins connected to the compressor rack 
-	#plus the power rating of the compressors making up the compressor rack.  
-    #Assuming a COP of 1.3 for low-temperature compressor racks and a COP of 2.0 for medium-temperature compressor racks, 
-	#the required condenser capacity is approximated as follows:
-	
-	if compressor_type == 'Low Temp'
-	   condensor_cap = 1.2*cooling_cap*(1+1/(1.3))
-	
-	#Note the factor 1.2 has been included to over-estimate the condenser size.  The total capacity of the display cases can be calculated from their rated cooling capacity times the length of the cases.  The capacity of each of the walk-ins is specified directly.
-	else
-  	   condensor_cap = 1.2*cooling_cap*(1+1/(2.0))
-	end   
-	condenser_coefficient_2 = condensor_cap/5.6
-	condenser_curve = OpenStudio::Model::CurveLinear.new(self)
-    condenser_curve.setCoefficient1Constant(0)
-	condenser_curve.setCoefficient2x(condenser_coefficient_2)
-	condenser_curve.setMinimumValueofx(1.4)
-	condenser_curve.setMaximumValueofx(33.3)
-    # The condenser fan power can be estimated from the heat rejection capacity of the condenser as follows:
-	condenser_fan_pwr = 0.0441*condensor_cap + 695
-
-    condenser = OpenStudio::Model::RefrigerationCondenserAirCooled.new(self)
-	condenser.setRatedFanPower(condenser_fan_pwr)
-	condenser.setRatedEffectiveTotalHeatRejectionRateCurve(condenser_curve)
-	condenser.setCondenserFanSpeedControlType('Fixed')
-	condenser.setMinimumFanAirFlowRatio(0.1) 
-  	
-	ref_sys.setRefrigerationCondenser(condenser)
     
-	
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{compressor_type} refrigeration system")
+    
+    # Compressors (20 for each system)
+    for i in 0 ... 20
+      compressor =  OpenStudio::Model::RefrigerationCompressor.new(self)
+      case template
+      when '90.1-2004', '90.1-2007', '90.1-2010'
+        if compressor_type == 'Low Temp'
+          compressor.setRefrigerationCompressorPowerCurve(add_curve('Old_Low_Temp_Comp_Pwr_Curve'))
+          compressor.setRefrigerationCompressorCapacityCurve(add_curve('Old_Low_Temp_Comp_Cap_Curve'))
+        else
+          compressor.setRefrigerationCompressorPowerCurve(add_curve('Old_Med_Temp_Comp_Pwr_Curve'))
+          compressor.setRefrigerationCompressorCapacityCurve(add_curve('Old_Med_Temp_Comp_Cap_Curve'))
+        end
+      when '90.1-2013'
+        if compressor_type == 'Low Temp'
+          compressor.setRefrigerationCompressorPowerCurve(add_curve('New_Low_Temp_Comp_Pwr_Curve'))
+          compressor.setRefrigerationCompressorCapacityCurve(add_curve('New_Low_Temp_Comp_Cap_Curve'))
+        else
+          compressor.setRefrigerationCompressorPowerCurve(add_curve('New_Med_Temp_Comp_Pwr_Curve'))
+          compressor.setRefrigerationCompressorCapacityCurve(add_curve('New_Med_Temp_Comp_Cap_Curve'))
+        end
+      end
+      ref_sys.addCompressor(compressor)
+    end
+    
+    # Cases
+    cooling_cap = 0
+    cases.each do |case_|
+      for i in 0 ... case_['number_of_cases']
+        ref_case = add_refrigeration_case(template, case_)
+        ref_sys.addCase(ref_case)
+        cooling_cap = cooling_cap + (ref_case.ratedTotalCoolingCapacityperUnitLength * ref_case.caseLength) # calculate total cooling capacity of the cases
+      end
+    end
+    
+    # Walkins
+    walkins.each do |walkin_|
+      for i in 0 ... walkin_['number_of_walkins']
+        ref_walkin = add_refrigeration_walkin(template, walkin_)
+        ref_sys.addWalkin(ref_walkin)
+        cooling_cap = cooling_cap + ref_walkin.ratedCoilCoolingCapacity # calculate total cooling capacity of the cases + walkins
+      end
+    end	
+
+    # Condenser capacity
+    # The heat rejection rate from the condenser is equal to the rated capacity of all the display cases and walk-ins connected to the compressor rack 
+    # plus the power rating of the compressors making up the compressor rack.  
+    # Assuming a COP of 1.3 for low-temperature compressor racks and a COP of 2.0 for medium-temperature compressor racks, 
+    # the required condenser capacity is approximated as follows:
+    # Note the factor 1.2 has been included to over-estimate the condenser size.  The total capacity of the display cases can be calculated from their rated cooling capacity times the length of the cases.  The capacity of each of the walk-ins is specified directly.	
+    if compressor_type == 'Low Temp'
+      condensor_cap = 1.2*cooling_cap*(1+1/(1.3))
+    else
+      condensor_cap = 1.2*cooling_cap*(1+1/(2.0))
+    end   
+    condenser_coefficient_2 = condensor_cap/5.6
+    condenser_curve = OpenStudio::Model::CurveLinear.new(self)
+    condenser_curve.setCoefficient1Constant(0)
+    condenser_curve.setCoefficient2x(condenser_coefficient_2)
+    condenser_curve.setMinimumValueofx(1.4)
+    condenser_curve.setMaximumValueofx(33.3)
+    
+    # Condenser fan power
+    # The condenser fan power can be estimated from the heat rejection capacity of the condenser as follows:
+    condenser_fan_pwr = 0.0441*condensor_cap + 695
+    
+    # Condenser
+    condenser = OpenStudio::Model::RefrigerationCondenserAirCooled.new(self)
+    condenser.setRatedFanPower(condenser_fan_pwr)
+    condenser.setRatedEffectiveTotalHeatRejectionRateCurve(condenser_curve)
+    condenser.setCondenserFanSpeedControlType('Fixed')
+    condenser.setMinimumFanAirFlowRatio(0.1) 
+
+    ref_sys.setRefrigerationCondenser(condenser)
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Refrigeration System')
 
     return true
