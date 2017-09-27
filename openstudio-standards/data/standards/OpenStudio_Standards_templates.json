@@ -45,6 +45,42 @@
       "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
     },
     {
+      "name": "DEER 1985",
+      "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
+    },
+    {
+      "name": "DEER 1996",
+      "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
+    },
+    {
+      "name": "DEER 2003",
+      "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
+    },
+    {
+      "name": "DEER 2007",
+      "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
+    },
+    {
+      "name": "DEER 2011",
+      "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
+    },
+    {
+      "name": "DEER 2014",
+      "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
+    },
+    {
+      "name": "DEER 2015",
+      "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
+    },
+    {
+      "name": "DEER 2017",
+      "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
+    },
+    {
+      "name": "DEER Pre-1975",
+      "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
+    },
+    {
       "name": "DOE Ref 1980-2004",
       "notes": "Numbers taken from the DOE 1980-2004 reference buildings, with values mapped back to the original data source (standards, etc) where possible.  The infiltration numbers were taken from the reference buildings but converted to cfm/ft^2 of exterior surface area.  Color scheme is based on redder for more public spaces, bluer for more private spaces.  Occupancy from ventilation standards was not used by reference buildings because numbers were generally found to be too high for modeling, representing very conservative design scenarios."
     },
@@ -63,6 +99,10 @@
     {
       "name": "NECB 2011",
       "notes": "Taken from the Canadian NECB 2011"
+    },
+    {
+      "name": "NREL ZNE Ready 2017",
+      "notes": "National Renewable Energy Laboratory Zero Net Energy Ready 2017"
     },
     {
       "name": "OEESC 2014",

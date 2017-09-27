@@ -1,99 +1,24 @@
 {
   "climate_zone_sets": [
     {
-      "name": "CEC CZ 1",
+      "name": "CEC CZ All",
       "climate_zones": [
-        "CEC TITLE 24 CZ 1"
-      ]
-    },
-    {
-      "name": "CEC CZ 10",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 10"
-      ]
-    },
-    {
-      "name": "CEC CZ 11",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 11"
-      ]
-    },
-    {
-      "name": "CEC CZ 12",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 12"
-      ]
-    },
-    {
-      "name": "CEC CZ 13",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 13"
-      ]
-    },
-    {
-      "name": "CEC CZ 14",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 14"
-      ]
-    },
-    {
-      "name": "CEC CZ 15",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 15"
-      ]
-    },
-    {
-      "name": "CEC CZ 16",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 16"
-      ]
-    },
-    {
-      "name": "CEC CZ 2",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 2"
-      ]
-    },
-    {
-      "name": "CEC CZ 3",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 3"
-      ]
-    },
-    {
-      "name": "CEC CZ 4",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 4"
-      ]
-    },
-    {
-      "name": "CEC CZ 5",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 5"
-      ]
-    },
-    {
-      "name": "CEC CZ 6",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 6"
-      ]
-    },
-    {
-      "name": "CEC CZ 7",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 7"
-      ]
-    },
-    {
-      "name": "CEC CZ 8",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 8"
-      ]
-    },
-    {
-      "name": "CEC CZ 9",
-      "climate_zones": [
-        "CEC TITLE 24 CZ 9"
+        "CEC T24-CEC1",
+        "CEC T24-CEC2",
+        "CEC T24-CEC3",
+        "CEC T24-CEC4",
+        "CEC T24-CEC5",
+        "CEC T24-CEC6",
+        "CEC T24-CEC7",
+        "CEC T24-CEC8",
+        "CEC T24-CEC9",
+        "CEC T24-CEC10",
+        "CEC T24-CEC11",
+        "CEC T24-CEC12",
+        "CEC T24-CEC13",
+        "CEC T24-CEC14",
+        "CEC T24-CEC15",
+        "CEC T24-CEC16"
       ]
     },
     {
@@ -231,6 +156,102 @@
       "climate_zones": [
         "ASHRAE 169-2006-8A",
         "ASHRAE 169-2006-8B"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC1",
+      "climate_zones": [
+        "CEC T24-CEC1"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC10",
+      "climate_zones": [
+        "CEC T24-CEC10"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC11",
+      "climate_zones": [
+        "CEC T24-CEC11"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC12",
+      "climate_zones": [
+        "CEC T24-CEC12"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC13",
+      "climate_zones": [
+        "CEC T24-CEC13"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC14",
+      "climate_zones": [
+        "CEC T24-CEC14"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC15",
+      "climate_zones": [
+        "CEC T24-CEC15"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC16",
+      "climate_zones": [
+        "CEC T24-CEC16"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC2",
+      "climate_zones": [
+        "CEC T24-CEC2"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC3",
+      "climate_zones": [
+        "CEC T24-CEC3"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC4",
+      "climate_zones": [
+        "CEC T24-CEC4"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC5",
+      "climate_zones": [
+        "CEC T24-CEC5"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC6",
+      "climate_zones": [
+        "CEC T24-CEC6"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC7",
+      "climate_zones": [
+        "CEC T24-CEC7"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC8",
+      "climate_zones": [
+        "CEC T24-CEC8"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC9",
+      "climate_zones": [
+        "CEC T24-CEC9"
       ]
     },
     {
