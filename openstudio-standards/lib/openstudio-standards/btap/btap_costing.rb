@@ -56,7 +56,6 @@ class BTAPCosting
     return @key
   end
 
-
   def recreate_database()
     #Keeping track of start time.
     start = Time.now
@@ -341,7 +340,6 @@ class BTAPCosting
     end #thermalzone
     puts costing_report
   end
-
 
   #This will convert a sheet in a given workbook into an array of hashes with the headers as symbols.
   def convert_workbook_sheet_to_array_of_hashes(xlsx_path, sheet_name)
