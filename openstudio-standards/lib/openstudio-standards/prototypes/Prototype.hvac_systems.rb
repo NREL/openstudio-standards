@@ -4688,32 +4688,19 @@ class OpenStudio::Model::Model
     return true
 	end
 	
-  # Add supermarket refrigeration system which has multiple cases
-	def add_refrigeration_case(template, case_)
-								#case_type,
-								#case_name,
-								#cooling_capacity_per_length,
-								#length,
-								#evaporator_fan_pwr_per_length,
-								#lighting_per_length,
-								#lighting_sch_name,
-								#defrost_pwr_per_length,
-								#restocking_sch_name,
-								#thermal_zone)
+  # Add refrigerated case to the model.
+  #
+  # @param template
+  # @param case_type [String] the case type.  Valid choices include:
+  # LT Coffin Ice Cream, LT Coffin Frozen Food, LT Reach-In Ice Cream, LT Reach-In Frozen Food,
+  # MT Coffin, MT Vertical Open, MT Service, MT Reach-In
+  # @param case_name [String] the name of the case
+  # @param length [Double] the length of the case, in m
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
+  # case is located, and which will be impacted by the case's thermal load.
+	def add_refrigeration_case(template, case_type, case_name, length, thermal_zone)
 
-    # Default properties based on the case type (8 different types)
-    # case_type = 
-    #'LT Coffin Ice Cream','LT Coffin Frozen Food','LT Reach-In Ice Cream','LT Reach-In Frozen Food,
-    #'MT Coffin','MT Vertical Open','MT Service','MT Reach-In'
-    
-    case_type = case_['case_type']
-    case_name = case_['case_name']
-    length = case_['length']
-    thermal_zones = get_zones_from_spaces_on_system(case_)
-    
-    length_ft = OpenStudio.convert(length, 'm', 'ft').get
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{length_ft.round} ft #{case_type}") 
-  
+    # Capacity, defrost, anti-sweat
     case_temp = nil
     latent_heat_ratio = nil
     runtime_fraction = nil
@@ -4722,8 +4709,6 @@ class OpenStudio::Model::Model
     defrost_type = nil
     defrost_correction_curve_name = nil
     restocking_sch_name = 'Always Off'
-	
-    # Capacity, defrost, anti-sweat
     case case_type 
     when 'LT Coffin Frozen Food'
       latent_heat_ratio = 0.2
@@ -4735,7 +4720,7 @@ class OpenStudio::Model::Model
       defrost_correction_type = 'DewpointMethod'
 
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -22.8
         cooling_capacity_per_length = 588.5
         evaporator_fan_pwr_per_length = 23.62
@@ -4762,7 +4747,7 @@ class OpenStudio::Model::Model
       defrost_correction_curve_name = 'Coffin Defrost Curve'	 
       defrost_correction_type = 'DewpointMethod'
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -26.1
         cooling_capacity_per_length = 695.2
         evaporator_fan_pwr_per_length = 23.6
@@ -4789,7 +4774,7 @@ class OpenStudio::Model::Model
       defrost_correction_curve_name = 'Glass Door Defrost Curve'
       defrost_correction_type = 'DewpointMethod'
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -20
         cooling_capacity_per_length = 583.7
         evaporator_fan_pwr_per_length = 70.21
@@ -4816,7 +4801,7 @@ class OpenStudio::Model::Model
       defrost_correction_curve_name = 'Glass Door Defrost Curve'	 
       defrost_correction_type = 'DewpointMethod'
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -23.9
         cooling_capacity_per_length = 617.4
         evaporator_fan_pwr_per_length = 70.21
@@ -4843,7 +4828,7 @@ class OpenStudio::Model::Model
       defrost_correction_curve_name = 'Coffin Defrost Curve'
       defrost_type ='ElectricwithTemperatureTermination'
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -2.9
         cooling_capacity_per_length = 410
         evaporator_fan_pwr_per_length = 50.85
@@ -4871,7 +4856,7 @@ class OpenStudio::Model::Model
       defrost_correction_type = 'None'
       defrost_correction_curve_name = 'Coffin Defrost Curve'
         case template
-        when '90.1-2004', '90.1-2007', '90.1-2010'
+        when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
           case_temp = -2.9
           cooling_capacity_per_length = 808
           evaporator_fan_pwr_per_length = 31.82
@@ -4898,7 +4883,7 @@ class OpenStudio::Model::Model
       defrost_correction_type = 'None'
       defrost_correction_curve_name = 'Coffin Defrost Curve'
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = 0.6
         cooling_capacity_per_length = 1437.6
         evaporator_fan_pwr_per_length = 42.98
@@ -4991,9 +4976,7 @@ class OpenStudio::Model::Model
     ref_case = OpenStudio::Model::RefrigerationCase.new(self, defrost_sch)
     ref_case.setName("#{case_name}")
     ref_case.setAvailabilitySchedule(alwaysOnDiscreteSchedule)
-    thermal_zones.each do |zone_|
-      ref_case.setThermalZone(zone_)
-    end
+    ref_case.setThermalZone(thermal_zone)
     ref_case.setRatedTotalCoolingCapacityperUnitLength(cooling_capacity_per_length)
     ref_case.setCaseLength(length)
     ref_case.setCaseOperatingTemperature(case_temp)
@@ -5018,33 +5001,34 @@ class OpenStudio::Model::Model
     ref_case.setDefrostEnergyCorrectionCurveType(defrost_correction_type)
     ref_case.setDefrostEnergyCorrectionCurve(add_curve(defrost_correction_curve_name))
 
+    length_ft = OpenStudio.convert(length, 'm', 'ft').get
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{length_ft.round} ft #{case_type} called #{case_name} to #{thermal_zone.name}.") 
+
     return ref_case
   end
   
-  # Adds walkin
-  # It is suggested that the user input the insulated floor area of the walk-in (m2), and then the following items will be determined:
-  #     •	Rated coil cooling capacity (function of floor area)
-  #     •	Rated cooling coil fan power (function of cooling capacity)
-  #     •	Rated total lighting power (function of floor area)
-  #     •	Defrost power (function of cooling capacity)
+  # Adds walkin to the model. The following characteristics are defaulted based on user input. 
+  #  - Rated coil cooling capacity (function of floor area)
+  #  - Rated cooling coil fan power (function of cooling capacity)
+  #  - Rated total lighting power (function of floor area)
+  #  - Defrost power (function of cooling capacity)
   # Coil fan power and total lighting power are given for both “old (2004, 2007, and 2010)” and “new (2013)” walk-ins.  
   # It is assumed that only walk-in freezers have electric defrost while walk-in coolers use off-cycle defrost.
-  def add_refrigeration_walkin(template, walkin_)
-								
-    walkin_type = walkin_['walkin_type']
-    walkin_name = walkin_['walkin_name']
-    insulated_floor_area = walkin_['insulated_floor_area']
-    thermal_zones = get_zones_from_spaces_on_system(walkin_)
-	
+  #
+  # @param template [String]
+  # @param walkin_type [String] the walkin type.  valid choices are:
+  # Walk-In Freezer, Walk-In Cooler, Walk-In Cooler Glass Door
+  # @param walkin_name [String] the name of the walkin
+  # @param insulated_floor_area [Double] the floor area of the walkin, in m^2
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
+  # walkin is located, and which will be impacted by the walkin's thermal load.
+  def add_refrigeration_walkin(template, walkin_type, walkin_name, insulated_floor_area, thermal_zone)
+
+    # Capacity, defrost, lighting
     operating_temp = nil
     source_temp = nil
     defrost_type = nil
     always_off_name = 'Always Off'
-	
-    insulated_floor_area_ft2 = OpenStudio.convert(length, 'm^2', 'ft^2').get
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{insulated_floor_area_ft2.round} ft2 #{walkin_type}")
-  
-    # Capacity, defrost, lighting
     case walkin_type 
     when 'Walk-In Freezer'
       cooling_capacity = -0.3087*(insulated_floor_area^2)+152.9*(insulated_floor_area)+1060 
@@ -5059,7 +5043,7 @@ class OpenStudio::Model::Model
       reachin_door_area = 0
       stocking_door_U = 0.177
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         fan_power = 0.080*cooling_capacity
         lighting_power = 10.8*insulated_floor_area
       when '90.1-2013'
@@ -5080,7 +5064,7 @@ class OpenStudio::Model::Model
       reachin_door_area = 0
       stocking_door_U = 0.203
       case template
-        when '90.1-2004', '90.1-2007', '90.1-2010'
+        when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         fan_power = 0.080*cooling_capacity
         lighting_power = 10.8*insulated_floor_area
       when '90.1-2013'
@@ -5101,7 +5085,7 @@ class OpenStudio::Model::Model
       reachin_door_area = 0.35*insulated_floor_area
       stocking_door_U = 0.203
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         fan_power = 0.080*cooling_capacity
         lighting_power = 10.8*insulated_floor_area
       when '90.1-2013'
@@ -5167,22 +5151,36 @@ class OpenStudio::Model::Model
     ref_walkin.setRestockingSchedule(add_schedule(always_off_name))
     ref_walkin.setInsulatedFloorSurfaceArea(insulated_floor_area)
     ref_walkin.setInsulatedFloorUValue(insulated_floor_U)
-    thermal_zones.each do |zone_|
-      ref_walkin.setZoneBoundaryThermalZone(zone_)
-      ref_walkin.setZoneBoundaryTotalInsulatedSurfaceAreaFacingZone(insulated_surface_area)
-      ref_walkin.setZoneBoundaryInsulatedSurfaceUValueFacingZone(insulated_surface_U) 	
-      ref_walkin.setZoneBoundaryAreaofGlassReachInDoorsFacingZone(reachin_door_area)	
-      ref_walkin.setZoneBoundaryHeightofGlassReachInDoorsFacingZone(1.83)
-      ref_walkin.setZoneBoundaryGlassReachInDoorUValueFacingZone(2.27)
-      ref_walkin.setZoneBoundaryAreaofStockingDoorsFacingZone(3.3)
-      ref_walkin.setZoneBoundaryHeightofStockingDoorsFacingZone(2.1)
-      ref_walkin.setZoneBoundaryStockingDoorUValueFacingZone(stocking_door_U)
-      ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(add_schedule(walkin_door_sch))
-    end
+    ref_walkin.setZoneBoundaryThermalZone(thermal_zone)
+    ref_walkin.setZoneBoundaryTotalInsulatedSurfaceAreaFacingZone(insulated_surface_area)
+    ref_walkin.setZoneBoundaryInsulatedSurfaceUValueFacingZone(insulated_surface_U) 	
+    ref_walkin.setZoneBoundaryAreaofGlassReachInDoorsFacingZone(reachin_door_area)	
+    ref_walkin.setZoneBoundaryHeightofGlassReachInDoorsFacingZone(1.83)
+    ref_walkin.setZoneBoundaryGlassReachInDoorUValueFacingZone(2.27)
+    ref_walkin.setZoneBoundaryAreaofStockingDoorsFacingZone(3.3)
+    ref_walkin.setZoneBoundaryHeightofStockingDoorsFacingZone(2.1)
+    ref_walkin.setZoneBoundaryStockingDoorUValueFacingZone(stocking_door_U)
+    ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(add_schedule(walkin_door_sch))
+
+    insulated_floor_area_ft2 = OpenStudio.convert(insulated_floor_area, 'm^2', 'ft^2').get
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{insulated_floor_area_ft2.round} ft2 #{walkin_type} called #{walkin_name} to #{thermal_zone.name}.")
 
     return ref_walkin
   end
   
+  # Adds a full commercial refrigeration rack, as would be found in a supermarket,
+  # to the model.
+  #
+  # @param template [String]
+  # @param compressor_type [String] the system temperature range.  valid choices are:
+  # Low Temp, Med Temp
+  # @param sys_name [String] the name of the refrigeration system
+  # @cases [Array<Hash>] an array of cases with keys:
+  # case_type, case_name, length, number_of_cases, and space_names.
+  # @walkins [Array<Hashs>] an array of walkins with keys:
+  # walkin_type, walkin_name, insulated_floor_area, space_names, and number_of_walkins
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
+  # refrigeration piping is located.
   def add_refrigeration_system(template,
                                compressor_type,
                                sys_name,
@@ -5194,14 +5192,14 @@ class OpenStudio::Model::Model
     ref_sys = OpenStudio::Model::RefrigerationSystem.new(self)
     ref_sys.setName("#{sys_name}")
     ref_sys.setSuctionPipingZone(thermal_zone)
-    
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{compressor_type} refrigeration system")
-    
+  
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{compressor_type} refrigeration system called #{sys_name} with #{cases.size} cases and #{walkins.size} walkins.")
+
     # Compressors (20 for each system)
     for i in 0 ... 20
       compressor =  OpenStudio::Model::RefrigerationCompressor.new(self)
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010'
+      when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         if compressor_type == 'Low Temp'
           compressor.setRefrigerationCompressorPowerCurve(add_curve('Old_Low_Temp_Comp_Pwr_Curve'))
           compressor.setRefrigerationCompressorCapacityCurve(add_curve('Old_Low_Temp_Comp_Cap_Curve'))
@@ -5225,17 +5223,26 @@ class OpenStudio::Model::Model
     cooling_cap = 0
     cases.each do |case_|
       for i in 0 ... case_['number_of_cases']
-        ref_case = add_refrigeration_case(template, case_)
+        zone = get_zones_from_spaces_on_system(case_)[0]
+        ref_case = add_refrigeration_case(template,
+                                          case_['case_type'],
+                                          "#{case_['case_name']} #{i+1}",
+                                          case_['length'],
+                                          zone)
         ref_sys.addCase(ref_case)
         cooling_cap = cooling_cap + (ref_case.ratedTotalCoolingCapacityperUnitLength * ref_case.caseLength) # calculate total cooling capacity of the cases
       end
     end
     
     # Walkins
-    walkins.each do |walkin_|
-      for i in 0 ... walkin_['number_of_walkins']
-        ref_walkin = add_refrigeration_walkin(template, walkin_)
-        ref_sys.addWalkin(ref_walkin)
+    walkins.each do |walkin|
+      for i in 0 ... walkin['number_of_walkins']
+        zone = get_zones_from_spaces_on_system(walkin)[0]
+        ref_walkin = add_refrigeration_walkin(template,
+                                              walkin['walkin_type'],
+                                              "#{walkin['walkin_name']} #{i+1}",
+                                              walkin['insulated_floor_area'],
+                                              zone)
         cooling_cap = cooling_cap + ref_walkin.ratedCoilCoolingCapacity # calculate total cooling capacity of the cases + walkins
       end
     end	
@@ -5270,8 +5277,6 @@ class OpenStudio::Model::Model
     condenser.setMinimumFanAirFlowRatio(0.1) 
 
     ref_sys.setRefrigerationCondenser(condenser)
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Refrigeration System')
 
     return true
   end
