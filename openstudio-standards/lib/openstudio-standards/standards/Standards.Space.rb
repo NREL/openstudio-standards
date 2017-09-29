@@ -1545,13 +1545,17 @@ class OpenStudio::Model::Space
     basic_infil_rate_cfm_per_ft2 = nil
     infil_type = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, infiltration rates are not defined using this method, no changes have been made to the model.")
       return true
     when '90.1-2004', '90.1-2007'
       basic_infil_rate_cfm_per_ft2 = 1.8
     when '90.1-2010', '90.1-2013'
       basic_infil_rate_cfm_per_ft2 = 1.0
+	when 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001'
+      basic_infil_rate_cfm_per_ft2 = 1.8
+    when 'CEC T24 2005', 'CEC T24 2008'
+      basic_infil_rate_cfm_per_ft2 = 0.5
     end
 
     # Conversion factor
@@ -1663,13 +1667,17 @@ class OpenStudio::Model::Space
     basic_infil_rate_cfm_per_ft2 = nil
     infil_type = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, infiltration rates are not defined using this method, no changes have been made to the model.")
       return true
-    when '90.1-2004', '90.1-2007', 'CEC T24 2005', 'CEC T24 2008'
+    when '90.1-2004', '90.1-2007'
       basic_infil_rate_cfm_per_ft2 = 1.8
     when '90.1-2010', '90.1-2013'
       basic_infil_rate_cfm_per_ft2 = 1.0
+	when 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001'
+      basic_infil_rate_cfm_per_ft2 = 1.8
+    when 'CEC T24 2005', 'CEC T24 2008'
+      basic_infil_rate_cfm_per_ft2 = 0.5
     end
 
     # Calculate the basic infiltration rate

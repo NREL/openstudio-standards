@@ -1386,7 +1386,7 @@ class OpenStudio::Model::Model
         clg = 1.33
         htg = 1.33
       end
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
       case building_type
       when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'Outpatient', 'PrimarySchool'
         clg = 1.0

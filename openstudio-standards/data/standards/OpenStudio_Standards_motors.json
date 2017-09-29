@@ -1921,7 +1921,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CEC T24 2001",
       "number_of_poles": 4,
       "type": "Enclosed",
       "synchronous_speed": 1800,
@@ -1931,7 +1931,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CEC T24 2005",
       "number_of_poles": 4,
       "type": "Enclosed",
       "synchronous_speed": 1800,

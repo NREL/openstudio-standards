@@ -323,16 +323,6 @@
       ]
     },
     {
-      "name": "NACM_Drop Ceiling",
-      "intended_surface_type": "InteriorCeiling",
-      "standards_construction_type": null,
-      "insulation_layer": null,
-      "sort": null,
-      "materials": [
-        "NACM_Acoustic Tile 3/4in"
-      ]
-    },
-    {
       "name": "NACM_Interior Floor",
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": null,
@@ -2422,6 +2412,17 @@
         "Compliance Insulation R6.46",
         "Air - Metal Wall Framing - 16 or 24 in. OC",
         "Gypsum Board - 3/8 in."
+      ]
+    },
+    {
+      "name": "ceiling_Metal roof",
+      "intended_surface_type": "InteriorCeiling",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "sort": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "ceiling_2_Insulation"
       ]
     },
     {
