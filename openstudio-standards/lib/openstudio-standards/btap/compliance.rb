@@ -863,7 +863,7 @@ module BTAP
         schedule_type_array , space_zoning_data_array = self.necb_spacetype_system_selection(model)
         
         #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
-        space_zoning_data_array.each do |space_zone_data|
+        space_zoning_data_array.sort{|obj1, obj2| obj1.space_name <=> obj2.space_name}.each do |space_zone_data|
           #If it is a wildcard space.
           if space_zone_data.system_number.nil?
             #iterate through all adjacent spaces from largest shared wall area to smallest.
@@ -877,6 +877,7 @@ module BTAP
                 next
               else
                 space_zone_data.system_number = adj_space_data.system_number
+                puts "#{space_zone_data.space.name.get}"
                 break
               end 
             end
