@@ -38,7 +38,25 @@ class OpenStudio::Model::Model
       'NECB-CNEB-6'  => epw_file.to_s,
       'NECB-CNEB-7a' => epw_file.to_s,
       'NECB-CNEB-7b' => epw_file.to_s,
-      'NECB-CNEB-8'  => epw_file.to_s
+      'NECB-CNEB-8'  => epw_file.to_s,
+      # CEC
+      'CEC T24-CEC1' => 'CZ01RV2.epw',
+      'CEC T24-CEC2' => 'CZ02RV2.epw',
+      'CEC T24-CEC3' => 'CZ03RV2.epw',
+      'CEC T24-CEC4' => 'CZ04RV2.epw',
+      'CEC T24-CEC5' => 'CZ05RV2.epw',
+      'CEC T24-CEC6' => 'CZ06RV2.epw',
+      'CEC T24-CEC7' => 'CZ07RV2.epw',
+      'CEC T24-CEC8' => 'CZ08RV2.epw',
+      'CEC T24-CEC9' => 'CZ09RV2.epw',
+      'CEC T24-CEC10' => 'CZ10RV2.epw',
+      'CEC T24-CEC11' => 'CZ11RV2.epw',
+      'CEC T24-CEC12' => 'CZ12RV2.epw',
+      'CEC T24-CEC13' => 'CZ13RV2.epw',
+      'CEC T24-CEC14' => 'CZ14RV2.epw',
+      'CEC T24-CEC15' => 'CZ15RV2.epw',
+      'CEC T24-CEC16' => 'CZ16RV2.epw',
+
     }
 
     # Get the weather file name from the hash

@@ -1244,9 +1244,9 @@ class OpenStudio::Model::Model
         end
 
         # If electric zone heat
-        reheat_type = 'Water'
+        electric_reheat = false
         if zone_heat_fuel == 'Electricity'
-          reheat_type = 'Electricity'
+          electric_reheat = true
         end
 
         # Group zones by story
@@ -1288,7 +1288,7 @@ class OpenStudio::Model::Model
                            0.9,
                            OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
                            nil,
-                           reheat_type,
+                           electric_reheat,
                            nil)
           end
 
@@ -3153,6 +3153,10 @@ class OpenStudio::Model::Model
         end
         next
       end
+      if cz.institution == 'CEC'
+        climate_zone = "CEC T24-#{cz.value}"
+        next
+      end
     end
 
     # get building type from model
@@ -4164,7 +4168,7 @@ class OpenStudio::Model::Model
     # get climate zone value
     climate_zone_value = ''
     getClimateZones.climateZones.each do |cz|
-      if cz.institution == 'ASHRAE'
+      if cz.institution == 'ASHRAE' || cz.institution == 'CEC'
         climate_zone_value = cz.value
         next
       end
@@ -4262,7 +4266,7 @@ class OpenStudio::Model::Model
 
     # Check the results
     if possible_climate_zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
+      # OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim} #{climate_zone}")
     elsif possible_climate_zones.size > 2
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
     end
@@ -4283,6 +4287,8 @@ class OpenStudio::Model::Model
                  possible_climate_zones.sort.first
                end
     when 'ICC IECC 2015', 'OEESC 2014'
+      result = possible_climate_zones.sort.first
+    when 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
       result = possible_climate_zones.sort.first
     end
 
