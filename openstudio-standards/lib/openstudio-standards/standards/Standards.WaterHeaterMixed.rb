@@ -52,14 +52,14 @@ class OpenStudio::Model::WaterHeaterMixed
     case fuel_type
     when 'Electricity'
       case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
 
         if capacity_w <= 12_000 # I think this should be 12000W, use variable capacity_w instead of capacity_btu_per_hr (as per PNNL doc)
           # Fixed water heater efficiency per PNNL
           water_heater_eff = 1
           # Calculate the minimum Energy Factor (EF)
           base_ef, vol_drt = case template
-                             when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+                       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
                                [0.93, 0.00132]
                              when '90.1-2010'
                                [0.97, 0.00132]
@@ -75,7 +75,7 @@ class OpenStudio::Model::WaterHeaterMixed
           water_heater_eff = 1
           # Calculate the skin loss coefficient (UA)
           case template
-          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
+          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
             # Calculate the max allowable standby loss (SL)
             sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal)) 
             # Calculate the skin loss coefficient (UA)
@@ -118,7 +118,7 @@ class OpenStudio::Model::WaterHeaterMixed
 
     when 'NaturalGas'
       case template # TODO: inconsistency; ref buildings don't calculate water heater UA the same way
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
         water_heater_eff = 0.78
         ua_btu_per_hr_per_f = 11.37
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
