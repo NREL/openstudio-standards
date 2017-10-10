@@ -4435,7 +4435,7 @@ class OpenStudio::Model::Model
     end
 
     # If there is no service hot water load.. Don't bother adding anything.
-    if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 ||
+    if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
        data['service_water_heating_peak_flow_rate'].to_f == 0.0
       return nil
     end
@@ -4478,6 +4478,8 @@ class OpenStudio::Model::Model
     water_fixture.setFlowRateFractionSchedule(schedule)
     water_fixture.setName("#{space_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     swh_connection.addWaterUseEquipment(water_fixture)
+    #Set space to water usage only for NECB 2011. Used for validation.. Hopefully will not skew zonal heat balance. Plopez. 
+    water_fixture.setSpace(space) if template == 'NECB 2011'
 
     # Connect the water use connection to the SWH loop
     swh_loop.addDemandBranchForComponent(swh_connection)

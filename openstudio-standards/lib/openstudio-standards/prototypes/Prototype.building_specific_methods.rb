@@ -1,44 +1,33 @@
-
+require 'json'
 # Extend the class to add Medium Office specific stuff
 class OpenStudio::Model::Model
   def define_space_type_map(building_type, template, climate_zone)
-    case building_type
-    when 'SecondarySchool'
-      return PrototypeBuilding::SecondarySchool.define_space_type_map(building_type, template, climate_zone)
-    when 'PrimarySchool'
-      return PrototypeBuilding::PrimarySchool.define_space_type_map(building_type, template, climate_zone)
-    when 'SmallOffice'
-      return PrototypeBuilding::SmallOffice.define_space_type_map(building_type, template, climate_zone)
-    when 'MediumOffice'
-      return PrototypeBuilding::MediumOffice.define_space_type_map(building_type, template, climate_zone)
-    when 'LargeOffice'
-      return PrototypeBuilding::LargeOffice.define_space_type_map(building_type, template, climate_zone)
-    when 'SmallHotel'
-      return PrototypeBuilding::SmallHotel.define_space_type_map(building_type, template, climate_zone)
-    when 'LargeHotel'
-      return PrototypeBuilding::LargeHotel.define_space_type_map(building_type, template, climate_zone)
-    when 'Warehouse'
-      return PrototypeBuilding::Warehouse.define_space_type_map(building_type, template, climate_zone)
-    when 'RetailStandalone'
-      return PrototypeBuilding::RetailStandalone.define_space_type_map(building_type, template, climate_zone)
-    when 'RetailStripmall'
-      return PrototypeBuilding::RetailStripmall.define_space_type_map(building_type, template, climate_zone)
-    when 'QuickServiceRestaurant'
-      return PrototypeBuilding::QuickServiceRestaurant.define_space_type_map(building_type, template, climate_zone)
-    when 'FullServiceRestaurant'
-      return PrototypeBuilding::FullServiceRestaurant.define_space_type_map(building_type, template, climate_zone)
-    when 'Hospital'
-      return PrototypeBuilding::Hospital.define_space_type_map(building_type, template, climate_zone)
-    when 'Outpatient'
-      return PrototypeBuilding::Outpatient.define_space_type_map(building_type, template, climate_zone)
-    when 'MidriseApartment'
-      return PrototypeBuilding::MidriseApartment.define_space_type_map(building_type, template, climate_zone)
-    when 'HighriseApartment'
-      return PrototypeBuilding::HighriseApartment.define_space_type_map(building_type, template, climate_zone)
-	when 'SuperMarket'
-      return PrototypeBuilding::SuperMarket.define_space_type_map(building_type, template, climate_zone)  
+    space_type_map_json = File.absolute_path(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json"))
+    begin
+      space_type_map = JSON.parse(File.read(space_type_map_json))
+    rescue JSON::ParserError => e
+      puts "THE CONTENTS OF THE JSON FILE AT #{space_type_map_json} IS NOT VALID"
+      raise e
+    end
+
+    if space_type_map.has_key?(building_type)
+      template_found = false
+      #search for template within building_type key
+      space_type_map[building_type]['space_map'].each_with_index do |item, index|  
+        if item["template"].include?(template)
+          template_found = true
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{template}] found for Building Type = [#{building_type}] in [\"#{building_type}\"]['space_map'][#{index}][\"space_type_map\"]")
+          return item["space_type_map"]
+        end
+      end
+
+      unless template_found #throw error because space type mapping was not found
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Template = [#{template}] was not found for Building Type = [#{building_type}] at #{space_type_map_json}.")
+        return false 
+      end
+
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Building Type = #{building_type} not recognized")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Building Type = #{building_type} was not found at #{space_type_map_json}")
       return false
     end
   end

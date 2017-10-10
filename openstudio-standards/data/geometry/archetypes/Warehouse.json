@@ -1,0 +1,53 @@
+{
+  "Warehouse": {
+    "geometry": {
+      "DOE Ref Pre-1980": "Geometry.warehouse_pre_1980_to_2004.osm",
+      "DOE Ref 1980-2004": "Geometry.warehouse_pre_1980_to_2004.osm",
+      "DOE Ref 2004": "Geometry.warehouse_pre_1980_to_2004.osm",
+      "NECB 2011": "Geometry.warehouse.osm",
+      "90.1-2004": "Geometry.warehouse.osm",
+      "90.1-2007": "Geometry.warehouse.osm",
+      "90.1-2010": "Geometry.warehouse.osm",
+      "90.1-2013": "Geometry.warehouse.osm"
+    },
+    "space_map": [
+      {
+        "template": [
+          "NECB 2011"
+        ],
+        "space_type_map": {
+          "Warehouse - med/blk": [
+            "Zone3 Bulk Storage"
+          ],
+          "Warehouse - fine": [
+            "Zone2 Fine Storage"
+          ],
+          "Office - enclosed": [
+            "Zone1 Office"
+          ]
+        }
+      },
+      {
+        "template": [
+          "90.1-2004",
+          "90.1-2007",
+          "90.1-2010",
+          "90.1-2013",
+          "DOE Ref 1980-2004",
+          "DOE Ref Pre-1980"
+        ],
+        "space_type_map": {
+          "Bulk": [
+            "Zone3 Bulk Storage"
+          ],
+          "Fine": [
+            "Zone2 Fine Storage"
+          ],
+          "Office": [
+            "Zone1 Office"
+          ]
+        }
+      }
+    ]
+  }
+}

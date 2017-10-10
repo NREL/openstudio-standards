@@ -50,17 +50,16 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       compare_results = true,
       debug = false)
 
-    
     building_types.each do |building_type|
       templates.each do |template|
         climate_zones.each do |climate_zone|
           #need logic to go through weather files only for Canada's NECB 2011. It will ignore the ASHRAE climate zone. 
-          if template == 'NECB 2011'
+          if climate_zone == 'NECB HDD Method'
             epw_files.each do |epw_file|
               create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
             end 
           else
-            #otherwise it will go as normal with the american method. 
+            #otherwise it will go as normal with the american method and wipe the epw_file variable. 
             epw_file = ""
             create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
           end
@@ -413,14 +412,15 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     bldg_types.sort.each do |building_type|
       vintages.sort.each do |building_vintage|
         climate_zones.sort.each do |climate_zone|
-          puts "**********#{building_type}-#{building_vintage}-#{climate_zone}******************"
+
+          #puts "**********#{building_type}-#{building_vintage}-#{climate_zone}******************"
           # Open the sql file, skipping if not found
           model_name = "#{building_type}-#{building_vintage}-#{climate_zone}"
           sql_path_string = "#{Dir.pwd}/output/#{model_name}/AnnualRun/EnergyPlus/eplusout.sql"
           sql_path = OpenStudio::Path.new(sql_path_string)
           sql = nil
           if OpenStudio.exists(sql_path)
-            puts "Found SQL file."
+            #puts "Found SQL file."
             sql = OpenStudio::SqlFile.new(sql_path)
           else
             failures << "****Error - #{model_name} - Could not find sql file"

@@ -1,7 +1,7 @@
 
 OS:Version,
-  {b7920343-be50-4b7e-ae7a-6853603988c5}, !- Handle
-  1.7.0;                                  !- Version Identifier
+  {5beac1e0-460d-485f-b9c1-77deb7655392}, !- Handle
+  2.1.1;                                  !- Version Identifier
 
 OS:Site,
   {e4e0cf83-aa67-462b-ac86-dd69d24de0d1}, !- Handle
@@ -60,7 +60,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2edc3034-10d9-48ff-9f1e-ff89d18bbb3f}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
@@ -116,7 +116,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {314c62be-fce7-4e5a-bd05-c87c85e86c27}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   No;                                     !- Part of Total Floor Area
 
@@ -172,7 +172,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2edc3034-10d9-48ff-9f1e-ff89d18bbb3f}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
@@ -229,7 +229,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2edc3034-10d9-48ff-9f1e-ff89d18bbb3f}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -251,7 +251,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2edc3034-10d9-48ff-9f1e-ff89d18bbb3f}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -289,7 +289,7 @@ OS:Surface,
   5, 13.46, 3.05,                         !- X,Y,Z Vertex 3 {m}
   0, 18.46, 3.05;                         !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {abc5d571-df7f-47b1-bf8b-892a6dadede3}, !- Handle
   Gas:Facility,                           !- Name
   Hourly,                                 !- Reporting Frequency
@@ -331,7 +331,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {2edc3034-10d9-48ff-9f1e-ff89d18bbb3f}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -581,7 +581,7 @@ OS:SubSurface,
 OS:HeatBalanceAlgorithm,
   {30aa4e32-ecc1-41fa-8e20-75c7b3a9c558}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {F}
+  200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:Surface,
   {47ffdd48-31f2-4e14-9cf2-3fe0ba8f9927}, !- Handle
@@ -909,7 +909,7 @@ OS:SubSurface,
   27.69, 12.45, 0.9,                      !- X,Y,Z Vertex 3 {m}
   27.69, 12.45, 2.424;                    !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {15699204-c979-4451-b40c-3b532d8c0da9}, !- Handle
   ElectricityNet:Facility,                !- Name
   Hourly,                                 !- Reporting Frequency
@@ -1001,7 +1001,7 @@ OS:Surface,
   22.69, 5, 3.05,                         !- X,Y,Z Vertex 3 {m}
   22.69, 13.46, 3.05;                     !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {d446ed18-52cc-487c-bf58-c78a8edaa642}, !- Handle
   Electricity:Facility,                   !- Name
   Hourly,                                 !- Reporting Frequency
@@ -1211,8 +1211,8 @@ OS:Building,
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Standards Number of Stories
-  ,                                       !- Standards Number of Above Ground Stories
+  2,                                      !- Standards Number of Stories
+  2,                                      !- Standards Number of Above Ground Stories
   ;                                       !- Standards Building Type
 
 OS:Surface,
@@ -1319,4 +1319,22 @@ OS:SubSurface,
 
 OS:Facility,
   {8b48fb85-9058-4291-a948-6088f0592bb3}; !- Handle
+
+OS:BuildingStory,
+  {2edc3034-10d9-48ff-9f1e-ff89d18bbb3f}, !- Handle
+  Building Story 1,                       !- Name
+  0,                                      !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
+
+OS:BuildingStory,
+  {314c62be-fce7-4e5a-bd05-c87c85e86c27}, !- Handle
+  Building Story 2,                       !- Name
+  3.05,                                   !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
 

@@ -14,7 +14,9 @@ class TestNECBFullServiceRestaurant < CreateDOEPrototypeBuildingTest
 #  'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
 #  'CAN_PQ_Sherbrooke.716100_CWEC.epw', #CZ 7a - Electric HDD = 5068
 #  'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
-  'CAN_NU_Resolute.719240_CWEC.epw' # CZ 8  -FuelOil2 HDD = 12570
+#  'CAN_NU_Resolute.719240_CWEC.epw' # CZ 8  -FuelOil2 HDD = 12570
+  'CAN_PQ_Kuujjuarapik.719050_CWEC.epw' # CZ 8  -FuelOil2 HDD = 7986
+#  'CAN_ON_Kingston.716200_CWEC.epw'   # This did not run cleanly! Error in 671 of compliance.rb
 ] 
   create_models = true
   run_models = false

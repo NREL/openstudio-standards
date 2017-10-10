@@ -55,7 +55,24 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         #Lights
         total_lpd = []
         lpd_sched = []
-        st.lights.each {|light| total_lpd << light.powerPerFloorArea.get ; lpd_sched << light.schedule.get.name}
+        occSensLPDfactor = 1.0
+        if template == "NECB 2011"
+          # NECB 2011 space types that require a reduction in the LPD to account for 
+          # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))
+          reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
+            "Conf./meet./multi-purpose", "Washroom-sch-A",
+            "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", "Washroom-sch-E", "Washroom-sch-F", "Washroom-sch-G",
+            "Washroom-sch-H", "Washroom-sch-I", "Dress./fitt. - performance arts", "Locker room", "Retail - dressing/fitting"]
+          space_type_name = st.standardsSpaceType.get
+          if reduceLPDSpaces.include?(space_type_name)
+            occSensLPDfactor = 0.9
+          elsif ( (space_type_name=='Storage area' && space_area < 100) || 
+               (space_type_name=='Storage area - refrigerated' && space_area < 100) || 
+               (space_type_name=='Office - enclosed' && space_area < 25) )
+            # Do nothing! In this case, we use the duplicate space type name appended with " - occsens"!
+          end
+        end
+        st.lights.each {|light| total_lpd << light.powerPerFloorArea.get * occSensLPDfactor ; lpd_sched << light.schedule.get.name}
         assert(total_lpd.size <= 1 , "#{total_lpd.size} light definitions given. Expecting <= 1.")
         
         #People / Occupancy

@@ -1,12 +1,20 @@
 
 # open the class to add methods to size all HVAC equipment
 class OpenStudio::Model::Model
-  def add_swh(building_type, template, climate_zone, prototype_input)
+  def add_swh(building_type, template, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
 
+      if template == 'NECB 2011'
+        # vars x1..x10 not required here, only service water heating fuel type, which is
+        # weather file dependent for NECB 2011
+        x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
+      else
+        swh_fueltype = prototype_input['main_water_heater_fuel']
+      end
+      
       # Add the main service water loop
       main_swh_loop = add_swh_loop(template,
                                    'Main Service Water Loop',
@@ -16,7 +24,7 @@ class OpenStudio::Model::Model
                                    prototype_input['main_service_water_pump_motor_efficiency'],
                                    OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
                                    OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
-                                   prototype_input['main_water_heater_fuel'],
+                                   swh_fueltype,
                                    OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
                                    building_type) unless building_type == 'RetailStripmall' && template != 'NECB 2011'
 
@@ -219,7 +227,17 @@ class OpenStudio::Model::Model
           # Add a service water use for each space
           space_names.each do |space_name|
             space = getSpaceByName(space_name).get
-            space_multiplier = space.multiplier
+            space_multiplier =  nil
+            case template
+            when 'NECB 2011'
+            #Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes. 
+              space_multiplier = 1
+            else
+              space_multiplier = space.multiplier 
+            end
+            
+
+            
             add_swh_end_uses_by_space(get_lookup_name(building_type),
                                       template,
                                       climate_zone,

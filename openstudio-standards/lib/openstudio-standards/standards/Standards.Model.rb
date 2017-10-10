@@ -29,6 +29,10 @@ def load_openstudio_standards_json
   standards_files << 'OpenStudio_Standards_exterior_lighting.json'
   standards_files << 'OpenStudio_Standards_parking.json'
   standards_files << 'OpenStudio_Standards_entryways.json'
+  standards_files << 'OpenStudio_Standards_necb_climate_zones.json'
+  standards_files << 'OpenStudio_Standards_necb_fdwr.json'
+  standards_files << 'OpenStudio_Standards_necb_hvac_system_selection_type.json'
+  standards_files << 'OpenStudio_Standards_necb_surface_conductances.json'
   #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
 
   # Combine the data from the JSON files into a single hash
@@ -3696,7 +3700,10 @@ class OpenStudio::Model::Model
               end
       end
       space_cats[space] = cat
-
+      # NECB 2011 keep track of totals for NECB regardless of conditioned or not. 
+      total_wall_m2 += wall_area_m2
+      total_subsurface_m2 += wind_area_m2 # this contains doors as well.
+      
       # Add to the correct category
       case cat
       when 'Unconditioned'
@@ -3711,9 +3718,7 @@ class OpenStudio::Model::Model
         sh_wall_m2 += wall_area_m2
         sh_wind_m2 += wind_area_m2
       end
-      # keep track of totals for NECB
-      total_wall_m2 += wall_area_m2
-      total_subsurface_m2 += wind_area_m2 # this contains doors as well.
+
     end
 
     # Calculate the WWR of each category
@@ -3749,7 +3754,8 @@ class OpenStudio::Model::Model
       # NECB FDWR limit
       hdd = BTAP::Environment::WeatherFile.new(weatherFile.get.path.get).hdd18
       fdwr_lim = (BTAP::Compliance::NECB2011.max_fwdr(hdd) * 100.0).round(1)
-
+      #puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
+      #puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
       # Stop here unless windows / doors need reducing
       return true unless fdwr > fdwr_lim
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{wwr_lim.round}%.")
@@ -3823,7 +3829,7 @@ class OpenStudio::Model::Model
           end
         end
       end
-
+      
     end
 
     return true

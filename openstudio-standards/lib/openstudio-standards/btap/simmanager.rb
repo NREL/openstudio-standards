@@ -59,7 +59,7 @@ module BTAP
         workflow.add(params)
         workflow.add(co.getTools())
         rm.enqueue( workflow.create( OpenStudio::Path.new("#{folder}/#{File.basename(model_path, ".osm")}"), OpenStudio::Path.new(model_path)),false)
-        puts "#{model_path} enqueued. #{counter} of #{osm_files.size}"
+        # puts "#{model_path} enqueued. #{counter} of #{osm_files.size}"
       end
       #rm.showStatusDialog()
       rm.waitForFinished()
@@ -641,7 +641,7 @@ module BTAP
       def self.convert_eso_to_csv(eso_file_path)
         #Run ESO Vars command must be run in folder.
         root_folder = Dir.getwd()
-        puts File.dirname(eso_file_path)
+        # puts File.dirname(eso_file_path)
         Dir.chdir(File.dirname(eso_file_path))
         system(self.find_read_vars_eso())
         #get name of run from html file. This is faster than loading OSM file.
@@ -683,7 +683,7 @@ module BTAP
         Dir.mkdir(@outdir.to_s+"\\sqlresults") unless File.exists?(@outdir.to_s+"\\sqlresults")
         #make html folder
         Dir.mkdir(@outdir.to_s+"\\htmlresults") unless File.exists?(@outdir.to_s+"\\htmlresults")
-        puts "processing results for " + run_name
+        #puts "processing results for " + run_name
 
         #load sql file
         # see if we can find sql file
@@ -705,7 +705,7 @@ module BTAP
           sqlFile = OpenStudio::SqlFile.new(sql_path)
           model.setSqlFile(sqlFile)
         else
-          puts "could not load sql file" + sql_path
+          #puts "could not load sql file" + sql_path
         end
 
 

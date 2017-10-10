@@ -51,12 +51,16 @@ class SHWTests < MiniTest::Test
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
+    hw_loop = OpenStudio::Model::PlantLoop.new(model)
+    always_on = model.alwaysOnDiscreteSchedule	
+    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
       model, 
       model.getThermalZones, 
       boiler_fueltype, 
       heating_coil_type, 
-      baseboard_type)
+      baseboard_type,
+      hw_loop)
     # run the standards
     result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
     # Save the model
@@ -123,12 +127,16 @@ class SHWTests < MiniTest::Test
         boiler_fueltype = 'Electricity'
         baseboard_type = 'Hot Water'
         heating_coil_type = 'DX'
+        hw_loop = OpenStudio::Model::PlantLoop.new(model)
+        always_on = model.alwaysOnDiscreteSchedule	
+        BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
         BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
           model, 
           model.getThermalZones, 
           boiler_fueltype, 
           heating_coil_type, 
-          baseboard_type)
+          baseboard_type,
+          hw_loop)
         # set volume and capacity of water tank
         shw_units = model.getWaterHeaterMixeds
         shw_units[0].setHeaterMaximumCapacity(1000.0*icap)

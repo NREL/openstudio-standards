@@ -1,7 +1,7 @@
 
 OS:Version,
-  {ee3e2ff8-4bdb-4e3c-b3b0-320656b673b5}, !- Handle
-  1.8.0;                                  !- Version Identifier
+  {61bb58d1-1a10-4d32-8e27-f2d7c814f80c}, !- Handle
+  2.1.1;                                  !- Version Identifier
 
 OS:Site,
   {5131d4fd-bdc3-4987-b252-b00022eb6fa7}, !- Handle
@@ -69,7 +69,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {123b80d5-dd69-416a-98e2-41c71a91f505}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
@@ -101,7 +101,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {123b80d5-dd69-416a-98e2-41c71a91f505}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
@@ -166,11 +166,11 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   3.0488,                                 !- Z Origin {m}
-  ,                                       !- Building Story Name
+  {5090125b-0d59-44b5-bedc-ceeedd108d8d}, !- Building Story Name
   ,                                       !- Thermal Zone Name
   No;                                     !- Part of Total Floor Area
 
-OS:Meter,
+OS:Output:Meter,
   {1d217ca0-6d2b-449e-8519-1957dc15f7a4}, !- Handle
   Gas:Facility,                           !- Name
   hourly,                                 !- Reporting Frequency
@@ -180,7 +180,7 @@ OS:Meter,
 OS:HeatBalanceAlgorithm,
   {e3daa38c-dd95-42be-9f5b-3e83aecfe210}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {F}
+  200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:Building,
   {2359408b-6252-42dc-81e2-5632894e0032}, !- Handle
@@ -191,11 +191,11 @@ OS:Building,
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Standards Number of Stories
-  ,                                       !- Standards Number of Above Ground Stories
+  2,                                      !- Standards Number of Stories
+  2,                                      !- Standards Number of Above Ground Stories
   ;                                       !- Standards Building Type
 
-OS:Meter,
+OS:Output:Meter,
   {78703274-d428-499c-a972-44dc302926ba}, !- Handle
   Electricity:Building,                   !- Name
   hourly,                                 !- Reporting Frequency
@@ -252,7 +252,7 @@ OS:Surface,
   15.2428, 0, -1.02093692033454e-015,     !- X,Y,Z Vertex 2 {m}
   15.2428, 15.2428, -1.02093692033454e-015; !- X,Y,Z Vertex 3 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {7ae2d07a-e6f7-4bcf-a173-3d401bdd3ba1}, !- Handle
   Electricity:HVAC,                       !- Name
   hourly,                                 !- Reporting Frequency
@@ -264,8 +264,8 @@ OS:RunPeriod,
   Run Period 1,                           !- Name
   1,                                      !- Begin Month
   1,                                      !- Begin Day of Month
-  12,                                      !- End Month
-  31,                                      !- End Day of Month
+  12,                                     !- End Month
+  31,                                     !- End Day of Month
   No,                                     !- Use Weather File Holidays and Special Days
   No,                                     !- Use Weather File Daylight Saving Period
   No,                                     !- Apply Weekend Holiday Rule
@@ -345,7 +345,7 @@ OS:Surface,
   0, 15.2428, 0,                          !- X,Y,Z Vertex 2 {m}
   0, 0, 0;                                !- X,Y,Z Vertex 3 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {8cd39ffc-0617-4655-b1c8-2c94a0ab3309}, !- Handle
   Electricity:Facility,                   !- Name
   hourly,                                 !- Reporting Frequency
@@ -480,7 +480,7 @@ OS:Surface,
   0, 7.6214, 0,                           !- X,Y,Z Vertex 3 {m}
   0, 15.2428, 0;                          !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {d2db413f-1af6-4e7f-9109-45d9423b7ea7}, !- Handle
   ElectricityNet:Facility,                !- Name
   hourly,                                 !- Reporting Frequency
@@ -511,4 +511,22 @@ OS:ConvergenceLimits,
 
 OS:Facility,
   {693dbb2e-41ae-48dc-a6f3-a7089dd1c0fe}; !- Handle
+
+OS:BuildingStory,
+  {123b80d5-dd69-416a-98e2-41c71a91f505}, !- Handle
+  Building Story 1,                       !- Name
+  0,                                      !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
+
+OS:BuildingStory,
+  {5090125b-0d59-44b5-bedc-ceeedd108d8d}, !- Handle
+  Building Story 2,                       !- Name
+  3.0488,                                 !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ;                                       !- Group Rendering Name
 

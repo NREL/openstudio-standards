@@ -1,0 +1,62 @@
+{
+  "RetailStripmall": {
+    "geometry": {
+      "NECB 2011": "Geometry.retail_stripmall.osm",
+      "90.1-2004": "Geometry.retail_stripmall.osm",
+      "90.1-2007": "Geometry.retail_stripmall.osm",
+      "90.1-2010": "Geometry.retail_stripmall.osm",
+      "90.1-2013": "Geometry.retail_stripmall.osm",
+      "DOE Ref 1980-2004": "Geometry.retail_stripmall.osm",
+      "DOE Ref Pre-1980": "Geometry.retail_stripmall.osm"
+    },
+    "space_map": [
+      {
+        "template": [
+          "NECB 2011"
+        ],
+        "space_type_map": {
+          "Retail - sales": [
+            "LGstore1",
+            "LGstore2",
+            "SMstore1",
+            "SMstore2",
+            "SMstore3",
+            "SMstore4",
+            "SMstore5",
+            "SMstore6",
+            "SMstore7",
+            "SMstore8"
+          ]
+        }
+      },
+      {
+        "template": [
+          "90.1-2004",
+          "90.1-2007",
+          "90.1-2010",
+          "90.1-2013",
+          "DOE Ref 1980-2004",
+          "DOE Ref Pre-1980"
+        ],
+        "space_type_map": {
+          "Strip mall - type 1": [
+            "LGstore1",
+            "SMstore1"
+          ],
+          "Strip mall - type 2": [
+            "SMstore2",
+            "SMstore3",
+            "SMstore4"
+          ],
+          "Strip mall - type 3": [
+            "LGstore2",
+            "SMstore5",
+            "SMstore6",
+            "SMstore7",
+            "SMstore8"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "LargeOffice": {
+    "geometry": {
+      "DOE Ref Pre-1980": "Geometry.large_office_reference.osm",
+      "DOE Ref 1980-2004": "Geometry.large_office_reference.osm",
+      "DOE Ref 2004": "Geometry.large_office_reference.osm",
+      "NECB 2011": "Geometry.large_office_2010.osm",
+      "90.1-2004": "Geometry.large_office_2010.osm",
+      "90.1-2007": "Geometry.large_office_2010.osm",
+      "90.1-2010": "Geometry.large_office_2010.osm",
+      "90.1-2013": "Geometry.large_office_2010.osm"
+    },
+    "space_map": [
+      {
+        "template": [
+          "DOE Ref Pre-1980",
+          "DOE Ref 1980-2004"
+        ],
+        "space_type_map": {
+          "WholeBuilding - Lg Office": [
+            "Basement",
+            "Core_bottom",
+            "Core_mid",
+            "Core_top",
+            "Perimeter_bot_ZN_1",
+            "Perimeter_bot_ZN_2",
+            "Perimeter_bot_ZN_3",
+            "Perimeter_bot_ZN_4",
+            "Perimeter_mid_ZN_1",
+            "Perimeter_mid_ZN_2",
+            "Perimeter_mid_ZN_3",
+            "Perimeter_mid_ZN_4",
+            "Perimeter_top_ZN_1",
+            "Perimeter_top_ZN_2",
+            "Perimeter_top_ZN_3",
+            "Perimeter_top_ZN_4"
+          ]
+        }
+      },
+      {
+        "template": [
+          "90.1-2004",
+          "90.1-2007",
+          "90.1-2010",
+          "90.1-2013"
+        ],
+        "space_type_map": {
+          "WholeBuilding - Lg Office": [
+            "Basement",
+            "Core_bottom",
+            "Core_mid",
+            "Core_top",
+            "Perimeter_bot_ZN_1",
+            "Perimeter_bot_ZN_2",
+            "Perimeter_bot_ZN_3",
+            "Perimeter_bot_ZN_4",
+            "Perimeter_mid_ZN_1",
+            "Perimeter_mid_ZN_2",
+            "Perimeter_mid_ZN_3",
+            "Perimeter_mid_ZN_4",
+            "Perimeter_top_ZN_1",
+            "Perimeter_top_ZN_2",
+            "Perimeter_top_ZN_3",
+            "Perimeter_top_ZN_4"
+          ],
+          "OfficeLarge Data Center": [
+            "DataCenter_bot_ZN_6",
+            "DataCenter_mid_ZN_6",
+            "DataCenter_top_ZN_6"
+          ],
+          "OfficeLarge Main Data Center": [
+            "DataCenter_basement_ZN_6"
+          ]
+        }
+      },
+      {
+        "template": [
+          "NECB 2011"
+        ],
+        "space_type_map": {
+          "Electrical/Mechanical-sch-A": [
+            "Basement"
+          ],
+          "Office - open plan": [
+            "Core_bottom",
+            "Core_mid",
+            "Core_top",
+            "Perimeter_bot_ZN_1",
+            "Perimeter_bot_ZN_2",
+            "Perimeter_bot_ZN_3",
+            "Perimeter_bot_ZN_4",
+            "Perimeter_mid_ZN_1",
+            "Perimeter_mid_ZN_2",
+            "Perimeter_mid_ZN_3",
+            "Perimeter_mid_ZN_4",
+            "Perimeter_top_ZN_1",
+            "Perimeter_top_ZN_2",
+            "Perimeter_top_ZN_3",
+            "Perimeter_top_ZN_4",
+            "DataCenter_basement_ZN_6",
+            "DataCenter_bot_ZN_6",
+            "DataCenter_mid_ZN_6",
+            "DataCenter_top_ZN_6"
+          ],
+          "- undefined -": [
+            "GroundFloor_Plenum",
+            "TopFloor_Plenum",
+            "MidFloor_Plenum"
+          ]
+        }
+      }
+    ],
+    "space_multiplier_map": {
+      "DataCenter_mid_ZN_6": 10,
+      "Perimeter_mid_ZN_1": 10,
+      "Perimeter_mid_ZN_2": 10,
+      "Perimeter_mid_ZN_3": 10,
+      "Perimeter_mid_ZN_4": 10,
+      "Core_mid": 10,
+      "MidFloor_Plenum": 10
+    }
+  }
+}

@@ -25,6 +25,9 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = "sys6"
     puts "***************************************#{name}*******************************************************\n"
+    hw_loop = OpenStudio::Model::PlantLoop.new(model)
+    always_on = model.alwaysOnDiscreteSchedule	
+    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
       model, 
       model.getThermalZones, 
@@ -32,7 +35,8 @@ class HVACEfficienciesTest < MiniTest::Test
       heating_coil_type, 
       baseboard_type, 
       chiller_type, 
-      fan_type)
+      fan_type,
+      hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -51,13 +55,13 @@ class HVACEfficienciesTest < MiniTest::Test
         if diff > tol then deltaT_set_correctly = false end
         assert(deltaT_set_correctly,'test_hw_loop_rules: Hot water loop design temperature difference does not match necb requirement')
         supply_comps = iloop.supplyComponents
-        pump_is_constant_speed = false
+        pump_is_variable_speed = false
         supply_comps.each do |icomp|
-          if icomp.to_PumpConstantSpeed.is_initialized
-            pump_is_constant_speed = true
+          if icomp.to_PumpVariableSpeed.is_initialized
+            pump_is_variable_speed = true
           end
         end
-        assert(pump_is_constant_speed,'test_hw_loop_rules: Hot water loop pump is not constant speed')
+        assert(pump_is_variable_speed,'test_hw_loop_rules: Hot water loop pump is not variable speed')
         supply_out_node = iloop.supplyOutletNode
         set_point_manager = supply_out_node.setpointManagerOutdoorAirReset.get
         necb_outdoorLowTemperature = -16.0
@@ -90,12 +94,16 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = "sys2"
     puts "***************************************#{name}*******************************************************\n"
+    hw_loop = OpenStudio::Model::PlantLoop.new(model)
+    always_on = model.alwaysOnDiscreteSchedule	
+    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(
       model, 
       model.getThermalZones, 
       boiler_fueltype, 
       chiller_type, 
-      mua_cooling_type)
+      mua_cooling_type,
+      hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -156,12 +164,16 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = "sys2"
     puts "***************************************#{name}*******************************************************\n"
+    hw_loop = OpenStudio::Model::PlantLoop.new(model)
+    always_on = model.alwaysOnDiscreteSchedule	
+    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(
       model, 
       model.getThermalZones, 
       boiler_fueltype, 
       chiller_type, 
-      mua_cooling_type)
+      mua_cooling_type,
+      hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards

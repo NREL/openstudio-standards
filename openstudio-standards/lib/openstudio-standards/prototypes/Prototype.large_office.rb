@@ -148,16 +148,9 @@ module LargeOffice
   end
 
   def self.define_space_multiplier
+    building_type = 'LargeOffice'
     # This map define the multipliers for spaces with multipliers not equals to 1
-    space_multiplier_map = {
-      'DataCenter_mid_ZN_6' => 10,
-      'Perimeter_mid_ZN_1' => 10,
-      'Perimeter_mid_ZN_2' => 10,
-      'Perimeter_mid_ZN_3' => 10,
-      'Perimeter_mid_ZN_4' => 10,
-      'Core_mid' => 10,
-      'MidFloor_Plenum' => 10
-    }
+    space_multiplier_map = JSON.parse(File.read(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json")))[building_type]['space_multiplier_map']
     return space_multiplier_map
   end
 

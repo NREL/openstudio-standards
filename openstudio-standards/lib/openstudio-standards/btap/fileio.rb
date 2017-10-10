@@ -21,6 +21,7 @@
 require "#{File.dirname(__FILE__)}/btap"
 require 'fileutils'
 require 'csv'
+require 'securerandom'
 #require 'rubygems'
 
 
@@ -81,7 +82,7 @@ module BTAP
     def self.delete_files_in_folder_by_extention(folder,ext)
       BTAP::FileIO::get_find_files_from_folder_by_extension(folder, ext).each do |file|
         FileUtils.rm(file)
-        puts "#{file} deleted."
+        #puts "#{file} deleted."
       end
     end
     
@@ -108,7 +109,7 @@ module BTAP
       unless File.exist?(filepath)
         raise 'File does not exist: ' + filepath.to_s
       end
-      puts "loading file #{filepath}..."
+      #puts "loading file #{filepath}..."
       model_path = OpenStudio::Path.new(filepath.to_s)
       #Upgrade version if required.
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -123,7 +124,7 @@ module BTAP
       if name != ""
         self.set_name(model,name)
       end
-      puts "File #{filepath} loaded."
+      #puts "File #{filepath} loaded."
       return model
     end
 
@@ -174,7 +175,7 @@ module BTAP
       unless File.exist?(filepath)
         raise 'File does not exist: ' + filepath.to_s
       end
-      puts "loading file #{filepath}..."
+      #puts "loading file #{filepath}..."
       model_path = OpenStudio::Path.new(filepath.to_s)
       #Upgrade version if required.
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -189,7 +190,7 @@ module BTAP
       if name != "" and not name.nil?
         self.set_name(model,name)
       end
-      puts "File #{filepath} loaded."
+      #puts "File #{filepath} loaded."
 
       return model
     end
@@ -203,7 +204,7 @@ module BTAP
       unless File.exist?(filepath)
         raise 'File does not exist: ' + filepath.to_s
       end
-      puts "loading equest file #{filepath}. This will only convert geometry."
+      #puts "loading equest file #{filepath}. This will only convert geometry."
       #Create an instancse of a DOE model
       doe_model = BTAP::EQuest::DOEBuilding.new()
       #Load the inp data into the DOE model.
@@ -276,7 +277,7 @@ module BTAP
       FileUtils.mkdir_p(File.dirname(filename))
       File.delete(filename) if File.exist?(filename)
       model.save(OpenStudio::Path.new(filename))
-      puts "File #{filename} saved."
+      #puts "File #{filename} saved."
     end
 
     # This method will translate to an E+ IDF format and save the model to an idf file.
@@ -298,7 +299,7 @@ module BTAP
           model = FileIO.load_idf(file)
           # this is a bit ugly but it works properly when called on a recursive folder structure
           FileIO.save_osm(model, (File.expand_path("..\\OSM-No_Space_Types\\", filepath) << "\\" << Pathname.new(file).basename.to_s)[0..-5])
-          puts # empty line break
+          #puts # empty line break
         end
       }
     end
@@ -321,7 +322,7 @@ module BTAP
 
         #Run ESO Vars command must be run in folder.
         root_folder = Dir.getwd()
-        puts File.dirname(eso_file_path)
+        #puts File.dirname(eso_file_path)
         Dir.chdir(File.dirname(eso_file_path))
         if File.exist?("eplustbl.htm")
           File.open("dummy.rvi", 'w') {|f| f.write("") } 
@@ -333,18 +334,18 @@ module BTAP
           f = File.open("eplustbl.htm")
           f.each_line do |line|
             if line =~ /<p>Building: <b>(.*)<\/b><\/p>/
-              puts  "Found name: #{$1}"
+              #puts  "Found name: #{$1}"
               runname = $1
               break
             end
           end
           f.close
           #copy files over with distinct names
-          puts "copy hourly results to #{out_folder}/#{runname}_eplusout.csv"
+          #puts "copy hourly results to #{out_folder}/#{runname}_eplusout.csv"
           FileUtils.cp("eplusout.csv","#{out_folder}/#{runname}_eplusout.csv")
-          puts "copy html results to #{out_folder}/#{runname}_eplustbl.htm"
+          #puts "copy html results to #{out_folder}/#{runname}_eplustbl.htm"
           FileUtils.cp("eplustbl.htm","#{out_folder}/#{runname}_eplustbl.htm")
-          puts "copy sql results to #{out_folder}/#{runname}_eplusout.sql"
+          #puts "copy sql results to #{out_folder}/#{runname}_eplusout.sql"
           FileUtils.cp("eplusout.sql","#{out_folder}/#{runname}_eplusout.sql")
 
           
@@ -409,8 +410,8 @@ module BTAP
     end
 
     def self.terminus_hourly_output(csv_file)
-      puts "Starting Terminus output processing."
-      puts "reading #{csv_file} being processed"
+      #puts "Starting Terminus output processing."
+      #puts "reading #{csv_file} being processed"
       #reads csv file into memory.
       original = CSV.read(csv_file,
         {
@@ -418,7 +419,7 @@ module BTAP
           :converters =>     :numeric  #This tell it to convert string data into numeric when possible.
         }
       )
-      puts "done reading #{csv_file} being processed"
+      #puts "done reading #{csv_file} being processed"
       # We are going to collect the header names  that fit a pattern. But first we need to
       # create array containers to save the header name. In ruby we can use the string header names
       # as the array index.
@@ -461,20 +462,20 @@ module BTAP
 
       end
       #Debug printout stuff. Make sure the output it captures the headers you want otherwise modify the regex above
-      puts waterheater_gas_rate_headers
-      puts waterheater_electric_rate_headers
-      puts waterheater_heating_rate_headers
+      #puts waterheater_gas_rate_headers
+      #puts waterheater_electric_rate_headers
+      #puts waterheater_heating_rate_headers
 
-      puts cooling_coil_electric_power_headers
-      puts cooling_coil_total_cooling_rate_headers
+      #puts cooling_coil_electric_power_headers
+      #puts cooling_coil_total_cooling_rate_headers
 
-      puts heating_coil_air_heating_rate_headers
-      puts heating_coil_gas_rate_headers
+      #puts heating_coil_air_heating_rate_headers
+      #puts heating_coil_gas_rate_headers
 
-      puts plant_supply_heating_demand_rate_headers
-      puts facility_total_electrical_demand_headers
-      puts boiler_gas_rate_headers
-      puts heating_coil_electric_power_headers
+      #puts plant_supply_heating_demand_rate_headers
+      #puts facility_total_electrical_demand_headers
+      #puts boiler_gas_rate_headers
+      #puts heating_coil_electric_power_headers
 
 
       #open up a new file to save the file to..Note: This will fail it the file is open in EXCEL.
@@ -531,7 +532,7 @@ module BTAP
           ]
         end
       end
-      puts "Ending Terminus output processing."
+      #puts "Ending Terminus output processing."
     end
 
     def self.remove_rows_from_csv_table(start_index,stop_index,table)
@@ -544,7 +545,7 @@ module BTAP
 
 
     #load a model into OS & version translates, exiting and erroring if a problem is found
-    def safe_load_model(model_path_string)
+    def self.safe_load_model(model_path_string)
       model_path = OpenStudio::Path.new(model_path_string)
       if OpenStudio::exists(model_path)
         versionTranslator = OpenStudio::OSVersion::VersionTranslator.new
@@ -566,7 +567,7 @@ module BTAP
       if OpenStudio::exists(sql_path)
         sql = OpenStudio::SqlFile.new(sql_path)
       else
-        puts "#{sql_path} couldn't be found"
+        puts "Error: #{sql_path} couldn't be found"
         exit
       end
       return sql
@@ -693,8 +694,26 @@ module BTAP
       return si_quantity.value
     end
 
-      
-
+    def self.compile_qaqc_results(output_folder)
+      full_json = []
+      Dir.foreach("#{output_folder}") do |folder|
+        next if folder == '.' or folder == '..'
+        Dir.glob("#{output_folder}/#{folder}/qaqc.json") { |item| 
+          puts "Reading #{output_folder}/#{folder}/qaqc.json"
+          json = JSON.parse(File.read(item))
+          json['eplusout_err']['warnings'] = json['eplusout_err']['warnings'].size
+          json['eplusout_err']['severe'] = json['eplusout_err']['warnings'].size
+          json['eplusout_err']['fatal'] = json['eplusout_err']['warnings'].size
+          json['run_uuid'] = SecureRandom.uuid
+          bldg = json['building']['name'].split('-')
+          json['building_type'] = bldg[1]
+          json['template'] = bldg[0]
+          full_json << json
+        }
+      end
+      File.open("#{output_folder}/../RESULTS-#{Time.now.strftime("%m-%d-%Y")}.json", 'w') {|f| f.write(JSON.pretty_generate(full_json)) }
+    end
+    
     # This is a simple example which uses rubyzip to
     # recursively generate a zip file from the contents of
     # a specified directory. The directory itself is not
