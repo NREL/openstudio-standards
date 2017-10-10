@@ -215,9 +215,11 @@ class OpenStudio::Model::Model
       PrototypeBuilding::FullServiceRestaurant.update_exhaust_fan_efficiency(template, self)
     elsif building_type == 'Outpatient'
       PrototypeBuilding::Outpatient.update_exhaust_fan_efficiency(template, self)
+    elsif building_type == 'SuperMarket'
+      PrototypeBuilding::SuperMarket.update_exhaust_fan_efficiency(template, self)
     end
-
-    if building_type == 'HighriseApartment'
+	
+	if building_type == 'HighriseApartment'
       PrototypeBuilding::HighriseApartment.update_fan_efficiency(self)
     end
 
@@ -247,6 +249,8 @@ class OpenStudio::Model::Model
     when 'MediumOffice'
       lookup_name = 'Office'
     when 'LargeOffice'
+      lookup_name = 'Office'
+	when 'LargeOfficeDetail'
       lookup_name = 'Office'
     when 'RetailStandalone'
       lookup_name = 'Retail'
@@ -279,6 +283,8 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.medium_office'
     when 'LargeOffice'
       building_methods = 'Prototype.large_office'
+	when 'LargeOfficeDetail'
+      building_methods = 'Prototype.large_office_detail'  
     when 'SmallHotel'
       building_methods = 'Prototype.small_hotel'
     when 'LargeHotel'
@@ -301,6 +307,8 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.mid_rise_apartment'
     when 'HighriseApartment'
       building_methods = 'Prototype.high_rise_apartment'
+    when 'SuperMarket'
+      building_methods = 'Prototype.supermarket'  
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Building Type = #{building_type} not recognized")
       return false
@@ -325,6 +333,15 @@ class OpenStudio::Model::Model
     # NECB 2011 geometry is not explicitly defined; for NECB 2011 template, latest ASHRAE 90.1 geometry file is assigned (implicitly)
 
     case building_type
+    when 'SuperMarket'
+      case template
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'DOE Ref 2004'
+        geometry_file = 'Geometry.supermarket.osm'
+      when '90.1-2004', '90.1-2007'
+        geometry_file = 'Geometry.supermarket.osm'
+      else # '90.1-2010', '90.1-2013'
+        geometry_file = 'Geometry.supermarket_2010_2013.osm'
+      end
     when 'SecondarySchool'
       geometry_file = if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
                         'Geometry.secondary_school_pre_1980_to_2004.osm'
@@ -355,6 +372,14 @@ class OpenStudio::Model::Model
       else
         geometry_file = 'Geometry.large_office_2010.osm'
       end
+	when 'LargeOfficeDetail'
+      alt_search_name = 'Office'
+      case template
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'DOE Ref 2004'
+        geometry_file = 'Geometry.large_office_reference.osm'
+      else
+        geometry_file = 'Geometry.large_office_detail_2010.osm'
+      end  
     when 'SmallHotel'
       case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -863,6 +888,7 @@ class OpenStudio::Model::Model
     else
       space_multiplier_map = {}
     end
+
 
     # Create a thermal zone for each space in the self
     getSpaces.each do |space|
@@ -1384,7 +1410,7 @@ class OpenStudio::Model::Model
       end
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       case building_type
-      when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'Outpatient', 'PrimarySchool'
+      when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'LargeOfficeDetail','Outpatient', 'PrimarySchool'
         clg = 1.0
         htg = 1.0
       end

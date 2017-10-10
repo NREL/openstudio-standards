@@ -115,218 +115,98 @@
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC 2005-1",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2005-10",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2005-2",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2005-3",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2005-4",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2005-5",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2005-6",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2005-7",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2005-8",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2005-9",
-      "standard": "CEC Title24-2005",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-1",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-10",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-2",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-3",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-4",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-5",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-6",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-7",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-8",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC 2008-9",
-      "standard": "CEC Title24-2008",
-      "representative_city": null,
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "CEC TITLE 24 CZ 1",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC1",
+      "standard": "CEC T24",
       "representative_city": "Arcata",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 10",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC10",
+      "standard": "CEC T24",
       "representative_city": "Riverside",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 11",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC11",
+      "standard": "CEC T24",
       "representative_city": "Red Bluff",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 12",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC12",
+      "standard": "CEC T24",
       "representative_city": "Sacramento",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 13",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC13",
+      "standard": "CEC T24",
       "representative_city": "Fresno",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 14",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC14",
+      "standard": "CEC T24",
       "representative_city": "Palmdale",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 15",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC15",
+      "standard": "CEC T24",
       "representative_city": "Palm Spring-Intl",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 16",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC16",
+      "standard": "CEC T24",
       "representative_city": "Blue Canyon",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 2",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC2",
+      "standard": "CEC T24",
       "representative_city": "Santa Rosa",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 3",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC3",
+      "standard": "CEC T24",
       "representative_city": "Oakland",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 4",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC4",
+      "standard": "CEC T24",
       "representative_city": "San Jose-Reid",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 5",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC5",
+      "standard": "CEC T24",
       "representative_city": "Santa Maria",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 6",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC6",
+      "standard": "CEC T24",
       "representative_city": "Torrance",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 7",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC7",
+      "standard": "CEC T24",
       "representative_city": "San Diego-Lindbergh",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 8",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC8",
+      "standard": "CEC T24",
       "representative_city": "Fullerton",
       "bcl_weather_component_id": null
     },
     {
-      "name": "CEC TITLE 24 CZ 9",
-      "standard": "CEC Title24-2013",
+      "name": "CEC T24-CEC9",
+      "standard": "CEC T24",
       "representative_city": "Burbank-Glendale",
       "bcl_weather_component_id": null
     },

@@ -27,8 +27,9 @@ class OpenStudio::Model::Model
       if building_type == 'LargeOffice' && template != 'NECB 2011'
 
         # Only the core spaces have service water
-        ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
-          add_swh_end_uses(template,
+        ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name| 
+        #['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].each do |space_name| # for new space type large office
+		 add_swh_end_uses(template,
                            'Main',
                            main_swh_loop,
                            OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
@@ -37,7 +38,19 @@ class OpenStudio::Model::Model
                            space_name,
                            building_type)
         end
+      elsif building_type == 'LargeOfficeDetail' && template != 'NECB 2011'
 
+        # Only mechanical rooms have service water
+        ['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].each do |space_name| # for new space type large office
+		 add_swh_end_uses(template,
+                           'Main',
+                           main_swh_loop,
+                           OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                           prototype_input['main_service_water_flowrate_schedule'],
+                           OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
+                           space_name,
+                           building_type)
+        end
       elsif building_type == 'RetailStripmall' && template != 'NECB 2011'
 
         return true if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'

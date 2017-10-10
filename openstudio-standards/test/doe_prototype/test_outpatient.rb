@@ -4,8 +4,9 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestOutpatient < CreateDOEPrototypeBuildingTest
   
   building_types = ['Outpatient']
-  templates = ['DOE Ref 1980-2004', 'DOE Ref Pre-1980', '90.1-2010']
-  climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+  templates = [#'DOE Ref 1980-2004', 'DOE Ref Pre-1980', 
+             '90.1-2010']
+  climate_zones = ['ASHRAE 169-2006-2A']#,'ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
   # templates = ['DOE Ref 1980-2004', 'DOE Ref Pre-1980', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2004'] 
   # climate_zones = ['ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A','ASHRAE 169-2006-2B',
                    # 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A',
@@ -16,8 +17,8 @@ class TestOutpatient < CreateDOEPrototypeBuildingTest
   epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw']
   
   create_models = true
-  run_models = false
-  compare_results = false
+  run_models = true
+  compare_results = true
   
   debug = false
   

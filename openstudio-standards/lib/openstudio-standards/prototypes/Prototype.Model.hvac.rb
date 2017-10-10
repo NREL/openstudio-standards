@@ -40,7 +40,7 @@ class OpenStudio::Model::Model
             condenser_water_loop = nil
             number_cooling_towers = 1
             num_chillers = 1
-            if building_type == 'Hospital' || building_type == 'LargeOffice'
+            if building_type == 'Hospital' || building_type == 'LargeOffice' || building_type == 'LargeOfficeDetail'
               case template
               when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
                 number_cooling_towers = 2
@@ -125,6 +125,9 @@ class OpenStudio::Model::Model
                   building_type)
 
         when 'PSZ-AC'
+		
+          # Retrieve the existing chilled water loop
+          # or add a new one if necessary.
 
           # Special logic to differentiate between operation schedules
           # that vary even inside of a system type for stripmall.
@@ -342,6 +345,17 @@ class OpenStudio::Model::Model
                             system['condenser_fan_pwr'],
                             system['condenser_fan_pwr_curve_name'],
                             thermal_zones[0])
+							
+        # When multiple cases and walk-ins asssigned to a system        
+	    	when 'Refrigeration_system'
+
+          add_refrigeration_system(template,
+                                   system['compressor_type'],
+                                   system['sys_name'],
+                                   system['cases'],
+                                   system['walkins'],
+                                   thermal_zones[0])
+
         else
 
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "System type #{system['type']} is not recognized.  This system will not be added.")
