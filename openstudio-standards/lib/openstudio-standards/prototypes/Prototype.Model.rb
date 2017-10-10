@@ -28,7 +28,7 @@ class OpenStudio::Model::Model
   #   model.create_prototype_building('SmallOffice', '90.1-2010', 'ASHRAE 169-2006-5A')
 
   def create_prototype_building(building_type, template, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
-    osm_file_increment = 0 
+    osm_file_increment = 0
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == 'HighriseApartment'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
@@ -63,71 +63,71 @@ class OpenStudio::Model::Model
       debug_incremental_changes = false
       load_building_type_methods(building_type, template, climate_zone)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes 
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes
 
       load_geometry(building_type, template, climate_zone)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes 
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes
 
       getBuilding.setName("#{template}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_set_name.osm")  if debug_incremental_changes 
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_set_name.osm")  if debug_incremental_changes
 
       space_type_map = define_space_type_map(building_type, template, climate_zone)
       File.open("#{sizing_run_dir}/space_type_map.json", 'w') {|f| f.write(JSON.pretty_generate(space_type_map)) }
-      
+
       assign_space_type_stubs('Space Function', template, space_type_map) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_assign_space_type_stubs.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_assign_space_type_stubs.osm")  if debug_incremental_changes
+
       add_loads(template, climate_zone)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_loads.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_loads.osm")  if debug_incremental_changes
+
       apply_infiltration_standard(template)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_infiltration.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_infiltration.osm")  if debug_incremental_changes
+
       modify_infiltration_coefficients(building_type, template, climate_zone) # does not apply to NECB 2011 but left here for consistency
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_infiltation_coefficients.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_infiltation_coefficients.osm")  if debug_incremental_changes
+
       modify_surface_convection_algorithm(template)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_surface_convection_algorithm.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_surface_convection_algorithm.osm")  if debug_incremental_changes
+
       add_constructions(building_type, template, climate_zone)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes
+
       create_thermal_zones(building_type, template, climate_zone)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_create_thermal_zones.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_create_thermal_zones.osm")  if debug_incremental_changes
+
       add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes
+
       return false if runSizingRun("#{sizing_run_dir}/SR0") == false
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_sizing_run_0.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_sizing_run_0.osm")  if debug_incremental_changes
+
       add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_hvac.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_hvac.osm")  if debug_incremental_changes
+
       osm_file_increment += 1
       add_swh(building_type, template, climate_zone, prototype_input)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_swh.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_swh.osm")  if debug_incremental_changes
+
       apply_sizing_parameters(building_type, template)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_sizing_paramaters.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_sizing_paramaters.osm")  if debug_incremental_changes
+
       yearDescription.get.setDayofWeekforStartDay('Sunday')
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setDayofWeekforStartDay.osm")  if debug_incremental_changes 
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setDayofWeekforStartDay.osm")  if debug_incremental_changes
     else
 
       load_building_type_methods(building_type, template, climate_zone)
@@ -158,7 +158,7 @@ class OpenStudio::Model::Model
       getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
     end
 
-    # For some building types, stories are defined explicitly 
+    # For some building types, stories are defined explicitly
     if building_type == 'SmallHotel'
       building_story_map = PrototypeBuilding::SmallHotel.define_building_story_map(building_type, template, climate_zone)
       assign_building_story(building_type, template, climate_zone, building_story_map)
@@ -284,7 +284,7 @@ class OpenStudio::Model::Model
     when 'LargeOffice'
       building_methods = 'Prototype.large_office'
 	when 'LargeOfficeDetail'
-      building_methods = 'Prototype.large_office_detail'  
+      building_methods = 'Prototype.large_office_detail'
     when 'SmallHotel'
       building_methods = 'Prototype.small_hotel'
     when 'LargeHotel'
@@ -379,7 +379,7 @@ class OpenStudio::Model::Model
         geometry_file = 'Geometry.large_office_reference.osm'
       else
         geometry_file = 'Geometry.large_office_detail_2010.osm'
-      end  
+      end
     when 'SmallHotel'
       case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -479,21 +479,21 @@ class OpenStudio::Model::Model
     model = nil
     if File.dirname(__FILE__)[0] == ':'
       # running from embedded location
-    
+
       # Load geometry from the saved geometry.osm
       geom_model_string = load_resource_relative(rel_path_to_osm)
-    
+
       # version translate from string
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
       model = version_translator.loadModelFromString(geom_model_string)
     else
       abs_path = File.join(File.dirname(__FILE__), rel_path_to_osm)
-      
+
       # version translate from string
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
       model = version_translator.loadModel(abs_path)
     end
-    
+
     if model.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{rel_path_to_osm}")
       return false
@@ -502,7 +502,7 @@ class OpenStudio::Model::Model
 
     # Add the objects from the geometry model to the working model
     addObjects(model.toIdfFile.objects)
-   
+
     return true
   end
 
@@ -883,6 +883,8 @@ class OpenStudio::Model::Model
       space_multiplier_map = PrototypeBuilding::MidriseApartment.define_space_multiplier
     when 'LargeOffice'
       space_multiplier_map = PrototypeBuilding::LargeOffice.define_space_multiplier
+    when 'LargeOfficeDetail'
+      space_multiplier_map = PrototypeBuilding::LargeOfficeDetail.define_space_multiplier
     when 'Hospital'
       space_multiplier_map = PrototypeBuilding::Hospital.define_space_multiplier
     else
@@ -912,7 +914,7 @@ class OpenStudio::Model::Model
         thermostat_clone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostat_clone)
         if template == 'NECB 2011'
-          #Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing. 
+          #Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
           ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
           ideal_loads.addToThermalZone(zone)
         end
