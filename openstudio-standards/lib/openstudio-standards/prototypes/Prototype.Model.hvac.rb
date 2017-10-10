@@ -42,7 +42,7 @@ class OpenStudio::Model::Model
             num_chillers = 1
             if building_type == 'Hospital' || building_type == 'LargeOffice' || building_type == 'LargeOfficeDetail'
               case template
-              when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+              when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
                 number_cooling_towers = 2
                 num_chillers = 2
               end

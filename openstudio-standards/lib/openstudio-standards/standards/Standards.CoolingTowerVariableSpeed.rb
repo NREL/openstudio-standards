@@ -7,7 +7,8 @@ class OpenStudio::Model::CoolingTowerVariableSpeed
     apply_minimum_power_per_flow(template)
 
     # 90.1-2013 6.5.2.2 Multicell heat rejection with VSD
-    if template == '90.1-2013'
+    case template
+    when '90.1-2013', 'NREL ZNE Ready 2017'
       setCellControl('MaximalCell')
     end
 

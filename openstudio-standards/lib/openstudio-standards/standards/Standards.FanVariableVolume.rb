@@ -129,7 +129,7 @@ class OpenStudio::Model::FanVariableVolume
       hp_limit = 9.9
     when '90.1-2007', '90.1-2010'
       hp_limit = 7.54
-    when '90.1-2013'
+    when '90.1-2013', 'NREL ZNE Ready 2017'
       case cooling_system_type
       when 'dx'
       hp_limit = 0.0

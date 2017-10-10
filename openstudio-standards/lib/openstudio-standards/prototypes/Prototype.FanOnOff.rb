@@ -50,7 +50,7 @@ class OpenStudio::Model::FanOnOff
                                else # Over 20,000 cfm
                                  4.09
                                end
-      when '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                                  2.5
                                else # Over 7,437 cfm
@@ -70,7 +70,7 @@ class OpenStudio::Model::FanOnOff
                                else # Over 20,000 cfm
                                  4.09
                                end
-      when '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                                  2.5
                                else # Over 7,437 cfm

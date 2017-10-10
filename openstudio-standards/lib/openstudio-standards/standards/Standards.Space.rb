@@ -158,7 +158,7 @@ class OpenStudio::Model::Space
 
           # Determine the extra width to add to the sidelighted area
           extra_width_m = 0
-          if template == '90.1-2013'
+          if template == '90.1-2013' || template == 'NREL ZNE Ready 2017'
             extra_width_m = head_height_m / 2
           elsif template == '90.1-2010'
             extra_width_m = OpenStudio.convert(2, 'ft', 'm').get
@@ -883,7 +883,7 @@ class OpenStudio::Model::Space
         end
       end
 
-    when '90.1-2013'
+    when '90.1-2013', 'NREL ZNE Ready 2017'
 
       req_top_ctrl = true
       req_pri_ctrl = true
@@ -1192,7 +1192,7 @@ class OpenStudio::Model::Space
         end
       end
 
-    when '90.1-2013'
+    when '90.1-2013', 'NREL ZNE Ready 2017'
 
       if req_top_ctrl && req_pri_ctrl && req_sec_ctrl
         # Sensor 1 controls toplighted area
@@ -1374,6 +1374,11 @@ class OpenStudio::Model::Space
       basic_infil_rate_cfm_per_ft2 = 1.8
     when '90.1-2010', '90.1-2013'
       basic_infil_rate_cfm_per_ft2 = 1.0
+    when 'NREL ZNE Ready 2017'
+      basic_infil_rate_cfm_per_ft2 = 0.5
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Space', "#{template} is not a valid option for apply_infiltration_rate().")
+      return false
     end
 
     # Conversion factor
@@ -1409,7 +1414,7 @@ class OpenStudio::Model::Space
       # exterior surface area (for the E+ input field) this will include the exterior floor if present.
       all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / exteriorArea
 
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
       adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
       # Get the exterior wall area
@@ -1490,7 +1495,7 @@ class OpenStudio::Model::Space
       return true
     when '90.1-2004', '90.1-2007'
       basic_infil_rate_cfm_per_ft2 = 1.8
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       basic_infil_rate_cfm_per_ft2 = 1.0
     end
 

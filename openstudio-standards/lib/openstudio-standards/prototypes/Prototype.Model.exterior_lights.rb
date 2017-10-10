@@ -21,6 +21,12 @@ class OpenStudio::Model::Model
     # load exterior_lighting_properties
     exterior_lighting_properties = self.find_object($os_standards['exterior_lighting'], search_criteria)
 
+    # make sure lighting properties were found
+    if exterior_lighting_properties.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.exterior_lights', "Exterior lighting properties not found for #{template}, ext lighting zone #{exterior_lighting_zone_number}, none will be added to model.")
+      return exterior_lights
+    end
+
     # get building types and ratio (needed to get correct schedules, parking area, entries, canopies, and drive throughs)
     space_type_hash = self.create_space_type_hash(template)
 
@@ -37,7 +43,7 @@ class OpenStudio::Model::Model
       default_day = ext_lights_sch_facade_and_landscape.defaultDaySchedule
       default_day.addValue(OpenStudio::Time.new(0, end_setback_shutoff[:hr], end_setback_shutoff[:min], 0), 0.0)
       default_day.addValue(OpenStudio::Time.new(0, start_setback_shutoff[:hr], start_setback_shutoff[:min], 0), 1.0)
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Facade and Landscape exterior lights shut off from #{start_setback_shutoff} to #{end_setback_shutoff}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Facade and Landscape exterior lights shut off from #{start_setback_shutoff} to #{end_setback_shutoff}")
     else
       ext_lights_sch_facade_and_landscape = self.alwaysOnDiscreteSchedule
     end
@@ -47,7 +53,7 @@ class OpenStudio::Model::Model
       default_day = ext_lights_sch_other.defaultDaySchedule
       default_day.addValue(OpenStudio::Time.new(0, end_setback_shutoff[:hr], end_setback_shutoff[:min], 0), setback_value)
       default_day.addValue(OpenStudio::Time.new(0, start_setback_shutoff[:hr], start_setback_shutoff[:min], 0), 1.0)
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Non Facade and Landscape lights reduce by #{exterior_lighting_properties["occupancy_setback_reduction"]*100} % from #{start_setback_shutoff} to #{end_setback_shutoff}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Non Facade and Landscape lights reduce by #{exterior_lighting_properties["occupancy_setback_reduction"]*100} % from #{start_setback_shutoff} to #{end_setback_shutoff}")
     else
       ext_lights_sch_other = self.alwaysOnDiscreteSchedule
     end
@@ -61,7 +67,7 @@ class OpenStudio::Model::Model
       name_prefix = "Parking Areas and Drives"
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of parking area.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of parking area.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -88,7 +94,7 @@ class OpenStudio::Model::Model
       name_prefix = "Building Facades"
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building facade area.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building facade area.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -115,7 +121,7 @@ class OpenStudio::Model::Model
       name_prefix = "Main Entries"
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of main entry length.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of main entry length.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       ext_lights_def.setName("#{name_prefix} Def (W/ft)")
       ext_lights_def.setDesignLevel(power)
@@ -142,7 +148,7 @@ class OpenStudio::Model::Model
       name_prefix = "Other Doors"
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of other doors.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of other doors.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       ext_lights_def.setName("#{name_prefix} Def (W/ft)")
       ext_lights_def.setDesignLevel(power)
@@ -169,7 +175,7 @@ class OpenStudio::Model::Model
       name_prefix = "Entry Canopies"
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building entry canopies.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building entry canopies.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -196,7 +202,7 @@ class OpenStudio::Model::Model
       name_prefix = "Emergency Canopies"
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building emergency canopies.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building emergency canopies.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -223,7 +229,7 @@ class OpenStudio::Model::Model
       name_prefix = "Drive Through Windows"
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W/drive through window of lighting for #{multiplier} drie through windows.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/drive through window of lighting for #{multiplier} drie through windows.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -251,13 +257,13 @@ class OpenStudio::Model::Model
       elsif not exterior_lighting_properties["base_site_allowance_fraction"].nil?
         power = exterior_lighting_properties["base_site_allowance_fraction"] * installed_power # shold be of allowed vs. installed, but hard to calculate
       else
-        OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Cannot determine target base site allowance power, will set to 0 W.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Cannot determine target base site allowance power, will set to 0 W.")
         power = 0.0
       end
       name_prefix = "Base Site Allowance"
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Added #{power} W of non landscape tradable exterior lighting. Wil follow occupancy setback reduction.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W of non landscape tradable exterior lighting. Wil follow occupancy setback reduction.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       ext_lights_def.setName("#{name_prefix} Def (W)")
       ext_lights_def.setDesignLevel(power)
@@ -336,7 +342,7 @@ class OpenStudio::Model::Model
       elsif not illuminated_parking_area_lookup["beds_per_spot"].nil?
         num_spots += hash[:num_beds] / illuminated_parking_area_lookup["beds_per_spot"].to_f
       else
-        OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.exterior_lights', "Unexpected key, can't calculate number of parking spots from #{illuminated_parking_area_lookup.keys.first}.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Unexpected key, can't calculate number of parking spots from #{illuminated_parking_area_lookup.keys.first}.")
       end
       parking_area_and_drives_area += num_spots * illuminated_parking_area_lookup["parking_area_per_spot"]
 

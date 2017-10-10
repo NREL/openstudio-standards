@@ -899,6 +899,7 @@ class OpenStudio::Model::Model
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
+    oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
     # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
@@ -1097,6 +1098,7 @@ class OpenStudio::Model::Model
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
+    oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
     # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
@@ -1308,6 +1310,7 @@ class OpenStudio::Model::Model
     # Outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
+    oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
     oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA Sys")
@@ -1482,6 +1485,7 @@ class OpenStudio::Model::Model
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
+    oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
     oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
@@ -1684,6 +1688,7 @@ class OpenStudio::Model::Model
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
+    oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
     # oa_intake_controller.setMinimumOutdoorAirSchedule(motorized_oa_damper_sch)
     oa_intake_controller.setMinimumFractionofOutdoorAirSchedule(oa_damper_sch)
 
@@ -2284,7 +2289,7 @@ class OpenStudio::Model::Model
       econ_eff_sch = add_schedule('RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
 
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_eff_sch) if building_type == 'RetailStandalone' || building_type == 'RetailStripmall'
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No maximum fraction outdoor air schedule in PSZ for building types except RetailStandalone')
@@ -2578,6 +2583,7 @@ class OpenStudio::Model::Model
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
       oa_controller.setName("#{air_loop.name} OA Sys Controller")
       oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+      oa_controller.autosizeMinimumOutdoorAirFlowRate
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_controller)
       oa_system.setName("#{air_loop.name} OA Sys")
 
@@ -3074,6 +3080,7 @@ class OpenStudio::Model::Model
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_controller.setName("#{thermal_zone_name} SAC OA Sys Controller")
     oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    oa_controller.autosizeMinimumOutdoorAirFlowRate
     oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_max_oa_frac_sch)
     oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_controller)
     oa_system.setName("#{thermal_zone_name} SAC OA Sys")
@@ -3871,6 +3878,7 @@ class OpenStudio::Model::Model
       oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
       oa_intake_controller.setName("#{air_loop.name} OA Controller")
       oa_intake_controller.setMinimumLimitType('FixedMinimum')
+      oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
       oa_intake_controller.setMinimumFractionofOutdoorAirSchedule(alwaysOnDiscreteSchedule)
 
       controller_mv = oa_intake_controller.controllerMechanicalVentilation
@@ -4104,7 +4112,7 @@ class OpenStudio::Model::Model
 
     # Water heater depends on the fuel type
     water_heater = OpenStudio::Model::WaterHeaterMixed.new(self)
-    water_heater.setName("#{water_heater_vol_gal}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
+    water_heater.setName("#{water_heater_vol_gal.round}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
     water_heater.setTankVolume(OpenStudio.convert(water_heater_vol_gal, 'gal', 'm^3').get)
     water_heater.setSetpointTemperatureSchedule(swh_temp_sch)
 
@@ -4668,6 +4676,7 @@ class OpenStudio::Model::Model
     controller_oa.setName('DOAS OA Controller')
     controller_oa.setEconomizerControlType(economizer_control_type)
     controller_oa.setMinimumLimitType('FixedMinimum')
+    controller_oa.autosizeMinimumOutdoorAirFlowRate
     controller_oa.setMinimumOutdoorAirSchedule(oa_damper_sch)
     controller_oa.resetEconomizerMaximumLimitDryBulbTemperature
     # TODO: Yixing read the schedule from the Prototype Input
@@ -4798,12 +4807,16 @@ class OpenStudio::Model::Model
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop]
   # the chilled water loop that serves the fan coils.
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
+  # @param ventilation [Bool] if true, ventilation will be supplied through the unit.  If false,
+  # no ventilation will be supplied through the unit, with the expectation that it will be provided
+  # by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACFourPipeFanCoil>]
   # array of fan coil units.
   def add_four_pipe_fan_coil(template,
                               hot_water_loop,
                               chilled_water_loop,
-                              thermal_zones)
+                              thermal_zones,
+                              ventilation=true)
 
     # Supply temps used across all zones
     zn_dsn_clg_sa_temp_f = 55
@@ -4862,7 +4875,9 @@ class OpenStudio::Model::Model
       fcu.setName("#{zone.name} FCU")
       fcu.setCapacityControlMethod('CyclingFan')
       fcu.autosizeMaximumSupplyAirFlowRate
-      fcu.setMaximumOutdoorAirFlowRate(0)
+      if !ventilation
+        fcu.setMaximumOutdoorAirFlowRate(0)
+      end
       fcu.addToThermalZone(zone)
       fcus << fcu
 
@@ -5064,7 +5079,8 @@ class OpenStudio::Model::Model
 
       # Outdoor Air Intake
       oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
-      oa_intake_controller.setName("#{air_loop.name} OA Controller")        
+      oa_intake_controller.setName("#{air_loop.name} OA Controller")
+      oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
       oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
       oa_intake.setName("#{air_loop.name} OA Sys")
       oa_intake.addToNode(air_loop.supplyInletNode)
@@ -5251,7 +5267,8 @@ class OpenStudio::Model::Model
 
       # Outdoor Air Intake
       oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
-      oa_intake_controller.setName("#{air_loop.name} OA Controller")        
+      oa_intake_controller.setName("#{air_loop.name} OA Controller")  
+      oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
       oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_intake_controller)
       oa_intake.setName("#{air_loop.name} OA Sys")
       oa_intake.addToNode(air_loop.supplyInletNode)
@@ -5525,7 +5542,7 @@ class OpenStudio::Model::Model
         lift_pwr_w = 14_610.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Elevator type '#{elevator_type}', not recognized, will assume Hydraulic elevator, #{lift_pwr_w} W.")
       end
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       if elevator_type == 'Traction'
         lift_pwr_w = 20_370.0
       elsif elevator_type == 'Hydraulic'
@@ -5595,9 +5612,11 @@ class OpenStudio::Model::Model
     elevator_fan_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
     elevator_fan_definition.setName('Elevator Fan')
     elevator_fan_definition.setDesignLevel(vent_pwr_w)
+    elevator_fan_definition.setFractionLost(0.95)
 
     elevator_fan_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_fan_definition)
     elevator_fan_equipment.setName("#{number_of_elevators.round} Elevator Fans")
+    elevator_fan_equipment.setEndUseSubcategory('Elevator Fans')
     elevator_fan_sch = add_schedule(elevator_fan_schedule)
     elevator_fan_equipment.setSchedule(elevator_fan_sch)
     elevator_fan_equipment.setSpace(space)
@@ -5757,7 +5776,7 @@ class OpenStudio::Model::Model
       fraction_antisweat_to_case = 0.0
       under_case_return_air_fraction = 0.0
       case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_Pre2004'
@@ -6830,7 +6849,12 @@ class OpenStudio::Model::Model
 
     when 'PVAV Reheat'
       hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+      chilled_water_loop = case cool_fuel
+                           when 'Electricity'
+                             nil
+                           else
+                             get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+                           end
 
       electric_reheat = false
       if zone_heat_fuel == 'Electricity'

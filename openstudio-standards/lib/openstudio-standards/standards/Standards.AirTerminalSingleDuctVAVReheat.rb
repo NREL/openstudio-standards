@@ -21,7 +21,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
       min_damper_position = 0.3
     when '90.1-2007'
       min_damper_position = 0.3
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       case reheat_type
       when 'HotWater'
       min_damper_position = if has_ddc

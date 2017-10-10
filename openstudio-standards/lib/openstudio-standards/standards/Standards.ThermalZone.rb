@@ -1370,6 +1370,9 @@ class OpenStudio::Model::ThermalZone
     when '90.1-2013'
       min_area_ft2 = 500
       min_occ_per_1000_ft2 = 25
+    when 'NREL ZNE Ready 2017'
+      min_area_ft2 = 500
+      min_occ_per_1000_ft2 = 12 # half of 90.1-2013
     end
 
     # Get the area served and the number of occupants

@@ -284,7 +284,10 @@ end
 
 # Convert the infiltration rate at a 75 Pa
 # to an infiltration rate at the typical value for the prototype buildings
-# per method described here:  http://www.taskair.net/knowledge/Infiltration%20Modeling%20Guidelines%20for%20Commercial%20Building%20Energy%20Analysis.pdf
+# per method described here:  http://www.pnl.gov/main/publications/external/technical_reports/PNNL-18898.pdf
+# Gowri K, DW Winiarski, and RE Jarnagin. 2009. 
+# Infiltration modeling guidelines for commercial building energy analysis. 
+# PNNL-18898, Pacific Northwest National Laboratory, Richland, WA. 
 #
 # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
 # @return [Double]
