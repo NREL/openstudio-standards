@@ -52,7 +52,8 @@ module Hospital
         'Lobby' => ['Lobby_Records_Flr_1'],
         'NurseStn' => ['OR_NurseStn_Lobby_Flr_2', 'NurseStn_Lobby_Flr_3', 'NurseStn_Lobby_Flr_4', 'NurseStn_Lobby_Flr_5'],
         'OR' => ['OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2'],
-        'Office' => ['Office1_Mult4_Flr_1', 'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5'],
+        'HospitalOfficeFlr1' => ['Office1_Mult4_Flr_1'],
+        'HospitalOfficeFlr5' => ['Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5'],
         'Basement' => ['Basement'], # 'PatCorridor' => [],
         'PatRoom' => ['PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PatRoom6_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_4', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4'],
         'PhysTherapy' => ['PhysTherapy_Flr_3'],
@@ -264,6 +265,10 @@ module Hospital
   def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
+    # add extra equipment for kitchen
+    PrototypeBuilding::Hospital.add_extra_equip_kitchen(template, model) 
+
+    
     system_to_space_map = PrototypeBuilding::Hospital.define_hvac_system_map(building_type, template, climate_zone)
 
     hot_water_loop = nil
@@ -297,6 +302,43 @@ module Hospital
     return true
   end
 
+  # add extra equipment for kitchen
+  def self.add_extra_equip_kitchen(template, model)
+    kitchen_space = model.getSpaceByName('Kitchen_Flr_5')
+    kitchen_space = kitchen_space.get
+    kitchen_space_type = kitchen_space.spaceType.get
+    elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
+    elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      elec_equip_def1.setFractionLatent(0)
+      elec_equip_def1.setFractionRadiant(0.25)
+      elec_equip_def1.setFractionLost(0)
+      elec_equip_def2.setFractionLatent(0)
+      elec_equip_def2.setFractionRadiant(0.25)
+      elec_equip_def2.setFractionLost(0)
+      if template == '90.1-2013'
+        elec_equip_def1.setDesignLevel(915)
+        elec_equip_def2.setDesignLevel(855)
+      else
+        elec_equip_def1.setDesignLevel(99999.88)
+        elec_equip_def2.setDesignLevel(99999.99)
+      end
+      # Create the electric equipment instance and hook it up to the space type
+      elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
+      elec_equip2 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def2)
+      elec_equip1.setName('Kitchen_Reach-in-Freezer')
+      elec_equip2.setName('Kitchen_Reach-in-Refrigerator')
+      elec_equip1.setSpaceType(kitchen_space_type)
+      elec_equip2.setSpaceType(kitchen_space_type)
+      elec_equip1.setSchedule(model.add_schedule('Hospital ALWAYS_ON'))
+      elec_equip2.setSchedule(model.add_schedule('Hospital ALWAYS_ON'))
+    end
+  end  
+  
+  
   def self.update_waterheater_loss_coefficient(template, model)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'

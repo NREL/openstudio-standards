@@ -170,7 +170,8 @@ def export_spreadsheet_to_json
   worksheets_to_skip << 'interior_lighting'
   worksheets_to_skip << 'lookups'
   worksheets_to_skip << 'sheetmap'
-
+  worksheets_to_skip << 'deer_lighting_fractions'
+  
   # List of columns to skip
   cols_to_skip = []
   cols_to_skip << 'lookup'
@@ -210,7 +211,7 @@ def export_spreadsheet_to_json
   # Loop through and export each tab to a separate JSON file
   workbook.worksheets.each do |worksheet|
     sheet_name = worksheet.sheet_name.snake_case
-    
+
     standards_data = {}
     
     # Skip the specified worksheets

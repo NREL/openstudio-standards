@@ -114,7 +114,7 @@ class OpenStudio::Model::ThermalZone
       oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
       oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
       oa_rate = dsn_oa.outdoorAirFlowRate
-      oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour
+      oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour / 3600
       tot_oa = oa_for_people + oa_for_floor_area + oa_rate + oa_for_volume
 
       # Convert total to per-area

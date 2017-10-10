@@ -255,6 +255,10 @@ class OpenStudio::Model::Model
     # Apply the HVAC efficiency standard
     apply_hvac_efficiency_standard(template, climate_zone)
 
+    # Fix EMS references.
+    # Temporary workaround for OS issue #2598
+    temp_fix_ems_references
+
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
@@ -620,6 +624,14 @@ class OpenStudio::Model::Model
     # The constructions lookup table uses a slightly different list of
     # building types.
     lookup_building_type = get_lookup_name(building_type)
+    # TODO this is a workaround.  Need to synchronize the building type names
+    # across different parts of the code, including splitting of Office types
+    case building_type
+    when 'SmallOffice', 'MediumOffice', 'LargeOffice'
+      lookup_building_type = building_type
+    else
+      lookup_building_type = get_lookup_name(building_type)
+    end
 
     # Assign construction to adiabatic construction
     # Assign a material to all internal mass objects

@@ -109,6 +109,10 @@ module LargeHotel
   def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
+    # add extra equipment for kitchen
+    PrototypeBuilding::LargeHotel.add_extra_equip_kitchen(template, model) 
+    
+    
     # Add Exhaust Fan
     space_type_map = model.define_space_type_map(building_type, template, climate_zone)
     exhaust_fan_space_types = []
@@ -183,6 +187,50 @@ module LargeHotel
     return true
   end # add hvac
 
+  
+
+  # add extra equipment for kitchen
+  def self.add_extra_equip_kitchen(template, model)
+    kitchen_space = model.getSpaceByName('Kitchen_Flr_6')
+    kitchen_space = kitchen_space.get
+    kitchen_space_type = kitchen_space.spaceType.get
+    elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
+    elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      elec_equip_def1.setFractionLatent(0)
+      elec_equip_def1.setFractionRadiant(0.25)
+      elec_equip_def1.setFractionLost(0)
+      elec_equip_def2.setFractionLatent(0)
+      elec_equip_def2.setFractionRadiant(0.25)
+      elec_equip_def2.setFractionLost(0)
+      if template == '90.1-2013'
+        elec_equip_def1.setDesignLevel(457.7)
+        elec_equip_def2.setDesignLevel(285)
+      else
+        elec_equip_def1.setDesignLevel(99999.88)
+        elec_equip_def2.setDesignLevel(99999.99)
+      end
+      # Create the electric equipment instance and hook it up to the space type
+      elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
+      elec_equip2 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def2)
+      elec_equip1.setName('Kitchen_Reach-in-Freezer')
+      elec_equip2.setName('Kitchen_Reach-in-Refrigerator')
+      elec_equip1.setSpaceType(kitchen_space_type)
+      elec_equip2.setSpaceType(kitchen_space_type)
+      elec_equip1.setSchedule(model.add_schedule('HotelLarge ALWAYS_ON'))
+      elec_equip2.setSchedule(model.add_schedule('HotelLarge ALWAYS_ON'))
+    # elec_equip2.setSchedule(model.alwaysOnDiscreteSchedule)
+    # elec_equip2.setSchedule(model.alwaysOffDiscreteSchedule)
+    end
+  end  
+  
+
+  
+
+  
   # Add the daylighting controls for lobby, cafe, dinning and banquet
   def self.large_hotel_add_daylighting_controls(template, model)
     space_names = ['Banquet_Flr_6', 'Dining_Flr_6', 'Cafe_Flr_1', 'Lobby_Flr_1']

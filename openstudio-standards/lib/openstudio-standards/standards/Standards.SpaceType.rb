@@ -132,6 +132,9 @@ class OpenStudio::Model::SpaceType
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set occupancy to #{occupancy_per_area} people/1000 ft^2.")
         end
 
+        # set fraction radiant  ##
+        definition.setFractionRadiant(0.3)
+        
         # Clothing schedule for thermal comfort metrics
         clothing_sch = model.getScheduleRulesetByName('Clothing Schedule')
         if clothing_sch.is_initialized
@@ -183,6 +186,7 @@ class OpenStudio::Model::SpaceType
     lights_frac_to_return_air = space_type_properties['lighting_fraction_to_return_air'].to_f
     lights_frac_radiant = space_type_properties['lighting_fraction_radiant'].to_f
     lights_frac_visible = space_type_properties['lighting_fraction_visible'].to_f
+    lights_frac_replaceable = space_type_properties['lighting_fraction_replaceable'].to_f
     lights_have_info = true unless lighting_per_area.zero?
     lights_have_info = true unless lighting_per_person.zero?
 
@@ -243,6 +247,9 @@ class OpenStudio::Model::SpaceType
         unless lights_frac_visible.zero?
           definition.setFractionVisible(lights_frac_visible)
         end
+        # unless lights_frac_replaceable.zero?
+        #  definition.setFractionReplaceable(lights_frac_replaceable)
+        # end        
       end
 
       # If additional lights are specified, add those too

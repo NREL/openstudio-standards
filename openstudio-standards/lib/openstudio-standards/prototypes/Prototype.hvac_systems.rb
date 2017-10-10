@@ -900,7 +900,6 @@ class OpenStudio::Model::Model
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
-    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
@@ -908,7 +907,6 @@ class OpenStudio::Model::Model
 
     if building_type == 'LargeHotel'
       oa_intake_controller.setEconomizerControlType('DifferentialEnthalpy')
-      oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
       oa_intake_controller.resetMaximumFractionofOutdoorAirSchedule
       oa_intake_controller.resetEconomizerMinimumLimitDryBulbTemperature
     end
@@ -1100,7 +1098,6 @@ class OpenStudio::Model::Model
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
-    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
@@ -1486,7 +1483,6 @@ class OpenStudio::Model::Model
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
-    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
@@ -1690,7 +1686,6 @@ class OpenStudio::Model::Model
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     # oa_intake_controller.setMinimumOutdoorAirSchedule(motorized_oa_damper_sch)
     oa_intake_controller.setMinimumFractionofOutdoorAirSchedule(oa_damper_sch)
-    oa_intake_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
 
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
@@ -2284,7 +2279,6 @@ class OpenStudio::Model::Model
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
       oa_controller.setName("#{air_loop.name} OA Sys Controller")
       oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
-      oa_controller.setHeatRecoveryBypassControlType('BypassWhenOAFlowGreaterThanMinimum')
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(self, oa_controller)
       oa_system.setName("#{air_loop.name} OA Sys")
       econ_eff_sch = add_schedule('RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
@@ -5549,18 +5543,34 @@ class OpenStudio::Model::Model
     area_ft2 = length_ft * width_ft
     volume_ft3 = area_ft2 * height_ft
 
-    # Ventilation assumptions
+		# Ventilation assumptions
     vent_rate_acm = 1 # air changes per minute
     vent_rate_cfm = volume_ft3 / vent_rate_acm
     vent_pwr_per_flow_w_per_cfm = 0.33
+	
+    # (1) make elevator ventilation fan power be code dependent and (2) assign 0.5 of fraction radiant
     vent_pwr_w = vent_pwr_per_flow_w_per_cfm * vent_rate_cfm
-
+    elec_equip_frac_radiant = 0.5
+    if template == '90.1-2013'
+      # addendum 90.1-2007 aj has requirement on efficiency
+      vent_pwr_w = vent_pwr_w * 0.29 / 0.70  
+		end
+	
     # Lighting assumptions
     design_ltg_lm_per_ft2 = 30
     light_loss_factor = 0.75
-    pct_incandescent = 0.7
-    pct_led = 0.3
-    incandescent_efficacy_lm_per_w = 10.0
+	
+    # (1) make elevator lighting and ventilation fan power be code dependent and (2) assign 0.5 of fraction radiant
+    case template
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004','90.1-2004', '90.1-2007'
+      pct_incandescent = 0.7
+      pct_led = 0.3
+    when '90.1-2010', '90.1-2013'
+      pct_incandescent = 0.0
+      pct_led = 1.0
+    end
+    
+		incandescent_efficacy_lm_per_w = 10.0
     led_efficacy_lm_per_w = 35.0
     target_ltg_lm_per_ft2 = design_ltg_lm_per_ft2 / light_loss_factor # 40
     target_ltg_lm = target_ltg_lm_per_ft2 * area_ft2 # 1132.2
@@ -5574,13 +5584,9 @@ class OpenStudio::Model::Model
     elevator_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
     elevator_definition.setName('Elevator Lift Motor')
     elevator_definition.setDesignLevel(lift_pwr_w)
-
-    elevator_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_definition)
-    elevator_equipment.setName("#{number_of_elevators.round} Elevator Lift Motors")
-    elevator_sch = add_schedule(elevator_schedule)
-    elevator_equipment.setSchedule(elevator_sch)
-    elevator_equipment.setSpace(space)
-    elevator_equipment.setMultiplier(number_of_elevators)
+	
+    # assign 0.5 for fraction radiant for lift motor
+    elevator_definition.setFractionRadiant(elec_equip_frac_radiant)	
 
     # Pre-1980 and 1980-2004 don't have lights or fans
     return elevator_equipment if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
@@ -5596,18 +5602,6 @@ class OpenStudio::Model::Model
     elevator_fan_equipment.setSchedule(elevator_fan_sch)
     elevator_fan_equipment.setSpace(space)
     elevator_fan_equipment.setMultiplier(number_of_elevators)
-
-    # Elevator lights
-    elevator_lights_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
-    elevator_lights_definition.setName('Elevator Lights')
-    elevator_lights_definition.setDesignLevel(lighting_pwr_w)
-
-    elevator_lights_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_lights_definition)
-    elevator_lights_equipment.setName("#{number_of_elevators.round} Elevator Lights")
-    elevator_lights_sch = add_schedule(elevator_lights_schedule)
-    elevator_lights_equipment.setSchedule(elevator_lights_sch)
-    elevator_lights_equipment.setSpace(space)
-    elevator_lights_equipment.setMultiplier(number_of_elevators)
 
     return elevator_equipment
   end
@@ -6192,7 +6186,7 @@ class OpenStudio::Model::Model
   #  - Rated cooling coil fan power (function of cooling capacity)
   #  - Rated total lighting power (function of floor area)
   #  - Defrost power (function of cooling capacity)
-  # Coil fan power and total lighting power are given for both “old (2004, 2007, and 2010)” and “new (2013)” walk-ins.  
+  # Coil fan power and total lighting power are given for both “old (2004, 2007, and 2010)�? and “new (2013)�? walk-ins.  
   # It is assumed that only walk-in freezers have electric defrost while walk-in coolers use off-cycle defrost.
   #
   # @param template [String]

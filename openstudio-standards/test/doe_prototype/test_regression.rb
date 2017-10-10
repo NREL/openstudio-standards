@@ -4,9 +4,32 @@ require_relative 'doe_prototype_regression_helper'
 class DOEPrototypeRegressionTest < Minitest::Test
 
   def setup
-    @building_types = ['SmallOffice']
-    @templates = ['DOE Ref Pre-1980']#,'DOE Ref 1980-2004','90.1-2010']
-    @climate_zones = ['ASHRAE 169-2006-2A']#,'ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+	@building_types = [
+		'SmallOffice',
+		'MediumOffice',
+		'LargeOffice',
+		'RetailStandalone',
+		'RetailStripmall',
+		'PrimarySchool',
+		'SecondarySchool',
+		'Outpatient',
+		'Hospital',
+		'SmallHotel',
+		'LargeHotel',
+		'QuickServiceRestaurant',
+		'FullServiceRestaurant',
+		'MidriseApartment',
+		'HighriseApartment']
+    # @building_types = ['MediumOffice']
+    @templates = ['90.1-2013']
+    @climate_zones = ['ASHRAE 169-2006-1A', 
+                      'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B',
+                      'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 
+                      'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C', 
+                      'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B', 
+                      'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 
+                      'ASHRAE 169-2006-7A', 
+                      'ASHRAE 169-2006-8A']
   end
 
   def test_doe_prototype_sim_settings

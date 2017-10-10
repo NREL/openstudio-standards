@@ -183,7 +183,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       # Compare the results against the legacy idf files if requested
       if compare_results
             
-        acceptable_error_percentage = 10 # Max % error for any end use/fuel type combo
+        acceptable_error_percentage = 0 # Max % error for any end use/fuel type combo
 
         # Load the legacy idf results JSON file into a ruby hash
         temp = File.read("#{Dir.pwd}/data/legacy_idf_results.json")
@@ -197,9 +197,13 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               
         sql_path_string = "#{@test_dir}/#{model_name}/AnnualRun/EnergyPlus/eplusout.sql"
         sql_path = OpenStudio::Path.new(sql_path_string)
+        sql_path_string_2 = "#{@test_dir}/#{model_name}/AnnualRun/run/eplusout.sql"
+        sql_path_2 = OpenStudio::Path.new(sql_path_string_2)        
         sql = nil
         if OpenStudio.exists(sql_path)
           sql = OpenStudio::SqlFile.new(sql_path)
+        elsif OpenStudio.exists(sql_path_2)
+          sql = OpenStudio::SqlFile.new(sql_path_2)
         else
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find sql file, could not compare results.")
         end
@@ -298,7 +302,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             write_to_file = false
             if osm_val > 0 && legacy_val > 0
               percent_error = ((osm_val - legacy_val)/legacy_val) * 100
-              if percent_error.abs > acceptable_error_percentage
+              if percent_error.abs >= acceptable_error_percentage
                 OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', "#{fuel_type}-#{end_use} Error = #{percent_error.round}% (#{osm_val}, #{legacy_val})")
                 write_to_file = true
               end
@@ -317,6 +321,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               percent_error = 0
             end
 
+            # ALWAYS OUTPUT THE VALUES
+            write_to_file = true
             if write_to_file
               csv_rows << "#{building_type},#{template},#{climate_zone},#{fuel_type},#{end_use},#{legacy_val.round(2)},#{osm_val.round(2)},#{percent_error.round},#{abs_err.round}"
             end
