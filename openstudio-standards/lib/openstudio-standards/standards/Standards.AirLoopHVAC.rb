@@ -3225,9 +3225,11 @@ class OpenStudio::Model::AirLoopHVAC
       if equip.to_CoilHeatingGas.is_initialized
         htg_coil = equip.to_CoilHeatingGas.get
       elsif equip.to_CoilHeatingElectric.is_initialized
-        htg_coil = equip.to_CoilHeatingElectric.get
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: electric heating coil was found, cannot apply DX fan/economizer control.")
+        return false
       elsif equip.to_CoilHeatingWater.is_initialized
-        htg_coil = equip.to_CoilHeatingWater.get
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: hot water heating coil was found found, cannot apply DX fan/economizer control.")
+        return false
       end
     end
     if htg_coil.nil?
