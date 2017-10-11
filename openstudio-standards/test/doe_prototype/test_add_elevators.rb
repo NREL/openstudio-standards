@@ -19,7 +19,8 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    assert(elevators.multiplier > 1.0)
+    expected_elev = 1.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")    
   end
 
   def test_add_elevators_small_hotel
@@ -38,7 +39,8 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    assert(elevators.multiplier > 1.0)
+    expected_elev = 1.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
   end
 
   def test_add_elevators_large_hotel
@@ -57,7 +59,8 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    assert(elevators.multiplier > 1.0)
+    expected_elev = 4.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
   end
 
   def test_add_elevators_midrise
@@ -76,7 +79,8 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    assert(elevators.multiplier >= 1.0)
+    expected_elev = 1.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
   end
 
   def test_add_elevators_hospital
@@ -95,7 +99,8 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    assert(elevators.multiplier >= 6.5)
+    expected_elev = 7.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
     assert(elevators.definition.to_ElectricEquipmentDefinition.get.fractionLost == 1.0)
   end
 
@@ -115,7 +120,8 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    assert(elevators.multiplier == 0.0)
+    expected_elev = 3.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
   end
 
   def test_add_elevators_secondary
@@ -134,7 +140,8 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    assert(elevators.multiplier >= 1.0)
+    expected_elev = 2.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
   end
 
   def test_add_elevators_multi_story_retail
@@ -153,7 +160,8 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    assert(elevators.multiplier >= 1.0)
+    expected_elev = 7.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
   end
 
   def test_add_elevators_multi_story_warehouse
@@ -172,7 +180,8 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    assert(elevators.multiplier >= 1.0)
+    expected_elev = 1.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
   end
 
 end
