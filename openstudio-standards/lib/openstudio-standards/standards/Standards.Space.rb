@@ -1376,9 +1376,6 @@ class OpenStudio::Model::Space
       basic_infil_rate_cfm_per_ft2 = 1.0
     when 'NREL ZNE Ready 2017'
       basic_infil_rate_cfm_per_ft2 = 0.5
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Space', "#{template} is not a valid option for apply_infiltration_rate().")
-      return false
     end
 
     # Conversion factor
