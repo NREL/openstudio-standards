@@ -25,7 +25,7 @@ end
 
 $LOAD_PATH.unshift File.expand_path('../../../lib', __FILE__)
 require 'minitest/autorun'
-require 'minitest/ci'
+require 'minitest/reporters'
 require 'openstudio'
 require 'openstudio/ruleset/ShowRunnerOutput'
 require 'json'
@@ -40,4 +40,5 @@ rescue
   puts 'Using installed openstudio-standards gem.' 
 end
 
-puts "Minitest::Ci.report_dir = #{Minitest::Ci.report_dir}"
+# spec-like progress plus JUnit XML format for circleci
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new, Minitest::Reporters::JUnitReporter.new]
