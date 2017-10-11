@@ -548,7 +548,7 @@ module SmallHotel
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       elec_equip.setSchedule(model.add_schedule('HotelSmall ELEV_LIGHT_FAN_SCH_ADD_DF'))
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      elec_equip.setSchedule(model.add_schedule('HotelSmall ELEV_LIGHT_FAN_SCH_ADD_DF_Pre2004'))
+      elec_equip.setSchedule(model.add_schedule('HotelSmall ELEV_LIGHT_FAN_SCH_ADD_DF'))
     end
     return true
   end
