@@ -765,14 +765,6 @@ class OpenStudio::Model::Model
     hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
     hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
 
-    if building_type == 'LargeHotel'
-      rht_sa_temp_f = 90 # VAV box reheat to 90F for large hotel
-      zone_htg_sa_temp_f = 104 # Zone heating design supply air temperature to 104 F
-    else
-      rht_sa_temp_f = 104 # VAV box reheat to 104F
-      zone_htg_sa_temp_f = 104 # Zone heating design supply air temperature to 104 F
-    end
-
     # hvac operation schedule
     hvac_op_sch = if hvac_op_sch.nil?
                     alwaysOnDiscreteSchedule
@@ -795,7 +787,14 @@ class OpenStudio::Model::Model
     if building_type == 'LargeHotel'
       htg_sa_temp_f = 62 # Central deck htg temp 55F
     end
-    rht_sa_temp_f = 104 # VAV box reheat to 104F
+    zone_htg_sa_temp_f = 104 # Zone heating design supply air temperature to 104 F
+    if building_type == 'LargeHotel'
+      rht_sa_temp_f = 90 # VAV box reheat to 90F for large hotel
+    else
+      rht_sa_temp_f = 104 # VAV box reheat to 104F
+    end
+    htg_oa_tdb_c = heating_design_outdoor_temperatures.min # Assume OAT is entering heating coil for coil sizing
+
     clg_sa_temp_c = OpenStudio.convert(clg_sa_temp_f, 'F', 'C').get
     prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f, 'F', 'C').get
     preclg_sa_temp_c = OpenStudio.convert(preclg_sa_temp_f, 'F', 'C').get
@@ -835,7 +834,7 @@ class OpenStudio::Model::Model
     # air handler controls
     sizing_system = air_loop.sizingSystem
     sizing_system.setMinimumSystemAirFlowRatio(air_flow_ratio)
-    sizing_system.setPreheatDesignTemperature(prehtg_sa_temp_c)
+    # sizing_system.setPreheatDesignTemperature(htg_oa_tdb_c)
     sizing_system.setPrecoolDesignTemperature(preclg_sa_temp_c)
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
@@ -875,14 +874,12 @@ class OpenStudio::Model::Model
       htg_coil.setName("#{air_loop.name} Main Htg Coil")
       htg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Main Htg Coil Controller")
       htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-      htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
       htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-      htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
       if building_type == 'LargeHotel'
         htg_coil.setRatedInletAirTemperature(htg_sa_temp_c)
         htg_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
       else
-        htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
+        htg_coil.setRatedInletAirTemperature(htg_oa_tdb_c)
         htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
       end
     end
@@ -950,7 +947,6 @@ class OpenStudio::Model::Model
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
       terminal.apply_initial_prototype_damper_position(building_type, template, zone.outdoor_airflow_rate_per_area)
-      terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
       air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
@@ -966,7 +962,6 @@ class OpenStudio::Model::Model
       end
       sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(clg_sa_temp_c)
-      # sizing_zone.setZoneHeatingDesignSupplyAirTemperature(rht_sa_temp_c)
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zone_htg_sa_temp_c)
 
       unless return_plenum.nil?
@@ -1204,15 +1199,15 @@ class OpenStudio::Model::Model
     hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
 
     # Control temps used across all air handlers
-    # TODO why aren't design and operational temps coordinated?
     sys_dsn_prhtg_temp_f = 44.6 # Design central deck to preheat to 44.6F
-    sys_dsn_clg_sa_temp_f = 57.2 # Design central deck to cool to 57.2F
-    sys_dsn_htg_sa_temp_f = 62 # Central heat to 62F
+    sys_dsn_clg_sa_temp_f = 55 # Design central deck to cool to 55F
+    sys_dsn_htg_sa_temp_f = 55 # Central heat to 55F
     zn_dsn_clg_sa_temp_f = 55 # Design VAV box for 55F from central deck
     zn_dsn_htg_sa_temp_f = 122 # Design VAV box to reheat to 122F
-    rht_rated_air_in_temp_f = 62 # Reheat coils designed to receive 62F
-    rht_rated_air_out_temp_f = 90 # Reheat coils designed to supply 90F...but zone expects 122F...?
+    rht_rated_air_in_temp_f = 55 # Reheat coils designed to receive 55F
+    rht_rated_air_out_temp_f = 122 # Reheat coils designed to supply 122F
     clg_sa_temp_f = 55 # Central deck clg temp operates at 55F
+    htg_oa_tdb_c = heating_design_outdoor_temperatures.min # Assume OAT is entering heating coil for coil sizing
 
     sys_dsn_prhtg_temp_c = OpenStudio.convert(sys_dsn_prhtg_temp_f, 'F', 'C').get
     sys_dsn_clg_sa_temp_c = OpenStudio.convert(sys_dsn_clg_sa_temp_f, 'F', 'C').get
@@ -1286,9 +1281,9 @@ class OpenStudio::Model::Model
       htg_coil = OpenStudio::Model::CoilHeatingWater.new(self, alwaysOnDiscreteSchedule)
       htg_coil.setName("#{air_loop.name} Main Htg Coil")
       htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-      htg_coil.setRatedInletAirTemperature(rht_rated_air_in_temp_c)
+      htg_coil.setRatedInletAirTemperature(htg_oa_tdb_c)
       htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-      htg_coil.setRatedOutletAirTemperature(rht_rated_air_out_temp_c)
+      htg_coil.setRatedOutletAirTemperature(sys_dsn_htg_sa_temp_c)
       htg_coil.addToNode(air_loop.supplyInletNode)
       hot_water_loop.addDemandBranchForComponent(htg_coil)
     end
@@ -1341,6 +1336,7 @@ class OpenStudio::Model::Model
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(self, alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
+      terminal.setMaximumReheatAirTemperature(rht_rated_air_out_temp_c)
       terminal.apply_initial_prototype_damper_position(building_type, template, zone.outdoor_airflow_rate_per_area)
       air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
 
@@ -6219,7 +6215,7 @@ class OpenStudio::Model::Model
   #  - Rated cooling coil fan power (function of cooling capacity)
   #  - Rated total lighting power (function of floor area)
   #  - Defrost power (function of cooling capacity)
-  # Coil fan power and total lighting power are given for both “old (2004, 2007, and 2010)�? and “new (2013)�? walk-ins.  
+  # Coil fan power and total lighting power are given for both “old (2004, 2007, and 2010)‿ and “new (2013)‿ walk-ins.  
   # It is assumed that only walk-in freezers have electric defrost while walk-in coolers use off-cycle defrost.
   #
   # @param template [String]
