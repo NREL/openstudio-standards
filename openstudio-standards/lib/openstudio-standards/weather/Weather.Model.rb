@@ -170,6 +170,21 @@ class OpenStudio::Model::Model
       ground_temp.setDecemberGroundTemperature(19.633)
     end
   end
+
+  # Gets the maximum OA dry bulb temperatures
+  # for all WinterDesignDays in the model.
+  #
+  # @return [Array<Double>] an array of OA temperatures in C
+  def heating_design_outdoor_temperatures
+    heating_design_outdoor_temps = []
+    getDesignDays.each do |dd|
+      next unless dd.dayType == 'WinterDesignDay'
+      heating_design_outdoor_temps << dd.maximumDryBulbTemperature
+    end
+
+    return heating_design_outdoor_temps
+  end
+
 end
 
 # *********************************************************************
