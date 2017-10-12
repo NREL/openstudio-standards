@@ -1109,11 +1109,18 @@ class OpenStudio::Model::Space
       if data.nil?
         OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
       else 
-        # read the building-space type-code year depedent illiuminance setpoint value
-        daylight_stpt_lux = data['target_illuminance_setpoint'].to_f
-        if daylight_stpt_lux.zero?
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: daylighting is not appropriate for this space type.")
+        # Read the illuminance setpoint value
+        # If 'na', daylighting is not appropriate for this space type for some reason
+        daylight_stpt_lux = data['target_illuminance_setpoint']
+        if daylight_stpt_lux == 'na'
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: daylighting is not appropriate for #{template} #{standards_building_type} #{standards_space_type}.")
           return true
+        end
+        # If a setpoint is specified, use that.  Otherwise use a default.
+        daylight_stpt_lux = daylight_stpt_lux.to_f
+        if daylight_stpt_lux.zero?
+          daylight_stpt_lux = 375
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: no specific illuminance setpoint defined for #{template} #{standards_building_type} #{standards_space_type}, assuming #{daylight_stpt_lux} Lux.")
         else
           OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: illuminance setpoint = #{daylight_stpt_lux} Lux")
         end
