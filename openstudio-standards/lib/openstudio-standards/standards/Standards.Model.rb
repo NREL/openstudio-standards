@@ -2703,15 +2703,11 @@ class OpenStudio::Model::Model
     data = find_object($os_standards['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
       data = find_object($os_standards['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
-
       unless data
-
-        # for debugging (maria)
-        # puts "data = #{data}"
-
+        # if nothing matches say that we could not find it.
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{template}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in $os_standards['construction_sets']")
         return construction_set
       end
-
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
