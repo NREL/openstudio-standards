@@ -3169,7 +3169,11 @@ class OpenStudio::Model::AirLoopHVAC
     # Scrub special characters from the system name
     sn = name.get.to_s
     snc = sn.gsub(/\W/, '').delete('_')
-
+    # If the name starts with a number, prepend with a letter
+    if snc[0] =~ /[0-9]/
+      snc = "SYS#{snc}"
+    end
+    
     # Get the zone name
     zone = thermalZones[0]
     zone_name = zone.name.get.to_s
