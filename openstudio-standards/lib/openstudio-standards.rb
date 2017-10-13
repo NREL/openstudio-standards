@@ -4,6 +4,7 @@ module OpenstudioStandards
  
   require 'json' # Used to load standards JSON files
 
+
   # HVAC sizing
   require_relative 'openstudio-standards/hvac_sizing/Siz.Model'
 
@@ -33,4 +34,14 @@ module OpenstudioStandards
   # should never be altered by the gem.
   # @Todo: A constant in ruby is $CONSTANT not $constant
   $os_standards = load_openstudio_standards_json
+
+  #refactored includes
+  require_relative 'openstudio-standards/refactor/standards/standards_model'
+  require_relative 'openstudio-standards/refactor/necb/necb_2011'
+  require_relative 'openstudio-standards/refactor/ashrae_90_1/ashrae90_1_2007'
+  require_relative 'openstudio-standards/refactor/ashrae_90_1/ashrae90_1_2009'
+  require_relative 'openstudio-standards/refactor/ashrae_90_1/ashrae90_1_2010'
+  require_relative 'openstudio-standards/refactor/ashrae_90_1/ashrae90_1_2013'
+  require_relative 'openstudio-standards/refactor/doe_reference_buildings/doe_ref_pre_1980'
+  require_relative 'openstudio-standards/refactor/doe_reference_buildings/doe_ref_pre_1980'
 end
