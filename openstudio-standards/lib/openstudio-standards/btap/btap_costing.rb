@@ -112,14 +112,16 @@ class BTAPCosting
       '
     rs_auth_bearer = ask "Paste RSMeans API Curl String and hit enter:"
     m = rs_auth_bearer.match(/.*Bearer (?<bearer>[^']+).*$/)
-    if m[:bearer].to_s.size != 934
-      abort "Bearer key is not 934 charecters long. Please ensure that you copied the full curl string from the API Explorer."
-    else
+    #if m[:bearer].to_s.size != 934
+    #  puts "this is the bearer #{m[:bearer]}"
+    #  puts "this is the bearer #{m[:bearer].size}"
+    #  abort "Bearer key is not 934 charecters long. Please ensure that you copied the full curl string from the API Explorer."
+    #else
       #store auth_key in class variable
       @auth_hash = m[:bearer].to_s
       #Store to disk to subsequent runs if required.
       File.write(@rs_means_auth_hash_path, @auth_hash)
-    end
+    #end
   end
 
   def load_data_from_excel
