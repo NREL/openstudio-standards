@@ -266,7 +266,10 @@ class Baseline9012013Test2 < Minitest::Test
   
     daylighting_test_hash = {}
     daylighting_test_hash["Flr2 Lounge Perimeter 250CD"] = {"PrimaryArea" => 1074.5,"SecondaryArea" => 974.1,"ControlType" => "PrimaryAndSecondary"}
-    daylighting_test_hash["Flr1 Office 130-132 136 138 139"] = {"PrimaryArea" => 340,"SecondaryArea" => 340,"ControlType" => "PrimaryAndSecondary"}
+    # Don't expect daylighting controls in closed offices; assume
+    # that spaces would in reality be broken into multiple rooms
+    # less than the minimum size to require daylighting controls.
+    # daylighting_test_hash["Flr1 Office 130-132 136 138 139"] = {"PrimaryArea" => 340,"SecondaryArea" => 340,"ControlType" => "PrimaryAndSecondary"}
     daylighting_test_hash["Flr1 Dining 150"] = {"PrimaryArea" => 1725.9,"SecondaryArea" => 1500.4,"ControlType" => "PrimaryAndSecondary"}
     # currently the measure is not calculating the expected daylighting areas because window width is getting reduced from proposed to baseline 
     
