@@ -793,7 +793,6 @@ class OpenStudio::Model::Model
     else
       rht_sa_temp_f = 104 # VAV box reheat to 104F
     end
-    htg_oa_tdb_c = heating_design_outdoor_temperatures.min # Assume OAT is entering heating coil for coil sizing
 
     clg_sa_temp_c = OpenStudio.convert(clg_sa_temp_f, 'F', 'C').get
     prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f, 'F', 'C').get
@@ -875,13 +874,8 @@ class OpenStudio::Model::Model
       htg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Main Htg Coil Controller")
       htg_coil.setRatedInletWaterTemperature(hw_temp_c)
       htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-      if building_type == 'LargeHotel'
-        htg_coil.setRatedInletAirTemperature(htg_sa_temp_c)
-        htg_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
-      else
-        htg_coil.setRatedInletAirTemperature(htg_oa_tdb_c)
-        htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
-      end
+      htg_coil.setRatedInletAirTemperature(htg_sa_temp_c)
+      htg_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
     end
 
     # cooling coil
@@ -1207,7 +1201,6 @@ class OpenStudio::Model::Model
     rht_rated_air_in_temp_f = 55 # Reheat coils designed to receive 55F
     rht_rated_air_out_temp_f = 122 # Reheat coils designed to supply 122F
     clg_sa_temp_f = 55 # Central deck clg temp operates at 55F
-    htg_oa_tdb_c = heating_design_outdoor_temperatures.min # Assume OAT is entering heating coil for coil sizing
 
     sys_dsn_prhtg_temp_c = OpenStudio.convert(sys_dsn_prhtg_temp_f, 'F', 'C').get
     sys_dsn_clg_sa_temp_c = OpenStudio.convert(sys_dsn_clg_sa_temp_f, 'F', 'C').get
@@ -1281,9 +1274,9 @@ class OpenStudio::Model::Model
       htg_coil = OpenStudio::Model::CoilHeatingWater.new(self, alwaysOnDiscreteSchedule)
       htg_coil.setName("#{air_loop.name} Main Htg Coil")
       htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-      htg_coil.setRatedInletAirTemperature(htg_oa_tdb_c)
+      htg_coil.setRatedInletAirTemperature(sys_dsn_prhtg_temp_c)
       htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-      htg_coil.setRatedOutletAirTemperature(sys_dsn_htg_sa_temp_c)
+      htg_coil.setRatedOutletAirTemperature(rht_rated_air_out_temp_c)
       htg_coil.addToNode(air_loop.supplyInletNode)
       hot_water_loop.addDemandBranchForComponent(htg_coil)
     end
