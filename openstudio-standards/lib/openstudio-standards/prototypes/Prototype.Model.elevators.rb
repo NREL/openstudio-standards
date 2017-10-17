@@ -264,6 +264,7 @@ class OpenStudio::Model::Model
     # check fraction lost on heat from elevator if traction, change to 100% lost if not setup that way.
     if elevator_type == "Traction"
       elevator.definition.to_ElectricEquipmentDefinition.get.setFractionLost(1.0)
+      elevator.definition.to_ElectricEquipmentDefinition.get.setFractionRadiant(0.0)
     end
 
     return elevator
