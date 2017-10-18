@@ -607,7 +607,7 @@ module BTAP
       end
 
 
-      def self.necb_spacetype_system_selection(model, heatingDesignLoad = nil, coolingDesignLoad = nil, runner = nil, building_type = nil)
+      def self.necb_spacetype_system_selection(model, heatingDesignLoad = nil, coolingDesignLoad = nil)
         spacezoning_data = Struct.new(
             :space, # the space object
             :space_name, # the space name
@@ -630,7 +630,14 @@ module BTAP
 
 
         #find the number of stories in the model this include multipliers.
-        number_of_stories = self.get_number_of_above_ground_floors(model, building_type, "NECB 2011", runner)
+        number_of_stories = 	model.getBuilding.standardsNumberOfAboveGroundStories()
+        if number_of_stories.empty?
+          raise ("Number of above ground stories not present in geometry model. Please ensure this is defined in your Building Object")
+        else
+          number_of_stories = number_of_stories.get
+        end
+
+        #self.get_number_of_above_ground_floors(model, building_type, "NECB 2011", runner)
         #set up system array containers. These will contain the spaces associated with the system types. 
         space_zoning_data_array = []
 
@@ -862,7 +869,7 @@ module BTAP
         #BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
 
         #this method will determine the spaces that should be set to each system
-        schedule_type_array, space_zoning_data_array = self.necb_spacetype_system_selection(model, nil, nil, runner, building_type)
+        schedule_type_array, space_zoning_data_array = self.necb_spacetype_system_selection(model, nil, nil)
 
         #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
         space_zoning_data_array.sort{|obj1, obj2| obj1.space_name <=> obj2.space_name}.each do |space_zone_data|
