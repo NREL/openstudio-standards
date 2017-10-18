@@ -1,4 +1,5 @@
 require_relative '../helpers/minitest_helper'
+require_relative '../helpers/compare_models_helper'
 require 'zlib'
 require 'base64'
 require 'digest'
@@ -48,7 +49,10 @@ class TestRefactor < Minitest::Test
             #old method of creating a model.
             old_model = OpenStudio::Model::Model.new()
             old_model.create_prototype_building(building_type, template, climate_zone, epw_file, old_method_run_dir)
-            #assert(compare_osm_files(old_model, new_model), "Refactoring #{run_name} produces a different osm file than old version.")
+
+            # Compare the two models
+            diffs = compare_osm_files(old_model, new_model)
+            assert_equal(0, diffs.size, "There were #{diffs.size} differences between the old and refactored model: \n #{diffs.join("\n")}")
           end
         end
       end
@@ -86,8 +90,10 @@ class TestRefactor < Minitest::Test
             #old method of creating a model.
             old_model = OpenStudio::Model::Model.new()
             old_model.create_prototype_building(building_type, template, climate_zone, epw_file, old_method_run_dir)
-            # need code to compare old and new methods models
-            #assert(compare_osm_files(old_model, new_model), "Refactoring #{run_name} produces a different result than old version.")
+
+            # Compare the two models
+            diffs = compare_osm_files(old_model, new_model)
+            assert_equal(0, diffs.size, "There were #{diffs.size} differences between the old and refactored model:\n#{diffs.join("\n")}")
           end
         end
       end
