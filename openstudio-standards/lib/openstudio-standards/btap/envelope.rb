@@ -594,7 +594,7 @@ module BTAP
           #If it is Opaque
           raise ("This construction is not opaque :#{construction.name}") unless (construction.isOpaque)
           minimum_resistance = 0
-          name_prefix = "Customized opaque construction #{construction.handle()} to conductance of #{conductance}"
+          name_prefix = "Customized opaque construction #{construction.name} to conductance of #{conductance}"
 
           #Check to see if we already made one like this.
           existing_construction = OpenStudio::Model::getConstructionByName(construction.model,name_prefix)
