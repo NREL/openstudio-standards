@@ -1,7 +1,7 @@
 
 # open the class to add methods to return sizing values
-class OpenStudio::Model::CoilHeatingGasMultiStage
-  def apply_efficiency_and_curves(template, standards)
+class StandardsModel < OpenStudio::Model::Model
+  def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage, template, standards)
     successfully_set_all_properties = true
 
     # Get the coil capacity
@@ -50,7 +50,7 @@ class OpenStudio::Model::CoilHeatingGasMultiStage
     end
 
     # plf vs plr curve for furnace
-    furnace_plffplr_curve = model.add_curve(furnace_plffplr_curve_name, standards)
+    furnace_plffplr_curve = model_add_curve(model, furnace_plffplr_curve_name, standards)
     if furnace_plffplr_curve
       setPartLoadFractionCorrelationCurve(furnace_plffplr_curve)
     else

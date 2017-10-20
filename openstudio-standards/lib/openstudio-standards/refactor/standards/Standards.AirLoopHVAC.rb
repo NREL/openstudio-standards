@@ -1,6 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::AirLoopHVAC
+class StandardsModel < OpenStudio::Model::Model
   # Apply multizone vav outdoor air method and
   # adjust multizone VAV damper positions
   # to achieve a system minimum ventilation effectiveness
@@ -8,7 +8,7 @@ class OpenStudio::Model::AirLoopHVAC
   # into the sizing:system object.
   #
   # return [Bool] returns true if successful, false if not
-  def apply_multizone_vav_outdoor_air_sizing(template)
+  def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac, template)
     # TODO: enable damper position adjustment for legacy IDFS
     if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', 'Damper positions not modified for DOE Ref Pre-1980 or DOE Ref 1980-2004 vintages.')
@@ -19,15 +19,15 @@ class OpenStudio::Model::AirLoopHVAC
     # Only applies to multi-zone vav systems
     # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
     # (2) AHU1 in 2004-2013
-    if multizone_vav_system? && !(name.to_s.include? 'Outpatient F1') && template != 'NECB 2011'
-      adjust_minimum_vav_damper_positions
+    if air_loop_hvac_multizone_vav_system?(air_loop_hvac)  && !(name.to_s.include? 'Outpatient F1') && template != 'NECB 2011'
+      air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac) 
     end
 
     # Second time adjustment:
     # Only apply to 2010 and 2013 Outpatient (both AHU1 and AHU2)
     # TODO maybe apply to hospital as well?
     if (name.to_s.include? 'Outpatient') && (template == '90.1-2010' || template == '90.1-2013')
-      adjust_minimum_vav_damper_positions_outpatient
+      air_loop_hvac_adjust_minimum_vav_damper_positions_outpatient(air_loop_hvac) 
     end
 
     return true
@@ -41,29 +41,29 @@ class OpenStudio::Model::AirLoopHVAC
   # @todo night damper shutoff
   # @todo nightcycle control
   # @todo night fan shutoff
-  def apply_standard_controls(template, climate_zone)
+  def air_loop_hvac_apply_standard_controls(air_loop_hvac, template, climate_zone)
     # Energy Recovery Ventilation
-    if energy_recovery_ventilator_required?(template, climate_zone)
-      apply_energy_recovery_ventilator(template)
+    if air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, template, climate_zone)
+      air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac, template)
     end
 
     # Economizers
-    apply_economizer_limits(template, climate_zone)
-    apply_economizer_integration(template, climate_zone)
+    air_loop_hvac_apply_economizer_limits(air_loop_hvac, template, climate_zone)
+    air_loop_hvac_apply_economizer_integration(air_loop_hvac, template, climate_zone)
 
     # Multizone VAV Systems
-    if multizone_vav_system?
+    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) 
 
       # VAV Reheat Control
-      apply_vav_damper_action(template)
+      air_loop_hvac_apply_vav_damper_action(air_loop_hvac, template)
 
       # Multizone VAV Optimization
       # This rule does not apply to two hospital and one outpatient systems (TODO add hospital two systems as exception)
       unless name.to_s.include? 'Outpatient F1'
-        if multizone_vav_optimization_required?(template, climate_zone)
-          enable_multizone_vav_optimization
+        if air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, template, climate_zone)
+          air_loop_hvac_enable_multizone_vav_optimization(air_loop_hvac) 
         else
-          disable_multizone_vav_optimization
+          air_loop_hvac_disable_multizone_vav_optimization(air_loop_hvac) 
         end
       end
 
@@ -71,13 +71,13 @@ class OpenStudio::Model::AirLoopHVAC
       # Per 5.2.2.16 (Halverson et al 2014), all multiple zone VAV systems are assumed to have DDC for all years of DOE 90.1 prototypes, so the has_ddc is not used any more. 
       supply_return_exhaust_relief_fans.each do |fan|
         if fan.to_FanVariableVolume.is_initialized
-          plr_req = fan.part_load_fan_power_limitation?(template)
+          plr_req = fan_variable_volume_part_load_fan_power_limitation?(fan, template)
 		  # Part Load Fan Pressure Control 
           if plr_req 
-            fan.set_control_type('Multi Zone VAV with VSD and SP Setpoint Reset')
+            pump_variable_speed_set_control_type(fan, 'Multi Zone VAV with VSD and SP Setpoint Reset')
           # No Part Load Fan Pressure Control 
           else
-            fan.set_control_type('Multi Zone VAV with discharge dampers')
+            pump_variable_speed_set_control_type(fan, 'Multi Zone VAV with discharge dampers')
           end
         else
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{fan}: This is not a multizone VAV fan system.")
@@ -87,22 +87,22 @@ class OpenStudio::Model::AirLoopHVAC
       ## # Static Pressure Reset
       ## # assume no systems have DDC control of VAV terminals		
       ## has_ddc = false
-      ## spr_req = static_pressure_reset_required?(template, has_ddc)
+      ## spr_req = air_loop_hvac_static_pressure_reset_required?(air_loop_hvac, template, has_ddc)
       ## supply_return_exhaust_relief_fans.each do |fan|
       ##   if fan.to_FanVariableVolume.is_initialized
-      ##     plr_req = fan.part_load_fan_power_limitation?(template)
+      ##     plr_req = fan_variable_volume_part_load_fan_power_limitation?(fan, template)
       ##     # Part Load Fan Pressure Control & Static Pressure Reset
       ##     if plr_req && spr_req
-      ##       fan.set_control_type('Multi Zone VAV with VSD and Static Pressure Reset')
+      ##       pump_variable_speed_set_control_type(fan, 'Multi Zone VAV with VSD and Static Pressure Reset')
       ##     # Part Load Fan Pressure Control only
       ##     elsif plr_req && !spr_req
-      ##       fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
+      ##       pump_variable_speed_set_control_type(fan, 'Multi Zone VAV with VSD and Fixed SP Setpoint')
       ##     # Static Pressure Reset only
       ##     elsif !plr_req && spr_req
-      ##       fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
+      ##       pump_variable_speed_set_control_type(fan, 'Multi Zone VAV with VSD and Fixed SP Setpoint')
       ##     # No Control Required
       ##     else
-      ##       fan.set_control_type('Multi Zone VAV with AF or BI Riding Curve')
+      ##       pump_variable_speed_set_control_type(fan, 'Multi Zone VAV with AF or BI Riding Curve')
       ##     end
       ##   else
       ##     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "For #{name}: there is a constant volume fan on a multizone vav system.  Cannot apply static pressure reset controls.")
@@ -114,15 +114,15 @@ class OpenStudio::Model::AirLoopHVAC
     if self.thermalZones.size == 1
       supply_return_exhaust_relief_fans.each do |fan|
         if fan.to_FanVariableVolume.is_initialized
-          fan.set_control_type('Single Zone VAV Fan')
+          pump_variable_speed_set_control_type(fan, 'Single Zone VAV Fan')
         end
       end
-      self.apply_single_zone_controls(template, climate_zone)
+      air_loop_hvac_apply_single_zone_controls(self, template, climate_zone)
     end
 
     # DCV
-    if demand_control_ventilation_required?(template, climate_zone)
-      enable_demand_control_ventilation(template, climate_zone)
+    if thermal_zone_demand_control_ventilation_required?(thermal_zone, template, climate_zone)
+      air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, template, climate_zone)
       # For systems that require DCV,
       # all individual zones that require DCV preserve
       # both per-area and per-person OA requirements.
@@ -130,8 +130,8 @@ class OpenStudio::Model::AirLoopHVAC
       # to per-area values only so DCV performance is only
       # based on the subset of zones that required DCV.
       thermalZones.sort.each do |zone|
-        if zone.demand_control_ventilation_required?(template, climate_zone)
-          zone.convert_oa_req_to_per_area
+        if thermal_zone_demand_control_ventilation_required?(zone, template, climate_zone)
+          thermal_zone_convert_oa_req_to_per_area(zone) 
         end
       end
     else
@@ -141,31 +141,31 @@ class OpenStudio::Model::AirLoopHVAC
       # multizone VAV optimization do not
       # incorrectly take variable occupancy into account.
       thermalZones.sort.each do |zone|
-        zone.convert_oa_req_to_per_area
+        thermal_zone_convert_oa_req_to_per_area(zone) 
       end
     end
 
     # SAT reset
     # TODO Prototype buildings use OAT-based SAT reset,
     # but PRM RM suggests Warmest zone based SAT reset.
-    if supply_air_temperature_reset_required?(template, climate_zone)
-      enable_supply_air_temperature_reset_warmest_zone(template)
+    if air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, template, climate_zone)
+      air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac, template)
     end
 
     # Unoccupied shutdown
-    if unoccupied_fan_shutoff_required?(template)
-      enable_unoccupied_fan_shutoff
+    if air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac, template)
+      air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac) 
     else
       setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     end
 
     # Motorized OA damper
-    if motorized_oa_damper_required?(template, climate_zone)
+    if air_loop_hvac_motorized_oa_damper_required?(air_loop_hvac, template, climate_zone)
       # Assume that the availability schedule has already been
       # set to reflect occupancy and use this for the OA damper.
-      add_motorized_oa_damper(0.15, availabilitySchedule)
+      air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, 0.15, availabilitySchedule)
     else
-      remove_motorized_oa_damper
+      air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac) 
     end
 
     # Zones that require DCV preserve
@@ -173,8 +173,8 @@ class OpenStudio::Model::AirLoopHVAC
     # Other zones have OA reqs converted
     # to per-area values only so that DCV
     thermalZones.sort.each do |zone|
-      if zone.demand_control_ventilation_required?(template, climate_zone)
-        zone.convert_oa_req_to_per_area
+      if thermal_zone_demand_control_ventilation_required?(zone, template, climate_zone)
+        thermal_zone_convert_oa_req_to_per_area(zone) 
       end
     end
     
@@ -191,25 +191,25 @@ class OpenStudio::Model::AirLoopHVAC
   # Apply all PRM baseline required controls to the airloop.
   # Only applies those controls that differ from the normal
   # prescriptive controls, which are added via
-  # AirLoopHVAC.apply_standard_controls
+  # plant_loop_apply_standard_controls(AirLoopHVAC) 
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def apply_prm_baseline_controls(template, climate_zone)
+  def air_loop_hvac_apply_prm_baseline_controls(air_loop_hvac, template, climate_zone)
     # Economizers
-    if prm_baseline_economizer_required?(template, climate_zone)
-      apply_prm_baseline_economizer(template, climate_zone)
+    if air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, template, climate_zone)
+      air_loop_hvac_apply_prm_baseline_economizer(air_loop_hvac, template, climate_zone)
     end
 
     # Multizone VAV Systems
-    if multizone_vav_system?
+    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) 
 
       # VSD no Static Pressure Reset on all VAV systems
       # per G3.1.3.15
       supply_return_exhaust_relief_fans.each do |fan|
         if fan.to_FanVariableVolume.is_initialized
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Setting fan part load curve per G3.1.3.15.")
-          fan.set_control_type('Multi Zone VAV with VSD and Fixed SP Setpoint')
+          pump_variable_speed_set_control_type(fan, 'Multi Zone VAV with VSD and Fixed SP Setpoint')
         end
       end
 
@@ -218,13 +218,13 @@ class OpenStudio::Model::AirLoopHVAC
       # even if not required by prescriptive section.
       case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-        enable_supply_air_temperature_reset_warmest_zone(template)
+        air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac, template)
       end
 
     end
 
     # Unoccupied shutdown
-    enable_unoccupied_fan_shutoff
+    air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac) 
 
     return true
   end
@@ -240,16 +240,16 @@ class OpenStudio::Model::AirLoopHVAC
   # @todo Figure out how to split fan power between multiple fans
   # if the proposed model had multiple fans (supply, return, exhaust, etc.)
   # return [Bool] true if successful, false if not.
-  def apply_prm_baseline_fan_power(template)
+  def air_loop_hvac_apply_prm_baseline_fan_power(air_loop_hvac, template)
     # Main AHU fans
 
     # Calculate the allowable fan motor bhp
     # for the entire airloop.
-    allowable_fan_bhp = allowable_system_brake_horsepower(template)
+    allowable_fan_bhp = air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac, template)
 
     # Divide the allowable power evenly between the fans
     # on this airloop.
-    all_fans = supply_return_exhaust_relief_fans
+    all_fans = air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac) 
     allowable_fan_bhp /= all_fans.size
 
     # Set the motor efficiencies
@@ -258,9 +258,9 @@ class OpenStudio::Model::AirLoopHVAC
     # fan power for each fan and adjust
     # the fan pressure rise accordingly
     all_fans.each do |fan|
-      fan.apply_standard_minimum_motor_efficiency(template, allowable_fan_bhp)
+      pump_apply_standard_minimum_motor_efficiency(fan, template, allowable_fan_bhp)
       allowable_power_w = allowable_fan_bhp * 746 / fan.motorEfficiency
-      fan.adjust_pressure_rise_to_meet_fan_power(allowable_power_w)
+      fan_adjust_pressure_rise_to_meet_fan_power(fan, allowable_power_w)
     end
 
     # Fan powered terminal fans
@@ -269,7 +269,7 @@ class OpenStudio::Model::AirLoopHVAC
     demandComponents.each do |dc|
       next if dc.to_AirTerminalSingleDuctParallelPIUReheat.empty?
       pfp_term = dc.to_AirTerminalSingleDuctParallelPIUReheat.get
-      pfp_term.apply_prm_baseline_fan_power(template)
+      zone_hvac_component_apply_prm_baseline_fan_power(pfp_term, template)
     end
 
     return true
@@ -282,7 +282,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @return [Double] fan power limitation pressure drop adjustment
   #   units = horsepower
   # @todo Determine the presence of MERV filters and other stuff in Table 6.5.3.1.1B.  May need to extend AirLoopHVAC data model
-  def fan_power_limitation_pressure_drop_adjustment_brake_horsepower(template = 'ASHRAE 90.1-2007')
+  def air_loop_hvac_fan_power_limitation_pressure_drop_adjustment_brake_horsepower(air_loop_hvac, template = 'ASHRAE 90.1-2007')
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_cfm = 0
@@ -325,7 +325,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] allowable fan system brake horsepower
   #   units = horsepower
-  def allowable_system_brake_horsepower(template = 'ASHRAE 90.1-2007')
+  def air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac, template = 'ASHRAE 90.1-2007')
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_cfm = 0
@@ -340,7 +340,7 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     # Get the fan limitation pressure drop adjustment bhp
-    fan_pwr_adjustment_bhp = fan_power_limitation_pressure_drop_adjustment_brake_horsepower
+    fan_pwr_adjustment_bhp = air_loop_hvac_fan_power_limitation_pressure_drop_adjustment_brake_horsepower(air_loop_hvac) 
 
     # Determine the number of zones the system serves
     num_zones_served = thermalZones.size
@@ -388,7 +388,7 @@ class OpenStudio::Model::AirLoopHVAC
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Allowable brake horsepower = #{allowable_fan_bhp.round(2)}HP based on #{dsn_air_flow_cfm.round} cfm and #{fan_pwr_adjustment_bhp.round(2)} bhp of adjustment.")
 
     # Calculate and report the total area for debugging/testing
-    floor_area_served_m2 = floor_area_served
+    floor_area_served_m2 = air_loop_hvac_floor_area_served(air_loop_hvac) 
 
     if floor_area_served_m2 == 0
       OpenStudio.logFree(OpenStudio::Warn,'openstudio.standards.AirLoopHVAC', "AirLoopHVAC #{self.name.to_s} serves zero floor area. Check that it has thermal zones attached to it, and that they have non-zero floor area'.")
@@ -408,7 +408,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Get all of the supply, return, exhaust, and relief fans on this system
   #
   # @return [Array] an array of FanConstantVolume, FanVariableVolume, and FanOnOff objects
-  def supply_return_exhaust_relief_fans
+  def air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac)
     # Fans on the supply side of the airloop directly, or inside of unitary equipment.
     fans = []
     sup_and_oa_comps = supplyComponents
@@ -449,7 +449,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] total brake horsepower of the fans on the system
   #   units = horsepower
-  def system_fan_brake_horsepower(include_terminal_fans = true, template = 'ASHRAE 90.1-2007')
+  def air_loop_hvac_system_fan_brake_horsepower(air_loop_hvac, include_terminal_fans = true, template = 'ASHRAE 90.1-2007')
     # TODO: get the template from the parent model itself?
     # Or not because maybe you want to see the difference between two standards?
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{name}-Determining #{template} allowable system fan power.")
@@ -457,7 +457,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Get all fans
     fans = []
     # Supply, exhaust, relief, and return fans
-    fans += supply_return_exhaust_relief_fans
+    fans += air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac) 
 
     # Fans inside of fan-powered terminals
     if include_terminal_fans
@@ -480,7 +480,7 @@ class OpenStudio::Model::AirLoopHVAC
     # sum up their brake horsepower values.
     sys_fan_bhp = 0
     fans.sort.each do |fan|
-      sys_fan_bhp += fan.brake_horsepower
+      sys_fan_bhp += pump_brake_horsepower(fan) 
     end
 
     return sys_fan_bhp
@@ -490,23 +490,23 @@ class OpenStudio::Model::AirLoopHVAC
   # the system hitting the baseline allowable fan power
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  def apply_baseline_fan_pressure_rise(template = 'ASHRAE 90.1-2007')
+  def air_loop_hvac_apply_baseline_fan_pressure_rise(air_loop_hvac, template = 'ASHRAE 90.1-2007')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{name}-Setting #{template} baseline fan power.")
 
     # Get the total system bhp from the proposed system, including terminal fans
-    proposed_sys_bhp = system_fan_brake_horsepower(true)
+    proposed_sys_bhp = air_loop_hvac_system_fan_brake_horsepower(air_loop_hvac, true)
 
     # Get the allowable fan brake horsepower
-    allowable_fan_bhp = allowable_system_brake_horsepower(template)
+    allowable_fan_bhp = air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac, template)
 
     # Get the fan power limitation from proposed system
-    fan_pwr_adjustment_bhp = fan_power_limitation_pressure_drop_adjustment_brake_horsepower
+    fan_pwr_adjustment_bhp = air_loop_hvac_fan_power_limitation_pressure_drop_adjustment_brake_horsepower(air_loop_hvac) 
 
     # Subtract the fan power adjustment
     allowable_fan_bhp -= fan_pwr_adjustment_bhp
 
     # Get all fans
-    fans = supply_return_exhaust_relief_fans
+    fans = air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac) 
 
     # TODO: improve description
     # Loop through the fans, changing the pressure rise
@@ -520,7 +520,7 @@ class OpenStudio::Model::AirLoopHVAC
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', fan.name.to_s)
 
       # Get the bhp of the fan on the proposed system
-      proposed_fan_bhp = fan.brake_horsepower
+      proposed_fan_bhp = pump_brake_horsepower(fan) 
 
       # Get the bhp of the fan on the proposed system
       proposed_fan_bhp_frac = proposed_fan_bhp / proposed_sys_bhp
@@ -531,13 +531,13 @@ class OpenStudio::Model::AirLoopHVAC
 
       # Set the baseline impeller eff of the fan,
       # preserving the proposed motor eff.
-      baseline_impeller_eff = fan.baseline_impeller_efficiency(template)
-      fan.change_impeller_efficiency(baseline_impeller_eff)
+      baseline_impeller_eff = fan_baseline_impeller_efficiency(fan, template)
+      fan_change_impeller_efficiency(fan, baseline_impeller_eff)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "* #{(baseline_impeller_eff * 100).round(1)}% = Baseline fan impeller efficiency.")
 
       # Set the baseline motor efficiency for the specified bhp
       baseline_motor_eff = fan.standardMinimumMotorEfficiency(template, standards, allowable_fan_bhp)
-      fan.change_motor_efficiency(baseline_motor_eff)
+      fan_change_motor_efficiency(fan, baseline_motor_eff)
 
       # Get design supply air flow rate (whether autosized or hard-sized)
       dsn_air_flow_m3_per_s = 0
@@ -558,14 +558,14 @@ class OpenStudio::Model::AirLoopHVAC
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "* #{fan_pressure_rise_in_wc.round(2)} in w.c. = Pressure drop to achieve allowable fan power.")
 
       # Calculate the bhp of the fan to make sure it matches
-      calc_bhp = fan.brake_horsepower
+      calc_bhp = pump_brake_horsepower(fan) 
       if ((calc_bhp - baseline_fan_bhp) / baseline_fan_bhp).abs > 0.02
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "#{fan.name} baseline fan bhp supposed to be #{baseline_fan_bhp}, but is #{calc_bhp}.")
       end
     end
 
     # Calculate the total bhp of the system to make sure it matches the goal
-    calc_sys_bhp = system_fan_brake_horsepower(false)
+    calc_sys_bhp = air_loop_hvac_system_fan_brake_horsepower(air_loop_hvac, false)
     if ((calc_sys_bhp - allowable_fan_bhp) / allowable_fan_bhp).abs > 0.02
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "#{name} baseline system bhp supposed to be #{allowable_fan_bhp}, but is #{calc_sys_bhp}.")
     end
@@ -577,7 +577,7 @@ class OpenStudio::Model::AirLoopHVAC
   #   units = Watts (W)
   # @todo Change to pull water coil nominal capacity instead of design load; not a huge difference, but water coil nominal capacity not available in sizing table.
   # @todo Handle all additional cooling coil types.  Currently only handles CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, and CoilCoolingWater
-  def total_cooling_capacity
+  def air_loop_hvac_total_cooling_capacity(air_loop_hvac)
     # Sum the cooling capacity for all cooling components
     # on the airloop, which may be inside of unitary systems.
     total_cooling_capacity_w = 0
@@ -724,7 +724,7 @@ class OpenStudio::Model::AirLoopHVAC
   # 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B', 'ASHRAE 169-2006-5C', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
   # 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
   # @return [Bool] returns true if an economizer is required, false if not
-  def economizer_required?(template, climate_zone)
+  def air_loop_hvac_economizer_required?(air_loop_hvac, template, climate_zone)
     economizer_required = false
 
     return economizer_required if name.to_s.include? 'Outpatient F1'
@@ -736,7 +736,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Determine if the airloop serves any computer rooms
     # / data centers, which changes the economizer.
     is_dc = false
-    if data_center_area_served > 0
+    if air_loop_hvac_data_center_area_served(air_loop_hvac)  > 0
       is_dc = true
     end
 
@@ -824,7 +824,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Check whether the system requires an economizer by comparing
     # the system capacity to the minimum capacity.
-    total_cooling_capacity_w = total_cooling_capacity
+    total_cooling_capacity_w = plant_loop_total_cooling_capacity(plant_loop) 
     total_cooling_capacity_btu_per_hr = OpenStudio.convert(total_cooling_capacity_w, 'W', 'Btu/hr').get
     if total_cooling_capacity_btu_per_hr >= minimum_capacity_btu_per_hr
       if is_dc
@@ -849,7 +849,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def apply_economizer_limits(template, climate_zone)
+  def air_loop_hvac_apply_economizer_limits(air_loop_hvac, template, climate_zone)
     # EnergyPlus economizer types
     # 'NoEconomizer'
     # 'FixedDryBulb'
@@ -983,7 +983,7 @@ class OpenStudio::Model::AirLoopHVAC
   #   via #economizer_required?
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def apply_economizer_integration(template, climate_zone)
+  def air_loop_hvac_apply_economizer_integration(air_loop_hvac, template, climate_zone)
     # Determine if the system is a VAV system based on the fan
     # which may be inside of a unitary system.
     is_vav = false
@@ -1024,7 +1024,7 @@ class OpenStudio::Model::AirLoopHVAC
         integrated_economizer_required = false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: non-integrated economizer per 6.5.1.3 exception a, DX VAV system.")
         # Exception b, DX units less than 65,000 Btu/hr
-      elsif total_cooling_capacity < minimum_capacity_w
+      elsif plant_loop_total_cooling_capacity(plant_loop)  < minimum_capacity_w
         integrated_economizer_required = false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: non-integrated economizer per 6.5.1.3 exception b, DX system less than #{minimum_capacity_btu_per_hr}Btu/hr.")
       else
@@ -1085,7 +1085,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if required, false if not
-  def prm_baseline_economizer_required?(template, climate_zone)
+  def air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, template, climate_zone)
     economizer_required = false
 
     # A big number of ft2 as the minimum requirement
@@ -1144,8 +1144,8 @@ class OpenStudio::Model::AirLoopHVAC
     min_ext_area_served_m2 = OpenStudio.convert(min_ext_area_served_ft2, 'ft^2', 'm^2').get
 
     # Get the interior and exterior area served
-    int_area_served_m2 = floor_area_served_interior_zones
-    ext_area_served_m2 = floor_area_served_exterior_zones
+    int_area_served_m2 = air_loop_hvac_floor_area_served_interior_zones(air_loop_hvac) 
+    ext_area_served_m2 = air_loop_hvac_floor_area_served_exterior_zones(air_loop_hvac) 
 
     # Check the floor area exception
     if int_area_served_m2 < min_int_area_served_m2 && ext_area_served_m2 < min_ext_area_served_m2
@@ -1168,7 +1168,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def apply_prm_baseline_economizer(template, climate_zone)
+  def air_loop_hvac_apply_prm_baseline_economizer(air_loop_hvac, template, climate_zone)
     # EnergyPlus economizer types
     # 'NoEconomizer'
     # 'FixedDryBulb'
@@ -1294,7 +1294,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if allowable, if the system has no economizer or no OA system.
   # Returns false if the economizer type is not allowable.
-  def economizer_type_allowable?(template, climate_zone)
+  def air_loop_hvac_economizer_type_allowable?(air_loop_hvac, template, climate_zone)
     # EnergyPlus economizer types
     # 'NoEconomizer'
     # 'FixedDryBulb'
@@ -1391,7 +1391,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def energy_recovery_ventilator_required?(template, climate_zone)
+  def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, template, climate_zone)
     # ERV Not Applicable for AHUs that serve
     # parking garage, warehouse, or multifamily
     # if space_types_served_names.include?('PNNL_Asset_Rating_Apartment_Space_Type') ||
@@ -1576,7 +1576,7 @@ class OpenStudio::Model::AirLoopHVAC
         ann_op_hrs = 8760.0
       elsif avail_sch.to_ScheduleRuleset.is_initialized
         avail_sch = avail_sch.to_ScheduleRuleset.get
-        ann_op_hrs = avail_sch.annual_hours_above_value(0.0)
+        ann_op_hrs = schedule_ruleset_annual_hours_above_value(avail_sch, 0.0)
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
       end
@@ -1844,7 +1844,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def apply_energy_recovery_ventilator(template)
+  def air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac, template)
     # Get the oa system
     oa_system = nil
     if airLoopHVACOutdoorAirSystem.is_initialized
@@ -1945,7 +1945,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @todo Add exception logic for
   #   systems with AIA healthcare ventilation requirements
   #   dual duct systems
-  def multizone_vav_optimization_required?(template, climate_zone)
+  def air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, template, climate_zone)
     multizone_opt_required = false
 
     case template
@@ -1969,7 +1969,7 @@ class OpenStudio::Model::AirLoopHVAC
       end
 
       # Not required for systems that require an ERV
-      if energy_recovery?
+      if air_loop_hvac_energy_recovery?(air_loop_hvac) 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: multizone vav optimization is not required because the system has Energy Recovery.")
         return multizone_opt_required
       end
@@ -2039,7 +2039,7 @@ class OpenStudio::Model::AirLoopHVAC
   # in the Controller:MechanicalVentilation object to 'VentilationRateProcedure'
   #
   # @return [Bool] Returns true if required, false if not.
-  def enable_multizone_vav_optimization
+  def air_loop_hvac_enable_multizone_vav_optimization(air_loop_hvac)
     # Enable multizone vav optimization
     # at each timestep.
     if airLoopHVACOutdoorAirSystem.is_initialized
@@ -2059,7 +2059,7 @@ class OpenStudio::Model::AirLoopHVAC
   # in the Controller:MechanicalVentilation object to 'ZoneSum'
   #
   # @return [Bool] Returns true if required, false if not.
-  def disable_multizone_vav_optimization
+  def air_loop_hvac_disable_multizone_vav_optimization(air_loop_hvac)
     # Disable multizone vav optimization
     # at each timestep.
     if airLoopHVACOutdoorAirSystem.is_initialized
@@ -2080,13 +2080,13 @@ class OpenStudio::Model::AirLoopHVAC
   # @param has_ddc [Bool] if true, will assume that there
   # is DDC control of vav terminals.  If false, assumes otherwise.
   # @return [Bool] true if successful, false if not
-  def apply_minimum_vav_damper_positions(template, has_ddc = true)
+  def air_loop_hvac_apply_minimum_vav_damper_positions(air_loop_hvac, template, has_ddc = true)
     thermalZones.each do |zone|
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-          zone_oa = zone.outdoor_airflow_rate
+          zone_oa = thermal_zone_outdoor_airflow_rate(zone) 
           vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
-          vav_terminal.apply_minimum_damper_position(template, zone_oa, has_ddc)
+          air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(vav_terminal, template, zone_oa, has_ddc)
         end
       end
     end
@@ -2099,11 +2099,11 @@ class OpenStudio::Model::AirLoopHVAC
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def adjust_minimum_vav_damper_positions
+  def air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
     # Total uncorrected outdoor airflow rate
     v_ou = 0.0
     thermalZones.each do |zone|
-      v_ou += zone.outdoor_airflow_rate
+      v_ou += thermal_zone_outdoor_airflow_rate(zone) 
     end
 
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
@@ -2132,7 +2132,7 @@ class OpenStudio::Model::AirLoopHVAC
     num_zones_adj = 0
     thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
-      v_bz = zone.outdoor_airflow_rate
+      v_bz = thermal_zone_outdoor_airflow_rate(zone) 
 
       # Zone air distribution, assumed 1 per PNNL
       e_z = 1.0
@@ -2295,7 +2295,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Reference: <Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010> Page109-111
   # For implementation purpose, since it is time-consuming to perform autosizing in three climate zones, just use
   # the results of the current climate zone
-  def adjust_minimum_vav_damper_positions_outpatient
+  def air_loop_hvac_adjust_minimum_vav_damper_positions_outpatient(air_loop_hvac)
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       sizing_zone = zone.sizingZone
@@ -2331,7 +2331,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for
   #   systems that serve multifamily, parking garage, warehouse
-  def demand_control_ventilation_required?(template, climate_zone)
+  def air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac, template, climate_zone)
     dcv_required = false
 
     # Not required by the old vintages
@@ -2341,7 +2341,7 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     # Not required for systems that require an ERV
-    if energy_recovery?
+    if air_loop_hvac_energy_recovery?(air_loop_hvac) 
       case template
       when 'NREL ZNE Ready 2017'
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV may be required although the system has Energy Recovery.")
@@ -2386,20 +2386,20 @@ class OpenStudio::Model::AirLoopHVAC
     oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
 
     # Check for min OA without an economizer OR has economizer
-    if oa_flow_cfm < min_oa_without_economizer_cfm && economizer? == false
+    if oa_flow_cfm < min_oa_without_economizer_cfm && air_loop_hvac_economizer?(air_loop_hvac)  == false
       # Message if doesn't pass OA limit
       if oa_flow_cfm < min_oa_without_economizer_cfm
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_without_economizer_cfm.round} cfm.")
       end
       # Message if doesn't have economizer
-      if economizer? == false
+      if air_loop_hvac_economizer?(air_loop_hvac)  == false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system does not have an economizer.")
       end
       return dcv_required
     end
 
     # If has economizer, cfm limit is lower
-    if oa_flow_cfm < min_oa_with_economizer_cfm && economizer?
+    if oa_flow_cfm < min_oa_with_economizer_cfm && air_loop_hvac_economizer?(air_loop_hvac) 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: DCV is not required since the system has an economizer, but the min oa flow is #{oa_flow_cfm.round} cfm, less than the minimum of #{min_oa_with_economizer_cfm.round} cfm for systems with an economizer.")
       return dcv_required
     end
@@ -2408,7 +2408,7 @@ class OpenStudio::Model::AirLoopHVAC
     # for all of zones on the loop
     any_zones_req_dcv = false
     thermalZones.sort.each do |zone|
-      if zone.demand_control_ventilation_required?(template, climate_zone)
+      if thermal_zone_demand_control_ventilation_required?(zone, template, climate_zone)
         any_zones_req_dcv = true
         break
       end
@@ -2430,7 +2430,7 @@ class OpenStudio::Model::AirLoopHVAC
   # to per-area values only so that DCV won't impact these zones.
   #
   # @return [Bool] Returns true if required, false if not.
-  def enable_demand_control_ventilation(template, climate_zone)
+  def air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, template, climate_zone)
     # Get the OA intake
     controller_oa = nil
     controller_mv = nil
@@ -2461,11 +2461,11 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
-  def supply_air_temperature_reset_required?(template, climate_zone)
+  def air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, template, climate_zone)
     is_sat_reset_required = false
 
     # Only required for multizone VAV systems
-    return is_sat_reset_required unless multizone_vav_system?
+    return is_sat_reset_required unless air_loop_hvac_multizone_vav_system?(air_loop_hvac) 
 
     # Not required until 90.1-2010
     case template
@@ -2505,7 +2505,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param template [String] valid choices: '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Bool] Returns true if successful, false if not.
-  def enable_supply_air_temperature_reset_warmest_zone(template)
+  def air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac, template)
     # Get the current setpoint and calculate
     # the new setpoint.
     sizing_system = sizingSystem
@@ -2549,7 +2549,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @return [Bool] Returns true if successful, false if not.
 
-  def enable_supply_air_temperature_reset_outdoor_temperature
+  def air_loop_hvac_enable_supply_air_temperature_reset_outdoor_temperature(air_loop_hvac)
     # for AHU1 in Outpatient, SAT is 52F constant, no reset
     return true if name.get == 'PVAV Outpatient F1'
 
@@ -2591,7 +2591,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system has an economizer
   #
   # @return [Bool] Returns true if required, false if not.
-  def economizer?
+  def air_loop_hvac_economizer?(air_loop_hvac)
     # Get the OA system and OA controller
     oa_sys = airLoopHVACOutdoorAirSystem
     if oa_sys.is_initialized
@@ -2613,7 +2613,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system is a multizone VAV system
   #
   # @return [Bool] Returns true if required, false if not.
-  def multizone_vav_system?
+  def air_loop_hvac_multizone_vav_system?(air_loop_hvac)
     multizone_vav_system = false
 
     # Must serve more than 1 zone
@@ -2641,7 +2641,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system has terminal reheat
   #
   # @return [Bool] returns true if has one or more reheat terminals, false if it doesn't.
-  def terminal_reheat?
+  def air_loop_hvac_terminal_reheat?(air_loop_hvac)
     has_term_rht = false
     demandComponents.each do |sc|
       if sc.to_AirTerminalSingleDuctConstantVolumeReheat.is_initialized ||
@@ -2660,7 +2660,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if the system has energy recovery already
   #
   # @return [Bool] Returns true if an ERV is present, false if not.
-  def energy_recovery?
+  def air_loop_hvac_energy_recovery?(air_loop_hvac)
     has_erv = false
 
     # Get the OA system
@@ -2686,7 +2686,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @return [Bool] Returns true if successful, false if not
   # @todo see if this impacts the sizing run.
-  def apply_vav_damper_action(template)
+  def air_loop_hvac_apply_vav_damper_action(air_loop_hvac, template)
     damper_action = nil
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004','NECB 2011'
@@ -2738,7 +2738,7 @@ class OpenStudio::Model::AirLoopHVAC
   end
 
   # Determine if a motorized OA damper is required
-  def motorized_oa_damper_required?(template, climate_zone)
+  def air_loop_hvac_motorized_oa_damper_required?(air_loop_hvac, template, climate_zone)
     motorized_oa_damper_required = false
 
     if name.to_s.include? 'Outpatient F1'
@@ -2749,7 +2749,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # If the system has an economizer, it must have
     # a motorized damper.
-    if economizer?
+    if air_loop_hvac_economizer?(air_loop_hvac) 
       motorized_oa_damper_required = true
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Because the system has an economizer, it requires a motorized OA damper.")
       return motorized_oa_damper_required
@@ -2849,11 +2849,11 @@ class OpenStudio::Model::AirLoopHVAC
   # If not supplied, one will be created based on the supplied
   # occupancy threshold.
   # @return [Bool] true if successful, false if not
-  def add_motorized_oa_damper(min_occ_pct = 0.15, occ_sch = nil)
+  def air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, min_occ_pct = 0.15, occ_sch = nil)
     # Get the airloop occupancy schedule if none supplied
     if occ_sch.nil?
-      occ_sch = get_occupancy_schedule(min_occ_pct)
-      flh = occ_sch.annual_equivalent_full_load_hrs
+      occ_sch = thermal_zone_get_occupancy_schedule(thermal_zone, min_occ_pct)
+      flh = schedule_ruleset_annual_equivalent_full_load_hrs(occ_sch) 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used to close OA damper during unoccupied hours.")
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Setting motorized OA damper schedule to #{occ_sch.name}.")
@@ -2879,7 +2879,7 @@ class OpenStudio::Model::AirLoopHVAC
   # the damper will be open and OA will be brought into the building.
   # This reflects the use of a backdraft gravity damper, and
   # increases building loads unnecessarily during unoccupied hours.
-  def remove_motorized_oa_damper
+  def air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
     # Get the OA system and OA controller
     oa_sys = airLoopHVACOutdoorAirSystem
     if oa_sys.is_initialized
@@ -2907,7 +2907,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   # @return [ScheduleRuleset] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
   # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
-  def get_occupancy_schedule(occupied_percentage_threshold = 0.05)
+  def air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold = 0.05)
     # Get all the occupancy schedules in every space in every zone
     # served by this airloop.  Include people added via the SpaceType
     # in addition to people hard-assigned to the Space itself.
@@ -3132,9 +3132,9 @@ class OpenStudio::Model::AirLoopHVAC
   # and staging controls for packaged single zone units.
   #
   # @return [Bool] returns true if successful, false if not
-  def apply_single_zone_controls(template, climate_zone)
+  def air_loop_hvac_apply_single_zone_controls(air_loop_hvac, template, climate_zone)
     # These controls only apply to systems with DX cooling
-    unless dx_cooling?
+    unless air_loop_hvac_dx_cooling?(air_loop_hvac) 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Single zone controls not applicable because no DX cooling.")
       return true
     end
@@ -3160,7 +3160,7 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     # Fan control program only used for systems with two-stage DX coils
-    fan_control = if multi_stage_dx_cooling?
+    fan_control = if air_loop_hvac_multi_stage_dx_cooling?(air_loop_hvac) 
                     true
                   else
                     false
@@ -3513,7 +3513,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param has_ddc [Bool] whether or not the system has DDC control
   # over VAV terminals.
   # return [Bool] returns true if static pressure reset is required, false if not
-  def static_pressure_reset_required?(template, has_ddc)
+  def air_loop_hvac_static_pressure_reset_required?(air_loop_hvac, template, has_ddc)
     sp_reset_required = false
 
     # A big number of btu per hr as the minimum requirement
@@ -3543,7 +3543,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param template [String]
   # @return [Bool] true if required, false if not
-  def unoccupied_fan_shutoff_required?(template)
+  def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac, template)
     shutoff_required = true
 
     # Per 90.1 6.4.3.4.5, systems less than 0.75 HP
@@ -3557,7 +3557,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Determine the system fan horsepower
     total_hp = 0.0
     supply_return_exhaust_relief_fans.each do |fan|
-      total_hp += fan.motor_horsepower
+      total_hp += pump_motor_horsepower(fan) 
     end
 
     # Check the HP exception
@@ -3586,7 +3586,7 @@ class OpenStudio::Model::AirLoopHVAC
   # @param min_occ_pct [Double] the fractional value below which
   # the system will be considered unoccupied.
   # @return [Bool] true if successful, false if not
-  def enable_unoccupied_fan_shutoff(min_occ_pct = 0.15)
+  def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.15)
     # Set the system to night cycle
     setNightCycleControlType('CycleOnAny')
 
@@ -3598,8 +3598,8 @@ class OpenStudio::Model::AirLoopHVAC
     end
 
     # Get the airloop occupancy schedule
-    loop_occ_sch = get_occupancy_schedule(min_occ_pct)
-    flh = loop_occ_sch.annual_equivalent_full_load_hrs
+    loop_occ_sch = thermal_zone_get_occupancy_schedule(thermal_zone, min_occ_pct)
+    flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch) 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
 
     # Set HVAC availability schedule to follow occupancy
@@ -3613,7 +3613,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # return [Double] the total floor area of all zones attached
   # to the air loop, in m^2.
-  def floor_area_served
+  def air_loop_hvac_floor_area_served(air_loop_hvac)
     total_area = 0.0
 
     thermalZones.each do |zone|
@@ -3628,7 +3628,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # return [Double] the total floor area of all zones attached
   # to the air loop, in m^2.
-  def floor_area_served_interior_zones
+  def air_loop_hvac_floor_area_served_interior_zones(air_loop_hvac)
     total_area = 0.0
 
     thermalZones.each do |zone|
@@ -3645,7 +3645,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # return [Double] the total floor area of all zones attached
   # to the air loop, in m^2.
-  def floor_area_served_exterior_zones
+  def air_loop_hvac_floor_area_served_exterior_zones(air_loop_hvac)
     total_area = 0.0
 
     thermalZones.each do |zone|
@@ -3660,7 +3660,7 @@ class OpenStudio::Model::AirLoopHVAC
   # find design_supply_air_flow_rate
   #
   # @return [Double]  design_supply_air_flow_rate m^3/s
-  def find_design_supply_air_flow_rate
+  def air_loop_hvac_find_design_supply_air_flow_rate(air_loop_hvac)
     # Get the design_supply_air_flow_rate
     design_supply_air_flow_rate = nil
     if designSupplyAirFlowRate.is_initialized
@@ -3683,7 +3683,7 @@ class OpenStudio::Model::AirLoopHVAC
   # standards space type spreadsheet instead
   # of relying on the standards space type name to
   # identify a data center.
-  def data_center_area_served
+  def air_loop_hvac_data_center_area_served(air_loop_hvac)
     dc_area_m2 = 0.0
 
     thermalZones.each do |zone|
@@ -3707,7 +3707,7 @@ class OpenStudio::Model::AirLoopHVAC
   #
   # @param max_reheat_c [Double] the maximum reheat temperature, in C
   # @return [Bool] returns true if successful, false if not.
-  def apply_maximum_reheat_temperature(max_reheat_c)
+  def air_loop_hvac_apply_maximum_reheat_temperature(air_loop_hvac, max_reheat_c)
     demandComponents.each do |sc|
       if sc.to_AirTerminalSingleDuctConstantVolumeReheat.is_initialized
         term = sc.to_AirTerminalSingleDuctConstantVolumeReheat.get
@@ -3734,7 +3734,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Set the system sizing properties based on the zone sizing information
   #
   # @return [Bool] true if successful, false if not.
-  def apply_prm_sizing_temperatures
+  def air_loop_hvac_apply_prm_sizing_temperatures(air_loop_hvac)
     # Get the design heating and cooling SAT information
     # for all zones served by the system.
     htg_setpts_c = []
@@ -3752,7 +3752,7 @@ class OpenStudio::Model::AirLoopHVAC
     # heating SAT is set to the same value as cooling SAT
     # and the terminals are expected to do the heating.
     # If not, heating SAT set to maximum zone heating design SAT.
-    has_term_rht = terminal_reheat?
+    has_term_rht = air_loop_hvac_terminal_reheat?(air_loop_hvac) 
     htg_sat_c = if has_term_rht
                   clg_sat_c
                 else
@@ -3771,7 +3771,7 @@ class OpenStudio::Model::AirLoopHVAC
     # If it's a terminal reheat system, set the reheat terminal setpoints too
     if has_term_rht
       rht_c = htg_setpts_c.max
-      apply_maximum_reheat_temperature(rht_c)
+      air_loop_hvac_apply_maximum_reheat_temperature(air_loop_hvac, rht_c)
     end
 
     return true
@@ -3780,7 +3780,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if every zone on the system has an identical
   # multiplier.  If so, return this number.  If not, return 1.
   # @return [Integer] an integer representing the system multiplier.
-  def system_multiplier
+  def air_loop_hvac_system_multiplier(air_loop_hvac)
     mult = 1
 
     # Get all the zone multipliers
@@ -3803,7 +3803,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if this Air Loop uses DX cooling.
   #
   # @return [Bool] true if uses DX cooling, false if not.
-  def dx_cooling?
+  def air_loop_hvac_dx_cooling?(air_loop_hvac)
     dx_clg = false
 
     # Check for all DX coil types
@@ -3850,7 +3850,7 @@ class OpenStudio::Model::AirLoopHVAC
   # Determine if this Air Loop uses multi-stage DX cooling.
   #
   # @return [Bool] true if uses multi-stage DX cooling, false if not.
-  def multi_stage_dx_cooling?
+  def air_loop_hvac_multi_stage_dx_cooling?(air_loop_hvac)
     dx_clg = false
 
     # Check for all DX coil types

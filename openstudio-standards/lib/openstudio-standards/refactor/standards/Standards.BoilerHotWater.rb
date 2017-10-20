@@ -1,11 +1,11 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::BoilerHotWater
+class StandardsModel < OpenStudio::Model::Model
   # find search criteria
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  # @return [Hash] used for find_object
-  def find_search_criteria(template)
+  # @return [Hash] used for model_find_object(model) 
+  def boiler_hot_water_find_search_criteria(boiler_hot_water, template)
     # Define the criteria to find the boiler properties
     # in the hvac standards data set.
     search_criteria = {}
@@ -37,7 +37,7 @@ class OpenStudio::Model::BoilerHotWater
   # Find capacity in W
   #
   # @return [Double] capacity in W
-  def find_capacity
+  def boiler_hot_water_find_capacity(boiler_hot_water)
     capacity_w = nil
     if nominalCapacity.is_initialized
       capacity_w = nominalCapacity.get
@@ -57,10 +57,10 @@ class OpenStudio::Model::BoilerHotWater
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Double] minimum thermal efficiency
-  def standard_minimum_thermal_efficiency(template, rename=false)
+  def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, template, rename=false)
     # Get the boiler properties
-    search_criteria = find_search_criteria(template)
-    capacity_w = find_capacity
+    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
+    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -68,7 +68,7 @@ class OpenStudio::Model::BoilerHotWater
     thermal_eff = nil
 
     # Get the boiler properties
-    blr_props = model.find_object($os_standards['boilers'], search_criteria, capacity_btu_per_hr)
+    blr_props = model_find_object(model, $os_standards['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false
@@ -114,17 +114,17 @@ class OpenStudio::Model::BoilerHotWater
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def apply_efficiency_and_curves(template)
+  def boiler_hot_water_apply_efficiency_and_curves(boiler_hot_water, template)
     successfully_set_all_properties = false 
 
     # Define the criteria to find the boiler properties
     # in the hvac standards data set.
-    search_criteria = find_search_criteria(template)
+    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
     fuel_type = search_criteria['fuel_type']
     fluid_type = search_criteria['fluid_type']
 
     # Get the capacity
-    capacity_w = find_capacity
+    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
 
     # for NECB, check if secondary and/or modulating boiler required
     if template == 'NECB 2011'
@@ -158,7 +158,7 @@ class OpenStudio::Model::BoilerHotWater
     end
 
     # Get the boiler properties
-    blr_props = model.find_object($os_standards['boilers'], search_criteria, capacity_btu_per_hr)
+    blr_props = model_find_object(model, $os_standards['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false
@@ -166,7 +166,7 @@ class OpenStudio::Model::BoilerHotWater
     end
 
     # Make the EFFFPLR curve
-    eff_fplr = model.add_curve(blr_props['efffplr'])
+    eff_fplr = model_add_curve(model, blr_props['efffplr'])
     if eff_fplr
       setNormalizedBoilerEfficiencyCurve(eff_fplr)
     else

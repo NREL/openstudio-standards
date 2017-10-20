@@ -1,12 +1,12 @@
 # open the class to add methods to apply HVAC efficiency standards
-class OpenStudio::Model::ZoneHVACComponent
+class StandardsModel < OpenStudio::Model::Model
   # Sets the fan power of zone level HVAC equipment 
   # (PTACs, PTHPs, Fan Coils, and Unit Heaters)
   # based on the W/cfm specified in the standard.
   #
   # @param template [String] the template base requirements on
   # @return [Bool] returns true if successful, false if not
-  def apply_prm_baseline_fan_power(template)
+  def zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac_component, template)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.ZoneHVACComponent', "Setting fan power for #{name}.")
 
     # Convert this to the actual class type
@@ -53,12 +53,12 @@ class OpenStudio::Model::ZoneHVACComponent
     max_air_flow_rate_cfm = OpenStudio.convert(max_air_flow_rate, 'm^3/s', 'ft^3/min').get
 
     # Set the impeller efficiency
-    fan.change_impeller_efficiency(fan.baseline_impeller_efficiency(template))
+    fan_change_impeller_efficiency(fan, fan.baseline_impeller_efficiency(template))
 
     # Set the motor efficiency, preserving the impeller efficency.
     # For zone HVAC fans, a bhp lookup of 0.5bhp is always used because
     # they are assumed to represent a series of small fans in reality.
-    fan.apply_standard_minimum_motor_efficiency(template, fan.brake_horsepower)
+    fan_apply_standard_minimum_motor_efficiency(fan, template, fan.brake_horsepower)
 
     # Calculate a new pressure rise to hit the target W/cfm
     fan_tot_eff = fan.fanEfficiency

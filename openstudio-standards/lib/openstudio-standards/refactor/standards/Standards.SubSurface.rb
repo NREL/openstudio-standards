@@ -1,12 +1,12 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class OpenStudio::Model::SubSurface
+class StandardsModel < OpenStudio::Model::Model
   # Determine the component infiltration rate for this surface
   #
   # @param type [String] choices are 'baseline' and 'advanced'
   # @return [Double] infiltration rate
   #   @units cubic meters per second (m^3/s)
-  def component_infiltration_rate(type)
+  def sub_surface_component_infiltration_rate(sub_surface, type)
     comp_infil_rate_m3_per_s = 0.0
 
     # Define the envelope component infiltration rates
@@ -79,7 +79,7 @@ class OpenStudio::Model::SubSurface
   #
   # @param percent_reduction [Double] the fractional amount
   # to reduce the area.
-  def reduce_area_by_percent_by_shrinking_toward_centroid(percent_reduction)
+  def sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(sub_surface, percent_reduction)
     mult = 1 - percent_reduction
     scale_factor = mult**0.5
 
@@ -113,7 +113,7 @@ class OpenStudio::Model::SubSurface
   #
   # @param percent_reduction [Double] the fractional amount
   # to reduce the area.
-  def reduce_area_by_percent_by_raising_sill(percent_reduction)
+  def sub_surface_reduce_area_by_percent_by_raising_sill(sub_surface, percent_reduction)
 
     mult = 1 - percent_reduction
 
@@ -160,7 +160,7 @@ class OpenStudio::Model::SubSurface
 
   # Determine if the sub surface is a vertical rectangle,
   # meaning a rectangle where the bottom is parallel to the ground.
-  def vertical_rectangle?
+  def sub_surface_vertical_rectangle?(sub_surface)
     # Get the vertices once
     verts = vertices
 

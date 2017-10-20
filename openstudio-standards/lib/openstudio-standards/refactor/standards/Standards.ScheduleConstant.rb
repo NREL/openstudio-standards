@@ -1,13 +1,13 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::ScheduleConstant
+class StandardsModel < OpenStudio::Model::Model
   # Returns the equivalent full load hours (EFLH) for this schedule.
   # For example, an always-on fractional schedule
   # (always 1.0, 24/7, 365) would return a value of 8760.
   #
   # @author Andrew Parker, NREL
   # return [Double] The total number of full load hours for this schedule
-  def annual_equivalent_full_load_hrs
+  def schedule_constant_annual_equivalent_full_load_hrs(schedule_constant)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "Calculating total annual EFLH for schedule: #{name}")
 
     return annual_flh = value * 8760
@@ -18,7 +18,7 @@ class OpenStudio::Model::ScheduleConstant
   #
   # @author David Goldwasser, NREL.
   # return [Hash] Hash has two keys, min and max.
-  def annual_min_max_value
+  def schedule_constant_annual_min_max_value(schedule_constant)
     result = { 'min' => value, 'max' => value }
 
     return result

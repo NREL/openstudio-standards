@@ -1,16 +1,16 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::SpaceType
+class StandardsModel < OpenStudio::Model::Model
   # Returns standards data for selected space type and template
   #
   # @param [string] target template for lookup
   # @return [hash] hash of internal loads for different load types
-  def get_standards_data(template)
-    standards_building_type = if standardsBuildingType.is_initialized
-                                standardsBuildingType.get
+  def space_type_get_standards_data(space_type, template)
+    standards_building_type = if space_type.standardsBuildingType.is_initialized
+                               space_type. standardsBuildingType.get
                               end
-    standards_space_type = if standardsSpaceType.is_initialized
-                             standardsSpaceType.get
+    standards_space_type = if space_type.standardsSpaceType.is_initialized
+                             space_type.standardsSpaceType.get
                            end
 
     # populate search hash
@@ -22,7 +22,7 @@ class OpenStudio::Model::SpaceType
 
     # lookup space type properties
 
-    space_type_properties = model.find_object($os_standards['space_types'], search_criteria)
+    space_type_properties = model_find_object(space_type.model, $os_standards['space_types'], search_criteria)
 
     if space_type_properties.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
@@ -37,9 +37,9 @@ class OpenStudio::Model::SpaceType
   #
   # @param [string] target template for lookup
   # @return [Bool] returns true if successful, false if not.
-  def apply_rendering_color(template)
+  def space_type_apply_rendering_color(space_type, template)
     # Get the standards data
-    space_type_properties = get_standards_data(template)
+    space_type_properties = space_type_get_standards_data(space_type, template)
 
     # Set the rendering color of the space type
     rgb = space_type_properties['rgb']
@@ -51,11 +51,11 @@ class OpenStudio::Model::SpaceType
     r = rgb[0].to_i
     g = rgb[1].to_i
     b = rgb[2].to_i
-    rendering_color = OpenStudio::Model::RenderingColor.new(model)
+    rendering_color = OpenStudio::Model::RenderingColor.new(space_type.model)
     rendering_color.setRenderingRedValue(r)
     rendering_color.setRenderingGreenValue(g)
     rendering_color.setRenderingBlueValue(b)
-    setRenderingColor(rendering_color)
+    space_type.setRenderingColor(rendering_color)
 
     return true
   end
@@ -77,21 +77,21 @@ class OpenStudio::Model::SpaceType
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
   # @param set_infiltration [Bool] if true, set the infiltration rates
   # @return [Bool] returns true if successful, false if not
-  def apply_internal_loads(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+  def space_type_apply_internal_loads(space_type, template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     # Skip plenums
     # Check if the space type name
     # contains the word plenum.
-    if name.get.to_s.downcase.include?('plenum')
+    if space_type.name.get.to_s.downcase.include?('plenum')
       return false
     end
-    if standardsSpaceType.is_initialized
-      if standardsSpaceType.get.downcase.include?('plenum')
+    if space_type.standardsSpaceType.is_initialized
+      if space_type.standardsSpaceType.get.downcase.include?('plenum')
         return false
       end
     end
 
     # Get the standards data
-    space_type_properties = get_standards_data(template)
+    space_type_properties = space_type_get_standards_data(space_type, template)
 
     # Need to add a check, or it'll crash on space_type_properties['occupancy_per_area'].to_f below
     if space_type_properties.nil?
@@ -477,9 +477,9 @@ class OpenStudio::Model::SpaceType
   # schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
   # but may be found and used later.
   # @return [Bool] returns true if successful, false if not
-  def apply_internal_load_schedules(template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
+  def space_type_apply_internal_load_schedules(space_type, template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
     # Get the standards data
-    space_type_properties = get_standards_data(template)
+    space_type_properties = space_type_get_standards_data(space_type, template)
 
     # Get the default schedule set
     # or create a new one if none exists.
@@ -581,9 +581,9 @@ class OpenStudio::Model::SpaceType
   # @param [string] intended_surface_type template for lookup
   # @param [string] standards_construction_type template for lookup
   # @return [hash] hash of construction properties
-  def get_construction_properties(template, intended_surface_type, standards_construction_type)
+  def space_type_get_construction_properties(space_type, template, intended_surface_type, standards_construction_type)
     # get building_category value
-    building_category = if !get_standards_data(template).nil? && get_standards_data(template)['is_residential'] == 'Yes'
+    building_category = if !get_standards_data(template).nil? && space_type_get_standards_data(space_type, template)['is_residential'] == 'Yes'
                           'Residential'
                         else
                           'Nonresidential'
@@ -591,7 +591,7 @@ class OpenStudio::Model::SpaceType
 
     # get climate_zone_set
     climate_zone = model.get_building_climate_zone_and_building_type['climate_zone']
-    climate_zone_set = model.find_climate_zone_set(climate_zone, template)
+    climate_zone_set = model_find_climate_zone_set(model, climate_zone, template)
 
     # populate search hash
     search_criteria = {
@@ -603,7 +603,7 @@ class OpenStudio::Model::SpaceType
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = model.find_object($os_standards['construction_properties'], search_criteria)
+    construction_properties = model_find_object(model, $os_standards['construction_properties'], search_criteria)
 
     return construction_properties
   end

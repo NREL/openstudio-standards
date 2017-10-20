@@ -1,6 +1,6 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class OpenStudio::Model::Space
+class StandardsModel < OpenStudio::Model::Model
   # Returns values for the different types of daylighted areas in the space.
   # Definitions for each type of area follow the respective template.
   # @note This method is super complicated because of all the polygon/geometry math required.
@@ -17,7 +17,7 @@ class OpenStudio::Model::Space
   #   'secondary_sidelighted_area', 'total_window_area', 'total_skylight_area'
   # @todo add a list of valid choices for template argument
   # TODO stop skipping non-vertical walls
-  def daylighted_areas(template, draw_daylight_areas_for_debugging = false)
+  def space_daylighted_areas(space, template, draw_daylight_areas_for_debugging = false)
     ### Begin the actual daylight area calculations ###
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, calculating daylighted areas.")
@@ -373,36 +373,36 @@ class OpenStudio::Model::Space
     end # Next surface
 
     # Set z=0 for all the polygons so that intersection will work
-    toplit_polygons = polygons_set_z(toplit_polygons, 0.0)
-    pri_sidelit_polygons = polygons_set_z(pri_sidelit_polygons, 0.0)
-    sec_sidelit_polygons = polygons_set_z(sec_sidelit_polygons, 0.0)
+    toplit_polygons = space_polygons_set_z(space, toplit_polygons, 0.0)
+    pri_sidelit_polygons = space_polygons_set_z(space, pri_sidelit_polygons, 0.0)
+    sec_sidelit_polygons = space_polygons_set_z(space, sec_sidelit_polygons, 0.0)
 
     # Check the initial polygons
-    check_z_zero(floor_polygons, 'floor_polygons', name.get)
-    check_z_zero(toplit_polygons, 'toplit_polygons', name.get)
-    check_z_zero(pri_sidelit_polygons, 'pri_sidelit_polygons', name.get)
-    check_z_zero(sec_sidelit_polygons, 'sec_sidelit_polygons', name.get)
+    space_check_z_zero(space, floor_polygons, 'floor_polygons', name.get)
+    space_check_z_zero(space, toplit_polygons, 'toplit_polygons', name.get)
+    space_check_z_zero(space, pri_sidelit_polygons, 'pri_sidelit_polygons', name.get)
+    space_check_z_zero(space, sec_sidelit_polygons, 'sec_sidelit_polygons', name.get)
 
     # Join, then subtract
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '***Joining polygons***')
 
     # Join toplighted polygons into a single set
-    combined_toplit_polygons = join_polygons(toplit_polygons, 0.01, 'toplit_polygons')
+    combined_toplit_polygons = space_join_polygons(space, toplit_polygons, 0.01, 'toplit_polygons')
 
     # Join primary sidelighted polygons into a single set
-    combined_pri_sidelit_polygons = join_polygons(pri_sidelit_polygons, 0.01, 'pri_sidelit_polygons')
+    combined_pri_sidelit_polygons = space_join_polygons(space, pri_sidelit_polygons, 0.01, 'pri_sidelit_polygons')
 
     # Join secondary sidelighted polygons into a single set
-    combined_sec_sidelit_polygons = join_polygons(sec_sidelit_polygons, 0.01, 'sec_sidelit_polygons')
+    combined_sec_sidelit_polygons = space_join_polygons(space, sec_sidelit_polygons, 0.01, 'sec_sidelit_polygons')
 
     # Join floor polygons into a single set
-    combined_floor_polygons = join_polygons(floor_polygons, 0.01, 'floor_polygons')
+    combined_floor_polygons = space_join_polygons(space, floor_polygons, 0.01, 'floor_polygons')
 
     # Check the joined polygons
-    check_z_zero(combined_floor_polygons, 'combined_floor_polygons', name.get)
-    check_z_zero(combined_toplit_polygons, 'combined_toplit_polygons', name.get)
-    check_z_zero(combined_pri_sidelit_polygons, 'combined_pri_sidelit_polygons', name.get)
-    check_z_zero(combined_sec_sidelit_polygons, 'combined_sec_sidelit_polygons', name.get)
+    space_check_z_zero(space, combined_floor_polygons, 'combined_floor_polygons', name.get)
+    space_check_z_zero(space, combined_toplit_polygons, 'combined_toplit_polygons', name.get)
+    space_check_z_zero(space, combined_pri_sidelit_polygons, 'combined_pri_sidelit_polygons', name.get)
+    space_check_z_zero(space, combined_sec_sidelit_polygons, 'combined_sec_sidelit_polygons', name.get)
 
     # Make a new surface for each of the resulting polygons to visually inspect it
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***Making Surfaces to view in SketchUp***")
@@ -446,25 +446,25 @@ class OpenStudio::Model::Space
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '***Subtracting overlapping areas***')
 
     # Subtract lower-priority daylighting areas from higher priority ones
-    pri_minus_top_polygons = a_polygons_minus_b_polygons(combined_pri_sidelit_polygons, combined_toplit_polygons, 'combined_pri_sidelit_polygons', 'combined_toplit_polygons')
+    pri_minus_top_polygons = space_a_polygons_minus_b_polygons(space, combined_pri_sidelit_polygons, combined_toplit_polygons, 'combined_pri_sidelit_polygons', 'combined_toplit_polygons')
 
-    sec_minus_top_polygons = a_polygons_minus_b_polygons(combined_sec_sidelit_polygons, combined_toplit_polygons, 'combined_sec_sidelit_polygons', 'combined_toplit_polygons')
+    sec_minus_top_polygons = space_a_polygons_minus_b_polygons(space, combined_sec_sidelit_polygons, combined_toplit_polygons, 'combined_sec_sidelit_polygons', 'combined_toplit_polygons')
 
-    sec_minus_top_minus_pri_polygons = a_polygons_minus_b_polygons(sec_minus_top_polygons, combined_pri_sidelit_polygons, 'sec_minus_top_polygons', 'combined_pri_sidelit_polygons')
+    sec_minus_top_minus_pri_polygons = space_a_polygons_minus_b_polygons(space, sec_minus_top_polygons, combined_pri_sidelit_polygons, 'sec_minus_top_polygons', 'combined_pri_sidelit_polygons')
 
     # Check the subtracted polygons
-    check_z_zero(pri_minus_top_polygons, 'pri_minus_top_polygons', name.get)
-    check_z_zero(sec_minus_top_polygons, 'sec_minus_top_polygons', name.get)
-    check_z_zero(sec_minus_top_minus_pri_polygons, 'sec_minus_top_minus_pri_polygons', name.get)
+    space_check_z_zero(space, pri_minus_top_polygons, 'pri_minus_top_polygons', name.get)
+    space_check_z_zero(space, sec_minus_top_polygons, 'sec_minus_top_polygons', name.get)
+    space_check_z_zero(space, sec_minus_top_minus_pri_polygons, 'sec_minus_top_minus_pri_polygons', name.get)
 
     # Make a new surface for each of the resulting polygons to visually inspect it.
     # First reset the z so the surfaces show up on the correct plane.
     if draw_daylight_areas_for_debugging
 
-      combined_toplit_polygons_at_floor = polygons_set_z(combined_toplit_polygons, floor_z)
-      pri_minus_top_polygons_at_floor = polygons_set_z(pri_minus_top_polygons, floor_z)
-      sec_minus_top_minus_pri_polygons_at_floor = polygons_set_z(sec_minus_top_minus_pri_polygons, floor_z)
-      combined_floor_polygons_at_floor = polygons_set_z(combined_floor_polygons, floor_z)
+      combined_toplit_polygons_at_floor = space_polygons_set_z(space, combined_toplit_polygons, floor_z)
+      pri_minus_top_polygons_at_floor = space_polygons_set_z(space, pri_minus_top_polygons, floor_z)
+      sec_minus_top_minus_pri_polygons_at_floor = space_polygons_set_z(space, sec_minus_top_minus_pri_polygons, floor_z)
+      combined_floor_polygons_at_floor = space_polygons_set_z(space, combined_floor_polygons, floor_z)
 
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '***Making Surfaces to view in SketchUp***')
       dummy_space = OpenStudio::Model::Space.new(model)
@@ -509,18 +509,18 @@ class OpenStudio::Model::Space
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '***Calculating Daylighted Areas***')
 
     # Get the total floor area
-    total_floor_area_m2 = total_area_of_polygons(combined_floor_polygons)
+    total_floor_area_m2 = space_total_area_of_polygons(space, combined_floor_polygons)
     total_floor_area_ft2 = OpenStudio.convert(total_floor_area_m2, 'm^2', 'ft^2').get
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "total_floor_area_ft2 = #{total_floor_area_ft2.round(1)}")
 
     # Toplighted area
-    toplighted_area_m2 = area_a_polygons_overlap_b_polygons(combined_toplit_polygons, combined_floor_polygons, 'combined_toplit_polygons', 'combined_floor_polygons')
+    toplighted_area_m2 = space_area_a_polygons_overlap_b_polygons(space, combined_toplit_polygons, combined_floor_polygons, 'combined_toplit_polygons', 'combined_floor_polygons')
 
     # Primary sidelighted area
-    primary_sidelighted_area_m2 = area_a_polygons_overlap_b_polygons(pri_minus_top_polygons, combined_floor_polygons, 'pri_minus_top_polygons', 'combined_floor_polygons')
+    primary_sidelighted_area_m2 = space_area_a_polygons_overlap_b_polygons(space, pri_minus_top_polygons, combined_floor_polygons, 'pri_minus_top_polygons', 'combined_floor_polygons')
 
     # Secondary sidelighted area
-    secondary_sidelighted_area_m2 = area_a_polygons_overlap_b_polygons(sec_minus_top_minus_pri_polygons, combined_floor_polygons, 'sec_minus_top_minus_pri_polygons', 'combined_floor_polygons')
+    secondary_sidelighted_area_m2 = space_area_a_polygons_overlap_b_polygons(space, sec_minus_top_minus_pri_polygons, combined_floor_polygons, 'sec_minus_top_minus_pri_polygons', 'combined_floor_polygons')
 
     # Convert to IP for displaying
     toplighted_area_ft2 = OpenStudio.convert(toplighted_area_m2, 'm^2', 'ft^2').get
@@ -541,12 +541,12 @@ class OpenStudio::Model::Space
   end
 
   # Returns the sidelighting effective aperture
-  # sidelighting_effective_aperture = E(window area * window VT) / primary_sidelighted_area
+  # space_sidelighting_effective_aperture(space)  = E(window area * window VT) / primary_sidelighted_area
   #
   # @param primary_sidelighted_area [Double] the primary sidelighted area (m^2) of the space
   # @return [Double] the unitless sidelighting effective aperture metric
-  def sidelighting_effective_aperture(primary_sidelighted_area)
-    # sidelighting_effective_aperture = E(window area * window VT) / primary_sidelighted_area
+  def space_sidelighting_effective_aperture(space, primary_sidelighted_area)
+    # space_sidelighting_effective_aperture(space)  = E(window area * window VT) / primary_sidelighted_area
     sidelighting_effective_aperture = 9999
 
     num_sub_surfaces = 0
@@ -570,7 +570,7 @@ class OpenStudio::Model::Space
         if construction.is_initialized
           construction_name = construction.get.name.get.upcase
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{name}, could not determine construction for #{sub_surface.name}, will not be included in  sidelighting_effective_aperture calculation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{name}, could not determine construction for #{sub_surface.name}, will not be included in  space_sidelighting_effective_aperture(space)  calculation.")
           next
         end
 
@@ -594,7 +594,7 @@ class OpenStudio::Model::Space
             if row_id.is_initialized
               row_id = row_id.get
             else
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "VT row ID not found for construction: #{construction_name}, #{sub_surface.name} will not be included in  sidelighting_effective_aperture calculation.")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "VT row ID not found for construction: #{construction_name}, #{sub_surface.name} will not be included in  space_sidelighting_effective_aperture(space)  calculation.")
               row_id = 9999
             end
 
@@ -648,12 +648,12 @@ class OpenStudio::Model::Space
   end
 
   # Returns the skylight effective aperture
-  # skylight_effective_aperture = E(0.85 * skylight area * skylight VT * WF) / toplighted_area
+  # space_skylight_effective_aperture(space)  = E(0.85 * skylight area * skylight VT * WF) / toplighted_area
   #
   # @param toplighted_area [Double] the toplighted area (m^2) of the space
   # @return [Double] the unitless skylight effective aperture metric
-  def skylight_effective_aperture(toplighted_area)
-    # skylight_effective_aperture = E(0.85 * skylight area * skylight VT * WF) / toplighted_area
+  def space_skylight_effective_aperture(space, toplighted_area)
+    # space_skylight_effective_aperture(space)  = E(0.85 * skylight area * skylight VT * WF) / toplighted_area
     skylight_effective_aperture = 0.0
 
     num_sub_surfaces = 0
@@ -780,7 +780,7 @@ class OpenStudio::Model::Space
   # @todo stop skipping non-horizontal roofs
   # @todo Determine the illuminance setpoint for the controls based on space type
   # @todo rotate sensor to face window (only needed for glare calcs)
-  def add_daylighting_controls(template, remove_existing_controls, draw_daylight_areas_for_debugging = false)
+  def space_add_daylighting_controls(space, template, remove_existing_controls, draw_daylight_areas_for_debugging = false)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "******For #{name}, adding daylight controls.")
 
     # Check for existing daylighting controls
@@ -835,7 +835,7 @@ class OpenStudio::Model::Space
       req_top_ctrl = true
       req_pri_ctrl = true
 
-      areas = daylighted_areas(template, draw_daylight_areas_for_debugging)
+      areas = space_daylighted_areas(space, template, draw_daylight_areas_for_debugging)
       ###################
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "primary_sidelighted_area = #{areas['primary_sidelighted_area']}")
       ###################
@@ -850,7 +850,7 @@ class OpenStudio::Model::Space
         req_pri_ctrl = false
       else
         # Check effective sidelighted aperture
-        sidelighted_effective_aperture = sidelighting_effective_aperture(areas['primary_sidelighted_area'])
+        sidelighted_effective_aperture = space_sidelighting_effective_aperture(space, areas['primary_sidelighted_area'])
         ###################
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
         ###################
@@ -873,7 +873,7 @@ class OpenStudio::Model::Space
         req_top_ctrl = false
       else
         # Check effective sidelighted aperture
-        sidelighted_effective_aperture = skylight_effective_aperture(areas['toplighted_area'])
+        sidelighted_effective_aperture = space_skylight_effective_aperture(space, areas['toplighted_area'])
         ###################
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_top = #{sidelighted_effective_aperture}")
         ###################
@@ -889,7 +889,7 @@ class OpenStudio::Model::Space
       req_pri_ctrl = true
       req_sec_ctrl = true
 
-      areas = daylighted_areas(template, draw_daylight_areas_for_debugging)
+      areas = space_daylighted_areas(space, template, draw_daylight_areas_for_debugging)
 
       # Primary Sidelighting
       # Check if the primary sidelit area contains less than 150W of lighting
@@ -941,7 +941,7 @@ class OpenStudio::Model::Space
       req_top_ctrl = true
       req_pri_ctrl = true
 
-      areas = daylighted_areas(template, draw_daylight_areas_for_debugging)
+      areas = space_daylighted_areas(space, template, draw_daylight_areas_for_debugging)
 
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
@@ -1105,7 +1105,7 @@ class OpenStudio::Model::Space
          'space_type' => standards_space_type
       }
 
-      data = model.find_object($os_standards['space_types'], search_criteria)
+      data = model_find_object(model, $os_standards['space_types'], search_criteria)
       if data.nil?
         OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
       else 
@@ -1369,7 +1369,7 @@ class OpenStudio::Model::Space
   # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
-  def apply_infiltration_rate(template)
+  def space_apply_infiltration_rate(space, template)
     # Define the total building baseline infiltration rate
     basic_infil_rate_cfm_per_ft2 = nil
     infil_type = nil
@@ -1403,7 +1403,7 @@ class OpenStudio::Model::Space
       spaceInfiltrationDesignFlowRates.each(&:remove)
 
       adj_infil_rate_m3_per_s_per_m2 = 0.25 * 0.001 # m3/s/m2
-      exterior_wall_and_roof_and_subsurface_area = self.exterior_wall_and_roof_and_subsurface_area # To do
+      exterior_wall_and_roof_and_subsurface_area = space_exterior_wall_and_roof_and_subsurface_area(space) # To do
       # Don't create an object if there is no exterior wall area
       if exterior_wall_and_roof_and_subsurface_area <= 0.0
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
@@ -1422,7 +1422,7 @@ class OpenStudio::Model::Space
       adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
       adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
       # Get the exterior wall area
-      exterior_wall_and_window_area_m2 = exterior_wall_and_window_area
+      exterior_wall_and_window_area_m2 = space_exterior_wall_and_window_area(space) 
 
       # Don't create an object if there is no exterior wall area
       if exterior_wall_and_window_area_m2 <= 0.0
@@ -1489,7 +1489,7 @@ class OpenStudio::Model::Space
   #   @units cubic meters per second (m^3/s)
   # @todo handle floors over unconditioned spaces
   # @todo make subsurface infil rates part of Surface.component_infiltration_rate?
-  def component_infiltration_rate(template)
+  def space_component_infiltration_rate(space, template)
     # Define the total building baseline infiltration rate
     basic_infil_rate_cfm_per_ft2 = nil
     infil_type = nil
@@ -1514,11 +1514,11 @@ class OpenStudio::Model::Space
     base_comp_infil_m3_per_s = 0.0
     surfaces.sort.each do |surface|
       # This surface
-      base_comp_infil_m3_per_s += surface.component_infiltration_rate(infil_type)
+      base_comp_infil_m3_per_s += surface_component_infiltration_rate(surface, infil_type)
       # Subsurfaces in this surface
       # TODO make this part of Surface.component_infiltration_rate?
       surface.subSurfaces.sort.each do |subsurface|
-        base_comp_infil_m3_per_s += subsurface.component_infiltration_rate(infil_type)
+        base_comp_infil_m3_per_s += surface_component_infiltration_rate(subsurface, infil_type)
       end
     end
     base_comp_infil_cfm = OpenStudio.convert(base_comp_infil_m3_per_s, 'm^3/s', 'cfm').get
@@ -1528,11 +1528,11 @@ class OpenStudio::Model::Space
     adv_comp_infil_m3_per_s = 0.0
     surfaces.sort.each do |surface|
       # This surface
-      adv_comp_infil_m3_per_s += surface.component_infiltration_rate(infil_type)
+      adv_comp_infil_m3_per_s += surface_component_infiltration_rate(surface, infil_type)
       # Subsurfaces in this surface
       # TODO make this part of Surface.component_infiltration_rate?
       surface.subSurfaces.sort.each do |subsurface|
-        adv_comp_infil_m3_per_s += subsurface.component_infiltration_rate(infil_type)
+        adv_comp_infil_m3_per_s += surface_component_infiltration_rate(subsurface, infil_type)
       end
     end
     adv_comp_infil_cfm = OpenStudio.convert(adv_comp_infil_m3_per_s, 'm^3/s', 'cfm').get
@@ -1560,7 +1560,7 @@ class OpenStudio::Model::Space
   # including the area of the windows on these walls.
   #
   # @return [Double] area in m^2
-  def exterior_wall_and_window_area
+  def space_exterior_wall_and_window_area(space)
     area_m2 = 0.0
 
     # Loop through all surfaces in this space
@@ -1584,7 +1584,7 @@ class OpenStudio::Model::Space
   # including the area of the windows on these walls.
   #
   # @return [Double] area in m^2
-  def exterior_wall_and_roof_and_subsurface_area
+  def space_exterior_wall_and_roof_and_subsurface_area(space)
     area_m2 = 0.0
 
     # Loop through all surfaces in this space
@@ -1612,7 +1612,7 @@ class OpenStudio::Model::Space
   # word plenum.
   #
   # return [Bool] returns true if plenum, false if not
-  def plenum?
+  def space_plenum?(space)
     plenum_status = false
 
     # Check if it is designated
@@ -1654,14 +1654,14 @@ class OpenStudio::Model::Space
   # type of the space below the largest floor in the plenum.
   #
   # return [Bool] true if residential, false if nonresidential
-  def residential?(template)
+  def space_residential?(space, template)
     is_res = false
 
     space_to_check = self
 
     # If this space is a plenum, check the space type
     # of the space below the largest floor in the space
-    if plenum?
+    if space_plenum?(space) 
       # Find the largest floor
       largest_floor_area = 0.0
       largest_surface = nil
@@ -1695,7 +1695,7 @@ class OpenStudio::Model::Space
     if space_type.is_initialized
       space_type = space_type.get
       # Get the space type data
-      space_type_properties = space_type.get_standards_data(template)
+      space_type_properties = space_type_get_standards_data(space_type, template)
       if space_type_properties.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
         is_res = false
@@ -1720,7 +1720,7 @@ class OpenStudio::Model::Space
   # @param climate_zone [String] climate zone
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces
-  def conditioning_category(template, climate_zone)
+  def space_conditioning_category(space, template, climate_zone)
     # Get the zone this space is inside
     zone = thermalZone
 
@@ -1741,7 +1741,7 @@ class OpenStudio::Model::Space
   #
   # @author Andrew Parker, Julien Marrec
   # @return [Bool] true if heated, false if not
-  def heated?
+  def space_heated?(space)
     # Get the zone this space is inside
     zone = thermalZone
 
@@ -1762,7 +1762,7 @@ class OpenStudio::Model::Space
   #
   # @author Andrew Parker, Julien Marrec
   # @return [Bool] true if cooled, false if not
-  def cooled?
+  def space_cooled?(space)
     # Get the zone this space is inside
     zone = thermalZone
 
@@ -1785,7 +1785,7 @@ class OpenStudio::Model::Space
   # schedule value is 1 (100%).
   #
   # @return [Double] the design internal load, in W
-  def design_internal_load
+  def space_design_internal_load(space)
     load_w = 0.0
 
     # People
@@ -1824,7 +1824,7 @@ class OpenStudio::Model::Space
   end
 
   # will return a sorted array of array of spaces and connected area (Descending)
-  def get_adjacent_spaces_with_shared_wall_areas(same_floor = true)
+  def space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor = true)
     same_floor_spaces = []
     spaces = []
     surfaces.each do |surface|
@@ -1879,7 +1879,7 @@ class OpenStudio::Model::Space
     return sorted_spaces
   end
 
-  def get_adjacent_space_with_most_shared_wall_area(same_floor = true)
+  def space_get_adjacent_space_with_most_shared_wall_area(space, same_floor = true)
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
 
@@ -1891,7 +1891,7 @@ class OpenStudio::Model::Space
 
   # Check the z coordinates of a polygon
   # @api private
-  def check_z_zero(polygons, name, space)
+  def space_check_z_zero(space, polygons, name)
     fails = []
     errs = 0
     polygons.each do |polygon|
@@ -1913,7 +1913,7 @@ class OpenStudio::Model::Space
   # A method to convert an array of arrays to
   # an array of OpenStudio::Point3ds.
   # @api private
-  def ruby_polygons_to_point3d_z_zero(ruby_polygons)
+  def space_ruby_polygons_to_point3d_z_zero(space, ruby_polygons)
     # Convert the final polygons back to OpenStudio
     os_polygons = []
     ruby_polygons.each do |ruby_polygon|
@@ -1930,7 +1930,7 @@ class OpenStudio::Model::Space
 
   # A method to zero-out the z vertex of an array of polygons
   # @api private
-  def polygons_set_z(polygons, new_z)
+  def space_polygons_set_z(space, polygons, new_z)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "### #{polygons}")
 
     # Convert the final polygons back to OpenStudio
@@ -1950,7 +1950,7 @@ class OpenStudio::Model::Space
   # A method to returns the number of duplicate vertices in a polygon.
   # TODO does not actually wor
   # @api private
-  def find_duplicate_vertices(ruby_polygon, tol = 0.001)
+  def space_find_duplicate_vertices(space, ruby_polygon, tol = 0.001)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '***')
     duplicates = []
 
@@ -1973,7 +1973,7 @@ class OpenStudio::Model::Space
   # Subtracts one array of polygons from the next,
   # returning an array of resulting polygons.
   # @api private
-  def a_polygons_minus_b_polygons(a_polygons, b_polygons, a_name, b_name)
+  def space_a_polygons_minus_b_polygons(space, a_polygons, b_polygons, a_name, b_name)
     final_polygons_ruby = []
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "#{a_polygons.size} #{a_name} minus #{b_polygons.size} #{b_name}")
@@ -1981,10 +1981,10 @@ class OpenStudio::Model::Space
     # Don't try to subtract anything if either set is empty
     if a_polygons.size.zero?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} - #{b_name}: #{a_name} contains no polygons.")
-      return polygons_set_z(a_polygons, 0.0)
+      return space_polygons_set_z(space, a_polygons, 0.0)
     elsif b_polygons.size.zero?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} - #{b_name}: #{b_name} contains no polygons.")
-      return polygons_set_z(a_polygons, 0.0)
+      return space_polygons_set_z(space, a_polygons, 0.0)
     end
 
     # Loop through all a polygons, and for each one,
@@ -2068,7 +2068,7 @@ class OpenStudio::Model::Space
     # polygons.  Do this by finding duplicate
     # unique_final_polygons_ruby.each do |unique_final_polygon_ruby|
     # next if unique_final_polygon_ruby.size == 4 # Don't check 4-sided polygons
-    # dupes = find_duplicate_vertices(unique_final_polygon_ruby)
+    # dupes = space_find_duplicate_vertices(space, unique_final_polygon_ruby)
     # if dupes.size > 0
     # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "---Two polygons attached by line = #{unique_final_polygon_ruby.to_s.gsub(/\[|\]/,'|')}")
     # end
@@ -2079,7 +2079,7 @@ class OpenStudio::Model::Space
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} minus #{b_name} = #{unique_final_polygons_ruby.size} polygons.")
 
     # Convert the final polygons back to OpenStudio
-    unique_final_polygons = ruby_polygons_to_point3d_z_zero(unique_final_polygons_ruby)
+    unique_final_polygons = space_ruby_polygons_to_point3d_z_zero(space, unique_final_polygons_ruby)
 
     return unique_final_polygons
   end
@@ -2087,7 +2087,7 @@ class OpenStudio::Model::Space
   # Wrapper to catch errors in joinAll method
   # [utilities.geometry.joinAll] <1> Expected polygons to join together
   # @api private
-  def join_polygons(polygons, tol, name)
+  def space_join_polygons(space, polygons, tol, name)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Joining #{name} from #{self.name}")
 
     combined_polygons = []
@@ -2158,7 +2158,7 @@ class OpenStudio::Model::Space
       else
 
         # First polygon minus the already combined polygons
-        first_polygon_minus_combined = a_polygons_minus_b_polygons([first_polygon], combined_polygons_2, 'first_polygon', 'combined_polygons_2')
+        first_polygon_minus_combined = space_a_polygons_minus_b_polygons(space, [first_polygon], combined_polygons_2, 'first_polygon', 'combined_polygons_2')
 
         # Add the result back
         combined_polygons_2 += first_polygon_minus_combined
@@ -2186,7 +2186,7 @@ class OpenStudio::Model::Space
 
   # Gets the total area of a series of polygons
   # @api private
-  def total_area_of_polygons(polygons)
+  def space_total_area_of_polygons(space, polygons)
     total_area_m2 = 0
     polygons.each do |polygon|
       area_m2 = OpenStudio.getArea(polygon)
@@ -2203,7 +2203,7 @@ class OpenStudio::Model::Space
   # Returns an array of resulting polygons.
   # Assumes that a_polygons don't overlap one another, and that b_polygons don't overlap one another
   # @api private
-  def area_a_polygons_overlap_b_polygons(a_polygons, b_polygons, a_name, b_name)
+  def space_area_a_polygons_overlap_b_polygons(space, a_polygons, b_polygons, a_name, b_name)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "#{a_polygons.size} #{a_name} overlaps #{b_polygons.size} #{b_name}")
 
     overlap_area = 0

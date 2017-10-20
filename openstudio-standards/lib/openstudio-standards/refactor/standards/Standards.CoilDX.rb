@@ -6,9 +6,9 @@ module CoilDX
   # Finds the subcategory.  Possible choices are:
   # Single Package, Split System, PTAC, or PTHP
   #
-  # @return [String] the subcategory
+  # @return [String] the coil_dx_subcategory(coil_dx) 
   # @todo Add add split system vs single package to model object
-  def subcategory
+  def coil_dx_subcategory(coil_dx)
     sub_category = 'Single Package'
 
     if airLoopHVAC.empty?
@@ -29,10 +29,9 @@ module CoilDX
 
   # Determine if it is a heat pump
   # @return [Bool] true if it is a heat pump, false if not
-  def heat_pump?
+  def coil_dx_heat_pump?(coil_dx)
     heat_pump = false
 
-    heating_type = nil
     if airLoopHVAC.empty?
       if containingHVACComponent.is_initialized
         containing_comp = containingHVACComponent.get
@@ -54,7 +53,7 @@ module CoilDX
   # Determine the heating type.  Possible choices are:
   # Electric Resistance or None, All Other
   # @return [String] the heating type
-  def heating_type
+  def coil_dx_heating_type(coil_dx)
     htg_type = nil
 
     # If Unitary or Zone HVAC
@@ -111,7 +110,7 @@ module CoilDX
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [hash] has for search criteria to be used for find object
-  def find_search_criteria(template)
+  def coil_dx_find_search_criteria(coil_dx, template)
     search_criteria = {}
     search_criteria['template'] = template
 
@@ -124,17 +123,17 @@ module CoilDX
                                         'AirCooled'
                                       end
 
-    # Get the subcategory
-    search_criteria['subcategory'] = subcategory
+    # Get the coil_dx_subcategory(coil_dx) 
+    search_criteria['subcategory'] = coil_dx_subcategory(coil_dx) 
 
     # Add the heating type to the search criteria
     unless heating_type.nil?
-      search_criteria['heating_type'] = heating_type
+      search_criteria['heating_type'] = coil_dx_heating_type(coil_dx) 
     end
 
     # Unitary heat pumps don't have a heating type
     # as part of the search
-    if heat_pump?
+    if coil_dx_heat_pump?(coil_dx) 
       if airLoopHVAC.empty?
         if containingHVACComponent.is_initialized
           containing_comp = containingHVACComponent.get

@@ -1,5 +1,5 @@
 
-class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
+class StandardsModel < OpenStudio::Model::Model
   # Set the minimum damper position based on OA
   # rate of the space and the template.
   # Zones with low OA per area get lower initial guesses.
@@ -13,7 +13,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
   # which impacts the minimum damper position requirement.
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
-  def apply_minimum_damper_position(template, zone_min_oa = nil, has_ddc = true)
+  def air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(air_terminal_single_duct_vav_reheat, template, zone_min_oa = nil, has_ddc = true)
     # Minimum damper position
     min_damper_position = nil
     case template
@@ -22,7 +22,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
     when '90.1-2007'
       min_damper_position = 0.3
     when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-      case reheat_type
+      case air_terminal_single_duct_vav_reheat_reheat_type(air_terminal_single_duct_vav_reheat) 
       when 'HotWater'
       min_damper_position = if has_ddc
                               0.2
@@ -47,7 +47,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
     return true
   end
 
-  def set_heating_cap
+  def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
     flow_rate_fraction = constantMinimumAirFlowFraction
     if reheatCoil.to_CoilHeatingWater.is_initialized
       reheat_coil = reheatCoil.to_CoilHeatingWater.get
@@ -64,7 +64,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
   # Electricity, or HotWater reheat coil.
   # @return [String] reheat type.  One of NaturalGas,
   # Electricity, or HotWater.
-  def reheat_type
+  def air_terminal_single_duct_vav_reheat_reheat_type(air_terminal_single_duct_vav_reheat)
     type = nil
 
     # Get the reheat coil

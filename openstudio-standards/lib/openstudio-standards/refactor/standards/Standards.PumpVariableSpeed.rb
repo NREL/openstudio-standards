@@ -1,6 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::PumpVariableSpeed
+class StandardsModel < OpenStudio::Model::Model
   include Pump
 
   # Set the pump curve coefficients based
@@ -8,7 +8,7 @@ class OpenStudio::Model::PumpVariableSpeed
   #
   # @param control_type [String] valid choices
   # are Riding Curve, VSD No Reset, VSD DP Reset
-  def set_control_type(control_type)
+  def pump_variable_speed_set_control_type(pump_variable_speed, control_type)
     # Determine the coefficients
     coeff_a = nil
     coeff_b = nil

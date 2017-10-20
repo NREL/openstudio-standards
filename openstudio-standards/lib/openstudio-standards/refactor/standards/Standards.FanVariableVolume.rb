@@ -1,9 +1,9 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::FanVariableVolume
+class StandardsModel < OpenStudio::Model::Model
   include Fan
 
-  def set_control_type(control_type)
+  def fan_variable_volume_set_control_type(fan_variable_volume, control_type)
     # Determine the coefficients
     coeff_a = nil
     coeff_b = nil
@@ -97,7 +97,7 @@ class OpenStudio::Model::FanVariableVolume
   # Determines whether there is a requirement to have a
   # VSD or some other method to reduce fan power
   # at low part load ratios.
-  def part_load_fan_power_limitation?(template)
+  def fan_variable_volume_part_load_fan_power_limitation?(fan_variable_volume, template)
      part_load_control_required = false
 
     # Not required by the old vintages
@@ -110,7 +110,7 @@ class OpenStudio::Model::FanVariableVolume
     mz_fan = false 
     if self.airLoopHVAC.is_initialized
       air_loop = self.airLoopHVAC.get
-      mz_fan = air_loop.multizone_vav_system?
+      mz_fan = air_loop_hvac_multizone_vav_system?(air_loop) 
     end
 
     # No part load fan power control is required for single zone VAV systems
@@ -130,7 +130,7 @@ class OpenStudio::Model::FanVariableVolume
     when '90.1-2007', '90.1-2010'
       hp_limit = 7.54
     when '90.1-2013', 'NREL ZNE Ready 2017'
-      case cooling_system_type
+      case fan_variable_volume_cooling_system_type(fan_variable_volume) 
       when 'dx'
       hp_limit = 0.0
       cap_limit_btu_per_hr = 110_000
@@ -151,15 +151,15 @@ class OpenStudio::Model::FanVariableVolume
       return part_load_control_required
       end
       air_loop = air_loop.get
-      clg_cap_w = air_loop.total_cooling_capacity
+      clg_cap_w = plant_loop_total_cooling_capacity(air_loop) 
       clg_cap_btu_per_hr = OpenStudio.convert(clg_cap_w, 'W', 'Btu/hr').get
-      fan_hp = motor_horsepower
+      fan_hp = pump_motor_horsepower(pump) 
       if fan_hp >= hp_limit && clg_cap_btu_per_hr >= cap_limit_btu_per_hr
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: part load fan power control is required for #{fan_hp.round(1)} HP fan, #{clg_cap_btu_per_hr.round} Btu/hr cooling capacity.")
       part_load_control_required = true
       end             
     elsif hp_limit
-      fan_hp = motor_horsepower
+      fan_hp = pump_motor_horsepower(pump) 
       if fan_hp >= hp_limit
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Part load fan power control is required for #{fan_hp.round(1)} HP fan.")
       part_load_control_required = true
@@ -172,7 +172,7 @@ class OpenStudio::Model::FanVariableVolume
   # Determine if the cooling system is DX, CHW, evaporative, or a mixture.
   # @return [String] the cooling system type.  Possible options are:
   # dx, chw, evaporative, mixed, unknown.
-  def cooling_system_type
+  def fan_variable_volume_cooling_system_type(fan_variable_volume)
     clg_sys_type = 'unknown'
 
     # Get the air loop this fan is connected to

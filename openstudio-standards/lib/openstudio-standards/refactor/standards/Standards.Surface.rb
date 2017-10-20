@@ -1,13 +1,13 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class OpenStudio::Model::Surface
+class StandardsModel < OpenStudio::Model::Model
   # Determine the component infiltration rate for this surface
   #
   # @param type [String] choices are 'baseline' and 'advanced'
   # @return [Double] infiltration rate
   #   @units cubic meters per second (m^3/s)
   # @todo handle floors over unconditioned spaces
-  def component_infiltration_rate(type)
+  def surface_component_infiltration_rate(surface, type)
     comp_infil_rate_m3_per_s = 0.0
 
     # Define the envelope component infiltration rates

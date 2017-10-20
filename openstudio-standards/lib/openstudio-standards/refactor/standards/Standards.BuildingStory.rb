@@ -1,6 +1,6 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class OpenStudio::Model::BuildingStory
+class StandardsModel < OpenStudio::Model::Model
   # Checks all spaces on this story that are part of the total
   # floor area to see if they have the same multiplier.
   # If they do, assume that the multipliers are being used
@@ -8,7 +8,7 @@ class OpenStudio::Model::BuildingStory
   #
   # @return [Integer] return the floor multiplier for this story,
   # returning 1 if no floor multiplier.
-  def floor_multiplier
+  def building_story_floor_multiplier(building_story)
     floor_multiplier = 1
 
     # Determine the multipliers for all spaces
@@ -22,7 +22,7 @@ class OpenStudio::Model::BuildingStory
     # If there are no spaces on this story, assume
     # a multiplier of 1
     if multipliers.size.zero?
-      return floor_multiplier
+      return floor_multiplier 
     end
 
     # Calculate the average multiplier and
@@ -44,11 +44,11 @@ class OpenStudio::Model::BuildingStory
   # story, with the exception of plenum spaces.
   #
   # @return [Double] the minimum z-value, in m
-  def minimum_z_value
+  def building_story_minimum_z_value(building_story)
     z_heights = []
     spaces.each do |space|
       # Skip plenum spaces
-      next if space.plenum?
+      next if thermal_zone_plenum?(space) 
 
       # Get the z value of the space, which
       # vertices in space surfaces are relative to.

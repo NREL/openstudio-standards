@@ -1,6 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::WaterHeaterMixed
+class StandardsModel < OpenStudio::Model::Model
   # Applies the standard efficiency ratings and typical losses and paraisitic loads to this object.
   # Efficiency and skin loss coefficient (UA)
   # Per PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
@@ -9,7 +9,7 @@ class OpenStudio::Model::WaterHeaterMixed
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def apply_efficiency(template)
+  def water_heater_mixed_apply_efficiency(water_heater_mixed, template)
     # Get the capacity of the water heater
     # TODO add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
@@ -187,7 +187,7 @@ class OpenStudio::Model::WaterHeaterMixed
 
     # set part-load performance curve
     if template == 'NECB 2011' && fuel_type == 'NaturalGas'
-      plf_vs_plr_curve = model.add_curve('SWH-EFFFPLR-NECB2011')
+      plf_vs_plr_curve = model_add_curve(model, 'SWH-EFFFPLR-NECB2011')
       setPartLoadFactorCurve(plf_vs_plr_curve)
     end
 
@@ -206,7 +206,7 @@ class OpenStudio::Model::WaterHeaterMixed
   #
   # @param building_type [String] the building type
   # @return [Bool] returns true if successful, false if not.
-  def apply_prm_baseline_fuel_type(template, building_type)
+  def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, template, building_type)
     # For all standards except 90.1-2013
     # baseline is same as proposed per
     # Table G3.1 item 11.b
@@ -248,7 +248,7 @@ class OpenStudio::Model::WaterHeaterMixed
   # Finds capacity in Btu/hr
   #
   # @return [Double] capacity in Btu/hr to be used for find object
-  def find_capacity()
+  def water_heater_mixed_find_capacity(water_heater_mixed)
 
     # Get the coil capacity
     capacity_w = nil

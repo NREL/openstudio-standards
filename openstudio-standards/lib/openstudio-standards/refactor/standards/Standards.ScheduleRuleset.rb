@@ -1,13 +1,13 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::ScheduleRuleset
+class StandardsModel < OpenStudio::Model::Model
   # Returns the equivalent full load hours (EFLH) for this schedule.
   # For example, an always-on fractional schedule
   # (always 1.0, 24/7, 365) would return a value of 8760.
   #
   # @author Andrew Parker, NREL.  Matt Leach, NORESCO.
   # @return [Double] The total number of full load hours for this schedule.
-  def annual_equivalent_full_load_hrs
+  def schedule_ruleset_annual_equivalent_full_load_hrs(schedule_ruleset)
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating total annual EFLH for schedule: #{self.name}")
 
     # Define the start and end date
@@ -109,7 +109,7 @@ class OpenStudio::Model::ScheduleRuleset
   #
   # @author David Goldwasser, NREL.
   # @return [Hash] Hash has two keys, min and max.
-  def annual_min_max_value
+  def schedule_ruleset_annual_min_max_value(schedule_ruleset)
     # gather profiles
     profiles = []
     profiles << defaultDaySchedule
@@ -148,7 +148,7 @@ class OpenStudio::Model::ScheduleRuleset
   # will not be counted.
   # @return [Double] The total number of hours
   # this schedule is above the specified value.
-  def annual_hours_above_value(lower_limit)
+  def schedule_ruleset_annual_hours_above_value(schedule_ruleset, lower_limit)
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating total annual hours above #{lower_limit} for schedule: #{self.name}")
 
     # Define the start and end date

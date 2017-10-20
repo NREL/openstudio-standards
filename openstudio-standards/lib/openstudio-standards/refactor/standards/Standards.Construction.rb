@@ -1,6 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::Construction
+class StandardsModel < OpenStudio::Model::Model
   # Sets the U-value of a construction to a specified value
   # by modifying the thickness of the insulation layer.
   #
@@ -16,7 +16,7 @@ class OpenStudio::Model::Construction
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
   # @return [Bool] returns true if successful, false if not
   # @todo Put in Phlyroy's logic for inferring the insulation layer of a construction
-  def set_u_value(target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_film_coefficients = true)
+  def construction_set_u_value(construction, target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_film_coefficients = true)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting U-Value for #{name}.")
 
     # Skip fenestration constructions
@@ -161,13 +161,13 @@ class OpenStudio::Model::Construction
   # @param target_f_factor_ip [Double] F-Factor
   # @param insulation_layer_name [String] The name of the insulation layer in this construction
   # @return [Bool] returns true if successful, false if not
-  def set_slab_f_factor(target_f_factor_ip, insulation_layer_name = nil)
+  def construction_set_slab_f_factor(construction, target_f_factor_ip, insulation_layer_name = nil)
     # Regression from table A6.3 unheated, fully insulated slab
     r_value_ip = 1.0248 * target_f_factor_ip**-2.186
     u_value_ip = 1.0 / r_value_ip
 
     # Set the insulation U-value
-    set_u_value(u_value_ip, insulation_layer_name, 'GroundContactFloor', true)
+    construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactFloor', true)
 
     # Modify the construction name
     setName("#{name} F-#{target_f_factor_ip.round(3)}")
@@ -183,13 +183,13 @@ class OpenStudio::Model::Construction
   # @param target_c_factor_ip [Double] C-Factor
   # @param insulation_layer_name [String] The name of the insulation layer in this construction
   # @return [Bool] returns true if successful, false if not
-  def set_underground_wall_c_factor(target_c_factor_ip, insulation_layer_name = nil)
+  def construction_set_underground_wall_c_factor(construction, target_c_factor_ip, insulation_layer_name = nil)
     # Regression from table A4.2 continuous exterior insulation
     r_value_ip = 0.775 * target_c_factor_ip**-1.067
     u_value_ip = 1.0 / r_value_ip
 
     # Set the insulation U-value
-    set_u_value(u_value_ip, insulation_layer_name, 'GroundContactWall', true)
+    construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactWall', true)
 
     # Modify the construction name
     setName("#{name} C-#{target_c_factor_ip.round(3)}")
@@ -200,7 +200,7 @@ class OpenStudio::Model::Construction
   # Get the SHGC as calculated by EnergyPlus.
   # Only applies to fenestration constructions.
   # @return [Double] the SHGC as a decimal.
-  def calculated_solar_heat_gain_coefficient
+  def construction_calculated_solar_heat_gain_coefficient(construction)
     construction_name = name.get.to_s
 
     shgc = nil
@@ -250,7 +250,7 @@ class OpenStudio::Model::Construction
   # Get the VT as calculated by EnergyPlus.
   # Only applies to fenestration constructions.
   # @return [Double] the visible transmittance as a decimal.
-  def calculated_visible_transmittance
+  def construction_calculated_visible_transmittance(construction)
     construction_name = name.get.to_s
 
     vt = nil
@@ -300,7 +300,7 @@ class OpenStudio::Model::Construction
   # Get the U-Factor as calculated by EnergyPlus.
   # Only applies to fenestration constructions.
   # @return [Double] the U-Factor in W/m^2*K.
-  def calculated_u_factor
+  def construction_calculated_u_factor(construction)
     construction_name = name.get.to_s
 
     u_factor_w_per_m2_k = nil
@@ -356,7 +356,7 @@ class OpenStudio::Model::Construction
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
   # @return [double] r-value in m^2*K/W.
-  def film_coefficients_r_value(intended_surface_type)
+  def construction_film_coefficients_r_value(construction, intended_surface_type)
     other_layer_r_value_si = 0.0
 
     # Determine the R-value of the air films, if requested

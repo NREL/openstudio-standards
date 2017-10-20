@@ -1,11 +1,11 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::ChillerElectricEIR
+class StandardsModel < OpenStudio::Model::Model
   # Finds the search criteria
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [hash] has for search criteria to be used for find object
-  def find_search_criteria(template)
+  def chiller_electric_eir_find_search_criteria(chiller_electric_eir, template)
     search_criteria = {}
     search_criteria['template'] = template
 
@@ -55,7 +55,7 @@ class OpenStudio::Model::ChillerElectricEIR
   # Finds capacity in W
   #
   # @return [Double] capacity in W to be used for find object
-  def find_capacity
+  def chiller_electric_eir_find_capacity(chiller_electric_eir)
     capacity_w = nil
     if referenceCapacity.is_initialized
       capacity_w = referenceCapacity.get
@@ -75,11 +75,11 @@ class OpenStudio::Model::ChillerElectricEIR
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Double] full load efficiency (COP)
-  def standard_minimum_full_load_efficiency(template)
+  def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir, template)
     # Get the chiller properties
-    search_criteria = find_search_criteria(template)
+    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
     capacity_tons = OpenStudio.convert(find_capacity, 'W', 'ton').get 
-    chlr_props = model.find_object($os_standards['chillers'], search_criteria, capacity_tons, Date.today)
+    chlr_props = model_find_object(model, $os_standards['chillers'], search_criteria, capacity_tons, Date.today)
 
     # lookup the efficiency value
     kw_per_ton = nil
@@ -99,18 +99,18 @@ class OpenStudio::Model::ChillerElectricEIR
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def apply_efficiency_and_curves(template, clg_tower_objs)
+  def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, template, clg_tower_objs)
     chillers = $os_standards['chillers']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
-    search_criteria = find_search_criteria(template)
+    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
     cooling_type = search_criteria['cooling_type']
     condenser_type = search_criteria['condenser_type']
     compressor_type = search_criteria['compressor_type']
 
     # Get the chiller capacity
-    capacity_w = find_capacity
+    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
 
     # NECB 2011 requires that all chillers be modulating down to 25% of their capacity
     if template == 'NECB 2011'
@@ -137,7 +137,7 @@ class OpenStudio::Model::ChillerElectricEIR
                     end
 
     # Get the chiller properties
-    chlr_props = model.find_object(chillers, search_criteria, capacity_tons, Date.today)
+    chlr_props = model_find_object(model, chillers, search_criteria, capacity_tons, Date.today)
     unless chlr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{self.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
       successfully_set_all_properties = false
@@ -145,7 +145,7 @@ class OpenStudio::Model::ChillerElectricEIR
     end
 
     # Make the CAPFT curve
-    cool_cap_ft = model.add_curve(chlr_props['capft'])
+    cool_cap_ft = model_add_curve(model, chlr_props['capft'])
     if cool_cap_ft
       setCoolingCapacityFunctionOfTemperature(cool_cap_ft)
     else
@@ -154,7 +154,7 @@ class OpenStudio::Model::ChillerElectricEIR
     end
 
     # Make the EIRFT curve
-    cool_eir_ft = model.add_curve(chlr_props['eirft'])
+    cool_eir_ft = model_add_curve(model, chlr_props['eirft'])
     if cool_eir_ft
       setElectricInputToCoolingOutputRatioFunctionOfTemperature(cool_eir_ft)
     else
@@ -164,7 +164,7 @@ class OpenStudio::Model::ChillerElectricEIR
 
     # Make the EIRFPLR curve
     # which may be either a CurveBicubic or a CurveQuadratic based on chiller type
-    cool_plf_fplr = model.add_curve(chlr_props['eirfplr'])
+    cool_plf_fplr = model_add_curve(model, chlr_props['eirfplr'])
     if cool_plf_fplr
       setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
     else

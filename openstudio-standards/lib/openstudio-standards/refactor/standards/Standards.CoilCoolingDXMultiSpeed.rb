@@ -1,11 +1,11 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::CoilCoolingDXMultiSpeed
+class StandardsModel < OpenStudio::Model::Model
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Bool] true if successful, false if not
-  def apply_efficiency_and_curves(template, sql_db_vars_map)
+  def coil_cooling_dx_multi_speed_apply_efficiency_and_curves(coil_cooling_dx_multi_speed, template, sql_db_vars_map)
     successfully_set_all_properties = true
 
     # Define the criteria to find the chiller properties
@@ -17,7 +17,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
 
     # TODO: Standards - add split system vs single package to model
     # For now, assume single package as default
-    subcategory = 'Single Package'
+    sub_category = 'Single Package'
 
     # Determine the heating type if unitary or zone hvac
     heat_pump = false
@@ -38,7 +38,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
       elsif containingZoneHVACComponent.is_initialized
         containing_comp = containingZoneHVACComponent.get
         if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-          subcategory = 'PTAC'
+          sub_category = 'PTAC'
           htg_coil = containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.get.heatingCoil
           if htg_coil.to_CoilHeatingElectric.is_initialized
             heating_type = 'Electric Resistance or None'
@@ -54,7 +54,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
       search_criteria['heating_type'] = heating_type
     end
 
-    search_criteria['subcategory'] = subcategory
+    search_criteria['subcategory'] = sub_category
 
     # Get the coil capacity
     capacity_w = nil
@@ -115,9 +115,9 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if heat_pump == true
-                 model.find_object($os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model.find_object($os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
@@ -128,7 +128,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     end
 
     # Make the COOL-CAP-FT curve
-    cool_cap_ft = model.add_curve(ac_props['cool_cap_ft'], standards)
+    cool_cap_ft = model_add_curve(model, ac_props['cool_cap_ft'], standards)
     if cool_cap_ft
       clg_stages.each do |stage|
         stage.setTotalCoolingCapacityFunctionofTemperatureCurve(cool_cap_ft)
@@ -139,7 +139,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     end
 
     # Make the COOL-CAP-FFLOW curve
-    cool_cap_fflow = model.add_curve(ac_props['cool_cap_fflow'], standards)
+    cool_cap_fflow = model_add_curve(model, ac_props['cool_cap_fflow'], standards)
     if cool_cap_fflow
       clg_stages.each do |stage|
         stage.setTotalCoolingCapacityFunctionofFlowFractionCurve(cool_cap_fflow)
@@ -150,7 +150,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     end
 
     # Make the COOL-EIR-FT curve
-    cool_eir_ft = model.add_curve(ac_props['cool_eir_ft'], standards)
+    cool_eir_ft = model_add_curve(model, ac_props['cool_eir_ft'], standards)
     if cool_eir_ft
       clg_stages.each do |stage|
         stage.setEnergyInputRatioFunctionofTemperatureCurve(cool_eir_ft)
@@ -161,7 +161,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     end
 
     # Make the COOL-EIR-FFLOW curve
-    cool_eir_fflow = model.add_curve(ac_props['cool_eir_fflow'], standards)
+    cool_eir_fflow = model_add_curve(model, ac_props['cool_eir_fflow'], standards)
     if cool_eir_fflow
       clg_stages.each do |stage|
         stage.setEnergyInputRatioFunctionofFlowFractionCurve(cool_eir_fflow)
@@ -172,7 +172,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     end
 
     # Make the COOL-PLF-FPLR curve
-    cool_plf_fplr = model.add_curve(ac_props['cool_plf_fplr'], standards)
+    cool_plf_fplr = model_add_curve(model, ac_props['cool_plf_fplr'], standards)
     if cool_plf_fplr
       clg_stages.each do |stage|
         stage.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
@@ -185,7 +185,7 @@ class OpenStudio::Model::CoilCoolingDXMultiSpeed
     # Get the minimum efficiency standards
     cop = nil
 
-    if subcategory == 'PTAC'
+    if coil_dx_subcategory(coil_dx)  == 'PTAC'
       ptac_eer_coeff_1 = ac_props['ptac_eer_coefficient_1']
       ptac_eer_coeff_2 = ac_props['ptac_eer_coefficient_2']
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000

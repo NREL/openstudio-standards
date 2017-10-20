@@ -1,11 +1,11 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::ScheduleCompact
+class StandardsModel < OpenStudio::Model::Model
   # Returns the min and max value for this schedule.
   #
   # @author Andrew Parker, NREL.
   # return [Hash] Hash has two keys, min and max.
-  def annual_min_max_value
+  def schedule_compact_annual_min_max_value(schedule_compact)
     vals = []
     prev_str = ''
     sch.extensibleGroups.each do |eg|

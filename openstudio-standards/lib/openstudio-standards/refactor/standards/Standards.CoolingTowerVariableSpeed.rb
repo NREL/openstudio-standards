@@ -1,10 +1,10 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::CoolingTowerVariableSpeed
+class StandardsModel < OpenStudio::Model::Model
   include CoolingTower
 
-  def apply_efficiency_and_curves(template)
-    apply_minimum_power_per_flow(template)
+  def cooling_tower_variable_speed_apply_efficiency_and_curves(cooling_tower_variable_speed, template)
+    cooling_tower_apply_minimum_power_per_flow(cooling_tower, template)
 
     # 90.1-2013 6.5.2.2 Multicell heat rejection with VSD
     case template

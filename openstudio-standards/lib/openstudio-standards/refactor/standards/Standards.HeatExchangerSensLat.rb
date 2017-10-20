@@ -1,8 +1,8 @@
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent
+class StandardsModel < OpenStudio::Model::Model
   # Sets the minimum effectiveness of the heat exchanger per
   # the standard.
-  def apply_efficiency(template)
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(heat_exchanger_air_to_air_sensible_and_latent, template)
     # Assumed to be sensible and latent at all flow
     min_effct = case template
                 when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'

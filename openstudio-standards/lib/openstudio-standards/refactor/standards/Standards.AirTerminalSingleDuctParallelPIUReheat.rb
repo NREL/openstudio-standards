@@ -1,12 +1,12 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat
+class StandardsModel < OpenStudio::Model::Model
   # Sets the fan power of a PIU fan based on the W/cfm
   # specified in the standard.
   #
   # @param template [String] the template base requirements on
   # @return [Bool] returns true if successful, false if not
-  def apply_prm_baseline_fan_power(template)
+  def air_terminal_single_duct_parallel_piu_reheat_apply_prm_baseline_fan_power(air_terminal_single_duct_parallel_piu_reheat, template)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "Setting PIU fan power for #{name}.")
 
     # Determine the fan sizing flow rate, min flow rate,
@@ -40,12 +40,12 @@ class OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat
     fan = self.fan.to_FanConstantVolume.get
 
     # Set the impeller efficiency
-    fan.change_impeller_efficiency(fan.baseline_impeller_efficiency(template))
+    fan_change_impeller_efficiency(fan, fan.baseline_impeller_efficiency(template))
 
     # Set the motor efficiency, preserving the impeller efficency.
     # For terminal fans, a bhp lookup of 0.5bhp is always used because
     # they are assumed to represent a series of small fans in reality.
-    fan.apply_standard_minimum_motor_efficiency(template, fan.brake_horsepower)
+    pump_apply_standard_minimum_motor_efficiency(fan, template, fan.brake_horsepower)
 
     # Calculate a new pressure rise to hit the target W/cfm
     fan_tot_eff = fan.fanEfficiency

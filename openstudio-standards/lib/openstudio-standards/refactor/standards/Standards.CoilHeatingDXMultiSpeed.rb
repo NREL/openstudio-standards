@@ -1,11 +1,11 @@
 
 # open the class to add methods to return sizing values
-class OpenStudio::Model::CoilHeatingDXMultiSpeed
+class StandardsModel < OpenStudio::Model::Model
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Bool] true if successful, false if not
-  def apply_efficiency_and_curves(template, sql_db_vars_map)
+  def coil_heating_dx_multi_speed_apply_efficiency_and_curves(coil_heating_dx_multi_speed, template, sql_db_vars_map)
     successfully_set_all_properties = true
 
     # Define the criteria to find the unitary properties
@@ -67,7 +67,7 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
     capacity_kbtu_per_hr = OpenStudio.convert(clg_capacity, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
-    hp_props = model.find_object($os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    hp_props = model_find_object(model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if hp_props.nil?
@@ -78,7 +78,7 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
 
     # Make the HEAT-CAP-FT curve
     htg_stages = stages
-    heat_cap_ft = model.add_curve(hp_props['heat_cap_ft'], standards)
+    heat_cap_ft = model_add_curve(model, hp_props['heat_cap_ft'], standards)
     if heat_cap_ft
       htg_stages.each do |istage|
         istage.setHeatingCapacityFunctionofTemperatureCurve(heat_cap_ft)
@@ -89,7 +89,7 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
     end
 
     # Make the HEAT-CAP-FFLOW curve
-    heat_cap_fflow = model.add_curve(hp_props['heat_cap_fflow'], standards)
+    heat_cap_fflow = model_add_curve(model, hp_props['heat_cap_fflow'], standards)
     if heat_cap_fflow
       htg_stages.each do |istage|
         istage.setHeatingCapacityFunctionofFlowFractionCurve(heat_cap_fflow)
@@ -100,7 +100,7 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
     end
 
     # Make the HEAT-EIR-FT curve
-    heat_eir_ft = model.add_curve(hp_props['heat_eir_ft'], standards)
+    heat_eir_ft = model_add_curve(model, hp_props['heat_eir_ft'], standards)
     if heat_eir_ft
       htg_stages.each do |istage|
         istage.setEnergyInputRatioFunctionofTemperatureCurve(heat_eir_ft)
@@ -111,7 +111,7 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
     end
 
     # Make the HEAT-EIR-FFLOW curve
-    heat_eir_fflow = model.add_curve(hp_props['heat_eir_fflow'], standards)
+    heat_eir_fflow = model_add_curve(model, hp_props['heat_eir_fflow'], standards)
     if heat_eir_fflow
       htg_stages.each do |istage|
         istage.setEnergyInputRatioFunctionofFlowFractionCurve(heat_eir_fflow)
@@ -122,7 +122,7 @@ class OpenStudio::Model::CoilHeatingDXMultiSpeed
     end
 
     # Make the HEAT-PLF-FPLR curve
-    heat_plf_fplr = model.add_curve(hp_props['heat_plf_fplr'], standards)
+    heat_plf_fplr = model_add_curve(model, hp_props['heat_plf_fplr'], standards)
     if heat_plf_fplr
       htg_stages.each do |istage|
         istage.setPartLoadFractionCorrelationCurve(heat_plf_fplr)

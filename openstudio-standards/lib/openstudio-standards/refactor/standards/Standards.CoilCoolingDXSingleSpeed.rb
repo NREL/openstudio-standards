@@ -1,12 +1,12 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::CoilCoolingDXSingleSpeed
+class StandardsModel < OpenStudio::Model::Model
   include CoilDX
 
   # Finds capacity in W
   #
   # @return [Double] capacity in W to be used for find object
-  def find_capacity
+  def coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
     capacity_w = nil
     if ratedTotalCoolingCapacity.is_initialized
       capacity_w = ratedTotalCoolingCapacity.get
@@ -42,22 +42,22 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
-  def standard_minimum_cop(template, rename=false)
-    search_criteria = find_search_criteria(template)
+  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, template, rename=false)
+    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
     sub_category = search_criteria['subcategory']
-    capacity_w = find_capacity
+    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Look up the efficiency characteristics    
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if heat_pump?
-                 model.find_object($os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = if coil_dx_heat_pump?(coil_dx) 
+                 model_find_object(model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model.find_object($os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
@@ -151,23 +151,23 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def apply_efficiency_and_curves(template, sql_db_vars_map)
+  def coil_cooling_dx_single_speed_apply_efficiency_and_curves(coil_cooling_dx_single_speed, template, sql_db_vars_map)
     successfully_set_all_properties = true
 
     # Get the search criteria
-    search_criteria = find_search_criteria(template)
+    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
 
     # Get the capacity
-    capacity_w = find_capacity
+    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if heat_pump?
-                 model.find_object($os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = if coil_dx_heat_pump?(coil_dx) 
+                 model_find_object(model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model.find_object($os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
@@ -178,7 +178,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-CAP-FT curve
-    cool_cap_ft = model.add_curve(ac_props['cool_cap_ft'])
+    cool_cap_ft = model_add_curve(model, ac_props['cool_cap_ft'])
     if cool_cap_ft
       setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft)
     else
@@ -187,7 +187,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-CAP-FFLOW curve
-    cool_cap_fflow = model.add_curve(ac_props['cool_cap_fflow'])
+    cool_cap_fflow = model_add_curve(model, ac_props['cool_cap_fflow'])
     if cool_cap_fflow
       setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow)
     else
@@ -196,7 +196,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-EIR-FT curve
-    cool_eir_ft = model.add_curve(ac_props['cool_eir_ft'])
+    cool_eir_ft = model_add_curve(model, ac_props['cool_eir_ft'])
     if cool_eir_ft
       setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)
     else
@@ -205,7 +205,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-EIR-FFLOW curve
-    cool_eir_fflow = model.add_curve(ac_props['cool_eir_fflow'])
+    cool_eir_fflow = model_add_curve(model, ac_props['cool_eir_fflow'])
     if cool_eir_fflow
       setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
     else
@@ -214,7 +214,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     end
 
     # Make the COOL-PLF-FPLR curve
-    cool_plf_fplr = model.add_curve(ac_props['cool_plf_fplr'])
+    cool_plf_fplr = model_add_curve(model, ac_props['cool_plf_fplr'])
     if cool_plf_fplr
       setPartLoadFractionCorrelationCurve(cool_plf_fplr)
     else
@@ -226,7 +226,7 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
     orig_name = name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = standard_minimum_cop(template, true)
+    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, template, true)
 
     # Map the original name to the new name
     sql_db_vars_map[name.to_s] = orig_name

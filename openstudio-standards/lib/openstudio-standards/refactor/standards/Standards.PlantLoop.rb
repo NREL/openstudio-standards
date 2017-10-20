@@ -1,22 +1,22 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::PlantLoop
+class StandardsModel < OpenStudio::Model::Model
   # Apply all standard required controls to the plantloop
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def apply_standard_controls(template, climate_zone)
+  def plant_loop_apply_standard_controls(plant_loop, template, climate_zone)
     # Variable flow system
-    enable_variable_flow(template) if is_variable_flow_required(template)
+    plant_loop_enable_variable_flow(plant_loop, template) if is_variable_flow_required(template)
 
     # Supply water temperature reset
-    enable_supply_water_temperature_reset if supply_water_temperature_reset_required?(template)
+    plant_loop_enable_supply_water_temperature_reset(plant_loop)  if supply_water_temperature_reset_required?(template)
   end
 
-  def enable_variable_flow(template)
+  def plant_loop_enable_variable_flow(plant_loop, template)
   end
 
-  def variable_flow_system?
+  def plant_loop_variable_flow_system?(plant_loop)
     variable_flow = false
 
     # Modify all the primary pumps
@@ -38,7 +38,7 @@ class OpenStudio::Model::PlantLoop
 
   # TODO: I think it makes more sense to sense the motor efficiency right there...
   # But actually it's completely irrelevant... you could set at 0.9 and just calculate the pressurise rise to have your 19 W/GPM or whatever
-  def apply_prm_baseline_pump_power(template)
+  def plant_loop_apply_prm_baseline_pump_power(plant_loop, template)
     # Determine the pumping power per
     # flow based on loop type.
     pri_w_per_gpm = nil
@@ -99,16 +99,16 @@ class OpenStudio::Model::PlantLoop
     supplyComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
       elsif sc.to_HeaderedPumpsConstantSpeed.is_initialized
         pump = sc.to_HeaderedPumpsConstantSpeed.get
-        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
       end
     end
 
@@ -116,23 +116,23 @@ class OpenStudio::Model::PlantLoop
     demandComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump.apply_prm_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, sec_w_per_gpm, template)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump.apply_prm_pressure_rise_and_motor_efficiency(sec_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, sec_w_per_gpm, template)
       elsif sc.to_HeaderedPumpsConstantSpeed.is_initialized
         pump = sc.to_HeaderedPumpsConstantSpeed.get
-        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        pump.apply_prm_pressure_rise_and_motor_efficiency(pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
       end
     end
 
     return true
   end
 
-  def apply_prm_baseline_temperatures(template)
+  def plant_loop_apply_prm_baseline_temperatures(plant_loop, template)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
     case loop_type
@@ -154,7 +154,7 @@ class OpenStudio::Model::PlantLoop
 
       # ASHRAE Appendix G - G3.1.3.4 (for ASHRAE 90.1-2004, 2007 and 2010)
       # HW reset: 180F at 20F and below, 150F at 50F and above
-      enable_supply_water_temperature_reset
+      plant_loop_enable_supply_water_temperature_reset(plant_loop) 
 
       # Boiler properties
       supplyComponents.each do |sc|
@@ -188,7 +188,7 @@ class OpenStudio::Model::PlantLoop
 
       # ASHRAE Appendix G - G3.1.3.9 (for ASHRAE 90.1-2004, 2007 and 2010)
       # ChW reset: 44F at 80F and above, 54F at 60F and below
-      enable_supply_water_temperature_reset
+      plant_loop_enable_supply_water_temperature_reset(plant_loop) 
 
       # Chiller properties
       supplyComponents.each do |sc|
@@ -360,7 +360,7 @@ class OpenStudio::Model::PlantLoop
     return true
   end
 
-  def supply_water_temperature_reset_required?(template)
+  def plant_loop_supply_water_temperature_reset_required?(plant_loop, template)
     reset_required = false
 
     case template
@@ -372,20 +372,20 @@ class OpenStudio::Model::PlantLoop
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
 
       # Not required for service water heating systems
-      if swh_loop?
+      if plant_loop_swh_loop?(plant_loop) 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}: supply water temperature reset not required for service water heating systems.")
         return reset_required
       end
 
       # Not required for variable flow systems
-      if variable_flow_system?
+      if plant_loop_variable_flow_system?(plant_loop) 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{name}: supply water temperature reset not required for variable flow systems per 6.5.4.3 Exception b.")
         return reset_required
       end
 
       # Determine the capacity of the system
-      heating_capacity_w = total_heating_capacity
-      cooling_capacity_w = total_cooling_capacity
+      heating_capacity_w = plant_loop_total_heating_capacity(plant_loop) 
+      cooling_capacity_w = plant_loop_total_cooling_capacity(plant_loop) 
 
       heating_capacity_btu_per_hr = OpenStudio.convert(heating_capacity_w, 'W', 'Btu/hr').get
       cooling_capacity_btu_per_hr = OpenStudio.convert(cooling_capacity_w, 'W', 'Btu/hr').get
@@ -407,7 +407,7 @@ class OpenStudio::Model::PlantLoop
     return reset_required
   end
 
-  def enable_supply_water_temperature_reset
+  def plant_loop_enable_supply_water_temperature_reset(plant_loop)
     # Get the current setpoint manager on the outlet node
     # and determine if already has temperature reset
     spms = supplyOutletNode.setpointManagers
@@ -498,7 +498,7 @@ class OpenStudio::Model::PlantLoop
   #
   # @return [Double] total cooling capacity
   #   units = Watts (W)
-  def total_cooling_capacity
+  def plant_loop_total_cooling_capacity(plant_loop)
     # Sum the cooling capacity for all cooling components
     # on the plant loop.
     total_cooling_capacity_w = 0
@@ -537,7 +537,7 @@ class OpenStudio::Model::PlantLoop
   # @return [Double] total heating capacity
   #   units = Watts (W)
   # @todo Add district heating to plant loop heating capacity
-  def total_heating_capacity
+  def plant_loop_total_heating_capacity(plant_loop)
     # Sum the heating capacity for all heating components
     # on the plant loop.
     total_heating_capacity_w = 0
@@ -590,7 +590,7 @@ class OpenStudio::Model::PlantLoop
     return total_heating_capacity_w
   end
 
-  def total_floor_area_served
+  def plant_loop_total_floor_area_served(plant_loop)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
 
@@ -651,7 +651,7 @@ class OpenStudio::Model::PlantLoop
     return area_served_m2
   end
 
-  def apply_prm_baseline_pumping_type(template)
+  def plant_loop_apply_prm_baseline_pumping_type(plant_loop, template)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
 
@@ -669,7 +669,7 @@ class OpenStudio::Model::PlantLoop
       end
 
       # Determine the area served
-      area_served_m2 = total_floor_area_served
+      area_served_m2 = plant_loop_total_floor_area_served(plant_loop) 
       area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
       # Determine the pump type
@@ -682,7 +682,7 @@ class OpenStudio::Model::PlantLoop
       supplyComponents.each do |sc|
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
-          pump.set_control_type(control_type)
+          pump_variable_speed_set_control_type(pump, control_type)
         end
       end
 
@@ -707,7 +707,7 @@ class OpenStudio::Model::PlantLoop
         minimum_area_ft2 = 120_000
 
         # Determine the area served
-        area_served_m2 = total_floor_area_served
+        area_served_m2 = plant_loop_total_floor_area_served(plant_loop) 
         area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
         # Determine the primary pump type
@@ -724,7 +724,7 @@ class OpenStudio::Model::PlantLoop
         minimum_cap_tons = 300
 
         # Determine the capacity
-        cap_w = total_cooling_capacity
+        cap_w = plant_loop_total_cooling_capacity(plant_loop) 
         cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
 
         # Determine if it a district cooling system
@@ -767,10 +767,10 @@ class OpenStudio::Model::PlantLoop
       supplyComponents.each do |sc|
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
-          pump.set_control_type(pri_control_type)
+          pump_variable_speed_set_control_type(pump, pri_control_type)
         elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
           pump = sc.to_HeaderedPumpsVariableSpeed.get
-          pump.set_control_type(control_type)        
+          headered_pump_variable_speed_set_control_type(pump, control_type)        
         end
       end
 
@@ -778,10 +778,10 @@ class OpenStudio::Model::PlantLoop
       demandComponents.each do |sc|
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
-          pump.set_control_type(sec_control_type)
+          pump_variable_speed_set_control_type(pump, sec_control_type)
         elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
           pump = sc.to_HeaderedPumpsVariableSpeed.get
-          pump.set_control_type(control_type)
+          headered_pump_variable_speed_set_control_type(pump, control_type)
         end
       end
 
@@ -801,10 +801,10 @@ class OpenStudio::Model::PlantLoop
       supplyComponents.each do |sc|
         if sc.to_PumpVariableSpeed.is_initialized
           pump = sc.to_PumpVariableSpeed.get
-          pump.set_control_type(control_type)
+          pump_variable_speed_set_control_type(pump, control_type)
         elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
           pump = sc.to_HeaderedPumpsVariableSpeed.get
-          pump.set_control_type(control_type)
+          headered_pump_variable_speed_set_control_type(pump, control_type)
         end
       end
 
@@ -813,7 +813,7 @@ class OpenStudio::Model::PlantLoop
     return true
   end
 
-  def apply_prm_number_of_boilers(template)
+  def plant_loop_apply_prm_number_of_boilers(plant_loop, template)
     # Skip non-heating plants
     return true unless sizingPlant.loopType == 'Heating'
 
@@ -826,7 +826,7 @@ class OpenStudio::Model::PlantLoop
     end
 
     # Determine the area served
-    area_served_m2 = total_floor_area_served
+    area_served_m2 = plant_loop_total_floor_area_served(plant_loop) 
     area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
     # Do nothing if only one boiler is required
@@ -876,7 +876,7 @@ class OpenStudio::Model::PlantLoop
     return true
   end
 
-  def apply_prm_number_of_chillers(template)
+  def plant_loop_apply_prm_number_of_chillers(plant_loop, template)
     # Skip non-cooling plants
     return true unless sizingPlant.loopType == 'Cooling'
 
@@ -888,7 +888,7 @@ class OpenStudio::Model::PlantLoop
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
 
       # Determine the capacity of the loop
-      cap_w = total_cooling_capacity
+      cap_w = plant_loop_total_cooling_capacity(plant_loop) 
       cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
 
       if cap_tons <= 300
@@ -1024,7 +1024,7 @@ class OpenStudio::Model::PlantLoop
     return true
   end
 
-  def apply_prm_number_of_cooling_towers(template)
+  def plant_loop_apply_prm_number_of_cooling_towers(plant_loop, template)
     # Skip non-cooling plants
     return true unless sizingPlant.loopType == 'Condenser'
 
@@ -1160,7 +1160,7 @@ class OpenStudio::Model::PlantLoop
   #
   # @return [Double] rated power consumption per flow
   #   @units Watts per GPM (W*s/m^3)
-  def total_rated_w_per_gpm
+  def plant_loop_total_rated_w_per_gpm(plant_loop)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
 
@@ -1171,12 +1171,12 @@ class OpenStudio::Model::PlantLoop
     supplyComponents.each do |component|
       if component.to_PumpConstantSpeed.is_initialized
         pump = component.to_PumpConstantSpeed.get
-        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump) 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{name} - Primary (Supply) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         supply_w_per_gpm += pump_rated_w_per_gpm
       elsif component.to_PumpVariableSpeed.is_initialized
         pump = component.to_PumpVariableSpeed.get
-        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump) 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{name} - Primary (Supply) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         supply_w_per_gpm += pump_rated_w_per_gpm
       end
@@ -1188,12 +1188,12 @@ class OpenStudio::Model::PlantLoop
     demand_pumps.each do |component|
       if component.to_PumpConstantSpeed.is_initialized
         pump = component.to_PumpConstantSpeed.get
-        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump) 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{name} - Secondary (Demand) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         demand_w_per_gpm += pump_rated_w_per_gpm
       elsif component.to_PumpVariableSpeed.is_initialized
         pump = component.to_PumpVariableSpeed.get
-        pump_rated_w_per_gpm = pump.rated_w_per_gpm
+        pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump) 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{name} - Secondary (Demand) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         demand_w_per_gpm += pump_rated_w_per_gpm
       end
@@ -1209,7 +1209,7 @@ class OpenStudio::Model::PlantLoop
   # find maximum_loop_flow_rate
   #
   # @return [Double]  maximum_loop_flow_rate m^3/s
-  def find_maximum_loop_flow_rate
+  def plant_loop_find_maximum_loop_flow_rate(plant_loop)
     # Get the maximum_loop_flow_rate
     maximum_loop_flow_rate = nil
     if maximumLoopFlowRate.is_initialized
@@ -1227,7 +1227,7 @@ class OpenStudio::Model::PlantLoop
   # or a WaterHeaterMixed on the supply side
   #
   # @return [Boolean] true if it's indeed a SHW loop, false otherwise
-  def swh_loop?()
+  def plant_loop_swh_loop?(plant_loop)
 
     serves_swh = false
     self.demandComponents.each do |comp|
@@ -1251,15 +1251,15 @@ class OpenStudio::Model::PlantLoop
   # the water storage volume, and the total heating capacity.
   #
   # @return [Array<Array<String>, Bool, Double, Double>] An array of:
-  # fuel types, combination_system (true/false), storage_capacity (m^3), total_heating_capacity (W)
-  def swh_system_type
+  # fuel types, combination_system (true/false), storage_capacity (m^3), plant_loop_total_heating_capacity(plant_loop)  (W)
+  def plant_loop_swh_system_type(plant_loop)
     combination_system = true
     storage_capacity = 0
     primary_fuels = []
     secondary_fuels = []
 
-    # @Todo: to work correctly, plantloop.total_heating_capacity requires to have either hardsized capacities or a sizing run.
-    primary_heating_capacity = total_heating_capacity
+    # @Todo: to work correctly, plant_loop_total_heating_capacity(plantloop)  requires to have either hardsized capacities or a sizing run.
+    primary_heating_capacity = plant_loop_total_heating_capacity(plant_loop) 
     secondary_heating_capacity = 0
 
     supplyComponents.each do |component|
@@ -1294,7 +1294,7 @@ class OpenStudio::Model::PlantLoop
         if component.secondaryPlantLoop.is_initialized
           source_plant_loop = component.secondaryPlantLoop.get
           secondary_fuels += model.plant_loop_heating_fuels(source_plant_loop)
-          secondary_heating_capacity += source_plant_loop.total_heating_capacity
+          secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop) 
         end
 
         # Storage capacity
@@ -1316,7 +1316,7 @@ class OpenStudio::Model::PlantLoop
         if component.secondaryPlantLoop.is_initialized
           source_plant_loop = component.secondaryPlantLoop.get
           secondary_fuels += model.plant_loop_heating_fuels(source_plant_loop)
-          secondary_heating_capacity += source_plant_loop.total_heating_capacity
+          secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop) 
         end
 
         # Storage capacity
@@ -1331,7 +1331,7 @@ class OpenStudio::Model::PlantLoop
         if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
           source_plant_loop = hx.secondaryPlantLoop.get
           secondary_fuels += model.plant_loop_heating_fuels(source_plant_loop)
-          secondary_heating_capacity += source_plant_loop.total_heating_capacity
+          secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop) 
         end
 
       when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
@@ -1347,7 +1347,7 @@ class OpenStudio::Model::PlantLoop
     total_heating_capacity = primary_heating_capacity + secondary_heating_capacity
     # If the primary heating capacity is bigger than secondary, assume the secondary is just a backup and disregard it?
     # if primary_heating_capacity > secondary_heating_capacity
-    #   total_heating_capacity = primary_heating_capacity
+    #   plant_loop_total_heating_capacity(plant_loop)  = primary_heating_capacity
     #   fuels = primary_fuels
     # end
 

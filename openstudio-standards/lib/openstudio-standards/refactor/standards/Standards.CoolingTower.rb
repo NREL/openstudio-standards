@@ -17,7 +17,7 @@ module CoolingTower
   #
   # @param template [String] the template base requirements on
   # @return [Bool] true if successful, false if not
-  def apply_minimum_power_per_flow(template)
+  def cooling_tower_apply_minimum_power_per_flow(cooling_tower, template)
     # Get the design water flow rate
     design_water_flow_m3_per_s = nil
     if designWaterFlowRate.is_initialized
@@ -71,7 +71,7 @@ module CoolingTower
     end
 
     # Get the cooling tower properties
-    ct_props = model.find_object(heat_rejection, search_criteria)
+    ct_props = model_find_object(model, heat_rejection, search_criteria)
     unless ct_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{self.name}, cannot find heat rejection properties, cannot apply standard efficiencies or curves.")
       return false
@@ -99,7 +99,7 @@ module CoolingTower
       'type' => 'Enclosed'
     }
 
-    motor_properties = model.find_object(motors, search_criteria, fan_motor_nameplate_hp)
+    motor_properties = model_find_object(model, motors, search_criteria, fan_motor_nameplate_hp)
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{self.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp.")
       return false
