@@ -110,9 +110,9 @@ module CoilDX
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [hash] has for search criteria to be used for find object
-  def coil_dx_find_search_criteria(coil_dx, template)
+  def coil_dx_find_search_criteria(coil_dx)
     search_criteria = {}
-    search_criteria['template'] = template
+    search_criteria['template'] = instvartemplate
 
     search_criteria['cooling_type'] = case coil_dx.iddObjectType.valueName.to_s
                                       when 'OS_Coil_Cooling_DX_SingleSpeed',

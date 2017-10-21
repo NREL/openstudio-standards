@@ -5,9 +5,9 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [hash] has for search criteria to be used for find object
-  def chiller_electric_eir_find_search_criteria(chiller_electric_eir, template)
+  def chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     search_criteria = {}
-    search_criteria['template'] = template
+    search_criteria['template'] = instvartemplate
 
     # Determine if WaterCooled or AirCooled by
     # checking if the chiller is connected to a condenser
@@ -75,9 +75,9 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Double] full load efficiency (COP)
-  def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir, template)
+  def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     # Get the chiller properties
-    search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir, template)
+    search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     capacity_tons = OpenStudio.convert(find_capacity, 'W', 'ton').get 
     chlr_props = model_find_object(model, $os_standards['chillers'], search_criteria, capacity_tons, Date.today)
 
@@ -99,12 +99,12 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, template, clg_tower_objs)
+  def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = $os_standards['chillers']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
-    search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir, template)
+    search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     cooling_type = search_criteria['cooling_type']
     condenser_type = search_criteria['condenser_type']
     compressor_type = search_criteria['compressor_type']
@@ -113,7 +113,7 @@ class StandardsModel < OpenStudio::Model::Model
     capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir) 
 
     # NECB 2011 requires that all chillers be modulating down to 25% of their capacity
-    if template == 'NECB 2011'
+    if instvartemplate == 'NECB 2011'
       chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
       chiller_electric_eir.setMinimumPartLoadRatio(0.25)
       chiller_electric_eir.setMinimumUnloadingRatio(0.25)
@@ -130,7 +130,7 @@ class StandardsModel < OpenStudio::Model::Model
     end # NECB 2011
 
     # Convert capacity to tons
-    capacity_tons = if template == 'NECB 2011'
+    capacity_tons = if instvartemplate == 'NECB 2011'
                       OpenStudio.convert(chiller_capacity, 'W', 'ton').get
                     else
                       OpenStudio.convert(capacity_w, 'W', 'ton').get
@@ -185,7 +185,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Set cooling tower properties for NECB 2011 now that the new COP of the chiller is set
-    if template == 'NECB 2011'
+    if instvartemplate == 'NECB 2011'
       if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
         # Single speed tower model assumes 25% extra for compressor power
         tower_cap = capacity_w * (1.0 + 1.0 / chiller_electric_eir.referenceCOP)
@@ -200,7 +200,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Append the name with size and kw/ton
     chiller_electric_eir.setName("#{chiller_electric_eir.name} #{capacity_tons.round}tons #{kw_per_ton.round(1)}kW/ton")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ChillerElectricEIR', "For #{template}: #{chiller_electric_eir.name}: #{cooling_type} #{condenser_type} #{compressor_type} Capacity = #{capacity_tons.round}tons; COP = #{cop.round(1)} (#{kw_per_ton.round(1)}kW/ton)")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ChillerElectricEIR', "For #{instvartemplate}: #{chiller_electric_eir.name}: #{cooling_type} #{condenser_type} #{compressor_type} Capacity = #{capacity_tons.round}tons; COP = #{cop.round(1)} (#{kw_per_ton.round(1)}kW/ton)")
 
     return successfully_set_all_properties
   end

@@ -5,7 +5,7 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param [string] target template for lookup
   # @return [hash] hash of internal loads for different load types
-  def space_type_get_standards_data(space_type, template)
+  def space_type_get_standards_data(space_type)
     standards_building_type = if space_type.standardsBuildingType.is_initialized
                                space_type. standardsBuildingType.get
                               end
@@ -15,7 +15,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # populate search hash
     search_criteria = {
-      'template' => template,
+      'template' => instvartemplate,
       'building_type' => standards_building_type,
       'space_type' => standards_space_type
     }
@@ -37,9 +37,9 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param [string] target template for lookup
   # @return [Bool] returns true if successful, false if not.
-  def space_type_apply_rendering_color(space_type, template)
+  def space_type_apply_rendering_color(space_type)
     # Get the standards data
-    space_type_properties = space_type_get_standards_data(space_type, template)
+    space_type_properties = space_type_get_standards_data(space_type)
 
     # Set the rendering color of the space type
     rgb = space_type_properties['rgb']
@@ -77,7 +77,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
   # @param set_infiltration [Bool] if true, set the infiltration rates
   # @return [Bool] returns true if successful, false if not
-  def space_type_apply_internal_loads(space_type, template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+  def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     # Skip plenums
     # Check if the space type name
     # contains the word plenum.
@@ -91,7 +91,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Get the standards data
-    space_type_properties = space_type_get_standards_data(space_type, template)
+    space_type_properties = space_type_get_standards_data(space_type)
 
     # Need to add a check, or it'll crash on space_type_properties['occupancy_per_area'].to_f below
     if space_type_properties.nil?
@@ -215,7 +215,7 @@ class StandardsModel < OpenStudio::Model::Model
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           occSensLPDfactor = 1.0
-          if template == "NECB 2011"
+          if instvartemplate == "NECB 2011"
             # NECB 2011 space types that require a reduction in the LPD to account for 
             # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))
             reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
@@ -224,7 +224,7 @@ class StandardsModel < OpenStudio::Model::Model
               "Dress./fitt. - performance arts", "Locker room", "Locker room-sch-A", "Locker room-sch-B", 
               "Locker room-sch-C", "Locker room-sch-D", "Locker room-sch-E", "Locker room-sch-F", "Locker room-sch-G",
               "Locker room-sch-H", "Locker room-sch-I", "Retail - dressing/fitting"]
-            if reduceLPDSpaces.include?(standardsSpaceType.get)
+            if reduceLPDSpaces.include?(space_type.standardsSpaceType.get)
               # Note that "Storage area", "Storage area - refrigerated", "Hospital - medical supply" and "Office - enclosed" 
               # LPD should only be reduced if their space areas are less than specific area values. 
               # This is checked in a space loop after this function in the calling routine.
@@ -477,9 +477,9 @@ class StandardsModel < OpenStudio::Model::Model
   # schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
   # but may be found and used later.
   # @return [Bool] returns true if successful, false if not
-  def space_type_apply_internal_load_schedules(space_type, template, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
+  def space_type_apply_internal_load_schedules(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
     # Get the standards data
-    space_type_properties = space_type_get_standards_data(space_type, template)
+    space_type_properties = space_type_get_standards_data(space_type)
 
     # Get the default schedule set
     # or create a new one if none exists.
@@ -581,9 +581,9 @@ class StandardsModel < OpenStudio::Model::Model
   # @param [string] intended_surface_type template for lookup
   # @param [string] standards_construction_type template for lookup
   # @return [hash] hash of construction properties
-  def space_type_get_construction_properties(space_type, template, intended_surface_type, standards_construction_type)
+  def space_type_get_construction_properties(space_type, intended_surface_type, standards_construction_type)
     # get building_category value
-    building_category = if !get_standards_data(template).nil? && space_type_get_standards_data(space_type, template)['is_residential'] == 'Yes'
+    building_category = if !get_standards_data(template).nil? && space_type_get_standards_data(space_type)['is_residential'] == 'Yes'
                           'Residential'
                         else
                           'Nonresidential'
@@ -591,11 +591,11 @@ class StandardsModel < OpenStudio::Model::Model
 
     # get climate_zone_set
     climate_zone = space_type.model.get_building_climate_zone_and_building_type['climate_zone']
-    climate_zone_set = model_find_climate_zone_set(model, climate_zone, template)
+    climate_zone_set = model_find_climate_zone_set(model, climate_zone)
 
     # populate search hash
     search_criteria = {
-      'template' => template,
+      'template' => instvartemplate,
       'climate_zone_set' => climate_zone_set,
       'intended_surface_type' => intended_surface_type,
       'standards_construction_type' => standards_construction_type,

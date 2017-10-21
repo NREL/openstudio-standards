@@ -13,10 +13,10 @@ class StandardsModel < OpenStudio::Model::Model
   # which impacts the minimum damper position requirement.
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
-  def air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(air_terminal_single_duct_vav_reheat, template, zone_min_oa = nil, has_ddc = true)
+  def air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(air_terminal_single_duct_vav_reheat, zone_min_oa = nil, has_ddc = true)
     # Minimum damper position
     min_damper_position = nil
-    case template
+    case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
       min_damper_position = 0.3
     when '90.1-2007'
@@ -48,15 +48,15 @@ class StandardsModel < OpenStudio::Model::Model
   end
 
   def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
-    flow_rate_fraction = constantMinimumAirFlowFraction
-    if reheatCoil.to_CoilHeatingWater.is_initialized
-      reheat_coil = reheatCoil.to_CoilHeatingWater.get
+    flow_rate_fraction = air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction
+    if air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.is_initialized
+      reheat_coil = air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.get
       if reheat_coil.autosizedRatedCapacity.to_f < 1.0e-6
-        cap = 1.2 * 1000.0 * constantMinimumAirFlowFraction * autosizedMaximumAirFlowRate.to_f * (18.0 - 13.0)
-	    reheat_coil.setPerformanceInputMethod("NominalCapacity")
+        cap = 1.2 * 1000.0 * air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction * air_terminal_single_duct_vav_reheat.autosizedMaximumAirFlowRate.to_f * (18.0 - 13.0)
+        reheat_coil.setPerformanceInputMethod("NominalCapacity")
         reheat_coil.setRatedCapacity(cap)
-        setMaximumReheatAirTemperature(18.0)
-	  end
+        air_terminal_single_duct_vav_reheat.setMaximumReheatAirTemperature(18.0)
+      end
     end
   end
 
@@ -68,7 +68,7 @@ class StandardsModel < OpenStudio::Model::Model
     type = nil
 
     # Get the reheat coil
-    rht_coil = reheatCoil
+    rht_coil = air_terminal_single_duct_vav_reheat.reheatCoil
     if rht_coil.to_CoilHeatingElectric.is_initialized
       type = 'Electricity'
     elsif rht_coil.to_CoilHeatingWater.is_initialized

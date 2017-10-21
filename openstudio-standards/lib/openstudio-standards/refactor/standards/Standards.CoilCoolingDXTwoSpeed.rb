@@ -25,8 +25,8 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Double] full load efficiency (COP)
-  def coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, template, rename=false)
-    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed, template)
+  def coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, rename=false)
+    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
     sub_category = search_criteria['subcategory']
@@ -63,7 +63,7 @@ class StandardsModel < OpenStudio::Model::Model
       min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
       cop = seer_to_cop_cooling_no_fan(min_seer)
       new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{instvartemplate}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # If specified as EER
@@ -71,7 +71,7 @@ class StandardsModel < OpenStudio::Model::Model
       min_eer = ac_props['minimum_energy_efficiency_ratio']
       cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
       new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{instvartemplate}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # if specified as SEER (heat pump)
@@ -79,7 +79,7 @@ class StandardsModel < OpenStudio::Model::Model
       min_seer = ac_props['minimum_seasonal_efficiency']
       cop = seer_to_cop_cooling_no_fan(min_seer)
       new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{instvartemplate}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # If specified as EER (heat pump)
@@ -87,7 +87,7 @@ class StandardsModel < OpenStudio::Model::Model
       min_eer = ac_props['minimum_full_load_efficiency']
       cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
       new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{instvartemplate}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # Rename
@@ -103,11 +103,11 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def coil_cooling_dx_two_speed_apply_efficiency_and_curves(coil_cooling_dx_two_speed, template, sql_db_vars_map)
+  def coil_cooling_dx_two_speed_apply_efficiency_and_curves(coil_cooling_dx_two_speed, sql_db_vars_map)
     successfully_set_all_properties = true
 
     # Get the search criteria
-    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed, template)
+    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed)
 
     # Get the capacity
     capacity_w = coil_cooling_dx_two_speed_find_capacity(coil_cooling_dx_two_speed) 
@@ -196,7 +196,7 @@ class StandardsModel < OpenStudio::Model::Model
     orig_name = coil_cooling_dx_two_speed.name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, template, true)
+    cop = coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, true)
 
     # Map the original name to the new name
     sql_db_vars_map[coil_cooling_dx_two_speed.name.to_s] = orig_name

@@ -9,7 +9,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def water_heater_mixed_apply_efficiency(water_heater_mixed, template)
+  def water_heater_mixed_apply_efficiency(water_heater_mixed)
     # Get the capacity of the water heater
     # TODO add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
@@ -51,14 +51,14 @@ class StandardsModel < OpenStudio::Model::Model
     sl_btu_per_hr = nil
     case fuel_type
     when 'Electricity'
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
 
         if capacity_w <= 12_000 # I think this should be 12000W, use variable capacity_w instead of capacity_btu_per_hr (as per PNNL doc)
           # Fixed water heater efficiency per PNNL
           water_heater_eff = 1
           # Calculate the minimum Energy Factor (EF)
-          base_ef, vol_drt = case template
+          base_ef, vol_drt = case instvartemplate
                              when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
                                [0.93, 0.00132]
                              when '90.1-2010'
@@ -74,7 +74,7 @@ class StandardsModel < OpenStudio::Model::Model
           # Fixed water heater efficiency per PNNL
           water_heater_eff = 1
           # Calculate the skin loss coefficient (UA)
-          case template
+          case instvartemplate
           when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
             # Calculate the max allowable standby loss (SL)
             sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal)) 
@@ -117,7 +117,7 @@ class StandardsModel < OpenStudio::Model::Model
       end
 
     when 'NaturalGas'
-      case template # TODO: inconsistency; ref buildings don't calculate water heater UA the same way
+      case instvartemplate # TODO: inconsistency; ref buildings don't calculate water heater UA the same way
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         water_heater_eff = 0.78
         ua_btu_per_hr_per_f = 11.37
@@ -126,7 +126,7 @@ class StandardsModel < OpenStudio::Model::Model
           # Fixed water heater thermal efficiency per PNNL
           water_heater_eff = 0.82
           # Calculate the minimum Energy Factor (EF)
-          base_ef, vol_drt = case template
+          base_ef, vol_drt = case instvartemplate
                              when '90.1-2004', '90.1-2007'
                                [0.62, 0.0019]
                              when '90.1-2010', 'NECB 2011'
@@ -151,7 +151,7 @@ class StandardsModel < OpenStudio::Model::Model
           # Thermal efficiency requirement from 90.1
           et = 0.8
           # Calculate the max allowable standby loss (SL)
-          cap_adj, vol_drt = case template
+          cap_adj, vol_drt = case instvartemplate
                    when '90.1-2004', '90.1-2007', '90.1-2010', 'NECB 2011'
                      [800, 110]
                    when '90.1-2013', 'NREL ZNE Ready 2017'
@@ -186,14 +186,14 @@ class StandardsModel < OpenStudio::Model::Model
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
 
     # set part-load performance curve
-    if template == 'NECB 2011' && fuel_type == 'NaturalGas'
-      plf_vs_plr_curve = model_add_curve(model, 'SWH-EFFFPLR-NECB2011')
+    if instvartemplate == 'NECB 2011' && fuel_type == 'NaturalGas'
+      plf_vs_plr_curve = model_add_curve(water_heater_mixed.model, 'SWH-EFFFPLR-NECB2011')
       water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
     end
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{instvartemplate}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
 
     return true
   end
@@ -206,11 +206,11 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param building_type [String] the building type
   # @return [Bool] returns true if successful, false if not.
-  def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, template, building_type)
+  def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, building_type)
     # For all standards except 90.1-2013
     # baseline is same as proposed per
     # Table G3.1 item 11.b
-    unless template == '90.1-2013'
+    unless instvartemplate == '90.1-2013'
       return true
     end
 

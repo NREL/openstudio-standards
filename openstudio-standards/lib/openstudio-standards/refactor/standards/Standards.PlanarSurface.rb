@@ -21,7 +21,7 @@ class StandardsModel < OpenStudio::Model::Model
   # used to avoid creating duplicate constructions.
   # @todo Align the standard construction enumerations in the
   # spreadsheet with the enumerations in OpenStudio (follow CBECC-Com).
-  def planar_surface_apply_standard_construction(planar_surface, template, climate_zone, previous_construction_map = {})
+  def planar_surface_apply_standard_construction(planar_surface, climate_zone, previous_construction_map = {})
     # Skip surfaces not in a space
     return previous_construction_map if space.empty?
     space = planar_surface.space.get
@@ -33,12 +33,12 @@ class StandardsModel < OpenStudio::Model::Model
     # Determine if residential or nonresidential
     # based on the space type.
     occ_type = 'Nonresidential'
-    if space_residential?(space, template)
+    if space_residential?(space)
       occ_type = 'Residential'
     end
 
     # Get the climate zone set
-    climate_zone_set = model_find_climate_zone_set(model, climate_zone, template)
+    climate_zone_set = model_find_climate_zone_set(model, climate_zone)
 
     # Get the intended surface type
     standards_info = construction.standardsInformation
@@ -106,11 +106,11 @@ class StandardsModel < OpenStudio::Model::Model
     # Check if the construction type was already created.
     # If yes, use that construction.  If no, make a new one.
     new_construction = nil
-    type = [template, climate_zone, surf_type, stds_type, occ_type]
+    type = [instvartemplate, climate_zone, surf_type, stds_type, occ_type]
     if previous_construction_map[type]
       new_construction = previous_construction_map[type]
     else
-      new_construction = model_find_and_add_construction(model, template,
+      new_construction = model_find_and_add_construction(model, instvartemplate,
                                                          climate_zone_set,
                                                          surf_type,
                                                          stds_type,

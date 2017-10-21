@@ -10,7 +10,7 @@ module Pump
   # @param target_w_per_gpm [Double] the target power per flow, in W/gpm
   # @return [Bool] return true if successful, false if not
   # @author jmarrec
-  def pump_apply_prm_pressure_rise_and_motor_efficiency(pump, target_w_per_gpm, template)
+  def pump_apply_prm_pressure_rise_and_motor_efficiency(pump, target_w_per_gpm)
     # Eplus assumes an impeller efficiency of 0.78 to determine the total efficiency
     # http://bigladdersoftware.com/epx/docs/8-4/engineering-reference/component-sizing.html#pump-sizing
     # Rated_Power_Use = Rated_Volume_Flow_Rate * Rated_Pump_Head / Total_Efficiency
@@ -38,13 +38,13 @@ module Pump
     # values.  If a motor is just above a nominal size, and the next size
     # down has a lower efficiency value, later motor efficiency setting
     # methods can mess up the W/gpm.  All this nonsense avoids that.
-    mot_eff_hi_end, nom_hp_hi_end = pump_standard_minimum_motor_efficiency_and_size(pump, template, target_motor_power_cons_hp)
+    mot_eff_hi_end, nom_hp_hi_end = pump_standard_minimum_motor_efficiency_and_size(pump, target_motor_power_cons_hp)
 
     # Calculate the actual brake horsepower using this efficiency
     target_motor_bhp = target_motor_power_cons_hp * mot_eff_hi_end
 
     # Find the motor efficiency using actual bhp
-    mot_eff_lo_end, nom_hp_lo_end = pump_standard_minimum_motor_efficiency_and_size(pump, template, target_motor_bhp)
+    mot_eff_lo_end, nom_hp_lo_end = pump_standard_minimum_motor_efficiency_and_size(pump, target_motor_bhp)
 
     # If the efficiency drops you down into a lower band with
     # a lower efficiency value, use that for the motor efficiency.
@@ -80,12 +80,12 @@ module Pump
     return true
   end
 
-  def pump_apply_standard_minimum_motor_efficiency(pump, template)
+  def pump_apply_standard_minimum_motor_efficiency(pump)
     # Get the horsepower
     bhp = pump_brake_horsepower(pump) 
 
     # Find the motor efficiency
-    motor_eff, nominal_hp = pump_standard_minimum_motor_efficiency_and_size(pump, template, bhp)
+    motor_eff, nominal_hp = pump_standard_minimum_motor_efficiency_and_size(pump, bhp)
 
     # Change the motor efficiency
     pump.setMotorEfficiency(motor_eff)
@@ -106,7 +106,7 @@ module Pump
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
   # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
-  def pump_standard_minimum_motor_efficiency_and_size(pump, template, motor_bhp)
+  def pump_standard_minimum_motor_efficiency_and_size(pump, motor_bhp)
     motor_eff = 0.85
     nominal_hp = motor_bhp
 
@@ -120,7 +120,7 @@ module Pump
 
     # Assuming all pump motors are 4-pole ODP
     search_criteria = {
-      'template' => template,
+      'template' => instvartemplate,
       'number_of_poles' => 4.0,
       'type' => 'Enclosed'
     }

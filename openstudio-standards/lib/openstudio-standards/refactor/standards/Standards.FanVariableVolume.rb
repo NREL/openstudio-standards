@@ -97,11 +97,11 @@ class StandardsModel < OpenStudio::Model::Model
   # Determines whether there is a requirement to have a
   # VSD or some other method to reduce fan power
   # at low part load ratios.
-  def fan_variable_volume_part_load_fan_power_limitation?(fan_variable_volume, template)
+  def fan_variable_volume_part_load_fan_power_limitation?(fan_variable_volume)
      part_load_control_required = false
 
     # Not required by the old vintages
-    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011'
+    if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'NECB 2011'
       return part_load_control_required
     end
 
@@ -124,7 +124,7 @@ class StandardsModel < OpenStudio::Model::Model
     # for 90.1-2013, table 6.5.3.2.1: the cooling capacity threshold is 75000 instead of 110000 as of 1/1/2014 and the fan motor size for chiller-water and evalporative cooling is 0.25 hp as of 1/1/2014 instead of 5 hp
     hp_limit = nil # No minimum limit
     cap_limit_btu_per_hr = nil # No minimum limit
-    case template
+    case instvartemplate
     when '90.1-2004'
       hp_limit = 9.9
     when '90.1-2007', '90.1-2010'

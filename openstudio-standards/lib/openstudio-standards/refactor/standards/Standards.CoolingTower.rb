@@ -17,7 +17,7 @@ module CoolingTower
   #
   # @param template [String] the template base requirements on
   # @return [Bool] true if successful, false if not
-  def cooling_tower_apply_minimum_power_per_flow(cooling_tower, template)
+  def cooling_tower_apply_minimum_power_per_flow(cooling_tower)
     # Get the design water flow rate
     design_water_flow_m3_per_s = nil
     if cooling_tower.designWaterFlowRate.is_initialized
@@ -36,7 +36,7 @@ module CoolingTower
     # Define the criteria to find the cooling tower properties
     # in the hvac standards data set.
     search_criteria = {}
-    search_criteria['template'] = template
+    search_criteria['template'] = instvartemplate
 
     # By definition cooling towers in E+ are open.
     # Closed cooling towers are the fluidcooler objects.
@@ -58,7 +58,7 @@ module CoolingTower
 
     # 90.1 6.5.5.3 Limit on Centrifugal Fan
     # Open Circuit Cooling Towers.
-    case template
+    case instvartemplate
     when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       if fan_type == 'Centrifugal'
         gpm_limit = 1100
@@ -94,7 +94,7 @@ module CoolingTower
 
     # Assuming all fan motors are 4-pole Enclosed
     search_criteria = {
-      'template' => template,
+      'template' => instvartemplate,
       'number_of_poles' => 4.0,
       'type' => 'Enclosed'
     }

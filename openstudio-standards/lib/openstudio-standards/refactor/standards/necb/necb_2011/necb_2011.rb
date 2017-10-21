@@ -1,8 +1,8 @@
 class NECB_2011_Model < StandardsModel
   @@template = 'NECB 2011'
   register_standard (@@template)
-
-
+  attr_reader :instvartemplate
+  
   # Load the helper libraries for
   require "#{@@prototype_folder}/Prototype.Fan"
   require "#{@@prototype_folder}/Prototype.FanConstantVolume"
@@ -19,132 +19,250 @@ class NECB_2011_Model < StandardsModel
   require "#{@@prototype_folder}/Prototype.Model.exterior_lights"
 
 
-  def intialize()
+  def initialize
     super()
-    @@template = Template
+    @instvartemplate = @@template
   end
 
-  #EPW file is needed for regional fuel type defaults. Should separate this from rules.
-  #building Type required to look up space type mulitpliers. This should be part of prototype logic.
-  def add_hvac(building_type, epw_file)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.NECB_2011_Model', 'Started Adding HVAC')
-    boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
-    BTAP::Compliance::NECB2011.necb_autozone_and_autosystem(self, runner = nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype, building_type)
-  end
+  def create_prototype_model( building_type, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+    model = self # TODO refactor: pass in model instead
+    osm_file_increment = 0
+    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
+    if building_type == 'HighriseApartment'
+      if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
+        OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{building_type} at @@template #{} are not available, the measure is disabled for this specific type.")
+        return false
+        #elsif @@template == 'NECB 2011'
+        #  OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at @@template #{@@template} is not available, the measure is disabled for this specific type.")
+        #  return false
+      end
+    end
 
-  def create_prototype_model(building_type, template, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+    lookup_building_type = model_get_lookup_name(self, building_type)
 
     # Retrieve the Prototype Inputs from JSON
-    prototype_input = find_object($os_standards['prototype_inputs'], {'template' => @@template, 'building_type' => building_type}, nil)
+    search_criteria = {
+        'template' => instvartemplate,
+        'building_type' => building_type
+    }
+
+    puts "instvartemplate is #{instvartemplate}"
+    prototype_input = model_find_object(model, $os_standards['prototype_inputs'], search_criteria, nil)
+
     if prototype_input.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for #{{'template' => @@template, 'building_type' => building_type}}, cannot create model.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for #{search_criteria}, cannot create model.")
       return false
     end
-    debug_incremental_changes = false
-    load_building_type_methods(building_type)
-    # Ensure that surfaces are intersected properly.
-    load_geometry(building_type, @@template)
-    getSpaces.each {|space1| getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
-    add_design_days_and_weather_file(climate_zone, epw_file)
-    add_ground_temperatures(building_type, climate_zone, @@template)
-    # puts weatherFile.get.path.get.to_s
-    if weatherFile.empty? or weatherFile.get.path.empty? or not File.exists?(weatherFile.get.path.get.to_s)
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Weatherfile is not defined.")
-      raise()
-    end
-    getBuilding.setName("#{@@template}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
-    space_type_map = define_space_type_map(building_type, @@template, climate_zone)
-    File.open("#{sizing_run_dir}/space_type_map.json", 'w') {|f| f.write(JSON.pretty_generate(space_type_map))}
 
-    assign_space_type_stubs('Space Function', @@template, space_type_map) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
-    add_loads(@@template)
-    apply_infiltration_standard(@@template)
-    modify_surface_convection_algorithm(@@template)
-    add_constructions(building_type, @@template, climate_zone)
-    # Modify Constructions to NECB reference levels
-    apply_prm_construction_types(@@template)
-    # Reduce the WWR and SRR, if necessary
-    apply_prm_baseline_window_to_wall_ratio(@@template, nil)
-    apply_prm_baseline_skylight_to_roof_ratio(@@template)
-    create_thermal_zones(building_type, @@template, climate_zone)
-    # For some building types, stories are defined explicitly
-    if building_type == 'SmallHotel' && @@template != 'NECB 2011'
-      getBuildingStorys.each {|item| item.remove}
-      building_story_map = PrototypeBuilding::SmallHotel::define_building_story_map(building_type, @@template, climate_zone)
-      assign_building_story(building_type, @@template, climate_zone, building_story_map)
+    case instvartemplate
+      when 'NECB 2011'
+
+        debug_incremental_changes = false
+        model_load_building_type_methods(model, building_type)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes
+
+        # Ensure that surfaces are intersected properly.
+        model_load_geometry(model, building_type)
+
+        getSpaces.each { |space1| getSpaces.each { |space2| space1.intersectSurfaces(space2) } }
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes
+
+        add_design_days_and_weather_file(climate_zone, epw_file)
+        add_ground_temperatures(building_type, climate_zone, instvartemplate)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes
+        # puts weatherFile.get.path.get.to_s
+        if weatherFile.empty? or weatherFile.get.path.empty? or not File.exists?(weatherFile.get.path.get.to_s)
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Weatherfile is not defined.")
+          raise()
+        end
+
+        getBuilding.setName("#{}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_set_name.osm")  if debug_incremental_changes
+
+        space_type_map = define_space_type_map(building_type, instvartemplate, climate_zone)
+        File.open("#{sizing_run_dir}/space_type_map.json", 'w') {|f| f.write(JSON.pretty_generate(space_type_map)) }
+
+        model_assign_space_type_stubs(model, 'Space Function', space_type_map) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_assign_space_type_stubs.osm")  if debug_incremental_changes
+
+        model_add_loads(model)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_loads.osm")  if debug_incremental_changes
+
+        model_apply_infiltration_standard(model)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_infiltration.osm")  if debug_incremental_changes
+
+        model_modify_surface_convection_algorithm(model)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_surface_convection_algorithm.osm")  if debug_incremental_changes
+
+        model_add_constructions(model, building_type, climate_zone)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes
+
+        # Modify Constructions to NECB reference levels
+        model_apply_prm_construction_types(model)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes
+
+        # Reduce the WWR and SRR, if necessary
+        model_apply_prm_baseline_window_to_wall_ratio(model,nil)
+        model_apply_prm_baseline_skylight_to_roof_ratio(model)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_fdwr_srr_rules.osm")  if debug_incremental_changes
+
+        model_create_thermal_zones(model, building_type, climate_zone)
+        # For some building types, stories are defined explicitly
+        if building_type == 'SmallHotel' && instvartemplate != 'NECB 2011'
+          getBuildingStorys.each { |item| item.remove }
+          building_story_map = PrototypeBuilding::SmallHotel::define_building_story_map(building_type, instvartemplate, climate_zone)
+          model_assign_building_story(model, building_type, climate_zone, building_story_map)
+        end
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_create_thermal_zones.osm")  if debug_incremental_changes
+
+
+
+        return false if runSizingRun("#{sizing_run_dir}/SR0") == false
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_sizing_run_0.osm")  if debug_incremental_changes
+
+        add_hvac(building_type, instvartemplate, climate_zone, prototype_input, epw_file)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_hvac.osm")  if debug_incremental_changes
+
+        osm_file_increment += 1
+        add_swh(building_type, instvartemplate, climate_zone, prototype_input, epw_file)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_swh.osm")  if debug_incremental_changes
+
+        model_apply_sizing_parameters(model, building_type)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_sizing_paramaters.osm")  if debug_incremental_changes
+
+        yearDescription.get.setDayofWeekforStartDay('Sunday')
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setDayofWeekforStartDay.osm")  if debug_incremental_changes
+
+        #set a larger tolerance for unmet hours from default 0.2 to 1.0C
+        getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
+        getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
+        osm_file_increment += 1
+        BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setTolerances.osm")  if debug_incremental_changes
+
+      else
+        #optionally  determine the climate zone from the epw and stat files.
+        if climate_zone == 'NECB HDD Method'
+          climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone()
+        else
+          #this is required to be blank otherwise it may cause side effects.
+          epw_file = ""
+        end
+        model_load_building_type_methods(model, building_type)
+        model_load_geometry(model, building_type)
+        getBuilding.setName("#{}-#{building_type}-#{climate_zone} created: #{Time.new}")
+        space_type_map = define_space_type_map(building_type, instvartemplate, climate_zone)
+        model_assign_space_type_stubs(model, lookup_building_type, space_type_map)
+        model_add_loads(model)
+        model_apply_infiltration_standard(model)
+        model_modify_infiltration_coefficients(model, building_type, climate_zone)
+        model_modify_surface_convection_algorithm(model)
+        model_add_constructions(model, building_type, climate_zone)
+        model_create_thermal_zones(model, building_type, climate_zone)
+        add_hvac(building_type, instvartemplate, climate_zone, prototype_input, epw_file)
+        custom_hvac_tweaks(building_type, instvartemplate, climate_zone, prototype_input, self)
+        add_swh(building_type, instvartemplate, climate_zone, prototype_input, epw_file)
+        custom_swh_tweaks(building_type, instvartemplate, climate_zone, prototype_input, self)
+        model_add_exterior_lights(model, building_type, climate_zone, prototype_input)
+        model_add_occupancy_sensors(model, building_type, climate_zone)
+        add_design_days_and_weather_file(climate_zone, epw_file)
+        add_ground_temperatures(building_type, climate_zone, instvartemplate)
+
+        model_apply_sizing_parameters(model, building_type)
+        yearDescription.get.setDayofWeekforStartDay('Sunday')
+
     end
-    return false if runSizingRun("#{sizing_run_dir}/SR0") == false
-    add_hvac(building_type, epw_file)
-    add_swh(building_type, @@template, climate_zone, prototype_input, epw_file)
-    apply_sizing_parameters(building_type, @@template)
-    yearDescription.get.setDayofWeekforStartDay('Sunday')
-    #set a larger tolerance for unmet hours from default 0.2 to 1.0C
-    getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
-    getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
     # set climate zone and building type
     getBuilding.setStandardsBuildingType(building_type)
     if climate_zone.include? 'ASHRAE 169-2006-'
       getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
     end
+
     # For some building types, stories are defined explicitly
     if building_type == 'SmallHotel'
-      getBuildingStorys.each {|item| item.remove}
-      building_story_map = PrototypeBuilding::SmallHotel.define_building_story_map(building_type, @@template, climate_zone)
-      assign_building_story(building_type, @@template, climate_zone, building_story_map)
+      getBuildingStorys.each { |item| item.remove }
+      building_story_map = PrototypeBuilding::SmallHotel.define_building_story_map(building_type, instvartemplate, climate_zone)
+      model_assign_building_story(model, building_type, climate_zone, building_story_map)
     end
+
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
-    assign_spaces_to_stories
-    # Perform a sizing run
+    model_assign_spaces_to_stories(model) 
+
+    # Perform a sizing model_run(model) 
     if runSizingRun("#{sizing_run_dir}/SR1") == false
       return false
     end
+
     # If there are any multizone systems, reset damper positions
     # to achieve a 60% ventilation effectiveness minimum for the system
     # following the ventilation rate procedure from 62.1
-    apply_multizone_vav_outdoor_air_sizing(@@template)
+    model_apply_multizone_vav_outdoor_air_sizing(model)
+
     # This is needed for NECB 2011 as a workaround for sizing the reheat boxes
-    if @@template == 'NECB 2011'
-      getAirTerminalSingleDuctVAVReheats.each {|iobj| iobj.set_heating_cap}
+    if instvartemplate == 'NECB 2011'
+      getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)  }
     end
+
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
-    apply_prototype_hvac_assumptions(building_type, @@template, climate_zone)
+    model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
+
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
     # AHU1 doesn't have economizer
     if building_type == 'Outpatient'
-      PrototypeBuilding::Outpatient.modify_oa_controller(@@template, self)
+      PrototypeBuilding::Outpatient.modify_oa_controller(instvartemplate, self)
       # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-      PrototypeBuilding::Outpatient.reset_or_room_vav_minimum_damper(prototype_input, @@template, self)
+      PrototypeBuilding::Outpatient.reset_or_room_vav_minimum_damper(prototype_input, instvartemplate, self)
     end
+
     if building_type == 'Hospital'
-      PrototypeBuilding::Hospital.modify_hospital_oa_controller(@@template, self)
+      PrototypeBuilding::Hospital.modify_hospital_oa_controller(instvartemplate, self)
     end
+
     # Apply the HVAC efficiency standard
-    apply_hvac_efficiency_standard(@@template, climate_zone)
+    model_apply_hvac_efficiency_standard(model, climate_zone)
+
     # Fix EMS references.
     # Temporary workaround for OS issue #2598
-    temp_fix_ems_references
+    model_temp_fix_ems_references(model) 
+
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
     if building_type == 'LargeHotel'
-      PrototypeBuilding::LargeHotel.large_hotel_add_daylighting_controls(@@template, self)
+      PrototypeBuilding::LargeHotel.large_hotel_add_daylighting_controls(instvartemplate, self)
     elsif building_type == 'Hospital'
-      PrototypeBuilding::Hospital.hospital_add_daylighting_controls(@@template, self)
+      PrototypeBuilding::Hospital.hospital_add_daylighting_controls(instvartemplate, self)
     else
-      add_daylighting_controls(@@template)
+      model_add_daylighting_controls(model)
     end
 
     if building_type == 'QuickServiceRestaurant'
-      PrototypeBuilding::QuickServiceRestaurant.update_exhaust_fan_efficiency(@@template, self)
+      PrototypeBuilding::QuickServiceRestaurant.update_exhaust_fan_efficiency(instvartemplate, self)
     elsif building_type == 'FullServiceRestaurant'
-      PrototypeBuilding::FullServiceRestaurant.update_exhaust_fan_efficiency(@@template, self)
+      PrototypeBuilding::FullServiceRestaurant.update_exhaust_fan_efficiency(instvartemplate, self)
     elsif building_type == 'Outpatient'
-      PrototypeBuilding::Outpatient.update_exhaust_fan_efficiency(@@template, self)
+      PrototypeBuilding::Outpatient.update_exhaust_fan_efficiency(instvartemplate, self)
     elsif building_type == 'SuperMarket'
-      PrototypeBuilding::SuperMarket.update_exhaust_fan_efficiency(@@template, self)
+      PrototypeBuilding::SuperMarket.update_exhaust_fan_efficiency(instvartemplate, self)
     end
 
     if building_type == 'HighriseApartment'
@@ -153,7 +271,7 @@ class NECB_2011_Model < StandardsModel
 
     # Add output variables for debugging
     if debug
-      request_timeseries_outputs
+      model_request_timeseries_outputs(model) 
     end
 
     # Finished
@@ -168,7 +286,28 @@ class NECB_2011_Model < StandardsModel
   # @param building_type [String] the building type
   # @return [String] returns the lookup name as a string
   # @todo Unify the lookup names and eliminate this method
+  def model_get_lookup_name(model, building_type)
+    lookup_name = building_type
 
+    case building_type
+      when 'SmallOffice'
+        lookup_name = 'Office'
+      when 'MediumOffice'
+        lookup_name = 'Office'
+      when 'LargeOffice'
+        lookup_name = 'Office'
+      when 'LargeOfficeDetail'
+        lookup_name = 'Office'
+      when 'RetailStandalone'
+        lookup_name = 'Retail'
+      when 'RetailStripmall'
+        lookup_name = 'StripMall'
+      when 'Office'
+        lookup_name = 'Office'
+    end
+
+    return lookup_name
+  end
 
   # Loads the library of methods specific to this building type
   #
@@ -176,7 +315,7 @@ class NECB_2011_Model < StandardsModel
   # @param template [String] the template
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
-  def load_building_type_methods(building_type)
+  def model_load_building_type_methods(model, building_type)
     building_methods = nil
 
     case building_type
@@ -232,7 +371,7 @@ class NECB_2011_Model < StandardsModel
   # @param template [String] the template
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
-  def load_geometry(building_type, template)
+  def model_load_geometry(model, building_type)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding geometry')
 
     # Determine which geometry file to use
@@ -249,9 +388,9 @@ class NECB_2011_Model < StandardsModel
     end
 
     if building_type_to_geometry.has_key?(building_type)
-      if building_type_to_geometry[building_type]['geometry'].has_key?(@@template)
+      if building_type_to_geometry[building_type]['geometry'].has_key?(instvartemplate)
         #puts building_type_to_geometry[building_type]['geometry'][@@template]
-        geometry_file = building_type_to_geometry[building_type]['geometry'][@@template]
+        geometry_file = building_type_to_geometry[building_type]['geometry'][instvartemplate]
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_space_type_map', "Template = [#{building_type}] was not found for Building Type = [#{building_type}] at #{building_type_to_geometry_json}.")
         return false
@@ -266,7 +405,7 @@ class NECB_2011_Model < StandardsModel
     #Upgrade version if required.
     version_translator = OpenStudio::OSVersion::VersionTranslator.new
     model = version_translator.loadModel(model_path).get
-    self.addObjects(model.toIdfFile.objects)
+    self.addObjects( model.toIdfFile.objects )
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
     #ensure that model is intersected correctly.
     getSpaces.each {|space1| getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
@@ -279,12 +418,12 @@ class NECB_2011_Model < StandardsModel
   #
   # @param rel_path_to_osm [String] the path to an .osm file, relative to this file
   # @return [Bool] returns true if successful, false if not
-  def replace_model(rel_path_to_osm)
+  def model_replace_model(model, rel_path_to_osm)
 
     # Take the existing model and remove all the objects
     # (this is cheesy), but need to keep the same memory block
     handles = OpenStudio::UUIDVector.new
-    self.objects.each {|objects| handles << objects.handle}
+    self.objects.each { |objects| handles << objects.handle }
     self.removeObjects(handles)
 
     model = nil
@@ -332,14 +471,14 @@ class NECB_2011_Model < StandardsModel
   #   The hash for each building is defined inside the Prototype.building_name
   #   e.g. (Prototype.secondary_school.rb) file.
   # @return [Bool] returns true if successful, false if not
-  def assign_space_type_stubs(building_type, template, space_type_map)
+  def model_assign_space_type_stubs(model, building_type, space_type_map)
     space_type_map.each do |space_type_name, space_names|
       # Create a new space type
       stub_space_type = OpenStudio::Model::SpaceType.new(self)
       stub_space_type.setStandardsBuildingType(building_type)
       stub_space_type.setStandardsSpaceType(space_type_name)
       stub_space_type.setName("#{building_type} #{space_type_name}")
-      stub_space_type.apply_rendering_color(@@template)
+      space_type_apply_rendering_color(stub_space_type)
 
       stub_space_type_occsens = nil
       occsensSpaceTypeCreated = false # Flag to determine need for another space type
@@ -352,11 +491,11 @@ class NECB_2011_Model < StandardsModel
 
         occsensSpaceTypeUsed = false
 
-        if @@template == "NECB 2011"
+        if instvartemplate == "NECB 2011"
           # Check if space type for this space matches NECB 2011 specific space type
           # for occupancy sensor that is area dependent. Note: space.floorArea in m2.
           space_type_name_occsens = space_type_name + " - occsens"
-          if ((space_type_name=='Storage area' && space.floorArea < 100) ||
+          if((space_type_name=='Storage area' && space.floorArea < 100) ||
               (space_type_name=='Storage area - refrigerated' && space.floorArea < 100) ||
               (space_type_name=='Hospital - medical supply' && space.floorArea < 100) ||
               (space_type_name=='Office - enclosed' && space.floorArea < 25))
@@ -370,7 +509,7 @@ class NECB_2011_Model < StandardsModel
               stub_space_type_occsens.setStandardsBuildingType(building_type)
               stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
               stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
-              stub_space_type_occsens.apply_rendering_color(@@template)
+              space_type_apply_rendering_color(stub_space_type_occsens)
               occsensSpaceTypeCreated = true
               occsensSpaceTypeCount += 1
             else
@@ -399,19 +538,19 @@ class NECB_2011_Model < StandardsModel
     return true
   end
 
-  def add_full_space_type_libs(template)
-    space_type_properties_list = find_objects($os_standards['space_types'], '@@template' => 'NECB 2011')
+  def model_add_full_space_type_libs(model)
+    space_type_properties_list = model_find_objects(model, $os_standards['space_types'], '' => 'NECB 2011')
     space_type_properties_list.each do |space_type_property|
       stub_space_type = OpenStudio::Model::SpaceType.new(self)
       stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
       stub_space_type.setStandardsSpaceType(space_type_property['space_type'])
-      stub_space_type.setName("#{@@template}-#{space_type_property['building_type']}-#{space_type_property['space_type']}")
-      stub_space_type.apply_rendering_color(@@template)
+      stub_space_type.setName("#{}-#{space_type_property['building_type']}-#{space_type_property['space_type']}")
+      space_type_apply_rendering_color(stub_space_type)
     end
-    add_loads(@@template)
+    model_add_loads(model)
   end
 
-  def assign_building_story(building_type, template, climate_zone, building_story_map)
+  def model_assign_building_story(model, building_type, climate_zone, building_story_map)
     building_story_map.each do |building_story_name, space_names|
       stub_building_story = OpenStudio::Model::BuildingStory.new(self)
       stub_building_story.setName(building_story_name)
@@ -437,20 +576,20 @@ class NECB_2011_Model < StandardsModel
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
 
-  def add_loads(template)
+  def model_add_loads(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
     # Loop through all the space types currently in the model,
     # which are placeholders, and give them appropriate loads and schedules
     getSpaceTypes.sort.each do |space_type|
       # Rendering color
-      space_type.apply_rendering_color(@@template)
+      space_type_apply_rendering_color(space_type)
 
       # Loads
-      space_type.apply_internal_loads(@@template, true, true, true, true, true, true)
+      space_type_apply_internal_loads(space_type, true, true, true, true, true, true)
 
       # Schedules
-      space_type.apply_internal_load_schedules(@@template, true, true, true, true, true, true, true)
+      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
@@ -468,20 +607,20 @@ class NECB_2011_Model < StandardsModel
   # @param template [String] the template to draw data from
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
-  def add_constructions(building_type, template, climate_zone)
+  def model_add_constructions(model, building_type, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
     is_residential = 'No' # default is nonresidential for building level
 
     # The constructions lookup table uses a slightly different list of
     # building types.
-    lookup_building_type = get_lookup_name(building_type)
+    lookup_building_type = model_get_lookup_name(model, building_type)
     # TODO this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
     case building_type
       when 'SmallOffice', 'MediumOffice', 'LargeOffice'
         lookup_building_type = building_type
       else
-        lookup_building_type = get_lookup_name(building_type)
+        lookup_building_type = model_get_lookup_name(model, building_type)
     end
 
     # Assign construction to adiabatic construction
@@ -578,8 +717,8 @@ class NECB_2011_Model < StandardsModel
 
     # Make the default construction set for the building
     spc_type = nil
-    spc_type = "WholeBuilding" if @@template == 'NECB 2011'
-    bldg_def_const_set = add_construction_set(@@template, climate_zone, lookup_building_type, spc_type, is_residential)
+    spc_type = "WholeBuilding" if instvartemplate == 'NECB 2011'
+    bldg_def_const_set = model_add_construction_set(model, climate_zone, lookup_building_type, spc_type, is_residential)
     
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
@@ -614,14 +753,14 @@ class NECB_2011_Model < StandardsModel
 
       # Attempt to make a construction set for this space type
       # and assign it if it can be created.
-      spc_type_const_set = add_construction_set(@@template, climate_zone, stds_building_type, stds_spc_type, is_residential)
+      spc_type_const_set = model_add_construction_set(model, climate_zone, stds_building_type, stds_spc_type, is_residential)
       if spc_type_const_set.is_initialized
         space_type.setDefaultConstructionSet(spc_type_const_set.get)
       end
     end
 
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
-    if lookup_building_type == 'SmallHotel' && @@template != 'NECB 2011'
+    if lookup_building_type == 'SmallHotel' && instvartemplate != 'NECB 2011'
       getBuildingStorys.sort.each do |story|
         next if story.name.get == 'AtticStory'
         # puts "story = #{story.name}"
@@ -636,7 +775,7 @@ class NECB_2011_Model < StandardsModel
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = find_object($os_standards['space_types'], 'template' => @@template, 'building_type' => lookup_building_type, 'space_type' => space_type_name)
+          data = model_find_object(model, $os_standards['space_types'], 'template' => instvartemplate, 'building_type' => lookup_building_type, 'space_type' => space_type_name)
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
@@ -644,7 +783,7 @@ class NECB_2011_Model < StandardsModel
         next if is_residential == 'No'
 
         # if the story is identified as residential, assign residential construction set to the spaces on this story.
-        building_story_const_set = add_construction_set(@@template, climate_zone, lookup_building_type, nil, is_residential)
+        building_story_const_set = model_add_construction_set(model, climate_zone, lookup_building_type, nil, is_residential)
         if building_story_const_set.is_initialized
           story.spaces.each do |space|
             space.setDefaultConstructionSet(building_story_const_set.get)
@@ -688,15 +827,15 @@ class NECB_2011_Model < StandardsModel
     # get all the space types that are conditioned
 
     # not required for NECB 2011
-    unless @@template == 'NECB 2011'
-      conditioned_space_names = find_conditioned_space_names(building_type, @@template, climate_zone)
+    unless instvartemplate == 'NECB 2011'
+      conditioned_space_names = model_find_conditioned_space_names(model, building_type, climate_zone)
     end
 
     # add internal mass
     # not required for NECB 2011
-    unless (@@template == 'NECB 2011') ||
+    unless (instvartemplate == 'NECB 2011') ||
         ((building_type == 'SmallHotel') &&
-            (@@template == '90.1-2004' || @@template == '90.1-2007' || @@template == '90.1-2010' || @@template == '90.1-2013' || @@template == 'NREL ZNE Ready 2017'))
+            (instvartemplate == '90.1-2004' || instvartemplate == '90.1-2007' || instvartemplate == '90.1-2010' || instvartemplate == '90.1-2013' || instvartemplate == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(self)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
@@ -723,8 +862,8 @@ class NECB_2011_Model < StandardsModel
   #
   # @param (see #add_constructions)
   # @return [Array<String>] returns an array of space names as strings
-  def find_conditioned_space_names(building_type, template, climate_zone)
-    system_to_space_map = define_hvac_system_map(building_type, @@template, climate_zone)
+  def model_find_conditioned_space_names(model, building_type, climate_zone)
+    system_to_space_map = define_hvac_system_map(building_type, instvartemplate, climate_zone)
     conditioned_space_names = OpenStudio::StringVector.new
     system_to_space_map.each do |system|
       system['space_names'].each do |space_name|
@@ -740,7 +879,7 @@ class NECB_2011_Model < StandardsModel
   #
   # @param (see #add_constructions)
   # @return [Bool] returns true if successful, false if not
-  def create_thermal_zones(building_type, template, climate_zone)
+  def model_create_thermal_zones(model, building_type, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
 
     # Remove any Thermal zones assigned
@@ -784,7 +923,7 @@ class NECB_2011_Model < StandardsModel
       else
         thermostat_clone = thermostat.get.clone(self).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostat_clone)
-        if @@template == 'NECB 2011'
+        if instvartemplate == 'NECB 2011'
           #Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
           ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(self)
           ideal_loads.addToThermalZone(zone)
@@ -795,7 +934,7 @@ class NECB_2011_Model < StandardsModel
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
   end
 
-  # Loop through thermal zones and run thermal_zone.add_exhaust
+  # Loop through thermal zones and model_run(model)  thermal_zone.add_exhaust
   # If kitchen_makeup is "None" then exhaust will be modeled in every kitchen zone without makeup air
   # If kitchen_makeup is "Adjacent" then exhaust will be modeled in every kitchen zone. Makeup air will be provided when there as an adjacent dining,cafe, or cafeteria zone of the same buidling type.
   # If kitchen_makeup is "Largest Zone" then exhaust will only be modeled in the largest kitchen zone, but the flow rate will be based on the kitchen area for all zones. Makeup air will be modeled in the largest dining,cafe, or cafeteria zone of the same building type.
@@ -803,12 +942,12 @@ class NECB_2011_Model < StandardsModel
   # @param @@template [String] Valid choices are
   # @param kitchen_makeup [String] Valid choices are
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
-  def add_exhaust(template, kitchen_makeup = "Adjacent") # kitchen_makeup options are (None, Largest Zone, Adjacent)
+  def model_add_exhaust(model,kitchen_makeup = "Adjacent") # kitchen_makeup options are (None, Largest Zone, Adjacent)
 
     zone_exhaust_fans = {}
 
     # apply use specified kitchen_makup logic
-    if not ["Adjacent", "Largest Zone"].include?(kitchen_makeup)
+    if not ["Adjacent","Largest Zone"].include?(kitchen_makeup)
 
       if not kitchen_makeup == "None"
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
@@ -816,7 +955,7 @@ class NECB_2011_Model < StandardsModel
 
       # loop through thermal zones
       self.getThermalZones.sort.each do |thermal_zone|
-        zone_exhaust_hash = thermal_zone.add_exhaust(@@template)
+        zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
 
         # populate zone_exhaust_fans
         zone_exhaust_fans.merge!(zone_exhaust_hash)
@@ -826,12 +965,12 @@ class NECB_2011_Model < StandardsModel
 
       # populate standard_space_types_with_makup_air
       standard_space_types_with_makup_air = {}
-      standard_space_types_with_makup_air[["FullServiceRestaurant", "Kitchen"]] = ["FullServiceRestaurant", "Dining"]
-      standard_space_types_with_makup_air[["QuickServiceRestaurant", "Kitchen"]] = ["QuickServiceRestaurant", "Dining"]
-      standard_space_types_with_makup_air[["Hospital", "Kitchen"]] = ["Hospital", "Dining"]
-      standard_space_types_with_makup_air[["SecondarySchool", "Kitchen"]] = ["SecondarySchool", "Cafeteria"]
-      standard_space_types_with_makup_air[["PrimarySchool", "Kitchen"]] = ["PrimarySchool", "Cafeteria"]
-      standard_space_types_with_makup_air[["LargeHotel", "Kitchen"]] = ["LargeHotel", "Cafe"]
+      standard_space_types_with_makup_air[["FullServiceRestaurant","Kitchen"]] = ["FullServiceRestaurant","Dining"]
+      standard_space_types_with_makup_air[["QuickServiceRestaurant","Kitchen"]] = ["QuickServiceRestaurant","Dining"]
+      standard_space_types_with_makup_air[["Hospital","Kitchen"]] = ["Hospital","Dining"]
+      standard_space_types_with_makup_air[["SecondarySchool","Kitchen"]] = ["SecondarySchool","Cafeteria"]
+      standard_space_types_with_makup_air[["PrimarySchool","Kitchen"]] = ["PrimarySchool","Cafeteria"]
+      standard_space_types_with_makup_air[["LargeHotel","Kitchen"]] = ["LargeHotel","Cafe"]
 
       # gather information on zones organized by standards building type and space type. zone may be in this multiple times if it has multiple space types
       zones_by_standards = {}
@@ -851,7 +990,7 @@ class NECB_2011_Model < StandardsModel
           if not space_type_hash.has_key?(space_type)
             space_type_hash[space_type] = {}
             space_type_hash[space_type][:effective_floor_area] = 0.0
-            space_type_hash[space_type][:standards_array] =[space_type.standardsBuildingType.get, space_type.standardsSpaceType.get]
+            space_type_hash[space_type][:standards_array] =[space_type.standardsBuildingType.get,space_type.standardsSpaceType.get]
             if kitchen_makeup == "Adjacent"
               space_type_hash[space_type][:adjacent_zones] = []
             end
@@ -877,10 +1016,10 @@ class NECB_2011_Model < StandardsModel
 
       if kitchen_makeup == "Largest Zone"
 
-        zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust run on it
+        zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust model_run(model)  on it
 
         # loop through standard_space_types_with_makup_air
-        standard_space_types_with_makup_air.each do |makeup_target, makeup_source|
+        standard_space_types_with_makup_air.each do |makeup_target,makeup_source|
 
           # hash to manage lookups
           markup_target_effective_floor_area = {}
@@ -889,9 +1028,9 @@ class NECB_2011_Model < StandardsModel
           if zones_by_standards.has_key?(makeup_target)
 
             # process zones of each makeup_target
-            zones_by_standards[makeup_target].each do |thermal_zone, space_type_hash|
+            zones_by_standards[makeup_target].each do |thermal_zone,space_type_hash|
               effective_floor_area = 0.0
-              space_type_hash.each do |space_type, hash|
+              space_type_hash.each do |space_type,hash|
                 effective_floor_area += space_type_hash[space_type][:effective_floor_area]
               end
               markup_target_effective_floor_area[thermal_zone] = effective_floor_area
@@ -907,9 +1046,9 @@ class NECB_2011_Model < StandardsModel
             if zones_by_standards.has_key?(makeup_source)
 
               # process zones of each makeup_source
-              zones_by_standards[makeup_source].each do |thermal_zone, space_type_hash|
+              zones_by_standards[makeup_source].each do |thermal_zone,space_type_hash|
                 effective_floor_area = 0.0
-                space_type_hash.each do |space_type, hash|
+                space_type_hash.each do |space_type,hash|
                   effective_floor_area += space_type_hash[space_type][:effective_floor_area]
                 end
 
@@ -937,7 +1076,7 @@ class NECB_2011_Model < StandardsModel
 
             # add exhaust
             next if zones_applied.include?(largest_target_zone) # would only hit this if zone has two space types each requesting makeup air
-            zone_exhaust_hash = largest_target_zone.add_exhaust(@@template, exhaust_makeup_inputs)
+            zone_exhaust_hash = thermal_zone_add_exhaust(largest_target_zone,exhaust_makeup_inputs)
             zones_applied << largest_target_zone
             zone_exhaust_fans.merge!(zone_exhaust_hash)
 
@@ -946,15 +1085,15 @@ class NECB_2011_Model < StandardsModel
         end
 
         # add exhaust to zones that did not contain space types with standard_space_types_with_makup_air
-        zones_by_standards.each do |standards_array, zones_hash|
+        zones_by_standards.each do |standards_array,zones_hash|
           next if standard_space_types_with_makup_air.has_key?(standards_array)
 
           # loop through zones adding exhaust
-          zones_hash.each do |thermal_zone, space_type_hash|
+          zones_hash.each do |thermal_zone,space_type_hash|
             next if zones_applied.include?(thermal_zone)
 
             # add exhaust
-            zone_exhaust_hash = thermal_zone.add_exhaust(@@template)
+            zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
             zones_applied << thermal_zone
             zone_exhaust_fans.merge!(zone_exhaust_hash)
           end
@@ -964,15 +1103,15 @@ class NECB_2011_Model < StandardsModel
 
       else #kitchen_makeup == "Adjacent"
 
-        zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust run on it
+        zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust model_run(model)  on it
 
-        standard_space_types_with_makup_air.each do |makeup_target, makeup_source|
+        standard_space_types_with_makup_air.each do |makeup_target,makeup_source|
           if zones_by_standards.has_key?(makeup_target)
             # process zones of each makeup_target
-            zones_by_standards[makeup_target].each do |thermal_zone, space_type_hash|
+            zones_by_standards[makeup_target].each do |thermal_zone,space_type_hash|
 
               # get adjacent zones
-              adjacent_zones = thermal_zone.get_adjacent_zones_with_shared_wall_areas
+              adjacent_zones = thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone) 
 
               # find adjacent zones matching key and value from standard_space_types_with_makup_air
               first_adjacent_makeup_source = nil
@@ -989,7 +1128,7 @@ class NECB_2011_Model < StandardsModel
                   exhaust_makeup_inputs[makeup_target][:source_zone] = first_adjacent_makeup_source
 
                   # add exhaust
-                  zone_exhaust_hash = thermal_zone.add_exhaust(@@template, exhaust_makeup_inputs)
+                  zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone,exhaust_makeup_inputs)
                   zones_applied << thermal_zone
                   zone_exhaust_fans.merge!(zone_exhaust_hash)
                 end
@@ -1002,7 +1141,7 @@ class NECB_2011_Model < StandardsModel
                 OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Model has zone with #{makeup_target} but no adjacent zone with #{makeup_source}. Exhaust will be added, but no makeup air.")
 
                 # add exhaust
-                zone_exhaust_hash = thermal_zone.add_exhaust(@@template)
+                zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
                 zones_applied << thermal_zone
                 zone_exhaust_fans.merge!(zone_exhaust_hash)
 
@@ -1018,7 +1157,7 @@ class NECB_2011_Model < StandardsModel
           next if zones_applied.include?(thermal_zone)
 
           # add exhaust
-          zone_exhaust_hash = thermal_zone.add_exhaust(@@template)
+          zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
           zone_exhaust_fans.merge!(zone_exhaust_hash)
         end
 
@@ -1036,9 +1175,9 @@ class NECB_2011_Model < StandardsModel
   # @param (see #add_constructions)
   # @return [Bool] returns true if successful, false if not
   # @todo genericize and move this method to Standards.Space
-  def add_occupancy_sensors(building_type, template, climate_zone)
+  def model_add_occupancy_sensors(model, building_type, climate_zone)
     # Only add occupancy sensors for 90.1-2010
-    case @@template
+    case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
         return true
     end
@@ -1046,8 +1185,8 @@ class NECB_2011_Model < StandardsModel
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Occupancy Sensors')
 
     space_type_reduction_map = {
-        'SecondarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22},
-        'PrimarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22}
+        'SecondarySchool' => { 'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22 },
+        'PrimarySchool' => { 'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22 }
     }
 
     # Loop through all the space types and reduce lighting operation schedule fractions as-specified
@@ -1095,11 +1234,11 @@ class NECB_2011_Model < StandardsModel
         reduced_lights_schs[lights_sch_name] = new_lights_sch
 
         # Reduce default day schedule
-        multiply_schedule(new_lights_sch.defaultDaySchedule, red_multiplier, 0.25)
+        model_multiply_schedule(model, new_lights_sch.defaultDaySchedule, red_multiplier, 0.25)
 
         # Reduce all other rule schedules
         new_lights_sch.scheduleRules.each do |sch_rule|
-          multiply_schedule(sch_rule.daySchedule, red_multiplier, 0.25)
+          model_multiply_schedule(model, sch_rule.daySchedule, red_multiplier, 0.25)
         end
       end # end of lights_sch_names.uniq.each do
 
@@ -1119,9 +1258,7 @@ class NECB_2011_Model < StandardsModel
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished Adding Occupancy Sensors')
 
     return true
-  end
-
-  # add occupancy sensors
+  end # add occupancy sensors
 
   # Adds exterior lights to the building, as specified
   # in OpenStudio_Standards_prototype_inputs
@@ -1131,7 +1268,7 @@ class NECB_2011_Model < StandardsModel
   # @todo translate w/linear foot of facade, door, parking, etc
   #   into lookup table and implement that way instead of hard-coding as
   #   inputs in the spreadsheet.
-  def add_exterior_lights(building_type, template, climate_zone, prototype_input)
+  def model_add_exterior_lights(model, building_type, climate_zone, prototype_input)
     # TODO: Standards - translate w/linear foot of facade, door, parking, etc
     # into lookup table and implement that way instead of hard-coding as
     # inputs in the spreadsheet.
@@ -1146,7 +1283,7 @@ class NECB_2011_Model < StandardsModel
       occ_sens_ext_lts_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       occ_sens_ext_lts_def.setName("#{occ_sens_ext_lts_name} Def")
       occ_sens_ext_lts_def.setDesignLevel(occ_sens_ext_lts_power)
-      occ_sens_ext_lts_sch = add_schedule(occ_sens_ext_lts_sch_name)
+      occ_sens_ext_lts_sch = model_add_schedule(model, occ_sens_ext_lts_sch_name)
       occ_sens_ext_lts = OpenStudio::Model::ExteriorLights.new(occ_sens_ext_lts_def, occ_sens_ext_lts_sch)
       occ_sens_ext_lts.setName("#{occ_sens_ext_lts_name} Def")
       occ_sens_ext_lts.setControlOption('AstronomicalClock')
@@ -1161,7 +1298,7 @@ class NECB_2011_Model < StandardsModel
       nondimming_ext_lts_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       nondimming_ext_lts_def.setName("#{nondimming_ext_lts_name} Def")
       nondimming_ext_lts_def.setDesignLevel(nondimming_ext_lts_power)
-      nondimming_ext_lts_sch = add_schedule(nondimming_ext_lts_sch_name)
+      nondimming_ext_lts_sch = model_add_schedule(model, nondimming_ext_lts_sch_name)
       nondimming_ext_lts = OpenStudio::Model::ExteriorLights.new(nondimming_ext_lts_def, nondimming_ext_lts_sch)
       nondimming_ext_lts.setName("#{nondimming_ext_lts_name} Def")
       nondimming_ext_lts.setControlOption('AstronomicalClock')
@@ -1177,7 +1314,7 @@ class NECB_2011_Model < StandardsModel
       fuel_ext_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       fuel_ext_def.setName("#{fuel_ext_name} Def")
       fuel_ext_def.setDesignLevel(fuel_ext_power)
-      fuel_ext_sch = add_schedule(fuel_ext_sch_name)
+      fuel_ext_sch = model_add_schedule(model, fuel_ext_sch_name)
       fuel_ext_lts = OpenStudio::Model::ExteriorLights.new(fuel_ext_def, fuel_ext_sch)
       fuel_ext_lts.setName(fuel_ext_name.to_s)
       fuel_ext_lts.setControlOption('ScheduleNameOnly')
@@ -1190,7 +1327,7 @@ class NECB_2011_Model < StandardsModel
       fuel_ext_def = OpenStudio::Model::ExteriorLightsDefinition.new(self)
       fuel_ext_def.setName("#{fuel_ext_name} Def")
       fuel_ext_def.setDesignLevel(fuel_ext_power)
-      fuel_ext_sch = add_schedule(fuel_ext_sch_name)
+      fuel_ext_sch = model_add_schedule(model, fuel_ext_sch_name)
       fuel_ext_lts = OpenStudio::Model::ExteriorLights.new(fuel_ext_def, fuel_ext_sch)
       fuel_ext_lts.setName(fuel_ext_name.to_s)
       fuel_ext_lts.setControlOption('ScheduleNameOnly')
@@ -1199,20 +1336,18 @@ class NECB_2011_Model < StandardsModel
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding exterior lights')
 
     return true
-  end
-
-  # add exterior lights
+  end # add exterior lights
 
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)
   # @return [Bool] returns true if successful, false if not
   # @todo Consistency - make prototype and reference vintages consistent
-  def modify_infiltration_coefficients(building_type, template, climate_zone)
+  def model_modify_infiltration_coefficients(model, building_type, climate_zone)
     # Select the terrain type, which
     # impacts wind speed, and in turn infiltration
     terrain = 'City'
-    case @@template
+    case instvartemplate
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         case building_type
           when 'Warehouse'
@@ -1225,7 +1360,7 @@ class NECB_2011_Model < StandardsModel
     getSite.setTerrain(terrain)
 
     # modify the infiltration coefficients
-    case @@template
+    case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         # TODO make this consistent with newer prototypes
         const_coeff = 1.0
@@ -1253,11 +1388,11 @@ class NECB_2011_Model < StandardsModel
   # @param (see #add_constructions)
   # @return [Bool] returns true if successful, false if not
   # @todo Consistency - make prototype and reference vintages consistent
-  def modify_surface_convection_algorithm(template)
+  def model_modify_surface_convection_algorithm(model)
     inside = getInsideSurfaceConvectionAlgorithm
     outside = getOutsideSurfaceConvectionAlgorithm
 
-    case @@template
+    case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         inside.setAlgorithm('TARP')
         outside.setAlgorithm('DOE-2')
@@ -1273,11 +1408,11 @@ class NECB_2011_Model < StandardsModel
   # @return [Bool] returns true if successful, false if not
   # @todo Consistency - make sizing factors consistent
   #   between building types, climate zones, and vintages?
-  def apply_sizing_parameters(building_type, template)
+  def model_apply_sizing_parameters(model, building_type)
     # Default unless otherwise specified
     clg = 1.2
     htg = 1.2
-    case @@template
+    case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         case building_type
           when 'PrimarySchool', 'SecondarySchool', 'Outpatient'
@@ -1289,7 +1424,7 @@ class NECB_2011_Model < StandardsModel
         end
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         case building_type
-          when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'LargeOfficeDetail', 'Outpatient', 'PrimarySchool'
+          when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'LargeOfficeDetail','Outpatient', 'PrimarySchool'
             clg = 1.0
             htg = 1.0
         end
@@ -1309,27 +1444,27 @@ class NECB_2011_Model < StandardsModel
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{htg} for heating and #{clg} for cooling.")
   end
 
-  def apply_prototype_hvac_assumptions(building_type, template, climate_zone)
+  def model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying prototype HVAC assumptions.')
 
     ##### Apply equipment efficiencies
 
     # Fans
     # Pressure Rise
-    getFanConstantVolumes.sort.each {|obj| obj.apply_prototype_fan_pressure_rise(building_type, @@template, climate_zone)}
-    getFanVariableVolumes.sort.each {|obj| obj.apply_prototype_fan_pressure_rise(building_type, @@template, climate_zone)}
-    getFanOnOffs.sort.each {|obj| obj.apply_prototype_fan_pressure_rise(building_type, @@template, climate_zone)}
+    getFanConstantVolumes.sort.each { |obj| obj.apply_prototype_fan_pressure_rise(building_type, instvartemplate, climate_zone) }
+    getFanVariableVolumes.sort.each { |obj| obj.apply_prototype_fan_pressure_rise(building_type, instvartemplate, climate_zone) }
+    getFanOnOffs.sort.each { |obj| obj.apply_prototype_fan_pressure_rise(building_type, instvartemplate, climate_zone) }
     getFanZoneExhausts.sort.each(&:apply_prototype_fan_pressure_rise)
 
     # Motor Efficiency
-    getFanConstantVolumes.sort.each {|obj| obj.apply_prototype_fan_efficiency(@@template)}
-    getFanVariableVolumes.sort.each {|obj| obj.apply_prototype_fan_efficiency(@@template)}
-    getFanOnOffs.sort.each {|obj| obj.apply_prototype_fan_efficiency(@@template)}
-    getFanZoneExhausts.sort.each {|obj| obj.apply_prototype_fan_efficiency(@@template)}
+    getFanConstantVolumes.sort.each { |obj| obj.apply_prototype_fan_efficiency(instvartemplate) }
+    getFanVariableVolumes.sort.each { |obj| obj.apply_prototype_fan_efficiency(instvartemplate) }
+    getFanOnOffs.sort.each { |obj| obj.apply_prototype_fan_efficiency(instvartemplate) }
+    getFanZoneExhausts.sort.each { |obj| obj.apply_prototype_fan_efficiency(instvartemplate) }
 
     ##### Add Economizers
 
-    if @@template != 'NECB 2011'
+    if instvartemplate != 'NECB 2011'
       # Create an economizer maximum OA fraction of 70%
       # to reflect damper leakage per PNNL
       econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(self)
@@ -1346,11 +1481,11 @@ class NECB_2011_Model < StandardsModel
 
     # Check each airloop
     getAirLoopHVACs.sort.each do |air_loop|
-      if air_loop.economizer_required?(@@template, climate_zone) == true
+      if air_loop_hvac_economizer_required?(air_loop, climate_zone) == true
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
         economizer_type = nil
-        case @@template
+        case instvartemplate
           when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
             economizer_type = 'DifferentialDryBulb'
           when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
@@ -1381,14 +1516,14 @@ class NECB_2011_Model < StandardsModel
         end
         oa_control = oa_sys.getControllerOutdoorAir
         oa_control.setEconomizerControlType(economizer_type)
-        if @@template != 'NECB 2011'
+        if instvartemplate != 'NECB 2011'
           # oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
         end
 
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.
-        unless air_loop.economizer_type_allowable?(@@template, climate_zone)
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{@@template}, climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
+        unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone)
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{}, climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
           oa_control.setEconomizerControlType('NoEconomizer')
         end
 
@@ -1402,7 +1537,7 @@ class NECB_2011_Model < StandardsModel
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
   end
 
-  def add_debugging_variables(type)
+  def model_add_debugging_variables(model, type)
     # 'detailed'
     # 'timestep'
     # 'hourly'
@@ -1433,9 +1568,9 @@ class NECB_2011_Model < StandardsModel
     end
   end
 
-  def run(run_dir = "#{Dir.pwd}/Run")
-    # If the run directory is not specified
-    # run in the current working directory
+  def model_run(model, run_dir = "#{Dir.pwd}/Run")
+    # If the model_run(model)  directory is not specified
+    # model_run(model)  in the current working directory
 
     # Make the directory if it doesn't exist
     unless Dir.exist?(run_dir)
@@ -1444,8 +1579,8 @@ class NECB_2011_Model < StandardsModel
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started simulation in '#{run_dir}'")
 
-    # Change the simulation to only run the weather file
-    # and not run the sizing day simulations
+    # Change the simulation to only model_run(model)  the weather file
+    # and not model_run(model)  the sizing day simulations
     sim_control = getSimulationControl
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
@@ -1502,7 +1637,7 @@ class NECB_2011_Model < StandardsModel
 
     sql_path = nil
     if use_runmanager == true
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', 'Running sizing run with RunManager.')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', 'Running sizing model_run(model)  with RunManager.')
 
       # Find EnergyPlus
       ep_dir = OpenStudio.getEnergyPlusDirectory
@@ -1511,7 +1646,7 @@ class NECB_2011_Model < StandardsModel
       idd_path = OpenStudio::Path.new(ep_dir.to_s + '/Energy+.idd')
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
-      # Make a run manager and queue up the sizing run
+      # Make a run manager and queue up the sizing model_run(model) 
       run_manager_db_path = OpenStudio::Path.new("#{run_dir}/run.db")
       run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true, false, false, false)
       job = OpenStudio::Runmanager::JobFactory.createEnergyPlusJob(ep_tool,
@@ -1522,7 +1657,7 @@ class NECB_2011_Model < StandardsModel
 
       run_manager.enqueue(job, true)
 
-      # Start the sizing run and wait for it to finish.
+      # Start the sizing model_run(model)  and wait for it to finish.
       while run_manager.workPending
         sleep 1
         OpenStudio::Application.instance.processEvents
@@ -1530,44 +1665,44 @@ class NECB_2011_Model < StandardsModel
 
       sql_path = OpenStudio::Path.new("#{run_dir}/Energyplus/eplusout.sql")
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Finished sizing run in #{(Time.new - start_time).round}sec.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Finished sizing model_run(model)  in #{(Time.new - start_time).round}sec.")
 
     else # Use the openstudio-workflow gem
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', 'Running sizing run with openstudio-workflow gem.')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', 'Running sizing model_run(model)  with openstudio-workflow gem.')
 
       # Copy the weather file to this directory
       FileUtils.copy(epw_path.to_s, run_dir)
 
       # Run the simulation
       sim = OpenStudio::Workflow.run_energyplus('Local', run_dir)
-      final_state = sim.run
+      final_state = model_run(sim) 
 
       if final_state == :finished
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Finished sizing run in #{(Time.new - start_time).round}sec.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Finished sizing model_run(model)  in #{(Time.new - start_time).round}sec.")
       end
 
       sql_path = OpenStudio::Path.new("#{run_dir}/run/eplusout.sql")
 
     end
 
-    # Load the sql file created by the sizing run
+    # Load the sql file created by the sizing model_run(model) 
     sql_path = OpenStudio::Path.new("#{run_dir}/Energyplus/eplusout.sql")
     if OpenStudio.exists(sql_path)
       sql = OpenStudio::SqlFile.new(sql_path)
       # Check to make sure the sql file is readable,
       # which won't be true if EnergyPlus crashed during simulation.
       unless sql.connectionOpen
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The run failed.  Look at the eplusout.err file in #{File.dirname(sql_path.to_s)} to see the cause.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The model_run(model)  failed.  Look at the eplusout.err file in #{File.dirname(sql_path.to_s)} to see the cause.")
         return false
       end
-      # Attach the sql file from the run to the sizing model
+      # Attach the sql file from the model_run(model)  to the sizing model
       setSqlFile(sql)
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Results for the sizing run couldn't be found here: #{sql_path}.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Results for the sizing model_run(model)  couldn't be found here: #{sql_path}.")
       return false
     end
 
-    # Check that the run finished without severe errors
+    # Check that the model_run(model)  finished without severe errors
     error_query = "SELECT ErrorMessage
         FROM Errors
         WHERE ErrorType='1'"
@@ -1577,7 +1712,7 @@ class NECB_2011_Model < StandardsModel
       errs = errs.get
       unless errs.empty?
         errs = errs.get
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The run failed with the following severe errors: #{errs.join('\n')}.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "The model_run(model)  failed with the following severe errors: #{errs.join('\n')}.")
         return false
       end
     end
@@ -1587,7 +1722,7 @@ class NECB_2011_Model < StandardsModel
     return true
   end
 
-  def request_timeseries_outputs
+  def model_request_timeseries_outputs(model)
     # "detailed"
     # "timestep"
     # "hourly"
@@ -1654,7 +1789,7 @@ class NECB_2011_Model < StandardsModel
     end
   end
 
-  def clear_and_set_example_constructions
+  def model_clear_and_set_example_constructions(model)
     # Define Materials
     name = 'opaque material'
     thickness = 0.012700
@@ -1707,30 +1842,30 @@ class NECB_2011_Model < StandardsModel
 
     # Define Constructions
     # # Surfaces
-    ext_wall = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionExtWall', [opaque_mat, insulation_mat], insulation_mat)
-    ext_roof = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionExtRoof', [opaque_mat, insulation_mat], insulation_mat)
-    ext_floor = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionExtFloor', [opaque_mat, insulation_mat], insulation_mat)
-    grnd_wall = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionGrndWall', [opaque_mat, insulation_mat], insulation_mat)
-    grnd_roof = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionGrndRoof', [opaque_mat, insulation_mat], insulation_mat)
-    grnd_floor = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionGrndFloor', [opaque_mat, insulation_mat], insulation_mat)
-    int_wall = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionIntWall', [opaque_mat, insulation_mat], insulation_mat)
-    int_roof = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionIntRoof', [opaque_mat, insulation_mat], insulation_mat)
-    int_floor = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionIntFloor', [opaque_mat, insulation_mat], insulation_mat)
+    ext_wall                            = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionExtWall',                    [opaque_mat, insulation_mat], insulation_mat)
+    ext_roof                            = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionExtRoof',                    [opaque_mat, insulation_mat], insulation_mat)
+    ext_floor                           = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionExtFloor',                   [opaque_mat, insulation_mat], insulation_mat)
+    grnd_wall                           = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionGrndWall',                   [opaque_mat, insulation_mat], insulation_mat)
+    grnd_roof                           = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionGrndRoof',                   [opaque_mat, insulation_mat], insulation_mat)
+    grnd_floor                          = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionGrndFloor',                  [opaque_mat, insulation_mat], insulation_mat)
+    int_wall                            = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionIntWall',                    [opaque_mat, insulation_mat], insulation_mat)
+    int_roof                            = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionIntRoof',                    [opaque_mat, insulation_mat], insulation_mat)
+    int_floor                           = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionIntFloor',                   [opaque_mat, insulation_mat], insulation_mat)
     # # Subsurfaces
-    fixed_window = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionFixed', [simple_glazing_mat])
-    operable_window = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionOperable', [simple_glazing_mat])
-    glass_door = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDoor', [standard_glazing_mat])
-    door = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionDoor', [opaque_mat, insulation_mat], insulation_mat)
-    overhead_door = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionOverheadDoor', [opaque_mat, insulation_mat], insulation_mat)
-    skylt = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionSkylight', [standard_glazing_mat])
-    daylt_dome = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDomeConstruction', [standard_glazing_mat])
-    daylt_diffuser = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDiffuserConstruction', [standard_glazing_mat])
+    fixed_window                        = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionFixed',                [simple_glazing_mat])
+    operable_window                     = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionOperable',             [simple_glazing_mat])
+    glass_door                          = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDoor',                 [standard_glazing_mat])
+    door                                = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionDoor',                       [opaque_mat, insulation_mat], insulation_mat)
+    overhead_door                       = BTAP::Resources::Envelope::Constructions.create_construction(self, 'OpaqueConstructionOverheadDoor',               [opaque_mat, insulation_mat], insulation_mat)
+    skylt                               = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionSkylight',             [standard_glazing_mat])
+    daylt_dome                          = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDomeConstruction',     [standard_glazing_mat])
+    daylt_diffuser                      = BTAP::Resources::Envelope::Constructions.create_construction(self, 'FenestrationConstructionDiffuserConstruction', [standard_glazing_mat])
 
     # Define Construction Sets
     # # Surface
     exterior_construction_set = BTAP::Resources::Envelope::ConstructionSets.create_default_surface_constructions(self, 'ExteriorSet', ext_wall, ext_roof, ext_floor)
     interior_construction_set = BTAP::Resources::Envelope::ConstructionSets.create_default_surface_constructions(self, 'InteriorSet', int_wall, int_roof, int_floor)
-    ground_construction_set = BTAP::Resources::Envelope::ConstructionSets.create_default_surface_constructions(self, 'GroundSet', grnd_wall, grnd_roof, grnd_floor)
+    ground_construction_set   = BTAP::Resources::Envelope::ConstructionSets.create_default_surface_constructions(self, 'GroundSet', grnd_wall, grnd_roof, grnd_floor)
 
     # # Subsurface
     subsurface_exterior_construction_set = BTAP::Resources::Envelope::ConstructionSets.create_subsurface_construction_set(self, fixed_window, operable_window, door, glass_door, overhead_door, skylt, daylt_dome, daylt_diffuser)
@@ -1755,7 +1890,7 @@ class NECB_2011_Model < StandardsModel
   # a different system type.
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, stories, and zones (an array of zones)
-  def group_zones_by_type(min_area_m2=20_000)
+  def model_group_zones_by_type(model, min_area_m2=20_000)
     min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
 
     # Get occupancy type, fuel type, and area information for all zones,
@@ -1764,7 +1899,7 @@ class NECB_2011_Model < StandardsModel
     # Residential
     # NonResidential
     # Use 90.1-2010 so that retail and publicassembly are not split out
-    zones = zones_with_occ_and_fuel_type('90.1-2010', nil)
+    zones = model_zones_with_occ_and_fuel_type(model, '90.1-2010', nil)
 
     # Ensure that there is at least one conditioned zone
     if zones.size.zero?
@@ -1773,8 +1908,8 @@ class NECB_2011_Model < StandardsModel
     end
 
     # Group the zones by occupancy type
-    type_to_area = Hash.new {0.0}
-    zones_grouped_by_occ = zones.group_by {|z| z['occ']}
+    type_to_area = Hash.new { 0.0 }
+    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
 
     # Determine the dominant occupancy type by area
     zones_grouped_by_occ.each do |occ_type, zns|
@@ -1782,7 +1917,7 @@ class NECB_2011_Model < StandardsModel
         type_to_area[occ_type] += zn['area']
       end
     end
-    dom_occ = type_to_area.sort_by {|k, v| v}.reverse[0][0]
+    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
 
     # Get the dominant occupancy type group
     dom_occ_group = zones_grouped_by_occ[dom_occ]
@@ -1831,7 +1966,7 @@ class NECB_2011_Model < StandardsModel
       area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
 
       # Determine the number of stories this group spans
-      num_stories = num_stories_spanned(gp_zns)
+      num_stories = model_num_stories_spanned(model, gp_zns)
 
       # Create a hash representing this group
       group = {}
@@ -1861,7 +1996,7 @@ class NECB_2011_Model < StandardsModel
   # Method to multiply the values in a day schedule by a specified value
   # but only when the existing value is higher than a specified lower limit.
   # This limit prevents occupancy sensors from affecting unoccupied hours.
-  def multiply_schedule(day_sch, multiplier, limit)
+  def model_multiply_schedule(model, day_sch, multiplier, limit)
     # Record the original times and values
     times = day_sch.times
     values = day_sch.values

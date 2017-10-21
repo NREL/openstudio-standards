@@ -5,9 +5,9 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param (see #economizer_required?)
   # @return [Bool] returns true if successful, false if not
-  def plant_loop_apply_standard_controls(plant_loop, template, climate_zone)
+  def plant_loop_apply_standard_controls(plant_loop, climate_zone)
     # Supply water temperature reset
-    plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop, template)
+    plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop)
   end
 
   def plant_loop_variable_flow_system?(plant_loop)
@@ -32,7 +32,7 @@ class StandardsModel < OpenStudio::Model::Model
 
   # TODO: I think it makes more sense to sense the motor efficiency right there...
   # But actually it's completely irrelevant... you could set at 0.9 and just calculate the pressurise rise to have your 19 W/GPM or whatever
-  def plant_loop_apply_prm_baseline_pump_power(plant_loop, template)
+  def plant_loop_apply_prm_baseline_pump_power(plant_loop)
     # Determine the pumping power per
     # flow based on loop type.
     pri_w_per_gpm = nil
@@ -93,16 +93,16 @@ class StandardsModel < OpenStudio::Model::Model
     plant_loop.supplyComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm)
       elsif sc.to_HeaderedPumpsConstantSpeed.is_initialized
         pump = sc.to_HeaderedPumpsConstantSpeed.get
-        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm)
       end
     end
 
@@ -110,23 +110,23 @@ class StandardsModel < OpenStudio::Model::Model
     plant_loop.demandComponents.each do |sc|
       if sc.to_PumpConstantSpeed.is_initialized
         pump = sc.to_PumpConstantSpeed.get
-        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, sec_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, sec_w_per_gpm)
       elsif sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
-        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, sec_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, sec_w_per_gpm)
       elsif sc.to_HeaderedPumpsConstantSpeed.is_initialized
         pump = sc.to_HeaderedPumpsConstantSpeed.get
-        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm, template)
+        pump_apply_prm_pressure_rise_and_motor_efficiency(pump, pri_w_per_gpm)
       end
     end
 
     return true
   end
 
-  def plant_loop_apply_prm_baseline_temperatures(plant_loop, template)
+  def plant_loop_apply_prm_baseline_temperatures(plant_loop)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
     case loop_type
@@ -238,7 +238,7 @@ class StandardsModel < OpenStudio::Model::Model
       leaving_cw_t_f = nil
       approach_r = nil
       range_r = nil
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         # G3.1.3.11 - CW supply temp = 85F or 10F approaching design wet bulb temperature,
         # whichever is lower.  Design range = 10F
@@ -354,10 +354,10 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
-  def plant_loop_supply_water_temperature_reset_required?(plant_loop, template)
+  def plant_loop_supply_water_temperature_reset_required?(plant_loop)
     reset_required = false
 
-    case template
+    case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
 
       # Not required before 90.1-2004
@@ -645,7 +645,7 @@ class StandardsModel < OpenStudio::Model::Model
     return area_served_m2
   end
 
-  def plant_loop_apply_prm_baseline_pumping_type(plant_loop, template)
+  def plant_loop_apply_prm_baseline_pumping_type(plant_loop)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
 
@@ -657,7 +657,7 @@ class StandardsModel < OpenStudio::Model::Model
       # Determine the minimum area to determine
       # pumping type.
       minimum_area_ft2 = nil
-      case template
+      case instvartemplate
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         minimum_area_ft2 = 120_000
       end
@@ -695,7 +695,7 @@ class StandardsModel < OpenStudio::Model::Model
       # on cooling capacity.
       pri_control_type = nil
       sec_control_type = nil
-      case template
+      case instvartemplate
       when '90.1-2004'
 
         minimum_area_ft2 = 120_000
@@ -807,14 +807,14 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
-  def plant_loop_apply_prm_number_of_boilers(plant_loop, template)
+  def plant_loop_apply_prm_number_of_boilers(plant_loop)
     # Skip non-heating plants
     return true unless sizingPlant.loopType == 'Heating'
 
     # Determine the minimum area to determine
     # number of boilers.
     minimum_area_ft2 = nil
-    case template
+    case instvartemplate
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       minimum_area_ft2 = 15_000
     end
@@ -870,7 +870,7 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
-  def plant_loop_apply_prm_number_of_chillers(plant_loop, template)
+  def plant_loop_apply_prm_number_of_chillers(plant_loop)
     # Skip non-cooling plants
     return true unless sizingPlant.loopType == 'Cooling'
 
@@ -878,7 +878,7 @@ class StandardsModel < OpenStudio::Model::Model
     num_chillers = nil
     chiller_cooling_type = nil
     chiller_compressor_type = nil
-    case template
+    case instvartemplate
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
 
       # Determine the capacity of the loop
@@ -1006,7 +1006,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Set the sizing factor and the chiller types
     final_chillers.each_with_index do |final_chiller, i|
-      final_chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i + 1} of #{final_chillers.size}")
+      final_chiller.setName("#{instvartemplate} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i + 1} of #{final_chillers.size}")
       final_chiller.setSizingFactor(per_chiller_sizing_factor)
       final_chiller.setCondenserType(chiller_cooling_type)
     end
@@ -1018,7 +1018,7 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
-  def plant_loop_apply_prm_number_of_cooling_towers(plant_loop, template)
+  def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
     return true unless sizingPlant.loopType == 'Condenser'
 

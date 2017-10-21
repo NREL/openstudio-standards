@@ -17,7 +17,7 @@ class StandardsModel < OpenStudio::Model::Model
   #   'secondary_sidelighted_area', 'total_window_area', 'total_skylight_area'
   # @todo add a list of valid choices for template argument
   # TODO stop skipping non-vertical walls
-  def space_daylighted_areas(space, template, draw_daylight_areas_for_debugging = false)
+  def space_daylighted_areas(space, draw_daylight_areas_for_debugging = false)
     ### Begin the actual daylight area calculations ###
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, calculating daylighted areas.")
@@ -158,9 +158,9 @@ class StandardsModel < OpenStudio::Model::Model
 
           # Determine the extra width to add to the sidelighted area
           extra_width_m = 0
-          if template == '90.1-2013' || template == 'NREL ZNE Ready 2017'
+          if instvartemplate == '90.1-2013' || instvartemplate == 'NREL ZNE Ready 2017'
             extra_width_m = head_height_m / 2
-          elsif template == '90.1-2010'
+          elsif instvartemplate == '90.1-2010'
             extra_width_m = OpenStudio.convert(2, 'ft', 'm').get
           end
           # OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "Adding #{extra_width_m.round(2)}m to the width for the sidelighted area.")
@@ -780,7 +780,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @todo stop skipping non-horizontal roofs
   # @todo Determine the illuminance setpoint for the controls based on space type
   # @todo rotate sensor to face window (only needed for glare calcs)
-  def space_add_daylighting_controls(space, template, remove_existing_controls, draw_daylight_areas_for_debugging = false)
+  def space_add_daylighting_controls(space, remove_existing_controls, draw_daylight_areas_for_debugging = false)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "******For #{space.name}, adding daylight controls.")
 
     # Check for existing daylighting controls
@@ -823,7 +823,7 @@ class StandardsModel < OpenStudio::Model::Model
     space_lpd_w_per_m2 = space.lightingPowerPerFloorArea
 
     # Determine the type of control required
-    case template
+    case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
 
       # Do nothing, no daylighting controls required
@@ -835,7 +835,7 @@ class StandardsModel < OpenStudio::Model::Model
       req_top_ctrl = true
       req_pri_ctrl = true
 
-      areas = space_daylighted_areas(space, template, draw_daylight_areas_for_debugging)
+      areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
       ###################
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "primary_sidelighted_area = #{areas['primary_sidelighted_area']}")
       ###################
@@ -889,7 +889,7 @@ class StandardsModel < OpenStudio::Model::Model
       req_pri_ctrl = true
       req_sec_ctrl = true
 
-      areas = space_daylighted_areas(space, template, draw_daylight_areas_for_debugging)
+      areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
 
       # Primary Sidelighting
       # Check if the primary sidelit area contains less than 150W of lighting
@@ -941,7 +941,7 @@ class StandardsModel < OpenStudio::Model::Model
       req_top_ctrl = true
       req_pri_ctrl = true
 
-      areas = space_daylighted_areas(space, template, draw_daylight_areas_for_debugging)
+      areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
 
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
@@ -963,7 +963,7 @@ class StandardsModel < OpenStudio::Model::Model
         req_top_ctrl = false
       end
 
-    end # End of template case statement
+    end # End of instvartemplate case statement
 
     # Output the daylight control requirements
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control required = #{req_top_ctrl}")
@@ -1100,27 +1100,27 @@ class StandardsModel < OpenStudio::Model::Model
       # use the building type (standards_building_type) and space type (standards_space_type)
       # as well as template to locate the space type data 
       search_criteria = {
-         'template' => template,
+         'template' => instvartemplate,
          'building_type' => standards_building_type,
          'space_type' => standards_space_type
       }
 
       data = model_find_object(space.model, $os_standards['space_types'], search_criteria)
       if data.nil?
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{instvartemplate}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
       else 
         # Read the illuminance setpoint value
         # If 'na', daylighting is not appropriate for this space type for some reason
         daylight_stpt_lux = data['target_illuminance_setpoint']
         if daylight_stpt_lux == 'na'
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: daylighting is not appropriate for #{template} #{standards_building_type} #{standards_space_type}.")
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: daylighting is not appropriate for #{instvartemplate} #{standards_building_type} #{standards_space_type}.")
           return true
         end
         # If a setpoint is specified, use that.  Otherwise use a default.
         daylight_stpt_lux = daylight_stpt_lux.to_f
         if daylight_stpt_lux.zero?
           daylight_stpt_lux = 375
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: no specific illuminance setpoint defined for #{template} #{standards_building_type} #{standards_space_type}, assuming #{daylight_stpt_lux} Lux.")
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: no specific illuminance setpoint defined for #{instvartemplate} #{standards_building_type} #{standards_space_type}, assuming #{daylight_stpt_lux} Lux.")
         else
           OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: illuminance setpoint = #{daylight_stpt_lux} Lux")
         end
@@ -1166,7 +1166,7 @@ class StandardsModel < OpenStudio::Model::Model
     sensor_1_window = nil
     sensor_2_window = nil
 
-    case template
+    case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
 
       # Do nothing, no daylighting controls required
@@ -1242,7 +1242,7 @@ class StandardsModel < OpenStudio::Model::Model
     # office prototypes for 90.1-2010 and 90.1-2013
     # based on assumptions about geometry that is not explicitly
     # defined in the model.
-    case template
+    case instvartemplate
     when '90.1-2010', '90.1-2013'
       if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
         sensor_1_frac = sensor_1_frac * psa_nongeo_frac unless psa_nongeo_frac.nil?
@@ -1369,13 +1369,13 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
-  def space_apply_infiltration_rate(space, template)
+  def space_apply_infiltration_rate(space)
     # Define the total building baseline infiltration rate
     basic_infil_rate_cfm_per_ft2 = nil
     infil_type = nil
-    case template
+    case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, infiltration rates are not defined using this method, no changes have been made to the model.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{instvartemplate}, infiltration rates are not defined using this method, no changes have been made to the model.")
       return true
     when '90.1-2004', '90.1-2007'
       basic_infil_rate_cfm_per_ft2 = 1.8
@@ -1393,11 +1393,11 @@ class StandardsModel < OpenStudio::Model::Model
     # for the prototype buildings.
     adj_infil_rate_m3_per_s_per_m2 = nil
     all_ext_infil_m3_per_s_per_m2 = nil
-    case template
+    case instvartemplate
     when 'NECB 2011'
       # Remove infiltration rates set at the space type.
-      unless spaceType.empty?
-        spaceType.get.spaceInfiltrationDesignFlowRates.each(&:remove)
+      unless space.spaceType.empty?
+        space.spaceType.get.spaceInfiltrationDesignFlowRates.each(&:remove)
       end
       # Remove infiltration rates set at the space object.
       space.spaceInfiltrationDesignFlowRates.each(&:remove)
@@ -1406,7 +1406,7 @@ class StandardsModel < OpenStudio::Model::Model
       exterior_wall_and_roof_and_subsurface_area = space_exterior_wall_and_roof_and_subsurface_area(space) # To do
       # Don't create an object if there is no exterior wall area
       if exterior_wall_and_roof_and_subsurface_area <= 0.0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{instvartemplate}, no exterior wall area was found, no infiltration will be added.")
         return true
       end
       # Calculate the total infiltration, assuming
@@ -1416,7 +1416,7 @@ class StandardsModel < OpenStudio::Model::Model
       tot_infil_m3_per_s = adj_infil_rate_m3_per_s_per_m2 * exterior_wall_and_roof_and_subsurface_area
       # Now spread the total infiltration rate over all
       # exterior surface area (for the E+ input field) this will include the exterior floor if present.
-      all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / exteriorArea
+      all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.exteriorArea
 
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
@@ -1426,7 +1426,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       # Don't create an object if there is no exterior wall area
       if exterior_wall_and_window_area_m2 <= 0.0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{instvartemplate}, no exterior wall area was found, no infiltration will be added.")
         return true
       end
 
@@ -1489,13 +1489,13 @@ class StandardsModel < OpenStudio::Model::Model
   #   @units cubic meters per second (m^3/s)
   # @todo handle floors over unconditioned spaces
   # @todo make subsurface infil rates part of Surface.component_infiltration_rate?
-  def space_component_infiltration_rate(space, template)
+  def space_component_infiltration_rate(space)
     # Define the total building baseline infiltration rate
     basic_infil_rate_cfm_per_ft2 = nil
     infil_type = nil
-    case template
+    case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, infiltration rates are not defined using this method, no changes have been made to the model.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{instvartemplate}, infiltration rates are not defined using this method, no changes have been made to the model.")
       return true
     when '90.1-2004', '90.1-2007'
       basic_infil_rate_cfm_per_ft2 = 1.8
@@ -1654,7 +1654,7 @@ class StandardsModel < OpenStudio::Model::Model
   # type of the space below the largest floor in the plenum.
   #
   # return [Bool] true if residential, false if nonresidential
-  def space_residential?(space, template)
+  def space_residential?(space)
     is_res = false
 
     space_to_check = space
@@ -1665,7 +1665,7 @@ class StandardsModel < OpenStudio::Model::Model
       # Find the largest floor
       largest_floor_area = 0.0
       largest_surface = nil
-      surfaces.each do |surface|
+      space.surfaces.each do |surface|
         next unless surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Surface'
         if surface.grossArea > largest_floor_area
           largest_floor_area = surface.grossArea
@@ -1695,7 +1695,7 @@ class StandardsModel < OpenStudio::Model::Model
     if space_type.is_initialized
       space_type = space_type.get
       # Get the space type data
-      space_type_properties = space_type_get_standards_data(space_type, template)
+      space_type_properties = space_type_get_standards_data(space_type)
       if space_type_properties.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
         is_res = false
@@ -1720,7 +1720,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @param climate_zone [String] climate zone
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces
-  def space_conditioning_category(space, template, climate_zone)
+  def space_conditioning_category(space, climate_zone)
     # Get the zone this space is inside
     zone = space.thermalZone
 
@@ -1730,7 +1730,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Get the category from the zone
-    cond_cat = zone.get.conditioning_category(template, climate_zone)
+    cond_cat = zone.get.conditioning_category( climate_zone)
 
     return cond_cat
   end
