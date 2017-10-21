@@ -240,7 +240,7 @@ class OpenStudio::Model::Model
     water_use_def_schedules = {} # key is temp C value is schedule
 
     # loop through space types adding demand side of swh
-    self.getSpaceTypes.each do |space_type|
+    self.getSpaceTypes.sort.each do |space_type|
       next if not space_type.standardsBuildingType.is_initialized
       next if not space_type.standardsSpaceType.is_initialized
       next if not space_type_hash.has_key?(space_type) # this is used for space types without any floor area

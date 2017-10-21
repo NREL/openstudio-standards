@@ -316,7 +316,7 @@ module Outpatient
     PrototypeBuilding::Outpatient.adjust_clg_setpoint(template, climate_zone, model)
     # Get the hot water loop
     hot_water_loop = nil
-    model.getPlantLoops.each do |loop|
+    model.getPlantLoops.sort.each do |loop|
       # If it has a boiler:hotwater, it is the correct loop
       unless loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).empty?
         hot_water_loop = loop
@@ -406,7 +406,7 @@ module Outpatient
         infiltration.setSchedule(infil_sch)
         infiltration.setSpace(space)
       end
-      model.getSpaceTypes.each do |space_type|
+      model.getSpaceTypes.sort.each do |space_type|
         space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
       end
     else
@@ -466,7 +466,7 @@ module Outpatient
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('OutPatientHealthCare MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('OutPatientHealthCare MaxRelHumSetSch'))
     operatingroom1_zone.setZoneControlHumidistat(humidistat)
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.thermalZones.include? operatingroom1_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
         humidifier.setRatedCapacity(3.72E-5)
@@ -503,7 +503,7 @@ module Outpatient
   # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
   # AHU1 doesn't have economizer
   def self.modify_oa_controller(template, model)
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
       controller_mv = controller_oa.controllerMechanicalVentilation
@@ -567,7 +567,7 @@ module Outpatient
 
   # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone
   def self.apply_minimum_total_ach(building_type, template, model)
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       space_type_name = space.spaceType.get.standardsSpaceType.get
       search_criteria = {
         'template' => template,

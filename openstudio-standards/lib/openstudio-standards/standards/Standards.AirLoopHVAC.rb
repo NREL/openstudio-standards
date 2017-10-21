@@ -2296,7 +2296,7 @@ class OpenStudio::Model::AirLoopHVAC
   # For implementation purpose, since it is time-consuming to perform autosizing in three climate zones, just use
   # the results of the current climate zone
   def adjust_minimum_vav_damper_positions_outpatient
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       zone = space.thermalZone.get
       sizing_zone = zone.sizingZone
       space_area = space.floorArea

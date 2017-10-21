@@ -41,7 +41,7 @@ def strip_model(model)
   model.getCurves.each(&:remove)
 
   # remove all zone equipment
-  model.getThermalZones.each do |zone|
+  model.getThermalZones.sort.each do |zone|
     zone.equipment.each(&:remove)
   end
 
