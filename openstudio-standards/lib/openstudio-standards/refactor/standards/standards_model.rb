@@ -4,6 +4,12 @@ class StandardsModel < OpenStudio::Model::Model
   @@standards_folder =  "#{File.dirname(__FILE__)}/../../standards"
   @@data_folder =       "#{File.dirname(__FILE__)}/../../../../data"
 
+  # Require all the standards files below this dynamically for now
+  # TODO refactor: hard code requires later
+  Dir.glob("#{File.dirname(__FILE__)}/*.rb").each do |file_path|
+    require file_path
+  end
+
   # The code below is required for the factory method. For an explanation see
   # https://stackoverflow.com/questions/1515577/factory-methods-in-ruby and clakes post. Which I think is the cleanest
   # implementation.
