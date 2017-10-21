@@ -557,7 +557,7 @@ class NECB_2011_Model < StandardsModel
     basement_floor_layers << cp02_carpet_pad
     basement_floor_construction.setLayers(basement_floor_layers)
 
-    getSurfaces.each do |surface|
+    getSurfaces.sort.each do |surface|
       if surface.outsideBoundaryCondition.to_s == 'Adiabatic'
         if surface.surfaceType.to_s == 'Wall'
           surface.setConstruction(wall_adiabatic_construction)
@@ -580,7 +580,7 @@ class NECB_2011_Model < StandardsModel
     spc_type = nil
     spc_type = "WholeBuilding" if @@template == 'NECB 2011'
     bldg_def_const_set = add_construction_set(@@template, climate_zone, lookup_building_type, spc_type, is_residential)
-    puts bldg_def_const_set
+    
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
     else
@@ -589,7 +589,7 @@ class NECB_2011_Model < StandardsModel
     end
 
     # Make a construction set for each space type, if one is specified
-    getSpaceTypes.each do |space_type|
+    getSpaceTypes.sort.each do |space_type|
       # Get the standards building type
       stds_building_type = nil
       if space_type.standardsBuildingType.is_initialized
@@ -622,7 +622,7 @@ class NECB_2011_Model < StandardsModel
 
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
     if lookup_building_type == 'SmallHotel' && @@template != 'NECB 2011'
-      getBuildingStorys.each do |story|
+      getBuildingStorys.sort.each do |story|
         next if story.name.get == 'AtticStory'
         # puts "story = #{story.name}"
         is_residential = 'No' # default for building story level
@@ -678,7 +678,7 @@ class NECB_2011_Model < StandardsModel
     construction.setLayers(layers)
 
     # Assign the internal mass construction to existing internal mass objects
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       internal_masses = space.internalMass
       internal_masses.each do |internal_mass|
         internal_mass.internalMassDefinition.setConstruction(construction)
@@ -764,7 +764,7 @@ class NECB_2011_Model < StandardsModel
 
 
     # Create a thermal zone for each space in the self
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       zone = OpenStudio::Model::ThermalZone.new(self)
       zone.setName("#{space.name} ZN")
       unless space_multiplier_map[space.name.to_s].nil?
@@ -815,7 +815,7 @@ class NECB_2011_Model < StandardsModel
       end
 
       # loop through thermal zones
-      self.getThermalZones.each do |thermal_zone|
+      self.getThermalZones.sort.each do |thermal_zone|
         zone_exhaust_hash = thermal_zone.add_exhaust(@@template)
 
         # populate zone_exhaust_fans
@@ -836,7 +836,7 @@ class NECB_2011_Model < StandardsModel
       # gather information on zones organized by standards building type and space type. zone may be in this multiple times if it has multiple space types
       zones_by_standards = {}
 
-      self.getThermalZones.each do |thermal_zone|
+      self.getThermalZones.sort.each do |thermal_zone|
 
         # get space type ratio for spaces in zone
         space_type_hash = {} # key is  space type,  value hash with floor area, standards building type, standards space type, and array of adjacent zones
@@ -1014,7 +1014,7 @@ class NECB_2011_Model < StandardsModel
         end
 
         # add exhaust for rest of zones
-        self.getThermalZones.each do |thermal_zone|
+        self.getThermalZones.sort.each do |thermal_zone|
           next if zones_applied.include?(thermal_zone)
 
           # add exhaust
@@ -1051,7 +1051,7 @@ class NECB_2011_Model < StandardsModel
     }
 
     # Loop through all the space types and reduce lighting operation schedule fractions as-specified
-    getSpaceTypes.each do |space_type|
+    getSpaceTypes.sort.each do |space_type|
       # Skip space types with no standards building type
       next if space_type.standardsBuildingType.empty?
       stds_bldg_type = space_type.standardsBuildingType.get
@@ -1240,7 +1240,7 @@ class NECB_2011_Model < StandardsModel
         velo_sq_coeff = 0.0
     end
 
-    getSpaceInfiltrationDesignFlowRates.each do |infiltration|
+    getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration|
       infiltration.setConstantTermCoefficient(const_coeff)
       infiltration.setTemperatureTermCoefficient(temp_coeff)
       infiltration.setVelocityTermCoefficient(velo_coeff)
@@ -1345,7 +1345,7 @@ class NECB_2011_Model < StandardsModel
     end
 
     # Check each airloop
-    getAirLoopHVACs.each do |air_loop|
+    getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.economizer_required?(@@template, climate_zone) == true
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
