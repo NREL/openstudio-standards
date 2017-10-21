@@ -23,7 +23,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Error if no values were found
     if vals.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleCompact', "Could not find any value in #{name} when determining min and max.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleCompact', "Could not find any value in #{schedule_compact.name} when determining min and max.")
       result = { 'min' => 999.9, 'max' => 999.9 }
       return result
     end

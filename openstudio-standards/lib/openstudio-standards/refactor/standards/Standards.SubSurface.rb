@@ -46,7 +46,7 @@ class StandardsModel < OpenStudio::Model::Model
       when 'OverheadDoor'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['loading_dock_door']
       when 'GlassDoor'
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{name}, assuming swinging_or_revolving_glass_door for infiltration calculation.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{sub_surface.name}, assuming swinging_or_revolving_glass_door for infiltration calculation.")
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['swinging_or_revolving_glass_door']
       when 'FixedWindow', 'OperableWindow'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['window']
@@ -55,7 +55,7 @@ class StandardsModel < OpenStudio::Model::Model
       end
     end
     if infil_rate_cfm_per_ft2.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{name}, could not determine surface type for infiltration, will not be included in calculation.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{sub_surface.name}, could not determine surface type for infiltration, will not be included in calculation.")
       return comp_infil_rate_m3_per_s
     end
 

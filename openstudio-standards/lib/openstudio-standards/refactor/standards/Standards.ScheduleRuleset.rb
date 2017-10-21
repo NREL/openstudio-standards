@@ -13,8 +13,8 @@ class StandardsModel < OpenStudio::Model::Model
     # Define the start and end date
     year_start_date = nil
     year_end_date = nil
-    if model.yearDescription.is_initialized
-      year_description = model.yearDescription.get
+    if schedule_ruleset.model.yearDescription.is_initialized
+      year_description = schedule_ruleset.model.yearDescription.get
       year = year_description.assumedYear
       year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
       year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
@@ -26,16 +26,16 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Get the ordered list of all the day schedules
     # that are used by this schedule ruleset
-    day_schs = getDaySchedules(year_start_date, year_end_date)
+    day_schs = schedule_ruleset.getDaySchedules(year_start_date, year_end_date)
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "***Day Schedules Used***")
     day_schs.uniq.each do |day_sch|
       # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{day_sch.name.get}")
     end
 
     # Get a 365-value array of which schedule is used on each day of the year,
-    day_schs_used_each_day = getActiveRuleIndices(year_start_date, year_end_date)
+    day_schs_used_each_day = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
     if !day_schs_used_each_day.length == 365
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "#{name} does not have 365 daily schedules accounted for, cannot accurately calculate annual EFLH.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "#{schedule_ruleset.name} does not have 365 daily schedules accounted for, cannot accurately calculate annual EFLH.")
       return 0
     end
 
@@ -53,7 +53,7 @@ class StandardsModel < OpenStudio::Model::Model
     # of days that day schedule applies and add this to the total.
     annual_flh = 0
     max_daily_flh = 0
-    default_day_sch = defaultDaySchedule
+    default_day_sch = schedule_ruleset.defaultDaySchedule
     day_sch_freq.each do |freq|
       # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", freq.inspect
       # exit
@@ -98,7 +98,7 @@ class StandardsModel < OpenStudio::Model::Model
     # which would indicate that this isn't a
     # fractional schedule.
     if max_daily_flh > 24
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{name} has more than 24 EFLH in one day schedule, indicating that it is not a fractional schedule.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{schedule_ruleset.name} has more than 24 EFLH in one day schedule, indicating that it is not a fractional schedule.")
     end
 
     return annual_flh
@@ -112,8 +112,8 @@ class StandardsModel < OpenStudio::Model::Model
   def schedule_ruleset_annual_min_max_value(schedule_ruleset)
     # gather profiles
     profiles = []
-    profiles << defaultDaySchedule
-    rules = scheduleRules
+    profiles << schedule_ruleset.defaultDaySchedule
+    rules = schedule_ruleset.scheduleRules
     rules.each do |rule|
       profiles << rule.daySchedule
     end
@@ -121,7 +121,7 @@ class StandardsModel < OpenStudio::Model::Model
     # test profiles
     min = nil
     max = nil
-    profiles.each do |profile|
+    schedule_ruleset.profiles.each do |profile|
       profile.values.each do |value|
         if min.nil?
           min = value
@@ -154,8 +154,8 @@ class StandardsModel < OpenStudio::Model::Model
     # Define the start and end date
     year_start_date = nil
     year_end_date = nil
-    if model.yearDescription.is_initialized
-      year_description = model.yearDescription.get
+    if schedule_ruleset.model.yearDescription.is_initialized
+      year_description = schedule_ruleset.model.yearDescription.get
       year = year_description.assumedYear
       year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
       year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
@@ -167,16 +167,16 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Get the ordered list of all the day schedules
     # that are used by this schedule ruleset
-    day_schs = getDaySchedules(year_start_date, year_end_date)
+    day_schs = schedule_ruleset.getDaySchedules(year_start_date, year_end_date)
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "***Day Schedules Used***")
     day_schs.uniq.each do |day_sch|
       # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{day_sch.name.get}")
     end
 
     # Get a 365-value array of which schedule is used on each day of the year,
-    day_schs_used_each_day = getActiveRuleIndices(year_start_date, year_end_date)
+    day_schs_used_each_day = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
     if !day_schs_used_each_day.length == 365
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "#{name} does not have 365 daily schedules accounted for, cannot accurately calculate annual EFLH.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "#{schedule_ruleset.name} does not have 365 daily schedules accounted for, cannot accurately calculate annual EFLH.")
       return 0
     end
 
@@ -193,7 +193,7 @@ class StandardsModel < OpenStudio::Model::Model
     # hours for that day, then multiply this by the number
     # of days that day schedule applies and add this to the total.
     annual_hrs = 0
-    default_day_sch = defaultDaySchedule
+    default_day_sch = schedule_ruleset.defaultDaySchedule
     day_sch_freq.each do |freq|
       # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", freq.inspect
       # exit

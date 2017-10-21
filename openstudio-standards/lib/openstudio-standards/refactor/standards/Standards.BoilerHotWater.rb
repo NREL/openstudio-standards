@@ -13,7 +13,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Get fuel type
     fuel_type = nil
-    case fuelType
+    case boiler_hot_water.fuelType
     when 'NaturalGas'
       fuel_type = 'Gas'
     when 'Electricity'
@@ -21,7 +21,7 @@ class StandardsModel < OpenStudio::Model::Model
     when 'FuelOil#1', 'FuelOil#2'
       fuel_type = 'Oil'
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{name}, a fuel type of #{fuelType} is not yet supported.  Assuming 'Gas.'")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuelType} is not yet supported.  Assuming 'Gas.'")
       fuel_type = 'Gas'
     end
 
@@ -39,12 +39,12 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Double] capacity in W
   def boiler_hot_water_find_capacity(boiler_hot_water)
     capacity_w = nil
-    if nominalCapacity.is_initialized
-      capacity_w = nominalCapacity.get
-    elsif autosizedNominalCapacity.is_initialized
-      capacity_w = autosizedNominalCapacity.get
+    if boiler_hot_water.nominalCapacity.is_initialized
+      capacity_w = boiler_hot_water.nominalCapacity.get
+    elsif boiler_hot_water.autosizedNominalCapacity.is_initialized
+      capacity_w = boiler_hot_water.autosizedNominalCapacity.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{name} capacity is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
@@ -59,8 +59,8 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Double] minimum thermal efficiency
   def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, template, rename=false)
     # Get the boiler properties
-    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
-    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
+    search_criteria = boiler_hot_water_find_search_criteria(boiler_hot_water, template)
+    capacity_w = boiler_hot_water_find_capacity(boiler_hot_water) 
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -70,7 +70,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Get the boiler properties
     blr_props = model_find_object(model, $os_standards['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{name}, cannot find boiler properties, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
@@ -82,28 +82,28 @@ class StandardsModel < OpenStudio::Model::Model
     unless blr_props['minimum_annual_fuel_utilization_efficiency'].nil?
       min_afue = blr_props['minimum_annual_fuel_utilization_efficiency']
       thermal_eff = afue_to_thermal_eff(min_afue)
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
+      new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
     end
 
     # If specified as thermal efficiency
     unless blr_props['minimum_thermal_efficiency'].nil?
       thermal_eff = blr_props['minimum_thermal_efficiency']
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{thermal_eff} Thermal Eff"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Thermal Efficiency = #{thermal_eff}")
+      new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{thermal_eff} Thermal Eff"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Thermal Efficiency = #{thermal_eff}")
     end
 
     # If specified as combustion efficiency
     unless blr_props['minimum_combustion_efficiency'].nil?
       min_comb_eff = blr_props['minimum_combustion_efficiency']
       thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
+      new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
     end
 
     # Rename
     if rename
-      setName(new_comp_name)
+      boiler_hot_water.setName(new_comp_name)
     end
 
     return thermal_eff
@@ -119,20 +119,20 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Define the criteria to find the boiler properties
     # in the hvac standards data set.
-    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
+    search_criteria = boiler_hot_water_find_search_criteria(boiler_hot_water, template)
     fuel_type = search_criteria['fuel_type']
     fluid_type = search_criteria['fluid_type']
 
     # Get the capacity
-    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
+    capacity_w = boiler_hot_water_find_capacity(boiler_hot_water) 
 
     # for NECB, check if secondary and/or modulating boiler required
     if template == 'NECB 2011'
       if capacity_w / 1000.0 >= 352.0
         if name.to_s.include?('Primary Boiler')
           boiler_capacity = capacity_w
-          setBoilerFlowMode('LeavingSetpointModulated')
-          setMinimumPartLoadRatio(0.25)
+          boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
+          boiler_hot_water.setMinimumPartLoadRatio(0.25)
         elsif name.to_s.include?('Secondary Boiler')
           boiler_capacity = 0.001
         end
@@ -145,7 +145,7 @@ class StandardsModel < OpenStudio::Model::Model
           boiler_capacity = 0.001
         end
       end
-      setNominalCapacity(boiler_capacity)
+      boiler_hot_water.setNominalCapacity(boiler_capacity)
     end # NECB 2011
 
     # Convert capacity to Btu/hr
@@ -158,19 +158,19 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Get the boiler properties
-    blr_props = model_find_object(model, $os_standards['boilers'], search_criteria, capacity_btu_per_hr)
+    blr_props = model_find_object(boiler_hot_water.model, $os_standards['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{name}, cannot find boiler properties, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
     # Make the EFFFPLR curve
-    eff_fplr = model_add_curve(model, blr_props['efffplr'])
+    eff_fplr = model_add_curve(boiler_hot_water.model, blr_props['efffplr'])
     if eff_fplr
-      setNormalizedBoilerEfficiencyCurve(eff_fplr)
+      boiler_hot_water.setNormalizedBoilerEfficiencyCurve(eff_fplr)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{name}, cannot find eff_fplr curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find eff_fplr curve, will not be set.")
       successfully_set_all_properties = false
     end
 
@@ -181,31 +181,31 @@ class StandardsModel < OpenStudio::Model::Model
     unless blr_props['minimum_annual_fuel_utilization_efficiency'].nil?
       min_afue = blr_props['minimum_annual_fuel_utilization_efficiency']
       thermal_eff = afue_to_thermal_eff(min_afue)
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
+      new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
     end
 
     # If specified as thermal efficiency
     unless blr_props['minimum_thermal_efficiency'].nil?
       thermal_eff = blr_props['minimum_thermal_efficiency']
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{thermal_eff} Thermal Eff"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Thermal Efficiency = #{thermal_eff}")
+      new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{thermal_eff} Thermal Eff"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Thermal Efficiency = #{thermal_eff}")
     end
 
     # If specified as combustion efficiency
     unless blr_props['minimum_combustion_efficiency'].nil?
       min_comb_eff = blr_props['minimum_combustion_efficiency']
       thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
+      new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
     end
 
     # Set the name
-    setName(new_comp_name)
+    boiler_hot_water.setName(new_comp_name)
 
     # Set the efficiency values
     unless thermal_eff.nil?
-      setNominalThermalEfficiency(thermal_eff)
+      boiler_hot_water.setNominalThermalEfficiency(thermal_eff)
     end
 
     return successfully_set_all_properties

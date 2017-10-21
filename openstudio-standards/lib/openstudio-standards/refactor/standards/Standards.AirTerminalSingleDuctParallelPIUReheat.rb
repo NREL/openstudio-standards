@@ -7,7 +7,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] the template base requirements on
   # @return [Bool] returns true if successful, false if not
   def air_terminal_single_duct_parallel_piu_reheat_apply_prm_baseline_fan_power(air_terminal_single_duct_parallel_piu_reheat, template)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "Setting PIU fan power for #{name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "Setting PIU fan power for #{air_terminal_single_duct_parallel_piu_reheat.name}.")
 
     # Determine the fan sizing flow rate, min flow rate,
     # and W/cfm
@@ -37,7 +37,7 @@ class StandardsModel < OpenStudio::Model::Model
     setMinimumPrimaryAirFlowFraction(min_flow_frac)
 
     # Get the fan
-    fan = self.fan.to_FanConstantVolume.get
+    fan = air_terminal_single_duct_parallel_piu_reheat.fan.to_FanConstantVolume.get
 
     # Set the impeller efficiency
     fan_change_impeller_efficiency(fan, fan.baseline_impeller_efficiency(template))
@@ -55,7 +55,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Calculate the newly set efficacy
     fan_power_new_w = fan_rise_new_pa * max_sec_flow_rate_m3_per_s / fan_tot_eff
     fan_efficacy_new_w_per_cfm = fan_power_new_w / max_sec_flow_rate_cfm
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "For #{name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.AirTerminalSingleDuctParallelPIUReheat', "For #{air_terminal_single_duct_parallel_piu_reheat.name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm.")
 
     return true
   end

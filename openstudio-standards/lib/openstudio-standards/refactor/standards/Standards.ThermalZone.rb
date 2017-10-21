@@ -10,7 +10,7 @@ class StandardsModel < OpenStudio::Model::Model
   def thermal_zone_outdoor_airflow_rate(thermal_zone)
     tot_oa_flow_rate = 0.0
 
-    spaces = self.spaces.sort
+    spaces = thermal_zone.spaces.sort
 
     sum_floor_area = 0.0
     sum_number_of_people = 0.0
@@ -63,7 +63,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Convert to cfm
     tot_oa_flow_rate_cfm = OpenStudio.convert(tot_oa_flow_rate, 'm^3/s', 'cfm').get
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{name}, design min OA = #{tot_oa_flow_rate_cfm.round} cfm.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, design min OA = #{tot_oa_flow_rate_cfm.round} cfm.")
 
     return tot_oa_flow_rate
   end
@@ -100,7 +100,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # For each space in the zone, convert
     # all design OA to per-area
-    spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       dsn_oa = space.designSpecificationOutdoorAir
       next if dsn_oa.empty?
       dsn_oa = dsn_oa.get
@@ -190,7 +190,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # For each day of the year, determine
     # time_value_pairs = []
-    year = model.getYearDescription
+    year = thermal_zone.model.getYearDescription
     yearly_data = []
     yearly_times = OpenStudio::DateTimeVector.new
     yearly_values = []
@@ -263,8 +263,8 @@ class StandardsModel < OpenStudio::Model::Model
     # time_series = OpenStudio::TimeSeries.new(times, values, 'unitless')
 
     # Make a schedule ruleset
-    sch_name = "#{name} Occ Sch"
-    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
+    sch_name = "#{thermal_zone.name} Occ Sch"
+    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(thermal_zone.model)
     sch_ruleset.setName(sch_name.to_s)
 
     # Default - All Occupied
@@ -273,14 +273,14 @@ class StandardsModel < OpenStudio::Model::Model
     day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
 
     # Winter Design Day - All Occupied
-    day_sch = OpenStudio::Model::ScheduleDay.new(model)
+    day_sch = OpenStudio::Model::ScheduleDay.new(thermal_zone.model)
     sch_ruleset.setWinterDesignDaySchedule(day_sch)
     day_sch = sch_ruleset.winterDesignDaySchedule
     day_sch.setName("#{sch_name} Winter Design Day")
     day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
 
     # Summer Design Day - All Occupied
-    day_sch = OpenStudio::Model::ScheduleDay.new(model)
+    day_sch = OpenStudio::Model::ScheduleDay.new(thermal_zone.model)
     sch_ruleset.setSummerDesignDaySchedule(day_sch)
     day_sch = sch_ruleset.summerDesignDaySchedule
     day_sch.setName("#{sch_name} Summer Design Day")
@@ -462,7 +462,7 @@ class StandardsModel < OpenStudio::Model::Model
     elsif htg_fuels.size.zero? && clg_fuels.size.zero?
       fuel_type = 'unconditioned'
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{name}, could not determine fuel type, assuming fossil.  Heating fuels = #{htg_fuels.join(', ')}; cooling fuels = #{clg_fuels.join(', ')}.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{thermal_zone.name}, could not determine fuel type, assuming fossil.  Heating fuels = #{htg_fuels.join(', ')}; cooling fuels = #{clg_fuels.join(', ')}.")
       fuel_type = 'fossil'
     end
 
@@ -517,25 +517,25 @@ class StandardsModel < OpenStudio::Model::Model
     # Electric and fossil and district
     if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating') && fossil
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{name}, heating mixed electricity, fossil, and district.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed electricity, fossil, and district.")
     end
 
     # Electric and fossil
     if htg_fuels.include?('Electricity') && fossil
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{name}, heating mixed electricity and fossil.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed electricity and fossil.")
     end
 
     # Electric and district
     if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating')
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{name}, heating mixed electricity and district.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed electricity and district.")
     end
 
     # Fossil and district
     if fossil && htg_fuels.include?('DistrictHeating')
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{name}, heating mixed fossil and district.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed fossil and district.")
     end
 
     return is_mixed
@@ -684,8 +684,8 @@ class StandardsModel < OpenStudio::Model::Model
     # Report out the characteristics for debugging if
     # the system type cannot be inferred.
     if sys_type == 'Unknown'
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{name}, the baseline system type could not be inferred.")
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "***#{name}***")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, the baseline system type could not be inferred.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "***#{thermal_zone.name}***")
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "system type = #{sys_type}")
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "has_air_loop = #{has_air_loop}")
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "air_loop_num_zones = #{air_loop_num_zones}")
@@ -785,7 +785,7 @@ class StandardsModel < OpenStudio::Model::Model
           htd = true
         end
       else
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{name} used an unknown schedule type for the heating setpoint; assuming heated.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the heating setpoint; assuming heated.")
         htd = true
       end
     end
@@ -821,7 +821,7 @@ class StandardsModel < OpenStudio::Model::Model
             htd = true
           end
         else
-          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{name} used an unknown schedule type for the heating setpoint; assuming heated.")
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the heating setpoint; assuming heated.")
           htd = true
         end
       end
@@ -918,7 +918,7 @@ class StandardsModel < OpenStudio::Model::Model
           cld = true
         end
       else
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
         cld = true
       end
     end
@@ -954,7 +954,7 @@ class StandardsModel < OpenStudio::Model::Model
             cld = true
           end
         else
-          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
           cld = true
         end
       end
@@ -985,7 +985,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     area_plenum = 0
     area_non_plenum = 0
-    spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       if space_plenum?(space) 
         area_plenum += space.floorArea
       else
@@ -1067,14 +1067,14 @@ class StandardsModel < OpenStudio::Model::Model
 
     cond_cat = 'Unconditioned'
     if htg_load_btu_per_ft2 > htg_lim_btu_per_ft2
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{name} is conditioned because heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{htg_lim_btu_per_ft2.round} Btu/hr*ft^2.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{thermal_zone.name} is conditioned because heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{htg_lim_btu_per_ft2.round} Btu/hr*ft^2.")
       cond_cat = if res
                    'ResConditioned'
                  else
                    'NonResConditioned'
                  end
     elsif clg_load_btu_per_ft2 > clg_lim_btu_per_ft2
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{name} is conditioned because cooling load of #{clg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{clg_lim_btu_per_ft2.round} Btu/hr*ft^2.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{thermal_zone.name} is conditioned because cooling load of #{clg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{clg_lim_btu_per_ft2.round} Btu/hr*ft^2.")
       cond_cat = if res
                    'ResConditioned'
                  else
@@ -1082,7 +1082,7 @@ class StandardsModel < OpenStudio::Model::Model
                  end
     elsif htg_load_btu_per_ft2 > semihtd_lim_btu_per_ft2
       cond_cat = 'Semiheated'
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{name} is semiheated because heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{semihtd_lim_btu_per_ft2.round} Btu/hr*ft^2.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{thermal_zone.name} is semiheated because heating load of #{htg_load_btu_per_ft2.round} Btu/hr*ft^2 exceeds minimum of #{semihtd_lim_btu_per_ft2.round} Btu/hr*ft^2.")
     end
 
     return cond_cat
@@ -1121,7 +1121,7 @@ class StandardsModel < OpenStudio::Model::Model
     # return the current design heating temperature
     if setpoint_c.nil?
       setpoint_c = sizingZone.zoneHeatingDesignSupplyAirTemperature
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{name}: could not determine max heating setpoint.  Design heating SAT will be #{OpenStudio.convert(setpoint_c, 'C', 'F').get.round} F from proposed model.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: could not determine max heating setpoint.  Design heating SAT will be #{OpenStudio.convert(setpoint_c, 'C', 'F').get.round} F from proposed model.")
       return setpoint_c
     end
 
@@ -1132,7 +1132,7 @@ class StandardsModel < OpenStudio::Model::Model
       setpoint_f = OpenStudio.convert(setpoint_c, 'C', 'F').get
       new_setpoint_c = sizingZone.zoneHeatingDesignSupplyAirTemperature
       new_setpoint_f = OpenStudio.convert(new_setpoint_c, 'C', 'F').get
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{name}: max heating setpoint in proposed model was #{setpoint_f.round} F.  20 F SAT delta-T from this point is unreasonable. Design heating SAT will be #{new_setpoint_f.round} F from proposed model.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: max heating setpoint in proposed model was #{setpoint_f.round} F.  20 F SAT delta-T from this point is unreasonable. Design heating SAT will be #{new_setpoint_f.round} F from proposed model.")
       return new_setpoint_c
     end
 
@@ -1178,7 +1178,7 @@ class StandardsModel < OpenStudio::Model::Model
     # return the current design cooling temperature
     if setpoint_c.nil?
       setpoint_c = sizingZone.zoneCoolingDesignSupplyAirTemperature
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{name}: could not determine min cooling setpoint.  Design cooling SAT will be #{OpenStudio.convert(setpoint_c, 'C', 'F').get.round} F from proposed model.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: could not determine min cooling setpoint.  Design cooling SAT will be #{OpenStudio.convert(setpoint_c, 'C', 'F').get.round} F from proposed model.")
       return setpoint_c
     end
 
@@ -1189,7 +1189,7 @@ class StandardsModel < OpenStudio::Model::Model
       setpoint_f = OpenStudio.convert(setpoint_c, 'C', 'F').get
       new_setpoint_c = sizingZone.zoneCoolingDesignSupplyAirTemperature
       new_setpoint_f = OpenStudio.convert(new_setpoint_c, 'C', 'F').get
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{name}: max cooling setpoint in proposed model was #{setpoint_f.round} F.  20 F SAT delta-T from this point is unreasonable. Design cooling SAT will be #{new_setpoint_f.round} F from proposed model.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: max cooling setpoint in proposed model was #{setpoint_f.round} F.  20 F SAT delta-T from this point is unreasonable. Design cooling SAT will be #{new_setpoint_f.round} F from proposed model.")
       return new_setpoint_c
     end
 
@@ -1222,7 +1222,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     htg_sat_f = OpenStudio.convert(htg_sat_c, 'C', 'F').get
     clg_sat_f = OpenStudio.convert(clg_sat_c, 'C', 'F').get
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{name}, Htg SAT = #{htg_sat_f.round(1)}F, Clg SAT = #{clg_sat_f.round(1)}F.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, Htg SAT = #{htg_sat_f.round(1)}F, Clg SAT = #{clg_sat_f.round(1)}F.")
 
     result = false
     if htg_success && clg_success
@@ -1236,7 +1236,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Heated to 0F (below thermal_zone_heated?(thermal_zone)  threshold)
     htg_t_f = 0
     htg_t_c = OpenStudio.convert(htg_t_f, 'F', 'C').get
-    htg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    htg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(thermal_zone.model)
     htg_stpt_sch.setName('Unconditioned Minimal Heating')
     htg_stpt_sch.defaultDaySchedule.setName('Unconditioned Minimal Heating Default')
     htg_stpt_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), htg_t_c)
@@ -1244,14 +1244,14 @@ class StandardsModel < OpenStudio::Model::Model
     # Cooled to 120F (above thermal_zone_cooled?(thermal_zone)  threshold)
     clg_t_f = 120
     clg_t_c = OpenStudio.convert(clg_t_f, 'F', 'C').get
-    clg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    clg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(thermal_zone.model)
     clg_stpt_sch.setName('Unconditioned Minimal Heating')
     clg_stpt_sch.defaultDaySchedule.setName('Unconditioned Minimal Heating Default')
     clg_stpt_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), clg_t_c)
 
     # Thermostat
-    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
-    thermostat.setName("#{name} Unconditioned Thermostat")
+    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(thermal_zone.model)
+    thermostat.setName("#{thermal_zone.name} Unconditioned Thermostat")
     thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
     thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
 
@@ -1378,7 +1378,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Get the area served and the number of occupants
     area_served_m2 = 0
     num_people = 0
-    spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       area_served_m2 += space.floorArea
       num_people += space.numberOfPeople
     end
@@ -1386,7 +1386,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Check the minimum area
     area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
     if area_served_ft2 < min_area_ft2
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{name}: DCV is not required since the area is #{area_served_ft2.round} ft2, but the minimum size is #{min_area_ft2.round} ft2.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is not required since the area is #{area_served_ft2.round} ft2, but the minimum size is #{min_area_ft2.round} ft2.")
       return dcv_required
     end
 
@@ -1395,7 +1395,7 @@ class StandardsModel < OpenStudio::Model::Model
     occ_per_1000_ft2 = occ_per_ft2 * 1000
 
     if occ_per_1000_ft2 < min_occ_per_1000_ft2
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{name}: DCV is not required since the occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is not required since the occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
       return dcv_required
     end
 
@@ -1419,7 +1419,7 @@ class StandardsModel < OpenStudio::Model::Model
     space_type_hash = {} # key is space type value is floor_area_si
 
     # get space type ratio for spaces in zone, making more than one exhaust fan if necessary
-    self.spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       next if not space.spaceType.is_initialized
       next if not space.partofTotalFloorArea
       space_type = space.spaceType.get
@@ -1440,7 +1440,7 @@ class StandardsModel < OpenStudio::Model::Model
       makeup_target = [space_type.standardsBuildingType.get,space_type.standardsSpaceType.get]
       if exhaust_makeup_inputs.has_key?(makeup_target) and exhaust_makeup_inputs[makeup_target].has_key?(:target_effective_floor_area)
         # pass in custom floor area
-        floor_area_si = exhaust_makeup_inputs[makeup_target][:target_effective_floor_area] / self.multiplier.to_f
+        floor_area_si = exhaust_makeup_inputs[makeup_target][:target_effective_floor_area] / thermal_zone.multiplier.to_f
         floor_area_ip = OpenStudio.convert(floor_area_si,'m^2','ft^2').get
       else
         floor_area_ip = OpenStudio.convert(floor_area,'m^2','ft^2').get
@@ -1452,24 +1452,24 @@ class StandardsModel < OpenStudio::Model::Model
       maximum_flow_rate_ip = exhaust_per_area * floor_area_ip
       maximum_flow_rate_si = OpenStudio.convert(maximum_flow_rate_ip,'cfm','m^3/s').get
       if space_type_properties['exhaust_schedule'].nil?
-        exhaust_schedule = model.alwaysOnDiscreteSchedule
+        exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
       else
         sch_name = space_type_properties['exhaust_schedule']
         exhaust_schedule = model_add_schedule(model, sch_name)
         unless exhaust_schedule
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "Could not find an exhaust schedule called #{sch_name}, exhaust fans will run continuously.")
-          exhaust_schedule = model.alwaysOnDiscreteSchedule
+          exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
         end
       end
 
       # add exhaust fans
-      zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
-      zone_exhaust_fan.setName(self.name.to_s + ' Exhaust Fan')
+      zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(thermal_zone.model)
+      zone_exhaust_fan.setName(thermal_zone.name.to_s + ' Exhaust Fan')
       zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
       # not using zone_exhaust_fan.setFlowFractionSchedule. Exhaust fans are on when available
       zone_exhaust_fan.setMaximumFlowRate(maximum_flow_rate_si)
       zone_exhaust_fan.setEndUseSubcategory('Zone Exhaust Fans')
-      zone_exhaust_fan.addToThermalZone(self)
+      zone_exhaust_fan.addToThermalZone(thermal_zone)
       exhaust_fans[zone_exhaust_fan] = {} # keys are :zone_mixing and :transfer_air_source_zone_exhaust
 
       # set fan pressure rise
@@ -1491,8 +1491,8 @@ class StandardsModel < OpenStudio::Model::Model
         transfer_air_zone_mixing_si = maximum_flow_rate_si * max_sch_val
 
         # add dummy exhaust fan to a transfer_air_source_zones
-        transfer_air_source_zone_exhaust = OpenStudio::Model::FanZoneExhaust.new(model)
-        transfer_air_source_zone_exhaust.setName(self.name.to_s + ' Transfer Air Source')
+        transfer_air_source_zone_exhaust = OpenStudio::Model::FanZoneExhaust.new(thermal_zone.model)
+        transfer_air_source_zone_exhaust.setName(thermal_zone.name.to_s + ' Transfer Air Source')
         transfer_air_source_zone_exhaust.setAvailabilitySchedule(exhaust_schedule)
         # not using zone_exhaust_fan.setFlowFractionSchedule. Exhaust fans are on when available
         transfer_air_source_zone_exhaust.setMaximumFlowRate(transfer_air_zone_mixing_si)
@@ -1506,7 +1506,7 @@ class StandardsModel < OpenStudio::Model::Model
         zone_mixing_schedule = exhaust_schedule
 
         # add zone mixing
-        zone_mixing = OpenStudio::Model::ZoneMixing.new(self)
+        zone_mixing = OpenStudio::Model::ZoneMixing.new(thermal_zone)
         zone_mixing.setSchedule(zone_mixing_schedule)
         zone_mixing.setSourceZone(exhaust_makeup_inputs[makeup_target][:source_zone])
         zone_mixing.setDesignFlowRate(transfer_air_zone_mixing_si)
@@ -1528,12 +1528,12 @@ class StandardsModel < OpenStudio::Model::Model
 
     adjacent_zones = []
 
-    self.spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space) 
       adj_spaces.each do |k,v|
         # skip if space is in current thermal zone.
         next if not space.thermalZone.is_initialized
-        next if k.thermalZone.get == self
+        next if k.thermalZone.get == thermal_zone
         adjacent_zones << k.thermalZone.get
       end
     end

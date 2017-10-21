@@ -95,7 +95,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Need to add a check, or it'll crash on space_type_properties['occupancy_per_area'].to_f below
     if space_type_properties.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} was not found in the standards data.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} was not found in the standards data.")
       return false
     end
     # People
@@ -106,41 +106,41 @@ class StandardsModel < OpenStudio::Model::Model
     if set_people && people_have_info
 
       # Remove all but the first instance
-      instances = people.sort
+      instances = space_type.people.sort
       if instances.size.zero?
         # Create a new definition and instance
-        definition = OpenStudio::Model::PeopleDefinition.new(model)
-        definition.setName("#{name} People Definition")
+        definition = OpenStudio::Model::PeopleDefinition.new(space_type.model)
+        definition.setName("#{space_type.name} People Definition")
         instance = OpenStudio::Model::People.new(definition)
-        instance.setName("#{name} People")
-        instance.setSpaceType(self)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} had no people, one has been created.")
+        instance.setName("#{space_type.name} People")
+        instance.setSpaceType(space_type)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no people, one has been created.")
         instances << instance
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{name}.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
       end
 
       # Modify the definition of the instance
-      people.sort.each do |inst|
+      space_type.people.sort.each do |inst|
         definition = inst.peopleDefinition
         unless occupancy_per_area.zero?
           definition.setPeopleperSpaceFloorArea(OpenStudio.convert(occupancy_per_area / 1000, 'people/ft^2', 'people/m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set occupancy to #{occupancy_per_area} people/1000 ft^2.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set occupancy to #{occupancy_per_area} people/1000 ft^2.")
         end
 
         # set fraction radiant  ##
         definition.setFractionRadiant(0.3)
         
         # Clothing schedule for thermal comfort metrics
-        clothing_sch = model.getScheduleRulesetByName('Clothing Schedule')
+        clothing_sch = space_type.model.getScheduleRulesetByName('Clothing Schedule')
         if clothing_sch.is_initialized
           clothing_sch = clothing_sch.get
         else
-          clothing_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+          clothing_sch = OpenStudio::Model::ScheduleRuleset.new(space_type.model)
           clothing_sch.setName('Clothing Schedule')
           clothing_sch.defaultDaySchedule.setName('Clothing Schedule Default Winter Clothes')
           clothing_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
@@ -153,11 +153,11 @@ class StandardsModel < OpenStudio::Model::Model
         inst.setClothingInsulationSchedule(clothing_sch)
 
         # Air velocity schedule for thermal comfort metrics
-        air_velo_sch = model.getScheduleRulesetByName('Air Velocity Schedule')
+        air_velo_sch = space_type.model.getScheduleRulesetByName('Air Velocity Schedule')
         if air_velo_sch.is_initialized
           air_velo_sch = air_velo_sch.get
         else
-          air_velo_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+          air_velo_sch = OpenStudio::Model::ScheduleRuleset.new(space_type.model)
           air_velo_sch.setName('Air Velocity Schedule')
           air_velo_sch.defaultDaySchedule.setName('Air Velocity Schedule Default')
           air_velo_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
@@ -165,11 +165,11 @@ class StandardsModel < OpenStudio::Model::Model
         inst.setAirVelocitySchedule(air_velo_sch)
 
         # Work efficiency schedule for thermal comfort metrics
-        work_efficiency_sch = model.getScheduleRulesetByName('Work Efficiency Schedule')
+        work_efficiency_sch = space_type.model.getScheduleRulesetByName('Work Efficiency Schedule')
         if work_efficiency_sch.is_initialized
           work_efficiency_sch = work_efficiency_sch.get
         else
-          work_efficiency_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+          work_efficiency_sch = OpenStudio::Model::ScheduleRuleset.new(space_type.model)
           work_efficiency_sch.setName('Work Efficiency Schedule')
           work_efficiency_sch.defaultDaySchedule.setName('Work Efficiency Schedule Default')
           work_efficiency_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
@@ -193,25 +193,25 @@ class StandardsModel < OpenStudio::Model::Model
     if set_lights && lights_have_info
 
       # Remove all but the first instance
-      instances = lights.sort
+      instances = space_type.lights.sort
       if instances.size.zero?
-        definition = OpenStudio::Model::LightsDefinition.new(model)
-        definition.setName("#{name} Lights Definition")
+        definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
+        definition.setName("#{space_type.name} Lights Definition")
         instance = OpenStudio::Model::Lights.new(definition)
-        instance.setName("#{name} Lights")
-        instance.setSpaceType(self)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} had no lights, one has been created.")
+        instance.setName("#{space_type.name} Lights")
+        instance.setSpaceType(space_type)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no lights, one has been created.")
         instances << instance
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{name}.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
       end
 
       # Modify the definition of the instance
-      lights.sort.each do |inst|
+      space_type.lights.sort.each do |inst|
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           occSensLPDfactor = 1.0
@@ -232,11 +232,11 @@ class StandardsModel < OpenStudio::Model::Model
             end
           end
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occSensLPDfactor, 'W/ft^2', 'W/m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set LPD to #{lighting_per_area} W/ft^2.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
         end
         unless lighting_per_person.zero?
           definition.setWattsperPerson(OpenStudio.convert(lighting_per_person.to_f, 'W/person', 'W/person').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set lighting to #{lighting_per_person} W/person.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting to #{lighting_per_person} W/person.")
         end
         unless lights_frac_to_return_air.zero?
           definition.setReturnAirFraction(lights_frac_to_return_air)
@@ -256,8 +256,8 @@ class StandardsModel < OpenStudio::Model::Model
       additional_lighting_per_area = space_type_properties['additional_lighting_per_area'].to_f
       unless additional_lighting_per_area.zero?
         # Create the lighting definition
-        additional_lights_def = OpenStudio::Model::LightsDefinition.new(model)
-        additional_lights_def.setName("#{name} Additional Lights Definition")
+        additional_lights_def = OpenStudio::Model::LightsDefinition.new(space_type.model)
+        additional_lights_def.setName("#{space_type.name} Additional Lights Definition")
         additional_lights_def.setWattsperSpaceFloorArea(OpenStudio.convert(additional_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
         additional_lights_def.setReturnAirFraction(lights_frac_to_return_air)
         additional_lights_def.setFractionRadiant(lights_frac_radiant)
@@ -265,8 +265,8 @@ class StandardsModel < OpenStudio::Model::Model
 
         # Create the lighting instance and hook it up to the space type
         additional_lights = OpenStudio::Model::Lights.new(additional_lights_def)
-        additional_lights.setName("#{name} Additional Lights")
-        additional_lights.setSpaceType(self)
+        additional_lights.setName("#{space_type.name} Additional Lights")
+        additional_lights.setSpaceType(space_type)
       end
 
     end
@@ -282,29 +282,29 @@ class StandardsModel < OpenStudio::Model::Model
     if set_electric_equipment && elec_equip_have_info
 
       # Remove all but the first instance
-      instances = electricEquipment.sort
+      instances = space_type.electricEquipment.sort
       if instances.size.zero?
-        definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
-        definition.setName("#{name} Elec Equip Definition")
+        definition = OpenStudio::Model::ElectricEquipmentDefinition.new(space_type.model)
+        definition.setName("#{space_type.name} Elec Equip Definition")
         instance = OpenStudio::Model::ElectricEquipment.new(definition)
-        instance.setName("#{name} Elec Equip")
-        instance.setSpaceType(self)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} had no electric equipment, one has been created.")
+        instance.setName("#{space_type.name} Elec Equip")
+        instance.setSpaceType(space_type)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no electric equipment, one has been created.")
         instances << instance
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{name}.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
       end
 
       # Modify the definition of the instance
-      electricEquipment.sort.each do |inst|
+      space_type.electricEquipment.sort.each do |inst|
         definition = inst.electricEquipmentDefinition
         unless elec_equip_per_area.zero?
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(elec_equip_per_area.to_f, 'W/ft^2', 'W/m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set electric EPD to #{elec_equip_per_area} W/ft^2.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric EPD to #{elec_equip_per_area} W/ft^2.")
         end
         unless elec_equip_frac_latent.zero?
           definition.setFractionLatent(elec_equip_frac_latent)
@@ -330,29 +330,29 @@ class StandardsModel < OpenStudio::Model::Model
     if set_gas_equipment && gas_equip_have_info
 
       # Remove all but the first instance
-      instances = gasEquipment.sort
+      instances = space_type.gasEquipment.sort
       if instances.size.zero?
-        definition = OpenStudio::Model::GasEquipmentDefinition.new(model)
-        definition.setName("#{name} Gas Equip Definition")
+        definition = OpenStudio::Model::GasEquipmentDefinition.new(space_type.model)
+        definition.setName("#{space_type.name} Gas Equip Definition")
         instance = OpenStudio::Model::GasEquipment.new(definition)
-        instance.setName("#{name} Gas Equip")
-        instance.setSpaceType(self)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} had no gas equipment, one has been created.")
+        instance.setName("#{space_type.name} Gas Equip")
+        instance.setSpaceType(space_type)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no gas equipment, one has been created.")
         instances << instance
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{name}.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
       end
 
       # Modify the definition of the instance
-      gasEquipment.sort.each do |inst|
+      space_type.gasEquipment.sort.each do |inst|
         definition = inst.gasEquipmentDefinition
         unless gas_equip_per_area.zero?
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(gas_equip_per_area.to_f, 'Btu/hr*ft^2', 'W/m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set gas EPD to #{elec_equip_per_area} Btu/hr*ft^2.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas EPD to #{elec_equip_per_area} Btu/hr*ft^2.")
         end
         unless gas_equip_frac_latent.zero?
           definition.setFractionLatent(gas_equip_frac_latent)
@@ -377,14 +377,14 @@ class StandardsModel < OpenStudio::Model::Model
     ventilation_have_info = true unless ventilation_ach.zero?
 
     # Get the design OA or create a new one if none exists
-    ventilation = designSpecificationOutdoorAir
+    ventilation = space_type.designSpecificationOutdoorAir
     if ventilation.is_initialized
       ventilation = ventilation.get
     else
-      ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(model)
-      ventilation.setName("#{name} Ventilation")
-      setDesignSpecificationOutdoorAir(ventilation)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} had no ventilation specification, one has been created.")
+      ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(space_type.model)
+      ventilation.setName("#{space_type.name} Ventilation")
+      space_type.setDesignSpecificationOutdoorAir(ventilation)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no ventilation specification, one has been created.")
     end
 
     if set_ventilation && ventilation_have_info
@@ -393,15 +393,15 @@ class StandardsModel < OpenStudio::Model::Model
       ventilation.setOutdoorAirMethod('Sum')
       unless ventilation_per_area.zero?
         ventilation.setOutdoorAirFlowperFloorArea(OpenStudio.convert(ventilation_per_area.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set ventilation per area to #{ventilation_per_area} cfm/ft^2.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per area to #{ventilation_per_area} cfm/ft^2.")
       end
       unless ventilation_per_person.zero?
         ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set ventilation per person to #{ventilation_per_person} cfm/person.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per person to #{ventilation_per_person} cfm/person.")
       end
       unless ventilation_ach.zero?
         ventilation.setOutdoorAirFlowAirChangesperHour(ventilation_ach)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set ventilation to #{ventilation_ach} ACH.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation to #{ventilation_ach} ACH.")
       end
 
     elsif set_ventilation && !ventilation_have_info
@@ -427,34 +427,34 @@ class StandardsModel < OpenStudio::Model::Model
     if set_infiltration && infiltration_have_info
 
       # Remove all but the first instance
-      instances = spaceInfiltrationDesignFlowRates.sort
+      instances = space_type.spaceInfiltrationDesignFlowRates.sort
       if instances.size.zero?
-        instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-        instance.setName("#{name} Infiltration")
-        instance.setSpaceType(self)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} had no infiltration objects, one has been created.")
+        instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space_type.model)
+        instance.setName("#{space_type.name} Infiltration")
+        instance.setSpaceType(space_type)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no infiltration objects, one has been created.")
         instances << instance
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{name}.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
       end
 
       # Modify each instance
-      spaceInfiltrationDesignFlowRates.sort.each do |inst|
+      space_type.spaceInfiltrationDesignFlowRates.sort.each do |inst|
         unless infiltration_per_area_ext.zero?
           inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")
         end
         unless infiltration_per_area_ext_wall.zero?
           inst.setFlowperExteriorWallArea(OpenStudio.convert(infiltration_per_area_ext_wall.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set infiltration to #{infiltration_per_area_ext_wall} per ft^2 exterior wall area.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{infiltration_per_area_ext_wall} per ft^2 exterior wall area.")
         end
         unless infiltration_ach.zero?
           inst.setAirChangesperHour(infiltration_ach)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set infiltration to #{ventilation_ach} ACH.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} ACH.")
         end
       end
 
@@ -484,26 +484,26 @@ class StandardsModel < OpenStudio::Model::Model
     # Get the default schedule set
     # or create a new one if none exists.
     default_sch_set = nil
-    if defaultScheduleSet.is_initialized
-      default_sch_set = defaultScheduleSet.get
+    if space_type.defaultScheduleSet.is_initialized
+      default_sch_set = space_type.defaultScheduleSet.get
     else
-      default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(model)
-      default_sch_set.setName("#{name} Schedule Set")
-      setDefaultScheduleSet(default_sch_set)
+      default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(space_type.model)
+      default_sch_set.setName("#{space_type.name} Schedule Set")
+      space_type.setDefaultScheduleSet(default_sch_set)
     end
 
     # People
     if set_people
       occupancy_sch = space_type_properties['occupancy_schedule']
       unless occupancy_sch.nil?
-        default_sch_set.setNumberofPeopleSchedule(model.add_schedule(occupancy_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set occupancy schedule to #{occupancy_sch}.")
+        default_sch_set.setNumberofPeopleSchedule(space_type.model.add_schedule(occupancy_sch))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set occupancy schedule to #{occupancy_sch}.")
       end
 
       occupancy_activity_sch = space_type_properties['occupancy_activity_schedule']
       unless occupancy_activity_sch.nil?
-        default_sch_set.setPeopleActivityLevelSchedule(model.add_schedule(occupancy_activity_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set occupant activity schedule to #{occupancy_activity_sch}.")
+        default_sch_set.setPeopleActivityLevelSchedule(space_type.model.add_schedule(occupancy_activity_sch))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set occupant activity schedule to #{occupancy_activity_sch}.")
       end
 
     end
@@ -513,8 +513,8 @@ class StandardsModel < OpenStudio::Model::Model
 
       lighting_sch = space_type_properties['lighting_schedule']
       unless lighting_sch.nil?
-        default_sch_set.setLightingSchedule(model.add_schedule(lighting_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set lighting schedule to #{lighting_sch}.")
+        default_sch_set.setLightingSchedule(space_type.model.add_schedule(lighting_sch))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
       end
 
     end
@@ -524,8 +524,8 @@ class StandardsModel < OpenStudio::Model::Model
 
       elec_equip_sch = space_type_properties['electric_equipment_schedule']
       unless elec_equip_sch.nil?
-        default_sch_set.setElectricEquipmentSchedule(model.add_schedule(elec_equip_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set electric equipment schedule to #{elec_equip_sch}.")
+        default_sch_set.setElectricEquipmentSchedule(space_type.model.add_schedule(elec_equip_sch))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric equipment schedule to #{elec_equip_sch}.")
       end
 
     end
@@ -535,8 +535,8 @@ class StandardsModel < OpenStudio::Model::Model
 
       gas_equip_sch = space_type_properties['gas_equipment_schedule']
       unless gas_equip_sch.nil?
-        default_sch_set.setGasEquipmentSchedule(model.add_schedule(gas_equip_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set gas equipment schedule to #{gas_equip_sch}.")
+        default_sch_set.setGasEquipmentSchedule(space_type.model.add_schedule(gas_equip_sch))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas equipment schedule to #{gas_equip_sch}.")
       end
 
     end
@@ -546,8 +546,8 @@ class StandardsModel < OpenStudio::Model::Model
 
       infiltration_sch = space_type_properties['infiltration_schedule']
       unless infiltration_sch.nil?
-        default_sch_set.setInfiltrationSchedule(model.add_schedule(infiltration_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set infiltration schedule to #{infiltration_sch}.")
+        default_sch_set.setInfiltrationSchedule(space_type.model.add_schedule(infiltration_sch))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration schedule to #{infiltration_sch}.")
       end
 
     end
@@ -555,19 +555,19 @@ class StandardsModel < OpenStudio::Model::Model
     # Thermostat
     if make_thermostat
 
-      thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
-      thermostat.setName("#{name} Thermostat")
+      thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(space_type.model)
+      thermostat.setName("#{space_type.name} Thermostat")
 
       heating_setpoint_sch = space_type_properties['heating_setpoint_schedule']
       unless heating_setpoint_sch.nil?
-        thermostat.setHeatingSetpointTemperatureSchedule(model.add_schedule(heating_setpoint_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set heating setpoint schedule to #{heating_setpoint_sch}.")
+        thermostat.setHeatingSetpointTemperatureSchedule(space_type.model.add_schedule(heating_setpoint_sch))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set heating setpoint schedule to #{heating_setpoint_sch}.")
       end
 
       cooling_setpoint_sch = space_type_properties['cooling_setpoint_schedule']
       unless cooling_setpoint_sch.nil?
-        thermostat.setCoolingSetpointTemperatureSchedule(model.add_schedule(cooling_setpoint_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set cooling setpoint schedule to #{cooling_setpoint_sch}.")
+        thermostat.setCoolingSetpointTemperatureSchedule(space_type.model.add_schedule(cooling_setpoint_sch))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set cooling setpoint schedule to #{cooling_setpoint_sch}.")
       end
 
     end
@@ -590,7 +590,7 @@ class StandardsModel < OpenStudio::Model::Model
                         end
 
     # get climate_zone_set
-    climate_zone = model.get_building_climate_zone_and_building_type['climate_zone']
+    climate_zone = space_type.model.get_building_climate_zone_and_building_type['climate_zone']
     climate_zone_set = model_find_climate_zone_set(model, climate_zone, template)
 
     # populate search hash

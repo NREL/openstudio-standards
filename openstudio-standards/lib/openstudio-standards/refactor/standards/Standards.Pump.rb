@@ -20,10 +20,10 @@ module Pump
 
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
-    flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
-                      autosizedRatedFlowRate.get
+    flow_m3_per_s = if pump.autosizedRatedFlowRate.is_initialized
+                      pump.autosizedRatedFlowRate.get
                     else
-                      ratedFlowRate.get
+                      pump.ratedFlowRate.get
                     end
     flow_gpm = OpenStudio.convert(flow_m3_per_s, 'm^3/s', 'gal/min').get
 
@@ -55,7 +55,7 @@ module Pump
     target_brake_power_hp = target_motor_power_cons_hp * motor_efficiency
 
     # Change the motor efficiency
-    setMotorEfficiency(motor_efficiency)
+    pump.setMotorEfficiency(motor_efficiency)
 
     total_efficiency = impeller_efficiency * motor_efficiency
 
@@ -65,17 +65,17 @@ module Pump
     pressure_rise_ft_h2o = OpenStudio.convert(pressure_rise_pa, 'Pa', 'ftH_{2}O').get
 
     # Change pressure rise
-    setRatedPumpHead(pressure_rise_pa)
+    pump.setRatedPumpHead(pressure_rise_pa)
 
     # Report
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_efficiency * 100).round(2)}%; #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_ft_h2o.round(2)} ftH2O.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{pump.name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_efficiency * 100).round(2)}%; #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_ft_h2o.round(2)} ftH2O.")
 
     # Calculate the W/gpm for verification
-    calculated_w = pump_pump_power(pump) 
+    calculated_w = pump_pumppower(pump) 
 
     calculated_w_per_gpm = calculated_w / flow_gpm
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Pump', "For #{name}: calculated W/gpm = #{calculated_w_per_gpm.round(1)}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Pump', "For #{pump.name}: calculated W/gpm = #{calculated_w_per_gpm.round(1)}.")
 
     return true
   end
@@ -88,9 +88,9 @@ module Pump
     motor_eff, nominal_hp = pump_standard_minimum_motor_efficiency_and_size(pump, template, bhp)
 
     # Change the motor efficiency
-    setMotorEfficiency(motor_eff)
+    pump.setMotorEfficiency(motor_eff)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{name}: brake hp = #{bhp.round(2)}HP, motor nameplate = #{nominal_hp.round(2)}HP, motor eff = #{(motor_eff * 100).round(2)}%.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{pump.name}: brake hp = #{bhp.round(2)}HP, motor nameplate = #{nominal_hp.round(2)}HP, motor eff = #{(motor_eff * 100).round(2)}%.")
 
     return true
   end
@@ -125,9 +125,9 @@ module Pump
       'type' => 'Enclosed'
     }
 
-    motor_properties = model_find_object(model, motors, search_criteria, motor_bhp)
+    motor_properties = model_find_object(pump.model, motors, search_criteria, motor_bhp)
     if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
       return [motor_eff, nominal_hp]
     end
 
@@ -140,9 +140,9 @@ module Pump
 
     # Get the efficiency based on the nominal horsepower
     # Add 0.01 hp to avoid search errors.
-    motor_properties = model_find_object(model, motors, search_criteria, nominal_hp + 0.01)
+    motor_properties = model_find_object(pump.model, motors, search_criteria, nominal_hp + 0.01)
     if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{pump.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
       return [motor_eff, nominal_hp]
     end
     motor_eff = motor_properties['nominal_full_load_efficiency']
@@ -156,13 +156,13 @@ module Pump
   #
   # @return [Double] pump power
   #   @units Watts (W)
-  def pump_pump_power(pump)
+  def pump_pumppower(pump)
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
-    flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
-                      autosizedRatedFlowRate.get
+    flow_m3_per_s = if pump.autosizedRatedFlowRate.is_initialized
+                      pump.autosizedRatedFlowRate.get
                     else
-                      ratedFlowRate.get
+                      pump.ratedFlowRate.get
                     end
 
     # E+ default impeller efficiency
@@ -170,7 +170,7 @@ module Pump
     impeller_eff = 0.78
 
     # Get the motor efficiency
-    motor_eff = motorEfficiency
+    motor_eff = pump.motorEfficiency
 
     # Calculate the total efficiency
     # which includes both motor and
@@ -178,7 +178,7 @@ module Pump
     pump_total_eff = impeller_eff * motor_eff
 
     # Get the pressure rise (Pa)
-    pressure_rise_pa = ratedPumpHead
+    pressure_rise_pa = pump.ratedPumpHead
 
     # Calculate the pump power (W)
     pump_power_w = pressure_rise_pa * flow_m3_per_s / pump_total_eff
@@ -194,10 +194,10 @@ module Pump
   def pump_brake_horsepower(pump)
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
-    flow_m3_per_s = if autosizedRatedFlowRate.is_initialized
-                      autosizedRatedFlowRate.get
+    flow_m3_per_s = if pump.autosizedRatedFlowRate.is_initialized
+                      pump.autosizedRatedFlowRate.get
                     else
-                      ratedFlowRate.get
+                      pump.ratedFlowRate.get
                     end
 
     # E+ default impeller efficiency
@@ -205,7 +205,7 @@ module Pump
     impeller_eff = 0.78
 
     # Get the pressure rise (Pa)
-    pressure_rise_pa = ratedPumpHead
+    pressure_rise_pa = pump.ratedPumpHead
 
     # Calculate the pump power (W)
     pump_power_w = pressure_rise_pa * flow_m3_per_s / impeller_eff
@@ -223,7 +223,7 @@ module Pump
   # @return [Double] horsepower
   def pump_motor_horsepower(pump)
     # Get the pump power
-    pump_power_w = pump_pump_power(pump) 
+    pump_power_w = pump_pumppower(pump) 
 
     # Convert to HP
     pump_hp = pump_power_w / 745.7 # 745.7 W/HP
@@ -238,22 +238,22 @@ module Pump
   def pump_rated_w_per_gpm(pump)
     # Get design power (whether autosized or hard-sized)
     rated_power_w = 0
-    if autosizedRatedPowerConsumption.is_initialized
-      rated_power_w = autosizedRatedPowerConsumption.get
-    elsif ratedPowerConsumption.is_initialized
-      rated_power_w = ratedPowerConsumption.get
+    if pump.autosizedRatedPowerConsumption.is_initialized
+      rated_power_w = pump.autosizedRatedPowerConsumption.get
+    elsif pump.ratedPowerConsumption.is_initialized
+      rated_power_w = pump.ratedPowerConsumption.get
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{name}, could not find rated pump power consumption, cannot determine w per gpm correctly.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find rated pump power consumption, cannot determine w per gpm correctly.")
       return 0.0
     end
 
     rated_m3_per_s = 0
-    if autosizedRatedFlowRate.is_initialized
-      rated_m3_per_s = autosizedRatedFlowRate.get
-    elsif ratedFlowRate.is_initialized
-      rated_m3_per_s = ratedFlowRate.get
+    if pump.autosizedRatedFlowRate.is_initialized
+      rated_m3_per_s = pump.autosizedRatedFlowRate.get
+    elsif pump.ratedFlowRate.is_initialized
+      rated_m3_per_s = pump.ratedFlowRate.get
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{name}, could not find rated pump Flow Rate, cannot determine w per gpm correctly.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find rated pump Flow Rate, cannot determine w per gpm correctly.")
       return 0.0
     end
 

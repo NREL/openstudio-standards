@@ -20,12 +20,12 @@ module CoolingTower
   def cooling_tower_apply_minimum_power_per_flow(cooling_tower, template)
     # Get the design water flow rate
     design_water_flow_m3_per_s = nil
-    if designWaterFlowRate.is_initialized
-      design_water_flow_m3_per_s = designWaterFlowRate.get
-    elsif autosizedDesignWaterFlowRate.is_initialized
-      design_water_flow_m3_per_s = autosizedDesignWaterFlowRate.get
+    if cooling_tower.designWaterFlowRate.is_initialized
+      design_water_flow_m3_per_s = cooling_tower.designWaterFlowRate.get
+    elsif cooling_tower.autosizedDesignWaterFlowRate.is_initialized
+      design_water_flow_m3_per_s = cooling_tower.autosizedDesignWaterFlowRate.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{name} design water flow rate is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name} design water flow rate is not available, cannot apply efficiency standard.")
       return false
     end
     design_water_flow_gpm = OpenStudio.convert(design_water_flow_m3_per_s, 'm^3/s', 'gal/min').get
@@ -45,7 +45,7 @@ module CoolingTower
     # TODO: Standards replace this with a mechanism to store this
     # data in the cooling tower object itself.
     # For now, retrieve the fan type from the name
-    name = self.name.get
+    name = cooling_tower.name.get
     fan_type = nil
     if name.include?('Centrifugal')
       fan_type = 'Centrifugal'
@@ -65,21 +65,21 @@ module CoolingTower
         if design_water_flow_gpm >= gpm_limit
           fan_type = 'Propeller or Axial'
           search_criteria['fan_type'] = fan_type
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{self.name}, the design flow rate of #{design_water_flow_gpm.round} gpm is higher than the limit of #{gpm_limit.round} gpm for open centrifugal towers per 6.5.5.3.  This tower must meet the minimum performance of #{fan_type} instead.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, the design flow rate of #{design_water_flow_gpm.round} gpm is higher than the limit of #{gpm_limit.round} gpm for open centrifugal towers per 6.5.5.3.  This tower must meet the minimum performance of #{fan_type} instead.")
         end
       end
     end
 
     # Get the cooling tower properties
-    ct_props = model_find_object(model, heat_rejection, search_criteria)
+    ct_props = model_find_object(cooling_tower.model, heat_rejection, search_criteria)
     unless ct_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{self.name}, cannot find heat rejection properties, cannot apply standard efficiencies or curves.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, cannot find heat rejection properties, cannot apply standard efficiencies or curves.")
       return false
     end
 
     # Get cooling tower efficiency
     min_gpm_per_hp = ct_props['minimum_performance']
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{self.name}, design water flow = #{design_water_flow_gpm.round} gpm, minimum performance = #{min_gpm_per_hp} gpm/hp (nameplate).")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, design water flow = #{design_water_flow_gpm.round} gpm, minimum performance = #{min_gpm_per_hp} gpm/hp (nameplate).")
 
     # Calculate the allowed fan brake horsepower
     # per method used in PNNL prototype buildings.
@@ -99,9 +99,9 @@ module CoolingTower
       'type' => 'Enclosed'
     }
 
-    motor_properties = model_find_object(model, motors, search_criteria, fan_motor_nameplate_hp)
+    motor_properties = model_find_object(cooling_tower.model, motors, search_criteria, fan_motor_nameplate_hp)
     if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{self.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp.")
       return false
     end
 
@@ -117,20 +117,20 @@ module CoolingTower
     # Convert to W
     fan_motor_actual_power_w = fan_motor_actual_power_hp * 745.7 # 745.7 W/HP
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{self.name}, allowed fan motor nameplate hp = #{fan_motor_nameplate_hp.round(1)} hp, fan brake horsepower = #{fan_bhp.round(1)}, and fan motor actual power = #{fan_motor_actual_power_hp.round(1)} hp (#{fan_motor_actual_power_w.round} W) at #{fan_motor_eff} motor efficiency.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, allowed fan motor nameplate hp = #{fan_motor_nameplate_hp.round(1)} hp, fan brake horsepower = #{fan_bhp.round(1)}, and fan motor actual power = #{fan_motor_actual_power_hp.round(1)} hp (#{fan_motor_actual_power_w.round} W) at #{fan_motor_eff} motor efficiency.")
 
     # Append the efficiency to the name
-    setName("#{self.name} #{min_gpm_per_hp.round(1)} gpm/hp")
+    cooling_tower.setName("#{cooling_tower.name} #{min_gpm_per_hp.round(1)} gpm/hp")
 
     # Hard size the design fan power.
     # Leave the water flow and air flow autosized.
-    if to_CoolingTowerSingleSpeed.is_initialized
-      setFanPoweratDesignAirFlowRate(fan_motor_actual_power_w)
-    elsif to_CoolingTowerTwoSpeed.is_initialized
-      setHighFanSpeedFanPower(fan_motor_actual_power_w)
-      setLowFanSpeedFanPower(0.3 * fan_motor_actual_power_w)
-    elsif to_CoolingTowerVariableSpeed.is_initialized
-      setDesignFanPower(fan_motor_actual_power_w)
+    if cooling_tower.to_CoolingTowerSingleSpeed.is_initialized
+      cooling_tower.setFanPoweratDesignAirFlowRate(fan_motor_actual_power_w)
+    elsif cooling_tower.to_CoolingTowerTwoSpeed.is_initialized
+      cooling_tower.setHighFanSpeedFanPower(fan_motor_actual_power_w)
+      cooling_tower.setLowFanSpeedFanPower(0.3 * fan_motor_actual_power_w)
+    elsif cooling_tower.to_CoolingTowerVariableSpeed.is_initialized
+      cooling_tower.setDesignFanPower(fan_motor_actual_power_w)
     end
 
     return true

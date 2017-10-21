@@ -17,11 +17,11 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Bool] returns true if successful, false if not
   # @todo Put in Phlyroy's logic for inferring the insulation layer of a construction
   def construction_set_u_value(construction, target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_film_coefficients = true)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting U-Value for #{name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting U-Value for #{construction.name}.")
 
     # Skip fenestration constructions
     if isFenestration
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the u-value of opaque constructions. #{name} is not opaque.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the u-value of opaque constructions. #{construction.name} is not opaque.")
       return false
     end
 
@@ -29,7 +29,7 @@ class StandardsModel < OpenStudio::Model::Model
     if insulation_layer_name.nil? && target_u_value_ip == 0.0
       # Do nothing if the construction already doesn't have an insulation layer
     elsif insulation_layer_name.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{name}, but this construction has no insulation layer specified.  Requested U-value will not be set.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{construction.name}, but this construction has no insulation layer specified.  Requested U-value will not be set.")
       return false
     end
 
@@ -51,11 +51,11 @@ class StandardsModel < OpenStudio::Model::Model
     target_u_value_si = OpenStudio.convert(target_u_value_ip, 'Btu/ft^2*hr*R', 'W/m^2*K').get
     target_r_value_si = 1.0 / target_u_value_si
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "#{name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_ip = #{target_u_value_ip.round(3)} for #{name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_ip = #{target_r_value_ip.round(2)} for #{name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_si = #{target_u_value_si.round(3)} for #{name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_si = #{target_r_value_si.round(2)} for #{name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "#{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_ip = #{target_u_value_ip.round(3)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_ip = #{target_r_value_ip.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_si = #{target_u_value_si.round(3)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_si = #{target_r_value_si.round(2)} for #{construction.name}.")
 
     # Determine the R-value of the non-insulation layers
     other_layer_r_value_si = 0.0
@@ -120,7 +120,7 @@ class StandardsModel < OpenStudio::Model::Model
     # This is the desired R-value of the insulation.
     ins_r_value_si = target_r_value_si - other_layer_r_value_si
     if ins_r_value_si <= 0.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{name} is too low given the other materials in the construction; insulation layer will not be modified.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too low given the other materials in the construction; insulation layer will not be modified.")
       return false
     end
     ins_r_value_ip = OpenStudio.convert(ins_r_value_si, 'm^2*K/W', 'ft^2*h*R/Btu').get
@@ -148,7 +148,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Modify the construction name
-    setName("#{name} R-#{target_r_value_ip.round(2)}")
+    setName("#{construction.name} R-#{target_r_value_ip.round(2)}")
 
     return true
   end
@@ -170,7 +170,7 @@ class StandardsModel < OpenStudio::Model::Model
     construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactFloor', true)
 
     # Modify the construction name
-    setName("#{name} F-#{target_f_factor_ip.round(3)}")
+    setName("#{construction.name} F-#{target_f_factor_ip.round(3)}")
 
     return true
   end
@@ -192,7 +192,7 @@ class StandardsModel < OpenStudio::Model::Model
     construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactWall', true)
 
     # Modify the construction name
-    setName("#{name} C-#{target_c_factor_ip.round(3)}")
+    setName("#{construction.name} C-#{target_c_factor_ip.round(3)}")
 
     return true
   end
@@ -205,7 +205,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     shgc = nil
 
-    sql = model.sqlFile
+    sql = construction.model.sqlFile
 
     if sql.is_initialized
       sql = sql.get
@@ -255,7 +255,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     vt = nil
 
-    sql = model.sqlFile
+    sql = construction.model.sqlFile
 
     if sql.is_initialized
       sql = sql.get
@@ -305,7 +305,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     u_factor_w_per_m2_k = nil
 
-    sql = model.sqlFile
+    sql = construction.model.sqlFile
 
     if sql.is_initialized
       sql = sql.get

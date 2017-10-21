@@ -8,12 +8,12 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Double] capacity in W to be used for find object
   def coil_cooling_dx_two_speed_find_capacity(coil_cooling_dx_two_speed)
     capacity_w = nil
-    if ratedHighSpeedTotalCoolingCapacity.is_initialized
-      capacity_w = ratedHighSpeedTotalCoolingCapacity.get
-    elsif autosizedRatedHighSpeedTotalCoolingCapacity.is_initialized
-      capacity_w = autosizedRatedHighSpeedTotalCoolingCapacity.get
+    if coil_cooling_dx_two_speed.ratedHighSpeedTotalCoolingCapacity.is_initialized
+      capacity_w = coil_cooling_dx_two_speed.ratedHighSpeedTotalCoolingCapacity.get
+    elsif coil_cooling_dx_two_speed.autosizedRatedHighSpeedTotalCoolingCapacity.is_initialized
+      capacity_w = coil_cooling_dx_two_speed.autosizedRatedHighSpeedTotalCoolingCapacity.get
     else
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{self.name} capacity is not available, cannot apply efficiency standard.")
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_two_speed.name} capacity is not available, cannot apply efficiency standard.")
       return 0.0
     end
 
@@ -26,25 +26,25 @@ class StandardsModel < OpenStudio::Model::Model
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Double] full load efficiency (COP)
   def coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, template, rename=false)
-    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
+    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed, template)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
     sub_category = search_criteria['subcategory']
-    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
+    capacity_w = coil_cooling_dx_two_speed_find_capacity(coil_cooling_dx_two_speed) 
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_dx) 
-                 model_find_object(model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_two_speed) 
+                 model_find_object(coil_cooling_dx_two_speed.model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object(model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(coil_cooling_dx_two_speed.model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find efficiency info, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find efficiency info, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
@@ -54,7 +54,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find efficiency info, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find efficiency info, cannot apply efficiency standard.")
       return cop # value of nil
     end
 
@@ -62,37 +62,37 @@ class StandardsModel < OpenStudio::Model::Model
     unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
       cop = seer_to_cop_cooling_no_fan(min_seer)
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+      new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
       cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+      new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # if specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
       cop = seer_to_cop_cooling_no_fan(min_seer)
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+      new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # If specified as EER (heat pump)
     unless ac_props['minimum_full_load_efficiency'].nil?
       min_eer = ac_props['minimum_full_load_efficiency']
       cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
-      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+      new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # Rename
     if rename
-      setName(new_comp_name)
+      coil_cooling_dx_two_speed.setName(new_comp_name)
     end
 
     return cop
@@ -107,104 +107,104 @@ class StandardsModel < OpenStudio::Model::Model
     successfully_set_all_properties = true
 
     # Get the search criteria
-    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
+    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed, template)
 
     # Get the capacity
-    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
+    capacity_w = coil_cooling_dx_two_speed_find_capacity(coil_cooling_dx_two_speed) 
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_dx) 
-                 model_find_object(model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_two_speed) 
+                 model_find_object(coil_cooling_dx_two_speed.model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object(model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(coil_cooling_dx_two_speed.model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find efficiency info, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find efficiency info, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return sql_db_vars_map
     end
 
     # Make the total COOL-CAP-FT curve
-    tot_cool_cap_ft = model_add_curve(model, ac_props['cool_cap_ft'])
+    tot_cool_cap_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_cap_ft'])
     if tot_cool_cap_ft
-      setTotalCoolingCapacityFunctionOfTemperatureCurve(tot_cool_cap_ft)
+      coil_cooling_dx_two_speed.setTotalCoolingCapacityFunctionOfTemperatureCurve(tot_cool_cap_ft)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find cool_cap_ft curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_cap_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the total COOL-CAP-FFLOW curve
-    tot_cool_cap_fflow = model_add_curve(model, ac_props['cool_cap_fflow'])
+    tot_cool_cap_fflow = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_cap_fflow'])
     if tot_cool_cap_fflow
-      setTotalCoolingCapacityFunctionOfFlowFractionCurve(tot_cool_cap_fflow)
+      coil_cooling_dx_two_speed.setTotalCoolingCapacityFunctionOfFlowFractionCurve(tot_cool_cap_fflow)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find cool_cap_fflow curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_cap_fflow curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FT curve
-    cool_eir_ft = model_add_curve(model, ac_props['cool_eir_ft'])
+    cool_eir_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_eir_ft'])
     if cool_eir_ft
-      setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)
+      coil_cooling_dx_two_speed.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find cool_eir_ft curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_eir_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FFLOW curve
-    cool_eir_fflow = model_add_curve(model, ac_props['cool_eir_fflow'])
+    cool_eir_fflow = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_eir_fflow'])
     if cool_eir_fflow
-      setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
+      coil_cooling_dx_two_speed.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find cool_eir_fflow curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_eir_fflow curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the COOL-PLF-FPLR curve
-    cool_plf_fplr = model_add_curve(model, ac_props['cool_plf_fplr'])
+    cool_plf_fplr = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_plf_fplr'])
     if cool_plf_fplr
-      setPartLoadFractionCorrelationCurve(cool_plf_fplr)
+      coil_cooling_dx_two_speed.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find cool_plf_fplr curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the low speed COOL-CAP-FT curve
-    low_speed_cool_cap_ft = model_add_curve(model, ac_props['cool_cap_ft'])
+    low_speed_cool_cap_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_cap_ft'])
     if low_speed_cool_cap_ft
-      setLowSpeedTotalCoolingCapacityFunctionOfTemperatureCurve(low_speed_cool_cap_ft)
+      coil_cooling_dx_two_speed.setLowSpeedTotalCoolingCapacityFunctionOfTemperatureCurve(low_speed_cool_cap_ft)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find cool_cap_ft curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_cap_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the low speed COOL-EIR-FT curve
-    low_speed_cool_eir_ft = model_add_curve(model, ac_props['cool_eir_ft'])
+    low_speed_cool_eir_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_eir_ft'])
     if low_speed_cool_eir_ft
-      setLowSpeedEnergyInputRatioFunctionOfTemperatureCurve(low_speed_cool_eir_ft)
+      coil_cooling_dx_two_speed.setLowSpeedEnergyInputRatioFunctionOfTemperatureCurve(low_speed_cool_eir_ft)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{name}, cannot find cool_eir_ft curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_eir_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Preserve the original name
-    orig_name = name.to_s
+    orig_name = coil_cooling_dx_two_speed.name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, template, true)
+    cop = coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, template, true)
 
     # Map the original name to the new name
-    sql_db_vars_map[name.to_s] = orig_name
+    sql_db_vars_map[coil_cooling_dx_two_speed.name.to_s] = orig_name
 
     # Set the efficiency values
     unless cop.nil?
-      setRatedHighSpeedCOP(cop)
-      setRatedLowSpeedCOP(cop)
+      coil_cooling_dx_two_speed.setRatedHighSpeedCOP(cop)
+      coil_cooling_dx_two_speed.setRatedLowSpeedCOP(cop)
     end
 
     return sql_db_vars_map

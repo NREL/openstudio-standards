@@ -34,7 +34,7 @@ class StandardsModel < OpenStudio::Model::Model
       end
     end
     setConstantMinimumAirFlowFraction(min_damper_position)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirTerminalSingleDuctVAVReheat', "For #{name}: set minimum damper position to #{min_damper_position}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirTerminalSingleDuctVAVReheat', "For #{air_terminal_single_duct_vav_reheat.name}: set minimum damper position to #{min_damper_position}.")
 
     # Minimum OA flow rate
     # If specified, will also add this limit

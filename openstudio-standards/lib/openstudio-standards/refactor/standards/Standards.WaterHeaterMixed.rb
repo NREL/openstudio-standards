@@ -13,9 +13,9 @@ class StandardsModel < OpenStudio::Model::Model
     # Get the capacity of the water heater
     # TODO add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
-    capacity_w = heaterMaximumCapacity
+    capacity_w = water_heater_mixed.heaterMaximumCapacity
     if capacity_w.empty?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{name}, cannot find capacity, standard will not be applied.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find capacity, standard will not be applied.")
       return false
     else
       capacity_w = capacity_w.get
@@ -26,9 +26,9 @@ class StandardsModel < OpenStudio::Model::Model
     # Get the volume of the water heater
     # TODO add capability to pull autosized water heater volume
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
-    volume_m3 = tankVolume
+    volume_m3 = water_heater_mixed.tankVolume
     if volume_m3.empty?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{name}, cannot find volume, standard will not be applied.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volume, standard will not be applied.")
       return false
     else
       volume_m3 = volume_m3.get
@@ -36,9 +36,9 @@ class StandardsModel < OpenStudio::Model::Model
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
 
     # Get the heater fuel type
-    fuel_type = heaterFuelType
+    fuel_type = water_heater_mixed.heaterFuelType
     unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity'
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{name}, fuel type of #{fuel_type} is not yet supported, standard will not be applied.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, fuel type of #{fuel_type} is not yet supported, standard will not be applied.")
     end
 
     # Calculate the water heater efficiency and
@@ -171,29 +171,29 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Set the water heater properties
     # Efficiency
-    setHeaterThermalEfficiency(water_heater_eff)
+    water_heater_mixed.setHeaterThermalEfficiency(water_heater_eff)
     # Skin loss
-    setOffCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
-    setOnCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
+    water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
+    water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
     # TODO: Parasitic loss (pilot light)
     # PNNL document says pilot lights were removed, but IDFs
     # still have the on/off cycle parasitic fuel consumptions filled in
-    setOnCycleParasiticFuelType(fuel_type)
+    water_heater_mixed.setOnCycleParasiticFuelType(fuel_type)
     # self.setOffCycleParasiticFuelConsumptionRate(??)
-    setOnCycleParasiticHeatFractiontoTank(0)
-    setOffCycleParasiticFuelType(fuel_type)
+    water_heater_mixed.setOnCycleParasiticHeatFractiontoTank(0)
+    water_heater_mixed.setOffCycleParasiticFuelType(fuel_type)
     # self.setOffCycleParasiticFuelConsumptionRate(??)
-    setOffCycleParasiticHeatFractiontoTank(0.8)
+    water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
 
     # set part-load performance curve
     if template == 'NECB 2011' && fuel_type == 'NaturalGas'
       plf_vs_plr_curve = model_add_curve(model, 'SWH-EFFFPLR-NECB2011')
-      setPartLoadFactorCurve(plf_vs_plr_curve)
+      water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
     end
 
     # Append the name with standards information
-    setName("#{name} #{water_heater_eff.round(3)} Therm Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
+    water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
 
     return true
   end
@@ -236,10 +236,10 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Change the fuel type if necessary
-    old_fuel = heaterFuelType
+    old_fuel = water_heater_mixed.heaterFuelType
     unless new_fuel == old_fuel
-      setHeaterFuelType(new_fuel)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{name}, changed baseline water heater fuel from #{old_fuel} to #{new_fuel}.")
+      water_heater_mixed.setHeaterFuelType(new_fuel)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, changed baseline water heater fuel from #{old_fuel} to #{new_fuel}.")
     end
 
     return true
@@ -252,12 +252,12 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Get the coil capacity
     capacity_w = nil
-    if self.heaterMaximumCapacity.is_initialized
-      capacity_w = self.heaterMaximumCapacity.get
-    elsif self.autosizedHeaterMaximumCapacity.is_initialized
-      capacity_w = self.autosizedHeaterMaximumCapacity.get
+    if water_heater_mixed.heaterMaximumCapacity.is_initialized
+      capacity_w = water_heater_mixed.heaterMaximumCapacity.get
+    elsif water_heater_mixed.autosizedHeaterMaximumCapacity.is_initialized
+      capacity_w = water_heater_mixed.autosizedHeaterMaximumCapacity.get
     else
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{self.name} capacity is not available.")
+      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name} capacity is not available.")
       return false
     end
 

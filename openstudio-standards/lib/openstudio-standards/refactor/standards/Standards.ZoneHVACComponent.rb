@@ -7,7 +7,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] the template base requirements on
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac_component, template)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.ZoneHVACComponent', "Setting fan power for #{name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")
 
     # Convert this to the actual class type
     zone_hvac = if to_ZoneHVACFourPipeFanCoil.is_initialized
@@ -68,7 +68,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Calculate the newly set efficacy
     fan_power_new_w = fan_rise_new_pa * max_air_flow_rate / fan_tot_eff
     fan_efficacy_new_w_per_cfm = fan_power_new_w / max_air_flow_rate_cfm
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ZoneHVACComponent', "For #{name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ZoneHVACComponent', "For #{zone_hvac_component.name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm.")
 
     return true
   end

@@ -11,9 +11,9 @@ module CoilDX
   def coil_dx_subcategory(coil_dx)
     sub_category = 'Single Package'
 
-    if airLoopHVAC.empty?
-      if containingZoneHVACComponent.is_initialized
-        containing_comp = containingZoneHVACComponent.get
+    if coil_dx.airLoopHVAC.empty?
+      if coil_dx.containingZoneHVACComponent.is_initialized
+        containing_comp = coil_dx.containingZoneHVACComponent.get
         # PTAC
         if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
           sub_category = 'PTAC'
@@ -32,14 +32,14 @@ module CoilDX
   def coil_dx_heat_pump?(coil_dx)
     heat_pump = false
 
-    if airLoopHVAC.empty?
-      if containingHVACComponent.is_initialized
-        containing_comp = containingHVACComponent.get
+    if coil_dx.airLoopHVAC.empty?
+      if coil_dx.containingHVACComponent.is_initialized
+        containing_comp = coil_dx.containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
           heat_pump = true
         end # TODO: Add other unitary systems
-      elsif containingZoneHVACComponent.is_initialized
-        containing_comp = containingZoneHVACComponent.get
+      elsif coil_dx.containingZoneHVACComponent.is_initialized
+        containing_comp = coil_dx.containingZoneHVACComponent.get
         # PTHP
         if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           heat_pump = true
@@ -57,14 +57,14 @@ module CoilDX
     htg_type = nil
 
     # If Unitary or Zone HVAC
-    if airLoopHVAC.empty?
-      if containingHVACComponent.is_initialized
-        containing_comp = containingHVACComponent.get
+    if coil_dx.airLoopHVAC.empty?
+      if coil_dx.containingHVACComponent.is_initialized
+        containing_comp = coil_dx.containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
           htg_type = 'Electric Resistance or None'
         end # TODO: Add other unitary systems
-      elsif containingZoneHVACComponent.is_initialized
-        containing_comp = containingZoneHVACComponent.get
+      elsif coil_dx.containingZoneHVACComponent.is_initialized
+        containing_comp = coil_dx.containingZoneHVACComponent.get
         # PTAC
         if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
           htg_coil = containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.get.heatingCoil
@@ -82,8 +82,8 @@ module CoilDX
     end
 
     # If on an AirLoop
-    if airLoopHVAC.is_initialized
-      air_loop = airLoopHVAC.get
+    if coil_dx.airLoopHVAC.is_initialized
+      air_loop = coil_dx.airLoopHVAC.get
       htg_type = if !air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).empty?
                        'Electric Resistance or None'
                      elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).empty?
@@ -114,11 +114,11 @@ module CoilDX
     search_criteria = {}
     search_criteria['template'] = template
 
-    search_criteria['cooling_type'] = case iddObjectType.valueName.to_s
+    search_criteria['cooling_type'] = case coil_dx.iddObjectType.valueName.to_s
                                       when 'OS_Coil_Cooling_DX_SingleSpeed',
                                            'OS_Coil_Cooling_DX_TwoSpeed',
                                            'OS_Coil_Cooling_DX_MultiSpeed'
-                                        condenserType
+                                        coil_dx.condenserType
                                       else
                                         'AirCooled'
                                       end
@@ -127,16 +127,16 @@ module CoilDX
     search_criteria['subcategory'] = coil_dx_subcategory(coil_dx) 
 
     # Add the heating type to the search criteria
-    unless heating_type.nil?
+    unless coil_dx_heating_type(coil_dx).nil?
       search_criteria['heating_type'] = coil_dx_heating_type(coil_dx) 
     end
 
     # Unitary heat pumps don't have a heating type
     # as part of the search
     if coil_dx_heat_pump?(coil_dx) 
-      if airLoopHVAC.empty?
-        if containingHVACComponent.is_initialized
-          containing_comp = containingHVACComponent.get
+      if coil_dx.airLoopHVAC.empty?
+        if coil_dx.containingHVACComponent.is_initialized
+          containing_comp = coil_dx.containingHVACComponent.get
           if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
             search_criteria['heating_type'] = nil
           end # TODO: Add other unitary systems

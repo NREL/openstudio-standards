@@ -20,7 +20,7 @@ class StandardsModel < OpenStudio::Model::Model
   def space_daylighted_areas(space, template, draw_daylight_areas_for_debugging = false)
     ### Begin the actual daylight area calculations ###
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, calculating daylighted areas.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, calculating daylighted areas.")
 
     result = { 'toplighted_area' => 0.0,
                'primary_sidelighted_area' => 0.0,
@@ -34,32 +34,32 @@ class StandardsModel < OpenStudio::Model::Model
     # Make rendering colors to help debug visually
     if draw_daylight_areas_for_debugging
       # Yellow
-      toplit_construction = OpenStudio::Model::Construction.new(model)
-      toplit_color = OpenStudio::Model::RenderingColor.new(model)
+      toplit_construction = OpenStudio::Model::Construction.new(space.model)
+      toplit_color = OpenStudio::Model::RenderingColor.new(space.model)
       toplit_color.setRenderingRedValue(255)
       toplit_color.setRenderingGreenValue(255)
       toplit_color.setRenderingBlueValue(0)
       toplit_construction.setRenderingColor(toplit_color)
 
       # Red
-      pri_sidelit_construction = OpenStudio::Model::Construction.new(model)
-      pri_sidelit_color = OpenStudio::Model::RenderingColor.new(model)
+      pri_sidelit_construction = OpenStudio::Model::Construction.new(space.model)
+      pri_sidelit_color = OpenStudio::Model::RenderingColor.new(space.model)
       pri_sidelit_color.setRenderingRedValue(255)
       pri_sidelit_color.setRenderingGreenValue(0)
       pri_sidelit_color.setRenderingBlueValue(0)
       pri_sidelit_construction.setRenderingColor(pri_sidelit_color)
 
       # Blue
-      sec_sidelit_construction = OpenStudio::Model::Construction.new(model)
-      sec_sidelit_color = OpenStudio::Model::RenderingColor.new(model)
+      sec_sidelit_construction = OpenStudio::Model::Construction.new(space.model)
+      sec_sidelit_color = OpenStudio::Model::RenderingColor.new(space.model)
       sec_sidelit_color.setRenderingRedValue(0)
       sec_sidelit_color.setRenderingGreenValue(0)
       sec_sidelit_color.setRenderingBlueValue(255)
       sec_sidelit_construction.setRenderingColor(sec_sidelit_color)
 
       # Light Blue
-      flr_construction = OpenStudio::Model::Construction.new(model)
-      flr_color = OpenStudio::Model::RenderingColor.new(model)
+      flr_construction = OpenStudio::Model::Construction.new(space.model)
+      flr_color = OpenStudio::Model::RenderingColor.new(space.model)
       flr_color.setRenderingRedValue(0)
       flr_color.setRenderingGreenValue(255)
       flr_color.setRenderingBlueValue(255)
@@ -73,7 +73,7 @@ class StandardsModel < OpenStudio::Model::Model
     up_translation_sec = OpenStudio.createTranslation(OpenStudio::Vector3d.new(0, 0, 0.1))
 
     # Get the space's surface group's transformation
-    @space_transformation = transformation
+    @space_transformation = space.transformation
 
     # Record a floor in the space for later use
     floor_surface = nil
@@ -81,7 +81,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Record all floor polygons
     floor_polygons = []
     floor_z = 0.0
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       if surface.surfaceType == 'Floor'
         floor_surface = surface
         floor_z = surface.vertices[0].z
@@ -106,7 +106,7 @@ class StandardsModel < OpenStudio::Model::Model
     toplit_polygons = []
     pri_sidelit_polygons = []
     sec_sidelit_polygons = []
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       if surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall'
 
         # TODO: stop skipping non-vertical walls
@@ -114,7 +114,7 @@ class StandardsModel < OpenStudio::Model::Model
         surface_normal_z = surface_normal.z
         unless surface_normal_z.abs < 0.001
           unless surface.subSurfaces.empty?
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Cannot currently handle non-vertical walls; skipping windows on #{surface.name} in #{name}.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Cannot currently handle non-vertical walls; skipping windows on #{surface.name} in #{space.name}.")
             next
           end
         end
@@ -138,7 +138,7 @@ class StandardsModel < OpenStudio::Model::Model
           # Find the width of the window
           rot_origin = nil
           unless sub_surface.vertices.size == 4
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A sub-surface in space #{name} has other than 4 vertices; this sub-surface will not be included in the daylighted area calculation.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A sub-surface in space #{space.name} has other than 4 vertices; this sub-surface will not be included in the daylighted area calculation.")
             next
           end
           prev_vertex_on_floorplane = nil
@@ -197,7 +197,7 @@ class StandardsModel < OpenStudio::Model::Model
               new_x = vertex.x + extra_width_m
             else
               new_x = 99.9
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A window in space #{name} is non-rectangular; this sub-surface will not be included in the primary daylighted area calculation. #{vertex.x} != #{min_x_val} or #{max_x_val}")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A window in space #{space.name} is non-rectangular; this sub-surface will not be included in the primary daylighted area calculation. #{vertex.x} != #{min_x_val} or #{max_x_val}")
             end
 
             # Zero-out the y for the bottom edge because the
@@ -224,7 +224,7 @@ class StandardsModel < OpenStudio::Model::Model
               new_x = vertex.x + extra_width_m
             else
               new_x = 99.9
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A window in space #{name} is non-rectangular; this sub-surface will not be included in the secondary daylighted area calculation.")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A window in space #{space.name} is non-rectangular; this sub-surface will not be included in the secondary daylighted area calculation.")
             end
 
             # Add the head height of the window to all points
@@ -271,7 +271,7 @@ class StandardsModel < OpenStudio::Model::Model
         straight_upward = OpenStudio::Vector3d.new(0, 0, 1)
         unless surface_normal.to_s == straight_upward.to_s
           unless surface.subSurfaces.empty?
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Cannot currently handle non-horizontal roofs; skipping skylights on #{surface.name} in #{name}.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Cannot currently handle non-horizontal roofs; skipping skylights on #{surface.name} in #{space.name}.")
             OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Surface #{surface.name} has outward normal of #{surface_normal.to_s.gsub(/\[|\]/, '|')}; up is #{straight_upward.to_s.gsub(/\[|\]/, '|')}.")
             next
           end
@@ -338,7 +338,7 @@ class StandardsModel < OpenStudio::Model::Model
               new_x = vertex.x + additional_extent_m
             else
               new_x = 99.9
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A skylight in space #{name} is non-rectangular; this sub-surface will not be included in the daylighted area calculation.")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A skylight in space #{space.name} is non-rectangular; this sub-surface will not be included in the daylighted area calculation.")
             end
 
             # Move the y vertices outward by the specified amount.
@@ -348,7 +348,7 @@ class StandardsModel < OpenStudio::Model::Model
               new_y = vertex.y + additional_extent_m
             else
               new_y = 99.9
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A skylight in space #{name} is non-rectangular; this sub-surface will not be included in the daylighted area calculation.")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "A skylight in space #{space.name} is non-rectangular; this sub-surface will not be included in the daylighted area calculation.")
             end
 
             # Set z = 0 so that intersection works.
@@ -378,10 +378,10 @@ class StandardsModel < OpenStudio::Model::Model
     sec_sidelit_polygons = space_polygons_set_z(space, sec_sidelit_polygons, 0.0)
 
     # Check the initial polygons
-    space_check_z_zero(space, floor_polygons, 'floor_polygons', name.get)
-    space_check_z_zero(space, toplit_polygons, 'toplit_polygons', name.get)
-    space_check_z_zero(space, pri_sidelit_polygons, 'pri_sidelit_polygons', name.get)
-    space_check_z_zero(space, sec_sidelit_polygons, 'sec_sidelit_polygons', name.get)
+    space_check_z_zero(space, floor_polygons, 'floor_polygons')
+    space_check_z_zero(space, toplit_polygons, 'toplit_polygons')
+    space_check_z_zero(space, pri_sidelit_polygons, 'pri_sidelit_polygons')
+    space_check_z_zero(space, sec_sidelit_polygons, 'sec_sidelit_polygons')
 
     # Join, then subtract
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '***Joining polygons***')
@@ -399,10 +399,10 @@ class StandardsModel < OpenStudio::Model::Model
     combined_floor_polygons = space_join_polygons(space, floor_polygons, 0.01, 'floor_polygons')
 
     # Check the joined polygons
-    space_check_z_zero(space, combined_floor_polygons, 'combined_floor_polygons', name.get)
-    space_check_z_zero(space, combined_toplit_polygons, 'combined_toplit_polygons', name.get)
-    space_check_z_zero(space, combined_pri_sidelit_polygons, 'combined_pri_sidelit_polygons', name.get)
-    space_check_z_zero(space, combined_sec_sidelit_polygons, 'combined_sec_sidelit_polygons', name.get)
+    space_check_z_zero(space, combined_floor_polygons, 'combined_floor_polygons')
+    space_check_z_zero(space, combined_toplit_polygons, 'combined_toplit_polygons')
+    space_check_z_zero(space, combined_pri_sidelit_polygons, 'combined_pri_sidelit_polygons')
+    space_check_z_zero(space, combined_sec_sidelit_polygons, 'combined_sec_sidelit_polygons')
 
     # Make a new surface for each of the resulting polygons to visually inspect it
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "***Making Surfaces to view in SketchUp***")
@@ -453,9 +453,9 @@ class StandardsModel < OpenStudio::Model::Model
     sec_minus_top_minus_pri_polygons = space_a_polygons_minus_b_polygons(space, sec_minus_top_polygons, combined_pri_sidelit_polygons, 'sec_minus_top_polygons', 'combined_pri_sidelit_polygons')
 
     # Check the subtracted polygons
-    space_check_z_zero(space, pri_minus_top_polygons, 'pri_minus_top_polygons', name.get)
-    space_check_z_zero(space, sec_minus_top_polygons, 'sec_minus_top_polygons', name.get)
-    space_check_z_zero(space, sec_minus_top_minus_pri_polygons, 'sec_minus_top_minus_pri_polygons', name.get)
+    space_check_z_zero(space, pri_minus_top_polygons, 'pri_minus_top_polygons')
+    space_check_z_zero(space, sec_minus_top_polygons, 'sec_minus_top_polygons')
+    space_check_z_zero(space, sec_minus_top_minus_pri_polygons, 'sec_minus_top_minus_pri_polygons')
 
     # Make a new surface for each of the resulting polygons to visually inspect it.
     # First reset the z so the surfaces show up on the correct plane.
@@ -467,12 +467,12 @@ class StandardsModel < OpenStudio::Model::Model
       combined_floor_polygons_at_floor = space_polygons_set_z(space, combined_floor_polygons, floor_z)
 
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', '***Making Surfaces to view in SketchUp***')
-      dummy_space = OpenStudio::Model::Space.new(model)
+      dummy_space = OpenStudio::Model::Space.new(space.model)
 
       combined_toplit_polygons_at_floor.each do |polygon|
         polygon = up_translation_top * polygon
         polygon = @space_transformation * polygon
-        daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
+        daylt_surf = OpenStudio::Model::Surface.new(polygon, space.model)
         daylt_surf.setConstruction(toplit_construction)
         daylt_surf.setSpace(dummy_space)
         daylt_surf.setName('Top')
@@ -481,7 +481,7 @@ class StandardsModel < OpenStudio::Model::Model
       pri_minus_top_polygons_at_floor.each do |polygon|
         polygon = up_translation_pri * polygon
         polygon = @space_transformation * polygon
-        daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
+        daylt_surf = OpenStudio::Model::Surface.new(polygon, space.model)
         daylt_surf.setConstruction(pri_sidelit_construction)
         daylt_surf.setSpace(dummy_space)
         daylt_surf.setName('Pri')
@@ -490,7 +490,7 @@ class StandardsModel < OpenStudio::Model::Model
       sec_minus_top_minus_pri_polygons_at_floor.each do |polygon|
         polygon = up_translation_sec * polygon
         polygon = @space_transformation * polygon
-        daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
+        daylt_surf = OpenStudio::Model::Surface.new(polygon, space.model)
         daylt_surf.setConstruction(sec_sidelit_construction)
         daylt_surf.setSpace(dummy_space)
         daylt_surf.setName('Sec')
@@ -499,7 +499,7 @@ class StandardsModel < OpenStudio::Model::Model
       combined_floor_polygons_at_floor.each do |polygon|
         polygon = up_translation_flr * polygon
         polygon = @space_transformation * polygon
-        daylt_surf = OpenStudio::Model::Surface.new(polygon, model)
+        daylt_surf = OpenStudio::Model::Surface.new(polygon, space.model)
         daylt_surf.setConstruction(flr_construction)
         daylt_surf.setSpace(dummy_space)
         daylt_surf.setName('Flr')
@@ -554,7 +554,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Loop through all windows and add up area * VT
     sum_window_area_times_vt = 0
     construction_name_to_vt_map = {}
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall'
       surface.subSurfaces.sort.each do |sub_surface|
         next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'GlassDoor')
@@ -570,14 +570,14 @@ class StandardsModel < OpenStudio::Model::Model
         if construction.is_initialized
           construction_name = construction.get.name.get.upcase
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{name}, could not determine construction for #{sub_surface.name}, will not be included in  space_sidelighting_effective_aperture(space)  calculation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine construction for #{sub_surface.name}, will not be included in  space_sidelighting_effective_aperture(space)  calculation.")
           next
         end
 
         # Store VT for this construction in map if not already looked up
         if construction_name_to_vt_map[construction_name].nil?
 
-          sql = model.sqlFile
+          sql = space.model.sqlFile
 
           if sql.is_initialized
             sql = sql.get
@@ -624,7 +624,7 @@ class StandardsModel < OpenStudio::Model::Model
         # Get the VT from the map
         vt = construction_name_to_vt_map[construction_name]
         if vt.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{name}, could not determine VLT for #{construction_name}, will not be included in sidelighting effective aperture caluclation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in sidelighting effective aperture caluclation.")
           vt = 0
         end
 
@@ -636,13 +636,13 @@ class StandardsModel < OpenStudio::Model::Model
     if sum_window_area_times_vt.zero?
       sidelighting_effective_aperture = 9999
       if num_sub_surfaces > 0
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{name} has no windows where VLT could be determined, sidelighting effective aperture will be higher than it should.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} has no windows where VLT could be determined, sidelighting effective aperture will be higher than it should.")
       end
     else
       sidelighting_effective_aperture = sum_window_area_times_vt / primary_sidelighted_area
     end
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{name} sidelighting effective aperture = #{sidelighting_effective_aperture.round(4)}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name} sidelighting effective aperture = #{sidelighting_effective_aperture.round(4)}.")
 
     return sidelighting_effective_aperture
   end
@@ -665,7 +665,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Loop through all windows and add up area * VT
     sum_85pct_times_skylight_area_times_vt_times_wf = 0
     construction_name_to_vt_map = {}
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'RoofCeiling'
       surface.subSurfaces.sort.each do |sub_surface|
         next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && sub_surface.subSurfaceType == 'Skylight'
@@ -681,14 +681,14 @@ class StandardsModel < OpenStudio::Model::Model
         if construction.is_initialized
           construction_name = construction.get.name.get.upcase
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{name}, ")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, ")
           next
         end
 
         # Store VT for this construction in map if not already looked up
         if construction_name_to_vt_map[construction_name].nil?
 
-          sql = model.sqlFile
+          sql = space.model.sqlFile
 
           if sql.is_initialized
             sql = sql.get
@@ -735,7 +735,7 @@ class StandardsModel < OpenStudio::Model::Model
         # Get the VT from the map
         vt = construction_name_to_vt_map[construction_name]
         if vt.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{name}, could not determine VLT for #{construction_name}, will not be included in skylight effective aperture caluclation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in skylight effective aperture caluclation.")
           vt = 0
         end
 
@@ -747,13 +747,13 @@ class StandardsModel < OpenStudio::Model::Model
     if sum_85pct_times_skylight_area_times_vt_times_wf.zero?
       skylight_effective_aperture = 9999
       if num_sub_surfaces > 0
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{name} has no skylights where VLT could be determined, skylight effective aperture will be higher than it should.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} has no skylights where VLT could be determined, skylight effective aperture will be higher than it should.")
       end
     else
       skylight_effective_aperture = sum_85pct_times_skylight_area_times_vt_times_wf / toplighted_area
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "#{name} skylight effective aperture = #{skylight_effective_aperture}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "#{space.name} skylight effective aperture = #{skylight_effective_aperture}.")
 
     return skylight_effective_aperture
   end
@@ -781,24 +781,24 @@ class StandardsModel < OpenStudio::Model::Model
   # @todo Determine the illuminance setpoint for the controls based on space type
   # @todo rotate sensor to face window (only needed for glare calcs)
   def space_add_daylighting_controls(space, template, remove_existing_controls, draw_daylight_areas_for_debugging = false)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "******For #{name}, adding daylight controls.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "******For #{space.name}, adding daylight controls.")
 
     # Check for existing daylighting controls
     # and remove if specified in the input
-    existing_daylighting_controls = daylightingControls
+    existing_daylighting_controls = space.daylightingControls
     unless existing_daylighting_controls.empty?
       if remove_existing_controls
         existing_daylighting_controls.each(&:remove)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, removed #{existing_daylighting_controls.size} existing daylight controls before adding new controls.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, removed #{existing_daylighting_controls.size} existing daylight controls before adding new controls.")
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, daylight controls were already present, no additional controls added.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, daylight controls were already present, no additional controls added.")
         return false
       end
     end
 
     # Skip this space if it has no exterior windows or skylights
     ext_fen_area_m2 = 0
-    surfaces.each do |surface|
+    space.surfaces.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       surface.subSurfaces.each do |sub_surface|
         next unless sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'Skylight' || sub_surface.subSurfaceType == 'GlassDoor'
@@ -806,7 +806,7 @@ class StandardsModel < OpenStudio::Model::Model
       end
     end
     if ext_fen_area_m2.zero?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, daylighting control not applicable because no exterior fenestration is present.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, daylighting control not applicable because no exterior fenestration is present.")
       return false
     end
 
@@ -817,17 +817,17 @@ class StandardsModel < OpenStudio::Model::Model
     req_sec_ctrl = false
 
     # Get the area of the space
-    space_area_m2 = floorArea
+    space_area_m2 = space.floorArea
 
     # Get the LPD of the space
-    space_lpd_w_per_m2 = lightingPowerPerFloorArea
+    space_lpd_w_per_m2 = space.lightingPowerPerFloorArea
 
     # Determine the type of control required
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
 
       # Do nothing, no daylighting controls required
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, daylighting control not required by this standard.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, daylighting control not required by this standard.")
       return false
 
     when '90.1-2010'
@@ -843,10 +843,10 @@ class StandardsModel < OpenStudio::Model::Model
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       else
         # Check effective sidelighted aperture
@@ -855,7 +855,7 @@ class StandardsModel < OpenStudio::Model::Model
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
         ###################
         if sidelighted_effective_aperture < 0.1
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
           req_pri_ctrl = false
         end
       end
@@ -866,10 +866,10 @@ class StandardsModel < OpenStudio::Model::Model
       # Toplighting
       # Check if the toplit area < 900 ft2
       if areas['toplighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
         req_top_ctrl = false
       elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
         req_top_ctrl = false
       else
         # Check effective sidelighted aperture
@@ -878,7 +878,7 @@ class StandardsModel < OpenStudio::Model::Model
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_top = #{sidelighted_effective_aperture}")
         ###################
         if sidelighted_effective_aperture < 0.006
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, toplighting control not required because skylight effective aperture < 0.006 per 9.4.1.5 Exception b.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because skylight effective aperture < 0.006 per 9.4.1.5 Exception b.")
           req_top_ctrl = false
         end
       end
@@ -894,15 +894,15 @@ class StandardsModel < OpenStudio::Model::Model
       # Primary Sidelighting
       # Check if the primary sidelit area contains less than 150W of lighting
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] * space_lpd_w_per_m2 < 150.0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because less than 150W of lighting are present in the primary daylighted area per 9.4.1.1(e).")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because less than 150W of lighting are present in the primary daylighted area per 9.4.1.1(e).")
         req_pri_ctrl = false
       else
         # Check the size of the windows
         if areas['total_window_area'] < OpenStudio.convert(20.0, 'ft^2', 'm^2').get
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
           req_pri_ctrl = false
         end
       end
@@ -910,15 +910,15 @@ class StandardsModel < OpenStudio::Model::Model
       # Secondary Sidelighting
       # Check if the primary and secondary sidelit areas contains less than 300W of lighting
       if areas['secondary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
         req_sec_ctrl = false
       elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 300
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, secondary sidelighting control not required because less than 300W of lighting are present in the combined primary and secondary daylighted areas per 9.4.1.1(e).")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control not required because less than 300W of lighting are present in the combined primary and secondary daylighted areas per 9.4.1.1(e).")
         req_sec_ctrl = false
       else
         # Check the size of the windows
         if areas['total_window_area'] < OpenStudio.convert(20.0, 'ft^2', 'm^2').get
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, secondary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
           req_sec_ctrl = false
         end
       end
@@ -926,10 +926,10 @@ class StandardsModel < OpenStudio::Model::Model
       # Toplighting
       # Check if the toplit area contains less than 150W of lighting
       if areas['toplighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
         req_top_ctrl = false
       elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
         req_top_ctrl = false
       end
 
@@ -946,40 +946,40 @@ class StandardsModel < OpenStudio::Model::Model
       # Sidelighting
       # Check if the primary sidelit area < 250 ft2
       if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
         req_pri_ctrl = false
       end
 
       # Toplighting
       # Check if the toplit area < 900 ft2
       if areas['toplighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
         req_top_ctrl = false
       elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
         req_top_ctrl = false
       end
 
     end # End of template case statement
 
     # Output the daylight control requirements
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, toplighting control required = #{req_top_ctrl}")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, primary sidelighting control required = #{req_pri_ctrl}")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, secondary sidelighting control required = #{req_sec_ctrl}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control required = #{req_top_ctrl}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control required = #{req_pri_ctrl}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control required = #{req_sec_ctrl}")
 
     # Stop here if no lighting controls are required.
     # Do not put daylighting control points into the space.
     if !req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, no daylighting control is required.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, no daylighting control is required.")
       return false
     end
 
     # Record a floor in the space for later use
     floor_surface = nil
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       if surface.surfaceType == 'Floor'
         floor_surface = surface
         break
@@ -989,7 +989,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Find all exterior windows/skylights in the space and record their azimuths and areas
     windows = {}
     skylights = {}
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors' && (surface.surfaceType == 'Wall' || surface.surfaceType == 'RoofCeiling')
 
       # Skip non-vertical walls and non-horizontal roofs
@@ -999,7 +999,7 @@ class StandardsModel < OpenStudio::Model::Model
         # TODO: stop skipping non-vertical walls
         unless surface_normal.z.abs < 0.001
           unless surface.subSurfaces.empty?
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Cannot currently handle non-vertical walls; skipping windows on #{surface.name} in #{name} for daylight sensor positioning.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Cannot currently handle non-vertical walls; skipping windows on #{surface.name} in #{space.name} for daylight sensor positioning.")
             next
           end
         end
@@ -1007,7 +1007,7 @@ class StandardsModel < OpenStudio::Model::Model
         # TODO: stop skipping non-horizontal roofs
         unless surface_normal.to_s == straight_upward.to_s
           unless surface.subSurfaces.empty?
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Cannot currently handle non-horizontal roofs; skipping skylights on #{surface.name} in #{name} for daylight sensor positioning.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Cannot currently handle non-horizontal roofs; skipping skylights on #{surface.name} in #{space.name} for daylight sensor positioning.")
             OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Surface #{surface.name} has outward normal of #{surface_normal.to_s.gsub(/\[|\]/, '|')}; up is #{straight_upward.to_s.gsub(/\[|\]/, '|')}.")
             next
           end
@@ -1085,7 +1085,7 @@ class StandardsModel < OpenStudio::Model::Model
     daylight_stpt_lux = 375
 
     # find the specific space_type properties
-    space_type = self.spaceType
+    space_type = space.spaceType
     if space_type.empty?
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "Space #{space_type} is an unknown space type, assuming #{daylight_stpt_lux} Lux daylight setpoint")
     else
@@ -1105,7 +1105,7 @@ class StandardsModel < OpenStudio::Model::Model
          'space_type' => standards_space_type
       }
 
-      data = model_find_object(model, $os_standards['space_types'], search_criteria)
+      data = model_find_object(space.model, $os_standards['space_types'], search_criteria)
       if data.nil?
         OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
       else 
@@ -1113,30 +1113,30 @@ class StandardsModel < OpenStudio::Model::Model
         # If 'na', daylighting is not appropriate for this space type for some reason
         daylight_stpt_lux = data['target_illuminance_setpoint']
         if daylight_stpt_lux == 'na'
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: daylighting is not appropriate for #{template} #{standards_building_type} #{standards_space_type}.")
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: daylighting is not appropriate for #{template} #{standards_building_type} #{standards_space_type}.")
           return true
         end
         # If a setpoint is specified, use that.  Otherwise use a default.
         daylight_stpt_lux = daylight_stpt_lux.to_f
         if daylight_stpt_lux.zero?
           daylight_stpt_lux = 375
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: no specific illuminance setpoint defined for #{template} #{standards_building_type} #{standards_space_type}, assuming #{daylight_stpt_lux} Lux.")
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: no specific illuminance setpoint defined for #{template} #{standards_building_type} #{standards_space_type}, assuming #{daylight_stpt_lux} Lux.")
         else
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: illuminance setpoint = #{daylight_stpt_lux} Lux")
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: illuminance setpoint = #{daylight_stpt_lux} Lux")
         end
         # for the office prototypes where core and perimeter zoning is used,
         # there are additional assumptions about how much of the daylit area can be used.
         if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
           psa_nongeo_frac = data['psa_nongeometry_fraction'].to_f 
           ssa_nongeo_frac = data['ssa_nongeometry_fraction'].to_f 
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: assuming only #{(psa_nongeo_frac*100).round}% of the primary sidelit area is daylightable based on typical design practice.")
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{name}: assuming only #{(ssa_nongeo_frac*100).round}% of the secondary sidelit area is daylightable based on typical design practice.")
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: assuming only #{(psa_nongeo_frac*100).round}% of the primary sidelit area is daylightable based on typical design practice.")
+          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: assuming only #{(ssa_nongeo_frac*100).round}% of the secondary sidelit area is daylightable based on typical design practice.")
         end
       end
     end
     
     # Get the zone that the space is in
-    zone = thermalZone
+    zone = space.thermalZone
     if zone.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Space #{name.get} has no thermal zone")
     else
@@ -1149,13 +1149,13 @@ class StandardsModel < OpenStudio::Model::Model
     sorted_skylights = skylights.sort_by { |_skylight, vals| [vals[:facade], vals[:area], vals[:name]] }
 
     # Report out the sorted skylights for debugging
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, Skylights:")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, Skylights:")
     sorted_skylights.each do |sky, p|
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{sky.name} #{p[:facade]}, area = #{p[:area_m2].round(2)} m^2")
     end
 
     # Report out the sorted windows for debugging
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{name}, Windows:")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, Windows:")
     sorted_windows.each do |win, p|
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{win.name} #{p[:facade]}, area = #{p[:area_m2].round(2)} m^2")
     end
@@ -1252,12 +1252,12 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Place the sensors and set control fractions
     # get the zone that the space is in
-    zone = thermalZone
+    zone = space.thermalZone
     if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Space #{name}, cannot determine daylighted areas.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Space #{space.name}, cannot determine daylighted areas.")
       return false
     else
-      zone = thermalZone.get
+      zone = space.thermalZone.get
     end
 
     # Ensure that total controlled fraction
@@ -1270,19 +1270,19 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Sensors
     if sensor_1_frac > 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}: sensor 1 controls #{(sensor_1_frac * 100).round}% of the zone lighting.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}: sensor 1 controls #{(sensor_1_frac * 100).round}% of the zone lighting.")
     end
     if sensor_2_frac > 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{name}: sensor 2 controls #{(sensor_2_frac * 100).round}% of the zone lighting.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}: sensor 2 controls #{(sensor_2_frac * 100).round}% of the zone lighting.")
     end
 
     # First sensor
     if sensor_1_window
       # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{self.name}, calculating daylighted areas.")
       # runner.registerInfo("Daylight sensor 1 inside of #{sensor_1_frac.name}")
-      sensor_1 = OpenStudio::Model::DaylightingControl.new(model)
-      sensor_1.setName("#{name} Daylt Sensor 1")
-      sensor_1.setSpace(self)
+      sensor_1 = OpenStudio::Model::DaylightingControl.new(space.model)
+      sensor_1.setName("#{space.name} Daylt Sensor 1")
+      sensor_1.setSpace(space)
       sensor_1.setIlluminanceSetpoint(daylight_stpt_lux)
       sensor_1.setLightingControlType('Stepped')
       sensor_1.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
@@ -1322,9 +1322,9 @@ class StandardsModel < OpenStudio::Model::Model
     if sensor_2_window
       # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "For #{self.name}, calculating daylighted areas.")
       # runner.registerInfo("Daylight sensor 2 inside of #{sensor_2_frac.name}")
-      sensor_2 = OpenStudio::Model::DaylightingControl.new(model)
-      sensor_2.setName("#{name} Daylt Sensor 2")
-      sensor_2.setSpace(self)
+      sensor_2 = OpenStudio::Model::DaylightingControl.new(space.model)
+      sensor_2.setName("#{space.name} Daylt Sensor 2")
+      sensor_2.setSpace(space)
       sensor_2.setIlluminanceSetpoint(daylight_stpt_lux)
       sensor_2.setLightingControlType('Stepped')
       sensor_2.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
@@ -1400,7 +1400,7 @@ class StandardsModel < OpenStudio::Model::Model
         spaceType.get.spaceInfiltrationDesignFlowRates.each(&:remove)
       end
       # Remove infiltration rates set at the space object.
-      spaceInfiltrationDesignFlowRates.each(&:remove)
+      space.spaceInfiltrationDesignFlowRates.each(&:remove)
 
       adj_infil_rate_m3_per_s_per_m2 = 0.25 * 0.001 # m3/s/m2
       exterior_wall_and_roof_and_subsurface_area = space_exterior_wall_and_roof_and_subsurface_area(space) # To do
@@ -1436,24 +1436,24 @@ class StandardsModel < OpenStudio::Model::Model
 
       # Now spread the total infiltration rate over all
       # exterior surface areas (for the E+ input field)
-      all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / exteriorArea
+      all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.exteriorArea
 
     end
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Space', "For #{name}, adj infil = #{all_ext_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Space', "For #{space.name}, adj infil = #{all_ext_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2.")
 
     # Get any infiltration schedule already assigned to this space or its space type
     # If not, the always on schedule will be applied.
     infil_sch = nil
-    unless spaceInfiltrationDesignFlowRates.empty?
-      old_infil = spaceInfiltrationDesignFlowRates[0]
+    unless space.spaceInfiltrationDesignFlowRates.empty?
+      old_infil = space.spaceInfiltrationDesignFlowRates[0]
       if old_infil.schedule.is_initialized
         infil_sch = old_infil.schedule.get
       end
     end
 
-    if infil_sch.nil? && spaceType.is_initialized
-      space_type = spaceType.get
+    if infil_sch.nil? && space.spaceType.is_initialized
+      space_type = space.spaceType.get
       unless space_type.spaceInfiltrationDesignFlowRates.empty?
         old_infil = space_type.spaceInfiltrationDesignFlowRates[0]
         if old_infil.schedule.is_initialized
@@ -1463,12 +1463,12 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     if infil_sch.nil?
-      infil_sch = model.alwaysOnDiscreteSchedule
+      infil_sch = space.model.alwaysOnDiscreteSchedule
     end
 
     # Create an infiltration rate object for this space
-    infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-    infiltration.setName("#{name} Infiltration")
+    infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
+    infiltration.setName("#{space.name} Infiltration")
     # infiltration.setFlowperExteriorWallArea(adj_infil_rate_m3_per_s_per_m2)
     infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2)
     infiltration.setSchedule(infil_sch)
@@ -1477,7 +1477,7 @@ class StandardsModel < OpenStudio::Model::Model
     infiltration.setVelocityTermCoefficient(0.224)
     infiltration.setVelocitySquaredTermCoefficient(0.0)
 
-    infiltration.setSpace(self)
+    infiltration.setSpace(space)
 
     return true
   end
@@ -1512,7 +1512,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Calculate the baseline component infiltration rate
     infil_type = 'baseline'
     base_comp_infil_m3_per_s = 0.0
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       # This surface
       base_comp_infil_m3_per_s += surface_component_infiltration_rate(surface, infil_type)
       # Subsurfaces in this surface
@@ -1526,7 +1526,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Calculate the advanced component infiltration rate
     infil_type = 'advanced'
     adv_comp_infil_m3_per_s = 0.0
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       # This surface
       adv_comp_infil_m3_per_s += surface_component_infiltration_rate(surface, infil_type)
       # Subsurfaces in this surface
@@ -1548,7 +1548,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Calculate the rate per exterior area
     adj_infil_m3_per_s_per_m2 = adj_infil_m3_per_s / ext_area_m2
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Space', "For #{name}, infil = #{adj_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Space', "For #{space.name}, infil = #{adj_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2.")
     #=> infil = #{comp_infil_rate_m3_per_s.round(2)} m^3/s, ext area = #{tot_ext_area_m2.round} m^2")
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "For #{self.name}, comp infil = #{comp_infil_rate_cfm_per_ft2.round(4)} cfm/ft2 => infil = #{comp_infil_rate_cfm.round(2)} cfm, ext area = #{tot_ext_area_ft2.round} ft2")
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "For #{self.name}")
@@ -1564,7 +1564,7 @@ class StandardsModel < OpenStudio::Model::Model
     area_m2 = 0.0
 
     # Loop through all surfaces in this space
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       # Skip non-outdoor surfaces
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       # Skip non-walls
@@ -1588,7 +1588,7 @@ class StandardsModel < OpenStudio::Model::Model
     area_m2 = 0.0
 
     # Loop through all surfaces in this space
-    surfaces.sort.each do |surface|
+    space.surfaces.sort.each do |surface|
       # Skip non-outdoor surfaces
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       # Skip non-walls
@@ -1620,7 +1620,7 @@ class StandardsModel < OpenStudio::Model::Model
     # floor area.  This method internally
     # also checks to see if the space's zone
     # is a supply or return plenum
-    unless partofTotalFloorArea
+    unless space.partofTotalFloorArea
       plenum_status = true
       return plenum_status
     end
@@ -1629,7 +1629,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Check if the space type name
     # contains the word plenum.
-    space_type = spaceType
+    space_type = space.spaceType
     if space_type.is_initialized
       space_type = space_type.get
       if space_type.name.get.to_s.downcase.include?('plenum')
@@ -1657,7 +1657,7 @@ class StandardsModel < OpenStudio::Model::Model
   def space_residential?(space, template)
     is_res = false
 
-    space_to_check = self
+    space_to_check = space
 
     # If this space is a plenum, check the space type
     # of the space below the largest floor in the space
@@ -1673,7 +1673,7 @@ class StandardsModel < OpenStudio::Model::Model
         end
       end
       if largest_surface.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
         return is_res
       end
       # Get the space on the other side of this floor
@@ -1682,11 +1682,11 @@ class StandardsModel < OpenStudio::Model::Model
         if adj_surface.space.is_initialized
           space_to_check = adj_surface.space.get
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{name} is a plenum, but could not find a space attached to the largest floor's adjacent surface #{adj_surface.name} to determine if plenum should be res or nonres.  Assuming nonresidential.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} is a plenum, but could not find a space attached to the largest floor's adjacent surface #{adj_surface.name} to determine if plenum should be res or nonres.  Assuming nonresidential.")
           return is_res
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
         return is_res
       end
     end
@@ -1722,7 +1722,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @todo add logic to detect indirectly-conditioned spaces
   def space_conditioning_category(space, template, climate_zone)
     # Get the zone this space is inside
-    zone = thermalZone
+    zone = space.thermalZone
 
     # Assume unconditioned if not assigned to a zone
     if zone.empty?
@@ -1743,7 +1743,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Bool] true if heated, false if not
   def space_heated?(space)
     # Get the zone this space is inside
-    zone = thermalZone
+    zone = space.thermalZone
 
     # Assume unheated if not assigned to a zone
     if zone.empty?
@@ -1764,7 +1764,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Bool] true if cooled, false if not
   def space_cooled?(space)
     # Get the zone this space is inside
-    zone = thermalZone
+    zone = space.thermalZone
 
     # Assume uncooled if not assigned to a zone
     if zone.empty?
@@ -1789,7 +1789,7 @@ class StandardsModel < OpenStudio::Model::Model
     load_w = 0.0
 
     # People
-    people.each do |people|
+    space.people.each do |people|
       w_per_person = 125 # Initial assumption
       act_sch = people.activityLevelSchedule
       if act_sch.is_initialized
@@ -1797,9 +1797,9 @@ class StandardsModel < OpenStudio::Model::Model
           act_sch = act_sch.get.to_ScheduleRuleset.get
           w_per_person = act_sch.annual_min_max_value['max']
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
         end
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{space.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
       end
 
       num_ppl = people.getNumberOfPeople(floorArea)
@@ -1810,15 +1810,15 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Lights
-    load_w += lightingPower
+    load_w += space.lightingPower
 
     # Electric Equipment
-    load_w += electricEquipmentPower
+    load_w += space.electricEquipmentPower
 
     # Gas Equipment
-    load_w += gasEquipmentPower
+    load_w += space.gasEquipmentPower
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "#{name} has #{load_w.round}W of design internal loads.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "#{space.name} has #{load_w.round}W of design internal loads.")
 
     return load_w
   end
@@ -1827,11 +1827,11 @@ class StandardsModel < OpenStudio::Model::Model
   def space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor = true)
     same_floor_spaces = []
     spaces = []
-    surfaces.each do |surface|
+    space.surfaces.each do |surface|
       adj_surface = surface.adjacentSurface
       unless adj_surface.empty?
-        model.getSpaces.each do |space|
-          next if space == self
+        space.model.getSpaces.sort.each do |space|
+          next if space == space
           space.surfaces.each do |surf|
             if surf == adj_surface.get
               spaces << space
@@ -1842,9 +1842,9 @@ class StandardsModel < OpenStudio::Model::Model
     end
     # If looking for only spaces adjacent on the same floor.
     if same_floor == true
-      raise "Cannot get adjacent spaces of space #{name} since space not set to BuildingStory" if buildingStory.empty?
+      raise "Cannot get adjacent spaces of space #{space.name} since space not set to BuildingStory" if buildingStory.empty?
       spaces.each do |space|
-        raise "One or more adjecent spaces to space #{name} is not assigned to a BuildingStory. Ensure all spaces are assigned." if space.buildingStory.empty?
+        raise "One or more adjecent spaces to space #{space.name} is not assigned to a BuildingStory. Ensure all spaces are assigned." if space.buildingStory.empty?
         if space.buildingStory.get == buildingStory.get
           same_floor_spaces << space
         end
@@ -1857,13 +1857,13 @@ class StandardsModel < OpenStudio::Model::Model
     array_hash = {}
     return nil if spaces.size.zero?
     # iterate through each surface in the space
-    surfaces.each do |surface|
+    space.surfaces.each do |surface|
       # get the adjacent surface in another space.
       adj_surface = surface.adjacentSurface
       unless adj_surface.empty?
         # go through each of the adjeacent spaces to find the matching  surface/space.
         spaces.each_with_index do |space, index|
-          next if space == self
+          next if space == space
           space.surfaces.each do |surf|
             if surf == adj_surface.get
               # initialize array index to zero for first time so += will work.
@@ -1906,7 +1906,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
     # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} => #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
     if errs > 0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "***FAIL*** #{space} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "***FAIL*** #{space.name} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.")
     end
   end
 
@@ -2088,7 +2088,7 @@ class StandardsModel < OpenStudio::Model::Model
   # [utilities.geometry.joinAll] <1> Expected polygons to join together
   # @api private
   def space_join_polygons(space, polygons, tol, name)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Joining #{name} from #{self.name}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "Joining #{name} from #{space.name}")
 
     combined_polygons = []
 
@@ -2154,7 +2154,7 @@ class StandardsModel < OpenStudio::Model::Model
       msg_log_2.disable
 
       if join_errs_2 > 0 || inner_loop_errs_2 > 0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{self.name}, the workaround for joining polygons failed.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, the workaround for joining polygons failed.")
       else
 
         # First polygon minus the already combined polygons
@@ -2171,15 +2171,15 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Report logged errors to user
     if join_errs > 0
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{self.name}, #{join_errs} of #{polygons.size} #{name} were not joined properly due to limitations of the geometry calculation methods.  The resulting daylighted areas will be smaller than they should be.")
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, the #{name.gsub('_polygons','')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, #{join_errs} of #{polygons.size} #{space.name} were not joined properly due to limitations of the geometry calculation methods.  The resulting daylighted areas will be smaller than they should be.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons','')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
     if inner_loop_errs > 0
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{self.name}, #{inner_loop_errs} of #{polygons.size} #{name} were not joined properly becasue the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{self.name}, the #{name.gsub('_polygons','')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, #{inner_loop_errs} of #{polygons.size} #{space.name} were not joined properly becasue the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons','')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Joined #{polygons.size} #{name} into #{combined_polygons.size} polygons.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Joined #{polygons.size} #{space.name} into #{combined_polygons.size} polygons.")
 
     return combined_polygons
   end
@@ -2193,7 +2193,7 @@ class StandardsModel < OpenStudio::Model::Model
       if area_m2.is_initialized
         total_area_m2 += area_m2.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Could not get area for a polygon in #{name}, daylighted area calculation will not be accurate.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Could not get area for a polygon in #{space.name}, daylighted area calculation will not be accurate.")
       end
     end
 

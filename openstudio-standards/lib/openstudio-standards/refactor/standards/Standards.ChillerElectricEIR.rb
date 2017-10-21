@@ -13,7 +13,7 @@ class StandardsModel < OpenStudio::Model::Model
     # checking if the chiller is connected to a condenser
     # water loop or not.
     cooling_type = 'AirCooled'
-    if secondaryPlantLoop.is_initialized
+    if chiller_electric_eir.secondaryPlantLoop.is_initialized
       cooling_type = 'WaterCooled'
     end
 
@@ -22,7 +22,7 @@ class StandardsModel < OpenStudio::Model::Model
     # TODO: Standards replace this with a mechanism to store this
     # data in the chiller object itself.
     # For now, retrieve the condenser type from the name
-    name = self.name.get
+    name = chiller_electric_eir.name.get
     condenser_type = nil
     compressor_type = nil
     if cooling_type == 'AirCooled'
@@ -57,12 +57,12 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Double] capacity in W to be used for find object
   def chiller_electric_eir_find_capacity(chiller_electric_eir)
     capacity_w = nil
-    if referenceCapacity.is_initialized
-      capacity_w = referenceCapacity.get
-    elsif autosizedReferenceCapacity.is_initialized
-      capacity_w = autosizedReferenceCapacity.get
+    if chiller_electric_eir.referenceCapacity.is_initialized
+      capacity_w = chiller_electric_eir.referenceCapacity.get
+    elsif chiller_electric_eir.autosizedReferenceCapacity.is_initialized
+      capacity_w = chiller_electric_eir.autosizedReferenceCapacity.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{name} capacity is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
@@ -77,7 +77,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Double] full load efficiency (COP)
   def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir, template)
     # Get the chiller properties
-    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
+    search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir, template)
     capacity_tons = OpenStudio.convert(find_capacity, 'W', 'ton').get 
     chlr_props = model_find_object(model, $os_standards['chillers'], search_criteria, capacity_tons, Date.today)
 
@@ -88,7 +88,7 @@ class StandardsModel < OpenStudio::Model::Model
       kw_per_ton = chlr_props['minimum_full_load_efficiency']
       cop = kw_per_ton_to_cop(kw_per_ton)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{name}, cannot find minimum full load efficiency.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency.")
     end
 
     return cop
@@ -104,29 +104,29 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
-    search_criteria = coil_dx_find_search_criteria(coil_dx, template)
+    search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir, template)
     cooling_type = search_criteria['cooling_type']
     condenser_type = search_criteria['condenser_type']
     compressor_type = search_criteria['compressor_type']
 
     # Get the chiller capacity
-    capacity_w = water_heater_mixed_find_capacity(water_heater_mixed) 
+    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir) 
 
     # NECB 2011 requires that all chillers be modulating down to 25% of their capacity
     if template == 'NECB 2011'
-      setChillerFlowMode('LeavingSetpointModulated')
-      setMinimumPartLoadRatio(0.25)
-      setMinimumUnloadingRatio(0.25)
+      chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
+      chiller_electric_eir.setMinimumPartLoadRatio(0.25)
+      chiller_electric_eir.setMinimumUnloadingRatio(0.25)
       if (capacity_w / 1000.0) < 2100.0
-        if self.name.to_s.include? 'Primary Chiller'
+        if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
           chiller_capacity = capacity_w
-        elsif self.name.to_s.include? 'Secondary Chiller'
+        elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
           chiller_capacity = 0.001
         end
       else
         chiller_capacity = capacity_w / 2.0
       end
-      setReferenceCapacity(chiller_capacity)
+      chiller_electric_eir.setReferenceCapacity(chiller_capacity)
     end # NECB 2011
 
     # Convert capacity to tons
@@ -137,38 +137,38 @@ class StandardsModel < OpenStudio::Model::Model
                     end
 
     # Get the chiller properties
-    chlr_props = model_find_object(model, chillers, search_criteria, capacity_tons, Date.today)
+    chlr_props = model_find_object(chiller_electric_eir.model, chillers, search_criteria, capacity_tons, Date.today)
     unless chlr_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{self.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
 
     # Make the CAPFT curve
-    cool_cap_ft = model_add_curve(model, chlr_props['capft'])
+    cool_cap_ft = model_add_curve(chiller_electric_eir.model, chlr_props['capft'])
     if cool_cap_ft
-      setCoolingCapacityFunctionOfTemperature(cool_cap_ft)
+      chiller_electric_eir.setCoolingCapacityFunctionOfTemperature(cool_cap_ft)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{self.name}, cannot find cool_cap_ft curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find cool_cap_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the EIRFT curve
-    cool_eir_ft = model_add_curve(model, chlr_props['eirft'])
+    cool_eir_ft = model_add_curve(chiller_electric_eir.model, chlr_props['eirft'])
     if cool_eir_ft
-      setElectricInputToCoolingOutputRatioFunctionOfTemperature(cool_eir_ft)
+      chiller_electric_eir.setElectricInputToCoolingOutputRatioFunctionOfTemperature(cool_eir_ft)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{self.name}, cannot find cool_eir_ft curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find cool_eir_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the EIRFPLR curve
     # which may be either a CurveBicubic or a CurveQuadratic based on chiller type
-    cool_plf_fplr = model_add_curve(model, chlr_props['eirfplr'])
+    cool_plf_fplr = model_add_curve(chiller_electric_eir.model, chlr_props['eirfplr'])
     if cool_plf_fplr
-      setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
+      chiller_electric_eir.setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{self.name}, cannot find cool_plf_fplr curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find cool_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false
     end
 
@@ -178,17 +178,17 @@ class StandardsModel < OpenStudio::Model::Model
     if chlr_props['minimum_full_load_efficiency']
       kw_per_ton = chlr_props['minimum_full_load_efficiency']
       cop = kw_per_ton_to_cop(kw_per_ton)
-      setReferenceCOP(cop)
+      chiller_electric_eir.setReferenceCOP(cop)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{self.name}, cannot find minimum full load efficiency, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Set cooling tower properties for NECB 2011 now that the new COP of the chiller is set
     if template == 'NECB 2011'
-      if self.name.to_s.include? 'Primary Chiller'
+      if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
         # Single speed tower model assumes 25% extra for compressor power
-        tower_cap = capacity_w * (1.0 + 1.0 / referenceCOP)
+        tower_cap = capacity_w * (1.0 + 1.0 / chiller_electric_eir.referenceCOP)
         if (tower_cap / 1000.0) < 1750
           clg_tower_objs[0].setNumberofCells(1)
         else
@@ -199,8 +199,8 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Append the name with size and kw/ton
-    setName("#{name} #{capacity_tons.round}tons #{kw_per_ton.round(1)}kW/ton")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ChillerElectricEIR', "For #{template}: #{self.name}: #{cooling_type} #{condenser_type} #{compressor_type} Capacity = #{capacity_tons.round}tons; COP = #{cop.round(1)} (#{kw_per_ton.round(1)}kW/ton)")
+    chiller_electric_eir.setName("#{chiller_electric_eir.name} #{capacity_tons.round}tons #{kw_per_ton.round(1)}kW/ton")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ChillerElectricEIR', "For #{template}: #{chiller_electric_eir.name}: #{cooling_type} #{condenser_type} #{compressor_type} Capacity = #{capacity_tons.round}tons; COP = #{cop.round(1)} (#{kw_per_ton.round(1)}kW/ton)")
 
     return successfully_set_all_properties
   end

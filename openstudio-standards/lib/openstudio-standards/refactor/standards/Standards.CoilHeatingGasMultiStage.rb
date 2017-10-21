@@ -12,7 +12,7 @@ class StandardsModel < OpenStudio::Model::Model
     elsif autosizedStage4NominalCapacity.is_initialized
       capacity_w = autosizedStage4NominalCapacity.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{name} capacity is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_heating_gas_multi_stage.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
@@ -54,7 +54,7 @@ class StandardsModel < OpenStudio::Model::Model
     if furnace_plffplr_curve
       setPartLoadFractionCorrelationCurve(furnace_plffplr_curve)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingGasMultiStage', "For #{name}, cannot find plffplr curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingGasMultiStage', "For #{coil_heating_gas_multi_stage.name}, cannot find plffplr curve, will not be set.")
       successfully_set_all_properties = false
     end
   end

@@ -78,17 +78,17 @@ class StandardsModel < OpenStudio::Model::Model
       return false
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FanVariableVolume', "For #{name}: Set fan curve coefficients to reflect control type of '#{control_type}'.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FanVariableVolume', "For #{fan_variable_volume.name}: Set fan curve coefficients to reflect control type of '#{control_type}'.")
 
     # Set the coefficients
-    setFanPowerCoefficient1(coeff_a)
-    setFanPowerCoefficient2(coeff_b)
-    setFanPowerCoefficient3(coeff_c)
-    setFanPowerCoefficient4(coeff_d)
+    fan_variable_volume.setFanPowerCoefficient1(coeff_a)
+    fan_variable_volume.setFanPowerCoefficient2(coeff_b)
+    fan_variable_volume.setFanPowerCoefficient3(coeff_c)
+    fan_variable_volume.setFanPowerCoefficient4(coeff_d)
 
     # Set the fan minimum power
-    setFanPowerMinimumFlowRateInputMethod('Fraction')
-    setFanPowerMinimumFlowFraction(min_pct_pwr)
+    fan_variable_volume.setFanPowerMinimumFlowRateInputMethod('Fraction')
+    fan_variable_volume.setFanPowerMinimumFlowFraction(min_pct_pwr)
 
     # Append the control type to the fan name
     # self.setName("#{self.name} #{control_type}")
@@ -108,14 +108,14 @@ class StandardsModel < OpenStudio::Model::Model
     # Check if the fan is on a multizone or single zone system.
     # If not on an AirLoop (for example, in unitary system or zone equipment), assumed to be a single zone fan
     mz_fan = false 
-    if self.airLoopHVAC.is_initialized
-      air_loop = self.airLoopHVAC.get
+    if fan_variable_volume.airLoopHVAC.is_initialized
+      air_loop = fan_variable_volume.airLoopHVAC.get
       mz_fan = air_loop_hvac_multizone_vav_system?(air_loop) 
     end
 
     # No part load fan power control is required for single zone VAV systems
     unless mz_fan
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FanVariableVolume', "For #{name}: No part load fan power control is required for single zone VAV systems.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FanVariableVolume', "For #{fan_variable_volume.name}: No part load fan power control is required for single zone VAV systems.")
       return part_load_control_required
     end
 
@@ -145,23 +145,23 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Check against limits
     if hp_limit && cap_limit_btu_per_hr
-      air_loop = airLoopHVAC
+      air_loop = fan_variable_volume.airLoopHVAC
       unless air_loop.is_initialized
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{name}: Could not find the air loop to get cooling capacity for determining part load fan power control requirement.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{fan_variable_volume.name}: Could not find the air loop to get cooling capacity for determining part load fan power control requirement.")
       return part_load_control_required
       end
       air_loop = air_loop.get
       clg_cap_w = plant_loop_total_cooling_capacity(air_loop) 
       clg_cap_btu_per_hr = OpenStudio.convert(clg_cap_w, 'W', 'Btu/hr').get
-      fan_hp = pump_motor_horsepower(pump) 
+      fan_hp = fan_motor_horsepower(fan_variable_volume) 
       if fan_hp >= hp_limit && clg_cap_btu_per_hr >= cap_limit_btu_per_hr
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: part load fan power control is required for #{fan_hp.round(1)} HP fan, #{clg_cap_btu_per_hr.round} Btu/hr cooling capacity.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{fan_variable_volume.name}: part load fan power control is required for #{fan_hp.round(1)} HP fan, #{clg_cap_btu_per_hr.round} Btu/hr cooling capacity.")
       part_load_control_required = true
       end             
     elsif hp_limit
-      fan_hp = pump_motor_horsepower(pump) 
+      fan_hp = fan_motor_horsepower(fan_variable_volume) 
       if fan_hp >= hp_limit
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Part load fan power control is required for #{fan_hp.round(1)} HP fan.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{fan_variable_volume.name}: Part load fan power control is required for #{fan_hp.round(1)} HP fan.")
       part_load_control_required = true
       end
     end

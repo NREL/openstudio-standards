@@ -57,7 +57,7 @@ class StandardsModel < OpenStudio::Model::Model
       end
     end
     if infil_rate_cfm_per_ft2.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{name}, could not determine surface type for infiltration, will not be included in calculation.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{surface.name}, could not determine surface type for infiltration, will not be included in calculation.")
       return comp_infil_rate_m3_per_s
     end
 

@@ -32,7 +32,7 @@ class StandardsModel < OpenStudio::Model::Model
     # If the multiplier is greater than 1, report this
     if avg_multiplier > 1
       floor_multiplier = avg_multiplier
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BuildingStory', "Story #{name} has a multiplier of #{floor_multiplier}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BuildingStory', "Story #{building_story.name} has a multiplier of #{floor_multiplier}.")
     end
 
     return floor_multiplier
@@ -67,7 +67,7 @@ class StandardsModel < OpenStudio::Model::Model
     if z_heights.size > 0
       z = z_heights.min
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "For #{name} could not find the minimum_z_value, which means the story has no spaces assigned or the spaces have no surfaces.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "For #{building_story.name} could not find the minimum_z_value, which means the story has no spaces assigned or the spaces have no surfaces.")
     end
 
     return z

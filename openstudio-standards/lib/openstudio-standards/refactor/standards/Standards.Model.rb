@@ -152,7 +152,7 @@ class StandardsModel < OpenStudio::Model::Model
     # If any of the lights are missing schedules, assign an
     # always-off schedule to those lights.  This is assumed to
     # be the user's intent in the proposed model.
-    getLightss.each do |lights|
+    getLightss.sort.each do |lights|
       if lights.schedule.empty?
         lights.setSchedule(alwaysOffDiscreteSchedule)
       end
@@ -332,7 +332,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Translate to IDF and save for debugging
     forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
-    idf = forward_translator.translateModel(self)
+    idf = forward_translator.translateModel(model)
     idf_path = OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.idf")
     idf.save(idf_path, true)
 
@@ -347,7 +347,7 @@ class StandardsModel < OpenStudio::Model::Model
   def model_residential_and_nonresidential_floor_areas(model, template)
     res_area_m2 = 0
     nonres_area_m2 = 0
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       if thermal_zone_residential?(space, template)
         res_area_m2 += space.floorArea
       else
@@ -672,7 +672,7 @@ class StandardsModel < OpenStudio::Model::Model
     # for the purposes of HVAC system assignment
     all_htg_fuels = []
     all_clg_fuels = []
-    getThermalZones.each do |zone|
+    getThermalZones.sort.each do |zone|
       all_htg_fuels += zone.heating_fuels
       all_clg_fuels += zone.cooling_fuels
     end
@@ -1760,9 +1760,9 @@ class StandardsModel < OpenStudio::Model::Model
   def model_assign_spaces_to_stories(model)
     # Make hash of spaces and minz values
     sorted_spaces = {}
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       # Skip plenum spaces
-      next if thermal_zone_plenum?(space) 
+      next if space_plenum?(space) 
 
       # loop through space surfaces to find min z value
       z_points = []
@@ -1824,7 +1824,7 @@ class StandardsModel < OpenStudio::Model::Model
     name = model_make_name(model, template, clim, building_type, spc_type)
 
     # Create a new construction set and name it
-    construction_set = OpenStudio::Model::DefaultConstructionSet.new(self)
+    construction_set = OpenStudio::Model::DefaultConstructionSet.new(model)
     construction_set.setName(name)
 
     # Specify the types of constructions
@@ -1845,7 +1845,7 @@ class StandardsModel < OpenStudio::Model::Model
     exterior_skylight_standards_construction_type = 'IEAD'
 
     # Exterior surfaces constructions
-    exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
+    exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
     exterior_surfaces.setFloorConstruction(find_and_add_construction(template,
                                                                      climate_zone_set,
@@ -1866,7 +1866,7 @@ class StandardsModel < OpenStudio::Model::Model
                                                                            category))
 
     # Interior surfaces constructions
-    interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
+    interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultInteriorSurfaceConstructions(interior_surfaces)
     construction_name = interior_floors
     unless construction_name.nil?
@@ -1882,7 +1882,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Ground contact surfaces constructions
-    ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
+    ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
     ground_surfaces.setFloorConstruction(find_and_add_construction(template,
                                                                    climate_zone_set,
@@ -1897,7 +1897,7 @@ class StandardsModel < OpenStudio::Model::Model
                                                                   category))
 
     # Exterior sub surfaces constructions
-    exterior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(self)
+    exterior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(model)
     construction_set.setDefaultExteriorSubSurfaceConstructions(exterior_subsurfaces)
     if exterior_fixed_window_standards_construction_type && exterior_fixed_window_building_category
       exterior_subsurfaces.setFixedWindowConstruction(find_and_add_construction(template,
@@ -1946,7 +1946,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Interior sub surfaces constructions
-    interior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(self)
+    interior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(model)
     construction_set.setDefaultInteriorSubSurfaceConstructions(interior_subsurfaces)
     if construction_name == interior_fixed_windows
       interior_subsurfaces.setFixedWindowConstruction(add_construction(construction_name))
@@ -1990,7 +1990,7 @@ class StandardsModel < OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying multizone vav OA sizing.')
 
     # Multi-zone VAV outdoor air sizing
-    getAirLoopHVACs.sort.each { |obj| model_apply_multizone_vav_outdoor_air_sizing(obj, template) }
+    model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(obj, template) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying multizone vav OA sizing.')
   end
@@ -2003,15 +2003,19 @@ class StandardsModel < OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
 
     # Air Loop Controls
-    getAirLoopHVACs.sort.each { |obj| plant_loop_apply_standard_controls(obj, template, climate_zone) }
+    getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, template, climate_zone) }
 
+    # Plant Loop Controls
+    # TODO refactor: enable this code (missing before refactor)
+    # getPlantLoops.sort.each { |obj| plant_loop_apply_standard_controls(obj, template, climate_zone) }
+    
     ##### Apply equipment efficiencies
 
     # Fans
-    getFanVariableVolumes.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj, template, obj.brake_horsepower) }
-    getFanConstantVolumes.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj, template, obj.brake_horsepower) }
-    getFanOnOffs.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj, template, obj.brake_horsepower) }
-    getFanZoneExhausts.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj, template, obj.brake_horsepower) }
+    getFanVariableVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, template, obj.brake_horsepower) }
+    getFanConstantVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, template, obj.brake_horsepower) }
+    getFanOnOffs.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, template, obj.brake_horsepower) }
+    getFanZoneExhausts.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, template, obj.brake_horsepower) }
 
     # Pumps
     getPumpConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj, template) }
@@ -2023,29 +2027,29 @@ class StandardsModel < OpenStudio::Model::Model
     # set DX HP coils before DX clg coils because when DX HP coils need to first
     # pull the capacities of their paried DX clg coils, and this does not work
     # correctly if the DX clg coil efficiencies have been set because they are renamed.
-    getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = cooling_tower_variable_speed_apply_efficiency_and_curves(obj, template, sql_db_vars_map) }
+    getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, template, sql_db_vars_map) }
 
     # Unitary ACs
-    getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = cooling_tower_variable_speed_apply_efficiency_and_curves(obj, template, sql_db_vars_map) }
-    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = cooling_tower_variable_speed_apply_efficiency_and_curves(obj, template, sql_db_vars_map) }
+    getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, template, sql_db_vars_map) }
+    getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, template, sql_db_vars_map) }
 
     # Chillers
     clg_tower_objs = getCoolingTowerSingleSpeeds
-    getChillerElectricEIRs.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj, template, clg_tower_objs) }
+    getChillerElectricEIRs.sort.each { |obj| chiller_electric_eir_apply_efficiency_and_curves(obj, template, clg_tower_objs) }
 
     # Boilers
-    getBoilerHotWaters.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj, template) }
+    getBoilerHotWaters.sort.each { |obj| boiler_hot_water_apply_efficiency_and_curves(obj, template) }
 
     # Water Heaters
     getWaterHeaterMixeds.sort.each { |obj| water_heater_mixed_apply_efficiency(obj, template) }
 
     # Cooling Towers
-    getCoolingTowerSingleSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj, template) }
-    getCoolingTowerTwoSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj, template) }
+    getCoolingTowerSingleSpeeds.sort.each { |obj| cooling_tower_single_speed_apply_efficiency_and_curves(obj, template) }
+    getCoolingTowerTwoSpeeds.sort.each { |obj| cooling_tower_two_speed_apply_efficiency_and_curves(obj, template) }
     getCoolingTowerVariableSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj, template) }
 
     # ERVs
-    getHeatExchangerAirToAirSensibleAndLatents.each { |obj| water_heater_mixed_apply_efficiency(obj, template) }
+    getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj, template) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
@@ -2081,7 +2085,7 @@ class StandardsModel < OpenStudio::Model::Model
       # "For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004', infiltration rates are not defined using this method, no changes have been made to the model.
     else
       # Remove infiltration rates set at the space type. Kind of redundant for NECB 2011
-      getSpaceTypes.each do |space_type|
+      getSpaceTypes.sort.each do |space_type|
         space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
       end
     end
@@ -2333,10 +2337,10 @@ class StandardsModel < OpenStudio::Model::Model
   # @param [string] name
   # @return schedule
   def model_add_constant_schedule_ruleset(model, value,name = nil)
-    schedule = OpenStudio::Model::ScheduleRuleset.new(self)
+    schedule = OpenStudio::Model::ScheduleRuleset.new(model)
     if not name.nil?
       schedule.setName(name)
-      schedule.defaultDaySchedule.setName("#{name} Default")
+      schedule.defaultDaySchedule.setName("#{model.name} Default")
     end
     schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
 
@@ -2352,7 +2356,7 @@ class StandardsModel < OpenStudio::Model::Model
   def model_add_schedule(model, schedule_name)
     return nil if schedule_name.nil? || schedule_name == ''
     # First check model and return schedule if it already exists
-    getSchedules.each do |schedule|
+    getSchedules.sort.each do |schedule|
       if schedule.name.get.to_s == schedule_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added schedule: #{schedule_name}")
         return schedule
@@ -2371,7 +2375,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Make a schedule ruleset
-    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(self)
+    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
     sch_ruleset.setName(schedule_name.to_s)
 
     # Loop through the rules, making one for each row in the spreadsheet
@@ -2393,7 +2397,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       # Winter Design Day
       if day_types.include?('WntrDsn')
-        day_sch = OpenStudio::Model::ScheduleDay.new(self)
+        day_sch = OpenStudio::Model::ScheduleDay.new(model)
         sch_ruleset.setWinterDesignDaySchedule(day_sch)
         day_sch = sch_ruleset.winterDesignDaySchedule
         day_sch.setName("#{schedule_name} Winter Design Day")
@@ -2402,7 +2406,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       # Summer Design Day
       if day_types.include?('SmrDsn')
-        day_sch = OpenStudio::Model::ScheduleDay.new(self)
+        day_sch = OpenStudio::Model::ScheduleDay.new(model)
         sch_ruleset.setSummerDesignDaySchedule(day_sch)
         day_sch = sch_ruleset.summerDesignDaySchedule
         day_sch.setName("#{schedule_name} Summer Design Day")
@@ -2463,7 +2467,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @todo make return an OptionalMaterial
   def model_add_material(model, material_name)
     # First check model and return material if it already exists
-    getMaterials.each do |material|
+    getMaterials.sort.each do |material|
       if material.name.get.to_s == material_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added material: #{material_name}")
         return material
@@ -2483,7 +2487,7 @@ class StandardsModel < OpenStudio::Model::Model
     material_type = data['material_type']
 
     if material_type == 'StandardOpaqueMaterial'
-      material = OpenStudio::Model::StandardOpaqueMaterial.new(self)
+      material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
       material.setName(material_name)
 
       material.setRoughness(data['roughness'].to_s)
@@ -2496,7 +2500,7 @@ class StandardsModel < OpenStudio::Model::Model
       material.setVisibleAbsorptance(data['visible_absorptance'].to_f)
 
     elsif material_type == 'MasslessOpaqueMaterial'
-      material = OpenStudio::Model::MasslessOpaqueMaterial.new(self)
+      material = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
       material.setName(material_name)
       material.setThermalResistance(OpenStudio.convert(data['resistance'].to_f, 'hr*ft^2*R/Btu', 'm^2*K/W').get)
 
@@ -2508,20 +2512,20 @@ class StandardsModel < OpenStudio::Model::Model
       material.setVisibleAbsorptance(data['visible_absorptance'].to_f)
 
     elsif material_type == 'AirGap'
-      material = OpenStudio::Model::AirGap.new(self)
+      material = OpenStudio::Model::AirGap.new(model)
       material.setName(material_name)
 
       material.setThermalResistance(OpenStudio.convert(data['resistance'].to_f, 'hr*ft^2*R/Btu*in', 'm*K/W').get)
 
     elsif material_type == 'Gas'
-      material = OpenStudio::Model::Gas.new(self)
+      material = OpenStudio::Model::Gas.new(model)
       material.setName(material_name)
 
       material.setThickness(OpenStudio.convert(data['thickness'].to_f, 'in', 'm').get)
       material.setGasType(data['gas_type'].to_s)
 
     elsif material_type == 'SimpleGlazing'
-      material = OpenStudio::Model::SimpleGlazing.new(self)
+      material = OpenStudio::Model::SimpleGlazing.new(model)
       material.setName(material_name)
 
       material.setUFactor(OpenStudio.convert(data['u_factor'].to_f, 'Btu/hr*ft^2*R', 'W/m^2*K').get)
@@ -2529,7 +2533,7 @@ class StandardsModel < OpenStudio::Model::Model
       material.setVisibleTransmittance(data['visible_transmittance'].to_f)
 
     elsif material_type == 'StandardGlazing'
-      material = OpenStudio::Model::StandardGlazing.new(self)
+      material = OpenStudio::Model::StandardGlazing.new(model)
       material.setName(material_name)
 
       material.setOpticalDataType(data['optical_data_type'].to_s)
@@ -2564,7 +2568,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @todo make return an OptionalConstruction
   def model_add_construction(model, construction_name, construction_props = nil)
     # First check model and return construction if it already exists
-    getConstructions.each do |construction|
+    getConstructions.sort.each do |construction|
       if construction.name.get.to_s == construction_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added construction: #{construction_name}")
         return construction
@@ -2581,7 +2585,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Make a new construction and set the standards details
-    construction = OpenStudio::Model::Construction.new(self)
+    construction = OpenStudio::Model::Construction.new(model)
     construction.setName(construction_name)
     standards_info = construction.standardsInformation
 
@@ -2663,9 +2667,9 @@ class StandardsModel < OpenStudio::Model::Model
     if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
       # Return an empty construction
-      construction = OpenStudio::Model::Construction.new(self)
+      construction = OpenStudio::Model::Construction.new(model)
       construction.setName('Could not find construction properties set to Adiabatic ')
-      almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(self, 'Smooth', 500)
+      almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 500)
       construction.insertLayer(0, almost_adiabatic)
       return construction
     else
@@ -2676,7 +2680,7 @@ class StandardsModel < OpenStudio::Model::Model
     if props['construction'].nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No typical construction is specified for construction properties of: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.  Make sure it is entered in the spreadsheet.")
       # Return an empty construction
-      construction = OpenStudio::Model::Construction.new(self)
+      construction = OpenStudio::Model::Construction.new(model)
       construction.setName('No typical construction was specified')
       return construction
     end
@@ -2715,11 +2719,11 @@ class StandardsModel < OpenStudio::Model::Model
     name = model_make_name(model, template, clim, building_type, spc_type)
 
     # Create a new construction set and name it
-    construction_set = OpenStudio::Model::DefaultConstructionSet.new(self)
+    construction_set = OpenStudio::Model::DefaultConstructionSet.new(model)
     construction_set.setName(name)
 
     # Exterior surfaces constructions
-    exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
+    exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
     if data['exterior_floor_standards_construction_type'] && data['exterior_floor_building_category']
       exterior_surfaces.setFloorConstruction(find_and_add_construction(template,
@@ -2744,7 +2748,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Interior surfaces constructions
-    interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
+    interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultInteriorSurfaceConstructions(interior_surfaces)
     construction_name = data['interior_floors']
     unless construction_name.nil?
@@ -2760,7 +2764,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Ground contact surfaces constructions
-    ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
+    ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
     if data['ground_contact_floor_standards_construction_type'] && data['ground_contact_floor_building_category']
       ground_surfaces.setFloorConstruction(find_and_add_construction(template,
@@ -2786,7 +2790,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Exterior sub surfaces constructions
-    exterior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(self)
+    exterior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(model)
     construction_set.setDefaultExteriorSubSurfaceConstructions(exterior_subsurfaces)
     if data['exterior_fixed_window_standards_construction_type'] && data['exterior_fixed_window_building_category']
       exterior_subsurfaces.setFixedWindowConstruction(find_and_add_construction(template,
@@ -2835,7 +2839,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Interior sub surfaces constructions
-    interior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(self)
+    interior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(model)
     construction_set.setDefaultInteriorSubSurfaceConstructions(interior_subsurfaces)
     if (construction_name = data['interior_fixed_windows'])
       interior_subsurfaces.setFixedWindowConstruction(add_construction(construction_name))
@@ -2881,7 +2885,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Make biquadratic curves
     curve_data = model_find_object(model, curve_biquadratics, 'name' => curve_name)
     if curve_data
-      curve = OpenStudio::Model::CurveBiquadratic.new(self)
+      curve = OpenStudio::Model::CurveBiquadratic.new(model)
       curve.setName(curve_data['name'])
       curve.setCoefficient1Constant(curve_data['coeff_1'])
       curve.setCoefficient2x(curve_data['coeff_2'])
@@ -2906,7 +2910,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Make quadratic curves
     curve_data = model_find_object(model, curve_quadratics, 'name' => curve_name)
     if curve_data
-      curve = OpenStudio::Model::CurveQuadratic.new(self)
+      curve = OpenStudio::Model::CurveQuadratic.new(model)
       curve.setName(curve_data['name'])
       curve.setCoefficient1Constant(curve_data['coeff_1'])
       curve.setCoefficient2x(curve_data['coeff_2'])
@@ -2926,7 +2930,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Make cubic curves
     curve_data = model_find_object(model, curve_cubics, 'name' => curve_name)
     if curve_data
-      curve = OpenStudio::Model::CurveCubic.new(self)
+      curve = OpenStudio::Model::CurveCubic.new(model)
       curve.setName(curve_data['name'])
       curve.setCoefficient1Constant(curve_data['coeff_1'])
       curve.setCoefficient2x(curve_data['coeff_2'])
@@ -2947,7 +2951,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Make bicubic curves
     curve_data = model_find_object(model, curve_bicubics, 'name' => curve_name)
     if curve_data
-      curve = OpenStudio::Model::CurveBicubic.new(self)
+      curve = OpenStudio::Model::CurveBicubic.new(model)
       curve.setName(curve_data['name'])
       curve.setCoefficient1Constant(curve_data['coeff_1'])
       curve.setCoefficient2x(curve_data['coeff_2'])
@@ -3168,7 +3172,7 @@ class StandardsModel < OpenStudio::Model::Model
     # map office building type to small medium or large
     if building_type == 'Office' && model_remap_office(model) 
       open_studio_area = getBuilding.floorArea
-      building_type = model_remap_office(self, open_studio_area)
+      building_type = model_remap_office(model, open_studio_area)
     end
 
     results = {}
@@ -3306,7 +3310,7 @@ class StandardsModel < OpenStudio::Model::Model
     constructions = []
 
     # From default construction sets
-    getDefaultConstructionSets.each do |const_set|
+    getDefaultConstructionSets.sort.each do |const_set|
       ext_surfs = const_set.defaultExteriorSurfaceConstructions
       int_surfs = const_set.defaultInteriorSurfaceConstructions
       gnd_surfs = const_set.defaultGroundContactSurfaceConstructions
@@ -3378,7 +3382,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Hard-assigned surfaces
-    getSurfaces.each do |surf|
+    getSurfaces.sort.each do |surf|
       next unless surf.outsideBoundaryCondition == boundary_condition
       surf_type = surf.surfaceType
       if surf_type == 'Floor' || surf_type == 'Wall'
@@ -3390,7 +3394,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Hard-assigned subsurfaces
-    getSubSurfaces.each do |surf|
+    getSubSurfaces.sort.each do |surf|
       next unless surf.outsideBoundaryCondition == boundary_condition
       surf_type = surf.subSurfaceType
       if surf_type == 'FixedWindow' || surf_type == 'OperableWindow'
@@ -3492,7 +3496,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     case template
     when 'NECB 2011'
-      BTAP::Compliance::NECB2011.set_all_construction_sets_to_necb!(self, runner = nil)
+      BTAP::Compliance::NECB2011.set_all_construction_sets_to_necb!(model, runner = nil)
       return true
     else
       case template
@@ -3565,14 +3569,14 @@ class StandardsModel < OpenStudio::Model::Model
     surfaces_to_modify = []
     types_to_modify.each do |boundary_condition, surface_type|
       # Surfaces
-      getSurfaces.each do |surf|
+      getSurfaces.sort.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.surfaceType == surface_type
         surfaces_to_modify << surf
       end
 
       # SubSurfaces
-      getSubSurfaces.each do |surf|
+      getSubSurfaces.sort.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.subSurfaceType == surface_type
         surfaces_to_modify << surf
@@ -3650,7 +3654,7 @@ class StandardsModel < OpenStudio::Model::Model
     total_subsurface_m2 = 0.0
     # Store the space conditioning category for later use
     space_cats = {}
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       wind_area_m2 = 0
@@ -3762,7 +3766,7 @@ class StandardsModel < OpenStudio::Model::Model
       # Determine the factors by which to reduce the window / door area
       mult = fdwr_lim / fdwr
       # Reduce the window area if any of the categories necessary
-      getSpaces.each do |space|
+      getSpaces.sort.each do |space|
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
           # Skip non-outdoor surfaces
@@ -3787,7 +3791,7 @@ class StandardsModel < OpenStudio::Model::Model
       mult_sh_red = wwr_lim / wwr_sh
 
       # Reduce the window area if any of the categories necessary
-      getSpaces.each do |space|
+      getSpaces.sort.each do |space|
         # Determine the space category
         # from the previously stored values
         cat = space_cats[space]
@@ -3853,7 +3857,7 @@ class StandardsModel < OpenStudio::Model::Model
     sh_sky_m2 = 0
     total_roof_m2 = 0.001
     total_subsurface_m2 = 0
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       sky_area_m2 = 0
@@ -3926,7 +3930,7 @@ class StandardsModel < OpenStudio::Model::Model
       mult = srr_lim / srr
 
       # Reduce the subsurface areas
-      getSpaces.each do |space|
+      getSpaces.sort.each do |space|
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
           # Skip non-outdoor surfaces
@@ -3955,7 +3959,7 @@ class StandardsModel < OpenStudio::Model::Model
       # mult_sh_red = srr_lim / srr_sh
 
       # Reduce the skylight area if any of the categories necessary
-      getSpaces.each do |space|
+      getSpaces.sort.each do |space|
         # Determine the space category
         cat = 'NonRes'
         if thermal_zone_residential?(space, template)
@@ -4005,7 +4009,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Bool] true if successful, false if not
   def model_remove_prm_hvac(model)
     # Plant loops
-    getPlantLoops.each do |loop|
+    getPlantLoops.sort.each do |loop|
       # Don't remove service water heating loops
       next if plant_loop_swh_loop?(loop) 
       loop.remove
@@ -4015,7 +4019,7 @@ class StandardsModel < OpenStudio::Model::Model
     getAirLoopHVACs.each(&:remove)
 
     # Zone equipment
-    getThermalZones.each do |zone|
+    getThermalZones.sort.each do |zone|
       zone.equipment.each do |zone_equipment|
         next if zone_equipment.to_FanZoneExhaust.is_initialized
         zone_equipment.remove
@@ -4033,7 +4037,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Bool] returns true if successful, false if not.
   def model_remove_external_shading_devices(model)
     shading_surfaces_removed = 0
-    getShadingSurfaceGroups.each do |shade_group|
+    getShadingSurfaceGroups.sort.each do |shade_group|
       # Skip Site shading
       next if shade_group.shadingSurfaceType == 'Site'
       # Space shading surfaces should be removed
@@ -4070,7 +4074,7 @@ class StandardsModel < OpenStudio::Model::Model
   # Default is 0.3 m ~1ft
   # @return [OpenStudio::Model::BuildingStory] the story
   def model_get_story_for_nominal_z_coordinate(model, minz, tolerance = 0.3)
-    getBuildingStorys.each do |story|
+    getBuildingStorys.sort.each do |story|
       z = building_story_minimum_z_value(story) 
 
       if (minz - z).abs < tolerance
@@ -4079,7 +4083,7 @@ class StandardsModel < OpenStudio::Model::Model
       end
     end
 
-    story = OpenStudio::Model::BuildingStory.new(self)
+    story = OpenStudio::Model::BuildingStory.new(model)
     story.setNominalZCoordinate(minz)
     OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "No story with a min z value of #{minz.round(2)} m +/- #{tolerance} m was found, so a new story called #{story.name} was created.")
 
@@ -4307,7 +4311,7 @@ class StandardsModel < OpenStudio::Model::Model
   def model_validate_standards_spacetypes_in_model(model, template)
     error_string = ''
     # populate search hash
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       unless space.spaceType.empty?
         if space.spaceType.get.standardsSpaceType.empty? || space.spaceType.get.standardsBuildingType.empty?
           error_string << "Space: #{space.name} has SpaceType of #{space.spaceType.get.name} but the standardSpaceType or standardBuildingType  is undefined. Please use an appropriate standardSpaceType for #{template}\n"
@@ -4344,7 +4348,7 @@ class StandardsModel < OpenStudio::Model::Model
     story_hash = {}
 
     # loop through stories
-    self.getBuildingStorys.each do |story|
+    model.getBuildingStorys.sort.each do |story|
 
       # skip of story doesn't have any spaces
       next if story.spaces.size == 0
@@ -4384,7 +4388,7 @@ class StandardsModel < OpenStudio::Model::Model
 
           # update count of ground wall areas
           next if not surface.surfaceType == "Wall"
-          next if not surface.outsideBoundaryCondition == "Ground" # todo - make more flexible for slab/basement modeling
+          next if not surface.outsideBoundaryCondition == "Ground" # todo - make more flexible for slab/basement model.modeling
           story_ground_wall_area += surface.grossArea
 
         end
@@ -4434,7 +4438,7 @@ class StandardsModel < OpenStudio::Model::Model
     above_grade = 0
 
     # call model_create_story_hash(model) 
-    story_hash = model_create_story_hash(self) 
+    story_hash = model_create_story_hash(model) 
 
     story_hash.each do |story,hash|
 
@@ -4472,7 +4476,7 @@ class StandardsModel < OpenStudio::Model::Model
     typical_class_size = 20.0
 
     space_type_hash = {}
-    self.getSpaceTypes.sort.each do |space_type|
+    model.getSpaceTypes.sort.each do |space_type|
 
       # get standards info
       stds_bldg_type = space_type.standardsBuildingType
@@ -4576,7 +4580,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @author Julien Marrec
   def model_apply_baseline_swh_loops(model, template, building_type)
 
-    getPlantLoops.each do |plant_loop|
+    getPlantLoops.sort.each do |plant_loop|
       # Skip non service water heating loops
       next unless plant_loop_swh_loop?(plant_loop) 
 
@@ -4614,7 +4618,7 @@ class StandardsModel < OpenStudio::Model::Model
 
         end
 
-        water_heater = OpenStudio::Model::WaterHeaterMixed.new(self)
+        water_heater = OpenStudio::Model::WaterHeaterMixed.new(model)
         water_heater.setName("Baseline Water Heater")
         water_heater.setHeaterMaximumCapacity(total_heating_capacity)
         water_heater.setTankVolume(storage_capacity)
@@ -4651,7 +4655,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Set the water heater fuel types if it's 90.1-2013
-    getWaterHeaterMixeds.each do |water_heater|
+    getWaterHeaterMixeds.sort.each do |water_heater|
       water_heater_mixed_apply_prm_baseline_fuel_type(water_heater, template, building_type)
     end
     
@@ -4669,7 +4673,7 @@ class StandardsModel < OpenStudio::Model::Model
   def model_temp_fix_ems_references(model)
 
     # Internal Variables
-    getEnergyManagementSystemInternalVariables.each do |var|
+    getEnergyManagementSystemInternalVariables.sort.each do |var|
       # Get the reference field value
       ref = var.internalDataIndexKeyName
       # Convert to UUID

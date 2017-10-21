@@ -55,7 +55,7 @@ class StandardsModel < OpenStudio::Model::Model
       elsif dxcoil.autosizedSpeed4GrossRatedTotalCoolingCapacity.is_initialized
         clg_capacity = dxcoil.autosizedSpeed4GrossRatedTotalCoolingCapacity.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{name} capacity is not available, cannot apply efficiency standard.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
         successfully_set_all_properties = false
         return successfully_set_all_properties
       end
@@ -71,7 +71,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Check to make sure properties were found
     if hp_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultipeed', "For #{name}, cannot find efficiency info, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultipeed', "For #{coil_heating_dx_multi_speed.name}, cannot find efficiency info, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
@@ -84,7 +84,7 @@ class StandardsModel < OpenStudio::Model::Model
         istage.setHeatingCapacityFunctionofTemperatureCurve(heat_cap_ft)
       end
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{name}, cannot find heat_cap_ft curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name}, cannot find heat_cap_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
@@ -95,7 +95,7 @@ class StandardsModel < OpenStudio::Model::Model
         istage.setHeatingCapacityFunctionofFlowFractionCurve(heat_cap_fflow)
       end
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{name}, cannot find heat_cap_fflow curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name}, cannot find heat_cap_fflow curve, will not be set.")
       successfully_set_all_properties = false
     end
 
@@ -106,7 +106,7 @@ class StandardsModel < OpenStudio::Model::Model
         istage.setEnergyInputRatioFunctionofTemperatureCurve(heat_eir_ft)
       end
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{name}, cannot find heat_eir_ft curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name}, cannot find heat_eir_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
@@ -117,7 +117,7 @@ class StandardsModel < OpenStudio::Model::Model
         istage.setEnergyInputRatioFunctionofFlowFractionCurve(heat_eir_fflow)
       end
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{name}, cannot find heat_eir_fflow curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name}, cannot find heat_eir_fflow curve, will not be set.")
       successfully_set_all_properties = false
     end
 
@@ -128,7 +128,7 @@ class StandardsModel < OpenStudio::Model::Model
         istage.setPartLoadFractionCorrelationCurve(heat_plf_fplr)
       end
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{name}, cannot find heat_plf_fplr curve, will not be set.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name}, cannot find heat_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false
     end
 
@@ -142,7 +142,7 @@ class StandardsModel < OpenStudio::Model::Model
       elsif autosizedSpeed4GrossRatedHeatingCapacity.is_initialized
         htg_capacity = autosizedSpeed4GrossRatedHeatingCapacity.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{name} capacity is not available, cannot apply efficiency standard.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
         successfully_set_all_properties = false
         return successfully_set_all_properties
       end
@@ -151,7 +151,7 @@ class StandardsModel < OpenStudio::Model::Model
       elsif autosizedSpeed4RatedAirFlowRate.is_initialized
         flow_rate4 = autosizedSpeed4RatedAirFlowRate.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{name} capacity is not available, cannot apply efficiency standard.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
         successfully_set_all_properties = false
         return successfully_set_all_properties
       end
@@ -168,16 +168,16 @@ class StandardsModel < OpenStudio::Model::Model
     unless hp_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = hp_props['minimum_seasonal_energy_efficiency_ratio']
       cop = seer_to_cop(min_seer)
-      setName("#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{template}: #{name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+      setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{template}: #{coil_heating_dx_multi_speed.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # If specified as EER
     unless hp_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = hp_props['minimum_energy_efficiency_ratio']
       cop = eer_to_cop(min_eer)
-      setName("#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER")
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{template}: #{name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+      setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{template}: #{coil_heating_dx_multi_speed.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # Set the efficiency values

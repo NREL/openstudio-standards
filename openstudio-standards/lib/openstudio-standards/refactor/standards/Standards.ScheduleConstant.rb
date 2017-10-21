@@ -8,7 +8,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @author Andrew Parker, NREL
   # return [Double] The total number of full load hours for this schedule
   def schedule_constant_annual_equivalent_full_load_hrs(schedule_constant)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "Calculating total annual EFLH for schedule: #{name}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "Calculating total annual EFLH for schedule: #{schedule_constant.name}")
 
     return annual_flh = value * 8760
   end
