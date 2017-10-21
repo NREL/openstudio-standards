@@ -97,11 +97,11 @@ class StandardsModel < OpenStudio::Model::Model
   # Determines whether there is a requirement to have a
   # VSD or some other method to reduce fan power
   # at low part load ratios.
-  def fan_variable_volume_part_load_fan_power_limitation?(fan_variable_volume, template)
+  def fan_variable_volume_part_load_fan_power_limitation?(fan_variable_volume)
      part_load_control_required = false
 
     # Not required by the old vintages
-    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011'
+    if @@template == 'DOE Ref Pre-1980' || @@template == 'DOE Ref 1980-2004' || @@template == 'NECB 2011'
       return part_load_control_required
     end
 

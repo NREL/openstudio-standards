@@ -1,7 +1,7 @@
 
 # open the class to add methods to return sizing values
 class StandardsModel < OpenStudio::Model::Model
-  def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage, template, standards)
+  def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage, standards)
     successfully_set_all_properties = true
 
     # Get the coil capacity
@@ -18,7 +18,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Set number of stages for NECB 2011
-    if template == 'NECB 2011'
+    if @@template == 'NECB 2011'
       num_stages = (capacity_w / (66.0 * 1000.0) + 0.5).round
       num_stages = [num_stages, 4].min
       stage_cap = []

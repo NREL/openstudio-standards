@@ -17,7 +17,7 @@ module CoolingTower
   #
   # @param template [String] the template base requirements on
   # @return [Bool] true if successful, false if not
-  def cooling_tower_apply_minimum_power_per_flow(cooling_tower, template)
+  def cooling_tower_apply_minimum_power_per_flow(cooling_tower)
     # Get the design water flow rate
     design_water_flow_m3_per_s = nil
     if cooling_tower.designWaterFlowRate.is_initialized
@@ -94,7 +94,7 @@ module CoolingTower
 
     # Assuming all fan motors are 4-pole Enclosed
     search_criteria = {
-      'template' => template,
+      'template' => @@template,
       'number_of_poles' => 4.0,
       'type' => 'Enclosed'
     }

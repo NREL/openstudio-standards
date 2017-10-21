@@ -102,9 +102,9 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] full load efficiency (COP)
-  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, template, rename=false)
+  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename=false)
     # find ac properties
-    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, template)
+    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed)
     sub_category = search_criteria['subcategory']
     suppl_heating_type = search_criteria['heating_type']
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed) 
@@ -145,7 +145,7 @@ class StandardsModel < OpenStudio::Model::Model
       min_hspf = ac_props['minimum_heating_seasonal_performance_factor']
       cop = hspf_to_cop_heating_no_fan(min_hspf)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_hspf.round(1)}HSPF"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{@@template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
     end
 
     # If specified as COPH
@@ -153,7 +153,7 @@ class StandardsModel < OpenStudio::Model::Model
       min_coph = ac_props['minimum_coefficient_of_performance_heating']
       cop = cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_coph.round(1)}COPH"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{@@template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph}")
     end
 
     # If specified as EER
@@ -161,7 +161,7 @@ class StandardsModel < OpenStudio::Model::Model
       min_eer = ac_props['minimum_energy_efficiency_ratio']
       cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_eer.round(1)}EER"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{@@template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # Rename
@@ -172,11 +172,11 @@ class StandardsModel < OpenStudio::Model::Model
     return cop
   end
 
-  def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, template, sql_db_vars_map)
+  def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map)
     successfully_set_all_properties = true
 
     # Get the search criteria
-    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, template)
+    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed)
 
     # Get the capacity
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed) 
@@ -242,7 +242,7 @@ class StandardsModel < OpenStudio::Model::Model
     orig_name = coil_heating_dx_single_speed.name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, template, true)
+    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, true)
 
     # Map the original name to the new name
     sql_db_vars_map[coil_heating_dx_single_speed.name.to_s] = orig_name

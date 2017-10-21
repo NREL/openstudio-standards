@@ -5,7 +5,7 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Bool] true if successful, false if not
-  def coil_heating_dx_multi_speed_apply_efficiency_and_curves(coil_heating_dx_multi_speed, template, sql_db_vars_map)
+  def coil_heating_dx_multi_speed_apply_efficiency_and_curves(coil_heating_dx_multi_speed, sql_db_vars_map)
     successfully_set_all_properties = true
 
     # Define the criteria to find the unitary properties
@@ -135,7 +135,7 @@ class StandardsModel < OpenStudio::Model::Model
     # For NECB the heat pump needs only one stage
     htg_capacity = nil
     flow_rate4 = nil
-    if template == 'NECB 2011'
+    if @@template == 'NECB 2011'
       htg_stages = stages
       if htg_stages.last.grossRatedHeatingCapacity.is_initialized
         htg_capacity = htg_stages.last.grossRatedHeatingCapacity.get
@@ -169,7 +169,7 @@ class StandardsModel < OpenStudio::Model::Model
       min_seer = hp_props['minimum_seasonal_energy_efficiency_ratio']
       cop = seer_to_cop(min_seer)
       setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{template}: #{coil_heating_dx_multi_speed.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{@@template}: #{coil_heating_dx_multi_speed.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # If specified as EER
@@ -177,7 +177,7 @@ class StandardsModel < OpenStudio::Model::Model
       min_eer = hp_props['minimum_energy_efficiency_ratio']
       cop = eer_to_cop(min_eer)
       setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER")
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{template}: #{coil_heating_dx_multi_speed.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{@@template}: #{coil_heating_dx_multi_speed.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # Set the efficiency values
