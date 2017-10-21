@@ -9,7 +9,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
-  def water_heater_mixed_apply_efficiency(water_heater_mixed)
+  def water_heater_mixed_apply_efficiency(water_heater_mixed, template)
     # Get the capacity of the water heater
     # TODO add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
@@ -186,14 +186,14 @@ class StandardsModel < OpenStudio::Model::Model
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
 
     # set part-load performance curve
-    if @@template == 'NECB 2011' && fuel_type == 'NaturalGas'
+    if template == 'NECB 2011' && fuel_type == 'NaturalGas'
       plf_vs_plr_curve = model_add_curve(model, 'SWH-EFFFPLR-NECB2011')
       water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
     end
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{@@template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
 
     return true
   end
@@ -206,11 +206,11 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param building_type [String] the building type
   # @return [Bool] returns true if successful, false if not.
-  def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, building_type)
+  def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, template, building_type)
     # For all standards except 90.1-2013
     # baseline is same as proposed per
     # Table G3.1 item 11.b
-    unless @@template == '90.1-2013'
+    unless template == '90.1-2013'
       return true
     end
 

@@ -356,14 +356,14 @@ class StandardsModel < OpenStudio::Model::Model
   # it will be assumed nonresidential.
   #
   # return [Bool] true if residential, false if nonresidential
-  def thermal_zone_residential?(thermal_zone)
+  def thermal_zone_residential?(thermal_zone, template)
     # Determine the respective areas
     res_area_m2 = 0
     nonres_area_m2 = 0
     spaces.each do |space|
       # Ignore space if not part of total area
       next unless space.partofTotalFloorArea
-      if space_residential?(space)
+      if space_residential?(space, template)
         res_area_m2 += space.floorArea
       else
         nonres_area_m2 += space.floorArea
@@ -1007,7 +1007,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @param climate_zone [String] climate zone
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces
-  def thermal_zone_conditioning_category(thermal_zone, climate_zone)
+  def thermal_zone_conditioning_category(thermal_zone, template, climate_zone)
     # Get the heating load
     htg_load_btu_per_ft2 = 0.0
     htg_load_w_per_m2 = heatingDesignLoad
@@ -1061,7 +1061,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Determine if residential
     res = false
-    if thermal_zone_residential?(thermal_zone)
+    if thermal_zone_residential?(thermal_zone, template)
       res = true
     end
 
@@ -1310,8 +1310,8 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @return [String] the occupancy type category
   # @todo Add public assembly building types
-  def thermal_zone_occupancy_type(thermal_zone)
-    occ_type = if thermal_zone_residential?(thermal_zone)
+  def thermal_zone_occupancy_type(thermal_zone, template)
+    occ_type = if thermal_zone_residential?(thermal_zone, template)
                  'residential'
                else
                  'nonresidential'
@@ -1319,7 +1319,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Based on the space type that
     # represents a majority of the zone.
-    if @@template == '90.1-2013'
+    if template == '90.1-2013'
       space_type = thermal_zone_majority_space_type(thermal_zone) 
       if space_type.is_initialized
         space_type = space_type.get
@@ -1349,11 +1349,11 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for 90.1-2013
   #   for cells, sickrooms, labs, barbers, salons, and bowling alleys
-  def thermal_zone_demand_control_ventilation_required?(thermal_zone, climate_zone)
+  def thermal_zone_demand_control_ventilation_required?(thermal_zone, template, climate_zone)
     dcv_required = false
 
     # Not required by the old vintages
-    if @@template == 'DOE Ref Pre-1980' || @@template == 'DOE Ref 1980-2004' || @@template == 'NECB 2011'
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011'
       return dcv_required
     end
 
@@ -1411,7 +1411,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @param template [String] Valid choices are
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
   # @todo - Combine availability and fraction flow schedule to make zone mixing schedule
-  def thermal_zone_add_exhaust(thermal_zone,exhaust_makeup_inputs = {})
+  def thermal_zone_add_exhaust(thermal_zone, template,exhaust_makeup_inputs = {})
 
     exhaust_fans = {} # key is primary exhaust value is hash of arrays of secondary objects
 
@@ -1446,7 +1446,7 @@ class StandardsModel < OpenStudio::Model::Model
         floor_area_ip = OpenStudio.convert(floor_area,'m^2','ft^2').get
       end
 
-      space_type_properties = space_type_get_standards_data(space_type)
+      space_type_properties = space_type_get_standards_data(space_type, template)
       exhaust_per_area = space_type_properties['exhaust_per_area']
       next if exhaust_per_area.nil?
       maximum_flow_rate_ip = exhaust_per_area * floor_area_ip
@@ -1476,7 +1476,7 @@ class StandardsModel < OpenStudio::Model::Model
       zone_exhaust_fan.apply_prototype_fan_pressure_rise
 
       # update efficiency and pressure rise
-      zone_exhaust_fan.apply_prototype_fan_efficiency()
+      zone_exhaust_fan.apply_prototype_fan_efficiency(template)
 
       # add and alter objectxs related to zone exhaust makeup air
       if exhaust_makeup_inputs.has_key?(makeup_target) and exhaust_makeup_inputs[makeup_target][:source_zone]
@@ -1548,7 +1548,7 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param template [String] Valid choices are
   # @return [Bool] returns true if DCV is required for exhaust fan for specified tempate
-  def thermal_zone_exhaust_fan_dcv_required?(thermal_zone)
+  def thermal_zone_exhaust_fan_dcv_required?(thermal_zone, template)
 
   end
 

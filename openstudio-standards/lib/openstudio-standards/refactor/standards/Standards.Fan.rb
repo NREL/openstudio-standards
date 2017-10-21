@@ -2,9 +2,9 @@
 # A variety of fan calculation methods that are the same regardless of fan type.
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
 module Fan
-  def fan_apply_standard_minimum_motor_efficiency(fan, allowed_bhp)
+  def fan_apply_standard_minimum_motor_efficiency(fan, template, allowed_bhp)
     # Find the motor efficiency
-    motor_eff, nominal_hp = fan_standard_minimum_motor_efficiency_and_size(fan, allowed_bhp)
+    motor_eff, nominal_hp = fan_standard_minimum_motor_efficiency_and_size(fan, template, allowed_bhp)
 
     # Change the motor efficiency
     # but preserve the existing fan impeller
@@ -180,7 +180,7 @@ module Fan
   #
   # @return [Double] impeller efficiency (0.0 to 1.0)
   # @todo Add fan type to data model and modify this method
-  def fan_baseline_impeller_efficiency(fan)
+  def fan_baseline_impeller_efficiency(fan, template)
     # Assume that the fan efficiency is 65% for normal fans
     # and 55% for small fans (like exhaust fans).
     # TODO add fan type to fan data model
@@ -208,7 +208,7 @@ module Fan
   #
   # @param motor_bhp [Double] motor brake horsepower (hp)
   # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
-  def fan_standard_minimum_motor_efficiency_and_size(fan, motor_bhp)
+  def fan_standard_minimum_motor_efficiency_and_size(fan, template, motor_bhp)
     fan_motor_eff = 0.85
     nominal_hp = motor_bhp
 
@@ -224,7 +224,7 @@ module Fan
 
     # Assuming all fan motors are 4-pole ODP
     template_mod = template.dup
-    if @@template == 'NECB 2011'
+    if template == 'NECB 2011'
 
       if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
         template_mod += '-CONSTANT'
@@ -254,7 +254,7 @@ module Fan
     end
 
     search_criteria = {
-      'template' => @@template_mod,
+      'template' => template_mod,
       'number_of_poles' => 4.0,
       'type' => 'Enclosed'
     }
