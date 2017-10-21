@@ -18,6 +18,9 @@ def compare_osm_files(model_true, model_compare)
   
   # Define types of objects to skip entirely during the comparison
   object_types_to_skip = [
+    'OS:EnergyManagementSystem:Sensor', # Names are UIDs
+    'OS:EnergyManagementSystem:Program', # Names are UIDs
+    'OS:EnergyManagementSystem:Actuator', # Names are UIDs
     'OS:Connection', # Names are UIDs
     'OS:PortList', # Names are UIDs
     'OS:Building' # Name includes timestamp of creation
@@ -97,6 +100,10 @@ def compare_osm_files(model_true, model_compare)
       next if field_name.include?('Outlet Node')
       next if field_name.include?('Port List')
       
+      # Don't compare the names of schedule type limits
+      # because they appear to be created non-deteministically
+      next if field_name.include?('Schedule Type Limits Name')
+      
       # Get the value from the true object
       true_value = ""
       if i < true_object_num_fields
@@ -111,6 +118,10 @@ def compare_osm_files(model_true, model_compare)
       end
       compare_value = "-" if compare_value.empty?
       
+      # Round long numeric fields
+      true_value = true_value.to_f.round(5) unless true_value.to_f.zero?
+      compare_value = compare_value.to_f.round(5) unless compare_value.to_f.zero?
+
       # Move to the next field if no difference was found
       next if true_value == compare_value
 
