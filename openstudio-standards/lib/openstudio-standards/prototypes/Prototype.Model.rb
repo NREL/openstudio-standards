@@ -729,7 +729,7 @@ class OpenStudio::Model::Model
     spc_type = nil
     spc_type = "WholeBuilding" if template == 'NECB 2011'
     bldg_def_const_set = add_construction_set(template, climate_zone, lookup_building_type, spc_type, is_residential)
-    puts bldg_def_const_set
+    
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
     else
