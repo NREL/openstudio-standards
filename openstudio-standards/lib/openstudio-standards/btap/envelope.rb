@@ -92,8 +92,8 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_thermal_mass_definitions( model )
-        model.getInternalMassDefinitions.each { |item| item.remove }
-        model.getInternalMasss.each { |item| item.remove }
+        model.getInternalMassDefinitions.sort.each { |item| item.remove }
+        model.getInternalMasss.sort.each { |item| item.remove }
       end
 
       #This method removes all envelope information from model.
@@ -112,7 +112,7 @@ module BTAP
 
 
       def self.set_all_surfaces_to_default_construction( model )
-        model.getPlanarSurfaces.each { |item| item.resetConstruction }
+        model.getPlanarSurfaces.sort.each { |item| item.resetConstruction }
       end
 
 
@@ -1001,7 +1001,7 @@ module BTAP
             return false
           end
           #sets all surfaces to use default constructions except adiabatic, where it does a hard assignment of the interior wall construction type. 
-          model.getPlanarSurfaces.each { |item| item.resetConstruction }
+          model.getPlanarSurfaces.sort.each { |item| item.resetConstruction }
           #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
           BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces( model, runner)
           BTAP::runner_register("Info","set_construction_set_by_file(#{construction_library_file}, #{construction_set_name}) Completed Sucessfully.")

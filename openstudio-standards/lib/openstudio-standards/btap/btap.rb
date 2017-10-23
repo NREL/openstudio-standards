@@ -211,7 +211,7 @@ module BTAP
     #@return [OpenStudio::Model::Model] the OpenStudio model object (self reference).
     def self.clear_output_variables(model)
       #remove existing outputs
-      model.getOutputVariables.each do |object|
+      model.getOutputVariables.sort.each do |object|
         object.remove
       end
       return model

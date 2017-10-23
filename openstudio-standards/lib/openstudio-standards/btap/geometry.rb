@@ -25,7 +25,7 @@ module BTAP
       #enumerate stories.
       BTAP::Geometry::BuildingStoreys::auto_assign_spaces_to_stories(model)
       #Enumerate spaces
-      model.getBuildingStorys.each do |story|
+      model.getBuildingStorys.sort.each do |story|
         spaces = Array.new
         spaces.concat( story.spaces )
         spaces.sort! do |a, b|
@@ -50,7 +50,7 @@ module BTAP
     def self.rename_zones_based_on_spaces(model)
 
       # loop through thermal zones
-      model.getThermalZones.each do |thermal_zone| # this is going through all, not just selection
+      model.getThermalZones.sort.each do |thermal_zone| # this is going through all, not just selection
         #puts "old zone name : #{thermal_zone.name}"
         # reset the array of spaces to be empty
         spaces_in_thermal_zone = []
@@ -2111,8 +2111,8 @@ module BTAP
       end
     end
     def self.match_surfaces(model)
-      model.getSpaces.each do |space1|
-        model.getSpaces.each do |space2|
+      model.getSpaces.sort.each do |space1|
+        model.getSpaces.sort.each do |space2|
           space1.matchSurfaces(space2)
         end
       end
@@ -2120,8 +2120,8 @@ module BTAP
     end
 
     def self.intersect_surfaces(model)
-      model.getSpaces.each do |space1|
-        model.getSpaces.each do |space2|
+      model.getSpaces.sort.each do |space1|
+        model.getSpaces.sort.each do |space2|
           space1.intersectSurfaces(space2)
         end
       end
@@ -2191,10 +2191,10 @@ module BTAP
       # the z-axis origin of the space.
       def self.auto_assign_spaces_to_stories(model)
         #delete existing stories.
-        model.getBuildingStorys.each {|buildingstory| buildingstory.remove }
+        model.getBuildingStorys.sort.each {|buildingstory| buildingstory.remove }
         #create hash of building storeys, index is the Z-axis origin of the space.
         building_story_hash = Hash.new()
-        model.getSpaces.each do |space|
+        model.getSpaces.sort.each do |space|
           if building_story_hash[space.zOrigin].nil?
             building_story_hash[space.zOrigin] = OpenStudio::Model::BuildingStory.new(model)
             building_story_hash[space.zOrigin].setName( building_story_hash.length.to_s )
@@ -2261,7 +2261,7 @@ module BTAP
       # find the first story with z coordinate, create one if needed
       def self.getStoryForNominalZCoordinate(model, minz)
   
-        model.getBuildingStorys.each do |story|
+        model.getBuildingStorys.sort.each do |story|
           z = story.nominalZCoordinate
           if not z.empty?
             if minz == z.get
@@ -2277,7 +2277,7 @@ module BTAP
       
       def self.getStoryAboveGround(model)
         count = 0
-        model.getBuildingStorys.each do |story|
+        model.getBuildingStorys.sort.each do |story|
           z = story.nominalZCoordinate
           unless z.empty?
             if z.to_f >= 0
@@ -2292,7 +2292,7 @@ module BTAP
       
       def self.getStoryBelowGround(model)
         count = 0
-        model.getBuildingStorys.each do |story|
+        model.getBuildingStorys.sort.each do |story|
           z = story.nominalZCoordinate
           unless z.empty?
             if z.to_f < 0
@@ -2571,7 +2571,7 @@ module BTAP
       # @return [Array<OpenStudio::Model::ThermalZone] an array of zones
       def self.filter_core_zones(thermal_zones)
         array = Array.new()
-        thermal_zones.getThermalZones.each do |zone|
+        thermal_zones.getThermalZones.sort.each do |zone|
           zone.space.each do |space|
             if not space.is_a_perimeter_space?()
               array.push(zone)

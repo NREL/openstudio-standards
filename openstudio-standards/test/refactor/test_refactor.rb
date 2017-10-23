@@ -11,22 +11,22 @@ class TestRefactor < Minitest::Test
   def test_necb_2011()
 
     building_types = [
-      "FullServiceRestaurant",
-      "Hospital",
-      "HighriseApartment",
-      "LargeHotel",
-      "LargeOffice",
-      "MediumOffice",
-      "MidriseApartment",
-      "Outpatient",
-      "PrimarySchool",
-      "QuickServiceRestaurant",
-      "RetailStandalone",
-      "SecondarySchool",
-      "SmallHotel",
-      "SmallOffice",
-      "RetailStripmall",
-      "Warehouse"
+      "FullServiceRestaurant"#,
+      #"Hospital",
+      #"HighriseApartment",
+      #"LargeHotel",
+      #"LargeOffice",
+      #"MediumOffice",
+      #"MidriseApartment",
+      #"Outpatient",
+      #"PrimarySchool",
+      #"QuickServiceRestaurant",
+      #"RetailStandalone",
+      #"SecondarySchool",
+      #"SmallHotel",
+      #"SmallOffice",
+      #"RetailStripmall",
+      #"Warehouse"
     ]
     templates = ['NECB 2011']
     climate_zones = ['NECB HDD Method']
@@ -98,7 +98,7 @@ class TestRefactor < Minitest::Test
   end
 
 
-  def test_nrel
+  def don_t_test_nrel
     building_types = [
       "FullServiceRestaurant",
       "Hospital",

@@ -122,10 +122,10 @@ class Vintagizer
   def fan_eff()
     #DX Coil COP ECMs
     unless 'default' == cop_info[1]
-      constructions_model.getCoilCoolingDXSingleSpeeds.each do |cooling_coil|
+      constructions_model.getCoilCoolingDXSingleSpeeds.sort.each do |cooling_coil|
         cooling_coil.setRatedCOP( OpenStudio::OptionalDouble.new( cop_info[1][0] ))
       end
-      constructions_model.getCoilCoolingDXTwoSpeeds.each do |cooling_coil|
+      constructions_model.getCoilCoolingDXTwoSpeeds.sort.each do |cooling_coil|
         cooling_coil.setRatedHighSpeedCOP( OpenStudio::OptionalDouble.new( cop_info[1][0] ) )
         cooling_coil.setRatedLowSpeedCOP( OpenStudio::OptionalDouble.new( cop_info[1][0] ))
       end
@@ -137,10 +137,10 @@ class Vintagizer
   def pump_eff()
     #DX Coil COP ECMs
     unless 'default' == cop_info[1]
-      constructions_model.getCoilCoolingDXSingleSpeeds.each do |cooling_coil|
+      constructions_model.getCoilCoolingDXSingleSpeeds.sort.each do |cooling_coil|
         cooling_coil.setRatedCOP( OpenStudio::OptionalDouble.new( cop_info[1][0] ))
       end
-      constructions_model.getCoilCoolingDXTwoSpeeds.each do |cooling_coil|
+      constructions_model.getCoilCoolingDXTwoSpeeds.sort.each do |cooling_coil|
         cooling_coil.setRatedHighSpeedCOP( OpenStudio::OptionalDouble.new( cop_info[1][0] ) )
         cooling_coil.setRatedLowSpeedCOP( OpenStudio::OptionalDouble.new( cop_info[1][0] ))
       end
@@ -152,10 +152,10 @@ class Vintagizer
   def cop()
     #DX Coil COP ECMs
     unless 'default' == cop_info[1]
-      constructions_model.getCoilCoolingDXSingleSpeeds.each do |cooling_coil|
+      constructions_model.getCoilCoolingDXSingleSpeeds.sort.each do |cooling_coil|
         cooling_coil.setRatedCOP( OpenStudio::OptionalDouble.new( cop_info[1][0] ) )
       end
-      constructions_model.getCoilCoolingDXTwoSpeeds.each do |cooling_coil|
+      constructions_model.getCoilCoolingDXTwoSpeeds.sort.each do |cooling_coil|
         cooling_coil.setRatedHighSpeedCOP( OpenStudio::OptionalDouble.new( cop_info[1][0] ) )
         cooling_coil.setRatedLowSpeedCOP( OpenStudio::OptionalDouble.new( cop_info[1][0] ) )
       end
