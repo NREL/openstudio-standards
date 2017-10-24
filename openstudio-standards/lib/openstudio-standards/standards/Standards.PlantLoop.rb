@@ -208,7 +208,7 @@ class OpenStudio::Model::PlantLoop
       # Per https://unmethours.com/question/16698/which-cooling-design-day-is-most-common-for-sizing-rooftop-units/
       # the WB=>MDB day is used to size cooling towers.
       summer_oat_wbs_f = []
-      model.getDesignDays.each do |dd|
+      model.getDesignDays.sort.each do |dd|
         next unless dd.dayType == 'SummerDesignDay'
         next unless dd.name.get.to_s.include?('WB=>MDB')
         if dd.humidityIndicatingType == 'Wetbulb'

@@ -301,13 +301,13 @@ module BTAP
 
 
       def self.remove_all_schedules(model)
-        model.getScheduleBases.each { |item| item.remove }
+        model.getScheduleBases.sort.each { |item| item.remove }
       end
 
 
       def self.create_zonal_occupancy_schedule_on_off(model, thermal_zone)
 
-        model.getFanZoneExhausts.each {|zfe| puts "Fan Ex:#{zfe}"}
+        model.getFanZoneExhausts.sort.each {|zfe| puts "Fan Ex:#{zfe}"}
 
         #Create new timeseries object to keep track of on/off states. Default to 30min intervals.
         timeseries  = OpenStudio::TimeSeries.new
@@ -336,7 +336,7 @@ module BTAP
             model.building.get.defaultScheduleSet.get.numberofPeopleSchedule.get.to_ScheduleRuleset.is_initialized
           occ_schedule = model.building.get.defaultScheduleSet.get.numberofPeopleSchedule.get
           #get building default occupancy schedule.
-          model.getFanZoneExhausts.each do |zfe|
+          model.getFanZoneExhausts.sort.each do |zfe|
             zfe.setAvailabilitySchedule(occ_schedule)
             zfe.setBalancedExhaustFractionSchedule(occ_schedule)
           end

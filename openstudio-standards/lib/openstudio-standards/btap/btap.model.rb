@@ -174,7 +174,7 @@ class OpenStudio::Model::Model
     #remove hvac and only use ideal loads.
     model = self.clone(true).to_Model
     BTAP::Resources::HVAC::clear_all_hvac_from_model(model)
-    model.getThermalZones.each {|zone| zone.setUseIdealAirLoads(true)}
+    model.getThermalZones.sort.each {|zone| zone.setUseIdealAirLoads(true)}
     conductance = 0.200
     models = Array.new()
     #Add baseline
@@ -220,7 +220,7 @@ class OpenStudio::Model::Model
   # Set global changes
   def set_all_ext_wall_conductances_to(conductance)
     #Set conductances to needed values in construction set if possible.
-    self.getDefaultConstructionSets.each_with_index do |default_construction_set, index|
+    self.getDefaultConstructionSets.sort.each_with_index do |default_construction_set, index|
       BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!(
           self,
           "Sensitivity Def Cnst Set #{index}",
@@ -254,7 +254,7 @@ class OpenStudio::Model::Model
       )
     end
     #sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
-    self.getPlanarSurfaces.each {|item| item.resetConstruction}
+    self.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
     #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(self, nil)
     return self
@@ -262,7 +262,7 @@ class OpenStudio::Model::Model
 
   def set_all_ext_roof_conductances_to(conductance)
     #Set conductances to needed values in construction set if possible.
-    self.getDefaultConstructionSets.each_with_index do |default_construction_set, index|
+    self.getDefaultConstructionSets.sort.each_with_index do |default_construction_set, index|
       BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!(
           self,
           "Sensitivity Def Cnst Set #{index}",
@@ -296,7 +296,7 @@ class OpenStudio::Model::Model
       )
     end
     #sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
-    self.getPlanarSurfaces.each {|item| item.resetConstruction}
+    self.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
     #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(self, nil)
     return self
@@ -304,7 +304,7 @@ class OpenStudio::Model::Model
 
   def set_all_ground_wall_conductances_to(conductance)
     #Set conductances to needed values in construction set if possible.
-    self.getDefaultConstructionSets.each_with_index do |default_construction_set, index|
+    self.getDefaultConstructionSets.sort.each_with_index do |default_construction_set, index|
       BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!(
           self,
           "Sensitivity Def Cnst Set #{index}",
@@ -338,7 +338,7 @@ class OpenStudio::Model::Model
       )
     end
     #sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
-    self.getPlanarSurfaces.each {|item| item.resetConstruction}
+    self.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
     #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(self, nil)
     return self
@@ -346,7 +346,7 @@ class OpenStudio::Model::Model
 
   def set_all_ground_floor_conductances_to(conductance)
     #Set conductances to needed values in construction set if possible.
-    self.getDefaultConstructionSets.each_with_index do |default_construction_set, index|
+    self.getDefaultConstructionSets.sort.each_with_index do |default_construction_set, index|
       BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!(
           self,
           "Sensitivity Def Cnst Set #{index}",
@@ -380,7 +380,7 @@ class OpenStudio::Model::Model
       )
     end
     #sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
-    self.getPlanarSurfaces.each {|item| item.resetConstruction}
+    self.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
     #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(self, nil)
     return self
@@ -388,7 +388,7 @@ class OpenStudio::Model::Model
 
   def set_all_ext_windows_and_door_conductances_to(conductance)
     #Set conductances to needed values in construction set if possible.
-    self.getDefaultConstructionSets.each_with_index do |default_construction_set, index|
+    self.getDefaultConstructionSets.sort.each_with_index do |default_construction_set, index|
       BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!(
           self,
           "Sensitivity Def Cnst Set #{index}",
@@ -422,7 +422,7 @@ class OpenStudio::Model::Model
       )
     end
     #sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
-    self.getPlanarSurfaces.each {|item| item.resetConstruction}
+    self.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
     #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(self, nil)
     return self
@@ -430,7 +430,7 @@ class OpenStudio::Model::Model
 
   def set_all_ext_skylight_conductances_to(conductance)
     #Set conductances to needed values in construction set if possible.
-    self.getDefaultConstructionSets.each_with_index do |default_construction_set, index|
+    self.getDefaultConstructionSets.sort.each_with_index do |default_construction_set, index|
       BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!(
           self,
           "Sensitivity Def Cnst Set #{index}",
@@ -464,7 +464,7 @@ class OpenStudio::Model::Model
       )
     end
     #sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
-    self.getPlanarSurfaces.each {|item| item.resetConstruction}
+    self.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
     #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(self, nil)
     return self
@@ -484,7 +484,7 @@ class OpenStudio::Model::Model
                                  setAirChangesperHour)
 
     table = "name,infiltration_method,infiltration_design_flow_rate,infiltration_flow_per_space,infiltration_flow_per_exterior_area,infiltration_air_changes_per_hour\n"
-    self.getSpaceInfiltrationDesignFlowRates.each do |infiltration_load|
+    self.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration_load|
       infiltration_load.setAirChangesperHour(setAirChangesperHour) unless setAirChangesperHour.nil?
       infiltration_load.setDesignFlowRate(setDesignFlowRate) unless setDesignFlowRate.nil?
       infiltration_load.setFlowperSpaceFloorArea(setFlowperSpaceFloorArea) unless setFlowperSpaceFloorArea.nil?
@@ -502,7 +502,7 @@ class OpenStudio::Model::Model
 
   #Scale Global Changes
   def scale_all_people_loads(factor)
-    self.getPeoples.each do |item|
+    self.getPeoples.sort.each do |item|
       item.setMultiplier(item.multiplier * factor)
     end
   end
@@ -520,7 +520,7 @@ class OpenStudio::Model::Model
                                   c_coef,
                                   time_shift = nil,
                                   time_sign = nil)
-    model.getPeoples.each do |item|
+    model.getPeoples.sort.each do |item|
       #Do an in-place modification of the schedule.
       BTAP::Resources::Schedules::modify_schedule!(self, item.schedule, a_coef, b_coef, c_coef, time_shift, time_sign)
     end
@@ -531,7 +531,7 @@ class OpenStudio::Model::Model
   #@param model [OpenStudio::model::Model] A model object
   #@param factor [Float]
   def scale_lighting_loads(factor)
-    self.getLightss.each do |item|
+    self.getLightss.sort.each do |item|
       item.setMultiplier(item.multiplier * factor)
     end
   end
@@ -549,7 +549,7 @@ class OpenStudio::Model::Model
                                     c_coef,
                                     time_shift = nil,
                                     time_sign = nil)
-    model.getLightss.each do |item|
+    model.getLightss.sort.each do |item|
       #Do an in-place modification of the schedule.
       BTAP::Resources::Schedules::modify_schedule!(self, item.schedule, a_coef, b_coef, c_coef, time_shift, time_sign)
     end
@@ -560,7 +560,7 @@ class OpenStudio::Model::Model
   #@param model [OpenStudio::model::Model] A model object
   #@param factor [Float]
   def scale_electrical_loads(model, factor)
-    self.getElectricEquipments.each do |item|
+    self.getElectricEquipments.sort.each do |item|
       item.setMultiplier(item.multiplier * factor)
     end
   end
@@ -578,7 +578,7 @@ class OpenStudio::Model::Model
                                       c_coef,
                                       time_shift = nil,
                                       time_sign = nil)
-    self.getElectricEquipments.each do |item|
+    self.getElectricEquipments.sort.each do |item|
       BTAP::Resources::Schedules::modify_schedule!(self, item.schedule, a_coef, b_coef, c_coef, time_shift, time_sign)
     end
   end
@@ -588,7 +588,7 @@ class OpenStudio::Model::Model
   #@param model [OpenStudio::model::Model] A model object
   #@param factor [Float]
   def scale_oa_loads(factor)
-    self.getDesignSpecificationOutdoorAirs.each do |oa_def|
+    self.getDesignSpecificationOutdoorAirs.sort.each do |oa_def|
       oa_def.setOutdoorAirFlowperPerson(oa_def.getOutdoorAirFlowperPerson * factor) unless oa_def.isOutdoorAirFlowperPersonDefaulted
       oa_def.setOutdoorAirFlowperFloorArea(oa_def.getOutdoorAirFlowperFloorArea * factor) unless oa_def.isOutdoorAirFlowperFloorAreaDefaulted
       oa_def.setOutdoorAirFlowRate(oa_def.getOutdoorAirFlowRate * factor) unless oa_def.isOutdoorAirFlowRateDefaulted
@@ -601,7 +601,7 @@ class OpenStudio::Model::Model
   #@param model [OpenStudio::model::Model] A model object
   #@param factor [Float]
   def scale_inflitration_loads(factor)
-    self.getSpaceInfiltrationDesignFlowRates.each do |infiltration_load|
+    self.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration_load|
       infiltration_load.setDesignFlowRate(infiltration_load.designFlowRate.get * factor) unless infiltration_load.designFlowRate.empty?
       infiltration_load.setFlowperSpaceFloorArea(infiltration_load.flowperSpaceFloorArea.get * factor) unless infiltration_load.flowperSpaceFloorArea.empty?
       infiltration_load.setFlowperExteriorSurfaceArea(infiltration_load.flowperExteriorSurfaceArea.get * factor) unless infiltration_load.flowperExteriorSurfaceArea.empty?
@@ -614,8 +614,8 @@ class OpenStudio::Model::Model
   #@author phylroy.lopez@nrcan.gc.ca
   #@param model [OpenStudio::model::Model] A model object
   def eliminate_all_people_loads()
-    self.getPeoples.each {|people| people.remove}
-    self.getPeopleDefinitions.each {|people| people.remove}
+    self.getPeoples.sort.each {|people| people.remove}
+    self.getPeopleDefinitions.sort.each {|people| people.remove}
     return self
   end
 
@@ -623,8 +623,8 @@ class OpenStudio::Model::Model
   #@author phylroy.lopez@nrcan.gc.ca
   #@param model [OpenStudio::model::Model] A model object
   def eliminate_all_lighting_loads()
-    self.getLightss.each {|item| item.remove}
-    self.getLightsDefinitions.each {|item| item.remove}
+    self.getLightss.sort.each {|item| item.remove}
+    self.getLightsDefinitions.sort.each {|item| item.remove}
     return self
   end
 
@@ -632,8 +632,8 @@ class OpenStudio::Model::Model
   #@author phylroy.lopez@nrcan.gc.ca
   #@param model [OpenStudio::model::Model] A model object
   def eliminate_all_electric_loads()
-    self.getElectricEquipments.each {|item| item.remove}
-    self.getElectricEquipmentDefinitions.each {|item| item.remove}
+    self.getElectricEquipments.sort.each {|item| item.remove}
+    self.getElectricEquipmentDefinitions.sort.each {|item| item.remove}
     return self
   end
 
@@ -641,7 +641,7 @@ class OpenStudio::Model::Model
   #@author phylroy.lopez@nrcan.gc.ca
   #@param model [OpenStudio::model::Model] A model object
   def eliminate_all_design_specification_outdoor_air()
-    self.getDesignSpecificationOutdoorAirs.each {|item| item.remove}
+    self.getDesignSpecificationOutdoorAirs.sort.each {|item| item.remove}
     return self
   end
 
@@ -649,7 +649,7 @@ class OpenStudio::Model::Model
   #@author phylroy.lopez@nrcan.gc.ca
   #@param model [OpenStudio::model::Model] A model object
   def eliminate_all_space_infiltration_design_flow_rates()
-    self.getSpaceInfiltrationDesignFlowRates.each {|item| item.remove}
+    self.getSpaceInfiltrationDesignFlowRates.sort.each {|item| item.remove}
     return self
   end
 

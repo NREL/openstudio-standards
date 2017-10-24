@@ -267,7 +267,7 @@ module BTAP
 
     # Store Space data.
     qaqc[:spaces] =[]
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       spaceinfo = {}
       qaqc[:spaces] << spaceinfo
       spaceinfo[:name] = space.name.get #name should be defined test
@@ -341,7 +341,7 @@ module BTAP
     
     # Store Thermal zone data
     qaqc[:thermal_zones] = [] 
-    model.getThermalZones.each do  |zone|
+    model.getThermalZones.sort.each do  |zone|
       zoneinfo = {}
       qaqc[:thermal_zones] << zoneinfo
       zoneinfo[:name] = zone.name.get
@@ -392,7 +392,7 @@ module BTAP
     end #zone
     # Store Air Loop Information
     qaqc[:air_loops] = []
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       air_loop_info = {}
       air_loop_info[:name] = air_loop.name.get
       air_loop_info[:thermal_zones] = []
@@ -530,7 +530,7 @@ module BTAP
 
 
     qaqc[:plant_loops] = []
-    model.getPlantLoops.each do |plant_loop|
+    model.getPlantLoops.sort.each do |plant_loop|
       plant_loop_info = {}
       qaqc[:plant_loops] << plant_loop_info
       plant_loop_info[:name] = plant_loop.name.get
@@ -725,7 +725,7 @@ end
   
 def get_total_nominal_capacity (model)
   total_nominal_capacity = 0
-  model.getSpaces.each do |space|
+  model.getSpaces.sort.each do |space|
     zone_name = space.thermalZone.get.name.get.upcase
     area = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='InputVerificationandResultsSummary' AND ReportForString='Entire Facility' AND TableName='Zone Summary' AND ColumnName='Area' AND RowName='#{zone_name}'")
     area = validate_optional(area, model, -1)

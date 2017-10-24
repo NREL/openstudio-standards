@@ -31,7 +31,7 @@ module BTAP
       #@param runner [String]
       def self.remove_all_costs(model,runner = nil)
         #Remove all cost items.
-        model.getLifeCycleCosts.each  { |cost_item| cost_item.remove }
+        model.getLifeCycleCosts.sort.each  { |cost_item| cost_item.remove }
         #log change
         message = "Removed all cost objects from model"
         runner.nil? ? puts(message) : runner.registerInfo(message)
@@ -332,7 +332,7 @@ module BTAP
         log = ""
         unless model.getFanVariableVolumes.empty?
           log = "fan_variable_volume_name,fan_total_eff,fan_motor_eff\n"
-          model.getFanVariableVolumes.each do |fan|
+          model.getFanVariableVolumes.sort.each do |fan|
             fan.setFanEfficiency( @fan_total_eff  ) unless @fan_total_eff.nil?
             fan.setMotorEfficiency( @fan_motor_eff  ) unless @fan_motor_eff.nil?
             log  << fan.name.get.to_s << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
@@ -341,7 +341,7 @@ module BTAP
 
         unless model.getFanConstantVolumes.empty?
           log = "fan_constant_volume_name,fan_total_eff,fan_motor_eff\n"
-          model.getFanConstantVolumes.each do |fan|
+          model.getFanConstantVolumes.sort.each do |fan|
             fan.setFanEfficiency(  @fan_total_eff ) unless @fan_total_eff.nil?
             fan.setMotorEfficiency( @fan_motor_eff ) unless @fan_motor_eff.nil?
             log  << fan.name.get.to_s << ",#{fan.fanEfficiency},#{fan.motorEfficiency}\n"
@@ -352,7 +352,7 @@ module BTAP
         case @fan_volume_type
 
         when "VariableVolume"
-          model.getFanConstantVolumes.each do |fan_const|
+          model.getFanConstantVolumes.sort.each do |fan_const|
             #check that this is indeed connected to an airloop.
             log << "Found Const Vol Fan #{fan_const.name.get.to_s}"
             unless fan_const.loop.empty?
@@ -379,7 +379,7 @@ module BTAP
             end
           end
         when "ConstantVolume"
-          model.getFanVariableVolumes.each do |fan|
+          model.getFanVariableVolumes.sort.each do |fan|
             #check that this is indeed connected to an airloop.
             log << "Found Const Vol Fan #{fan.name.get.to_s}"
             unless fan.loop.empty?
@@ -424,7 +424,7 @@ module BTAP
         log = ""
         unless model.getPumpVariableSpeeds.empty?
           log = "pump_variable_speed_name,@pump_motor_eff\n"
-          model.getPumpVariableSpeeds.each do |pump|
+          model.getPumpVariableSpeeds.sort.each do |pump|
             pump.setMotorEfficiency( @pump_motor_eff.to_f ) unless @pump_motor_eff.nil?
             pump.setPumpControlType( @pump_control_type ) unless @pump_control_type.nil?
             log  << pump.name.get.to_s << ",#{pump.motorEfficiency}\n"
@@ -432,7 +432,7 @@ module BTAP
         end
         unless model.getPumpConstantSpeeds.empty?
           log << "pump_variable_speed_name,@pump_motor_eff\n"
-          model.getPumpConstantSpeeds.each do |pump|
+          model.getPumpConstantSpeeds.sort.each do |pump|
             pump.setMotorEfficiency( @pump_motor_eff.to_f  ) unless @pump_motor_eff.nil?
             pump.setPumpControlType( @pump_control_type ) unless @pump_control_type.nil?
             log  << pump.name.get.to_s << ",#{pump.motorEfficiency}\n"
@@ -442,7 +442,7 @@ module BTAP
         #set pump speed type based on existing pump.
         case @pump_speed_type
         when "VariableSpeed"
-          model.getPumpConstantSpeeds.each do |pump_const|
+          model.getPumpConstantSpeeds.sort.each do |pump_const|
             log << "Found Const Vol Fan #{pump_const.name.get.to_s}"
             #check that this is indeed connected to an plant loop.
             unless pump_const.plantLoop.empty?
@@ -467,7 +467,7 @@ module BTAP
             end
           end #end loop PumpConstantSpeeds
         when "ConstantSpeed"
-          model.getPumpVariableSpeeds.each do |pump|
+          model.getPumpVariableSpeeds.sort.each do |pump|
             log << "Found Variable Speed Pump #{pump.name.get.to_s}"
             #check that this is indeed connected to an plant loop.
             unless pump.plantLoop.empty?
@@ -517,7 +517,7 @@ module BTAP
 
         unless model.getCoilCoolingDXSingleSpeeds.empty?
           log = "coil_cooling_dx_single_speed_name,cop\n"
-          model.getCoilCoolingDXSingleSpeeds.each do |cooling_coil|
+          model.getCoilCoolingDXSingleSpeeds.sort.each do |cooling_coil|
             cooling_coil.setRatedCOP( OpenStudio::OptionalDouble.new( @cop ) ) unless @cop.nil?
             cop = "NA"
             cop = cooling_coil.ratedCOP.get unless cooling_coil.ratedCOP.empty?
@@ -528,7 +528,7 @@ module BTAP
 
         unless model.getCoilCoolingDXTwoSpeeds.empty?
           log << "coil_cooling_dx_two_speed_name,cop\n"
-          model.getCoilCoolingDXTwoSpeeds.each do |cooling_coil|
+          model.getCoilCoolingDXTwoSpeeds.sort.each do |cooling_coil|
             cooling_coil.setRatedHighSpeedCOP( @cop  ) unless @cop.nil?
             cooling_coil.setRatedLowSpeedCOP(  @cop  ) unless @cop.nil?
             cop_high = "NA"
@@ -596,7 +596,7 @@ module BTAP
 
         #SizingZone
         table << "handle,zone_heating_sizing_factor,zone_cooling_sizing_factor\n"
-        model.getSizingZones.each do |item|
+        model.getSizingZones.sort.each do |item|
           item.setZoneHeatingSizingFactor(@zone_heating_sizing_factor) unless @zone_heating_sizing_factor.nil?
           item.setZoneCoolingSizingFactor(@zone_cooling_sizing_factor) unless @zone_cooling_sizing_factor.nil?
           table  << "#{item.handle},#{item.zoneHeatingSizingFactor.get},#{item.zoneCoolingSizingFactor.get}\n"
@@ -625,7 +625,7 @@ module BTAP
         #schedule = BTAP::Resources::Schedules::create_annual_ruleset_schedule_detailed_json(model, @shw_setpoint_sched) unless @shw_setpoint_sched_name.nil? or @shw_setpoint_sched.nil?
 
         #iterate through water heaters.
-        model.getWaterHeaterMixeds.each do |item|
+        model.getWaterHeaterMixeds.sort.each do |item|
           unless @shw_setpoint_sched_name.nil? or @shw_setpoint_sched.nil?
             item.setSetpointTemperatureSchedule(schedule)
           end
@@ -658,7 +658,7 @@ module BTAP
         self.set_instance_variables(measure_values)
         table = "name,boiler_design_water_outlet_temperature,boiler_fuel_type,boiler_thermal_eff\n"
 
-        model.getPlantLoops.each do |iplantloop|
+        model.getPlantLoops.sort.each do |iplantloop|
           iplantloop.components.each do |icomponent|
             if icomponent.to_BoilerHotWater.is_initialized
               boiler = icomponent.to_BoilerHotWater.get
@@ -807,7 +807,7 @@ module BTAP
               cooling_schedule =  lib.getScheduleRulesetByName(cooling_schedule_name).get.clone(model).to_ScheduleRuleset.get
             end
           end
-          model.getThermostatSetpointDualSetpoints.each do |dual_setpoint|
+          model.getThermostatSetpointDualSetpoints.sort.each do |dual_setpoint|
             unless heating_schedule_name.nil?
               raise ("Could not set heating Schedule") unless dual_setpoint.setHeatingSetpointTemperatureSchedule(heating_schedule)
             end
@@ -874,7 +874,7 @@ module BTAP
           
           
           #Add setpoint manager to all OA object in airloops.
-          model.getHeatExchangerAirToAirSensibleAndLatents.each do |erv|
+          model.getHeatExchangerAirToAirSensibleAndLatents.sort.each do |erv|
 
             #needed to get the supply outlet node from the erv to place the setpoint manager.
             node =  erv.primaryAirOutletModelObject.get.to_Node.get if erv.primaryAirOutletModelObject.is_initialized
@@ -933,7 +933,7 @@ module BTAP
           model,
           @lighting_scaling_factor ) unless @lighting_scaling_factor.nil?
         #Set lighting variables
-        model.getLightsDefinitions.each do |lightsdef|
+        model.getLightsDefinitions.sort.each do |lightsdef|
           lightsdef.setFractionRadiant(@lighting_fraction_radiant.to_f)
           lightsdef.setFractionVisible(@lighting_fraction_visible.to_f)
           lightsdef.setReturnAirFraction(@lighting_return_air_fraction.to_f)
@@ -962,7 +962,7 @@ module BTAP
           @elec_equipment_scaling_factor) unless @elec_equipment_scaling_factor.nil?
 
         #Set plug loads variables
-        model.getElectricEquipmentDefinitions.each do |elec_equip_def|
+        model.getElectricEquipmentDefinitions.sort.each do |elec_equip_def|
           elec_equip_def.setFractionRadiant(@elec_equipment_fraction_radiant.to_f)
           elec_equip_def.setFractionLatent(@elec_equipment_fraction_latent.to_f)
           elec_equip_def.setFractionLost(@elec_equipment_fraction_lost.to_f)
@@ -988,7 +988,7 @@ module BTAP
 
         if @cold_deck_reset_enabled.to_bool == true
 
-          model.getAirLoopHVACs.each do |iairloop|
+          model.getAirLoopHVACs.sort.each do |iairloop|
             cooling_present = false
             set_point_manager = nil
             iairloop.components.each do |icomponent|
@@ -1005,7 +1005,7 @@ module BTAP
               end
             end
             #check if setpoint manager is present at supply outlet.
-            model.getSetpointManagerSingleZoneReheats.each do |manager|
+            model.getSetpointManagerSingleZoneReheats.sort.each do |manager|
               if iairloop.supplyOutletNode == manager.setpointNode.get
                 set_point_manager = manager
               end
@@ -1046,10 +1046,10 @@ module BTAP
         #Set all the above instance variables to the @csv_data values or, if not set or == 'na', to nil.
         self.set_instance_variables(measure_values)
         if @sat_reset_enabled.to_bool == true
-          model.getAirLoopHVACs.each do |iairloop|
+          model.getAirLoopHVACs.sort.each do |iairloop|
 
             #check if setpoint manager is present at supply outlet
-            model.getSetpointManagerSingleZoneReheats.each do |manager|
+            model.getSetpointManagerSingleZoneReheats.sort.each do |manager|
               if iairloop.supplyOutletNode == manager.setpointNode.get
                 manager.disconnect
               end
@@ -1098,7 +1098,7 @@ module BTAP
               @occ_stbck_heat_setback.to_f,
               @occ_stbck_cool_setpoint.to_f,
               @occ_stbck_cool_setback.to_f)
-            model.getThermostatSetpointDualSetpoints.each do |dual_setpoint|
+            model.getThermostatSetpointDualSetpoints.sort.each do |dual_setpoint|
               raise ("Could not set setback heating Schedule") unless dual_setpoint.setHeatingSetpointTemperatureSchedule(heating_schedule)
               raise ("Could not set setback cooling Schedule") unless dual_setpoint.setCoolingSetpointTemperatureSchedule(cooling_schedule)
               log << "modified....#{dual_setpoint}"

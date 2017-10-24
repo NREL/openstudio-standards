@@ -76,12 +76,12 @@ module BTAP
         hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
 
         #interate Through all surfaces
-        model.getSurfaces.each do |surface|
+        model.getSurfaces.sort.each do |surface|
           #set fenestration to wall ratio.
           BTAP::Compliance::NECB2011::set_necb_external_surface_conductance(surface, hdd, false, 1.0)
 
           #dig into the subsurface and change them as well.
-          model.getSubSurfaces.each do |subsurface|
+          model.getSubSurfaces.sort.each do |subsurface|
             BTAP::Compliance::NECB2011::set_necb_external_subsurface_conductance(subsurface, hdd)
           end
         end
@@ -164,7 +164,7 @@ module BTAP
           scale_door = 1.0,
           scale_window = 1.0)
 
-        model.getDefaultConstructionSets.each do |set|
+        model.getDefaultConstructionSets.sort.each do |set|
           self.set_construction_set_to_necb!(model,
                                              set,
                                              runner,
@@ -178,7 +178,7 @@ module BTAP
                                              scale_window)
         end
         #sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type. 
-        model.getPlanarSurfaces.each {|item| item.resetConstruction}
+        model.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
         #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
         BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
       end
@@ -346,7 +346,7 @@ module BTAP
         dominant_sched_type = BTAP::Compliance::NECB2011::determine_dominant_necb_schedule_type(model)
         #puts "dominant_sched_type = #{dominant_sched_type}"
         # find schedule set that corresponds to dominant schedule type
-        model.getDefaultScheduleSets.each do |sched_ruleset|
+        model.getDefaultScheduleSets.sort.each do |sched_ruleset|
           # just check people schedule
           # TO DO: should make this smarter: check all schedules
           people_sched = sched_ruleset.numberofPeopleSchedule
@@ -363,7 +363,7 @@ module BTAP
 
         # replace the default schedule set for the space type with * to schedule ruleset with dominant schedule type
 
-        model.getSpaces.each do |space|
+        model.getSpaces.sort.each do |space|
           #check to see if space space type has a "*" wildcard schedule.
           spacetype_name = space.spaceType.get.name.to_s unless space.spaceType.empty?
           if determine_necb_schedule_type(space).to_s == "*".to_s
@@ -384,7 +384,7 @@ module BTAP
       def self.set_zones_thermostat_schedule_based_on_space_type_schedules(model, runner = nil)
         puts "in set_zones_thermostat_schedule_based_on_space_type_schedules"
         BTAP::runner_register("DEBUG", "Start-set_zones_thermostat_schedule_based_on_space_type_schedules", runner)
-        model.getThermalZones.each do |zone|
+        model.getThermalZones.sort.each do |zone|
           BTAP::runner_register("DEBUG", "Zone = #{zone.name} Spaces =#{zone.spaces.size} ", runner)
           array = []
 
@@ -565,7 +565,7 @@ module BTAP
         ]
         #iterate through spaces in building.
         wildcard_spaces = 0
-        model.getSpaces.each do |space|
+        model.getSpaces.sort.each do |space|
           found_space_type = false
           #iterate through the NECB spacetype property table
           space_type_properties.each do |spacetype|
@@ -607,7 +607,7 @@ module BTAP
       end
 
 
-      def self.necb_spacetype_system_selection(model, heatingDesignLoad = nil, coolingDesignLoad = nil, runner = nil, building_type = nil)
+      def self.necb_spacetype_system_selection(model, heatingDesignLoad = nil, coolingDesignLoad = nil)
         spacezoning_data = Struct.new(
             :space, # the space object
             :space_name, # the space name
@@ -630,12 +630,19 @@ module BTAP
 
 
         #find the number of stories in the model this include multipliers.
-        number_of_stories = self.get_number_of_above_ground_floors(model, building_type, "NECB 2011", runner)
+        number_of_stories = 	model.getBuilding.standardsNumberOfAboveGroundStories()
+        if number_of_stories.empty?
+          raise ("Number of above ground stories not present in geometry model. Please ensure this is defined in your Building Object")
+        else
+          number_of_stories = number_of_stories.get
+        end
+
+        #self.get_number_of_above_ground_floors(model, building_type, "NECB 2011", runner)
         #set up system array containers. These will contain the spaces associated with the system types. 
         space_zoning_data_array = []
 
         #First pass of spaces to collect information into the space_zoning_data_array . 
-        model.getSpaces.each do |space|
+        model.getSpaces.sort.each do |space|
 
 
           #this will get the spacetype system index 8.4.4.8A  from the SpaceTypeData and BuildingTypeData in  (1-12)
@@ -862,7 +869,7 @@ module BTAP
         #BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
 
         #this method will determine the spaces that should be set to each system
-        schedule_type_array, space_zoning_data_array = self.necb_spacetype_system_selection(model, nil, nil, runner, building_type)
+        schedule_type_array, space_zoning_data_array = self.necb_spacetype_system_selection(model, nil, nil)
 
         #Deal with Wildcard spaces. Might wish to have logic to do coridors first.
         space_zoning_data_array.sort{|obj1, obj2| obj1.space_name <=> obj2.space_name}.each do |space_zone_data|
@@ -893,7 +900,7 @@ module BTAP
 
 
         #remove any thermal zones used for sizing to start fresh. Should only do this after the above system selection method. 
-        model.getThermalZones.each {|zone| zone.remove}
+        model.getThermalZones.sort.each {|zone| zone.remove}
 
 
         #now lets apply the rules.
@@ -911,7 +918,7 @@ module BTAP
           system_zone_array[system_number] = []
           #iterate by story
           story_counter = 0
-          model.getBuildingStorys.each do |story|
+          model.getBuildingStorys.sort.each do |story|
             #puts "Story:#{story}"
             story_counter = story_counter + 1
             #iterate by operation schedule type. 
@@ -1030,14 +1037,14 @@ module BTAP
           end
         else
           #otherwise use ideal loads. 
-          model.getThermalZones.each do |thermal_zone|
+          model.getThermalZones.sort.each do |thermal_zone|
             thermal_zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
             thermal_zone_ideal_loads.addToThermalZone(thermal_zone)
           end
         end
         #Check to ensure that all spaces are assigned to zones except undefined ones.
         errors = []
-        model.getSpaces.each do |space|
+        model.getSpaces.sort.each do |space|
           if space.thermalZone.empty? and space.spaceType.get.name.get != 'Space Function - undefined -'
             errors << "space #{space.name} with spacetype #{space.spaceType.get.name.get} was not assigned a thermalzone."
           end

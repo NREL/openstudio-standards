@@ -272,7 +272,7 @@ module Hospital
     system_to_space_map = PrototypeBuilding::Hospital.define_hvac_system_map(building_type, template, climate_zone)
 
     hot_water_loop = nil
-    model.getPlantLoops.each do |loop|
+    model.getPlantLoops.sort.each do |loop|
       # If it has a boiler:hotwater, it is the correct loop
       unless loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).empty?
         hot_water_loop = loop
@@ -395,7 +395,7 @@ module Hospital
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('Hospital MaxRelHumSetSch'))
     zone.setZoneControlHumidistat(humidistat)
 
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.thermalZones.include? zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
         humidifier.setRatedCapacity(3.72E-5)
@@ -453,7 +453,7 @@ module Hospital
   end
 
   def self.modify_hospital_oa_controller(template, model)
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
       oa_control = oa_sys.getControllerOutdoorAir
       case air_loop.name.get

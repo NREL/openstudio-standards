@@ -346,7 +346,7 @@ module SecondarySchool
     # add extra equipment for kitchen
     PrototypeBuilding::SecondarySchool.add_extra_equip_kitchen(template, model)
     
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       if space.name.get.to_s == 'Mech_ZN_1_FLR_1'
         model.add_elevator(template,
                      space,

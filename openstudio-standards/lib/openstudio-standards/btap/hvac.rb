@@ -21,7 +21,7 @@ module BTAP
       end
 
       def self.clear_all_zone_equipment_from_model(model)
-        model.getThermalZones.each do |thermal_zone|
+        model.getThermalZones.sort.each do |thermal_zone|
           BTAP::Resources::HVAC::clear_all_zone_equipment_from_zone(thermal_zone)
         end
       end
@@ -30,13 +30,13 @@ module BTAP
         BTAP::Resources::HVAC::clear_all_zone_equipment_from_model(model)
         BTAP::Resources::HVAC::clear_all_loops(model)
         # Delete outdoor VRF units (not in zone, not in loops)
-        model.getAirConditionerVariableRefrigerantFlows.each {|vrf| vrf.remove}
+        model.getAirConditionerVariableRefrigerantFlows.sort.each {|vrf| vrf.remove}
       end
 
       def self.enable_demand_control_ventilation(model,is_enabled)
         log = ""
         log << "ControllerMechanicalVentilation_handle,enabled?\n"
-        model.getControllerMechanicalVentilations.each do |item|
+        model.getControllerMechanicalVentilations.sort.each do |item|
           item.setDemandControlledVentilation( is_enabled )
           log << "#{item.handle},#{item.demandControlledVentilation.to_s}\n"
         end
@@ -649,7 +649,7 @@ module BTAP
               #create geometry and spaces
               BTAP::Geometry::Wizards::create_shape_rectangle(model)
               #For each space.
-              model.getSpaces.each do |space|
+              model.getSpaces.sort.each do |space|
                 #create zone
                 zone = BTAP::Geometry::Zones::create_thermal_zone(model, space)
                 #assign electric unit heater
@@ -940,7 +940,7 @@ module BTAP
 
             # Make a PTAC with hot water heating and DX cooling for each zone
             # and connect the hot water coil to the hot water plant loop
-            model.getThermalZones.each do |zone|
+            model.getThermalZones.sort.each do |zone|
 
               fan = OpenStudio::Model::FanConstantVolume.new(model,always_on)
               fan.setPressureRise(500) #TODO units
@@ -1022,7 +1022,7 @@ module BTAP
             always_on = model.alwaysOnDiscreteSchedule
 
             # Make a PTHP for each zone
-            model.getThermalZones.each do |zone|
+            model.getThermalZones.sort.each do |zone|
 
               fan = OpenStudio::Model::FanConstantVolume.new(model,always_on)
               fan.setPressureRise(300)
@@ -1155,7 +1155,7 @@ module BTAP
             always_on = model.alwaysOnDiscreteSchedule
 
             # Make a PSZ-AC for each zone
-            model.getThermalZones.each do |zone|
+            model.getThermalZones.sort.each do |zone|
 
               air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
               air_loop.setName("#{zone.name} Packaged Rooftop Air Conditioner")
@@ -1283,7 +1283,7 @@ module BTAP
             always_on = model.alwaysOnDiscreteSchedule
 
             # Make a PSZ-HP for each zone
-            model.getThermalZones.each do |zone|
+            model.getThermalZones.sort.each do |zone|
 
               air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
               air_loop.setName("Packaged Rooftop Heat Pump")
@@ -2175,7 +2175,7 @@ module BTAP
             # Make a furnace with gas heating and no cooling for each zone
             always_on = model.alwaysOnDiscreteSchedule
 
-            model.getThermalZones.each do |zone|
+            model.getThermalZones.sort.each do |zone|
               air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
               air_loop.setName("Gas Furnace")
               sizingSystem = air_loop.sizingSystem
@@ -2238,7 +2238,7 @@ module BTAP
             # Make a furnace with gas heating and no cooling for each zone
             always_on = model.alwaysOnDiscreteSchedule
 
-            model.getThermalZones.each do |zone|
+            model.getThermalZones.sort.each do |zone|
 
               air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
               air_loop.setName("Electric Furnace")

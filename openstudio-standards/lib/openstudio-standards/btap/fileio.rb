@@ -141,10 +141,10 @@ module BTAP
       end
 
       # pull original design days over
-      new_model.getDesignDays.each { |designDay|
+      new_model.getDesignDays.sort.each { |designDay|
         designDay.remove
       }
-      model.getDesignDays.each { |designDay|
+      model.getDesignDays.sort.each { |designDay|
         designDay.clone(new_model)
       }
 
@@ -245,10 +245,10 @@ module BTAP
       end
 
       # pull original design days over
-      new_model.getDesignDays.each { |designDay|
+      new_model.getDesignDays.sort.each { |designDay|
         designDay.remove
       }
-      model.getDesignDays.each { |designDay|
+      model.getDesignDays.sort.each { |designDay|
         designDay.clone(new_model)
       }
 
@@ -586,7 +586,7 @@ module BTAP
         possible_key_values = openstudio_sql_file.availableKeyValues(env_period,timestep,variable_name)
         possible_variable_names = openstudio_sql_file.availableVariableNames(env_period,timestep).include?(variable_name)
         if not possible_variable_names.nil?  and  possible_variable_names.include?(variable_name) and not possible_key_values.nil?
-          possible_key_values.get.each do |key_value|
+          possible_key_values.get.sort.each do |key_value|
             unless regex_name_filter.match(key_value).nil?
               returnArray << get_timeseries_array(openstudio_sql_file, timestep, variable_name, key_value)
             end

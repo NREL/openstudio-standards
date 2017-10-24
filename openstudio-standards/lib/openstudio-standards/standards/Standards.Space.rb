@@ -1830,7 +1830,7 @@ class OpenStudio::Model::Space
     surfaces.each do |surface|
       adj_surface = surface.adjacentSurface
       unless adj_surface.empty?
-        model.getSpaces.each do |space|
+        model.getSpaces.sort.each do |space|
           next if space == self
           space.surfaces.each do |surf|
             if surf == adj_surface.get

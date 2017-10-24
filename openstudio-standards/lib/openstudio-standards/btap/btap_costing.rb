@@ -229,7 +229,7 @@ class BTAPCosting
     num_of_above_ground_stories = model.getBuilding.standardsNumberOfAboveGroundStories
 
     #Iterate through the thermal zones.
-    model.getThermalZones.each do |zone|
+    model.getThermalZones.sort.each do |zone|
       #Iterate through spaces.
       zone.spaces.each do |space|
         #Get SpaceType defined for space.. if not defined it will skip the spacetype. May have to deal with Attic spaces.

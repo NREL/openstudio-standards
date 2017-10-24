@@ -256,7 +256,7 @@ module BTAP
         gbaseModel.building.get.setName("Gbase")
         BTAP::Site::set_weather_file(gbaseModel, @original_file)
         BTAP::Resources::HVAC::clear_all_hvac_from_model(gbaseModel)
-        gbaseModel.getThermalZones.each  do |thermalzone| 
+        gbaseModel.getThermalZones.sort.each  do |thermalzone| 
           thermalzone.setUseIdealAirLoads(true)
         end
         ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( gbaseModel.getSurfaces, ["Ground"] )
@@ -269,7 +269,7 @@ module BTAP
         gfloatModel.building.get.setName("Gfloating")
         BTAP::Site::set_weather_file(gfloatModel, @original_file)
         BTAP::Resources::HVAC::clear_all_hvac_from_model(gfloatModel)
-        gfloatModel.getThermalZones.each  do |thermalzone| 
+        gfloatModel.getThermalZones.sort.each  do |thermalzone| 
           thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)
           thermalzone.setUseIdealAirLoads(true)
         end
@@ -284,7 +284,7 @@ module BTAP
         #        gidealModel = BTAP::FileIO::deep_copy(model)
         #        gidealModel.building.get.setName("Gideal")
         #        BTAP::Site::set_weather_file(gidealModel, @original_file)
-        #        gidealModel.getThermalZones.each do |thermalzone|
+        #        gidealModel.getThermalZones.sort.each do |thermalzone|
         #          thermalzone.setThermostatSetpointDualSetpoint(@mpc_21C_setpoint)
         #        end
         #        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( gidealModel.getSurfaces, ["Ground"] )
@@ -297,7 +297,7 @@ module BTAP
         #        gadiabaticModel = BTAP::FileIO::deep_copy(model)
         #        gadiabaticModel.building.get.setName("Gadiabatic")
         #        BTAP::Site::set_weather_file(gadiabaticModel, @original_file)
-        #        gadiabaticModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_21C_setpoint)}
+        #        gadiabaticModel.getThermalZones.sort.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_21C_setpoint)}
         #        self.set_internal_gains_to_zero(gadiabaticModel)
         #        outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(gadiabaticModel.getSurfaces, ["Outdoors"])
         #        BTAP::Geometry::Surfaces::set_surfaces_construction_conductance(outdoor_surfaces, 1/200)
@@ -311,7 +311,7 @@ module BTAP
         #        gsteadystateModel.building.get.setName("Gsteadystate")
         #        BTAP::Site::set_weather_file(gsteadystateModel, @all_off)
         #        self.set_internal_gains_to_zero(gsteadystateModel)
-        #        gsteadystateModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_21C_setpoint)}
+        #        gsteadystateModel.getThermalZones.sort.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_21C_setpoint)}
         #        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( gsteadystateModel.getSurfaces, ["Ground"] )
         #        BTAP::Geometry::Surfaces::set_surfaces_boundary_condition( gsteadystateModel , ground_surfaces, "Adiabatic")
         #        model_array.push(gsteadystateModel)
@@ -321,7 +321,7 @@ module BTAP
         #        gigModel = BTAP::FileIO::deep_copy(model)
         #        gigModel.building.get.setName("Gig")
         #        BTAP::Site::set_weather_file(gigModel, @all_off)
-        #        gigModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
+        #        gigModel.getThermalZones.sort.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
         #        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( gigModel.getSurfaces, ["Ground"] )
         #        BTAP::Geometry::Surfaces::set_surfaces_boundary_condition( gigModel , ground_surfaces, "Adiabatic")
         #        model_array.push(gigModel)
@@ -332,7 +332,7 @@ module BTAP
         #        gsgModel.building.get.setName("Gsg")
         #        BTAP::Site::set_weather_file( gsgModel,@solar_radiation_only_temp_constant)
         #        self.set_internal_gains_to_zero(gsgModel)
-        #        gsgModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
+        #        gsgModel.getThermalZones.sort.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
         #        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( gsgModel.getSurfaces, ["Ground"] )
         #        BTAP::Geometry::Surfaces::set_surfaces_boundary_condition( gsgModel , ground_surfaces, "Adiabatic")
         #        model_array.push(gsgModel)
@@ -343,7 +343,7 @@ module BTAP
         #        gextModel.building.get.setName("Gext")
         #        BTAP::Site::set_weather_file( gextModel,@solar_radiation_off_temp_normal )
         #        self.set_internal_gains_to_zero(gextModel)
-        #        gextModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
+        #        gextModel.getThermalZones.sort.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
         #        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( gextModel.getSurfaces, ["Ground"] )
         #        BTAP::Geometry::Surfaces::set_surfaces_boundary_condition( gextModel , ground_surfaces, "Adiabatic")
         #        model_array.push(gextModel)
@@ -353,7 +353,7 @@ module BTAP
         #        ghModel.building.get.setName("Gh")
         #        BTAP::Site::set_weather_file(ghModel,@all_off )
         #        self.set_internal_gains_to_zero(ghModel)
-        #        ghModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_cooling)}
+        #        ghModel.getThermalZones.sort.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_cooling)}
         #        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( ghModel.getSurfaces, ["Ground"] )
         #        BTAP::Geometry::Surfaces::set_surfaces_boundary_condition( ghModel , ground_surfaces, "Adiabatic")
         #        model_array.push(ghModel)
@@ -363,7 +363,7 @@ module BTAP
         #        gcModel.building.get.setName("Gc")
         #        BTAP::Site::set_weather_file(gcModel,@solar_radiation_off_temp_normal)
         #        self.set_internal_gains_to_zero(gcModel)
-        #        gcModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heating)}
+        #        gcModel.getThermalZones.sort.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heating)}
         #        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( gcModel.getSurfaces, ["Ground"] )
         #        BTAP::Geometry::Surfaces::set_surfaces_boundary_condition( gcModel , ground_surfaces, "Adiabatic")
         #        model_array.push(gcModel)
@@ -376,7 +376,7 @@ module BTAP
         #        BTAP::Resources::SpaceLoads::ScaleLoads::scale_inflitration_loads(goffModel, 0.0)
         #        ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition( goffModel.getSurfaces, ["Ground"] )
         #        BTAP::Geometry::Surfaces::set_surfaces_boundary_condition( goffModel , ground_surfaces, "Adiabatic")
-        #        goffModel.getThermalZones.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
+        #        goffModel.getThermalZones.sort.each { |thermalzone| thermalzone.setThermostatSetpointDualSetpoint(@mpc_no_heat_cool)}
         #        model_array.push(goffModel)
 
 
@@ -394,7 +394,7 @@ module BTAP
         BTAP::Geometry::rename_zones_based_on_spaces(model)
         BTAP::Geometry::prefix_equipment_with_zone_name(model)
         #since this is a one to one relationship of space to zone.Name them the same
-        model.getSpaces.each do |space|
+        model.getSpaces.sort.each do |space|
           space.thermalZone.get.setName(space.name.get)
         end
         #set run period to a week
@@ -419,7 +419,7 @@ module BTAP
         BTAP::Geometry::rename_zones_based_on_spaces(model)
         BTAP::Geometry::prefix_equipment_with_zone_name(model)
         #since this is a one to one relationship of space to zone.Name them the same
-        model.getSpaces.each do |space|
+        model.getSpaces.sort.each do |space|
           space.thermalZone.get.setName(space.name.get)
         end
         #set run period to a week

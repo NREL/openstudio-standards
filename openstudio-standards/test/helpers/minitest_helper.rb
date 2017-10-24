@@ -25,7 +25,12 @@ end
 
 $LOAD_PATH.unshift File.expand_path('../../../lib', __FILE__)
 require 'minitest/autorun'
-require 'minitest/ci'
+if ENV['CI'] == 'true'
+  require 'minitest/ci'
+else
+  require 'minitest/reporters'
+end
+
 require 'openstudio'
 require 'openstudio/ruleset/ShowRunnerOutput'
 require 'json'
@@ -40,4 +45,9 @@ rescue
   puts 'Using installed openstudio-standards gem.' 
 end
 
-puts "Saving test results to #{Minitest::Ci.report_dir}"
+if ENV['CI'] == 'true'
+  puts "Saving test results to #{Minitest::Ci.report_dir}"
+else
+  Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new, Minitest::Reporters::RubyMineReporter.new]
+end
+

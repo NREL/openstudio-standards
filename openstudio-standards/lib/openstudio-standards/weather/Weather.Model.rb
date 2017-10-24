@@ -8,6 +8,9 @@ class OpenStudio::Model::Model
   def add_design_days_and_weather_file(climate_zone, epw_file)
     require_relative 'Weather.stat_file'
 
+    # Remove any existing Design Day objects that are in the file
+    getDesignDays.each(&:remove)
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Started adding weather file for climate zone: #{climate_zone}.")
 
     # Define the weather file for each climate zone
@@ -112,8 +115,7 @@ class OpenStudio::Model::Model
       return false
     end
 
-    # Remove any existing Design Day objects that are in the file
-    getDesignDays.each(&:remove)
+
 
     # Load in the ddy file based on convention that it is in
     # the same directory and has the same basename as the epw file.

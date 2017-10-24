@@ -41,7 +41,7 @@ class OpenStudio::Model::Model
 
 
 
-    osm_file_increment = 0 
+    osm_file_increment = 0
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == 'HighriseApartment'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
@@ -76,24 +76,24 @@ class OpenStudio::Model::Model
       debug_incremental_changes = false
       load_building_type_methods(building_type)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes
+
      # Ensure that surfaces are intersected properly.
       load_geometry(building_type, template)
       getSpaces.each { |space1| getSpaces.each { |space2| space1.intersectSurfaces(space2) } }
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes
-      
+
       add_design_days_and_weather_file(climate_zone, epw_file)
       add_ground_temperatures(building_type, climate_zone, template)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes 
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes
       # puts weatherFile.get.path.get.to_s
       if weatherFile.empty? or weatherFile.get.path.empty? or not File.exists?(weatherFile.get.path.get.to_s)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Weatherfile is not defined.")
         raise()
       end
-      
+
       getBuilding.setName("#{template}-#{building_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_set_name.osm")  if debug_incremental_changes
@@ -103,47 +103,47 @@ class OpenStudio::Model::Model
 
       assign_space_type_stubs('Space Function', template, space_type_map) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_assign_space_type_stubs.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_assign_space_type_stubs.osm")  if debug_incremental_changes
+
       add_loads(template)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_loads.osm")  if debug_incremental_changes
 
       apply_infiltration_standard(template)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_infiltration.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_apply_infiltration.osm")  if debug_incremental_changes
+
       modify_surface_convection_algorithm(template)
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_modify_surface_convection_algorithm.osm")  if debug_incremental_changes
 
       add_constructions(building_type, template, climate_zone)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes
+
       # Modify Constructions to NECB reference levels
       apply_prm_construction_types(template)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_constructions.osm")  if debug_incremental_changes
+
       # Reduce the WWR and SRR, if necessary
       apply_prm_baseline_window_to_wall_ratio(template,nil)
       apply_prm_baseline_skylight_to_roof_ratio(template)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_fdwr_srr_rules.osm")  if debug_incremental_changes 
-        
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_add_fdwr_srr_rules.osm")  if debug_incremental_changes
+
       create_thermal_zones(building_type, template, climate_zone)
-      # For some building types, stories are defined explicitly 
+      # For some building types, stories are defined explicitly
       if building_type == 'SmallHotel' && template != 'NECB 2011'
         getBuildingStorys.each { |item| item.remove }
         building_story_map = PrototypeBuilding::SmallHotel::define_building_story_map(building_type, template, climate_zone)
         assign_building_story(building_type, template, climate_zone, building_story_map)
       end
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_create_thermal_zones.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_create_thermal_zones.osm")  if debug_incremental_changes
 
-      
+
+
       return false if runSizingRun("#{sizing_run_dir}/SR0") == false
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_sizing_run_0.osm")  if debug_incremental_changes
@@ -163,20 +163,20 @@ class OpenStudio::Model::Model
 
       yearDescription.get.setDayofWeekforStartDay('Sunday')
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setDayofWeekforStartDay.osm")  if debug_incremental_changes 
-      
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setDayofWeekforStartDay.osm")  if debug_incremental_changes
+
       #set a larger tolerance for unmet hours from default 0.2 to 1.0C
       getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
       getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
       osm_file_increment += 1
-      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setTolerances.osm")  if debug_incremental_changes 
-    
+      BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_setTolerances.osm")  if debug_incremental_changes
+
     else
-      #optionally  determine the climate zone from the epw and stat files. 
+      #optionally  determine the climate zone from the epw and stat files.
       if climate_zone == 'NECB HDD Method'
         climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone()
       else
-        #this is required to be blank otherwise it may cause side effects. 
+        #this is required to be blank otherwise it may cause side effects.
         epw_file = ""
       end
       load_building_type_methods(building_type)
@@ -279,7 +279,7 @@ class OpenStudio::Model::Model
     elsif building_type == 'SuperMarket'
       PrototypeBuilding::SuperMarket.update_exhaust_fan_efficiency(template, self)
     end
-	
+
 	if building_type == 'HighriseApartment'
       PrototypeBuilding::HighriseApartment.update_fan_efficiency(self)
     end
@@ -369,7 +369,7 @@ class OpenStudio::Model::Model
     when 'HighriseApartment'
       building_methods = 'Prototype.high_rise_apartment'
     when 'SuperMarket'
-      building_methods = 'Prototype.supermarket'  
+      building_methods = 'Prototype.supermarket'
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Building Type = #{building_type} not recognized")
       return false
@@ -493,23 +493,23 @@ class OpenStudio::Model::Model
       stub_space_type_occsens = nil
       occsensSpaceTypeCreated = false # Flag to determine need for another space type
       occsensSpaceTypeCount = 0
-      
+
       space_names.each do |space_name|
         space = getSpaceByName(space_name)
         next if space.empty?
         space = space.get
-        
+
         occsensSpaceTypeUsed = false
 
         if template == "NECB 2011"
-          # Check if space type for this space matches NECB 2011 specific space type 
+          # Check if space type for this space matches NECB 2011 specific space type
           # for occupancy sensor that is area dependent. Note: space.floorArea in m2.
           space_type_name_occsens = space_type_name + " - occsens"
-          if((space_type_name=='Storage area' && space.floorArea < 100) || 
-            (space_type_name=='Storage area - refrigerated' && space.floorArea < 100) || 
+          if((space_type_name=='Storage area' && space.floorArea < 100) ||
+            (space_type_name=='Storage area - refrigerated' && space.floorArea < 100) ||
             (space_type_name=='Hospital - medical supply' && space.floorArea < 100) ||
             (space_type_name=='Office - enclosed' && space.floorArea < 25))
-            # If there is only one space assigned to this space type, then reassign this stub 
+            # If there is only one space assigned to this space type, then reassign this stub
             # to the template duplicate with appendage " - occsens", otherwise create a new stub
             # for this space. Required to use reduced LPD by NECB 2011 0.9 factor.
             occsensSpaceTypeUsed = true
@@ -522,7 +522,7 @@ class OpenStudio::Model::Model
               stub_space_type_occsens.apply_rendering_color(template)
               occsensSpaceTypeCreated = true
               occsensSpaceTypeCount += 1
-            else  
+            else
               # reassign occsens space type stub already created...
               stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
               stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
@@ -530,18 +530,18 @@ class OpenStudio::Model::Model
             end
           end
         end
-        
+
         if occsensSpaceTypeUsed
           space.setSpaceType(stub_space_type_occsens)
         else
           space.setSpaceType(stub_space_type)
         end
-        
+
         if occsensSpaceTypeCount == space_names.length
           # delete the stub_space_type since all spaces were reassigned to stub_space_type_occsens
           stub_space_type.remove
         end
-        
+
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Setting #{space.name} to #{building_type}.#{space_type_name}")
       end
     end
@@ -706,7 +706,7 @@ class OpenStudio::Model::Model
     basement_floor_layers << cp02_carpet_pad
     basement_floor_construction.setLayers(basement_floor_layers)
 
-    getSurfaces.each do |surface|
+    getSurfaces.sort.each do |surface|
       if surface.outsideBoundaryCondition.to_s == 'Adiabatic'
         if surface.surfaceType.to_s == 'Wall'
           surface.setConstruction(wall_adiabatic_construction)
@@ -729,7 +729,7 @@ class OpenStudio::Model::Model
     spc_type = nil
     spc_type = "WholeBuilding" if template == 'NECB 2011'
     bldg_def_const_set = add_construction_set(template, climate_zone, lookup_building_type, spc_type, is_residential)
-    puts bldg_def_const_set
+    
     if bldg_def_const_set.is_initialized
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
     else
@@ -738,7 +738,7 @@ class OpenStudio::Model::Model
     end
 
     # Make a construction set for each space type, if one is specified
-    getSpaceTypes.each do |space_type|
+    getSpaceTypes.sort.each do |space_type|
       # Get the standards building type
       stds_building_type = nil
       if space_type.standardsBuildingType.is_initialized
@@ -771,7 +771,7 @@ class OpenStudio::Model::Model
 
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
     if lookup_building_type == 'SmallHotel' && template != 'NECB 2011'
-      getBuildingStorys.each do |story|
+      getBuildingStorys.sort.each do |story|
         next if story.name.get == 'AtticStory'
         # puts "story = #{story.name}"
         is_residential = 'No' # default for building story level
@@ -827,7 +827,7 @@ class OpenStudio::Model::Model
     construction.setLayers(layers)
 
     # Assign the internal mass construction to existing internal mass objects
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       internal_masses = space.internalMass
       internal_masses.each do |internal_mass|
         internal_mass.internalMassDefinition.setConstruction(construction)
@@ -859,7 +859,7 @@ class OpenStudio::Model::Model
         end
       end
     end
-    
+
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
 
@@ -913,7 +913,7 @@ class OpenStudio::Model::Model
 
 
     # Create a thermal zone for each space in the self
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       zone = OpenStudio::Model::ThermalZone.new(self)
       zone.setName("#{space.name} ZN")
       unless space_multiplier_map[space.name.to_s].nil?
@@ -964,7 +964,7 @@ class OpenStudio::Model::Model
       end
 
       # loop through thermal zones
-      self.getThermalZones.each do |thermal_zone|
+      self.getThermalZones.sort.each do |thermal_zone|
         zone_exhaust_hash = thermal_zone.add_exhaust(template)
 
         # populate zone_exhaust_fans
@@ -985,7 +985,7 @@ class OpenStudio::Model::Model
       # gather information on zones organized by standards building type and space type. zone may be in this multiple times if it has multiple space types
       zones_by_standards = {}
 
-      self.getThermalZones.each do |thermal_zone|
+      self.getThermalZones.sort.each do |thermal_zone|
 
         # get space type ratio for spaces in zone
         space_type_hash = {} # key is  space type,  value hash with floor area, standards building type, standards space type, and array of adjacent zones
@@ -1163,7 +1163,7 @@ class OpenStudio::Model::Model
         end
 
         # add exhaust for rest of zones
-        self.getThermalZones.each do |thermal_zone|
+        self.getThermalZones.sort.each do |thermal_zone|
           next if zones_applied.include?(thermal_zone)
 
           # add exhaust
@@ -1200,7 +1200,7 @@ class OpenStudio::Model::Model
     }
 
     # Loop through all the space types and reduce lighting operation schedule fractions as-specified
-    getSpaceTypes.each do |space_type|
+    getSpaceTypes.sort.each do |space_type|
       # Skip space types with no standards building type
       next if space_type.standardsBuildingType.empty?
       stds_bldg_type = space_type.standardsBuildingType.get
@@ -1283,7 +1283,7 @@ class OpenStudio::Model::Model
     # into lookup table and implement that way instead of hard-coding as
     # inputs in the spreadsheet.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding exterior lights')
-
+    
     # Occupancy Sensing Exterior Lights
     # which reduce to 70% power when no one is around.
     unless prototype_input['occ_sensing_exterior_lighting_power'].nil?
@@ -1385,7 +1385,7 @@ class OpenStudio::Model::Model
       velo_sq_coeff = 0.0
     end
 
-    getSpaceInfiltrationDesignFlowRates.each do |infiltration|
+    getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration|
       infiltration.setConstantTermCoefficient(const_coeff)
       infiltration.setTemperatureTermCoefficient(temp_coeff)
       infiltration.setVelocityTermCoefficient(velo_coeff)
@@ -1490,7 +1490,7 @@ class OpenStudio::Model::Model
     end
 
     # Check each airloop
-    getAirLoopHVACs.each do |air_loop|
+    getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.economizer_required?(template, climate_zone) == true
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
@@ -1935,7 +1935,7 @@ class OpenStudio::Model::Model
     # Check the non-dominant occupancy type groups to see if they
     # are big enough to trigger the occupancy exception.
     # If they are, leave the group standing alone.
-    # If they are not, add the zones in that group 
+    # If they are not, add the zones in that group
     # back to the dominant occupancy type group.
     occ_groups = []
     zones_grouped_by_occ.each do |occ_type, zns|
@@ -1985,7 +1985,7 @@ class OpenStudio::Model::Model
       group['stories'] = num_stories
       group['zones'] = gp_zns
       final_groups << group
-      
+
       # Report out the final grouping
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['type']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
       group['zones'].sort.each_slice(5) do |zone_list|
@@ -1995,7 +1995,7 @@ class OpenStudio::Model::Model
         end
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
       end
- 
+
     end
 
     return final_groups
