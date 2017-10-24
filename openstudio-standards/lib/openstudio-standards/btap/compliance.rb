@@ -388,7 +388,7 @@ module BTAP
           BTAP::runner_register("DEBUG", "Zone = #{zone.name} Spaces =#{zone.spaces.size} ", runner)
           array = []
 
-          zone.spaces.each do |space|
+          zone.spaces.sort.each do |space|
             schedule_type = BTAP::Compliance::NECB2011::determine_necb_schedule_type(space).to_s
             BTAP::runner_register("DEBUG", "space name/type:#{space.name}/#{schedule_type}", runner)
 
@@ -882,7 +882,7 @@ module BTAP
               puts ("Warning: No adjacent spaces for #{space_zone_data.space.name} on same floor, looking for others above and below to set system")
               adj_spaces = space_zone_data.space.get_adjacent_spaces_with_shared_wall_areas(false)
             end
-            adj_spaces.each do |adj_space|
+            adj_spaces.sort.each do |adj_space|
               #if there are no adjacent spaces. Raise an error.
               raise ("Could not determine adj space to space #{space_zone_data.space.name.get}") if adj_space.nil?
               adj_space_data = space_zoning_data_array.find {|data| data.space == adj_space[0]}

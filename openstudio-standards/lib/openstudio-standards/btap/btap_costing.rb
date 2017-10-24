@@ -231,7 +231,7 @@ class BTAPCosting
     #Iterate through the thermal zones.
     model.getThermalZones.sort.each do |zone|
       #Iterate through spaces.
-      zone.spaces.each do |space|
+      zone.spaces.sort.each do |space|
         #Get SpaceType defined for space.. if not defined it will skip the spacetype. May have to deal with Attic spaces.
         if space.spaceType.empty? or space.spaceType.get.standardsSpaceType.empty? or space.spaceType.get.standardsBuildingType.empty?
           raise ("standards Space type and building type is not defined for space:#{space.name.get}. Skipping this space for costing.")

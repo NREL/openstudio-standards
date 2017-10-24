@@ -33,7 +33,7 @@ module BTAP
             (a.yOrigin <=> b.yOrigin)
         end
         counter = 1
-        spaces.each do |space|
+        spaces.sort.each do |space|
           #puts "old space name : #{space.name}"
           if prepend_name == true
             space.setName("#{story.name}-#{counter.to_s}:#{space.name}")
@@ -59,7 +59,7 @@ module BTAP
       
         # get list of spaces in thermal zone
         spaces = thermal_zone.spaces
-        spaces.each do |space|
+        spaces.sort.each do |space|
 
           # make an array instead of the puts statement
           spaces_in_thermal_zone.push space.name.to_s
@@ -2209,7 +2209,7 @@ module BTAP
       def self.get_zones_from_storey(storey)
         #check to see if the storey has a zone that is part of the zone list. 
         zones = Array.new
-        storey.spaces.each do |space|
+        storey.spaces.sort.each do |space|
           if not space.thermalZone.empty?  and not zones.include?(space.thermalZone.get)
             zones.push( space.thermalZone.get )
           end
@@ -2229,7 +2229,7 @@ module BTAP
   
         # make has of spaces and minz values
         sorted_spaces = Hash.new
-        spaces.each do |space|
+        spaces.sort.each do |space|
           # loop through space surfaces to find min z value
           z_points = []
           space.surfaces.each do |surface|
@@ -2246,7 +2246,7 @@ module BTAP
   
   
         # this should take the sorted list and make and assign stories
-        sorted_spaces.each do |space|
+        sorted_spaces.sort.each do |space|
           space_obj = space[0]
           space_minz = space[1]
           if space_obj.buildingStory.empty?
@@ -2671,7 +2671,7 @@ module BTAP
       def self.get_surfaces_from_thermal_zones(thermal_zone_array)
         surfaces = Array.new()
         thermal_zone_array.each do |thermal_zone|
-          thermal_zone.spaces.each do |space|
+          thermal_zone.spaces.sort.each do |space|
             surfaces.concat(space.surfaces())
           end
           return surfaces

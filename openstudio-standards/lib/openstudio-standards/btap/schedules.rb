@@ -311,7 +311,7 @@ module BTAP
 
         #Create new timeseries object to keep track of on/off states. Default to 30min intervals.
         timeseries  = OpenStudio::TimeSeries.new
-        thermal_zone.spaces.each do |space|
+        thermal_zone.spaces.sort.each do |space|
           #Iterate through the people object in the space.
           space.spaceType.get.people.each do |people|
             if people.numberofPeopleSchedule.is_initialized() and people.numberofPeopleSchedule.get.to_ScheduleRuleset.is_initialized

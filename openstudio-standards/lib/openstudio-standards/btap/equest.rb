@@ -2231,7 +2231,7 @@ module BTAP
             end
           end
           #Find Polygons for space and add reference to the space.
-          spaces.each do |space|
+          spaces.sort.each do |space|
             if space.check_keyword?("POLYGON")
               if ( polygon.utype == space.get_keyword_value("POLYGON") )
                 space.polygon = polygon
@@ -2244,7 +2244,7 @@ module BTAP
 
         #    Find spaces that belong to the zone.
         zones.each do |zone|
-          spaces.each do |space|
+          spaces.sort.each do |space|
             if ( space.utype ==  zone.get_keyword_value("SPACE") )
               space.zone = zone
               zone.space = space

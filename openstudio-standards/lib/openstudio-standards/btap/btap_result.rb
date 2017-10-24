@@ -60,7 +60,7 @@ module BTAP
       display = spaceType.name.get
       floor_area_si = 0
       # loop through spaces so I can skip if not included in floor area
-      spaceType.spaces.each do |space|
+      spaceType.spaces.sort.each do |space|
         next if not space.partofTotalFloorArea
         floor_area_si += space.floorArea * space.multiplier
       end
@@ -372,7 +372,7 @@ module BTAP
       zoneinfo[:zone_heating_design_supply_air_temperature] = zone.sizingZone.zoneHeatingDesignSupplyAirTemperature
       zoneinfo[:zone_cooling_design_supply_air_temperature] = zone.sizingZone.zoneCoolingDesignSupplyAirTemperature
       zoneinfo[:spaces] = []
-      zone.spaces.each do |space|
+      zone.spaces.sort.each do |space|
         spaceinfo ={}
         zoneinfo[:spaces] << spaceinfo
         spaceinfo[:name] = space.name.get  
@@ -398,7 +398,7 @@ module BTAP
       air_loop_info[:thermal_zones] = []
       air_loop_info[:total_floor_area_served] = 0.0
       air_loop_info[:total_breathing_zone_outdoor_airflow_vbz] = 0.0
-      air_loop.thermalZones.each do |zone|
+      air_loop.thermalZones.sort.each do |zone|
         air_loop_info[:thermal_zones] << zone.name.get
         vbz = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName='Zone Ventilation Parameters' AND ColumnName='Breathing Zone Outdoor Airflow - Vbz' AND Units='m3/s' AND RowName='#{zone.name.get.to_s.upcase}' ")
         vbz = validate_optional(vbz, model, 0)

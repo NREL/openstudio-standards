@@ -1625,7 +1625,7 @@ module BTAP
 
               # Get all zones on this story
               zones = []
-              story.spaces.each do |space|
+              story.spaces.sort.each do |space|
                 if space.thermalZone.is_initialized
                   zones << space.thermalZone.get
                 end
@@ -1775,7 +1775,7 @@ module BTAP
 
               # Get all zones on this story
               zones = []
-              story.spaces.each do |space|
+              story.spaces.sort.each do |space|
                 if space.thermalZone.is_initialized
                   zones << space.thermalZone.get
                 end
@@ -1999,7 +1999,7 @@ module BTAP
 
               # Get all zones on this story
               zones = []
-              story.spaces.each do |space|
+              story.spaces.sort.each do |space|
                 if space.thermalZone.is_initialized
                   zones << space.thermalZone.get
                 end
@@ -2140,7 +2140,7 @@ module BTAP
 
               # Get all zones on this story
               zones = []
-              story.spaces.each do |space|
+              story.spaces.sort.each do |space|
                 if space.thermalZone.is_initialized
                   zones << space.thermalZone.get
                 end
