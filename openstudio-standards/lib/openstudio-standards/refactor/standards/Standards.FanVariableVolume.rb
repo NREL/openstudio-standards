@@ -100,11 +100,6 @@ class StandardsModel < OpenStudio::Model::Model
   def fan_variable_volume_part_load_fan_power_limitation?(fan_variable_volume)
      part_load_control_required = false
 
-    # Not required by the old vintages
-    if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
-      return part_load_control_required
-    end
-
     # Check if the fan is on a multizone or single zone system.
     # If not on an AirLoop (for example, in unitary system or zone equipment), assumed to be a single zone fan
     mz_fan = false 
@@ -119,29 +114,9 @@ class StandardsModel < OpenStudio::Model::Model
       return part_load_control_required
     end
 
-    # Determine the motor size limit
-    # for 15 | 10 nameplate HP threshold are equivalent to motors with input powers of 9.9 | 7.54  HP (TSD)  
-    # for 90.1-2013, table 6.5.3.2.1: the cooling capacity threshold is 75000 instead of 110000 as of 1/1/2014 and the fan motor size for chiller-water and evalporative cooling is 0.25 hp as of 1/1/2014 instead of 5 hp
-    hp_limit = nil # No minimum limit
-    cap_limit_btu_per_hr = nil # No minimum limit
-    case instvartemplate
-    when '90.1-2004'
-      hp_limit = 9.9
-    when '90.1-2007', '90.1-2010'
-      hp_limit = 7.54
-    when '90.1-2013', 'NREL ZNE Ready 2017'
-      case fan_variable_volume_cooling_system_type(fan_variable_volume) 
-      when 'dx'
-      hp_limit = 0.0
-      cap_limit_btu_per_hr = 110_000
-      when 'chw'
-      hp_limit = 0.25
-      when 'evap'
-      hp_limit = 0.25
-      else
-      hp_limit = 9999.9 # No requirement
-      end
-    end
+    # Determine the motor and capacity size limits
+    hp_limit = fan_variable_volume_part_load_fan_power_limitation_hp_limit(fan_variable_volume)
+    cap_limit_btu_per_hr = fan_variable_volume_part_load_fan_power_limitation_capacity_limit(fan_variable_volume)
 
     # Check against limits
     if hp_limit && cap_limit_btu_per_hr
@@ -169,6 +144,24 @@ class StandardsModel < OpenStudio::Model::Model
     return part_load_control_required
   end
 
+  # The threhold horsepower below which part load control is not required.
+  #
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] the fan
+  # @return [Double] the limit, in horsepower. Return nil for no limit by default.
+  def fan_variable_volume_part_load_fan_power_limitation_hp_limit(fan_variable_volume)
+    hp_limit = nil # No minimum limit
+    return hp_limit
+  end
+
+  # The threhold capacity below which part load control is not required.
+  #
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] the fan
+  # @return [Double] the limit, in Btu/hr. Return nil for no limit by default.
+  def fan_variable_volume_part_load_fan_power_limitation_capacity_limit(fan_variable_volume)
+    cap_limit_btu_per_hr = nil # No minimum limit
+    return cap_limit_btu_per_hr
+  end
+  
   # Determine if the cooling system is DX, CHW, evaporative, or a mixture.
   # @return [String] the cooling system type.  Possible options are:
   # dx, chw, evaporative, mixed, unknown.

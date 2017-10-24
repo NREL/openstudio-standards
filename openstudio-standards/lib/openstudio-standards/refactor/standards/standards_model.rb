@@ -4,6 +4,16 @@ class StandardsModel < OpenStudio::Model::Model
   @@standards_folder =  "#{File.dirname(__FILE__)}/../../standards"
   @@data_folder =       "#{File.dirname(__FILE__)}/../../../../data"
 
+  # Require the files containing the modules first
+  require_relative 'Standards.CoilDX'
+  require_relative 'Standards.CoolingTower'
+  require_relative 'Standards.Fan'
+  require_relative 'Standards.Pump'
+  require_relative 'ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTower'
+  require_relative 'ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTower'
+  require_relative 'ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower'
+  require_relative 'necb/necb_2011/necb_2011.Fan'
+
   # Require all the standards files below this dynamically for now
   # TODO refactor: hard code requires later
   Dir.glob("#{File.dirname(__FILE__)}/../**/*.rb").each do |file_path|
@@ -17,7 +27,8 @@ class StandardsModel < OpenStudio::Model::Model
       'ashrae90_1_2010',
       'ashrae90_1_2013',
       'doe_ref_pre_1980',
-      'doe_ref_pre_1980_2004'
+      'doe_ref_pre_1980_2004',
+      'nrel_zne_ready_2017'
     ]
     next if already_loaded_files.include?(File.basename(file_path, '.rb'))
     puts "Requiring: #{file_path}."

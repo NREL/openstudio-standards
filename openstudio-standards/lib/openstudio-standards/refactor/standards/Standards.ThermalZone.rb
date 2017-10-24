@@ -1302,11 +1302,8 @@ class StandardsModel < OpenStudio::Model::Model
     return OpenStudio::Model::OptionalSpaceType.new(biggest_space_type)
   end
 
-  # Determine if the thermal zone's occupancy type category.
-  # Options are:
-  # residential, nonresidential
-  # 90.1-2013 adds additional Options:
-  # publicassembly, retail
+  # Determine the thermal zone's occupancy type category.
+  # Options are: residential, nonresidential
   #
   # @return [String] the occupancy type category
   # @todo Add public assembly building types
@@ -1316,25 +1313,6 @@ class StandardsModel < OpenStudio::Model::Model
                else
                  'nonresidential'
                end
-
-    # Based on the space type that
-    # represents a majority of the zone.
-    if instvartemplate == '90.1-2013'
-      space_type = thermal_zone_majority_space_type(thermal_zone) 
-      if space_type.is_initialized
-        space_type = space_type.get
-        bldg_type = space_type.standardsBuildingType
-        if bldg_type.is_initialized
-          bldg_type = bldg_type.get
-          case bldg_type
-          when 'Retail', 'StripMall', 'SuperMarket'
-            occ_type = 'retail'
-            # when 'SomeBuildingType' # TODO add publicassembly building types
-            # occ_type = 'publicassembly'
-          end
-        end
-      end
-    end
 
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.ThermalZone", "For #{self.name}, occupancy type = #{occ_type}.")
 
@@ -1352,29 +1330,14 @@ class StandardsModel < OpenStudio::Model::Model
   def thermal_zone_demand_control_ventilation_required?(thermal_zone, climate_zone)
     dcv_required = false
 
-    # Not required by the old vintages
-    if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
-      return dcv_required
+    # Get the limits
+    min_area_m2, min_area_m2_per_occ = thermal_zone_demand_control_ventilation_limits(thermal_zone)
+    
+    # Not required if both limits nil
+    if min_area_m2.nil? && min_area_m2_per_occ.nil?
+      return dcv_required 
     end
-
-    # Area and occupant density limits
-    min_area_ft2 = 0
-    min_occ_per_1000_ft2 = 0
-    case instvartemplate
-    when '90.1-2004'
-      min_area_ft2 = 0
-      min_occ_per_1000_ft2 = 100
-    when '90.1-2007', '90.1-2010'
-      min_area_ft2 = 500
-      min_occ_per_1000_ft2 = 40
-    when '90.1-2013'
-      min_area_ft2 = 500
-      min_occ_per_1000_ft2 = 25
-    when 'NREL ZNE Ready 2017'
-      min_area_ft2 = 500
-      min_occ_per_1000_ft2 = 12 # half of 90.1-2013
-    end
-
+    
     # Get the area served and the number of occupants
     area_served_m2 = 0
     num_people = 0
@@ -1382,29 +1345,53 @@ class StandardsModel < OpenStudio::Model::Model
       area_served_m2 += space.floorArea
       num_people += space.numberOfPeople
     end
-
-    # Check the minimum area
     area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
-    if area_served_ft2 < min_area_ft2
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is not required since the area is #{area_served_ft2.round} ft2, but the minimum size is #{min_area_ft2.round} ft2.")
-      return dcv_required
+
+    # Check the minimum area if there is a limit 
+    if min_area_m2
+      # Convert limit to IP
+      min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
+      # Check the limit
+      if area_served_ft2 < min_area_ft2
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is not required since the area is #{area_served_ft2.round} ft2, but the minimum size is #{min_area_ft2.round} ft2.")
+        return dcv_required
+      end
     end
 
-    # Check the minimum occupancy density
-    occ_per_ft2 = num_people / area_served_ft2
-    occ_per_1000_ft2 = occ_per_ft2 * 1000
-
-    if occ_per_1000_ft2 < min_occ_per_1000_ft2
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is not required since the occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
-      return dcv_required
+    # Check the minimum occupancy density if there is a limit 
+    if min_area_m2_per_occ
+      # Convert limit to IP
+      min_area_ft2_per_occ = OpenStudio.convert(min_area_m2_per_occ, 'm^2', 'ft^2').get
+      min_occ_per_ft2 = 1.0 / min_area_ft2_per_occ
+      min_occ_per_1000_ft2 = min_occ_per_ft2 * 1000
+      # Check the limit
+      occ_per_ft2 = num_people / area_served_ft2
+      occ_per_1000_ft2 = occ_per_ft2 * 1000
+      if occ_per_1000_ft2 < min_occ_per_1000_ft2
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is not required since the occupant density is #{occ_per_1000_ft2.round} people/1000 ft2, but the minimum occupant density is #{min_occ_per_1000_ft2.round} people/1000 ft2.")
+        return dcv_required
+      end
     end
-
+    
     # If here, DCV is required
     dcv_required = true
 
     return dcv_required
   end
 
+  # Determine the area and occupancy level limits for
+  # demand control ventilation.  No DCV requirements by default.
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone
+  # @return [Array<Double>] the minimum area, in m^2
+  # and the minimum occupancy density in m^2/person.  Returns nil
+  # if there is no requirement.
+  def thermal_zone_demand_control_ventilation_limits(thermal_zone)
+    min_area_m2 = nil
+    min_area_per_occ = nil
+    return [min_area_m2, min_area_per_occ]
+  end
+  
   # Add Exhaust Fans based on space type lookup
   # This measure doesn't look if DCV is needed. Others methods can check if DCV needed and add it
   #

@@ -56,16 +56,15 @@ module CoolingTower
       search_criteria['fan_type'] = fan_type
     end
 
-    # 90.1 6.5.5.3 Limit on Centrifugal Fan
+    # Limit on Centrifugal Fan
     # Open Circuit Cooling Towers.
-    case instvartemplate
-    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-      if fan_type == 'Centrifugal'
-        gpm_limit = 1100
+    if fan_type == 'Centrifugal'
+      gpm_limit = cooling_tower_apply_minimum_power_per_flow_gpm_limit(cooling_tower)
+      if gpm_limit
         if design_water_flow_gpm >= gpm_limit
           fan_type = 'Propeller or Axial'
           search_criteria['fan_type'] = fan_type
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, the design flow rate of #{design_water_flow_gpm.round} gpm is higher than the limit of #{gpm_limit.round} gpm for open centrifugal towers per 6.5.5.3.  This tower must meet the minimum performance of #{fan_type} instead.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, the design flow rate of #{design_water_flow_gpm.round} gpm is higher than the limit of #{gpm_limit.round} gpm for open centrifugal towers.  This tower must meet the minimum performance of #{fan_type} instead.")
         end
       end
     end
@@ -135,4 +134,17 @@ module CoolingTower
 
     return true
   end
+  
+  # Above this point, centrifugal fan cooling towers must meet the limits
+  # of propeller or axial cooling towers instead.
+  #
+  # @param cooling_tower [OpenStudio::Model::CoolingTowerSingleSpeed,
+  # OpenStudio::Model::CoolingTowerTwoSpeed,
+  # OpenStudio::Model::CoolingTowerVariableSpeed] the cooling tower
+  # @return [Double] the limit, in gallons per minute.  Return nil for no limit.
+  def cooling_tower_apply_minimum_power_per_flow_gpm_limit(cooling_tower)
+    gpm_limit = nil
+    return gpm_limit
+  end
+  
 end

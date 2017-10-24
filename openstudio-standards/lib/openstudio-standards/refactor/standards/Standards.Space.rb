@@ -158,9 +158,10 @@ class StandardsModel < OpenStudio::Model::Model
 
           # Determine the extra width to add to the sidelighted area
           extra_width_m = 0
-          if instvartemplate == '90.1-2013' || instvartemplate == 'NREL ZNE Ready 2017'
+          width_method = space_daylighted_area_window_width(space)
+          if width_method == 'proportional'
             extra_width_m = head_height_m / 2
-          elsif instvartemplate == '90.1-2010'
+          elsif width_method == 'fixed'
             extra_width_m = OpenStudio.convert(2, 'ft', 'm').get
           end
           # OpenStudio::logFree(OpenStudio::Debug, "openstudio.model.Space", "Adding #{extra_width_m.round(2)}m to the width for the sidelighted area.")
@@ -540,6 +541,19 @@ class StandardsModel < OpenStudio::Model::Model
     return result
   end
 
+  # Determines the method used to extend the daylighted area horizontally
+  # next to a window.  If the method is 'fixed', 2 ft is added to the
+  # width of each window.  If the method is 'proportional', a distance
+  # equal to half of the head height of the window is added.  If the method is 'none',
+  # no additional width is added.
+  # Default is none.
+  #
+  # @return [String] returns 'fixed' or 'proportional'
+  def space_daylighted_area_window_width(space)
+    method = 'none'
+    return method
+  end
+  
   # Returns the sidelighting effective aperture
   # space_sidelighting_effective_aperture(space)  = E(window area * window VT) / primary_sidelighted_area
   #
@@ -811,159 +825,23 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     areas = nil
-
-    req_top_ctrl = false
-    req_pri_ctrl = false
-    req_sec_ctrl = false
-
+    
     # Get the area of the space
     space_area_m2 = space.floorArea
 
     # Get the LPD of the space
     space_lpd_w_per_m2 = space.lightingPowerPerFloorArea
 
-    # Determine the type of control required
-    case instvartemplate
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+    # Get the daylighting areas
+    areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
+    
+    # Determine the type of daylighting controls required
+    req_top_ctrl, req_pri_ctrl, req_sec_ctrl = space_daylighting_control_required?(space, areas)
 
-      # Do nothing, no daylighting controls required
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, daylighting control not required by this standard.")
+    # Stop here if no controls are required
+    if !req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
       return false
-
-    when '90.1-2010'
-
-      req_top_ctrl = true
-      req_pri_ctrl = true
-
-      areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
-      ###################
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "primary_sidelighted_area = #{areas['primary_sidelighted_area']}")
-      ###################
-
-      # Sidelighting
-      # Check if the primary sidelit area < 250 ft2
-      if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
-        req_pri_ctrl = false
-      elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
-        req_pri_ctrl = false
-      else
-        # Check effective sidelighted aperture
-        sidelighted_effective_aperture = space_sidelighting_effective_aperture(space, areas['primary_sidelighted_area'])
-        ###################
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
-        ###################
-        if sidelighted_effective_aperture < 0.1
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
-          req_pri_ctrl = false
-        end
-      end
-
-      ###################
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "toplighted_area = #{areas['toplighted_area']}")
-      ###################
-      # Toplighting
-      # Check if the toplit area < 900 ft2
-      if areas['toplighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
-        req_top_ctrl = false
-      elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
-        req_top_ctrl = false
-      else
-        # Check effective sidelighted aperture
-        sidelighted_effective_aperture = space_skylight_effective_aperture(space, areas['toplighted_area'])
-        ###################
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_top = #{sidelighted_effective_aperture}")
-        ###################
-        if sidelighted_effective_aperture < 0.006
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because skylight effective aperture < 0.006 per 9.4.1.5 Exception b.")
-          req_top_ctrl = false
-        end
-      end
-
-    when '90.1-2013', 'NREL ZNE Ready 2017'
-
-      req_top_ctrl = true
-      req_pri_ctrl = true
-      req_sec_ctrl = true
-
-      areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
-
-      # Primary Sidelighting
-      # Check if the primary sidelit area contains less than 150W of lighting
-      if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
-        req_pri_ctrl = false
-      elsif areas['primary_sidelighted_area'] * space_lpd_w_per_m2 < 150.0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because less than 150W of lighting are present in the primary daylighted area per 9.4.1.1(e).")
-        req_pri_ctrl = false
-      else
-        # Check the size of the windows
-        if areas['total_window_area'] < OpenStudio.convert(20.0, 'ft^2', 'm^2').get
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
-          req_pri_ctrl = false
-        end
-      end
-
-      # Secondary Sidelighting
-      # Check if the primary and secondary sidelit areas contains less than 300W of lighting
-      if areas['secondary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
-        req_sec_ctrl = false
-      elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 300
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control not required because less than 300W of lighting are present in the combined primary and secondary daylighted areas per 9.4.1.1(e).")
-        req_sec_ctrl = false
-      else
-        # Check the size of the windows
-        if areas['total_window_area'] < OpenStudio.convert(20.0, 'ft^2', 'm^2').get
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control not required because there are less than 20ft2 of window per 9.4.1.1(e) Exception 2.")
-          req_sec_ctrl = false
-        end
-      end
-
-      # Toplighting
-      # Check if the toplit area contains less than 150W of lighting
-      if areas['toplighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
-        req_top_ctrl = false
-      elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
-        req_top_ctrl = false
-      end
-
-    when 'AssetScore'
-
-      # Same as 90.1-2010 but without effective aperture limits
-      # to avoid needing to perform run to get VLT for layered windows.
-
-      req_top_ctrl = true
-      req_pri_ctrl = true
-
-      areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
-
-      # Sidelighting
-      # Check if the primary sidelit area < 250 ft2
-      if areas['primary_sidelighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
-        req_pri_ctrl = false
-      elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
-        req_pri_ctrl = false
-      end
-
-      # Toplighting
-      # Check if the toplit area < 900 ft2
-      if areas['toplighted_area'] == 0.0
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
-        req_top_ctrl = false
-      elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
-        req_top_ctrl = false
-      end
-
-    end # End of instvartemplate case statement
+    end
 
     # Output the daylight control requirements
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control required = #{req_top_ctrl}")
@@ -1160,94 +1038,21 @@ class StandardsModel < OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{win.name} #{p[:facade]}, area = #{p[:area_m2].round(2)} m^2")
     end
 
-    # Add the required controls
-    sensor_1_frac = 0.0
-    sensor_2_frac = 0.0
-    sensor_1_window = nil
-    sensor_2_window = nil
-
-    case instvartemplate
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
-
-      # Do nothing, no daylighting controls required
-
-    when '90.1-2010', 'AssetScore'
-
-      if req_top_ctrl && req_pri_ctrl
-        # Sensor 1 controls toplighted area
-        sensor_1_frac = areas['toplighted_area'] / space_area_m2
-        sensor_1_window = sorted_skylights[0]
-        # Sensor 2 controls primary area
-        sensor_2_frac = areas['primary_sidelighted_area'] / space_area_m2
-        sensor_2_window = sorted_windows[0]
-      elsif req_top_ctrl && !req_pri_ctrl
-        # Sensor 1 controls toplighted area
-        sensor_1_frac = areas['toplighted_area'] / space_area_m2
-        sensor_1_window = sorted_skylights[0]
-      elsif !req_top_ctrl && req_pri_ctrl
-        if sorted_windows.size == 1
-          # Sensor 1 controls the whole primary area
-          sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2
-          sensor_1_window = sorted_windows[0]
-        else
-          # Sensor 1 controls half the primary area
-          sensor_1_frac = (areas['primary_sidelighted_area'] / space_area_m2) / 2
-          sensor_1_window = sorted_windows[0]
-          # Sensor 2 controls the other half of primary area
-          sensor_2_frac = (areas['primary_sidelighted_area'] / space_area_m2) / 2
-          sensor_2_window = sorted_windows[1]
-        end
-      end
-
-    when '90.1-2013', 'NREL ZNE Ready 2017'
-
-      if req_top_ctrl && req_pri_ctrl && req_sec_ctrl
-        # Sensor 1 controls toplighted area
-        sensor_1_frac = areas['toplighted_area'] / space_area_m2
-        sensor_1_window = sorted_skylights[0]
-        # Sensor 2 controls primary + secondary area
-        sensor_2_frac = (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) / space_area_m2
-        sensor_2_window = sorted_windows[0]
-      elsif !req_top_ctrl && req_pri_ctrl && req_sec_ctrl
-        # Sensor 1 controls primary area
-        sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2
-        sensor_1_window = sorted_windows[0]
-        # Sensor 2 controls secondary area
-        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2)
-        sensor_2_window = sorted_windows[0]
-      elsif req_top_ctrl && !req_pri_ctrl && req_sec_ctrl
-        # Sensor 1 controls toplighted area
-        sensor_1_frac = areas['toplighted_area'] / space_area_m2
-        sensor_1_window = sorted_skylights[0]
-        # Sensor 2 controls secondary area
-        sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2)
-        sensor_2_window = sorted_windows[0]
-      elsif req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
-        # Sensor 1 controls toplighted area
-        sensor_1_frac = areas['toplighted_area'] / space_area_m2
-        sensor_1_window = sorted_skylights[0]
-      elsif !req_top_ctrl && req_pri_ctrl && !req_sec_ctrl
-        # Sensor 1 controls primary area
-        sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2
-        sensor_1_window = sorted_windows[0]
-      elsif !req_top_ctrl && !req_pri_ctrl && req_sec_ctrl
-        # Sensor 1 controls secondary area
-        sensor_1_frac = areas['secondary_sidelighted_area'] / space_area_m2
-        sensor_1_window = sorted_windows[0]
-      end
-
-    end
+    # Determine the sensor fractions and the attached windows
+    sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window = space_daylighting_fractions_and_windows(space,
+                                                                                                             areas,
+                                                                                                             sorted_windows, 
+                                                                                                             sorted_skylights,
+                                                                                                             req_top_ctrl,
+                                                                                                             req_pri_ctrl,
+                                                                                                             req_sec_ctrl)
 
     # Further adjust the sensor controlled fraction for the three
-    # office prototypes for 90.1-2010 and 90.1-2013
-    # based on assumptions about geometry that is not explicitly
+    # office prototypes based on assumptions about geometry that is not explicitly
     # defined in the model.
-    case instvartemplate
-    when '90.1-2010', '90.1-2013'
-      if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
-        sensor_1_frac = sensor_1_frac * psa_nongeo_frac unless psa_nongeo_frac.nil?
-        sensor_2_frac = sensor_2_frac * ssa_nongeo_frac unless ssa_nongeo_frac.nil?
-       end
+    if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
+      sensor_1_frac = sensor_1_frac * psa_nongeo_frac unless psa_nongeo_frac.nil?
+      sensor_2_frac = sensor_2_frac * ssa_nongeo_frac unless ssa_nongeo_frac.nil?
     end
 
     # Place the sensors and set control fractions
@@ -1363,6 +1168,42 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
+  # Determine if the space requires daylighting controls for
+  # toplighting, primary sidelighting, and secondary sidelighting.
+  # Defaults to false for all types.
+  #
+  # @param space [OpenStudio::Model::Space] the space in question
+  # @param areas [Hash] a hash of daylighted areas
+  # @return [Array<Bool>] req_top_ctrl, req_pri_ctrl, req_sec_ctrl
+  def space_daylighting_control_required?(space, areas)
+    req_top_ctrl = false
+    req_pri_ctrl = false
+    req_sec_ctrl = false
+  
+    return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
+  end
+  
+  # Determine the fraction controlled by each sensor and which
+  # window each sensor should go near.
+  #
+  # @param space [OpenStudio::Model::Space] the space with the daylighting
+  # @param sorted_windows [Hash] a hash of windows, sorted by priority
+  # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
+  def space_daylighting_fractions_and_windows(space,
+                                              areas,
+                                              sorted_windows, 
+                                              sorted_skylights,
+                                              req_top_ctrl,
+                                              req_pri_ctrl,
+                                              req_sec_ctrl)
+    sensor_1_frac = 0.0
+    sensor_2_frac = 0.0
+    sensor_1_window = nil
+    sensor_2_window = nil
+    
+    return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
+  end
+  
   # Set the infiltration rate for this space to include
   # the impact of air leakage requirements in the standard.
   #
@@ -1370,20 +1211,11 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
-    # Define the total building baseline infiltration rate
-    basic_infil_rate_cfm_per_ft2 = nil
-    infil_type = nil
-    case instvartemplate
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{instvartemplate}, infiltration rates are not defined using this method, no changes have been made to the model.")
-      return true
-    when '90.1-2004', '90.1-2007'
-      basic_infil_rate_cfm_per_ft2 = 1.8
-    when '90.1-2010', '90.1-2013'
-      basic_infil_rate_cfm_per_ft2 = 1.0
-    when 'NREL ZNE Ready 2017'
-      basic_infil_rate_cfm_per_ft2 = 0.5
-    end
+    # Determine the total building baseline infiltration rate
+    basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa(space)
+    
+    # Do nothing if no infiltration
+    return true if basic_infil_rate_cfm_per_ft2.zero?
 
     # Conversion factor
     # 1 m^3/s*m^2 = 196.85 cfm/ft2
@@ -1452,80 +1284,15 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
-  # Determine the component infiltration rate for this space
+  # Determine the base infiltration rate at 75 PA.
   #
-  # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  # @return [Double] infiltration rate
-  #   @units cubic meters per second (m^3/s)
-  # @todo handle floors over unconditioned spaces
-  # @todo make subsurface infil rates part of Surface.component_infiltration_rate?
-  def space_component_infiltration_rate(space)
-    # Define the total building baseline infiltration rate
-    basic_infil_rate_cfm_per_ft2 = nil
-    infil_type = nil
-    case instvartemplate
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{instvartemplate}, infiltration rates are not defined using this method, no changes have been made to the model.")
-      return true
-    when '90.1-2004', '90.1-2007'
-      basic_infil_rate_cfm_per_ft2 = 1.8
-    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-      basic_infil_rate_cfm_per_ft2 = 1.0
-    end
-
-    # Calculate the basic infiltration rate
-    ext_area_m2 = exteriorArea
-    ext_area_ft2 = OpenStudio.convert(ext_area_m2, 'm^2', 'ft^2').get
-    basic_infil_cfm = basic_infil_rate_cfm_per_ft2 * ext_area_ft2
-    basic_infil_m3_per_s = OpenStudio.convert(basic_infil_cfm, 'cfm', 'm^3/s').get
-
-    # Calculate the baseline component infiltration rate
-    infil_type = 'baseline'
-    base_comp_infil_m3_per_s = 0.0
-    space.surfaces.sort.each do |surface|
-      # This surface
-      base_comp_infil_m3_per_s += surface_component_infiltration_rate(surface, infil_type)
-      # Subsurfaces in this surface
-      # TODO make this part of Surface.component_infiltration_rate?
-      surface.subSurfaces.sort.each do |subsurface|
-        base_comp_infil_m3_per_s += surface_component_infiltration_rate(subsurface, infil_type)
-      end
-    end
-    base_comp_infil_cfm = OpenStudio.convert(base_comp_infil_m3_per_s, 'm^3/s', 'cfm').get
-
-    # Calculate the advanced component infiltration rate
-    infil_type = 'advanced'
-    adv_comp_infil_m3_per_s = 0.0
-    space.surfaces.sort.each do |surface|
-      # This surface
-      adv_comp_infil_m3_per_s += surface_component_infiltration_rate(surface, infil_type)
-      # Subsurfaces in this surface
-      # TODO make this part of Surface.component_infiltration_rate?
-      surface.subSurfaces.sort.each do |subsurface|
-        adv_comp_infil_m3_per_s += surface_component_infiltration_rate(subsurface, infil_type)
-      end
-    end
-    adv_comp_infil_cfm = OpenStudio.convert(adv_comp_infil_m3_per_s, 'm^3/s', 'cfm').get
-
-    # Calculate the adjusted infiltration rate
-    infil_m3_per_s = basic_infil_m3_per_s - base_comp_infil_m3_per_s + adv_comp_infil_m3_per_s
-
-    # Adjust the infiltration from 75Pa to 4Pa
-    intial_pressure_pa = 75.0
-    final_pressure_pa = 4.0
-    adj_infil_m3_per_s = adjust_infiltration_to_lower_pressure(infil_m3_per_s, intial_pressure_pa, final_pressure_pa)
-
-    # Calculate the rate per exterior area
-    adj_infil_m3_per_s_per_m2 = adj_infil_m3_per_s / ext_area_m2
-
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Space', "For #{space.name}, infil = #{adj_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2.")
-    #=> infil = #{comp_infil_rate_m3_per_s.round(2)} m^3/s, ext area = #{tot_ext_area_m2.round} m^2")
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "For #{self.name}, comp infil = #{comp_infil_rate_cfm_per_ft2.round(4)} cfm/ft2 => infil = #{comp_infil_rate_cfm.round(2)} cfm, ext area = #{tot_ext_area_ft2.round} ft2")
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "For #{self.name}")
-
-    return adj_infil_m3_per_s
+  # @return [Double] the baseline infiltration rate, in cfm/ft^2
+  # defaults to no infiltration.
+  def space_infiltration_rate_75_pa(space) 
+    basic_infil_rate_cfm_per_ft2 = 0
+    return basic_infil_rate_cfm_per_ft2
   end
-
+  
   # Calculate the area of the exterior walls,
   # including the area of the windows on these walls.
   #

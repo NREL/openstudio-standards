@@ -45,4 +45,5 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/refactor/standards/ashrae_90_1/ashrae_90_1_2013/ashrae90_1_2013'
   require_relative 'openstudio-standards/refactor/standards/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980'
   require_relative 'openstudio-standards/refactor/standards/ashrae_90_1/doe_ref_1980_2004/doe_ref_pre_1980_2004'
+  require_relative 'openstudio-standards/refactor/standards/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017'
 end

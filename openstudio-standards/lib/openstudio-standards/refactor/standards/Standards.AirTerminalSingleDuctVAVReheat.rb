@@ -15,24 +15,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @todo remove exception where older vintages don't have minimum positions adjusted.
   def air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(air_terminal_single_duct_vav_reheat, zone_min_oa = nil, has_ddc = true)
     # Minimum damper position
-    min_damper_position = nil
-    case instvartemplate
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
-      min_damper_position = 0.3
-    when '90.1-2007'
-      min_damper_position = 0.3
-    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-      case air_terminal_single_duct_vav_reheat_reheat_type(air_terminal_single_duct_vav_reheat) 
-      when 'HotWater'
-      min_damper_position = if has_ddc
-                              0.2
-                            else
-                              0.3
-                            end
-      when 'Electricity', 'NaturalGas'
-        min_damper_position = 0.3
-      end
-    end
+    min_damper_position = air_terminal_single_duct_vav_reheat_minimum_damper_position(air_terminal_single_duct_vav_reheat, has_ddc)
     setConstantMinimumAirFlowFraction(min_damper_position)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirTerminalSingleDuctVAVReheat', "For #{air_terminal_single_duct_vav_reheat.name}: set minimum damper position to #{min_damper_position}.")
 
@@ -47,6 +30,15 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
+  # Specifies the minimum damper position for VAV dampers.
+  # Defaults to 30%
+  #
+  # @param has_ddc [Bool] whether or not there is DDC control of the VAV terminal in question
+  def air_terminal_single_duct_vav_reheat_minimum_damper_position(air_terminal_single_duct_vav_reheat, has_ddc = false)
+    min_damper_position = 0.3
+    return min_damper_position
+  end
+  
   def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
     flow_rate_fraction = air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction
     if air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.is_initialized
