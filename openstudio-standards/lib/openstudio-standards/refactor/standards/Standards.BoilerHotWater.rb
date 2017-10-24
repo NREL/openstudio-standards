@@ -129,11 +129,11 @@ class StandardsModel < OpenStudio::Model::Model
     # for NECB, check if secondary and/or modulating boiler required
     if instvartemplate == 'NECB 2011'
       if capacity_w / 1000.0 >= 352.0
-        if name.to_s.include?('Primary Boiler')
+        if boiler_hot_water.name.to_s.include?('Primary Boiler')
           boiler_capacity = capacity_w
           boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
           boiler_hot_water.setMinimumPartLoadRatio(0.25)
-        elsif name.to_s.include?('Secondary Boiler')
+        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
           boiler_capacity = 0.001
         end
       elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
