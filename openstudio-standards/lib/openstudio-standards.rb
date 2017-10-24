@@ -38,6 +38,7 @@ module OpenstudioStandards
   #refactored includes
   require_relative 'openstudio-standards/refactor/standards/standards_model'
   require_relative 'openstudio-standards/refactor/standards/necb/necb_2011/necb_2011'
+  require_relative 'openstudio-standards/refactor/standards/ashrae_90_1/ashrae_90_1'
   require_relative 'openstudio-standards/refactor/standards/ashrae_90_1/ashrae_90_1_2007/ashrae90_1_2007'
   require_relative 'openstudio-standards/refactor/standards/ashrae_90_1/ashrae_90_1_2004/ashrae90_1_2004'
   require_relative 'openstudio-standards/refactor/standards/ashrae_90_1/ashrae_90_1_2010/ashrae90_1_2010'
