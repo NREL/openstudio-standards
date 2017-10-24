@@ -35,10 +35,11 @@ class TestRefactorParallel < Minitest::Test
     end
 
     models_with_differences = []
-    processess = (Parallel::processor_count + 2 )
+    processess = (Parallel::processor_count )
     puts "processess #{processess}"
     puts "Running #{runs.size} comparisons"
     Parallel.map(runs, in_processes: processess) do |run|
+      diffs = []
       begin
 
         FileUtils.mkdir_p(run['refactored_run_dir']) unless Dir.exists?(run['refactored_run_dir'])
@@ -62,22 +63,19 @@ class TestRefactorParallel < Minitest::Test
         old_model.create_prototype_building(run['building_type'], run['template'], run['climate_zone'], run['epw_file'], run['old_method_run_dir'])
         log_messages_to_file("#{run['old_method_run_dir']}/openstudio_standards.log", debug = false)
 
-        # Compare the two models
+        # Compare the two models.
         diffs = compare_osm_files(old_model, new_model)
 
-        # Log the differences to file
-        diff_file = "#{run['old_method_run_dir']}/../differences.json"
-        FileUtils.rm(diff_file) if File.exists?(diff_file)
-        if diffs.size > 0
-          File.write(diff_file, diffs.to_json)
-        end
+
       rescue => exception
-        # Log error
-        diff_file = "#{run['old_method_run_dir']}/../differences.json"
-        diffs << "Error occured with #{run['run_name']}: #{exception.backtrace}"
-        File.write(diff_file, diffs.to_json)
-        next
+        # Log error/exception and then keep going.
+        error = "#{exception.backtrace.first}: #{exception.message} (#{exception.class})", exception.backtrace.drop(1).map{|s| "\n#{s}"}
+        diffs << "#{run['run_name']}: Error \n#{error}"
       end
+      #Write out diff or error message
+      diff_file = "#{run['old_method_run_dir']}/../differences.json"
+      FileUtils.rm(diff_file) if File.exists?(diff_file)
+      File.write(diff_file, diffs.to_json) if diffs.size > 0
     end
 
     runs.each do |run|
