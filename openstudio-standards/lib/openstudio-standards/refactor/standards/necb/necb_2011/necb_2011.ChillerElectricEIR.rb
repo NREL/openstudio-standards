@@ -1,99 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class StandardsModel < OpenStudio::Model::Model
-  # Finds the search criteria
-  #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  # @return [hash] has for search criteria to be used for find object
-  def chiller_electric_eir_find_search_criteria(chiller_electric_eir)
-    search_criteria = {}
-    search_criteria['template'] = instvartemplate
-
-    # Determine if WaterCooled or AirCooled by
-    # checking if the chiller is connected to a condenser
-    # water loop or not.
-    cooling_type = 'AirCooled'
-    if chiller_electric_eir.secondaryPlantLoop.is_initialized
-      cooling_type = 'WaterCooled'
-    end
-
-    search_criteria['cooling_type'] = cooling_type
-
-    # TODO: Standards replace this with a mechanism to store this
-    # data in the chiller object itself.
-    # For now, retrieve the condenser type from the name
-    name = chiller_electric_eir.name.get
-    condenser_type = nil
-    compressor_type = nil
-    if cooling_type == 'AirCooled'
-      if name.include?('WithCondenser')
-        condenser_type = 'WithCondenser'
-      elsif name.include?('WithoutCondenser')
-        condenser_type = 'WithoutCondenser'
-      end
-    elsif cooling_type == 'WaterCooled'
-      if name.include?('Reciprocating')
-        compressor_type = 'Reciprocating'
-      elsif name.include?('Rotary Screw')
-        compressor_type = 'Rotary Screw'
-      elsif name.include?('Scroll')
-        compressor_type = 'Scroll'
-      elsif name.include?('Centrifugal')
-        compressor_type = 'Centrifugal'
-      end
-    end
-    unless condenser_type.nil?
-      search_criteria['condenser_type'] = condenser_type
-    end
-    unless compressor_type.nil?
-      search_criteria['compressor_type'] = compressor_type
-    end
-
-    return search_criteria
-  end
-
-  # Finds capacity in W
-  #
-  # @return [Double] capacity in W to be used for find object
-  def chiller_electric_eir_find_capacity(chiller_electric_eir)
-    capacity_w = nil
-    if chiller_electric_eir.referenceCapacity.is_initialized
-      capacity_w = chiller_electric_eir.referenceCapacity.get
-    elsif chiller_electric_eir.autosizedReferenceCapacity.is_initialized
-      capacity_w = chiller_electric_eir.autosizedReferenceCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
-    end
-
-    return capacity_w
-  end
-
-  # Finds lookup object in standards and return full load efficiency
-  #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
-  # @return [Double] full load efficiency (COP)
-  def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
-    # Get the chiller properties
-    search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
-    capacity_tons = OpenStudio.convert(find_capacity, 'W', 'ton').get 
-    chlr_props = model_find_object(model, $os_standards['chillers'], search_criteria, capacity_tons, Date.today)
-
-    # lookup the efficiency value
-    kw_per_ton = nil
-    cop = nil
-    if chlr_props['minimum_full_load_efficiency']
-      kw_per_ton = chlr_props['minimum_full_load_efficiency']
-      cop = kw_per_ton_to_cop(kw_per_ton)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency.")
-    end
-
-    return cop
-  end
-
+class NECB_2011_Model < StandardsModel
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
@@ -112,8 +19,23 @@ class StandardsModel < OpenStudio::Model::Model
     # Get the chiller capacity
     capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir) 
 
+    # All chillers must be modulating down to 25% of their capacity
+    chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
+    chiller_electric_eir.setMinimumPartLoadRatio(0.25)
+    chiller_electric_eir.setMinimumUnloadingRatio(0.25)
+    if (capacity_w / 1000.0) < 2100.0
+      if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
+        chiller_capacity = capacity_w
+      elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
+        chiller_capacity = 0.001
+      end
+    else
+      chiller_capacity = capacity_w / 2.0
+    end
+    chiller_electric_eir.setReferenceCapacity(chiller_capacity)
+
     # Convert capacity to tons
-    capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
+    capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
     # Get the chiller properties
     chlr_props = model_find_object(chiller_electric_eir.model, chillers, search_criteria, capacity_tons, Date.today)
@@ -161,6 +83,18 @@ class StandardsModel < OpenStudio::Model::Model
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency, will not be set.")
       successfully_set_all_properties = false
+    end
+
+    # Set cooling tower properties now that the new COP of the chiller is set
+    if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
+      # Single speed tower model assumes 25% extra for compressor power
+      tower_cap = capacity_w * (1.0 + 1.0 / chiller_electric_eir.referenceCOP)
+      if (tower_cap / 1000.0) < 1750
+        clg_tower_objs[0].setNumberofCells(1)
+      else
+        clg_tower_objs[0].setNumberofCells((tower_cap / (1000 * 1750) + 0.5).round)
+      end
+      clg_tower_objs[0].setFanPoweratDesignAirFlowRate(0.015 * tower_cap)
     end
 
     # Append the name with size and kw/ton

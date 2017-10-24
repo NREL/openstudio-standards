@@ -190,7 +190,7 @@ module Fan
     # TODO check COMNET and T24 ACM and PNNL 90.1 doc
     fan_impeller_eff = 0.65
 
-    if fan_small_fan?(fan)  && instvartemplate != 'NECB 2011'
+    if fan_small_fan?(fan)
       fan_impeller_eff = 0.55
     end
 
@@ -223,38 +223,8 @@ module Fan
     motors = $os_standards['motors']
 
     # Assuming all fan motors are 4-pole ODP
-    instvartemplate_mod = instvartemplate.dup
-    if instvartemplate == 'NECB 2011'
-
-      if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
-        instvartemplate_mod += '-CONSTANT'
-      elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
-        instvartemplate_mod += '-VARIABLE'
-        # 0.909 corrects for 10% over sizing implemented upstream
-        # 0.7457 is to convert from bhp to kW
-        fan_power_kw = 0.909 * 0.7457 * motor_bhp
-        power_vs_flow_curve_name = if fan_power_kw >= 25.0
-                                     'VarVolFan-FCInletVanes-NECB2011-FPLR'
-                                   elsif fan_power_kw >= 7.5 && fan_power_kw < 25
-                                     'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
-                                   else
-                                     'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
-                                   end
-        power_vs_flow_curve = model_add_curve(fan.model(), power_vs_flow_curve_name)
-        fan.setFanPowerMinimumFlowRateInputMethod('Fraction')
-        fan.setFanPowerCoefficient5(0.0)
-        fan.setFanPowerMinimumFlowFraction(power_vs_flow_curve.minimumValueofx)
-        fan.setFanPowerCoefficient1(power_vs_flow_curve.coefficient1Constant)
-        fan.setFanPowerCoefficient2(power_vs_flow_curve.coefficient2x)
-        fan.setFanPowerCoefficient3(power_vs_flow_curve.coefficient3xPOW2)
-        fan.setFanPowerCoefficient4(power_vs_flow_curve.coefficient4xPOW3)
-      else
-        raise("")
-      end
-    end
-
     search_criteria = {
-      'template' => instvartemplate_mod,
+      'template' => instvartemplate,
       'number_of_poles' => 4.0,
       'type' => 'Enclosed'
     }

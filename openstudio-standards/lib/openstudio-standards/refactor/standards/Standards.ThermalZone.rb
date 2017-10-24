@@ -1353,7 +1353,7 @@ class StandardsModel < OpenStudio::Model::Model
     dcv_required = false
 
     # Not required by the old vintages
-    if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'NECB 2011'
+    if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
       return dcv_required
     end
 

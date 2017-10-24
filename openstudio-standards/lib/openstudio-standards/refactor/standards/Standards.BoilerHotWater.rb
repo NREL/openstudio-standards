@@ -111,8 +111,7 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-  # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify
   # @return [Bool] true if successful, false if not
   def boiler_hot_water_apply_efficiency_and_curves(boiler_hot_water)
     successfully_set_all_properties = false 
@@ -126,36 +125,9 @@ class StandardsModel < OpenStudio::Model::Model
     # Get the capacity
     capacity_w = boiler_hot_water_find_capacity(boiler_hot_water) 
 
-    # for NECB, check if secondary and/or modulating boiler required
-    if instvartemplate == 'NECB 2011'
-      if capacity_w / 1000.0 >= 352.0
-        if boiler_hot_water.name.to_s.include?('Primary Boiler')
-          boiler_capacity = capacity_w
-          boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
-          boiler_hot_water.setMinimumPartLoadRatio(0.25)
-        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-          boiler_capacity = 0.001
-        end
-      elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
-        boiler_capacity = capacity_w / 2
-      elsif (capacity_w / 1000.0) <= 176.0
-        if boiler_hot_water.name.to_s.include?('Primary Boiler')
-          boiler_capacity = capacity_w
-        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-          boiler_capacity = 0.001
-        end
-      end
-      boiler_hot_water.setNominalCapacity(boiler_capacity)
-    end # NECB 2011
-
     # Convert capacity to Btu/hr
-    if instvartemplate == 'NECB 2011'
-      capacity_btu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'Btu/hr').get
-      capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'kBtu/hr').get
-    else
-      capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-      capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
-    end
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
+    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Get the boiler properties
     blr_props = model_find_object(boiler_hot_water.model, $os_standards['boilers'], search_criteria, capacity_btu_per_hr)

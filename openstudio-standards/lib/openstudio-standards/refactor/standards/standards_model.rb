@@ -6,7 +6,21 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Require all the standards files below this dynamically for now
   # TODO refactor: hard code requires later
-  Dir.glob("#{File.dirname(__FILE__)}/*.rb").each do |file_path|
+  Dir.glob("#{File.dirname(__FILE__)}/../**/*.rb").each do |file_path|
+    # Don't load temp scripts
+    next if file_path.include?('temporary_scripts')
+    # Don't load already loaded files
+    already_loaded_files = [
+      'necb_2011',
+      'ashrae90_1_2007',
+      'ashrae90_1_2004',
+      'ashrae90_1_2010',
+      'ashrae90_1_2013',
+      'doe_ref_pre_1980',
+      'doe_ref_pre_1980_2004'
+    ]
+    next if already_loaded_files.include?(File.basename(file_path, '.rb'))
+    puts "Requiring: #{file_path}."
     require file_path
   end
 

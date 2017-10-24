@@ -132,29 +132,26 @@ class StandardsModel < OpenStudio::Model::Model
       successfully_set_all_properties = false
     end
 
-    # For NECB the heat pump needs only one stage
     htg_capacity = nil
     flow_rate4 = nil
-    if instvartemplate == 'NECB 2011'
-      htg_stages = stages
-      if htg_stages.last.grossRatedHeatingCapacity.is_initialized
-        htg_capacity = htg_stages.last.grossRatedHeatingCapacity.get
-      elsif autosizedSpeed4GrossRatedHeatingCapacity.is_initialized
-        htg_capacity = autosizedSpeed4GrossRatedHeatingCapacity.get
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
-        successfully_set_all_properties = false
-        return successfully_set_all_properties
-      end
-      if htg_stages.last.ratedAirFlowRate.is_initialized
-        flow_rate4 = htg_stages.last.ratedAirFlowRate.get
-      elsif autosizedSpeed4RatedAirFlowRate.is_initialized
-        flow_rate4 = autosizedSpeed4RatedAirFlowRate.get
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
-        successfully_set_all_properties = false
-        return successfully_set_all_properties
-      end
+    htg_stages = coil_heating_dx_multi_speed.stages
+    if htg_stages.last.grossRatedHeatingCapacity.is_initialized
+      htg_capacity = htg_stages.last.grossRatedHeatingCapacity.get
+    elsif coil_heating_dx_multi_speed.autosizedSpeed4GrossRatedHeatingCapacity.is_initialized
+      htg_capacity = coil_heating_dx_multi_speed.autosizedSpeed4GrossRatedHeatingCapacity.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
+      successfully_set_all_properties = false
+      return successfully_set_all_properties
+    end
+    if htg_stages.last.ratedAirFlowRate.is_initialized
+      flow_rate4 = htg_stages.last.ratedAirFlowRate.get
+    elsif coil_heating_dx_multi_speed.autosizedSpeed4RatedAirFlowRate.is_initialized
+      flow_rate4 = coil_heating_dx_multi_speed.autosizedSpeed4RatedAirFlowRate.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{coil_heating_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
+      successfully_set_all_properties = false
+      return successfully_set_all_properties
     end
 
     # Convert capacity to Btu/hr

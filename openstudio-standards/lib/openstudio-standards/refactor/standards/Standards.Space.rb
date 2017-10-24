@@ -1391,54 +1391,24 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Adjust the infiltration rate to the average pressure
     # for the prototype buildings.
-    adj_infil_rate_m3_per_s_per_m2 = nil
-    all_ext_infil_m3_per_s_per_m2 = nil
-    case instvartemplate
-    when 'NECB 2011'
-      # Remove infiltration rates set at the space type.
-      unless space.spaceType.empty?
-        space.spaceType.get.spaceInfiltrationDesignFlowRates.each(&:remove)
-      end
-      # Remove infiltration rates set at the space object.
-      space.spaceInfiltrationDesignFlowRates.each(&:remove)
+    adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
+    adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
+    # Get the exterior wall area
+    exterior_wall_and_window_area_m2 = space_exterior_wall_and_window_area(space) 
 
-      adj_infil_rate_m3_per_s_per_m2 = 0.25 * 0.001 # m3/s/m2
-      exterior_wall_and_roof_and_subsurface_area = space_exterior_wall_and_roof_and_subsurface_area(space) # To do
-      # Don't create an object if there is no exterior wall area
-      if exterior_wall_and_roof_and_subsurface_area <= 0.0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{instvartemplate}, no exterior wall area was found, no infiltration will be added.")
-        return true
-      end
-      # Calculate the total infiltration, assuming
-      # that it only occurs through exterior walls and roofs (not floors as
-      # explicit stated in the NECB 2011 so overhang/cantilevered floors will
-      # have no effective infiltration)
-      tot_infil_m3_per_s = adj_infil_rate_m3_per_s_per_m2 * exterior_wall_and_roof_and_subsurface_area
-      # Now spread the total infiltration rate over all
-      # exterior surface area (for the E+ input field) this will include the exterior floor if present.
-      all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.exteriorArea
-
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-      adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
-      adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
-      # Get the exterior wall area
-      exterior_wall_and_window_area_m2 = space_exterior_wall_and_window_area(space) 
-
-      # Don't create an object if there is no exterior wall area
-      if exterior_wall_and_window_area_m2 <= 0.0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{instvartemplate}, no exterior wall area was found, no infiltration will be added.")
-        return true
-      end
-
-      # Calculate the total infiltration, assuming
-      # that it only occurs through exterior walls
-      tot_infil_m3_per_s = adj_infil_rate_m3_per_s_per_m2 * exterior_wall_and_window_area_m2
-
-      # Now spread the total infiltration rate over all
-      # exterior surface areas (for the E+ input field)
-      all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.exteriorArea
-
+    # Don't create an object if there is no exterior wall area
+    if exterior_wall_and_window_area_m2 <= 0.0
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{instvartemplate}, no exterior wall area was found, no infiltration will be added.")
+      return true
     end
+
+    # Calculate the total infiltration, assuming
+    # that it only occurs through exterior walls
+    tot_infil_m3_per_s = adj_infil_rate_m3_per_s_per_m2 * exterior_wall_and_window_area_m2
+
+    # Now spread the total infiltration rate over all
+    # exterior surface areas (for the E+ input field)
+    all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.exteriorArea
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Space', "For #{space.name}, adj infil = #{all_ext_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2.")
 

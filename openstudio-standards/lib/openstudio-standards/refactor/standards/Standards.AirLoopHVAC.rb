@@ -19,7 +19,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Only applies to multi-zone vav systems
     # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
     # (2) AHU1 in 2004-2013
-    if air_loop_hvac_multizone_vav_system?(air_loop_hvac)  && !(air_loop_hvac.name.to_s.include? 'Outpatient F1') && instvartemplate != 'NECB 2011'
+    if air_loop_hvac_multizone_vav_system?(air_loop_hvac)  && !(air_loop_hvac.name.to_s.include? 'Outpatient F1')
       air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac) 
     end
 
@@ -818,8 +818,6 @@ class StandardsModel < OpenStudio::Model::Model
           minimum_capacity_btu_per_hr = 54_000
         end
       end
-    when 'NECB 2011'
-      minimum_capacity_btu_per_hr = 68_243 # NECB requires economizer for cooling cap > 20 kW
     end
 
     # Check whether the system requires an economizer by comparing
@@ -1055,10 +1053,6 @@ class StandardsModel < OpenStudio::Model::Model
         end
       end
     when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-      integrated_economizer_required = true
-    when 'NECB 2011'
-      # this means that compressor allowed to turn on when economizer is open
-      # (NoLockout); as per 5.2.2.8(3)
       integrated_economizer_required = true
     end
 
@@ -1571,7 +1565,7 @@ class StandardsModel < OpenStudio::Model::Model
       # Calculate the number of system operating hours
       # based on the availability schedule.
       ann_op_hrs = 0.0
-      avail_sch = availabilitySchedule
+      avail_sch = air_loop_hvac.availabilitySchedule
       if avail_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
         ann_op_hrs = 8760.0
       elsif avail_sch.to_ScheduleRuleset.is_initialized
@@ -1732,11 +1726,6 @@ class StandardsModel < OpenStudio::Model::Model
           end
         end
       end
-    when 'NECB 2011'
-      # The NECB 2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
-      # The calculation for this is done below, to modify erv_required
-      # erv_cfm set to nil here as placeholder, will lead to erv_required = false
-      erv_cfm = nil
     end
 
     # Determine if an ERV is required
@@ -1751,89 +1740,6 @@ class StandardsModel < OpenStudio::Model::Model
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Exceeds minimum flow requirement of #{erv_cfm}cfm.")
       erv_required = true
     end
-
-    # This code modifies erv_required for NECB 2011
-    # Calculation of exhaust heat content and check whether it is > 150 kW
-
-    if instvartemplate == 'NECB 2011'
-
-      # get all zones in the model
-      zones = air_loop_hvac.thermalZones
-
-      # initialize counters
-      sum_zone_oa = 0.0
-      sum_zone_oa_times_heat_design_t = 0.0
-
-      # zone loop
-      zones.each do |zone|
-        # get design heat temperature for each zone; this is equivalent to design exhaust temperature
-        heat_design_t = 21.0
-        zone_thermostat = zone.thermostat.get
-        if zone_thermostat.to_ThermostatSetpointDualSetpoint.is_initialized
-          dual_thermostat = zone_thermostat.to_ThermostatSetpointDualSetpoint.get
-          htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
-          htg_temp_sch_ruleset = htg_temp_sch.to_ScheduleRuleset.get
-          winter_dd_sch = htg_temp_sch_ruleset.winterDesignDaySchedule
-          heat_design_t = winter_dd_sch.values.max
-        end
-
-        # initialize counter
-        zone_oa = 0.0
-        # outdoor defined at space level; get OA flow for all spaces within zone
-        spaces = zone.spaces
-
-        # space loop
-        spaces.each do |space|
-          unless space.designSpecificationOutdoorAir.empty? # if empty, don't do anything
-            outdoor_air = space.designSpecificationOutdoorAir.get
-            # in bTAP, outdoor air specified as outdoor air per 
-            oa_flow_per_floor_area = outdoor_air.outdoorAirFlowperFloorArea
-            oa_flow = oa_flow_per_floor_area * space.floorArea * zone.multiplier # oa flow for the space
-            zone_oa += oa_flow # add up oa flow for all spaces to get zone air flow
-          end
-        end # space loop
-        sum_zone_oa += zone_oa # sum of all zone oa flows to get system oa flow
-        sum_zone_oa_times_heat_design_t += (zone_oa * heat_design_t) # calculated to get oa flow weighted average of design exhaust temperature
-      end # zone loop
-
-      # Calculate average exhaust temperature (oa flow weighted average)
-      avg_exhaust_temp = sum_zone_oa_times_heat_design_t / sum_zone_oa
-
-      # for debugging/testing
-      #      puts "average exhaust temp = #{avg_exhaust_temp}"
-      #      puts "sum_zone_oa = #{sum_zone_oa}"
-
-      # Get January winter design temperature
-      # get model weather file name
-      weather_file = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get)
-
-      # get winter(heating) design temp stored in array
-      # Note that the NECB 2011 specifies using the 2.5% january design temperature
-      # The outdoor temperature used here is the 0.4% heating design temperature of the coldest month, available in stat file
-      outdoor_temp = weather_file.heating_design_info[1]
-
-      #      for debugging/testing
-      #      puts "outdoor design temp = #{outdoor_temp}"
-
-      # Calculate exhaust heat content
-      exhaust_heat_content = 0.00123 * sum_zone_oa * 1000.0 * (avg_exhaust_temp - outdoor_temp)
-
-      # for debugging/testing
-      #      puts "exhaust heat content = #{exhaust_heat_content}"
-
-      # Modify erv_required based on exhaust heat content
-      if exhaust_heat_content > 150.0
-        erv_required = true
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV required based on exhaust heat content.")
-      else
-        erv_required = false
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV not required based on exhaust heat content.")
-      end
-
-    end # of NECB 2011 condition
-
-    # for debugging/testing
-    #    puts "erv_required = #{erv_required}"
 
     return erv_required
   end
@@ -1857,25 +1763,14 @@ class StandardsModel < OpenStudio::Model::Model
     # Create an ERV
     erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(air_loop_hvac.model)
     erv.setName("#{air_loop_hvac.name} ERV")
-    if instvartemplate == 'NECB 2011'
-      erv.setSensibleEffectivenessat100HeatingAirFlow(0.5)
-      erv.setLatentEffectivenessat100HeatingAirFlow(0.5)
-      erv.setSensibleEffectivenessat75HeatingAirFlow(0.5)
-      erv.setLatentEffectivenessat75HeatingAirFlow(0.5)
-      erv.setSensibleEffectivenessat100CoolingAirFlow(0.5)
-      erv.setLatentEffectivenessat100CoolingAirFlow(0.5)
-      erv.setSensibleEffectivenessat75CoolingAirFlow(0.5)
-      erv.setLatentEffectivenessat75CoolingAirFlow(0.5)
-    else
-      erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
-      erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
-      erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
-      erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
-      erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
-      erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
-      erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
-      erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
-    end
+    erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
+    erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
+    erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
+    erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
+    erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+    erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
+    erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
+    erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
     erv.setSupplyAirOutletTemperatureControl(true)
     erv.setHeatExchangerType('Rotary')
     erv.setFrostControlType('ExhaustOnly')
@@ -2335,7 +2230,7 @@ class StandardsModel < OpenStudio::Model::Model
     dcv_required = false
 
     # Not required by the old vintages
-    if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'NECB 2011'
+    if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{instvartemplate} #{climate_zone}:  #{air_loop_hvac.name}: DCV is not required for any system.")
       return dcv_required
     end
@@ -2689,7 +2584,7 @@ class StandardsModel < OpenStudio::Model::Model
   def air_loop_hvac_apply_vav_damper_action(air_loop_hvac)
     damper_action = nil
     case instvartemplate
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004','NECB 2011'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
       damper_action = 'Single Maximum'
     when '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       damper_action = 'Dual Maximum'
@@ -3142,7 +3037,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Number of stages is determined by the template
     num_stages = nil
     case instvartemplate
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'NECB 2011'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: No special economizer controls were modeled.")
       return true
     when '90.1-2004', '90.1-2007'
@@ -3531,8 +3426,6 @@ class StandardsModel < OpenStudio::Model::Model
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Static pressure reset not required because the system does not have DDC control of VAV terminals.")
       end
-    when 'NECB 2011'
-      # static pressure reset not required
     end
 
     return sp_reset_required
@@ -3550,7 +3443,7 @@ class StandardsModel < OpenStudio::Model::Model
     # must turn off when unoccupied.
     minimum_fan_hp = nil
     case instvartemplate
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'NREL ZNE Ready 2017'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       minimum_fan_hp = 0.75
     end
 

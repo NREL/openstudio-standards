@@ -1,65 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class StandardsModel < OpenStudio::Model::Model
-  # Returns standards data for selected space type and template
-  #
-  # @param [string] target template for lookup
-  # @return [hash] hash of internal loads for different load types
-  def space_type_get_standards_data(space_type)
-    standards_building_type = if space_type.standardsBuildingType.is_initialized
-                               space_type. standardsBuildingType.get
-                              end
-    standards_space_type = if space_type.standardsSpaceType.is_initialized
-                             space_type.standardsSpaceType.get
-                           end
-
-    # populate search hash
-    search_criteria = {
-      'template' => instvartemplate,
-      'building_type' => standards_building_type,
-      'space_type' => standards_space_type
-    }
-
-    # lookup space type properties
-
-    space_type_properties = model_find_object(space_type.model, $os_standards['space_types'], search_criteria)
-
-    if space_type_properties.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
-      space_type_properties = {}
-    end
-
-    return space_type_properties
-  end
-
-  # Sets the color for the space types as shown
-  # in the SketchUp plugin using render by space type.
-  #
-  # @param [string] target template for lookup
-  # @return [Bool] returns true if successful, false if not.
-  def space_type_apply_rendering_color(space_type)
-    # Get the standards data
-    space_type_properties = space_type_get_standards_data(space_type)
-
-    # Set the rendering color of the space type
-    rgb = space_type_properties['rgb']
-    if rgb.nil?
-      return false
-    end
-
-    rgb = rgb.split('_')
-    r = rgb[0].to_i
-    g = rgb[1].to_i
-    b = rgb[2].to_i
-    rendering_color = OpenStudio::Model::RenderingColor.new(space_type.model)
-    rendering_color.setRenderingRedValue(r)
-    rendering_color.setRenderingGreenValue(g)
-    rendering_color.setRenderingBlueValue(b)
-    space_type.setRenderingColor(rendering_color)
-
-    return true
-  end
-
+class NECB_2011_Model < StandardsModel
   # Sets the selected internal loads to standards-based or typical values.
   # For each category that is selected get all load instances. Remove all
   # but the first instance if multiple instances.  Add a new instance/definition
@@ -215,6 +156,20 @@ class StandardsModel < OpenStudio::Model::Model
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           occSensLPDfactor = 1.0
+          # NECB 2011 space types that require a reduction in the LPD to account for 
+          # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))
+          reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
+            "Conf./meet./multi-purpose", "Washroom-sch-A", "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", 
+            "Washroom-sch-E", "Washroom-sch-F", "Washroom-sch-G", "Washroom-sch-H", "Washroom-sch-I", 
+            "Dress./fitt. - performance arts", "Locker room", "Locker room-sch-A", "Locker room-sch-B", 
+            "Locker room-sch-C", "Locker room-sch-D", "Locker room-sch-E", "Locker room-sch-F", "Locker room-sch-G",
+            "Locker room-sch-H", "Locker room-sch-I", "Retail - dressing/fitting"]
+          if reduceLPDSpaces.include?(space_type.standardsSpaceType.get)
+            # Note that "Storage area", "Storage area - refrigerated", "Hospital - medical supply" and "Office - enclosed" 
+            # LPD should only be reduced if their space areas are less than specific area values. 
+            # This is checked in a space loop after this function in the calling routine.
+            occSensLPDfactor = 0.9
+          end
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occSensLPDfactor, 'W/ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
         end
@@ -443,152 +398,5 @@ class StandardsModel < OpenStudio::Model::Model
       end
 
     end
-  end
-
-  # Sets the schedules for the selected internal loads to typical schedules.
-  # Get the default schedule set for this space type if one exists or make
-  # one if none exists. For each category that is selected, add the typical
-  # schedule for this category to the default schedule set.
-  # This method does not alter any schedules of any internal loads that
-  # does not inherit from the default schedule set.
-  #
-  # @param set_people [Bool] if true, set the occupancy and activity schedules
-  # @param set_lights [Bool] if true, set the lighting schedule
-  # @param set_electric_equipment [Bool] if true, set the electric schedule schedule
-  # @param set_gas_equipment [Bool] if true, set the gas equipment density
-  # @param set_infiltration [Bool] if true, set the infiltration schedule
-  # @param make_thermostat [Bool] if true, makes a thermostat for this space type from the
-  # schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
-  # but may be found and used later.
-  # @return [Bool] returns true if successful, false if not
-  def space_type_apply_internal_load_schedules(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
-    # Get the standards data
-    space_type_properties = space_type_get_standards_data(space_type)
-
-    # Get the default schedule set
-    # or create a new one if none exists.
-    default_sch_set = nil
-    if space_type.defaultScheduleSet.is_initialized
-      default_sch_set = space_type.defaultScheduleSet.get
-    else
-      default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(space_type.model)
-      default_sch_set.setName("#{space_type.name} Schedule Set")
-      space_type.setDefaultScheduleSet(default_sch_set)
-    end
-
-    # People
-    if set_people
-      occupancy_sch = space_type_properties['occupancy_schedule']
-      unless occupancy_sch.nil?
-        default_sch_set.setNumberofPeopleSchedule(space_type.model.add_schedule(occupancy_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set occupancy schedule to #{occupancy_sch}.")
-      end
-
-      occupancy_activity_sch = space_type_properties['occupancy_activity_schedule']
-      unless occupancy_activity_sch.nil?
-        default_sch_set.setPeopleActivityLevelSchedule(space_type.model.add_schedule(occupancy_activity_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set occupant activity schedule to #{occupancy_activity_sch}.")
-      end
-
-    end
-
-    # Lights
-    if set_lights
-
-      lighting_sch = space_type_properties['lighting_schedule']
-      unless lighting_sch.nil?
-        default_sch_set.setLightingSchedule(space_type.model.add_schedule(lighting_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
-      end
-
-    end
-
-    # Electric Equipment
-    if set_electric_equipment
-
-      elec_equip_sch = space_type_properties['electric_equipment_schedule']
-      unless elec_equip_sch.nil?
-        default_sch_set.setElectricEquipmentSchedule(space_type.model.add_schedule(elec_equip_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric equipment schedule to #{elec_equip_sch}.")
-      end
-
-    end
-
-    # Gas Equipment
-    if set_gas_equipment
-
-      gas_equip_sch = space_type_properties['gas_equipment_schedule']
-      unless gas_equip_sch.nil?
-        default_sch_set.setGasEquipmentSchedule(space_type.model.add_schedule(gas_equip_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas equipment schedule to #{gas_equip_sch}.")
-      end
-
-    end
-
-    # Infiltration
-    if set_infiltration
-
-      infiltration_sch = space_type_properties['infiltration_schedule']
-      unless infiltration_sch.nil?
-        default_sch_set.setInfiltrationSchedule(space_type.model.add_schedule(infiltration_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration schedule to #{infiltration_sch}.")
-      end
-
-    end
-
-    # Thermostat
-    if make_thermostat
-
-      thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(space_type.model)
-      thermostat.setName("#{space_type.name} Thermostat")
-
-      heating_setpoint_sch = space_type_properties['heating_setpoint_schedule']
-      unless heating_setpoint_sch.nil?
-        thermostat.setHeatingSetpointTemperatureSchedule(space_type.model.add_schedule(heating_setpoint_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set heating setpoint schedule to #{heating_setpoint_sch}.")
-      end
-
-      cooling_setpoint_sch = space_type_properties['cooling_setpoint_schedule']
-      unless cooling_setpoint_sch.nil?
-        thermostat.setCoolingSetpointTemperatureSchedule(space_type.model.add_schedule(cooling_setpoint_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set cooling setpoint schedule to #{cooling_setpoint_sch}.")
-      end
-
-    end
-
-    return true
-  end
-
-  # Returns standards data for selected construction
-  #
-  # @param [string] target template for lookup
-  # @param [string] intended_surface_type template for lookup
-  # @param [string] standards_construction_type template for lookup
-  # @return [hash] hash of construction properties
-  def space_type_get_construction_properties(space_type, intended_surface_type, standards_construction_type)
-    # get building_category value
-    building_category = if !get_standards_data(template).nil? && space_type_get_standards_data(space_type)['is_residential'] == 'Yes'
-                          'Residential'
-                        else
-                          'Nonresidential'
-                        end
-
-    # get climate_zone_set
-    climate_zone = space_type.model.get_building_climate_zone_and_building_type['climate_zone']
-    climate_zone_set = model_find_climate_zone_set(model, climate_zone)
-
-    # populate search hash
-    search_criteria = {
-      'template' => instvartemplate,
-      'climate_zone_set' => climate_zone_set,
-      'intended_surface_type' => intended_surface_type,
-      'standards_construction_type' => standards_construction_type,
-      'building_category' => building_category
-    }
-
-    # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = model_find_object(model, $os_standards['construction_properties'], search_criteria)
-
-    return construction_properties
   end
 end

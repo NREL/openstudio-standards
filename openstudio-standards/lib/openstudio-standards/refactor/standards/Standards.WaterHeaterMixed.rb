@@ -51,77 +51,51 @@ class StandardsModel < OpenStudio::Model::Model
     sl_btu_per_hr = nil
     case fuel_type
     when 'Electricity'
-      case instvartemplate
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
+      if capacity_w <= 12_000 # I think this should be 12000W, use variable capacity_w instead of capacity_btu_per_hr (as per PNNL doc)
+        # Fixed water heater efficiency per PNNL
+        water_heater_eff = 1
+        # Calculate the minimum Energy Factor (EF)
+        base_ef, vol_drt = case instvartemplate
+                           when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+                             [0.93, 0.00132]
+                           when '90.1-2010'
+                             [0.97, 0.00132]
+                           when '90.1-2013', 'NREL ZNE Ready 2017'
+                             [0.97, 0.00035]
+                           end
 
-        if capacity_w <= 12_000 # I think this should be 12000W, use variable capacity_w instead of capacity_btu_per_hr (as per PNNL doc)
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the minimum Energy Factor (EF)
-          base_ef, vol_drt = case instvartemplate
-                             when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
-                               [0.93, 0.00132]
-                             when '90.1-2010'
-                               [0.97, 0.00132]
-                             when '90.1-2013', 'NREL ZNE Ready 2017'
-                               [0.97, 0.00035]
-                             end
-
-          ef = base_ef - (vol_drt * volume_gal)
-          # Calculate the skin loss coefficient (UA)
-          ua_btu_per_hr_per_f = (41_094 * (1 / ef - 1)) / (24 * 67.5)
-        else
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the skin loss coefficient (UA)
-          case instvartemplate
-          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
-            # Calculate the max allowable standby loss (SL)
-            sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal)) 
-            # Calculate the skin loss coefficient (UA)
-            ua_btu_per_hr_per_f = sl_btu_per_hr / 70
-          when '90.1-2013', 'NREL ZNE Ready 2017'
-            # Calculate the percent loss per hr
-            hrly_loss_pct = (0.3 + 27 / volume_gal) / 100
-            # Convert to Btu/hr, assuming:
-            # Water at 120F, density = 8.25 lb/gal
-            # 1 Btu to raise 1 lb of water 1 F
-            # Therefore 8.25 Btu / gal of water * deg F
-            # 70F delta-T between water and zone
-            hrly_loss_btu_per_hr = hrly_loss_pct * volume_gal * 8.25 * 70
-            # Calculate the skin loss coefficient (UA)
-            ua_btu_per_hr_per_f = hrly_loss_btu_per_hr / 70
-          end
-        end
-
-      when 'NECB 2011'
-        volume_l_per_s = volume_m3 * 1000
-        if capacity_btu_per_hr <= OpenStudio.convert(12, 'kW', 'Btu/hr').get
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the max allowable standby loss (SL)
-          sl_w = if volume_l_per_s < 270
-                   40 + 0.2 * volume_l_per_s # assume bottom inlet
-                 else
-                   0.472 * volume_l_per_s - 33.5
-                 end # assume bottom inlet
-          sl_btu_per_hr = OpenStudio.convert(sl_w, 'W', 'Btu/hr').get
-        else
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the max allowable standby loss (SL)   # use this - NECB does not give SL calculation for cap > 12 kW
-          sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal))
-        end
+        ef = base_ef - (vol_drt * volume_gal)
         # Calculate the skin loss coefficient (UA)
-        ua_btu_per_hr_per_f = sl_btu_per_hr / 70
+        ua_btu_per_hr_per_f = (41_094 * (1 / ef - 1)) / (24 * 67.5)
+      else
+        # Fixed water heater efficiency per PNNL
+        water_heater_eff = 1
+        # Calculate the skin loss coefficient (UA)
+        case instvartemplate
+        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
+          # Calculate the max allowable standby loss (SL)
+          sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal)) 
+          # Calculate the skin loss coefficient (UA)
+          ua_btu_per_hr_per_f = sl_btu_per_hr / 70
+        when '90.1-2013', 'NREL ZNE Ready 2017'
+          # Calculate the percent loss per hr
+          hrly_loss_pct = (0.3 + 27 / volume_gal) / 100
+          # Convert to Btu/hr, assuming:
+          # Water at 120F, density = 8.25 lb/gal
+          # 1 Btu to raise 1 lb of water 1 F
+          # Therefore 8.25 Btu / gal of water * deg F
+          # 70F delta-T between water and zone
+          hrly_loss_btu_per_hr = hrly_loss_pct * volume_gal * 8.25 * 70
+          # Calculate the skin loss coefficient (UA)
+          ua_btu_per_hr_per_f = hrly_loss_btu_per_hr / 70
+        end
       end
-
     when 'NaturalGas'
       case instvartemplate # TODO: inconsistency; ref buildings don't calculate water heater UA the same way
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         water_heater_eff = 0.78
         ua_btu_per_hr_per_f = 11.37
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'NREL ZNE Ready 2017'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         if capacity_btu_per_hr <= 75_000
           # Fixed water heater thermal efficiency per PNNL
           water_heater_eff = 0.82
@@ -129,12 +103,13 @@ class StandardsModel < OpenStudio::Model::Model
           base_ef, vol_drt = case instvartemplate
                              when '90.1-2004', '90.1-2007'
                                [0.62, 0.0019]
-                             when '90.1-2010', 'NECB 2011'
+                             when '90.1-2010'
                                [0.67, 0.0019]
                              when '90.1-2013', 'NREL ZNE Ready 2017'
                                [0.67, 0.0005]
                              end
 
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.WaterHeaterMixed', "For base_ef = #{base_ef}, vol_drt = #{vol_drt}, volume_gal = #{volume_gal}")           
           ef = base_ef - (vol_drt * volume_gal)
           # Calculate the Recovery Efficiency (RE)
           # based on a fixed capacity of 75,000 Btu/hr
@@ -152,7 +127,7 @@ class StandardsModel < OpenStudio::Model::Model
           et = 0.8
           # Calculate the max allowable standby loss (SL)
           cap_adj, vol_drt = case instvartemplate
-                   when '90.1-2004', '90.1-2007', '90.1-2010', 'NECB 2011'
+                   when '90.1-2004', '90.1-2007', '90.1-2010'
                      [800, 110]
                    when '90.1-2013', 'NREL ZNE Ready 2017'
                      [799, 16.6]
@@ -184,12 +159,6 @@ class StandardsModel < OpenStudio::Model::Model
     water_heater_mixed.setOffCycleParasiticFuelType(fuel_type)
     # self.setOffCycleParasiticFuelConsumptionRate(??)
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
-
-    # set part-load performance curve
-    if instvartemplate == 'NECB 2011' && fuel_type == 'NaturalGas'
-      plf_vs_plr_curve = model_add_curve(water_heater_mixed.model, 'SWH-EFFFPLR-NECB2011')
-      water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
-    end
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")

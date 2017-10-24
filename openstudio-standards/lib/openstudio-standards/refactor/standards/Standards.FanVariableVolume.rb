@@ -101,7 +101,7 @@ class StandardsModel < OpenStudio::Model::Model
      part_load_control_required = false
 
     # Not required by the old vintages
-    if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'NECB 2011'
+    if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
       return part_load_control_required
     end
 
@@ -151,7 +151,7 @@ class StandardsModel < OpenStudio::Model::Model
       return part_load_control_required
       end
       air_loop = air_loop.get
-      clg_cap_w = plant_loop_total_cooling_capacity(air_loop) 
+      clg_cap_w = air_loop_hvac_total_cooling_capacity(air_loop) 
       clg_cap_btu_per_hr = OpenStudio.convert(clg_cap_w, 'W', 'Btu/hr').get
       fan_hp = fan_motor_horsepower(fan_variable_volume) 
       if fan_hp >= hp_limit && clg_cap_btu_per_hr >= cap_limit_btu_per_hr
@@ -176,7 +176,7 @@ class StandardsModel < OpenStudio::Model::Model
     clg_sys_type = 'unknown'
 
     # Get the air loop this fan is connected to
-    air_loop = airLoopHVAC
+    air_loop = fan_variable_volume.airLoopHVAC
     unless air_loop.is_initialized
       return clg_sys_type
     end

@@ -2084,7 +2084,7 @@ class StandardsModel < OpenStudio::Model::Model
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       # "For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004', infiltration rates are not defined using this method, no changes have been made to the model.
     else
-      # Remove infiltration rates set at the space type. Kind of redundant for NECB 2011
+      # Remove infiltration rates set at the space type
       getSpaceTypes.sort.each do |space_type|
         space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
       end
@@ -3493,33 +3493,26 @@ class StandardsModel < OpenStudio::Model::Model
     # Without Curb
 
     # Create an array of types
-
     case instvartemplate
-    when 'NECB 2011'
-      BTAP::Compliance::NECB2011.set_all_construction_sets_to_necb!(model, runner = nil)
-      return true
-    else
-      case instvartemplate
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
-        types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
-        types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
-        types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
-        types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
-      end
-      # Modify all constructions of each type
-      types_to_modify.each do |boundary_cond, surf_type, const_type|
-        constructions = model_find_constructions(model, boundary_cond, surf_type)
-
-        constructions.sort.each do |const|
-          standards_info = const.standardsInformation
-          standards_info.setIntendedSurfaceType(surf_type)
-          standards_info.setStandardsConstructionType(const_type)
-        end
-      end
-      return true
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
+      types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
+      types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+      types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
+      types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
     end
-    return false
+    # Modify all constructions of each type
+    types_to_modify.each do |boundary_cond, surf_type, const_type|
+      constructions = model_find_constructions(model, boundary_cond, surf_type)
+
+      constructions.sort.each do |const|
+        standards_info = const.standardsInformation
+        standards_info.setIntendedSurfaceType(surf_type)
+        standards_info.setStandardsConstructionType(const_type)
+      end
+    end
+
+    return true
   end
 
   # Apply the standard construction to each surface in the
@@ -3667,13 +3660,8 @@ class StandardsModel < OpenStudio::Model::Model
         wall_area_m2 += surface.grossArea * space.multiplier
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
-          if 'NECB 2011' == instvartemplate
-            wind_area_m2 += ss.netArea * space.multiplier
-          elsif ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
-            wind_area_m2 += ss.netArea * space.multiplier
-          else
-            next
-          end
+          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+          wind_area_m2 += ss.netArea * space.multiplier
         end
       end
 
@@ -3704,9 +3692,6 @@ class StandardsModel < OpenStudio::Model::Model
               end
       end
       space_cats[space] = cat
-      # NECB 2011 keep track of totals for NECB regardless of conditioned or not. 
-      total_wall_m2 += wall_area_m2
-      total_subsurface_m2 += wind_area_m2 # this contains doors as well.
       
       # Add to the correct category
       case cat
@@ -3729,7 +3714,6 @@ class StandardsModel < OpenStudio::Model::Model
     wwr_nr = ((nr_wind_m2 / nr_wall_m2) * 100.0).round(1)
     wwr_res = ((res_wind_m2 / res_wall_m2) * 100).round(1)
     wwr_sh = ((sh_wind_m2 / sh_wall_m2) * 100).round(1)
-    fdwr = ((total_subsurface_m2 / total_wall_m2) * 100).round(1) # used by NECB 2011
 
     # Convert to IP and report
     nr_wind_ft2 = OpenStudio.convert(nr_wind_m2, 'm^2', 'ft^2').get
@@ -3753,83 +3737,53 @@ class StandardsModel < OpenStudio::Model::Model
     red_res = wwr_res > wwr_lim ? true : false
     red_sh = wwr_sh > wwr_lim ? true : false
 
-    case instvartemplate
-    when 'NECB 2011'
-      # NECB FDWR limit
-      hdd = BTAP::Environment::WeatherFile.new(weatherFile.get.path.get).hdd18
-      fdwr_lim = (BTAP::Compliance::NECB2011.max_fwdr(hdd) * 100.0).round(1)
-      #puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
-      #puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
-      # Stop here unless windows / doors need reducing
-      return true unless fdwr > fdwr_lim
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{wwr_lim.round}%.")
-      # Determine the factors by which to reduce the window / door area
-      mult = fdwr_lim / fdwr
-      # Reduce the window area if any of the categories necessary
-      getSpaces.sort.each do |space|
-        # Loop through all surfaces in this space
-        space.surfaces.sort.each do |surface|
-          # Skip non-outdoor surfaces
-          next unless surface.outsideBoundaryCondition == 'Outdoors'
-          # Skip non-walls
-          next unless surface.surfaceType == 'Wall'
-          # Subsurfaces in this surface
-          surface.subSurfaces.sort.each do |ss|
-            # Reduce the size of the window
-            red = 1.0 - mult
-            sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
-          end
-        end
+    # Stop here unless windows need reducing
+    return true unless red_nr || red_res || red_sh
+
+    # Determine the factors by which to reduce the window area
+    mult_nr_red = wwr_lim / wwr_nr
+    mult_res_red = wwr_lim / wwr_res
+    mult_sh_red = wwr_lim / wwr_sh
+
+    # Reduce the window area if any of the categories necessary
+    getSpaces.sort.each do |space|
+      # Determine the space category
+      # from the previously stored values
+      cat = space_cats[space]
+
+      # Get the correct multiplier
+      case cat
+      when 'Unconditioned'
+        next # Skip unconditioned spaces
+      when 'NonResConditioned'
+        next unless red_nr
+        mult = mult_nr_red
+      when 'ResConditioned'
+        next unless red_res
+        mult = mult_res_red
+      when 'Semiheated'
+        next unless red_sh
+        mult = mult_sh_red
       end
-    else # all other instvartemplate types
-      # Stop here unless windows need reducing
-      return true unless red_nr || red_res || red_sh
 
-      # Determine the factors by which to reduce the window area
-      mult_nr_red = wwr_lim / wwr_nr
-      mult_res_red = wwr_lim / wwr_res
-      mult_sh_red = wwr_lim / wwr_sh
-
-      # Reduce the window area if any of the categories necessary
-      getSpaces.sort.each do |space|
-        # Determine the space category
-        # from the previously stored values
-        cat = space_cats[space]
-
-        # Get the correct multiplier
-        case cat
-        when 'Unconditioned'
-          next # Skip unconditioned spaces
-        when 'NonResConditioned'
-          next unless red_nr
-          mult = mult_nr_red
-        when 'ResConditioned'
-          next unless red_res
-          mult = mult_res_red
-        when 'Semiheated'
-          next unless red_sh
-          mult = mult_sh_red
-        end
-
-        # Loop through all surfaces in this space
-        space.surfaces.sort.each do |surface|
-          # Skip non-outdoor surfaces
-          next unless surface.outsideBoundaryCondition == 'Outdoors'
-          # Skip non-walls
-          next unless surface.surfaceType.casecmp('wall').zero?
-          # Subsurfaces in this surface
-          surface.subSurfaces.sort.each do |ss|
-            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
-            # Reduce the size of the window
-            # If a vertical rectangle, raise sill height to avoid
-            # impacting daylighting areas, otherwise
-            # reduce toward centroid.
-            red = 1.0 - mult
-            if sub_surface_vertical_rectangle?(ss) 
-              sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
-            else
-              sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
-            end
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType.casecmp('wall').zero?
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+          # Reduce the size of the window
+          # If a vertical rectangle, raise sill height to avoid
+          # impacting daylighting areas, otherwise
+          # reduce toward centroid.
+          red = 1.0 - mult
+          if sub_surface_vertical_rectangle?(ss) 
+            sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
+          else
+            sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
           end
         end
       end
@@ -3870,7 +3824,7 @@ class StandardsModel < OpenStudio::Model::Model
         wall_area_m2 += surface.grossArea * space.multiplier
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
-          next unless 'NECB 2011' == instvartemplate || (ss.subSurfaceType == 'Skylight')
+          next unless ss.subSurfaceType == 'Skylight'
           sky_area_m2 += ss.netArea * space.multiplier
         end
       end
@@ -3910,7 +3864,7 @@ class StandardsModel < OpenStudio::Model::Model
     # SRR limit
     srr_lim = nil
     case instvartemplate
-    when '90.1-2004', '90.1-2007', '90.1-2010', 'NECB 2011'
+    when '90.1-2004', '90.1-2007', '90.1-2010'
       srr_lim = 5.0
     when '90.1-2013'
       srr_lim = 3.0
@@ -3921,83 +3875,56 @@ class StandardsModel < OpenStudio::Model::Model
     red_res = srr_res > srr_lim ? true : false
     red_sh = srr_sh > srr_lim ? true : false
 
-    case instvartemplate
-    when 'NECB 2011'
-      # Stop here unless windows need reducing
-      return true unless srr > srr_lim
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{srr_lim.round}%.")
-      # Determine the factors by which to reduce the window / door area
-      mult = srr_lim / srr
+    # Stop here unless skylights need reducing
+    return true unless red_nr || red_res || red_sh
 
-      # Reduce the subsurface areas
-      getSpaces.sort.each do |space|
-        # Loop through all surfaces in this space
-        space.surfaces.sort.each do |surface|
-          # Skip non-outdoor surfaces
-          next unless surface.outsideBoundaryCondition == 'Outdoors'
-          # Skip non-walls
-          next unless surface.surfaceType == 'RoofCeiling'
-          # Subsurfaces in this surface
-          surface.subSurfaces.sort.each do |ss|
-            # Reduce the size of the subsurface
-            red = 1.0 - mult
-            sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
-          end
-        end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all skylights equally down to the limit of #{srr_lim.round}%.")
+
+    # Determine the factors by which to reduce the skylight area
+    mult_nr_red = srr_lim / srr_nr
+    mult_res_red = srr_lim / srr_res
+    # mult_sh_red = srr_lim / srr_sh
+
+    # Reduce the skylight area if any of the categories necessary
+    getSpaces.sort.each do |space|
+      # Determine the space category
+      cat = 'NonRes'
+      if thermal_zone_residential?(space)
+        cat = 'Res'
+      end
+      # if space.is_semiheated
+      # cat = 'Semiheated'
+      # end
+
+      # Skip spaces whose skylights don't need to be reduced
+      case cat
+      when 'NonRes'
+        next unless red_nr
+        mult = mult_nr_red
+      when 'Res'
+        next unless red_res
+        mult = mult_res_red
+      when 'Semiheated'
+        next unless red_sh
+        # mult = mult_sh_red
       end
 
-    else
-
-      # Stop here unless skylights need reducing
-      return true unless red_nr || red_res || red_sh
-
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all skylights equally down to the limit of #{srr_lim.round}%.")
-
-      # Determine the factors by which to reduce the skylight area
-      mult_nr_red = srr_lim / srr_nr
-      mult_res_red = srr_lim / srr_res
-      # mult_sh_red = srr_lim / srr_sh
-
-      # Reduce the skylight area if any of the categories necessary
-      getSpaces.sort.each do |space|
-        # Determine the space category
-        cat = 'NonRes'
-        if thermal_zone_residential?(space)
-          cat = 'Res'
-        end
-        # if space.is_semiheated
-        # cat = 'Semiheated'
-        # end
-
-        # Skip spaces whose skylights don't need to be reduced
-        case cat
-        when 'NonRes'
-          next unless red_nr
-          mult = mult_nr_red
-        when 'Res'
-          next unless red_res
-          mult = mult_res_red
-        when 'Semiheated'
-          next unless red_sh
-          # mult = mult_sh_red
-        end
-
-        # Loop through all surfaces in this space
-        space.surfaces.sort.each do |surface|
-          # Skip non-outdoor surfaces
-          next unless surface.outsideBoundaryCondition == 'Outdoors'
-          # Skip non-walls
-          next unless surface.surfaceType == 'RoofCeiling'
-          # Subsurfaces in this surface
-          surface.subSurfaces.sort.each do |ss|
-            next unless ss.subSurfaceType == 'Skylight'
-            # Reduce the size of the skylight
-            red = 1.0 - mult
-            sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
-        end
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'RoofCeiling'
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          next unless ss.subSurfaceType == 'Skylight'
+          # Reduce the size of the skylight
+          red = 1.0 - mult
+          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
-    end # instvartemplate case
+    end
+
     return true
   end
 
@@ -4284,7 +4211,7 @@ class StandardsModel < OpenStudio::Model::Model
     case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       result = possible_climate_zones.sort.last
-    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'NREL ZNE Ready 2017'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       result = possible_climate_zones.sort.first
     when '90.1-2004'
       result = if possible_climate_zones.include? 'ClimateZone 3'
@@ -4306,7 +4233,7 @@ class StandardsModel < OpenStudio::Model::Model
 
   # This method ensures that all spaces with spacetypes defined contain at least
   # a standardSpaceType appropriate for the template. So, if any space
-  # with a space type defined does not have a NECB spacetype, or is undefined, an error will stop
+  # with a space type defined does not have a Stnadard spacetype, or is undefined, an error will stop
   # with information that the spacetype needs to be defined.
   def model_validate_standards_spacetypes_in_model(model)
     error_string = ''

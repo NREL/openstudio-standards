@@ -1,6 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class StandardsModel < OpenStudio::Model::Model
+class NECB_2011_Model < StandardsModel
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
@@ -75,6 +75,35 @@ class StandardsModel < OpenStudio::Model::Model
       flow_rate4 = clg_stages.last.ratedAirFlowRate.get
     elsif autosizedSpeed4RatedAirFlowRate.is_initialized
       flow_rate4 = autosizedSpeed4RatedAirFlowRate.get
+    end
+
+    # Set number of stages
+    stage_cap = []
+    num_stages = (capacity_w / (66.0 * 1000.0) + 0.5).round
+    num_stages = [num_stages, 4].min
+    if num_stages == 1
+      stage_cap[0] = capacity_w / 2.0
+      stage_cap[1] = 2.0 * stage_cap[0]
+      stage_cap[2] = stage_cap[1] + 0.1
+      stage_cap[3] = stage_cap[2] + 0.1
+    else
+      stage_cap[0] = 66.0 * 1000.0
+      stage_cap[1] = 2.0 * stage_cap[0]
+      if num_stages == 2
+        stage_cap[2] = stage_cap[1] + 0.1
+        stage_cap[3] = stage_cap[2] + 0.1
+      elsif num_stages == 3
+        stage_cap[2] = 3.0 * stage_cap[0]
+        stage_cap[3] = stage_cap[2] + 0.1
+      elsif num_stages == 4
+        stage_cap[2] = 3.0 * stage_cap[0]
+        stage_cap[3] = 4.0 * stage_cap[0]
+      end
+    end
+    # set capacities, flow rates, and sensible heat ratio for stages
+    (0..3).each do |istage|
+      clg_stages[istage].setGrossRatedTotalCoolingCapacity(stage_cap[istage])
+      clg_stages[istage].setRatedAirFlowRate(flow_rate4 * stage_cap[istage] / capacity_w)
     end
 
     # Convert capacity to Btu/hr
