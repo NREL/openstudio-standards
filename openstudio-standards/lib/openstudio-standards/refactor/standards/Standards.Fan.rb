@@ -240,9 +240,9 @@ module Fan
                                    else
                                      'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
                                    end
-        power_vs_flow_curve = model_add_curve(model, power_vs_flow_curve_name)
+        power_vs_flow_curve = model_add_curve(fan.model(), power_vs_flow_curve_name)
         fan.setFanPowerMinimumFlowRateInputMethod('Fraction')
-        fan.fan.setFanPowerCoefficient5(0.0)
+        fan.setFanPowerCoefficient5(0.0)
         setFanPowerMinimumFlowFraction(power_vs_flow_curve.minimumValueofx)
         fan.setFanPowerCoefficient1(power_vs_flow_curve.coefficient1Constant)
         fan.setFanPowerCoefficient2(power_vs_flow_curve.coefficient2x)
