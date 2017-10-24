@@ -83,7 +83,7 @@ class TestRefactorParallel < Minitest::Test
       diff_file = "#{run['old_method_run_dir']}/../differences.json"
       if File.exists?(diff_file)
         diffs = JSON.parse(File.read(diff_file))
-        models_with_differences << "There were #{diffs.size} differences in #{run['building_type']} #{run['template']} #{run['climate_zone']} #{run['epw_file']} :\n#{diffs.join("\n")}"
+        models_with_differences << "There were #{diffs.size} differences/errors in #{run['building_type']} #{run['template']} #{run['climate_zone']} #{run['epw_file']} :\n#{diffs.join("\n")}"
       end
     end
     # Assert that there are no differences in any models
