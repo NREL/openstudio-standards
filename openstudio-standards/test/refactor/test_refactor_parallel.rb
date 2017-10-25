@@ -128,7 +128,7 @@ class TestRefactorParallel < Minitest::Test
   #end function
 
 
-  def dont_test_nrel
+  def test_nrel
     building_types = [
         "FullServiceRestaurant",
         "Hospital",
