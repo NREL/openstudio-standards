@@ -367,11 +367,11 @@
       "energy_factor_base": null,
       "energy_factor_volume_derate": null,
       "standby_loss_base": null,
-      "standby_loss_capacity_allowance": 800.0,
-      "standby_loss_volume_allowance": 110.0,
+      "standby_loss_capacity_allowance": null,
+      "standby_loss_volume_allowance": null,
       "hourly_loss_base": null,
       "hourly_loss_volume_allowance": null,
-      "thermal_efficiency": 0.8,
+      "thermal_efficiency": 0.78,
       "notes": "From DOE Reference Buildings"
     },
     {
@@ -384,11 +384,11 @@
       "energy_factor_base": null,
       "energy_factor_volume_derate": null,
       "standby_loss_base": null,
-      "standby_loss_capacity_allowance": 800.0,
-      "standby_loss_volume_allowance": 110.0,
+      "standby_loss_capacity_allowance": null,
+      "standby_loss_volume_allowance": null,
       "hourly_loss_base": null,
       "hourly_loss_volume_allowance": null,
-      "thermal_efficiency": 0.8,
+      "thermal_efficiency": 0.78,
       "notes": "From DOE Reference Buildings"
     },
     {

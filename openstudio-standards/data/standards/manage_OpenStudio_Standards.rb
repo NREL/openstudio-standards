@@ -204,6 +204,7 @@ def export_spreadsheet_to_json
   # (rubyXL returns 0 or 1, will translate to true/false)
   bool_cols = []
   bool_cols << 'hx'  
+  bool_cols << 'data_center'  
   
   # Open workbook
   workbook = RubyXL::Parser.parse(xlsx_path)

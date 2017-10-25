@@ -34,6 +34,7 @@ def load_openstudio_standards_json
   standards_files << 'OpenStudio_Standards_necb_hvac_system_selection_type.json'
   standards_files << 'OpenStudio_Standards_necb_surface_conductances.json'
   standards_files << 'OpenStudio_Standards_water_heaters.json'
+  standards_files << 'OpenStudio_Standards_economizers.json'
   #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
 
   # Combine the data from the JSON files into a single hash

@@ -131,271 +131,278 @@ class StandardsModel < OpenStudio::Model::Model
     loop_type = sizing_plant.loopType
     case loop_type
     when 'Heating'
-
-      # Loop properties
-      # G3.1.3.3 - HW Supply at 180F, return at 130F
-      hw_temp_f = 180
-      hw_delta_t_r = 50
-      min_temp_f = 50
-
-      hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
-      hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
-      min_temp_c = OpenStudio.convert(min_temp_f, 'F', 'C').get
-
-      sizing_plant.setDesignLoopExitTemperature(hw_temp_c)
-      sizing_plant.setLoopDesignTemperatureDifference(hw_delta_t_k)
-      setMinimumLoopTemperature(min_temp_c)
-
-      # ASHRAE Appendix G - G3.1.3.4 (for ASHRAE 90.1-2004, 2007 and 2010)
-      # HW reset: 180F at 20F and below, 150F at 50F and above
-      plant_loop_enable_supply_water_temperature_reset(plant_loop) 
-
-      # Boiler properties
-      plant_loop.supplyComponents.each do |sc|
-        if sc.to_BoilerHotWater.is_initialized
-          boiler = sc.to_BoilerHotWater.get
-          boiler.setDesignWaterOutletTemperature(hw_temp_c)
-        end
-      end
-
+      plant_loop_apply_prm_baseline_hot_water_temperatures(plant_loop)
     when 'Cooling'
-
-      # Loop properties
-      # G3.1.3.8 - LWT 44 / EWT 56
-      chw_temp_f = 44
-      chw_delta_t_r = 12
-      min_temp_f = 34
-      max_temp_f = 200
-      # For water-cooled chillers this is the water temperature entering the condenser (e.g., leaving the cooling tower).
-      ref_cond_wtr_temp_f = 85
-
-      chw_temp_c = OpenStudio.convert(chw_temp_f, 'F', 'C').get
-      chw_delta_t_k = OpenStudio.convert(chw_delta_t_r, 'R', 'K').get
-      min_temp_c = OpenStudio.convert(min_temp_f, 'F', 'C').get
-      max_temp_c = OpenStudio.convert(max_temp_f, 'F', 'C').get
-      ref_cond_wtr_temp_c = OpenStudio.convert(ref_cond_wtr_temp_f, 'F', 'C').get
-
-      sizing_plant.setDesignLoopExitTemperature(chw_temp_c)
-      sizing_plant.setLoopDesignTemperatureDifference(chw_delta_t_k)
-      setMinimumLoopTemperature(min_temp_c)
-      setMaximumLoopTemperature(max_temp_c)
-
-      # ASHRAE Appendix G - G3.1.3.9 (for ASHRAE 90.1-2004, 2007 and 2010)
-      # ChW reset: 44F at 80F and above, 54F at 60F and below
-      plant_loop_enable_supply_water_temperature_reset(plant_loop) 
-
-      # Chiller properties
-      plant_loop.supplyComponents.each do |sc|
-        if sc.to_ChillerElectricEIR.is_initialized
-          chiller = sc.to_ChillerElectricEIR.get
-          chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
-          chiller.setReferenceEnteringCondenserFluidTemperature(ref_cond_wtr_temp_c)
-        end
-      end
-
+      plant_loop_apply_prm_baseline_chilled_water_temperatures(plant_loop)
     when 'Condenser'
-
-      # Much of the thought in this section
-      # came from @jmarrec
-
-      # Determine the design OATwb from the design days.
-      # Per https://unmethours.com/question/16698/which-cooling-design-day-is-most-common-for-sizing-rooftop-units/
-      # the WB=>MDB day is used to size cooling towers.
-      summer_oat_wbs_f = []
-      plant_loop.model.getDesignDays.sort.each do |dd|
-        next unless dd.dayType == 'SummerDesignDay'
-        next unless dd.name.get.to_s.include?('WB=>MDB')
-        if dd.humidityIndicatingType == 'Wetbulb'
-          summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
-          summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
-        else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
-        end
-      end
-
-      # Use the value from the design days or
-      # 78F, the CTI rating condition, if no
-      # design day information is available.
-      design_oat_wb_f = nil
-      if summer_oat_wbs_f.size.zero?
-        design_oat_wb_f = 78
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, no design day OATwb conditions were found.  CTI rating condition of 78F OATwb will be used for sizing cooling towers.")
-      else
-        # Take worst case condition
-        design_oat_wb_f = summer_oat_wbs_f.max
-      end
-
-      # There is an EnergyPlus model limitation
-      # that the design_oat_wb_f < 80F
-      # for cooling towers
-      ep_max_design_oat_wb_f = 80
-      if design_oat_wb_f > ep_max_design_oat_wb_f
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, reduced design OATwb from #{design_oat_wb_f} F to E+ model max input of #{ep_max_design_oat_wb_f} F.")
-        design_oat_wb_f = ep_max_design_oat_wb_f
-      end
-
-      # Determine the design CW temperature, approach, and range
-      leaving_cw_t_f = nil
-      approach_r = nil
-      range_r = nil
-      case instvartemplate
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
-        # G3.1.3.11 - CW supply temp = 85F or 10F approaching design wet bulb temperature,
-        # whichever is lower.  Design range = 10F
-        # Design Temperature rise of 10F => Range: 10F
-        range_r = 10
-
-        # Determine the leaving CW temp
-        max_leaving_cw_t_f = 85
-        leaving_cw_t_10f_approach_f = design_oat_wb_f + 10
-        leaving_cw_t_f = [max_leaving_cw_t_f, leaving_cw_t_10f_approach_f].min
-
-        # Calculate the approach
-        approach_r = leaving_cw_t_f - design_oat_wb_f
-
-      when '90.1-2013'
-        # G3.1.3.11 - CW supply temp shall be evaluated at 0.4% evaporative design OATwb
-        # per the formulat approach_F = 25.72 - (0.24 * OATwb_F)
-        # 55F <= OATwb <= 90F
-        # Design range = 10F.
-        range_r = 10
-
-        # Limit the OATwb
-        if design_oat_wb_f < 55
-          design_oat_wb_f = 55
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, a design OATwb of 55F will be used for sizing the cooling towers because the actual design value is below the limit in G3.1.3.11.")
-        elsif design_oat_wb_f > 90
-          design_oat_wb_f = 90
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, a design OATwb of 90F will be used for sizing the cooling towers because the actual design value is above the limit in G3.1.3.11.")
-        end
-
-        # Calculate the approach
-        approach_r = 25.72 - (0.24 * design_oat_wb_f)
-
-        # Calculate the leaving CW temp
-        leaving_cw_t_f = design_oat_wb_f + approach_r
-
-      end
-
-      # Report out design conditions
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, design OATwb = #{design_oat_wb_f.round(1)} F, approach = #{approach_r.round(1)} deltaF, range = #{range_r.round(1)} deltaF, leaving condenser water temperature = #{leaving_cw_t_f.round(1)} F.")
-
-      # Convert to SI units
-      leaving_cw_t_c = OpenStudio.convert(leaving_cw_t_f, 'F', 'C').get
-      approach_k = OpenStudio.convert(approach_r, 'R', 'K').get
-      range_k = OpenStudio.convert(range_r, 'R', 'K').get
-      design_oat_wb_c = OpenStudio.convert(design_oat_wb_f, 'F', 'C').get
-
-      # Set the CW sizing parameters
-      sizing_plant.setDesignLoopExitTemperature(leaving_cw_t_c)
-      sizing_plant.setLoopDesignTemperatureDifference(range_k)
-
-      # Set Cooling Tower sizing parameters.
-      # Only the variable speed cooling tower
-      # in E+ allows you to set the design temperatures.
-      #
-      # Per the documentation
-      # http://bigladdersoftware.com/epx/docs/8-4/input-output-reference/group-condenser-equipment.html#field-design-u-factor-times-area-value
-      # for CoolingTowerSingleSpeed and CoolingTowerTwoSpeed
-      # E+ uses the following values during sizing:
-      # 95F entering water temp
-      # 95F OATdb
-      # 78F OATwb
-      # range = loop design delta-T aka range (specified above)
-      plant_loop.supplyComponents.each do |sc|
-        if sc.to_CoolingTowerVariableSpeed.is_initialized
-          ct = sc.to_CoolingTowerVariableSpeed.get
-          # E+ has a minimum limit of 68F (20C) for this field.
-          # Check against limit before attempting to set value.
-          eplus_design_oat_wb_c_lim = 20
-          if design_oat_wb_c < eplus_design_oat_wb_c_lim
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, a design OATwb of 68F will be used for sizing the cooling towers because the actual design value is below the limit EnergyPlus accepts for this input.")
-            design_oat_wb_c = eplus_design_oat_wb_c_lim
-          end
-          ct.setDesignInletAirWetBulbTemperature(design_oat_wb_c)
-          ct.setDesignApproachTemperature(approach_k)
-          ct.setDesignRangeTemperature(range_k)
-        end
-      end
-
-      # Set the min and max CW temps
-      # Typical design of min temp is really around 40F
-      # (that's what basin heaters, when used, are sized for usually)
-      min_temp_f = 34
-      max_temp_f = 200
-      min_temp_c = OpenStudio.convert(min_temp_f, 'F', 'C').get
-      max_temp_c = OpenStudio.convert(max_temp_f, 'F', 'C').get
-      setMinimumLoopTemperature(min_temp_c)
-      setMaximumLoopTemperature(max_temp_c)
-
-      # Cooling Tower operational controls
-      # G3.1.3.11 - Tower shall be controlled to maintain a 70F
-      # LCnWT where weather permits,
-      # floating up to leaving water at design conditions.
-      float_down_to_f = 70
-      float_down_to_c = OpenStudio.convert(float_down_to_f, 'F', 'C').get
-      cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(plant_loop.model)
-      cw_t_stpt_manager.setName("CW Temp Follows OATwb w/ #{approach_r} deltaF approach min #{float_down_to_f.round(1)} F to max #{leaving_cw_t_f.round(1)}")
-      cw_t_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
-      # At low design OATwb, it is possible to calculate
-      # a maximum temperature below the minimum.  In this case,
-      # make the maximum and minimum the same.
-      if leaving_cw_t_c < float_down_to_c
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, the maximum leaving temperature of #{leaving_cw_t_f.round(1)} F is below the minimum of #{float_down_to_f.round(1)} F.  The maximum will be set to the same value as the minimum.")
-        leaving_cw_t_c = float_down_to_c
-      end
-      cw_t_stpt_manager.setMaximumSetpointTemperature(leaving_cw_t_c)
-      cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
-      cw_t_stpt_manager.setOffsetTemperatureDifference(approach_k)
-      cw_t_stpt_manager.addToNode(supplyOutletNode)
-
+      plant_loop_apply_prm_baseline_condenser_water_temperatures(plant_loop)
     end
 
     return true
   end
 
+  def plant_loop_apply_prm_baseline_hot_water_temperatures(plant_loop)
+    sizing_plant = plant_loop.sizingPlant
+    
+    # Loop properties
+    # G3.1.3.3 - HW Supply at 180F, return at 130F
+    hw_temp_f = 180
+    hw_delta_t_r = 50
+    min_temp_f = 50
+
+    hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
+    hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
+    min_temp_c = OpenStudio.convert(min_temp_f, 'F', 'C').get
+
+    sizing_plant.setDesignLoopExitTemperature(hw_temp_c)
+    sizing_plant.setLoopDesignTemperatureDifference(hw_delta_t_k)
+    setMinimumLoopTemperature(min_temp_c)
+
+    # ASHRAE Appendix G - G3.1.3.4 (for ASHRAE 90.1-2004, 2007 and 2010)
+    # HW reset: 180F at 20F and below, 150F at 50F and above
+    plant_loop_enable_supply_water_temperature_reset(plant_loop) 
+
+    # Boiler properties
+    plant_loop.supplyComponents.each do |sc|
+      if sc.to_BoilerHotWater.is_initialized
+        boiler = sc.to_BoilerHotWater.get
+        boiler.setDesignWaterOutletTemperature(hw_temp_c)
+      end
+    end
+    return true
+  end
+  
+  def plant_loop_apply_prm_baseline_chilled_water_temperatures(plant_loop)
+    sizing_plant = plant_loop.sizingPlant
+
+    # Loop properties
+    # G3.1.3.8 - LWT 44 / EWT 56
+    chw_temp_f = 44
+    chw_delta_t_r = 12
+    min_temp_f = 34
+    max_temp_f = 200
+    # For water-cooled chillers this is the water temperature entering the condenser (e.g., leaving the cooling tower).
+    ref_cond_wtr_temp_f = 85
+
+    chw_temp_c = OpenStudio.convert(chw_temp_f, 'F', 'C').get
+    chw_delta_t_k = OpenStudio.convert(chw_delta_t_r, 'R', 'K').get
+    min_temp_c = OpenStudio.convert(min_temp_f, 'F', 'C').get
+    max_temp_c = OpenStudio.convert(max_temp_f, 'F', 'C').get
+    ref_cond_wtr_temp_c = OpenStudio.convert(ref_cond_wtr_temp_f, 'F', 'C').get
+
+    sizing_plant.setDesignLoopExitTemperature(chw_temp_c)
+    sizing_plant.setLoopDesignTemperatureDifference(chw_delta_t_k)
+    setMinimumLoopTemperature(min_temp_c)
+    setMaximumLoopTemperature(max_temp_c)
+
+    # ASHRAE Appendix G - G3.1.3.9 (for ASHRAE 90.1-2004, 2007 and 2010)
+    # ChW reset: 44F at 80F and above, 54F at 60F and below
+    plant_loop_enable_supply_water_temperature_reset(plant_loop) 
+
+    # Chiller properties
+    plant_loop.supplyComponents.each do |sc|
+      if sc.to_ChillerElectricEIR.is_initialized
+        chiller = sc.to_ChillerElectricEIR.get
+        chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
+        chiller.setReferenceEnteringCondenserFluidTemperature(ref_cond_wtr_temp_c)
+      end
+    end
+
+    return true
+  end
+  
+  def plant_loop_apply_prm_baseline_condenser_water_temperatures(plant_loop)
+    sizing_plant = plant_loop.sizingPlant
+
+    # Much of the thought in this section
+    # came from @jmarrec
+
+    # Determine the design OATwb from the design days.
+    # Per https://unmethours.com/question/16698/which-cooling-design-day-is-most-common-for-sizing-rooftop-units/
+    # the WB=>MDB day is used to size cooling towers.
+    summer_oat_wbs_f = []
+    plant_loop.model.getDesignDays.sort.each do |dd|
+      next unless dd.dayType == 'SummerDesignDay'
+      next unless dd.name.get.to_s.include?('WB=>MDB')
+      if dd.humidityIndicatingType == 'Wetbulb'
+        summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+        summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
+      end
+    end
+
+    # Use the value from the design days or
+    # 78F, the CTI rating condition, if no
+    # design day information is available.
+    design_oat_wb_f = nil
+    if summer_oat_wbs_f.size.zero?
+      design_oat_wb_f = 78
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, no design day OATwb conditions were found.  CTI rating condition of 78F OATwb will be used for sizing cooling towers.")
+    else
+      # Take worst case condition
+      design_oat_wb_f = summer_oat_wbs_f.max
+    end
+
+    # There is an EnergyPlus model limitation
+    # that the design_oat_wb_f < 80F
+    # for cooling towers
+    ep_max_design_oat_wb_f = 80
+    if design_oat_wb_f > ep_max_design_oat_wb_f
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, reduced design OATwb from #{design_oat_wb_f} F to E+ model max input of #{ep_max_design_oat_wb_f} F.")
+      design_oat_wb_f = ep_max_design_oat_wb_f
+    end
+
+    # Determine the design CW temperature, approach, and range
+    leaving_cw_t_c, approach_k, range_k = plant_loop_prm_baseline_condenser_water_temperatures(plant_loop, design_oat_wb_c)
+
+    # Convert to IP units
+    leaving_cw_t_f = OpenStudio.convert(leaving_cw_t_c, 'C', 'F').get
+    approach_r = OpenStudio.convert(approach_k, 'K', 'R').get
+    range_r = OpenStudio.convert(range_k, 'K', 'R').get
+
+    # Report out design conditions
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, design OATwb = #{design_oat_wb_f.round(1)} F, approach = #{approach_r.round(1)} deltaF, range = #{range_r.round(1)} deltaF, leaving condenser water temperature = #{leaving_cw_t_f.round(1)} F.")
+
+    # Convert to SI units
+    design_oat_wb_c = OpenStudio.convert(design_oat_wb_f, 'F', 'C').get
+
+    # Set the CW sizing parameters
+    sizing_plant.setDesignLoopExitTemperature(leaving_cw_t_c)
+    sizing_plant.setLoopDesignTemperatureDifference(range_k)
+
+    # Set Cooling Tower sizing parameters.
+    # Only the variable speed cooling tower
+    # in E+ allows you to set the design temperatures.
+    #
+    # Per the documentation
+    # http://bigladdersoftware.com/epx/docs/8-4/input-output-reference/group-condenser-equipment.html#field-design-u-factor-times-area-value
+    # for CoolingTowerSingleSpeed and CoolingTowerTwoSpeed
+    # E+ uses the following values during sizing:
+    # 95F entering water temp
+    # 95F OATdb
+    # 78F OATwb
+    # range = loop design delta-T aka range (specified above)
+    plant_loop.supplyComponents.each do |sc|
+      if sc.to_CoolingTowerVariableSpeed.is_initialized
+        ct = sc.to_CoolingTowerVariableSpeed.get
+        # E+ has a minimum limit of 68F (20C) for this field.
+        # Check against limit before attempting to set value.
+        eplus_design_oat_wb_c_lim = 20
+        if design_oat_wb_c < eplus_design_oat_wb_c_lim
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, a design OATwb of 68F will be used for sizing the cooling towers because the actual design value is below the limit EnergyPlus accepts for this input.")
+          design_oat_wb_c = eplus_design_oat_wb_c_lim
+        end
+        ct.setDesignInletAirWetBulbTemperature(design_oat_wb_c)
+        ct.setDesignApproachTemperature(approach_k)
+        ct.setDesignRangeTemperature(range_k)
+      end
+    end
+
+    # Set the min and max CW temps
+    # Typical design of min temp is really around 40F
+    # (that's what basin heaters, when used, are sized for usually)
+    min_temp_f = 34
+    max_temp_f = 200
+    min_temp_c = OpenStudio.convert(min_temp_f, 'F', 'C').get
+    max_temp_c = OpenStudio.convert(max_temp_f, 'F', 'C').get
+    setMinimumLoopTemperature(min_temp_c)
+    setMaximumLoopTemperature(max_temp_c)
+
+    # Cooling Tower operational controls
+    # G3.1.3.11 - Tower shall be controlled to maintain a 70F
+    # LCnWT where weather permits,
+    # floating up to leaving water at design conditions.
+    float_down_to_f = 70
+    float_down_to_c = OpenStudio.convert(float_down_to_f, 'F', 'C').get
+    cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(plant_loop.model)
+    cw_t_stpt_manager.setName("CW Temp Follows OATwb w/ #{approach_r} deltaF approach min #{float_down_to_f.round(1)} F to max #{leaving_cw_t_f.round(1)}")
+    cw_t_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
+    # At low design OATwb, it is possible to calculate
+    # a maximum temperature below the minimum.  In this case,
+    # make the maximum and minimum the same.
+    if leaving_cw_t_c < float_down_to_c
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, the maximum leaving temperature of #{leaving_cw_t_f.round(1)} F is below the minimum of #{float_down_to_f.round(1)} F.  The maximum will be set to the same value as the minimum.")
+      leaving_cw_t_c = float_down_to_c
+    end
+    cw_t_stpt_manager.setMaximumSetpointTemperature(leaving_cw_t_c)
+    cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
+    cw_t_stpt_manager.setOffsetTemperatureDifference(approach_k)
+    cw_t_stpt_manager.addToNode(supplyOutletNode)    
+
+    return true
+  end
+  
+  # Determine the performance rating method specified 
+  # design condenser water temperature, approach, and range
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] the condenser water loop
+  # @param design_oat_wb_c [Double] the design OA wetbulb temperature (C)
+  # @return [Array<Double>] [leaving_cw_t_c, approach_k, range_k]
+  def plant_loop_prm_baseline_condenser_water_temperatures(plant_loop, design_oat_wb_c)
+    design_oat_wb_f = OpenStudio.convert(design_oat_wb_f, 'F', 'C').get
+    
+    # G3.1.3.11 - CW supply temp = 85F or 10F approaching design wet bulb temperature,
+    # whichever is lower.  Design range = 10F
+    # Design Temperature rise of 10F => Range: 10F
+    range_r = 10
+
+    # Determine the leaving CW temp
+    max_leaving_cw_t_f = 85
+    leaving_cw_t_10f_approach_f = design_oat_wb_f + 10
+    leaving_cw_t_f = [max_leaving_cw_t_f, leaving_cw_t_10f_approach_f].min
+
+    # Calculate the approach
+    approach_r = leaving_cw_t_f - design_oat_wb_f
+
+    # Unit conversion
+    leaving_cw_t_c
+    approach_k
+    range_k
+    
+    # Convert to SI units
+    leaving_cw_t_c = OpenStudio.convert(leaving_cw_t_f, 'F', 'C').get
+    approach_k = OpenStudio.convert(approach_r, 'R', 'K').get
+    range_k = OpenStudio.convert(range_r, 'R', 'K').get
+
+    return [leaving_cw_t_c, approach_k, range_k]
+  end
+  
+  # Determine if temperature reset is required.
+  # Required if heating or cooling capacity is greater than 
+  # 300,000 Btu/hr.
   def plant_loop_supply_water_temperature_reset_required?(plant_loop)
     reset_required = false
 
-    case instvartemplate
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-
-      # Not required before 90.1-2004
+    # Not required for service water heating systems
+    if plant_loop_swh_loop?(plant_loop) 
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset not required for service water heating systems.")
       return reset_required
+    end
 
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
+    # Not required for variable flow systems
+    if plant_loop_variable_flow_system?(plant_loop) 
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset not required for variable flow systems per 6.5.4.3 Exception b.")
+      return reset_required
+    end
 
-      # Not required for service water heating systems
-      if plant_loop_swh_loop?(plant_loop) 
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset not required for service water heating systems.")
-        return reset_required
-      end
+    # Determine the capacity of the system
+    heating_capacity_w = plant_loop_total_heating_capacity(plant_loop) 
+    cooling_capacity_w = plant_loop_total_cooling_capacity(plant_loop) 
 
-      # Not required for variable flow systems
-      if plant_loop_variable_flow_system?(plant_loop) 
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset not required for variable flow systems per 6.5.4.3 Exception b.")
-        return reset_required
-      end
+    heating_capacity_btu_per_hr = OpenStudio.convert(heating_capacity_w, 'W', 'Btu/hr').get
+    cooling_capacity_btu_per_hr = OpenStudio.convert(cooling_capacity_w, 'W', 'Btu/hr').get
 
-      # Determine the capacity of the system
-      heating_capacity_w = plant_loop_total_heating_capacity(plant_loop) 
-      cooling_capacity_w = plant_loop_total_cooling_capacity(plant_loop) 
-
-      heating_capacity_btu_per_hr = OpenStudio.convert(heating_capacity_w, 'W', 'Btu/hr').get
-      cooling_capacity_btu_per_hr = OpenStudio.convert(cooling_capacity_w, 'W', 'Btu/hr').get
-
-      # Compare against capacity minimum requirement
-      min_cap_btu_per_hr = 300_000
-      if heating_capacity_btu_per_hr > min_cap_btu_per_hr
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset is required because heating capacity of #{heating_capacity_btu_per_hr.round} Btu/hr exceeds the minimum threshold of #{min_cap_btu_per_hr.round} Btu/hr.")
-        reset_required = true
-      elsif cooling_capacity_btu_per_hr > min_cap_btu_per_hr
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset is required because cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum threshold of #{min_cap_btu_per_hr.round} Btu/hr.")
-        reset_required = true
-      else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset is not required because capacity is less than minimum of #{min_cap_btu_per_hr.round} Btu/hr.")
-      end
-
+    # Compare against capacity minimum requirement
+    min_cap_btu_per_hr = 300_000
+    if heating_capacity_btu_per_hr > min_cap_btu_per_hr
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset is required because heating capacity of #{heating_capacity_btu_per_hr.round} Btu/hr exceeds the minimum threshold of #{min_cap_btu_per_hr.round} Btu/hr.")
+      reset_required = true
+    elsif cooling_capacity_btu_per_hr > min_cap_btu_per_hr
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset is required because cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum threshold of #{min_cap_btu_per_hr.round} Btu/hr.")
+      reset_required = true
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: supply water temperature reset is not required because capacity is less than minimum of #{min_cap_btu_per_hr.round} Btu/hr.")
     end
 
     return reset_required
@@ -651,173 +658,145 @@ class StandardsModel < OpenStudio::Model::Model
 
     case loop_type
     when 'Heating'
-
-      # Hot water systems
-
-      # Determine the minimum area to determine
-      # pumping type.
-      minimum_area_ft2 = nil
-      case instvartemplate
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        minimum_area_ft2 = 120_000
-      end
-
-      # Determine the area served
-      area_served_m2 = plant_loop_total_floor_area_served(plant_loop) 
-      area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
-
-      # Determine the pump type
-      control_type = 'Riding Curve'
-      if area_served_ft2 > minimum_area_ft2
-        control_type = 'VSD No Reset'
-      end
-
-      # Modify all the primary pumps
-      plant_loop.supplyComponents.each do |sc|
-        if sc.to_PumpVariableSpeed.is_initialized
-          pump = sc.to_PumpVariableSpeed.get
-          pump_variable_speed_set_control_type(pump, control_type)
-        end
-      end
-
-      # Report out the pumping type
-      unless control_type.nil?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, pump type is #{control_type}.")
-      end
-
+      plant_loop_apply_prm_baseline_hot_water_pumping_type(plant_loop)
     when 'Cooling'
-
-      # Chilled water systems
-
-      # Determine the pumping type.
-      # For some templates, this is
-      # based on area.  For others, it is built
-      # on cooling capacity.
-      pri_control_type = nil
-      sec_control_type = nil
-      case instvartemplate
-      when '90.1-2004'
-
-        minimum_area_ft2 = 120_000
-
-        # Determine the area served
-        area_served_m2 = plant_loop_total_floor_area_served(plant_loop) 
-        area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
-
-        # Determine the primary pump type
-        pri_control_type = 'Constant Flow'
-
-        # Determine the secondary pump type
-        sec_control_type = 'Riding Curve'
-        if area_served_ft2 > minimum_area_ft2
-          sec_control_type = 'VSD No Reset'
-        end
-
-      when '90.1-2007', '90.1-2010', '90.1-2013'
-
-        minimum_cap_tons = 300
-
-        # Determine the capacity
-        cap_w = plant_loop_total_cooling_capacity(plant_loop) 
-        cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
-
-        # Determine if it a district cooling system
-        has_district_cooling = false
-        plant_loop.supplyComponents.each do |sc|
-          if sc.to_DistrictCooling.is_initialized
-            has_district_cooling = true
-          end
-        end
-
-        # Determine the primary and secondary pumping types
-        pri_control_type = nil
-        sec_control_type = nil
-        if has_district_cooling
-          pri_control_type = if cap_tons > minimum_cap_tons
-                               'VSD No Reset'
-                             else
-                               'Riding Curve'
-                             end
-        else
-          pri_control_type = 'Constant Flow'
-          sec_control_type = if cap_tons > minimum_cap_tons
-                               'VSD No Reset'
-                             else
-                               'Riding Curve'
-                             end
-        end
-      end
-
-      # Report out the pumping type
-      unless pri_control_type.nil?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, primary pump type is #{pri_control_type}.")
-      end
-
-      unless sec_control_type.nil?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, secondary pump type is #{sec_control_type}.")
-      end
-
-      # Modify all the primary pumps
-      plant_loop.supplyComponents.each do |sc|
-        if sc.to_PumpVariableSpeed.is_initialized
-          pump = sc.to_PumpVariableSpeed.get
-          pump_variable_speed_set_control_type(pump, pri_control_type)
-        elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
-          pump = sc.to_HeaderedPumpsVariableSpeed.get
-          headered_pump_variable_speed_set_control_type(pump, control_type)        
-        end
-      end
-
-      # Modify all the secondary pumps
-      plant_loop.demandComponents.each do |sc|
-        if sc.to_PumpVariableSpeed.is_initialized
-          pump = sc.to_PumpVariableSpeed.get
-          pump_variable_speed_set_control_type(pump, sec_control_type)
-        elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
-          pump = sc.to_HeaderedPumpsVariableSpeed.get
-          headered_pump_variable_speed_set_control_type(pump, control_type)
-        end
-      end
-
+      plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)
     when 'Condenser'
-
-      # Condenser water systems
-
-      # All condenser water loops are constant flow
-      control_type = 'Constant Flow'
-
-      # Report out the pumping type
-      unless control_type.nil?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, pump type is #{control_type}.")
-      end
-
-      # Modify all primary pumps
-      plant_loop.supplyComponents.each do |sc|
-        if sc.to_PumpVariableSpeed.is_initialized
-          pump = sc.to_PumpVariableSpeed.get
-          pump_variable_speed_set_control_type(pump, control_type)
-        elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
-          pump = sc.to_HeaderedPumpsVariableSpeed.get
-          headered_pump_variable_speed_set_control_type(pump, control_type)
-        end
-      end
-
+      plant_loop_apply_prm_baseline_condenser_water_pumping_type(plant_loop)
     end
 
     return true
   end
 
+  def plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)
+    # Determine the pumping type.
+    minimum_cap_tons = 300
+
+    # Determine the capacity
+    cap_w = plant_loop_total_cooling_capacity(plant_loop) 
+    cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
+
+    # Determine if it a district cooling system
+    has_district_cooling = false
+    plant_loop.supplyComponents.each do |sc|
+      if sc.to_DistrictCooling.is_initialized
+        has_district_cooling = true
+      end
+    end
+
+    # Determine the primary and secondary pumping types
+    pri_control_type = nil
+    sec_control_type = nil
+    if has_district_cooling
+      pri_control_type = if cap_tons > minimum_cap_tons
+                           'VSD No Reset'
+                         else
+                           'Riding Curve'
+                         end
+    else
+      pri_control_type = 'Constant Flow'
+      sec_control_type = if cap_tons > minimum_cap_tons
+                           'VSD No Reset'
+                         else
+                           'Riding Curve'
+                         end
+    end
+
+    # Report out the pumping type
+    unless pri_control_type.nil?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, primary pump type is #{pri_control_type}.")
+    end
+
+    unless sec_control_type.nil?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, secondary pump type is #{sec_control_type}.")
+    end
+
+    # Modify all the primary pumps
+    plant_loop.supplyComponents.each do |sc|
+      if sc.to_PumpVariableSpeed.is_initialized
+        pump = sc.to_PumpVariableSpeed.get
+        pump_variable_speed_set_control_type(pump, pri_control_type)
+      elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsVariableSpeed.get
+        headered_pump_variable_speed_set_control_type(pump, control_type)        
+      end
+    end
+
+    # Modify all the secondary pumps
+    plant_loop.demandComponents.each do |sc|
+      if sc.to_PumpVariableSpeed.is_initialized
+        pump = sc.to_PumpVariableSpeed.get
+        pump_variable_speed_set_control_type(pump, sec_control_type)
+      elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsVariableSpeed.get
+        headered_pump_variable_speed_set_control_type(pump, control_type)
+      end
+    end
+  
+    return true
+  end
+  
+  def plant_loop_apply_prm_baseline_hot_water_pumping_type(plant_loop)
+    # Determine the minimum area to determine
+    # pumping type.
+    minimum_area_ft2 = 120_000
+
+    # Determine the area served
+    area_served_m2 = plant_loop_total_floor_area_served(plant_loop) 
+    area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
+
+    # Determine the pump type
+    control_type = 'Riding Curve'
+    if area_served_ft2 > minimum_area_ft2
+      control_type = 'VSD No Reset'
+    end
+
+    # Modify all the primary pumps
+    plant_loop.supplyComponents.each do |sc|
+      if sc.to_PumpVariableSpeed.is_initialized
+        pump = sc.to_PumpVariableSpeed.get
+        pump_variable_speed_set_control_type(pump, control_type)
+      end
+    end
+
+    # Report out the pumping type
+    unless control_type.nil?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, pump type is #{control_type}.")
+    end
+    
+    return true
+  end
+
+  def plant_loop_apply_prm_baseline_condenser_water_pumping_type(plant_loop)
+    # All condenser water loops are constant flow
+    control_type = 'Constant Flow'
+
+    # Report out the pumping type
+    unless control_type.nil?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{plant_loop.name}, pump type is #{control_type}.")
+    end
+
+    # Modify all primary pumps
+    plant_loop.supplyComponents.each do |sc|
+      if sc.to_PumpVariableSpeed.is_initialized
+        pump = sc.to_PumpVariableSpeed.get
+        pump_variable_speed_set_control_type(pump, control_type)
+      elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
+        pump = sc.to_HeaderedPumpsVariableSpeed.get
+        headered_pump_variable_speed_set_control_type(pump, control_type)
+      end
+    end
+  
+    return true
+  end
+  
   def plant_loop_apply_prm_number_of_boilers(plant_loop)
     # Skip non-heating plants
     return true unless sizingPlant.loopType == 'Heating'
 
     # Determine the minimum area to determine
     # number of boilers.
-    minimum_area_ft2 = nil
-    case instvartemplate
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      minimum_area_ft2 = 15_000
-    end
+    minimum_area_ft2 = 15_000
 
     # Determine the area served
     area_served_m2 = plant_loop_total_floor_area_served(plant_loop) 
@@ -878,31 +857,26 @@ class StandardsModel < OpenStudio::Model::Model
     num_chillers = nil
     chiller_cooling_type = nil
     chiller_compressor_type = nil
-    case instvartemplate
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
 
-      # Determine the capacity of the loop
-      cap_w = plant_loop_total_cooling_capacity(plant_loop) 
-      cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
-
-      if cap_tons <= 300
-        num_chillers = 1
-        chiller_cooling_type = 'WaterCooled'
-        chiller_compressor_type = 'Rotary Screw'
-      elsif cap_tons > 300 && cap_tons < 600
-        num_chillers = 2
-        chiller_cooling_type = 'WaterCooled'
-        chiller_compressor_type = 'Rotary Screw'
-      else
-        # Max capacity of a single chiller
-        max_cap_ton = 800.0
-        num_chillers = (cap_tons / max_cap_ton).floor + 1
-        # Must be at least 2 chillers
-        num_chillers += 1 if num_chillers == 1
-        chiller_cooling_type = 'WaterCooled'
-        chiller_compressor_type = 'Centrifugal'
-      end
-
+    # Determine the capacity of the loop
+    cap_w = plant_loop_total_cooling_capacity(plant_loop) 
+    cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
+    if cap_tons <= 300
+      num_chillers = 1
+      chiller_cooling_type = 'WaterCooled'
+      chiller_compressor_type = 'Rotary Screw'
+    elsif cap_tons > 300 && cap_tons < 600
+      num_chillers = 2
+      chiller_cooling_type = 'WaterCooled'
+      chiller_compressor_type = 'Rotary Screw'
+    else
+      # Max capacity of a single chiller
+      max_cap_ton = 800.0
+      num_chillers = (cap_tons / max_cap_ton).floor + 1
+      # Must be at least 2 chillers
+      num_chillers += 1 if num_chillers == 1
+      chiller_cooling_type = 'WaterCooled'
+      chiller_compressor_type = 'Centrifugal'
     end
 
     # Get all existing chillers and pumps
