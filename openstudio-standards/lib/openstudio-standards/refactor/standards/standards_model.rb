@@ -13,10 +13,11 @@ class StandardsModel < OpenStudio::Model::Model
   require_relative 'ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTower'
   require_relative 'ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower'
   require_relative 'necb/necb_2011/necb_2011.Fan'
+  require_relative 'ashrae_90_1/ashrae_90_1.rb'
 
   # Require all the standards files below this dynamically for now
   # TODO refactor: hard code requires later
-  Dir.glob("#{File.dirname(__FILE__)}/../**/*.rb").each do |file_path|
+  Dir.glob("#{File.dirname(__FILE__)}/**/*.rb").each do |file_path|
     # Don't load temp scripts
     next if file_path.include?('temporary_scripts')
     # Don't load already loaded files
