@@ -84,13 +84,13 @@ class StandardsModel < OpenStudio::Model::Model
     scale_factor = mult**0.5
 
     # Get the centroid (Point3d)
-    g = centroid
+    g = sub_surface.centroid
 
     # Create an array to collect the new vertices
     new_vertices = []
 
     # Loop on vertices (Point3ds)
-    vertices.each do |vertex|
+    sub_surface.vertices.each do |vertex|
       # Point3d - Point3d = Vector3d
       # Vector from centroid to vertex (GA, GB, GC, etc)
       centroid_vector = vertex - g
@@ -105,7 +105,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Assign the new vertices to the self
-    setVertices(new_vertices)
+    sub_surface.setVertices(new_vertices)
   end
 
   # Reduce the area of the subsurface by raising the
@@ -118,12 +118,12 @@ class StandardsModel < OpenStudio::Model::Model
     mult = 1 - percent_reduction
 
     # Calculate the original area
-    area_original = netArea
+    area_original = sub_surface.netArea
 
     # Find the min and max z values
     min_z_val = 99999
     max_z_val = -99999
-    vertices.each do |vertex|
+    sub_surface.vertices.each do |vertex|
       # Min z value
       if vertex.z < min_z_val
         min_z_val = vertex.z
@@ -142,7 +142,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Reset the z value of the lowest points
     new_vertices = []
-    vertices.each do |vertex|
+    sub_surface.vertices.each do |vertex|
       new_x = vertex.x
       new_y = vertex.y
       new_z = vertex.z
@@ -153,7 +153,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Reset the vertices
-    setVertices(new_vertices)
+    sub_surface.setVertices(new_vertices)
 
     return true
   end
@@ -162,7 +162,7 @@ class StandardsModel < OpenStudio::Model::Model
   # meaning a rectangle where the bottom is parallel to the ground.
   def sub_surface_vertical_rectangle?(sub_surface)
     # Get the vertices once
-    verts = vertices
+    verts = sub_surface.vertices
 
     # Check for 4 vertices
     return false unless verts.size == 4
