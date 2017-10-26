@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # Apply multizone vav outdoor air method and
   # adjust multizone VAV damper positions
@@ -264,7 +263,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Determine the fan power limitation pressure drop adjustment
   # Per Table 6.5.3.1.1B
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] fan power limitation pressure drop adjustment
   #   units = horsepower
   # @todo Determine the presence of MERV filters and other stuff in Table 6.5.3.1.1B.  May need to extend AirLoopHVAC data model
@@ -308,7 +306,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Determine the allowable fan system brake horsepower
   # Per Table 6.5.3.1.1A
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] allowable fan system brake horsepower
   #   units = horsepower
   def air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac)
@@ -432,7 +429,6 @@ class StandardsModel < OpenStudio::Model::Model
   # with or without the fans inside of fan powered terminals.
   #
   # @param include_terminal_fans [Bool] if true, power from fan powered terminals will be included
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] total brake horsepower of the fans on the system
   #   units = horsepower
   def air_loop_hvac_system_fan_brake_horsepower(air_loop_hvac, include_terminal_fans = true)
@@ -475,7 +471,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Set the fan pressure rises that will result in
   # the system hitting the baseline allowable fan power
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   def air_loop_hvac_apply_baseline_fan_pressure_rise(air_loop_hvac)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name}-Setting #{instvartemplate} baseline fan power.")
 
@@ -704,7 +699,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Determine whether or not this system
   # is required to have an economizer.
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @param climate_zone [String] valid choices: 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B',
   # 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C',
   # 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B', 'ASHRAE 169-2006-5C', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
@@ -1455,7 +1449,6 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Set the minimum VAV damper positions.
   #
-  # @param template [String] the building template
   # @param has_ddc [Bool] if true, will assume that there
   # is DDC control of vav terminals.  If false, assumes otherwise.
   # @return [Bool] true if successful, false if not
@@ -1851,7 +1844,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Enable supply air temperature (SAT) reset based
   # on the cooling demand of the warmest zone.
   #
-  # @param template [String] valid choices: '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Bool] Returns true if successful, false if not.
   def air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac)
     # Get the current setpoint and calculate
@@ -2863,7 +2855,6 @@ class StandardsModel < OpenStudio::Model::Model
   #   has DDC control of VAV terminals or not, determine this
   #   from the system itself.  This may require additional information
   #   be added to the OpenStudio data model.
-  # @param template [String] the template base requirements on
   # @param has_ddc [Bool] whether or not the system has DDC control
   # over VAV terminals.
   # return [Bool] returns true if static pressure reset is required, false if not
@@ -2883,7 +2874,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Determine if a system's fans must shut off when
   # not required.
   #
-  # @param template [String]
   # @return [Bool] true if required, false if not
   def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
     shutoff_required = true

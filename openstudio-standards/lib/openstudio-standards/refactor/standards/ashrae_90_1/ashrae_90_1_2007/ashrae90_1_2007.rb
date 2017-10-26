@@ -1,3 +1,5 @@
+# This class holds methods that apply ASHRAE 90.1-2004
+# to a given model.
 class A90_1_2007_Model < A90_1_Model
   @@template = '90.1-2007'
   register_standard (@@template)
@@ -299,7 +301,6 @@ class A90_1_2007_Model < A90_1_Model
   # Loads the library of methods specific to this building type
   #
   # @param building_type [String] the building type
-  # @param template [String] the template
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
   def model_load_building_type_methods(model, building_type)
@@ -355,7 +356,6 @@ class A90_1_2007_Model < A90_1_Model
   # Loads a geometry-only .osm as a starting point.
   #
   # @param building_type [String] the building type
-  # @param template [String] the template
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
   def model_load_geometry(model, building_type)
@@ -559,7 +559,6 @@ class A90_1_2007_Model < A90_1_Model
   # Some loads are governed by the standard, others are typical values
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
-  # @param template [String] the template to draw data from
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
 
@@ -591,7 +590,6 @@ class A90_1_2007_Model < A90_1_Model
   # to this space type, overriding the whole-building construction set.
   #
   # @param building_type [String] the type of building
-  # @param template [String] the template to draw data from
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
   def model_add_constructions(model, building_type, climate_zone)
@@ -926,7 +924,6 @@ class A90_1_2007_Model < A90_1_Model
   # If kitchen_makeup is "Adjacent" then exhaust will be modeled in every kitchen zone. Makeup air will be provided when there as an adjacent dining,cafe, or cafeteria zone of the same buidling type.
   # If kitchen_makeup is "Largest Zone" then exhaust will only be modeled in the largest kitchen zone, but the flow rate will be based on the kitchen area for all zones. Makeup air will be modeled in the largest dining,cafe, or cafeteria zone of the same building type.
   #
-  # @param @@template [String] Valid choices are
   # @param kitchen_makeup [String] Valid choices are
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
   def model_add_exhaust(model,kitchen_makeup = "Adjacent") # kitchen_makeup options are (None, Largest Zone, Adjacent)

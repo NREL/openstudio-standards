@@ -1,4 +1,3 @@
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class NRELZNEReady2017_Model < A90_1_Model
   # Defines the minimum sensible and latent effectiveness of
   # the heat exchanger.  Assumed to apply to sensible and latent

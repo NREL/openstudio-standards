@@ -108,7 +108,6 @@ module CoilDX
 
   # Finds the search criteria
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [hash] has for search criteria to be used for find object
   def coil_dx_find_search_criteria(coil_dx)
     search_criteria = {}

@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # Apply all standard required controls to the plantloop
   #
@@ -10,17 +9,19 @@ class StandardsModel < OpenStudio::Model::Model
     plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop)
   end
 
+  # Determine if the plant loop is variable flow.
+  # Returns true if primary and/or secondary pumps are variable speed.
   def plant_loop_variable_flow_system?(plant_loop)
     variable_flow = false
 
-    # Modify all the primary pumps
+    # Check all the primary pumps
     plant_loop.supplyComponents.each do |sc|
       if sc.to_PumpVariableSpeed.is_initialized
         variable_flow = true
       end
     end
 
-    # Modify all the secondary pumps
+    # Check all the secondary pumps
     plant_loop.demandComponents.each do |sc|
       if sc.to_PumpVariableSpeed.is_initialized
         variable_flow = true
@@ -126,6 +127,7 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
+  # Applies the temperatures to the plant loop based on Appendix G.
   def plant_loop_apply_prm_baseline_temperatures(plant_loop)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
@@ -141,6 +143,7 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
+  # Applies the hot water temperatures to the plant loop based on Appendix G.
   def plant_loop_apply_prm_baseline_hot_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     
@@ -172,6 +175,7 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
   
+  # Applies the chilled water temperatures to the plant loop based on Appendix G.
   def plant_loop_apply_prm_baseline_chilled_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
 
@@ -211,6 +215,7 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
   
+  # Applies the condenser water temperatures to the plant loop based on Appendix G.
   def plant_loop_apply_prm_baseline_condenser_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
 
@@ -408,6 +413,8 @@ class StandardsModel < OpenStudio::Model::Model
     return reset_required
   end
 
+  # Enable reset of hot or chilled water temperature
+  # based on outdoor air temperature.
   def plant_loop_enable_supply_water_temperature_reset(plant_loop)
     # Get the current setpoint manager on the outlet node
     # and determine if already has temperature reset
@@ -591,6 +598,11 @@ class StandardsModel < OpenStudio::Model::Model
     return total_heating_capacity_w
   end
 
+  # Determine the total floor area served by this loop.
+  # If the loop serves a coil attached to an AirLoopHVAC,
+  # count the area of all zones served by that loop.
+  # If the loop serves coils inside of zone equipment,
+  # count the area of the zones containing the zone equipment.
   def plant_loop_total_floor_area_served(plant_loop)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
@@ -652,6 +664,7 @@ class StandardsModel < OpenStudio::Model::Model
     return area_served_m2
   end
 
+  # Applies the pumping controls to the loop based on Appendix G.
   def plant_loop_apply_prm_baseline_pumping_type(plant_loop)
     sizing_plant = sizingPlant
     loop_type = sizing_plant.loopType
@@ -668,6 +681,7 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
+  # Applies the chilled water pumping controls to the loop based on Appendix G.
   def plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)
     # Determine the pumping type.
     minimum_cap_tons = 300
@@ -736,6 +750,7 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
   
+  # Applies the hot water pumping controls to the loop based on Appendix G.
   def plant_loop_apply_prm_baseline_hot_water_pumping_type(plant_loop)
     # Determine the minimum area to determine
     # pumping type.
@@ -767,6 +782,7 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
+  # Applies the condenser water pumping controls to the loop based on Appendix G.
   def plant_loop_apply_prm_baseline_condenser_water_pumping_type(plant_loop)
     # All condenser water loops are constant flow
     control_type = 'Constant Flow'
@@ -790,6 +806,8 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
   
+  # Splits the single boiler used for the initial sizing run
+  # into multiple separate boilers based on Appendix G.
   def plant_loop_apply_prm_number_of_boilers(plant_loop)
     # Skip non-heating plants
     return true unless sizingPlant.loopType == 'Heating'
@@ -849,6 +867,8 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
+  # Splits the single chiller used for the initial sizing run
+  # into multiple separate chillers based on Appendix G.
   def plant_loop_apply_prm_number_of_chillers(plant_loop)
     # Skip non-cooling plants
     return true unless sizingPlant.loopType == 'Cooling'
@@ -992,6 +1012,8 @@ class StandardsModel < OpenStudio::Model::Model
     return true
   end
 
+  # Splits the single cooling tower used for the initial sizing run
+  # into multiple separate cooling towers based on Appendix G.
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
     return true unless sizingPlant.loopType == 'Condenser'

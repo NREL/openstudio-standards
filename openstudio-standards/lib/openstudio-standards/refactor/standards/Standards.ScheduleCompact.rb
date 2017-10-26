@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # Returns the min and max value for this schedule.
   #

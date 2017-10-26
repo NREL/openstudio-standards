@@ -1,4 +1,3 @@
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # If construction properties can be found
   # based on the template,
@@ -8,9 +7,8 @@ class StandardsModel < OpenStudio::Model::Model
   # create a construction that meets those properties and
   # assign it to this surface.
   #
-  # @param template [String] valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
-  # @climate_zone [String]
+  # @param climate_zone [String] the climate zone
   # @param previous_construction_map [Hash] a hash where the keys are an array of inputs
   # [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   # and the values are the constructions.  If supplied, constructions will be pulled

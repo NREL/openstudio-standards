@@ -1,4 +1,8 @@
-# The is the new base class that will contain the common standard code.
+# This abstract class holds generic methods that many energy standards would commonly use.
+# Many of the methods in this class apply efficiency values from the
+# OpenStudio-Standards spreadsheet.  If a method in this class is redefined
+# by a child class, the implementation in the child class is used.
+# @abstract
 class StandardsModel < OpenStudio::Model::Model
   @@prototype_folder =  "#{File.dirname(__FILE__)}/../../prototypes"
   @@standards_folder =  "#{File.dirname(__FILE__)}/../../standards"

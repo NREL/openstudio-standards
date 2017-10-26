@@ -80,6 +80,8 @@ module Pump
     return true
   end
 
+  # Applies the minimum motor efficiency for this pump
+  # based on the motor's brake horsepower.
   def pump_apply_standard_minimum_motor_efficiency(pump)
     # Get the horsepower
     bhp = pump_brake_horsepower(pump) 

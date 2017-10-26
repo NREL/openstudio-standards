@@ -15,7 +15,6 @@ module CoolingTower
   # rate will not (and should not)
   # exactly equal the minimum tower performance.
   #
-  # @param template [String] the template base requirements on
   # @return [Bool] true if successful, false if not
   def cooling_tower_apply_minimum_power_per_flow(cooling_tower)
     # Get the design water flow rate

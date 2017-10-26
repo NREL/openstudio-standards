@@ -5,7 +5,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Zones with low OA per area get lower initial guesses.
   # Final position will be adjusted upward
   # as necessary by Standards.AirLoopHVAC.adjust_minimum_vav_damper_positions
-  # @param template [String] the template
   # @param zone_min_oa [Double] the zone outdoor air flow rate, in m^3/s.
   # If supplied, this will be set as a minimum limit in addition to the minimum
   # damper position.  EnergyPlus will use the larger of the two values during sizing.
@@ -39,6 +38,8 @@ class StandardsModel < OpenStudio::Model::Model
     return min_damper_position
   end
   
+  # Sets the capacity of the reheat coil based on the minimum flow fraction,
+  # and the maximum flow rate.
   def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
     flow_rate_fraction = air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction
     if air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.is_initialized

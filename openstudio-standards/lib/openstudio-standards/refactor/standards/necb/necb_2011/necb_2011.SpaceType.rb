@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class NECB_2011_Model < StandardsModel
   # Sets the selected internal loads to standards-based or typical values.
   # For each category that is selected get all load instances. Remove all

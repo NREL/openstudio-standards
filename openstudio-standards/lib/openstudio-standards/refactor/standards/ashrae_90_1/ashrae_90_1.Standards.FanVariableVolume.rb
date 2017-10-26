@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class A90_1_Model < StandardsModel
 
   # The threhold horsepower below which part load control is not required.

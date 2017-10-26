@@ -3,7 +3,6 @@
 class StandardsModel < OpenStudio::Model::Model
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Bool] true if successful, false if not
   def coil_heating_dx_multi_speed_apply_efficiency_and_curves(coil_heating_dx_multi_speed, sql_db_vars_map)
     successfully_set_all_properties = true

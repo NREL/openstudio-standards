@@ -1,9 +1,7 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # Finds the search criteria
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [hash] has for search criteria to be used for find object
   def chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     search_criteria = {}
@@ -72,8 +70,6 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Finds lookup object in standards and return full load efficiency
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Double] full load efficiency (COP)
   def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     # Get the chiller properties
@@ -96,8 +92,6 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = $os_standards['chillers']

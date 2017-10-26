@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # Returns the equivalent full load hours (EFLH) for this schedule.
   # For example, an always-on fractional schedule

@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # Calculates the zone outdoor airflow requirement (Voz)
   # based on the inputs in the DesignSpecification:OutdoorAir obects
@@ -1232,6 +1231,9 @@ class StandardsModel < OpenStudio::Model::Model
     return result
   end
 
+  # Adds a thermostat that heats the space to 0 F and cools to 120 F.
+  # These numbers are outside of the threshold that is considered heated
+  # or cooled by thermal_zone_cooled?() and thermal_zone_heated?()
   def thermal_zone_add_unconditioned_thermostat(thermal_zone)
     # Heated to 0F (below thermal_zone_heated?(thermal_zone)  threshold)
     htg_t_f = 0
@@ -1395,7 +1397,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Add Exhaust Fans based on space type lookup
   # This measure doesn't look if DCV is needed. Others methods can check if DCV needed and add it
   #
-  # @param template [String] Valid choices are
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
   # @todo - Combine availability and fraction flow schedule to make zone mixing schedule
   def thermal_zone_add_exhaust(thermal_zone,exhaust_makeup_inputs = {})
@@ -1533,7 +1534,6 @@ class StandardsModel < OpenStudio::Model::Model
 
   # returns true if DCV is required for exhaust fan for specified tempate
   #
-  # @param template [String] Valid choices are
   # @return [Bool] returns true if DCV is required for exhaust fan for specified tempate
   def thermal_zone_exhaust_fan_dcv_required?(thermal_zone)
 
@@ -1541,10 +1541,6 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Add DCV to exhaust fan and if requsted to related objects
   #
-  # @param template [Bool] defaults to true to change associated objects
-  # @param template [Array] related zone mixing objects
-  # @param template [Array] related transfer_air_source_zones
-  # @param template [Bool] defaults to true to change associated objects
   # @return [Bool] not sure if there is anything to turn here other than if it was sucessful, no new objects made?
   def thermal_zone_add_exhaust_fan_dcv(thermal_zone, change_related_objects = true,zone_mixing_objects = [],transfer_air_source_zones = [])
 

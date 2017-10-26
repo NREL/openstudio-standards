@@ -1,8 +1,20 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   include Fan
 
+  # Modify the fan curve coefficients to reflect a specific type of control.
+  #
+  # @param control_type [String] valid choices are:
+  # Multi Zone VAV with discharge dampers, 
+  # Multi Zone VAV with VSD and SP Setpoint Reset,   
+  # Multi Zone VAV with AF or BI Riding Curve,
+  # Multi Zone VAV with AF or BI with Inlet Vanes,
+  # Multi Zone VAV with FC Riding Curve,
+  # Multi Zone VAV with FC with Inlet Vanes,
+  # Multi Zone VAV with Vane-axial with Variable Pitch Blades,
+  # Multi Zone VAV with VSD and Fixed SP Setpoint,
+  # Multi Zone VAV with VSD and Static Pressure Reset,
+  # Single Zone VAV Fan
   def fan_variable_volume_set_control_type(fan_variable_volume, control_type)
     # Determine the coefficients
     coeff_a = nil

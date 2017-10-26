@@ -1,4 +1,3 @@
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # Sets the minimum effectiveness of the heat exchanger per
   # the standard.

@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # Sets the U-value of a construction to a specified value
   # by modifying the thickness of the insulation layer.

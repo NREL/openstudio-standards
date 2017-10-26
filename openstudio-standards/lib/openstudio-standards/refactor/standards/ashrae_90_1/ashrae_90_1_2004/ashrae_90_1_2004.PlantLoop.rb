@@ -1,4 +1,7 @@
 class A90_1_2004_Model < A90_1_Model
+
+  # Set the primary and secondary pumping control types for the
+  # chilled water loop, as specified in Appendix G.
   def plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)
     # Determine the pumping type.
     minimum_area_ft2 = 120_000

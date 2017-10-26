@@ -1,6 +1,8 @@
 
-# open the class to add methods to return sizing values
 class StandardsModel < OpenStudio::Model::Model
+  # Applies the standard efficiency ratings and typical performance curves to this object.
+  #
+  # @return [Bool] true if successful, false if not
   def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage, standards)
     successfully_set_all_properties = true
 

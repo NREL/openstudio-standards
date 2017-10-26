@@ -113,7 +113,6 @@ class StandardsModel < OpenStudio::Model::Model
   # compliance path for minimum standard compliance."  This means you can't use
   # this method for code compliance to get a permit.
   # @param building_type [String] the building type
-  # @param template [String] the template.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @param climate_zone [String] the climate zone
   # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
   # If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
@@ -444,7 +443,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Determine the dominant and exceptional areas of the
   # building based on fuel types and occupancy types.
   #
-  # @param template [String] the template.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, fuel, and zones (an array of zones)
   def model_prm_baseline_system_groups(model, custom)
@@ -739,7 +737,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Determine the baseline system type given the
   # inputs.  Logic is different for different standards.
   #
-  # @param template [String] Valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param area_type [String] Valid choices are residential,
   # nonresidential, and heatedonly
@@ -861,14 +858,6 @@ class StandardsModel < OpenStudio::Model::Model
   # are outliers and putting these systems on separate
   # single-zone systems.  This method does that.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
-  # @param area_type [String] Valid choices are residential,
-  # nonresidential, and heatedonly
-  # @param heating_fuel_type [String] Valid choices are
-  # electric and fossil
-  # @param area_ft2 [Double] Area in ft^2
-  # @param num_stories [Integer] Number of stories
   # @param system_type [String] The system type.  Valid choices are
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace,
@@ -876,9 +865,9 @@ class StandardsModel < OpenStudio::Model::Model
   # OpenStudio::Model::Model.prm_baseline_system_type.
   # @param main_heat_fuel [String] main heating fuel.  Valid choices are
   # Electricity, NaturalGas, DistrictHeating
-  # @param main_heat_fuel [String] zone heating/reheat fuel.  Valid choices are
+  # @param zone_heat_fuel [String] zone heating/reheat fuel.  Valid choices are
   # Electricity, NaturalGas, DistrictHeating
-  # @param main_heat_fuel [String] cooling fuel.  Valid choices are
+  # @param cool_fuel [String] cooling fuel.  Valid choices are
   # Electricity, DistrictCooling
   # @todo add 90.1-2013 systems 11-13
   def model_add_prm_baseline_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
@@ -1726,7 +1715,6 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param category [String] the construction set category desired.
   # Valid choices are Nonresidential, Residential, and Semiheated
-  # @param template [String] the template.  Valid choices are 90.1-2004, 90.1-2007, 90.1-2010, 90.1-2013.
   # @return [OpenStudio::Model::DefaultConstructionSet] returns a default
   # construction set populated with the specified constructions.
   def model_add_prm_construction_set(model, category)
@@ -2260,10 +2248,10 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Create constant ScheduleRuleset
   #
-  # @param [double] constant value
-  # @param [string] name
+  # @param value [double] the value to use, 24-7, 365
+  # @param name [string] the name of the schedule
   # @return schedule
-  def model_add_constant_schedule_ruleset(model, value,name = nil)
+  def model_add_constant_schedule_ruleset(model, value, name = nil)
     schedule = OpenStudio::Model::ScheduleRuleset.new(model)
     if not name.nil?
       schedule.setName(name)
@@ -2799,6 +2787,8 @@ class StandardsModel < OpenStudio::Model::Model
     return OpenStudio::Model::OptionalDefaultConstructionSet.new(construction_set)
   end
 
+  # Adds a curve from the OpenStudio-Standards dataset to the model
+  # based on the curve name.
   def model_add_curve(model, curve_name)
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
@@ -2946,7 +2936,6 @@ class StandardsModel < OpenStudio::Model::Model
   #
   # @param climate_zone [String] string for the ASHRAE climate zone.
   # @param building_type [String] string for prototype building type.
-  # @param template [String] string for prototype template to target.
   # @return [Hash] Returns a hash with data presented in various bins. Returns nil if no search results
   def model_process_results_for_datapoint(model, climate_zone, building_type)
     # Combine the data from the JSON files into a single hash
@@ -3025,7 +3014,7 @@ class StandardsModel < OpenStudio::Model::Model
   # This is used to calculate EUI's to compare against non prototype buildings
   # Areas taken from scorecard Excel Files
   #
-  # @param [Sting] building type
+  # @param building_type [String] the building type
   # @return [Double] floor area (m^2) of prototype building for building type passed in. Returns nil if unexpected building type
   def model_find_prototype_floor_area(model, building_type)
     if building_type == 'FullServiceRestaurant' # 5502 ft^2
@@ -3073,7 +3062,7 @@ class StandardsModel < OpenStudio::Model::Model
 
   # this is used by other methods to get the clinzte aone and building type from a model.
   # it has logic to break office into small, medium or large based on building area that can be turned off
-  # @param [bool] re-map small office or leave it alone
+  # @param remap_office [bool] re-map small office or leave it alone
   # @return [hash] key for climate zone and building type, both values are strings
   def model_get_building_climate_zone_and_building_type(model, remap_office = true)
     # get climate zone from model
@@ -3110,7 +3099,7 @@ class StandardsModel < OpenStudio::Model::Model
   end
 
   # remap office to one of the protptye buildings
-  # @param [Double] floor area
+  # @param floor_area [Double] floor area (m^2)
   # @return [String] SmallOffice, MediumOffice, LargeOffice
   def model_remap_office(model, floor_area)
     # prototype small office approx 500 m^2
@@ -3130,7 +3119,6 @@ class StandardsModel < OpenStudio::Model::Model
   # If the building type or ASHRAE climate zone is not set in the model this will return nil
   # If the lookup doesn't find matching simulation results this wil return nil
   #
-  # @param [String] target prototype template for eui lookup
   # @return [Double] EUI (MJ/m^2) for target template for given OSM. Returns nil if can't calculate EUI
   def model_find_target_eui(model)
     building_data = model_get_building_climate_zone_and_building_type(model) 
@@ -3162,7 +3150,6 @@ class StandardsModel < OpenStudio::Model::Model
   # If the building type or ASHRAE climate zone is not set in the model this will return nil
   # If the lookup doesn't find matching simulation results this wil return nil
   #
-  # @param [String] target prototype template for eui lookup
   # @return [Hash] EUI (MJ/m^2) This will return a hash of end uses. key is end use, value is eui
   def model_find_target_eui_by_end_use(model)
     building_data = model_get_building_climate_zone_and_building_type(model) 
@@ -3356,7 +3343,6 @@ class StandardsModel < OpenStudio::Model::Model
   # the PRM.  For some standards, this will involve making
   # modifications.  For others, it will not.
   #
-  # @param template [String] valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
   def model_apply_prm_construction_types(model)
@@ -3517,10 +3503,9 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Returns standards data for selected construction
   #
-  # @param [string] target template for lookup
-  # @param [string] intended_surface_type template for lookup
-  # @param [string] standards_construction_type template for lookup
-  # @param [string] building_category template for lookup
+  # @param intended_surface_type [string] the surface type
+  # @param standards_construction_type [string]  the type of construction
+  # @param building_category [string] the type of building
   # @return [hash] hash of construction properties
   def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category = 'Nonresidential')
     # get climate_zone_set
@@ -4308,7 +4293,6 @@ class StandardsModel < OpenStudio::Model::Model
 
   # create space_type_hash with info such as effective_num_spaces, num_units, num_meds, num_meals
   #
-  # @param template [String]
   # @param trust_effective_num_spaces [Bool] defaults to false - set to true if modeled every space as a real rpp, vs. space as collection of rooms
   # @return [hash] hash of space types with misc information
   # @todo - add code when determining number of units to makeuse of trust_effective_num_spaces arg

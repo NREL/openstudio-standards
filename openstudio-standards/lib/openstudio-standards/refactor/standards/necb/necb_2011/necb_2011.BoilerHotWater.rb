@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class NECB_2011_Model < StandardsModel
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #

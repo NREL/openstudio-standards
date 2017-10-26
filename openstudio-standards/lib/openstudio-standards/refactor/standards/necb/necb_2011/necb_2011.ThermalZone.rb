@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class NECB_2011_Model < StandardsModel
   # Determine if demand control ventilation (DCV) is
   # required for this zone based on area and occupant density.

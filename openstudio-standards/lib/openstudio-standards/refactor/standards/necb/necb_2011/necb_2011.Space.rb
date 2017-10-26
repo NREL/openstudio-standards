@@ -4,7 +4,6 @@ class NECB_2011_Model < StandardsModel
   # Set the infiltration rate for this space to include
   # the impact of air leakage requirements in the standard.
   #
-  # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)

@@ -100,7 +100,6 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Finds lookup object in standards and return efficiency
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] full load efficiency (COP)
   def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename=false)
     # find ac properties
@@ -172,6 +171,9 @@ class StandardsModel < OpenStudio::Model::Model
     return cop
   end
 
+  # Applies the standard efficiency ratings and typical performance curves to this object.
+  #
+  # @return [Bool] true if successful, false if not
   def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map)
     successfully_set_all_properties = true
 

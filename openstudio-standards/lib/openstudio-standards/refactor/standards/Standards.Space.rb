@@ -7,7 +7,6 @@ class StandardsModel < OpenStudio::Model::Model
   #   and therefore may not return perfect results.  However, it works well in most tested
   #   situations.  When it fails, it will log warnings/errors for users to see.
   #
-  # @param template [String] template to use.  valid choices:
   # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
   #   daylight areas will be added to the model as surfaces for visual debugging.
   #   Yellow = toplighted area, Red = primary sidelighted area,
@@ -777,7 +776,6 @@ class StandardsModel < OpenStudio::Model::Model
   #   and therefore may not return perfect results.  However, it works well in most tested
   #   situations.  When it fails, it will log warnings/errors for users to see.
   #
-  # @param template [String] template to use.  valid choices:
   # @param remove_existing_controls [Bool] if true, will remove existing controls then add new ones
   # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
   #   daylight areas will be added to the model as surfaces for visual debugging.
@@ -1207,7 +1205,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Set the infiltration rate for this space to include
   # the impact of air leakage requirements in the standard.
   #
-  # @param template [String] choices are 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
@@ -1616,6 +1613,7 @@ class StandardsModel < OpenStudio::Model::Model
     return sorted_spaces
   end
 
+  # Find the space that has the most wall area touching this space.
   def space_get_adjacent_space_with_most_shared_wall_area(space, same_floor = true)
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end

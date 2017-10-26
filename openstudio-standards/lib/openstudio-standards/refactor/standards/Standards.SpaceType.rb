@@ -1,9 +1,7 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # Returns standards data for selected space type and template
   #
-  # @param [string] target template for lookup
   # @return [hash] hash of internal loads for different load types
   def space_type_get_standards_data(space_type)
     standards_building_type = if space_type.standardsBuildingType.is_initialized
@@ -35,7 +33,6 @@ class StandardsModel < OpenStudio::Model::Model
   # Sets the color for the space types as shown
   # in the SketchUp plugin using render by space type.
   #
-  # @param [string] target template for lookup
   # @return [Bool] returns true if successful, false if not.
   def space_type_apply_rendering_color(space_type)
     # Get the standards data
@@ -561,9 +558,8 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Returns standards data for selected construction
   #
-  # @param [string] target template for lookup
-  # @param [string] intended_surface_type template for lookup
-  # @param [string] standards_construction_type template for lookup
+  # @param intended_surface_type [string] the type of surface
+  # @param standards_construction_type [string] the type of construction
   # @return [hash] hash of construction properties
   def space_type_get_construction_properties(space_type, intended_surface_type, standards_construction_type)
     # get building_category value

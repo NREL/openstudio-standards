@@ -4,7 +4,6 @@ class StandardsModel < OpenStudio::Model::Model
   # (PTACs, PTHPs, Fan Coils, and Unit Heaters)
   # based on the W/cfm specified in the standard.
   #
-  # @param template [String] the template base requirements on
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac_component)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")

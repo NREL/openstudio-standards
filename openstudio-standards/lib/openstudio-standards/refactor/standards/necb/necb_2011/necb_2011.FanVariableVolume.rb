@@ -1,5 +1,4 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class NECB_2011_Model < StandardsModel
   include NECBFan
 

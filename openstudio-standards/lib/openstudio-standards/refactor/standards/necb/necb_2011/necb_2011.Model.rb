@@ -6,7 +6,6 @@ class NECB_2011_Model < StandardsModel
   # the PRM.  For some standards, this will involve making
   # modifications.  For others, it will not.
   #
-  # @param template [String] valid choices are 90.1-2004,
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
   def model_apply_prm_construction_types(model)

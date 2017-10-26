@@ -1,9 +1,7 @@
 
-# Reopen the OpenStudio class to add methods to apply standards to this object
 class StandardsModel < OpenStudio::Model::Model
   # find search criteria
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
   # @return [Hash] used for model_find_object(model) 
   def boiler_hot_water_find_search_criteria(boiler_hot_water)
     # Define the criteria to find the boiler properties
@@ -54,8 +52,6 @@ class StandardsModel < OpenStudio::Model::Model
 
   # Finds lookup object in standards and return minimum thermal efficiency
   #
-  # @param template [String] valid choices: 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-  # @param standards [Hash] the OpenStudio_Standards spreadsheet in hash format
   # @return [Double] minimum thermal efficiency
   def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, rename=false)
     # Get the boiler properties
