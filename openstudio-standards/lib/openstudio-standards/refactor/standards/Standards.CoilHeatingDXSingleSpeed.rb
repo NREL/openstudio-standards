@@ -1,6 +1,6 @@
 
 # open the class to add methods to return sizing values
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include CoilDX
 
   # Finds capacity in W.  This is the cooling capacity of the
@@ -26,7 +26,7 @@ class StandardsModel < OpenStudio::Model::Model
           end
         end # TODO: Add other unitary systems
       elsif coil_heating_dx_single_speed.containingZoneHVACComponent.is_initialized
-        containing_comp = containingZoneHVACComponent.get
+        containing_comp = coil_heating_dx_single_speed.containingZoneHVACComponent.get
         # PTHP
         if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           pthp = containing_comp.to_ZoneHVACPackagedTerminalHeatPump.get
@@ -37,7 +37,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # On AirLoop directly
     if coil_heating_dx_single_speed.airLoopHVAC.is_initialized
-      air_loop = airLoopHVAC.get
+      air_loop = coil_heating_dx_single_speed.airLoopHVAC.get
       # Check for the presence of any other type of cooling coil
       clg_types = ['OS:Coil:Cooling:DX:SingleSpeed',
                    'OS:Coil:Cooling:DX:TwoSpeed',

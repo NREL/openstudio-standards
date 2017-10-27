@@ -1,6 +1,6 @@
 
 # open the class to add methods to return sizing values
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @return [Bool] true if successful, false if not
@@ -15,9 +15,9 @@ class StandardsModel < OpenStudio::Model::Model
     # Determine supplemental heating type if unitary
     heat_pump = false
     suppl_heating_type = nil
-    if airLoopHVAC.empty?
-      if containingHVACComponent.is_initialized
-        containing_comp = containingHVACComponent.get
+    if coil_heating_dx_multi_speed.airLoopHVAC.empty?
+      if coil_heating_dx_multi_speed.containingHVACComponent.is_initialized
+        containing_comp = coil_heating_dx_multi_speed.containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
           heat_pump = true
           htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.supplementalHeatingCoil
@@ -38,7 +38,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Get the coil capacity
     clg_capacity = nil
     if heat_pump == true
-      containing_comp = containingHVACComponent.get
+      containing_comp = coil_heating_dx_multi_speed.containingHVACComponent.get
       heat_pump_comp = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
       ccoil = heat_pump_comp.coolingCoil
       dxcoil = ccoil.to_CoilCoolingDXMultiSpeed.get
@@ -164,7 +164,7 @@ class StandardsModel < OpenStudio::Model::Model
     unless hp_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = hp_props['minimum_seasonal_energy_efficiency_ratio']
       cop = seer_to_cop(min_seer)
-      setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
+      coil_heating_dx_multi_speed.setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{instvartemplate}: #{coil_heating_dx_multi_speed.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
@@ -172,7 +172,7 @@ class StandardsModel < OpenStudio::Model::Model
     unless hp_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = hp_props['minimum_energy_efficiency_ratio']
       cop = eer_to_cop(min_eer)
-      setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER")
+      coil_heating_dx_multi_speed.setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{instvartemplate}: #{coil_heating_dx_multi_speed.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 

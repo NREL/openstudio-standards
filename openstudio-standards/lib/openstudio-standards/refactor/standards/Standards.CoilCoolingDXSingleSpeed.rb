@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include CoilDX
 
   # Finds capacity in W

@@ -1,5 +1,5 @@
 # open the class to add methods to apply HVAC efficiency standards
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Sets the fan power of zone level HVAC equipment 
   # (PTACs, PTHPs, Fan Coils, and Unit Heaters)
   # based on the W/cfm specified in the standard.
@@ -52,7 +52,7 @@ class StandardsModel < OpenStudio::Model::Model
     max_air_flow_rate_cfm = OpenStudio.convert(max_air_flow_rate, 'm^3/s', 'ft^3/min').get
 
     # Set the impeller efficiency
-    fan_change_impeller_efficiency(fan, fan.baseline_impeller_efficiency())
+    fan_change_impeller_efficiency(fan, fan_baseline_impeller_efficiency(fan))
 
     # Set the motor efficiency, preserving the impeller efficency.
     # For zone HVAC fans, a bhp lookup of 0.5bhp is always used because

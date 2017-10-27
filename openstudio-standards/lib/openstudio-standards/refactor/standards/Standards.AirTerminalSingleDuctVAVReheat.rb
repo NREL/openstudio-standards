@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Set the minimum damper position based on OA
   # rate of the space and the template.
   # Zones with low OA per area get lower initial guesses.
@@ -15,7 +15,7 @@ class StandardsModel < OpenStudio::Model::Model
   def air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(air_terminal_single_duct_vav_reheat, zone_min_oa = nil, has_ddc = true)
     # Minimum damper position
     min_damper_position = air_terminal_single_duct_vav_reheat_minimum_damper_position(air_terminal_single_duct_vav_reheat, has_ddc)
-    setConstantMinimumAirFlowFraction(min_damper_position)
+    air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirTerminalSingleDuctVAVReheat', "For #{air_terminal_single_duct_vav_reheat.name}: set minimum damper position to #{min_damper_position}.")
 
     # Minimum OA flow rate
@@ -23,7 +23,7 @@ class StandardsModel < OpenStudio::Model::Model
     # and the larger of the two will be used
     # for sizing.
     unless zone_min_oa.nil?
-      setFixedMinimumAirFlowRate(zone_min_oa)
+      air_terminal_single_duct_vav_reheat.setFixedMinimumAirFlowRate(zone_min_oa)
     end
 
     return true

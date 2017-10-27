@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Calculates the zone outdoor airflow requirement (Voz)
   # based on the inputs in the DesignSpecification:OutdoorAir obects
   # in all spaces in the zone.
@@ -1009,14 +1009,14 @@ class StandardsModel < OpenStudio::Model::Model
   def thermal_zone_conditioning_category(thermal_zone, climate_zone)
     # Get the heating load
     htg_load_btu_per_ft2 = 0.0
-    htg_load_w_per_m2 = heatingDesignLoad
+    htg_load_w_per_m2 = thermal_zone.heatingDesignLoad
     if htg_load_w_per_m2.is_initialized
       htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
     end
 
     # Get the cooling load
     clg_load_btu_per_ft2 = 0.0
-    clg_load_w_per_m2 = coolingDesignLoad
+    clg_load_w_per_m2 = thermal_zone.coolingDesignLoad
     if clg_load_w_per_m2.is_initialized
       clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
     end
@@ -1097,7 +1097,7 @@ class StandardsModel < OpenStudio::Model::Model
     setpoint_c = nil
 
     # Setpoint schedule
-    tstat = thermostatSetpointDualSetpoint
+    tstat = thermal_zone.thermostatSetpointDualSetpoint
     if tstat.is_initialized
       tstat = tstat.get
       setpoint_sch = tstat.heatingSetpointTemperatureSchedule
@@ -1119,7 +1119,7 @@ class StandardsModel < OpenStudio::Model::Model
     # If the heating setpoint could not be determined
     # return the current design heating temperature
     if setpoint_c.nil?
-      setpoint_c = sizingZone.zoneHeatingDesignSupplyAirTemperature
+      setpoint_c = thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: could not determine max heating setpoint.  Design heating SAT will be #{OpenStudio.convert(setpoint_c, 'C', 'F').get.round} F from proposed model.")
       return setpoint_c
     end
@@ -1129,7 +1129,7 @@ class StandardsModel < OpenStudio::Model::Model
     # return the current design heating temperature
     if setpoint_c < OpenStudio.convert(41, 'F', 'C').get
       setpoint_f = OpenStudio.convert(setpoint_c, 'C', 'F').get
-      new_setpoint_c = sizingZone.zoneHeatingDesignSupplyAirTemperature
+      new_setpoint_c = thermal_zone.sizingZone.zoneHeatingDesignSupplyAirTemperature
       new_setpoint_f = OpenStudio.convert(new_setpoint_c, 'C', 'F').get
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: max heating setpoint in proposed model was #{setpoint_f.round} F.  20 F SAT delta-T from this point is unreasonable. Design heating SAT will be #{new_setpoint_f.round} F from proposed model.")
       return new_setpoint_c
@@ -1154,7 +1154,7 @@ class StandardsModel < OpenStudio::Model::Model
     setpoint_c = nil
 
     # Setpoint schedule
-    tstat = thermostatSetpointDualSetpoint
+    tstat = thermal_zone.thermostatSetpointDualSetpoint
     if tstat.is_initialized
       tstat = tstat.get
       setpoint_sch = tstat.coolingSetpointTemperatureSchedule
@@ -1176,7 +1176,7 @@ class StandardsModel < OpenStudio::Model::Model
     # If the cooling setpoint could not be determined
     # return the current design cooling temperature
     if setpoint_c.nil?
-      setpoint_c = sizingZone.zoneCoolingDesignSupplyAirTemperature
+      setpoint_c = thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperature
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: could not determine min cooling setpoint.  Design cooling SAT will be #{OpenStudio.convert(setpoint_c, 'C', 'F').get.round} F from proposed model.")
       return setpoint_c
     end
@@ -1186,7 +1186,7 @@ class StandardsModel < OpenStudio::Model::Model
     # return the current design cooling temperature
     if setpoint_c > OpenStudio.convert(91, 'F', 'C').get
       setpoint_f = OpenStudio.convert(setpoint_c, 'C', 'F').get
-      new_setpoint_c = sizingZone.zoneCoolingDesignSupplyAirTemperature
+      new_setpoint_c = thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperature
       new_setpoint_f = OpenStudio.convert(new_setpoint_c, 'C', 'F').get
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: max cooling setpoint in proposed model was #{setpoint_f.round} F.  20 F SAT delta-T from this point is unreasonable. Design cooling SAT will be #{new_setpoint_f.round} F from proposed model.")
       return new_setpoint_c
@@ -1213,11 +1213,11 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Heating
     htg_sat_c = thermal_zone_prm_baseline_heating_design_supply_temperature(thermal_zone) 
-    htg_success = sizingZone.setZoneHeatingDesignSupplyAirTemperature(htg_sat_c)
+    htg_success = thermal_zone.sizingZone.setZoneHeatingDesignSupplyAirTemperature(htg_sat_c)
 
     # Cooling
     clg_sat_c = thermal_zone_prm_baseline_cooling_design_supply_temperature(thermal_zone) 
-    clg_success = sizingZone.setZoneCoolingDesignSupplyAirTemperature(clg_sat_c)
+    clg_success = thermal_zone.sizingZone.setZoneCoolingDesignSupplyAirTemperature(clg_sat_c)
 
     htg_sat_f = OpenStudio.convert(htg_sat_c, 'C', 'F').get
     clg_sat_f = OpenStudio.convert(clg_sat_c, 'C', 'F').get
@@ -1461,10 +1461,10 @@ class StandardsModel < OpenStudio::Model::Model
       exhaust_fans[zone_exhaust_fan] = {} # keys are :zone_mixing and :transfer_air_source_zone_exhaust
 
       # set fan pressure rise
-      zone_exhaust_fan.apply_prototype_fan_pressure_rise
+      fan_zone_exhaust_apply_prototype_fan_pressure_rise(zone_exhaust_fan) 
 
       # update efficiency and pressure rise
-      zone_exhaust_fan.apply_prototype_fan_efficiency()
+      prototype_fan_apply_prototype_fan_efficiency(zone_exhaust_fan, )
 
       # add and alter objectxs related to zone exhaust makeup air
       if exhaust_makeup_inputs.has_key?(makeup_target) and exhaust_makeup_inputs[makeup_target][:source_zone]

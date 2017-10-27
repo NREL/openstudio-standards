@@ -1,6 +1,6 @@
 require 'json'
 # Extend the class to add Medium Office specific stuff
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   def model_define_space_type_map(model, building_type, template, climate_zone)
     space_type_map_json = File.absolute_path(File.join(File.dirname(__FILE__),"../../../../../../data/geometry/archetypes/#{building_type}.json"))
     begin

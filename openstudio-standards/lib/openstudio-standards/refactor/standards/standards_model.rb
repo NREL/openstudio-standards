@@ -3,7 +3,7 @@
 # OpenStudio-Standards spreadsheet.  If a method in this class is redefined
 # by a child class, the implementation in the child class is used.
 # @abstract
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   @@data_folder =       "#{File.dirname(__FILE__)}/../../../../data"
 
   # Require the files containing the modules first

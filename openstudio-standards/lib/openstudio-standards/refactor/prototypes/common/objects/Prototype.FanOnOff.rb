@@ -1,6 +1,6 @@
 
 # open the class to add methods to return sizing values
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include PrototypeFan
 
   # Sets the fan pressure rise based on the Prototype buildings inputs
@@ -60,7 +60,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # If the fan lives inside a unitary system
-    if airLoopHVAC.empty? && fan_on_off.containingZoneHVACComponent.empty?
+    if fan_on_off.airLoopHVAC.empty? && fan_on_off.containingZoneHVACComponent.empty?
       case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437

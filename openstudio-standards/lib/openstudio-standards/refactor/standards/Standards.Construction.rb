@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Sets the U-value of a construction to a specified value
   # by modifying the thickness of the insulation layer.
   #
@@ -19,7 +19,7 @@ class StandardsModel < OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting U-Value for #{construction.name}.")
 
     # Skip fenestration constructions
-    if isFenestration
+    if construction.isFenestration
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the u-value of opaque constructions. #{construction.name} is not opaque.")
       return false
     end
@@ -35,11 +35,11 @@ class StandardsModel < OpenStudio::Model::Model
     # Remove the insulation layer if the specified U-value is zero.
     if target_u_value_ip == 0.0
       layer_index = 0
-      layers.each do |layer|
+      construction.layers.each do |layer|
         break if layer.name.get == insulation_layer_name
         layer_index += 1
       end
-      eraseLayer(layer_index)
+      construction.eraseLayer(layer_index)
       return true
     end
 
@@ -58,7 +58,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Determine the R-value of the non-insulation layers
     other_layer_r_value_si = 0.0
-    layers.each do |layer|
+    construction.layers.each do |layer|
       next if layer.to_OpaqueMaterial.empty?
       next if layer.name.get == insulation_layer_name
       other_layer_r_value_si += layer.to_OpaqueMaterial.get.thermalResistance
@@ -125,7 +125,7 @@ class StandardsModel < OpenStudio::Model::Model
     ins_r_value_ip = OpenStudio.convert(ins_r_value_si, 'm^2*K/W', 'ft^2*h*R/Btu').get
 
     # Set the R-value of the insulation layer
-    layers.each do |layer|
+    construction.layers.each do |layer|
       next unless layer.name.get == insulation_layer_name
       if layer.to_StandardOpaqueMaterial.is_initialized
         layer = layer.to_StandardOpaqueMaterial.get
@@ -147,7 +147,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Modify the construction name
-    setName("#{construction.name} R-#{target_r_value_ip.round(2)}")
+    construction.setName("#{construction.name} R-#{target_r_value_ip.round(2)}")
 
     return true
   end
@@ -169,7 +169,7 @@ class StandardsModel < OpenStudio::Model::Model
     construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactFloor', true)
 
     # Modify the construction name
-    setName("#{construction.name} F-#{target_f_factor_ip.round(3)}")
+    construction.setName("#{construction.name} F-#{target_f_factor_ip.round(3)}")
 
     return true
   end
@@ -191,7 +191,7 @@ class StandardsModel < OpenStudio::Model::Model
     construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactWall', true)
 
     # Modify the construction name
-    setName("#{construction.name} C-#{target_c_factor_ip.round(3)}")
+    construction.setName("#{construction.name} C-#{target_c_factor_ip.round(3)}")
 
     return true
   end

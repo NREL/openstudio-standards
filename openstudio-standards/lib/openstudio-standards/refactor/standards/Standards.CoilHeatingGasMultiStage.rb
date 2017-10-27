@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @return [Bool] true if successful, false if not
@@ -11,8 +11,8 @@ class StandardsModel < OpenStudio::Model::Model
     htg_stages = stages
     if htg_stages.last.nominalCapacity.is_initialized
       capacity_w = htg_stages.last.nominalCapacity.get
-    elsif autosizedStage4NominalCapacity.is_initialized
-      capacity_w = autosizedStage4NominalCapacity.get
+    elsif coil_heating_gas_multi_stage.autosizedStage4NominalCapacity.is_initialized
+      capacity_w = coil_heating_gas_multi_stage.autosizedStage4NominalCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_heating_gas_multi_stage.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
@@ -22,7 +22,7 @@ class StandardsModel < OpenStudio::Model::Model
     # plf vs plr curve for furnace
     furnace_plffplr_curve = model_add_curve(model, furnace_plffplr_curve_name, standards)
     if furnace_plffplr_curve
-      setPartLoadFractionCorrelationCurve(furnace_plffplr_curve)
+      coil_heating_gas_multi_stage.setPartLoadFractionCorrelationCurve(furnace_plffplr_curve)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingGasMultiStage', "For #{coil_heating_gas_multi_stage.name}, cannot find plffplr curve, will not be set.")
       successfully_set_all_properties = false

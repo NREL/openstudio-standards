@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include CoolingTower
 
   # Applies the standard efficiency ratings and typical performance curves to this object.

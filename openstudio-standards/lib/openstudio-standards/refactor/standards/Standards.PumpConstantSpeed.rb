@@ -1,4 +1,4 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include Pump
 end

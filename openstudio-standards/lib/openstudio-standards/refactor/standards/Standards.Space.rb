@@ -1,6 +1,6 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Returns values for the different types of daylighted areas in the space.
   # Definitions for each type of area follow the respective template.
   # @note This method is super complicated because of all the polygon/geometry math required.
@@ -1576,10 +1576,10 @@ class StandardsModel < OpenStudio::Model::Model
     end
     # If looking for only spaces adjacent on the same floor.
     if same_floor == true
-      raise "Cannot get adjacent spaces of space #{space.name} since space not set to BuildingStory" if buildingStory.empty?
+      raise "Cannot get adjacent spaces of space #{space.name} since space not set to BuildingStory" if space.buildingStory.empty?
       spaces.each do |space|
         raise "One or more adjecent spaces to space #{space.name} is not assigned to a BuildingStory. Ensure all spaces are assigned." if space.buildingStory.empty?
-        if space.buildingStory.get == buildingStory.get
+        if space.buildingStory.get == space.buildingStory.get
           same_floor_spaces << space
         end
       end

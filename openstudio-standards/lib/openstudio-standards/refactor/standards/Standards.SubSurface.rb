@@ -1,6 +1,6 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Determine the component infiltration rate for this surface
   #
   # @param type [String] choices are 'baseline' and 'advanced'
@@ -31,12 +31,12 @@ class StandardsModel < OpenStudio::Model::Model
       }
     }
 
-    boundary_condition = outsideBoundaryCondition
+    boundary_condition = sub_surface.outsideBoundaryCondition
     # Skip non-outdoor surfaces
-    return comp_infil_rate_m3_per_s unless outsideBoundaryCondition == 'Outdoors' || outsideBoundaryCondition == 'Ground'
+    return comp_infil_rate_m3_per_s unless outsideBoundaryCondition == 'Outdoors' || sub_surface.outsideBoundaryCondition == 'Ground'
 
     # Per area infiltration rate for this surface
-    surface_type = subSurfaceType
+    surface_type = sub_surface.subSurfaceType
     infil_rate_cfm_per_ft2 = nil
     case boundary_condition
     when 'Outdoors'
@@ -60,7 +60,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Area of the surface
-    area_m2 = netArea
+    area_m2 = sub_surface.netArea
     area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
 
     # Rate for this surface

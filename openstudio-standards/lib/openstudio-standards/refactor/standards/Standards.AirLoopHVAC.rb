@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Apply multizone vav outdoor air method and
   # adjust multizone VAV damper positions
   # to achieve a system minimum ventilation effectiveness
@@ -270,12 +270,12 @@ class StandardsModel < OpenStudio::Model::Model
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_cfm = 0
-    if autosizedDesignSupplyAirFlowRate.is_initialized
-      dsn_air_flow_m3_per_s = autosizedDesignSupplyAirFlowRate.get
+    if air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
+      dsn_air_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
     else
-      dsn_air_flow_m3_per_s = designSupplyAirFlowRate.get
+      dsn_air_flow_m3_per_s = air_loop_hvac.designSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
     end
@@ -312,12 +312,12 @@ class StandardsModel < OpenStudio::Model::Model
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_cfm = 0
-    if autosizedDesignSupplyAirFlowRate.is_initialized
-      dsn_air_flow_m3_per_s = autosizedDesignSupplyAirFlowRate.get
+    if air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
+      dsn_air_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
     else
-      dsn_air_flow_m3_per_s = designSupplyAirFlowRate.get
+      dsn_air_flow_m3_per_s = air_loop_hvac.designSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
     end
@@ -326,7 +326,7 @@ class StandardsModel < OpenStudio::Model::Model
     fan_pwr_adjustment_bhp = air_loop_hvac_fan_power_limitation_pressure_drop_adjustment_brake_horsepower(air_loop_hvac) 
 
     # Determine the number of zones the system serves
-    num_zones_served = thermalZones.size
+    num_zones_served = air_loop_hvac.thermalZones.size
 
     # Get the supply air fan and determine whether VAV or CAV system.
     # Assume that supply air fan is fan closest to the demand outlet node.
@@ -1369,7 +1369,7 @@ class StandardsModel < OpenStudio::Model::Model
     spm_oa_pretreat.addToNode(erv_outlet)
 
     # Apply the prototype Heat Exchanger power assumptions.
-    erv.apply_prototype_nominal_electric_power
+    heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_nominal_electric_power(erv) 
 
     # Determine if the system is a DOAS based on
     # whether there is 100% OA in heating and cooling sizing.
@@ -1453,7 +1453,7 @@ class StandardsModel < OpenStudio::Model::Model
   # is DDC control of vav terminals.  If false, assumes otherwise.
   # @return [Bool] true if successful, false if not
   def air_loop_hvac_apply_minimum_vav_damper_positions(air_loop_hvac, has_ddc = true)
-    thermalZones.each do |zone|
+    air_loop_hvac.thermalZones.each do |zone|
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
           zone_oa = thermal_zone_outdoor_airflow_rate(zone) 
@@ -1848,7 +1848,7 @@ class StandardsModel < OpenStudio::Model::Model
   def air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac)
     # Get the current setpoint and calculate
     # the new setpoint.
-    sizing_system = sizingSystem
+    sizing_system = air_loop_hvac.sizingSystem
     design_sat_c = sizing_system.centralCoolingDesignSupplyAirTemperature
     design_sat_f = OpenStudio.convert(design_sat_c, 'C', 'F').get
 
@@ -1894,11 +1894,11 @@ class StandardsModel < OpenStudio::Model::Model
 
   def air_loop_hvac_enable_supply_air_temperature_reset_outdoor_temperature(air_loop_hvac)
     # for AHU1 in Outpatient, SAT is 52F constant, no reset
-    return true if name.get == 'PVAV Outpatient F1'
+    return true if air_loop_hvac.name.get == 'PVAV Outpatient F1'
 
     # Get the current setpoint and calculate
     # the new setpoint.
-    sizing_system = sizingSystem
+    sizing_system = air_loop_hvac.sizingSystem
     sat_at_hi_oat_c = sizing_system.centralCoolingDesignSupplyAirTemperature
     sat_at_hi_oat_f = OpenStudio.convert(sat_at_hi_oat_c, 'C', 'F').get
     # 5F increase when it's cold outside,
@@ -2944,7 +2944,7 @@ class StandardsModel < OpenStudio::Model::Model
   def air_loop_hvac_floor_area_served(air_loop_hvac)
     total_area = 0.0
 
-    thermalZones.each do |zone|
+    air_loop_hvac.thermalZones.each do |zone|
       total_area += zone.floorArea
     end
 
@@ -2959,7 +2959,7 @@ class StandardsModel < OpenStudio::Model::Model
   def air_loop_hvac_floor_area_served_interior_zones(air_loop_hvac)
     total_area = 0.0
 
-    thermalZones.each do |zone|
+    air_loop_hvac.thermalZones.each do |zone|
       # Skip zones that have exterior surface area
       next if zone.exteriorSurfaceArea > 0
       total_area += zone.floorArea
@@ -2976,7 +2976,7 @@ class StandardsModel < OpenStudio::Model::Model
   def air_loop_hvac_floor_area_served_exterior_zones(air_loop_hvac)
     total_area = 0.0
 
-    thermalZones.each do |zone|
+    air_loop_hvac.thermalZones.each do |zone|
       # Skip zones that have no exterior surface area
       next if zone.exteriorSurfaceArea.zero?
       total_area += zone.floorArea
@@ -2991,10 +2991,10 @@ class StandardsModel < OpenStudio::Model::Model
   def air_loop_hvac_find_design_supply_air_flow_rate(air_loop_hvac)
     # Get the design_supply_air_flow_rate
     design_supply_air_flow_rate = nil
-    if designSupplyAirFlowRate.is_initialized
-      design_supply_air_flow_rate = designSupplyAirFlowRate.get
-    elsif autosizedDesignSupplyAirFlowRate.is_initialized
-      design_supply_air_flow_rate = autosizedDesignSupplyAirFlowRate.get
+    if air_loop_hvac.designSupplyAirFlowRate.is_initialized
+      design_supply_air_flow_rate = air_loop_hvac.designSupplyAirFlowRate.get
+    elsif air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
+      design_supply_air_flow_rate = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} design sypply air flow rate is not available.")
     end
@@ -3067,7 +3067,7 @@ class StandardsModel < OpenStudio::Model::Model
     # for all zones served by the system.
     htg_setpts_c = []
     clg_setpts_c = []
-    thermalZones.each do |zone|
+    air_loop_hvac.thermalZones.each do |zone|
       sizing_zone = zone.sizingZone
       htg_setpts_c << sizing_zone.zoneHeatingDesignSupplyAirTemperature
       clg_setpts_c << sizing_zone.zoneCoolingDesignSupplyAirTemperature
@@ -3088,7 +3088,7 @@ class StandardsModel < OpenStudio::Model::Model
                 end
 
     # Set the central SAT values
-    sizing_system = sizingSystem
+    sizing_system = air_loop_hvac.sizingSystem
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_sat_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sat_c)
 
@@ -3113,7 +3113,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Get all the zone multipliers
     zn_mults = []
-    thermalZones.each do |zone|
+    air_loop_hvac.thermalZones.each do |zone|
       zn_mults << zone.multiplier
     end
  

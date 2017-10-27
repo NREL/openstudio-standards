@@ -1,4 +1,4 @@
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
 
   # Load the helper libraries for
   require_relative "Prototype.Fan"
@@ -15,8 +15,9 @@ class StandardsModel < OpenStudio::Model::Model
   require_relative "Prototype.Model.exterior_lights"
   require_relative "Prototype.hvac_systems"
 
-  def model_create_prototype_model(model,  building_type, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
-    model = model # TODO refactor: pass in model instead
+  def model_create_prototype_model(model, building_type, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+    puts "model_create_prototype_model, model.class = #{model.class}"
+    # model = model # TODO refactor: pass in model instead
     osm_file_increment = 0
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if building_type == 'HighriseApartment'
@@ -56,16 +57,16 @@ class StandardsModel < OpenStudio::Model::Model
         # Ensure that surfaces are intersected properly.
         model_load_geometry(model, building_type)
 
-        getSpaces.each { |space1| model.getSpaces.each { |space2| space1.intersectSurfaces(space2) } }
+        model.getSpaces.each { |space1| model.getSpaces.each { |space2| space1.intersectSurfaces(space2) } }
         osm_file_increment += 1
         BTAP::FileIO::save_osm(model,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes
 
-        add_design_days_and_weather_file(climate_zone, epw_file)
-        add_ground_temperatures(building_type, climate_zone, instvartemplate)
+        model.add_design_days_and_weather_file(climate_zone, epw_file)
+        model.add_ground_temperatures(building_type, climate_zone, instvartemplate)
         osm_file_increment += 1
         BTAP::FileIO::save_osm(model,"#{sizing_run_dir}/post_#{osm_file_increment}_add_design_days_and_weather_file.osm")  if debug_incremental_changes
         # puts weatherFile.get.path.get.to_s
-        if weatherFile.empty? or model.weatherFile.get.path.empty? or not File.exists?(weatherFile.get.path.get.to_s)
+        if model.weatherFile.empty? or model.weatherFile.get.path.empty? or not File.exists?(model.weatherFile.get.path.get.to_s)
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Weatherfile is not defined.")
           raise()
         end
@@ -167,13 +168,13 @@ class StandardsModel < OpenStudio::Model::Model
         model_add_constructions(model, building_type, climate_zone)
         model_create_thermal_zones(model, building_type, climate_zone)
         model_add_hvac(model, building_type, instvartemplate, climate_zone, prototype_input, epw_file)
-        model_custom_hvac_tweaks(model, building_type, instvartemplate, climate_zone, prototype_input, model)
+        model_custom_hvac_tweaks(model, building_type, instvartemplate, climate_zone, prototype_input)
         model_add_swh(model, building_type, instvartemplate, climate_zone, prototype_input, epw_file)
-        model_custom_swh_tweaks(model, building_type, instvartemplate, climate_zone, prototype_input, model)
+        model_custom_swh_tweaks(model, building_type, instvartemplate, climate_zone, prototype_input)
         model_add_exterior_lights(model, building_type, climate_zone, prototype_input)
         model_add_occupancy_sensors(model, building_type, climate_zone)
-        add_design_days_and_weather_file(climate_zone, epw_file)
-        add_ground_temperatures(building_type, climate_zone, instvartemplate)
+        model.add_design_days_and_weather_file(climate_zone, epw_file)
+        model.add_ground_temperatures(building_type, climate_zone, instvartemplate)
 
         model_apply_sizing_parameters(model, building_type)
         model.yearDescription.get.setDayofWeekforStartDay('Sunday')
@@ -267,7 +268,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Finished
     model_status = 'final'
-    save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
+    model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
 
     return model
   end
@@ -361,7 +362,7 @@ class StandardsModel < OpenStudio::Model::Model
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
   def model_load_geometry(model, building_type)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding geometry')
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Started adding geometry')
 
     # Determine which geometry file to use
     # based on building_type and template
@@ -390,15 +391,16 @@ class StandardsModel < OpenStudio::Model::Model
     end
     # Load the geometry .osm
     geom_file = "#{@@data_folder}/geometry/#{geometry_file}"
-    model_path = OpenStudio::Path.new(geom_file.to_s)
+    geom_model_path = OpenStudio::Path.new(geom_file.to_s)
     #Upgrade version if required.
     version_translator = OpenStudio::OSVersion::VersionTranslator.new
-    model = version_translator.loadModel(model_path).get
-    model.addObjects( model.toIdfFile.objects )
+    geom_model = version_translator.loadModel(geom_model_path).get
+    model.addObjects( geom_model.toIdfFile.objects )
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
     #ensure that model is intersected correctly.
-    getSpaces.each {|space1| model.getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
+    model.getSpaces.each {|space1| model.getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
     return true
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Finished adding geometry')
   end
 
   # Replaces all objects in the current model
@@ -499,13 +501,13 @@ class StandardsModel < OpenStudio::Model::Model
               stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
               stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
               space_type_apply_rendering_color(stub_space_type_occsens)
-              model.occsensSpaceTypeCreated = true
-              model.occsensSpaceTypeCount += 1
+              occsensSpaceTypeCreated = true
+              occsensSpaceTypeCount += 1
             else
               # reassign occsens space type stub already created...
               stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
               stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
-              model.occsensSpaceTypeCount += 1
+              occsensSpaceTypeCount += 1
             end
           end
         end
@@ -1437,10 +1439,10 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Fans
     # Pressure Rise
-    model.getFanConstantVolumes.sort.each { |obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj, building_type, instvartemplate, climate_zone) }
-    model.getFanVariableVolumes.sort.each { |obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj, building_type, instvartemplate, climate_zone) }
-    model.getFanOnOffs.sort.each { |obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj, building_type, instvartemplate, climate_zone) }
-    model.getFanZoneExhausts.sort.each(&:apply_prototype_fan_pressure_rise)
+    model.getFanConstantVolumes.sort.each { |obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj, building_type, instvartemplate, climate_zone) }
+    model.getFanVariableVolumes.sort.each { |obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj, building_type, instvartemplate, climate_zone) }
+    model.getFanOnOffs.sort.each { |obj| fan_on_off_apply_prototype_fan_pressure_rise(obj, building_type, instvartemplate, climate_zone) }
+    model.getFanZoneExhausts.sort.each { |obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj) }
 
     # Motor Efficiency
     model.getFanConstantVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj, instvartemplate) }
@@ -1518,8 +1520,8 @@ class StandardsModel < OpenStudio::Model::Model
 
     # TODO: What is the logic behind hard-sizing
     # hot water coil convergence tolerances?
-    model.getControllerWaterCoils.sort.each(&:set_convergence_limits)
-
+    model.getControllerWaterCoils.sort.each { |obj| controller_water_coil_set_convergence_limits(obj) }
+    
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
   end
 

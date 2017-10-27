@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include Pump
 
   # Set the pump curve coefficients based
@@ -40,11 +40,11 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Set the coefficients
-    setCoefficient1ofthePartLoadPerformanceCurve(coeff_a)
-    setCoefficient2ofthePartLoadPerformanceCurve(coeff_b)
-    setCoefficient3ofthePartLoadPerformanceCurve(coeff_c)
-    setCoefficient4ofthePartLoadPerformanceCurve(coeff_d)
-    setPumpControlType('Intermittent')
+    pump_variable_speed.setCoefficient1ofthePartLoadPerformanceCurve(coeff_a)
+    pump_variable_speed.setCoefficient2ofthePartLoadPerformanceCurve(coeff_b)
+    pump_variable_speed.setCoefficient3ofthePartLoadPerformanceCurve(coeff_c)
+    pump_variable_speed.setCoefficient4ofthePartLoadPerformanceCurve(coeff_d)
+    pump_variable_speed.setPumpControlType('Intermittent')
 
     # Append the control type to the pump name
     # self.setName("#{self.name} #{control_type}")

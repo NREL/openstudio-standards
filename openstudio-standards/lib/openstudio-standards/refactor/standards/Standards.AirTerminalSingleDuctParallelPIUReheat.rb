@@ -1,6 +1,6 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Sets the fan power of a PIU fan based on the W/cfm
   # specified in the standard.
   #
@@ -20,26 +20,26 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Get the maximum flow rate through the terminal
     max_primary_air_flow_rate = nil
-    if autosizedMaximumPrimaryAirFlowRate.is_initialized
-      max_primary_air_flow_rate = autosizedMaximumPrimaryAirFlowRate.get
-    elsif maximumPrimaryAirFlowRate.is_initialized
-      max_primary_air_flow_rate = maximumPrimaryAirFlowRate.get
+    if air_terminal_single_duct_parallel_piu_reheat.autosizedMaximumPrimaryAirFlowRate.is_initialized
+      max_primary_air_flow_rate = air_terminal_single_duct_parallel_piu_reheat.autosizedMaximumPrimaryAirFlowRate.get
+    elsif air_terminal_single_duct_parallel_piu_reheat.maximumPrimaryAirFlowRate.is_initialized
+      max_primary_air_flow_rate = air_terminal_single_duct_parallel_piu_reheat.maximumPrimaryAirFlowRate.get
     end
 
     # Set the max secondary air flow rate
     max_sec_flow_rate_m3_per_s = max_primary_air_flow_rate * sec_flow_frac
-    setMaximumSecondaryAirFlowRate(max_sec_flow_rate_m3_per_s)
+    air_terminal_single_duct_parallel_piu_reheat.setMaximumSecondaryAirFlowRate(max_sec_flow_rate_m3_per_s)
     max_sec_flow_rate_cfm = OpenStudio.convert(max_sec_flow_rate_m3_per_s, 'm^3/s', 'ft^3/min').get
 
     # Set the minimum flow fraction
     # TODO Also compare to min OA requirement
-    setMinimumPrimaryAirFlowFraction(min_flow_frac)
+    air_terminal_single_duct_parallel_piu_reheat.setMinimumPrimaryAirFlowFraction(min_flow_frac)
 
     # Get the fan
     fan = air_terminal_single_duct_parallel_piu_reheat.fan.to_FanConstantVolume.get
 
     # Set the impeller efficiency
-    fan_change_impeller_efficiency(fan, fan.baseline_impeller_efficiency())
+    fan_change_impeller_efficiency(fan, fan_baseline_impeller_efficiency(fan))
 
     # Set the motor efficiency, preserving the impeller efficency.
     # For terminal fans, a bhp lookup of 0.5bhp is always used because

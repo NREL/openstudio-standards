@@ -1,6 +1,6 @@
 
 # open the class to add methods to size all HVAC equipment
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   def model_add_swh(model, building_type, template, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
@@ -120,10 +120,10 @@ class StandardsModel < OpenStudio::Model::Model
         space_type_map.each do |space_type_name, space_names|
           search_criteria = {
             'template' => template,
-            'building_type' => get_lookup_name(building_type),
+            'building_type' => model_get_lookup_name(model, building_type),
             'space_type' => space_type_name
           }
-          data = find_object($os_standards['space_types'], search_criteria)
+          data = model_find_object(model, $os_standards['space_types'], search_criteria)
 
           # Skip space types with no data
           next if data.nil?
@@ -145,7 +145,7 @@ class StandardsModel < OpenStudio::Model::Model
             
 
             
-            model_add_swh_end_uses_by_space(model, get_lookup_name(building_type),
+            model_add_swh_end_uses_by_space(model, model_get_lookup_name(model, building_type),
                                       template,
                                       climate_zone,
                                       main_swh_loop,
@@ -251,7 +251,7 @@ class StandardsModel < OpenStudio::Model::Model
       space_type_properties = space_type.get_standards_data(template)
       gal_hr_per_area = space_type_properties['service_water_heating_peak_flow_per_area']
       gal_hr_peak_flow_rate = space_type_properties['service_water_heating_peak_flow_rate']
-      flow_rate_fraction_schedule = model.add_schedule(space_type_properties['service_water_heating_schedule'])
+      flow_rate_fraction_schedule = model_add_schedule(model, space_type_properties['service_water_heating_schedule'])
       service_water_temperature_si = space_type_properties['service_water_heating_target_temperature']
       service_water_fraction_sensible = space_type_properties['service_water_heating_fraction_sensible']
       service_water_fraction_latent = space_type_properties['service_water_heating_fraction_latent']

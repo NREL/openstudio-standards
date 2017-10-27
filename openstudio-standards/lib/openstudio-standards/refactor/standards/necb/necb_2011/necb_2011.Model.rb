@@ -40,7 +40,7 @@ class NECB_2011_Model < StandardsModel
     total_subsurface_m2 = 0.0
     # Store the space conditioning category for later use
     space_cats = {}
-    getSpaces.sort.each do |space|
+    model.getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       wind_area_m2 = 0
@@ -134,7 +134,7 @@ class NECB_2011_Model < StandardsModel
     red_sh = wwr_sh > wwr_lim ? true : false
 
     # NECB FDWR limit
-    hdd = BTAP::Environment::WeatherFile.new(weatherFile.get.path.get).hdd18
+    hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
     fdwr_lim = (BTAP::Compliance::NECB2011.max_fwdr(hdd) * 100.0).round(1)
     #puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
     #puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
@@ -144,7 +144,7 @@ class NECB_2011_Model < StandardsModel
     # Determine the factors by which to reduce the window / door area
     mult = fdwr_lim / fdwr
     # Reduce the window area if any of the categories necessary
-    getSpaces.sort.each do |space|
+    model.getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       space.surfaces.sort.each do |surface|
         # Skip non-outdoor surfaces
@@ -181,7 +181,7 @@ class NECB_2011_Model < StandardsModel
     sh_sky_m2 = 0
     total_roof_m2 = 0.001
     total_subsurface_m2 = 0
-    getSpaces.sort.each do |space|
+    model.getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       sky_area_m2 = 0
@@ -245,7 +245,7 @@ class NECB_2011_Model < StandardsModel
     mult = srr_lim / srr
 
     # Reduce the subsurface areas
-    getSpaces.sort.each do |space|
+    model.getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       space.surfaces.sort.each do |surface|
         # Skip non-outdoor surfaces

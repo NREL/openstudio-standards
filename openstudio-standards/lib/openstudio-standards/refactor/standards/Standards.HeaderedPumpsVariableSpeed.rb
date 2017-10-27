@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include Pump
 
   # Takes the total rated flow rate and returns per-pump values
@@ -7,9 +7,9 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [OptionalDouble] the total rated flow rate per pump
   def headered_pumps_variable_speed_autosizedRatedFlowRate(headered_pumps_variable_speed)
     result = OpenStudio::OptionalDouble.new
-    total_rated_flow_rate = autosizedTotalRatedFlowRate
+    total_rated_flow_rate = headered_pumps_variable_speed.autosizedTotalRatedFlowRate
     if total_rated_flow_rate.is_initialized
-      per_pump_rated_flow_rate = total_rated_flow_rate.get / numberofPumpsinBank
+      per_pump_rated_flow_rate = total_rated_flow_rate.get / headered_pumps_variable_speed.numberofPumpsinBank
       result = OpenStudio::OptionalDouble.new(per_pump_rated_flow_rate)
     end
 
@@ -21,9 +21,9 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [OptionalDouble] the total rated flow rate per pump
   def headered_pumps_variable_speed_ratedFlowRate(headered_pumps_variable_speed)
     result = OpenStudio::OptionalDouble.new
-    total_rated_flow_rate = totalRatedFlowRate
+    total_rated_flow_rate = headered_pumps_variable_speed.totalRatedFlowRate
     if total_rated_flow_rate.is_initialized
-      per_pump_rated_flow_rate = total_rated_flow_rate.get / numberofPumpsinBank
+      per_pump_rated_flow_rate = total_rated_flow_rate.get / headered_pumps_variable_speed.numberofPumpsinBank
       result = OpenStudio::OptionalDouble.new(per_pump_rated_flow_rate)
     end
 
@@ -68,11 +68,11 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # Set the coefficients
-    setCoefficient1ofthePartLoadPerformanceCurve(coeff_a)
-    setCoefficient2ofthePartLoadPerformanceCurve(coeff_b)
-    setCoefficient3ofthePartLoadPerformanceCurve(coeff_c)
-    setCoefficient4ofthePartLoadPerformanceCurve(coeff_d)
-    setPumpControlType('Intermittent')
+    headered_pumps_variable_speed.setCoefficient1ofthePartLoadPerformanceCurve(coeff_a)
+    headered_pumps_variable_speed.setCoefficient2ofthePartLoadPerformanceCurve(coeff_b)
+    headered_pumps_variable_speed.setCoefficient3ofthePartLoadPerformanceCurve(coeff_c)
+    headered_pumps_variable_speed.setCoefficient4ofthePartLoadPerformanceCurve(coeff_d)
+    headered_pumps_variable_speed.setPumpControlType('Intermittent')
 
     # Append the control type to the pump name
     # self.setName("#{self.name} #{control_type}")

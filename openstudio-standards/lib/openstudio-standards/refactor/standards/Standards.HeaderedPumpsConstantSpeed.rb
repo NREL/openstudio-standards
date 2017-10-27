@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include Pump
 
   # Takes the total rated flow rate and returns per-pump values
@@ -7,9 +7,9 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [OptionalDouble] the total rated flow rate per pump
   def headered_pumps_constant_speed_autosizedRatedFlowRate(headered_pumps_constant_speed)
     result = OpenStudio::OptionalDouble.new
-    total_rated_flow_rate = autosizedTotalRatedFlowRate
+    total_rated_flow_rate = headered_pumps_constant_speed.autosizedTotalRatedFlowRate
     if total_rated_flow_rate.is_initialized
-      per_pump_rated_flow_rate = total_rated_flow_rate.get / numberofPumpsinBank
+      per_pump_rated_flow_rate = total_rated_flow_rate.get / headered_pumps_constant_speed.numberofPumpsinBank
       result = OpenStudio::OptionalDouble.new(per_pump_rated_flow_rate)
     end
 
@@ -21,9 +21,9 @@ class StandardsModel < OpenStudio::Model::Model
   # @return [OptionalDouble] the total rated flow rate per pump
   def headered_pumps_constant_speed_ratedFlowRate(headered_pumps_constant_speed)
     result = OpenStudio::OptionalDouble.new
-    total_rated_flow_rate = totalRatedFlowRate
+    total_rated_flow_rate = headered_pumps_constant_speed.totalRatedFlowRate
     if total_rated_flow_rate.is_initialized
-      per_pump_rated_flow_rate = total_rated_flow_rate.get / numberofPumpsinBank
+      per_pump_rated_flow_rate = total_rated_flow_rate.get / headered_pumps_constant_speed.numberofPumpsinBank
       result = OpenStudio::OptionalDouble.new(per_pump_rated_flow_rate)
     end
 

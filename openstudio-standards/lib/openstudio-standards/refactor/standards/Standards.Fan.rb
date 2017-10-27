@@ -37,27 +37,27 @@ module Fan
   def fan_adjust_pressure_rise_to_meet_fan_power(fan, target_fan_power)
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
-    dsn_air_flow_m3_per_s = if autosizedMaximumFlowRate.is_initialized
-                              autosizedMaximumFlowRate.get
+    dsn_air_flow_m3_per_s = if fan.autosizedMaximumFlowRate.is_initialized
+                              fan.autosizedMaximumFlowRate.get
                             else
-                              maximumFlowRate.get
+                              fan.maximumFlowRate.get
                             end
 
     # Get the current fan power
     current_fan_power_w = fan_fanpower(fan) 
 
     # Get the current pressure rise (Pa)
-    pressure_rise_pa = pressureRise
+    pressure_rise_pa = fan.pressureRise
 
     # Get the total fan efficiency
-    fan_total_eff = fanEfficiency
+    fan_total_eff = fan.fanEfficiency
 
     # Calculate the new fan pressure rise (Pa)
     new_pressure_rise_pa = target_fan_power * fan_total_eff / dsn_air_flow_m3_per_s
     new_pressure_rise_in_h2o = OpenStudio.convert(new_pressure_rise_pa, 'Pa', 'inH_{2}O').get
 
     # Set the new pressure rise
-    setPressureRise(new_pressure_rise_pa)
+    fan.setPressureRise(new_pressure_rise_pa)
 
     # Calculate the new power
     new_power_w = fan_fanpower(fan) 

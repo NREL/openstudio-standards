@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # find search criteria
   #
   # @return [Hash] used for model_find_object(model) 

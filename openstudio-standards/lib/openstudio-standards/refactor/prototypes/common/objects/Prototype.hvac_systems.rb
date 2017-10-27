@@ -1,6 +1,6 @@
 
 # open the class to add methods to size all HVAC equipment
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   require_relative 'Prototype.AirTerminalSingleDuctVAVReheat'
 
   # Creates a hot water loop with a boiler, district heating, or a
@@ -374,7 +374,7 @@ class StandardsModel < OpenStudio::Model::Model
         cooling_tower.setDesignApproachTemperature(cw_approach_delta_t_k)
         cooling_tower.setDesignRangeTemperature(cw_delta_t_k)
         cooling_tower.setFractionofTowerCapacityinFreeConvectionRegime(0.125)
-        twr_fan_curve = add_curve('VSD-TWR-FAN-FPLR')
+        twr_fan_curve = model_add_curve(model, 'VSD-TWR-FAN-FPLR')
         cooling_tower.setFanPowerRatioFunctionofAirFlowRateRatioCurve(twr_fan_curve)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{cooling_tower_capacity_control} is not a valid choice of cooling tower capacity control.  Valid choices are Fluid Bypass, Fan Cycling, TwoSpeed Fan, Variable Speed Fan.")
@@ -769,14 +769,14 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
                       model.alwaysOnDiscreteSchedule
                     else
-                      add_schedule(oa_damper_sch)
+                      model_add_schedule(model, oa_damper_sch)
                     end
 
     # control temps used across all air handlers
@@ -851,7 +851,7 @@ class StandardsModel < OpenStudio::Model::Model
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     # fan
-    fan = OpenStudio::Model::FanVariableVolume.new(model, alwaysOnDiscreteSchedule)
+    fan = OpenStudio::Model::FanVariableVolume.new(model, model.alwaysOnDiscreteSchedule)
     fan.setName("#{air_loop.name} Fan")
     fan.setFanEfficiency(vav_fan_efficiency)
     fan.setMotorEfficiency(vav_fan_motor_efficiency)
@@ -863,11 +863,11 @@ class StandardsModel < OpenStudio::Model::Model
 
     # heating coil
     if hot_water_loop.nil?
-      htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, alwaysOnDiscreteSchedule)
+      htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
       htg_coil.setName("#{air_loop.name} Main Htg Coil")
       htg_coil.addToNode(air_loop.supplyInletNode)
     else
-      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
       htg_coil.addToNode(air_loop.supplyInletNode)
       hot_water_loop.addDemandBranchForComponent(htg_coil)
       htg_coil.setName("#{air_loop.name} Main Htg Coil")
@@ -879,7 +879,7 @@ class StandardsModel < OpenStudio::Model::Model
     end
 
     # cooling coil
-    clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, alwaysOnDiscreteSchedule)
+    clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
     clg_coil.setName("#{air_loop.name} Clg Coil")
     clg_coil.addToNode(air_loop.supplyInletNode)
     clg_coil.setHeatExchangerConfiguration('CrossFlow')
@@ -916,13 +916,13 @@ class StandardsModel < OpenStudio::Model::Model
       rht_coil = nil
       case reheat_type
       when 'NaturalGas'
-        rht_coil = OpenStudio::Model::CoilHeatingGas.new(model, alwaysOnDiscreteSchedule)
+        rht_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
       when 'Electricity'
-        rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+        rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
       when 'Water'
-        rht_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+        rht_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
         rht_coil.setRatedInletWaterTemperature(hw_temp_c)
         rht_coil.setRatedInletAirTemperature(htg_sa_temp_c)
@@ -931,13 +931,13 @@ class StandardsModel < OpenStudio::Model::Model
         hot_water_loop.addDemandBranchForComponent(rht_coil)
       when nil
         # Zero-capacity, always-off electric heating coil
-        rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOffDiscreteSchedule)
+        rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOffDiscreteSchedule)
         rht_coil.setName("#{zone.name} No Reheat")
         rht_coil.setNominalCapacity(0)
       end
 
       # vav terminal
-      terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, alwaysOnDiscreteSchedule, rht_coil)
+      terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
       air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, building_type, template, zone.outdoor_airflow_rate_per_area)
@@ -1005,14 +1005,14 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
                       model.alwaysOnDiscreteSchedule
                     else
-                      add_schedule(oa_damper_sch)
+                      model_add_schedule(model, oa_damper_sch)
                     end
 
     # control temps used across all air handlers
@@ -1060,7 +1060,7 @@ class StandardsModel < OpenStudio::Model::Model
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     # fan
-    fan = OpenStudio::Model::FanVariableVolume.new(model, alwaysOnDiscreteSchedule)
+    fan = OpenStudio::Model::FanVariableVolume.new(model, model.alwaysOnDiscreteSchedule)
     fan.setName("#{air_loop.name} Fan")
     fan.setFanEfficiency(vav_fan_efficiency)
     fan.setMotorEfficiency(vav_fan_motor_efficiency)
@@ -1071,12 +1071,12 @@ class StandardsModel < OpenStudio::Model::Model
     fan.setEndUseSubcategory('VAV system Fans')
 
     # heating coil
-    htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+    htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
     htg_coil.setName("#{air_loop.name} Htg Coil")
     htg_coil.addToNode(air_loop.supplyInletNode)
 
     # cooling coil
-    clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, alwaysOnDiscreteSchedule)
+    clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
     clg_coil.setName("#{air_loop.name} Clg Coil")
     clg_coil.addToNode(air_loop.supplyInletNode)
     clg_coil.setHeatExchangerConfiguration('CrossFlow')
@@ -1104,11 +1104,11 @@ class StandardsModel < OpenStudio::Model::Model
     # hook the VAV system to each zone
     thermal_zones.each do |zone|
       # reheat coil
-      rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+      rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
       rht_coil.setName("#{zone.name} Rht Coil")
 
       # terminal fan
-      pfp_fan = OpenStudio::Model::FanConstantVolume.new(model, alwaysOnDiscreteSchedule)
+      pfp_fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
       pfp_fan.setName("#{zone.name} PFP Term Fan")
       pfp_fan.setPressureRise(300)
 
@@ -1174,14 +1174,14 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
                       model.alwaysOnDiscreteSchedule
                     else
-                      add_schedule(oa_damper_sch)
+                      model_add_schedule(model, oa_damper_sch)
                     end
 
     # Control temps for HW loop
@@ -1229,7 +1229,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Some exceptions for the Outpatient
     if sys_name.include? 'PVAV Outpatient F1'
       # Outpatient two AHU1 and AHU2 have different HVAC schedule
-      hvac_op_sch = add_schedule('OutPatientHealthCare AHU1-Fan_Pre2004')
+      hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU1-Fan_Pre2004')
       # Outpatient has different temperature settings for sizing
       clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
       sys_dsn_clg_sa_temp_f = if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
@@ -1240,7 +1240,7 @@ class StandardsModel < OpenStudio::Model::Model
       zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
       zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
     elsif sys_name.include? 'PVAV Outpatient F2 F3'
-      hvac_op_sch = add_schedule('OutPatientHealthCare AHU2-Fan_Pre2004')
+      hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU2-Fan_Pre2004')
       clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
       sys_dsn_clg_sa_temp_f = 52
       zn_dsn_clg_sa_temp_f = 55 # zone cooling design SAT
@@ -1260,18 +1260,18 @@ class StandardsModel < OpenStudio::Model::Model
     air_loop.setNightCycleControlType('CycleOnAny')
 
     # Fan
-    fan = OpenStudio::Model::FanVariableVolume.new(model, alwaysOnDiscreteSchedule)
+    fan = OpenStudio::Model::FanVariableVolume.new(model, model.alwaysOnDiscreteSchedule)
     fan.setName("#{air_loop.name} Fan")
     fan.addToNode(air_loop.supplyInletNode)
 
     # Heating coil - depends on whether heating is hot water or electric,
     # which is determined by whether or not a hot water loop is provided.
     if hot_water_loop.nil?
-      htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, alwaysOnDiscreteSchedule)
+      htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
       htg_coil.setName("#{air_loop.name} Main Htg Coil")
       htg_coil.addToNode(air_loop.supplyInletNode)
     else
-      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
       htg_coil.setName("#{air_loop.name} Main Htg Coil")
       htg_coil.setRatedInletWaterTemperature(hw_temp_c)
       htg_coil.setRatedInletAirTemperature(sys_dsn_prhtg_temp_c)
@@ -1287,7 +1287,7 @@ class StandardsModel < OpenStudio::Model::Model
       clg_coil.setName("#{air_loop.name} Clg Coil")
       clg_coil.addToNode(air_loop.supplyInletNode)
     else
-      clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, alwaysOnDiscreteSchedule)
+      clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
       clg_coil.setName("#{air_loop.name} Clg Coil")
       clg_coil.addToNode(air_loop.supplyInletNode)
       clg_coil.setHeatExchangerConfiguration('CrossFlow')
@@ -1313,10 +1313,10 @@ class StandardsModel < OpenStudio::Model::Model
       rht_coil = nil
       # sys_name.include? "Outpatient F2 F3"  is only for reheat coil of Outpatient Floor2&3
       if electric_reheat || hot_water_loop.nil? || sys_name.include?('Outpatient F2 F3')
-        rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+        rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
       else
-        rht_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+        rht_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
         rht_coil.setRatedInletWaterTemperature(hw_temp_c)
         rht_coil.setRatedInletAirTemperature(rht_rated_air_in_temp_c)
@@ -1326,7 +1326,7 @@ class StandardsModel < OpenStudio::Model::Model
       end
 
       # VAV terminal
-      terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, alwaysOnDiscreteSchedule, rht_coil)
+      terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
       terminal.setMaximumReheatAirTemperature(rht_rated_air_out_temp_c)
@@ -1386,14 +1386,14 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
                       model.alwaysOnDiscreteSchedule
                     else
-                      add_schedule(oa_damper_sch)
+                      model_add_schedule(model, oa_damper_sch)
                     end
 
     # control temps used across all air handlers
@@ -1441,7 +1441,7 @@ class StandardsModel < OpenStudio::Model::Model
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     # fan
-    fan = OpenStudio::Model::FanVariableVolume.new(model, alwaysOnDiscreteSchedule)
+    fan = OpenStudio::Model::FanVariableVolume.new(model, model.alwaysOnDiscreteSchedule)
     fan.setName("#{air_loop.name} Fan")
     fan.setFanEfficiency(vav_fan_efficiency)
     fan.setMotorEfficiency(vav_fan_motor_efficiency)
@@ -1452,7 +1452,7 @@ class StandardsModel < OpenStudio::Model::Model
     fan.setEndUseSubcategory('VAV system Fans')
 
     # heating coil
-    htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+    htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
     htg_coil.setName("#{air_loop.name} Main Htg Coil")
     htg_coil.addToNode(air_loop.supplyInletNode)
 
@@ -1462,7 +1462,7 @@ class StandardsModel < OpenStudio::Model::Model
       clg_coil.setName("#{air_loop.name} Clg Coil")
       clg_coil.addToNode(air_loop.supplyInletNode)
     else
-      clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, alwaysOnDiscreteSchedule)
+      clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
       clg_coil.setName("#{air_loop.name} Clg Coil")
       clg_coil.addToNode(air_loop.supplyInletNode)
       clg_coil.setHeatExchangerConfiguration('CrossFlow')
@@ -1491,11 +1491,11 @@ class StandardsModel < OpenStudio::Model::Model
     # hook the VAV system to each zone
     thermal_zones.each do |zone|
       # reheat coil
-      rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+      rht_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
       rht_coil.setName("#{zone.name} Rht Coil")
 
       # terminal fan
-      pfp_fan = OpenStudio::Model::FanConstantVolume.new(model, alwaysOnDiscreteSchedule)
+      pfp_fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
       pfp_fan.setName("#{zone.name} PFP Term Fan")
       pfp_fan.setPressureRise(300)
 
@@ -1557,14 +1557,14 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
                       model.alwaysOnDiscreteSchedule
                     else
-                      add_schedule(oa_damper_sch)
+                      model_add_schedule(model, oa_damper_sch)
                     end
 
     # Hot water loop control temperatures
@@ -1635,7 +1635,7 @@ class StandardsModel < OpenStudio::Model::Model
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     # Fan
-    fan = OpenStudio::Model::FanConstantVolume.new(model, alwaysOnDiscreteSchedule)
+    fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
     fan.setName("#{air_loop.name} Fan")
     if building_type == 'Hospital'
       fan.setFanEfficiency(0.61425)
@@ -1650,7 +1650,7 @@ class StandardsModel < OpenStudio::Model::Model
     fan.setEndUseSubcategory('CAV system Fans')
 
     # Air handler heating coil
-    htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+    htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
     htg_coil.addToNode(air_loop.supplyInletNode)
     hot_water_loop.addDemandBranchForComponent(htg_coil)
     htg_coil.setName("#{air_loop.name} Main Htg Coil")
@@ -1665,7 +1665,7 @@ class StandardsModel < OpenStudio::Model::Model
     if chilled_water_loop.nil?
       clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(model)
     else
-      clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, alwaysOnDiscreteSchedule)
+      clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
       clg_coil.setHeatExchangerConfiguration('CrossFlow')
       chilled_water_loop.addDemandBranchForComponent(clg_coil)
       clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
@@ -1696,11 +1696,11 @@ class StandardsModel < OpenStudio::Model::Model
     thermal_zones.each do |zone|
       if building_type == 'Hospital'
         # CAV terminal
-        terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, alwaysOnDiscreteSchedule)
+        terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
         terminal.setName("#{zone.name} CAV Term")
       else
         # Reheat coil
-        rht_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+        rht_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
         rht_coil.setName("#{zone.name} Rht Coil")
         rht_coil.setRatedInletWaterTemperature(hw_temp_c)
         rht_coil.setRatedInletAirTemperature(htg_sa_temp_c)
@@ -1709,7 +1709,7 @@ class StandardsModel < OpenStudio::Model::Model
         hot_water_loop.addDemandBranchForComponent(rht_coil)
 
         # VAV terminal
-        terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, alwaysOnDiscreteSchedule, rht_coil)
+        terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
         terminal.setName("#{zone.name} VAV Term")
         terminal.setZoneMinimumAirFlowMethod('Constant')
         air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, building_type, template, zone.outdoor_airflow_rate_per_area)
@@ -1797,14 +1797,14 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
                       model.alwaysOnDiscreteSchedule
                     else
-                      add_schedule(oa_damper_sch)
+                      model_add_schedule(model, oa_damper_sch)
                     end
 
     # Make a PSZ-AC for each zone
@@ -1891,7 +1891,7 @@ class StandardsModel < OpenStudio::Model::Model
       htg_coil = nil
       case heating_type
       when 'NaturalGas', 'Gas'
-        htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, alwaysOnDiscreteSchedule)
+        htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} Gas Htg Coil")
 
         if template == 'DOE Ref Pre-1980'
@@ -1899,7 +1899,7 @@ class StandardsModel < OpenStudio::Model::Model
         end
       when nil
         # Zero-capacity, always-off electric heating coil
-        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOffDiscreteSchedule)
+        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOffDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} No Heat")
         htg_coil.setNominalCapacity(0)
       when 'Water'
@@ -1907,7 +1907,7 @@ class StandardsModel < OpenStudio::Model::Model
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
           return false
         end
-        htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+        htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} Water Htg Coil")
         htg_coil.setRatedInletWaterTemperature(hw_temp_c)
         htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
@@ -2005,21 +2005,21 @@ class StandardsModel < OpenStudio::Model::Model
 
         hot_water_loop.addDemandBranchForComponent(htg_coil)
       when 'Electricity', 'Electric'
-        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} Electric Htg Coil")
       end
 
       supplemental_htg_coil = nil
       case supplemental_heating_type
       when 'Electricity', 'Electric' # TODO change spreadsheet to Electricity
-        supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} Electric Backup Htg Coil")
       when 'NaturalGas', 'Gas'
-        supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, alwaysOnDiscreteSchedule)
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} Gas Backup Htg Coil")
       when nil
         # Zero-capacity, always-off electric heating coil
-        supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOffDiscreteSchedule)
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOffDiscreteSchedule)
         supplemental_htg_coil.setName("#{air_loop.name} No Backup Heat")
         supplemental_htg_coil.setNominalCapacity(0)
       end
@@ -2030,7 +2030,7 @@ class StandardsModel < OpenStudio::Model::Model
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No chilled water plant loop supplied')
           return false
         end
-        clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, alwaysOnDiscreteSchedule)
+        clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
         clg_coil.setName("#{air_loop.name} Water Clg Coil")
         chilled_water_loop.addDemandBranchForComponent(clg_coil)
       elsif cooling_type == 'Two Speed DX AC'
@@ -2275,7 +2275,7 @@ class StandardsModel < OpenStudio::Model::Model
       oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
       oa_system.setName("#{air_loop.name} OA Sys")
-      econ_eff_sch = add_schedule('RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
+      econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
 
       case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
@@ -2305,7 +2305,7 @@ class StandardsModel < OpenStudio::Model::Model
           unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
           unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
           unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
-          unitary_system.setSupplyAirFanOperatingModeSchedule(alwaysOnDiscreteSchedule)
+          unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
           unitary_system.addToNode(supply_inlet_node)
           setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(50)
         else
@@ -2385,7 +2385,7 @@ class StandardsModel < OpenStudio::Model::Model
       air_loop.setNightCycleControlType('CycleOnAny')
 
       # Create a diffuser and attach the zone/diffuser pair to the air loop
-      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, alwaysOnDiscreteSchedule)
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
       air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
     end
@@ -2461,14 +2461,14 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
                       model.alwaysOnDiscreteSchedule
                     else
-                      add_schedule(oa_damper_sch)
+                      model_add_schedule(model, oa_damper_sch)
                     end
 
     # Make a PSZ-AC for each zone
@@ -2566,7 +2566,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       heat_pump_loop.addDemandBranchForComponent(clg_coil)
 
-      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
       supplemental_htg_coil.setName("#{air_loop.name} Electric Backup Htg Coil")
 
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -2586,10 +2586,10 @@ class StandardsModel < OpenStudio::Model::Model
         humidifier.setRatedPower(100_000)
         humidifier.setName("#{air_loop.name} Electric Steam Humidifier")
 
-        extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+        extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
         extra_elec_htg_coil.setName("#{air_loop.name} Electric Htg Coil")
 
-        extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+        extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
         extra_water_htg_coil.setName("#{air_loop.name} Water Htg Coil")
         extra_water_htg_coil.setRatedInletWaterTemperature(hw_temp_c)
         extra_water_htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
@@ -2607,7 +2607,7 @@ class StandardsModel < OpenStudio::Model::Model
         humidity_spm.addToNode(humidifier.outletModelObject.get.to_Node.get)
 
         humidistat = OpenStudio::Model::ZoneControlHumidistat.new(model)
-        humidistat.setHumidifyingRelativeHumiditySetpointSchedule(add_schedule('OfficeLarge DC_MinRelHumSetSch'))
+        humidistat.setHumidifyingRelativeHumiditySetpointSchedule(model_add_schedule(model, 'OfficeLarge DC_MinRelHumSetSch'))
         zone.setZoneControlHumidistat(humidistat)
       end
 
@@ -2622,7 +2622,7 @@ class StandardsModel < OpenStudio::Model::Model
       unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40, 'F', 'C').get)
       unitary_system.setFanPlacement('BlowThrough')
       unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
-      unitary_system.setSupplyAirFanOperatingModeSchedule(alwaysOnDiscreteSchedule)
+      unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
       unitary_system.addToNode(supply_inlet_node)
 
       setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(OpenStudio.convert(55, 'F', 'C').get)
@@ -2636,7 +2636,7 @@ class StandardsModel < OpenStudio::Model::Model
       air_loop.setNightCycleControlType('CycleOnAny')
 
       # Create a diffuser and attach the zone/diffuser pair to the air loop
-      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, alwaysOnDiscreteSchedule)
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
       air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
     end
@@ -2681,25 +2681,25 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # alternate hvac operation schedule
     alt_hvac_op_sch = if alt_hvac_op_sch.nil?
                         model.alwaysOnDiscreteSchedule
                       else
-                        add_schedule(alt_hvac_op_sch)
+                        model_add_schedule(model, alt_hvac_op_sch)
                       end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
                       model.alwaysOnDiscreteSchedule
                     else
-                      add_schedule(oa_damper_sch)
+                      model_add_schedule(model, oa_damper_sch)
                     end
 
     # OA_controller Maximum OA Fraction schedule
-    econ_max_oa_frac_sch = add_schedule('HotelSmall SAC_Econ_MaxOAFrac_Sch')
+    econ_max_oa_frac_sch = model_add_schedule(model, 'HotelSmall SAC_Econ_MaxOAFrac_Sch')
 
     # Make a SAC for each group of thermal zones
     parts = []
@@ -2766,7 +2766,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Fan
     fan = nil
     if fan_type == 'ConstantVolume'
-      fan = OpenStudio::Model::FanConstantVolume.new(model, alwaysOnDiscreteSchedule)
+      fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
       fan.setName("#{thermal_zone_name} SAC Fan")
       fan_static_pressure_in_h2o = 2.5
       fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
@@ -2774,7 +2774,7 @@ class StandardsModel < OpenStudio::Model::Model
       fan.setFanEfficiency(0.56) # get the average of four fans
       fan.setMotorEfficiency(0.86) # get the average of four fans
     elsif fan_type == 'Cycling'
-      fan = OpenStudio::Model::FanOnOff.new(model, alwaysOnDiscreteSchedule)
+      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
       fan.setName("#{thermal_zone_name} SAC Fan")
       fan_static_pressure_in_h2o = 2.5
       fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
@@ -2786,7 +2786,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Heating Coil
     htg_coil = nil
     if heating_type == 'Gas'
-      htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, alwaysOnDiscreteSchedule)
+      htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
       htg_coil.setName("#{thermal_zone_name} SAC Gas Htg Coil")
       htg_coil.setGasBurnerEfficiency(0.8)
       htg_part_load_fraction_correlation = OpenStudio::Model::CurveCubic.new(model)
@@ -2850,10 +2850,10 @@ class StandardsModel < OpenStudio::Model::Model
     # Supplemental Heating Coil
     supplemental_htg_coil = nil
     if supplemental_heating_type == 'Electric'
-      supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, alwaysOnDiscreteSchedule)
+      supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
       supplemental_htg_coil.setName("#{thermal_zone_name} PSZ-AC Electric Backup Htg Coil")
     elsif supplemental_heating_type == 'Gas'
-      supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, alwaysOnDiscreteSchedule)
+      supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
       supplemental_htg_coil.setName("#{thermal_zone_name} PSZ-AC Gas Backup Htg Coil")
     end
 
@@ -3108,7 +3108,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Create a diffuser and attach the zone/diffuser pair to the air loop
     thermal_zones.each do |zone|
-      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, alwaysOnDiscreteSchedule)
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{zone.name} SAC Diffuser")
       air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
     end
@@ -3166,7 +3166,7 @@ class StandardsModel < OpenStudio::Model::Model
       # add fan
       fan = nil
       if fan_type == 'ConstantVolume'
-        fan = OpenStudio::Model::FanConstantVolume.new(model, alwaysOnDiscreteSchedule)
+        fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
         fan.setName("#{zone.name} PTAC Fan")
         fan_static_pressure_in_h2o = 1.33
         fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
@@ -3174,7 +3174,7 @@ class StandardsModel < OpenStudio::Model::Model
         fan.setFanEfficiency(0.52)
         fan.setMotorEfficiency(0.8)
       elsif fan_type == 'Cycling'
-        fan = OpenStudio::Model::FanOnOff.new(model, alwaysOnDiscreteSchedule)
+        fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
         fan.setName("#{zone.name} PTAC Fan")
         fan_static_pressure_in_h2o = 1.33
         fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
@@ -3189,13 +3189,13 @@ class StandardsModel < OpenStudio::Model::Model
       htg_coil = nil
       case heating_type
       when 'NaturalGas', 'Gas'
-        htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, alwaysOnDiscreteSchedule)
+        htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{zone.name} PTAC Gas Htg Coil")
       when 'Electricity', 'Electric'
-        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{zone.name} PTAC Electric Htg Coil")
       when nil
-        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOffDiscreteSchedule)
+        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOffDiscreteSchedule)
         htg_coil.setName("#{zone.name} PTAC No Heat")
         htg_coil.setNominalCapacity(0)
       when 'Water'
@@ -3212,7 +3212,7 @@ class StandardsModel < OpenStudio::Model::Model
         prehtg_sa_temp_c = 16.6
         htg_sa_temp_c = 32.2
 
-        htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+        htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{hot_water_loop.name} Water Htg Coil")
         # None of these temperatures are defined
         htg_coil.setRatedInletWaterTemperature(hw_temp_c)
@@ -3385,7 +3385,7 @@ class StandardsModel < OpenStudio::Model::Model
       ptac_system.setName("#{zone.name} PTAC")
       ptac_system.setFanPlacement('DrawThrough')
       if fan_type == 'ConstantVolume'
-        ptac_system.setSupplyAirFanOperatingModeSchedule(alwaysOnDiscreteSchedule)
+        ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
       elsif fan_type == 'Cycling'
         ptac_system.setSupplyAirFanOperatingModeSchedule(always_off)
       end
@@ -3438,7 +3438,7 @@ class StandardsModel < OpenStudio::Model::Model
       # add fan
       fan = nil
       if fan_type == 'ConstantVolume'
-        fan = OpenStudio::Model::FanConstantVolume.new(model, alwaysOnDiscreteSchedule)
+        fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
         fan.setName("#{zone.name} PTAC Fan")
         fan_static_pressure_in_h2o = 1.33
         fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
@@ -3446,7 +3446,7 @@ class StandardsModel < OpenStudio::Model::Model
         fan.setFanEfficiency(0.52)
         fan.setMotorEfficiency(0.8)
       elsif fan_type == 'Cycling'
-        fan = OpenStudio::Model::FanOnOff.new(model, alwaysOnDiscreteSchedule)
+        fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
         fan.setName("#{zone.name} PTAC Fan")
         fan_static_pressure_in_h2o = 1.33
         fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
@@ -3566,7 +3566,7 @@ class StandardsModel < OpenStudio::Model::Model
       # clg_coil.setBasinHeaterSetpointTemperature(2.0)
 
       # Supplemental heating coil
-      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+      supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
 
       # Wrap coils in a PTHP system
       pthp_system = OpenStudio::Model::ZoneHVACPackagedTerminalHeatPump.new(model,
@@ -3579,7 +3579,7 @@ class StandardsModel < OpenStudio::Model::Model
       pthp_system.setName("#{zone.name} PTHP")
       pthp_system.setFanPlacement('DrawThrough')
       if fan_type == 'ConstantVolume'
-        pthp_system.setSupplyAirFanOperatingModeSchedule(alwaysOnDiscreteSchedule)
+        pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
       elsif fan_type == 'Cycling'
         pthp_system.setSupplyAirFanOperatingModeSchedule(always_off)
       end
@@ -3636,7 +3636,7 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # Make a unit heater for each zone
@@ -3670,7 +3670,7 @@ class StandardsModel < OpenStudio::Model::Model
         htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, hvac_op_sch)
         htg_coil.setName("#{zone.name} UnitHeater Electric Htg Coil")
       elsif heating_type == 'DistrictHeating' && !hot_water_loop.nil?
-        htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+        htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{zone.name} UnitHeater Water Htg Coil")
         htg_coil.setRatedInletWaterTemperature(hw_temp_c)
         htg_coil.setRatedInletAirTemperature(zn_temp_c)
@@ -3834,13 +3834,13 @@ class StandardsModel < OpenStudio::Model::Model
       # Direct Evap Cooler
       # TODO better assumptions for evap cooler performance
       # and fan pressure rise
-      evap = OpenStudio::Model::EvaporativeCoolerDirectResearchSpecial.new(model, alwaysOnDiscreteSchedule)
+      evap = OpenStudio::Model::EvaporativeCoolerDirectResearchSpecial.new(model, model.alwaysOnDiscreteSchedule)
       evap.setName("#{zone.name} Evap Media")
       evap.autosizePrimaryAirDesignFlowRate
       evap.addToNode(air_loop.supplyInletNode)
 
       # Fan (cycling), must be inside unitary system to cycle on airloop
-      fan = OpenStudio::Model::FanOnOff.new(model, alwaysOnDiscreteSchedule)
+      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
       fan.setName("#{zone.name} Evap Cooler Supply Fan")
       fan.setFanEfficiency(0.55)
       fan.setPressureRise(fan_static_pressure_pa)
@@ -3868,7 +3868,7 @@ class StandardsModel < OpenStudio::Model::Model
       oa_intake_controller.setName("#{air_loop.name} OA Controller")
       oa_intake_controller.setMinimumLimitType('FixedMinimum')
       oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
-      oa_intake_controller.setMinimumFractionofOutdoorAirSchedule(alwaysOnDiscreteSchedule)
+      oa_intake_controller.setMinimumFractionofOutdoorAirSchedule(model.alwaysOnDiscreteSchedule)
 
       controller_mv = oa_intake_controller.controllerMechanicalVentilation
       controller_mv.setName("#{air_loop.name} Vent Controller")
@@ -3879,7 +3879,7 @@ class StandardsModel < OpenStudio::Model::Model
       oa_intake.addToNode(air_loop.supplyInletNode)
 
       # make an air terminal for the zone
-      air_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, alwaysOnDiscreteSchedule)
+      air_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       air_terminal.setName("#{zone.name} Air Terminal")
 
       # attach new terminal to the zone and to the airloop
@@ -4150,7 +4150,7 @@ class StandardsModel < OpenStudio::Model::Model
       rated_flow_rate_gal_per_min = OpenStudio.convert(rated_flow_rate_m3_per_s, 'm^3/s', 'gal/min').get
       water_heater.setPeakUseFlowRate(rated_flow_rate_m3_per_s)
 
-      schedule = add_schedule(flowrate_schedule)
+      schedule = model_add_schedule(model, flowrate_schedule)
       water_heater.setUseFlowRateFractionSchedule(schedule)
     end
 
@@ -4381,7 +4381,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Water use equipment
     water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
-    schedule = add_schedule(flowrate_schedule)
+    schedule = model_add_schedule(model, flowrate_schedule)
     water_fixture.setFlowRateFractionSchedule(schedule)
 
     if space_name.nil?
@@ -4413,7 +4413,7 @@ class StandardsModel < OpenStudio::Model::Model
       'building_type' => building_type,
       'space_type' => space_type_name
     }
-    data = find_object($os_standards['space_types'], search_criteria)
+    data = model_find_object(model, $os_standards['space_types'], search_criteria)
     if data.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find space type for: #{search_criteria}.")
       return nil
@@ -4465,7 +4465,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Water use equipment
     water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
-    schedule = add_schedule(data['service_water_heating_schedule'])
+    schedule = model_add_schedule(model, data['service_water_heating_schedule'])
     water_fixture.setFlowRateFractionSchedule(schedule)
     water_fixture.setName("#{space_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     swh_connection.addWaterUseEquipment(water_fixture)
@@ -4517,7 +4517,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Water use equipment
     water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
     water_fixture.setName("Booster Water Fixture - #{rated_flow_rate_gal_per_min} gal/min at #{mixed_water_temp_f}F")
-    schedule = add_schedule(flowrate_schedule)
+    schedule = model_add_schedule(model, flowrate_schedule)
     water_fixture.setFlowRateFractionSchedule(schedule)
     swh_connection.addWaterUseEquipment(water_fixture)
 
@@ -4591,14 +4591,14 @@ class StandardsModel < OpenStudio::Model::Model
     hvac_op_sch = if hvac_op_sch.nil?
                     model.alwaysOnDiscreteSchedule
                   else
-                    add_schedule(hvac_op_sch)
+                    model_add_schedule(model, hvac_op_sch)
                   end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
                       model.alwaysOnDiscreteSchedule
                     else
-                      add_schedule(oa_damper_sch)
+                      model_add_schedule(model, oa_damper_sch)
                     end
 
     # DOAS
@@ -4631,7 +4631,7 @@ class StandardsModel < OpenStudio::Model::Model
     # constant speed fan
     fan_static_pressure_in_h2o = 2.5
     fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, "inH_{2}O","Pa").get
-    fan = OpenStudio::Model::FanConstantVolume.new(model, alwaysOnDiscreteSchedule)
+    fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
     fan.setName('DOAS Fan')
     fan.setFanEfficiency(0.58175)
     fan.setPressureRise(fan_static_pressure_pa)
@@ -4647,7 +4647,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # create heating coil
     # water coil
-    heating_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+    heating_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
     hot_water_loop.addDemandBranchForComponent(heating_coil)
     heating_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
     heating_coil.addToNode(airloop_supply_inlet)
@@ -4655,7 +4655,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # create cooling coil
     # water coil
-    cooling_coil = OpenStudio::Model::CoilCoolingWater.new(model, alwaysOnDiscreteSchedule)
+    cooling_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
     chilled_water_loop.addDemandBranchForComponent(cooling_coil)
     cooling_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
     cooling_coil.addToNode(airloop_supply_inlet)
@@ -4670,7 +4670,7 @@ class StandardsModel < OpenStudio::Model::Model
     controller_oa.resetEconomizerMaximumLimitDryBulbTemperature
     # TODO: Yixing read the schedule from the Prototype Input
     if building_type == 'LargeHotel'
-      controller_oa.setMinimumFractionofOutdoorAirSchedule(add_schedule('HotelLarge FLR_3_DOAS_OAminOAFracSchedule'))
+      controller_oa.setMinimumFractionofOutdoorAirSchedule(model_add_schedule(model, 'HotelLarge FLR_3_DOAS_OAminOAFracSchedule'))
     end
     controller_oa.resetEconomizerMaximumLimitEnthalpy
     controller_oa.resetMaximumFractionofOutdoorAirSchedule
@@ -4737,7 +4737,7 @@ class StandardsModel < OpenStudio::Model::Model
       zone_sizing.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(sat_at_lo_oat_c)
 
       # make an air terminal for the zone
-      air_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, alwaysOnDiscreteSchedule)
+      air_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       air_terminal.setName(zone_name + 'Air Terminal')
 
       # attach new terminal to the zone and to the airloop
@@ -4774,7 +4774,7 @@ class StandardsModel < OpenStudio::Model::Model
         htg_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
         htg_coil.setName("#{zone.name} Hydronic Baseboard Coil")
         hot_water_loop.addDemandBranchForComponent(htg_coil)
-        baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, alwaysOnDiscreteSchedule, htg_coil)
+        baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, model.alwaysOnDiscreteSchedule, htg_coil)
         baseboard.setName("#{zone.name} Hydronic Baseboard")
         baseboard.addToThermalZone(zone)
         baseboards << baseboard
@@ -4825,7 +4825,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       fcu_clg_coil = nil
       if chilled_water_loop
-        fcu_clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, alwaysOnDiscreteSchedule)
+        fcu_clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
         fcu_clg_coil.setName("#{zone.name} 'FCU Cooling Coil")
         chilled_water_loop.addDemandBranchForComponent(fcu_clg_coil)
         fcu_clg_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
@@ -4836,18 +4836,18 @@ class StandardsModel < OpenStudio::Model::Model
 
       fcu_htg_coil = nil
       if hot_water_loop
-        fcu_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, alwaysOnDiscreteSchedule)
+        fcu_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
         fcu_htg_coil.setName("#{zone.name} FCU Heating Coil")
         hot_water_loop.addDemandBranchForComponent(fcu_htg_coil)
         fcu_htg_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
       else
         # Zero-capacity, always-off electric heating coil
-        fcu_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOffDiscreteSchedule)
+        fcu_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOffDiscreteSchedule)
         fcu_htg_coil.setName("#{zone.name} No Heat")
         fcu_htg_coil.setNominalCapacity(0)
       end
 
-      fcu_fan = OpenStudio::Model::FanOnOff.new(model, alwaysOnDiscreteSchedule)
+      fcu_fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
       fcu_fan.setName("#{zone.name} Fan Coil fan")
       fcu_fan.setFanEfficiency(0.16)
       fcu_fan.setPressureRise(270.9) # Pa
@@ -4926,14 +4926,14 @@ class StandardsModel < OpenStudio::Model::Model
       clg_coil.setMaximumOutdoorDryBulbTemperatureForCrankcaseHeaterOperation(OpenStudio::OptionalDouble.new(10))
       clg_coil.setBasinHeaterSetpointTemperature(OpenStudio::OptionalDouble.new(2))
 
-      fan = OpenStudio::Model::FanOnOff.new(model, alwaysOnDiscreteSchedule)
+      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
       fan.setName("Window AC Supply Fan")
       fan.setFanEfficiency(1)
       fan.setPressureRise(0)
       fan.setMotorEfficiency(1)
       fan.setMotorInAirstreamFraction(0)
 
-      htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOffDiscreteSchedule)
+      htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOffDiscreteSchedule)
       htg_coil.setName("Window AC Always Off Htg Coil")
 
       ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model, 
@@ -5058,7 +5058,7 @@ class StandardsModel < OpenStudio::Model::Model
       end
 
       # Fan
-      fan = OpenStudio::Model::FanOnOff.new(model, alwaysOnDiscreteSchedule)
+      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
       fan.setName("#{air_loop_name} supply fan")
       fan.setEndUseSubcategory('residential hvac fan')
       fan.setFanEfficiency(0.6) # Overall Efficiency of the Supply Fan, Motor and Drive
@@ -5081,7 +5081,7 @@ class StandardsModel < OpenStudio::Model::Model
       # Unitary System (holds the coils and fan)
       unitary = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
       unitary.setName("#{air_loop_name} zoneunitary system")
-      unitary.setAvailabilitySchedule(alwaysOnDiscreteSchedule)
+      unitary.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       unitary.setMaximumSupplyAirTemperature(OpenStudio::convert(120.0,"F","C").get)
       unitary.setControllingZoneorThermostatLocation(zone)
       unitary.addToNode(air_loop.supplyInletNode)
@@ -5099,7 +5099,7 @@ class StandardsModel < OpenStudio::Model::Model
       unitary.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
 
       # Diffuser
-      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, alwaysOnDiscreteSchedule)
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName(" #{zone.name} direct air")
       air_loop.addBranchForZone(zone, diffuser)
 
@@ -5217,7 +5217,7 @@ class StandardsModel < OpenStudio::Model::Model
         htg_coil.setDefrostControl("OnDemand")
 
         # Supplemental Heating Coil
-        supp_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, alwaysOnDiscreteSchedule)
+        supp_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
         supp_htg_coil.setName("#{air_loop_name} supp htg coil")
         supp_htg_coil.setEfficiency(1)
       end
@@ -5246,7 +5246,7 @@ class StandardsModel < OpenStudio::Model::Model
       end
 
       # Fan
-      fan = OpenStudio::Model::FanOnOff.new(model, alwaysOnDiscreteSchedule)
+      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
       fan.setName("#{air_loop_name} supply fan")
       fan.setEndUseSubcategory('residential hvac fan')
       fan.setFanEfficiency(0.6) # Overall Efficiency of the Supply Fan, Motor and Drive
@@ -5269,7 +5269,7 @@ class StandardsModel < OpenStudio::Model::Model
       # Unitary System (holds the coils and fan)
       unitary = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
       unitary.setName("#{air_loop_name} zoneunitary system")
-      unitary.setAvailabilitySchedule(alwaysOnDiscreteSchedule)
+      unitary.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       unitary.setMaximumSupplyAirTemperature(OpenStudio::convert(170.0,"F","C").get) # higher temp for supplemental heat as to not severely limit its use, resulting in unmet hours.
       unitary.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio::convert(40.0,"F","C").get)
       unitary.setControllingZoneorThermostatLocation(zone)
@@ -5287,7 +5287,7 @@ class StandardsModel < OpenStudio::Model::Model
       unitary.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
 
       # Diffuser
-      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, alwaysOnDiscreteSchedule)
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName(" #{zone.name} direct air")
       air_loop.addBranchForZone(zone, diffuser)
 
@@ -5405,7 +5405,7 @@ class StandardsModel < OpenStudio::Model::Model
       supply_fan = OpenStudio::Model::FanOnOff.new(model)
       supply_fan.setName("#{zone.name} ERV Supply Fan")
       supply_fan.setMotorEfficiency(fan_motor_efficiency)
-      impeller_eff = supply_fan.baseline_impeller_efficiency(template)
+      impeller_eff = fan_baseline_impeller_efficiency(supply_fan)
       supply_fan.change_impeller_efficiency(impeller_eff)
       supply_fan.setPressureRise(fan_static_pressure_pa)
       supply_fan.setMotorInAirstreamFraction(1)
@@ -5591,7 +5591,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     elevator_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_definition)
     elevator_equipment.setName("#{number_of_elevators.round} Elevator Lift Motors")
-    elevator_sch = add_schedule(elevator_schedule)
+    elevator_sch = model_add_schedule(model, elevator_schedule)
     elevator_equipment.setSchedule(elevator_sch)
     elevator_equipment.setSpace(space)
     elevator_equipment.setMultiplier(number_of_elevators)
@@ -5607,7 +5607,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     elevator_fan_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_fan_definition)
     elevator_fan_equipment.setName("#{number_of_elevators.round} Elevator Fans")
-    elevator_fan_sch = add_schedule(elevator_fan_schedule)
+    elevator_fan_sch = model_add_schedule(model, elevator_fan_schedule)
     elevator_fan_equipment.setSchedule(elevator_fan_sch)
     elevator_fan_equipment.setSpace(space)
     elevator_fan_equipment.setMultiplier(number_of_elevators)
@@ -5620,7 +5620,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     elevator_lights_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_lights_definition)
     elevator_lights_equipment.setName("#{number_of_elevators.round} Elevator Lights")
-    elevator_lights_sch = add_schedule(elevator_lights_schedule)
+    elevator_lights_sch = model_add_schedule(model, elevator_lights_schedule)
     elevator_lights_equipment.setSchedule(elevator_lights_sch)
     elevator_lights_equipment.setSpace(space)
     elevator_lights_equipment.setMultiplier(number_of_elevators)
@@ -5647,7 +5647,7 @@ class StandardsModel < OpenStudio::Model::Model
     thermal_zones.each do |zone|
       fan = OpenStudio::Model::FanZoneExhaust.new(model)
       fan.setName("#{zone.name} Exhaust Fan")
-      fan.setAvailabilitySchedule(add_schedule(availability_sch_name))
+      fan.setAvailabilitySchedule(model_add_schedule(model, availability_sch_name))
       # two ways to input the flow rate: Number of Array.
       # For number: assign directly. For Array: assign each flow rate to each according zone.
       if flow_rate.is_a? Numeric
@@ -5660,11 +5660,11 @@ class StandardsModel < OpenStudio::Model::Model
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Wrong format of flow rate')
       end
       unless flow_fraction_schedule_name.nil?
-        fan.setFlowFractionSchedule(add_schedule(flow_fraction_schedule_name))
+        fan.setFlowFractionSchedule(model_add_schedule(model, flow_fraction_schedule_name))
       end
       fan.setSystemAvailabilityManagerCouplingMode('Decoupled')
       unless balanced_exhaust_fraction_schedule_name.nil?
-        fan.setBalancedExhaustFractionSchedule(add_schedule(balanced_exhaust_fraction_schedule_name))
+        fan.setBalancedExhaustFractionSchedule(model_add_schedule(model, balanced_exhaust_fraction_schedule_name))
       end
       fan.addToThermalZone(zone)
       fans << fan
@@ -5691,7 +5691,7 @@ class StandardsModel < OpenStudio::Model::Model
     thermal_zones.each do |zone|
       ventilation = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
       ventilation.setName("#{zone.name} Ventilation")
-      ventilation.setSchedule(add_schedule(availability_sch_name))
+      ventilation.setSchedule(model_add_schedule(model, availability_sch_name))
       ventilation.setVentilationType(ventilation_type)
 
       ventilation.setAirChangesperHour(0)
@@ -5832,7 +5832,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Case
     ref_case = OpenStudio::Model::RefrigerationCase.new(model, defrost_sch)
     ref_case.setName("#{thermal_zone.name} #{case_type}")
-    ref_case.setAvailabilitySchedule(alwaysOnDiscreteSchedule)
+    ref_case.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     ref_case.setThermalZone(thermal_zone)
     ref_case.setRatedTotalCoolingCapacityperUnitLength(cooling_capacity_per_length)
     ref_case.setCaseLength(length)
@@ -5841,7 +5841,7 @@ class StandardsModel < OpenStudio::Model::Model
     ref_case.setOperatingCaseFanPowerperUnitLength(evaporator_fan_pwr_per_length)
     ref_case.setStandardCaseLightingPowerperUnitLength(lighting_per_length)
     ref_case.resetInstalledCaseLightingPowerperUnitLength
-    ref_case.setCaseLightingSchedule(add_schedule(lighting_sch_name))
+    ref_case.setCaseLightingSchedule(model_add_schedule(model, lighting_sch_name))
     ref_case.setHumidityatZeroAntiSweatHeaterEnergy(0)
     unless defrost_type == 'None'
       ref_case.setCaseDefrostType('Electric')
@@ -5854,11 +5854,11 @@ class StandardsModel < OpenStudio::Model::Model
     ref_case.setRatedAmbientTemperature(OpenStudio.convert(75, 'F', 'C').get)
     ref_case.setRatedLatentHeatRatio(latent_heat_ratio)
     ref_case.setRatedRuntimeFraction(runtime_fraction)
-    # TODO: enable ref_case.setLatentCaseCreditCurve(self.add_curve(latent_case_credit_curve_name))
-    ref_case.setLatentCaseCreditCurve(add_curve(latent_case_credit_curve_name))
+    # TODO: enable ref_case.setLatentCaseCreditCurve(model_add_curve(model, latent_case_credit_curve_name))
+    ref_case.setLatentCaseCreditCurve(model_add_curve(model, latent_case_credit_curve_name))
     ref_case.setCaseHeight(0)
     # TODO: setRefrigeratedCaseRestockingSchedule is not working
-    ref_case.setRefrigeratedCaseRestockingSchedule(add_schedule(restocking_sch_name))
+    ref_case.setRefrigeratedCaseRestockingSchedule(model_add_schedule(model, restocking_sch_name))
     if case_type == 'Walkin Freezer'
       ref_case.setCaseCreditFractionSchedule(case_credit_sch)
     end
@@ -6171,7 +6171,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Case
     ref_case = OpenStudio::Model::RefrigerationCase.new(model, defrost_sch)
     ref_case.setName("#{case_name}")
-    ref_case.setAvailabilitySchedule(alwaysOnDiscreteSchedule)
+    ref_case.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     ref_case.setThermalZone(thermal_zone)
     ref_case.setRatedTotalCoolingCapacityperUnitLength(cooling_capacity_per_length)
     ref_case.setCaseLength(length)
@@ -6180,7 +6180,7 @@ class StandardsModel < OpenStudio::Model::Model
     ref_case.setOperatingCaseFanPowerperUnitLength(evaporator_fan_pwr_per_length)
     ref_case.setStandardCaseLightingPowerperUnitLength(lighting_per_length)
     ref_case.resetInstalledCaseLightingPowerperUnitLength
-    ref_case.setCaseLightingSchedule(alwaysOnDiscreteSchedule)
+    ref_case.setCaseLightingSchedule(model.alwaysOnDiscreteSchedule)
     ref_case.setHumidityatZeroAntiSweatHeaterEnergy(anti_power)
     ref_case.setCaseDefrostType(defrost_type)
     ref_case.setCaseDefrostPowerperUnitLength(defrost_pwr_per_length)
@@ -6191,11 +6191,11 @@ class StandardsModel < OpenStudio::Model::Model
     ref_case.setRatedAmbientTemperature(OpenStudio.convert(75, 'F', 'C').get)
     ref_case.setRatedLatentHeatRatio(latent_heat_ratio)
     ref_case.setRatedRuntimeFraction(runtime_fraction)
-    ref_case.setLatentCaseCreditCurve(add_curve(latent_case_credit_curve_name))
+    ref_case.setLatentCaseCreditCurve(model_add_curve(model, latent_case_credit_curve_name))
     ref_case.setCaseHeight(0)
-    ref_case.setRefrigeratedCaseRestockingSchedule(add_schedule(restocking_sch_name))
+    ref_case.setRefrigeratedCaseRestockingSchedule(model_add_schedule(model, restocking_sch_name))
     ref_case.setDefrostEnergyCorrectionCurveType(defrost_correction_type)
-    ref_case.setDefrostEnergyCorrectionCurve(add_curve(defrost_correction_curve_name))
+    ref_case.setDefrostEnergyCorrectionCurve(model_add_curve(model, defrost_correction_curve_name))
 
     length_ft = OpenStudio.convert(length, 'm', 'ft').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{length_ft.round} ft #{case_type} called #{case_name} to #{thermal_zone.name}.") 
@@ -6328,23 +6328,23 @@ class StandardsModel < OpenStudio::Model::Model
     # Walk-In
     ref_walkin = OpenStudio::Model::RefrigerationWalkIn.new(model, defrost_sch)
     ref_walkin.setName("#{walkin_name}")
-    ref_walkin.setAvailabilitySchedule(alwaysOnDiscreteSchedule)
+    ref_walkin.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     ref_walkin.setRatedCoilCoolingCapacity(cooling_capacity)
     ref_walkin.setOperatingTemperature(operating_temp)
     ref_walkin.setRatedCoolingSourceTemperature(source_temp)
     ref_walkin.setRatedTotalHeatingPower(0)
-    ref_walkin.setHeatingPowerSchedule(add_schedule(always_off_name))
+    ref_walkin.setHeatingPowerSchedule(model_add_schedule(model, always_off_name))
     ref_walkin.setRatedCoolingCoilFanPower(fan_power)
     ref_walkin.setRatedCirculationFanPower(0)
     ref_walkin.setRatedTotalLightingPower(lighting_power)
-    ref_walkin.setLightingSchedule(alwaysOnDiscreteSchedule)
+    ref_walkin.setLightingSchedule(model.alwaysOnDiscreteSchedule)
     ref_walkin.setDefrostType(defrost_type)
     ref_walkin.setDefrostControlType(defrost_control_type)
     ref_walkin.setDefrostSchedule(defrost_sch)
     ref_walkin.setDefrostDripDownSchedule(defrost_dripdown_sch)
     ref_walkin.setDefrostPower(defrost_power)
     ref_walkin.setTemperatureTerminationDefrostFractiontoIce(0.7)
-    ref_walkin.setRestockingSchedule(add_schedule(always_off_name))
+    ref_walkin.setRestockingSchedule(model_add_schedule(model, always_off_name))
     ref_walkin.setInsulatedFloorSurfaceArea(insulated_floor_area)
     ref_walkin.setInsulatedFloorUValue(insulated_floor_U)
     ref_walkin.setZoneBoundaryThermalZone(thermal_zone)
@@ -6356,7 +6356,7 @@ class StandardsModel < OpenStudio::Model::Model
     ref_walkin.setZoneBoundaryAreaofStockingDoorsFacingZone(3.3)
     ref_walkin.setZoneBoundaryHeightofStockingDoorsFacingZone(2.1)
     ref_walkin.setZoneBoundaryStockingDoorUValueFacingZone(stocking_door_U)
-    ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(add_schedule(walkin_door_sch))
+    ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(model_add_schedule(model, walkin_door_sch))
 
     insulated_floor_area_ft2 = OpenStudio.convert(insulated_floor_area, 'm^2', 'ft^2').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{insulated_floor_area_ft2.round} ft2 #{walkin_type} called #{walkin_name} to #{thermal_zone.name}.")
@@ -6397,19 +6397,19 @@ class StandardsModel < OpenStudio::Model::Model
       case template
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         if compressor_type == 'Low Temp'
-          compressor.setRefrigerationCompressorPowerCurve(add_curve('Old_Low_Temp_Comp_Pwr_Curve'))
-          compressor.setRefrigerationCompressorCapacityCurve(add_curve('Old_Low_Temp_Comp_Cap_Curve'))
+          compressor.setRefrigerationCompressorPowerCurve(model_add_curve(model, 'Old_Low_Temp_Comp_Pwr_Curve'))
+          compressor.setRefrigerationCompressorCapacityCurve(model_add_curve(model, 'Old_Low_Temp_Comp_Cap_Curve'))
         else
-          compressor.setRefrigerationCompressorPowerCurve(add_curve('Old_Med_Temp_Comp_Pwr_Curve'))
-          compressor.setRefrigerationCompressorCapacityCurve(add_curve('Old_Med_Temp_Comp_Cap_Curve'))
+          compressor.setRefrigerationCompressorPowerCurve(model_add_curve(model, 'Old_Med_Temp_Comp_Pwr_Curve'))
+          compressor.setRefrigerationCompressorCapacityCurve(model_add_curve(model, 'Old_Med_Temp_Comp_Cap_Curve'))
         end
       when '90.1-2013'
         if compressor_type == 'Low Temp'
-          compressor.setRefrigerationCompressorPowerCurve(add_curve('New_Low_Temp_Comp_Pwr_Curve'))
-          compressor.setRefrigerationCompressorCapacityCurve(add_curve('New_Low_Temp_Comp_Cap_Curve'))
+          compressor.setRefrigerationCompressorPowerCurve(model_add_curve(model, 'New_Low_Temp_Comp_Pwr_Curve'))
+          compressor.setRefrigerationCompressorCapacityCurve(model_add_curve(model, 'New_Low_Temp_Comp_Cap_Curve'))
         else
-          compressor.setRefrigerationCompressorPowerCurve(add_curve('New_Med_Temp_Comp_Pwr_Curve'))
-          compressor.setRefrigerationCompressorCapacityCurve(add_curve('New_Med_Temp_Comp_Cap_Curve'))
+          compressor.setRefrigerationCompressorPowerCurve(model_add_curve(model, 'New_Med_Temp_Comp_Pwr_Curve'))
+          compressor.setRefrigerationCompressorCapacityCurve(model_add_curve(model, 'New_Med_Temp_Comp_Cap_Curve'))
         end
       end
       ref_sys.addCompressor(compressor)

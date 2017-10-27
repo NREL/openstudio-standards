@@ -1,6 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include PrototypeFan
 
   # Sets the fan pressure rise based on the Prototype buildings inputs

@@ -10,7 +10,7 @@ class NECB_2011_Model < StandardsModel
     # in the hvac standards data set.
     search_criteria = {}
     search_criteria['template'] = instvartemplate
-    cooling_type = condenserType
+    cooling_type = coil_cooling_dx_multi_speed.condenserType
     search_criteria['cooling_type'] = cooling_type
 
     # TODO: Standards - add split system vs single package to model
@@ -21,9 +21,9 @@ class NECB_2011_Model < StandardsModel
     heat_pump = false
     heating_type = nil
     containing_comp = nil
-    if airLoopHVAC.empty?
-      if containingHVACComponent.is_initialized
-        containing_comp = containingHVACComponent.get
+    if coil_cooling_dx_multi_speed.airLoopHVAC.empty?
+      if coil_cooling_dx_multi_speed.containingHVACComponent.is_initialized
+        containing_comp = coil_cooling_dx_multi_speed.containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
           htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.heatingCoil
           if htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized
@@ -33,8 +33,8 @@ class NECB_2011_Model < StandardsModel
             heating_type = 'All Other'
           end
         end # TODO: Add other unitary systems
-      elsif containingZoneHVACComponent.is_initialized
-        containing_comp = containingZoneHVACComponent.get
+      elsif coil_cooling_dx_multi_speed.containingZoneHVACComponent.is_initialized
+        containing_comp = coil_cooling_dx_multi_speed.containingZoneHVACComponent.get
         if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
           sub_category = 'PTAC'
           htg_coil = containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.get.heatingCoil
@@ -59,8 +59,8 @@ class NECB_2011_Model < StandardsModel
     clg_stages = stages
     if clg_stages.last.grossRatedTotalCoolingCapacity.is_initialized
       capacity_w = clg_stages.last.grossRatedTotalCoolingCapacity.get
-    elsif autosizedSpeed4GrossRatedTotalCoolingCapacity.is_initialized
-      capacity_w = autosizedSpeed4GrossRatedTotalCoolingCapacity.get
+    elsif coil_cooling_dx_multi_speed.autosizedSpeed4GrossRatedTotalCoolingCapacity.is_initialized
+      capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed4GrossRatedTotalCoolingCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
@@ -71,8 +71,8 @@ class NECB_2011_Model < StandardsModel
     flow_rate4 = nil
     if clg_stages.last.ratedAirFlowRate.is_initialized
       flow_rate4 = clg_stages.last.ratedAirFlowRate.get
-    elsif autosizedSpeed4RatedAirFlowRate.is_initialized
-      flow_rate4 = autosizedSpeed4RatedAirFlowRate.get
+    elsif coil_cooling_dx_multi_speed.autosizedSpeed4RatedAirFlowRate.is_initialized
+      flow_rate4 = coil_cooling_dx_multi_speed.autosizedSpeed4RatedAirFlowRate.get
     end
 
     # Set number of stages
@@ -228,7 +228,7 @@ class NECB_2011_Model < StandardsModel
     end
 
     sql_db_vars_map[new_comp_name] = name.to_s
-    setName(new_comp_name)
+    coil_cooling_dx_multi_speed.setName(new_comp_name)
 
     # Set the efficiency values
 

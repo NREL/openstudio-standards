@@ -1,5 +1,5 @@
 # open the class to add methods to add elevators
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
 
   # Add elevators to the model
   #

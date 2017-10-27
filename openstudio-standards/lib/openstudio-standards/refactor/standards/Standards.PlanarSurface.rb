@@ -1,4 +1,4 @@
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # If construction properties can be found
   # based on the template,
   # the standards intended surface type,
@@ -120,7 +120,7 @@ class StandardsModel < OpenStudio::Model::Model
 
     # Assign the new construction to the surface
     if new_construction
-      setConstruction(new_construction)
+      planar_surface.setConstruction(new_construction)
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.PlanarSurface', "Set the construction for #{planar_surface.name} to #{new_construction.name}.")
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "Could not generate a standard construction for #{planar_surface.name}.")

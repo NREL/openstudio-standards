@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Set the initial minimum damper position based on OA
   # rate of the space and the template.
   # Zones with low OA per area get lower initial guesses.
@@ -13,7 +13,7 @@ class StandardsModel < OpenStudio::Model::Model
     # Minimum damper position is based on prototype
     # assumptions, which are not clearly documented.
     min_damper_position = nil
-    vav_name = name.get
+    vav_name = air_terminal_single_duct_vav_reheat.name.get
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       min_damper_position = if building_type == 'Outpatient' && vav_name.include?('Floor 1')

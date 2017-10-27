@@ -7,15 +7,15 @@ module PrototypeFan
   # motor type, and a 10% safety factor on brake horsepower.
   #
   # @return [Bool] true if successful, false if not
-  def prototype_fan_apply_prototype_fan_efficiency(prototype_fan, template)
+  def prototype_fan_apply_prototype_fan_efficiency(fan, template)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
-    if prototype_fan.maximumFlowRate.is_initialized
-      maximum_flow_rate_m3_per_s = prototype_fan.maximumFlowRate.get
-    elsif prototype_fan.autosizedMaximumFlowRate.is_initialized
-      maximum_flow_rate_m3_per_s = prototype_fan.autosizedMaximumFlowRate.get
+    if fan.maximumFlowRate.is_initialized
+      maximum_flow_rate_m3_per_s = fan.maximumFlowRate.get
+    elsif fan.autosizedMaximumFlowRate.is_initialized
+      maximum_flow_rate_m3_per_s = fan.autosizedMaximumFlowRate.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{prototype_fan.name} max flow rate is not hard sized, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{fan.name} max flow rate is not hard sized, cannot apply efficiency standard.")
       return false
     end
 
@@ -23,11 +23,11 @@ module PrototypeFan
     maximum_flow_rate_cfm = OpenStudio.convert(maximum_flow_rate_m3_per_s, 'm^3/s', 'cfm').get
 
     # Get the pressure rise from the fan
-    pressure_rise_pa = prototype_fan.pressureRise
+    pressure_rise_pa = fan.pressureRise
     pressure_rise_in_h2o = OpenStudio.convert(pressure_rise_pa, 'Pa', 'inH_{2}O').get
 
     # Get the default impeller efficiency
-    fan_impeller_eff = baseline_impeller_efficiency(template)
+    fan_impeller_eff = fan_baseline_impeller_efficiency(fan)
 
     # Calculate the Brake Horsepower
     brake_hp = (pressure_rise_in_h2o * maximum_flow_rate_cfm) / (fan_impeller_eff * 6356)
@@ -41,27 +41,27 @@ module PrototypeFan
     # Minimum motor size for efficiency lookup
     # is 1 HP unless the motor serves an exhaust fan,
     # a powered VAV terminal, or a fan coil unit.
-    unless small_fan?
+    unless fan_small_fan?(fan)
       if allowed_hp < 1.0
         allowed_hp = 1.01
       end
     end
 
     # Find the motor efficiency
-    motor_eff, nominal_hp = standard_minimum_motor_efficiency_and_size(template, allowed_hp)
+    motor_eff, nominal_hp = fan_standard_minimum_motor_efficiency_and_size(fan, allowed_hp)
 
     # Calculate the total fan efficiency
     total_fan_eff = fan_impeller_eff * motor_eff
 
     # Set the total fan efficiency and the motor efficiency
-    if to_FanZoneExhaust.is_initialized
-      prototype_fan.setFanEfficiency(total_fan_eff)
+    if fan.to_FanZoneExhaust.is_initialized
+      fan.setFanEfficiency(total_fan_eff)
     else
-      prototype_fan.setFanEfficiency(total_fan_eff)
-      prototype_fan.setMotorEfficiency(motor_eff)
+      fan.setFanEfficiency(total_fan_eff)
+      fan.setMotorEfficiency(motor_eff)
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{prototype_fan.name}: allowed_hp = #{allowed_hp.round(2)}HP; motor eff = #{(motor_eff * 100).round(2)}%; total fan eff = #{(total_fan_eff * 100).round}% based on #{maximum_flow_rate_cfm.round} cfm.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: allowed_hp = #{allowed_hp.round(2)}HP; motor eff = #{(motor_eff * 100).round(2)}%; total fan eff = #{(total_fan_eff * 100).round}% based on #{maximum_flow_rate_cfm.round} cfm.")
 
     return true
   end

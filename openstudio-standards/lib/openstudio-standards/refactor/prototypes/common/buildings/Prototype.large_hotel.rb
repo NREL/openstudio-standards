@@ -102,7 +102,7 @@ module LargeHotel
   def self.define_space_multiplier
     building_type = 'LargeHotel'
     # This map define the multipliers for spaces with multipliers not equals to 1
-    space_multiplier_map = JSON.parse(File.read(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json")))[building_type]['space_multiplier_map']
+    space_multiplier_map = JSON.parse(File.read(File.join(File.dirname(__FILE__),"../../../../../../data/geometry/archetypes/#{building_type}.json")))[building_type]['space_multiplier_map']
     return space_multiplier_map
   end
 

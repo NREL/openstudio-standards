@@ -1,6 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   include PrototypeFan
 
   # Sets the fan pressure rise based on the Prototype buildings inputs
@@ -14,7 +14,7 @@ class StandardsModel < OpenStudio::Model::Model
       return true
     end
 
-    return true if name.to_s.include?('UnitHeater Fan')
+    return true if fan_constant_volume.name.to_s.include?('UnitHeater Fan')
 
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil

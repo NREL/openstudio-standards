@@ -10,7 +10,7 @@ class DOERefPre1980_Model < A90_1_Model
   # buildings, fix this inconsistency.
   def model_apply_infiltration_standard(model)
     # Set the infiltration rate at each space
-    getSpaces.sort.each do |space|
+    model.getSpaces.sort.each do |space|
       space_apply_infiltration_rate(space)
     end
 

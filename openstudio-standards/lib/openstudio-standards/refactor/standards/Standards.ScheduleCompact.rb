@@ -1,5 +1,5 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Returns the min and max value for this schedule.
   #
   # @author Andrew Parker, NREL.

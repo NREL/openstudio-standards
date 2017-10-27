@@ -1,11 +1,11 @@
 
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
   # Returns standards data for selected space type and template
   #
   # @return [hash] hash of internal loads for different load types
   def space_type_get_standards_data(space_type)
     standards_building_type = if space_type.standardsBuildingType.is_initialized
-                               space_type. standardsBuildingType.get
+                               space_type.standardsBuildingType.get
                               end
     standards_space_type = if space_type.standardsSpaceType.is_initialized
                              space_type.standardsSpaceType.get
@@ -477,13 +477,13 @@ class StandardsModel < OpenStudio::Model::Model
     if set_people
       occupancy_sch = space_type_properties['occupancy_schedule']
       unless occupancy_sch.nil?
-        default_sch_set.setNumberofPeopleSchedule(space_type.model.add_schedule(occupancy_sch))
+        default_sch_set.setNumberofPeopleSchedule(model_add_schedule(space_type.model, occupancy_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set occupancy schedule to #{occupancy_sch}.")
       end
 
       occupancy_activity_sch = space_type_properties['occupancy_activity_schedule']
       unless occupancy_activity_sch.nil?
-        default_sch_set.setPeopleActivityLevelSchedule(space_type.model.add_schedule(occupancy_activity_sch))
+        default_sch_set.setPeopleActivityLevelSchedule(model_add_schedule(space_type.model, occupancy_activity_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set occupant activity schedule to #{occupancy_activity_sch}.")
       end
 
@@ -494,7 +494,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       lighting_sch = space_type_properties['lighting_schedule']
       unless lighting_sch.nil?
-        default_sch_set.setLightingSchedule(space_type.model.add_schedule(lighting_sch))
+        default_sch_set.setLightingSchedule(model_add_schedule(space_type.model, lighting_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting schedule to #{lighting_sch}.")
       end
 
@@ -505,7 +505,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       elec_equip_sch = space_type_properties['electric_equipment_schedule']
       unless elec_equip_sch.nil?
-        default_sch_set.setElectricEquipmentSchedule(space_type.model.add_schedule(elec_equip_sch))
+        default_sch_set.setElectricEquipmentSchedule(model_add_schedule(space_type.model, elec_equip_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric equipment schedule to #{elec_equip_sch}.")
       end
 
@@ -516,7 +516,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       gas_equip_sch = space_type_properties['gas_equipment_schedule']
       unless gas_equip_sch.nil?
-        default_sch_set.setGasEquipmentSchedule(space_type.model.add_schedule(gas_equip_sch))
+        default_sch_set.setGasEquipmentSchedule(model_add_schedule(space_type.model, gas_equip_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas equipment schedule to #{gas_equip_sch}.")
       end
 
@@ -527,7 +527,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       infiltration_sch = space_type_properties['infiltration_schedule']
       unless infiltration_sch.nil?
-        default_sch_set.setInfiltrationSchedule(space_type.model.add_schedule(infiltration_sch))
+        default_sch_set.setInfiltrationSchedule(model_add_schedule(space_type.model, infiltration_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration schedule to #{infiltration_sch}.")
       end
 
@@ -541,13 +541,13 @@ class StandardsModel < OpenStudio::Model::Model
 
       heating_setpoint_sch = space_type_properties['heating_setpoint_schedule']
       unless heating_setpoint_sch.nil?
-        thermostat.setHeatingSetpointTemperatureSchedule(space_type.model.add_schedule(heating_setpoint_sch))
+        thermostat.setHeatingSetpointTemperatureSchedule(model_add_schedule(space_type.model, heating_setpoint_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set heating setpoint schedule to #{heating_setpoint_sch}.")
       end
 
       cooling_setpoint_sch = space_type_properties['cooling_setpoint_schedule']
       unless cooling_setpoint_sch.nil?
-        thermostat.setCoolingSetpointTemperatureSchedule(space_type.model.add_schedule(cooling_setpoint_sch))
+        thermostat.setCoolingSetpointTemperatureSchedule(model_add_schedule(space_type.model, cooling_setpoint_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set cooling setpoint schedule to #{cooling_setpoint_sch}.")
       end
 

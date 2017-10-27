@@ -1,5 +1,5 @@
 # open the class to add methods to add exterior lighting
-class StandardsModel < OpenStudio::Model::Model
+class StandardsModel
 
   # Add exterior lighting to the model
   #
@@ -19,7 +19,7 @@ class StandardsModel < OpenStudio::Model::Model
     }
     
     # load exterior_lighting_properties
-    exterior_lighting_properties = model.find_object($os_standards['exterior_lighting'], search_criteria)
+    exterior_lighting_properties = model_find_object(model, $os_standards['exterior_lighting'], search_criteria)
 
     # make sure lighting properties were found
     if exterior_lighting_properties.nil?
@@ -332,7 +332,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       # load illuminated_parking_area_properties
       search_criteria = {'building_type' => building_type}
-      illuminated_parking_area_lookup = model.find_object($os_standards['parking'], search_criteria)
+      illuminated_parking_area_lookup = model_find_object(model, $os_standards['parking'], search_criteria)
       if not illuminated_parking_area_lookup["building_area_per_spot"].nil?
         num_spots += floor_area_ip / illuminated_parking_area_lookup["building_area_per_spot"].to_f
       elsif not illuminated_parking_area_lookup["units_per_spot"].nil?
@@ -348,7 +348,7 @@ class StandardsModel < OpenStudio::Model::Model
 
       # load illuninated_parking_area_properties
       search_criteria = {'building_type' => building_type}
-      exterior_lighting_assumptions_lookup = model.find_object($os_standards['entryways'], search_criteria)
+      exterior_lighting_assumptions_lookup = model_find_object(model, $os_standards['entryways'], search_criteria)
 
       # lookup doors
       if use_model_for_entries_and_canopies
