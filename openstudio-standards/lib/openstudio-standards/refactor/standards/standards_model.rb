@@ -4,8 +4,6 @@
 # by a child class, the implementation in the child class is used.
 # @abstract
 class StandardsModel < OpenStudio::Model::Model
-  @@prototype_folder =  "#{File.dirname(__FILE__)}/../../prototypes"
-  @@standards_folder =  "#{File.dirname(__FILE__)}/../../standards"
   @@data_folder =       "#{File.dirname(__FILE__)}/../../../../data"
 
   # Require the files containing the modules first
@@ -18,6 +16,7 @@ class StandardsModel < OpenStudio::Model::Model
   require_relative 'ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower'
   require_relative 'necb/necb_2011/necb_2011.Fan'
   require_relative 'ashrae_90_1/ashrae_90_1.rb'
+  require_relative 'Standards.Model'
 
   # Require all the standards files below this dynamically for now
   # TODO refactor: hard code requires later

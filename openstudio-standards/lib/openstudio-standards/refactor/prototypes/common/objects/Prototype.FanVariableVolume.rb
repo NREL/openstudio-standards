@@ -1,27 +1,27 @@
 
 # open the class to add methods to return sizing values
-class OpenStudio::Model::FanVariableVolume
+class StandardsModel < OpenStudio::Model::Model
   include PrototypeFan
 
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def apply_prototype_fan_pressure_rise(building_type, template, climate_zone)
+  def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume, building_type, template, climate_zone)
     # NECB
     if template == 'NECB 2011'
       pressure_rise_pa = 1458.33 # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
-      setPressureRise(pressure_rise_pa)
+      fan_variable_volume.setPressureRise(pressure_rise_pa)
       return true
     end
 
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
-    if maximumFlowRate.is_initialized
-      maximum_flow_rate_m3_per_s = maximumFlowRate.get
-    elsif autosizedMaximumFlowRate.is_initialized
-      maximum_flow_rate_m3_per_s = autosizedMaximumFlowRate.get
+    if fan_variable_volume.maximumFlowRate.is_initialized
+      maximum_flow_rate_m3_per_s = fan_variable_volume.maximumFlowRate.get
+    elsif fan_variable_volume.autosizedMaximumFlowRate.is_initialized
+      maximum_flow_rate_m3_per_s = fan_variable_volume.autosizedMaximumFlowRate.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.FanVariableVolume', "For #{name} max flow rate is not available, cannot apply prototype assumptions.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.FanVariableVolume', "For #{fan_variable_volume.name} max flow rate is not available, cannot apply prototype assumptions.")
       return false
     end
 
@@ -33,8 +33,8 @@ class OpenStudio::Model::FanVariableVolume
     pressure_rise_in_h2o = 0.0
 
     # If the fan lives inside of a zone hvac equipment
-    if containingZoneHVACComponent.is_initialized
-      zone_hvac = self.ZoneHVACComponent.get
+    if fan_variable_volume.containingZoneHVACComponent.is_initialized
+      zone_hvac = fan_variable_volume.ZoneHVACComponent.get
       if zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
         pressure_rise_in_h2o = 1.33
       elsif zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
@@ -45,7 +45,7 @@ class OpenStudio::Model::FanVariableVolume
         return false
       end
     # If the fan lives on an airloop
-    elsif airLoopHVAC.is_initialized
+    elsif fan_variable_volume.airLoopHVAC.is_initialized
 
       # TODO: Inconsistency - Primary School uses CAV pressure rises
       # even thought it has a VAV system.  CAV system is listed in document,
@@ -84,9 +84,9 @@ class OpenStudio::Model::FanVariableVolume
 
     # Set the fan pressure rise
     pressure_rise_pa = OpenStudio.convert(pressure_rise_in_h2o, 'inH_{2}O', 'Pa').get
-    setPressureRise(pressure_rise_pa)
+    fan_variable_volume.setPressureRise(pressure_rise_pa)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.FanVariableVolume', "For Prototype: #{name}: #{maximum_flow_rate_cfm.round}cfm; Pressure Rise = #{pressure_rise_in_h2o}in w.c.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.FanVariableVolume', "For Prototype: #{fan_variable_volume.name}: #{maximum_flow_rate_cfm.round}cfm; Pressure Rise = #{pressure_rise_in_h2o}in w.c.")
 
     return true
   end

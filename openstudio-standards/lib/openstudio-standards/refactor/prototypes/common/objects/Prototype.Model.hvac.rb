@@ -1,22 +1,22 @@
 
 # open the class to add methods to size all HVAC equipment
-class OpenStudio::Model::Model
-  def add_hvac(building_type, template, climate_zone, prototype_input, epw_file)
+class StandardsModel < OpenStudio::Model::Model
+  def model_add_hvac(model, building_type, template, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
     case template
     when 'NECB 2011'
       boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
-      BTAP::Compliance::NECB2011.necb_autozone_and_autosystem(self, runner = nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype, building_type)
+      BTAP::Compliance::NECB2011.necb_autozone_and_autosystem(model, runner = nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype, building_type)
     else
       # Get the list of HVAC systems, as defined
       # for each building in the Prototype.building_name files.
-      system_to_space_map = define_hvac_system_map(building_type, template, climate_zone)
+      system_to_space_map = model_define_hvac_system_map(model, building_type, template, climate_zone)
 
       # Add each HVAC system
       system_to_space_map.each do |system|
-        thermal_zones = get_zones_from_spaces_on_system(system)
+        thermal_zones = model_get_zones_from_spaces_on_system(model, system)
 
-        return_plenum = get_return_plenum_from_system(system)
+        return_plenum = model_get_return_plenum_from_system(model, system)
 
         # Add the HVAC systems
         case system['type']
@@ -25,17 +25,17 @@ class OpenStudio::Model::Model
           # Retrieve the existing hot water loop
           # or add a new one if necessary.
           hot_water_loop = nil
-          hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
-                             getPlantLoopByName('Hot Water Loop').get
+          hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
+                             model.getPlantLoopByName('Hot Water Loop').get
                            else
-                             add_hw_loop('NaturalGas', building_type)
+                             model_add_hw_loop(model, 'NaturalGas', building_type)
                            end
 
           # Retrieve the existing chilled water loop
           # or add a new one if necessary.
           chilled_water_loop = nil
-          if getPlantLoopByName('Chilled Water Loop').is_initialized
-            chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
+          if model.getPlantLoopByName('Chilled Water Loop').is_initialized
+            chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
           else
             condenser_water_loop = nil
             number_cooling_towers = 1
@@ -48,7 +48,7 @@ class OpenStudio::Model::Model
               end
             end
             if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-              condenser_water_loop = add_cw_loop(template,
+              condenser_water_loop = model_add_cw_loop(model, template,
                                                  'Open Cooling Tower',
                                                  'Centrifugal',
                                                  'Fan Cycling',
@@ -57,7 +57,7 @@ class OpenStudio::Model::Model
                                                  building_type)
             end
 
-            chilled_water_loop = add_chw_loop(template,
+            chilled_water_loop = model_add_chw_loop(model, template,
                                               prototype_input['chw_pumping_type'],
                                               prototype_input['chiller_cooling_type'],
                                               prototype_input['chiller_condenser_type'],
@@ -68,7 +68,7 @@ class OpenStudio::Model::Model
           end
 
           # Add the VAV
-          add_vav_reheat(template,
+          model_add_vav_reheat(model, template,
                          system['name'],
                          hot_water_loop,
                          chilled_water_loop,
@@ -87,22 +87,22 @@ class OpenStudio::Model::Model
           # Retrieve the existing hot water loop
           # or add a new one if necessary.
           hot_water_loop = nil
-          hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
-                             getPlantLoopByName('Hot Water Loop').get
+          hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
+                             model.getPlantLoopByName('Hot Water Loop').get
                            else
-                             add_hw_loop('NaturalGas', building_type)
+                             model_add_hw_loop(model, 'NaturalGas', building_type)
                            end
 
           chilled_water_loop = nil
-          if getPlantLoopByName('Chilled Water Loop').is_initialized
-            chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
+          if model.getPlantLoopByName('Chilled Water Loop').is_initialized
+            chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
           elsif building_type == 'Hospital'
             condenser_water_loop = nil
             if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-              condenser_water_loop = add_cw_loop
+              condenser_water_loop = model_add_cw_loop(model) 
             end
 
-            chilled_water_loop = add_chw_loop(template,
+            chilled_water_loop = model_add_chw_loop(model, template,
                                               prototype_input['chw_pumping_type'],
                                               prototype_input['chiller_cooling_type'],
                                               prototype_input['chiller_condenser_type'],
@@ -112,7 +112,7 @@ class OpenStudio::Model::Model
           end
 
           # Add the CAV
-          add_cav(template,
+          model_add_cav(model, template,
                   system['name'],
                   hot_water_loop,
                   thermal_zones,
@@ -154,10 +154,10 @@ class OpenStudio::Model::Model
           # Special logic to make a heat pump loop if necessary
           heat_pump_loop = nil
           if prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
-            heat_pump_loop = add_hp_loop(building_type)
+            heat_pump_loop = model_add_hp_loop(model, building_type)
           end
 
-          add_psz_ac(template,
+          model_add_psz_ac(model, template,
                      system['name'],
                      heat_pump_loop, # Typically nil unless water source hp
                      heat_pump_loop, # Typically nil unless water source hp
@@ -176,15 +176,15 @@ class OpenStudio::Model::Model
           # Retrieve the existing hot water loop
           # or add a new one if necessary.
           hot_water_loop = nil
-          hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
-                             getPlantLoopByName('Hot Water Loop').get
+          hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
+                             model.getPlantLoopByName('Hot Water Loop').get
                            elsif building_type == 'MediumOffice'
                              nil
                            else
-                             add_hw_loop('NaturalGas', building_type)
+                             model_add_hw_loop(model, 'NaturalGas', building_type)
                            end
 
-          add_pvav(template,
+          model_add_pvav(model, template,
                    system['name'],
                    thermal_zones,
                    prototype_input['vav_operation_schedule'],
@@ -200,21 +200,21 @@ class OpenStudio::Model::Model
           # Retrieve the existing hot water loop
           # or add a new one if necessary.
           hot_water_loop = nil
-          hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
-                             getPlantLoopByName('Hot Water Loop').get
+          hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
+                             model.getPlantLoopByName('Hot Water Loop').get
                            else
-                             add_hw_loop('NaturalGas', building_type)
+                             model_add_hw_loop(model, 'NaturalGas', building_type)
                            end
 
           # Retrieve the existing chilled water loop
           # or add a new one if necessary.
           chilled_water_loop = nil
-          if getPlantLoopByName('Chilled Water Loop').is_initialized
-            chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
+          if model.getPlantLoopByName('Chilled Water Loop').is_initialized
+            chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
           else
             condenser_water_loop = nil
             if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-              condenser_water_loop = add_cw_loop(template,
+              condenser_water_loop = model_add_cw_loop(model, template,
                                                  'Open Cooling Tower',
                                                  'Centrifugal',
                                                  'Fan Cycling',
@@ -223,7 +223,7 @@ class OpenStudio::Model::Model
                                                  building_type)
             end
 
-            chilled_water_loop = add_chw_loop(template,
+            chilled_water_loop = model_add_chw_loop(model, template,
                                               prototype_input['chw_pumping_type'],
                                               prototype_input['chiller_cooling_type'],
                                               prototype_input['chiller_condenser_type'],
@@ -232,7 +232,7 @@ class OpenStudio::Model::Model
                                               condenser_water_loop)
           end
 
-          add_doas(template,
+          model_add_doas(model, template,
                    system['name'],
                    hot_water_loop,
                    chilled_water_loop,
@@ -243,7 +243,7 @@ class OpenStudio::Model::Model
                    prototype_input['doas_economizer_control_type'],
                    building_type)
 
-          add_four_pipe_fan_coil(template,
+          model_add_four_pipe_fan_coil(model, template,
                                   hot_water_loop,
                                   chilled_water_loop,
                                   thermal_zones)
@@ -253,22 +253,22 @@ class OpenStudio::Model::Model
           # Retrieve the existing hot water loop
           # or add a new one if necessary.
           hot_water_loop = nil
-          hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
-                             getPlantLoopByName('Hot Water Loop').get
+          hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
+                             model.getPlantLoopByName('Hot Water Loop').get
                            else
-                             add_hw_loop('NaturalGas', building_type)
+                             model_add_hw_loop(model, 'NaturalGas', building_type)
                            end
 
           # Retrieve the existing heat pump loop
           # or add a new one if necessary.
           heat_pump_loop = nil
-          heat_pump_loop = if getPlantLoopByName('Heat Pump Loop').is_initialized
-                             getPlantLoopByName('Heat Pump Loop').get
+          heat_pump_loop = if model.getPlantLoopByName('Heat Pump Loop').is_initialized
+                             model.getPlantLoopByName('Heat Pump Loop').get
                            else
-                             add_hp_loop(building_type)
+                             model_add_hp_loop(model, building_type)
                            end
 
-          add_data_center_hvac(template,
+          model_add_data_center_hvac(model, template,
                                nil,
                                hot_water_loop,
                                heat_pump_loop,
@@ -279,7 +279,7 @@ class OpenStudio::Model::Model
 
         when 'SAC'
 
-          add_split_ac(template,
+          model_add_split_ac(model, template,
                        nil,
                        thermal_zones,
                        prototype_input['sac_operation_schedule'],
@@ -293,7 +293,7 @@ class OpenStudio::Model::Model
 
         when 'UnitHeater'
 
-          add_unitheater(template,
+          model_add_unitheater(model, template,
                          nil,
                          thermal_zones,
                          prototype_input['unitheater_operation_schedule'],
@@ -305,7 +305,7 @@ class OpenStudio::Model::Model
 
         when 'PTAC'
 
-          add_ptac(template,
+          model_add_ptac(model, template,
                    nil,
                    nil,
                    thermal_zones,
@@ -316,7 +316,7 @@ class OpenStudio::Model::Model
 
         when 'Exhaust Fan'
 
-          add_exhaust_fan(system['availability_sch_name'],
+          model_add_exhaust_fan(model, system['availability_sch_name'],
                           system['flow_rate'],
                           system['flow_fraction_schedule_name'],
                           system['balanced_exhaust_fraction_schedule_name'],
@@ -324,14 +324,14 @@ class OpenStudio::Model::Model
 
         when 'Zone Ventilation'
 
-          add_zone_ventilation(system['availability_sch_name'],
+          model_add_zone_ventilation(model, system['availability_sch_name'],
                                system['flow_rate'],
                                system['ventilation_type'],
                                thermal_zones)
 
         when 'Refrigeration'
 
-          add_refrigeration(template,
+          model_add_refrigeration(model, template,
                             system['case_type'],
                             system['cooling_capacity_per_length'],
                             system['length'],
@@ -349,7 +349,7 @@ class OpenStudio::Model::Model
         # When multiple cases and walk-ins asssigned to a system        
 	    	when 'Refrigeration_system'
 
-          add_refrigeration_system(template,
+          model_add_refrigeration_system(model, template,
                                    system['compressor_type'],
                                    system['sys_name'],
                                    system['cases'],
@@ -372,11 +372,11 @@ class OpenStudio::Model::Model
 
   private
 
-  def get_zones_from_spaces_on_system(system)
+  def model_get_zones_from_spaces_on_system(model, system)
     # Find all zones associated with these spaces
     thermal_zones = []
     system['space_names'].each do |space_name|
-      space = getSpaceByName(space_name)
+      space = model.getSpaceByName(space_name)
       if space.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
         next
@@ -393,7 +393,7 @@ class OpenStudio::Model::Model
     return thermal_zones
   end
 
-  def get_return_plenum_from_system(system)
+  def model_get_return_plenum_from_system(model, system)
     # Find the zone associated with the return plenum space name
     return_plenum = nil
 
@@ -401,7 +401,7 @@ class OpenStudio::Model::Model
     return return_plenum if system['return_plenum'].nil?
 
     # Get the space
-    space = getSpaceByName(system['return_plenum'])
+    space = model.getSpaceByName(system['return_plenum'])
     if space.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{system['return_plenum']} was found in the model")
       return return_plenum

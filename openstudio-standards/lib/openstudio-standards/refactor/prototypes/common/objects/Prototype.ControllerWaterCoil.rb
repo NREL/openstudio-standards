@@ -1,6 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class OpenStudio::Model::ControllerWaterCoil
+class StandardsModel < OpenStudio::Model::Model
   # Sets the convergence tolerance to 0.0001 deltaC
   # for all hot water coils.
   #
@@ -8,11 +8,11 @@ class OpenStudio::Model::ControllerWaterCoil
   # @todo Figure out what the reason for this is,
   # because it seems like a workaround for an E+ bug
   # that was probably addressed long ago.
-  def set_convergence_limits
+  def controller_water_coil_set_convergence_limits(controller_water_coil)
     controller_action = action
     if controller_action.is_initialized
       if controller_action.get == 'Normal'
-        setControllerConvergenceTolerance(0.0001)
+        controller_water_coil.setControllerConvergenceTolerance(0.0001)
       end
     end
 

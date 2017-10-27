@@ -1,8 +1,8 @@
 require 'json'
 # Extend the class to add Medium Office specific stuff
-class OpenStudio::Model::Model
-  def define_space_type_map(building_type, template, climate_zone)
-    space_type_map_json = File.absolute_path(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json"))
+class StandardsModel < OpenStudio::Model::Model
+  def model_define_space_type_map(model, building_type, template, climate_zone)
+    space_type_map_json = File.absolute_path(File.join(File.dirname(__FILE__),"../../../../../../data/geometry/archetypes/#{building_type}.json"))
     begin
       space_type_map = JSON.parse(File.read(space_type_map_json))
     rescue JSON::ParserError => e
@@ -32,7 +32,7 @@ class OpenStudio::Model::Model
     end
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def model_define_hvac_system_map(model, building_type, template, climate_zone)
     case building_type
     when 'SecondarySchool'
       return PrototypeBuilding::SecondarySchool.define_hvac_system_map(building_type, template, climate_zone)
@@ -74,7 +74,7 @@ class OpenStudio::Model::Model
     end
   end
 
-  def custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
+  def model_custom_hvac_tweaks(model, building_type, template, climate_zone, prototype_input)
     case building_type
     when 'SecondarySchool'
       return PrototypeBuilding::SecondarySchool.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
@@ -116,7 +116,7 @@ class OpenStudio::Model::Model
     end
   end
 
-  def custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)
+  def model_custom_swh_tweaks(model, building_type, template, climate_zone, prototype_input)
     case building_type
     when 'SecondarySchool'
       return PrototypeBuilding::SecondarySchool.custom_swh_tweaks(building_type, template, climate_zone, prototype_input, model)

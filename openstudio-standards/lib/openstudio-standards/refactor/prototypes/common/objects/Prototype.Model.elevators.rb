@@ -1,14 +1,14 @@
 # open the class to add methods to add elevators
-class OpenStudio::Model::Model
+class StandardsModel < OpenStudio::Model::Model
 
   # Add elevators to the model
   #
   # @param template [String] Valid choices are
   # @return [OpenStudio::Model::ElectricEquipment] the resulting elevator
-  def add_elevators(template)
+  def model_add_elevators(model, template)
 
     # determine effective number of stories
-    effective_num_stories = self.effective_num_stories
+    effective_num_stories = model.effective_num_stories
 
     # determine elevator type
     # todo - add logic here or upstream to have some multi-story buildings without elevators (e.g. small multi-family and small hotels)
@@ -38,7 +38,7 @@ class OpenStudio::Model::Model
     building_type_hash = {}
 
     # apply building type specific log to add to number of elevators based on Beyer (2009) rules of thumb
-    space_type_hash = self.create_space_type_hash(template)
+    space_type_hash = model.create_space_type_hash(template)
     space_type_hash.each do |space_type,hash|
 
       # update building_type_hash
@@ -59,7 +59,7 @@ class OpenStudio::Model::Model
         # The office buildings have one elevator for every 45,000 ft2 (4,181 m2),
         # plus one service elevator for the large office building (500,000 ft^2).
         area_per_pass_elev_ft2 = 45_000
-        bldg_area_ft2 = OpenStudio.convert(self.getBuilding.floorArea, 'm^2', 'ft^2').get
+        bldg_area_ft2 = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
         if bldg_area_ft2 > 500_000
           area_per_freight_elev_ft2 = 500_000
         end
@@ -156,7 +156,7 @@ class OpenStudio::Model::Model
     building_type = building_type_hash.key(building_type_hash.values.max)
     # rename space types as needed
     if building_type == "Office"
-      building_type = self.remap_office(building_type_hash["Office"])
+      building_type = model.remap_office(building_type_hash["Office"])
     end
     if building_type == "SmallHotel" then building_type = "LargeHotel" end # no elevator schedules for SmallHotel
     if building_type == "PrimarySchool" then building_type = "SecondarySchool" end # no elevator schedules for PrimarySchool
@@ -206,12 +206,12 @@ class OpenStudio::Model::Model
           occ_sch = largest_space_type.defaultScheduleSet.get.numberofPeopleSchedule.get
         end
       else
-        occ_sch = alwaysOffDiscreteSchedule
+        occ_sch = model.alwaysOffDiscreteSchedule
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.elevators', "No occupancy schedule was specified for #{largest_space_type.name}, an always off schedule will be used for the elvevators and the elevators will never run.")
       end
 
       # clone and assign to elevator
-      elev_sch = occ_sch.clone(self)
+      elev_sch = occ_sch.clone(model)
       elevator_schedule = elev_sch.name.to_s
       elevator_fan_schedule = elev_sch.name.to_s
       elevator_lights_schedule = elev_sch.name.to_s
@@ -250,7 +250,7 @@ class OpenStudio::Model::Model
     # todo - should schedules change based on traction vs. hydraulic vs. just taking what is in prototype.
 
     # call add_elevator in Prototype.hvac_systems.rb to create elevator objects
-    elevator = self.add_elevator(template,
+    elevator = model_add_elevator(model, template,
                        target_space,
                        number_of_elevators,
                        elevator_type,
