@@ -99,6 +99,20 @@ class NECB_2011_Model < StandardsModel
     # end
 
     erv_required = nil
+    # ERV not applicable for medical AHUs (AHU1 in Outpatient), per AIA 2001 - 7.31.D2.
+    if air_loop_hvac.name.to_s.include? 'Outpatient F1'
+      erv_required = false
+      return erv_required
+    end
+
+    # ERV not applicable for medical AHUs, per AIA 2001 - 7.31.D2.
+    if air_loop_hvac.name.to_s.include? 'VAV_ER'
+      erv_required = false
+      return erv_required
+    elsif air_loop_hvac.name.to_s.include? 'VAV_OR'
+      erv_required = false
+      return erv_required
+    end
 
     # ERV Not Applicable for AHUs that have DCV
     # or that have no OA intake.
@@ -118,6 +132,52 @@ class NECB_2011_Model < StandardsModel
       return false
     end
 
+    # Get the AHU design supply air flow rate
+    dsn_flow_m3_per_s = nil
+    if air_loop_hvac.designSupplyAirFlowRate.is_initialized
+      dsn_flow_m3_per_s = air_loop_hvac.designSupplyAirFlowRate.get
+    elsif air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
+      dsn_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} design supply air flow rate is not available, cannot apply efficiency standard.")
+      return false
+    end
+    dsn_flow_cfm = OpenStudio.convert(dsn_flow_m3_per_s, 'm^3/s', 'cfm').get
+
+    # Get the minimum OA flow rate
+    min_oa_flow_m3_per_s = nil
+    if controller_oa.minimumOutdoorAirFlowRate.is_initialized
+      min_oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
+    elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
+      min_oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{controller_oa.name}: minimum OA flow rate is not available, cannot apply efficiency standard.")
+      return false
+    end
+    min_oa_flow_cfm = OpenStudio.convert(min_oa_flow_m3_per_s, 'm^3/s', 'cfm').get
+
+    # Calculate the percent OA at design airflow
+    pct_oa = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
+
+    # The NECB 2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
+    # The calculation for this is done below, to modify erv_required
+    # erv_cfm set to nil here as placeholder, will lead to erv_required = false
+    erv_cfm = nil
+
+    # Determine if an ERV is required
+    # erv_required = nil
+    if erv_cfm.nil?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}.")
+      erv_required = false
+    elsif dsn_flow_cfm < erv_cfm
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Does not exceed minimum flow requirement of #{erv_cfm}cfm.")
+      erv_required = false
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}. Exceeds minimum flow requirement of #{erv_cfm}cfm.")
+      erv_required = true
+    end
+
+    # This code modifies erv_required for NECB 2011
     # Calculation of exhaust heat content and check whether it is > 150 kW
 
     # get all zones in the model
@@ -293,8 +353,8 @@ class NECB_2011_Model < StandardsModel
   # @todo Add exception logic for
   #   systems that serve multifamily, parking garage, warehouse
   def air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac, climate_zone)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{instvartemplate} #{climate_zone}:  #{air_loop_hvac.name}: DCV is not required for any system.")
     dcv_required = false
-
     return dcv_required
   end
 
@@ -352,6 +412,7 @@ class NECB_2011_Model < StandardsModel
   #
   # @return [Bool] returns true if successful, false if not
   def air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: No special economizer controls were modeled.")
     return true 
   end
 
@@ -363,68 +424,14 @@ class NECB_2011_Model < StandardsModel
     sp_reset_required = false
     return sp_reset_required
   end
-
-  # Determine if a system's fans must shut off when
-  # not required.
-  #
-  # @return [Bool] true if required, false if not
-  def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
-    shutoff_required = true
-
-    # Systems less than 0.75 HP
-    # must turn off when unoccupied.
-    minimum_fan_hp = 0.75
-
-    # Determine the system fan horsepower
-    total_hp = 0.0
-    air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
-      total_hp += fan_motor_horsepower(fan) 
-    end
-
-    # Check the HP exception
-    if total_hp < minimum_fan_hp
-      shutoff_required = false
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Unoccupied fan shutoff not required because system fan HP of #{total_hp.round(2)} HP is less than the minimum threshold of #{minimum_fan_hp} HP.")
-    end
-
-    return shutoff_required
-
-    dx_clg = false
-
-    # Check for all DX coil types
-    dx_types = [
-      'OS_Coil_Cooling_DX_MultiSpeed',
-      'OS_Coil_Cooling_DX_TwoSpeed',
-      'OS_Coil_Cooling_DX_TwoStageWithHumidityControlMode'
-    ]
-
-    air_loop_hvac.supplyComponents.each do |component|
-      # Get the object type, getting the internal coil
-      # type if inside a unitary system.
-      obj_type = component.iddObjectType.valueName.to_s
-      case obj_type
-      when 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
-        component = component.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.get
-        obj_type = component.coolingCoil.iddObjectType.valueName.to_s
-      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir'
-        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
-        obj_type = component.coolingCoil.iddObjectType.valueName.to_s
-      when 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed'
-        component = component.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get
-        obj_type = component.coolingCoil.iddObjectType.valueName.to_s
-      when 'OS_AirLoopHVAC_UnitarySystem'
-        component = component.to_AirLoopHVACUnitarySystem.get
-        if component.coolingCoil.is_initialized
-          obj_type = component.coolingCoil.get.iddObjectType.valueName.to_s
-        end
-      end
-      # See if the object type is a DX coil
-      if dx_types.include?(obj_type)
-        dx_clg = true
-        break # Stop if find a DX coil
-      end
-    end
-
-    return dx_clg
-  end
+  
+  # Determine the air flow and number of story limits
+  # for whether motorized OA damper is required.
+  # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories].
+  # If both nil, never required
+  def air_loop_hvac_motorized_oa_damper_limits(air_loop_hvac, climate_zone)
+    minimum_oa_flow_cfm = 0
+    maximum_stories = 0
+    return [minimum_oa_flow_cfm, maximum_stories]
+  end 
 end
