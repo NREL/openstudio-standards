@@ -1,20 +1,5 @@
 class StandardsModel
 
-  # Load the helper libraries for
-  require_relative "Prototype.Fan"
-  require_relative "Prototype.FanConstantVolume"
-  require_relative "Prototype.FanVariableVolume"
-  require_relative "Prototype.FanOnOff"
-  require_relative "Prototype.FanZoneExhaust"
-  require_relative "Prototype.HeatExchangerAirToAirSensibleAndLatent"
-  require_relative "Prototype.ControllerWaterCoil"
-  require_relative "Prototype.Model.hvac"
-  require_relative "Prototype.Model.swh"
-  require_relative "Prototype.building_specific_methods"
-  require_relative "Prototype.Model.elevators"
-  require_relative "Prototype.Model.exterior_lights"
-  require_relative "Prototype.hvac_systems"
-
   def model_create_prototype_model(model, building_type, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
     puts "model_create_prototype_model, model.class = #{model.class}"
     # model = model # TODO refactor: pass in model instead
@@ -351,7 +336,7 @@ class StandardsModel
         return false
     end
 
-    require_relative "../buildings/#{building_methods}"
+    # require_relative "../buildings/#{building_methods}"
 
     return true
   end

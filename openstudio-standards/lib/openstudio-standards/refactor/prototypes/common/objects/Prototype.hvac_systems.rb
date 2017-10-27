@@ -1,7 +1,6 @@
 
 # open the class to add methods to size all HVAC equipment
 class StandardsModel
-  require_relative 'Prototype.AirTerminalSingleDuctVAVReheat'
 
   # Creates a hot water loop with a boiler, district heating, or a
   # water-to-water heat pump and adds it to the model.

@@ -64,46 +64,6 @@ end
 
 # open the class to add methods to apply HVAC efficiency standards
 class StandardsModel
-  # Load the helper libraries for getting the autosized
-  # values for each type of model object.
-  require_relative 'Standards.AirTerminalSingleDuctParallelPIUReheat'
-  require_relative 'Standards.BuildingStory'
-  require_relative 'Standards.Fan'
-  require_relative 'Standards.FanConstantVolume'
-  require_relative 'Standards.FanVariableVolume'
-  require_relative 'Standards.FanOnOff'
-  require_relative 'Standards.FanZoneExhaust'
-  require_relative 'Standards.ChillerElectricEIR'
-  require_relative 'Standards.CoilDX'
-  require_relative 'Standards.CoilCoolingDXTwoSpeed'
-  require_relative 'Standards.CoilCoolingDXSingleSpeed'
-  require_relative 'Standards.CoilHeatingDXSingleSpeed'
-  require_relative 'Standards.BoilerHotWater'
-  require_relative 'Standards.AirLoopHVAC'
-  require_relative 'Standards.WaterHeaterMixed'
-  require_relative 'Standards.Space'
-  require_relative 'Standards.Construction'
-  require_relative 'Standards.ThermalZone'
-  require_relative 'Standards.Surface'
-  require_relative 'Standards.SubSurface'
-  require_relative 'Standards.ScheduleRuleset'
-  require_relative 'Standards.ScheduleConstant'
-  require_relative 'Standards.ScheduleCompact'
-  require_relative 'Standards.SpaceType'
-  require_relative 'Standards.PlanarSurface'
-  require_relative 'Standards.PlantLoop'
-  require_relative 'Standards.Pump'
-  require_relative 'Standards.PumpConstantSpeed'
-  require_relative 'Standards.PumpVariableSpeed'
-  require_relative 'Standards.AirTerminalSingleDuctVAVReheat'
-  require_relative 'Standards.CoolingTower'
-  require_relative 'Standards.CoolingTowerSingleSpeed'
-  require_relative 'Standards.CoolingTowerTwoSpeed'
-  require_relative 'Standards.CoolingTowerVariableSpeed'
-  require_relative 'Standards.ZoneHVACComponent'
-  require_relative 'Standards.HeatExchangerSensLat'
-  require_relative 'Standards.HeaderedPumpsConstantSpeed'
-  require_relative 'Standards.HeaderedPumpsVariableSpeed'
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.
