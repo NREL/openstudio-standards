@@ -38,7 +38,7 @@ class StandardsModel
     when '90.1-2004', '90.1-2007'
       min_damper_position = 0.3
     when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-      min_damper_position = case reheat_type
+      min_damper_position = case air_terminal_single_duct_vav_reheat_reheat_type(air_terminal_single_duct_vav_reheat)
                             when 'HotWater'
                               0.2
                             when 'Electricity', 'NaturalGas'
