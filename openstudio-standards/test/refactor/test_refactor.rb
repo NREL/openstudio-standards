@@ -8,7 +8,7 @@ require 'digest'
 class TestRefactor < Minitest::Test
 
 
-  def test_necb_2011()
+  def dtest_necb_2011()
 
     building_types = [
       "FullServiceRestaurant",
@@ -145,7 +145,7 @@ class TestRefactor < Minitest::Test
             
             # Once all template logic and building type logic is removed we will be able to remove the building_type and
             # template arguments and simply call new_model.create_protype_model(climate_zone, epw_file, refactored_run_dir)
-            new_model.create_prototype_model(building_type, climate_zone, epw_file, refactored_run_dir)
+            new_model.model_create_prototype_model(building_type, climate_zone, epw_file, refactored_run_dir)
             log_messages_to_file("#{refactored_run_dir}/openstudio_standards.log", debug = false)
             
             # Reset the log so that only new messages are stored

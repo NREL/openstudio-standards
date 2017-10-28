@@ -52,7 +52,7 @@ class TestRefactorParallel < Minitest::Test
 
         # Once all template logic and building type logic is removed we will be able to remove the building_type and
         # template arguments and simply call new_model.create_protype_model(climate_zone, epw_file, refactored_run_dir)
-        new_model.create_prototype_model(run['building_type'], run['climate_zone'], run['epw_file'], run['refactored_run_dir'])
+        new_model.model_create_prototype_model(run['building_type'], run['climate_zone'], run['epw_file'], run['refactored_run_dir'])
         log_messages_to_file("#{run['refactored_run_dir']}/openstudio_standards.log", debug = false)
 
         # Reset the log so that only new messages are stored
@@ -128,7 +128,7 @@ class TestRefactorParallel < Minitest::Test
   #end function
 
 
-  def test_nrel
+  def d_test_nrel
     building_types = [
         "FullServiceRestaurant",
         "Hospital",
