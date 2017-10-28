@@ -1,6 +1,8 @@
 class StandardsModel
 
-  def model_create_prototype_model(model, building_type, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+  def model_create_prototype_model(building_type, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+    model = OpenStudio::Model::Model.new()
+
     puts "model_create_prototype_model, model.class = #{model.class}"
     # model = model # TODO refactor: pass in model instead
     osm_file_increment = 0
