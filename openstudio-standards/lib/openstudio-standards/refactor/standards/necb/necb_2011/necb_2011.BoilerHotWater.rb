@@ -41,7 +41,7 @@ class NECB_2011_Model < StandardsModel
     capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'kBtu/hr').get
 
     # Get the boiler properties
-    blr_props = model_find_object(boiler_hot_water.model, $os_standards['boilers'], search_criteria, capacity_btu_per_hr)
+    blr_props = model_find_object( $os_standards['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false

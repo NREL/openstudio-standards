@@ -1,9 +1,17 @@
+class NECB_2011_Prototype < NECB_2011_Model
+  @@building_type = nil
+  attr_reader :instvarbuilding_type
 
+  def initialize
+    @instvartemplate = @@template
+    @instvarbuilding_type = @@building_type
+  end
 
-class NECB_2011FullServiceRestaurant < NECB_2011_Model
-@@building_type = 'FullServiceRestaurant'
-register_standard ("#{@@template}_#{@@building_type}")
-  
+end
+
+class NECB_2011FullServiceRestaurant < NECB_2011_Prototype
+  @@building_type = 'FullServiceRestaurant'
+  register_standard ("#{@@template}_#{@@building_type}")
 
 end
 
@@ -108,5 +116,5 @@ end
 class NECB_2011Warehouse < NECB_2011_Model
   @@building_type = 'Warehouse'
   register_standard ("#{@@template}_#{@@building_type}")
-  
+
 end

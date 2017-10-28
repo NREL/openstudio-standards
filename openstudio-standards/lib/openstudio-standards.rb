@@ -1,13 +1,13 @@
 require_relative 'openstudio-standards/version'
 
 module OpenstudioStandards
- 
+
   # Change to load/not load different copies of the code
   load_original_code = true
   load_refactor_code = true
- 
+
   require 'json' # Used to load standards JSON files
-  
+
   ### Load the original code ###
   if load_original_code
     # HVAC sizing
@@ -34,7 +34,7 @@ module OpenstudioStandards
     require_relative 'openstudio-standards/utilities/hash'
     require_relative 'openstudio-standards/utilities/sqlfile'
   end
-  
+
   # Load the Openstudio Standards JSON
   # and assign to a constant.  This
   # should never be altered by the gem.
@@ -45,7 +45,7 @@ module OpenstudioStandards
   if load_refactor_code
     stds = 'openstudio-standards/refactor/standards'
     proto = 'openstudio-standards/refactor/prototypes'
-    
+
     ### Standards ###
     # Standards classes
     require_relative "#{stds}/standards_model"
@@ -200,8 +200,16 @@ module OpenstudioStandards
     require_relative "#{proto}/common/buildings/Prototype.supermarket"
     require_relative "#{proto}/common/buildings/Prototype.warehouse"
     # NECB Building Types
-    require_relative "#{proto}/necb/necb_2011/buildings/necb2011_full_service_restaurant"
-    require_relative "#{proto}/necb/necb_2011/buildings/necb2011_high_rise_apartment" 
+    require_relative "#{proto}/necb/necb_2011/buildings/necb2011_prototypes.rb"
+    #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2004/ashrae90_1_2004_prototypes.rb"
+    #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2007/ashrae90_1_2007_prototypes.rb"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2010/ashrae90_1_2010_prototypes.rb"
+    #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2013/ashrae90_1_2013_prototypes.rb"
+    #require_relative "#{proto}/ashrae90_1/doe_ref_1980_2004/doe_ref_1980_2004_prototypes.rb"
+    #require_relative "#{proto}/ashrae90_1/doe_ref_pre_1980/doe_ref_pre_1980_prototypes.rb"
+    #require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_nze_ready_2017_prototypes.rb"
+
+
     # Model Objects
     require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
     require_relative "#{proto}/common/objects/Prototype.ControllerWaterCoil"

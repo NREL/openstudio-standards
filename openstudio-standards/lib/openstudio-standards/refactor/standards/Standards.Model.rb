@@ -1687,9 +1687,9 @@ class StandardsModel
     end
 
     # Get the object data
-    data = model_find_object(model, $os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
+    data = model_find_object( $os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
-      data = model_find_object(model, $os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
+      data = model_find_object( $os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
       unless data
         return construction_set
       end
@@ -1982,7 +1982,7 @@ class StandardsModel
   #     OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false #TODO change to return empty optional schedule:ruleset?
   #   end
-  def model_find_objects(model, hash_of_objects, search_criteria, capacity = nil)
+  def model_find_objects( hash_of_objects, search_criteria, capacity = nil)
     #    matching_objects = hash_of_objects.clone
     #    #new
     #    puts "searching"
@@ -2111,7 +2111,7 @@ class StandardsModel
   #   'type' => 'Enclosed',
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
-  def model_find_object(model, hash_of_objects, search_criteria, capacity = nil, date = nil)
+  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil)
     #    new_matching_objects = model_find_objects(self, hash_of_objects, search_criteria, capacity)
 
     desired_object = nil
@@ -2243,7 +2243,7 @@ class StandardsModel
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding schedule: #{schedule_name}")
 
     # Find all the schedule rules that match the name
-    rules = model_find_objects(model, $os_standards['schedules'], 'name' => schedule_name)
+    rules = model_find_objects( $os_standards['schedules'], 'name' => schedule_name)
     if rules.size.zero?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
       return false # TODO: change to return empty optional schedule:ruleset?
@@ -2352,7 +2352,7 @@ class StandardsModel
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding material: #{material_name}")
 
     # Get the object data
-    data = model_find_object(model, $os_standards['materials'], 'name' => material_name)
+    data = model_find_object( $os_standards['materials'], 'name' => material_name)
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
       return false # TODO: change to return empty optional material
@@ -2453,7 +2453,7 @@ class StandardsModel
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding construction: #{construction_name}")
 
     # Get the object data
-    data = model_find_object(model, $os_standards['constructions'], 'name' => construction_name)
+    data = model_find_object( $os_standards['constructions'], 'name' => construction_name)
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for construction: #{construction_name}, will not be created.")
       return OpenStudio::Model::OptionalConstruction.new
@@ -2533,7 +2533,7 @@ class StandardsModel
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = model_find_object(model, $os_standards['construction_properties'], 'template' => instvartemplate,
+    props = model_find_object( $os_standards['construction_properties'], 'template' => instvartemplate,
                                                                   'climate_zone_set' => climate_zone_set,
                                                                   'intended_surface_type' => intended_surface_type,
                                                                   'standards_construction_type' => standards_construction_type,
@@ -2579,9 +2579,9 @@ class StandardsModel
 
     # Get the object data
 
-    data = model_find_object(model, $os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
+    data = model_find_object( $os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
-      data = model_find_object(model, $os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
+      data = model_find_object($os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
       unless data
         # if nothing matches say that we could not find it.
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{instvartemplate}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in $os_standards['construction_sets']")
@@ -2760,7 +2760,7 @@ class StandardsModel
     curve_cubics = $os_standards['curve_cubics']
 
     # Make biquadratic curves
-    curve_data = model_find_object(model, curve_biquadratics, 'name' => curve_name)
+    curve_data = model_find_object( curve_biquadratics, 'name' => curve_name)
     if curve_data
       curve = OpenStudio::Model::CurveBiquadratic.new(model)
       curve.setName(curve_data['name'])
@@ -2785,7 +2785,7 @@ class StandardsModel
     end
 
     # Make quadratic curves
-    curve_data = model_find_object(model, curve_quadratics, 'name' => curve_name)
+    curve_data = model_find_object(curve_quadratics, 'name' => curve_name)
     if curve_data
       curve = OpenStudio::Model::CurveQuadratic.new(model)
       curve.setName(curve_data['name'])
@@ -2805,7 +2805,7 @@ class StandardsModel
     end
 
     # Make cubic curves
-    curve_data = model_find_object(model, curve_cubics, 'name' => curve_name)
+    curve_data = model_find_object(curve_cubics, 'name' => curve_name)
     if curve_data
       curve = OpenStudio::Model::CurveCubic.new(model)
       curve.setName(curve_data['name'])
@@ -2826,7 +2826,7 @@ class StandardsModel
     end
 
     # Make bicubic curves
-    curve_data = model_find_object(model, curve_bicubics, 'name' => curve_name)
+    curve_data = model_find_object(curve_bicubics, 'name' => curve_name)
     if curve_data
       curve = OpenStudio::Model::CurveBicubic.new(model)
       curve.setName(curve_data['name'])
@@ -3482,7 +3482,7 @@ class StandardsModel
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = model_find_object(model, $os_standards['construction_properties'], search_criteria)
+    construction_properties = model_find_object( $os_standards['construction_properties'], search_criteria)
 
     return construction_properties
   end

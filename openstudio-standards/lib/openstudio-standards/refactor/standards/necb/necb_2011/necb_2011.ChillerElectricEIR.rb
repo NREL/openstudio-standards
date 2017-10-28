@@ -35,7 +35,7 @@ class NECB_2011_Model < StandardsModel
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
     # Get the chiller properties
-    chlr_props = model_find_object(chiller_electric_eir.model, chillers, search_criteria, capacity_tons, Date.today)
+    chlr_props = model_find_object( chillers, search_criteria, capacity_tons, Date.today)
     unless chlr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
       successfully_set_all_properties = false

@@ -120,10 +120,10 @@ class StandardsModel
         space_type_map.each do |space_type_name, space_names|
           search_criteria = {
             'template' => template,
-            'building_type' => model_get_lookup_name(model, building_type),
+            'building_type' => model_get_lookup_name(building_type),
             'space_type' => space_type_name
           }
-          data = model_find_object(model, $os_standards['space_types'], search_criteria)
+          data = model_find_object($os_standards['space_types'], search_criteria)
 
           # Skip space types with no data
           next if data.nil?
@@ -145,7 +145,7 @@ class StandardsModel
             
 
             
-            model_add_swh_end_uses_by_space(model, model_get_lookup_name(model, building_type),
+            model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
                                       template,
                                       climate_zone,
                                       main_swh_loop,

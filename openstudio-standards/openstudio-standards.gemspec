@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   # spec.test_files = Dir['test/**/*']
   spec.require_paths = ['lib']
   spec.add_development_dependency 'minitest-reporters'
+  spec.add_development_dependency 'minitest-parallel_fork'
   spec.add_development_dependency 'ruby-progressbar'
   spec.add_development_dependency 'parallel_tests'
   spec.add_development_dependency "nokogiri", "<= 1.6.8.1"

@@ -4412,7 +4412,7 @@ class StandardsModel
       'building_type' => building_type,
       'space_type' => space_type_name
     }
-    data = model_find_object(model, $os_standards['space_types'], search_criteria)
+    data = model_find_object($os_standards['space_types'], search_criteria)
     if data.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find space type for: #{search_criteria}.")
       return nil

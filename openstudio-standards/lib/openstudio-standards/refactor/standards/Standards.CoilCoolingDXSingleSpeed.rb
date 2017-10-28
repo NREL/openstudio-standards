@@ -53,9 +53,9 @@ class StandardsModel
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed) 
-                 model_find_object(coil_cooling_dx_single_speed.model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object( $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object(coil_cooling_dx_single_speed.model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object( $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
@@ -161,9 +161,9 @@ class StandardsModel
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed) 
-                 model_find_object(coil_cooling_dx_single_speed.model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object( $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object(coil_cooling_dx_single_speed.model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object( $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found

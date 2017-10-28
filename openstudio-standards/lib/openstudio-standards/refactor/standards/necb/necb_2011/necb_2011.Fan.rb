@@ -84,7 +84,7 @@ module NECBFan
     if fan_small_fan?(fan) 
       nominal_hp = 0.5
     else
-      motor_properties = model_find_object(fan.model, motors, search_criteria, motor_bhp)
+      motor_properties = model_find_object( motors, search_criteria, motor_bhp)
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
         return [fan_motor_eff, nominal_hp]
@@ -105,7 +105,7 @@ module NECBFan
 
     # Get the efficiency based on the nominal horsepower
     # Add 0.01 hp to avoid search errors.
-    motor_properties = model_find_object(fan.model, motors, search_criteria, nominal_hp + 0.01)
+    motor_properties = model_find_object( motors, search_criteria, nominal_hp + 0.01)
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
       return [fan_motor_eff, nominal_hp]

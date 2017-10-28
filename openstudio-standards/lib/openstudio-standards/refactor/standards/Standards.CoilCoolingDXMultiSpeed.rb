@@ -82,9 +82,9 @@ class StandardsModel
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if heat_pump == true
-                 model_find_object(model, $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object($os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object(model, $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object($os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found

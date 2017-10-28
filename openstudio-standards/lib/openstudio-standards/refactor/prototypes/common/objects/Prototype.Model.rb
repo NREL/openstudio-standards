@@ -1,7 +1,12 @@
 class StandardsModel
 
-  def model_create_prototype_model(building_type, climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+    building_type = @instvarbuilding_type
+    puts "prototype is #{@instvarbuilding_type}"
+    raise ("no building_type!") if building_type.nil?
     model = OpenStudio::Model::Model.new()
+    #use old method for now.
+    model_load_building_type_methods(model, building_type)
 
     puts "model_create_prototype_model, model.class = #{model.class}"
     # model = model # TODO refactor: pass in model instead
@@ -17,7 +22,7 @@ class StandardsModel
       end
     end
 
-    lookup_building_type = model_get_lookup_name(model, building_type)
+    lookup_building_type = model_get_lookup_name(building_type)
 
     # Retrieve the Prototype Inputs from JSON
     search_criteria = {
@@ -26,10 +31,11 @@ class StandardsModel
     }
 
     puts "instvartemplate is #{instvartemplate}"
-    prototype_input = model_find_object(model, $os_standards['prototype_inputs'], search_criteria, nil)
+    prototype_input = model_find_object($os_standards['prototype_inputs'], search_criteria, nil)
 
     if prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for #{search_criteria}, cannot create model.")
+      raise()
       return false
     end
 
@@ -37,7 +43,7 @@ class StandardsModel
       when 'NECB 2011'
 
         debug_incremental_changes = false
-        model_load_building_type_methods(model, building_type)
+
         osm_file_increment += 1
         BTAP::FileIO::save_osm(model,"#{sizing_run_dir}/post_#{osm_file_increment}_load_building_type_methods.osm") if debug_incremental_changes
 
@@ -253,10 +259,6 @@ class StandardsModel
       model_request_timeseries_outputs(model) 
     end
 
-    # Finished
-    model_status = 'final'
-    model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
-
     return model
   end
 
@@ -265,7 +267,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [String] returns the lookup name as a string
   # @todo Unify the lookup names and eliminate this method
-  def model_get_lookup_name(model, building_type)
+  def model_get_lookup_name( building_type )
     lookup_name = building_type
 
     case building_type
@@ -517,7 +519,7 @@ class StandardsModel
   end
 
   def model_add_full_space_type_libs(model)
-    space_type_properties_list = model_find_objects(model, $os_standards['space_types'], '' => 'NECB 2011')
+    space_type_properties_list = model_find_objects($os_standards['space_types'], '' => 'NECB 2011')
     space_type_properties_list.each do |space_type_property|
       stub_space_type = OpenStudio::Model::SpaceType.new(model)
       stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
@@ -589,14 +591,14 @@ class StandardsModel
 
     # The constructions lookup table uses a slightly different list of
     # building types.
-    lookup_building_type = model_get_lookup_name(model, building_type)
+    lookup_building_type = model_get_lookup_name( building_type)
     # TODO this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
     case building_type
       when 'SmallOffice', 'MediumOffice', 'LargeOffice'
         lookup_building_type = building_type
       else
-        lookup_building_type = model_get_lookup_name(model, building_type)
+        lookup_building_type = model_get_lookup_name(building_type)
     end
 
     # Assign construction to adiabatic construction
@@ -751,7 +753,7 @@ class StandardsModel
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = model_find_object(model, $os_standards['space_types'], 'template' => instvartemplate, 'building_type' => lookup_building_type, 'space_type' => space_type_name)
+          data = model_find_object( $os_standards['space_types'], 'template' => instvartemplate, 'building_type' => lookup_building_type, 'space_type' => space_type_name)
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
