@@ -144,14 +144,13 @@ class TestRefactorParallel < Minitest::Test
   nrcan_templates = ['NECB 2011']
   nrcan_climate_zones = ['NECB HDD Method']
   nrcan_epw_files = [
-      'CAN_BC_Vancouver.718920_CWEC.epw'#, #  CZ 5 - Gas HDD = 3019
-=begin
+      'CAN_BC_Vancouver.718920_CWEC.epw', #  CZ 5 - Gas HDD = 3019
       'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
       'CAN_PQ_Sherbrooke.716100_CWEC.epw', #CZ 7a - Electric HDD = 5068
       'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
       'CAN_NU_Resolute.719240_CWEC.epw', # CZ 8  -FuelOil2 HDD = 12570
       'CAN_PQ_Kuujjuarapik.719050_CWEC.epw', # CZ 8  -FuelOil2 HDD = 7986
-=end
+
   ]
 
 
