@@ -200,10 +200,11 @@ module OpenstudioStandards
     require_relative "#{proto}/common/buildings/Prototype.supermarket"
     require_relative "#{proto}/common/buildings/Prototype.warehouse"
     # NECB Building Types
-    require_relative "#{proto}/necb/necb_2011/buildings/necb2011_prototypes"
+    require_relative "#{proto}/common/prototype_metaprogramming.rb"
+    #require_relative "#{proto}/necb/necb_2011/buildings/necb2011_prototypes"
     #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2004/ashrae90_1_2004_prototypes.rb"
     #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2007/ashrae90_1_2007_prototypes.rb"
-    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2010/ashrae90_1_2010_prototypes"
+    #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2010/ashrae90_1_2010_prototypes"
     #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2013/ashrae90_1_2013_prototypes.rb"
     #require_relative "#{proto}/ashrae90_1/doe_ref_1980_2004/doe_ref_1980_2004_prototypes.rb"
     #require_relative "#{proto}/ashrae90_1/doe_ref_pre_1980/doe_ref_pre_1980_prototypes.rb"

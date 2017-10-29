@@ -6,7 +6,7 @@ class StandardsModel
     raise ("no building_type!") if building_type.nil?
     model = OpenStudio::Model::Model.new()
     #use old method for now.
-    model_load_building_type_methods(model, building_type)
+    model_load_building_type_methods( building_type)
     # model = model # TODO refactor: pass in model instead
     osm_file_increment = 0
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
@@ -147,7 +147,7 @@ class StandardsModel
           #this is required to be blank otherwise it may cause side effects.
           epw_file = ""
         end
-        model_load_building_type_methods(model, building_type)
+        model_load_building_type_methods(building_type)
         model_load_geometry(model, building_type)
         model.getBuilding.setName("#{}-#{building_type}-#{climate_zone} created: #{Time.new}")
         space_type_map = model_define_space_type_map(model, building_type, instvartemplate, climate_zone)
@@ -293,7 +293,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
-  def model_load_building_type_methods(model, building_type)
+  def model_load_building_type_methods(building_type)
     building_methods = nil
 
     case building_type
