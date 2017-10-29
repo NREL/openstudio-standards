@@ -51,7 +51,7 @@ class TestRefactorParallel < Minitest::Test
   end
 
   def self.create_test(run)
-    define_method("test_#{run['template']}_#{run['building_type']}_#{run['climate_zone'] }_#{run['climate_zone']}_#{run['epw_file']}") do
+    define_method("test_#{run['template']}_#{run['building_type']}_#{run['climate_zone'] }_#{run['epw_file']}") do
       diffs = []
       begin
 
@@ -59,9 +59,8 @@ class TestRefactorParallel < Minitest::Test
         FileUtils.mkdir_p(run['old_method_run_dir']) unless Dir.exists?(run['old_method_run_dir'])
         #new method of create standards model
         prototype_object = StandardsModel.get_standard_model("#{run['template']}_#{run['building_type']}")
-        puts "Class created is #{prototype_object.class}"
+        puts "this is a #{prototype_object.class}"
         new_model = prototype_object.model_create_prototype_model(run['climate_zone'], run['epw_file'], run['refactored_run_dir'])
-        puts "Class created is #{new_model.class}"
         log_messages_to_file("#{run['refactored_run_dir']}/openstudio_standards.log", debug = false)
 
         # Reset the log so that only new messages are stored
@@ -145,14 +144,14 @@ class TestRefactorParallel < Minitest::Test
   nrcan_templates = ['NECB 2011']
   nrcan_climate_zones = ['NECB HDD Method']
   nrcan_epw_files = [
-      'CAN_BC_Vancouver.718920_CWEC.epw',  #  CZ 5 - Gas HDD = 3019
+      'CAN_BC_Vancouver.718920_CWEC.epw'#, #  CZ 5 - Gas HDD = 3019
+=begin
       'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
       'CAN_PQ_Sherbrooke.716100_CWEC.epw', #CZ 7a - Electric HDD = 5068
       'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
       'CAN_NU_Resolute.719240_CWEC.epw', # CZ 8  -FuelOil2 HDD = 12570
       'CAN_PQ_Kuujjuarapik.719050_CWEC.epw', # CZ 8  -FuelOil2 HDD = 7986
-      'CAN_ON_Kingston.716200_CWEC.epw' # This did not run cleanly! Error in 671 of compliance.rb
-
+=end
   ]
 
 
@@ -160,6 +159,7 @@ class TestRefactorParallel < Minitest::Test
 
   #add runs and run them
   runs = nrcan_runs + nrel_runs
+  puts
   case Gem::Platform.local.os
     when 'linux'
       create_parallel_tests(runs)

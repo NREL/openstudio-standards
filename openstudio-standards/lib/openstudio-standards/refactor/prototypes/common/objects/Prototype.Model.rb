@@ -7,8 +7,6 @@ class StandardsModel
     model = OpenStudio::Model::Model.new()
     #use old method for now.
     model_load_building_type_methods(model, building_type)
-
-    puts "model_create_prototype_model, model.class = #{model.class}"
     # model = model # TODO refactor: pass in model instead
     osm_file_increment = 0
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
