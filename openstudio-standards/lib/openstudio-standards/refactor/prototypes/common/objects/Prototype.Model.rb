@@ -7,8 +7,7 @@ StandardsModel.class_eval do
     building_type = @instvarbuilding_type
     raise ("no building_type!") if @instvarbuilding_type.nil?
     model = nil
-    #use old method for now.
-    model_load_building_type_methods(@instvarbuilding_type)
+
 
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if @instvarbuilding_type == 'HighriseApartment'
@@ -24,31 +23,26 @@ StandardsModel.class_eval do
     case @instvartemplate
       when 'NECB 2011'
 
-        model = load_osm(@geometry_file)
-        model.add_design_days_and_weather_file(climate_zone, epw_file)
-        model.add_ground_temperatures(@instvarbuilding_type, climate_zone, @instvartemplate)
-        # puts weatherFile.get.path.get.to_s
-        if model.weatherFile.empty? or model.weatherFile.get.path.empty? or not File.exists?(model.weatherFile.get.path.get.to_s)
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Weatherfile is not defined.")
-          raise()
-        end
+        model = load_osm(@geometry_file) #standard candidate
+        model.add_design_days_and_weather_file(climate_zone, epw_file) #Standards
+        model.add_ground_temperatures(@instvarbuilding_type, climate_zone, @instvartemplate) #prototype candidate
         model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
-        model_assign_space_type_stubs(model, 'Space Function', @space_type_map) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
-        model_add_loads(model)
-        model_apply_infiltration_standard(model)
-        model_modify_surface_convection_algorithm(model)
-        model_add_constructions(model, @instvarbuilding_type, climate_zone)
-        model_apply_prm_construction_types(model)
-        model_apply_prm_baseline_window_to_wall_ratio(model, nil)
-        model_apply_prm_baseline_skylight_to_roof_ratio(model)
-        model_create_thermal_zones(model, @space_multiplier_map)
+        model_assign_space_type_stubs(model, 'Space Function', @space_type_map) #Standards candidate
+        model_add_loads(model) #standards candidate
+        model_apply_infiltration_standard(model) #standards candidate
+        model_modify_surface_convection_algorithm(model) #standards
+        model_add_constructions(model, @instvarbuilding_type, climate_zone) #prototype candidate
+        model_apply_prm_construction_types(model) #standards candidate
+        model_apply_prm_baseline_window_to_wall_ratio(model, nil) #standards candidate
+        model_apply_prm_baseline_skylight_to_roof_ratio(model) #standards candidate
+        model_create_thermal_zones(model, @space_multiplier_map) #standards candidate
         # For some building types, stories are defined explicitly
         unless @building_story_map.nil?
           model.getBuildingStorys.each {|item| item.remove}
-          model_assign_building_story(model, @building_story_map)
+          model_assign_building_story(model, @building_story_map) #standards candidate
         end
         return false if model.runSizingRun("#{sizing_run_dir}/SR0") == false
-        model_add_hvac(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file)
+        model_add_hvac(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file) #standards for NECB Prototype for NREL candidate
         model_add_swh(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file)
         model_apply_sizing_parameters(model, @instvarbuilding_type)
         model.yearDescription.get.setDayofWeekforStartDay('Sunday')
@@ -63,7 +57,6 @@ StandardsModel.class_eval do
           #this is required to be blank otherwise it may cause side effects.
           epw_file = ""
         end
-        model_load_building_type_methods(@instvarbuilding_type)
         model = load_osm(@geometry_file)
         model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
         model_assign_space_type_stubs(model, @lookup_building_type, @space_type_map)
@@ -74,9 +67,9 @@ StandardsModel.class_eval do
         model_add_constructions(model, @instvarbuilding_type, climate_zone)
         model_create_thermal_zones(model, @space_multiplier_map)
         model_add_hvac(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file)
-        model_custom_hvac_tweaks(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input)
+        self.custom_hvac_tweaks(building_type, @instvartemplate, climate_zone, @prototype_input, model)
         model_add_swh(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file)
-        model_custom_swh_tweaks(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input)
+        self.custom_swh_tweaks(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input)
         model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
         model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
         model.add_design_days_and_weather_file(climate_zone, epw_file)
@@ -94,7 +87,7 @@ StandardsModel.class_eval do
     # For some building types, stories are defined explicitly
     if building_type == 'SmallHotel'
       model.getBuildingStorys.each {|item| item.remove}
-      building_story_map = PrototypeBuilding::SmallHotel.define_building_story_map(building_type, instvartemplate, climate_zone)
+      building_story_map = self.define_building_story_map(building_type, instvartemplate, climate_zone)
       model_assign_building_story(model, building_story_map)
     end
 
@@ -125,13 +118,13 @@ StandardsModel.class_eval do
     # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
     # AHU1 doesn't have economizer
     if building_type == 'Outpatient'
-      PrototypeBuilding::Outpatient.modify_oa_controller(instvartemplate, model)
+      self.modify_oa_controller(instvartemplate, model)
       # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-      PrototypeBuilding::Outpatient.reset_or_room_vav_minimum_damper(@prototype_input, instvartemplate, model)
+      self.reset_or_room_vav_minimum_damper(@prototype_input, instvartemplate, model)
     end
 
     if building_type == 'Hospital'
-      PrototypeBuilding::Hospital.modify_hospital_oa_controller(instvartemplate, model)
+      self.modify_hospital_oa_controller(instvartemplate, model)
     end
 
     # Apply the HVAC efficiency standard
@@ -145,25 +138,25 @@ StandardsModel.class_eval do
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
     if building_type == 'LargeHotel'
-      PrototypeBuilding::LargeHotel.large_hotel_add_daylighting_controls(instvartemplate, model)
+      self.large_hotel_add_daylighting_controls(instvartemplate, model)
     elsif building_type == 'Hospital'
-      PrototypeBuilding::Hospital.hospital_add_daylighting_controls(instvartemplate, model)
+      self.hospital_add_daylighting_controls(instvartemplate, model)
     else
       model_add_daylighting_controls(model)
     end
 
     if building_type == 'QuickServiceRestaurant'
-      PrototypeBuilding::QuickServiceRestaurant.update_exhaust_fan_efficiency(instvartemplate, model)
+      self.update_exhaust_fan_efficiency(instvartemplate, model)
     elsif building_type == 'FullServiceRestaurant'
-      PrototypeBuilding::FullServiceRestaurant.update_exhaust_fan_efficiency(instvartemplate, model)
+      self.update_exhaust_fan_efficiency(instvartemplate, model)
     elsif building_type == 'Outpatient'
-      PrototypeBuilding::Outpatient.update_exhaust_fan_efficiency(instvartemplate, model)
+      self.update_exhaust_fan_efficiency(instvartemplate, model)
     elsif building_type == 'SuperMarket'
-      PrototypeBuilding::SuperMarket.update_exhaust_fan_efficiency(instvartemplate, model)
+      self.update_exhaust_fan_efficiency(instvartemplate, model)
     end
 
     if building_type == 'HighriseApartment'
-      PrototypeBuilding::HighriseApartment.update_fan_efficiency(model)
+      self.update_fan_efficiency(model)
     end
 
     # Add output variables for debugging
@@ -202,60 +195,7 @@ StandardsModel.class_eval do
     return lookup_name
   end
 
-  # Loads the library of methods specific to this building type
-  #
-  # @param building_type [String] the building type
-  # @param climate_zone [String] the climate zone
-  # @return [Bool] returns true if successful, false if not
-  def model_load_building_type_methods(building_type)
-    building_methods = nil
 
-    case building_type
-      when 'SecondarySchool'
-        building_methods = 'Prototype.secondary_school'
-      when 'PrimarySchool'
-        building_methods = 'Prototype.primary_school'
-      when 'SmallOffice'
-        building_methods = 'Prototype.small_office'
-      when 'MediumOffice'
-        building_methods = 'Prototype.medium_office'
-      when 'LargeOffice'
-        building_methods = 'Prototype.large_office'
-      when 'LargeOfficeDetail'
-        building_methods = 'Prototype.large_office_detail'
-      when 'SmallHotel'
-        building_methods = 'Prototype.small_hotel'
-      when 'LargeHotel'
-        building_methods = 'Prototype.large_hotel'
-      when 'Warehouse'
-        building_methods = 'Prototype.warehouse'
-      when 'RetailStandalone'
-        building_methods = 'Prototype.retail_standalone'
-      when 'RetailStripmall'
-        building_methods = 'Prototype.retail_stripmall'
-      when 'QuickServiceRestaurant'
-        building_methods = 'Prototype.quick_service_restaurant'
-      when 'FullServiceRestaurant'
-        building_methods = 'Prototype.full_service_restaurant'
-      when 'Hospital'
-        building_methods = 'Prototype.hospital'
-      when 'Outpatient'
-        building_methods = 'Prototype.outpatient'
-      when 'MidriseApartment'
-        building_methods = 'Prototype.mid_rise_apartment'
-      when 'HighriseApartment'
-        building_methods = 'Prototype.high_rise_apartment'
-      when 'SuperMarket'
-        building_methods = 'Prototype.supermarket'
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Building Type = #{building_type} not recognized")
-        return false
-    end
-
-    # require_relative "../buildings/#{building_methods}"
-
-    return true
-  end
 
   # Loads a osm as a starting point.
   #

@@ -86,7 +86,26 @@ class #{template}#{name} < #{template}_Prototype
     puts geometry_file
     puts @space_type_map
     puts @system_to_space_map
+    #add all building methods for now. 
+    self.extend(#{name})
   end
+#Common Methods to all prototypes. 
+  def define_space_type_map(building_type, template, climate_zone)
+    return @space_type_map
+  end
+
+  def define_hvac_system_map(building_type, template, climate_zone)
+    return @system_to_space_map
+  end
+
+  def define_space_multiplier
+    return @space_multiplier_map
+  end
+
+ def define_building_story_map(building_type, instvartemplate, climate_zone)
+    return @building_story_map
+ end
+
 
 end
 DYNAMICClass

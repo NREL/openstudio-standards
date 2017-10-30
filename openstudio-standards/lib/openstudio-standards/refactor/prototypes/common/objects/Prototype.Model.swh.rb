@@ -111,7 +111,7 @@ class StandardsModel
       else
 
         # Attaches the end uses if specified by space type
-        space_type_map = model_define_space_type_map(model, building_type, template, climate_zone)
+        space_type_map = self.define_space_type_map(building_type, template, climate_zone)
 
         if template == 'NECB 2011'
           building_type = 'Space Function'

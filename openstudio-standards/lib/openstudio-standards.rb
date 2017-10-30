@@ -49,6 +49,23 @@ module OpenstudioStandards
     require_relative 'openstudio-standards/prototypes/Prototype.utilities'
     require_relative 'openstudio-standards/prototypes/Prototype.add_objects'
     require_relative 'openstudio-standards/prototypes/Prototype.hvac_systems'
+    require_relative "openstudio-standards/prototypes/Prototype.full_service_restaurant"
+    require_relative "openstudio-standards/prototypes/Prototype.high_rise_apartment"
+    require_relative "openstudio-standards/prototypes/Prototype.hospital"
+    require_relative "openstudio-standards/prototypes/Prototype.large_hotel"
+    require_relative "openstudio-standards/prototypes/Prototype.large_office"
+    require_relative "openstudio-standards/prototypes/Prototype.medium_office"
+    require_relative "openstudio-standards/prototypes/Prototype.mid_rise_apartment"
+    require_relative "openstudio-standards/prototypes/Prototype.outpatient"
+    require_relative "openstudio-standards/prototypes/Prototype.primary_school"
+    require_relative "openstudio-standards/prototypes/Prototype.quick_service_restaurant"
+    require_relative "openstudio-standards/prototypes/Prototype.retail_standalone"
+    require_relative "openstudio-standards/prototypes/Prototype.retail_stripmall"
+    require_relative "openstudio-standards/prototypes/Prototype.secondary_school"
+    require_relative "openstudio-standards/prototypes/Prototype.small_hotel"
+    require_relative "openstudio-standards/prototypes/Prototype.small_office"
+    require_relative "openstudio-standards/prototypes/Prototype.supermarket"
+    require_relative "openstudio-standards/prototypes/Prototype.warehouse"
 
     # Weather data
     require_relative 'openstudio-standards/weather/Weather.Model'
@@ -213,33 +230,11 @@ module OpenstudioStandards
 
     ### Prototypes ###
     # Building Types
-    require_relative "#{proto}/common/buildings/Prototype.full_service_restaurant"
-    require_relative "#{proto}/common/buildings/Prototype.high_rise_apartment"
-    require_relative "#{proto}/common/buildings/Prototype.hospital"
-    require_relative "#{proto}/common/buildings/Prototype.large_hotel"
-    require_relative "#{proto}/common/buildings/Prototype.large_office"
-    require_relative "#{proto}/common/buildings/Prototype.medium_office"
-    require_relative "#{proto}/common/buildings/Prototype.mid_rise_apartment"
-    require_relative "#{proto}/common/buildings/Prototype.outpatient"
-    require_relative "#{proto}/common/buildings/Prototype.primary_school"
-    require_relative "#{proto}/common/buildings/Prototype.quick_service_restaurant"
-    require_relative "#{proto}/common/buildings/Prototype.retail_standalone"
-    require_relative "#{proto}/common/buildings/Prototype.retail_stripmall"
-    require_relative "#{proto}/common/buildings/Prototype.secondary_school"
-    require_relative "#{proto}/common/buildings/Prototype.small_hotel"
-    require_relative "#{proto}/common/buildings/Prototype.small_office"
-    require_relative "#{proto}/common/buildings/Prototype.supermarket"
-    require_relative "#{proto}/common/buildings/Prototype.warehouse"
+    require_relative "#{proto}/common/buildings/Prototype.all_buildings"
+
     # NECB Building Types
     require_relative "#{proto}/common/prototype_metaprogramming.rb"
-    #require_relative "#{proto}/necb/necb_2011/buildings/necb2011_prototypes"
-    #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2004/ashrae90_1_2004_prototypes.rb"
-    #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2007/ashrae90_1_2007_prototypes.rb"
-    #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2010/ashrae90_1_2010_prototypes"
-    #require_relative "#{proto}/ashrae90_1/ashrae_90_1_2013/ashrae90_1_2013_prototypes.rb"
-    #require_relative "#{proto}/ashrae90_1/doe_ref_1980_2004/doe_ref_1980_2004_prototypes.rb"
-    #require_relative "#{proto}/ashrae90_1/doe_ref_pre_1980/doe_ref_pre_1980_prototypes.rb"
-    #require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_nze_ready_2017_prototypes.rb"
+
 
 
     # Model Objects
