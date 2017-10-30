@@ -10,10 +10,10 @@ class StandardsModel
     else
       # Get the list of HVAC systems, as defined
       # for each building in the Prototype.building_name files.
-      system_to_space_map = model_define_hvac_system_map(model, building_type, template, climate_zone)
+
 
       # Add each HVAC system
-      system_to_space_map.each do |system|
+      @system_to_space_map .each do |system|
         thermal_zones = model_get_zones_from_spaces_on_system(model, system)
 
         return_plenum = model_get_return_plenum_from_system(model, system)

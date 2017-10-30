@@ -32,47 +32,7 @@ class StandardsModel
     end
   end
 
-  def model_define_hvac_system_map(model, building_type, template, climate_zone)
-    case building_type
-    when 'SecondarySchool'
-      return PrototypeBuilding::SecondarySchool.define_hvac_system_map(building_type, template, climate_zone)
-    when 'PrimarySchool'
-      return PrototypeBuilding::PrimarySchool.define_hvac_system_map(building_type, template, climate_zone)
-    when 'SmallOffice'
-      return PrototypeBuilding::SmallOffice.define_hvac_system_map(building_type, template, climate_zone)
-    when 'MediumOffice'
-      return PrototypeBuilding::MediumOffice.define_hvac_system_map(building_type, template, climate_zone)
-    when 'LargeOffice'
-      return PrototypeBuilding::LargeOffice.define_hvac_system_map(building_type, template, climate_zone)
-    when 'SmallHotel'
-      return PrototypeBuilding::SmallHotel.define_hvac_system_map(building_type, template, climate_zone)
-    when 'LargeHotel'
-      return PrototypeBuilding::LargeHotel.define_hvac_system_map(building_type, template, climate_zone)
-    when 'Warehouse'
-      return PrototypeBuilding::Warehouse.define_hvac_system_map(building_type, template, climate_zone)
-    when 'RetailStandalone'
-      return PrototypeBuilding::RetailStandalone.define_hvac_system_map(building_type, template, climate_zone)
-    when 'RetailStripmall'
-      return PrototypeBuilding::RetailStripmall.define_hvac_system_map(building_type, template, climate_zone)
-    when 'QuickServiceRestaurant'
-      return PrototypeBuilding::QuickServiceRestaurant.define_hvac_system_map(building_type, template, climate_zone)
-    when 'FullServiceRestaurant'
-      return PrototypeBuilding::FullServiceRestaurant.define_hvac_system_map(building_type, template, climate_zone)
-    when 'Hospital'
-      return PrototypeBuilding::Hospital.define_hvac_system_map(building_type, template, climate_zone)
-    when 'Outpatient'
-      return PrototypeBuilding::Outpatient.define_hvac_system_map(building_type, template, climate_zone)
-    when 'MidriseApartment'
-      return PrototypeBuilding::MidriseApartment.define_hvac_system_map(building_type, template, climate_zone)
-    when 'HighriseApartment'
-      return PrototypeBuilding::HighriseApartment.define_hvac_system_map(building_type, template, climate_zone)
-	when 'SuperMarket'
-      return PrototypeBuilding::SuperMarket.define_hvac_system_map(building_type, template, climate_zone)  
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.define_hvac_system_map', "Building Type = #{building_type} not recognized")
-      return false
-    end
-  end
+
 
   def model_custom_hvac_tweaks(model, building_type, template, climate_zone, prototype_input)
     case building_type

@@ -1,3 +1,7 @@
+
+
+
+
 class NECB2011HighRiseApartment < NECB_2011_Model
   attr_accessor :define_space_type_map
   attr_accessor :offCycleLossCoefficienttoAmbientTemperatureWithBooster

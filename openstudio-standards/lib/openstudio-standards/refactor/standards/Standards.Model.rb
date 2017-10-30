@@ -80,7 +80,6 @@ class StandardsModel
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
   def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-    lookup_building_type = model_get_lookup_name(model, building_type)
 
     model.getBuilding.setName("#{instvartemplate}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 

@@ -1,4 +1,35 @@
+require 'singleton'
 require_relative 'openstudio-standards/version'
+
+class Folders
+  #A place to keep all folder paths and ensure that they exist!
+  # Usage is
+  # Folders.instance.refactor_folder
+  include Singleton
+  attr_reader :data_costing_folder
+  attr_reader :data_geometry_folder
+  attr_reader :data_standards_folder
+  attr_reader :data_weather_folder
+  attr_reader :refactor_folder
+
+  def initialize
+    folders = []
+    folders << @data_costing_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/costing/")
+    folders << @data_geometry_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/geometry/")
+    folders << @data_standards_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/standards/")
+    folders << @data_weather_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/weather/")
+    folders << @refactor_folder = File.expand_path("#{File.dirname(__FILE__)}/../lib/openstudio-standards/refactor")
+    error = false
+    folders.each do |folder|
+
+      unless Dir.exist?(folder)
+        puts "#{folder} does not exist. Please check paths relative to this file."
+        error = true
+      end
+    end
+    raise("Folder paths are incorrect. Standards Cannot continue.") if error
+  end
+end
 
 module OpenstudioStandards
 

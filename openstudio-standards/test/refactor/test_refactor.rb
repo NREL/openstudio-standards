@@ -72,8 +72,6 @@ class TestRefactorParallel < Minitest::Test
         log_messages_to_file("#{run['old_method_run_dir']}/openstudio_standards.log", debug = false)
 
         # Compare the two models.
-        puts "Old created is #{old_model.class}"
-        puts "Old created is #{new_model.class}"
         diffs = compare_osm_files(old_model, new_model)
 
 
@@ -116,7 +114,7 @@ class TestRefactorParallel < Minitest::Test
 
   ]
 
-  nrel_templates = ['90.1-2010', 'DOE Ref Pre-1980']
+  nrel_templates = ['90.1-2010']#, 'DOE Ref Pre-1980']
   nrel_climate_zones = ['ASHRAE 169-2006-1A']
   nrel_epw_files = [nil] # we will need to keep this overloaded to keep arguments consistant.
   nrel_runs = self.create_runs_jobs(nrel_templates, nrel_building_types, nrel_climate_zones, nrel_epw_files)
