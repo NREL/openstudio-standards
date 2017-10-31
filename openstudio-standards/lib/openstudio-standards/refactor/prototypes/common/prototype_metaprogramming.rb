@@ -106,6 +106,44 @@ class #{template}#{name} < #{template}_Prototype
     return @building_story_map
  end
 
+ def modify_oa_controller(instvartemplate, model)
+ end
+
+ def reset_or_room_vav_minimum_damper(prototype_input, instvartemplate, model)
+ end
+
+ def update_exhaust_fan_efficiency(instvartemplate, model)
+ end
+
+ def update_fan_efficiency(model)
+ end
+
+   # Get the name of the building type used in lookups
+  #
+  # @param building_type [String] the building type
+  # @return [String] returns the lookup name as a string
+  # @todo Unify the lookup names and eliminate this method
+  def model_get_lookup_name(building_type)
+    lookup_name = building_type
+    case building_type
+      when 'SmallOffice'
+        lookup_name = 'Office'
+      when 'MediumOffice'
+        lookup_name = 'Office'
+      when 'LargeOffice'
+        lookup_name = 'Office'
+      when 'LargeOfficeDetail'
+        lookup_name = 'Office'
+      when 'RetailStandalone'
+        lookup_name = 'Retail'
+      when 'RetailStripmall'
+        lookup_name = 'StripMall'
+      when 'Office'
+        lookup_name = 'Office'
+    end
+    return lookup_name
+  end
+
 
 end
 DYNAMICClass

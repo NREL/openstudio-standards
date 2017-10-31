@@ -1931,7 +1931,7 @@ class StandardsModel
 
   # Applies daylighting controls to each space in the model
   # per the standard.
-  def model_add_daylighting_controls(model)
+  def add_daylighting_controls(template, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding daylighting controls.')
 
     # Add daylighting controls to each space

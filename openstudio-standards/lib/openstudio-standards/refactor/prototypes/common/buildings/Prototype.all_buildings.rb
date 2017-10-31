@@ -507,7 +507,7 @@ module Hospital
     end
   end
 
-  def hospital_add_daylighting_controls(template, model)
+  def add_daylighting_controls(template, model)
     space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
@@ -530,7 +530,7 @@ module Hospital
     end
   end
 
-  def modify_hospital_oa_controller(template, model)
+  def modify_oa_controller(template, model)
     model.getAirLoopHVACs.sort.each do |air_loop|
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
       oa_control = oa_sys.getControllerOutdoorAir
@@ -671,7 +671,7 @@ module LargeHotel
 
 
   # Add the daylighting controls for lobby, cafe, dinning and banquet
-  def large_hotel_add_daylighting_controls(template, model)
+  def add_daylighting_controls(template, model)
     space_names = ['Banquet_Flr_6', 'Dining_Flr_6', 'Cafe_Flr_1', 'Lobby_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get

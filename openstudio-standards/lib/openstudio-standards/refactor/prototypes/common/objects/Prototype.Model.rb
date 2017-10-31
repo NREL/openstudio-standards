@@ -2,13 +2,10 @@
 StandardsModel.class_eval do
 # I am replacing all prototype inputs.
 # Right now.
-
   def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
     building_type = @instvarbuilding_type
     raise ("no building_type!") if @instvarbuilding_type.nil?
     model = nil
-
-
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if @instvarbuilding_type == 'HighriseApartment'
       if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
@@ -19,10 +16,8 @@ StandardsModel.class_eval do
         #  return false
       end
     end
-
     case @instvartemplate
       when 'NECB 2011'
-
         model = load_osm(@geometry_file) #standard candidate
         model.add_design_days_and_weather_file(climate_zone, epw_file) #Standards
         model.add_ground_temperatures(@instvarbuilding_type, climate_zone, @instvartemplate) #prototype candidate
@@ -49,6 +44,34 @@ StandardsModel.class_eval do
         #set a larger tolerance for unmet hours from default 0.2 to 1.0C
         model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
         model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
+        return false if model.runSizingRun("#{sizing_run_dir}/SR1") == false
+        #this doesn nothing for NECB
+        model_apply_multizone_vav_outdoor_air_sizing(model)
+        # This is needed for NECB 2011 as a workaround for sizing the reheat boxes
+        model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
+        # Apply the prototype HVAC assumptions
+        # which include sizing the fan pressure rises based
+        # on the flow rate of the system.
+        model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
+        # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
+        # AHU1 doesn't have economizer
+        self.modify_oa_controller(instvartemplate, model)
+        # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+        self.reset_or_room_vav_minimum_damper(@prototype_input, instvartemplate, model)
+        self.modify_oa_controller(instvartemplate, model)
+        # Apply the HVAC efficiency standard
+        model_apply_hvac_efficiency_standard(model, climate_zone)
+        # Fix EMS references.
+        # Temporary workaround for OS issue #2598
+        model_temp_fix_ems_references(model)
+        # Add daylighting controls per standard
+        # only four zones in large hotel have daylighting controls
+        # todo: YXC to merge to the main function
+        self.add_daylighting_controls(instvartemplate, model)
+        self.update_exhaust_fan_efficiency(instvartemplate, model)
+        self.update_fan_efficiency(model)
+        # Add output variables for debugging
+        model_request_timeseries_outputs(model) if debug
       else
         #optionally  determine the climate zone from the epw and stat files.
         if climate_zone == 'NECB HDD Method'
@@ -76,126 +99,45 @@ StandardsModel.class_eval do
         model.add_ground_temperatures(@instvarbuilding_type, climate_zone, instvartemplate)
         model_apply_sizing_parameters(model, @instvarbuilding_type)
         model.yearDescription.get.setDayofWeekforStartDay('Sunday')
-
+        # For some building types, stories are defined explicitly
+        model_assign_building_story(model, @building_story_map) #standards candidate
+        # set climate zone and building type
+        model.getBuilding.setStandardsBuildingType(building_type)
+        if climate_zone.include? 'ASHRAE 169-2006-'
+          model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
+        end
+        # Perform a sizing model_run(model)
+        return false if model.runSizingRun("#{sizing_run_dir}/SR1") == false
+        # If there are any multizone systems, reset damper positions
+        # to achieve a 60% ventilation effectiveness minimum for the system
+        # following the ventilation rate procedure from 62.1
+        model_apply_multizone_vav_outdoor_air_sizing(model)
+        # Apply the prototype HVAC assumptions
+        # which include sizing the fan pressure rises based
+        # on the flow rate of the system.
+        model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
+        # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
+        # AHU1 doesn't have economizer
+        self.modify_oa_controller(instvartemplate, model)
+        # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+        self.reset_or_room_vav_minimum_damper(@prototype_input, instvartemplate, model)
+        self.modify_oa_controller(instvartemplate, model)
+        # Apply the HVAC efficiency standard
+        model_apply_hvac_efficiency_standard(model, climate_zone)
+        # Fix EMS references.
+        # Temporary workaround for OS issue #2598
+        model_temp_fix_ems_references(model)
+        # Add daylighting controls per standard
+        # only four zones in large hotel have daylighting controls
+        # todo: YXC to merge to the main function
+        self.add_daylighting_controls(instvartemplate, model)
+        self.update_exhaust_fan_efficiency(instvartemplate, model)
+        self.update_fan_efficiency(model)
+        # Add output variables for debugging
+        model_request_timeseries_outputs(model) if debug
     end
-    # set climate zone and building type
-    model.getBuilding.setStandardsBuildingType(building_type)
-    if climate_zone.include? 'ASHRAE 169-2006-'
-      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
-    end
-
-    # For some building types, stories are defined explicitly
-    if building_type == 'SmallHotel'
-      model.getBuildingStorys.each {|item| item.remove}
-      building_story_map = self.define_building_story_map(building_type, instvartemplate, climate_zone)
-      model_assign_building_story(model, building_story_map)
-    end
-
-    # Assign building stories to spaces in the building
-    # where stories are not yet assigned.
-    model_assign_spaces_to_stories(model)
-
-    # Perform a sizing model_run(model) 
-    if model.runSizingRun("#{sizing_run_dir}/SR1") == false
-      return false
-    end
-
-    # If there are any multizone systems, reset damper positions
-    # to achieve a 60% ventilation effectiveness minimum for the system
-    # following the ventilation rate procedure from 62.1
-    model_apply_multizone_vav_outdoor_air_sizing(model)
-
-    # This is needed for NECB 2011 as a workaround for sizing the reheat boxes
-    if instvartemplate == 'NECB 2011'
-      model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
-    end
-
-    # Apply the prototype HVAC assumptions
-    # which include sizing the fan pressure rises based
-    # on the flow rate of the system.
-    model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-
-    # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
-    # AHU1 doesn't have economizer
-    if building_type == 'Outpatient'
-      self.modify_oa_controller(instvartemplate, model)
-      # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-      self.reset_or_room_vav_minimum_damper(@prototype_input, instvartemplate, model)
-    end
-
-    if building_type == 'Hospital'
-      self.modify_hospital_oa_controller(instvartemplate, model)
-    end
-
-    # Apply the HVAC efficiency standard
-    model_apply_hvac_efficiency_standard(model, climate_zone)
-
-    # Fix EMS references.
-    # Temporary workaround for OS issue #2598
-    model_temp_fix_ems_references(model)
-
-    # Add daylighting controls per standard
-    # only four zones in large hotel have daylighting controls
-    # todo: YXC to merge to the main function
-    if building_type == 'LargeHotel'
-      self.large_hotel_add_daylighting_controls(instvartemplate, model)
-    elsif building_type == 'Hospital'
-      self.hospital_add_daylighting_controls(instvartemplate, model)
-    else
-      model_add_daylighting_controls(model)
-    end
-
-    if building_type == 'QuickServiceRestaurant'
-      self.update_exhaust_fan_efficiency(instvartemplate, model)
-    elsif building_type == 'FullServiceRestaurant'
-      self.update_exhaust_fan_efficiency(instvartemplate, model)
-    elsif building_type == 'Outpatient'
-      self.update_exhaust_fan_efficiency(instvartemplate, model)
-    elsif building_type == 'SuperMarket'
-      self.update_exhaust_fan_efficiency(instvartemplate, model)
-    end
-
-    if building_type == 'HighriseApartment'
-      self.update_fan_efficiency(model)
-    end
-
-    # Add output variables for debugging
-    if debug
-      model_request_timeseries_outputs(model)
-    end
-
     return model
   end
-
-  # Get the name of the building type used in lookups
-  #
-  # @param building_type [String] the building type
-  # @return [String] returns the lookup name as a string
-  # @todo Unify the lookup names and eliminate this method
-  def model_get_lookup_name(building_type)
-    lookup_name = building_type
-
-    case building_type
-      when 'SmallOffice'
-        lookup_name = 'Office'
-      when 'MediumOffice'
-        lookup_name = 'Office'
-      when 'LargeOffice'
-        lookup_name = 'Office'
-      when 'LargeOfficeDetail'
-        lookup_name = 'Office'
-      when 'RetailStandalone'
-        lookup_name = 'Retail'
-      when 'RetailStripmall'
-        lookup_name = 'StripMall'
-      when 'Office'
-        lookup_name = 'Office'
-    end
-
-    return lookup_name
-  end
-
-
 
   # Loads a osm as a starting point.
   #
@@ -221,13 +163,11 @@ StandardsModel.class_eval do
   # @param rel_path_to_osm [String] the path to an .osm file, relative to this file
   # @return [Bool] returns true if successful, false if not
   def model_replace_model(model, rel_path_to_osm)
-
     # Take the existing model and remove all the objects
     # (this is cheesy), but need to keep the same memory block
     handles = OpenStudio::UUIDVector.new
     model.objects.each {|objects| handles << objects.handle}
     model.removeObjects(handles)
-
     model = nil
     if File.dirname(__FILE__)[0] == ':'
       # running from embedded location
@@ -256,7 +196,6 @@ StandardsModel.class_eval do
 
     # Add the objects from the geometry model to the working model
     model.addObjects(model.toIdfFile.objects)
-
     return true
   end
 
@@ -352,7 +291,12 @@ StandardsModel.class_eval do
     model_add_loads(model)
   end
 
-  def model_assign_building_story(model, building_story_map)
+  def model_assign_building_story(model, building_story_map = nil)
+    if building_story_map.nil? or building_story_map.empty?
+
+      model_assign_spaces_to_stories(model)
+      return true
+    end
     building_story_map.each do |building_story_name, space_names|
       stub_building_story = OpenStudio::Model::BuildingStory.new(model)
       stub_building_story.setName(building_story_name)
