@@ -100,7 +100,7 @@ module OpenstudioStandards
     require_relative "#{stds}/necb/necb_2011/necb_2011"
     require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
     require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
-    require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_pre_1980_2004"
+    require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004"
     require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae90_1_2004"
     require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae90_1_2007"
     require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae90_1_2010"
@@ -197,9 +197,9 @@ module OpenstudioStandards
     require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.ThermalZone"
     require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.WaterHeaterMixed"
     # DOE 1980-2004
-    require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_pre_1980_2004.AirLoopHVAC"
-    require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_pre_1980_2004.Model"
-    require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_pre_1980_2004.PlantLoop"
+    require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirLoopHVAC"
+    require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.Model"
+    require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.PlantLoop"
     # DOE Pre-1980
     require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.AirLoopHVAC"
     require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.Model"
