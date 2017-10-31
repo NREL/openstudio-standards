@@ -1,4 +1,4 @@
-class DOERef1980_2004_Model < A90_1_Model
+class DOERefPre1980_Model < A90_1_Model
   # Apply the air leakage requirements to the model.
   # "For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004', 
   # infiltration rates are not defined using this method, 

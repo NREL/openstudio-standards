@@ -19,7 +19,10 @@ class StandardsModel
   end
   #Get an instance of the standard class by name.
   def self.get_standard_model(name)
-    StandardsList[name].new
+    if StandardsList[name].nil?
+      raise "ERROR: Did not find a class called '#{name}' to create in #{StandardsList}"
+    end
+    return StandardsList[name].new
   end
   #set up template class variable.
   def intialize()
