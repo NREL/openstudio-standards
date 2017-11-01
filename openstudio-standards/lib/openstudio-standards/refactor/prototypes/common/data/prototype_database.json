@@ -1125,6 +1125,7 @@
       ]
     },
     "space_multiplier_map": {
+      "DataCenter_mid_ZN_6": 10,
       "Perimeter_mid_ZN_1": 10,
       "Perimeter_mid_ZN_2": 10,
       "Perimeter_mid_ZN_3": 10,
@@ -13651,7 +13652,6 @@
       ]
     },
     "space_multiplier_map": {
-      "DataCenter_mid_ZN_6": 10,
       "Perimeter_mid_ZN_1": 10,
       "Perimeter_mid_ZN_2": 10,
       "Perimeter_mid_ZN_3": 10,
@@ -16722,7 +16722,6 @@
       ]
     },
     "space_multiplier_map": {
-      "DataCenter_mid_ZN_6": 10,
       "Perimeter_mid_ZN_1": 10,
       "Perimeter_mid_ZN_2": 10,
       "Perimeter_mid_ZN_3": 10,
