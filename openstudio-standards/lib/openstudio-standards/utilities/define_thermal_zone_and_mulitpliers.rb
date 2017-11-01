@@ -92,6 +92,7 @@ data_hash.each do |info|
   # Use this to load the osm file into a model object.
   full_path = geometry_folder_path + info["geometry"]
   model=BTAP::FileIO::load_osm(full_path)
+=begin
 
   # This will add the OS:Building information to the model.
   total_floors =  geometry_json[info["building_type"]]["above_ground_floors"].to_i + geometry_json[info["building_type"]]["below_ground_floors"].to_i
@@ -112,7 +113,10 @@ data_hash.each do |info|
       thermal_zone.setName("TZ-#{space_name}")
       # Add zone mulitplier if required.
       thermal_zone.setMultiplier(multiplier)
+
       # get the space in the model.
+      puts info["class_name"]
+      puts space_name
       space = model.getSpaceByName(space_name).get
       #associates the thermal to the space.
       space.setThermalZone(thermal_zone)
@@ -131,7 +135,8 @@ data_hash.each do |info|
       end
     end
   end
+=end
 
-  BTAP::FileIO::save_osm(model, full_path+".new")
+  BTAP::FileIO::save_osm(model, full_path)
 end
 

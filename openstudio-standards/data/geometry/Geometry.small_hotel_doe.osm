@@ -1,7 +1,7 @@
 
 OS:Version,
-  {04b005d3-f822-4522-92a6-f9f79bb496cf}, !- Handle
-  1.8.0;                                  !- Version Identifier
+  {2454237e-aa68-4567-b57a-2c8a942c0df4}, !- Handle
+  2.2.1;                                  !- Version Identifier
 
 OS:Site,
   {f9ddda8a-7be0-47bc-875c-483746952320}, !- Handle
@@ -2007,7 +2007,7 @@ OS:Surface,
   52.4743, 10.1078, 6.096,                !- X,Y,Z Vertex 3 {m}
   52.4743, 10.1078, 8.8392;               !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {bfe3d1fd-8b8a-4b95-a144-8d252c2d471b}, !- Handle
   Heating:Gas,                            !- Name
   hourly,                                 !- Reporting Frequency
@@ -2366,7 +2366,7 @@ OS:SubSurface,
   17.31, 18.3374, 0.9544,                 !- X,Y,Z Vertex 3 {m}
   17.31, 18.3374, 2.3984;                 !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {76de7eca-07ad-4279-8cd6-6a3281cd6201}, !- Handle
   Humidifier:Electricity,                 !- Name
   hourly,                                 !- Reporting Frequency
@@ -3056,7 +3056,7 @@ OS:SubSurface,
   31.251, 0.0488, 6.7456,                 !- X,Y,Z Vertex 3 {m}
   31.251, 0.0488, 8.1896;                 !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {2f96800f-289b-47d1-b3ef-939fcc6fa03e}, !- Handle
   Cooling:Electricity,                    !- Name
   hourly,                                 !- Reporting Frequency
@@ -3371,7 +3371,7 @@ OS:Space,
   ,                                       !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
-OS:Meter,
+OS:Output:Meter,
   {577a3452-3c26-4f5d-8b90-020e51b8e0c9}, !- Handle
   WaterSystems:Gas,                       !- Name
   hourly,                                 !- Reporting Frequency
@@ -3685,7 +3685,7 @@ OS:Surface,
   52.4743, 10.1078, 0,                    !- X,Y,Z Vertex 3 {m}
   52.4743, 10.1078, 3.3528;               !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {6b740fd9-163d-4780-860d-1c1a98daeeea}, !- Handle
   Heating:Electricity,                    !- Name
   hourly,                                 !- Reporting Frequency
@@ -4101,7 +4101,7 @@ OS:SubSurface,
   6.562, 0.0488, 6.7456,                  !- X,Y,Z Vertex 3 {m}
   6.562, 0.0488, 8.1896;                  !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {d23d6772-24db-4a97-ba5e-3faa3248f295}, !- Handle
   ExteriorLights:Electricity,             !- Name
   hourly,                                 !- Reporting Frequency
@@ -4901,7 +4901,7 @@ OS:Surface,
   4.0111, 18.3374, 6.096,                 !- X,Y,Z Vertex 3 {m}
   4.0111, 18.3374, 8.8392;                !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {da2d2209-9a14-40e2-8395-6059e4917fcf}, !- Handle
   Refrigeration:Electricity,              !- Name
   hourly,                                 !- Reporting Frequency
@@ -7549,7 +7549,7 @@ OS:Surface,
   40.5871, 10.1078, 3.3528,               !- X,Y,Z Vertex 3 {m}
   40.5871, 18.3374, 3.3528;               !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {43dc8562-679d-46e6-bcc9-3fda422d78a6}, !- Handle
   ExteriorEquipment:Electricity,          !- Name
   hourly,                                 !- Reporting Frequency
@@ -7743,14 +7743,14 @@ OS:SubSurface,
   34.074, 18.3374, 4.0024,                !- X,Y,Z Vertex 3 {m}
   34.074, 18.3374, 5.4464;                !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {4ab54000-81a8-48c6-b2b7-37141e2eafdc}, !- Handle
   InteriorEquipment:Electricity,          !- Name
   hourly,                                 !- Reporting Frequency
   False,                                  !- Meter File Only
   False;                                  !- Cumulative
 
-OS:Meter,
+OS:Output:Meter,
   {abb115a1-09d3-4d4d-950f-b0f2875166ce}, !- Handle
   Fans:Electricity,                       !- Name
   hourly,                                 !- Reporting Frequency
@@ -8046,7 +8046,7 @@ OS:Surface,
   4.0111, 0.0488, 6.096,                  !- X,Y,Z Vertex 3 {m}
   4.0111, 0.0488, 8.8392;                 !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {6c0f42a6-41ff-4eb7-8cf1-ab5821989d0d}, !- Handle
   InteriorEquipment:Gas,                  !- Name
   hourly,                                 !- Reporting Frequency
@@ -8461,7 +8461,7 @@ OS:SubSurface,
   30.111, 18.3374, 0.9544,                !- X,Y,Z Vertex 3 {m}
   30.111, 18.3374, 2.3984;                !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {7e589998-fdd0-48bd-9ce7-790f3ded4e42}, !- Handle
   Electricity:Facility,                   !- Name
   hourly,                                 !- Reporting Frequency
@@ -9045,7 +9045,7 @@ OS:Surface,
   28.6999, 18.3374, 0,                    !- X,Y,Z Vertex 3 {m}
   28.6999, 18.3374, 3.3528;               !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {cc297f77-7b16-4c9a-98fc-0f58f6ca01d7}, !- Handle
   HeatRejection:Electricity,              !- Name
   hourly,                                 !- Reporting Frequency
@@ -9375,7 +9375,7 @@ OS:SubSurface,
   3.057, 0.0488, 0.9544,                  !- X,Y,Z Vertex 3 {m}
   3.057, 0.0488, 2.3984;                  !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {de3fe8d3-0fbd-4692-a359-2bbf1a01c916}, !- Handle
   InteriorLights:Electricity,             !- Name
   hourly,                                 !- Reporting Frequency
@@ -9746,7 +9746,7 @@ OS:Surface,
 OS:HeatBalanceAlgorithm,
   {1acbee8b-01d2-4d46-8092-af3567969000}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {F}
+  200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:Surface,
   {6a1c6f97-1626-4384-b1b6-db73b038f70c}, !- Handle
@@ -10443,7 +10443,7 @@ OS:Surface,
   32.6623, 10.1078, 3.3528,               !- X,Y,Z Vertex 3 {m}
   32.6623, 10.1078, 6.096;                !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {3fe441fb-ac46-44af-a936-60ef9fbef96f}, !- Handle
   WaterSystems:Electricity,               !- Name
   hourly,                                 !- Reporting Frequency
@@ -11130,7 +11130,7 @@ OS:Surface,
   26.8711, 10.1078, 0,                    !- X,Y,Z Vertex 3 {m}
   26.8711, 18.3374, 0;                    !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {8888abdd-890b-4a0a-a40b-92c8e0cdd199}, !- Handle
   Gas:Facility,                           !- Name
   hourly,                                 !- Reporting Frequency
@@ -11375,7 +11375,7 @@ OS:Surface,
   26.8711, 18.3374, 3.3528,               !- X,Y,Z Vertex 3 {m}
   26.8711, 10.1078, 3.3528;               !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {87d46cf7-2b3e-4f91-9b01-63783eec158d}, !- Handle
   Pumps:Electricity,                      !- Name
   hourly,                                 !- Reporting Frequency

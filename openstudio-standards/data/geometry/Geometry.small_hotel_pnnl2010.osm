@@ -1,7 +1,7 @@
 
 OS:Version,
-  {77c57981-62a3-4b5d-acff-405695742699}, !- Handle
-  1.7.0;                                  !- Version Identifier
+  {e486cb33-64ed-4f65-a45b-e5d97b2b8927}, !- Handle
+  2.2.1;                                  !- Version Identifier
 
 OS:Site,
   {0f47c310-aa5a-40d4-85d5-78f02ad3b06b}, !- Handle
@@ -344,7 +344,7 @@ OS:Space,
 OS:HeatBalanceAlgorithm,
   {cf83a599-72b0-4300-a242-3930cd584a49}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {F}
+  200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:SubSurface,
   {938d3ad7-a3bd-432e-b7f6-d9e557208b03}, !- Handle
@@ -2155,7 +2155,7 @@ OS:Surface,
   19.86068442, 8.2790292198, 0,           !- X,Y,Z Vertex 3 {m}
   19.86068442, 8.2790292198, 3.3528;      !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {812cebd8-779f-4d17-8147-71cbc6133991}, !- Handle
   ElectricityNet:Facility,                !- Name
   Hourly,                                 !- Reporting Frequency
@@ -9027,7 +9027,7 @@ OS:Surface,
   19.8606844241, 18.33742922, 0,          !- X,Y,Z Vertex 3 {m}
   19.8606844241, 18.33742922, 3.3528;     !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {d191dc6b-f1f2-4466-aeb8-821ef31504c4}, !- Handle
   Electricity:Facility,                   !- Name
   Hourly,                                 !- Reporting Frequency
@@ -10602,7 +10602,7 @@ OS:Surface,
   52.4742844242, 0.0488452197, 0,         !- X,Y,Z Vertex 3 {m}
   52.4742844242, 8.2790292198, 0;         !- X,Y,Z Vertex 4 {m}
 
-OS:Meter,
+OS:Output:Meter,
   {4c9b2aa4-d123-4402-b4b4-3de78c267438}, !- Handle
   Gas:Facility,                           !- Name
   Hourly,                                 !- Reporting Frequency

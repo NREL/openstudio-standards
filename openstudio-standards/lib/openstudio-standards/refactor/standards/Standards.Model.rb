@@ -3549,6 +3549,7 @@ class StandardsModel
         cat = 'Semiheated'
       # Heated and Cooled
       else
+        raise("hello")
         res = thermal_zone_residential?(space)
         cat = if res
                 'ResConditioned'
