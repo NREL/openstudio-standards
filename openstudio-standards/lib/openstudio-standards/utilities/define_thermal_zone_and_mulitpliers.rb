@@ -92,7 +92,7 @@ data_hash.each do |info|
   # Use this to load the osm file into a model object.
   full_path = geometry_folder_path + info["geometry"]
   model=BTAP::FileIO::load_osm(full_path)
-=begin
+
 
   # This will add the OS:Building information to the model.
   total_floors =  geometry_json[info["building_type"]]["above_ground_floors"].to_i + geometry_json[info["building_type"]]["below_ground_floors"].to_i
@@ -101,27 +101,6 @@ data_hash.each do |info|
   model.building().get.setStandardsNumberOfStories(total_floors)
   model.building().get.setStandardsNumberOfAboveGroundStories(above_ground_floors)
 
-  model.getThermalZones.sort.each {|zone| zone.remove}
-  #skips if there are no multipliers.
-  if not info["space_multiplier_map"].nil?
-    info["space_multiplier_map"].sort.each do |space_name, multiplier|
-      space_name = space_name.to_s
-      multiplier = multiplier.to_i
-      # after that is done you should have a model object.
-      thermal_zone = OpenStudio::Model::ThermalZone.new(model)
-      # Create a more informative space name.
-      thermal_zone.setName("TZ-#{space_name}")
-      # Add zone mulitplier if required.
-      thermal_zone.setMultiplier(multiplier)
-
-      # get the space in the model.
-      puts info["class_name"]
-      puts space_name
-      space = model.getSpaceByName(space_name).get
-      #associates the thermal to the space.
-      space.setThermalZone(thermal_zone)
-    end
-  end
   if not info["building_story_map"].nil?
     model.getBuildingStorys.sort.each {|story| story.remove}
     info["building_story_map"].each do |building_story_name, space_names|
@@ -135,8 +114,30 @@ data_hash.each do |info|
       end
     end
   end
-=end
 
-  BTAP::FileIO::save_osm(model, full_path)
+
+  model.getThermalZones.sort.each { |zone| zone.remove }
+  #skips if there are no multipliers.
+  if not info["space_multiplier_map"].nil?
+    info["space_multiplier_map"].sort.each do |space_name, multiplier|
+      space_name = space_name.to_s
+      multiplier = multiplier.to_i
+      # after that is done you should have a model object.
+      thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+      # Create a more informative space name.
+      thermal_zone.setName("TZ-#{space_name}")
+      # Add zone mulitplier if required.
+      thermal_zone.setMultiplier(multiplier)
+
+      # get the space in the model.
+      space = model.getSpaceByName(space_name).get
+      #associates the thermal to the space.
+      space.setThermalZone(thermal_zone)
+    end
+  end
+
+
+
+  BTAP::FileIO::save_osm(model, full_path + ".new")
 end
 
