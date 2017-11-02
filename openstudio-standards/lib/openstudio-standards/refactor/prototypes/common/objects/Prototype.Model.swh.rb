@@ -1,13 +1,13 @@
 
 # open the class to add methods to size all HVAC equipment
 class StandardsModel
-  def model_add_swh(model, building_type, template, climate_zone, prototype_input, epw_file)
+  def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
 
-      if template == 'NECB 2011'
+      if instvartemplate == 'NECB 2011'
         # vars x1..x10 not required here, only service water heating fuel type, which is
         # weather file dependent for NECB 2011
         x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
@@ -16,7 +16,7 @@ class StandardsModel
       end
       
       # Add the main service water loop
-      main_swh_loop = model_add_swh_loop(model, template,
+      main_swh_loop = model_add_swh_loop(model,
                                    'Main Service Water Loop',
                                    nil,
                                    OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
@@ -26,18 +26,18 @@ class StandardsModel
                                    OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
                                    swh_fueltype,
                                    OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                   building_type) unless building_type == 'RetailStripmall' && template != 'NECB 2011'
+                                   building_type) unless building_type == 'RetailStripmall' && instvartemplate != 'NECB 2011'
 
       # Attach the end uses if specified in prototype inputs
       # TODO remove special logic for large office SWH end uses
       # TODO remove special logic for stripmall SWH end uses and service water loops
       # TODO remove special logic for large hotel SWH end uses
-      if building_type == 'LargeOffice' && template != 'NECB 2011'
+      if building_type == 'LargeOffice' && instvartemplate != 'NECB 2011'
 
         # Only the core spaces have service water
         ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name| 
         #['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].each do |space_name| # for new space type large office
-		 model_add_swh_end_uses(model, template,
+		 model_add_swh_end_uses(model,
                            'Main',
                            main_swh_loop,
                            OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
@@ -46,11 +46,11 @@ class StandardsModel
                            space_name,
                            building_type)
         end
-      elsif building_type == 'LargeOfficeDetail' && template != 'NECB 2011'
+      elsif building_type == 'LargeOfficeDetail' && instvartemplate != 'NECB 2011'
 
         # Only mechanical rooms have service water
         ['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].each do |space_name| # for new space type large office
-		 model_add_swh_end_uses(model, template,
+		 model_add_swh_end_uses(model,
                            'Main',
                            main_swh_loop,
                            OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
@@ -59,9 +59,9 @@ class StandardsModel
                            space_name,
                            building_type)
         end
-      elsif building_type == 'RetailStripmall' && template != 'NECB 2011'
+      elsif building_type == 'RetailStripmall' && instvartemplate != 'NECB 2011'
 
-        return true if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
+        return true if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
 
         # Create a separate hot water loop & water heater for each space in the list
         swh_space_names = ['LGstore1', 'SMstore1', 'SMstore2', 'SMstore3', 'LGstore2', 'SMstore5', 'SMstore6']
@@ -74,7 +74,7 @@ class StandardsModel
         # Loop through all spaces
         swh_space_names.zip(swh_sch_names).each do |swh_space_name, swh_sch_name|
           swh_thermal_zone = model.getSpaceByName(swh_space_name).get.thermalZone.get
-          main_swh_loop = model_add_swh_loop(model, template,
+          main_swh_loop = model_add_swh_loop(model,
                                        "#{swh_thermal_zone.name} Service Water Loop",
                                        swh_thermal_zone,
                                        OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
@@ -86,7 +86,7 @@ class StandardsModel
                                        OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
                                        building_type)
 
-          model_add_swh_end_uses(model, template,
+          model_add_swh_end_uses(model,
                            'Main',
                            main_swh_loop,
                            rated_flow_rate_m3_per_s,
@@ -99,7 +99,7 @@ class StandardsModel
       elsif prototype_input['main_service_water_peak_flowrate']
 
         # Attaches the end uses if specified as a lump value in the prototype_input
-        model_add_swh_end_uses(model, template,
+        model_add_swh_end_uses(model,
                          'Main',
                          main_swh_loop,
                          OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
@@ -111,15 +111,15 @@ class StandardsModel
       else
 
         # Attaches the end uses if specified by space type
-        space_type_map = self.define_space_type_map(building_type, template, climate_zone)
+        space_type_map = self.define_space_type_map(building_type, climate_zone)
 
-        if template == 'NECB 2011'
+        if instvartemplate == 'NECB 2011'
           building_type = 'Space Function'
         end
 
         space_type_map.each do |space_type_name, space_names|
           search_criteria = {
-            'template' => template,
+            'template' => instvartemplate,
             'building_type' => model_get_lookup_name(building_type),
             'space_type' => space_type_name
           }
@@ -129,24 +129,21 @@ class StandardsModel
           next if data.nil?
 
           # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-          next unless template == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
+          next unless instvartemplate == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
 
           # Add a service water use for each space
           space_names.each do |space_name|
             space = model.getSpaceByName(space_name).get
             space_multiplier =  nil
-            case template
+            case instvartemplate
             when 'NECB 2011'
             #Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes. 
               space_multiplier = 1
             else
               space_multiplier = space.multiplier 
             end
-            
 
-            
             model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
-                                      template,
                                       climate_zone,
                                       main_swh_loop,
                                       space_type_name,
@@ -163,7 +160,7 @@ class StandardsModel
     unless prototype_input['booster_water_heater_volume'].nil?
 
       # Add the booster water loop
-      swh_booster_loop = model_add_swh_booster(model, template,
+      swh_booster_loop = model_add_swh_booster(model,
                                          main_swh_loop,
                                          OpenStudio.convert(prototype_input['booster_water_heater_capacity'], 'Btu/hr', 'W').get,
                                          OpenStudio.convert(prototype_input['booster_water_heater_volume'], 'gal', 'm^3').get,
@@ -174,7 +171,7 @@ class StandardsModel
                                          building_type)
 
       # Attach the end uses
-      model_add_booster_swh_end_uses(model, template,
+      model_add_booster_swh_end_uses(model,
                                swh_booster_loop,
                                OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                prototype_input['booster_service_water_flowrate_schedule'],
@@ -187,7 +184,7 @@ class StandardsModel
     unless prototype_input['laundry_water_heater_volume'].nil?
 
       # Add the laundry service water heating loop
-      laundry_swh_loop = model_add_swh_loop(model, template,
+      laundry_swh_loop = model_add_swh_loop(model,
                                       'Laundry Service Water Loop',
                                       nil,
                                       OpenStudio.convert(prototype_input['laundry_service_water_temperature'], 'F', 'C').get,
@@ -200,7 +197,7 @@ class StandardsModel
                                       building_type)
 
       # Attach the end uses if specified in prototype inputs
-      model_add_swh_end_uses(model, template,
+      model_add_swh_end_uses(model,
                        'Laundry',
                        laundry_swh_loop,
                        OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
@@ -225,7 +222,7 @@ class StandardsModel
   # @param [String] circulating, (circulating, noncirculating, nil) nil is smart
   # @return [Array] hot water loops
   # @todo - add in losses from tank and pipe insulation, etc.
-  def model_add_typical_swh(model, template, trust_effective_num_spaces = false, fuel = nil, pipe_insul_in = nil, circulating = nil)
+  def model_add_typical_swh(model, trust_effective_num_spaces = false, fuel = nil, pipe_insul_in = nil, circulating = nil)
 
     # array of hot water loops
     swh_systems = []
@@ -234,7 +231,7 @@ class StandardsModel
     water_use_equipment_hash = {} # key is standards building type value is array of water use equipment
 
     # create space type hash (need num_units for MidriseApartment and RetailStripmall)
-    space_type_hash = model.create_space_type_hash(template,trust_effective_num_spaces = false)
+    space_type_hash = model.create_space_type_hash(trust_effective_num_spaces = false)
 
     # add temperate schedules to hash so they can be shared across water use equipment
     water_use_def_schedules = {} # key is temp C value is schedule
@@ -248,7 +245,7 @@ class StandardsModel
       stds_space_type = space_type.standardsSpaceType.get
 
       # lookup space_type_properties
-      space_type_properties = space_type.get_standards_data(template)
+      space_type_properties = space_type.get_standards_data()
       gal_hr_per_area = space_type_properties['service_water_heating_peak_flow_per_area']
       gal_hr_peak_flow_rate = space_type_properties['service_water_heating_peak_flow_rate']
       flow_rate_fraction_schedule = model_add_schedule(model, space_type_properties['service_water_heating_schedule'])
@@ -340,7 +337,7 @@ class StandardsModel
           end
 
           # make loop for each unit and add on water use equipment
-          unit_hot_water_loop = model_add_swh_loop(model, template,
+          unit_hot_water_loop = model_add_swh_loop(model,
                                                    sys_name,
                                                    water_heater_thermal_zone,
                                                    service_water_temperature,
@@ -359,7 +356,7 @@ class StandardsModel
           unit_hot_water_loop.supplyComponents.each do |component|
             next if not component.to_WaterHeaterMixed.is_initialized
             component = component.to_WaterHeaterMixed.get
-            component.apply_efficiency(template)
+            component.apply_efficiency()
           end
 
           # add to list of systems
@@ -432,7 +429,7 @@ class StandardsModel
         parasitic_fuel_consumption_rate = water_heater_sizing[:parasitic_fuel_consumption_rate]
 
         # make loop for each unit and add on water use equipment
-        dedicated_hot_water_loop = model_add_swh_loop(model, template,
+        dedicated_hot_water_loop = model_add_swh_loop(model,
                                               sys_name,
                                               water_heater_thermal_zone,
                                               water_heater_temp_si,
@@ -453,7 +450,7 @@ class StandardsModel
           water_heater = component.to_WaterHeaterMixed.get
 
           # apply efficiency to hot water heater
-          water_heater.apply_efficiency(template)
+          water_heater.apply_efficiency()
         end
 
         # add to list of systems
@@ -479,7 +476,7 @@ class StandardsModel
           booster_water_heater_thermal_zone = nil
 
           # add_swh_booster
-          booster_service_water_loop = model_add_swh_booster(model, template,
+          booster_service_water_loop = model_add_swh_booster(model,
                                                        dedicated_hot_water_loop,
                                                       water_heater_capacity,
                                                       water_heater_volume,
@@ -496,7 +493,7 @@ class StandardsModel
             water_heater = component.to_WaterHeaterMixed.get
 
             # apply efficiency to hot water heater
-            water_heater.apply_efficiency(template)
+            water_heater.apply_efficiency()
           end
 
           # rename booster loop
@@ -619,7 +616,7 @@ class StandardsModel
       end
 
       # make loop for each unit and add on water use equipment
-      shared_hot_water_loop = model_add_swh_loop(model, template,
+      shared_hot_water_loop = model_add_swh_loop(model,
                                               sys_name,
                                               water_heater_thermal_zone,
                                               water_heater_temp_si,
@@ -637,7 +634,7 @@ class StandardsModel
         water_heater = component.to_WaterHeaterMixed.get
 
         # apply efficiency to hot water heater
-        water_heater.apply_efficiency(template)
+        water_heater.apply_efficiency()
       end
 
       # loop through water use equipment

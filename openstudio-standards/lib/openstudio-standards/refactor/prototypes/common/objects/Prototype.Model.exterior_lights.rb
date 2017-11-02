@@ -7,14 +7,14 @@ class StandardsModel
   # @param exterior_lighting_zone_number [Integer] Valid choices are
   # @return [Hash] the resulting exterior lights
   # @todo - would be nice to add argument for some building types (SmallHotel, MidriseApartment, PrimarySchool, SecondarySchool, RetailStripmall) if it has interior or exterior circulation.
-  def model_add_typical_exterior_lights(model, template,exterior_lighting_zone_number,onsite_parking_fraction = 1.0, add_base_site_allowance = false, use_model_for_entries_and_canopies = false)
+  def model_add_typical_exterior_lights(model,exterior_lighting_zone_number,onsite_parking_fraction = 1.0, add_base_site_allowance = false, use_model_for_entries_and_canopies = false)
 
     exterior_lights = {}
     installed_power = 0.0
 
     # populate search hash
     search_criteria = {
-        'template' => template,
+        'template' => instvartemplate,
         'exterior_lighting_zone_number' => exterior_lighting_zone_number,
     }
     
@@ -23,15 +23,15 @@ class StandardsModel
 
     # make sure lighting properties were found
     if exterior_lighting_properties.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.exterior_lights', "Exterior lighting properties not found for #{template}, ext lighting zone #{exterior_lighting_zone_number}, none will be added to model.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.exterior_lights', "Exterior lighting properties not found for #{instvartemplate}, ext lighting zone #{exterior_lighting_zone_number}, none will be added to model.")
       return exterior_lights
     end
 
     # get building types and ratio (needed to get correct schedules, parking area, entries, canopies, and drive throughs)
-    space_type_hash = model.create_space_type_hash(template)
+    space_type_hash = model.create_space_type_hash()
 
     # get model specific values to map to exterior_lighting_properties
-    area_length_count_hash = model.create_exterior_lighting_area_length_count_hash(template,space_type_hash,use_model_for_entries_and_canopies)
+    area_length_count_hash = model.create_exterior_lighting_area_length_count_hash(space_type_hash,use_model_for_entries_and_canopies)
 
     # using midnight to 6am setback or shutdown
     start_setback_shutoff = {:hr => 24, :min => 0}
@@ -288,7 +288,7 @@ class StandardsModel
   # @return [hash] hash of exterior lighting value types and building type and model specific values
   # @todo - add code in to determine number of entries and canopy area from model geoemtry
   # @todo - come up with better logic for entry widths
-  def model_create_exterior_lighting_area_length_count_hash(model, template,space_type_hash,use_model_for_entries_and_canopies)
+  def model_create_exterior_lighting_area_length_count_hash(model,space_type_hash,use_model_for_entries_and_canopies)
 
     area_length_count_hash = {}
 

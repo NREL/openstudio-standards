@@ -88,11 +88,11 @@ class #{template}#{name} < #{template}_Prototype
     self.extend(#{name})
   end
 #Common Methods to all prototypes. 
-  def define_space_type_map(building_type, template, climate_zone)
+  def define_space_type_map(building_type, climate_zone)
     return @space_type_map
   end
 
-  def define_hvac_system_map(building_type, template, climate_zone)
+  def define_hvac_system_map(building_type, climate_zone)
     return @system_to_space_map
   end
 
@@ -100,24 +100,20 @@ class #{template}#{name} < #{template}_Prototype
     return @space_multiplier_map
   end
 
-
-
-
-
- def define_building_story_map(building_type, instvartemplate, climate_zone)
+ def define_building_story_map(building_type, climate_zone)
     return @building_story_map
  end
 
- def modify_oa_controller(instvartemplate, model)
+ def model_modify_oa_controller(model)
  end
 
- def reset_or_room_vav_minimum_damper(prototype_input, instvartemplate, model)
+ def model_reset_or_room_vav_minimum_damper(prototype_input, model)
  end
 
- def update_exhaust_fan_efficiency(instvartemplate, model)
+ def model_update_exhaust_fan_efficiency(model)
  end
 
- def update_fan_efficiency(model)
+ def model_update_fan_efficiency(model)
  end
 
    # Get the name of the building type used in lookups

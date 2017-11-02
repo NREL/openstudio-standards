@@ -9,18 +9,18 @@ StandardsModel.class_eval do
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if @instvarbuilding_type == 'HighriseApartment'
       if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
-        OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at @@template #{} are not available, the measure is disabled for this specific type.")
+        OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at  #{} are not available, the measure is disabled for this specific type.")
         return false
         #elsif @@template == 'NECB 2011'
         #  OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at @@template #{@@template} is not available, the measure is disabled for this specific type.")
         #  return false
       end
     end
-    case @instvartemplate
+    case instvartemplate
       when 'NECB 2011'
         model = load_osm_data(@geometry_file) #standard candidate
         model.add_design_days_and_weather_file(climate_zone, epw_file) #Standards
-        model.add_ground_temperatures(@instvarbuilding_type, climate_zone, @instvartemplate) #prototype candidate
+        model.add_ground_temperatures(@instvarbuilding_type, climate_zone, instvartemplate) #prototype candidate
         model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
         model_assign_space_type_stubs(model, 'Space Function', @space_type_map) #Standards candidate
         model_add_loads(model) #standards candidate
@@ -34,8 +34,8 @@ StandardsModel.class_eval do
         # For some building types, stories are defined explicitly
 
         return false if model.runSizingRun("#{sizing_run_dir}/SR0") == false
-        model_add_hvac(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file) #standards for NECB Prototype for NREL candidate
-        model_add_swh(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file)
+        model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file) #standards for NECB Prototype for NREL candidate
+        model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
         model_apply_sizing_parameters(model, @instvarbuilding_type)
         model.yearDescription.get.setDayofWeekforStartDay('Sunday')
         #set a larger tolerance for unmet hours from default 0.2 to 1.0C
@@ -52,10 +52,10 @@ StandardsModel.class_eval do
         model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
         # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
         # AHU1 doesn't have economizer
-        self.modify_oa_controller(instvartemplate, model)
+        model_modify_oa_controller(model)
         # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-        self.reset_or_room_vav_minimum_damper(@prototype_input, instvartemplate, model)
-        self.modify_oa_controller(instvartemplate, model)
+        model_reset_or_room_vav_minimum_damper(@prototype_input, model)
+        model_modify_oa_controller(model)
         # Apply the HVAC efficiency standard
         model_apply_hvac_efficiency_standard(model, climate_zone)
         # Fix EMS references.
@@ -64,9 +64,9 @@ StandardsModel.class_eval do
         # Add daylighting controls per standard
         # only four zones in large hotel have daylighting controls
         # todo: YXC to merge to the main function
-        self.add_daylighting_controls(instvartemplate, model)
-        self.update_exhaust_fan_efficiency(instvartemplate, model)
-        self.update_fan_efficiency(model)
+        model_add_daylighting_controls(model)
+        model_update_exhaust_fan_efficiency(model)
+        model_update_fan_efficiency(model)
         # Add output variables for debugging
         model_request_timeseries_outputs(model) if debug
       else
@@ -86,10 +86,10 @@ StandardsModel.class_eval do
         model_modify_surface_convection_algorithm(model)
         model_add_constructions(model, @instvarbuilding_type, climate_zone)
         model_create_thermal_zones(model, @space_multiplier_map)
-        model_add_hvac(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file)
-        self.custom_hvac_tweaks(building_type, @instvartemplate, climate_zone, @prototype_input, model)
-        model_add_swh(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file)
-        self.custom_swh_tweaks(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input)
+        model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+        model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
+        model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+        model_custom_swh_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
         model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
         model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
         model.add_design_days_and_weather_file(climate_zone, epw_file)
@@ -113,10 +113,10 @@ StandardsModel.class_eval do
         model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
         # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
         # AHU1 doesn't have economizer
-        self.modify_oa_controller(instvartemplate, model)
+        model_modify_oa_controller(model)
         # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-        self.reset_or_room_vav_minimum_damper(@prototype_input, instvartemplate, model)
-        self.modify_oa_controller(instvartemplate, model)
+        model_reset_or_room_vav_minimum_damper(@prototype_input, model)
+        model_modify_oa_controller(model)
         # Apply the HVAC efficiency standard
         model_apply_hvac_efficiency_standard(model, climate_zone)
         # Fix EMS references.
@@ -125,9 +125,9 @@ StandardsModel.class_eval do
         # Add daylighting controls per standard
         # only four zones in large hotel have daylighting controls
         # todo: YXC to merge to the main function
-        self.add_daylighting_controls(instvartemplate, model)
-        self.update_exhaust_fan_efficiency(instvartemplate, model)
-        self.update_fan_efficiency(model)
+        model_add_daylighting_controls(model)
+        model_update_exhaust_fan_efficiency(model)
+        model_update_fan_efficiency(model)
         # Add output variables for debugging
         model_request_timeseries_outputs(model) if debug
     end
@@ -1198,16 +1198,16 @@ StandardsModel.class_eval do
 
     # Fans
     # Pressure Rise
-    model.getFanConstantVolumes.sort.each {|obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj, building_type, instvartemplate, climate_zone)}
-    model.getFanVariableVolumes.sort.each {|obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj, building_type, instvartemplate, climate_zone)}
-    model.getFanOnOffs.sort.each {|obj| fan_on_off_apply_prototype_fan_pressure_rise(obj, building_type, instvartemplate, climate_zone)}
+    model.getFanConstantVolumes.sort.each {|obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj, building_type, climate_zone)}
+    model.getFanVariableVolumes.sort.each {|obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj, building_type, climate_zone)}
+    model.getFanOnOffs.sort.each {|obj| fan_on_off_apply_prototype_fan_pressure_rise(obj, building_type, climate_zone)}
     model.getFanZoneExhausts.sort.each {|obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj)}
 
     # Motor Efficiency
-    model.getFanConstantVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj, instvartemplate)}
-    model.getFanVariableVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj, instvartemplate)}
-    model.getFanOnOffs.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj, instvartemplate)}
-    model.getFanZoneExhausts.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj, instvartemplate)}
+    model.getFanConstantVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
+    model.getFanVariableVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
+    model.getFanOnOffs.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
+    model.getFanZoneExhausts.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
 
     ##### Add Economizers
 

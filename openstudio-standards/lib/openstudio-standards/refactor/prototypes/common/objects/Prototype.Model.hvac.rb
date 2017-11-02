@@ -1,9 +1,9 @@
 
 # open the class to add methods to size all HVAC equipment
 class StandardsModel
-  def model_add_hvac(model, building_type, template, climate_zone, prototype_input, epw_file)
+  def model_add_hvac(model, building_type, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    case template
+    case instvartemplate
     when 'NECB 2011'
       boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
       BTAP::Compliance::NECB2011.necb_autozone_and_autosystem(model, runner = nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype, building_type)
@@ -41,14 +41,14 @@ class StandardsModel
             number_cooling_towers = 1
             num_chillers = 1
             if building_type == 'Hospital' || building_type == 'LargeOffice' || building_type == 'LargeOfficeDetail'
-              case template
+              case instvartemplate
               when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
                 number_cooling_towers = 2
                 num_chillers = 2
               end
             end
             if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-              condenser_water_loop = model_add_cw_loop(model, template,
+              condenser_water_loop = model_add_cw_loop(model,
                                                  'Open Cooling Tower',
                                                  'Centrifugal',
                                                  'Fan Cycling',
@@ -57,7 +57,7 @@ class StandardsModel
                                                  building_type)
             end
 
-            chilled_water_loop = model_add_chw_loop(model, template,
+            chilled_water_loop = model_add_chw_loop(model,
                                               prototype_input['chw_pumping_type'],
                                               prototype_input['chiller_cooling_type'],
                                               prototype_input['chiller_condenser_type'],
@@ -68,7 +68,7 @@ class StandardsModel
           end
 
           # Add the VAV
-          model_add_vav_reheat(model, template,
+          model_add_vav_reheat(model,
                          system['name'],
                          hot_water_loop,
                          chilled_water_loop,
@@ -102,7 +102,7 @@ class StandardsModel
               condenser_water_loop = model_add_cw_loop(model) 
             end
 
-            chilled_water_loop = model_add_chw_loop(model, template,
+            chilled_water_loop = model_add_chw_loop(model,
                                               prototype_input['chw_pumping_type'],
                                               prototype_input['chiller_cooling_type'],
                                               prototype_input['chiller_condenser_type'],
@@ -112,7 +112,7 @@ class StandardsModel
           end
 
           # Add the CAV
-          model_add_cav(model, template,
+          model_add_cav(model,
                   system['name'],
                   hot_water_loop,
                   thermal_zones,
@@ -157,7 +157,7 @@ class StandardsModel
             heat_pump_loop = model_add_hp_loop(model, building_type)
           end
 
-          model_add_psz_ac(model, template,
+          model_add_psz_ac(model,
                      system['name'],
                      heat_pump_loop, # Typically nil unless water source hp
                      heat_pump_loop, # Typically nil unless water source hp
@@ -184,7 +184,7 @@ class StandardsModel
                              model_add_hw_loop(model, 'NaturalGas', building_type)
                            end
 
-          model_add_pvav(model, template,
+          model_add_pvav(model,
                    system['name'],
                    thermal_zones,
                    prototype_input['vav_operation_schedule'],
@@ -214,7 +214,7 @@ class StandardsModel
           else
             condenser_water_loop = nil
             if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-              condenser_water_loop = model_add_cw_loop(model, template,
+              condenser_water_loop = model_add_cw_loop(model,
                                                  'Open Cooling Tower',
                                                  'Centrifugal',
                                                  'Fan Cycling',
@@ -223,7 +223,7 @@ class StandardsModel
                                                  building_type)
             end
 
-            chilled_water_loop = model_add_chw_loop(model, template,
+            chilled_water_loop = model_add_chw_loop(model,
                                               prototype_input['chw_pumping_type'],
                                               prototype_input['chiller_cooling_type'],
                                               prototype_input['chiller_condenser_type'],
@@ -232,7 +232,7 @@ class StandardsModel
                                               condenser_water_loop)
           end
 
-          model_add_doas(model, template,
+          model_add_doas(model,
                    system['name'],
                    hot_water_loop,
                    chilled_water_loop,
@@ -243,7 +243,7 @@ class StandardsModel
                    prototype_input['doas_economizer_control_type'],
                    building_type)
 
-          model_add_four_pipe_fan_coil(model, template,
+          model_add_four_pipe_fan_coil(model,
                                   hot_water_loop,
                                   chilled_water_loop,
                                   thermal_zones)
@@ -268,7 +268,7 @@ class StandardsModel
                              model_add_hp_loop(model, building_type)
                            end
 
-          model_add_data_center_hvac(model, template,
+          model_add_data_center_hvac(model,
                                nil,
                                hot_water_loop,
                                heat_pump_loop,
@@ -279,7 +279,7 @@ class StandardsModel
 
         when 'SAC'
 
-          model_add_split_ac(model, template,
+          model_add_split_ac(model,
                        nil,
                        thermal_zones,
                        prototype_input['sac_operation_schedule'],
@@ -293,7 +293,7 @@ class StandardsModel
 
         when 'UnitHeater'
 
-          model_add_unitheater(model, template,
+          model_add_unitheater(model,
                          nil,
                          thermal_zones,
                          prototype_input['unitheater_operation_schedule'],
@@ -305,7 +305,7 @@ class StandardsModel
 
         when 'PTAC'
 
-          model_add_ptac(model, template,
+          model_add_ptac(model,
                    nil,
                    nil,
                    thermal_zones,
@@ -331,7 +331,7 @@ class StandardsModel
 
         when 'Refrigeration'
 
-          model_add_refrigeration(model, template,
+          model_add_refrigeration(model,
                             system['case_type'],
                             system['cooling_capacity_per_length'],
                             system['length'],
@@ -349,7 +349,7 @@ class StandardsModel
         # When multiple cases and walk-ins asssigned to a system        
 	    	when 'Refrigeration_system'
 
-          model_add_refrigeration_system(model, template,
+          model_add_refrigeration_system(model,
                                    system['compressor_type'],
                                    system['sys_name'],
                                    system['cases'],

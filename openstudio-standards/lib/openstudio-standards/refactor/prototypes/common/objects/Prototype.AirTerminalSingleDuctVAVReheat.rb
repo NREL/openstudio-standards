@@ -9,12 +9,12 @@ class StandardsModel
   # @param zone_oa_per_area [Double] the zone outdoor air per area, m^3/s
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
-  def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, building_type, template, zone_oa_per_area)
+  def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, building_type, zone_oa_per_area)
     # Minimum damper position is based on prototype
     # assumptions, which are not clearly documented.
     min_damper_position = nil
     vav_name = air_terminal_single_duct_vav_reheat.name.get
-    case template
+    case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       min_damper_position = if building_type == 'Outpatient' && vav_name.include?('Floor 1')
                               1
@@ -51,7 +51,7 @@ class StandardsModel
     # Cutoff was determined by correlating apparent minimum guesses
     # to OA rates in prototypes since not well documented in papers.
     if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
       else
@@ -59,7 +59,7 @@ class StandardsModel
         if building_type == 'Outpatient'
           air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(1)
         elsif building_type == 'Hospital'
-          case template
+          case instvartemplate
           when '90.1-2010', '90.1-2013'
             if vav_name.include? 'PatRoom'
               air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(0.5)

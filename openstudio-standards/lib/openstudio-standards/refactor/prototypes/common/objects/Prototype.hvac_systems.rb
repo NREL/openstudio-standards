@@ -130,7 +130,7 @@ class StandardsModel
   # @param condenser_water_loop [OpenStudio::Model::PlantLoop] optional condenser water loop
   #   for water-cooled chillers.  If this is not passed in, the chillers will be air cooled.
   # @return [OpenStudio::Model::PlantLoop] the resulting chilled water loop
-  def model_add_chw_loop(model, template,
+  def model_add_chw_loop(model,
                    chw_pumping_type,
                    chiller_cooling_type,
                    chiller_condenser_type,
@@ -230,7 +230,7 @@ class StandardsModel
       # Make the correct type of chiller based these properties
       num_chillers.times do |i|
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
-        chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
+        chiller.setName("#{instvartemplate} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
         chilled_water_loop.addSupplyBranchForComponent(chiller)
         chiller.setReferenceLeavingChilledWaterTemperature(chw_temp_c)
         ref_cond_wtr_temp_f = 95
@@ -290,7 +290,7 @@ class StandardsModel
   # @param number_cooling_towers [Integer] the number of cooling towers to be added (in parallel)
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
-  def model_add_cw_loop(model, template,
+  def model_add_cw_loop(model,
                   cooling_tower_type,
                   cooling_tower_fan_type,
                   cooling_tower_capacity_control,
@@ -327,7 +327,7 @@ class StandardsModel
     sizing_plant.setLoopDesignTemperatureDifference(cw_delta_t_k)
 
     # Condenser water pump
-    if building_type == 'Hospital' && (template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980')
+    if building_type == 'Hospital' && (instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980')
       cw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
       cw_pump.setName('Condenser Water Loop Pump')
       cw_pump_head_ft_h2o = 60.0
@@ -740,7 +740,7 @@ class StandardsModel
   # @param reheat_type [String] valid options are NaturalGas, Electricity, Water, nil (no heat)
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
-  def model_add_vav_reheat(model, template,
+  def model_add_vav_reheat(model,
                      sys_name,
                      hot_water_loop,
                      chilled_water_loop,
@@ -939,7 +939,7 @@ class StandardsModel
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, building_type, template, zone.outdoor_airflow_rate_per_area)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, building_type, zone.outdoor_airflow_rate_per_area)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
       air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
@@ -963,7 +963,7 @@ class StandardsModel
     end
 
     # Set the damper action based on the template.
-    air_loop.apply_vav_damper_action(template)
+    air_loop_hvac_apply_vav_damper_action(air_loop)
 
     return air_loop
   end
@@ -984,7 +984,7 @@ class StandardsModel
   # @param vav_fan_pressure_rise [Double] fan pressure rise, in Pa
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
-  def model_add_vav_pfp_boxes(model, template,
+  def model_add_vav_pfp_boxes(model,
                         sys_name,
                         chilled_water_loop,
                         thermal_zones,
@@ -1153,7 +1153,7 @@ class StandardsModel
   # the supply plenum, or nil, in which case no return plenum will be used.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop
-  def model_add_pvav(model, template,
+  def model_add_pvav(model,
                sys_name,
                thermal_zones,
                hvac_op_sch,
@@ -1231,7 +1231,7 @@ class StandardsModel
       hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU1-Fan_Pre2004')
       # Outpatient has different temperature settings for sizing
       clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
-      sys_dsn_clg_sa_temp_f = if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+      sys_dsn_clg_sa_temp_f = if instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
                                 52
                               else
                                 45
@@ -1329,7 +1329,7 @@ class StandardsModel
       terminal.setName("#{zone.name} VAV Term")
       terminal.setZoneMinimumAirFlowMethod('Constant')
       terminal.setMaximumReheatAirTemperature(rht_rated_air_out_temp_c)
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, building_type, template, zone.outdoor_airflow_rate_per_area)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, building_type, zone.outdoor_airflow_rate_per_area)
       air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
 
       unless return_plenum.nil?
@@ -1343,7 +1343,7 @@ class StandardsModel
     end
 
     # Set the damper action based on the template.
-    air_loop.apply_vav_damper_action(template)
+    air_loop_hvac_apply_vav_damper_action(air_loop)
 
     return true
   end
@@ -1365,7 +1365,7 @@ class StandardsModel
   #   if nil, will be DX cooling.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
-  def model_add_pvav_pfp_boxes(model, template,
+  def model_add_pvav_pfp_boxes(model,
                          sys_name,
                          thermal_zones,
                          hvac_op_sch,
@@ -1535,7 +1535,7 @@ class StandardsModel
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to.
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop
-  def model_add_cav(model, template,
+  def model_add_cav(model,
               sys_name,
               hot_water_loop,
               thermal_zones,
@@ -1711,7 +1711,7 @@ class StandardsModel
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
         terminal.setName("#{zone.name} VAV Term")
         terminal.setZoneMinimumAirFlowMethod('Constant')
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, building_type, template, zone.outdoor_airflow_rate_per_area)
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, building_type, zone.outdoor_airflow_rate_per_area)
         terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
         terminal.setMaximumFlowFractionDuringReheat(0.5)
         terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
@@ -1734,7 +1734,7 @@ class StandardsModel
     end
 
     # Set the damper action based on the template.
-    air_loop.apply_vav_damper_action(template)
+    air_loop_hvac_apply_vav_damper_action(air_loop)
 
     return true
   end
@@ -1762,7 +1762,7 @@ class StandardsModel
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting PSZ-AC air loops
   # Todo: clarify where these default curves coefficients are coming from
   # Todo: I (jmarrec) believe it is the DOE Ref curves ("DOE Ref DX Clg Coil Cool-Cap-fT")
-  def model_add_psz_ac(model, template,
+  def model_add_psz_ac(model,
                  sys_name,
                  hot_water_loop,
                  chilled_water_loop,
@@ -1848,7 +1848,7 @@ class StandardsModel
 
       # Zone sizing
       sizing_zone = zone.sizingZone
-      if building_type == 'RetailStandalone' && (template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980')
+      if building_type == 'RetailStandalone' && (instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980')
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(14)
       else
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(12.8)
@@ -1893,7 +1893,7 @@ class StandardsModel
         htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, model.alwaysOnDiscreteSchedule)
         htg_coil.setName("#{air_loop.name} Gas Htg Coil")
 
-        if template == 'DOE Ref Pre-1980'
+        if instvartemplate == 'DOE Ref Pre-1980'
           htg_coil.setGasBurnerEfficiency(0.78)
         end
       when nil
@@ -2276,7 +2276,7 @@ class StandardsModel
       oa_system.setName("#{air_loop.name} OA Sys")
       econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
 
-      case template
+      case instvartemplate
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_eff_sch) if building_type == 'RetailStandalone' || building_type == 'RetailStripmall'
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -2427,7 +2427,7 @@ class StandardsModel
   # @param main_data_center [Bool] whether or not this is the main data
   # center in the building.
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting air loops
-  def model_add_data_center_hvac(model, template,
+  def model_add_data_center_hvac(model,
                            sys_name,
                            hot_water_loop,
                            heat_pump_loop,
@@ -2660,7 +2660,7 @@ class StandardsModel
   # Single Speed DX AC, Single Speed Heat Pump
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting split AC air loop.
-  def model_add_split_ac(model, template,
+  def model_add_split_ac(model,
                    sys_name,
                    thermal_zones,
                    hvac_op_sch,
@@ -3131,7 +3131,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an
   # array of the resulting PTACs.
-  def model_add_ptac(model, template,
+  def model_add_ptac(model,
                sys_name,
                hot_water_loop,
                thermal_zones,
@@ -3406,7 +3406,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an
   # array of the resulting PTACs.
-  def model_add_pthp(model, template,
+  def model_add_pthp(model,
                sys_name,
                thermal_zones,
                fan_type,
@@ -3605,7 +3605,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACUnitHeater>] an
   # array of the resulting unit heaters.
-  def model_add_unitheater(model, template,
+  def model_add_unitheater(model,
                      sys_name,
                      thermal_zones,
                      hvac_op_sch,
@@ -3643,7 +3643,7 @@ class StandardsModel
     thermal_zones.each do |zone|
       # Zone sizing
       sizing_zone = zone.sizingZone
-      if building_type == 'RetailStandalone' && template != 'DOE Ref 1980-2004' && template != 'DOE Ref Pre-1980'
+      if building_type == 'RetailStandalone' && instvartemplate != 'DOE Ref 1980-2004' && instvartemplate != 'DOE Ref Pre-1980'
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(12.8)
       else
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(14)
@@ -3706,7 +3706,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACHighTemperatureRadiant>] an
   # array of the resulting radiant heaters.
-  def model_add_high_temp_radiant(model, template,
+  def model_add_high_temp_radiant(model,
                             sys_name,
                             thermal_zones,
                             heating_type,
@@ -3738,7 +3738,7 @@ class StandardsModel
   # @param thermal_zones [String] zones to connect to this system
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] the resulting evaporative coolers
-  def model_add_evap_cooler(model, template,
+  def model_add_evap_cooler(model,
                       thermal_zones,
                       building_type = nil)
 
@@ -3925,7 +3925,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop]
   # the resulting service water loop.
-  def model_add_swh_loop(model, template,
+  def model_add_swh_loop(model,
                    sys_name,
                    water_heater_thermal_zone,
                    service_water_temperature,
@@ -3985,7 +3985,7 @@ class StandardsModel
       swh_pump_motor_efficiency = 1
     end
 
-    swh_pump = if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+    swh_pump = if instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
                  if building_type == 'Medium Office'
                    OpenStudio::Model::PumpConstantSpeed.new(model)
                  else
@@ -4001,7 +4001,7 @@ class StandardsModel
     swh_pump.setPumpControlType('Intermittent')
     swh_pump.addToNode(service_water_loop.supplyInletNode)
 
-    water_heater = model_add_water_heater(model, template,
+    water_heater = model_add_water_heater(model,
                                     water_heater_capacity,
                                     water_heater_volume,
                                     water_heater_fuel,
@@ -4054,7 +4054,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::WaterHeaterMixed]
   # the resulting water heater.
-  def model_add_water_heater(model, template,
+  def model_add_water_heater(model,
                        water_heater_capacity,
                        water_heater_volume,
                        water_heater_fuel,
@@ -4175,7 +4175,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop]
   # the resulting booster water loop.
-  def model_add_swh_booster(model, template,
+  def model_add_swh_booster(model,
                       main_service_water_loop,
                       water_heater_capacity,
                       water_heater_volume,
@@ -4337,7 +4337,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::WaterUseEquipment]
   # the resulting water fixture.
-  def model_add_swh_end_uses(model, template,
+  def model_add_swh_end_uses(model,
                        use_name,
                        swh_loop,
                        peak_flowrate,
@@ -4405,10 +4405,10 @@ class StandardsModel
 
   # This method will add an swh water fixture to the model for the space.
   # if the it will return a water fixture object, or NIL if there is no water load at all.
-  def model_add_swh_end_uses_by_space(model, building_type, template, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
+  def model_add_swh_end_uses_by_space(model, building_type, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
     # find the specific space_type properties from standard.json
     search_criteria = {
-      'template' => template,
+      'template' => instvartemplate,
       'building_type' => building_type,
       'space_type' => space_type_name
     }
@@ -4469,7 +4469,7 @@ class StandardsModel
     water_fixture.setName("#{space_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     swh_connection.addWaterUseEquipment(water_fixture)
     #Set space to water usage only for NECB 2011. Used for validation.. Hopefully will not skew zonal heat balance. Plopez. 
-    water_fixture.setSpace(space) if template == 'NECB 2011'
+    water_fixture.setSpace(space) if instvartemplate == 'NECB 2011'
 
     # Connect the water use connection to the SWH loop
     swh_loop.addDemandBranchForComponent(swh_connection)
@@ -4489,7 +4489,7 @@ class StandardsModel
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::WaterUseEquipment]
   # the resulting water fixture.
-  def model_add_booster_swh_end_uses(model, template,
+  def model_add_booster_swh_end_uses(model,
                                swh_booster_loop,
                                peak_flowrate,
                                flowrate_schedule,
@@ -4547,7 +4547,7 @@ class StandardsModel
   # @param energy_recovery [Bool] if true, an ERV will be added to the
   # DOAS system.
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting DOAS air loop
-  def model_add_doas(model, template,
+  def model_add_doas(model,
                sys_name,
                hot_water_loop,
                chilled_water_loop,
@@ -4755,7 +4755,7 @@ class StandardsModel
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add baseboards to.
   # @return [Array<OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric, OpenStudio::Model::ZoneHVACBaseboardConvectiveWater>]
   # array of baseboard heaters.
-  def model_add_baseboard(model, template,
+  def model_add_baseboard(model,
                      hot_water_loop,
                      thermal_zones)
 
@@ -4800,7 +4800,7 @@ class StandardsModel
   # by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACFourPipeFanCoil>]
   # array of fan coil units.
-  def model_add_four_pipe_fan_coil(model, template,
+  def model_add_four_pipe_fan_coil(model,
                               hot_water_loop,
                               chilled_water_loop,
                               thermal_zones,
@@ -4882,7 +4882,7 @@ class StandardsModel
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] and array of PTACs used as window AC units
-  def model_add_window_ac(model, template,
+  def model_add_window_ac(model,
                     thermal_zones)
 
     # Defaults
@@ -4963,7 +4963,7 @@ class StandardsModel
   # @param cooling [Bool] if true, the unit will include a DX cooling coil
   # @param ventilation [Bool] if true, the unit will include an OA intake
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] and array of air loops representing the furnaces
-  def model_add_furnace_central_ac(model, template,
+  def model_add_furnace_central_ac(model,
                              thermal_zones,
                              heating,
                              cooling,
@@ -5119,7 +5119,7 @@ class StandardsModel
   # @param cooling [Bool] if true, the unit will include a DX cooling coil
   # @param ventilation [Bool] if true, the unit will include an OA intake
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] and array of air loops representing the heat pumps
-  def model_add_central_air_source_heat_pump(model, template,
+  def model_add_central_air_source_heat_pump(model,
                                        thermal_zones,
                                        heating,
                                        cooling,
@@ -5383,7 +5383,7 @@ class StandardsModel
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add heat pumps to.
   # @return [Array<OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator>] an array of zone ERVs
   # @todo review the static pressure rise for the ERV
-  def model_add_zone_erv(model, template, thermal_zones)
+  def model_add_zone_erv(model, thermal_zones)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding zone ERV for #{thermal_zones.size} zones.")
     thermal_zones.each do |zone|
@@ -5475,7 +5475,7 @@ class StandardsModel
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add heat pumps to.
   # @return [Array<OpenStudio::Model::ZoneHVACIdealLoadsAirSystem>] an array of ideal air loads systems
   # @todo review the default ventilation settings
-  def model_add_ideal_air_loads(model, template, thermal_zones)
+  def model_add_ideal_air_loads(model, thermal_zones)
 
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding ideal air loads for #{thermal_zones.size} zones.")
 
@@ -5505,7 +5505,7 @@ class StandardsModel
   # @param elevator_lights_schedule [String] the name of the elevator lights schedule
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::ElectricEquipment] the resulting elevator
-  def model_add_elevator(model, template,
+  def model_add_elevator(model,
                    space,
                    number_of_elevators,
                    elevator_type,
@@ -5516,7 +5516,7 @@ class StandardsModel
 
     # Lift motor assumptions
     lift_pwr_w = nil
-    case template
+    case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       if elevator_type == 'Traction'
         lift_pwr_w = 18_537.0
@@ -5554,7 +5554,7 @@ class StandardsModel
     vent_pwr_per_flow_w_per_cfm = 0.33
     vent_pwr_w = vent_pwr_per_flow_w_per_cfm * vent_rate_cfm
     elec_equip_frac_radiant = 0.5
-    if template == '90.1-2013'
+    if instvartemplate == '90.1-2013'
       # addendum 90.1-2007 aj has requirement on efficiency
       vent_pwr_w = vent_pwr_w * 0.29 / 0.70  
     end
@@ -5563,7 +5563,7 @@ class StandardsModel
     design_ltg_lm_per_ft2 = 30
     light_loss_factor = 0.75
 
-    case template
+    case instvartemplate
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004','90.1-2004', '90.1-2007'
       pct_incandescent = 0.7
       pct_led = 0.3
@@ -5596,7 +5596,7 @@ class StandardsModel
     elevator_equipment.setMultiplier(number_of_elevators)
 
     # Pre-1980 and 1980-2004 don't have lights or fans
-    return elevator_equipment if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
+    return elevator_equipment if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
 
     # Elevator fan
     elevator_fan_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -5747,7 +5747,7 @@ class StandardsModel
   # @todo Set compressor properties since prototypes use simple
   # refrigeration rack instead of detailed
   # @todo fix latent case credit curve setter
-  def model_add_refrigeration(model, template,
+  def model_add_refrigeration(model,
                         case_type,
                         cooling_capacity_per_length,
                         length,
@@ -5777,7 +5777,7 @@ class StandardsModel
       runtime_fraction = 0.4
       fraction_antisweat_to_case = 0.0
       under_case_return_air_fraction = 0.0
-      case template
+      case instvartemplate
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -5893,7 +5893,7 @@ class StandardsModel
   # @param length [Double] the length of the case, in m
   # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
   # case is located, and which will be impacted by the case's thermal load.
-  def model_add_refrigeration_case(model, template, case_type, case_name, length, thermal_zone)
+  def model_add_refrigeration_case(model, case_type, case_name, length, thermal_zone)
 
     # Capacity, defrost, anti-sweat
     case_temp = nil
@@ -5914,7 +5914,7 @@ class StandardsModel
       defrost_correction_curve_name = 'Coffin Defrost Curve'
       defrost_correction_type = 'DewpointMethod'
 
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -22.8
         cooling_capacity_per_length = 588.5
@@ -5941,7 +5941,7 @@ class StandardsModel
       anti_sweat_type = 'Constant'
       defrost_correction_curve_name = 'Coffin Defrost Curve'	 
       defrost_correction_type = 'DewpointMethod'
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -26.1
         cooling_capacity_per_length = 695.2
@@ -5968,7 +5968,7 @@ class StandardsModel
       anti_sweat_type = 'Constant'
       defrost_correction_curve_name = 'Glass Door Defrost Curve'
       defrost_correction_type = 'DewpointMethod'
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -20
         cooling_capacity_per_length = 583.7
@@ -5995,7 +5995,7 @@ class StandardsModel
       anti_sweat_type = 'Constant'
       defrost_correction_curve_name = 'Glass Door Defrost Curve'	 
       defrost_correction_type = 'DewpointMethod'
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -23.9
         cooling_capacity_per_length = 617.4
@@ -6022,7 +6022,7 @@ class StandardsModel
       defrost_correction_type = 'None'
       defrost_correction_curve_name = 'Coffin Defrost Curve'
       defrost_type ='ElectricwithTemperatureTermination'
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = -2.9
         cooling_capacity_per_length = 410
@@ -6050,7 +6050,7 @@ class StandardsModel
       anti_sweat_type = 'Constant'
       defrost_correction_type = 'None'
       defrost_correction_curve_name = 'Coffin Defrost Curve'
-        case template
+        case instvartemplate
         when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
           case_temp = -2.9
           cooling_capacity_per_length = 808
@@ -6077,7 +6077,7 @@ class StandardsModel
       anti_sweat_type = 'None'
       defrost_correction_type = 'None'
       defrost_correction_curve_name = 'Coffin Defrost Curve'
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         case_temp = 0.6
         cooling_capacity_per_length = 1437.6
@@ -6217,7 +6217,7 @@ class StandardsModel
   # @param insulated_floor_area [Double] the floor area of the walkin, in m^2
   # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
   # walkin is located, and which will be impacted by the walkin's thermal load.
-  def model_add_refrigeration_walkin(model, template, walkin_type, walkin_name, insulated_floor_area, thermal_zone)
+  def model_add_refrigeration_walkin(model, walkin_type, walkin_name, insulated_floor_area, thermal_zone)
 
     # Capacity, defrost, lighting
     operating_temp = nil
@@ -6237,7 +6237,7 @@ class StandardsModel
       insulated_surface_U = 0.177
       reachin_door_area = 0
       stocking_door_U = 0.177
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         fan_power = 0.080*cooling_capacity
         lighting_power = 10.8*insulated_floor_area
@@ -6258,7 +6258,7 @@ class StandardsModel
       insulated_surface_U = 0.203
       reachin_door_area = 0
       stocking_door_U = 0.203
-      case template
+      case instvartemplate
         when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         fan_power = 0.080*cooling_capacity
         lighting_power = 10.8*insulated_floor_area
@@ -6279,7 +6279,7 @@ class StandardsModel
       insulated_surface_U = 0.203
       reachin_door_area = 0.35*insulated_floor_area
       stocking_door_U = 0.203
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         fan_power = 0.080*cooling_capacity
         lighting_power = 10.8*insulated_floor_area
@@ -6376,7 +6376,7 @@ class StandardsModel
   # walkin_type, walkin_name, insulated_floor_area, space_names, and number_of_walkins
   # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
   # refrigeration piping is located.
-  def model_add_refrigeration_system(model, template,
+  def model_add_refrigeration_system(model,
                                compressor_type,
                                sys_name,
                                cases,
@@ -6393,7 +6393,7 @@ class StandardsModel
     # Compressors (20 for each system)
     for i in 0 ... 20
       compressor =  OpenStudio::Model::RefrigerationCompressor.new(model)
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010'
         if compressor_type == 'Low Temp'
           compressor.setRefrigerationCompressorPowerCurve(model_add_curve(model, 'Old_Low_Temp_Comp_Pwr_Curve'))
@@ -6419,7 +6419,7 @@ class StandardsModel
     cases.each do |case_|
       for i in 0 ... case_['number_of_cases']
         zone = model_get_zones_from_spaces_on_system(model, case_)[0]
-        ref_case = model_add_refrigeration_case(model, template,
+        ref_case = model_add_refrigeration_case(model,
                                           case_['case_type'],
                                           "#{case_['case_name']} #{i+1}",
                                           case_['length'],
@@ -6433,7 +6433,7 @@ class StandardsModel
     walkins.each do |walkin|
       for i in 0 ... walkin['number_of_walkins']
         zone = model_get_zones_from_spaces_on_system(model, walkin)[0]
-        ref_walkin = model_add_refrigeration_walkin(model, template,
+        ref_walkin = model_add_refrigeration_walkin(model,
                                               walkin['walkin_type'],
                                               "#{walkin['walkin_name']} #{i+1}",
                                               walkin['insulated_floor_area'],
@@ -6483,7 +6483,7 @@ class StandardsModel
   # Electricity, DistrictCooling, and HeatPump.
   # @param air_cooled [Bool] if true, the chiller will be air-cooled.
   #   if false, it will be water-cooled.
-  def model_get_or_add_chilled_water_loop(model, template, cool_fuel, air_cooled=true)
+  def model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled=true)
     # Retrieve the existing chilled water loop
     # or add a new one if necessary.
     chilled_water_loop = nil
@@ -6492,7 +6492,7 @@ class StandardsModel
     else
       case cool_fuel
       when 'DistrictCooling'
-        chilled_water_loop = model_add_chw_loop(model, template,
+        chilled_water_loop = model_add_chw_loop(model,
                                           'const_pri',
                                           chiller_cooling_type = nil,
                                           chiller_condenser_type = nil,
@@ -6502,7 +6502,7 @@ class StandardsModel
                                           building_type = nil)
       when 'HeatPump'
         condenser_water_loop = model_get_or_add_ambient_water_loop(model) 
-        chilled_water_loop = model_add_chw_loop(model, template,
+        chilled_water_loop = model_add_chw_loop(model,
                                           'const_pri_var_sec',
                                           'WaterCooled',
                                           chiller_condenser_type = nil,
@@ -6512,7 +6512,7 @@ class StandardsModel
                                           building_type = nil)
       when 'Electricity'
         if air_cooled
-          chilled_water_loop = model_add_chw_loop(model, template,
+          chilled_water_loop = model_add_chw_loop(model,
                                             'const_pri',
                                             chiller_cooling_type = nil,
                                             chiller_condenser_type = nil,
@@ -6522,17 +6522,17 @@ class StandardsModel
                                             building_type = nil)
         else
           fan_type = 'TwoSpeed Fan'
-          if template == '90.1-2013'
+          if instvartemplate == '90.1-2013'
             fan_type = 'Variable Speed Fan'
           end
-          condenser_water_loop = model_add_cw_loop(model, template,
+          condenser_water_loop = model_add_cw_loop(model,
                                              'Open Cooling Tower',
                                              'Propeller or Axial',
                                              fan_type,
                                              1,
                                              1,
                                              nil)
-          chilled_water_loop = model_add_chw_loop(model, template,
+          chilled_water_loop = model_add_chw_loop(model,
                                             'const_pri_var_sec',
                                             'WaterCooled',
                                             chiller_condenser_type = nil,
@@ -6626,7 +6626,7 @@ class StandardsModel
   # @param system_type [String] The system type.  Valid choices are
   # TODO enumerate the valid strings
   # @return [Bool] returns true if successful, false if not
-  def model_add_hvac_system(model, template, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
+  def model_add_hvac_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
 
     # Don't do anything if there are no zones
     return true if zones.empty?
@@ -6645,7 +6645,7 @@ class StandardsModel
         hot_water_loop = nil
       end
 
-      model_add_ptac(model, template,
+      model_add_ptac(model,
                sys_name=nil,
                hot_water_loop,
                zones,
@@ -6654,7 +6654,7 @@ class StandardsModel
                cooling_type='Single Speed DX AC')
 
     when 'PTHP'
-      model_add_pthp(model, template,
+      model_add_pthp(model,
                sys_name=nil,
                zones,
                fan_type='ConstantVolume')
@@ -6680,14 +6680,14 @@ class StandardsModel
 
       case cool_fuel
       when 'DistrictCooling'
-        chilled_water_loop = model_get_or_add_chilled_water_loop(model, template, cool_fuel)
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel)
         cooling_type='Water'
       else
         chilled_water_loop = nil
         cooling_type='Single Speed DX AC'
       end
 
-      model_add_psz_ac(model, template,
+      model_add_psz_ac(model,
                  sys_name = nil,
                  hot_water_loop,
                  chilled_water_loop,
@@ -6701,7 +6701,7 @@ class StandardsModel
                  cooling_type)
 
     when 'PSZ-HP'
-      model_add_psz_ac(model, template,
+      model_add_psz_ac(model,
                  sys_name = 'PSZ-HP',
                  hot_water_loop=nil,
                  chilled_water_loop=nil,
@@ -6724,12 +6724,12 @@ class StandardsModel
 
       case cool_fuel
       when 'Electricity', 'DistrictCooling'
-        chilled_water_loop = model_get_or_add_chilled_water_loop(model, template, cool_fuel, air_cooled=true)
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled=true)
       when nil            
         chilled_water_loop = nil
       end
 
-      model_add_four_pipe_fan_coil(model, template,
+      model_add_four_pipe_fan_coil(model,
                               hot_water_loop,
                               chilled_water_loop,
                               zones)
@@ -6745,12 +6745,12 @@ class StandardsModel
         # return ??
       end
 
-      model_add_baseboard(model, template,
+      model_add_baseboard(model,
                      hot_water_loop,
                      zones)
 
     when 'Unit Heaters'
-      model_add_unitheater(model, template,
+      model_add_unitheater(model,
                      sys_name=nil,
                      zones,
                      hvac_op_sch=nil,
@@ -6760,25 +6760,25 @@ class StandardsModel
                      hot_water_loop=nil)
 
     when 'Window AC'
-      model_add_window_ac(model, template,
+      model_add_window_ac(model,
                     zones)
 
     when 'Residential AC'
-      model_add_furnace_central_ac(model, template,
+      model_add_furnace_central_ac(model,
                              zones,
                              heating=false,
                              cooling=true,
                              ventilation=false)
 
     when 'Forced Air Furnace'
-      model_add_furnace_central_ac(model, template,
+      model_add_furnace_central_ac(model,
                              zones,
                              heating=true,
                              cooling=false,
                              ventilation=true)
 
     when 'Residential Forced Air Furnace'
-      model_add_furnace_central_ac(model, template,
+      model_add_furnace_central_ac(model,
                              zones,
                              heating=true,
                              cooling=false,
@@ -6789,7 +6789,7 @@ class StandardsModel
       heating = true unless main_heat_fuel.nil?
       cooling = true unless cool_fuel.nil?
     
-      model_add_central_air_source_heat_pump(model, template,
+      model_add_central_air_source_heat_pump(model,
                                        zones,
                                        heating,
                                        cooling,
@@ -6797,14 +6797,14 @@ class StandardsModel
 
     when 'VAV Reheat'
       hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, template, cool_fuel, air_cooled=false)
+      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled=false)
 
       reheat_type = 'Water'
       if zone_heat_fuel == 'Electricity'
         reheat_type = 'Electricity'
       end
 
-      model_add_vav_reheat(model, template,
+      model_add_vav_reheat(model,
                      sys_name=nil,
                      hot_water_loop,
                      chilled_water_loop,
@@ -6818,9 +6818,9 @@ class StandardsModel
                      reheat_type)
 
     when 'VAV No Reheat'
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, template, cool_fuel, air_cooled=false)
+      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled=false)
 
-      model_add_vav_reheat(model, template,
+      model_add_vav_reheat(model,
                      sys_name=nil,
                      hot_water_loop,
                      chilled_water_loop,
@@ -6834,9 +6834,9 @@ class StandardsModel
                      reheat_type=nil)
 
     when 'VAV Gas Reheat'
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, template, cool_fuel, air_cooled=false)
+      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled=false)
 
-      model_add_vav_reheat(model, template,
+      model_add_vav_reheat(model,
                      sys_name=nil,
                      hot_water_loop,
                      chilled_water_loop,
@@ -6855,7 +6855,7 @@ class StandardsModel
                            when 'Electricity'
                              nil
                            else
-                             model_get_or_add_chilled_water_loop(model, template, cool_fuel, air_cooled=false)
+                             model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled=false)
                            end
 
       electric_reheat = false
@@ -6863,7 +6863,7 @@ class StandardsModel
         electric_reheat = true
       end
 
-      model_add_pvav(model, template,
+      model_add_pvav(model,
                sys_name=nil,
                zones,
                hvac_op_sch=nil,
@@ -6876,12 +6876,12 @@ class StandardsModel
     when 'PVAV PFP Boxes'
       case cool_fuel
       when 'DistrictCooling'
-        chilled_water_loop = model_get_or_add_chilled_water_loop(model, template, cool_fuel)
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel)
       else
         chilled_water_loop = nil
       end
 
-      model_add_pvav_pfp_boxes(model, template,
+      model_add_pvav_pfp_boxes(model,
                          sys_name=nil,
                          zones,
                          hvac_op_sch=nil,
@@ -6891,9 +6891,9 @@ class StandardsModel
                          vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
                          chilled_water_loop)
     when 'VAV PFP Boxes'
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, template, cool_fuel, air_cooled=false)
+      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled=false)
 
-      model_add_pvav_pfp_boxes(model, template,
+      model_add_pvav_pfp_boxes(model,
                          sys_name=nil,
                          zones,
                          hvac_op_sch=nil,
@@ -6925,9 +6925,9 @@ class StandardsModel
 
     when 'DOAS'
       hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, template, cool_fuel, air_cooled=false)
+      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled=false)
 
-      model_add_doas(model, template,
+      model_add_doas(model,
                sys_name=nil,
                hot_water_loop,
                chilled_water_loop,
@@ -6939,26 +6939,26 @@ class StandardsModel
                building_type = nil)
 
     when 'ERVs'
-      model_add_zone_erv(model, template, zones)
+      model_add_zone_erv(model, zones)
 
     when 'Evaporative Cooler'
-      model_add_evap_cooler(model, template,
+      model_add_evap_cooler(model,
                       zones)
 
     when 'Ideal Air Loads'
-      model_add_ideal_air_loads(model, template,
+      model_add_ideal_air_loads(model,
                           zones)
 
     ### Combination Systems ###
     when 'Water Source Heat Pumps with ERVs'
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='Water Source Heat Pumps',
                       main_heat_fuel,
                       zone_heat_fuel,
                       cool_fuel,
                       zones)
 
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='ERVs',
                       main_heat_fuel,
                       zone_heat_fuel,
@@ -6966,14 +6966,14 @@ class StandardsModel
                       zones)
 
     when 'Water Source Heat Pumps with DOAS'
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='Water Source Heat Pumps',
                       main_heat_fuel,
                       zone_heat_fuel,
                       cool_fuel,
                       zones)
 
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='DOAS',
                       main_heat_fuel,
                       zone_heat_fuel,
@@ -6981,14 +6981,14 @@ class StandardsModel
                       zones)
 
     when 'Ground Source Heat Pumps with ERVs'
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='Ground Source Heat Pumps',
                       main_heat_fuel,
                       zone_heat_fuel,
                       cool_fuel,
                       zones)
 
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='ERVs',
                       main_heat_fuel,
                       zone_heat_fuel,
@@ -6996,14 +6996,14 @@ class StandardsModel
                       zones)
 
     when 'Ground Source Heat Pumps with DOAS'
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='Ground Source Heat Pumps',
                       main_heat_fuel,
                       zone_heat_fuel,
                       cool_fuel,
                       zones)
 
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='DOAS',
                       main_heat_fuel,
                       zone_heat_fuel,
@@ -7011,14 +7011,14 @@ class StandardsModel
                       zones)
 
     when 'Fan Coil with DOAS'
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='Fan Coil',
                       main_heat_fuel,
                       zone_heat_fuel,
                       cool_fuel,
                       zones)
 
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='DOAS',
                       main_heat_fuel,
                       zone_heat_fuel,
@@ -7026,14 +7026,14 @@ class StandardsModel
                       zones)
 
     when 'Fan Coil with ERVs'
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='Fan Coil',
                       main_heat_fuel,
                       zone_heat_fuel,
                       cool_fuel,
                       zones)
 
-      model_add_hvac_system(model, template,
+      model_add_hvac_system(model,
                       system_type='ERVs',
                       main_heat_fuel,
                       zone_heat_fuel,
@@ -7064,7 +7064,7 @@ class StandardsModel
   # @return [String] The system type.  Possibilities are
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
   # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
-  def model_typical_hvac_system_type(model, template,
+  def model_typical_hvac_system_type(model,
                                climate_zone,
                                area_type,
                                delivery_type,
@@ -7211,9 +7211,9 @@ class StandardsModel
 
     if system_type.nil?
       system_type = [nil, nil, nil, nil]
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not determine system type for #{template}, #{area_type}, #{heating_source} heating, #{cooling_source} cooling, #{delivery_type} delivery, #{area_ft2.round} ft^2, #{num_stories} stories.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not determine system type for #{instvartemplate}, #{area_type}, #{heating_source} heating, #{cooling_source} cooling, #{delivery_type} delivery, #{area_ft2.round} ft^2, #{num_stories} stories.")
     else
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type[0]} for #{template}, #{area_type}, #{heating_source} heating, #{cooling_source} cooling, #{delivery_type} delivery, #{area_ft2.round} ft^2, #{num_stories} stories.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type[0]} for #{instvartemplate}, #{area_type}, #{heating_source} heating, #{cooling_source} cooling, #{delivery_type} delivery, #{area_ft2.round} ft^2, #{num_stories} stories.")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[1]} for main heating") unless system_type[1].nil?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[2]} for zone heat/reheat") unless system_type[2].nil?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[3]} for cooling") unless system_type[3].nil?

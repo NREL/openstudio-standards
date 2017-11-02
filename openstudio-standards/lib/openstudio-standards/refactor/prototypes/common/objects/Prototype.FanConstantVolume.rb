@@ -6,9 +6,9 @@ class StandardsModel
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume, building_type, template, climate_zone)
+  def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume, building_type, climate_zone)
     # NECB
-    if template == 'NECB 2011'
+    if instvartemplate == 'NECB 2011'
       pressure_rise_pa = 640.0
       fan_constant_volume.setPressureRise(pressure_rise_pa)
       return true
@@ -48,7 +48,7 @@ class StandardsModel
       end
     # If the fan lives on an airloop
     elsif fan_constant_volume.airLoopHVAC.is_initialized
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                                  2.5

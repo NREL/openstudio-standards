@@ -5,7 +5,7 @@ class StandardsModel
   #
   # @param template [String] Valid choices are
   # @return [OpenStudio::Model::ElectricEquipment] the resulting elevator
-  def model_add_elevators(model, template)
+  def model_add_elevators(model)
 
     # determine effective number of stories
     effective_num_stories = model.effective_num_stories
@@ -38,7 +38,7 @@ class StandardsModel
     building_type_hash = {}
 
     # apply building type specific log to add to number of elevators based on Beyer (2009) rules of thumb
-    space_type_hash = model.create_space_type_hash(template)
+    space_type_hash = model.create_space_type_hash()
     space_type_hash.each do |space_type,hash|
 
       # update building_type_hash
@@ -168,7 +168,7 @@ class StandardsModel
 
     # Retrieve the Prototype Inputs from JSON
     search_criteria = {
-        'template' => template,
+        'template' => instvartemplate,
         'building_type' => building_type
     }
 
@@ -250,7 +250,7 @@ class StandardsModel
     # todo - should schedules change based on traction vs. hydraulic vs. just taking what is in prototype.
 
     # call add_elevator in Prototype.hvac_systems.rb to create elevator objects
-    elevator = model_add_elevator(model, template,
+    elevator = model_add_elevator(model,
                        target_space,
                        number_of_elevators,
                        elevator_type,

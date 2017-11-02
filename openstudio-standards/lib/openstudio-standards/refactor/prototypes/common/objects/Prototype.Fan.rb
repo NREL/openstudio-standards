@@ -7,7 +7,7 @@ module PrototypeFan
   # motor type, and a 10% safety factor on brake horsepower.
   #
   # @return [Bool] true if successful, false if not
-  def prototype_fan_apply_prototype_fan_efficiency(fan, template)
+  def prototype_fan_apply_prototype_fan_efficiency(fan)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if fan.maximumFlowRate.is_initialized

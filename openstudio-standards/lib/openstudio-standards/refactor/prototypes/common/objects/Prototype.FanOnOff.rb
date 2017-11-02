@@ -6,7 +6,7 @@ class StandardsModel
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def fan_on_off_apply_prototype_fan_pressure_rise(fan_on_off, building_type, template, climate_zone)
+  def fan_on_off_apply_prototype_fan_pressure_rise(fan_on_off, building_type, climate_zone)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if fan_on_off.maximumFlowRate.is_initialized
@@ -41,7 +41,7 @@ class StandardsModel
 
     # If the fan lives on an airloop
     if fan_on_off.airLoopHVAC.is_initialized
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                                  2.5
@@ -61,7 +61,7 @@ class StandardsModel
 
     # If the fan lives inside a unitary system
     if fan_on_off.airLoopHVAC.empty? && fan_on_off.containingZoneHVACComponent.empty?
-      case template
+      case instvartemplate
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                                  2.5
