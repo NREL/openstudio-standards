@@ -15,7 +15,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -193,7 +192,6 @@
         "T S2 Apartment"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -777,25 +775,6 @@
         "Radiology_Flr_4"
       ]
     },
-    "space_multiplier_map": {
-      "ER_Exam1_Mult4_Flr_1": 4,
-      "ER_Exam3_Mult4_Flr_1": 4,
-      "ER_Triage_Mult4_Flr_1": 4,
-      "IC_PatRoom1_Mult5_Flr_2": 5,
-      "IC_PatRoom3_Mult6_Flr_2": 6,
-      "Office1_Mult4_Flr_1": 5,
-      "Office2_Mult5_Flr_5": 5,
-      "Office4_Mult6_Flr_5": 6,
-      "OR2_Mult5_Flr_2": 5,
-      "PatRoom1_Mult10_Flr_3": 10,
-      "PatRoom1_Mult10_Flr_4": 10,
-      "PatRoom3_Mult10_Flr_3": 10,
-      "PatRoom3_Mult10_Flr_4": 10,
-      "PatRoom5_Mult10_Flr_3": 10,
-      "PatRoom5_Mult10_Flr_4": 10,
-      "PatRoom7_Mult10_Flr_3": 10,
-      "PatRoom7_Mult10_Flr_4": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -1009,16 +988,6 @@
         "Storage_Flr_1"
       ]
     },
-    "space_multiplier_map": {
-      "Corridor_Flr_3": 4,
-      "Room_1_Flr_3": 4,
-      "Room_2_Flr_3": 4,
-      "Room_3_Mult19_Flr_3": 76,
-      "Room_3_Mult9_Flr_6": 9,
-      "Room_4_Mult19_Flr_3": 76,
-      "Room_5_Flr_3": 4,
-      "Room_6_Flr_3": 4
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -1124,15 +1093,6 @@
         "DataCenter_basement_ZN_6"
       ]
     },
-    "space_multiplier_map": {
-      "DataCenter_mid_ZN_6": 10,
-      "Perimeter_mid_ZN_1": 10,
-      "Perimeter_mid_ZN_2": 10,
-      "Perimeter_mid_ZN_3": 10,
-      "Perimeter_mid_ZN_4": 10,
-      "Core_mid": 10,
-      "MidFloor_Plenum": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -1235,7 +1195,6 @@
         "Core_top"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -1317,17 +1276,6 @@
         "T S1 Apartment",
         "T S2 Apartment"
       ]
-    },
-    "space_multiplier_map": {
-      "M SW Apartment": 2,
-      "M NW Apartment": 2,
-      "M SE Apartment": 2,
-      "M NE Apartment": 2,
-      "M N1 Apartment": 2,
-      "M N2 Apartment": 2,
-      "M S1 Apartment": 2,
-      "M S2 Apartment": 2,
-      "M Corridor": 2
     },
     "system_to_space_map": [
       {
@@ -1665,7 +1613,6 @@
         "Floor 3 Undeveloped 2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -1906,7 +1853,6 @@
         "Mult_Class_2_Pod_3_ZN_1_FLR_1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -2049,7 +1995,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -2138,7 +2083,6 @@
         "Front_Retail"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -2180,7 +2124,6 @@
         "SMstore8"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -2338,7 +2281,6 @@
         "Corner_Class_2_Pod_3_ZN_1_FLR_2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -2625,7 +2567,6 @@
         "RestroomFlr1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PTAC",
@@ -2941,84 +2882,7 @@
           "RearStairsFlr4"
         ]
       }
-    ],
-    "building_story_map": {
-      "BuildingStory1": [
-        "GuestRoom101",
-        "GuestRoom102",
-        "GuestRoom103",
-        "GuestRoom104",
-        "GuestRoom105",
-        "CorridorFlr1",
-        "ElevatorCoreFlr1",
-        "EmployeeLoungeFlr1",
-        "ExerciseCenterFlr1",
-        "FrontLoungeFlr1",
-        "FrontOfficeFlr1",
-        "FrontStairsFlr1",
-        "RearStairsFlr1",
-        "FrontStorageFlr1",
-        "RearStorageFlr1",
-        "LaundryRoomFlr1",
-        "MechanicalRoomFlr1",
-        "MeetingRoomFlr1",
-        "RestroomFlr1"
-      ],
-      "BuildingStory2": [
-        "GuestRoom201",
-        "GuestRoom202_205",
-        "GuestRoom206_208",
-        "GuestRoom209_212",
-        "GuestRoom213",
-        "GuestRoom214",
-        "GuestRoom215_218",
-        "GuestRoom219",
-        "GuestRoom220_223",
-        "GuestRoom224",
-        "CorridorFlr2",
-        "FrontStairsFlr2",
-        "RearStairsFlr2",
-        "FrontStorageFlr2",
-        "RearStorageFlr2",
-        "ElevatorCoreFlr2"
-      ],
-      "BuildingStory3": [
-        "GuestRoom301",
-        "GuestRoom302_305",
-        "GuestRoom306_308",
-        "GuestRoom309_312",
-        "GuestRoom313",
-        "GuestRoom314",
-        "GuestRoom315_318",
-        "GuestRoom319",
-        "GuestRoom320_323",
-        "GuestRoom324",
-        "CorridorFlr3",
-        "FrontStairsFlr3",
-        "RearStairsFlr3",
-        "FrontStorageFlr3",
-        "RearStorageFlr3",
-        "ElevatorCoreFlr3"
-      ],
-      "BuildingStory4": [
-        "GuestRoom401",
-        "GuestRoom402_405",
-        "GuestRoom406_408",
-        "GuestRoom409_412",
-        "GuestRoom413",
-        "GuestRoom414",
-        "GuestRoom415_418",
-        "GuestRoom419",
-        "GuestRoom420_423",
-        "GuestRoom424",
-        "CorridorFlr4",
-        "FrontStairsFlr4",
-        "RearStairsFlr4",
-        "FrontStorageFlr4",
-        "RearStorageFlr4",
-        "ElevatorCoreFlr4"
-      ]
-    }
+    ]
   },
   {
     "class_name": "A90_1_2004SmallOffice",
@@ -3037,7 +2901,6 @@
         "Attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -3092,7 +2955,6 @@
         "Zone1 Office"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -3153,7 +3015,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -3331,7 +3192,6 @@
         "T S2 Apartment"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -3915,25 +3775,6 @@
         "Radiology_Flr_4"
       ]
     },
-    "space_multiplier_map": {
-      "ER_Exam1_Mult4_Flr_1": 4,
-      "ER_Exam3_Mult4_Flr_1": 4,
-      "ER_Triage_Mult4_Flr_1": 4,
-      "IC_PatRoom1_Mult5_Flr_2": 5,
-      "IC_PatRoom3_Mult6_Flr_2": 6,
-      "Office1_Mult4_Flr_1": 5,
-      "Office2_Mult5_Flr_5": 5,
-      "Office4_Mult6_Flr_5": 6,
-      "OR2_Mult5_Flr_2": 5,
-      "PatRoom1_Mult10_Flr_3": 10,
-      "PatRoom1_Mult10_Flr_4": 10,
-      "PatRoom3_Mult10_Flr_3": 10,
-      "PatRoom3_Mult10_Flr_4": 10,
-      "PatRoom5_Mult10_Flr_3": 10,
-      "PatRoom5_Mult10_Flr_4": 10,
-      "PatRoom7_Mult10_Flr_3": 10,
-      "PatRoom7_Mult10_Flr_4": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -4147,16 +3988,6 @@
         "Storage_Flr_1"
       ]
     },
-    "space_multiplier_map": {
-      "Corridor_Flr_3": 4,
-      "Room_1_Flr_3": 4,
-      "Room_2_Flr_3": 4,
-      "Room_3_Mult19_Flr_3": 76,
-      "Room_3_Mult9_Flr_6": 9,
-      "Room_4_Mult19_Flr_3": 76,
-      "Room_5_Flr_3": 4,
-      "Room_6_Flr_3": 4
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -4262,15 +4093,6 @@
         "DataCenter_basement_ZN_6"
       ]
     },
-    "space_multiplier_map": {
-      "DataCenter_mid_ZN_6": 10,
-      "Perimeter_mid_ZN_1": 10,
-      "Perimeter_mid_ZN_2": 10,
-      "Perimeter_mid_ZN_3": 10,
-      "Perimeter_mid_ZN_4": 10,
-      "Core_mid": 10,
-      "MidFloor_Plenum": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -4373,7 +4195,6 @@
         "Core_top"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -4455,17 +4276,6 @@
         "T S1 Apartment",
         "T S2 Apartment"
       ]
-    },
-    "space_multiplier_map": {
-      "M SW Apartment": 2,
-      "M NW Apartment": 2,
-      "M SE Apartment": 2,
-      "M NE Apartment": 2,
-      "M N1 Apartment": 2,
-      "M N2 Apartment": 2,
-      "M S1 Apartment": 2,
-      "M S2 Apartment": 2,
-      "M Corridor": 2
     },
     "system_to_space_map": [
       {
@@ -4803,7 +4613,6 @@
         "Floor 3 Undeveloped 2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -5044,7 +4853,6 @@
         "Mult_Class_2_Pod_3_ZN_1_FLR_1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -5187,7 +4995,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -5276,7 +5083,6 @@
         "Front_Retail"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -5318,7 +5124,6 @@
         "SMstore8"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -5476,7 +5281,6 @@
         "Corner_Class_2_Pod_3_ZN_1_FLR_2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -5763,7 +5567,6 @@
         "RestroomFlr1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PTAC",
@@ -6079,84 +5882,7 @@
           "RearStairsFlr4"
         ]
       }
-    ],
-    "building_story_map": {
-      "BuildingStory1": [
-        "GuestRoom101",
-        "GuestRoom102",
-        "GuestRoom103",
-        "GuestRoom104",
-        "GuestRoom105",
-        "CorridorFlr1",
-        "ElevatorCoreFlr1",
-        "EmployeeLoungeFlr1",
-        "ExerciseCenterFlr1",
-        "FrontLoungeFlr1",
-        "FrontOfficeFlr1",
-        "FrontStairsFlr1",
-        "RearStairsFlr1",
-        "FrontStorageFlr1",
-        "RearStorageFlr1",
-        "LaundryRoomFlr1",
-        "MechanicalRoomFlr1",
-        "MeetingRoomFlr1",
-        "RestroomFlr1"
-      ],
-      "BuildingStory2": [
-        "GuestRoom201",
-        "GuestRoom202_205",
-        "GuestRoom206_208",
-        "GuestRoom209_212",
-        "GuestRoom213",
-        "GuestRoom214",
-        "GuestRoom215_218",
-        "GuestRoom219",
-        "GuestRoom220_223",
-        "GuestRoom224",
-        "CorridorFlr2",
-        "FrontStairsFlr2",
-        "RearStairsFlr2",
-        "FrontStorageFlr2",
-        "RearStorageFlr2",
-        "ElevatorCoreFlr2"
-      ],
-      "BuildingStory3": [
-        "GuestRoom301",
-        "GuestRoom302_305",
-        "GuestRoom306_308",
-        "GuestRoom309_312",
-        "GuestRoom313",
-        "GuestRoom314",
-        "GuestRoom315_318",
-        "GuestRoom319",
-        "GuestRoom320_323",
-        "GuestRoom324",
-        "CorridorFlr3",
-        "FrontStairsFlr3",
-        "RearStairsFlr3",
-        "FrontStorageFlr3",
-        "RearStorageFlr3",
-        "ElevatorCoreFlr3"
-      ],
-      "BuildingStory4": [
-        "GuestRoom401",
-        "GuestRoom402_405",
-        "GuestRoom406_408",
-        "GuestRoom409_412",
-        "GuestRoom413",
-        "GuestRoom414",
-        "GuestRoom415_418",
-        "GuestRoom419",
-        "GuestRoom420_423",
-        "GuestRoom424",
-        "CorridorFlr4",
-        "FrontStairsFlr4",
-        "RearStairsFlr4",
-        "FrontStorageFlr4",
-        "RearStorageFlr4",
-        "ElevatorCoreFlr4"
-      ]
-    }
+    ]
   },
   {
     "class_name": "A90_1_2007SmallOffice",
@@ -6175,7 +5901,6 @@
         "Attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -6230,7 +5955,6 @@
         "Zone1 Office"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -6291,7 +6015,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -6469,7 +6192,6 @@
         "T S2 Apartment"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -7053,25 +6775,6 @@
         "Radiology_Flr_4"
       ]
     },
-    "space_multiplier_map": {
-      "ER_Exam1_Mult4_Flr_1": 4,
-      "ER_Exam3_Mult4_Flr_1": 4,
-      "ER_Triage_Mult4_Flr_1": 4,
-      "IC_PatRoom1_Mult5_Flr_2": 5,
-      "IC_PatRoom3_Mult6_Flr_2": 6,
-      "Office1_Mult4_Flr_1": 5,
-      "Office2_Mult5_Flr_5": 5,
-      "Office4_Mult6_Flr_5": 6,
-      "OR2_Mult5_Flr_2": 5,
-      "PatRoom1_Mult10_Flr_3": 10,
-      "PatRoom1_Mult10_Flr_4": 10,
-      "PatRoom3_Mult10_Flr_3": 10,
-      "PatRoom3_Mult10_Flr_4": 10,
-      "PatRoom5_Mult10_Flr_3": 10,
-      "PatRoom5_Mult10_Flr_4": 10,
-      "PatRoom7_Mult10_Flr_3": 10,
-      "PatRoom7_Mult10_Flr_4": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -7285,16 +6988,6 @@
         "Storage_Flr_1"
       ]
     },
-    "space_multiplier_map": {
-      "Corridor_Flr_3": 4,
-      "Room_1_Flr_3": 4,
-      "Room_2_Flr_3": 4,
-      "Room_3_Mult19_Flr_3": 76,
-      "Room_3_Mult9_Flr_6": 9,
-      "Room_4_Mult19_Flr_3": 76,
-      "Room_5_Flr_3": 4,
-      "Room_6_Flr_3": 4
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -7400,15 +7093,6 @@
         "DataCenter_basement_ZN_6"
       ]
     },
-    "space_multiplier_map": {
-      "DataCenter_mid_ZN_6": 10,
-      "Perimeter_mid_ZN_1": 10,
-      "Perimeter_mid_ZN_2": 10,
-      "Perimeter_mid_ZN_3": 10,
-      "Perimeter_mid_ZN_4": 10,
-      "Core_mid": 10,
-      "MidFloor_Plenum": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -7511,7 +7195,6 @@
         "Core_top"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -7593,17 +7276,6 @@
         "T S1 Apartment",
         "T S2 Apartment"
       ]
-    },
-    "space_multiplier_map": {
-      "M SW Apartment": 2,
-      "M NW Apartment": 2,
-      "M SE Apartment": 2,
-      "M NE Apartment": 2,
-      "M N1 Apartment": 2,
-      "M N2 Apartment": 2,
-      "M S1 Apartment": 2,
-      "M S2 Apartment": 2,
-      "M Corridor": 2
     },
     "system_to_space_map": [
       {
@@ -7941,7 +7613,6 @@
         "Floor 3 Undeveloped 2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -8182,7 +7853,6 @@
         "Mult_Class_2_Pod_3_ZN_1_FLR_1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -8325,7 +7995,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -8414,7 +8083,6 @@
         "Front_Retail"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -8456,7 +8124,6 @@
         "SMstore8"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -8614,7 +8281,6 @@
         "Corner_Class_2_Pod_3_ZN_1_FLR_2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -8901,7 +8567,6 @@
         "RestroomFlr1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PTAC",
@@ -9217,84 +8882,7 @@
           "RearStairsFlr4"
         ]
       }
-    ],
-    "building_story_map": {
-      "BuildingStory1": [
-        "GuestRoom101",
-        "GuestRoom102",
-        "GuestRoom103",
-        "GuestRoom104",
-        "GuestRoom105",
-        "CorridorFlr1",
-        "ElevatorCoreFlr1",
-        "EmployeeLoungeFlr1",
-        "ExerciseCenterFlr1",
-        "FrontLoungeFlr1",
-        "FrontOfficeFlr1",
-        "FrontStairsFlr1",
-        "RearStairsFlr1",
-        "FrontStorageFlr1",
-        "RearStorageFlr1",
-        "LaundryRoomFlr1",
-        "MechanicalRoomFlr1",
-        "MeetingRoomFlr1",
-        "RestroomFlr1"
-      ],
-      "BuildingStory2": [
-        "GuestRoom201",
-        "GuestRoom202_205",
-        "GuestRoom206_208",
-        "GuestRoom209_212",
-        "GuestRoom213",
-        "GuestRoom214",
-        "GuestRoom215_218",
-        "GuestRoom219",
-        "GuestRoom220_223",
-        "GuestRoom224",
-        "CorridorFlr2",
-        "FrontStairsFlr2",
-        "RearStairsFlr2",
-        "FrontStorageFlr2",
-        "RearStorageFlr2",
-        "ElevatorCoreFlr2"
-      ],
-      "BuildingStory3": [
-        "GuestRoom301",
-        "GuestRoom302_305",
-        "GuestRoom306_308",
-        "GuestRoom309_312",
-        "GuestRoom313",
-        "GuestRoom314",
-        "GuestRoom315_318",
-        "GuestRoom319",
-        "GuestRoom320_323",
-        "GuestRoom324",
-        "CorridorFlr3",
-        "FrontStairsFlr3",
-        "RearStairsFlr3",
-        "FrontStorageFlr3",
-        "RearStorageFlr3",
-        "ElevatorCoreFlr3"
-      ],
-      "BuildingStory4": [
-        "GuestRoom401",
-        "GuestRoom402_405",
-        "GuestRoom406_408",
-        "GuestRoom409_412",
-        "GuestRoom413",
-        "GuestRoom414",
-        "GuestRoom415_418",
-        "GuestRoom419",
-        "GuestRoom420_423",
-        "GuestRoom424",
-        "CorridorFlr4",
-        "FrontStairsFlr4",
-        "RearStairsFlr4",
-        "FrontStorageFlr4",
-        "RearStorageFlr4",
-        "ElevatorCoreFlr4"
-      ]
-    }
+    ]
   },
   {
     "class_name": "A90_1_2010SmallOffice",
@@ -9313,7 +8901,6 @@
         "Attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -9368,7 +8955,6 @@
         "Zone1 Office"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -9429,7 +9015,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -9607,7 +9192,6 @@
         "T S2 Apartment"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -10191,25 +9775,6 @@
         "Radiology_Flr_4"
       ]
     },
-    "space_multiplier_map": {
-      "ER_Exam1_Mult4_Flr_1": 4,
-      "ER_Exam3_Mult4_Flr_1": 4,
-      "ER_Triage_Mult4_Flr_1": 4,
-      "IC_PatRoom1_Mult5_Flr_2": 5,
-      "IC_PatRoom3_Mult6_Flr_2": 6,
-      "Office1_Mult4_Flr_1": 5,
-      "Office2_Mult5_Flr_5": 5,
-      "Office4_Mult6_Flr_5": 6,
-      "OR2_Mult5_Flr_2": 5,
-      "PatRoom1_Mult10_Flr_3": 10,
-      "PatRoom1_Mult10_Flr_4": 10,
-      "PatRoom3_Mult10_Flr_3": 10,
-      "PatRoom3_Mult10_Flr_4": 10,
-      "PatRoom5_Mult10_Flr_3": 10,
-      "PatRoom5_Mult10_Flr_4": 10,
-      "PatRoom7_Mult10_Flr_3": 10,
-      "PatRoom7_Mult10_Flr_4": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -10423,16 +9988,6 @@
         "Storage_Flr_1"
       ]
     },
-    "space_multiplier_map": {
-      "Corridor_Flr_3": 4,
-      "Room_1_Flr_3": 4,
-      "Room_2_Flr_3": 4,
-      "Room_3_Mult19_Flr_3": 76,
-      "Room_3_Mult9_Flr_6": 9,
-      "Room_4_Mult19_Flr_3": 76,
-      "Room_5_Flr_3": 4,
-      "Room_6_Flr_3": 4
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -10538,15 +10093,6 @@
         "DataCenter_basement_ZN_6"
       ]
     },
-    "space_multiplier_map": {
-      "DataCenter_mid_ZN_6": 10,
-      "Perimeter_mid_ZN_1": 10,
-      "Perimeter_mid_ZN_2": 10,
-      "Perimeter_mid_ZN_3": 10,
-      "Perimeter_mid_ZN_4": 10,
-      "Core_mid": 10,
-      "MidFloor_Plenum": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -10649,7 +10195,6 @@
         "Core_top"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -10731,17 +10276,6 @@
         "T S1 Apartment",
         "T S2 Apartment"
       ]
-    },
-    "space_multiplier_map": {
-      "M SW Apartment": 2,
-      "M NW Apartment": 2,
-      "M SE Apartment": 2,
-      "M NE Apartment": 2,
-      "M N1 Apartment": 2,
-      "M N2 Apartment": 2,
-      "M S1 Apartment": 2,
-      "M S2 Apartment": 2,
-      "M Corridor": 2
     },
     "system_to_space_map": [
       {
@@ -11079,7 +10613,6 @@
         "Floor 3 Undeveloped 2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -11320,7 +10853,6 @@
         "Mult_Class_2_Pod_3_ZN_1_FLR_1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -11463,7 +10995,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -11552,7 +11083,6 @@
         "Front_Retail"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -11594,7 +11124,6 @@
         "SMstore8"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -11752,7 +11281,6 @@
         "Corner_Class_2_Pod_3_ZN_1_FLR_2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -12039,7 +11567,6 @@
         "RestroomFlr1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PTAC",
@@ -12355,84 +11882,7 @@
           "RearStairsFlr4"
         ]
       }
-    ],
-    "building_story_map": {
-      "BuildingStory1": [
-        "GuestRoom101",
-        "GuestRoom102",
-        "GuestRoom103",
-        "GuestRoom104",
-        "GuestRoom105",
-        "CorridorFlr1",
-        "ElevatorCoreFlr1",
-        "EmployeeLoungeFlr1",
-        "ExerciseCenterFlr1",
-        "FrontLoungeFlr1",
-        "FrontOfficeFlr1",
-        "FrontStairsFlr1",
-        "RearStairsFlr1",
-        "FrontStorageFlr1",
-        "RearStorageFlr1",
-        "LaundryRoomFlr1",
-        "MechanicalRoomFlr1",
-        "MeetingRoomFlr1",
-        "RestroomFlr1"
-      ],
-      "BuildingStory2": [
-        "GuestRoom201",
-        "GuestRoom202_205",
-        "GuestRoom206_208",
-        "GuestRoom209_212",
-        "GuestRoom213",
-        "GuestRoom214",
-        "GuestRoom215_218",
-        "GuestRoom219",
-        "GuestRoom220_223",
-        "GuestRoom224",
-        "CorridorFlr2",
-        "FrontStairsFlr2",
-        "RearStairsFlr2",
-        "FrontStorageFlr2",
-        "RearStorageFlr2",
-        "ElevatorCoreFlr2"
-      ],
-      "BuildingStory3": [
-        "GuestRoom301",
-        "GuestRoom302_305",
-        "GuestRoom306_308",
-        "GuestRoom309_312",
-        "GuestRoom313",
-        "GuestRoom314",
-        "GuestRoom315_318",
-        "GuestRoom319",
-        "GuestRoom320_323",
-        "GuestRoom324",
-        "CorridorFlr3",
-        "FrontStairsFlr3",
-        "RearStairsFlr3",
-        "FrontStorageFlr3",
-        "RearStorageFlr3",
-        "ElevatorCoreFlr3"
-      ],
-      "BuildingStory4": [
-        "GuestRoom401",
-        "GuestRoom402_405",
-        "GuestRoom406_408",
-        "GuestRoom409_412",
-        "GuestRoom413",
-        "GuestRoom414",
-        "GuestRoom415_418",
-        "GuestRoom419",
-        "GuestRoom420_423",
-        "GuestRoom424",
-        "CorridorFlr4",
-        "FrontStairsFlr4",
-        "RearStairsFlr4",
-        "FrontStorageFlr4",
-        "RearStorageFlr4",
-        "ElevatorCoreFlr4"
-      ]
-    }
+    ]
   },
   {
     "class_name": "A90_1_2013SmallOffice",
@@ -12451,7 +11901,6 @@
         "Attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -12506,7 +11955,6 @@
         "Zone1 Office"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -12567,7 +12015,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -12745,7 +12192,6 @@
         "T S2 Apartment"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -13329,25 +12775,6 @@
         "Radiology_Flr_4"
       ]
     },
-    "space_multiplier_map": {
-      "ER_Exam1_Mult4_Flr_1": 4,
-      "ER_Exam3_Mult4_Flr_1": 4,
-      "ER_Triage_Mult4_Flr_1": 4,
-      "IC_PatRoom1_Mult5_Flr_2": 5,
-      "IC_PatRoom3_Mult6_Flr_2": 6,
-      "Office1_Mult4_Flr_1": 5,
-      "Office2_Mult5_Flr_5": 5,
-      "Office4_Mult6_Flr_5": 6,
-      "OR2_Mult5_Flr_2": 5,
-      "PatRoom1_Mult10_Flr_3": 10,
-      "PatRoom1_Mult10_Flr_4": 10,
-      "PatRoom3_Mult10_Flr_3": 10,
-      "PatRoom3_Mult10_Flr_4": 10,
-      "PatRoom5_Mult10_Flr_3": 10,
-      "PatRoom5_Mult10_Flr_4": 10,
-      "PatRoom7_Mult10_Flr_3": 10,
-      "PatRoom7_Mult10_Flr_4": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -13544,16 +12971,6 @@
         "Storage_Flr_1"
       ]
     },
-    "space_multiplier_map": {
-      "Corridor_Flr_3": 4,
-      "Room_1_Flr_3": 4,
-      "Room_2_Flr_3": 4,
-      "Room_3_Mult19_Flr_3": 76,
-      "Room_3_Mult9_Flr_6": 9,
-      "Room_4_Mult19_Flr_3": 76,
-      "Room_5_Flr_3": 4,
-      "Room_6_Flr_3": 4
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -13651,14 +13068,6 @@
         "Perimeter_top_ZN_4"
       ]
     },
-    "space_multiplier_map": {
-      "Perimeter_mid_ZN_1": 10,
-      "Perimeter_mid_ZN_2": 10,
-      "Perimeter_mid_ZN_3": 10,
-      "Perimeter_mid_ZN_4": 10,
-      "Core_mid": 10,
-      "MidFloor_Plenum": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -13729,7 +13138,6 @@
         "Core_top"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -13805,17 +13213,6 @@
         "T S1 Apartment",
         "T S2 Apartment"
       ]
-    },
-    "space_multiplier_map": {
-      "M SW Apartment": 2,
-      "M NW Apartment": 2,
-      "M SE Apartment": 2,
-      "M NE Apartment": 2,
-      "M N1 Apartment": 2,
-      "M N2 Apartment": 2,
-      "M S1 Apartment": 2,
-      "M S2 Apartment": 2,
-      "M Corridor": 2
     },
     "system_to_space_map": [
       {
@@ -14171,7 +13568,6 @@
         "Floor 3 Undeveloped 2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -14347,7 +13743,6 @@
         "Mult_Class_2_Pod_3_ZN_1_FLR_1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -14490,7 +13885,6 @@
         "attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -14579,7 +13973,6 @@
         "Front_Retail"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -14621,7 +14014,6 @@
         "SMstore8"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -14781,7 +14173,6 @@
         "Corner_Class_2_Pod_3_ZN_1_FLR_2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -15055,7 +14446,6 @@
         "Attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PTAC",
@@ -15435,87 +14825,7 @@
           "RearStorageFlr4"
         ]
       }
-    ],
-    "building_story_map": {
-      "BuildingStory1": [
-        "GuestRoom101",
-        "GuestRoom102",
-        "GuestRoom103",
-        "GuestRoom104",
-        "GuestRoom105",
-        "CorridorFlr1",
-        "ElevatorCoreFlr1",
-        "EmployeeLoungeFlr1",
-        "ExerciseCenterFlr1",
-        "FrontLoungeFlr1",
-        "FrontOfficeFlr1",
-        "FrontStairsFlr1",
-        "RearStairsFlr1",
-        "FrontStorageFlr1",
-        "RearStorageFlr1",
-        "LaundryRoomFlr1",
-        "MechanicalRoomFlr1",
-        "MeetingRoomFlr1",
-        "RestroomFlr1"
-      ],
-      "BuildingStory2": [
-        "GuestRoom201",
-        "GuestRoom202_205",
-        "GuestRoom206_208",
-        "GuestRoom209_212",
-        "GuestRoom213",
-        "GuestRoom214",
-        "GuestRoom215_218",
-        "GuestRoom219",
-        "GuestRoom220_223",
-        "GuestRoom224",
-        "CorridorFlr2",
-        "FrontStairsFlr2",
-        "RearStairsFlr2",
-        "FrontStorageFlr2",
-        "RearStorageFlr2",
-        "ElevatorCoreFlr2"
-      ],
-      "BuildingStory3": [
-        "GuestRoom301",
-        "GuestRoom302_305",
-        "GuestRoom306_308",
-        "GuestRoom309_312",
-        "GuestRoom313",
-        "GuestRoom314",
-        "GuestRoom315_318",
-        "GuestRoom319",
-        "GuestRoom320_323",
-        "GuestRoom324",
-        "CorridorFlr3",
-        "FrontStairsFlr3",
-        "RearStairsFlr3",
-        "FrontStorageFlr3",
-        "RearStorageFlr3",
-        "ElevatorCoreFlr3"
-      ],
-      "BuildingStory4": [
-        "GuestRoom401",
-        "GuestRoom402_405",
-        "GuestRoom406_408",
-        "GuestRoom409_412",
-        "GuestRoom413",
-        "GuestRoom414",
-        "GuestRoom415_418",
-        "GuestRoom419",
-        "GuestRoom420_423",
-        "GuestRoom424",
-        "CorridorFlr4",
-        "FrontStairsFlr4",
-        "RearStairsFlr4",
-        "FrontStorageFlr4",
-        "RearStorageFlr4",
-        "ElevatorCoreFlr4"
-      ],
-      "AtticStory": [
-        "Attic"
-      ]
-    }
+    ]
   },
   {
     "class_name": "DOERef1980_2004SmallOffice",
@@ -15534,7 +14844,6 @@
         "Attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -15589,7 +14898,6 @@
         "Zone1 Office"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -15637,7 +14945,6 @@
         "Kitchen"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -15815,7 +15122,6 @@
         "T S2 Apartment"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -16399,25 +15705,6 @@
         "Radiology_Flr_4"
       ]
     },
-    "space_multiplier_map": {
-      "ER_Exam1_Mult4_Flr_1": 4,
-      "ER_Exam3_Mult4_Flr_1": 4,
-      "ER_Triage_Mult4_Flr_1": 4,
-      "IC_PatRoom1_Mult5_Flr_2": 5,
-      "IC_PatRoom3_Mult6_Flr_2": 6,
-      "Office1_Mult4_Flr_1": 5,
-      "Office2_Mult5_Flr_5": 5,
-      "Office4_Mult6_Flr_5": 6,
-      "OR2_Mult5_Flr_2": 5,
-      "PatRoom1_Mult10_Flr_3": 10,
-      "PatRoom1_Mult10_Flr_4": 10,
-      "PatRoom3_Mult10_Flr_3": 10,
-      "PatRoom3_Mult10_Flr_4": 10,
-      "PatRoom5_Mult10_Flr_3": 10,
-      "PatRoom5_Mult10_Flr_4": 10,
-      "PatRoom7_Mult10_Flr_3": 10,
-      "PatRoom7_Mult10_Flr_4": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -16614,16 +15901,6 @@
         "Storage_Flr_1"
       ]
     },
-    "space_multiplier_map": {
-      "Corridor_Flr_3": 4,
-      "Room_1_Flr_3": 4,
-      "Room_2_Flr_3": 4,
-      "Room_3_Mult19_Flr_3": 76,
-      "Room_3_Mult9_Flr_6": 9,
-      "Room_4_Mult19_Flr_3": 76,
-      "Room_5_Flr_3": 4,
-      "Room_6_Flr_3": 4
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -16721,14 +15998,6 @@
         "Perimeter_top_ZN_4"
       ]
     },
-    "space_multiplier_map": {
-      "Perimeter_mid_ZN_1": 10,
-      "Perimeter_mid_ZN_2": 10,
-      "Perimeter_mid_ZN_3": 10,
-      "Perimeter_mid_ZN_4": 10,
-      "Core_mid": 10,
-      "MidFloor_Plenum": 10
-    },
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -16799,7 +16068,6 @@
         "Core_top"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -16862,17 +16130,6 @@
         "T S1 Apartment",
         "T S2 Apartment"
       ]
-    },
-    "space_multiplier_map": {
-      "M SW Apartment": 2,
-      "M NW Apartment": 2,
-      "M SE Apartment": 2,
-      "M NE Apartment": 2,
-      "M N1 Apartment": 2,
-      "M N2 Apartment": 2,
-      "M S1 Apartment": 2,
-      "M S2 Apartment": 2,
-      "M Corridor": 2
     },
     "system_to_space_map": [
       {
@@ -17228,7 +16485,6 @@
         "Floor 3 Undeveloped 2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -17404,7 +16660,6 @@
         "Mult_Class_2_Pod_3_ZN_1_FLR_1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -17544,7 +16799,6 @@
         "Kitchen"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -17633,7 +16887,6 @@
         "Front_Retail"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -17675,7 +16928,6 @@
         "SMstore8"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -17835,7 +17087,6 @@
         "Corner_Class_2_Pod_3_ZN_1_FLR_2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "CAV",
@@ -18109,7 +17360,6 @@
         "Attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PTAC",
@@ -18489,87 +17739,7 @@
           "RearStorageFlr4"
         ]
       }
-    ],
-    "building_story_map": {
-      "BuildingStory1": [
-        "GuestRoom101",
-        "GuestRoom102",
-        "GuestRoom103",
-        "GuestRoom104",
-        "GuestRoom105",
-        "CorridorFlr1",
-        "ElevatorCoreFlr1",
-        "EmployeeLoungeFlr1",
-        "ExerciseCenterFlr1",
-        "FrontLoungeFlr1",
-        "FrontOfficeFlr1",
-        "FrontStairsFlr1",
-        "RearStairsFlr1",
-        "FrontStorageFlr1",
-        "RearStorageFlr1",
-        "LaundryRoomFlr1",
-        "MechanicalRoomFlr1",
-        "MeetingRoomFlr1",
-        "RestroomFlr1"
-      ],
-      "BuildingStory2": [
-        "GuestRoom201",
-        "GuestRoom202_205",
-        "GuestRoom206_208",
-        "GuestRoom209_212",
-        "GuestRoom213",
-        "GuestRoom214",
-        "GuestRoom215_218",
-        "GuestRoom219",
-        "GuestRoom220_223",
-        "GuestRoom224",
-        "CorridorFlr2",
-        "FrontStairsFlr2",
-        "RearStairsFlr2",
-        "FrontStorageFlr2",
-        "RearStorageFlr2",
-        "ElevatorCoreFlr2"
-      ],
-      "BuildingStory3": [
-        "GuestRoom301",
-        "GuestRoom302_305",
-        "GuestRoom306_308",
-        "GuestRoom309_312",
-        "GuestRoom313",
-        "GuestRoom314",
-        "GuestRoom315_318",
-        "GuestRoom319",
-        "GuestRoom320_323",
-        "GuestRoom324",
-        "CorridorFlr3",
-        "FrontStairsFlr3",
-        "RearStairsFlr3",
-        "FrontStorageFlr3",
-        "RearStorageFlr3",
-        "ElevatorCoreFlr3"
-      ],
-      "BuildingStory4": [
-        "GuestRoom401",
-        "GuestRoom402_405",
-        "GuestRoom406_408",
-        "GuestRoom409_412",
-        "GuestRoom413",
-        "GuestRoom414",
-        "GuestRoom415_418",
-        "GuestRoom419",
-        "GuestRoom420_423",
-        "GuestRoom424",
-        "CorridorFlr4",
-        "FrontStairsFlr4",
-        "RearStairsFlr4",
-        "FrontStorageFlr4",
-        "RearStorageFlr4",
-        "ElevatorCoreFlr4"
-      ],
-      "AtticStory": [
-        "Attic"
-      ]
-    }
+    ]
   },
   {
     "class_name": "DOERefPre1980SmallOffice",
@@ -18588,7 +17758,6 @@
         "Attic"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -18643,7 +17812,6 @@
         "Zone1 Office"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -18694,7 +17862,6 @@
         "Kitchen"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": null
   },
   {
@@ -18800,7 +17967,6 @@
         "T S2 Apartment"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -19370,25 +18536,6 @@
         "Radiology_Flr_4"
       ]
     },
-    "space_multiplier_map": {
-      "ER_Exam1_Mult4_Flr_1": 4,
-      "ER_Exam3_Mult4_Flr_1": 4,
-      "ER_Triage_Mult4_Flr_1": 4,
-      "IC_PatRoom1_Mult5_Flr_2": 5,
-      "IC_PatRoom3_Mult6_Flr_2": 6,
-      "Office1_Mult4_Flr_1": 5,
-      "Office2_Mult5_Flr_5": 5,
-      "Office4_Mult6_Flr_5": 6,
-      "OR2_Mult5_Flr_2": 5,
-      "PatRoom1_Mult10_Flr_3": 10,
-      "PatRoom1_Mult10_Flr_4": 10,
-      "PatRoom3_Mult10_Flr_3": 10,
-      "PatRoom3_Mult10_Flr_4": 10,
-      "PatRoom5_Mult10_Flr_3": 10,
-      "PatRoom5_Mult10_Flr_4": 10,
-      "PatRoom7_Mult10_Flr_3": 10,
-      "PatRoom7_Mult10_Flr_4": 10
-    },
     "system_to_space_map": null
   },
   {
@@ -19439,16 +18586,6 @@
         "Room_5_Flr_3",
         "Room_6_Flr_3"
       ]
-    },
-    "space_multiplier_map": {
-      "Corridor_Flr_3": 4,
-      "Room_1_Flr_3": 4,
-      "Room_2_Flr_3": 4,
-      "Room_3_Mult19_Flr_3": 76,
-      "Room_3_Mult9_Flr_6": 9,
-      "Room_4_Mult19_Flr_3": 76,
-      "Room_5_Flr_3": 4,
-      "Room_6_Flr_3": 4
     },
     "system_to_space_map": [
       {
@@ -19558,15 +18695,6 @@
         "MidFloor_Plenum"
       ]
     },
-    "space_multiplier_map": {
-      "DataCenter_mid_ZN_6": 10,
-      "Perimeter_mid_ZN_1": 10,
-      "Perimeter_mid_ZN_2": 10,
-      "Perimeter_mid_ZN_3": 10,
-      "Perimeter_mid_ZN_4": 10,
-      "Core_mid": 10,
-      "MidFloor_Plenum": 10
-    },
     "system_to_space_map": null
   },
   {
@@ -19598,7 +18726,6 @@
         "Perimeter_top_ZN_4"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -19674,17 +18801,6 @@
       "Conf./meet./multi-purpose": [
         "Office"
       ]
-    },
-    "space_multiplier_map": {
-      "M SW Apartment": 2,
-      "M NW Apartment": 2,
-      "M SE Apartment": 2,
-      "M NE Apartment": 2,
-      "M N1 Apartment": 2,
-      "M N2 Apartment": 2,
-      "M S1 Apartment": 2,
-      "M S2 Apartment": 2,
-      "M Corridor": 2
     },
     "system_to_space_map": [
       {
@@ -19996,7 +19112,6 @@
         "Floor 1 Cafe"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": null
   },
   {
@@ -20051,7 +19166,6 @@
         "Offices_ZN_1_FLR_1"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PVAV",
@@ -20194,7 +19308,6 @@
         "Kitchen"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": null
   },
   {
@@ -20215,7 +19328,6 @@
         "Front_Entry"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -20253,7 +19365,6 @@
         "SMstore8"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -20411,7 +19522,6 @@
         "Offices_ZN_1_FLR_2"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "VAV",
@@ -20676,85 +19786,7 @@
         "RestroomFlr1"
       ]
     },
-    "space_multiplier_map": null,
-    "system_to_space_map": null,
-    "building_story_map": {
-      "BuildingStory1": [
-        "GuestRoom101",
-        "GuestRoom102",
-        "GuestRoom103",
-        "GuestRoom104",
-        "GuestRoom105",
-        "CorridorFlr1",
-        "ElevatorCoreFlr1",
-        "EmployeeLoungeFlr1",
-        "ExerciseCenterFlr1",
-        "FrontLoungeFlr1",
-        "FrontOfficeFlr1",
-        "FrontStairsFlr1",
-        "RearStairsFlr1",
-        "FrontStorageFlr1",
-        "RearStorageFlr1",
-        "LaundryRoomFlr1",
-        "MechanicalRoomFlr1",
-        "MeetingRoomFlr1",
-        "RestroomFlr1"
-      ],
-      "BuildingStory2": [
-        "GuestRoom201",
-        "GuestRoom202_205",
-        "GuestRoom206_208",
-        "GuestRoom209_212",
-        "GuestRoom213",
-        "GuestRoom214",
-        "GuestRoom215_218",
-        "GuestRoom219",
-        "GuestRoom220_223",
-        "GuestRoom224",
-        "CorridorFlr2",
-        "FrontStairsFlr2",
-        "RearStairsFlr2",
-        "FrontStorageFlr2",
-        "RearStorageFlr2",
-        "ElevatorCoreFlr2"
-      ],
-      "BuildingStory3": [
-        "GuestRoom301",
-        "GuestRoom302_305",
-        "GuestRoom306_308",
-        "GuestRoom309_312",
-        "GuestRoom313",
-        "GuestRoom314",
-        "GuestRoom315_318",
-        "GuestRoom319",
-        "GuestRoom320_323",
-        "GuestRoom324",
-        "CorridorFlr3",
-        "FrontStairsFlr3",
-        "RearStairsFlr3",
-        "FrontStorageFlr3",
-        "RearStorageFlr3",
-        "ElevatorCoreFlr3"
-      ],
-      "BuildingStory4": [
-        "GuestRoom401",
-        "GuestRoom402_405",
-        "GuestRoom406_408",
-        "GuestRoom409_412",
-        "GuestRoom413",
-        "GuestRoom414",
-        "GuestRoom415_418",
-        "GuestRoom419",
-        "GuestRoom420_423",
-        "GuestRoom424",
-        "CorridorFlr4",
-        "FrontStairsFlr4",
-        "RearStairsFlr4",
-        "FrontStorageFlr4",
-        "RearStorageFlr4",
-        "ElevatorCoreFlr4"
-      ]
-    }
+    "system_to_space_map": null
   },
   {
     "class_name": "NECB_2011SmallOffice",
@@ -20773,7 +19805,6 @@
         "Perimeter_ZN_4"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": [
       {
         "type": "PSZ-AC",
@@ -20828,7 +19859,6 @@
         "Zone1 Office"
       ]
     },
-    "space_multiplier_map": null,
     "system_to_space_map": null
   }
 ]
