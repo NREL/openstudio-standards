@@ -916,7 +916,7 @@ class OpenStudio::Model::Model
     getSpaces.sort.each do |space|
       zone = OpenStudio::Model::ThermalZone.new(self)
       zone.setName("#{space.name} ZN")
-      unless space_multiplier_map[space.name.to_s].nil?
+      unless space_multiplier_map[space.name.to_s].nil? or space_multiplier_map[space.name.to_s] == 1
         zone.setMultiplier(space_multiplier_map[space.name.to_s])
       end
       space.setThermalZone(zone)

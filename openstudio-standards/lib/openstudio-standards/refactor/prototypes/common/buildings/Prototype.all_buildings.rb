@@ -465,6 +465,10 @@ module Hospital
     end
   end
 
+
+
+
+
   def add_humidifier(space_name, template, hot_water_loop, model)
     space = model.getSpaceByName(space_name).get
     zone = space.thermalZone.get
