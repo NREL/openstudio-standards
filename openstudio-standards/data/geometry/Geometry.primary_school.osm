@@ -44,7 +44,7 @@ OS:Space,
   73,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {e5937e4a-e298-44ff-b7b0-940713ea90e7}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -84,7 +84,7 @@ OS:Space,
   61,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {7373b6cf-d34c-4544-ac67-4ec8ba703e19}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -124,7 +124,7 @@ OS:Space,
   9,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {5603bf23-41c2-49bc-af2d-f68382b4b8b4}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -164,7 +164,7 @@ OS:Space,
   39,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {d5268e13-5deb-47e0-8f81-9102d4f6c3c0}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -187,7 +187,7 @@ OS:Space,
   42,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {a20cb5a5-2aa7-47d6-b497-7dba919a7ad4}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -227,7 +227,7 @@ OS:Space,
   38,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {6e6e4ef1-fd3a-4c8c-829f-4361b145767c}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -250,7 +250,7 @@ OS:Space,
   61,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {834033f8-ba93-40df-92db-8d80ebb10654}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -290,7 +290,7 @@ OS:Space,
   9,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {2507c1c6-c7bd-4653-83d8-47df16953701}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -330,7 +330,7 @@ OS:Space,
   73,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {6771b24e-6192-4835-ab85-f47eb3cba538}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -353,7 +353,7 @@ OS:Space,
   30,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {dbebff47-a09a-4f4a-85b4-a1bd0d6c884e}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -410,7 +410,7 @@ OS:Space,
   12,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {a1d09ca6-56f2-4c3b-90e3-8ed1bcfeb968}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -450,7 +450,7 @@ OS:Space,
   42,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {b7591044-7dac-40f4-baf6-8b0d7f77cb20}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -473,7 +473,7 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {f71ff842-9c9e-4da1-84ac-50a51bf528a8}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -513,7 +513,7 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {946d5b47-84dc-4f40-bbf2-e5677674cfe4}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -553,7 +553,7 @@ OS:Space,
   70,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {c689b5ee-5f5a-48b0-b47f-6937aa24025d}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -593,7 +593,7 @@ OS:Space,
   9,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {91ccd023-aa44-4d7e-be48-e4fb47459f83}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -693,7 +693,7 @@ OS:Space,
   46,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {124792aa-02f3-419b-baf4-965b107f8034}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -716,7 +716,7 @@ OS:Space,
   12,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {47ba88fb-f507-4454-a35a-553c46b779cb}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -790,7 +790,7 @@ OS:Space,
   51,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {6c8a7a34-71e3-4fc6-9c45-8bad2f5baf4d}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -830,7 +830,7 @@ OS:Space,
   61,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {49a53a88-122a-4696-8345-99ab0cfd1fb8}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -887,7 +887,7 @@ OS:Space,
   30,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {d93c2537-7455-4ae3-a497-10ff2901e4ea}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -927,7 +927,7 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {13e83a9f-bbb9-41a9-a93c-c129b1dc0bdb}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -1069,7 +1069,7 @@ OS:Space,
   21,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {003e3702-885a-4475-91eb-720468c866b3}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -1307,7 +1307,7 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {9fd0437c-d117-4d0d-9e8d-ee042aad0926}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -1575,7 +1575,7 @@ OS:Space,
   73,                                     !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {0fdcbf6a-4d91-46e1-9c57-01cf3ce41868}, !- Building Story Name
-  ,                                       !- Thermal Zone Name
+  {58845901-b903-4068-9641-d29e4e448125}, !- Thermal Zone Name
   Yes,                                    !- Part of Total Floor Area
   ;                                       !- Design Specification Outdoor Air Object Name
 
@@ -4252,4 +4252,2054 @@ OS:BuildingStory,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   ;                                       !- Group Rendering Name
+
+OS:ThermalZone,
+  {dbebff47-a09a-4f4a-85b4-a1bd0d6c884e}, !- Handle
+  TZ-Mult_Class_1_Pod_2_ZN_1_FLR_1,       !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {2570b200-7af3-4245-b344-a501ba26bfb3}, !- Zone Air Inlet Port List
+  {6fb159c1-9f84-4bbc-b1a0-26d4531538d7}, !- Zone Air Exhaust Port List
+  {65c63366-4249-4dd6-8f41-61d30c38c01a}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {89dc6205-c664-4f51-a7e1-2a8a76f2a972}, !- Handle
+  Node 1,                                 !- Name
+  {65c63366-4249-4dd6-8f41-61d30c38c01a}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {65c63366-4249-4dd6-8f41-61d30c38c01a}, !- Handle
+  {f13e6059-3c3b-4b4c-a842-9d3ca04db402}, !- Name
+  {dbebff47-a09a-4f4a-85b4-a1bd0d6c884e}, !- Source Object
+  11,                                     !- Outlet Port
+  {89dc6205-c664-4f51-a7e1-2a8a76f2a972}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {2570b200-7af3-4245-b344-a501ba26bfb3}, !- Handle
+  {1103ffdd-1a62-4daa-87ae-d206d7a84ff3}, !- Name
+  {dbebff47-a09a-4f4a-85b4-a1bd0d6c884e}; !- HVAC Component
+
+OS:PortList,
+  {6fb159c1-9f84-4bbc-b1a0-26d4531538d7}, !- Handle
+  {99b24f0e-3147-49f6-b1d3-ecf8708b099e}, !- Name
+  {dbebff47-a09a-4f4a-85b4-a1bd0d6c884e}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {03374d97-8f0b-4e43-9e74-d0a49d52507c}, !- Handle
+  {dbebff47-a09a-4f4a-85b4-a1bd0d6c884e}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {221ae268-def2-4847-8543-fe4428ab349d}, !- Handle
+  Zone HVAC Equipment List 1,             !- Name
+  {dbebff47-a09a-4f4a-85b4-a1bd0d6c884e}; !- Thermal Zone
+
+OS:ThermalZone,
+  {9fd0437c-d117-4d0d-9e8d-ee042aad0926}, !- Handle
+  TZ-Lobby_ZN_1_FLR_1,                    !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {f3335467-4c21-4811-a123-95d590433828}, !- Zone Air Inlet Port List
+  {897f076d-e1ff-4587-9a9d-4b4f81608e71}, !- Zone Air Exhaust Port List
+  {859d94c0-554d-4bb0-9963-e9ed1797c8fe}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {fbb419b8-f550-4eda-b47e-fd71c443893d}, !- Handle
+  Node 2,                                 !- Name
+  {859d94c0-554d-4bb0-9963-e9ed1797c8fe}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {859d94c0-554d-4bb0-9963-e9ed1797c8fe}, !- Handle
+  {323ec756-9a4d-410f-9f45-6e95615b817d}, !- Name
+  {9fd0437c-d117-4d0d-9e8d-ee042aad0926}, !- Source Object
+  11,                                     !- Outlet Port
+  {fbb419b8-f550-4eda-b47e-fd71c443893d}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {f3335467-4c21-4811-a123-95d590433828}, !- Handle
+  {8d370583-606b-48ef-9198-50747849eee8}, !- Name
+  {9fd0437c-d117-4d0d-9e8d-ee042aad0926}; !- HVAC Component
+
+OS:PortList,
+  {897f076d-e1ff-4587-9a9d-4b4f81608e71}, !- Handle
+  {7d2f646d-a544-4b64-a2de-febde8dbd795}, !- Name
+  {9fd0437c-d117-4d0d-9e8d-ee042aad0926}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {5638be40-ace9-4040-9ba0-eaaea448ccc4}, !- Handle
+  {9fd0437c-d117-4d0d-9e8d-ee042aad0926}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {5c942a69-9ad7-483b-bb11-e7c04cdd18f5}, !- Handle
+  Zone HVAC Equipment List 2,             !- Name
+  {9fd0437c-d117-4d0d-9e8d-ee042aad0926}; !- Thermal Zone
+
+OS:ThermalZone,
+  {834033f8-ba93-40df-92db-8d80ebb10654}, !- Handle
+  TZ-Mult_Class_1_Pod_3_ZN_1_FLR_1,       !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {1eace887-d9db-4bb6-9f8d-bb9be96227ca}, !- Zone Air Inlet Port List
+  {c0169927-bf87-402a-b6e7-841d41ac6c39}, !- Zone Air Exhaust Port List
+  {6eef01c5-8d11-40df-a1be-457200132f41}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {3bb9487b-84ed-4314-8e6b-bd378c954602}, !- Handle
+  Node 3,                                 !- Name
+  {6eef01c5-8d11-40df-a1be-457200132f41}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {6eef01c5-8d11-40df-a1be-457200132f41}, !- Handle
+  {309de40d-0f1f-421e-9f8d-f95f6a7b2c61}, !- Name
+  {834033f8-ba93-40df-92db-8d80ebb10654}, !- Source Object
+  11,                                     !- Outlet Port
+  {3bb9487b-84ed-4314-8e6b-bd378c954602}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {1eace887-d9db-4bb6-9f8d-bb9be96227ca}, !- Handle
+  {d24ce58c-b299-4edd-9b9d-dbe404c1d9c6}, !- Name
+  {834033f8-ba93-40df-92db-8d80ebb10654}; !- HVAC Component
+
+OS:PortList,
+  {c0169927-bf87-402a-b6e7-841d41ac6c39}, !- Handle
+  {9d20f0a4-5205-465a-9071-615e1948d17c}, !- Name
+  {834033f8-ba93-40df-92db-8d80ebb10654}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {5d7f0d32-60bb-43b5-96ee-0a26f7f002eb}, !- Handle
+  {834033f8-ba93-40df-92db-8d80ebb10654}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {46b86123-8fc3-4b80-a213-5fd0571e14ec}, !- Handle
+  Zone HVAC Equipment List 3,             !- Name
+  {834033f8-ba93-40df-92db-8d80ebb10654}; !- Thermal Zone
+
+OS:ThermalZone,
+  {d5268e13-5deb-47e0-8f81-9102d4f6c3c0}, !- Handle
+  TZ-Corridor_Pod_2_ZN_1_FLR_1,           !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {9f27a234-446d-4e50-b582-d1f3d13d1407}, !- Zone Air Inlet Port List
+  {44803252-e517-4407-9056-d79b626a0ac4}, !- Zone Air Exhaust Port List
+  {71e8e45f-e223-40a4-8d6c-5e75da70a671}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {b19183c9-8d48-47e7-ac7e-fe9dd5964beb}, !- Handle
+  Node 4,                                 !- Name
+  {71e8e45f-e223-40a4-8d6c-5e75da70a671}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {71e8e45f-e223-40a4-8d6c-5e75da70a671}, !- Handle
+  {a25316bd-a672-4b58-8287-83afd4b91f46}, !- Name
+  {d5268e13-5deb-47e0-8f81-9102d4f6c3c0}, !- Source Object
+  11,                                     !- Outlet Port
+  {b19183c9-8d48-47e7-ac7e-fe9dd5964beb}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {9f27a234-446d-4e50-b582-d1f3d13d1407}, !- Handle
+  {231591e4-6111-4b4a-ac65-7389718570ee}, !- Name
+  {d5268e13-5deb-47e0-8f81-9102d4f6c3c0}; !- HVAC Component
+
+OS:PortList,
+  {44803252-e517-4407-9056-d79b626a0ac4}, !- Handle
+  {08515b60-2c6e-44d0-9725-dd44791a2052}, !- Name
+  {d5268e13-5deb-47e0-8f81-9102d4f6c3c0}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {f50d50d9-6096-4239-9bd8-f942cefbfc11}, !- Handle
+  {d5268e13-5deb-47e0-8f81-9102d4f6c3c0}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {af0fac99-b4f3-4513-b758-104d55aed5a2}, !- Handle
+  Zone HVAC Equipment List 4,             !- Name
+  {d5268e13-5deb-47e0-8f81-9102d4f6c3c0}; !- Thermal Zone
+
+OS:ThermalZone,
+  {47ba88fb-f507-4454-a35a-553c46b779cb}, !- Handle
+  TZ-Corner_Class_2_Pod_1_ZN_1_FLR_1,     !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {7931ba7b-8eb5-47e1-89b3-01e415124b5e}, !- Zone Air Inlet Port List
+  {fcef05ed-b891-42e4-ab1f-cc91ff4ff5eb}, !- Zone Air Exhaust Port List
+  {d522fc4f-8b2b-4de3-831b-80e5066ec455}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {1914e5a0-a940-420a-8950-48e853a15e78}, !- Handle
+  Node 5,                                 !- Name
+  {d522fc4f-8b2b-4de3-831b-80e5066ec455}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {d522fc4f-8b2b-4de3-831b-80e5066ec455}, !- Handle
+  {4e968bc1-0621-4f6f-96e4-aaa4c67ae241}, !- Name
+  {47ba88fb-f507-4454-a35a-553c46b779cb}, !- Source Object
+  11,                                     !- Outlet Port
+  {1914e5a0-a940-420a-8950-48e853a15e78}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {7931ba7b-8eb5-47e1-89b3-01e415124b5e}, !- Handle
+  {1d2fbd5c-2f19-4332-862a-4135362968ec}, !- Name
+  {47ba88fb-f507-4454-a35a-553c46b779cb}; !- HVAC Component
+
+OS:PortList,
+  {fcef05ed-b891-42e4-ab1f-cc91ff4ff5eb}, !- Handle
+  {36550098-6d23-4ff2-bdf0-7c23da445abf}, !- Name
+  {47ba88fb-f507-4454-a35a-553c46b779cb}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {b82b59e9-72ee-401e-9f0f-084ef1832b07}, !- Handle
+  {47ba88fb-f507-4454-a35a-553c46b779cb}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {bdf7e27b-2e2e-4c44-81d6-64bee707e3c2}, !- Handle
+  Zone HVAC Equipment List 5,             !- Name
+  {47ba88fb-f507-4454-a35a-553c46b779cb}; !- Thermal Zone
+
+OS:ThermalZone,
+  {5603bf23-41c2-49bc-af2d-f68382b4b8b4}, !- Handle
+  TZ-Main_Corridor_ZN_1_FLR_1,            !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {b8c3b3d3-56c2-4a53-b51e-ce94e5eed077}, !- Zone Air Inlet Port List
+  {d129745a-d421-4f72-9635-7d4f94502d04}, !- Zone Air Exhaust Port List
+  {a84e2c38-e91d-409e-a96a-b696f23ddb23}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {02de65ee-0389-4e75-ac44-93b30777f442}, !- Handle
+  Node 6,                                 !- Name
+  {a84e2c38-e91d-409e-a96a-b696f23ddb23}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {a84e2c38-e91d-409e-a96a-b696f23ddb23}, !- Handle
+  {07507e39-ef56-4cbc-a688-6be5eaf19ce3}, !- Name
+  {5603bf23-41c2-49bc-af2d-f68382b4b8b4}, !- Source Object
+  11,                                     !- Outlet Port
+  {02de65ee-0389-4e75-ac44-93b30777f442}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {b8c3b3d3-56c2-4a53-b51e-ce94e5eed077}, !- Handle
+  {2df5cb27-fde5-48c6-a1e1-fb810319dea9}, !- Name
+  {5603bf23-41c2-49bc-af2d-f68382b4b8b4}; !- HVAC Component
+
+OS:PortList,
+  {d129745a-d421-4f72-9635-7d4f94502d04}, !- Handle
+  {609a1101-6e0c-460a-a21d-56ee0d7ad32b}, !- Name
+  {5603bf23-41c2-49bc-af2d-f68382b4b8b4}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {a739605f-d582-479b-90fe-cfe9b4dcf779}, !- Handle
+  {5603bf23-41c2-49bc-af2d-f68382b4b8b4}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {2ccf12f5-1791-42ab-8af6-dc13a00acda0}, !- Handle
+  Zone HVAC Equipment List 6,             !- Name
+  {5603bf23-41c2-49bc-af2d-f68382b4b8b4}; !- Thermal Zone
+
+OS:ThermalZone,
+  {6c8a7a34-71e3-4fc6-9c45-8bad2f5baf4d}, !- Handle
+  TZ-Bath_ZN_1_FLR_1,                     !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {3e42d14a-83da-4457-a101-261e71c8ae8b}, !- Zone Air Inlet Port List
+  {38862764-086d-4e01-bf57-ba2108aef2da}, !- Zone Air Exhaust Port List
+  {f68d72c2-b33f-44b9-ba2a-75ae65ddb8ff}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {9a92f824-1433-4af7-bf4c-1deab9dbdc3f}, !- Handle
+  Node 7,                                 !- Name
+  {f68d72c2-b33f-44b9-ba2a-75ae65ddb8ff}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {f68d72c2-b33f-44b9-ba2a-75ae65ddb8ff}, !- Handle
+  {74f1d5d3-b3af-43f3-ab4f-9b341b69d077}, !- Name
+  {6c8a7a34-71e3-4fc6-9c45-8bad2f5baf4d}, !- Source Object
+  11,                                     !- Outlet Port
+  {9a92f824-1433-4af7-bf4c-1deab9dbdc3f}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {3e42d14a-83da-4457-a101-261e71c8ae8b}, !- Handle
+  {31e99231-1158-4f0b-afa9-afe755f48873}, !- Name
+  {6c8a7a34-71e3-4fc6-9c45-8bad2f5baf4d}; !- HVAC Component
+
+OS:PortList,
+  {38862764-086d-4e01-bf57-ba2108aef2da}, !- Handle
+  {9c58581b-e8f9-4e45-b8e9-0faadd78abb9}, !- Name
+  {6c8a7a34-71e3-4fc6-9c45-8bad2f5baf4d}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {65b1ac08-47c1-40c9-b367-74c6a0ed34f9}, !- Handle
+  {6c8a7a34-71e3-4fc6-9c45-8bad2f5baf4d}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {e7913e59-003d-4017-b610-07fbe51fb7dd}, !- Handle
+  Zone HVAC Equipment List 7,             !- Name
+  {6c8a7a34-71e3-4fc6-9c45-8bad2f5baf4d}; !- Thermal Zone
+
+OS:ThermalZone,
+  {d93c2537-7455-4ae3-a497-10ff2901e4ea}, !- Handle
+  TZ-Corner_Class_1_Pod_2_ZN_1_FLR_1,     !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {c0e9ae78-c969-4441-a710-b573eb5f626d}, !- Zone Air Inlet Port List
+  {cf75d1ba-4645-414f-8625-fbb00c91ba28}, !- Zone Air Exhaust Port List
+  {6f290b38-bfcb-42ac-80df-f3784d21f9c8}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {464ea463-2ea0-4cb3-983b-17039e0c0cad}, !- Handle
+  Node 8,                                 !- Name
+  {6f290b38-bfcb-42ac-80df-f3784d21f9c8}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {6f290b38-bfcb-42ac-80df-f3784d21f9c8}, !- Handle
+  {f0b956b6-3f6c-4308-8e68-2ce48672c9fa}, !- Name
+  {d93c2537-7455-4ae3-a497-10ff2901e4ea}, !- Source Object
+  11,                                     !- Outlet Port
+  {464ea463-2ea0-4cb3-983b-17039e0c0cad}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {c0e9ae78-c969-4441-a710-b573eb5f626d}, !- Handle
+  {13a8bd96-743d-4988-ada5-0c8da49f2096}, !- Name
+  {d93c2537-7455-4ae3-a497-10ff2901e4ea}; !- HVAC Component
+
+OS:PortList,
+  {cf75d1ba-4645-414f-8625-fbb00c91ba28}, !- Handle
+  {acadf4e1-1578-437d-8bad-fd3123daf96d}, !- Name
+  {d93c2537-7455-4ae3-a497-10ff2901e4ea}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {dccf0f53-28f3-4eae-8e23-b8022734aaa1}, !- Handle
+  {d93c2537-7455-4ae3-a497-10ff2901e4ea}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {193cfc68-05af-44c1-850c-586853c81f7e}, !- Handle
+  Zone HVAC Equipment List 8,             !- Name
+  {d93c2537-7455-4ae3-a497-10ff2901e4ea}; !- Thermal Zone
+
+OS:ThermalZone,
+  {003e3702-885a-4475-91eb-720468c866b3}, !- Handle
+  TZ-Gym_ZN_1_FLR_1,                      !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {716b1280-176f-432e-9a78-d231e7604863}, !- Zone Air Inlet Port List
+  {a697eaf2-c240-41e1-965f-ee33f67925d7}, !- Zone Air Exhaust Port List
+  {ad75a0e9-6375-46ee-ab8a-6b4b899cce89}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {5df4d72a-cae9-4520-a94b-95d69cde8a71}, !- Handle
+  Node 9,                                 !- Name
+  {ad75a0e9-6375-46ee-ab8a-6b4b899cce89}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {ad75a0e9-6375-46ee-ab8a-6b4b899cce89}, !- Handle
+  {f117f372-166b-4f00-86eb-846857924b4d}, !- Name
+  {003e3702-885a-4475-91eb-720468c866b3}, !- Source Object
+  11,                                     !- Outlet Port
+  {5df4d72a-cae9-4520-a94b-95d69cde8a71}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {716b1280-176f-432e-9a78-d231e7604863}, !- Handle
+  {9e9aaaa0-3df7-4544-b4dc-a086d345b85b}, !- Name
+  {003e3702-885a-4475-91eb-720468c866b3}; !- HVAC Component
+
+OS:PortList,
+  {a697eaf2-c240-41e1-965f-ee33f67925d7}, !- Handle
+  {d1c6266e-42e8-4f3d-97c3-dc6aad1fda27}, !- Name
+  {003e3702-885a-4475-91eb-720468c866b3}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {3aafbbe1-ee92-4070-8501-9ff8a9e491a1}, !- Handle
+  {003e3702-885a-4475-91eb-720468c866b3}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {523dd1eb-7bf6-4ad0-9948-690afe580ad6}, !- Handle
+  Zone HVAC Equipment List 9,             !- Name
+  {003e3702-885a-4475-91eb-720468c866b3}; !- Thermal Zone
+
+OS:ThermalZone,
+  {58845901-b903-4068-9641-d29e4e448125}, !- Handle
+  TZ-Mult_Class_2_Pod_3_ZN_1_FLR_1,       !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {557c7927-0b7f-47cd-9c23-144282f660fa}, !- Zone Air Inlet Port List
+  {dc978aab-b4bb-4b30-9d59-f02e8df57a34}, !- Zone Air Exhaust Port List
+  {ffc06ebb-d4f7-4b1d-b96d-0acbbdf276f5}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {7be4f13d-dea3-481d-906b-5926da72edd1}, !- Handle
+  Node 10,                                !- Name
+  {ffc06ebb-d4f7-4b1d-b96d-0acbbdf276f5}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {ffc06ebb-d4f7-4b1d-b96d-0acbbdf276f5}, !- Handle
+  {6ad37ecc-8456-4e2c-a9e4-f474a6a4eee6}, !- Name
+  {58845901-b903-4068-9641-d29e4e448125}, !- Source Object
+  11,                                     !- Outlet Port
+  {7be4f13d-dea3-481d-906b-5926da72edd1}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {557c7927-0b7f-47cd-9c23-144282f660fa}, !- Handle
+  {e34a2a5a-e6ff-44e2-bdf9-ea4e20e8e445}, !- Name
+  {58845901-b903-4068-9641-d29e4e448125}; !- HVAC Component
+
+OS:PortList,
+  {dc978aab-b4bb-4b30-9d59-f02e8df57a34}, !- Handle
+  {dfe83d1f-196e-44de-b653-49e5aa4934e7}, !- Name
+  {58845901-b903-4068-9641-d29e4e448125}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {57fcf868-ebbb-4b74-b819-da6f06fa4119}, !- Handle
+  {58845901-b903-4068-9641-d29e4e448125}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {b7966230-f6c1-4b70-814f-a858d0d5cadb}, !- Handle
+  Zone HVAC Equipment List 10,            !- Name
+  {58845901-b903-4068-9641-d29e4e448125}; !- Thermal Zone
+
+OS:ThermalZone,
+  {49a53a88-122a-4696-8345-99ab0cfd1fb8}, !- Handle
+  TZ-Corner_Class_1_Pod_3_ZN_1_FLR_1,     !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {198d2b67-aa5a-4e80-954c-6bdbb186e271}, !- Zone Air Inlet Port List
+  {0981f7ca-5280-47fb-9c5d-823cbdec78b7}, !- Zone Air Exhaust Port List
+  {6ffcba01-be92-4592-a350-d72f9cc479be}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {b2cf4a57-0036-4b1d-9f96-64ec5d4e2ee4}, !- Handle
+  Node 11,                                !- Name
+  {6ffcba01-be92-4592-a350-d72f9cc479be}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {6ffcba01-be92-4592-a350-d72f9cc479be}, !- Handle
+  {f30cd4e1-ffcc-4831-b62c-deb8245e6c43}, !- Name
+  {49a53a88-122a-4696-8345-99ab0cfd1fb8}, !- Source Object
+  11,                                     !- Outlet Port
+  {b2cf4a57-0036-4b1d-9f96-64ec5d4e2ee4}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {198d2b67-aa5a-4e80-954c-6bdbb186e271}, !- Handle
+  {3b751e40-5889-43bb-b566-a5990056fcf9}, !- Name
+  {49a53a88-122a-4696-8345-99ab0cfd1fb8}; !- HVAC Component
+
+OS:PortList,
+  {0981f7ca-5280-47fb-9c5d-823cbdec78b7}, !- Handle
+  {39bb6802-2886-4a04-880e-762f842eea55}, !- Name
+  {49a53a88-122a-4696-8345-99ab0cfd1fb8}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {b404e0a6-156a-4113-b751-5445c09d1af4}, !- Handle
+  {49a53a88-122a-4696-8345-99ab0cfd1fb8}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {74123335-b750-4132-8866-52ff22ad3d42}, !- Handle
+  Zone HVAC Equipment List 11,            !- Name
+  {49a53a88-122a-4696-8345-99ab0cfd1fb8}; !- Thermal Zone
+
+OS:ThermalZone,
+  {13e83a9f-bbb9-41a9-a93c-c129b1dc0bdb}, !- Handle
+  TZ-Offices_ZN_1_FLR_1,                  !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {24125333-3e57-4cc4-84f7-5a453f0d137e}, !- Zone Air Inlet Port List
+  {75b9e2f5-2b3b-4869-9922-4db16ab1d2a2}, !- Zone Air Exhaust Port List
+  {9522033d-8f91-4f2b-b6e0-89b3698f296c}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {79ccf2cf-c4e2-4f34-ae86-efae61523e0e}, !- Handle
+  Node 12,                                !- Name
+  {9522033d-8f91-4f2b-b6e0-89b3698f296c}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {9522033d-8f91-4f2b-b6e0-89b3698f296c}, !- Handle
+  {b5630a43-2e4d-454a-b9e4-3dca39be40f7}, !- Name
+  {13e83a9f-bbb9-41a9-a93c-c129b1dc0bdb}, !- Source Object
+  11,                                     !- Outlet Port
+  {79ccf2cf-c4e2-4f34-ae86-efae61523e0e}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {24125333-3e57-4cc4-84f7-5a453f0d137e}, !- Handle
+  {5ec60eaf-85d2-494f-8b1b-825a98e4bba6}, !- Name
+  {13e83a9f-bbb9-41a9-a93c-c129b1dc0bdb}; !- HVAC Component
+
+OS:PortList,
+  {75b9e2f5-2b3b-4869-9922-4db16ab1d2a2}, !- Handle
+  {af3f8a6e-4539-408f-8679-6bb2088ad8bd}, !- Name
+  {13e83a9f-bbb9-41a9-a93c-c129b1dc0bdb}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {807de87b-d48d-475a-9d90-d904af6b02ce}, !- Handle
+  {13e83a9f-bbb9-41a9-a93c-c129b1dc0bdb}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {c805a781-cdd9-49f0-8cac-63e888eedaab}, !- Handle
+  Zone HVAC Equipment List 12,            !- Name
+  {13e83a9f-bbb9-41a9-a93c-c129b1dc0bdb}; !- Thermal Zone
+
+OS:ThermalZone,
+  {6771b24e-6192-4835-ab85-f47eb3cba538}, !- Handle
+  TZ-Computer_Class_ZN_1_FLR_1,           !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {1e77b9fc-4dcb-4d40-a4af-571bc5f3b7de}, !- Zone Air Inlet Port List
+  {ab47bcac-4172-4f5f-ba21-64803ae2255b}, !- Zone Air Exhaust Port List
+  {11d33495-afee-4d67-befa-89ffd4162985}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {cd6084b8-a3f7-45a2-93fd-a6bb72b35dfa}, !- Handle
+  Node 13,                                !- Name
+  {11d33495-afee-4d67-befa-89ffd4162985}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {11d33495-afee-4d67-befa-89ffd4162985}, !- Handle
+  {f6382dbf-9940-4983-8075-1617219db748}, !- Name
+  {6771b24e-6192-4835-ab85-f47eb3cba538}, !- Source Object
+  11,                                     !- Outlet Port
+  {cd6084b8-a3f7-45a2-93fd-a6bb72b35dfa}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {1e77b9fc-4dcb-4d40-a4af-571bc5f3b7de}, !- Handle
+  {2eda25bb-c29a-4c0f-9b0a-2a3d6d149ed7}, !- Name
+  {6771b24e-6192-4835-ab85-f47eb3cba538}; !- HVAC Component
+
+OS:PortList,
+  {ab47bcac-4172-4f5f-ba21-64803ae2255b}, !- Handle
+  {a163a8d9-b627-4944-9cde-dd1567234702}, !- Name
+  {6771b24e-6192-4835-ab85-f47eb3cba538}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {32edd49c-3a71-44a7-b904-45cf7fd0672b}, !- Handle
+  {6771b24e-6192-4835-ab85-f47eb3cba538}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {60b65dc0-93c1-498a-90aa-acd72fadbf5e}, !- Handle
+  Zone HVAC Equipment List 13,            !- Name
+  {6771b24e-6192-4835-ab85-f47eb3cba538}; !- Thermal Zone
+
+OS:ThermalZone,
+  {e5937e4a-e298-44ff-b7b0-940713ea90e7}, !- Handle
+  TZ-Corner_Class_2_Pod_3_ZN_1_FLR_1,     !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {680b17ef-8486-4c88-a1d7-14d67ceae01c}, !- Zone Air Inlet Port List
+  {8a3fe94a-0bab-4515-82ee-2a4d4687778f}, !- Zone Air Exhaust Port List
+  {5b4e73bf-e6d8-44b1-bd94-834e1e28a596}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {79c3502a-5a46-430b-a7b9-669f62f8ade3}, !- Handle
+  Node 14,                                !- Name
+  {5b4e73bf-e6d8-44b1-bd94-834e1e28a596}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {5b4e73bf-e6d8-44b1-bd94-834e1e28a596}, !- Handle
+  {79e68dde-9e59-467a-9505-11f9c2020797}, !- Name
+  {e5937e4a-e298-44ff-b7b0-940713ea90e7}, !- Source Object
+  11,                                     !- Outlet Port
+  {79c3502a-5a46-430b-a7b9-669f62f8ade3}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {680b17ef-8486-4c88-a1d7-14d67ceae01c}, !- Handle
+  {816249cc-c083-4d59-8bf4-801a24526334}, !- Name
+  {e5937e4a-e298-44ff-b7b0-940713ea90e7}; !- HVAC Component
+
+OS:PortList,
+  {8a3fe94a-0bab-4515-82ee-2a4d4687778f}, !- Handle
+  {bdee1bf1-28c5-4b84-919d-c618865417bf}, !- Name
+  {e5937e4a-e298-44ff-b7b0-940713ea90e7}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {d05e8638-d734-4902-8b1f-ca0c2067b453}, !- Handle
+  {e5937e4a-e298-44ff-b7b0-940713ea90e7}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {c3545f37-ed00-4754-866f-585dbb6dbd9d}, !- Handle
+  Zone HVAC Equipment List 14,            !- Name
+  {e5937e4a-e298-44ff-b7b0-940713ea90e7}; !- Thermal Zone
+
+OS:ThermalZone,
+  {7373b6cf-d34c-4544-ac67-4ec8ba703e19}, !- Handle
+  TZ-Library_Media_Center_ZN_1_FLR_1,     !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {9926d7d1-9007-4827-9679-cd99d8db2fb2}, !- Zone Air Inlet Port List
+  {eb1f897a-7c6f-4a2b-90b6-edff31f02ec2}, !- Zone Air Exhaust Port List
+  {8dc37cf3-92cb-444a-bff6-fee82a50c921}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {3d78ff9c-e453-47b7-b87f-062c9a99b75b}, !- Handle
+  Node 15,                                !- Name
+  {8dc37cf3-92cb-444a-bff6-fee82a50c921}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {8dc37cf3-92cb-444a-bff6-fee82a50c921}, !- Handle
+  {cff969e8-cca4-42ac-b5e0-844556fba2ef}, !- Name
+  {7373b6cf-d34c-4544-ac67-4ec8ba703e19}, !- Source Object
+  11,                                     !- Outlet Port
+  {3d78ff9c-e453-47b7-b87f-062c9a99b75b}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {9926d7d1-9007-4827-9679-cd99d8db2fb2}, !- Handle
+  {c2d5cfbe-19c3-4c96-a9fc-f21db3f39c92}, !- Name
+  {7373b6cf-d34c-4544-ac67-4ec8ba703e19}; !- HVAC Component
+
+OS:PortList,
+  {eb1f897a-7c6f-4a2b-90b6-edff31f02ec2}, !- Handle
+  {e5df330b-32a4-4a49-b708-b568648b6f20}, !- Name
+  {7373b6cf-d34c-4544-ac67-4ec8ba703e19}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {c9c2b544-4ff0-4bda-9fbb-711e0c6a6ae9}, !- Handle
+  {7373b6cf-d34c-4544-ac67-4ec8ba703e19}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {b17d8429-11e0-430d-ad5d-8bb145d0fa2f}, !- Handle
+  Zone HVAC Equipment List 15,            !- Name
+  {7373b6cf-d34c-4544-ac67-4ec8ba703e19}; !- Thermal Zone
+
+OS:ThermalZone,
+  {6e6e4ef1-fd3a-4c8c-829f-4361b145767c}, !- Handle
+  TZ-Kitchen_ZN_1_FLR_1,                  !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {a4abc617-9a1c-4d9b-96ff-d90e6ca34a08}, !- Zone Air Inlet Port List
+  {b1cc5123-2ec1-4a7e-9f44-308977cd23e9}, !- Zone Air Exhaust Port List
+  {e9fa426f-37d2-4eee-b31b-97bf40275474}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {45779f5b-0724-4d6d-8fcc-293edb5f9028}, !- Handle
+  Node 16,                                !- Name
+  {e9fa426f-37d2-4eee-b31b-97bf40275474}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {e9fa426f-37d2-4eee-b31b-97bf40275474}, !- Handle
+  {a8a34f5e-fe14-4b09-916f-3d35521d2c42}, !- Name
+  {6e6e4ef1-fd3a-4c8c-829f-4361b145767c}, !- Source Object
+  11,                                     !- Outlet Port
+  {45779f5b-0724-4d6d-8fcc-293edb5f9028}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {a4abc617-9a1c-4d9b-96ff-d90e6ca34a08}, !- Handle
+  {6861a9ed-c07b-4bb3-934b-2e758c43572d}, !- Name
+  {6e6e4ef1-fd3a-4c8c-829f-4361b145767c}; !- HVAC Component
+
+OS:PortList,
+  {b1cc5123-2ec1-4a7e-9f44-308977cd23e9}, !- Handle
+  {051872e7-9f4c-4743-b212-b3c454673467}, !- Name
+  {6e6e4ef1-fd3a-4c8c-829f-4361b145767c}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {03ed9436-b0aa-410a-be84-be0fedc014ac}, !- Handle
+  {6e6e4ef1-fd3a-4c8c-829f-4361b145767c}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {9f248b53-b036-448e-bf45-72098b539f39}, !- Handle
+  Zone HVAC Equipment List 16,            !- Name
+  {6e6e4ef1-fd3a-4c8c-829f-4361b145767c}; !- Thermal Zone
+
+OS:ThermalZone,
+  {946d5b47-84dc-4f40-bbf2-e5677674cfe4}, !- Handle
+  TZ-Corner_Class_1_Pod_1_ZN_1_FLR_1,     !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {703c8715-0636-4a96-910b-85fb7b30ab26}, !- Zone Air Inlet Port List
+  {48aea53c-323a-4b2e-bae4-774aa296be3e}, !- Zone Air Exhaust Port List
+  {44162d6a-c394-48bf-bbe5-5cd773b40fdf}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {5b3266bd-ab91-452d-b940-d1d11694133f}, !- Handle
+  Node 17,                                !- Name
+  {44162d6a-c394-48bf-bbe5-5cd773b40fdf}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {44162d6a-c394-48bf-bbe5-5cd773b40fdf}, !- Handle
+  {b883ed67-3e17-46b0-bc33-7c083f229960}, !- Name
+  {946d5b47-84dc-4f40-bbf2-e5677674cfe4}, !- Source Object
+  11,                                     !- Outlet Port
+  {5b3266bd-ab91-452d-b940-d1d11694133f}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {703c8715-0636-4a96-910b-85fb7b30ab26}, !- Handle
+  {ef95d18f-ac36-4f71-86e0-5db906ec5369}, !- Name
+  {946d5b47-84dc-4f40-bbf2-e5677674cfe4}; !- HVAC Component
+
+OS:PortList,
+  {48aea53c-323a-4b2e-bae4-774aa296be3e}, !- Handle
+  {99434b2b-b95e-4ebf-b4bc-a36acf7af4e1}, !- Name
+  {946d5b47-84dc-4f40-bbf2-e5677674cfe4}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {685eec00-8b67-4be1-bce0-baab321caea2}, !- Handle
+  {946d5b47-84dc-4f40-bbf2-e5677674cfe4}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {b85e82a9-2619-44be-a123-2f5e6851732f}, !- Handle
+  Zone HVAC Equipment List 17,            !- Name
+  {946d5b47-84dc-4f40-bbf2-e5677674cfe4}; !- Thermal Zone
+
+OS:ThermalZone,
+  {124792aa-02f3-419b-baf4-965b107f8034}, !- Handle
+  TZ-Cafeteria_ZN_1_FLR_1,                !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {2d430f8f-6ea6-4d48-8701-11e0b446cd3f}, !- Zone Air Inlet Port List
+  {646ad013-a808-49cb-b4b5-fda7125d067b}, !- Zone Air Exhaust Port List
+  {91a23ff2-7342-4ae9-9909-8a3b00dd14a7}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {963f4e98-f762-4dbd-b0d6-43023a812567}, !- Handle
+  Node 18,                                !- Name
+  {91a23ff2-7342-4ae9-9909-8a3b00dd14a7}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {91a23ff2-7342-4ae9-9909-8a3b00dd14a7}, !- Handle
+  {9edb4784-f398-4663-8b1b-3fa12298bb11}, !- Name
+  {124792aa-02f3-419b-baf4-965b107f8034}, !- Source Object
+  11,                                     !- Outlet Port
+  {963f4e98-f762-4dbd-b0d6-43023a812567}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {2d430f8f-6ea6-4d48-8701-11e0b446cd3f}, !- Handle
+  {dc634333-32a4-4682-9cf5-7b790be38b7f}, !- Name
+  {124792aa-02f3-419b-baf4-965b107f8034}; !- HVAC Component
+
+OS:PortList,
+  {646ad013-a808-49cb-b4b5-fda7125d067b}, !- Handle
+  {f2a7463d-8e0e-4444-9052-e40d1685fa8a}, !- Name
+  {124792aa-02f3-419b-baf4-965b107f8034}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {7cb2dc49-eefc-4e8e-92ef-ad1e63070514}, !- Handle
+  {124792aa-02f3-419b-baf4-965b107f8034}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {3a180ebd-31a9-440c-96fe-5f0fd1774bd1}, !- Handle
+  Zone HVAC Equipment List 18,            !- Name
+  {124792aa-02f3-419b-baf4-965b107f8034}; !- Thermal Zone
+
+OS:ThermalZone,
+  {91ccd023-aa44-4d7e-be48-e4fb47459f83}, !- Handle
+  TZ-Mech_ZN_1_FLR_1,                     !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {dfd088fd-a074-4505-89ab-3ed27b801d62}, !- Zone Air Inlet Port List
+  {c77bdb83-34bd-4ec4-9c78-128bdfdab478}, !- Zone Air Exhaust Port List
+  {1f226fe9-e8f4-4640-a51b-a3d0ab88071d}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {eb8b95fd-97ce-450a-9e98-28aed465759c}, !- Handle
+  Node 19,                                !- Name
+  {1f226fe9-e8f4-4640-a51b-a3d0ab88071d}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {1f226fe9-e8f4-4640-a51b-a3d0ab88071d}, !- Handle
+  {083cefca-dbe0-4457-8168-1bf7624f896a}, !- Name
+  {91ccd023-aa44-4d7e-be48-e4fb47459f83}, !- Source Object
+  11,                                     !- Outlet Port
+  {eb8b95fd-97ce-450a-9e98-28aed465759c}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {dfd088fd-a074-4505-89ab-3ed27b801d62}, !- Handle
+  {b612ed17-44ad-48e8-9fd0-c51b141d930a}, !- Name
+  {91ccd023-aa44-4d7e-be48-e4fb47459f83}; !- HVAC Component
+
+OS:PortList,
+  {c77bdb83-34bd-4ec4-9c78-128bdfdab478}, !- Handle
+  {79de1f3f-7924-43c9-a5ef-67ffb3e119bf}, !- Name
+  {91ccd023-aa44-4d7e-be48-e4fb47459f83}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {c7200ef8-cc07-4e60-a7b1-13b51f4d7394}, !- Handle
+  {91ccd023-aa44-4d7e-be48-e4fb47459f83}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {714145ba-28eb-4658-bf55-92d5267e2e52}, !- Handle
+  Zone HVAC Equipment List 19,            !- Name
+  {91ccd023-aa44-4d7e-be48-e4fb47459f83}; !- Thermal Zone
+
+OS:ThermalZone,
+  {a1d09ca6-56f2-4c3b-90e3-8ed1bcfeb968}, !- Handle
+  TZ-Mult_Class_2_Pod_1_ZN_1_FLR_1,       !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {a87fff7a-7d85-4d66-860c-558b6fa20cff}, !- Zone Air Inlet Port List
+  {9658f30b-0f76-422a-89c4-7469f6fc4817}, !- Zone Air Exhaust Port List
+  {c2d96161-6432-4dd8-8932-38b3388681a8}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {09fe2de0-abe7-4904-8e84-438ea089308b}, !- Handle
+  Node 20,                                !- Name
+  {c2d96161-6432-4dd8-8932-38b3388681a8}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {c2d96161-6432-4dd8-8932-38b3388681a8}, !- Handle
+  {90ed9952-fb5e-44fc-b066-2ff3d48f9805}, !- Name
+  {a1d09ca6-56f2-4c3b-90e3-8ed1bcfeb968}, !- Source Object
+  11,                                     !- Outlet Port
+  {09fe2de0-abe7-4904-8e84-438ea089308b}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {a87fff7a-7d85-4d66-860c-558b6fa20cff}, !- Handle
+  {55238342-d126-4e7a-a24c-5cb2447b19e0}, !- Name
+  {a1d09ca6-56f2-4c3b-90e3-8ed1bcfeb968}; !- HVAC Component
+
+OS:PortList,
+  {9658f30b-0f76-422a-89c4-7469f6fc4817}, !- Handle
+  {b6988741-416c-4474-82ee-b721b9e27cc3}, !- Name
+  {a1d09ca6-56f2-4c3b-90e3-8ed1bcfeb968}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {c00c3390-a78c-43d5-9574-c6dd11bb69db}, !- Handle
+  {a1d09ca6-56f2-4c3b-90e3-8ed1bcfeb968}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {3584ee99-b64f-436d-877e-e4b6c13e3080}, !- Handle
+  Zone HVAC Equipment List 20,            !- Name
+  {a1d09ca6-56f2-4c3b-90e3-8ed1bcfeb968}; !- Thermal Zone
+
+OS:ThermalZone,
+  {a20cb5a5-2aa7-47d6-b497-7dba919a7ad4}, !- Handle
+  TZ-Mult_Class_2_Pod_2_ZN_1_FLR_1,       !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {b40a173f-0a23-40da-bca6-de65ea588435}, !- Zone Air Inlet Port List
+  {c1b84e2f-6852-4b49-a652-f98f559ccc47}, !- Zone Air Exhaust Port List
+  {ccaec03a-85c1-4958-9725-276596d94745}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {5edbd27b-719b-4160-8fdf-c489131e370b}, !- Handle
+  Node 21,                                !- Name
+  {ccaec03a-85c1-4958-9725-276596d94745}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {ccaec03a-85c1-4958-9725-276596d94745}, !- Handle
+  {2a058ab6-1f96-4b2c-b9b7-12da3c4f7ab5}, !- Name
+  {a20cb5a5-2aa7-47d6-b497-7dba919a7ad4}, !- Source Object
+  11,                                     !- Outlet Port
+  {5edbd27b-719b-4160-8fdf-c489131e370b}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {b40a173f-0a23-40da-bca6-de65ea588435}, !- Handle
+  {70097913-1286-45e8-a350-979d993cffcf}, !- Name
+  {a20cb5a5-2aa7-47d6-b497-7dba919a7ad4}; !- HVAC Component
+
+OS:PortList,
+  {c1b84e2f-6852-4b49-a652-f98f559ccc47}, !- Handle
+  {47f56cc5-3a47-4c6a-bdd1-8ecf82ceb7da}, !- Name
+  {a20cb5a5-2aa7-47d6-b497-7dba919a7ad4}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {9b8da000-d423-435f-ba0d-95acb91b4760}, !- Handle
+  {a20cb5a5-2aa7-47d6-b497-7dba919a7ad4}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {f2dfd62a-711a-4baa-ab0a-fd7989067959}, !- Handle
+  Zone HVAC Equipment List 21,            !- Name
+  {a20cb5a5-2aa7-47d6-b497-7dba919a7ad4}; !- Thermal Zone
+
+OS:ThermalZone,
+  {2507c1c6-c7bd-4653-83d8-47df16953701}, !- Handle
+  TZ-Corridor_Pod_1_ZN_1_FLR_1,           !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {cc741b4d-0ed3-46ca-8f6e-031f76a786ab}, !- Zone Air Inlet Port List
+  {bebc7de0-b646-4953-a55e-ecac9726f921}, !- Zone Air Exhaust Port List
+  {ca5449df-4caf-44ad-b3d3-f9356bae28c6}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {ee7da99c-edf8-417d-8a3c-77e864a5ab79}, !- Handle
+  Node 22,                                !- Name
+  {ca5449df-4caf-44ad-b3d3-f9356bae28c6}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {ca5449df-4caf-44ad-b3d3-f9356bae28c6}, !- Handle
+  {f2a37f57-0898-432e-bd09-b64f120b4216}, !- Name
+  {2507c1c6-c7bd-4653-83d8-47df16953701}, !- Source Object
+  11,                                     !- Outlet Port
+  {ee7da99c-edf8-417d-8a3c-77e864a5ab79}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {cc741b4d-0ed3-46ca-8f6e-031f76a786ab}, !- Handle
+  {5a06061c-709a-4a11-917b-870b6ce332e7}, !- Name
+  {2507c1c6-c7bd-4653-83d8-47df16953701}; !- HVAC Component
+
+OS:PortList,
+  {bebc7de0-b646-4953-a55e-ecac9726f921}, !- Handle
+  {5907eb1f-27fa-4573-84d0-2181bb6bba3a}, !- Name
+  {2507c1c6-c7bd-4653-83d8-47df16953701}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {d30c6d87-05b4-4ec8-9ad9-45aa80c0fde1}, !- Handle
+  {2507c1c6-c7bd-4653-83d8-47df16953701}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {8c553f10-6961-48cf-8bb2-df5dd443810f}, !- Handle
+  Zone HVAC Equipment List 22,            !- Name
+  {2507c1c6-c7bd-4653-83d8-47df16953701}; !- Thermal Zone
+
+OS:ThermalZone,
+  {c689b5ee-5f5a-48b0-b47f-6937aa24025d}, !- Handle
+  TZ-Corridor_Pod_3_ZN_1_FLR_1,           !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {236bc1bd-33da-4878-9896-9a8e02c305cb}, !- Zone Air Inlet Port List
+  {db942969-b554-438b-88ba-cac776c954e3}, !- Zone Air Exhaust Port List
+  {65754146-20d8-477e-9538-e575c7585b0b}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {29e5e307-9332-4b1e-95a0-5c8f935a2c4b}, !- Handle
+  Node 23,                                !- Name
+  {65754146-20d8-477e-9538-e575c7585b0b}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {65754146-20d8-477e-9538-e575c7585b0b}, !- Handle
+  {065a0601-70cc-49a1-99e0-e237f2b32944}, !- Name
+  {c689b5ee-5f5a-48b0-b47f-6937aa24025d}, !- Source Object
+  11,                                     !- Outlet Port
+  {29e5e307-9332-4b1e-95a0-5c8f935a2c4b}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {236bc1bd-33da-4878-9896-9a8e02c305cb}, !- Handle
+  {54c21e22-6116-48b6-a165-1b7c36ccfab9}, !- Name
+  {c689b5ee-5f5a-48b0-b47f-6937aa24025d}; !- HVAC Component
+
+OS:PortList,
+  {db942969-b554-438b-88ba-cac776c954e3}, !- Handle
+  {09ca73a3-c3e9-40dd-a143-36bd1e734b8e}, !- Name
+  {c689b5ee-5f5a-48b0-b47f-6937aa24025d}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {bbdbb365-a0b8-42a0-b7ac-5089aea38560}, !- Handle
+  {c689b5ee-5f5a-48b0-b47f-6937aa24025d}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {257da1bb-c6dd-458b-ae18-8370718978d6}, !- Handle
+  Zone HVAC Equipment List 23,            !- Name
+  {c689b5ee-5f5a-48b0-b47f-6937aa24025d}; !- Thermal Zone
+
+OS:ThermalZone,
+  {b7591044-7dac-40f4-baf6-8b0d7f77cb20}, !- Handle
+  TZ-Corner_Class_2_Pod_2_ZN_1_FLR_1,     !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {23a75db0-1c7a-4e51-83b0-c551cd139fec}, !- Zone Air Inlet Port List
+  {b217ad3f-d003-45b1-af97-23157eff0fa0}, !- Zone Air Exhaust Port List
+  {c82324d9-4617-4fc9-9495-7dbeb11a4277}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {0dda8815-d213-4c26-ba60-5c6ddec1a814}, !- Handle
+  Node 24,                                !- Name
+  {c82324d9-4617-4fc9-9495-7dbeb11a4277}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {c82324d9-4617-4fc9-9495-7dbeb11a4277}, !- Handle
+  {170fd587-0d2b-497f-89a6-1174d513998a}, !- Name
+  {b7591044-7dac-40f4-baf6-8b0d7f77cb20}, !- Source Object
+  11,                                     !- Outlet Port
+  {0dda8815-d213-4c26-ba60-5c6ddec1a814}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {23a75db0-1c7a-4e51-83b0-c551cd139fec}, !- Handle
+  {9cf45ada-12e2-455c-9d4b-968185f71a64}, !- Name
+  {b7591044-7dac-40f4-baf6-8b0d7f77cb20}; !- HVAC Component
+
+OS:PortList,
+  {b217ad3f-d003-45b1-af97-23157eff0fa0}, !- Handle
+  {c1c1753c-8a90-44e5-aa4e-090bae16921a}, !- Name
+  {b7591044-7dac-40f4-baf6-8b0d7f77cb20}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {a0d05c8e-6bd1-41ad-969b-3da12b24dc13}, !- Handle
+  {b7591044-7dac-40f4-baf6-8b0d7f77cb20}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {fdfd17e8-ed73-4fa1-af61-12c98faca0b4}, !- Handle
+  Zone HVAC Equipment List 24,            !- Name
+  {b7591044-7dac-40f4-baf6-8b0d7f77cb20}; !- Thermal Zone
+
+OS:ThermalZone,
+  {f71ff842-9c9e-4da1-84ac-50a51bf528a8}, !- Handle
+  TZ-Mult_Class_1_Pod_1_ZN_1_FLR_1,       !- Name
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ,                                       !- Zone Outside Convection Algorithm
+  ,                                       !- Zone Conditioning Equipment List Name
+  {97cf81e7-a068-4610-ad5c-0169df24247e}, !- Zone Air Inlet Port List
+  {6bd66f89-d424-4771-8854-7f4f8818d57b}, !- Zone Air Exhaust Port List
+  {ed0a1d35-f002-4500-ba1a-493406ce8e64}, !- Zone Air Node Name
+  ,                                       !- Zone Return Air Node Name
+  ,                                       !- Primary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Illuminance Map Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Thermostat Name
+  No;                                     !- Use Ideal Air Loads
+
+OS:Node,
+  {8a899126-24fe-4ca6-a578-1fd9472b149b}, !- Handle
+  Node 25,                                !- Name
+  {ed0a1d35-f002-4500-ba1a-493406ce8e64}, !- Inlet Port
+  ;                                       !- Outlet Port
+
+OS:Connection,
+  {ed0a1d35-f002-4500-ba1a-493406ce8e64}, !- Handle
+  {fca94a8b-fc30-4f5c-a9c3-8d6bbf9571fb}, !- Name
+  {f71ff842-9c9e-4da1-84ac-50a51bf528a8}, !- Source Object
+  11,                                     !- Outlet Port
+  {8a899126-24fe-4ca6-a578-1fd9472b149b}, !- Target Object
+  2;                                      !- Inlet Port
+
+OS:PortList,
+  {97cf81e7-a068-4610-ad5c-0169df24247e}, !- Handle
+  {869490f0-61ef-4646-b64a-e70db167a486}, !- Name
+  {f71ff842-9c9e-4da1-84ac-50a51bf528a8}; !- HVAC Component
+
+OS:PortList,
+  {6bd66f89-d424-4771-8854-7f4f8818d57b}, !- Handle
+  {1c685f46-73f1-4a85-b998-5f9b19cb8a7c}, !- Name
+  {f71ff842-9c9e-4da1-84ac-50a51bf528a8}; !- HVAC Component
+
+OS:Sizing:Zone,
+  {c9279239-3960-4ca0-a72d-09675e999a96}, !- Handle
+  {f71ff842-9c9e-4da1-84ac-50a51bf528a8}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  ,                                       !- Cooling Design Air Flow Rate {m3/s}
+  ,                                       !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Cooling Minimum Air Flow {m3/s}
+  ,                                       !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  ,                                       !- Heating Design Air Flow Rate {m3/s}
+  ,                                       !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Heating Maximum Air Flow {m3/s}
+  ,                                       !- Heating Maximum Air Flow Fraction
+  ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+
+OS:ZoneHVAC:EquipmentList,
+  {616820a7-8a11-4a56-8c58-b70264b077f1}, !- Handle
+  Zone HVAC Equipment List 25,            !- Name
+  {f71ff842-9c9e-4da1-84ac-50a51bf528a8}; !- Thermal Zone
 
