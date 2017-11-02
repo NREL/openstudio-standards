@@ -80,8 +80,7 @@ class NECB_2011_Model < StandardsModel
         cat = 'Semiheated'
       # Heated and Cooled
       else
-        raise("hello2")
-        res = thermal_zone_residential?(space)
+        res = thermal_zone_residential?(space.thermalZone.get() )
         cat = if res
                 'ResConditioned'
               else
