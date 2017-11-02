@@ -34,10 +34,7 @@ StandardsModel.class_eval do
         model_apply_prm_baseline_skylight_to_roof_ratio(model) #standards candidate
         model_create_thermal_zones(model, @space_multiplier_map) #standards candidate
         # For some building types, stories are defined explicitly
-        unless @building_story_map.nil?
-          model.getBuildingStorys.each {|item| item.remove}
-          model_assign_building_story(model, @building_story_map) #standards candidate
-        end
+
         return false if model.runSizingRun("#{sizing_run_dir}/SR0") == false
         model_add_hvac(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file) #standards for NECB Prototype for NREL candidate
         model_add_swh(model, @instvarbuilding_type, instvartemplate, climate_zone, @prototype_input, epw_file)
@@ -101,8 +98,6 @@ StandardsModel.class_eval do
         model.add_ground_temperatures(@instvarbuilding_type, climate_zone, instvartemplate)
         model_apply_sizing_parameters(model, @instvarbuilding_type)
         model.yearDescription.get.setDayofWeekforStartDay('Sunday')
-        # For some building types, stories are defined explicitly
-        model_assign_building_story(model, @building_story_map) #standards candidate
         # set climate zone and building type
         model.getBuilding.setStandardsBuildingType(building_type)
         if climate_zone.include? 'ASHRAE 169-2006-'
@@ -629,7 +624,7 @@ StandardsModel.class_eval do
   #
   # @param (see #add_constructions)
   # @return [Bool] returns true if successful, false if not
-  def model_create_thermal_zones(model, space_multiplier_map)
+  def model_create_thermal_zones(model, space_multiplier_map = nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
     space_multiplier_map = {} if space_multiplier_map.nil?
 
