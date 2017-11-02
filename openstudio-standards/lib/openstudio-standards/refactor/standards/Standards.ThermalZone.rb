@@ -359,7 +359,7 @@ class StandardsModel
     # Determine the respective areas
     res_area_m2 = 0
     nonres_area_m2 = 0
-    spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       # Ignore space if not part of total area
       next unless space.partofTotalFloorArea
       if space_residential?(space)
