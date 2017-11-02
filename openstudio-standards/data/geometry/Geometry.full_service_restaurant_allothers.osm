@@ -441,9 +441,9 @@ OS:Building,
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  2,                                      !- Standards Number of Stories
-  2,                                      !- Standards Number of Above Ground Stories
-  ;                                       !- Standards Building Type
+  1,                                      !- Standards Number of Stories
+  0,                                      !- Standards Number of Above Ground Stories
+  FullServiceRestaurant;                  !- Standards Building Type
 
 OS:SubSurface,
   {714701bf-9cfa-4eef-a172-e932cc3274f1}, !- Handle

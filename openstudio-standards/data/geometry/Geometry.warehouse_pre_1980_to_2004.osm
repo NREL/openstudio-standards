@@ -493,7 +493,10 @@ OS:Building,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
-  ;                                       !- Default Schedule Set Name
+  ,                                       !- Default Schedule Set Name
+  1,                                      !- Standards Number of Stories
+  0,                                      !- Standards Number of Above Ground Stories
+  Warehouse;                              !- Standards Building Type
 
 OS:SubSurface,
   {e6872a52-2bbf-4d30-aa15-c2ee0dbf44bd}, !- Handle

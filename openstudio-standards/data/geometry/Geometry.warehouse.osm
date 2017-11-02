@@ -1620,7 +1620,8 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   1,                                      !- Standards Number of Stories
-  1;                                      !- Standards Number of Above Ground Stories
+  0,                                      !- Standards Number of Above Ground Stories
+  Warehouse;                              !- Standards Building Type
 
 OS:Facility,
   {df4e9cbf-49a4-4de4-b2f6-6cba678a29a8}; !- Handle

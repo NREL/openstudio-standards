@@ -18,7 +18,9 @@ StandardsModel.class_eval do
     end
     case @instvartemplate
       when 'NECB 2011'
-        model = load_osm(@geometry_file) #standard candidate
+        model = load_osm_data(@geometry_file) #standard candidate
+
+
         model.add_design_days_and_weather_file(climate_zone, epw_file) #Standards
         model.add_ground_temperatures(@instvarbuilding_type, climate_zone, @instvartemplate) #prototype candidate
         model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
@@ -80,7 +82,7 @@ StandardsModel.class_eval do
           #this is required to be blank otherwise it may cause side effects.
           epw_file = ""
         end
-        model = load_osm(@geometry_file)
+        model = load_osm_data(@geometry_file)
         model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
         model_assign_space_type_stubs(model, @lookup_building_type, @space_type_map)
         model_add_loads(model)
@@ -144,7 +146,7 @@ StandardsModel.class_eval do
   # @param building_type [String] the building type
   # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
-  def load_osm(osm_file)
+  def load_osm_data(osm_file)
     # Load the geometry .osm
     osm_model_path = OpenStudio::Path.new(osm_file.to_s)
     #Upgrade version if required.
@@ -153,6 +155,10 @@ StandardsModel.class_eval do
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
     #ensure that model is intersected correctly.
     model.getSpaces.each {|space1| model.getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
+    @space_multiplier_map  = {}
+    model.getSpaces.sort.each do |space|
+      @space_multiplier_map[space.name.get] = space.multiplier() if space.multiplier() > 1
+    end
     return model
   end
 

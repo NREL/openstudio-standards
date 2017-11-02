@@ -102,6 +102,10 @@ class #{template}#{name} < #{template}_Prototype
     return @space_multiplier_map
   end
 
+
+
+
+
  def define_building_story_map(building_type, instvartemplate, climate_zone)
     return @building_story_map
  end
@@ -143,7 +147,6 @@ class #{template}#{name} < #{template}_Prototype
     end
     return lookup_name
   end
-
 
 end
 DYNAMICClass

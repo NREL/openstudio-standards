@@ -138,6 +138,6 @@ data_hash.each do |info|
 
 
 
-  BTAP::FileIO::save_osm(model, full_path + ".new")
+  BTAP::FileIO::save_osm(model, full_path)
 end
 

@@ -1211,9 +1211,9 @@ OS:Building,
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  2,                                      !- Standards Number of Stories
-  2,                                      !- Standards Number of Above Ground Stories
-  ;                                       !- Standards Building Type
+  1,                                      !- Standards Number of Stories
+  0,                                      !- Standards Number of Above Ground Stories
+  SmallOffice;                            !- Standards Building Type
 
 OS:Surface,
   {10583da6-829d-472d-90f7-81a54a7bb399}, !- Handle

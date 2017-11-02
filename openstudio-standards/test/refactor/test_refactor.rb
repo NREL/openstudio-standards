@@ -95,22 +95,22 @@ class TestRefactorParallel < Minitest::Test
 
   #####NREL RUNS
   nrel_building_types = [
-      "FullServiceRestaurant",
+      #     "FullServiceRestaurant",
       "Hospital",
       "HighriseApartment",
       "LargeHotel",
-      "LargeOffice",
-      "MediumOffice",
-      "MidriseApartment",
-      "Outpatient",
-      "PrimarySchool",
-      "QuickServiceRestaurant",
-      "RetailStandalone",
-      "SecondarySchool",
-      "SmallHotel",
-      "SmallOffice",
-      "RetailStripmall",
-      "Warehouse"
+      #     "LargeOffice",
+      #    "MediumOffice",
+      #    "MidriseApartment",
+      #    "Outpatient",
+      #    "PrimarySchool",
+      #   "QuickServiceRestaurant",
+      #   "RetailStandalone",
+      # "SecondarySchool",
+      #  "SmallHotel",
+      #  "SmallOffice",
+      "RetailStripmall"#,
+  #  "Warehouse"
 
   ]
 
@@ -121,22 +121,22 @@ class TestRefactorParallel < Minitest::Test
 
   ######NRCan runs
   nrcan_building_types = [
-      "FullServiceRestaurant",
+ #     "FullServiceRestaurant",
       "Hospital",
       "HighriseApartment",
       "LargeHotel",
-      "LargeOffice",
-      "MediumOffice",
-      "MidriseApartment",
-      "Outpatient",
-      "PrimarySchool",
-      "QuickServiceRestaurant",
-      "RetailStandalone",
-      "SecondarySchool",
-      "SmallHotel",
-      "SmallOffice",
-      "RetailStripmall",
-      "Warehouse"
+ #     "LargeOffice",
+  #    "MediumOffice",
+  #    "MidriseApartment",
+  #    "Outpatient",
+  #    "PrimarySchool",
+   #   "QuickServiceRestaurant",
+   #   "RetailStandalone",
+     # "SecondarySchool",
+    #  "SmallHotel",
+    #  "SmallOffice",
+     "RetailStripmall"#,
+    #  "Warehouse"
 
   ]
   nrcan_templates = ['NECB 2011']
@@ -155,7 +155,7 @@ class TestRefactorParallel < Minitest::Test
   nrcan_runs = create_runs_jobs(nrcan_templates, nrcan_building_types, nrcan_climate_zones, nrcan_epw_files)
 
   #add runs and run them
-  runs = nrcan_runs + nrel_runs
+  runs = nrel_runs
   puts
   case Gem::Platform.local.os
     when 'linux'

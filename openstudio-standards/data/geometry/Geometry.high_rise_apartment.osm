@@ -11748,8 +11748,8 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   10,                                     !- Standards Number of Stories
-  10,                                     !- Standards Number of Above Ground Stories
-  ;                                       !- Standards Building Type
+  0,                                      !- Standards Number of Above Ground Stories
+  HighriseApartment;                      !- Standards Building Type
 
 OS:Surface,
   {6fd6faf4-c658-4c39-b921-71d08f638185}, !- Handle

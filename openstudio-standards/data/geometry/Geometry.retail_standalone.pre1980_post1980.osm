@@ -363,9 +363,9 @@ OS:Building,
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Standards Number of Stories
-  ,                                       !- Standards Number of Above Ground Stories
-  ;                                       !- Standards Building Type
+  1,                                      !- Standards Number of Stories
+  0,                                      !- Standards Number of Above Ground Stories
+  RetailStandalone;                       !- Standards Building Type
 
 OS:Surface,
   {3d29657f-60c7-44ae-9a96-2c92d168a8cd}, !- Handle
