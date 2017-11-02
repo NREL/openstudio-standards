@@ -76,8 +76,6 @@ class #{template}#{name} < #{template}_Prototype
     #ideally we should map the data required to a instance variable.
     @geometry_file =     "\#{Folders.instance.data_geometry_folder}/\#{@prototype_database["geometry"]}"
     @space_type_map =     @prototype_database["space_type_map"]
-    @building_story_map = @prototype_database["building_story_map"]
-    @space_multiplier_map = @prototype_database["space_multiplier_map"]
     @system_to_space_map = @prototype_database["system_to_space_map"]
     self.set_variables()
   end
