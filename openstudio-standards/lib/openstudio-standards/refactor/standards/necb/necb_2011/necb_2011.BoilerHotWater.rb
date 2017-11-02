@@ -1,5 +1,5 @@
 
-class NECB_2011_Model < StandardsModel
+NECB_2011_Model.class_eval do
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify

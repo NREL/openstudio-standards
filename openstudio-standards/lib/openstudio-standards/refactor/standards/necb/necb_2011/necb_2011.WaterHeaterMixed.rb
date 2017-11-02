@@ -1,5 +1,5 @@
 
-class NECB_2011_Model < StandardsModel
+NECB_2011_Model.class_eval do
   # Applies the standard efficiency ratings and typical losses and paraisitic loads to this object.
   # Efficiency and skin loss coefficient (UA)
   # Per PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf

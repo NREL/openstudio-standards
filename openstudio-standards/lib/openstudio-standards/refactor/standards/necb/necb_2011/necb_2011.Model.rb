@@ -1,5 +1,5 @@
 # open the class to add methods to apply HVAC efficiency standards
-class NECB_2011_Model < StandardsModel
+NECB_2011_Model.class_eval do
 
 
 

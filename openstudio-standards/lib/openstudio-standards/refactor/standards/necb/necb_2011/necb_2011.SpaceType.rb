@@ -1,5 +1,5 @@
 
-class NECB_2011_Model < StandardsModel
+NECB_2011_Model.class_eval do
   # Sets the selected internal loads to standards-based or typical values.
   # For each category that is selected get all load instances. Remove all
   # but the first instance if multiple instances.  Add a new instance/definition

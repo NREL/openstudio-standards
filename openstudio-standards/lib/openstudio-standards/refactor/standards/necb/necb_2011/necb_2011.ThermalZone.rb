@@ -1,5 +1,5 @@
 
-class NECB_2011_Model < StandardsModel
+NECB_2011_Model.class_eval do
   # Determine if demand control ventilation (DCV) is
   # required for this zone based on area and occupant density.
   # Does not account for System requirements like ERV, economizer, etc.

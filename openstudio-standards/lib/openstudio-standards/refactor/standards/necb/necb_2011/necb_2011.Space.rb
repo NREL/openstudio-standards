@@ -1,6 +1,15 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class NECB_2011_Model < StandardsModel
+NECB_2011_Model.class_eval do
+  # NECB Infiltration rate information for standard.
+  Infil_rate_m3_per_s_per_m2 = 0.25 * 0.001 # m3/s/m2
+  Infil_constant_term_coefficient = 0.0
+  Infil_temperature_term_coefficient = 0.0
+  Infil_velocity_term_coefficient = 0.224
+  Infiltration_velocity_squared_term_coefficient = 0.0
+
+
+
   # Set the infiltration rate for this space to include
   # the impact of air leakage requirements in the standard.
   #
@@ -14,7 +23,7 @@ class NECB_2011_Model < StandardsModel
     # Remove infiltration rates set at the space object.
     space.spaceInfiltrationDesignFlowRates.each(&:remove)
 
-    adj_infil_rate_m3_per_s_per_m2 = 0.25 * 0.001 # m3/s/m2
+    adj_infil_rate_m3_per_s_per_m2 = Infil_rate_m3_per_s_per_m2 # m3/s/m2
     exterior_wall_and_roof_and_subsurface_area = space_exterior_wall_and_roof_and_subsurface_area(space) # To do
     # Don't create an object if there is no exterior wall area
     if exterior_wall_and_roof_and_subsurface_area <= 0.0
@@ -62,11 +71,10 @@ class NECB_2011_Model < StandardsModel
     # infiltration.setFlowperExteriorWallArea(adj_infil_rate_m3_per_s_per_m2)
     infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2)
     infiltration.setSchedule(infil_sch)
-    infiltration.setConstantTermCoefficient(0.0)
-    infiltration.setTemperatureTermCoefficient 0.0
-    infiltration.setVelocityTermCoefficient(0.224)
-    infiltration.setVelocitySquaredTermCoefficient(0.0)
-
+    infiltration.setConstantTermCoefficient(Infil_constant_term_coefficient)
+    infiltration.setTemperatureTermCoefficient Infil_temperature_term_coefficient
+    infiltration.setVelocityTermCoefficient(Infil_velocity_term_coefficient)
+    infiltration.setVelocitySquaredTermCoefficient(Infiltration_velocity_squared_term_coefficient)
     infiltration.setSpace(space)
 
     return true

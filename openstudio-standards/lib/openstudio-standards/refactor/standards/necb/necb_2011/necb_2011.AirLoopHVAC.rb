@@ -1,5 +1,5 @@
 
-class NECB_2011_Model < StandardsModel
+NECB_2011_Model.class_eval do
   # NECB does not change damper positions
   #
   # return [Bool] returns true if successful, false if not

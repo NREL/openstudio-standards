@@ -1,5 +1,5 @@
 
-class NECB_2011_Model < StandardsModel
+NECB_2011_Model.class_eval do
   include NECBFan
 
   # Determines whether there is a requirement to have a
