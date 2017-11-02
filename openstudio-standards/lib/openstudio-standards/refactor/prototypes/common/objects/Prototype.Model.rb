@@ -19,8 +19,6 @@ StandardsModel.class_eval do
     case @instvartemplate
       when 'NECB 2011'
         model = load_osm_data(@geometry_file) #standard candidate
-
-
         model.add_design_days_and_weather_file(climate_zone, epw_file) #Standards
         model.add_ground_temperatures(@instvarbuilding_type, climate_zone, @instvartemplate) #prototype candidate
         model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
@@ -147,13 +145,29 @@ StandardsModel.class_eval do
     #Upgrade version if required.
     version_translator = OpenStudio::OSVersion::VersionTranslator.new
     model = version_translator.loadModel(osm_model_path).get
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
+    if model.getBuildingStorys.size < 1
+      raise("Building Storeys are not set in the model #{osm_model_path}. \n Please define the building stories and the spaces associated with them before running in standards.")
+    end
+    if model.getThermalZones.size < 1
+      raise("ThermalZones are not set in the model #{osm_model_path}. \n Please define the building stories and the spaces associated with them before running in standards.")
+    end
+    if model.getBuilding.standardsNumberOfStories.empty?
+      raise("standardsNumberOfStories are not set in the model #{osm_model_path}. \n Please define the stndards number of stories  before running in standards.")
+    end
+    if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
+      raise("standardsNumberOfAboveStories are not set in the model#{osm_model_path}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
+    end
+
+
     #ensure that model is intersected correctly.
     model.getSpaces.each {|space1| model.getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
+    #Get multipliers from TZ in model. Need this for HVAC contruction.
     @space_multiplier_map  = {}
     model.getSpaces.sort.each do |space|
       @space_multiplier_map[space.name.get] = space.multiplier() if space.multiplier() > 1
     end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
     return model
   end
 
