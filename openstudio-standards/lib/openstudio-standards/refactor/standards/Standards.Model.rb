@@ -35,6 +35,9 @@
   standards_files << 'OpenStudio_Standards_necb_surface_conductances.json'
   standards_files << 'OpenStudio_Standards_water_heaters.json'
   standards_files << 'OpenStudio_Standards_economizers.json'
+  standards_files << 'OpenStudio_Standards_refrigerated_cases.json'
+  standards_files << 'OpenStudio_Standards_walkin_refrigeration.json'
+  standards_files << 'OpenStudio_Standards_refrigeration_compressors.json'
   #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
 
   # Combine the data from the JSON files into a single hash

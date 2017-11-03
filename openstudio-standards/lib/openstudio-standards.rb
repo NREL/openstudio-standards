@@ -239,6 +239,7 @@ module OpenstudioStandards
 
     # Model Objects
     require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
+    require_relative "#{proto}/common/objects/Prototype.CoilHeatingGas"
     require_relative "#{proto}/common/objects/Prototype.ControllerWaterCoil"
     require_relative "#{proto}/common/objects/Prototype.Fan"
     require_relative "#{proto}/common/objects/Prototype.FanConstantVolume"
@@ -253,6 +254,52 @@ module OpenstudioStandards
     require_relative "#{proto}/common/objects/Prototype.Model.swh"
     require_relative "#{proto}/common/objects/Prototype.building_specific_methods"
     require_relative "#{proto}/common/objects/Prototype.hvac_systems"
+    require_relative "#{proto}/common/objects/Prototype.refrigeration"
     require_relative "#{proto}/common/objects/Prototype.utilities"
+    # 90.1-2004
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2004/ashrae_90_1_2004.AirTerminalSingleDuctVAVReheat"
+    # 90.1-2007
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2007/ashrae90_1_2007.FanConstantVolume"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2007/ashrae90_1_2007.FanOnOff"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2007/ashrae90_1_2007.FanVariableVolume"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2007/ashrae_90_1_2007.AirTerminalSingleDuctVAVReheat"
+    # 90.1-2010
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2010/ashrae90_1_2010.FanConstantVolume"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2010/ashrae90_1_2010.FanOnOff"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2010/ashrae90_1_2010.FanVariableVolume"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2010/ashrae90_1_2010.Model.elevators"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirTerminalSingleDuctVAVReheat"
+    # 90.1-2013
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2013/ashrae90_1_2013.FanConstantVolume"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2013/ashrae90_1_2013.FanOnOff"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2013/ashrae90_1_2013.FanVariableVolume"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2013/ashrae90_1_2013.Model.elevators"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2013/ashrae90_1_2013.hvac_systems"
+    require_relative "#{proto}/ashrae90_1/ashrae_90_1_2013/ashrae_90_1_2013.AirTerminalSingleDuctVAVReheat"
+    # DOE Ref 1980-2004
+    require_relative "#{proto}/ashrae90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirTerminalSingleDuctVAVReheat"
+    require_relative "#{proto}/ashrae90_1/doe_ref_1980_2004/doe_ref_1980_2004.Model.elevators"
+    require_relative "#{proto}/ashrae90_1/doe_ref_1980_2004/doe_ref_1980_2004.hvac_systems"
+    require_relative "#{proto}/ashrae90_1/doe_ref_1980_2004/doe_ref_1980_2004.refrigeration"
+    # DOE Ref Pre-1980
+    require_relative "#{proto}/ashrae90_1/doe_ref_pre_1980/doe_ref_pre_1980.AirTerminalSingleDuctVAVReheat"
+    require_relative "#{proto}/ashrae90_1/doe_ref_pre_1980/doe_ref_pre_1980.CoilHeatingGas"
+    require_relative "#{proto}/ashrae90_1/doe_ref_pre_1980/doe_ref_pre_1980.Model.elevators"
+    require_relative "#{proto}/ashrae90_1/doe_ref_pre_1980/doe_ref_pre_1980.hvac_systems"
+    require_relative "#{proto}/ashrae90_1/doe_ref_pre_1980/doe_ref_pre_1980.refrigeration"
+    # NREL ZNE Ready 2017
+    require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.AirTerminalSingleDuctVAVReheat"
+    require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanConstantVolume"
+    require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanOnOff"
+    require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
+    require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model.elevators"
+    require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
+    # NECB 2011    
+    require_relative "#{proto}/necb/necb_2011/buildings/necb2011_high_rise_apartment"
+    require_relative "#{proto}/necb/necb_2011/buildings/necb2011_prototypes"
+    require_relative "#{proto}/necb/necb_2011/necb_2011.FanConstantVolume"
+    require_relative "#{proto}/necb/necb_2011/necb_2011.FanVariableVolume"
+    require_relative "#{proto}/necb/necb_2011/necb_2011.Model.hvac"    
+    
   end
 end

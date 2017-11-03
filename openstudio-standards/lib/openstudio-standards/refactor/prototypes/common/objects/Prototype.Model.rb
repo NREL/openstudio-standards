@@ -1209,6 +1209,9 @@ StandardsModel.class_eval do
     model.getFanOnOffs.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
     model.getFanZoneExhausts.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
 
+    # Gas Heating Coil
+    model.getCoilHeatingGass.sort.each {|obj| coil_heating_gas_apply_prototype_efficiency(obj)}
+    
     ##### Add Economizers
 
     if instvartemplate != 'NECB 2011'

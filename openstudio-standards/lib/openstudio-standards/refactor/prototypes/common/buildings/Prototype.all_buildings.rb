@@ -375,6 +375,15 @@ module Hospital
     model_update_exhaust_fan_efficiency( model)
     model_reset_or_room_vav_minimum_damper(prototype_input, model)
 
+    # Modify the condenser water pump
+    if instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+      cw_pump = model.getPumpConstantSpeedByName('Condenser Water Loop Pump').get
+      cw_pump_head_ft_h2o = 60.0
+      cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O', 'Pa').get
+      cw_pump.setRatedPumpHead(cw_pump_head_press_pa)
+      cw_pump.addToNode(condenser_water_loop.supplyInletNode)
+    end
+    
     return true
   end
 
@@ -993,6 +1002,30 @@ module Outpatient
     # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone
     self.apply_minimum_total_ach(building_type, model)
 
+    # Some exceptions for the Outpatient
+    # TODO Refactor: not sure if this is actually enabled in the original code
+=begin
+    if sys_name.include? 'PVAV Outpatient F1'
+      # Outpatient two AHU1 and AHU2 have different HVAC schedule
+      hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU1-Fan_Pre2004')
+      # Outpatient has different temperature settings for sizing
+      clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
+      sys_dsn_clg_sa_temp_f = if instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+                                52
+                              else
+                                45
+                              end
+      zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
+      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
+    elsif sys_name.include? 'PVAV Outpatient F2 F3'
+      hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU2-Fan_Pre2004')
+      clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
+      sys_dsn_clg_sa_temp_f = 52
+      zn_dsn_clg_sa_temp_f = 55 # zone cooling design SAT
+      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
+    end  
+=end    
+    
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
 
     return true
@@ -1561,16 +1594,37 @@ module RetailStandalone
 
     # Add the door infiltration for template 2004,2007,2010,2013
     case instvartemplate
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        entry_space = model.getSpaceByName('Front_Entry').get
-        infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-        infiltration_entry.setName('Entry door Infiltration')
-        infiltration_per_zone = 1.418672682
-        infiltration_entry.setDesignFlowRate(infiltration_per_zone)
-        infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH'))
-        infiltration_entry.setSpace(entry_space)
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      entry_space = model.getSpaceByName('Front_Entry').get
+      infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+      infiltration_entry.setName('Entry door Infiltration')
+      infiltration_per_zone = 1.418672682
+      infiltration_entry.setDesignFlowRate(infiltration_per_zone)
+      infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH'))
+      infiltration_entry.setSpace(entry_space)
     end
 
+    # Update the zone sizing SAT
+    if instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+      model.getSizingZones.each do |sizing_zone|
+        sizing_zone.setZoneCoolingDesignSupplyAirTemperature(14)
+      end
+    end
+    
+    # Add economizer max fraction schedules
+    case instvartemplate
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
+      econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
+      model.getAirLoopHVACs.each do |air_loop|
+        oa_sys = air_loop.airLoopHVACOutdoorAirSystem
+        if oa_sys.is_initialized
+          oa_sys = oa_sys.get
+          oa_controller = oa_sys.getControllerOutdoorAir
+          oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_eff_sch)
+        end
+      end
+    end
+    
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     return true
@@ -1606,29 +1660,43 @@ module RetailStripmall
     # Add infiltration door opening
     # Spaces names to design infiltration rates (m3/s)
     case instvartemplate
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        door_infiltration_map = {['LGstore1', 'LGstore2'] => 0.388884328,
-                                 ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037}
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      door_infiltration_map = {['LGstore1', 'LGstore2'] => 0.388884328,
+                               ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037}
 
-        door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|
-          space_names.each do |space_name|
-            space = model.getSpaceByName(space_name).get
-            # Create the infiltration object and hook it up to the space type
-            infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-            infiltration.setName("#{space_name} Door Open Infiltration")
-            infiltration.setSpace(space)
-            infiltration.setDesignFlowRate(infiltration_design_flowrate)
-            infiltration_schedule = model.add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
-            if infiltration_schedule.nil?
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Can't find schedule (RetailStripmall INFIL_Door_Opening_SCH).")
-              return false
-            else
-              infiltration.setSchedule(infiltration_schedule)
-            end
+      door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|
+        space_names.each do |space_name|
+          space = model.getSpaceByName(space_name).get
+          # Create the infiltration object and hook it up to the space type
+          infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+          infiltration.setName("#{space_name} Door Open Infiltration")
+          infiltration.setSpace(space)
+          infiltration.setDesignFlowRate(infiltration_design_flowrate)
+          infiltration_schedule = model.add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
+          if infiltration_schedule.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Can't find schedule (RetailStripmall INFIL_Door_Opening_SCH).")
+            return false
+          else
+            infiltration.setSchedule(infiltration_schedule)
           end
         end
+      end
     end
 
+    # Add economizer max fraction schedules
+    case instvartemplate
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
+      econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
+      model.getAirLoopHVACs.each do |air_loop|
+        oa_sys = air_loop.airLoopHVACOutdoorAirSystem
+        if oa_sys.is_initialized
+          oa_sys = oa_sys.get
+          oa_controller = oa_sys.getControllerOutdoorAir
+          oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_eff_sch)
+        end
+      end
+    end
+    
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
     return true
   end
