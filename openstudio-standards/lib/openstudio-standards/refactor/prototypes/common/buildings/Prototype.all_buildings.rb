@@ -564,7 +564,7 @@ module LargeHotel
 
 
     # Add Exhaust Fan
-    space_type_map = model.define_space_type_map(building_type, climate_zone)
+    space_type_map = define_space_type_map(building_type, climate_zone)
     exhaust_fan_space_types = []
     case instvartemplate
       when '90.1-2004', '90.1-2007'
