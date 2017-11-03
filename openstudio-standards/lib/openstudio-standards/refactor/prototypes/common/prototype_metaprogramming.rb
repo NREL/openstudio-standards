@@ -85,7 +85,7 @@ class #{template}#{name} < #{template}_Prototype
     puts @space_type_map
     puts @system_to_space_map
     #add all building methods for now. 
-    self.extend(#{name})
+    self.extend(#{name}) unless @instvartemplate == 'NECB 2011'
   end
 #Common Methods to all prototypes. 
   def define_space_type_map(building_type, climate_zone)
