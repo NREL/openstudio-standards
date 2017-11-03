@@ -52,6 +52,7 @@ class OpenStudio::Model::SpaceType
     g = rgb[1].to_i
     b = rgb[2].to_i
     rendering_color = OpenStudio::Model::RenderingColor.new(model)
+    rendering_color.setName(self.name.get)
     rendering_color.setRenderingRedValue(r)
     rendering_color.setRenderingGreenValue(g)
     rendering_color.setRenderingBlueValue(b)
