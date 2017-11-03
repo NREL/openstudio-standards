@@ -3,7 +3,6 @@ require_relative '../helpers/compare_models_helper'
 require 'parallel' if Gem::Platform.local.os == 'linux'
 
 
-
 class TestRefactorParallel < Minitest::Test
 
   def self.create_runs_jobs(templates, building_types, climate_zones, epw_files)
@@ -77,8 +76,10 @@ class TestRefactorParallel < Minitest::Test
 
       rescue => exception
         # Log error/exception and then keep going.
-        error = "#{exception.backtrace.first}: #{exception.message} (#{exception.class})", exception.backtrace.drop(1).map {|s| "\n#{s}"}
+        error = "#{exception.backtrace.first}: #{exception.message} (#{exception.class})"
+        exception.backtrace.drop(1).map {|s| "\n#{s}"}.each {|bt| error << bt.to_s}
         diffs << "#{run['run_name']}: Error \n#{error}"
+
       end
       #Write out diff or error message
       diff_file = "#{run['old_method_run_dir']}/../differences.json"
@@ -95,59 +96,61 @@ class TestRefactorParallel < Minitest::Test
 
   #####NREL RUNS
   nrel_building_types = [
-      #     "FullServiceRestaurant",
-      "Hospital",
-      "HighriseApartment",
+      "FullServiceRestaurant",
+      #"Hospital",
+      #"HighriseApartment",
       "LargeHotel",
-      #     "LargeOffice",
-      #    "MediumOffice",
-      #    "MidriseApartment",
-      #    "Outpatient",
-      #    "PrimarySchool",
-      #   "QuickServiceRestaurant",
-      #   "RetailStandalone",
-      # "SecondarySchool",
-      #  "SmallHotel",
-      #  "SmallOffice",
-      "RetailStripmall"#,
-  #  "Warehouse"
+      "LargeOffice",
+      "MediumOffice",
+      "MidriseApartment",
+      #"Outpatient",
+      "PrimarySchool",
+      "QuickServiceRestaurant",
+      "RetailStandalone",
+      #"SecondarySchool",
+      #"SmallHotel",
+      "SmallOffice",
+      "RetailStripmall",
+      "Warehouse"
 
   ]
 
-  nrel_templates = ['90.1-2010']#, 'DOE Ref Pre-1980']
+  nrel_templates = ['90.1-2010'] #, 'DOE Ref Pre-1980']
   nrel_climate_zones = ['ASHRAE 169-2006-1A']
   nrel_epw_files = [nil] # we will need to keep this overloaded to keep arguments consistant.
   nrel_runs = self.create_runs_jobs(nrel_templates, nrel_building_types, nrel_climate_zones, nrel_epw_files)
 
   ######NRCan runs
   nrcan_building_types = [
- #     "FullServiceRestaurant",
-      "Hospital",
-      "HighriseApartment",
+      "FullServiceRestaurant",
+      #"Hospital",
+      #"HighriseApartment",
       "LargeHotel",
- #     "LargeOffice",
-  #    "MediumOffice",
-  #    "MidriseApartment",
-  #    "Outpatient",
-  #    "PrimarySchool",
-   #   "QuickServiceRestaurant",
-   #   "RetailStandalone",
-     # "SecondarySchool",
-    #  "SmallHotel",
-    #  "SmallOffice",
-     "RetailStripmall"#,
-    #  "Warehouse"
+      "LargeOffice",
+      "MediumOffice",
+      "MidriseApartment",
+      #"Outpatient",
+      "PrimarySchool",
+      "QuickServiceRestaurant",
+      "RetailStandalone",
+      #"SecondarySchool",
+      #"SmallHotel",
+      "SmallOffice",
+      "RetailStripmall",
+      "Warehouse"
 
   ]
   nrcan_templates = ['NECB 2011']
   nrcan_climate_zones = ['NECB HDD Method']
   nrcan_epw_files = [
-      'CAN_BC_Vancouver.718920_CWEC.epw', #  CZ 5 - Gas HDD = 3019
+      'CAN_BC_Vancouver.718920_CWEC.epw' #, #  CZ 5 - Gas HDD = 3019
+=begin
       'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
       'CAN_PQ_Sherbrooke.716100_CWEC.epw', #CZ 7a - Electric HDD = 5068
       'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
       'CAN_NU_Resolute.719240_CWEC.epw', # CZ 8  -FuelOil2 HDD = 12570
       'CAN_PQ_Kuujjuarapik.719050_CWEC.epw', # CZ 8  -FuelOil2 HDD = 7986
+=end
 
   ]
 
@@ -155,7 +158,7 @@ class TestRefactorParallel < Minitest::Test
   nrcan_runs = create_runs_jobs(nrcan_templates, nrcan_building_types, nrcan_climate_zones, nrcan_epw_files)
 
   #add runs and run them
-  runs = nrel_runs
+  runs =nrcan_runs + nrel_runs
   puts
   case Gem::Platform.local.os
     when 'linux'
