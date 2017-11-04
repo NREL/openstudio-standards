@@ -4,7 +4,7 @@ class StandardsModel
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume, building_type, climate_zone)
+  def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
 
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil

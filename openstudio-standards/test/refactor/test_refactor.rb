@@ -60,6 +60,7 @@ class TestRefactorParallel < Minitest::Test
         prototype_object = StandardsModel.get_standard_model("#{run['template']}_#{run['building_type']}")
         puts "this is a #{prototype_object.class}"
         new_model = prototype_object.model_create_prototype_model(run['climate_zone'], run['epw_file'], run['refactored_run_dir'])
+        BTAP::FileIO::save_osm(new_model, "#{run['run_dir']}/new.osm")
         log_messages_to_file("#{run['refactored_run_dir']}/openstudio_standards.log", debug = false)
 
         # Reset the log so that only new messages are stored
@@ -68,6 +69,7 @@ class TestRefactorParallel < Minitest::Test
         #old method of creating a model.
         old_model = OpenStudio::Model::Model.new()
         old_model.create_prototype_building(run['building_type'], run['template'], run['climate_zone'], run['epw_file'], run['old_method_run_dir'])
+        BTAP::FileIO::save_osm(old_model, "#{run['run_dir']}/old.osm")
         log_messages_to_file("#{run['old_method_run_dir']}/openstudio_standards.log", debug = false)
 
         # Compare the two models.
@@ -97,18 +99,18 @@ class TestRefactorParallel < Minitest::Test
   #####NREL RUNS
   nrel_building_types = [
       "FullServiceRestaurant",
-      #"Hospital",
-      #"HighriseApartment",
+       "Hospital",
+      "HighriseApartment",
       "LargeHotel",
       "LargeOffice",
       "MediumOffice",
       "MidriseApartment",
-      #"Outpatient",
+      "Outpatient",
       "PrimarySchool",
       "QuickServiceRestaurant",
       "RetailStandalone",
-      #"SecondarySchool",
-      #"SmallHotel",
+      "SecondarySchool",
+      "SmallHotel",
       "SmallOffice",
       "RetailStripmall",
       "Warehouse"
@@ -123,22 +125,21 @@ class TestRefactorParallel < Minitest::Test
   ######NRCan runs
   nrcan_building_types = [
       "FullServiceRestaurant",
-      #"Hospital",
-      #"HighriseApartment",
+     "Hospital",
+      "HighriseApartment",
       "LargeHotel",
       "LargeOffice",
       "MediumOffice",
       "MidriseApartment",
-      #"Outpatient",
+      "Outpatient",
       "PrimarySchool",
       "QuickServiceRestaurant",
       "RetailStandalone",
-      #"SecondarySchool",
-      #"SmallHotel",
+      "SecondarySchool",
+      "SmallHotel",
       "SmallOffice",
       "RetailStripmall",
       "Warehouse"
-
   ]
   nrcan_templates = ['NECB 2011']
   nrcan_climate_zones = ['NECB HDD Method']

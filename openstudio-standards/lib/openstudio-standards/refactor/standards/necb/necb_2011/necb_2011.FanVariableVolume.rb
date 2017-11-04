@@ -1,6 +1,5 @@
 
 NECB_2011_Model.class_eval do
-  include NECBFan
 
   # Determines whether there is a requirement to have a
   # VSD or some other method to reduce fan power

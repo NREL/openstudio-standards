@@ -1,10 +1,9 @@
 class StandardsModel
   include PrototypeFan
-
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
-  def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume, building_type, climate_zone)
+  def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
 
     # Don't modify unit heater fans
     return true if fan_constant_volume.name.to_s.include?('UnitHeater Fan')

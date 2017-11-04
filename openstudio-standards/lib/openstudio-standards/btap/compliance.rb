@@ -291,51 +291,9 @@ module BTAP
       end
 
 
-      # This method will look up the json file in the data geometry folder to determine the actual number of floors.. This is hard to do programattically due to the nature of the doe geometries and how they use zone multipliers.
-      def self.get_number_of_above_ground_floors(model, building_type, template = "NECB 2011", runner)
-        if template.nil? or building_type.nil?
-          BTAP::runner_register("Warning: ttemplate and/or building_type is undefined..using actual number of building stories for NECB system selection.", runner)
-          return model.getBuildingStorys.size
-        end
-        geometry_data = JSON.parse(File.read("#{File.dirname(__FILE__)}/../../../data/geometry/geometry.json"))
-        if geometry_data[template].nil? or geometry_data[template][building_type].nil? or geometry_data[template][building_type]["above_ground_floors"].nil?
-          BTAP::runner_register("Error: Number of floors for #{building_type} of template #{template} not found in #{File.dirname(__FILE__)}/../../../data/geometry/geometry.json. If you are adding an archetype please edit this file with the correct information. Now using number of acutual stories.", runner)
-          return false
-        else
-          return geometry_data[template][building_type]["above_ground_floors"].to_i
-        end
-      end
 
 
-      # This model converts all DOE to NECB reference building.
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param idf_folder [String]
-      #@return [OpenStudio::model::Model] model_array
-      def self.convert_all_doe_to_necb_reference_building(idf_folder, output_folder = 'C:/test/', construction_library_file = nil, construction_set_name = nil, weather_file = nil, set_necb_fdwr = true)
-        #iterate through all idf file in Original folder.
-        filenames = Array.new()
-        idf_filenames = BTAP::FileIO::get_find_files_from_folder_by_extension(idf_folder, "idf")
-        puts idf_folder
-        puts "filenames: #{idf_filenames}"
-        BTAP::FileIO::get_find_files_from_folder_by_extension(idf_folder, ".idf").each do |idf_filename|
-          puts idf_filename
-          #Convert doe E+ file to NECB space types and create osm model.
-          model = BTAP::Compliance::NECB2011::convert_doe_to_necb_reference_building(idf_filename, construction_library_file, construction_set_name, weather_file, set_necb_fdwr)
-          #determine climate zone. 
-          #set default to nil. 
-          weather = nil
-          #set weather file        
-          unless weather_file == nil
-            #Set weather file.
-            weather = BTAP::Environment::WeatherFile.new(weather_file)
-            weather.set_weather_file(model)
-          end
-          new_filename = "#{output_folder}#{File.basename(idf_filename, '.idf')}_#{weather.state_province_region}_#{weather.city}_CZ-#{ BTAP::Compliance::NECB2011::get_climate_zone_name(weather.hdd18)}.osm"
-          BTAP::FileIO::save_osm(model, new_filename)
-          filenames << new_filename
-        end
-        return filenames
-      end
+
 
 
       def self.set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)
@@ -443,91 +401,7 @@ module BTAP
         return true
       end
 
-      # This model converts all DOE to NECB reference building.
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param idf_filename [String]
-      #@param model [OpenStudio::Model::Model]
-      #@param runner [Object]
-      #@return  [OpenStudio::model::Model] model
-      def self.convert_idf_to_osm_with_necb_space_types(idf_filename, model = nil, runner = nil)
 
-        #Load up idf as OSM file and convert spacetypes based on map contained in File.dirname(idf_filename) + "/SpaceTypeConversions.csv"
-        model = BTAP::Compliance::NECB2011::convert_idf_to_osm_and_map_doe_zones_to_necb_space_types(idf_filename, runner)
-
-        #Taking care of wildcard spacetypes. 
-        BTAP::Compliance::NECB2011::set_wildcard_schedules_to_dominant_building_schedule(model, runner)
-
-        #set weather file        
-        BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model, runner)
-
-        #set Construction set.
-        BTAP::Resources::Envelope::ConstructionSets::set_construction_set_by_file(model, construction_library_file, construction_set_name, runner)
-
-        #set NECB u-values to construction. 
-        BTAP::Compliance::NECB2011::set_all_construction_sets_to_necb!(model, runner)
-
-        #Set FWDR
-        BTAP::Compliance::NECB2011::set_necb_fwdr(model, true, runner)
-
-        # Set Surface if they are out of wack.
-        BTAP::Geometry::match_surfaces(model)
-
-        #*** HVAC ***
-        BTAP::Compliance::NECB2011::necb_autozoner(model)
-
-        BTAP::Compliance::NECB2011::set_zones_thermostat_schedule_based_on_space_type_schedules(model, runner)
-
-
-        #*** HVAC ***
-        BTAP::Compliance::NECB2011::necb_autozoner(model)
-
-
-        #Set output for Raymond 
-        #create array of output variables strings from E+
-        output_variable_array =
-            [
-                "Facility Total Electric Demand Power",
-                "Water Heater Gas Rate",
-                "Plant Supply Side Heating Demand Rate",
-                "Heating Coil Gas Rate",
-                "Cooling Coil Electric Power",
-                "Boiler Gas Rate",
-                "Heating Coil Air Heating Rate",
-                "Heating Coil Electric Power",
-                "Cooling Coil Total Cooling Rate",
-                "Water Heater Heating Rate",
-                #          "Facility Total HVAC Electric Demand Power",
-                #          "Facility Total Electric Demand Power",
-                "Zone Air Temperature",
-                "Water Heater Electric Power"
-            #          "Baseboard Air Inlet Temperature",
-            #          "Baseboard Air Outlet Temperature",
-            #          "Baseboard Water Inlet Temperature",
-            #          "Baseboard Water Outlet Temperature",
-            #          "Boiler Inlet Temperature",
-            #          "Boiler Outlet Temperature",
-            #          "Plant Supply Side Inlet Temperature",
-            #          "Plant Supply Side Outlet Temperature",
-            #          "People Radiant Heating Rate",
-            #          "People Sensible Heating Rate",
-            #          "People Latent Gain Rate",
-            #          "People Total Heating Rate",
-            #          "Lights Total Heating Rate",
-            #          "Electric Equipment Total Heating Rate",
-            #          "Other Equipment Total Heating Rate",
-            #          "District Heating Hot Water Rate",
-            #          "District Heating Rate",
-            #          "Air System Outdoor Air Flow Fraction",
-            #          "Air System Outdoor Air Minimum Flow Fraction",
-            #          "Air System Fan Electric Energy"
-            ]
-        BTAP::Reports::set_output_variables(model, "Hourly", output_variable_array)
-        puts "added output variables ..." << output_variable_array.to_s << "\n"
-
-        #Purge unused objects and return osm model object. 
-        model.purgeUnusedResourceObjects
-        return model
-      end
 
       # This method confirms if the type is the proper space type
       #@author phylroy.lopez@nrcan.gc.ca
@@ -637,11 +511,10 @@ module BTAP
           number_of_stories = number_of_stories.get
         end
 
-        #self.get_number_of_above_ground_floors(model, building_type, "NECB 2011", runner)
-        #set up system array containers. These will contain the spaces associated with the system types. 
+        #set up system array containers. These will contain the spaces associated with the system types.
         space_zoning_data_array = []
 
-        #First pass of spaces to collect information into the space_zoning_data_array . 
+        #First pass of spaces to collect information into the space_zoning_data_array .
         model.getSpaces.sort.each do |space|
 
 
@@ -650,16 +523,16 @@ module BTAP
           if space.spaceType.empty?
             space_system_index = nil
           else
-            #gets row information from standards spreadsheet. 
+            #gets row information from standards spreadsheet.
             space_type_property = space.model.find_object($os_standards["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
             raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
-            #stores the Building or SpaceType System type name. 
+            #stores the Building or SpaceType System type name.
             necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
           end
 
 
-          #Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load. 
-          #Make sure we don't have sideeffects by changing the argument variables. 
+          #Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
+          #Make sure we don't have sideeffects by changing the argument variables.
           cooling_load = coolingDesignLoad
           heating_load = heatingDesignLoad
           if space.spaceType.get.standardsSpaceType.get == "- undefined -"
@@ -670,7 +543,7 @@ module BTAP
             heating_load = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heating_load.nil?
           end
 
-          #identify space-system_index and assign the right NECB system type 1-7. 
+          #identify space-system_index and assign the right NECB system type 1-7.
           system = nil
           is_dwelling_unit = false
           case necb_hvac_system_selection_type
@@ -740,9 +613,9 @@ module BTAP
             else
               raise ("NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid")
           end
-          #get placement on floor, core or perimeter and if a top, bottom, middle or single story. 
+          #get placement on floor, core or perimeter and if a top, bottom, middle or single story.
           horizontal_placement, vertical_placement = BTAP::Geometry::Spaces::get_space_placement(space)
-          #dump all info into an array for debugging and iteration. 
+          #dump all info into an array for debugging and iteration.
           unless space.spaceType.empty?
             space_type_name = space.spaceType.get.standardsSpaceType.get
             building_type_name = space.spaceType.get.standardsBuildingType.get
@@ -771,14 +644,14 @@ module BTAP
 
 
       # This method will take a model that uses NECB 2011 spacetypes , and..
-      # 1. Create a building story schema. 
-      # 2. Remove all existing Thermal Zone defintions. 
-      # 3. Create new thermal zones based on the following definitions. 
-      # Rule1 all zones must contain only the same schedule / occupancy schedule. 
-      # Rule2 zones must cater to similar solar gains (N,E,S,W) 
-      # Rule3 zones must not pass from floor to floor. They must be contained to a single floor or level. 
-      # Rule4 Wildcard spaces will be associated with the nearest zone of similar schedule type in which is shared most of it's internal surface with.  
-      # Rule5 For NECB zones must contain spaces of similar system type only. 
+      # 1. Create a building story schema.
+      # 2. Remove all existing Thermal Zone defintions.
+      # 3. Create new thermal zones based on the following definitions.
+      # Rule1 all zones must contain only the same schedule / occupancy schedule.
+      # Rule2 zones must cater to similar solar gains (N,E,S,W)
+      # Rule3 zones must not pass from floor to floor. They must be contained to a single floor or level.
+      # Rule4 Wildcard spaces will be associated with the nearest zone of similar schedule type in which is shared most of it's internal surface with.
+      # Rule5 For NECB zones must contain spaces of similar system type only.
       # Rule6 Residential / dwelling units must not share systems with other space types.
       # @author phylroy.lopez@nrcan.gc.ca
       # @param model [OpenStudio::model::Model] A model object
@@ -800,10 +673,10 @@ module BTAP
               swh_fueltype = "NaturalGas",
               building_type = nil)
 
-        #Create a data struct for the space to system to placement information. 
+        #Create a data struct for the space to system to placement information.
 
 
-        #system assignment. 
+        #system assignment.
         unless ["NaturalGas", "Electricity", "PropaneGas", "FuelOil#1", "FuelOil#2", "Coal", "Diesel", "Gasoline", "OtherFuel1"].include?(boiler_fueltype)
           BTAP::runner_register("ERROR", "boiler_fueltype = #{boiler_fueltype}", runner)
           return
@@ -864,7 +737,7 @@ module BTAP
           return false
         end
 
-        # Ensure that floors have been assigned by user. 
+        # Ensure that floors have been assigned by user.
         raise("No building stories have been defined.. User must define building stories and spaces in model.") unless model.getBuildingStorys.size > 0
         #BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
 
@@ -899,17 +772,17 @@ module BTAP
         end
 
 
-        #remove any thermal zones used for sizing to start fresh. Should only do this after the above system selection method. 
+        #remove any thermal zones used for sizing to start fresh. Should only do this after the above system selection method.
         model.getThermalZones.sort.each {|zone| zone.remove}
 
 
         #now lets apply the rules.
-        # Rule1 all zones must contain only the same schedule / occupancy schedule. 
-        # Rule2 zones must cater to similar solar gains (N,E,S,W) 
-        # Rule3 zones must not pass from floor to floor. They must be contained to a single floor or level. 
-        # Rule4 Wildcard spaces will be associated with the nearest zone of similar schedule type in which is shared most of it's internal surface with.  
-        # Rule5 NECB zones must contain spaces of similar system type only. 
-        # Rule6 Multiplier zone will be part of the floor and orientation of the base space. 
+        # Rule1 all zones must contain only the same schedule / occupancy schedule.
+        # Rule2 zones must cater to similar solar gains (N,E,S,W)
+        # Rule3 zones must not pass from floor to floor. They must be contained to a single floor or level.
+        # Rule4 Wildcard spaces will be associated with the nearest zone of similar schedule type in which is shared most of it's internal surface with.
+        # Rule5 NECB zones must contain spaces of similar system type only.
+        # Rule6 Multiplier zone will be part of the floor and orientation of the base space.
         # Rule7 Residential / dwelling units must not share systems with other space types.
         #Array of system types of Array of Spaces
         system_zone_array = []
@@ -921,7 +794,7 @@ module BTAP
           model.getBuildingStorys.sort.each do |story|
             #puts "Story:#{story}"
             story_counter = story_counter + 1
-            #iterate by operation schedule type. 
+            #iterate by operation schedule type.
             schedule_type_array.each do |schedule_type|
               #iterate by horizontal location
               ["north", "east", "west", "south", "core"].each do |horizontal_placement|
@@ -941,7 +814,7 @@ module BTAP
 
                   #create Thermal Zone if space_array is not empty.
                   if space_array.size > 0
-                    # Process spaces that have multipliers associated with them first. 
+                    # Process spaces that have multipliers associated with them first.
                     # This map define the multipliers for spaces with multipliers not equals to 1
                     space_multiplier_map = {}
                     # This map define the multipliers for spaces with multipliers not equals to 1
@@ -959,13 +832,13 @@ module BTAP
                     end
                     #create new zone and add the spaces to it.
                     space_array.each do |space|
-                      # Create thermalzone for each space. 
+                      # Create thermalzone for each space.
                       thermal_zone = OpenStudio::Model::ThermalZone.new(model)
-                      # Create a more informative space name.  
+                      # Create a more informative space name.
                       thermal_zone.setName("Sp-#{space.name} Sys-#{system_number.to_s} Flr-#{story_counter.to_s} Sch-#{schedule_type.to_s} HPlcmt-#{horizontal_placement} ZN")
-                      # Add zone mulitplier if required. 
+                      # Add zone mulitplier if required.
                       thermal_zone.setMultiplier(space_multiplier_map[space.name.to_s]) unless space_multiplier_map[space.name.to_s].nil?
-                      # Space to thermal zone. (for archetype work it is one to one) 
+                      # Space to thermal zone. (for archetype work it is one to one)
                       space.setThermalZone(thermal_zone)
                       # Get thermostat for space type if it already exists.
                       space_type_name = space.spaceType.get.name.get
@@ -1036,7 +909,7 @@ module BTAP
             end
           end
         else
-          #otherwise use ideal loads. 
+          #otherwise use ideal loads.
           model.getThermalZones.sort.each do |thermal_zone|
             thermal_zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
             thermal_zone_ideal_loads.addToThermalZone(thermal_zone)

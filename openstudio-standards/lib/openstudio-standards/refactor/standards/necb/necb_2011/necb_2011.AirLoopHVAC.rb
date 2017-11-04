@@ -16,9 +16,10 @@ NECB_2011_Model.class_eval do
   # 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B', 'ASHRAE 169-2006-5C', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
   # 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
   # @return [Bool] returns true if an economizer is required, false if not
-  def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
+  def air_loop_hvac_economizer_required?(air_loop_hvac)
     economizer_required = false
 
+    #need a better way to determine if an economizer is needed.
     return economizer_required if air_loop_hvac.name.to_s.include? 'Outpatient F1'
 
     # A big number of btu per hr as the minimum requirement

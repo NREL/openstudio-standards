@@ -295,8 +295,8 @@ module OpenstudioStandards
     require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model.elevators"
     require_relative "#{proto}/ashrae90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
     # NECB 2011    
-    require_relative "#{proto}/necb/necb_2011/buildings/necb2011_high_rise_apartment"
-    require_relative "#{proto}/necb/necb_2011/buildings/necb2011_prototypes"
+
+
     require_relative "#{proto}/necb/necb_2011/necb_2011.FanConstantVolume"
     require_relative "#{proto}/necb/necb_2011/necb_2011.FanVariableVolume"
     require_relative "#{proto}/necb/necb_2011/necb_2011.Model.hvac"    

@@ -1,3 +1,5 @@
+
+
 #Repopening Standards Class
 StandardsModel.class_eval do
 # I am replacing all prototype inputs.
@@ -18,7 +20,9 @@ StandardsModel.class_eval do
     end
     case instvartemplate
       when 'NECB 2011'
-        model = load_osm_data(@geometry_file) #standard candidate
+        #prototype generation.
+        model = load_initial_osm(@geometry_file) #standard candidate
+        model.yearDescription.get.setDayofWeekforStartDay('Sunday')
         model.add_design_days_and_weather_file(climate_zone, epw_file) #Standards
         model.add_ground_temperatures(@instvarbuilding_type, climate_zone, instvartemplate) #prototype candidate
         model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
@@ -34,16 +38,17 @@ StandardsModel.class_eval do
         # For some building types, stories are defined explicitly
 
         return false if model.runSizingRun("#{sizing_run_dir}/SR0") == false
+        #Create Reference HVAC Systems.
         model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file) #standards for NECB Prototype for NREL candidate
         model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
-        model_apply_sizing_parameters(model, @instvarbuilding_type)
-        model.yearDescription.get.setDayofWeekforStartDay('Sunday')
+        model_apply_sizing_parameters(model)
+
+
+
         #set a larger tolerance for unmet hours from default 0.2 to 1.0C
         model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
         model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
         return false if model.runSizingRun("#{sizing_run_dir}/SR1") == false
-        #this doesn nothing for NECB
-        model_apply_multizone_vav_outdoor_air_sizing(model)
         # This is needed for NECB 2011 as a workaround for sizing the reheat boxes
         model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
         # Apply the prototype HVAC assumptions
@@ -64,9 +69,7 @@ StandardsModel.class_eval do
         # Add daylighting controls per standard
         # only four zones in large hotel have daylighting controls
         # todo: YXC to merge to the main function
-        model_add_daylighting_controls(model)
-        model_update_exhaust_fan_efficiency(model)
-        model_update_fan_efficiency(model)
+        model_add_daylighting_controls(model) # to be removed after refactor.
         # Add output variables for debugging
         model_request_timeseries_outputs(model) if debug
       else
@@ -77,7 +80,7 @@ StandardsModel.class_eval do
           #this is required to be blank otherwise it may cause side effects.
           epw_file = ""
         end
-        model = load_osm_data(@geometry_file)
+        model = load_initial_osm(@geometry_file)
         model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
         model_assign_space_type_stubs(model, @lookup_building_type, @space_type_map)
         model_add_loads(model)
@@ -134,42 +137,7 @@ StandardsModel.class_eval do
     return model
   end
 
-  # Loads a osm as a starting point.
-  #
-  # @param building_type [String] the building type
-  # @param climate_zone [String] the climate zone
-  # @return [Bool] returns true if successful, false if not
-  def load_osm_data(osm_file)
-    # Load the geometry .osm
-    osm_model_path = OpenStudio::Path.new(osm_file.to_s)
-    #Upgrade version if required.
-    version_translator = OpenStudio::OSVersion::VersionTranslator.new
-    model = version_translator.loadModel(osm_model_path).get
-    if model.getBuildingStorys.size < 1
-      raise("Building Storeys are not set in the model #{osm_model_path}. \n Please define the building stories and the spaces associated with them before running in standards.")
-    end
-    if model.getThermalZones.size < 1
-      raise("ThermalZones are not set in the model #{osm_model_path}. \n Please define the building stories and the spaces associated with them before running in standards.")
-    end
-    if model.getBuilding.standardsNumberOfStories.empty?
-      raise("standardsNumberOfStories are not set in the model #{osm_model_path}. \n Please define the stndards number of stories  before running in standards.")
-    end
-    if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
-      raise("standardsNumberOfAboveStories are not set in the model#{osm_model_path}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
-    end
 
-
-    #ensure that model is intersected correctly.
-    model.getSpaces.each {|space1| model.getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
-    #Get multipliers from TZ in model. Need this for HVAC contruction.
-    @space_multiplier_map  = {}
-    model.getSpaces.sort.each do |space|
-      @space_multiplier_map[space.name.get] = space.multiplier() if space.multiplier() > 1
-    end
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
-    return model
-  end
 
   # Replaces all objects in the current model
   # with the objects in the .osm.  Typically used to
@@ -1176,8 +1144,7 @@ StandardsModel.class_eval do
             htg = 1.0
         end
       when 'NECB 2011'
-        clg = 1.3
-        htg = 1.3
+        raise("do not use this method for NECB")
       else
         # Use the sizing factors from 90.1 PRM
         clg = 1.15
@@ -1198,9 +1165,10 @@ StandardsModel.class_eval do
 
     # Fans
     # Pressure Rise
-    model.getFanConstantVolumes.sort.each {|obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj, building_type, climate_zone)}
-    model.getFanVariableVolumes.sort.each {|obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj, building_type, climate_zone)}
-    model.getFanOnOffs.sort.each {|obj| fan_on_off_apply_prototype_fan_pressure_rise(obj, building_type, climate_zone)}
+
+    model.getFanConstantVolumes.sort.each {|obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj)}
+    model.getFanVariableVolumes.sort.each {|obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj)}
+    model.getFanOnOffs.sort.each {|obj| fan_on_off_apply_prototype_fan_pressure_rise(obj)}
     model.getFanZoneExhausts.sort.each {|obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj)}
 
     # Motor Efficiency
@@ -1214,71 +1182,7 @@ StandardsModel.class_eval do
     
     ##### Add Economizers
 
-    if instvartemplate != 'NECB 2011'
-      # Create an economizer maximum OA fraction of 70%
-      # to reflect damper leakage per PNNL
-      econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      econ_max_70_pct_oa_sch.setName('Economizer Max OA Fraction 70 pct')
-      econ_max_70_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 70 pct Default')
-      econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
-    else
-      # NECB 2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
-      econ_max_100_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      econ_max_100_pct_oa_sch.setName('Economizer Max OA Fraction 100 pct')
-      econ_max_100_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 100 pct Default')
-      econ_max_100_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
-    end
-
-    # Check each airloop
-    model.getAirLoopHVACs.sort.each do |air_loop|
-      if air_loop_hvac_economizer_required?(air_loop, climate_zone) == true
-        # If an economizer is required, determine the economizer type
-        # in the prototype buildings, which depends on climate zone.
-        economizer_type = nil
-        case instvartemplate
-          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
-            economizer_type = 'DifferentialDryBulb'
-          when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-            case climate_zone
-              when 'ASHRAE 169-2006-1A',
-                  'ASHRAE 169-2006-2A',
-                  'ASHRAE 169-2006-3A',
-                  'ASHRAE 169-2006-4A'
-                economizer_type = 'DifferentialEnthalpy'
-              else
-                economizer_type = 'DifferentialDryBulb'
-            end
-          when 'NECB 2011'
-            # NECB 5.2.2.8 states that economizer can be controlled based on difference betweeen
-            # return air temperature and outside air temperature OR return air enthalpy
-            # and outside air enthalphy; latter chosen to be consistent with MNECB and CAN-QUEST implementation
-            economizer_type = 'DifferentialEnthalpy'
-        end
-
-        # Set the economizer type
-        # Get the OA system and OA controller
-        oa_sys = air_loop.airLoopHVACOutdoorAirSystem
-        if oa_sys.is_initialized
-          oa_sys = oa_sys.get
-        else
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but it has no OA system.")
-          next
-        end
-        oa_control = oa_sys.getControllerOutdoorAir
-        oa_control.setEconomizerControlType(economizer_type)
-        if instvartemplate != 'NECB 2011'
-          # oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
-        end
-
-        # Check that the economizer type set by the prototypes
-        # is not prohibited by code.  If it is, change to no economizer.
-        unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone)
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{}, climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
-          oa_control.setEconomizerControlType('NoEconomizer')
-        end
-
-      end
-    end
+    apply_economizers(climate_zone, model)
 
     # TODO: What is the logic behind hard-sizing
     # hot water coil convergence tolerances?
@@ -1741,7 +1645,6 @@ StandardsModel.class_eval do
     return final_groups
   end
 
-  private
 
   # Method to multiply the values in a day schedule by a specified value
   # but only when the existing value is higher than a specified lower limit.
@@ -1769,6 +1672,76 @@ StandardsModel.class_eval do
       day_sch.addValue(times[i], new_value)
     end
   end # end reduce schedule
+
+  def apply_economizers(climate_zone, model)
+    if instvartemplate != 'NECB 2011'
+      # Create an economizer maximum OA fraction of 70%
+      # to reflect damper leakage per PNNL
+      econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+      econ_max_70_pct_oa_sch.setName('Economizer Max OA Fraction 70 pct')
+      econ_max_70_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 70 pct Default')
+      econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
+    else
+      # NECB 2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
+      econ_max_100_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+      econ_max_100_pct_oa_sch.setName('Economizer Max OA Fraction 100 pct')
+      econ_max_100_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 100 pct Default')
+      econ_max_100_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
+    end
+
+    # Check each airloop
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      if air_loop_hvac_economizer_required?(air_loop, climate_zone) == true
+        # If an economizer is required, determine the economizer type
+        # in the prototype buildings, which depends on climate zone.
+        economizer_type = nil
+        case instvartemplate
+          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
+            economizer_type = 'DifferentialDryBulb'
+          when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
+            case climate_zone
+              when 'ASHRAE 169-2006-1A',
+                  'ASHRAE 169-2006-2A',
+                  'ASHRAE 169-2006-3A',
+                  'ASHRAE 169-2006-4A'
+                economizer_type = 'DifferentialEnthalpy'
+              else
+                economizer_type = 'DifferentialDryBulb'
+            end
+          when 'NECB 2011'
+            # NECB 5.2.2.8 states that economizer can be controlled based on difference betweeen
+            # return air temperature and outside air temperature OR return air enthalpy
+            # and outside air enthalphy; latter chosen to be consistent with MNECB and CAN-QUEST implementation
+            economizer_type = 'DifferentialEnthalpy'
+        end
+
+        # Set the economizer type
+        # Get the OA system and OA controller
+        oa_sys = air_loop.airLoopHVACOutdoorAirSystem
+        if oa_sys.is_initialized
+          oa_sys = oa_sys.get
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but it has no OA system.")
+          next
+        end
+        oa_control = oa_sys.getControllerOutdoorAir
+        oa_control.setEconomizerControlType(economizer_type)
+        if instvartemplate != 'NECB 2011'
+          # oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
+        end
+
+        # Check that the economizer type set by the prototypes
+        # is not prohibited by code.  If it is, change to no economizer.
+        unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone)
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{}, climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
+          oa_control.setEconomizerControlType('NoEconomizer')
+        end
+
+      end
+    end
+  end
+
+
 end
 
 

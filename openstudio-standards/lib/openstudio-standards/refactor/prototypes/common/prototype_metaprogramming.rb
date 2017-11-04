@@ -57,7 +57,6 @@ class #{template}#{name} < #{template}_Prototype
   attr_accessor :space_type_map
   attr_accessor :geometry_file
   attr_accessor :building_story_map
-  attr_accessor :space_multiplier_map 
   attr_accessor :system_to_space_map
   def initialize
     super()
@@ -96,9 +95,7 @@ class #{template}#{name} < #{template}_Prototype
     return @system_to_space_map
   end
 
-  def define_space_multiplier
-    return @space_multiplier_map
-  end
+
 
  def define_building_story_map(building_type, climate_zone)
     return @building_story_map

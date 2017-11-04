@@ -4,6 +4,7 @@
 # by a child class, the implementation in the child class is used.
 # @abstract
 class StandardsModel
+  attr_reader :standards_data
   @@data_folder = "#{File.dirname(__FILE__)}/../../../../data"
 
   # The code below is required for the factory method. For an explanation see

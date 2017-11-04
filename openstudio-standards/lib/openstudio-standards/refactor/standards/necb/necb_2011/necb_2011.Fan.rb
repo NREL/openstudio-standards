@@ -1,7 +1,8 @@
 
 # A variety of fan calculation methods that are the same regardless of fan type.
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
-module NECBFan
+# open the class to add methods to return sizing values
+NECB_2011_Model.class_eval do
   # Determines the baseline fan impeller efficiency
   # based on the specified fan type.
   #
