@@ -1227,6 +1227,7 @@ class OpenStudio::Model::Model
     air_loop.setAvailabilitySchedule(hvac_op_sch)
 
     # Some exceptions for the Outpatient
+=begin # The values set in this code aren't actually ever used.
     if sys_name.include? 'PVAV Outpatient F1'
       # Outpatient two AHU1 and AHU2 have different HVAC schedule
       hvac_op_sch = add_schedule('OutPatientHealthCare AHU1-Fan_Pre2004')
@@ -1246,7 +1247,8 @@ class OpenStudio::Model::Model
       zn_dsn_clg_sa_temp_f = 55 # zone cooling design SAT
       zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
     end
-
+=end
+    
     # Air handler controls
     stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self, sa_temp_sch)
     stpt_manager.addToNode(air_loop.supplyOutletNode)
