@@ -117,7 +117,7 @@ class TestRefactorParallel < Minitest::Test
 
   ]
 
-  nrel_templates = ['90.1-2010'] #, 'DOE Ref Pre-1980']
+  nrel_templates = ['90.1-2004','90.1-2007','90.1-2010','90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004']
   nrel_climate_zones = ['ASHRAE 169-2006-1A']
   nrel_epw_files = [nil] # we will need to keep this overloaded to keep arguments consistant.
   nrel_runs = self.create_runs_jobs(nrel_templates, nrel_building_types, nrel_climate_zones, nrel_epw_files)
