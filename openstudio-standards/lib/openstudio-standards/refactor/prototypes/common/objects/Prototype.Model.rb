@@ -182,6 +182,34 @@ StandardsModel.class_eval do
     return true
   end
 
+
+
+  def get_space_type_maps_from_model(model)
+    #check to see if there are s
+    #Do all spaces have Spacetypes?
+    all_spaces_have_space_types = true
+    #Do all spacetypes have StandardSpaceTypes
+    all_spaceTypes_have_standard_space_types = true
+    space_type_map = {}
+    model.getSpaces.each do |space|
+      if space.spaceType.empty?
+        all_spaces_have_space_types = false
+      else
+        if space.spaceType.get.standardsSpaceType.empty?
+          all_spaceTypes_have_standard_space_types = false
+        else
+          space_type_map[space.spaceType.get.standardsSpaceType().get.to_s] = [] if space_type_map[space.spaceType.get.standardsSpaceType()].nil?
+          space_type_map[space.spaceType.get.standardsSpaceType().get.to_s] << space.name.get
+        end
+      end
+    end
+    if  all_spaceTypes_have_standard_space_types and all_spaceTypes_have_standard_space_types
+      return space_type_map
+    end
+    return nil
+  end
+
+
   # Reads in a mapping between names of space types and
   # names of spaces in the model, creates an empty OpenStudio::Model::SpaceType
   # (no loads, occupants, schedules, etc.) for each space type, and assigns this

@@ -4508,6 +4508,18 @@ class StandardsModel
     if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
       raise("standardsNumberOfAboveStories are not set in the model#{osm_model_path}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
     end
+
+
+    if @space_type_map.nil? or @space_type_map.empty?
+      @space_type_maps = get_space_type_maps_from_model(model)
+      if @space_type_maps.nil? or @space_type_maps.empty?
+        raise("space_type_maps are not set in the model#{osm_model_path}, or in standards database#{@space_type_maps}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from osm file: #{osm_model_path}")
+      end
+    end
+
+
     #ensure that model is intersected correctly.
     model.getSpaces.each {|space1| model.getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
     #Get multipliers from TZ in model. Need this for HVAC contruction.
