@@ -62,7 +62,7 @@ OS:Surface,
 OS:Space,
   {227a53df-c60f-4814-9986-7262c5ebf0b0}, !- Handle
   Dining,                                 !- Name
-  {522f554d-75a3-401d-84e8-e5a2216fceba}, !- Space Type Name
+  {c33e0809-1f23-4228-bfe5-6fff2e786a05}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -94,7 +94,7 @@ OS:Surface,
 OS:Space,
   {ca5649c5-cc8d-4b71-9941-b893da8ba6a1}, !- Handle
   Kitchen,                                !- Name
-  {7cd767f1-70a3-44d4-9f65-377a012a0df4}, !- Space Type Name
+  {29e47332-fb8b-4f60-b96f-bda9e5d0609e}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -159,7 +159,7 @@ OS:Surface,
 OS:Space,
   {597594ef-5c7d-4f39-88b9-691ef2d8a8eb}, !- Handle
   attic,                                  !- Name
-  {b2f79fc6-d73d-48cf-9603-406c706fd7a7}, !- Space Type Name
+  {a64c789e-9065-4be0-8096-3d698aac0a8c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -184,7 +184,7 @@ OS:HeatBalanceAlgorithm,
 
 OS:Building,
   {2359408b-6252-42dc-81e2-5632894e0032}, !- Handle
-  -QuickServiceRestaurant-ASHRAE 169-2006-1A created: 2017-11-05 00:50:31 +0000, !- Name
+  A90_1_2010QuickServiceRestaurant,       !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -777,51 +777,51 @@ OS:ZoneHVAC:EquipmentList,
   {bb336d85-c8ac-402b-a8e1-7a30a51fa50a}; !- Thermal Zone
 
 OS:SpaceType,
-  {522f554d-75a3-401d-84e8-e5a2216fceba}, !- Handle
+  {c33e0809-1f23-4228-bfe5-6fff2e786a05}, !- Handle
   QuickServiceRestaurant Dining,          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {7c1f2a75-3cf7-44b7-8eea-9804d5ba12e1}, !- Group Rendering Name
+  {904ca7ca-bdc1-459a-9a65-54543dd83ae1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   QuickServiceRestaurant,                 !- Standards Building Type
   Dining;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {7c1f2a75-3cf7-44b7-8eea-9804d5ba12e1}, !- Handle
+  {904ca7ca-bdc1-459a-9a65-54543dd83ae1}, !- Handle
   QuickServiceRestaurant Dining,          !- Name
   31,                                     !- Rendering Red Value
   169,                                    !- Rendering Green Value
   34;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {7cd767f1-70a3-44d4-9f65-377a012a0df4}, !- Handle
+  {29e47332-fb8b-4f60-b96f-bda9e5d0609e}, !- Handle
   QuickServiceRestaurant Kitchen,         !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {5346ac9f-9bf4-4b9a-8f9e-5b69065efbef}, !- Group Rendering Name
+  {2c26f6e4-731d-4a8c-9f0a-4f2aedbea5ca}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   QuickServiceRestaurant,                 !- Standards Building Type
   Kitchen;                                !- Standards Space Type
 
 OS:Rendering:Color,
-  {5346ac9f-9bf4-4b9a-8f9e-5b69065efbef}, !- Handle
+  {2c26f6e4-731d-4a8c-9f0a-4f2aedbea5ca}, !- Handle
   QuickServiceRestaurant Kitchen,         !- Name
   78,                                     !- Rendering Red Value
   222,                                    !- Rendering Green Value
   133;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {b2f79fc6-d73d-48cf-9603-406c706fd7a7}, !- Handle
+  {a64c789e-9065-4be0-8096-3d698aac0a8c}, !- Handle
   QuickServiceRestaurant Attic,           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {11efa7cd-1bb9-430f-955a-8038a41a9396}, !- Group Rendering Name
+  {d9308427-a100-47b8-83f7-27f1b021f57e}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   QuickServiceRestaurant,                 !- Standards Building Type
   Attic;                                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {11efa7cd-1bb9-430f-955a-8038a41a9396}, !- Handle
+  {d9308427-a100-47b8-83f7-27f1b021f57e}, !- Handle
   QuickServiceRestaurant Attic,           !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value

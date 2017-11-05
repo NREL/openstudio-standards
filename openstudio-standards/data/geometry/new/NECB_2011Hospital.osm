@@ -164,7 +164,7 @@ OS:ThermostatSetpoint:DualSetpoint,
 
 OS:Building,
   {161a51f0-9700-4aa1-8ba8-f2513d0eecae}, !- Handle
-  -Hospital-NECB HDD Method-CAN_BC_Vancouver.718920_CWEC.epw created: 2017-11-05 00:50:32 +0000, !- Name
+  NECB_2011Hospital,                      !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -1580,7 +1580,7 @@ OS:BuildingStory,
 OS:Space,
   {d65f8740-1a1c-4333-9777-1d8c4b3d8c8c}, !- Handle
   Basement,                               !- Name
-  {5a939237-7554-47f9-b22c-3e13f9b75c3a}, !- Space Type Name
+  {d0fab25d-93ad-4d69-a3a1-663be6d36a13}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -1715,7 +1715,7 @@ OS:BuildingStory,
 OS:Space,
   {81d22812-3e36-4173-af2d-bc7c16c7d78d}, !- Handle
   Lobby_Records_Flr_1,                    !- Name
-  {aa71cdf2-9e0e-44c5-8bfd-37a78f5bfd88}, !- Space Type Name
+  {f32238b3-9c61-48df-b4be-4e6e7e98eac6}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -1922,7 +1922,7 @@ OS:Surface,
 OS:Space,
   {d02a2ad8-7579-4e33-845e-5db0f25d0008}, !- Handle
   Office1_Mult4_Flr_1,                    !- Name
-  {bb2a9ec1-e571-41e9-a01f-149f08e67f79}, !- Space Type Name
+  {1b79017e-ce55-4c5f-b89d-8c0d70a2ca23}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -2040,7 +2040,7 @@ OS:Surface,
 OS:Space,
   {a936d8c6-c80f-43e4-b674-f0ff7d5e49d1}, !- Handle
   Corridor_Flr_1,                         !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {725db32f-522f-4400-98ce-0dd075b086ef}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -2192,7 +2192,7 @@ OS:Surface,
 OS:Space,
   {b23209bb-38f3-4318-9460-da4deabe6b40}, !- Handle
   ER_Exam1_Mult4_Flr_1,                   !- Name
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Space Type Name
+  {7fdce7d3-5c53-4f02-8147-dd1947d1520c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -2310,7 +2310,7 @@ OS:Surface,
 OS:Space,
   {1d5f3348-db9f-441a-a8ca-1e7e9bdd085e}, !- Handle
   ER_Trauma1_Flr_1,                       !- Name
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Space Type Name
+  {7fdce7d3-5c53-4f02-8147-dd1947d1520c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -2428,7 +2428,7 @@ OS:Surface,
 OS:Space,
   {aead3fc1-6c8e-4cdb-9754-f28c1cd36458}, !- Handle
   ER_NurseStn_Lobby_Flr_1,                !- Name
-  {c9ee655b-3406-4d97-bb35-f3f4025f4d94}, !- Space Type Name
+  {0563f406-dc19-44b5-9570-597480c99474}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -2669,7 +2669,7 @@ OS:Surface,
 OS:Space,
   {b01e3f70-f15b-47a0-9257-d61db8335be1}, !- Handle
   ER_Exam3_Mult4_Flr_1,                   !- Name
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Space Type Name
+  {7fdce7d3-5c53-4f02-8147-dd1947d1520c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -2787,7 +2787,7 @@ OS:Surface,
 OS:Space,
   {c910f030-8bcd-4dfc-b1f1-7baea1152c07}, !- Handle
   ER_Triage_Mult4_Flr_1,                  !- Name
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Space Type Name
+  {7fdce7d3-5c53-4f02-8147-dd1947d1520c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -2905,7 +2905,7 @@ OS:Surface,
 OS:Space,
   {410e49cd-45e4-4016-8f16-212725295496}, !- Handle
   ER_Trauma2_Flr_1,                       !- Name
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Space Type Name
+  {7fdce7d3-5c53-4f02-8147-dd1947d1520c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -3040,7 +3040,7 @@ OS:BuildingStory,
 OS:Space,
   {f5b324b3-dbf9-4b4b-9031-c17101370e8a}, !- Handle
   ICU_Flr_2,                              !- Name
-  {82221dec-4b6e-4351-a1f8-5a3b8d795c5a}, !- Space Type Name
+  {509d6d02-16ab-4468-a4f1-91f6baf7e1b7}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -3175,7 +3175,7 @@ OS:Surface,
 OS:Space,
   {8e17b66e-323d-41da-8c6a-6e0fe5248ece}, !- Handle
   Corridor_Flr_2,                         !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {725db32f-522f-4400-98ce-0dd075b086ef}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -3361,7 +3361,7 @@ OS:Surface,
 OS:Space,
   {b3dcd733-cd31-439f-994e-336197e75839}, !- Handle
   OR_NurseStn_Lobby_Flr_2,                !- Name
-  {c9ee655b-3406-4d97-bb35-f3f4025f4d94}, !- Space Type Name
+  {0563f406-dc19-44b5-9570-597480c99474}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -3598,7 +3598,7 @@ OS:Surface,
 OS:Space,
   {fc06ee3b-170b-4c5d-8a5a-6565b48ae47d}, !- Handle
   ICU_NurseStn_Lobby_Flr_2,               !- Name
-  {c9ee655b-3406-4d97-bb35-f3f4025f4d94}, !- Space Type Name
+  {0563f406-dc19-44b5-9570-597480c99474}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -3769,7 +3769,7 @@ OS:Surface,
 OS:Space,
   {56f10cd4-f89c-4060-b7ff-f2ffeb2a5784}, !- Handle
   OR4_Flr_2,                              !- Name
-  {62646936-a5e0-4ada-97f8-b0c01355ee00}, !- Space Type Name
+  {2b63287d-2518-4c78-b1cf-389c5ab7680e}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -3887,7 +3887,7 @@ OS:Surface,
 OS:Space,
   {6a1edc7d-07e3-4e23-a3dd-8df1bf3933ff}, !- Handle
   OR2_Mult5_Flr_2,                        !- Name
-  {62646936-a5e0-4ada-97f8-b0c01355ee00}, !- Space Type Name
+  {2b63287d-2518-4c78-b1cf-389c5ab7680e}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -4005,7 +4005,7 @@ OS:Surface,
 OS:Space,
   {fb0117cb-af3f-42d4-80ea-66d3f103fc92}, !- Handle
   IC_PatRoom3_Mult6_Flr_2,                !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -4123,7 +4123,7 @@ OS:Surface,
 OS:Space,
   {50c2c50b-68d8-4a18-a0b9-9587b3ce6ce0}, !- Handle
   OR3_Flr_2,                              !- Name
-  {62646936-a5e0-4ada-97f8-b0c01355ee00}, !- Space Type Name
+  {2b63287d-2518-4c78-b1cf-389c5ab7680e}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -4241,7 +4241,7 @@ OS:Surface,
 OS:Space,
   {2e542505-aee2-4690-adc4-c7c63197da6c}, !- Handle
   OR1_Flr_2,                              !- Name
-  {62646936-a5e0-4ada-97f8-b0c01355ee00}, !- Space Type Name
+  {2b63287d-2518-4c78-b1cf-389c5ab7680e}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -4359,7 +4359,7 @@ OS:Surface,
 OS:Space,
   {331ebb1a-b2a9-4582-aeaf-b6cac2160cce}, !- Handle
   IC_PatRoom2_Flr_2,                      !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -4494,7 +4494,7 @@ OS:Surface,
 OS:Space,
   {6363e740-8ac6-4998-9011-aa336d0c62d9}, !- Handle
   IC_PatRoom1_Mult5_Flr_2,                !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -4629,7 +4629,7 @@ OS:BuildingStory,
 OS:Space,
   {e475a324-b7fe-4d83-a6af-cbc30515e7e3}, !- Handle
   PatRoom6_Flr_3,                         !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -4764,7 +4764,7 @@ OS:Surface,
 OS:Space,
   {052f43eb-ddd2-4e64-bd88-0a26686f697f}, !- Handle
   Corridor_SE_Flr_3,                      !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {725db32f-522f-4400-98ce-0dd075b086ef}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -5126,7 +5126,7 @@ OS:Surface,
 OS:Space,
   {b75b74de-d3c4-408d-86b4-f78927d0e863}, !- Handle
   PatRoom1_Mult10_Flr_3,                  !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -5244,7 +5244,7 @@ OS:Surface,
 OS:Space,
   {cfd0f121-e7cd-4e37-85dc-7904163b4987}, !- Handle
   PatRoom2_Flr_3,                         !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -5379,7 +5379,7 @@ OS:Surface,
 OS:Space,
   {f0492fb6-3401-451f-b476-b734664bade7}, !- Handle
   PatRoom7_Mult10_Flr_3,                  !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -5497,7 +5497,7 @@ OS:Surface,
 OS:Space,
   {f657f73c-aff8-4870-80f4-79ee36ab1724}, !- Handle
   PatRoom3_Mult10_Flr_3,                  !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -5615,7 +5615,7 @@ OS:Surface,
 OS:Space,
   {c8305584-88f0-4d0b-9a19-9a8601f2215d}, !- Handle
   Corridor_NW_Flr_3,                      !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {725db32f-522f-4400-98ce-0dd075b086ef}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -5960,7 +5960,7 @@ OS:Surface,
 OS:Space,
   {22290951-19f6-474f-a011-fb1c867eee80}, !- Handle
   Lab_Flr_3,                              !- Name
-  {5a939237-7554-47f9-b22c-3e13f9b75c3a}, !- Space Type Name
+  {d0fab25d-93ad-4d69-a3a1-663be6d36a13}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -6116,7 +6116,7 @@ OS:Surface,
 OS:Space,
   {e494cea2-4abd-4968-adee-7c2bba8c9841}, !- Handle
   NurseStn_Lobby_Flr_3,                   !- Name
-  {c9ee655b-3406-4d97-bb35-f3f4025f4d94}, !- Space Type Name
+  {0563f406-dc19-44b5-9570-597480c99474}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -6359,7 +6359,7 @@ OS:Surface,
 OS:Space,
   {29a8ebd7-ac6a-4bc0-a0bb-dcea45220ce9}, !- Handle
   PhysTherapy_Flr_3,                      !- Name
-  {122d4723-1efe-4d95-9722-377ae07e7ce8}, !- Space Type Name
+  {694bb810-5596-4c98-9e35-937d88339f36}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -6479,7 +6479,7 @@ OS:Surface,
 OS:Space,
   {f14ad2c1-11a0-4529-960d-3f401476ca68}, !- Handle
   PatRoom8_Flr_3,                         !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -6614,7 +6614,7 @@ OS:Surface,
 OS:Space,
   {1dcfe795-5eab-427d-bb11-2a8f8ab61df3}, !- Handle
   PatRoom5_Mult10_Flr_3,                  !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -6732,7 +6732,7 @@ OS:Surface,
 OS:Space,
   {59d2ee52-0dad-4ed6-a200-f6a0f26c021f}, !- Handle
   PatRoom4_Flr_3,                         !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -6883,7 +6883,7 @@ OS:BuildingStory,
 OS:Space,
   {2c631e7f-2d44-4d61-a37b-ebf17ce8fe49}, !- Handle
   PatRoom6_Flr_4,                         !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -7018,7 +7018,7 @@ OS:Surface,
 OS:Space,
   {c9362d24-0770-4cce-ae56-602531fc7ad3}, !- Handle
   Corridor_SE_Flr_4,                      !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {725db32f-522f-4400-98ce-0dd075b086ef}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -7380,7 +7380,7 @@ OS:Surface,
 OS:Space,
   {56ba66b4-acde-41c2-9975-63686e2740e0}, !- Handle
   PatRoom1_Mult10_Flr_4,                  !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -7498,7 +7498,7 @@ OS:Surface,
 OS:Space,
   {a042e062-e206-4703-a9ba-9d99013c3310}, !- Handle
   PatRoom2_Flr_4,                         !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -7633,7 +7633,7 @@ OS:Surface,
 OS:Space,
   {c151c2a7-5b90-4f8a-83da-0407ffc85225}, !- Handle
   PatRoom7_Mult10_Flr_4,                  !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -7751,7 +7751,7 @@ OS:Surface,
 OS:Space,
   {2bc73636-c15e-4dd5-8c04-762ded9b931e}, !- Handle
   PatRoom3_Mult10_Flr_4,                  !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -7869,7 +7869,7 @@ OS:Surface,
 OS:Space,
   {6b83d86d-58d6-49fb-973f-8b65317821c4}, !- Handle
   Corridor_NW_Flr_4,                      !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {725db32f-522f-4400-98ce-0dd075b086ef}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -8214,7 +8214,7 @@ OS:Surface,
 OS:Space,
   {5c8365ed-b8d7-4844-bf42-27164c3ff933}, !- Handle
   Lab_Flr_4,                              !- Name
-  {5a939237-7554-47f9-b22c-3e13f9b75c3a}, !- Space Type Name
+  {d0fab25d-93ad-4d69-a3a1-663be6d36a13}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -8368,7 +8368,7 @@ OS:Surface,
 OS:Space,
   {c29a148d-3ce7-416a-b9c8-6c36e095cfd8}, !- Handle
   NurseStn_Lobby_Flr_4,                   !- Name
-  {c9ee655b-3406-4d97-bb35-f3f4025f4d94}, !- Space Type Name
+  {0563f406-dc19-44b5-9570-597480c99474}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -8611,7 +8611,7 @@ OS:Surface,
 OS:Space,
   {786210a9-f712-484a-943a-91dac40008cc}, !- Handle
   Radiology_Flr_4,                        !- Name
-  {f9a7be2d-350f-4b18-b097-043c36488f38}, !- Space Type Name
+  {f47f6124-09d5-42a0-a6cd-d2a3aa3c76b4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -8729,7 +8729,7 @@ OS:Surface,
 OS:Space,
   {781f0778-e6d3-4693-a705-422ddb91a879}, !- Handle
   PatRoom8_Flr_4,                         !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -8864,7 +8864,7 @@ OS:Surface,
 OS:Space,
   {bf767170-6183-43d0-a1f2-e83c2da96224}, !- Handle
   PatRoom5_Mult10_Flr_4,                  !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -8982,7 +8982,7 @@ OS:Surface,
 OS:Space,
   {8bf403ae-7830-4113-b0be-7e8c8cc481ec}, !- Handle
   PatRoom4_Flr_4,                         !- Name
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Space Type Name
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -9677,7 +9677,7 @@ OS:BuildingStory,
 OS:Space,
   {cd21f8d0-03aa-4d07-a5bb-c171a57e6b9d}, !- Handle
   Office1_Flr_5,                          !- Name
-  {bb2a9ec1-e571-41e9-a01f-149f08e67f79}, !- Space Type Name
+  {1b79017e-ce55-4c5f-b89d-8c0d70a2ca23}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -9795,7 +9795,7 @@ OS:Surface,
 OS:Space,
   {743fe4a2-ec53-4710-b504-7005dc6742d8}, !- Handle
   Corridor_Flr_5,                         !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {725db32f-522f-4400-98ce-0dd075b086ef}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -10053,7 +10053,7 @@ OS:Surface,
 OS:Space,
   {a7fdff4c-6d5f-4911-99ae-d14edf95c714}, !- Handle
   NurseStn_Lobby_Flr_5,                   !- Name
-  {c9ee655b-3406-4d97-bb35-f3f4025f4d94}, !- Space Type Name
+  {0563f406-dc19-44b5-9570-597480c99474}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -10190,7 +10190,7 @@ OS:Surface,
 OS:Space,
   {bcfa0cce-dbe5-4040-8ad4-4a14ddff2e39}, !- Handle
   Dining_Flr_5,                           !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {aa77085e-d0f3-4429-94a9-d276800b9247}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -10308,7 +10308,7 @@ OS:Surface,
 OS:Space,
   {d4514f9d-0837-41de-8f53-62f9fd53f516}, !- Handle
   Office2_Mult5_Flr_5,                    !- Name
-  {aa71cdf2-9e0e-44c5-8bfd-37a78f5bfd88}, !- Space Type Name
+  {f32238b3-9c61-48df-b4be-4e6e7e98eac6}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -10426,7 +10426,7 @@ OS:Surface,
 OS:Space,
   {e52ecd02-76f8-496b-99df-063e2eadd097}, !- Handle
   Kitchen_Flr_5,                          !- Name
-  {808efff2-3603-42b4-9071-184c77cdad88}, !- Space Type Name
+  {5fac657e-a660-4d8b-97a9-42ac7088861d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -10561,7 +10561,7 @@ OS:Surface,
 OS:Space,
   {a3070ed6-0715-4eca-8a10-35548655f205}, !- Handle
   Office3_Flr_5,                          !- Name
-  {aa71cdf2-9e0e-44c5-8bfd-37a78f5bfd88}, !- Space Type Name
+  {f32238b3-9c61-48df-b4be-4e6e7e98eac6}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -10696,7 +10696,7 @@ OS:Surface,
 OS:Space,
   {5712cb79-eb78-4cbc-b940-f61c745b36d9}, !- Handle
   Office4_Mult6_Flr_5,                    !- Name
-  {bb2a9ec1-e571-41e9-a01f-149f08e67f79}, !- Space Type Name
+  {1b79017e-ce55-4c5f-b89d-8c0d70a2ca23}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -15482,7 +15482,7 @@ OS:ZoneHVAC:EquipmentList,
   {25e1435c-ab55-4dc3-94ef-5e6f319df059}; !- Thermal Zone
 
 OS:WeatherFile,
-  {522f554d-75a3-401d-84e8-e5a2216fceba}, !- Handle
+  {f554a428-189e-41b9-a2bc-5c31b9fe1241}, !- Handle
   Vancouver Int'l,                        !- City
   BC,                                     !- State Province Region
   CAN,                                    !- Country
@@ -15496,14 +15496,36 @@ OS:WeatherFile,
   9D8CC810;                               !- Checksum
 
 OS:Site:WaterMainsTemperature,
-  {c9e09834-a30c-4b69-99a4-52438625bef4}, !- Handle
+  {19f776f3-d4d6-4ea5-91bf-512f61a6e111}, !- Handle
   Correlation,                            !- Calculation Method
   ,                                       !- Temperature Schedule Name
   9.71666666666667,                       !- Annual Average Outdoor Air Temperature {C}
   13.9;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
 
 OS:SizingPeriod:DesignDay,
-  {41f5cf97-71d4-4c5d-aae5-5f58e4541464}, !- Handle
+  {830dcc84-08c6-4bec-ba32-b2530daeec43}, !- Handle
+  Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
+  -7,                                     !- Maximum Dry-Bulb Temperature {C}
+  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
+  -7,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb
+  101301,                                 !- Barometric Pressure {Pa}
+  2.9,                                    !- Wind Speed {m/s}
+  100,                                    !- Wind Direction {deg}
+  0,                                      !- Sky Clearness
+  0,                                      !- Rain Indicator
+  0,                                      !- Snow Indicator
+  21,                                     !- Day of Month
+  12,                                     !- Month
+  WinterDesignDay,                        !- Day Type
+  0,                                      !- Daylight Saving Time Indicator
+  Wetbulb,                                !- Humidity Indicating Type
+  ,                                       !- Humidity Indicating Day Schedule Name
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
+  ASHRAEClearSky;                         !- Solar Model Indicator
+
+OS:SizingPeriod:DesignDay,
+  {34bd915d-0a5d-4ad8-a97a-46c858453474}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -15528,30 +15550,8 @@ OS:SizingPeriod:DesignDay,
   0.371,                                  !- ASHRAE Taub {dimensionless}
   2.445;                                  !- ASHRAE Taud {dimensionless}
 
-OS:SizingPeriod:DesignDay,
-  {3005d5c1-36d4-4464-be36-bc676c75639b}, !- Handle
-  Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
-  -7,                                     !- Maximum Dry-Bulb Temperature {C}
-  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -7,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101301,                                 !- Barometric Pressure {Pa}
-  2.9,                                    !- Wind Speed {m/s}
-  100,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  12,                                     !- Month
-  WinterDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAEClearSky;                         !- Solar Model Indicator
-
 OS:Site:GroundTemperature:BuildingSurface,
-  {43e8474e-ca0d-4d6b-b5fb-3671ede6a488}, !- Handle
+  {c7e244d3-150a-4e09-b113-fe5d96c6a682}, !- Handle
   19.527,                                 !- January Ground Temperature {C}
   19.502,                                 !- February Ground Temperature {C}
   19.536,                                 !- March Ground Temperature {C}
@@ -15566,221 +15566,221 @@ OS:Site:GroundTemperature:BuildingSurface,
   19.633;                                 !- December Ground Temperature {C}
 
 OS:SpaceType,
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Handle
+  {725db32f-522f-4400-98ce-0dd075b086ef}, !- Handle
   Space Function Hospital corr. >= 2.4m-sch-B, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {924f3baa-87ac-4cd8-80c4-da2edc001688}, !- Group Rendering Name
+  {3a2e5055-9e86-4237-941f-aa56fce78d27}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Hospital corr. >= 2.4m-sch-B;           !- Standards Space Type
 
 OS:Rendering:Color,
-  {924f3baa-87ac-4cd8-80c4-da2edc001688}, !- Handle
+  {3a2e5055-9e86-4237-941f-aa56fce78d27}, !- Handle
   Space Function Hospital corr. >= 2.4m-sch-B, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Handle
+  {aa77085e-d0f3-4429-94a9-d276800b9247}, !- Handle
   Space Function Dining - bar lounge/leisure, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {68c7d89e-2fbc-49aa-b767-c39d08549260}, !- Group Rendering Name
+  {7fc6371f-bccd-40fd-8b8a-aaa51ade3422}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Dining - bar lounge/leisure;            !- Standards Space Type
 
 OS:Rendering:Color,
-  {68c7d89e-2fbc-49aa-b767-c39d08549260}, !- Handle
+  {7fc6371f-bccd-40fd-8b8a-aaa51ade3422}, !- Handle
   Space Function Dining - bar lounge/leisure, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Handle
+  {7fdce7d3-5c53-4f02-8147-dd1947d1520c}, !- Handle
   Space Function Hospital - emergency,    !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {25ee0019-d983-49e5-9f2d-36aa6e5bda2b}, !- Group Rendering Name
+  {d3761321-eef7-4e85-b6ca-58088302f87c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Hospital - emergency;                   !- Standards Space Type
 
 OS:Rendering:Color,
-  {25ee0019-d983-49e5-9f2d-36aa6e5bda2b}, !- Handle
+  {d3761321-eef7-4e85-b6ca-58088302f87c}, !- Handle
   Space Function Hospital - emergency,    !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {c9ee655b-3406-4d97-bb35-f3f4025f4d94}, !- Handle
+  {0563f406-dc19-44b5-9570-597480c99474}, !- Handle
   Space Function Hospital - nurses' station, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {62f5797f-5773-4a7f-a9dc-c33a13fb933f}, !- Group Rendering Name
+  {c0b35f11-3742-4296-990f-e38283d0e091}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Hospital - nurses' station;             !- Standards Space Type
 
 OS:Rendering:Color,
-  {62f5797f-5773-4a7f-a9dc-c33a13fb933f}, !- Handle
+  {c0b35f11-3742-4296-990f-e38283d0e091}, !- Handle
   Space Function Hospital - nurses' station, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {aa529a6c-aa81-45a0-82a9-2022a60885fb}, !- Handle
+  {49abcd98-01f3-400e-968c-a233a6bc0572}, !- Handle
   Space Function Hospital - patient room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {02dcd71a-bf69-4aa5-b10f-ab7fb777e571}, !- Group Rendering Name
+  {591a7cc6-b452-4051-b3a1-483579fcc6d7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Hospital - patient room;                !- Standards Space Type
 
 OS:Rendering:Color,
-  {02dcd71a-bf69-4aa5-b10f-ab7fb777e571}, !- Handle
+  {591a7cc6-b452-4051-b3a1-483579fcc6d7}, !- Handle
   Space Function Hospital - patient room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {82221dec-4b6e-4351-a1f8-5a3b8d795c5a}, !- Handle
+  {509d6d02-16ab-4468-a4f1-91f6baf7e1b7}, !- Handle
   Space Function Hospital - recovery,     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {03e184e6-5188-45fd-abde-b39b6991a30d}, !- Group Rendering Name
+  {478d385e-53a3-40d4-9f88-fe3d1bb6a93c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Hospital - recovery;                    !- Standards Space Type
 
 OS:Rendering:Color,
-  {03e184e6-5188-45fd-abde-b39b6991a30d}, !- Handle
+  {478d385e-53a3-40d4-9f88-fe3d1bb6a93c}, !- Handle
   Space Function Hospital - recovery,     !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {808efff2-3603-42b4-9071-184c77cdad88}, !- Handle
+  {5fac657e-a660-4d8b-97a9-42ac7088861d}, !- Handle
   Space Function Food preparation,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {74eb2b6d-7dce-4fde-94bb-cfbffc9806d9}, !- Group Rendering Name
+  {1a66fd50-be91-4dee-8ab0-fb7bc183e522}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Food preparation;                       !- Standards Space Type
 
 OS:Rendering:Color,
-  {74eb2b6d-7dce-4fde-94bb-cfbffc9806d9}, !- Handle
+  {1a66fd50-be91-4dee-8ab0-fb7bc183e522}, !- Handle
   Space Function Food preparation,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {5a939237-7554-47f9-b22c-3e13f9b75c3a}, !- Handle
+  {d0fab25d-93ad-4d69-a3a1-663be6d36a13}, !- Handle
   Space Function Lab - research,          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {cb947b08-2529-4c62-93b5-ea7c8a39687e}, !- Group Rendering Name
+  {eb48b8f5-705b-480a-8a82-b48ed22e99f7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Lab - research;                         !- Standards Space Type
 
 OS:Rendering:Color,
-  {cb947b08-2529-4c62-93b5-ea7c8a39687e}, !- Handle
+  {eb48b8f5-705b-480a-8a82-b48ed22e99f7}, !- Handle
   Space Function Lab - research,          !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {aa71cdf2-9e0e-44c5-8bfd-37a78f5bfd88}, !- Handle
+  {f32238b3-9c61-48df-b4be-4e6e7e98eac6}, !- Handle
   Space Function Office - enclosed,       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {951bea20-40e7-4229-ac40-27d743447896}, !- Group Rendering Name
+  {b976b03e-6719-4a8c-be2c-74bec0d61e53}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Office - enclosed;                      !- Standards Space Type
 
 OS:Rendering:Color,
-  {951bea20-40e7-4229-ac40-27d743447896}, !- Handle
+  {b976b03e-6719-4a8c-be2c-74bec0d61e53}, !- Handle
   Space Function Office - enclosed,       !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {bb2a9ec1-e571-41e9-a01f-149f08e67f79}, !- Handle
+  {1b79017e-ce55-4c5f-b89d-8c0d70a2ca23}, !- Handle
   Space Function Office - enclosed - occsens, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {6c0b1a2d-c5e7-457c-be2c-5d882c58ef4b}, !- Group Rendering Name
+  {a3e9c974-8214-4b29-be34-76eeb041f953}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Office - enclosed - occsens;            !- Standards Space Type
 
 OS:Rendering:Color,
-  {6c0b1a2d-c5e7-457c-be2c-5d882c58ef4b}, !- Handle
+  {a3e9c974-8214-4b29-be34-76eeb041f953}, !- Handle
   Space Function Office - enclosed - occsens, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {62646936-a5e0-4ada-97f8-b0c01355ee00}, !- Handle
+  {2b63287d-2518-4c78-b1cf-389c5ab7680e}, !- Handle
   Space Function Hospital - operating room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {bdbba930-02fb-429f-a5ef-cc45cd806231}, !- Group Rendering Name
+  {1ba586d3-3f1a-4aca-8aed-f21253ad4f0c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Hospital - operating room;              !- Standards Space Type
 
 OS:Rendering:Color,
-  {bdbba930-02fb-429f-a5ef-cc45cd806231}, !- Handle
+  {1ba586d3-3f1a-4aca-8aed-f21253ad4f0c}, !- Handle
   Space Function Hospital - operating room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {122d4723-1efe-4d95-9722-377ae07e7ce8}, !- Handle
+  {694bb810-5596-4c98-9e35-937d88339f36}, !- Handle
   Space Function Hospital - physical therapy, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {3003f037-ecc8-4aad-baea-da1585e22b2e}, !- Group Rendering Name
+  {86762035-5157-4e20-8096-f909ecb920b1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Hospital - physical therapy;            !- Standards Space Type
 
 OS:Rendering:Color,
-  {3003f037-ecc8-4aad-baea-da1585e22b2e}, !- Handle
+  {86762035-5157-4e20-8096-f909ecb920b1}, !- Handle
   Space Function Hospital - physical therapy, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {f9a7be2d-350f-4b18-b097-043c36488f38}, !- Handle
+  {f47f6124-09d5-42a0-a6cd-d2a3aa3c76b4}, !- Handle
   Space Function Hospital - radiology/imaging, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {1ec59fd0-8ad8-4884-8c39-cc53193e4a7e}, !- Group Rendering Name
+  {1dc2aeee-648b-495e-a11f-2724ef28ff08}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Hospital - radiology/imaging;           !- Standards Space Type
 
 OS:Rendering:Color,
-  {1ec59fd0-8ad8-4884-8c39-cc53193e4a7e}, !- Handle
+  {1dc2aeee-648b-495e-a11f-2724ef28ff08}, !- Handle
   Space Function Hospital - radiology/imaging, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value

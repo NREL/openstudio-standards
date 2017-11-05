@@ -62,7 +62,7 @@ OS:Surface,
 OS:Space,
   {227a53df-c60f-4814-9986-7262c5ebf0b0}, !- Handle
   Dining,                                 !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {908e515f-a23d-4b6f-9b95-2c8c7106e3a8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -94,7 +94,7 @@ OS:Surface,
 OS:Space,
   {ca5649c5-cc8d-4b71-9941-b893da8ba6a1}, !- Handle
   Kitchen,                                !- Name
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Space Type Name
+  {a822d4e4-c0e0-4653-bb1e-aa5fe0bef024}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -159,7 +159,7 @@ OS:Surface,
 OS:Space,
   {597594ef-5c7d-4f39-88b9-691ef2d8a8eb}, !- Handle
   attic,                                  !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {801291d9-9b74-4f6f-b531-0ef517bc4246}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -184,7 +184,7 @@ OS:HeatBalanceAlgorithm,
 
 OS:Building,
   {2359408b-6252-42dc-81e2-5632894e0032}, !- Handle
-  -QuickServiceRestaurant-NECB HDD Method-CAN_BC_Vancouver.718920_CWEC.epw created: 2017-11-05 00:50:31 +0000, !- Name
+  NECB_2011QuickServiceRestaurant,        !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -777,7 +777,7 @@ OS:ZoneHVAC:EquipmentList,
   {bb336d85-c8ac-402b-a8e1-7a30a51fa50a}; !- Thermal Zone
 
 OS:WeatherFile,
-  {522f554d-75a3-401d-84e8-e5a2216fceba}, !- Handle
+  {09fcbf7c-a220-4074-8443-14823e0a2154}, !- Handle
   Vancouver Int'l,                        !- City
   BC,                                     !- State Province Region
   CAN,                                    !- Country
@@ -791,14 +791,36 @@ OS:WeatherFile,
   9D8CC810;                               !- Checksum
 
 OS:Site:WaterMainsTemperature,
-  {c9e09834-a30c-4b69-99a4-52438625bef4}, !- Handle
+  {3cf9cb48-fc81-4ad0-aa4a-3ae7ff6bb16c}, !- Handle
   Correlation,                            !- Calculation Method
   ,                                       !- Temperature Schedule Name
   9.71666666666667,                       !- Annual Average Outdoor Air Temperature {C}
   13.9;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
 
 OS:SizingPeriod:DesignDay,
-  {41f5cf97-71d4-4c5d-aae5-5f58e4541464}, !- Handle
+  {ff8cdd23-5be2-4519-91dd-65f89c1ea824}, !- Handle
+  Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
+  -7,                                     !- Maximum Dry-Bulb Temperature {C}
+  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
+  -7,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb
+  101301,                                 !- Barometric Pressure {Pa}
+  2.9,                                    !- Wind Speed {m/s}
+  100,                                    !- Wind Direction {deg}
+  0,                                      !- Sky Clearness
+  0,                                      !- Rain Indicator
+  0,                                      !- Snow Indicator
+  21,                                     !- Day of Month
+  12,                                     !- Month
+  WinterDesignDay,                        !- Day Type
+  0,                                      !- Daylight Saving Time Indicator
+  Wetbulb,                                !- Humidity Indicating Type
+  ,                                       !- Humidity Indicating Day Schedule Name
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
+  ASHRAEClearSky;                         !- Solar Model Indicator
+
+OS:SizingPeriod:DesignDay,
+  {d435ad08-b787-475d-819c-0006b2629dea}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -823,30 +845,8 @@ OS:SizingPeriod:DesignDay,
   0.371,                                  !- ASHRAE Taub {dimensionless}
   2.445;                                  !- ASHRAE Taud {dimensionless}
 
-OS:SizingPeriod:DesignDay,
-  {3005d5c1-36d4-4464-be36-bc676c75639b}, !- Handle
-  Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
-  -7,                                     !- Maximum Dry-Bulb Temperature {C}
-  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -7,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101301,                                 !- Barometric Pressure {Pa}
-  2.9,                                    !- Wind Speed {m/s}
-  100,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  12,                                     !- Month
-  WinterDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAEClearSky;                         !- Solar Model Indicator
-
 OS:Site:GroundTemperature:BuildingSurface,
-  {43e8474e-ca0d-4d6b-b5fb-3671ede6a488}, !- Handle
+  {3d5ba3d7-bda2-4526-8e8a-cb511ffa2ace}, !- Handle
   19.527,                                 !- January Ground Temperature {C}
   19.502,                                 !- February Ground Temperature {C}
   19.536,                                 !- March Ground Temperature {C}
@@ -861,51 +861,51 @@ OS:Site:GroundTemperature:BuildingSurface,
   19.633;                                 !- December Ground Temperature {C}
 
 OS:SpaceType,
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Handle
+  {801291d9-9b74-4f6f-b531-0ef517bc4246}, !- Handle
   Space Function - undefined -,           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {924f3baa-87ac-4cd8-80c4-da2edc001688}, !- Group Rendering Name
+  {3ec0a831-677c-4a2a-aa32-3db663c6ea20}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   - undefined -;                          !- Standards Space Type
 
 OS:Rendering:Color,
-  {924f3baa-87ac-4cd8-80c4-da2edc001688}, !- Handle
+  {3ec0a831-677c-4a2a-aa32-3db663c6ea20}, !- Handle
   Space Function - undefined -,           !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Handle
+  {908e515f-a23d-4b6f-9b95-2c8c7106e3a8}, !- Handle
   Space Function Dining - bar lounge/leisure, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {68c7d89e-2fbc-49aa-b767-c39d08549260}, !- Group Rendering Name
+  {6cbfb388-ab07-4521-a472-cd36f1d688dd}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Dining - bar lounge/leisure;            !- Standards Space Type
 
 OS:Rendering:Color,
-  {68c7d89e-2fbc-49aa-b767-c39d08549260}, !- Handle
+  {6cbfb388-ab07-4521-a472-cd36f1d688dd}, !- Handle
   Space Function Dining - bar lounge/leisure, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Handle
+  {a822d4e4-c0e0-4653-bb1e-aa5fe0bef024}, !- Handle
   Space Function Food preparation,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {25ee0019-d983-49e5-9f2d-36aa6e5bda2b}, !- Group Rendering Name
+  {27695628-4c0c-4c27-aa03-4ff6dfcd5c92}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Food preparation;                       !- Standards Space Type
 
 OS:Rendering:Color,
-  {25ee0019-d983-49e5-9f2d-36aa6e5bda2b}, !- Handle
+  {27695628-4c0c-4c27-aa03-4ff6dfcd5c92}, !- Handle
   Space Function Food preparation,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value

@@ -52,7 +52,7 @@ OS:Connection,
 OS:Space,
   {5ea367b2-633e-43a1-9423-f1b770d2335d}, !- Handle
   SMstore2,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -92,7 +92,7 @@ OS:Connection,
 OS:Space,
   {89130de1-d42c-444e-801d-7d9adf3e04aa}, !- Handle
   SMstore7,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -132,7 +132,7 @@ OS:Connection,
 OS:Space,
   {ab4d5305-d428-465c-8009-bc4150273508}, !- Handle
   SMstore3,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -155,7 +155,7 @@ OS:Connection,
 OS:Space,
   {6d54358c-9390-42e5-bc44-ebe58628f22c}, !- Handle
   SMstore1,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -178,7 +178,7 @@ OS:Connection,
 OS:Space,
   {4ab39cda-851f-4e81-b908-ae359b3e2c57}, !- Handle
   LGstore2,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -286,7 +286,7 @@ OS:Connection,
 OS:Space,
   {afa5c72f-ec16-4fb7-9014-0c120fd3d938}, !- Handle
   SMstore5,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -309,7 +309,7 @@ OS:Connection,
 OS:Space,
   {3cabba90-ed6b-4267-bb90-b1645c10f28e}, !- Handle
   LGstore1,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -383,7 +383,7 @@ OS:Connection,
 OS:Space,
   {2ce2b667-ac4f-4f47-b0e0-c3246eb94e55}, !- Handle
   SMstore8,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -439,7 +439,7 @@ OS:Connection,
 OS:Space,
   {cbc69268-5c4e-4419-ad78-59e2fa30f77b}, !- Handle
   SMstore4,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -581,7 +581,7 @@ OS:Connection,
 OS:Space,
   {8aee463a-4c3c-4367-8f45-64fb6d2bfc88}, !- Handle
   SMstore6,                               !- Name
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Space Type Name
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2109,7 +2109,7 @@ OS:YearDescription,
 
 OS:Building,
   {2b0bfd6c-8754-4347-b436-1d7c3e63c79e}, !- Handle
-  -RetailStripmall-NECB HDD Method-CAN_BC_Vancouver.718920_CWEC.epw created: 2017-11-05 00:50:31 +0000, !- Name
+  NECB_2011RetailStripmall,               !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -2953,7 +2953,7 @@ OS:ZoneHVAC:EquipmentList,
   {f56931ed-4d15-4788-9043-64a52e66fb61}; !- Thermal Zone
 
 OS:WeatherFile,
-  {522f554d-75a3-401d-84e8-e5a2216fceba}, !- Handle
+  {3194d192-1b20-4a35-830a-b7678bad5d2c}, !- Handle
   Vancouver Int'l,                        !- City
   BC,                                     !- State Province Region
   CAN,                                    !- Country
@@ -2967,7 +2967,7 @@ OS:WeatherFile,
   9D8CC810;                               !- Checksum
 
 OS:Site,
-  {c9e09834-a30c-4b69-99a4-52438625bef4}, !- Handle
+  {7671b647-8f74-4be4-8472-53e7377e2371}, !- Handle
   Vancouver Int'l_BC_CAN,                 !- Name
   49.18,                                  !- Latitude {deg}
   -123.17,                                !- Longitude {deg}
@@ -2976,14 +2976,14 @@ OS:Site,
   ;                                       !- Terrain
 
 OS:Site:WaterMainsTemperature,
-  {7c1f2a75-3cf7-44b7-8eea-9804d5ba12e1}, !- Handle
+  {ec06c75e-5a4f-467d-99a4-da6484b762c1}, !- Handle
   Correlation,                            !- Calculation Method
   ,                                       !- Temperature Schedule Name
   9.71666666666667,                       !- Annual Average Outdoor Air Temperature {C}
   13.9;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
 
 OS:SizingPeriod:DesignDay,
-  {3005d5c1-36d4-4464-be36-bc676c75639b}, !- Handle
+  {8f25e220-0bcd-4ea5-a8ed-352c9509c490}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -3009,7 +3009,7 @@ OS:SizingPeriod:DesignDay,
   2.445;                                  !- ASHRAE Taud {dimensionless}
 
 OS:SizingPeriod:DesignDay,
-  {43e8474e-ca0d-4d6b-b5fb-3671ede6a488}, !- Handle
+  {45e47f68-83f0-4ee9-85f1-f806003bc8a5}, !- Handle
   Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
   -7,                                     !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -3031,7 +3031,7 @@ OS:SizingPeriod:DesignDay,
   ASHRAEClearSky;                         !- Solar Model Indicator
 
 OS:Site:GroundTemperature:BuildingSurface,
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Handle
+  {9829fa4a-b563-44bf-8034-90b2a5dc93f5}, !- Handle
   19.527,                                 !- January Ground Temperature {C}
   19.502,                                 !- February Ground Temperature {C}
   19.536,                                 !- March Ground Temperature {C}
@@ -3046,17 +3046,17 @@ OS:Site:GroundTemperature:BuildingSurface,
   19.633;                                 !- December Ground Temperature {C}
 
 OS:SpaceType,
-  {8d36fa7f-6e6d-4393-958f-683244f9ff8a}, !- Handle
+  {7fee3004-196e-42e2-962e-363caf8d97e4}, !- Handle
   Space Function Retail - sales,          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Group Rendering Name
+  {7bbfb265-71b7-4d9e-9e22-152a6e76bda7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Retail - sales;                         !- Standards Space Type
 
 OS:Rendering:Color,
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Handle
+  {7bbfb265-71b7-4d9e-9e22-152a6e76bda7}, !- Handle
   Space Function Retail - sales,          !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value

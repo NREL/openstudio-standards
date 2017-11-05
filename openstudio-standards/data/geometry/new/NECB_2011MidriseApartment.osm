@@ -28,7 +28,7 @@ OS:SimulationControl,
 OS:Space,
   {c3b16dd2-0b7e-41f9-9554-37b64a961382}, !- Handle
   T SE Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -41,7 +41,7 @@ OS:Space,
 OS:Space,
   {ab4b5dbb-3b66-43ba-b6e3-9e7c2c0d8d03}, !- Handle
   G Corridor,                             !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {91dc95f6-dd6b-4b1f-a13d-d925be8b32fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -88,7 +88,7 @@ OS:Surface,
 OS:Space,
   {66195dd7-4158-483d-b874-3388a680b571}, !- Handle
   T SW Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -118,7 +118,7 @@ OS:Surface,
 OS:Space,
   {6912ab22-717f-4315-a8ff-9c62dd3bb665}, !- Handle
   M S2 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -131,7 +131,7 @@ OS:Space,
 OS:Space,
   {522c5e6f-296d-41b5-be13-5d90fe955163}, !- Handle
   M SE Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -178,7 +178,7 @@ OS:Surface,
 OS:Space,
   {22d8b173-d774-48ce-9aac-7d6a7840f33f}, !- Handle
   T N1 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -191,7 +191,7 @@ OS:Space,
 OS:Space,
   {320a911a-e18e-4155-bcf9-b9823aa5a2c5}, !- Handle
   T Corridor,                             !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {91dc95f6-dd6b-4b1f-a13d-d925be8b32fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   ,                                       !- Direction of Relative North {deg}
@@ -221,7 +221,7 @@ OS:Surface,
 OS:Space,
   {9167359e-9688-41e4-ae83-b41424807596}, !- Handle
   T N2 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -268,7 +268,7 @@ OS:Surface,
 OS:Space,
   {7c013759-803b-46ae-9919-4e21adf7c78d}, !- Handle
   M SW Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -298,7 +298,7 @@ OS:Surface,
 OS:Space,
   {0fe08715-548f-4b65-befe-40ea29ebf953}, !- Handle
   T NW Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -328,7 +328,7 @@ OS:Surface,
 OS:Space,
   {fec56cd7-1bb5-4bb0-8e3b-dab87b5a2de0}, !- Handle
   M Corridor,                             !- Name
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Space Type Name
+  {91dc95f6-dd6b-4b1f-a13d-d925be8b32fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   ,                                       !- Direction of Relative North {deg}
@@ -358,7 +358,7 @@ OS:Surface,
 OS:Space,
   {3f1c5090-169e-4dca-b8f2-31c064cffb7d}, !- Handle
   G S1 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -388,7 +388,7 @@ OS:Surface,
 OS:Space,
   {695f347d-e36c-4348-b06b-48f78bb2529b}, !- Handle
   G S2 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -486,7 +486,7 @@ OS:Surface,
 OS:Space,
   {0038fd5f-f228-4b0a-a724-e0084dd5bbd8}, !- Handle
   M NE Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -516,7 +516,7 @@ OS:Surface,
 OS:Space,
   {d94f0b48-364b-4bd9-83bf-e9b13823aa40}, !- Handle
   T NE Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -529,7 +529,7 @@ OS:Space,
 OS:Space,
   {2959e27c-b725-4429-b1eb-770aad7a063b}, !- Handle
   G NW Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -542,7 +542,7 @@ OS:Space,
 OS:Space,
   {5b74560d-d6b6-436a-86c2-4d0bd4939d9e}, !- Handle
   T S1 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -555,7 +555,7 @@ OS:Space,
 OS:Space,
   {b97f9e56-e331-4b8c-aa4d-ad782e7aa50a}, !- Handle
   M N1 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -568,7 +568,7 @@ OS:Space,
 OS:Space,
   {859bc88c-c416-4bc3-8137-dd5ebef99bba}, !- Handle
   Office,                                 !- Name
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Space Type Name
+  {2eefb571-961d-4dec-a440-564be2a9301d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -632,7 +632,7 @@ OS:Surface,
 OS:Space,
   {6630228a-e074-4b5a-815a-de9c195b4f85}, !- Handle
   G NE Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -679,7 +679,7 @@ OS:Surface,
 OS:Space,
   {c43f7335-3ac7-490e-9b49-890ffac7f0d6}, !- Handle
   T S2 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -692,7 +692,7 @@ OS:Space,
 OS:Space,
   {f806d8c4-879a-4004-ae0b-63fdb89b5289}, !- Handle
   G SW Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -739,7 +739,7 @@ OS:Surface,
 OS:Space,
   {5c7ad500-0f3b-486f-9052-f98babde7c3f}, !- Handle
   M N2 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -905,7 +905,7 @@ OS:Surface,
 OS:Space,
   {656acd56-e898-40e0-8ffe-95e3c2336bc7}, !- Handle
   G N1 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1044,7 +1044,7 @@ OS:Output:Meter,
 OS:Space,
   {514aa5f4-342f-40d3-a763-2114e61b2fea}, !- Handle
   G N2 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1090,7 +1090,7 @@ OS:Surface,
 
 OS:Building,
   {761ed503-73d7-48c5-8197-2a7009e22170}, !- Handle
-  -MidriseApartment-NECB HDD Method-CAN_BC_Vancouver.718920_CWEC.epw created: 2017-11-05 00:50:32 +0000, !- Name
+  NECB_2011MidriseApartment,              !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -1107,7 +1107,7 @@ OS:Building,
 OS:Space,
   {2bd49564-6fbf-4d24-9275-72c2b5b44cc5}, !- Handle
   M S1 Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1794,7 +1794,7 @@ OS:Surface,
 OS:Space,
   {d251f702-03b3-4ba8-9b7c-08259a4ea42e}, !- Handle
   M NW Apartment,                         !- Name
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Space Type Name
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -6409,7 +6409,7 @@ OS:ZoneHVAC:EquipmentList,
   {d41f760b-3f21-45d7-9421-c0f678a8f47f}; !- Thermal Zone
 
 OS:WeatherFile,
-  {522f554d-75a3-401d-84e8-e5a2216fceba}, !- Handle
+  {6ccea589-175c-4cc7-be1c-63f41d0c7b8b}, !- Handle
   Vancouver Int'l,                        !- City
   BC,                                     !- State Province Region
   CAN,                                    !- Country
@@ -6423,14 +6423,14 @@ OS:WeatherFile,
   9D8CC810;                               !- Checksum
 
 OS:Site:WaterMainsTemperature,
-  {c9e09834-a30c-4b69-99a4-52438625bef4}, !- Handle
+  {ac22a580-8ffb-4fd5-860e-cda2cb14f125}, !- Handle
   Correlation,                            !- Calculation Method
   ,                                       !- Temperature Schedule Name
   9.71666666666667,                       !- Annual Average Outdoor Air Temperature {C}
   13.9;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
 
 OS:SizingPeriod:DesignDay,
-  {41f5cf97-71d4-4c5d-aae5-5f58e4541464}, !- Handle
+  {b9d592de-b755-45f1-a795-1014c52bfe5f}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -6456,7 +6456,7 @@ OS:SizingPeriod:DesignDay,
   2.445;                                  !- ASHRAE Taud {dimensionless}
 
 OS:SizingPeriod:DesignDay,
-  {3005d5c1-36d4-4464-be36-bc676c75639b}, !- Handle
+  {378998ce-cdbb-481c-94bf-d8f4becee482}, !- Handle
   Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
   -7,                                     !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -6478,7 +6478,7 @@ OS:SizingPeriod:DesignDay,
   ASHRAEClearSky;                         !- Solar Model Indicator
 
 OS:Site:GroundTemperature:BuildingSurface,
-  {43e8474e-ca0d-4d6b-b5fb-3671ede6a488}, !- Handle
+  {aa26c2fb-02d2-4346-87e2-033f604ee2cd}, !- Handle
   19.527,                                 !- January Ground Temperature {C}
   19.502,                                 !- February Ground Temperature {C}
   19.536,                                 !- March Ground Temperature {C}
@@ -6493,51 +6493,51 @@ OS:Site:GroundTemperature:BuildingSurface,
   19.633;                                 !- December Ground Temperature {C}
 
 OS:SpaceType,
-  {87727cdb-5e72-47ec-83ec-876ae9454ac9}, !- Handle
+  {91dc95f6-dd6b-4b1f-a13d-d925be8b32fc}, !- Handle
   Space Function Corr. < 2.4m wide-sch-G, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {924f3baa-87ac-4cd8-80c4-da2edc001688}, !- Group Rendering Name
+  {55c76daf-ae7f-44d6-9e71-a11b87e02a35}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Corr. < 2.4m wide-sch-G;                !- Standards Space Type
 
 OS:Rendering:Color,
-  {924f3baa-87ac-4cd8-80c4-da2edc001688}, !- Handle
+  {55c76daf-ae7f-44d6-9e71-a11b87e02a35}, !- Handle
   Space Function Corr. < 2.4m wide-sch-G, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {e225c12c-6856-40dc-a4c3-1fdd2b6061b3}, !- Handle
+  {24badfdf-3699-407c-b2ee-0182bd67c6a5}, !- Handle
   Space Function Dwelling Unit(s),        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {68c7d89e-2fbc-49aa-b767-c39d08549260}, !- Group Rendering Name
+  {795666bc-ce08-40fd-b89d-384972aabe1c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Dwelling Unit(s);                       !- Standards Space Type
 
 OS:Rendering:Color,
-  {68c7d89e-2fbc-49aa-b767-c39d08549260}, !- Handle
+  {795666bc-ce08-40fd-b89d-384972aabe1c}, !- Handle
   Space Function Dwelling Unit(s),        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {2b7c1fb1-9ef3-4432-a949-9b7169638744}, !- Handle
+  {2eefb571-961d-4dec-a440-564be2a9301d}, !- Handle
   Space Function Conf./meet./multi-purpose, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {25ee0019-d983-49e5-9f2d-36aa6e5bda2b}, !- Group Rendering Name
+  {b6198b88-d967-4b66-8811-f7e1ce571e1e}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Conf./meet./multi-purpose;              !- Standards Space Type
 
 OS:Rendering:Color,
-  {25ee0019-d983-49e5-9f2d-36aa6e5bda2b}, !- Handle
+  {b6198b88-d967-4b66-8811-f7e1ce571e1e}, !- Handle
   Space Function Conf./meet./multi-purpose, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
