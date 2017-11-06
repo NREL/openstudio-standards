@@ -35,7 +35,7 @@ OS:Connection,
 OS:Space,
   {16b36206-de28-4cc5-a003-3fd3fdc223f7}, !- Handle
   ER_Exam3_Mult4_Flr_1,                   !- Name
-  {0eb83ffa-abba-4207-a56c-d30f09a94d33}, !- Space Type Name
+  {bb762259-d9f2-4aa8-becb-9bdc14b5b5c5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -74,7 +74,7 @@ OS:Connection,
 OS:Space,
   {4b0352d7-5b15-44a5-874c-f4c860e83600}, !- Handle
   Corridor_NW_Flr_4,                      !- Name
-  {3893e797-1396-4293-b5c5-5b14f3f3dd62}, !- Space Type Name
+  {1a56ae62-3b2a-4427-8f00-08872cb7b3c4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -113,7 +113,7 @@ OS:Connection,
 OS:Space,
   {8ec78f13-57f2-4f0e-9746-f05360546e20}, !- Handle
   IC_PatRoom2_Flr_2,                      !- Name
-  {64b8fb9b-b2ce-4d2c-ae4c-a94f666c1c72}, !- Space Type Name
+  {8d03429d-53f0-444a-89a9-0e4dff87cfb2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -135,7 +135,7 @@ OS:Connection,
 OS:Space,
   {e141e567-31a6-4982-92aa-a4d8a75baef0}, !- Handle
   ER_Trauma1_Flr_1,                       !- Name
-  {bea10c7b-dbc3-4c12-802f-df4fc9f78e26}, !- Space Type Name
+  {96d7e080-557f-4965-b11a-338fc7f41f3e}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -174,7 +174,7 @@ OS:Connection,
 OS:Space,
   {1168441b-e4e6-4d44-a00f-18b75cc06a24}, !- Handle
   Corridor_Flr_1,                         !- Name
-  {3893e797-1396-4293-b5c5-5b14f3f3dd62}, !- Space Type Name
+  {1a56ae62-3b2a-4427-8f00-08872cb7b3c4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -230,7 +230,7 @@ OS:Connection,
 OS:Space,
   {e421471b-c574-4e8a-b7a8-245348dd3775}, !- Handle
   ER_NurseStn_Lobby_Flr_1,                !- Name
-  {59c3fd3e-d065-402b-8b70-d763ecb394ea}, !- Space Type Name
+  {7cba1d76-af6d-4aa4-893d-b9f602562341}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -269,7 +269,7 @@ OS:Connection,
 OS:Space,
   {e8233850-2c26-457b-b983-e0a87242a5d7}, !- Handle
   ICU_Flr_2,                              !- Name
-  {ab8c2172-2d30-4359-98a2-db6ed5db9555}, !- Space Type Name
+  {98e58acb-9b64-4e07-872e-f88abe5d0959}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -308,7 +308,7 @@ OS:Connection,
 OS:Space,
   {31390124-80ad-4222-b08a-01be2ad61163}, !- Handle
   NurseStn_Lobby_Flr_4,                   !- Name
-  {ed5beee9-c10e-434a-8ca4-9a97b6460da1}, !- Space Type Name
+  {791bfa34-c5f2-415c-a1fc-535956ce88a4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -347,7 +347,7 @@ OS:Connection,
 OS:Space,
   {5fa7a66e-65f8-47fe-850f-4aff5015d62b}, !- Handle
   OR_NurseStn_Lobby_Flr_2,                !- Name
-  {ed5beee9-c10e-434a-8ca4-9a97b6460da1}, !- Space Type Name
+  {791bfa34-c5f2-415c-a1fc-535956ce88a4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -386,7 +386,7 @@ OS:Connection,
 OS:Space,
   {2294b9a3-413c-42bf-8af1-ea3aba2f3837}, !- Handle
   PatRoom5_Mult10_Flr_3,                  !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -425,7 +425,7 @@ OS:Connection,
 OS:Space,
   {2870f103-d956-457d-b911-977241d8c35a}, !- Handle
   Corridor_Flr_2,                         !- Name
-  {3893e797-1396-4293-b5c5-5b14f3f3dd62}, !- Space Type Name
+  {1a56ae62-3b2a-4427-8f00-08872cb7b3c4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -464,7 +464,7 @@ OS:Connection,
 OS:Space,
   {dd7a92d0-924e-4003-b630-567ab7ab69ab}, !- Handle
   ER_Trauma2_Flr_1,                       !- Name
-  {bea10c7b-dbc3-4c12-802f-df4fc9f78e26}, !- Space Type Name
+  {96d7e080-557f-4965-b11a-338fc7f41f3e}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -520,7 +520,7 @@ OS:Connection,
 OS:Space,
   {668fd0fa-a605-4127-8009-961514db81c7}, !- Handle
   PatRoom3_Mult10_Flr_4,                  !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -542,7 +542,7 @@ OS:Connection,
 OS:Space,
   {f4b6e0eb-817b-405c-98f0-c425865851fb}, !- Handle
   NurseStn_Lobby_Flr_3,                   !- Name
-  {ed5beee9-c10e-434a-8ca4-9a97b6460da1}, !- Space Type Name
+  {791bfa34-c5f2-415c-a1fc-535956ce88a4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -564,7 +564,7 @@ OS:Connection,
 OS:Space,
   {75111445-9889-4e0e-bf8b-33e4ad0474cb}, !- Handle
   Office1_Flr_5,                          !- Name
-  {151ef0a0-7bc0-4b27-aff7-2cfadcb88f12}, !- Space Type Name
+  {7ba426a2-3247-409d-b428-1b4ac913aa9d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -621,7 +621,7 @@ OS:Connection,
 OS:Space,
   {0ebf2d87-9a96-4832-a366-f21cea5fd615}, !- Handle
   PatRoom6_Flr_4,                         !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -677,7 +677,7 @@ OS:Connection,
 OS:Space,
   {e9e27262-9df7-40dc-9a36-b9e4a585473e}, !- Handle
   Corridor_SE_Flr_3,                      !- Name
-  {3893e797-1396-4293-b5c5-5b14f3f3dd62}, !- Space Type Name
+  {1a56ae62-3b2a-4427-8f00-08872cb7b3c4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -716,7 +716,7 @@ OS:Connection,
 OS:Space,
   {6ad47ab4-cb8c-4b6f-9311-9dc048eb2eda}, !- Handle
   PatRoom1_Mult10_Flr_3,                  !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -755,7 +755,7 @@ OS:Connection,
 OS:Space,
   {8c173263-502d-42ba-a69e-93df43e4d6ca}, !- Handle
   ER_Exam1_Mult4_Flr_1,                   !- Name
-  {0eb83ffa-abba-4207-a56c-d30f09a94d33}, !- Space Type Name
+  {bb762259-d9f2-4aa8-becb-9bdc14b5b5c5}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -777,7 +777,7 @@ OS:Connection,
 OS:Space,
   {7698b8f9-ce74-4b6b-806d-12cdef049900}, !- Handle
   Radiology_Flr_4,                        !- Name
-  {3d27a5cb-e2b4-4d1d-9ee2-2c5f22bb22d8}, !- Space Type Name
+  {02732d5b-e5b2-4c6a-8b31-b8b8419b6d60}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -850,7 +850,7 @@ OS:Connection,
 OS:Space,
   {7802b3f6-be28-4f7e-ab11-b2ff579c4766}, !- Handle
   Corridor_Flr_5,                         !- Name
-  {3893e797-1396-4293-b5c5-5b14f3f3dd62}, !- Space Type Name
+  {1a56ae62-3b2a-4427-8f00-08872cb7b3c4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -889,7 +889,7 @@ OS:Connection,
 OS:Space,
   {b32db625-e874-459e-ae5c-6213262e2622}, !- Handle
   IC_PatRoom3_Mult6_Flr_2,                !- Name
-  {64b8fb9b-b2ce-4d2c-ae4c-a94f666c1c72}, !- Space Type Name
+  {8d03429d-53f0-444a-89a9-0e4dff87cfb2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -962,7 +962,7 @@ OS:Connection,
 OS:Space,
   {ebe6e839-d2fb-4757-8148-ae01cb77f2b7}, !- Handle
   Lobby_Records_Flr_1,                    !- Name
-  {96244d95-e6ad-4f96-bac4-636cc48d2a6e}, !- Space Type Name
+  {c8f1d79c-21fe-4463-aea1-b47cb2959ca6}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1001,7 +1001,7 @@ OS:Connection,
 OS:Space,
   {1fd4c829-a755-45de-b877-ff8108b86807}, !- Handle
   PatRoom8_Flr_3,                         !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1040,7 +1040,7 @@ OS:Connection,
 OS:Space,
   {013d2c94-7239-4063-ba94-06ba14717adc}, !- Handle
   PatRoom5_Mult10_Flr_4,                  !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1097,7 +1097,7 @@ OS:Connection,
 OS:Space,
   {17ae9a84-1b9c-49a1-8f48-a49619cb8e39}, !- Handle
   PatRoom6_Flr_3,                         !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1136,7 +1136,7 @@ OS:Connection,
 OS:Space,
   {60897f76-ccc0-4353-9cbd-ce8e06f8207c}, !- Handle
   PatRoom4_Flr_3,                         !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1181,7 +1181,7 @@ OS:Connection,
 OS:Space,
   {0f8481b9-82a8-4c09-8d52-f278649c4c33}, !- Handle
   PatRoom3_Mult10_Flr_3,                  !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1237,7 +1237,7 @@ OS:Connection,
 OS:Space,
   {7f22e5a6-e759-445a-84cb-6b454b893756}, !- Handle
   Corridor_SE_Flr_4,                      !- Name
-  {3893e797-1396-4293-b5c5-5b14f3f3dd62}, !- Space Type Name
+  {1a56ae62-3b2a-4427-8f00-08872cb7b3c4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1310,7 +1310,7 @@ OS:Connection,
 OS:Space,
   {70b3b79a-870d-4657-b97f-0bf50ccd6e7e}, !- Handle
   PatRoom7_Mult10_Flr_3,                  !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1383,7 +1383,7 @@ OS:Connection,
 OS:Space,
   {42cd4d82-e24e-4e11-88d4-f870740fe240}, !- Handle
   PatRoom8_Flr_4,                         !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1422,7 +1422,7 @@ OS:Connection,
 OS:Space,
   {0bb10f6e-83ca-443c-bdd6-76ddf2ef5dd5}, !- Handle
   Kitchen_Flr_5,                          !- Name
-  {7bd48d9b-5cbd-4980-82c9-df8813dbc5f9}, !- Space Type Name
+  {8c3420e6-2f32-4590-8693-5f123ef94deb}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1444,7 +1444,7 @@ OS:Connection,
 OS:Space,
   {e02691e9-a447-40e1-aa67-039878424ae6}, !- Handle
   Office3_Flr_5,                          !- Name
-  {151ef0a0-7bc0-4b27-aff7-2cfadcb88f12}, !- Space Type Name
+  {7ba426a2-3247-409d-b428-1b4ac913aa9d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1483,7 +1483,7 @@ OS:Connection,
 OS:Space,
   {1c76f8a5-14f0-4ef9-aedd-f22672148afa}, !- Handle
   Office1_Mult4_Flr_1,                    !- Name
-  {151ef0a0-7bc0-4b27-aff7-2cfadcb88f12}, !- Space Type Name
+  {7ba426a2-3247-409d-b428-1b4ac913aa9d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1522,7 +1522,7 @@ OS:Connection,
 OS:Space,
   {dc66d323-72f5-4969-aebb-d547b4919d13}, !- Handle
   Office2_Mult5_Flr_5,                    !- Name
-  {151ef0a0-7bc0-4b27-aff7-2cfadcb88f12}, !- Space Type Name
+  {7ba426a2-3247-409d-b428-1b4ac913aa9d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -1562,7 +1562,7 @@ OS:Connection,
 OS:Space,
   {fc9bddfe-4ba5-4685-8ab9-4aa035cfc214}, !- Handle
   PatRoom4_Flr_4,                         !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1601,7 +1601,7 @@ OS:Connection,
 OS:Space,
   {6a8c5c6f-369f-4ab1-867d-7f5523a9610f}, !- Handle
   NurseStn_Lobby_Flr_5,                   !- Name
-  {ed5beee9-c10e-434a-8ca4-9a97b6460da1}, !- Space Type Name
+  {791bfa34-c5f2-415c-a1fc-535956ce88a4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1657,7 +1657,7 @@ OS:Connection,
 OS:Space,
   {8cefc791-4220-41cf-852d-0cd472e915e7}, !- Handle
   Basement,                               !- Name
-  {3193352a-95d7-4c77-9485-619a0390fe1c}, !- Space Type Name
+  {0c37f2fd-02c1-4b8d-bf94-a696522b0e15}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1730,7 +1730,7 @@ OS:Connection,
 OS:Space,
   {d2b1807c-c9f4-44c2-8597-3b555b94b37c}, !- Handle
   PatRoom2_Flr_3,                         !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1769,7 +1769,7 @@ OS:Connection,
 OS:Space,
   {3a43a92b-6516-45e6-9f37-eb7bf8bccb83}, !- Handle
   Corridor_NW_Flr_3,                      !- Name
-  {3893e797-1396-4293-b5c5-5b14f3f3dd62}, !- Space Type Name
+  {1a56ae62-3b2a-4427-8f00-08872cb7b3c4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1859,7 +1859,7 @@ OS:Connection,
 OS:Space,
   {c8b8007f-d842-489f-b119-fad0f32ca54d}, !- Handle
   Office4_Mult6_Flr_5,                    !- Name
-  {151ef0a0-7bc0-4b27-aff7-2cfadcb88f12}, !- Space Type Name
+  {7ba426a2-3247-409d-b428-1b4ac913aa9d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1932,7 +1932,7 @@ OS:Connection,
 OS:Space,
   {3d0a884f-f38a-4024-ba41-a3615b0d597f}, !- Handle
   PatRoom7_Mult10_Flr_4,                  !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1954,7 +1954,7 @@ OS:Connection,
 OS:Space,
   {47d5f6b5-5e98-43ad-8669-c046505a937d}, !- Handle
   OR4_Flr_2,                              !- Name
-  {2d575313-0865-481a-a110-98270ec82dd0}, !- Space Type Name
+  {6ba7b853-f5ed-4e08-b51e-6a284640b96d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1993,7 +1993,7 @@ OS:Connection,
 OS:Space,
   {970b3b19-607d-49a6-8d29-1ec76a5b55c6}, !- Handle
   PatRoom1_Mult10_Flr_4,                  !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2049,7 +2049,7 @@ OS:Connection,
 OS:Space,
   {e0b3f21a-5417-4d6d-9bad-44c2b5fb3717}, !- Handle
   OR2_Mult5_Flr_2,                        !- Name
-  {2d575313-0865-481a-a110-98270ec82dd0}, !- Space Type Name
+  {6ba7b853-f5ed-4e08-b51e-6a284640b96d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2088,7 +2088,7 @@ OS:Connection,
 OS:Space,
   {432827a6-9676-48d3-9de8-55f3ed327c07}, !- Handle
   Lab_Flr_3,                              !- Name
-  {d96c93af-0cd4-4814-825d-0306590ddac1}, !- Space Type Name
+  {2ef765d1-ba3d-4054-a51f-a6e1b79d97b3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2127,7 +2127,7 @@ OS:Connection,
 OS:Space,
   {7c3f7787-1a2c-4af2-b30d-c5fe68177501}, !- Handle
   PatRoom2_Flr_4,                         !- Name
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Space Type Name
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2166,7 +2166,7 @@ OS:Connection,
 OS:Space,
   {aeb14eec-a11c-4495-b283-f98c2eca3dbf}, !- Handle
   ICU_NurseStn_Lobby_Flr_2,               !- Name
-  {832342cc-0b84-47e5-ac3b-0a480ba9f95b}, !- Space Type Name
+  {3fd52485-8d96-4be0-a7b0-052ba7a63cf6}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2279,7 +2279,7 @@ OS:Connection,
 OS:Space,
   {7cce3ac6-5d1d-4960-9e9f-f0d99f44c040}, !- Handle
   OR3_Flr_2,                              !- Name
-  {2d575313-0865-481a-a110-98270ec82dd0}, !- Space Type Name
+  {6ba7b853-f5ed-4e08-b51e-6a284640b96d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2522,7 +2522,7 @@ OS:Connection,
 OS:Space,
   {ccee8f2b-c192-4f18-9407-cda799f28f23}, !- Handle
   PhysTherapy_Flr_3,                      !- Name
-  {ff8d0524-f4e6-4396-9989-e87546795aa7}, !- Space Type Name
+  {1e73f43d-013b-4046-aebb-3cf4759b0596}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2561,7 +2561,7 @@ OS:Connection,
 OS:Space,
   {0b208f03-204c-460e-a229-d14790739b8b}, !- Handle
   OR1_Flr_2,                              !- Name
-  {2d575313-0865-481a-a110-98270ec82dd0}, !- Space Type Name
+  {6ba7b853-f5ed-4e08-b51e-6a284640b96d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2702,7 +2702,7 @@ OS:Connection,
 OS:Space,
   {bc7d28d5-92bd-44ec-8fa2-e6e43ce5010c}, !- Handle
   ER_Triage_Mult4_Flr_1,                  !- Name
-  {c7c77ef0-6148-4f94-9afa-b4747a8e1568}, !- Space Type Name
+  {0b240d25-7305-4fe3-b546-fa24d3ca980d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3121,7 +3121,7 @@ OS:Connection,
 OS:Space,
   {648db5a6-f0b0-425d-a12c-a9502504cf7a}, !- Handle
   IC_PatRoom1_Mult5_Flr_2,                !- Name
-  {64b8fb9b-b2ce-4d2c-ae4c-a94f666c1c72}, !- Space Type Name
+  {8d03429d-53f0-444a-89a9-0e4dff87cfb2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3228,7 +3228,7 @@ OS:Connection,
 OS:Space,
   {d7e311f6-f2c1-47c2-b301-cbba90b6f733}, !- Handle
   Lab_Flr_4,                              !- Name
-  {d96c93af-0cd4-4814-825d-0306590ddac1}, !- Space Type Name
+  {2ef765d1-ba3d-4054-a51f-a6e1b79d97b3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4174,7 +4174,7 @@ OS:Connection,
 OS:Space,
   {2d4ce43e-14fd-4122-b641-b757121d5aba}, !- Handle
   Dining_Flr_5,                           !- Name
-  {69a27bc2-60c2-46d3-ba5f-68f23b1f1922}, !- Space Type Name
+  {eda6a1ee-f21d-46dc-9b0f-28c8bc80c84f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -13414,7 +13414,7 @@ OS:ZoneHVAC:EquipmentList,
   {0fd7502c-2877-4174-b260-8e7ab921c280}; !- Thermal Zone
 
 OS:Surface,
-  {385a448b-6f65-4a83-954d-821f9a92ad3d}, !- Handle
+  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Handle
   Surface 1,                              !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13432,7 +13432,7 @@ OS:Surface,
   44.196, 48.768, 17.0732;                !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {788ec881-1ed6-4470-975a-63becea6a198}, !- Handle
+  {7ef28f12-04f3-4cc6-a8e5-b51c54945721}, !- Handle
   Surface 2,                              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13449,7 +13449,7 @@ OS:Surface,
   62.484, 48.768, 17.0732;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {4bcbb167-19d9-48b7-b3de-91ffd9692be4}, !- Handle
+  {39811ee1-9686-4edc-bc11-fc9e81fffc11}, !- Handle
   Surface 3,                              !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13467,7 +13467,7 @@ OS:Surface,
   65.532, 48.768, 8.5366;                 !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {04ed6abc-d5a1-4df0-a8ef-5f510d3abd3f}, !- Handle
+  {fbac58cd-2b1e-4bfc-a58a-451c5ec57d58}, !- Handle
   Surface 4,                              !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13484,7 +13484,7 @@ OS:Surface,
   28.956, 53.34, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {f795607b-835d-4bce-915d-e59858144da1}, !- Handle
+  {c6d4007d-5be1-4daf-83ea-860ce5af3310}, !- Handle
   Surface 5,                              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13501,7 +13501,7 @@ OS:Surface,
   60.96, 47.244, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {c33e0809-1f23-4228-bfe5-6fff2e786a05}, !- Handle
+  {96213e57-f0ca-4fb4-809c-d3e928a386f2}, !- Handle
   Surface 6,                              !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13518,7 +13518,7 @@ OS:Surface,
   65.532, 47.244, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {bb02258e-b6c0-48a1-9035-155e87414706}, !- Handle
+  {c9041ab8-126a-479b-b9f5-8253f3af8576}, !- Handle
   Surface 7,                              !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13535,7 +13535,7 @@ OS:Surface,
   60.96, 48.768, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {904ca7ca-bdc1-459a-9a65-54543dd83ae1}, !- Handle
+  {0fdac97c-e2a6-45a4-8bc1-ed20d2d0b293}, !- Handle
   Surface 8,                              !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13552,7 +13552,7 @@ OS:Surface,
   60.96, 48.768, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {29e47332-fb8b-4f60-b96f-bda9e5d0609e}, !- Handle
+  {a4c64c63-d321-4c41-8db1-f54399d13fbd}, !- Handle
   Surface 9,                              !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13569,7 +13569,7 @@ OS:Surface,
   60.96, 53.34, 4.2683;                   !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5a3c8cdc-df13-48cd-9fc3-443636d5e9e5}, !- Handle
+  {8d7cafa7-6ead-4d71-91c7-7d0ab4b9bfc9}, !- Handle
   Surface 10,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13586,7 +13586,7 @@ OS:Surface,
   64.008, 48.768, 4.2683;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {2c26f6e4-731d-4a8c-9f0a-4f2aedbea5ca}, !- Handle
+  {84876a78-eb06-4552-8449-bf50d8f88104}, !- Handle
   Surface 11,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13603,7 +13603,7 @@ OS:Surface,
   39.624, 22.86, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {a64c789e-9065-4be0-8096-3d698aac0a8c}, !- Handle
+  {4ee4cb2c-52f2-4a13-9131-667498c4a3ab}, !- Handle
   Surface 12,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13620,7 +13620,7 @@ OS:Surface,
   39.624, 42.672, 17.0732;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {66ee716f-3928-4890-b92e-fbfea733e0be}, !- Handle
+  {01560249-5c18-4039-a4bf-a673daaf2c4a}, !- Handle
   Surface 13,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13639,7 +13639,7 @@ OS:Surface,
   9.144, 42.672, 17.0732;                 !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {d9308427-a100-47b8-83f7-27f1b021f57e}, !- Handle
+  {d6e1f76c-b865-4ff4-b09a-cb795438a4fa}, !- Handle
   Surface 14,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13656,7 +13656,7 @@ OS:Surface,
   60.96, 42.672, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {1a182a4b-685b-4d4b-b8f1-0ce65a70d711}, !- Handle
+  {ddd92352-150d-4a05-9e4a-9af36c11a562}, !- Handle
   Surface 15,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13673,7 +13673,7 @@ OS:Surface,
   39.624, 19.812, 17.0732;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {d15a15ef-79f2-440c-9ab1-f02aa125af2b}, !- Handle
+  {ada0820f-1875-43d6-ad2e-ae1d0154c28a}, !- Handle
   Surface 16,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13690,7 +13690,7 @@ OS:Surface,
   62.484, 53.34, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {2810ebf6-286f-468c-9f32-b6486aa46826}, !- Handle
+  {684a29de-dffe-40d3-8bce-60fd24fdf8c4}, !- Handle
   Surface 17,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13709,7 +13709,7 @@ OS:Surface,
   39.624, 4.572, 17.0732;                 !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {03dc3de4-1a5f-4a05-b5a6-e138340433d8}, !- Handle
+  {9f60cec7-7c8e-450c-8151-d8b312c670e5}, !- Handle
   Surface 18,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13726,7 +13726,7 @@ OS:Surface,
   65.532, 48.768, 17.0732;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {60b304cd-992f-41c0-b22e-b04e8ac923b2}, !- Handle
+  {48f105bd-b327-43a3-9bc6-635c6d4b846f}, !- Handle
   Surface 19,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13743,7 +13743,7 @@ OS:Surface,
   44.196, 53.34, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {6e51187c-f67b-417e-b201-8fa7128eee33}, !- Handle
+  {bd6e8fed-472b-499c-a4df-b0ea9c59701a}, !- Handle
   Surface 20,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13760,7 +13760,7 @@ OS:Surface,
   4.572, 4.572, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {bdd70b3f-ec8d-45ef-8780-290266e8aaa9}, !- Handle
+  {d8d2a1a2-e7d3-4c71-9f5a-098f14c111c1}, !- Handle
   Surface 21,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13777,7 +13777,7 @@ OS:Surface,
   0, 7.622, 17.0732;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {b16b7826-d5b2-4ae5-8522-4ccb27b29c9a}, !- Handle
+  {520a0f69-6828-4751-9bdf-36056fab7b1c}, !- Handle
   Surface 22,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13794,7 +13794,7 @@ OS:Surface,
   28.956, 4.572, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {3c0de0b3-80ab-4709-983c-0cbcbddc07ea}, !- Handle
+  {70c4d39d-094a-47e3-b80c-5db4b1bd78c8}, !- Handle
   Surface 23,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13812,7 +13812,7 @@ OS:Surface,
   48.768, 42.672, 8.5366;                 !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {527d3b7b-aa6a-4f0c-99cb-b33479cdc151}, !- Handle
+  {1bf92496-b39c-435b-ac47-2bc53209af11}, !- Handle
   Surface 24,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13829,7 +13829,7 @@ OS:Surface,
   62.484, 4.572, 12.8049;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {c966de68-e951-4a43-8502-37313023c9ef}, !- Handle
+  {20831d94-7883-4042-afc7-be5c64c350e0}, !- Handle
   Surface 25,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13846,7 +13846,7 @@ OS:Surface,
   65.532, 42.672, 12.8049;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {01a5f7b6-f515-45b4-b9f1-d90821dc5ad1}, !- Handle
+  {af2e8075-2901-48d1-8a30-892c989ab639}, !- Handle
   Surface 26,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13863,7 +13863,7 @@ OS:Surface,
   39.624, 53.34, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {71c41618-d7cb-4495-a994-d29cb285aa9f}, !- Handle
+  {85e7e219-648c-428b-b1c4-0a6049f80bb1}, !- Handle
   Surface 27,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13880,7 +13880,7 @@ OS:Surface,
   64.008, 4.572, 0;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {99e1cf90-8197-40cb-8ad9-dc984c0ef7e9}, !- Handle
+  {b83a60d8-404b-438f-a3e4-b4ddb6a66c29}, !- Handle
   Surface 28,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13897,7 +13897,7 @@ OS:Surface,
   6.096, 0, 0;                            !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {290050fe-2ff8-4502-913b-ce0e06511dcd}, !- Handle
+  {0fc108e7-7250-4b2d-9702-23d485ca1421}, !- Handle
   Surface 29,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13914,7 +13914,7 @@ OS:Surface,
   39.624, 48.768, 4.2683;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {68b3700a-ec19-422d-84c7-ca889ec38676}, !- Handle
+  {5604b404-78ef-41f2-ae8f-5d78faf6cf53}, !- Handle
   Surface 30,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -13931,7 +13931,7 @@ OS:Surface,
   39.624, 4.572, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {e580b254-57d9-4a1b-bde1-57a28341821b}, !- Handle
+  {e1088e9b-8e09-4483-9b39-ff5143dfd692}, !- Handle
   Surface 31,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13948,7 +13948,7 @@ OS:Surface,
   39.624, 0, 0;                           !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {2242e13f-a92a-4f12-95e3-a120564d63a3}, !- Handle
+  {080e8427-b4b0-4ae3-802d-df95ae93c3e5}, !- Handle
   Surface 32,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13965,7 +13965,7 @@ OS:Surface,
   64.008, 13.716, 4.2683;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {a60d03bf-7caf-4bf0-99e4-dcf909a24650}, !- Handle
+  {b8fd9db4-7bd2-41c0-ab0c-0cec74ac9a69}, !- Handle
   Surface 33,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -13982,7 +13982,7 @@ OS:Surface,
   4.572, 4.572, 12.8049;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {0f69fa18-0a38-4c93-8ca0-d16de364e141}, !- Handle
+  {b777888b-3bf2-4e45-a040-4fb0ab280b4c}, !- Handle
   Surface 34,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -13999,7 +13999,7 @@ OS:Surface,
   4.572, 10.668, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {ac2973cc-5be0-4fcc-a332-98afee0efa14}, !- Handle
+  {b395defa-d69f-4d8f-a325-d6369ca3aa89}, !- Handle
   Surface 35,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14016,7 +14016,7 @@ OS:Surface,
   28.956, 4.572, 12.8049;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {0962574e-eac1-4f2a-be1f-10704317ee64}, !- Handle
+  {b8d83350-9eff-4735-b18b-55c92f8575d5}, !- Handle
   Surface 36,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14038,7 +14038,7 @@ OS:Surface,
   21.3415, 0, 0;                          !- X,Y,Z Vertex 9 {m}
 
 OS:Surface,
-  {142b8e81-d505-41f6-b259-e0eb9df6c444}, !- Handle
+  {bf5f8295-2e95-486d-bb66-417b1037d2df}, !- Handle
   Surface 37,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14059,7 +14059,7 @@ OS:Surface,
   0, 21.3415, 4.2683;                     !- X,Y,Z Vertex 8 {m}
 
 OS:Surface,
-  {a651f816-c1de-4793-8e5d-cdffb94d9adf}, !- Handle
+  {6064a941-6e6f-4e5e-ab73-ae912764cabb}, !- Handle
   Surface 38,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14076,7 +14076,7 @@ OS:Surface,
   21.3415, 4.572, 4.2683;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {95f6c706-c2e0-495a-b517-83e75162f2f0}, !- Handle
+  {4dee5204-e9ce-4d6e-bf92-927006c0f419}, !- Handle
   Surface 39,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14093,7 +14093,7 @@ OS:Surface,
   4.572, 48.768, 12.8049;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {36dacfb3-00c8-472e-a27c-7bd1839d73cf}, !- Handle
+  {49da93f8-31d5-433e-9148-e35213a5dbf0}, !- Handle
   Surface 40,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14110,7 +14110,7 @@ OS:Surface,
   6.096, 48.768, 12.8049;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {b0333971-1b6f-47b7-b2c8-ed983876561c}, !- Handle
+  {b7577070-7f0d-4f70-91db-f5e2ffb3e9e3}, !- Handle
   Surface 41,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14127,7 +14127,7 @@ OS:Surface,
   62.484, 48.768, 12.8049;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {fd6d97f8-f0a7-4604-8f78-d274bbf90e9f}, !- Handle
+  {daa8d19b-b385-4afd-bd75-e4292bdc3334}, !- Handle
   Surface 42,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14144,7 +14144,7 @@ OS:Surface,
   39.624, 47.244, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {d29db0ac-4129-450f-8ed4-d8c7510081f7}, !- Handle
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Handle
   Surface 43,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14162,7 +14162,7 @@ OS:Surface,
   28.956, 0, 8.5366;                      !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {08395b7c-cafd-4ca1-9671-ea98c20efcea}, !- Handle
+  {4d581ba9-f50e-4144-a34a-a735475be05d}, !- Handle
   Surface 44,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14179,7 +14179,7 @@ OS:Surface,
   39.624, 47.244, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5f312270-e40b-4e20-add7-086932cbbffc}, !- Handle
+  {33b2c943-5bc3-4e78-b5aa-cfb9c81f736c}, !- Handle
   Surface 45,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14198,7 +14198,7 @@ OS:Surface,
   4.572, 48.768, 8.5366;                  !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {4c1f49a0-f2d1-41eb-bc51-9a6645aafec5}, !- Handle
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Handle
   Surface 46,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14215,7 +14215,7 @@ OS:Surface,
   39.624, 22.86, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {d12e5da5-5f87-40cf-8279-0339519fca7f}, !- Handle
+  {29578bb5-eb36-44c8-8c20-23c657868e8a}, !- Handle
   Surface 47,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14232,7 +14232,7 @@ OS:Surface,
   39.624, 53.34, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {8067cd7c-08d9-43aa-980e-5b2215b4a834}, !- Handle
+  {6991161d-8404-4812-85bd-e528b0e5a6b2}, !- Handle
   Surface 48,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14249,7 +14249,7 @@ OS:Surface,
   28.956, 21.3415, 8.5366;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {d62933eb-c587-41ba-88ac-d1265d2ee60f}, !- Handle
+  {e32fe023-4130-450b-b2a8-3964172c81f2}, !- Handle
   Surface 49,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14266,7 +14266,7 @@ OS:Surface,
   28.956, 0, 8.5366;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {62cb9ede-be1f-4580-8a78-176f0f2923a9}, !- Handle
+  {2eec8c00-5a6b-433d-b52e-8bf78f1a6295}, !- Handle
   Surface 50,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14284,7 +14284,7 @@ OS:Surface,
   28.956, 10.668, 8.5366;                 !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {372e5c2c-a2c8-44c4-aab9-58f154fae5e6}, !- Handle
+  {505e350d-0840-4571-89d4-0f011f9d14ff}, !- Handle
   Surface 51,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14304,7 +14304,7 @@ OS:Surface,
   60.96, 16.764, 8.5366;                  !- X,Y,Z Vertex 7 {m}
 
 OS:Surface,
-  {8a616daf-08d0-498a-8972-17e0e4c58828}, !- Handle
+  {e59df199-1ca9-44a5-a6dc-05633e4fb8b9}, !- Handle
   Surface 52,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14322,7 +14322,7 @@ OS:Surface,
   4.572, 10.668, 8.5366;                  !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {20f133d1-fd8e-415b-8b5c-819d6af8a086}, !- Handle
+  {7d731ad7-ba77-4bf1-91a4-52bb25144142}, !- Handle
   Surface 53,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14339,7 +14339,7 @@ OS:Surface,
   39.624, 19.812, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {6248b8d6-73c7-42db-a630-348d17239b11}, !- Handle
+  {40e1cb83-b8a2-4cec-b59b-aace0a135846}, !- Handle
   Surface 54,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14358,7 +14358,7 @@ OS:Surface,
   9.144, 42.672, 8.5366;                  !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {0649d923-27f0-471c-abc1-7733ff2d18f2}, !- Handle
+  {df017267-09f8-4d88-9182-1c12331e6de4}, !- Handle
   Surface 55,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14375,7 +14375,7 @@ OS:Surface,
   65.532, 8.992, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {be485868-ff35-46bc-a71c-b4f89ddc3051}, !- Handle
+  {4fd6b540-3546-4311-9129-44c926f7367c}, !- Handle
   Surface 56,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14394,7 +14394,7 @@ OS:Surface,
   28.956, 10.668, 17.0732;                !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {15640d35-3fef-4ab9-a013-1d22afd057fe}, !- Handle
+  {49e43f87-d93e-4414-bf9c-c5e31e7bfb86}, !- Handle
   Surface 57,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14411,7 +14411,7 @@ OS:Surface,
   39.624, 22.86, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {d8467594-6176-4baf-8e8e-5d9b8133302c}, !- Handle
+  {797b981b-e8ba-497d-b361-4adef913762d}, !- Handle
   Surface 58,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14428,7 +14428,7 @@ OS:Surface,
   62.484, 4.572, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5fef3c52-60a9-4c90-a6ec-bc3241d47c56}, !- Handle
+  {da589d4f-b2f1-47c8-86f7-cb4ce09fa58e}, !- Handle
   Surface 59,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14447,7 +14447,7 @@ OS:Surface,
   60.96, 22.86, 17.0732;                  !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {9e87e98e-4a9a-403d-b6b5-1a44a2e2ef3f}, !- Handle
+  {a59cc0b0-024b-4efa-9f23-af4c0f7ec482}, !- Handle
   Surface 60,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14464,7 +14464,7 @@ OS:Surface,
   39.624, 4.572, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {25dc39e6-055d-4192-abbe-0c0d1817d24d}, !- Handle
+  {626449c0-0000-4c82-8023-35ffcc6b326c}, !- Handle
   Surface 61,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14481,7 +14481,7 @@ OS:Surface,
   65.532, 22.86, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {2dc93178-be58-4319-9af1-f5214e74e005}, !- Handle
+  {16f24371-1105-4dce-911d-d90829761440}, !- Handle
   Surface 62,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14500,7 +14500,7 @@ OS:Surface,
   28.956, 0, 17.0732;                     !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {22deff25-83c2-49fe-bd17-58df98c8da34}, !- Handle
+  {c8d2cef2-f01a-4bb9-a8f5-0b52a4662c6b}, !- Handle
   Surface 63,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14517,7 +14517,7 @@ OS:Surface,
   44.196, 4.572, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {a4d74bc0-d6d4-46d3-897e-ea677734d473}, !- Handle
+  {ae64a6cf-5c68-46d8-bc65-1072ceb714e4}, !- Handle
   Surface 64,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14534,7 +14534,7 @@ OS:Surface,
   9.144, 33.528, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5e044c52-f453-4718-aace-00a2c73a4e5c}, !- Handle
+  {e7c03313-132b-47c1-a320-17d8c0a5f08a}, !- Handle
   Surface 65,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14551,7 +14551,7 @@ OS:Surface,
   9.144, 33.528, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5ac53150-8316-4d87-8d56-ce64e2f1b29d}, !- Handle
+  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Handle
   Surface 66,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14570,7 +14570,7 @@ OS:Surface,
   15.24, 10.668, 17.0732;                 !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {a95a0670-40ce-408c-a1f1-b34f397a1943}, !- Handle
+  {3649b618-663e-43c4-be42-10953b782f6b}, !- Handle
   Surface 67,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14589,7 +14589,7 @@ OS:Surface,
   28.956, 53.34, 17.0732;                 !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {081bbf73-5bea-4b18-80a7-77706ef6af8c}, !- Handle
+  {096fa4bd-3adf-4dc7-a3cd-3235fa711554}, !- Handle
   Surface 68,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14606,7 +14606,7 @@ OS:Surface,
   9.144, 10.668, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {98e060de-16e3-4cb8-b0bc-c5995efe4f5f}, !- Handle
+  {9a145cb7-3aee-4ebf-a45e-36acb38d4a20}, !- Handle
   Surface 69,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14624,7 +14624,7 @@ OS:Surface,
   48.768, 48.768, 8.5366;                 !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {a9420ca7-b032-4385-a055-9fc369f0be69}, !- Handle
+  {7731f474-41b6-45a3-b218-59e981427ea0}, !- Handle
   Surface 70,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14641,7 +14641,7 @@ OS:Surface,
   39.624, 22.86, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {7969a55a-0907-46ed-8cae-c3e525f057e2}, !- Handle
+  {3342e300-753b-41b3-8e21-446aa6f1732b}, !- Handle
   Surface 71,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14658,7 +14658,7 @@ OS:Surface,
   39.624, 48.768, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {815944b0-186e-4fe7-afb7-10c763fbdc3d}, !- Handle
+  {bedcffb8-ce69-461d-b91d-0d38989d6d45}, !- Handle
   Surface 72,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14675,7 +14675,7 @@ OS:Surface,
   60.96, 47.244, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {f93ef646-8602-4f23-b59f-59a0a49c11a8}, !- Handle
+  {1fd9ef11-d684-4b82-9da4-0a422dd14b02}, !- Handle
   Surface 73,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14692,7 +14692,7 @@ OS:Surface,
   48.768, 48.768, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {76a86fef-cfd8-416b-b81e-dde87b26d728}, !- Handle
+  {d1eff599-4c5e-4e95-bb49-92cc9c540be1}, !- Handle
   Surface 74,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14709,7 +14709,7 @@ OS:Surface,
   39.624, 0, 8.5366;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {635f5c40-a030-4fa8-864c-c6a0fb48b8ec}, !- Handle
+  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Handle
   Surface 75,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14726,7 +14726,7 @@ OS:Surface,
   44.196, 48.768, 12.8049;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {240cb174-02e5-41e5-a669-827d81485596}, !- Handle
+  {17fa6fd9-7861-41ae-887e-639bcc0b32c5}, !- Handle
   Surface 76,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14743,7 +14743,7 @@ OS:Surface,
   70.104, 48.768, 12.8049;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {0a6863e0-26b9-48ce-bc7c-3fd5ab153baf}, !- Handle
+  {2b8427ab-da21-4a0b-8787-0b3c0fd36d29}, !- Handle
   Surface 77,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14760,7 +14760,7 @@ OS:Surface,
   44.196, 48.768, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {04c7a1bd-9a05-43d1-9abe-5f7dfb762cbb}, !- Handle
+  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Handle
   Surface 78,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14777,7 +14777,7 @@ OS:Surface,
   4.572, 21.3415, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {2b411381-b8d3-4ad3-804f-7d089b82c3c6}, !- Handle
+  {256d64e6-eeea-4b2c-bf9c-53073a0593b2}, !- Handle
   Surface 79,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14794,7 +14794,7 @@ OS:Surface,
   9.144, 21.3415, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {108328d9-96fd-45cf-89ce-ddb16db45188}, !- Handle
+  {91a60365-2c59-4cb9-8ef2-4a833f52a486}, !- Handle
   Surface 80,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14811,7 +14811,7 @@ OS:Surface,
   60.96, 41.148, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {8919d35c-ab99-4473-bfe2-a43529e4e31b}, !- Handle
+  {5011d809-abe1-4376-b714-6b9dabef0c78}, !- Handle
   Surface 81,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14830,7 +14830,7 @@ OS:Surface,
   9.144, 10.668, 8.5366;                  !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {1d67bda7-a032-4ab9-9766-32fd30675ce6}, !- Handle
+  {20c2b238-43a4-4b18-a9d1-ee5600e54a8c}, !- Handle
   Surface 82,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14847,7 +14847,7 @@ OS:Surface,
   9.144, 33.528, 12.8049;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {b6a15e95-c79f-4c5a-afea-69af20e3a72a}, !- Handle
+  {cbfb7f3a-220e-474c-a9e8-7914859bf74e}, !- Handle
   Surface 83,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -14864,7 +14864,7 @@ OS:Surface,
   0, 7.622, 17.0732;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {36582e31-ba15-48c2-900c-70ff44fcdbc8}, !- Handle
+  {f7f0be2b-ace4-4f53-bf84-c230f415e273}, !- Handle
   Surface 84,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14881,7 +14881,7 @@ OS:Surface,
   4.572, 7.622, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {9e01a408-8ca7-420e-9413-068bca5d4251}, !- Handle
+  {f1f01723-7454-4c70-9d58-83429851cf43}, !- Handle
   Surface 85,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14898,7 +14898,7 @@ OS:Surface,
   4.572, 8.992, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {e2ecf112-8671-4dab-935c-1f19da2f4754}, !- Handle
+  {a03a1a89-2148-42c6-9b3f-4d12b0bf52e8}, !- Handle
   Surface 86,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14915,7 +14915,7 @@ OS:Surface,
   4.572, 15.24, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {8e645a0b-b60c-492b-b5a4-db9c5f0b22c0}, !- Handle
+  {909ee754-6587-4c42-817a-b2f25795ac08}, !- Handle
   Surface 87,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14932,7 +14932,7 @@ OS:Surface,
   4.572, 48.768, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5d00385e-158c-4070-9ce0-eaeaf9d3038c}, !- Handle
+  {e2dbe164-b07a-4a34-99d5-f589bf388bb9}, !- Handle
   Surface 88,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -14949,7 +14949,7 @@ OS:Surface,
   6.096, 48.768, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {d10f94c8-652f-417a-a0f4-4b399fa686b5}, !- Handle
+  {2e14b4bd-df69-43ce-a490-7b627ad09fe2}, !- Handle
   Surface 89,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14966,7 +14966,7 @@ OS:Surface,
   4.572, 48.768, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {40acc5aa-c6b9-4c73-999e-617583b91bb9}, !- Handle
+  {b746ffbb-c3e8-43b7-9d3e-27c290612cee}, !- Handle
   Surface 90,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -14985,7 +14985,7 @@ OS:Surface,
   9.144, 21.3415, 8.5366;                 !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {dc5c82fc-f83c-4b0a-9ad2-ff2334273c47}, !- Handle
+  {ca17e7ae-73f5-48cf-b51a-4be121aa64db}, !- Handle
   Surface 91,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15004,7 +15004,7 @@ OS:Surface,
   15.24, 21.3415, 8.5366;                 !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {eeeaea7b-42db-4924-9108-d890a5a4919c}, !- Handle
+  {35d093b4-6ac9-4da5-8713-fc32ae26828a}, !- Handle
   Surface 92,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15021,7 +15021,7 @@ OS:Surface,
   15.24, 19.812, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {d4b84732-a246-4175-9792-51b9e6854584}, !- Handle
+  {d5bb2766-eea3-4a94-aa73-2a2bb5cba1bb}, !- Handle
   Surface 93,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15038,7 +15038,7 @@ OS:Surface,
   0, 4.572, 8.5366;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {2fbacbb3-7462-4d2e-aa00-ae87f729af33}, !- Handle
+  {9b9d6be8-db94-45a4-a27d-3aeb76d22746}, !- Handle
   Surface 94,                             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15055,7 +15055,7 @@ OS:Surface,
   48.768, 47.244, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {fef4fada-d124-43e1-823e-74b2042ad1dc}, !- Handle
+  {c870c233-312c-4ca6-84d2-6f3cc82b8ac0}, !- Handle
   Surface 95,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15074,7 +15074,7 @@ OS:Surface,
   48.768, 42.672, 8.5366;                 !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {fdbdf532-1e2c-4e83-b7c7-fa09910ae76f}, !- Handle
+  {103d24d9-c95a-40ad-8c94-0c81d68b2e4b}, !- Handle
   Surface 96,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15097,7 +15097,7 @@ OS:Surface,
   39.624, 4.572, 4.2683;                  !- X,Y,Z Vertex 10 {m}
 
 OS:Surface,
-  {d2f573fe-b3e1-43e9-9dce-6fb072570b43}, !- Handle
+  {cd0dea3f-e843-4800-8a55-0aef6a36fd9c}, !- Handle
   Surface 97,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15114,7 +15114,7 @@ OS:Surface,
   4.572, 10.668, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {97d7a2c6-0ebb-4893-a029-0112ac291972}, !- Handle
+  {09be3f40-fd69-44c3-95f0-04a0c28549d3}, !- Handle
   Surface 98,                             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15131,7 +15131,7 @@ OS:Surface,
   27.432, 53.34, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {146957db-fe0c-4bc2-9d1a-ccdca220fcaf}, !- Handle
+  {fe9eed56-ed0c-48e8-b082-a145aa6981c0}, !- Handle
   Surface 99,                             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15148,7 +15148,7 @@ OS:Surface,
   4.572, 45.72, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {cec01c3b-8147-44a7-891f-5f43e0496be4}, !- Handle
+  {3ba882a0-f824-4916-a0a7-486c0dc83928}, !- Handle
   Surface 100,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15165,7 +15165,7 @@ OS:Surface,
   4.572, 10.668, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {994fe258-ea88-40a2-93e1-2ed4e89fea69}, !- Handle
+  {ce38369e-a8bd-4c4b-9487-577f0e27aeb2}, !- Handle
   Surface 101,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15182,7 +15182,7 @@ OS:Surface,
   4.572, 15.24, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {6c365236-05d8-425b-886c-6c485acde967}, !- Handle
+  {f5219d96-9bcc-43ed-9b9a-74bd1654a8b1}, !- Handle
   Surface 102,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15199,7 +15199,7 @@ OS:Surface,
   6.096, 53.34, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {a0465f19-3443-4b59-be34-8134f8bf80d3}, !- Handle
+  {c28f5919-0769-400b-8be9-bdf3ead96880}, !- Handle
   Surface 103,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15216,7 +15216,7 @@ OS:Surface,
   0, 48.768, 17.0732;                     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {11434a31-b06d-423c-b383-d5265b7467ea}, !- Handle
+  {9ff2dbfd-dadf-4e71-989b-c8653352d2e5}, !- Handle
   Surface 104,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15233,7 +15233,7 @@ OS:Surface,
   44.196, 48.768, 17.0732;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {4146f7e0-935a-45c4-8b9b-c94da6ddc6b7}, !- Handle
+  {7a19544b-1057-4056-a29d-1cde23eae0ae}, !- Handle
   Surface 105,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15250,7 +15250,7 @@ OS:Surface,
   70.104, 48.768, 17.0732;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {9f63fed0-3ce6-47ad-96e7-1911ab40e0ca}, !- Handle
+  {648c9ba4-23fc-44d9-9b2d-3cb3a267ab82}, !- Handle
   Surface 106,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15269,7 +15269,7 @@ OS:Surface,
   39.624, 19.812, 8.5366;                 !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {64cd7484-204a-4bdb-96e0-015c307ddb03}, !- Handle
+  {715d718b-4818-43fd-b15f-0424d6c8bf22}, !- Handle
   Surface 107,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15286,7 +15286,7 @@ OS:Surface,
   64.008, 4.572, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {6e0603eb-281f-405c-b6a2-b1179a3805ed}, !- Handle
+  {6543cee8-48b9-46a4-8601-fd069d2f322f}, !- Handle
   Surface 108,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15304,7 +15304,7 @@ OS:Surface,
   62.484, 0, 8.5366;                      !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {545c0ed7-6172-4721-9c75-4bd7d83ad81f}, !- Handle
+  {e3d0b15a-468e-44e1-be77-905a2db88cef}, !- Handle
   Surface 109,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15324,7 +15324,7 @@ OS:Surface,
   44.196, 4.572, 8.5366;                  !- X,Y,Z Vertex 7 {m}
 
 OS:Surface,
-  {37780217-ef8f-4db0-bbf9-015dbd6adcc8}, !- Handle
+  {bb6cbd70-bb6a-4614-adc5-94de8884989a}, !- Handle
   Surface 110,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15341,7 +15341,7 @@ OS:Surface,
   60.96, 41.148, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {2a417609-0ccd-4bcb-a887-62758c01b8c8}, !- Handle
+  {241c4c07-8f06-4049-b05b-5359997929ac}, !- Handle
   Surface 111,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15364,7 +15364,7 @@ OS:Surface,
   48.768, 48.768, 4.2683;                 !- X,Y,Z Vertex 10 {m}
 
 OS:Surface,
-  {d9af4469-409e-4952-9a04-aac5be85c872}, !- Handle
+  {ee6a3040-e026-4638-9d70-8bdfe6305b21}, !- Handle
   Surface 112,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15381,7 +15381,7 @@ OS:Surface,
   48.768, 53.34, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {6d12a8f8-e6b4-41e9-8015-99371f76422c}, !- Handle
+  {7b69c854-e92d-40d8-b368-2d24bd2dbdcb}, !- Handle
   Surface 113,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15398,7 +15398,7 @@ OS:Surface,
   45.72, 4.572, 4.2683;                   !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {64204d49-43af-44ce-9696-f6c22f9f06bf}, !- Handle
+  {d4df4b39-7bde-45a9-86ae-40fd86d0ae0d}, !- Handle
   Surface 114,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15415,7 +15415,7 @@ OS:Surface,
   64.008, 13.716, 4.2683;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {af0d04b3-7d7c-4435-a8a7-86ca0cc275f1}, !- Handle
+  {93e7d873-98b4-4b46-a822-a6dba0ee64cc}, !- Handle
   Surface 115,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15432,7 +15432,7 @@ OS:Surface,
   60.96, 41.148, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {ddfac39e-5a06-4521-a584-0bf70705ae38}, !- Handle
+  {70204a66-f87f-478b-a6fd-d2be4be0e599}, !- Handle
   Surface 116,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15450,7 +15450,7 @@ OS:Surface,
   39.624, 47.244, 4.2683;                 !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {b32981cc-98df-441d-86c8-147234c924ba}, !- Handle
+  {03a75eb6-c60d-4eb2-971a-9d71de6cad2e}, !- Handle
   Surface 117,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15467,7 +15467,7 @@ OS:Surface,
   44.196, 0, 8.5366;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {0336cb48-8b04-45fc-ae7a-f1e703c670ad}, !- Handle
+  {cdbf6177-91fb-4217-9da7-0eb604d20cea}, !- Handle
   Surface 118,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15484,7 +15484,7 @@ OS:Surface,
   39.624, 10.668, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {560c0641-bb81-4e6b-8297-f8f1f32c3ec0}, !- Handle
+  {c9e71b8e-75f4-4a39-8e07-c3f9d64b93ff}, !- Handle
   Surface 119,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15501,7 +15501,7 @@ OS:Surface,
   65.532, 8.992, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {7fd9db64-6cee-43f2-8fff-3d545dc7bd71}, !- Handle
+  {38c64956-80a4-40e5-9be7-0cc3a1950841}, !- Handle
   Surface 120,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15518,7 +15518,7 @@ OS:Surface,
   60.96, 42.672, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {167c2f7e-39eb-4ba4-9346-738a3c128e94}, !- Handle
+  {56f85abd-83d3-40af-9857-828217d54e32}, !- Handle
   Surface 121,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15535,7 +15535,7 @@ OS:Surface,
   4.572, 48.768, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5e0ac196-902a-4c6a-a971-32f9c868ddc6}, !- Handle
+  {26bf1289-92c7-4908-89aa-8e90ed78f196}, !- Handle
   Surface 122,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15552,7 +15552,7 @@ OS:Surface,
   0, 48.768, 4.2683;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {f6c182db-69fa-4836-aa9a-48fd7566ff1d}, !- Handle
+  {333b4662-99ba-4035-a451-a29aa5125ec2}, !- Handle
   Surface 123,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15569,7 +15569,7 @@ OS:Surface,
   62.484, 4.572, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {b6d4860c-4840-474f-9685-fc51d9c9eb98}, !- Handle
+  {681cb290-8fd0-4a3a-ad67-4e295bebb907}, !- Handle
   Surface 124,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15586,7 +15586,7 @@ OS:Surface,
   65.532, 42.672, 17.0732;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {8d1a46bc-ed08-4aa3-8629-a6753091fd77}, !- Handle
+  {2faf72d2-e6ee-4161-ac50-94fe775642f3}, !- Handle
   Surface 125,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15603,7 +15603,7 @@ OS:Surface,
   15.24, 4.572, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {df15e2cd-2cba-4fa0-aa3a-e265a6e89925}, !- Handle
+  {4a7a2d10-e0e7-4275-9d2c-b48aca7f0aac}, !- Handle
   Surface 126,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15620,7 +15620,7 @@ OS:Surface,
   15.24, 19.812, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {6b7df431-5be0-4019-9def-af299134c330}, !- Handle
+  {cb196f57-17c4-46e4-af6f-e5f031bc2695}, !- Handle
   Surface 127,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15637,7 +15637,7 @@ OS:Surface,
   4.572, 4.572, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {183eef5e-eafe-4c2a-b838-6fd64b013be5}, !- Handle
+  {d2419fac-5aba-48bb-b134-1320fb793f09}, !- Handle
   Surface 128,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15655,7 +15655,7 @@ OS:Surface,
   9.144, 10.668, 17.0732;                 !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {d87db197-e2ff-4d51-ad0e-a5cd03752c42}, !- Handle
+  {d18edbd4-56fe-495e-9b14-77ea50a8cf24}, !- Handle
   Surface 129,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15672,7 +15672,7 @@ OS:Surface,
   65.532, 4.572, 12.8049;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5834ed39-c8f7-426a-be04-a7885e2ed32e}, !- Handle
+  {5a1ffa5c-59b0-4ab9-8c41-75038b0eda3c}, !- Handle
   Surface 130,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15690,7 +15690,7 @@ OS:Surface,
   6.096, 4.572, 8.5366;                   !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {358490a5-f797-4f6f-96ad-77f8abf421ae}, !- Handle
+  {f68a58de-d04d-41bc-b638-3168a2510f46}, !- Handle
   Surface 131,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15707,7 +15707,7 @@ OS:Surface,
   4.572, 8.992, 12.8049;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {227782f0-7d53-4451-b8f1-94baf858bb2f}, !- Handle
+  {340fcffd-ddea-480d-bbb1-238c4e6ec284}, !- Handle
   Surface 132,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15724,7 +15724,7 @@ OS:Surface,
   9.144, 7.622, 21.3415;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {083f0e43-47de-4ef0-b141-dfea2f8c9143}, !- Handle
+  {530b9c72-51ef-427d-84dd-dea1c1e8b472}, !- Handle
   Surface 133,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15741,7 +15741,7 @@ OS:Surface,
   6.096, 4.572, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {1bd343fb-1628-45f2-a9c8-648377d962ed}, !- Handle
+  {2c2ffea7-c098-4dea-b72a-df00ab386da3}, !- Handle
   Surface 134,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15758,7 +15758,7 @@ OS:Surface,
   9.144, 4.572, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {7b8bfd0e-5bc2-4dfc-baff-5e5fe2db7b80}, !- Handle
+  {b423ed9f-9144-4385-a1d4-0109a4d97062}, !- Handle
   Surface 135,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15775,7 +15775,7 @@ OS:Surface,
   9.144, 4.572, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {292c94b0-2fe6-479c-9a00-dd19449da3ee}, !- Handle
+  {4e1f95b2-3271-4c31-b270-3369dd222cbb}, !- Handle
   Surface 136,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15792,7 +15792,7 @@ OS:Surface,
   9.144, 33.528, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {80c40d92-c96b-420b-a9c0-542e487b323b}, !- Handle
+  {c80dc5c7-a5a2-47bd-82ca-b6fb0d4bb981}, !- Handle
   Surface 137,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15809,7 +15809,7 @@ OS:Surface,
   4.572, 7.622, 17.0732;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {ebaa2ab3-4a9e-4b1c-9663-6ea665d1b015}, !- Handle
+  {3809fd9e-805e-458f-8034-b6aecd59f22c}, !- Handle
   Surface 138,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15826,7 +15826,7 @@ OS:Surface,
   12.192, 48.768, 21.3415;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {39e9bdb5-2eeb-4f3e-9542-87fad3214171}, !- Handle
+  {8ee4e238-b253-424a-b517-5487569ff298}, !- Handle
   Surface 139,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15843,7 +15843,7 @@ OS:Surface,
   9.144, 45.72, 21.3415;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {a977af8f-9cd1-4dcc-a33e-5939c4b05c7a}, !- Handle
+  {8f0efc50-ab77-47d2-908f-17ec27efad9c}, !- Handle
   Surface 140,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15860,7 +15860,7 @@ OS:Surface,
   9.144, 15.24, 21.3415;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {a49efc11-1034-48b7-9e9b-c86b4902fa4a}, !- Handle
+  {fc62bc1b-eb28-4d57-b11c-12360b8ec326}, !- Handle
   Surface 141,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15877,7 +15877,7 @@ OS:Surface,
   9.144, 53.34, 21.3415;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {961662d7-7bac-4841-8ed3-bc114fb20cd3}, !- Handle
+  {ca177d68-24fe-4b23-9959-3bde4413c7cd}, !- Handle
   Surface 142,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15894,7 +15894,7 @@ OS:Surface,
   44.196, 4.572, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {79e68ac2-c526-44c4-b8ef-10aa3cc24e73}, !- Handle
+  {48caea18-bbab-4c15-9d08-19994da02321}, !- Handle
   Surface 143,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15912,7 +15912,7 @@ OS:Surface,
   45.72, 48.768, 4.2683;                  !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {2d9bc523-b896-4eb5-a849-0d0b7b12249b}, !- Handle
+  {65fe6fa9-1f64-498f-be11-13b245e9940d}, !- Handle
   Surface 144,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15929,7 +15929,7 @@ OS:Surface,
   45.72, 53.34, 4.2683;                   !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {967da347-f953-44c8-a28f-6b078f8bb325}, !- Handle
+  {66004489-f5ce-4543-a35e-a305769533bd}, !- Handle
   Surface 145,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15946,7 +15946,7 @@ OS:Surface,
   62.484, 4.572, 17.0732;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5680d24a-6c4b-4912-858c-10db21801e9e}, !- Handle
+  {adee031a-88fb-4245-af30-aae78f329600}, !- Handle
   Surface 146,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -15964,7 +15964,7 @@ OS:Surface,
   0, 15.24, 17.0732;                      !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {2ffff3f2-f7a3-4cc5-8a1d-0a2be9823f2f}, !- Handle
+  {fcf0cbcc-2a28-4609-a259-d9b8e7cb15e5}, !- Handle
   Surface 147,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -15981,7 +15981,7 @@ OS:Surface,
   39.624, 48.768, 0;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {ff830508-9c34-49fb-b60a-98e963b88c4f}, !- Handle
+  {ac8c5423-84c7-4be3-b05e-b6a60d20e43e}, !- Handle
   Surface 148,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -15998,7 +15998,7 @@ OS:Surface,
   64.008, 4.572, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {1359a07e-2383-46c6-994f-ab791cc33875}, !- Handle
+  {8786e166-b1ab-4948-979c-976599defeba}, !- Handle
   Surface 149,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16015,7 +16015,7 @@ OS:Surface,
   64.008, 48.768, 0;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {830d3beb-cabc-4be9-bede-744168a58ecc}, !- Handle
+  {95e279b6-4d1b-4f29-81e2-e72309cc5b07}, !- Handle
   Surface 150,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16032,7 +16032,7 @@ OS:Surface,
   64.008, 0, 0;                           !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {89d817d8-2738-4f70-95e3-463d9622e546}, !- Handle
+  {eea3d64e-b16b-4ca5-8654-a4bff23a871f}, !- Handle
   Surface 151,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16054,7 +16054,7 @@ OS:Surface,
   45.72, 4.572, 0;                        !- X,Y,Z Vertex 9 {m}
 
 OS:Surface,
-  {119e13f0-2c95-4ba1-af8a-523bf38ca8cb}, !- Handle
+  {1a722acf-48cc-42f3-bd96-72b7cafa5f17}, !- Handle
   Surface 152,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16071,7 +16071,7 @@ OS:Surface,
   45.72, 0, 0;                            !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {48183d1d-2e39-4d45-91dc-f63a2d7097c3}, !- Handle
+  {defa49fd-c611-4f08-88f7-a698215b7d6d}, !- Handle
   Surface 153,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16088,7 +16088,7 @@ OS:Surface,
   45.72, 48.768, 0;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {1e810f12-30b6-4cd5-bf49-5379aabd0275}, !- Handle
+  {cd9e010c-b707-48b2-9c8b-8cc91d1043af}, !- Handle
   Surface 154,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16105,7 +16105,7 @@ OS:Surface,
   64.008, 39.624, 0;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {b21adcf8-1de3-4b74-934b-2ab2716c143e}, !- Handle
+  {84cc2288-e2c1-492a-a74e-807a9c530e35}, !- Handle
   Surface 155,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16122,7 +16122,7 @@ OS:Surface,
   64.008, 9.144, 0;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {bcd965f7-be57-443c-a435-45258d5ce4f0}, !- Handle
+  {c0c248d6-3691-4d94-8bc9-0f1c4b2873f4}, !- Handle
   Surface 156,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16139,7 +16139,7 @@ OS:Surface,
   9.144, 0, 0;                            !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {1f1bb211-5341-436d-9f6d-4d5f3354adb6}, !- Handle
+  {891a466d-8607-4d69-9d09-7deeb7476183}, !- Handle
   Surface 157,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -16156,7 +16156,7 @@ OS:Surface,
   4.572, 48.768, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {cd60caca-d9b7-4b22-9aff-963ce79ad828}, !- Handle
+  {2e8f9de8-3f7e-4b21-91ea-d2b607932d4b}, !- Handle
   Surface 158,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -16173,7 +16173,7 @@ OS:Surface,
   6.096, 48.768, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {da572125-5336-4fd3-bd0f-57676a097761}, !- Handle
+  {7b22523e-9777-42a3-89ed-b4b1f65ee1bb}, !- Handle
   Surface 159,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16190,7 +16190,7 @@ OS:Surface,
   4.572, 21.3415, 4.2683;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {552724b0-6069-40d7-8658-a1ee7755a4bc}, !- Handle
+  {937be93d-1dca-451c-8765-e3bec4ae02f1}, !- Handle
   Surface 160,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -16207,7 +16207,7 @@ OS:Surface,
   4.572, 21.3415, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {01c5007f-366a-4e95-ba7d-4f80ad86f62a}, !- Handle
+  {e154fa8d-2cb2-40f4-82fb-b6abe7198dd1}, !- Handle
   Surface 161,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -16224,7 +16224,7 @@ OS:Surface,
   0, 21.3415, 8.5366;                     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {6b975b99-0a75-4431-9c34-8f331dbf8fd5}, !- Handle
+  {4ed95863-689f-448b-a662-0afc6f71544e}, !- Handle
   Surface 162,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16241,7 +16241,7 @@ OS:Surface,
   0, 44.196, 4.2683;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {ac22e62d-1ef2-4023-961a-6111363304de}, !- Handle
+  {dbbd271e-fb85-49e4-9c48-6d618e6a4454}, !- Handle
   Surface 163,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16258,7 +16258,7 @@ OS:Surface,
   6.096, 48.768, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {c023d727-bf9c-4153-adb7-5a65f70d8350}, !- Handle
+  {5fe9a96b-0396-44a1-a2a4-48f317d74135}, !- Handle
   Surface 164,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -16275,7 +16275,7 @@ OS:Surface,
   15.24, 21.3415, 8.5366;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {96d803e4-167e-4d59-a9be-b25bfe1635e5}, !- Handle
+  {ff998f9b-365e-481f-a124-0553cb872a3a}, !- Handle
   Surface 165,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16296,7 +16296,7 @@ OS:Surface,
   21.3415, 0, 4.2683;                     !- X,Y,Z Vertex 8 {m}
 
 OS:Surface,
-  {e61089dc-405f-4134-ad0e-2c3cc7051526}, !- Handle
+  {5deed2fe-0981-46e7-bea8-5abfc15800b9}, !- Handle
   Surface 166,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -16313,7 +16313,7 @@ OS:Surface,
   45.72, 48.768, 4.2683;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {07894ba4-804e-4fbf-b532-842f23297036}, !- Handle
+  {51c4e8d6-dbf6-4ea6-8a0c-723bb44da7fd}, !- Handle
   Surface 167,                            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
@@ -16330,7 +16330,7 @@ OS:Surface,
   62.484, 4.572, 12.8049;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {9bae3230-7c2a-45b9-9cd6-8d85250bd809}, !- Handle
+  {d6f482cc-97bb-447c-96ac-df55589a9099}, !- Handle
   Surface 168,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -16347,7 +16347,7 @@ OS:Surface,
   64.008, 47.244, 4.2683;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {c16f7647-99c7-4b01-ac02-7d74c0ea3510}, !- Handle
+  {8d1bb3e8-7b29-4df2-80c2-e96591571232}, !- Handle
   Surface 169,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16366,7 +16366,7 @@ OS:Surface,
   60.96, 16.764, 4.2683;                  !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
-  {85b30463-9ae8-4d52-bcab-821bbfb76c78}, !- Handle
+  {45ed4389-ff87-4968-ab7c-6e5f9aa6f6c7}, !- Handle
   Surface 170,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16384,7 +16384,7 @@ OS:Surface,
   65.532, 41.148, 8.5366;                 !- X,Y,Z Vertex 5 {m}
 
 OS:Surface,
-  {3cc7917d-b29c-4ec1-9fee-0aeebe10d8f0}, !- Handle
+  {7d80f268-9926-42e2-a4e2-65013a798be0}, !- Handle
   Surface 171,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -16401,7 +16401,7 @@ OS:Surface,
   60.96, 41.148, 8.5366;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {2fbcac77-cbc0-41ba-ba4e-5cf5c13f1955}, !- Handle
+  {63a86b8e-488e-455a-b878-047676b4012e}, !- Handle
   Surface 172,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16418,7 +16418,7 @@ OS:Surface,
   6.096, 0, 8.5366;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {8abf955b-2256-4def-bb9e-730fd5b3fc29}, !- Handle
+  {b56f5d65-e1e7-4547-a5e7-7e16405423c5}, !- Handle
   Surface 173,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16435,7 +16435,7 @@ OS:Surface,
   0, 8.992, 8.5366;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {4ce82335-c363-432f-8904-22b5f0984194}, !- Handle
+  {94068320-0e05-4427-bbe1-01d4a4965fcd}, !- Handle
   Surface 174,                            !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
@@ -16452,7 +16452,7 @@ OS:Surface,
   9.144, 4.572, 4.2683;                   !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {5f81a93b-702d-4ce5-9b9c-43b211f7784b}, !- Handle
+  {56aec717-9b5f-4ab6-b8e3-1f2f3c1599f7}, !- Handle
   Surface 175,                            !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
@@ -16469,323 +16469,323 @@ OS:Surface,
   0, 21.3415, 4.2683;                     !- X,Y,Z Vertex 4 {m}
 
 OS:SpaceType,
-  {3893e797-1396-4293-b5c5-5b14f3f3dd62}, !- Handle
+  {1a56ae62-3b2a-4427-8f00-08872cb7b3c4}, !- Handle
   Hospital Corridor,                      !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {86b4f059-415c-4f07-9e56-28fa26bb2d78}, !- Group Rendering Name
+  {6a44de18-a8a8-420b-a984-02dfc5261b61}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   Corridor;                               !- Standards Space Type
 
 OS:Rendering:Color,
-  {86b4f059-415c-4f07-9e56-28fa26bb2d78}, !- Handle
+  {6a44de18-a8a8-420b-a984-02dfc5261b61}, !- Handle
   Hospital Corridor,                      !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   31;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {69a27bc2-60c2-46d3-ba5f-68f23b1f1922}, !- Handle
+  {eda6a1ee-f21d-46dc-9b0f-28c8bc80c84f}, !- Handle
   Hospital Dining,                        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {cd452d64-861e-45b6-9ffe-28f2838aa691}, !- Group Rendering Name
+  {e5d72f38-a778-4dee-b7a7-976ea805795a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   Dining;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {cd452d64-861e-45b6-9ffe-28f2838aa691}, !- Handle
+  {e5d72f38-a778-4dee-b7a7-976ea805795a}, !- Handle
   Hospital Dining,                        !- Name
   31,                                     !- Rendering Red Value
   169,                                    !- Rendering Green Value
   34;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {0eb83ffa-abba-4207-a56c-d30f09a94d33}, !- Handle
+  {bb762259-d9f2-4aa8-becb-9bdc14b5b5c5}, !- Handle
   Hospital ER_Exam,                       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {672d0eef-1531-474f-9918-05d27d89977e}, !- Group Rendering Name
+  {089003e6-66b2-4051-b01d-5d31cdf828e7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   ER_Exam;                                !- Standards Space Type
 
 OS:Rendering:Color,
-  {672d0eef-1531-474f-9918-05d27d89977e}, !- Handle
+  {089003e6-66b2-4051-b01d-5d31cdf828e7}, !- Handle
   Hospital ER_Exam,                       !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   159;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {59c3fd3e-d065-402b-8b70-d763ecb394ea}, !- Handle
+  {7cba1d76-af6d-4aa4-893d-b9f602562341}, !- Handle
   Hospital ER_NurseStn,                   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {a79c9c19-759f-4993-ba15-53fa93c586fa}, !- Group Rendering Name
+  {30d5f214-09ad-472a-bef9-e1246ed0a8c5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   ER_NurseStn;                            !- Standards Space Type
 
 OS:Rendering:Color,
-  {a79c9c19-759f-4993-ba15-53fa93c586fa}, !- Handle
+  {30d5f214-09ad-472a-bef9-e1246ed0a8c5}, !- Handle
   Hospital ER_NurseStn,                   !- Name
   31,                                     !- Rendering Red Value
   162,                                    !- Rendering Green Value
   169;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {bea10c7b-dbc3-4c12-802f-df4fc9f78e26}, !- Handle
+  {96d7e080-557f-4965-b11a-338fc7f41f3e}, !- Handle
   Hospital ER_Trauma,                     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {153e419d-c568-43c3-b97a-4e6007af0e41}, !- Group Rendering Name
+  {d474d85f-61e7-4d18-a44a-390b314475f5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   ER_Trauma;                              !- Standards Space Type
 
 OS:Rendering:Color,
-  {153e419d-c568-43c3-b97a-4e6007af0e41}, !- Handle
+  {d474d85f-61e7-4d18-a44a-390b314475f5}, !- Handle
   Hospital ER_Trauma,                     !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   159;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {c7c77ef0-6148-4f94-9afa-b4747a8e1568}, !- Handle
+  {0b240d25-7305-4fe3-b546-fa24d3ca980d}, !- Handle
   Hospital ER_Triage,                     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {15850f3d-32d6-4275-8fe9-34083ef617f8}, !- Group Rendering Name
+  {cbb0ac7e-9e7a-46da-a606-56d140f163fe}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   ER_Triage;                              !- Standards Space Type
 
 OS:Rendering:Color,
-  {15850f3d-32d6-4275-8fe9-34083ef617f8}, !- Handle
+  {cbb0ac7e-9e7a-46da-a606-56d140f163fe}, !- Handle
   Hospital ER_Triage,                     !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   159;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {832342cc-0b84-47e5-ac3b-0a480ba9f95b}, !- Handle
+  {3fd52485-8d96-4be0-a7b0-052ba7a63cf6}, !- Handle
   Hospital ICU_NurseStn,                  !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {cb8fe6df-e7e0-4cbc-a592-badecf7160a2}, !- Group Rendering Name
+  {5558ef8a-c1c9-4d65-ba05-3b52f915ecb4}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   ICU_NurseStn;                           !- Standards Space Type
 
 OS:Rendering:Color,
-  {cb8fe6df-e7e0-4cbc-a592-badecf7160a2}, !- Handle
+  {5558ef8a-c1c9-4d65-ba05-3b52f915ecb4}, !- Handle
   Hospital ICU_NurseStn,                  !- Name
   31,                                     !- Rendering Red Value
   162,                                    !- Rendering Green Value
   169;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {ab8c2172-2d30-4359-98a2-db6ed5db9555}, !- Handle
+  {98e58acb-9b64-4e07-872e-f88abe5d0959}, !- Handle
   Hospital ICU_Open,                      !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {1b51009a-4c82-4718-9489-04ed9cd2f57a}, !- Group Rendering Name
+  {3c59a095-8784-418e-a671-3826bfef0ff4}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   ICU_Open;                               !- Standards Space Type
 
 OS:Rendering:Color,
-  {1b51009a-4c82-4718-9489-04ed9cd2f57a}, !- Handle
+  {3c59a095-8784-418e-a671-3826bfef0ff4}, !- Handle
   Hospital ICU_Open,                      !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value
   222;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {64b8fb9b-b2ce-4d2c-ae4c-a94f666c1c72}, !- Handle
+  {8d03429d-53f0-444a-89a9-0e4dff87cfb2}, !- Handle
   Hospital ICU_PatRm,                     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {dc6c7ff2-0887-41d5-bbc9-72c343eec997}, !- Group Rendering Name
+  {fd8cad00-3d2d-478d-9ff9-566492b6936c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   ICU_PatRm;                              !- Standards Space Type
 
 OS:Rendering:Color,
-  {dc6c7ff2-0887-41d5-bbc9-72c343eec997}, !- Handle
+  {fd8cad00-3d2d-478d-9ff9-566492b6936c}, !- Handle
   Hospital ICU_PatRm,                     !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value
   222;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {7bd48d9b-5cbd-4980-82c9-df8813dbc5f9}, !- Handle
+  {8c3420e6-2f32-4590-8693-5f123ef94deb}, !- Handle
   Hospital Kitchen,                       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {7b26029a-6761-496d-ac05-97850db3a797}, !- Group Rendering Name
+  {a23de4c2-74b7-467b-9955-e6ce45a2c16b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   Kitchen;                                !- Standards Space Type
 
 OS:Rendering:Color,
-  {7b26029a-6761-496d-ac05-97850db3a797}, !- Handle
+  {a23de4c2-74b7-467b-9955-e6ce45a2c16b}, !- Handle
   Hospital Kitchen,                       !- Name
   78,                                     !- Rendering Red Value
   222,                                    !- Rendering Green Value
   133;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {d96c93af-0cd4-4814-825d-0306590ddac1}, !- Handle
+  {2ef765d1-ba3d-4054-a51f-a6e1b79d97b3}, !- Handle
   Hospital Lab,                           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {98adff4b-1e47-454a-a658-1844e379b3e3}, !- Group Rendering Name
+  {62fd13df-f50a-4bb6-8d8a-8e159cc1c1dc}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   Lab;                                    !- Standards Space Type
 
 OS:Rendering:Color,
-  {98adff4b-1e47-454a-a658-1844e379b3e3}, !- Handle
+  {62fd13df-f50a-4bb6-8d8a-8e159cc1c1dc}, !- Handle
   Hospital Lab,                           !- Name
   204,                                    !- Rendering Red Value
   120,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {96244d95-e6ad-4f96-bac4-636cc48d2a6e}, !- Handle
+  {c8f1d79c-21fe-4463-aea1-b47cb2959ca6}, !- Handle
   Hospital Lobby,                         !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {a8931c80-8113-44bb-88cc-cfe7c5f8500f}, !- Group Rendering Name
+  {05dfda40-c079-4b15-9c45-828c3c333d54}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   Lobby;                                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {a8931c80-8113-44bb-88cc-cfe7c5f8500f}, !- Handle
+  {05dfda40-c079-4b15-9c45-828c3c333d54}, !- Handle
   Hospital Lobby,                         !- Name
   31,                                     !- Rendering Red Value
   162,                                    !- Rendering Green Value
   169;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {ed5beee9-c10e-434a-8ca4-9a97b6460da1}, !- Handle
+  {791bfa34-c5f2-415c-a1fc-535956ce88a4}, !- Handle
   Hospital NurseStn,                      !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c23920aa-da00-44b2-b6ee-96f121aeaee8}, !- Group Rendering Name
+  {42daa3f5-bc43-4db5-9070-ee8f2c0e43c1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   NurseStn;                               !- Standards Space Type
 
 OS:Rendering:Color,
-  {c23920aa-da00-44b2-b6ee-96f121aeaee8}, !- Handle
+  {42daa3f5-bc43-4db5-9070-ee8f2c0e43c1}, !- Handle
   Hospital NurseStn,                      !- Name
   31,                                     !- Rendering Red Value
   162,                                    !- Rendering Green Value
   169;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {2d575313-0865-481a-a110-98270ec82dd0}, !- Handle
+  {6ba7b853-f5ed-4e08-b51e-6a284640b96d}, !- Handle
   Hospital OR,                            !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {bac4a94c-6266-4b4e-80b5-5f1989492237}, !- Group Rendering Name
+  {06543b0a-3d9c-4721-b8c2-b95d7fff5b02}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   OR;                                     !- Standards Space Type
 
 OS:Rendering:Color,
-  {bac4a94c-6266-4b4e-80b5-5f1989492237}, !- Handle
+  {06543b0a-3d9c-4721-b8c2-b95d7fff5b02}, !- Handle
   Hospital OR,                            !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   159;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {151ef0a0-7bc0-4b27-aff7-2cfadcb88f12}, !- Handle
+  {7ba426a2-3247-409d-b428-1b4ac913aa9d}, !- Handle
   Hospital Office,                        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {5baf9396-dc42-480f-be74-270778ce5d2b}, !- Group Rendering Name
+  {15cca06f-679b-4a72-9ead-302e1b8822f2}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   Office;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {5baf9396-dc42-480f-be74-270778ce5d2b}, !- Handle
+  {15cca06f-679b-4a72-9ead-302e1b8822f2}, !- Handle
   Hospital Office,                        !- Name
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {3193352a-95d7-4c77-9485-619a0390fe1c}, !- Handle
+  {0c37f2fd-02c1-4b8d-bf94-a696522b0e15}, !- Handle
   Hospital Basement,                      !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c1d082c8-e6ba-4b82-bb6a-490ad1d609de}, !- Group Rendering Name
+  {a36f44a0-0c44-44cb-b63b-77daacf840ac}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   Basement;                               !- Standards Space Type
 
 OS:Rendering:Color,
-  {c1d082c8-e6ba-4b82-bb6a-490ad1d609de}, !- Handle
+  {a36f44a0-0c44-44cb-b63b-77daacf840ac}, !- Handle
   Hospital Basement,                      !- Name
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {526005d0-04b2-4ae4-9ce5-7a1b2e17be0d}, !- Handle
+  {b31acd9b-15d8-4fc3-b43a-f0a35e23d6ac}, !- Handle
   Hospital PatRoom,                       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {2ee715d0-2a9f-4f13-8109-4a6cad172a09}, !- Group Rendering Name
+  {5fee56a3-49cf-4c5c-8794-a6a3693f2d23}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   PatRoom;                                !- Standards Space Type
 
 OS:Rendering:Color,
-  {2ee715d0-2a9f-4f13-8109-4a6cad172a09}, !- Handle
+  {5fee56a3-49cf-4c5c-8794-a6a3693f2d23}, !- Handle
   Hospital PatRoom,                       !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value
   222;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {ff8d0524-f4e6-4396-9989-e87546795aa7}, !- Handle
+  {1e73f43d-013b-4046-aebb-3cf4759b0596}, !- Handle
   Hospital PhysTherapy,                   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {00112200-164e-411a-9d8b-b554166d59dc}, !- Group Rendering Name
+  {ff7773cc-0bd2-4c54-9f3d-1cded9a7a93c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   PhysTherapy;                            !- Standards Space Type
 
 OS:Rendering:Color,
-  {00112200-164e-411a-9d8b-b554166d59dc}, !- Handle
+  {ff7773cc-0bd2-4c54-9f3d-1cded9a7a93c}, !- Handle
   Hospital PhysTherapy,                   !- Name
   154,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   120;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {3d27a5cb-e2b4-4d1d-9ee2-2c5f22bb22d8}, !- Handle
+  {02732d5b-e5b2-4c6a-8b31-b8b8419b6d60}, !- Handle
   Hospital Radiology,                     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {ff69b247-0d92-49ef-af36-d5addf700046}, !- Group Rendering Name
+  {29bd596d-b43f-4d32-90db-05a26cf3a4ee}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
   Radiology;                              !- Standards Space Type
 
 OS:Rendering:Color,
-  {ff69b247-0d92-49ef-af36-d5addf700046}, !- Handle
+  {29bd596d-b43f-4d32-90db-05a26cf3a4ee}, !- Handle
   Hospital Radiology,                     !- Name
   136,                                    !- Rendering Red Value
   78,                                     !- Rendering Green Value

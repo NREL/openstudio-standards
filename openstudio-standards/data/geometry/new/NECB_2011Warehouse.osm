@@ -18,7 +18,7 @@ OS:Connection,
 OS:Space,
   {39655c19-15b3-4081-92c2-4613ae84d8e6}, !- Handle
   Zone3 Bulk Storage,                     !- Name
-  {577d2ff9-819d-4f16-ac37-05ee4c8ee5b2}, !- Space Type Name
+  {ae64a6cf-5c68-46d8-bc65-1072ceb714e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -131,7 +131,7 @@ OS:Connection,
 OS:Space,
   {cdd6a95f-f907-4c0e-817d-962525d358d0}, !- Handle
   Zone2 Fine Storage,                     !- Name
-  {a7603420-8ac8-498c-8dfa-e8cd4a63fb0a}, !- Space Type Name
+  {3649b618-663e-43c4-be42-10953b782f6b}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -170,7 +170,7 @@ OS:Connection,
 OS:Space,
   {12c3d4a0-20ec-4e1f-8040-e70cdfba4a69}, !- Handle
   Zone1 Office,                           !- Name
-  {2938a00b-9984-4a8b-9d66-98a932ec0727}, !- Space Type Name
+  {7731f474-41b6-45a3-b218-59e981427ea0}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1884,7 +1884,7 @@ OS:ZoneHVAC:EquipmentList,
   {28a54465-16b8-402c-b469-8c13db4674de}; !- Thermal Zone
 
 OS:WeatherFile,
-  {f220077c-f021-4e08-853f-52d03708d6e6}, !- Handle
+  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Handle
   Vancouver Int'l,                        !- City
   BC,                                     !- State Province Region
   CAN,                                    !- Country
@@ -1898,7 +1898,7 @@ OS:WeatherFile,
   9D8CC810;                               !- Checksum
 
 OS:Site,
-  {a88f9d16-2086-4daa-a6d8-7280bde4b6f9}, !- Handle
+  {7ef28f12-04f3-4cc6-a8e5-b51c54945721}, !- Handle
   Vancouver Int'l_BC_CAN,                 !- Name
   49.18,                                  !- Latitude {deg}
   -123.17,                                !- Longitude {deg}
@@ -1907,14 +1907,14 @@ OS:Site,
   ;                                       !- Terrain
 
 OS:Site:WaterMainsTemperature,
-  {0db6234e-f098-4df1-9e86-294d61e2aff7}, !- Handle
+  {39811ee1-9686-4edc-bc11-fc9e81fffc11}, !- Handle
   Correlation,                            !- Calculation Method
   ,                                       !- Temperature Schedule Name
   9.71666666666667,                       !- Annual Average Outdoor Air Temperature {C}
   13.9;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
 
 OS:SizingPeriod:DesignDay,
-  {91273525-087c-489f-99d3-5f14981d2fd7}, !- Handle
+  {626449c0-0000-4c82-8023-35ffcc6b326c}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -1940,7 +1940,7 @@ OS:SizingPeriod:DesignDay,
   2.445;                                  !- ASHRAE Taud {dimensionless}
 
 OS:SizingPeriod:DesignDay,
-  {9281a400-9077-41e7-8eab-9c07a036a12d}, !- Handle
+  {16f24371-1105-4dce-911d-d90829761440}, !- Handle
   Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
   -7,                                     !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -1962,7 +1962,7 @@ OS:SizingPeriod:DesignDay,
   ASHRAEClearSky;                         !- Solar Model Indicator
 
 OS:Site:GroundTemperature:BuildingSurface,
-  {59dc65f0-3f94-4e9e-a3d8-e5931e5e3835}, !- Handle
+  {c8d2cef2-f01a-4bb9-a8f5-0b52a4662c6b}, !- Handle
   19.527,                                 !- January Ground Temperature {C}
   19.502,                                 !- February Ground Temperature {C}
   19.536,                                 !- March Ground Temperature {C}
@@ -1977,51 +1977,51 @@ OS:Site:GroundTemperature:BuildingSurface,
   19.633;                                 !- December Ground Temperature {C}
 
 OS:SpaceType,
-  {577d2ff9-819d-4f16-ac37-05ee4c8ee5b2}, !- Handle
+  {ae64a6cf-5c68-46d8-bc65-1072ceb714e4}, !- Handle
   Space Function Warehouse - med/blk,     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {d89f79bb-a7ce-4e9d-b7b0-e36ca69bd679}, !- Group Rendering Name
+  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Warehouse - med/blk;                    !- Standards Space Type
 
 OS:Rendering:Color,
-  {d89f79bb-a7ce-4e9d-b7b0-e36ca69bd679}, !- Handle
+  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Handle
   Space Function Warehouse - med/blk,     !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {a7603420-8ac8-498c-8dfa-e8cd4a63fb0a}, !- Handle
+  {3649b618-663e-43c4-be42-10953b782f6b}, !- Handle
   Space Function Warehouse - fine,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {7308a0a4-28e6-4911-9cae-2109febe7c35}, !- Group Rendering Name
+  {9a145cb7-3aee-4ebf-a45e-36acb38d4a20}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Warehouse - fine;                       !- Standards Space Type
 
 OS:Rendering:Color,
-  {7308a0a4-28e6-4911-9cae-2109febe7c35}, !- Handle
+  {9a145cb7-3aee-4ebf-a45e-36acb38d4a20}, !- Handle
   Space Function Warehouse - fine,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {2938a00b-9984-4a8b-9d66-98a932ec0727}, !- Handle
+  {7731f474-41b6-45a3-b218-59e981427ea0}, !- Handle
   Space Function Office - enclosed,       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {dad86eb5-ccc2-4b04-b878-e8840e0e45ed}, !- Group Rendering Name
+  {bedcffb8-ce69-461d-b91d-0d38989d6d45}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Office - enclosed;                      !- Standards Space Type
 
 OS:Rendering:Color,
-  {dad86eb5-ccc2-4b04-b878-e8840e0e45ed}, !- Handle
+  {bedcffb8-ce69-461d-b91d-0d38989d6d45}, !- Handle
   Space Function Office - enclosed,       !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value

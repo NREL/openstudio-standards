@@ -18,7 +18,7 @@ OS:Connection,
 OS:Space,
   {39655c19-15b3-4081-92c2-4613ae84d8e6}, !- Handle
   Zone3 Bulk Storage,                     !- Name
-  {f554a428-189e-41b9-a2bc-5c31b9fe1241}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -131,7 +131,7 @@ OS:Connection,
 OS:Space,
   {cdd6a95f-f907-4c0e-817d-962525d358d0}, !- Handle
   Zone2 Fine Storage,                     !- Name
-  {291b44de-3a3d-4caf-81aa-98b9be5090e4}, !- Space Type Name
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -170,7 +170,7 @@ OS:Connection,
 OS:Space,
   {12c3d4a0-20ec-4e1f-8040-e70cdfba4a69}, !- Handle
   Zone1 Office,                           !- Name
-  {9499834c-1420-47f5-9586-6fdcf3dd01f5}, !- Space Type Name
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1882,51 +1882,51 @@ OS:ZoneHVAC:EquipmentList,
   {28a54465-16b8-402c-b469-8c13db4674de}; !- Thermal Zone
 
 OS:SpaceType,
-  {f554a428-189e-41b9-a2bc-5c31b9fe1241}, !- Handle
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Handle
   Warehouse Bulk,                         !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {986d3a7b-1620-448c-b7f5-2b9ccb60fc8d}, !- Group Rendering Name
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Warehouse,                              !- Standards Building Type
   Bulk;                                   !- Standards Space Type
 
 OS:Rendering:Color,
-  {986d3a7b-1620-448c-b7f5-2b9ccb60fc8d}, !- Handle
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Handle
   Warehouse Bulk,                         !- Name
   41,                                     !- Rendering Red Value
   31,                                     !- Rendering Green Value
   169;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {291b44de-3a3d-4caf-81aa-98b9be5090e4}, !- Handle
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Handle
   Warehouse Fine,                         !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {1301c39f-b5a6-4102-b2c3-36e1b0cb338d}, !- Group Rendering Name
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Warehouse,                              !- Standards Building Type
   Fine;                                   !- Standards Space Type
 
 OS:Rendering:Color,
-  {1301c39f-b5a6-4102-b2c3-36e1b0cb338d}, !- Handle
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Handle
   Warehouse Fine,                         !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {9499834c-1420-47f5-9586-6fdcf3dd01f5}, !- Handle
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Handle
   Warehouse Office,                       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {15e83ad4-9e0b-407d-84b0-94b690774936}, !- Group Rendering Name
+  {c6b09c11-bd60-4808-ad5a-b76127c2f8f5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Warehouse,                              !- Standards Building Type
   Office;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {15e83ad4-9e0b-407d-84b0-94b690774936}, !- Handle
+  {c6b09c11-bd60-4808-ad5a-b76127c2f8f5}, !- Handle
   Warehouse Office,                       !- Name
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value

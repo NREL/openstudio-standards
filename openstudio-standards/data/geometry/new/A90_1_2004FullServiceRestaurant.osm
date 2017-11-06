@@ -45,7 +45,7 @@ OS:Surface,
 OS:Space,
   {77d3cfbe-7d30-4aaf-86db-75976a798830}, !- Handle
   Kitchen,                                !- Name
-  {af0baab9-0d31-4e9b-b145-88255390a51f}, !- Space Type Name
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -84,7 +84,7 @@ OS:Surface,
 OS:Space,
   {d48cb50c-3a07-4ed6-baac-fe451a3f5495}, !- Handle
   Dining,                                 !- Name
-  {a8da1f59-bece-4881-8e18-b417d32c585c}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -114,7 +114,7 @@ OS:Surface,
 OS:Space,
   {a6d9b45b-2723-43c6-8355-1e3d52bed681}, !- Handle
   attic,                                  !- Name
-  {eb96fac2-cfdf-42c2-91f7-d2bd0e152689}, !- Space Type Name
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -764,51 +764,51 @@ OS:ZoneHVAC:EquipmentList,
   {783a6fd7-6496-4e75-84cc-12b5a4635d04}; !- Thermal Zone
 
 OS:SpaceType,
-  {a8da1f59-bece-4881-8e18-b417d32c585c}, !- Handle
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Handle
   FullServiceRestaurant Dining,           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {51320c81-b930-42ca-bcdc-2382041acfbc}, !- Group Rendering Name
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   FullServiceRestaurant,                  !- Standards Building Type
   Dining;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {51320c81-b930-42ca-bcdc-2382041acfbc}, !- Handle
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Handle
   FullServiceRestaurant Dining,           !- Name
   31,                                     !- Rendering Red Value
   169,                                    !- Rendering Green Value
   34;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {af0baab9-0d31-4e9b-b145-88255390a51f}, !- Handle
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Handle
   FullServiceRestaurant Kitchen,          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c58ac408-0e25-40a9-b895-8b98709afc80}, !- Group Rendering Name
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   FullServiceRestaurant,                  !- Standards Building Type
   Kitchen;                                !- Standards Space Type
 
 OS:Rendering:Color,
-  {c58ac408-0e25-40a9-b895-8b98709afc80}, !- Handle
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Handle
   FullServiceRestaurant Kitchen,          !- Name
   78,                                     !- Rendering Red Value
   222,                                    !- Rendering Green Value
   133;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {eb96fac2-cfdf-42c2-91f7-d2bd0e152689}, !- Handle
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Handle
   FullServiceRestaurant Attic,            !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {9d393ede-a263-4031-a09b-bad7bbef09dc}, !- Group Rendering Name
+  {c6b09c11-bd60-4808-ad5a-b76127c2f8f5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   FullServiceRestaurant,                  !- Standards Building Type
   Attic;                                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {9d393ede-a263-4031-a09b-bad7bbef09dc}, !- Handle
+  {c6b09c11-bd60-4808-ad5a-b76127c2f8f5}, !- Handle
   FullServiceRestaurant Attic,            !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value

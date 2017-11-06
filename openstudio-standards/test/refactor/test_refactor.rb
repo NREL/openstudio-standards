@@ -117,7 +117,7 @@ class TestRefactorParallel < Minitest::Test
 
   ]
 
-  nrel_templates = ['90.1-2004','90.1-2007','90.1-2010','90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004']
+  nrel_templates = ['90.1-2010']#'90.1-2004','90.1-2007','90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004']
   nrel_climate_zones = ['ASHRAE 169-2006-1A']
   nrel_epw_files = [nil] # we will need to keep this overloaded to keep arguments consistant.
   nrel_runs = self.create_runs_jobs(nrel_templates, nrel_building_types, nrel_climate_zones, nrel_epw_files)
@@ -125,7 +125,7 @@ class TestRefactorParallel < Minitest::Test
   ######NRCan runs
   nrcan_building_types = [
       "FullServiceRestaurant",
-     "Hospital",
+      "Hospital",
       "HighriseApartment",
       "LargeHotel",
       "LargeOffice",
@@ -140,6 +140,7 @@ class TestRefactorParallel < Minitest::Test
       "SmallOffice",
       "RetailStripmall",
       "Warehouse"
+
   ]
   nrcan_templates = ['NECB 2011']
   nrcan_climate_zones = ['NECB HDD Method']
@@ -159,7 +160,7 @@ class TestRefactorParallel < Minitest::Test
   nrcan_runs = create_runs_jobs(nrcan_templates, nrcan_building_types, nrcan_climate_zones, nrcan_epw_files)
 
   #add runs and run them
-  runs =nrcan_runs + nrel_runs
+  runs =nrcan_runs  + nrel_runs
   puts
   case Gem::Platform.local.os
     when 'linux'

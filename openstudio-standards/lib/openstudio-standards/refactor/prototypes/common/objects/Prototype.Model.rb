@@ -8,16 +8,7 @@ StandardsModel.class_eval do
     building_type = @instvarbuilding_type
     raise ("no building_type!") if @instvarbuilding_type.nil?
     model = nil
-    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
-    if @instvarbuilding_type == 'HighriseApartment'
-      if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
-        OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at  #{} are not available, the measure is disabled for this specific type.")
-        return false
-        #elsif @@template == 'NECB 2011'
-        #  OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at @@template #{@@template} is not available, the measure is disabled for this specific type.")
-        #  return false
-      end
-    end
+
     case instvartemplate
       when 'NECB 2011'
         #prototype generation.
@@ -76,6 +67,16 @@ StandardsModel.class_eval do
         # Add output variables for debugging
         model_request_timeseries_outputs(model) if debug
       else
+        # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
+        if @instvarbuilding_type == 'HighriseApartment'
+          if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
+            OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at  #{} are not available, the measure is disabled for this specific type.")
+            return false
+            #elsif @@template == 'NECB 2011'
+            #  OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at @@template #{@@template} is not available, the measure is disabled for this specific type.")
+            #  return false
+          end
+        end
         #optionally  determine the climate zone from the epw and stat files.
         if climate_zone == 'NECB HDD Method'
           climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone()

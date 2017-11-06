@@ -53,7 +53,7 @@ OS:Connection,
 OS:Space,
   {72459874-7e2c-4ecd-ae58-b2d96c368b31}, !- Handle
   Perimeter_ZN_1,                         !- Name
-  {3b74d1e1-96d7-4712-9bae-910a61f0f555}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -109,7 +109,7 @@ OS:Connection,
 OS:Space,
   {fb08bb0a-69e7-4942-8807-550e21855286}, !- Handle
   Attic,                                  !- Name
-  {720c4e16-b082-455f-ae46-b2874588a383}, !- Space Type Name
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -165,7 +165,7 @@ OS:Connection,
 OS:Space,
   {0ebdaea7-c6cb-452f-b121-7bbfcb1d95b8}, !- Handle
   Perimeter_ZN_2,                         !- Name
-  {3b74d1e1-96d7-4712-9bae-910a61f0f555}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -222,7 +222,7 @@ OS:Connection,
 OS:Space,
   {bb97cae6-ab6e-4ca9-a862-a3e532ee5e5d}, !- Handle
   Perimeter_ZN_3,                         !- Name
-  {3b74d1e1-96d7-4712-9bae-910a61f0f555}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -244,7 +244,7 @@ OS:Connection,
 OS:Space,
   {f9fb4430-2ed2-4cfb-bf10-1172712402a2}, !- Handle
   Perimeter_ZN_4,                         !- Name
-  {3b74d1e1-96d7-4712-9bae-910a61f0f555}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -324,7 +324,7 @@ OS:Connection,
 OS:Space,
   {32844cd3-cab3-4870-bbb6-6c79a28481b7}, !- Handle
   Core_ZN,                                !- Name
-  {3b74d1e1-96d7-4712-9bae-910a61f0f555}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1831,34 +1831,34 @@ OS:ZoneHVAC:EquipmentList,
   {761af5ec-0e7c-4fea-81cc-7d7860391e92}; !- Thermal Zone
 
 OS:SpaceType,
-  {3b74d1e1-96d7-4712-9bae-910a61f0f555}, !- Handle
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Handle
   Office WholeBuilding - Sm Office,       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {02a39a3f-7b1a-4c09-81fc-d1f18a5f29f4}, !- Group Rendering Name
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
   WholeBuilding - Sm Office;              !- Standards Space Type
 
 OS:Rendering:Color,
-  {02a39a3f-7b1a-4c09-81fc-d1f18a5f29f4}, !- Handle
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Handle
   Office WholeBuilding - Sm Office,       !- Name
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {720c4e16-b082-455f-ae46-b2874588a383}, !- Handle
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Handle
   Office Attic,                           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {b9c98a9b-5fd2-4809-8439-eba6669cd388}, !- Group Rendering Name
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
   Attic;                                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {b9c98a9b-5fd2-4809-8439-eba6669cd388}, !- Handle
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Handle
   Office Attic,                           !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value

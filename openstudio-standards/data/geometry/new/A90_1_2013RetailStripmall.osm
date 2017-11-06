@@ -52,7 +52,7 @@ OS:Connection,
 OS:Space,
   {5ea367b2-633e-43a1-9423-f1b770d2335d}, !- Handle
   SMstore2,                               !- Name
-  {457378c4-b1b7-4d5c-9561-591814a74c4a}, !- Space Type Name
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -92,7 +92,7 @@ OS:Connection,
 OS:Space,
   {89130de1-d42c-444e-801d-7d9adf3e04aa}, !- Handle
   SMstore7,                               !- Name
-  {6830f40d-2a1e-4521-a301-e56df35a48b8}, !- Space Type Name
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -132,7 +132,7 @@ OS:Connection,
 OS:Space,
   {ab4d5305-d428-465c-8009-bc4150273508}, !- Handle
   SMstore3,                               !- Name
-  {457378c4-b1b7-4d5c-9561-591814a74c4a}, !- Space Type Name
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -155,7 +155,7 @@ OS:Connection,
 OS:Space,
   {6d54358c-9390-42e5-bc44-ebe58628f22c}, !- Handle
   SMstore1,                               !- Name
-  {d8658606-3824-4b44-8461-4edfa112d1a7}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -178,7 +178,7 @@ OS:Connection,
 OS:Space,
   {4ab39cda-851f-4e81-b908-ae359b3e2c57}, !- Handle
   LGstore2,                               !- Name
-  {6830f40d-2a1e-4521-a301-e56df35a48b8}, !- Space Type Name
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -286,7 +286,7 @@ OS:Connection,
 OS:Space,
   {afa5c72f-ec16-4fb7-9014-0c120fd3d938}, !- Handle
   SMstore5,                               !- Name
-  {6830f40d-2a1e-4521-a301-e56df35a48b8}, !- Space Type Name
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -309,7 +309,7 @@ OS:Connection,
 OS:Space,
   {3cabba90-ed6b-4267-bb90-b1645c10f28e}, !- Handle
   LGstore1,                               !- Name
-  {d8658606-3824-4b44-8461-4edfa112d1a7}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -383,7 +383,7 @@ OS:Connection,
 OS:Space,
   {2ce2b667-ac4f-4f47-b0e0-c3246eb94e55}, !- Handle
   SMstore8,                               !- Name
-  {6830f40d-2a1e-4521-a301-e56df35a48b8}, !- Space Type Name
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -439,7 +439,7 @@ OS:Connection,
 OS:Space,
   {cbc69268-5c4e-4419-ad78-59e2fa30f77b}, !- Handle
   SMstore4,                               !- Name
-  {457378c4-b1b7-4d5c-9561-591814a74c4a}, !- Space Type Name
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -581,7 +581,7 @@ OS:Connection,
 OS:Space,
   {8aee463a-4c3c-4367-8f45-64fb6d2bfc88}, !- Handle
   SMstore6,                               !- Name
-  {6830f40d-2a1e-4521-a301-e56df35a48b8}, !- Space Type Name
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2951,51 +2951,51 @@ OS:ZoneHVAC:EquipmentList,
   {f56931ed-4d15-4788-9043-64a52e66fb61}; !- Thermal Zone
 
 OS:SpaceType,
-  {d8658606-3824-4b44-8461-4edfa112d1a7}, !- Handle
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Handle
   StripMall Strip mall - type 1,          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {8538892d-d317-423e-b140-2323e9155412}, !- Group Rendering Name
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   StripMall,                              !- Standards Building Type
   Strip mall - type 1;                    !- Standards Space Type
 
 OS:Rendering:Color,
-  {8538892d-d317-423e-b140-2323e9155412}, !- Handle
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Handle
   StripMall Strip mall - type 1,          !- Name
   171,                                    !- Rendering Red Value
   222,                                    !- Rendering Green Value
   78;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {457378c4-b1b7-4d5c-9561-591814a74c4a}, !- Handle
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Handle
   StripMall Strip mall - type 2,          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {668781d6-cef3-4365-9eed-63d24673c51e}, !- Group Rendering Name
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   StripMall,                              !- Standards Building Type
   Strip mall - type 2;                    !- Standards Space Type
 
 OS:Rendering:Color,
-  {668781d6-cef3-4365-9eed-63d24673c51e}, !- Handle
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Handle
   StripMall Strip mall - type 2,          !- Name
   171,                                    !- Rendering Red Value
   222,                                    !- Rendering Green Value
   78;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {6830f40d-2a1e-4521-a301-e56df35a48b8}, !- Handle
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Handle
   StripMall Strip mall - type 3,          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {d4e010d8-2d12-45f0-9ae0-8c83c8b46052}, !- Group Rendering Name
+  {c6b09c11-bd60-4808-ad5a-b76127c2f8f5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   StripMall,                              !- Standards Building Type
   Strip mall - type 3;                    !- Standards Space Type
 
 OS:Rendering:Color,
-  {d4e010d8-2d12-45f0-9ae0-8c83c8b46052}, !- Handle
+  {c6b09c11-bd60-4808-ad5a-b76127c2f8f5}, !- Handle
   StripMall Strip mall - type 3,          !- Name
   171,                                    !- Rendering Red Value
   222,                                    !- Rendering Green Value

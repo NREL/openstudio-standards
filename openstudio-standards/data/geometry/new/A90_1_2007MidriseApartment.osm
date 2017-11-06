@@ -28,7 +28,7 @@ OS:SimulationControl,
 OS:Space,
   {c3b16dd2-0b7e-41f9-9554-37b64a961382}, !- Handle
   T SE Apartment,                         !- Name
-  {55b45b7c-3d98-490e-a99f-d2416f521730}, !- Space Type Name
+  {123a1e31-6584-44b5-91a5-c6f19eed1bd2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -41,7 +41,7 @@ OS:Space,
 OS:Space,
   {ab4b5dbb-3b66-43ba-b6e3-9e7c2c0d8d03}, !- Handle
   G Corridor,                             !- Name
-  {5eb787c5-f8ad-46ff-a64d-3504142d9bd0}, !- Space Type Name
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -88,7 +88,7 @@ OS:Surface,
 OS:Space,
   {66195dd7-4158-483d-b874-3388a680b571}, !- Handle
   T SW Apartment,                         !- Name
-  {55b45b7c-3d98-490e-a99f-d2416f521730}, !- Space Type Name
+  {123a1e31-6584-44b5-91a5-c6f19eed1bd2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -118,7 +118,7 @@ OS:Surface,
 OS:Space,
   {6912ab22-717f-4315-a8ff-9c62dd3bb665}, !- Handle
   M S2 Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -131,7 +131,7 @@ OS:Space,
 OS:Space,
   {522c5e6f-296d-41b5-be13-5d90fe955163}, !- Handle
   M SE Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -178,7 +178,7 @@ OS:Surface,
 OS:Space,
   {22d8b173-d774-48ce-9aac-7d6a7840f33f}, !- Handle
   T N1 Apartment,                         !- Name
-  {3e723774-1f4b-4c45-a0e2-a9e1def4045d}, !- Space Type Name
+  {951da28d-6b44-4dd8-8abc-a60caa896152}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -191,7 +191,7 @@ OS:Space,
 OS:Space,
   {320a911a-e18e-4155-bcf9-b9823aa5a2c5}, !- Handle
   T Corridor,                             !- Name
-  {34d9054d-d371-436d-99b7-0bd9541e17bd}, !- Space Type Name
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   ,                                       !- Direction of Relative North {deg}
@@ -221,7 +221,7 @@ OS:Surface,
 OS:Space,
   {9167359e-9688-41e4-ae83-b41424807596}, !- Handle
   T N2 Apartment,                         !- Name
-  {3e723774-1f4b-4c45-a0e2-a9e1def4045d}, !- Space Type Name
+  {951da28d-6b44-4dd8-8abc-a60caa896152}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -268,7 +268,7 @@ OS:Surface,
 OS:Space,
   {7c013759-803b-46ae-9919-4e21adf7c78d}, !- Handle
   M SW Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -298,7 +298,7 @@ OS:Surface,
 OS:Space,
   {0fe08715-548f-4b65-befe-40ea29ebf953}, !- Handle
   T NW Apartment,                         !- Name
-  {55b45b7c-3d98-490e-a99f-d2416f521730}, !- Space Type Name
+  {123a1e31-6584-44b5-91a5-c6f19eed1bd2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -328,7 +328,7 @@ OS:Surface,
 OS:Space,
   {fec56cd7-1bb5-4bb0-8e3b-dab87b5a2de0}, !- Handle
   M Corridor,                             !- Name
-  {5eb787c5-f8ad-46ff-a64d-3504142d9bd0}, !- Space Type Name
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   ,                                       !- Direction of Relative North {deg}
@@ -358,7 +358,7 @@ OS:Surface,
 OS:Space,
   {3f1c5090-169e-4dca-b8f2-31c064cffb7d}, !- Handle
   G S1 Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -388,7 +388,7 @@ OS:Surface,
 OS:Space,
   {695f347d-e36c-4348-b06b-48f78bb2529b}, !- Handle
   G S2 Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -486,7 +486,7 @@ OS:Surface,
 OS:Space,
   {0038fd5f-f228-4b0a-a724-e0084dd5bbd8}, !- Handle
   M NE Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -516,7 +516,7 @@ OS:Surface,
 OS:Space,
   {d94f0b48-364b-4bd9-83bf-e9b13823aa40}, !- Handle
   T NE Apartment,                         !- Name
-  {55b45b7c-3d98-490e-a99f-d2416f521730}, !- Space Type Name
+  {123a1e31-6584-44b5-91a5-c6f19eed1bd2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -529,7 +529,7 @@ OS:Space,
 OS:Space,
   {2959e27c-b725-4429-b1eb-770aad7a063b}, !- Handle
   G NW Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -542,7 +542,7 @@ OS:Space,
 OS:Space,
   {5b74560d-d6b6-436a-86c2-4d0bd4939d9e}, !- Handle
   T S1 Apartment,                         !- Name
-  {3e723774-1f4b-4c45-a0e2-a9e1def4045d}, !- Space Type Name
+  {951da28d-6b44-4dd8-8abc-a60caa896152}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -555,7 +555,7 @@ OS:Space,
 OS:Space,
   {b97f9e56-e331-4b8c-aa4d-ad782e7aa50a}, !- Handle
   M N1 Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -568,7 +568,7 @@ OS:Space,
 OS:Space,
   {859bc88c-c416-4bc3-8137-dd5ebef99bba}, !- Handle
   Office,                                 !- Name
-  {8a9ca3ab-877f-4d5e-b14a-4543e96f4eec}, !- Space Type Name
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -632,7 +632,7 @@ OS:Surface,
 OS:Space,
   {6630228a-e074-4b5a-815a-de9c195b4f85}, !- Handle
   G NE Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -679,7 +679,7 @@ OS:Surface,
 OS:Space,
   {c43f7335-3ac7-490e-9b49-890ffac7f0d6}, !- Handle
   T S2 Apartment,                         !- Name
-  {3e723774-1f4b-4c45-a0e2-a9e1def4045d}, !- Space Type Name
+  {951da28d-6b44-4dd8-8abc-a60caa896152}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -692,7 +692,7 @@ OS:Space,
 OS:Space,
   {f806d8c4-879a-4004-ae0b-63fdb89b5289}, !- Handle
   G SW Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -739,7 +739,7 @@ OS:Surface,
 OS:Space,
   {5c7ad500-0f3b-486f-9052-f98babde7c3f}, !- Handle
   M N2 Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -905,7 +905,7 @@ OS:Surface,
 OS:Space,
   {656acd56-e898-40e0-8ffe-95e3c2336bc7}, !- Handle
   G N1 Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1044,7 +1044,7 @@ OS:Output:Meter,
 OS:Space,
   {514aa5f4-342f-40d3-a763-2114e61b2fea}, !- Handle
   G N2 Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1107,7 +1107,7 @@ OS:Building,
 OS:Space,
   {2bd49564-6fbf-4d24-9275-72c2b5b44cc5}, !- Handle
   M S1 Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1794,7 +1794,7 @@ OS:Surface,
 OS:Space,
   {d251f702-03b3-4ba8-9b7c-08259a4ea42e}, !- Handle
   M NW Apartment,                         !- Name
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Space Type Name
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -6409,102 +6409,102 @@ OS:ZoneHVAC:EquipmentList,
   {d41f760b-3f21-45d7-9421-c0f678a8f47f}; !- Thermal Zone
 
 OS:SpaceType,
-  {8a9ca3ab-877f-4d5e-b14a-4543e96f4eec}, !- Handle
+  {00bb34b4-bc43-4e40-829d-8e243ae6f314}, !- Handle
   MidriseApartment Office,                !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {207e93e7-aa49-4503-baf1-ee03785cce90}, !- Group Rendering Name
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
   Office;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {207e93e7-aa49-4503-baf1-ee03785cce90}, !- Handle
+  {ba9f1e77-0166-4bb8-ad1a-e2d7c481f722}, !- Handle
   MidriseApartment Office,                !- Name
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {5eb787c5-f8ad-46ff-a64d-3504142d9bd0}, !- Handle
+  {3a52e654-cd2e-486e-ace1-1b3ae05e97fc}, !- Handle
   MidriseApartment Corridor,              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {60b8b624-09a6-49e3-8b5b-c87ce9ad9926}, !- Group Rendering Name
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
   Corridor;                               !- Standards Space Type
 
 OS:Rendering:Color,
-  {60b8b624-09a6-49e3-8b5b-c87ce9ad9926}, !- Handle
+  {e147f1f1-1db5-4be7-aa09-6b4ad6ef9a32}, !- Handle
   MidriseApartment Corridor,              !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   31;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {34d9054d-d371-436d-99b7-0bd9541e17bd}, !- Handle
+  {e51c7a18-a1bf-4a7d-bf0d-d6517de30520}, !- Handle
   MidriseApartment Corridor_topfloor,     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {e5d84a37-b46c-4960-ba6b-505e0dc9969e}, !- Group Rendering Name
+  {c6b09c11-bd60-4808-ad5a-b76127c2f8f5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
   Corridor_topfloor;                      !- Standards Space Type
 
 OS:Rendering:Color,
-  {e5d84a37-b46c-4960-ba6b-505e0dc9969e}, !- Handle
+  {c6b09c11-bd60-4808-ad5a-b76127c2f8f5}, !- Handle
   MidriseApartment Corridor_topfloor,     !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   31;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {587d93ed-fbd1-4e34-a5a4-aa3dcf2f4982}, !- Handle
+  {065815bc-c33d-4984-9f2c-b9254f890a7d}, !- Handle
   MidriseApartment Apartment,             !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c09a14aa-5b2e-4154-8718-e645be2861bb}, !- Group Rendering Name
+  {6d43e91c-3413-432b-90bd-43b4cc41ddca}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
   Apartment;                              !- Standards Space Type
 
 OS:Rendering:Color,
-  {c09a14aa-5b2e-4154-8718-e645be2861bb}, !- Handle
+  {6d43e91c-3413-432b-90bd-43b4cc41ddca}, !- Handle
   MidriseApartment Apartment,             !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value
   222;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {55b45b7c-3d98-490e-a99f-d2416f521730}, !- Handle
+  {123a1e31-6584-44b5-91a5-c6f19eed1bd2}, !- Handle
   MidriseApartment Apartment_topfloor_WE, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c10fa614-cc18-4899-9948-df28150ad923}, !- Group Rendering Name
+  {f6a7421b-ad52-4ac1-88ae-d58da6a8a45c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
   Apartment_topfloor_WE;                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {c10fa614-cc18-4899-9948-df28150ad923}, !- Handle
+  {f6a7421b-ad52-4ac1-88ae-d58da6a8a45c}, !- Handle
   MidriseApartment Apartment_topfloor_WE, !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value
   222;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {3e723774-1f4b-4c45-a0e2-a9e1def4045d}, !- Handle
+  {951da28d-6b44-4dd8-8abc-a60caa896152}, !- Handle
   MidriseApartment Apartment_topfloor_NS, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {887c8142-37ea-41c5-9639-4f9a30c706b4}, !- Group Rendering Name
+  {88c324a4-3215-4cfa-97c2-871abd408f65}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
   Apartment_topfloor_NS;                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {887c8142-37ea-41c5-9639-4f9a30c706b4}, !- Handle
+  {88c324a4-3215-4cfa-97c2-871abd408f65}, !- Handle
   MidriseApartment Apartment_topfloor_NS, !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value

@@ -36,7 +36,7 @@ OS:Connection,
 OS:Space,
   {d1b7c1c3-e831-4ee2-a3a3-08e8f756705a}, !- Handle
   GuestRoom409_412,                       !- Name
-  {6e92d470-bcf0-4405-b582-e3c208211fa7}, !- Space Type Name
+  {e32fe023-4130-450b-b2a8-3964172c81f2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -74,7 +74,7 @@ OS:Connection,
 OS:Space,
   {e62fa6be-6441-455c-8319-088101603fea}, !- Handle
   GuestRoom413,                           !- Name
-  {3ab8c8b0-ebaa-4851-a5cf-aeb0d2b8d57e}, !- Space Type Name
+  {e59df199-1ca9-44a5-a6dc-05633e4fb8b9}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -95,7 +95,7 @@ OS:Connection,
 OS:Space,
   {7d3cdab0-7833-42f1-8b92-8d47d6343f01}, !- Handle
   GuestRoom314,                           !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -141,7 +141,7 @@ OS:Connection,
 OS:Space,
   {b3c76fbe-cf54-452a-8306-b26275cfa89a}, !- Handle
   CorridorFlr1,                           !- Name
-  {14622914-9228-48ae-9b56-b628418d115a}, !- Space Type Name
+  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -179,7 +179,7 @@ OS:Connection,
 OS:Space,
   {652a16b5-ce97-4cef-a4e0-6c69d1a085da}, !- Handle
   GuestRoom401,                           !- Name
-  {6e92d470-bcf0-4405-b582-e3c208211fa7}, !- Space Type Name
+  {e32fe023-4130-450b-b2a8-3964172c81f2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -217,7 +217,7 @@ OS:Connection,
 OS:Space,
   {305b4781-d9de-4647-a7c4-81b53319e4f9}, !- Handle
   GuestRoom302_305,                       !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -238,7 +238,7 @@ OS:Connection,
 OS:Space,
   {cfa26628-fd54-4236-aa09-483623cb3685}, !- Handle
   RearStairsFlr2,                         !- Name
-  {4584a895-2fd6-46b5-92e7-e1f7f8707bcc}, !- Space Type Name
+  {b83a60d8-404b-438f-a3e4-b4ddb6a66c29}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -293,7 +293,7 @@ OS:Connection,
 OS:Space,
   {bfd03907-7019-4685-a559-9eac57d10b5f}, !- Handle
   GuestRoom319,                           !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -331,7 +331,7 @@ OS:Connection,
 OS:Space,
   {1fc3ea07-52cc-4940-9efd-be587e47e905}, !- Handle
   GuestRoom214,                           !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -391,7 +391,7 @@ OS:Connection,
 OS:Space,
   {7c74aa7a-22dc-4421-817e-0bde65868fbd}, !- Handle
   GuestRoom309_312,                       !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -429,7 +429,7 @@ OS:Connection,
 OS:Space,
   {9ecfb5b0-1d88-4c36-9848-9d86eabaf86c}, !- Handle
   RestroomFlr1,                           !- Name
-  {ddbec689-77bb-4965-8d33-fbbe316ccdba}, !- Space Type Name
+  {ae64a6cf-5c68-46d8-bc65-1072ceb714e4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -467,7 +467,7 @@ OS:Connection,
 OS:Space,
   {cddbd72c-bf5c-4185-8aac-c80dbbf6099c}, !- Handle
   CorridorFlr4,                           !- Name
-  {20240da1-2e06-4792-ac5d-7726274c61ae}, !- Space Type Name
+  {fbac58cd-2b1e-4bfc-a58a-451c5ec57d58}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -556,7 +556,7 @@ OS:Connection,
 OS:Space,
   {3368d0f3-080c-428e-a6f7-eb8d5eebd364}, !- Handle
   FrontOfficeFlr1,                        !- Name
-  {5a45b512-20b7-4a0f-9fdb-e86115be1277}, !- Space Type Name
+  {20831d94-7883-4042-afc7-be5c64c350e0}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -577,7 +577,7 @@ OS:Connection,
 OS:Space,
   {ed2a5593-d848-4ad1-871f-e1c87f98cd61}, !- Handle
   GuestRoom215_218,                       !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -598,7 +598,7 @@ OS:Connection,
 OS:Space,
   {19c44071-045c-4bdf-a6d4-f9a3f4cb333c}, !- Handle
   GuestRoom301,                           !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -619,7 +619,7 @@ OS:Connection,
 OS:Space,
   {1712556b-b1c3-4a9c-85c3-1d2e8507a508}, !- Handle
   CorridorFlr3,                           !- Name
-  {14622914-9228-48ae-9b56-b628418d115a}, !- Space Type Name
+  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -640,7 +640,7 @@ OS:Connection,
 OS:Space,
   {2b66fb13-86af-4729-867e-2e8f919f5c16}, !- Handle
   FrontLoungeFlr1,                        !- Name
-  {9cefe5be-7e22-4c8d-8416-968f06c8bc3d}, !- Space Type Name
+  {520a0f69-6828-4751-9bdf-36056fab7b1c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -661,7 +661,7 @@ OS:Connection,
 OS:Space,
   {1e9f9b23-08c0-48c9-9056-c4b55a796530}, !- Handle
   GuestRoom220_223,                       !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -699,7 +699,7 @@ OS:Connection,
 OS:Space,
   {f0d386b3-62f7-4dc3-a9e8-3d5fcd027023}, !- Handle
   FrontStorageFlr2,                       !- Name
-  {20f60738-9e36-44aa-8319-f53e6805116c}, !- Space Type Name
+  {b777888b-3bf2-4e45-a040-4fb0ab280b4c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -720,7 +720,7 @@ OS:Connection,
 OS:Space,
   {8976bd60-7be6-4cac-a7c6-7e015c857449}, !- Handle
   GuestRoom324,                           !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -758,7 +758,7 @@ OS:Connection,
 OS:Space,
   {eb2ba65c-3e38-4275-846a-2debd4b868ea}, !- Handle
   GuestRoom102,                           !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -800,7 +800,7 @@ OS:Connection,
 OS:Space,
   {01ad6381-9b4e-43d4-840a-958f422d6284}, !- Handle
   CorridorFlr2,                           !- Name
-  {14622914-9228-48ae-9b56-b628418d115a}, !- Space Type Name
+  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -838,7 +838,7 @@ OS:Connection,
 OS:Space,
   {14ed010f-54af-48d6-871f-33524c771746}, !- Handle
   FrontStairsFlr4,                        !- Name
-  {b0d1c895-e46c-415c-9413-6e15742804c3}, !- Space Type Name
+  {e1088e9b-8e09-4483-9b39-ff5143dfd692}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -859,7 +859,7 @@ OS:Connection,
 OS:Space,
   {4fd1d0fe-1b37-4f3e-bb74-a03b7f1194ab}, !- Handle
   MechanicalRoomFlr1,                     !- Name
-  {0eaa4d1c-5e89-49f2-b49e-07806e32f44a}, !- Space Type Name
+  {797b981b-e8ba-497d-b361-4adef913762d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -914,7 +914,7 @@ OS:Connection,
 OS:Space,
   {f17a111d-9b4b-4ad2-ac4f-56cb7e18aeb3}, !- Handle
   EmployeeLoungeFlr1,                     !- Name
-  {5324d5e8-3263-4d88-9bf7-faf4aaa5bb26}, !- Space Type Name
+  {ada0820f-1875-43d6-ad2e-ae1d0154c28a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -952,7 +952,7 @@ OS:Connection,
 OS:Space,
   {7e063afc-1365-4e19-9aa4-f9a2fa4f64f6}, !- Handle
   RearStorageFlr4,                        !- Name
-  {e79e41d5-9fbf-4de4-affc-5adf22366739}, !- Space Type Name
+  {49da93f8-31d5-433e-9148-e35213a5dbf0}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1007,7 +1007,7 @@ OS:Connection,
 OS:Space,
   {f7400fd7-85aa-44d4-aaae-73ac8644cab1}, !- Handle
   LaundryRoomFlr1,                        !- Name
-  {50b9c73c-cd77-411c-95cf-771333f4afc6}, !- Space Type Name
+  {df017267-09f8-4d88-9182-1c12331e6de4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1045,7 +1045,7 @@ OS:Connection,
 OS:Space,
   {7282ffa1-b5f1-4891-8ecf-286819548e49}, !- Handle
   ElevatorCoreFlr3,                       !- Name
-  {97029971-ff74-4990-a9f2-5f705e5cc11c}, !- Space Type Name
+  {8d7cafa7-6ead-4d71-91c7-7d0ab4b9bfc9}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1083,7 +1083,7 @@ OS:Connection,
 OS:Space,
   {40e5cc0d-dfcc-42d1-a49c-694dfe891a59}, !- Handle
   GuestRoom105,                           !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1104,7 +1104,7 @@ OS:Connection,
 OS:Space,
   {2b5fcd54-ea09-4827-9373-b95ed3271953}, !- Handle
   RearStorageFlr1,                        !- Name
-  {20f60738-9e36-44aa-8319-f53e6805116c}, !- Space Type Name
+  {b777888b-3bf2-4e45-a040-4fb0ab280b4c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1125,7 +1125,7 @@ OS:Connection,
 OS:Space,
   {e2be0d69-c764-4751-87c5-2a3194d02215}, !- Handle
   GuestRoom201,                           !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1163,7 +1163,7 @@ OS:Connection,
 OS:Space,
   {7c244a56-d51f-43c6-bb8a-cca0ef81b829}, !- Handle
   RearStairsFlr3,                         !- Name
-  {4584a895-2fd6-46b5-92e7-e1f7f8707bcc}, !- Space Type Name
+  {b83a60d8-404b-438f-a3e4-b4ddb6a66c29}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1184,7 +1184,7 @@ OS:Connection,
 OS:Space,
   {9c1abf24-b787-4bca-920d-89062608d767}, !- Handle
   MeetingRoomFlr1,                        !- Name
-  {292ab971-3642-42f0-836d-85fb45bd0f34}, !- Space Type Name
+  {626449c0-0000-4c82-8023-35ffcc6b326c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1222,7 +1222,7 @@ OS:Connection,
 OS:Space,
   {5c319537-0a66-4b5f-b7c7-ebf34c4b9f4e}, !- Handle
   GuestRoom209_212,                       !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1243,7 +1243,7 @@ OS:Connection,
 OS:Space,
   {f3f2f58e-caa6-4f99-9766-98ceca84cc19}, !- Handle
   GuestRoom206_208,                       !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1281,7 +1281,7 @@ OS:Connection,
 OS:Space,
   {10417add-abcf-466e-a065-5e2b37bb58d3}, !- Handle
   RearStairsFlr4,                         !- Name
-  {b0d1c895-e46c-415c-9413-6e15742804c3}, !- Space Type Name
+  {e1088e9b-8e09-4483-9b39-ff5143dfd692}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1404,7 +1404,7 @@ OS:Connection,
 OS:Space,
   {5c0b05b3-14dc-45fb-8849-c0e65d1dc88c}, !- Handle
   RearStorageFlr2,                        !- Name
-  {20f60738-9e36-44aa-8319-f53e6805116c}, !- Space Type Name
+  {b777888b-3bf2-4e45-a040-4fb0ab280b4c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1459,7 +1459,7 @@ OS:Connection,
 OS:Space,
   {6c74a3cf-9ff9-4efd-a692-a4a3dc843ac2}, !- Handle
   GuestRoom103,                           !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1480,7 +1480,7 @@ OS:Connection,
 OS:Space,
   {2ccffce9-acc9-44b8-a184-c7f5fbea6422}, !- Handle
   RearStorageFlr3,                        !- Name
-  {20f60738-9e36-44aa-8319-f53e6805116c}, !- Space Type Name
+  {b777888b-3bf2-4e45-a040-4fb0ab280b4c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1586,7 +1586,7 @@ OS:Connection,
 OS:Space,
   {b7e451b5-5b04-4c8b-b2b3-b81663744290}, !- Handle
   GuestRoom101,                           !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1675,7 +1675,7 @@ OS:Connection,
 OS:Space,
   {f243567d-701b-4e6a-b9ff-bd7c5d290bf6}, !- Handle
   FrontStairsFlr3,                        !- Name
-  {4584a895-2fd6-46b5-92e7-e1f7f8707bcc}, !- Space Type Name
+  {b83a60d8-404b-438f-a3e4-b4ddb6a66c29}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1730,7 +1730,7 @@ OS:Connection,
 OS:Space,
   {829e7655-c103-4592-9edf-3438a180a2ba}, !- Handle
   GuestRoom315_318,                       !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1751,7 +1751,7 @@ OS:Connection,
 OS:Space,
   {c2d19df5-f772-466f-b90d-5b6ec93bb1b6}, !- Handle
   GuestRoom406_408,                       !- Name
-  {3ab8c8b0-ebaa-4851-a5cf-aeb0d2b8d57e}, !- Space Type Name
+  {e59df199-1ca9-44a5-a6dc-05633e4fb8b9}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1874,7 +1874,7 @@ OS:Connection,
 OS:Space,
   {37357883-8e14-49c8-be78-ba734cfce502}, !- Handle
   GuestRoom424,                           !- Name
-  {6e92d470-bcf0-4405-b582-e3c208211fa7}, !- Space Type Name
+  {e32fe023-4130-450b-b2a8-3964172c81f2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1912,7 +1912,7 @@ OS:Connection,
 OS:Space,
   {572dccc0-e58a-42de-920b-8d74010b410b}, !- Handle
   ElevatorCoreFlr4,                       !- Name
-  {662af957-c74c-469f-ae44-d9e41ecf3372}, !- Space Type Name
+  {01560249-5c18-4039-a4bf-a673daaf2c4a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1984,7 +1984,7 @@ OS:Connection,
 OS:Space,
   {38d2b6b5-8f4a-4423-a39d-8bae91f44c62}, !- Handle
   ExerciseCenterFlr1,                     !- Name
-  {82586afb-b1c8-4ef9-8d40-41005eb80b95}, !- Space Type Name
+  {48f105bd-b327-43a3-9bc6-635c6d4b846f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2022,7 +2022,7 @@ OS:Connection,
 OS:Space,
   {5a8dc4a8-7525-4dcf-a643-e92c09d0a819}, !- Handle
   GuestRoom202_205,                       !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2043,7 +2043,7 @@ OS:Connection,
 OS:Space,
   {7bc9ca4a-5249-40d3-8e40-75ede49f746d}, !- Handle
   GuestRoom419,                           !- Name
-  {6e92d470-bcf0-4405-b582-e3c208211fa7}, !- Space Type Name
+  {e32fe023-4130-450b-b2a8-3964172c81f2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2258,7 +2258,7 @@ OS:Connection,
 OS:Space,
   {6f41802d-15b0-430d-ae1e-a53af5b53588}, !- Handle
   GuestRoom420_423,                       !- Name
-  {6e92d470-bcf0-4405-b582-e3c208211fa7}, !- Space Type Name
+  {e32fe023-4130-450b-b2a8-3964172c81f2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2347,7 +2347,7 @@ OS:Connection,
 OS:Space,
   {fedcf888-629c-4ae7-bb6a-d56c2d7974a4}, !- Handle
   GuestRoom320_323,                       !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2402,7 +2402,7 @@ OS:Connection,
 OS:Space,
   {b918e84e-ac07-4fd7-98fc-17a66fdd6dda}, !- Handle
   GuestRoom219,                           !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2457,7 +2457,7 @@ OS:Connection,
 OS:Space,
   {6be08053-16e2-49ac-b3d3-87fc2a7c15ef}, !- Handle
   GuestRoom415_418,                       !- Name
-  {6e92d470-bcf0-4405-b582-e3c208211fa7}, !- Space Type Name
+  {e32fe023-4130-450b-b2a8-3964172c81f2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2512,7 +2512,7 @@ OS:Connection,
 OS:Space,
   {15423992-3618-4a9c-b227-4baf3be059d0}, !- Handle
   FrontStorageFlr1,                       !- Name
-  {20f60738-9e36-44aa-8319-f53e6805116c}, !- Space Type Name
+  {b777888b-3bf2-4e45-a040-4fb0ab280b4c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2567,7 +2567,7 @@ OS:Connection,
 OS:Space,
   {71c86e43-9b14-45ac-a6fa-6438c13d331b}, !- Handle
   GuestRoom414,                           !- Name
-  {3ab8c8b0-ebaa-4851-a5cf-aeb0d2b8d57e}, !- Space Type Name
+  {e59df199-1ca9-44a5-a6dc-05633e4fb8b9}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2690,7 +2690,7 @@ OS:Connection,
 OS:Space,
   {3365ea79-d231-497c-ba72-29707e2c3111}, !- Handle
   ElevatorCoreFlr1,                       !- Name
-  {c43fa3aa-94eb-488a-a7ac-b28f2b7cb1e2}, !- Space Type Name
+  {c9041ab8-126a-479b-b9f5-8253f3af8576}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2779,7 +2779,7 @@ OS:Connection,
 OS:Space,
   {b8585661-ec58-46ac-84c9-11e639571a70}, !- Handle
   FrontStairsFlr1,                        !- Name
-  {4584a895-2fd6-46b5-92e7-e1f7f8707bcc}, !- Space Type Name
+  {b83a60d8-404b-438f-a3e4-b4ddb6a66c29}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2834,7 +2834,7 @@ OS:Connection,
 OS:Space,
   {ecf6efff-928d-4a21-b933-7766ca51f08f}, !- Handle
   RearStairsFlr1,                         !- Name
-  {4584a895-2fd6-46b5-92e7-e1f7f8707bcc}, !- Space Type Name
+  {b83a60d8-404b-438f-a3e4-b4ddb6a66c29}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2889,7 +2889,7 @@ OS:Connection,
 OS:Space,
   {66f934e5-a57f-4dee-9979-348c1a1a32ce}, !- Handle
   GuestRoom104,                           !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2995,7 +2995,7 @@ OS:Connection,
 OS:Space,
   {bc72c659-b5a9-4d26-862d-cbe9f715b114}, !- Handle
   FrontStorageFlr3,                       !- Name
-  {20f60738-9e36-44aa-8319-f53e6805116c}, !- Space Type Name
+  {b777888b-3bf2-4e45-a040-4fb0ab280b4c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3135,7 +3135,7 @@ OS:Connection,
 OS:Space,
   {2252ed1f-808c-45fb-bd84-229b3918d625}, !- Handle
   GuestRoom224,                           !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3190,7 +3190,7 @@ OS:Connection,
 OS:Space,
   {321203dd-1224-4786-bc61-b1b8667c35b2}, !- Handle
   GuestRoom402_405,                       !- Name
-  {3ab8c8b0-ebaa-4851-a5cf-aeb0d2b8d57e}, !- Space Type Name
+  {e59df199-1ca9-44a5-a6dc-05633e4fb8b9}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3317,7 +3317,7 @@ OS:Connection,
 OS:Space,
   {1e9915b0-6623-40d9-8906-73ccdcb564e1}, !- Handle
   GuestRoom313,                           !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3508,7 +3508,7 @@ OS:Connection,
 OS:Space,
   {54bd1a25-93a3-40d1-8b06-8814592f5976}, !- Handle
   ElevatorCoreFlr2,                       !- Name
-  {97029971-ff74-4990-a9f2-5f705e5cc11c}, !- Space Type Name
+  {8d7cafa7-6ead-4d71-91c7-7d0ab4b9bfc9}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3563,7 +3563,7 @@ OS:Connection,
 OS:Space,
   {7c03c4da-eb44-4a11-9874-0bc070b4f7af}, !- Handle
   FrontStairsFlr2,                        !- Name
-  {4584a895-2fd6-46b5-92e7-e1f7f8707bcc}, !- Space Type Name
+  {b83a60d8-404b-438f-a3e4-b4ddb6a66c29}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3669,7 +3669,7 @@ OS:Connection,
 OS:Space,
   {872d6408-3cf1-45b3-9c7e-38a995acd157}, !- Handle
   GuestRoom306_308,                       !- Name
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Space Type Name
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3724,7 +3724,7 @@ OS:Connection,
 OS:Space,
   {03d33b95-9b63-4e20-9aea-b30045a78efe}, !- Handle
   GuestRoom213,                           !- Name
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Space Type Name
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3881,7 +3881,7 @@ OS:Connection,
 OS:Space,
   {dfad1783-8448-4381-94eb-e0a32c2ed6a0}, !- Handle
   FrontStorageFlr4,                       !- Name
-  {f20fabb6-74ac-4f62-a649-2f6467ab91ea}, !- Space Type Name
+  {bf5f8295-2e95-486d-bb66-417b1037d2df}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -17078,374 +17078,374 @@ OS:ZoneHVAC:EquipmentList,
   {35da0940-d1d8-4952-99b8-f76d178b25d5}; !- Thermal Zone
 
 OS:SpaceType,
-  {14622914-9228-48ae-9b56-b628418d115a}, !- Handle
+  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Handle
   SmallHotel Corridor,                    !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {62e82bb1-0517-46b7-b81c-ba86af0ddc96}, !- Group Rendering Name
+  {39811ee1-9686-4edc-bc11-fc9e81fffc11}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Corridor;                               !- Standards Space Type
 
 OS:Rendering:Color,
-  {62e82bb1-0517-46b7-b81c-ba86af0ddc96}, !- Handle
+  {39811ee1-9686-4edc-bc11-fc9e81fffc11}, !- Handle
   SmallHotel Corridor,                    !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   31;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {20240da1-2e06-4792-ac5d-7726274c61ae}, !- Handle
+  {fbac58cd-2b1e-4bfc-a58a-451c5ec57d58}, !- Handle
   SmallHotel Corridor4,                   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {42b80631-c7b8-4687-8d11-308077e56497}, !- Group Rendering Name
+  {96213e57-f0ca-4fb4-809c-d3e928a386f2}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Corridor4;                              !- Standards Space Type
 
 OS:Rendering:Color,
-  {42b80631-c7b8-4687-8d11-308077e56497}, !- Handle
+  {96213e57-f0ca-4fb4-809c-d3e928a386f2}, !- Handle
   SmallHotel Corridor4,                   !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   31;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {c43fa3aa-94eb-488a-a7ac-b28f2b7cb1e2}, !- Handle
+  {c9041ab8-126a-479b-b9f5-8253f3af8576}, !- Handle
   SmallHotel Elec/MechRoom,               !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {47c3c0c9-b8cd-4ef8-bac0-ad7d45d3402a}, !- Group Rendering Name
+  {a4c64c63-d321-4c41-8db1-f54399d13fbd}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Elec/MechRoom;                          !- Standards Space Type
 
 OS:Rendering:Color,
-  {47c3c0c9-b8cd-4ef8-bac0-ad7d45d3402a}, !- Handle
+  {a4c64c63-d321-4c41-8db1-f54399d13fbd}, !- Handle
   SmallHotel Elec/MechRoom,               !- Name
   41,                                     !- Rendering Red Value
   31,                                     !- Rendering Green Value
   175;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {97029971-ff74-4990-a9f2-5f705e5cc11c}, !- Handle
+  {8d7cafa7-6ead-4d71-91c7-7d0ab4b9bfc9}, !- Handle
   SmallHotel ElevatorCore,                !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {8d1a854e-1cc9-4eed-aadb-295ccd7d3c29}, !- Group Rendering Name
+  {4ee4cb2c-52f2-4a13-9131-667498c4a3ab}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   ElevatorCore;                           !- Standards Space Type
 
 OS:Rendering:Color,
-  {8d1a854e-1cc9-4eed-aadb-295ccd7d3c29}, !- Handle
+  {4ee4cb2c-52f2-4a13-9131-667498c4a3ab}, !- Handle
   SmallHotel ElevatorCore,                !- Name
   41,                                     !- Rendering Red Value
   31,                                     !- Rendering Green Value
   175;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {662af957-c74c-469f-ae44-d9e41ecf3372}, !- Handle
+  {01560249-5c18-4039-a4bf-a673daaf2c4a}, !- Handle
   SmallHotel ElevatorCore4,               !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {d87bcb81-c5fb-4088-a631-c39e64c00e50}, !- Group Rendering Name
+  {ddd92352-150d-4a05-9e4a-9af36c11a562}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   ElevatorCore4;                          !- Standards Space Type
 
 OS:Rendering:Color,
-  {d87bcb81-c5fb-4088-a631-c39e64c00e50}, !- Handle
+  {ddd92352-150d-4a05-9e4a-9af36c11a562}, !- Handle
   SmallHotel ElevatorCore4,               !- Name
   41,                                     !- Rendering Red Value
   31,                                     !- Rendering Green Value
   175;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {5324d5e8-3263-4d88-9bf7-faf4aaa5bb26}, !- Handle
+  {ada0820f-1875-43d6-ad2e-ae1d0154c28a}, !- Handle
   SmallHotel StaffLounge,                 !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {f3e89c55-4d42-444f-8c2b-77f87f91ab7e}, !- Group Rendering Name
+  {9f60cec7-7c8e-450c-8151-d8b312c670e5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   StaffLounge;                            !- Standards Space Type
 
 OS:Rendering:Color,
-  {f3e89c55-4d42-444f-8c2b-77f87f91ab7e}, !- Handle
+  {9f60cec7-7c8e-450c-8151-d8b312c670e5}, !- Handle
   SmallHotel StaffLounge,                 !- Name
   31,                                     !- Rendering Red Value
   169,                                    !- Rendering Green Value
   34;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {82586afb-b1c8-4ef9-8d40-41005eb80b95}, !- Handle
+  {48f105bd-b327-43a3-9bc6-635c6d4b846f}, !- Handle
   SmallHotel Exercise,                    !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {0f316728-99b4-45e8-80f0-be7a46baaec7}, !- Group Rendering Name
+  {d8d2a1a2-e7d3-4c71-9f5a-098f14c111c1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Exercise;                               !- Standards Space Type
 
 OS:Rendering:Color,
-  {0f316728-99b4-45e8-80f0-be7a46baaec7}, !- Handle
+  {d8d2a1a2-e7d3-4c71-9f5a-098f14c111c1}, !- Handle
   SmallHotel Exercise,                    !- Name
   154,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   120;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {9cefe5be-7e22-4c8d-8416-968f06c8bc3d}, !- Handle
+  {520a0f69-6828-4751-9bdf-36056fab7b1c}, !- Handle
   SmallHotel GuestLounge,                 !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c7ddb2b3-05d0-455d-8d88-ecfb335aa09c}, !- Group Rendering Name
+  {1bf92496-b39c-435b-ac47-2bc53209af11}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   GuestLounge;                            !- Standards Space Type
 
 OS:Rendering:Color,
-  {c7ddb2b3-05d0-455d-8d88-ecfb335aa09c}, !- Handle
+  {1bf92496-b39c-435b-ac47-2bc53209af11}, !- Handle
   SmallHotel GuestLounge,                 !- Name
   230,                                    !- Rendering Red Value
   157,                                    !- Rendering Green Value
   120;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {5a45b512-20b7-4a0f-9fdb-e86115be1277}, !- Handle
+  {20831d94-7883-4042-afc7-be5c64c350e0}, !- Handle
   SmallHotel Office,                      !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {39e36784-edb7-49ea-b254-6a927754bc92}, !- Group Rendering Name
+  {85e7e219-648c-428b-b1c4-0a6049f80bb1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Office;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {39e36784-edb7-49ea-b254-6a927754bc92}, !- Handle
+  {85e7e219-648c-428b-b1c4-0a6049f80bb1}, !- Handle
   SmallHotel Office,                      !- Name
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {4584a895-2fd6-46b5-92e7-e1f7f8707bcc}, !- Handle
+  {b83a60d8-404b-438f-a3e4-b4ddb6a66c29}, !- Handle
   SmallHotel Stair,                       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {7c22ad95-54f1-48d8-80b4-353161ec599b}, !- Group Rendering Name
+  {5604b404-78ef-41f2-ae8f-5d78faf6cf53}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Stair;                                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {7c22ad95-54f1-48d8-80b4-353161ec599b}, !- Handle
+  {5604b404-78ef-41f2-ae8f-5d78faf6cf53}, !- Handle
   SmallHotel Stair,                       !- Name
   230,                                    !- Rendering Red Value
   157,                                    !- Rendering Green Value
   120;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {b0d1c895-e46c-415c-9413-6e15742804c3}, !- Handle
+  {e1088e9b-8e09-4483-9b39-ff5143dfd692}, !- Handle
   SmallHotel Stair4,                      !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {8d8fc638-7386-45bc-abf0-946521f044a2}, !- Group Rendering Name
+  {b8fd9db4-7bd2-41c0-ab0c-0cec74ac9a69}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Stair4;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {8d8fc638-7386-45bc-abf0-946521f044a2}, !- Handle
+  {b8fd9db4-7bd2-41c0-ab0c-0cec74ac9a69}, !- Handle
   SmallHotel Stair4,                      !- Name
   230,                                    !- Rendering Red Value
   157,                                    !- Rendering Green Value
   120;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {20f60738-9e36-44aa-8319-f53e6805116c}, !- Handle
+  {b777888b-3bf2-4e45-a040-4fb0ab280b4c}, !- Handle
   SmallHotel Storage,                     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {0ea499f9-d3d1-4311-93ec-502ed0b56f65}, !- Group Rendering Name
+  {b8d83350-9eff-4735-b18b-55c92f8575d5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Storage;                                !- Standards Space Type
 
 OS:Rendering:Color,
-  {0ea499f9-d3d1-4311-93ec-502ed0b56f65}, !- Handle
+  {b8d83350-9eff-4735-b18b-55c92f8575d5}, !- Handle
   SmallHotel Storage,                     !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {f20fabb6-74ac-4f62-a649-2f6467ab91ea}, !- Handle
+  {bf5f8295-2e95-486d-bb66-417b1037d2df}, !- Handle
   SmallHotel Storage4Front,               !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {757fb5bb-3993-4003-95e9-c2e7caf9b71e}, !- Group Rendering Name
+  {4dee5204-e9ce-4d6e-bf92-927006c0f419}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Storage4Front;                          !- Standards Space Type
 
 OS:Rendering:Color,
-  {757fb5bb-3993-4003-95e9-c2e7caf9b71e}, !- Handle
+  {4dee5204-e9ce-4d6e-bf92-927006c0f419}, !- Handle
   SmallHotel Storage4Front,               !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {e79e41d5-9fbf-4de4-affc-5adf22366739}, !- Handle
+  {49da93f8-31d5-433e-9148-e35213a5dbf0}, !- Handle
   SmallHotel Storage4Rear,                !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {813054ca-0991-4b34-a6f4-7222cc05ddc7}, !- Group Rendering Name
+  {daa8d19b-b385-4afd-bd75-e4292bdc3334}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Storage4Rear;                           !- Standards Space Type
 
 OS:Rendering:Color,
-  {813054ca-0991-4b34-a6f4-7222cc05ddc7}, !- Handle
+  {daa8d19b-b385-4afd-bd75-e4292bdc3334}, !- Handle
   SmallHotel Storage4Rear,                !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {f8d9e367-1a17-49f8-b38d-1a58954a3fec}, !- Handle
+  {f85729b8-5146-4b84-bf68-ce9cbf0f8185}, !- Handle
   SmallHotel GuestRoom123Occ,             !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {449b05bd-e9d1-4d33-9e94-05e8c221901f}, !- Group Rendering Name
+  {33b2c943-5bc3-4e78-b5aa-cfb9c81f736c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   GuestRoom123Occ;                        !- Standards Space Type
 
 OS:Rendering:Color,
-  {449b05bd-e9d1-4d33-9e94-05e8c221901f}, !- Handle
+  {33b2c943-5bc3-4e78-b5aa-cfb9c81f736c}, !- Handle
   SmallHotel GuestRoom123Occ,             !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value
   222;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {141f0da2-4af3-43a7-8552-43ed28adb696}, !- Handle
+  {c87dac5e-4837-41f7-a220-1f1b92913666}, !- Handle
   SmallHotel GuestRoom123Vac,             !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {5834c922-e7cb-4bfa-91a5-6f74d647b481}, !- Group Rendering Name
+  {6991161d-8404-4812-85bd-e528b0e5a6b2}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   GuestRoom123Vac;                        !- Standards Space Type
 
 OS:Rendering:Color,
-  {5834c922-e7cb-4bfa-91a5-6f74d647b481}, !- Handle
+  {6991161d-8404-4812-85bd-e528b0e5a6b2}, !- Handle
   SmallHotel GuestRoom123Vac,             !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value
   222;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {6e92d470-bcf0-4405-b582-e3c208211fa7}, !- Handle
+  {e32fe023-4130-450b-b2a8-3964172c81f2}, !- Handle
   SmallHotel GuestRoom4Occ,               !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {95d57013-fac8-48cb-83eb-2ea38d1c5201}, !- Group Rendering Name
+  {505e350d-0840-4571-89d4-0f011f9d14ff}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   GuestRoom4Occ;                          !- Standards Space Type
 
 OS:Rendering:Color,
-  {95d57013-fac8-48cb-83eb-2ea38d1c5201}, !- Handle
+  {505e350d-0840-4571-89d4-0f011f9d14ff}, !- Handle
   SmallHotel GuestRoom4Occ,               !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value
   222;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {3ab8c8b0-ebaa-4851-a5cf-aeb0d2b8d57e}, !- Handle
+  {e59df199-1ca9-44a5-a6dc-05633e4fb8b9}, !- Handle
   SmallHotel GuestRoom4Vac,               !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c448a730-4759-4900-84fd-aeaa81441129}, !- Group Rendering Name
+  {40e1cb83-b8a2-4cec-b59b-aace0a135846}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   GuestRoom4Vac;                          !- Standards Space Type
 
 OS:Rendering:Color,
-  {c448a730-4759-4900-84fd-aeaa81441129}, !- Handle
+  {40e1cb83-b8a2-4cec-b59b-aace0a135846}, !- Handle
   SmallHotel GuestRoom4Vac,               !- Name
   78,                                     !- Rendering Red Value
   167,                                    !- Rendering Green Value
   222;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {50b9c73c-cd77-411c-95cf-771333f4afc6}, !- Handle
+  {df017267-09f8-4d88-9182-1c12331e6de4}, !- Handle
   SmallHotel Laundry,                     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {0e0d9f39-4546-4611-8acd-89be8f743e03}, !- Group Rendering Name
+  {49e43f87-d93e-4414-bf9c-c5e31e7bfb86}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Laundry;                                !- Standards Space Type
 
 OS:Rendering:Color,
-  {0e0d9f39-4546-4611-8acd-89be8f743e03}, !- Handle
+  {49e43f87-d93e-4414-bf9c-c5e31e7bfb86}, !- Handle
   SmallHotel Laundry,                     !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {0eaa4d1c-5e89-49f2-b49e-07806e32f44a}, !- Handle
+  {797b981b-e8ba-497d-b361-4adef913762d}, !- Handle
   SmallHotel Mechanical,                  !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {b61908ba-f94a-4aec-b664-88e36e8426e8}, !- Group Rendering Name
+  {a59cc0b0-024b-4efa-9f23-af4c0f7ec482}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Mechanical;                             !- Standards Space Type
 
 OS:Rendering:Color,
-  {b61908ba-f94a-4aec-b664-88e36e8426e8}, !- Handle
+  {a59cc0b0-024b-4efa-9f23-af4c0f7ec482}, !- Handle
   SmallHotel Mechanical,                  !- Name
   41,                                     !- Rendering Red Value
   31,                                     !- Rendering Green Value
   169;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {292ab971-3642-42f0-836d-85fb45bd0f34}, !- Handle
+  {626449c0-0000-4c82-8023-35ffcc6b326c}, !- Handle
   SmallHotel Meeting,                     !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {ba9403c8-6730-4e63-8c73-b881e289e865}, !- Group Rendering Name
+  {c8d2cef2-f01a-4bb9-a8f5-0b52a4662c6b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   Meeting;                                !- Standards Space Type
 
 OS:Rendering:Color,
-  {ba9403c8-6730-4e63-8c73-b881e289e865}, !- Handle
+  {c8d2cef2-f01a-4bb9-a8f5-0b52a4662c6b}, !- Handle
   SmallHotel Meeting,                     !- Name
   230,                                    !- Rendering Red Value
   196,                                    !- Rendering Green Value
   120;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {ddbec689-77bb-4965-8d33-fbbe316ccdba}, !- Handle
+  {ae64a6cf-5c68-46d8-bc65-1072ceb714e4}, !- Handle
   SmallHotel PublicRestroom,              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {0f37d97e-843a-49e6-ad45-1295595cb52e}, !- Group Rendering Name
+  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
   PublicRestroom;                         !- Standards Space Type
 
 OS:Rendering:Color,
-  {0f37d97e-843a-49e6-ad45-1295595cb52e}, !- Handle
+  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Handle
   SmallHotel PublicRestroom,              !- Name
   169,                                    !- Rendering Red Value
   169,                                    !- Rendering Green Value

@@ -98,6 +98,14 @@ module OpenstudioStandards
     # Standards classes
     require_relative "#{stds}/standards_model"
     require_relative "#{stds}/necb/necb_2011/necb_2011"
+    require_relative "#{stds}/necb/necb_2011/building_envelope"
+    require_relative "#{stds}/necb/necb_2011/lighting"
+    require_relative "#{stds}/necb/necb_2011/hvac_systems"
+    require_relative "#{stds}/necb/necb_2011/service_water_heating"
+    require_relative "#{stds}/necb/necb_2011/electrical_power_systems_and_motors"
+    require_relative "#{stds}/necb/necb_2011/beps_compliance_path"
+
+
     require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
     require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
     require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004"
@@ -111,7 +119,6 @@ module OpenstudioStandards
     require_relative "#{stds}/Standards.CoilDX"
     require_relative "#{stds}/Standards.Pump"
     require_relative "#{stds}/Standards.CoolingTower"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.Fan"
     require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTower"
     require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTower"
     require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower"
@@ -215,18 +222,7 @@ module OpenstudioStandards
     require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.HeatExchangerSensLat"
     require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Space"
     require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ThermalZone"
-    # NECB 2011
-    require_relative "#{stds}/necb/necb_2011/necb_2011.AirLoopHVAC"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.BoilerHotWater"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.ChillerElectricEIR"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.CoilCoolingDXMultiSpeed"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.CoilHeatingGasMultiStage"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.FanVariableVolume"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.Model"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.Space"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.SpaceType"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.ThermalZone"
-    require_relative "#{stds}/necb/necb_2011/necb_2011.WaterHeaterMixed"
+
 
     ### Prototypes ###
     # Building Types
