@@ -66,7 +66,7 @@ OS:Surface,
 OS:Space,
   {308a9ccd-586a-4231-b605-b35b346c50c8}, !- Handle
   Core_Retail,                            !- Name
-  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Space Type Name
+  {1c0dc596-51b6-4618-93b8-e9fcb87a8944}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -148,7 +148,7 @@ OS:Surface,
 OS:Space,
   {77c9e620-8800-4f89-addb-d3f75a7e86a8}, !- Handle
   Back_Space,                             !- Name
-  {c8d2cef2-f01a-4bb9-a8f5-0b52a4662c6b}, !- Space Type Name
+  {e4cb2e5e-0e5f-4048-bab7-588f49114e97}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -162,7 +162,7 @@ OS:Space,
 OS:Space,
   {ff444dc8-6aab-41a0-b337-ab0ed7d7956f}, !- Handle
   Front_Retail,                           !- Name
-  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Space Type Name
+  {1c0dc596-51b6-4618-93b8-e9fcb87a8944}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -210,7 +210,7 @@ OS:Surface,
 OS:Space,
   {f3f2316b-fa00-4041-a540-7f94e0c43ec9}, !- Handle
   Point_Of_Sale,                          !- Name
-  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Space Type Name
+  {1c0dc596-51b6-4618-93b8-e9fcb87a8944}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -224,7 +224,7 @@ OS:Space,
 OS:Space,
   {9509fe22-2b00-4be9-ba86-d4e9003d2d32}, !- Handle
   Front_Entry,                            !- Name
-  {9a145cb7-3aee-4ebf-a45e-36acb38d4a20}, !- Space Type Name
+  {29821415-f9ec-4d1c-954c-54e44d6c49f9}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1547,7 +1547,7 @@ OS:ZoneHVAC:EquipmentList,
   {2457585a-e958-4f6b-8185-1b373f9ce0d5}; !- Thermal Zone
 
 OS:WeatherFile,
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Handle
+  {02739817-df31-4805-9309-c5f7fa4d4684}, !- Handle
   Vancouver Int'l,                        !- City
   BC,                                     !- State Province Region
   CAN,                                    !- Country
@@ -1561,14 +1561,14 @@ OS:WeatherFile,
   9D8CC810;                               !- Checksum
 
 OS:Site:WaterMainsTemperature,
-  {7ef28f12-04f3-4cc6-a8e5-b51c54945721}, !- Handle
+  {ef1860ad-d73d-44ea-8102-4bdac0e94187}, !- Handle
   Correlation,                            !- Calculation Method
   ,                                       !- Temperature Schedule Name
   9.71666666666667,                       !- Annual Average Outdoor Air Temperature {C}
   13.9;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
 
 OS:SizingPeriod:DesignDay,
-  {a59cc0b0-024b-4efa-9f23-af4c0f7ec482}, !- Handle
+  {3028746f-458c-492e-9d3e-b6d85a7b9fcf}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -1594,7 +1594,7 @@ OS:SizingPeriod:DesignDay,
   2.445;                                  !- ASHRAE Taud {dimensionless}
 
 OS:SizingPeriod:DesignDay,
-  {626449c0-0000-4c82-8023-35ffcc6b326c}, !- Handle
+  {f2a317db-66ed-4e97-b6bf-68ce71c62dd1}, !- Handle
   Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
   -7,                                     !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -1616,7 +1616,7 @@ OS:SizingPeriod:DesignDay,
   ASHRAEClearSky;                         !- Solar Model Indicator
 
 OS:Site:GroundTemperature:BuildingSurface,
-  {16f24371-1105-4dce-911d-d90829761440}, !- Handle
+  {c73bb040-1c53-44ba-8c0f-007978fb64c3}, !- Handle
   19.527,                                 !- January Ground Temperature {C}
   19.502,                                 !- February Ground Temperature {C}
   19.536,                                 !- March Ground Temperature {C}
@@ -1631,51 +1631,51 @@ OS:Site:GroundTemperature:BuildingSurface,
   19.633;                                 !- December Ground Temperature {C}
 
 OS:SpaceType,
-  {c8d2cef2-f01a-4bb9-a8f5-0b52a4662c6b}, !- Handle
+  {e4cb2e5e-0e5f-4048-bab7-588f49114e97}, !- Handle
   Space Function Storage area,            !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {e7c03313-132b-47c1-a320-17d8c0a5f08a}, !- Group Rendering Name
+  {3f0a4a09-a43e-4e92-a5d2-78e99dadde4d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Storage area;                           !- Standards Space Type
 
 OS:Rendering:Color,
-  {e7c03313-132b-47c1-a320-17d8c0a5f08a}, !- Handle
+  {3f0a4a09-a43e-4e92-a5d2-78e99dadde4d}, !- Handle
   Space Function Storage area,            !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Handle
+  {1c0dc596-51b6-4618-93b8-e9fcb87a8944}, !- Handle
   Space Function Retail - sales,          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {096fa4bd-3adf-4dc7-a3cd-3235fa711554}, !- Group Rendering Name
+  {6fd2a9a6-428e-43f1-ae0b-b35a8ad6b656}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Retail - sales;                         !- Standards Space Type
 
 OS:Rendering:Color,
-  {096fa4bd-3adf-4dc7-a3cd-3235fa711554}, !- Handle
+  {6fd2a9a6-428e-43f1-ae0b-b35a8ad6b656}, !- Handle
   Space Function Retail - sales,          !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {9a145cb7-3aee-4ebf-a45e-36acb38d4a20}, !- Handle
+  {29821415-f9ec-4d1c-954c-54e44d6c49f9}, !- Handle
   Space Function Lobby - elevator,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {3342e300-753b-41b3-8e21-446aa6f1732b}, !- Group Rendering Name
+  {f36eb1d2-7dcf-4ffe-bf12-25fb355ba7d4}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Lobby - elevator;                       !- Standards Space Type
 
 OS:Rendering:Color,
-  {3342e300-753b-41b3-8e21-446aa6f1732b}, !- Handle
+  {f36eb1d2-7dcf-4ffe-bf12-25fb355ba7d4}, !- Handle
   Space Function Lobby - elevator,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value

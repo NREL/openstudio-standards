@@ -319,21 +319,21 @@ class NECB_2011_Model
     old_name = default_surface_construction_set.name.get.to_s
 
 
-    climate_zone_index = get_climate_zone_index(hdd)
-    new_name = "#{old_name} at climate #{get_climate_zone_name(hdd)}"
 
+    new_name = "#{old_name} at hdd = #{hdd}"
+    @standards_data["conductances"]
     #convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * @standards_data["conductances"]["Wall"].find {|i| i["hdd"] > hdd}["thermal_transmittance"])
-    floor_rsi = 1.0 / (scale_floor * @standards_data["conductances"]["Floor"].find {|i| i["hdd"] > hdd}["thermal_transmittance"])
-    roof_rsi = 1.0 / (scale_roof * @standards_data["conductances"]["Roof"].find {|i| i["hdd"] > hdd}["thermal_transmittance"])
-    ground_wall_rsi = 1.0 / (scale_ground_wall * @standards_data["conductances"]["GroundWall"].find {|i| i["hdd"] > hdd}["thermal_transmittance"])
-    ground_floor_rsi = 1.0 / (scale_ground_floor * @standards_data["conductances"]["GroundFloor"].find {|i| i["hdd"] > hdd}["thermal_transmittance"])
-    ground_roof_rsi = 1.0 / (scale_ground_roof * @standards_data["conductances"]["GroundRoof"].find {|i| i["hdd"] > hdd}["thermal_transmittance"])
-    door_rsi = 1.0 / (scale_door * @standards_data["conductances"]["Door"].find {|i| i["hdd"] > hdd}["thermal_transmittance"])
-    window_rsi = 1.0 / (scale_window * @standards_data["conductances"]["Window"].find {|i| i["hdd"] > hdd}["thermal_transmittance"])
+    wall_rsi = 1.0 / (scale_wall * @standards_data["conductances"].find {|i| i["surface"] == 'wall' and i["hdd"] > hdd}["thermal_transmittance"])
+    floor_rsi = 1.0 / (scale_floor * @standards_data["conductances"].find {|i| i["surface"] == 'floor' and i["hdd"] > hdd}["thermal_transmittance"])
+    roof_rsi = 1.0 / (scale_roof * @standards_data["conductances"].find {|i| i["surface"] == 'roof' and i["hdd"] > hdd}["thermal_transmittance"])
+    ground_wall_rsi = 1.0 / (scale_ground_wall * @standards_data["conductances"].find {|i| i["surface"] == 'ground_wall' and i["hdd"] > hdd}["thermal_transmittance"])
+    ground_floor_rsi = 1.0 / (scale_ground_floor * @standards_data["conductances"].find {|i| i["surface"] == 'ground_floor' and i["hdd"] > hdd}["thermal_transmittance"])
+    ground_roof_rsi = 1.0 / (scale_ground_roof * @standards_data["conductances"].find {|i| i["surface"] == 'ground_roof' and i["hdd"] > hdd}["thermal_transmittance"])
+    door_rsi = 1.0 / (scale_door * @standards_data["conductances"].find {|i| i["surface"] == 'door' and i["hdd"] > hdd}["thermal_transmittance"])
+    window_rsi = 1.0 / (scale_window * @standards_data["conductances"].find {|i| i["surface"] == 'window' and i["hdd"] > hdd}["thermal_transmittance"])
     BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
                                                                                                  wall_rsi, floor_rsi, roof_rsi,
-                                                                                                 ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
+                                                                                                  ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
                                                                                                  window_rsi, nil, nil,
                                                                                                  window_rsi, nil, nil,
                                                                                                  door_rsi,
@@ -356,7 +356,7 @@ class NECB_2011_Model
   #@return [String] surface as RSI
   def set_necb_external_surface_conductance(surface, hdd, is_radiant = false, scaling_factor = 1.0)
     conductance_value = 0
-    climate_zone_index = self.get_climate_zone_index(hdd)
+
 
     if surface.outsideBoundaryCondition.downcase == "outdoors"
 
@@ -398,7 +398,7 @@ class NECB_2011_Model
   #@param hdd [Float]
   def set_necb_external_subsurface_conductance(subsurface, hdd)
     conductance_value = 0
-    climate_zone_index = get_climate_zone_index(hdd)
+
     if subsurface.outsideBoundaryCondition.downcase.match("outdoors")
       case subsurface.subSurfaceType.downcase
         when /window/

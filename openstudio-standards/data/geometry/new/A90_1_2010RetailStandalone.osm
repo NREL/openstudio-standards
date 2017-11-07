@@ -66,7 +66,7 @@ OS:Surface,
 OS:Space,
   {308a9ccd-586a-4231-b605-b35b346c50c8}, !- Handle
   Core_Retail,                            !- Name
-  {8d7cafa7-6ead-4d71-91c7-7d0ab4b9bfc9}, !- Space Type Name
+  {c3ea7ad5-d111-4da5-9e86-ae5a15459443}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -148,7 +148,7 @@ OS:Surface,
 OS:Space,
   {77c9e620-8800-4f89-addb-d3f75a7e86a8}, !- Handle
   Back_Space,                             !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {70b7dc2b-3db4-4cbb-a05c-0c3bac4551ca}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -162,7 +162,7 @@ OS:Space,
 OS:Space,
   {ff444dc8-6aab-41a0-b337-ab0ed7d7956f}, !- Handle
   Front_Retail,                           !- Name
-  {8d7cafa7-6ead-4d71-91c7-7d0ab4b9bfc9}, !- Space Type Name
+  {c3ea7ad5-d111-4da5-9e86-ae5a15459443}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -210,7 +210,7 @@ OS:Surface,
 OS:Space,
   {f3f2316b-fa00-4041-a540-7f94e0c43ec9}, !- Handle
   Point_Of_Sale,                          !- Name
-  {c9041ab8-126a-479b-b9f5-8253f3af8576}, !- Space Type Name
+  {0056e96d-3dc9-4a0e-806c-8b1082404347}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -224,7 +224,7 @@ OS:Space,
 OS:Space,
   {9509fe22-2b00-4be9-ba86-d4e9003d2d32}, !- Handle
   Front_Entry,                            !- Name
-  {fbac58cd-2b1e-4bfc-a58a-451c5ec57d58}, !- Space Type Name
+  {ea20cb58-0efe-426e-bbc4-9923c4e0664f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1547,68 +1547,68 @@ OS:ZoneHVAC:EquipmentList,
   {2457585a-e958-4f6b-8185-1b373f9ce0d5}; !- Thermal Zone
 
 OS:SpaceType,
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Handle
+  {70b7dc2b-3db4-4cbb-a05c-0c3bac4551ca}, !- Handle
   Retail Back_Space,                      !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {39811ee1-9686-4edc-bc11-fc9e81fffc11}, !- Group Rendering Name
+  {1d4bc35c-019c-4eed-94b2-6348596650ea}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
   Back_Space;                             !- Standards Space Type
 
 OS:Rendering:Color,
-  {39811ee1-9686-4edc-bc11-fc9e81fffc11}, !- Handle
+  {1d4bc35c-019c-4eed-94b2-6348596650ea}, !- Handle
   Retail Back_Space,                      !- Name
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {fbac58cd-2b1e-4bfc-a58a-451c5ec57d58}, !- Handle
+  {ea20cb58-0efe-426e-bbc4-9923c4e0664f}, !- Handle
   Retail Entry,                           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {96213e57-f0ca-4fb4-809c-d3e928a386f2}, !- Group Rendering Name
+  {7c591bec-2df2-48cb-8171-8e14bdb57f6d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
   Entry;                                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {96213e57-f0ca-4fb4-809c-d3e928a386f2}, !- Handle
+  {7c591bec-2df2-48cb-8171-8e14bdb57f6d}, !- Handle
   Retail Entry,                           !- Name
   169,                                    !- Rendering Red Value
   31,                                     !- Rendering Green Value
   31;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {c9041ab8-126a-479b-b9f5-8253f3af8576}, !- Handle
+  {0056e96d-3dc9-4a0e-806c-8b1082404347}, !- Handle
   Retail Point_of_Sale,                   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {a4c64c63-d321-4c41-8db1-f54399d13fbd}, !- Group Rendering Name
+  {cd99286d-53bd-4822-b460-80c90f98b6a5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
   Point_of_Sale;                          !- Standards Space Type
 
 OS:Rendering:Color,
-  {a4c64c63-d321-4c41-8db1-f54399d13fbd}, !- Handle
+  {cd99286d-53bd-4822-b460-80c90f98b6a5}, !- Handle
   Retail Point_of_Sale,                   !- Name
   171,                                    !- Rendering Red Value
   222,                                    !- Rendering Green Value
   78;                                     !- Rendering Blue Value
 
 OS:SpaceType,
-  {8d7cafa7-6ead-4d71-91c7-7d0ab4b9bfc9}, !- Handle
+  {c3ea7ad5-d111-4da5-9e86-ae5a15459443}, !- Handle
   Retail Retail,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {4ee4cb2c-52f2-4a13-9131-667498c4a3ab}, !- Group Rendering Name
+  {ebe73362-8bc6-4862-bb17-0f2528e38f64}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
   Retail;                                 !- Standards Space Type
 
 OS:Rendering:Color,
-  {4ee4cb2c-52f2-4a13-9131-667498c4a3ab}, !- Handle
+  {ebe73362-8bc6-4862-bb17-0f2528e38f64}, !- Handle
   Retail Retail,                          !- Name
   171,                                    !- Rendering Red Value
   222,                                    !- Rendering Green Value

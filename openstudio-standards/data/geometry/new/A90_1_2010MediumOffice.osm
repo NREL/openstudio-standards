@@ -53,7 +53,7 @@ OS:Connection,
 OS:Space,
   {fd517fa4-3c26-440a-aa97-3ace8c1c83b8}, !- Handle
   Perimeter_mid_ZN_4,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -92,7 +92,7 @@ OS:Connection,
 OS:Space,
   {0301d7f6-33a7-4967-9d2b-ab9b1cfbe5aa}, !- Handle
   Core_bottom,                            !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -215,7 +215,7 @@ OS:Connection,
 OS:Space,
   {67aa5b71-cfb3-4a14-86b6-9f9ba9a407f8}, !- Handle
   Perimeter_top_ZN_3,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -254,7 +254,7 @@ OS:Connection,
 OS:Space,
   {a20d9a0e-f1f9-4c21-938a-707c85783069}, !- Handle
   Perimeter_bot_ZN_2,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -334,7 +334,7 @@ OS:Connection,
 OS:Space,
   {bcf7adbf-62d7-4451-bd90-23e37f8bd918}, !- Handle
   Perimeter_mid_ZN_1,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -356,7 +356,7 @@ OS:Connection,
 OS:Space,
   {dac06210-f4a7-4108-99da-b010224bcaf1}, !- Handle
   Perimeter_bot_ZN_1,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -412,7 +412,7 @@ OS:Connection,
 OS:Space,
   {c7f6e37f-54b9-4246-b00b-8ba5739f031d}, !- Handle
   Perimeter_bot_ZN_3,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -451,7 +451,7 @@ OS:Connection,
 OS:Space,
   {722a09e4-0646-4e5a-b78d-58b632bc69f7}, !- Handle
   Perimeter_mid_ZN_2,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -541,7 +541,7 @@ OS:Connection,
 OS:Space,
   {a47d34ed-7efc-47ea-bdaa-671d58f47564}, !- Handle
   Perimeter_top_ZN_4,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -597,7 +597,7 @@ OS:Connection,
 OS:Space,
   {27fdb3c4-855f-48df-983a-24f85fe57204}, !- Handle
   Perimeter_bot_ZN_4,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -670,7 +670,7 @@ OS:Connection,
 OS:Space,
   {b422ea64-bad8-4f36-9616-c0c97070580c}, !- Handle
   Core_top,                               !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -794,7 +794,7 @@ OS:Connection,
 OS:Space,
   {eb32a2fb-5981-48a3-a152-e410cbe800cd}, !- Handle
   Perimeter_top_ZN_2,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1467,7 +1467,7 @@ OS:Connection,
 OS:Space,
   {4c8e12a9-92e8-4ff5-b054-f47863b51cf4}, !- Handle
   Perimeter_top_ZN_1,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1506,7 +1506,7 @@ OS:Connection,
 OS:Space,
   {493f6d08-7166-456d-ac62-2aa6ae1e0923}, !- Handle
   Core_mid,                               !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1754,7 +1754,7 @@ OS:Connection,
 OS:Space,
   {ec891589-6c66-4218-912e-610c05f9fca6}, !- Handle
   Perimeter_mid_ZN_3,                     !- Name
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Space Type Name
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4445,17 +4445,17 @@ OS:ZoneHVAC:EquipmentList,
   {c184d74f-7742-4292-99f3-68ea078a297f}; !- Thermal Zone
 
 OS:SpaceType,
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Handle
+  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Handle
   Office WholeBuilding - Md Office,       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {39811ee1-9686-4edc-bc11-fc9e81fffc11}, !- Group Rendering Name
+  {cd183f59-5501-4385-a0dc-d615de706986}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
   WholeBuilding - Md Office;              !- Standards Space Type
 
 OS:Rendering:Color,
-  {39811ee1-9686-4edc-bc11-fc9e81fffc11}, !- Handle
+  {cd183f59-5501-4385-a0dc-d615de706986}, !- Handle
   Office WholeBuilding - Md Office,       !- Name
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value

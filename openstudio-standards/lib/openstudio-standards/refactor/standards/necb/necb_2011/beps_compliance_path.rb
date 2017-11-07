@@ -310,7 +310,6 @@ class NECB_2011_Model
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} ACH.")
         end
       end
-
     end
   end
 

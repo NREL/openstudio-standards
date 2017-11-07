@@ -115,7 +115,7 @@ module BTAP
 
 
         climate_zone_index = get_climate_zone_index(hdd)
-        new_name = "#{old_name} at climate #{get_climate_zone_name(hdd)}"
+        new_name = "#{old_name} at hdd = #{hdd}"
 
         #convert conductance values to rsi values. (Note: we should really be only using conductances in)
         wall_rsi = 1.0 / (scale_wall * BTAP::Compliance::NECB2011::Data::Conductances::Wall[climate_zone_index])

@@ -53,7 +53,7 @@ OS:Connection,
 OS:Space,
   {8c07a26c-759e-4a0c-be83-e179d3ff1ba1}, !- Handle
   Bathrooms_ZN_1_FLR_2,                   !- Name
-  {9a145cb7-3aee-4ebf-a45e-36acb38d4a20}, !- Space Type Name
+  {cb6fb2d1-1dae-4f52-b616-b8f927d0fd5c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -92,7 +92,7 @@ OS:Connection,
 OS:Space,
   {f70833c5-e11a-4fe3-b01f-1ec1692c6820}, !- Handle
   Corner_Class_2_Pod_3_ZN_1_FLR_2,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -131,7 +131,7 @@ OS:Connection,
 OS:Space,
   {5ac31c4c-fc60-49f4-83e3-b5b17c6fe4fc}, !- Handle
   Kitchen_ZN_1_FLR_1,                     !- Name
-  {5011d809-abe1-4376-b714-6b9dabef0c78}, !- Space Type Name
+  {ea91a77a-c82a-40dc-8900-6f0d38c93169}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -153,7 +153,7 @@ OS:Connection,
 OS:Space,
   {ca77a65a-8c83-47b2-8f2a-9d681b5b657c}, !- Handle
   Corner_Class_1_Pod_2_ZN_1_FLR_1,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -209,7 +209,7 @@ OS:Connection,
 OS:Space,
   {5b6d79a1-ca37-4ac2-86a5-1120aebe4e62}, !- Handle
   Gym_ZN_1_FLR_1,                         !- Name
-  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Space Type Name
+  {2ab198fb-20d5-4f3e-95d8-4cae64e1039a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -265,7 +265,7 @@ OS:Connection,
 OS:Space,
   {07897017-2f7d-4da1-85cc-9c9ec7088e51}, !- Handle
   Offices_ZN_1_FLR_1,                     !- Name
-  {d5bb2766-eea3-4a94-aa73-2a2bb5cba1bb}, !- Space Type Name
+  {d0b311bc-fbe6-4cd3-82d7-4297d590316a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -304,7 +304,7 @@ OS:Connection,
 OS:Space,
   {98a24e6c-59af-448d-bf56-daadacedc0c5}, !- Handle
   Corridor_Pod_1_ZN_1_FLR_2,              !- Name
-  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Space Type Name
+  {b5ebfecb-6eb8-4e86-826d-4adfdac937f3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -343,7 +343,7 @@ OS:Connection,
 OS:Space,
   {9afb3bcc-f466-426d-84be-d73696352d8a}, !- Handle
   Auditorium_ZN_1_FLR_1,                  !- Name
-  {c8d2cef2-f01a-4bb9-a8f5-0b52a4662c6b}, !- Space Type Name
+  {e4126ce8-37aa-4ad2-b94b-dd8818fbb452}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -365,7 +365,7 @@ OS:Connection,
 OS:Space,
   {9642778a-9cfa-4d96-a768-710240677291}, !- Handle
   LIBRARY_MEDIA_CENTER_ZN_1_FLR_2,        !- Name
-  {f7f0be2b-ace4-4f53-bf84-c230f415e273}, !- Space Type Name
+  {45cce4d1-7549-4fbd-b544-8d8b3774eda9}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -404,7 +404,7 @@ OS:Connection,
 OS:Space,
   {8b1f8f19-8d7c-433c-9ecc-bfb247b3b7d4}, !- Handle
   Mult_Class_2_Pod_2_ZN_1_FLR_1,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -477,7 +477,7 @@ OS:Connection,
 OS:Space,
   {8e6e73b2-43d7-4a77-a53a-c3b09d195d59}, !- Handle
   Aux_Gym_ZN_1_FLR_1,                     !- Name
-  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Space Type Name
+  {2ab198fb-20d5-4f3e-95d8-4cae64e1039a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -499,7 +499,7 @@ OS:Connection,
 OS:Space,
   {b6c86a90-edfc-4e71-b6f9-346cd0a38717}, !- Handle
   Mult_Class_1_Pod_2_ZN_1_FLR_1,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -521,7 +521,7 @@ OS:Connection,
 OS:Space,
   {dda8118e-5bf7-4453-bed7-34efb3eb3a63}, !- Handle
   Mult_Class_1_Pod_3_ZN_1_FLR_2,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -543,7 +543,7 @@ OS:Connection,
 OS:Space,
   {db901331-8783-4932-bbcd-197c7bbbb277}, !- Handle
   Corner_Class_1_Pod_3_ZN_1_FLR_2,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -565,7 +565,7 @@ OS:Connection,
 OS:Space,
   {b7ed1746-e328-4d40-9bf6-a1219420f787}, !- Handle
   Mult_Class_2_Pod_1_ZN_1_FLR_1,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -604,7 +604,7 @@ OS:Connection,
 OS:Space,
   {5636d2ef-32e4-44f0-9333-393e20c4bebf}, !- Handle
   Corner_Class_2_Pod_1_ZN_1_FLR_2,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -660,7 +660,7 @@ OS:Connection,
 OS:Space,
   {4df5e3e9-4558-49e9-b589-cc23916d222a}, !- Handle
   Cafeteria_ZN_1_FLR_1,                   !- Name
-  {bedcffb8-ce69-461d-b91d-0d38989d6d45}, !- Space Type Name
+  {a297cfc5-7a33-40b2-8e7a-7ee36e36487c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -716,7 +716,7 @@ OS:Connection,
 OS:Space,
   {5dec4325-8f0a-488d-b707-613fb470e0e7}, !- Handle
   Offices_ZN_1_FLR_2,                     !- Name
-  {d5bb2766-eea3-4a94-aa73-2a2bb5cba1bb}, !- Space Type Name
+  {d0b311bc-fbe6-4cd3-82d7-4297d590316a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -738,7 +738,7 @@ OS:Connection,
 OS:Space,
   {bb8fc698-714c-49fb-984a-9bc976451518}, !- Handle
   Mult_Class_1_Pod_3_ZN_1_FLR_1,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -794,7 +794,7 @@ OS:Connection,
 OS:Space,
   {b0690467-f466-4dbf-beee-17790f02591d}, !- Handle
   Mult_Class_1_Pod_1_ZN_1_FLR_1,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -833,7 +833,7 @@ OS:Connection,
 OS:Space,
   {ac3693b2-3300-4f2c-b943-7409b6dd6d2b}, !- Handle
   Mech_ZN_1_FLR_1,                        !- Name
-  {b746ffbb-c3e8-43b7-9d3e-27c290612cee}, !- Space Type Name
+  {9846cd4a-9ca4-4fee-b658-0a49457de8f8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -889,7 +889,7 @@ OS:Connection,
 OS:Space,
   {1be8baf7-7cf1-4108-868c-705edf0e7ec0}, !- Handle
   Corridor_Pod_1_ZN_1_FLR_1,              !- Name
-  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Space Type Name
+  {b5ebfecb-6eb8-4e86-826d-4adfdac937f3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -962,7 +962,7 @@ OS:Connection,
 OS:Space,
   {dde5685d-dbf0-4ee6-8d68-d62c6a0b05e8}, !- Handle
   Corner_Class_2_Pod_3_ZN_1_FLR_1,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1035,7 +1035,7 @@ OS:Connection,
 OS:Space,
   {8c061ff2-4149-4bdf-95af-a72da9c80a3d}, !- Handle
   Mult_Class_2_Pod_3_ZN_1_FLR_2,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1091,7 +1091,7 @@ OS:Connection,
 OS:Space,
   {b32161e3-b741-41cc-9ba5-be217c789335}, !- Handle
   Corridor_Pod_2_ZN_1_FLR_2,              !- Name
-  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Space Type Name
+  {b5ebfecb-6eb8-4e86-826d-4adfdac937f3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1130,7 +1130,7 @@ OS:Connection,
 OS:Space,
   {150bdac6-6d7a-4579-bb2a-e9ebefe783b3}, !- Handle
   Mult_Class_2_Pod_2_ZN_1_FLR_2,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1169,7 +1169,7 @@ OS:Connection,
 OS:Space,
   {4d1aa9bd-c7c0-4a1f-a2b6-0d60c9e701c4}, !- Handle
   Mech_ZN_1_FLR_2,                        !- Name
-  {b746ffbb-c3e8-43b7-9d3e-27c290612cee}, !- Space Type Name
+  {9846cd4a-9ca4-4fee-b658-0a49457de8f8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1208,7 +1208,7 @@ OS:Connection,
 OS:Space,
   {33defb17-169e-46a9-ac88-7866eeb792c7}, !- Handle
   Corner_Class_1_Pod_1_ZN_1_FLR_1,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1247,7 +1247,7 @@ OS:Connection,
 OS:Space,
   {c75fc8ec-17ad-4378-8f32-45ed11b98e23}, !- Handle
   Corner_Class_1_Pod_1_ZN_1_FLR_2,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1320,7 +1320,7 @@ OS:Connection,
 OS:Space,
   {556d27a6-5b87-4055-bf87-25f838fec2b2}, !- Handle
   Corridor_Pod_3_ZN_1_FLR_1,              !- Name
-  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Space Type Name
+  {b5ebfecb-6eb8-4e86-826d-4adfdac937f3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1359,7 +1359,7 @@ OS:Connection,
 OS:Space,
   {2cfc4990-7edd-48d1-8f37-986e07a08018}, !- Handle
   Corridor_Pod_3_ZN_1_FLR_2,              !- Name
-  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Space Type Name
+  {b5ebfecb-6eb8-4e86-826d-4adfdac937f3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1381,7 +1381,7 @@ OS:Connection,
 OS:Space,
   {31767973-8612-4705-a460-01f6428105cf}, !- Handle
   Mult_Class_2_Pod_1_ZN_1_FLR_2,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1420,7 +1420,7 @@ OS:Connection,
 OS:Space,
   {9b59a3e9-ae8b-456b-b3a6-9c20f740084e}, !- Handle
   Corridor_Pod_2_ZN_1_FLR_1,              !- Name
-  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Space Type Name
+  {b5ebfecb-6eb8-4e86-826d-4adfdac937f3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1561,7 +1561,7 @@ OS:Connection,
 OS:Space,
   {30b34808-2e33-48f2-b9e3-154533cd9e1d}, !- Handle
   Corner_Class_2_Pod_1_ZN_1_FLR_1,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1600,7 +1600,7 @@ OS:Connection,
 OS:Space,
   {366097f9-c622-449f-bde1-dc30882eda26}, !- Handle
   Main_Corridor_ZN_1_FLR_1,               !- Name
-  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Space Type Name
+  {b5ebfecb-6eb8-4e86-826d-4adfdac937f3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1707,7 +1707,7 @@ OS:Connection,
 OS:Space,
   {67db535a-e9d5-4822-bde9-04239f365467}, !- Handle
   Corner_Class_1_Pod_2_ZN_1_FLR_2,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1746,7 +1746,7 @@ OS:Connection,
 OS:Space,
   {ba9727a8-6c08-4245-bc56-5397118db0a4}, !- Handle
   Bathrooms_ZN_1_FLR_1,                   !- Name
-  {9a145cb7-3aee-4ebf-a45e-36acb38d4a20}, !- Space Type Name
+  {cb6fb2d1-1dae-4f52-b616-b8f927d0fd5c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1768,7 +1768,7 @@ OS:Connection,
 OS:Space,
   {77a1a3fb-815a-4cb4-9d3d-2e9616c19234}, !- Handle
   Corner_Class_2_Pod_2_ZN_1_FLR_2,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1824,7 +1824,7 @@ OS:Connection,
 OS:Space,
   {9c0777aa-19ac-4432-bdfb-2d0e73e4aeea}, !- Handle
   Corner_Class_1_Pod_3_ZN_1_FLR_1,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1914,7 +1914,7 @@ OS:Connection,
 OS:Space,
   {6d62e390-8ad1-48c6-bc6f-f3bafab36982}, !- Handle
   Mult_Class_1_Pod_1_ZN_1_FLR_2,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2038,7 +2038,7 @@ OS:Connection,
 OS:Space,
   {31559abd-c5d7-46a2-82ca-71820e221d8b}, !- Handle
   Main_Corridor_ZN_1_FLR_2,               !- Name
-  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Space Type Name
+  {b5ebfecb-6eb8-4e86-826d-4adfdac937f3}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2230,7 +2230,7 @@ OS:Connection,
 OS:Space,
   {2b0c21c1-9646-4ac7-afb4-cdbbd4d3ef28}, !- Handle
   Lobby_ZN_1_FLR_2,                       !- Name
-  {909ee754-6587-4c42-817a-b2f25795ac08}, !- Space Type Name
+  {cc3ffb1d-69a3-4ad8-91ae-35dea5f1dfbc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2354,7 +2354,7 @@ OS:Connection,
 OS:Space,
   {4212559d-1763-445d-872b-d1ff9d7f1fac}, !- Handle
   Lobby_ZN_1_FLR_1,                       !- Name
-  {909ee754-6587-4c42-817a-b2f25795ac08}, !- Space Type Name
+  {cc3ffb1d-69a3-4ad8-91ae-35dea5f1dfbc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2563,7 +2563,7 @@ OS:Connection,
 OS:Space,
   {b285e12b-8d8f-4d0b-b67e-6d3518bea265}, !- Handle
   Mult_Class_1_Pod_2_ZN_1_FLR_2,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2823,7 +2823,7 @@ OS:Connection,
 OS:Space,
   {2d02ebb4-cfe6-4e7a-901f-531b2010f99e}, !- Handle
   Mult_Class_2_Pod_3_ZN_1_FLR_1,          !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3457,7 +3457,7 @@ OS:Connection,
 OS:Space,
   {ccd52044-e8ac-4718-8d78-e0b895a942e5}, !- Handle
   Corner_Class_2_Pod_2_ZN_1_FLR_1,        !- Name
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Space Type Name
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -13184,7 +13184,7 @@ OS:ZoneHVAC:EquipmentList,
   {3aa329b5-b540-4175-93bc-c39d7cd5dc2b}; !- Thermal Zone
 
 OS:WeatherFile,
-  {e62032ad-238d-4a66-b9d2-4f871e3c0269}, !- Handle
+  {95e6096a-1bd7-43f0-a9d8-99e464b69aef}, !- Handle
   Vancouver Int'l,                        !- City
   BC,                                     !- State Province Region
   CAN,                                    !- Country
@@ -13198,14 +13198,36 @@ OS:WeatherFile,
   9D8CC810;                               !- Checksum
 
 OS:Site:WaterMainsTemperature,
-  {7ef28f12-04f3-4cc6-a8e5-b51c54945721}, !- Handle
+  {d6e07cd6-3a70-495f-a347-36c3bab494b0}, !- Handle
   Correlation,                            !- Calculation Method
   ,                                       !- Temperature Schedule Name
   9.71666666666667,                       !- Annual Average Outdoor Air Temperature {C}
   13.9;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
 
 OS:SizingPeriod:DesignDay,
-  {a59cc0b0-024b-4efa-9f23-af4c0f7ec482}, !- Handle
+  {06e561e0-2a05-4902-b032-ba85f9281c11}, !- Handle
+  Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
+  -7,                                     !- Maximum Dry-Bulb Temperature {C}
+  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
+  -7,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb
+  101301,                                 !- Barometric Pressure {Pa}
+  2.9,                                    !- Wind Speed {m/s}
+  100,                                    !- Wind Direction {deg}
+  0,                                      !- Sky Clearness
+  0,                                      !- Rain Indicator
+  0,                                      !- Snow Indicator
+  21,                                     !- Day of Month
+  12,                                     !- Month
+  WinterDesignDay,                        !- Day Type
+  0,                                      !- Daylight Saving Time Indicator
+  Wetbulb,                                !- Humidity Indicating Type
+  ,                                       !- Humidity Indicating Day Schedule Name
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
+  ASHRAEClearSky;                         !- Solar Model Indicator
+
+OS:SizingPeriod:DesignDay,
+  {5f8acb0a-37d2-4fa8-b7dd-47f451f35784}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -13230,30 +13252,8 @@ OS:SizingPeriod:DesignDay,
   0.371,                                  !- ASHRAE Taub {dimensionless}
   2.445;                                  !- ASHRAE Taud {dimensionless}
 
-OS:SizingPeriod:DesignDay,
-  {626449c0-0000-4c82-8023-35ffcc6b326c}, !- Handle
-  Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
-  -7,                                     !- Maximum Dry-Bulb Temperature {C}
-  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -7,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101301,                                 !- Barometric Pressure {Pa}
-  2.9,                                    !- Wind Speed {m/s}
-  100,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  12,                                     !- Month
-  WinterDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAEClearSky;                         !- Solar Model Indicator
-
 OS:Site:GroundTemperature:BuildingSurface,
-  {16f24371-1105-4dce-911d-d90829761440}, !- Handle
+  {aee27306-863b-4925-aaa1-ed0ba22ed752}, !- Handle
   19.527,                                 !- January Ground Temperature {C}
   19.502,                                 !- February Ground Temperature {C}
   19.536,                                 !- March Ground Temperature {C}
@@ -13268,187 +13268,187 @@ OS:Site:GroundTemperature:BuildingSurface,
   19.633;                                 !- December Ground Temperature {C}
 
 OS:SpaceType,
-  {c8d2cef2-f01a-4bb9-a8f5-0b52a4662c6b}, !- Handle
+  {e4126ce8-37aa-4ad2-b94b-dd8818fbb452}, !- Handle
   Space Function Audience - auditorium,   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {e7c03313-132b-47c1-a320-17d8c0a5f08a}, !- Group Rendering Name
+  {3c880eb3-2345-4bfc-8af6-c3d279d99359}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Audience - auditorium;                  !- Standards Space Type
 
 OS:Rendering:Color,
-  {e7c03313-132b-47c1-a320-17d8c0a5f08a}, !- Handle
+  {3c880eb3-2345-4bfc-8af6-c3d279d99359}, !- Handle
   Space Function Audience - auditorium,   !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {f8069be5-fd95-40f8-8227-5c7e54b96cef}, !- Handle
+  {2ab198fb-20d5-4f3e-95d8-4cae64e1039a}, !- Handle
   Space Function Gym - play,              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {096fa4bd-3adf-4dc7-a3cd-3235fa711554}, !- Group Rendering Name
+  {fa5b4b4d-70a1-47b7-8f9c-d44d621ca2b9}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Gym - play;                             !- Standards Space Type
 
 OS:Rendering:Color,
-  {096fa4bd-3adf-4dc7-a3cd-3235fa711554}, !- Handle
+  {fa5b4b4d-70a1-47b7-8f9c-d44d621ca2b9}, !- Handle
   Space Function Gym - play,              !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {9a145cb7-3aee-4ebf-a45e-36acb38d4a20}, !- Handle
+  {cb6fb2d1-1dae-4f52-b616-b8f927d0fd5c}, !- Handle
   Space Function Washroom-sch-D,          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {3342e300-753b-41b3-8e21-446aa6f1732b}, !- Group Rendering Name
+  {5241216d-b1fb-456e-903b-838f0780601d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Washroom-sch-D;                         !- Standards Space Type
 
 OS:Rendering:Color,
-  {3342e300-753b-41b3-8e21-446aa6f1732b}, !- Handle
+  {5241216d-b1fb-456e-903b-838f0780601d}, !- Handle
   Space Function Washroom-sch-D,          !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {bedcffb8-ce69-461d-b91d-0d38989d6d45}, !- Handle
+  {a297cfc5-7a33-40b2-8e7a-7ee36e36487c}, !- Handle
   Space Function Conf./meet./multi-purpose, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {d1eff599-4c5e-4e95-bb49-92cc9c540be1}, !- Group Rendering Name
+  {2b5f8174-451f-4e6c-89a6-abbbdcb1b7c5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Conf./meet./multi-purpose;              !- Standards Space Type
 
 OS:Rendering:Color,
-  {d1eff599-4c5e-4e95-bb49-92cc9c540be1}, !- Handle
+  {2b5f8174-451f-4e6c-89a6-abbbdcb1b7c5}, !- Handle
   Space Function Conf./meet./multi-purpose, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {275a38dd-7712-4248-8e08-cc7f64958580}, !- Handle
+  {2e312654-614e-461f-b433-1265500b3d8f}, !- Handle
   Space Function Classroom/lecture/training, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {2b8427ab-da21-4a0b-8787-0b3c0fd36d29}, !- Group Rendering Name
+  {93f07518-22e1-4cc9-b3df-6933178fbd8a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Classroom/lecture/training;             !- Standards Space Type
 
 OS:Rendering:Color,
-  {2b8427ab-da21-4a0b-8787-0b3c0fd36d29}, !- Handle
+  {93f07518-22e1-4cc9-b3df-6933178fbd8a}, !- Handle
   Space Function Classroom/lecture/training, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {ab4052ac-f8ea-4d2d-9454-817b7e3b22c5}, !- Handle
+  {b5ebfecb-6eb8-4e86-826d-4adfdac937f3}, !- Handle
   Space Function Corr. >= 2.4m wide-sch-D, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {91a60365-2c59-4cb9-8ef2-4a833f52a486}, !- Group Rendering Name
+  {3c1bbbfa-54b2-48f1-b251-b10519d7f395}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Corr. >= 2.4m wide-sch-D;               !- Standards Space Type
 
 OS:Rendering:Color,
-  {91a60365-2c59-4cb9-8ef2-4a833f52a486}, !- Handle
+  {3c1bbbfa-54b2-48f1-b251-b10519d7f395}, !- Handle
   Space Function Corr. >= 2.4m wide-sch-D, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {5011d809-abe1-4376-b714-6b9dabef0c78}, !- Handle
+  {ea91a77a-c82a-40dc-8900-6f0d38c93169}, !- Handle
   Space Function Food preparation,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {cbfb7f3a-220e-474c-a9e8-7914859bf74e}, !- Group Rendering Name
+  {a0037b7e-65be-45c2-a7d7-60b29c7b7925}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Food preparation;                       !- Standards Space Type
 
 OS:Rendering:Color,
-  {cbfb7f3a-220e-474c-a9e8-7914859bf74e}, !- Handle
+  {a0037b7e-65be-45c2-a7d7-60b29c7b7925}, !- Handle
   Space Function Food preparation,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {f7f0be2b-ace4-4f53-bf84-c230f415e273}, !- Handle
+  {45cce4d1-7549-4fbd-b544-8d8b3774eda9}, !- Handle
   Space Function Library - reading,       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {a03a1a89-2148-42c6-9b3f-4d12b0bf52e8}, !- Group Rendering Name
+  {28c5386d-fc90-47c4-bfd9-9782ddfd5644}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Library - reading;                      !- Standards Space Type
 
 OS:Rendering:Color,
-  {a03a1a89-2148-42c6-9b3f-4d12b0bf52e8}, !- Handle
+  {28c5386d-fc90-47c4-bfd9-9782ddfd5644}, !- Handle
   Space Function Library - reading,       !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {909ee754-6587-4c42-817a-b2f25795ac08}, !- Handle
+  {cc3ffb1d-69a3-4ad8-91ae-35dea5f1dfbc}, !- Handle
   Space Function Lobby - elevator,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {2e14b4bd-df69-43ce-a490-7b627ad09fe2}, !- Group Rendering Name
+  {07475e78-cdfc-4c05-a8d3-145c2ad90470}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Lobby - elevator;                       !- Standards Space Type
 
 OS:Rendering:Color,
-  {2e14b4bd-df69-43ce-a490-7b627ad09fe2}, !- Handle
+  {07475e78-cdfc-4c05-a8d3-145c2ad90470}, !- Handle
   Space Function Lobby - elevator,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {b746ffbb-c3e8-43b7-9d3e-27c290612cee}, !- Handle
+  {9846cd4a-9ca4-4fee-b658-0a49457de8f8}, !- Handle
   Space Function Electrical/Mechanical-sch-D, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {35d093b4-6ac9-4da5-8713-fc32ae26828a}, !- Group Rendering Name
+  {396d61bd-ab39-4f4f-8d0e-3c224081abf7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Electrical/Mechanical-sch-D;            !- Standards Space Type
 
 OS:Rendering:Color,
-  {35d093b4-6ac9-4da5-8713-fc32ae26828a}, !- Handle
+  {396d61bd-ab39-4f4f-8d0e-3c224081abf7}, !- Handle
   Space Function Electrical/Mechanical-sch-D, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {d5bb2766-eea3-4a94-aa73-2a2bb5cba1bb}, !- Handle
+  {d0b311bc-fbe6-4cd3-82d7-4297d590316a}, !- Handle
   Space Function Office - enclosed,       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c870c233-312c-4ca6-84d2-6f3cc82b8ac0}, !- Group Rendering Name
+  {de08f09a-ce5d-45ad-a036-835feca92354}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Office - enclosed;                      !- Standards Space Type
 
 OS:Rendering:Color,
-  {c870c233-312c-4ca6-84d2-6f3cc82b8ac0}, !- Handle
+  {de08f09a-ce5d-45ad-a036-835feca92354}, !- Handle
   Space Function Office - enclosed,       !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
