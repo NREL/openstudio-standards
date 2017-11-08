@@ -86,7 +86,6 @@ StandardsModel.class_eval do
         end
         model = load_initial_osm(@geometry_file)
         model.getBuilding.setName(self.class.to_s)
-        model_assign_space_type_stubs(model, @lookup_building_type, @space_type_map)
         #save new basefile to new geometry folder as class name.
         BTAP::FileIO::save_osm(model,"#{Folders.instance.data_geometry_folder}/new/#{self.class.to_s}.osm")
         model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")

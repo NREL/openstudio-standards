@@ -135,7 +135,7 @@ class NECB_2011_Model < StandardsModel
     model.add_design_days_and_weather_file(climate_zone, epw_file) #Standards
     model.add_ground_temperatures(@instvarbuilding_type, climate_zone, instvartemplate) #prototype candidate
     model.getBuilding.setName(self.class.to_s)
-    model_assign_space_type_stubs(model, 'Space Function', @space_type_map) #Standards candidate
+    #model_assign_space_type_stubs(model, 'Space Function', @space_type_map.sort) #Standards candidate
     #save new basefile to new geometry folder as class name.
     BTAP::FileIO::save_osm(model, "#{Folders.instance.data_geometry_folder}/new/#{self.class.to_s}.osm")
     model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")

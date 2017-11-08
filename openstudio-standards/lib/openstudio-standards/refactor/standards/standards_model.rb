@@ -5,7 +5,6 @@
 # @abstract
 class StandardsModel
   attr_reader :standards_data
-  @@data_folder = "#{File.dirname(__FILE__)}/../../../../data"
 
   # The code below is required for the factory method. For an explanation see
   # https://stackoverflow.com/questions/1515577/factory-methods-in-ruby and clakes post. Which I think is the cleanest

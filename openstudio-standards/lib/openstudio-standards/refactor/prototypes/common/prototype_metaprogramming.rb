@@ -73,9 +73,13 @@ class #{template}#{name} < #{template}_Prototype
     end
     @lookup_building_type = self.model_get_lookup_name(@@building_type)
     #ideally we should map the data required to a instance variable.
-    @geometry_file =     "\#{Folders.instance.data_geometry_folder}/\#{@prototype_database["geometry"]}"
     @space_type_map =     @prototype_database["space_type_map"]
     @system_to_space_map = @prototype_database["system_to_space_map"]
+    @geometry_file = "\#{Folders.instance.data_geometry_folder}/\#{self.class.name}.osm"
+    \#hvac_map_file = "\#{Folders.instance.data_geometry_folder}/\#{self.class.name}_hvac_map.json"
+    \#@system_to_space_map = JSON.parse(File.read(hvac_map_file)) if File.exist?(hvac_map_file)
+
+
     self.set_variables()
   end
   def set_variables()

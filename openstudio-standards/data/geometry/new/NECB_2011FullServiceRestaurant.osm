@@ -851,7 +851,7 @@ OS:Rendering:Color,
   255;                                    !- Rendering Blue Value
 
 OS:SizingPeriod:DesignDay,
-  {6dd0974b-0370-4b12-be14-b061eade6c4f}, !- Handle
+  {89c4030e-8e3a-494e-b5a0-46e64e295279}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -877,7 +877,7 @@ OS:SizingPeriod:DesignDay,
   2.445;                                  !- ASHRAE Taud {dimensionless}
 
 OS:SizingPeriod:DesignDay,
-  {c75ebf97-9084-4099-b5a1-9518f2a5c643}, !- Handle
+  {436fd729-0865-4edd-9837-1689dbb1d7fd}, !- Handle
   Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
   -7,                                     !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
