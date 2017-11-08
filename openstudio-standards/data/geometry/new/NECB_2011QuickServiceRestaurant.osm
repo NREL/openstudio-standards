@@ -62,7 +62,7 @@ OS:Surface,
 OS:Space,
   {227a53df-c60f-4814-9986-7262c5ebf0b0}, !- Handle
   Dining,                                 !- Name
-  {5f15d07b-d8ef-4d55-b9f1-d8d481e756ac}, !- Space Type Name
+  {41250f5d-63cc-4f96-b73a-ea200366ec24}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -94,7 +94,7 @@ OS:Surface,
 OS:Space,
   {ca5649c5-cc8d-4b71-9941-b893da8ba6a1}, !- Handle
   Kitchen,                                !- Name
-  {b6119c41-01ec-46a1-ab43-75a91508d0fa}, !- Space Type Name
+  {5ac54b43-126c-483e-a319-df98961bd312}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -159,7 +159,7 @@ OS:Surface,
 OS:Space,
   {597594ef-5c7d-4f39-88b9-691ef2d8a8eb}, !- Handle
   attic,                                  !- Name
-  {80b0d039-2c3b-4a69-bc7c-d19e4816842d}, !- Space Type Name
+  {a24f27e0-d86b-4774-9632-e7e54d33dd6a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -777,7 +777,7 @@ OS:ZoneHVAC:EquipmentList,
   {bb336d85-c8ac-402b-a8e1-7a30a51fa50a}; !- Thermal Zone
 
 OS:WeatherFile,
-  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Handle
+  {82f2e995-2e59-4a20-8410-c14b5a5a72f4}, !- Handle
   Vancouver Int'l,                        !- City
   BC,                                     !- State Province Region
   CAN,                                    !- Country
@@ -791,14 +791,80 @@ OS:WeatherFile,
   9D8CC810;                               !- Checksum
 
 OS:Site:WaterMainsTemperature,
-  {e434ef7d-0484-4bbb-8d85-a1a9f822e1b5}, !- Handle
+  {55cdfa98-f42d-41d3-b471-4f66016078f6}, !- Handle
   Correlation,                            !- Calculation Method
   ,                                       !- Temperature Schedule Name
   9.71666666666667,                       !- Annual Average Outdoor Air Temperature {C}
   13.9;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
 
+OS:Site:GroundTemperature:BuildingSurface,
+  {e060c27c-510e-40a0-82fd-efa8e25cdf70}, !- Handle
+  19.527,                                 !- January Ground Temperature {C}
+  19.502,                                 !- February Ground Temperature {C}
+  19.536,                                 !- March Ground Temperature {C}
+  19.598,                                 !- April Ground Temperature {C}
+  20.002,                                 !- May Ground Temperature {C}
+  21.64,                                  !- June Ground Temperature {C}
+  22.225,                                 !- July Ground Temperature {C}
+  22.375,                                 !- August Ground Temperature {C}
+  21.449,                                 !- September Ground Temperature {C}
+  20.121,                                 !- October Ground Temperature {C}
+  19.802,                                 !- November Ground Temperature {C}
+  19.633;                                 !- December Ground Temperature {C}
+
+OS:SpaceType,
+  {a24f27e0-d86b-4774-9632-e7e54d33dd6a}, !- Handle
+  Space Function - undefined -,           !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {ebad47d9-bff3-48a4-b01e-5b147503df6e}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Space Function,                         !- Standards Building Type
+  - undefined -;                          !- Standards Space Type
+
+OS:Rendering:Color,
+  {ebad47d9-bff3-48a4-b01e-5b147503df6e}, !- Handle
+  Space Function - undefined -,           !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {41250f5d-63cc-4f96-b73a-ea200366ec24}, !- Handle
+  Space Function Dining - bar lounge/leisure, !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {3ba1f1b7-2177-4153-acf0-0d281710d632}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Space Function,                         !- Standards Building Type
+  Dining - bar lounge/leisure;            !- Standards Space Type
+
+OS:Rendering:Color,
+  {3ba1f1b7-2177-4153-acf0-0d281710d632}, !- Handle
+  Space Function Dining - bar lounge/leisure, !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {5ac54b43-126c-483e-a319-df98961bd312}, !- Handle
+  Space Function Food preparation,        !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {296c2142-b432-4020-8055-887608db05cb}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Space Function,                         !- Standards Building Type
+  Food preparation;                       !- Standards Space Type
+
+OS:Rendering:Color,
+  {296c2142-b432-4020-8055-887608db05cb}, !- Handle
+  Space Function Food preparation,        !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
 OS:SizingPeriod:DesignDay,
-  {10c1ea48-fae6-4475-af1e-5750e1033042}, !- Handle
+  {bd664acc-1765-4326-b84b-484f65604518}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -824,7 +890,7 @@ OS:SizingPeriod:DesignDay,
   2.445;                                  !- ASHRAE Taud {dimensionless}
 
 OS:SizingPeriod:DesignDay,
-  {74bd6db8-390c-4ced-8062-855b0e48569f}, !- Handle
+  {c64b9a0c-503e-4e31-b2b7-c4599145756d}, !- Handle
   Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
   -7,                                     !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -844,70 +910,4 @@ OS:SizingPeriod:DesignDay,
   DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
   ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
   ASHRAEClearSky;                         !- Solar Model Indicator
-
-OS:Site:GroundTemperature:BuildingSurface,
-  {ffc7a986-68a5-45b0-ad49-cea3730b45ea}, !- Handle
-  19.527,                                 !- January Ground Temperature {C}
-  19.502,                                 !- February Ground Temperature {C}
-  19.536,                                 !- March Ground Temperature {C}
-  19.598,                                 !- April Ground Temperature {C}
-  20.002,                                 !- May Ground Temperature {C}
-  21.64,                                  !- June Ground Temperature {C}
-  22.225,                                 !- July Ground Temperature {C}
-  22.375,                                 !- August Ground Temperature {C}
-  21.449,                                 !- September Ground Temperature {C}
-  20.121,                                 !- October Ground Temperature {C}
-  19.802,                                 !- November Ground Temperature {C}
-  19.633;                                 !- December Ground Temperature {C}
-
-OS:SpaceType,
-  {80b0d039-2c3b-4a69-bc7c-d19e4816842d}, !- Handle
-  Space Function - undefined -,           !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {f4899f34-d8fb-49e2-84ba-d35a0c37b9f0}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  - undefined -;                          !- Standards Space Type
-
-OS:Rendering:Color,
-  {f4899f34-d8fb-49e2-84ba-d35a0c37b9f0}, !- Handle
-  Space Function - undefined -,           !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
-
-OS:SpaceType,
-  {5f15d07b-d8ef-4d55-b9f1-d8d481e756ac}, !- Handle
-  Space Function Dining - bar lounge/leisure, !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {ac68565c-a613-464b-ac5b-5e261d166914}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  Dining - bar lounge/leisure;            !- Standards Space Type
-
-OS:Rendering:Color,
-  {ac68565c-a613-464b-ac5b-5e261d166914}, !- Handle
-  Space Function Dining - bar lounge/leisure, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
-
-OS:SpaceType,
-  {b6119c41-01ec-46a1-ab43-75a91508d0fa}, !- Handle
-  Space Function Food preparation,        !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {4ff8247c-172c-429f-8b6f-90f5e871baf4}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  Food preparation;                       !- Standards Space Type
-
-OS:Rendering:Color,
-  {4ff8247c-172c-429f-8b6f-90f5e871baf4}, !- Handle
-  Space Function Food preparation,        !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 

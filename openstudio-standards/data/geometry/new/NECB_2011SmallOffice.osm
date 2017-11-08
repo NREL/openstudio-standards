@@ -53,7 +53,7 @@ OS:Connection,
 OS:Space,
   {72459874-7e2c-4ecd-ae58-b2d96c368b31}, !- Handle
   Perimeter_ZN_1,                         !- Name
-  {5f15d07b-d8ef-4d55-b9f1-d8d481e756ac}, !- Space Type Name
+  {9bb5443a-6c0e-4398-ae7e-487262d68794}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -109,7 +109,7 @@ OS:Connection,
 OS:Space,
   {fb08bb0a-69e7-4942-8807-550e21855286}, !- Handle
   Attic,                                  !- Name
-  {80b0d039-2c3b-4a69-bc7c-d19e4816842d}, !- Space Type Name
+  {cec78ef3-0017-48c4-8db5-8ed1c89e7f91}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -165,7 +165,7 @@ OS:Connection,
 OS:Space,
   {0ebdaea7-c6cb-452f-b121-7bbfcb1d95b8}, !- Handle
   Perimeter_ZN_2,                         !- Name
-  {5f15d07b-d8ef-4d55-b9f1-d8d481e756ac}, !- Space Type Name
+  {9bb5443a-6c0e-4398-ae7e-487262d68794}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -222,7 +222,7 @@ OS:Connection,
 OS:Space,
   {bb97cae6-ab6e-4ca9-a862-a3e532ee5e5d}, !- Handle
   Perimeter_ZN_3,                         !- Name
-  {5f15d07b-d8ef-4d55-b9f1-d8d481e756ac}, !- Space Type Name
+  {9bb5443a-6c0e-4398-ae7e-487262d68794}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -244,7 +244,7 @@ OS:Connection,
 OS:Space,
   {f9fb4430-2ed2-4cfb-bf10-1172712402a2}, !- Handle
   Perimeter_ZN_4,                         !- Name
-  {5f15d07b-d8ef-4d55-b9f1-d8d481e756ac}, !- Space Type Name
+  {9bb5443a-6c0e-4398-ae7e-487262d68794}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -324,7 +324,7 @@ OS:Connection,
 OS:Space,
   {32844cd3-cab3-4870-bbb6-6c79a28481b7}, !- Handle
   Core_ZN,                                !- Name
-  {5f15d07b-d8ef-4d55-b9f1-d8d481e756ac}, !- Space Type Name
+  {9bb5443a-6c0e-4398-ae7e-487262d68794}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1831,7 +1831,7 @@ OS:ZoneHVAC:EquipmentList,
   {761af5ec-0e7c-4fea-81cc-7d7860391e92}; !- Thermal Zone
 
 OS:WeatherFile,
-  {ec0af617-78fd-48d3-8650-9aa7c7893d50}, !- Handle
+  {d74ddd58-1ecb-4ce9-8b05-3fe0526b135e}, !- Handle
   Vancouver Int'l,                        !- City
   BC,                                     !- State Province Region
   CAN,                                    !- Country
@@ -1845,14 +1845,85 @@ OS:WeatherFile,
   9D8CC810;                               !- Checksum
 
 OS:Site:WaterMainsTemperature,
-  {e434ef7d-0484-4bbb-8d85-a1a9f822e1b5}, !- Handle
+  {5ae59639-00db-480b-9cb8-551de19b1c7d}, !- Handle
   Correlation,                            !- Calculation Method
   ,                                       !- Temperature Schedule Name
   9.71666666666667,                       !- Annual Average Outdoor Air Temperature {C}
   13.9;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
 
+OS:Site:GroundTemperature:BuildingSurface,
+  {146bc379-1597-4884-a849-021b3bb8a32c}, !- Handle
+  19.527,                                 !- January Ground Temperature {C}
+  19.502,                                 !- February Ground Temperature {C}
+  19.536,                                 !- March Ground Temperature {C}
+  19.598,                                 !- April Ground Temperature {C}
+  20.002,                                 !- May Ground Temperature {C}
+  21.64,                                  !- June Ground Temperature {C}
+  22.225,                                 !- July Ground Temperature {C}
+  22.375,                                 !- August Ground Temperature {C}
+  21.449,                                 !- September Ground Temperature {C}
+  20.121,                                 !- October Ground Temperature {C}
+  19.802,                                 !- November Ground Temperature {C}
+  19.633;                                 !- December Ground Temperature {C}
+
+OS:SpaceType,
+  {cec78ef3-0017-48c4-8db5-8ed1c89e7f91}, !- Handle
+  Space Function - undefined -,           !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {c3d5fa05-3380-49bf-818b-8ded0e4e08bd}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Space Function,                         !- Standards Building Type
+  - undefined -;                          !- Standards Space Type
+
+OS:Rendering:Color,
+  {c3d5fa05-3380-49bf-818b-8ded0e4e08bd}, !- Handle
+  Space Function - undefined -,           !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {9bb5443a-6c0e-4398-ae7e-487262d68794}, !- Handle
+  Space Function Office - enclosed,       !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {729fbfdc-d785-4b71-be84-c8ad98d5e690}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Space Function,                         !- Standards Building Type
+  Office - enclosed;                      !- Standards Space Type
+
+OS:Rendering:Color,
+  {729fbfdc-d785-4b71-be84-c8ad98d5e690}, !- Handle
+  Space Function Office - enclosed,       !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
 OS:SizingPeriod:DesignDay,
-  {10c1ea48-fae6-4475-af1e-5750e1033042}, !- Handle
+  {9bb57a1c-b79f-4fa7-920a-63c11ad5f7c3}, !- Handle
+  Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
+  -7,                                     !- Maximum Dry-Bulb Temperature {C}
+  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
+  -7,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb
+  101301,                                 !- Barometric Pressure {Pa}
+  2.9,                                    !- Wind Speed {m/s}
+  100,                                    !- Wind Direction {deg}
+  0,                                      !- Sky Clearness
+  0,                                      !- Rain Indicator
+  0,                                      !- Snow Indicator
+  21,                                     !- Day of Month
+  12,                                     !- Month
+  WinterDesignDay,                        !- Day Type
+  0,                                      !- Daylight Saving Time Indicator
+  Wetbulb,                                !- Humidity Indicating Type
+  ,                                       !- Humidity Indicating Day Schedule Name
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
+  ASHRAEClearSky;                         !- Solar Model Indicator
+
+OS:SizingPeriod:DesignDay,
+  {f4969133-6f63-4166-a659-7a126b6eb673}, !- Handle
   Vancouver Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   25,                                     !- Maximum Dry-Bulb Temperature {C}
   7.6,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
@@ -1876,75 +1947,4 @@ OS:SizingPeriod:DesignDay,
   ,                                       !- Diffuse Solar Day Schedule Name
   0.371,                                  !- ASHRAE Taub {dimensionless}
   2.445;                                  !- ASHRAE Taud {dimensionless}
-
-OS:SizingPeriod:DesignDay,
-  {74bd6db8-390c-4ced-8062-855b0e48569f}, !- Handle
-  Vancouver Int'l Ann Htg 99.6% Condns DB, !- Name
-  -7,                                     !- Maximum Dry-Bulb Temperature {C}
-  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -7,                                     !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101301,                                 !- Barometric Pressure {Pa}
-  2.9,                                    !- Wind Speed {m/s}
-  100,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  12,                                     !- Month
-  WinterDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAEClearSky;                         !- Solar Model Indicator
-
-OS:Site:GroundTemperature:BuildingSurface,
-  {ffc7a986-68a5-45b0-ad49-cea3730b45ea}, !- Handle
-  19.527,                                 !- January Ground Temperature {C}
-  19.502,                                 !- February Ground Temperature {C}
-  19.536,                                 !- March Ground Temperature {C}
-  19.598,                                 !- April Ground Temperature {C}
-  20.002,                                 !- May Ground Temperature {C}
-  21.64,                                  !- June Ground Temperature {C}
-  22.225,                                 !- July Ground Temperature {C}
-  22.375,                                 !- August Ground Temperature {C}
-  21.449,                                 !- September Ground Temperature {C}
-  20.121,                                 !- October Ground Temperature {C}
-  19.802,                                 !- November Ground Temperature {C}
-  19.633;                                 !- December Ground Temperature {C}
-
-OS:SpaceType,
-  {80b0d039-2c3b-4a69-bc7c-d19e4816842d}, !- Handle
-  Space Function - undefined -,           !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {f4899f34-d8fb-49e2-84ba-d35a0c37b9f0}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  - undefined -;                          !- Standards Space Type
-
-OS:Rendering:Color,
-  {f4899f34-d8fb-49e2-84ba-d35a0c37b9f0}, !- Handle
-  Space Function - undefined -,           !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
-
-OS:SpaceType,
-  {5f15d07b-d8ef-4d55-b9f1-d8d481e756ac}, !- Handle
-  Space Function Office - enclosed,       !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {ac68565c-a613-464b-ac5b-5e261d166914}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  Office - enclosed;                      !- Standards Space Type
-
-OS:Rendering:Color,
-  {ac68565c-a613-464b-ac5b-5e261d166914}, !- Handle
-  Space Function Office - enclosed,       !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
