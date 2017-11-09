@@ -61,6 +61,7 @@ class TestRefactorParallel < Minitest::Test
         puts "this is a #{prototype_object.class}"
         new_model = prototype_object.model_create_prototype_model(run['climate_zone'], run['epw_file'], run['refactored_run_dir'])
         BTAP::FileIO::save_osm(new_model, "#{run['run_dir']}/new.osm")
+        File.write("#{run['run_dir']}/new_space_map.json", JSON.pretty_generate(prototype_object.space_type_map))
         log_messages_to_file("#{run['refactored_run_dir']}/openstudio_standards.log", debug = false)
 
         # Reset the log so that only new messages are stored

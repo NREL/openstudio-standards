@@ -19,7 +19,7 @@ module RetailStripmall
         'Strip mall - type 3' => ['LGstore2', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8']
       }
     end
-    return space_type_map
+    return space_type_map.sort.to_h
   end
 
   def self.define_hvac_system_map(building_type, template, climate_zone)

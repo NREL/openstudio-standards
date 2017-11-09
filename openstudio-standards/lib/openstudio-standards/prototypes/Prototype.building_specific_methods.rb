@@ -17,7 +17,7 @@ class OpenStudio::Model::Model
         if item["template"].include?(template)
           template_found = true
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model.define_space_type_map', "Template = [#{template}] found for Building Type = [#{building_type}] in [\"#{building_type}\"]['space_map'][#{index}][\"space_type_map\"]")
-          return item["space_type_map"]
+          return item["space_type_map"].sort.to_h
         end
       end
 

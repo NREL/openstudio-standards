@@ -35,7 +35,7 @@ class StandardsModel
       if building_type == 'LargeOffice' && instvartemplate != 'NECB 2011'
 
         # Only the core spaces have service water
-        ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name| 
+        ['Core_bottom', 'Core_mid', 'Core_top'].sort.each do |space_name|
         #['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].each do |space_name| # for new space type large office
 		 model_add_swh_end_uses(model,
                            'Main',
@@ -49,7 +49,7 @@ class StandardsModel
       elsif building_type == 'LargeOfficeDetail' && instvartemplate != 'NECB 2011'
 
         # Only mechanical rooms have service water
-        ['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].each do |space_name| # for new space type large office
+        ['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].sort.each do |space_name| # for new space type large office
 		 model_add_swh_end_uses(model,
                            'Main',
                            main_swh_loop,
@@ -72,7 +72,7 @@ class StandardsModel
         rated_flow_rate_m3_per_s = OpenStudio.convert(rated_use_rate_gal_per_min, 'gal/min', 'm^3/s').get
 
         # Loop through all spaces
-        swh_space_names.zip(swh_sch_names).each do |swh_space_name, swh_sch_name|
+        swh_space_names.zip(swh_sch_names).sort.each do |swh_space_name, swh_sch_name|
           swh_thermal_zone = model.getSpaceByName(swh_space_name).get.thermalZone.get
           main_swh_loop = model_add_swh_loop(model,
                                        "#{swh_thermal_zone.name} Service Water Loop",
@@ -117,7 +117,7 @@ class StandardsModel
           building_type = 'Space Function'
         end
 
-        space_type_map.each do |space_type_name, space_names|
+        space_type_map.sort.each do |space_type_name, space_names|
           search_criteria = {
             'template' => instvartemplate,
             'building_type' => model_get_lookup_name(building_type),
@@ -132,7 +132,7 @@ class StandardsModel
           next unless instvartemplate == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
 
           # Add a service water use for each space
-          space_names.each do |space_name|
+          space_names.sort.each do |space_name|
             space = model.getSpaceByName(space_name).get
             space_multiplier =  nil
             case instvartemplate
@@ -353,7 +353,7 @@ class StandardsModel
           unit_hot_water_loop.addDemandBranchForComponent(water_use_connection)
 
           # apply efficiency to hot water heater
-          unit_hot_water_loop.supplyComponents.each do |component|
+          unit_hot_water_loop.supplyComponents.sort.each do |component|
             next if not component.to_WaterHeaterMixed.is_initialized
             component = component.to_WaterHeaterMixed.get
             component.apply_efficiency()
@@ -445,7 +445,7 @@ class StandardsModel
         dedicated_hot_water_loop.addDemandBranchForComponent(water_use_connection)
 
         # find water heater
-        dedicated_hot_water_loop.supplyComponents.each do |component|
+        dedicated_hot_water_loop.supplyComponents.sort.each do |component|
           next if not component.to_WaterHeaterMixed.is_initialized
           water_heater = component.to_WaterHeaterMixed.get
 
@@ -488,7 +488,7 @@ class StandardsModel
 
 
           # find water heater
-          booster_service_water_loop.supplyComponents.each do |component|
+          booster_service_water_loop.supplyComponents.sort.each do |component|
             next if not component.to_WaterHeaterMixed.is_initialized
             water_heater = component.to_WaterHeaterMixed.get
 
@@ -559,7 +559,7 @@ class StandardsModel
     bldg_effective_num_stories = bldg_effective_num_stories_hash[:below_grade] + bldg_effective_num_stories_hash[:above_grade]
 
     # add non-dedicated system(s) here. Separate systems for water use equipment from different building types
-    water_use_equipment_hash.each do |stds_bldg_type,water_use_equipment_array|
+    water_use_equipment_hash.sort.each do |stds_bldg_type,water_use_equipment_array|
 
       # gather inputs for add_swh_loop
       sys_name = "#{stds_bldg_type} Shared Service Water Loop"
@@ -594,7 +594,7 @@ class StandardsModel
       end
 
       bldg_type_floor_area = 0.0
-      space_type_hash.each do |space_type,hash|
+      space_type_hash.sort.each do |space_type,hash|
         next if not hash[:stds_bldg_type] == stds_bldg_type
         bldg_type_floor_area += hash[:floor_area]
       end
@@ -629,7 +629,7 @@ class StandardsModel
                                               stds_bldg_type)
 
       # find water heater
-      shared_hot_water_loop.supplyComponents.each do |component|
+      shared_hot_water_loop.supplyComponents.sort.each do |component|
         next if not component.to_WaterHeaterMixed.is_initialized
         water_heater = component.to_WaterHeaterMixed.get
 
@@ -638,7 +638,7 @@ class StandardsModel
       end
 
       # loop through water use equipment
-      water_use_equipment_array.each do |water_use_equip|
+      water_use_equipment_array.sort.each do |water_use_equip|
         # add water use connection
         water_use_connection = OpenStudio::Model::WaterUseConnections.new(model)
         water_use_connection.addWaterUseEquipment(water_use_equip)
@@ -675,7 +675,7 @@ class StandardsModel
 
     # get water use equipment
     max_flow_rate_array = [] # gallons per hour
-    water_use_equipment_array.each do |water_use_equip|
+    water_use_equipment_array.sort.each do |water_use_equip|
       water_use_equip_sch = water_use_equip.flowRateFractionSchedule
       next if water_use_equip_sch.empty?
       water_use_equip_sch = water_use_equip_sch.get

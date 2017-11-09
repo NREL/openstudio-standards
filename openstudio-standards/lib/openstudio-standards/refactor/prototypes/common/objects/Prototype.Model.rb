@@ -203,7 +203,7 @@ StandardsModel.class_eval do
         if space.spaceType.get.standardsSpaceType.empty?
           all_spaceTypes_have_standard_space_types = false
         else
-          space_type_map[space.spaceType.get.standardsSpaceType().get.to_s] = [] if space_type_map[space.spaceType.get.standardsSpaceType()].nil?
+          space_type_map[space.spaceType.get.standardsSpaceType().get.to_s] = [] if space_type_map[space.spaceType.get.standardsSpaceType().get.to_s].nil?
           space_type_map[space.spaceType.get.standardsSpaceType().get.to_s] << space.name.get
         end
       end

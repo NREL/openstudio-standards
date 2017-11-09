@@ -98,7 +98,7 @@ class OpenStudio::Model::Model
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_set_name.osm")  if debug_incremental_changes
 
-      space_type_map = define_space_type_map(building_type, template, climate_zone)
+      space_type_map = define_space_type_map(building_type, template, climate_zone).sort.to_h
       File.open("#{sizing_run_dir}/space_type_map.json", 'w') {|f| f.write(JSON.pretty_generate(space_type_map)) }
 
       assign_space_type_stubs('Space Function', template, space_type_map) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
@@ -182,7 +182,7 @@ class OpenStudio::Model::Model
       load_building_type_methods(building_type)
       load_geometry(building_type, template)
       getBuilding.setName("#{template}-#{building_type}-#{climate_zone} created: #{Time.new}")
-      space_type_map = define_space_type_map(building_type, template, climate_zone)
+      space_type_map = define_space_type_map(building_type, template, climate_zone).sort.to_h
       assign_space_type_stubs(lookup_building_type, template, space_type_map)
       add_loads(template)
       apply_infiltration_standard(template)
@@ -2164,7 +2164,7 @@ class NECB_2011 < Standard
         osm_file_increment += 1
         BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_set_name.osm")  if debug_incremental_changes
 
-        space_type_map = define_space_type_map(building_type, template, climate_zone)
+        space_type_map = define_space_type_map(building_type, template, climate_zone).sort.to_h
         File.open("#{sizing_run_dir}/space_type_map.json", 'w') {|f| f.write(JSON.pretty_generate(space_type_map)) }
 
         assign_space_type_stubs('Space Function', template, space_type_map) # TO DO: add support for defining NECB 2011 archetype by building type (versus space function)
@@ -2248,7 +2248,7 @@ class NECB_2011 < Standard
         load_building_type_methods(building_type)
         load_geometry(building_type, template)
         getBuilding.setName("#{template}-#{building_type}-#{climate_zone} created: #{Time.new}")
-        space_type_map = define_space_type_map(building_type, template, climate_zone)
+        space_type_map = define_space_type_map(building_type, template, climate_zone).sort.to_h
         assign_space_type_stubs(lookup_building_type, template, space_type_map)
         add_loads(template)
         apply_infiltration_standard(template)

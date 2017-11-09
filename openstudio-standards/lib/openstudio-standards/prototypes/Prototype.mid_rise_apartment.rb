@@ -89,7 +89,7 @@ module MidriseApartment
       }
     end
 
-    return space_type_map
+    return space_type_map.sort.to_h
   end
 
   def self.define_hvac_system_map(building_type, template, climate_zone)

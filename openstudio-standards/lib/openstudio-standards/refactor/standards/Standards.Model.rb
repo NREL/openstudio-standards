@@ -4509,11 +4509,10 @@ class StandardsModel
       raise("standardsNumberOfAboveStories are not set in the model#{osm_model_path}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
     end
 
-
     if @space_type_map.nil? or @space_type_map.empty?
-      @space_type_maps = get_space_type_maps_from_model(model)
-      if @space_type_maps.nil? or @space_type_maps.empty?
-        raise("space_type_maps are not set in the model#{osm_model_path}, or in standards database#{@space_type_maps}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
+      @space_type_map = get_space_type_maps_from_model(model).sort.to_h
+      if @space_type_map.nil? or @space_type_map.empty?
+        raise("space_type_maps are not set in the model#{osm_model_path}, or in standards database#{@space_type_map}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from osm file: #{osm_model_path}")
       end

@@ -41,7 +41,7 @@ module LargeHotel
       }
     end
 
-    return space_type_map
+    return space_type_map.sort.to_h
   end
 
   def self.define_hvac_system_map(building_type, template, climate_zone)
@@ -114,7 +114,7 @@ module LargeHotel
     
     
     # Add Exhaust Fan
-    space_type_map = model.define_space_type_map(building_type, template, climate_zone)
+    space_type_map = model.define_space_type_map(building_type, template, climate_zone).sort.to_h
     exhaust_fan_space_types = []
     case template
     when '90.1-2004', '90.1-2007'
