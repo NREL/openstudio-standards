@@ -2527,7 +2527,33 @@ class StandardsModel
       end
 
     end
-
+=begin
+    # Check if the construction with the modified name was already in the model.
+    # If it was, delete this new construction and return the copy already in the model.
+    m = construction.name.get.to_s.match(/\s(\d+)/)
+    if m
+      revised_cons_name = construction.name.get.to_s.gsub(/\s\d+/,'')
+      model.getConstructions.sort.each do |exist_construction|
+        if exist_construction.name.get.to_s == revised_cons_name
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added construction: #{construction_name}")
+          # Remove the recently added construction
+          lyrs = construction.layers
+          # Erase the layers in the construction
+          construction.setLayers([])
+          # Delete unused materials
+          lyrs.uniq.each do |lyr|
+            if lyr.directUseCount.zero?
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Removing Material: #{lyr.name}")
+              lyr.remove
+            end
+          end
+          construction.remove # Remove the construction
+          return exist_construction
+        end
+      end
+    end
+=end
+    
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction #{construction.name}.")
 
     return construction

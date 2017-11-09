@@ -296,7 +296,6 @@ module Hospital
     end
 
     PrototypeBuilding::Hospital.reset_kitchen_oa(template, model)
-    PrototypeBuilding::Hospital.update_exhaust_fan_efficiency(template, model)
     PrototypeBuilding::Hospital.reset_or_room_vav_minimum_damper(prototype_input, template, model)
 
     return true

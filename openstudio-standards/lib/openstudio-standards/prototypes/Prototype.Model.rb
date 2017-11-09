@@ -278,9 +278,11 @@ class OpenStudio::Model::Model
       PrototypeBuilding::Outpatient.update_exhaust_fan_efficiency(template, self)
     elsif building_type == 'SuperMarket'
       PrototypeBuilding::SuperMarket.update_exhaust_fan_efficiency(template, self)
+    elsif building_type == 'Hospital'
+      PrototypeBuilding::Hospital.update_exhaust_fan_efficiency(template, self)
     end
-
-	if building_type == 'HighriseApartment'
+    
+    if building_type == 'HighriseApartment'
       PrototypeBuilding::HighriseApartment.update_fan_efficiency(self)
     end
 
