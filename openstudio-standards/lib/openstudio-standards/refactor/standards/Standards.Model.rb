@@ -1,7 +1,7 @@
 # Loads the openstudio standards dataset.
 #
 # @return [Hash] a hash of standards data
-def model_load_openstudio_standards_json(model)
+def model_load_openstudio_standards_json()
   standards_files = []
   standards_files << 'OpenStudio_Standards_boilers.json'
   standards_files << 'OpenStudio_Standards_chillers.json'
@@ -22,7 +22,7 @@ def model_load_openstudio_standards_json(model)
   standards_files << 'OpenStudio_Standards_prototype_inputs.json'
   standards_files << 'OpenStudio_Standards_schedules.json'
   standards_files << 'OpenStudio_Standards_space_types.json'
-  standards_files << 'OpenStudio_Standards_instvartemplates.json'
+  standards_files << 'OpenStudio_Standards_templates.json'
   standards_files << 'OpenStudio_Standards_unitary_acs.json'
   standards_files << 'OpenStudio_Standards_heat_rejection.json'
   standards_files << 'OpenStudio_Standards_exterior_lighting.json'
@@ -38,7 +38,6 @@ def model_load_openstudio_standards_json(model)
   standards_files << 'OpenStudio_Standards_walkin_refrigeration.json'
   standards_files << 'OpenStudio_Standards_refrigeration_compressors.json'
   #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
-
   # Combine the data from the JSON files into a single hash
   top_dir = File.expand_path('../../..', File.dirname(__FILE__))
   standards_data_dir = "#{top_dir}/data/standards"
@@ -60,7 +59,6 @@ def model_load_openstudio_standards_json(model)
   if standards_data.keys.size.zero?
     OpenStudio.logFree(OpenStudio::Error, 'OpenStudio Standards JSON data was not loaded correctly.')
   end
-
   return standards_data
 end
 
