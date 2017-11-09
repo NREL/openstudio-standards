@@ -1,5 +1,3 @@
-
-
 #Repopening Standards Class
 StandardsModel.class_eval do
 # I am replacing all prototype inputs.
@@ -8,140 +6,79 @@ StandardsModel.class_eval do
     building_type = @instvarbuilding_type
     raise ("no building_type!") if @instvarbuilding_type.nil?
     model = nil
-
-    case instvartemplate
-      when 'NECB 2011'
-        #prototype generation.
-        model = load_initial_osm(@geometry_file) #standard candidate
-        model.yearDescription.get.setDayofWeekforStartDay('Sunday')
-        model.add_design_days_and_weather_file(climate_zone, epw_file) #Standards
-        model.add_ground_temperatures(@instvarbuilding_type, climate_zone, instvartemplate) #prototype candidate
-        model.getBuilding.setName(self.class.to_s)
-        model_assign_space_type_stubs(model, 'Space Function', @space_type_map) #Standards candidate
-        #save new basefile to new geometry folder as class name.
-        BTAP::FileIO::save_osm(model,"#{Folders.instance.data_geometry_folder}/new/#{self.class.to_s}.osm")
-        model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
-        model_add_loads(model) #standards candidate
-        model_apply_infiltration_standard(model) #standards candidate
-        model_modify_surface_convection_algorithm(model) #standards
-        model_add_constructions(model, @instvarbuilding_type, climate_zone) #prototype candidate
-        model_apply_prm_construction_types(model) #standards candidate
-        model_apply_prm_baseline_window_to_wall_ratio(model, nil) #standards candidate
-        model_apply_prm_baseline_skylight_to_roof_ratio(model) #standards candidate
-        model_create_thermal_zones(model, @space_multiplier_map) #standards candidate
-        # For some building types, stories are defined explicitly
-
-        return false if model.runSizingRun("#{sizing_run_dir}/SR0") == false
-        #Create Reference HVAC Systems.
-        model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file) #standards for NECB Prototype for NREL candidate
-        model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
-        model_apply_sizing_parameters(model)
-
-
-
-        #set a larger tolerance for unmet hours from default 0.2 to 1.0C
-        model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
-        model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
-        return false if model.runSizingRun("#{sizing_run_dir}/SR1") == false
-        # This is needed for NECB 2011 as a workaround for sizing the reheat boxes
-        model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
-        # Apply the prototype HVAC assumptions
-        # which include sizing the fan pressure rises based
-        # on the flow rate of the system.
-        model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-        # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
-        # AHU1 doesn't have economizer
-        model_modify_oa_controller(model)
-        # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-        model_reset_or_room_vav_minimum_damper(@prototype_input, model)
-        model_modify_oa_controller(model)
-        # Apply the HVAC efficiency standard
-        model_apply_hvac_efficiency_standard(model, climate_zone)
-        # Fix EMS references.
-        # Temporary workaround for OS issue #2598
-        model_temp_fix_ems_references(model)
-        # Add daylighting controls per standard
-        # only four zones in large hotel have daylighting controls
-        # todo: YXC to merge to the main function
-        model_add_daylighting_controls(model) # to be removed after refactor.
-        # Add output variables for debugging
-        model_request_timeseries_outputs(model) if debug
-      else
-        # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
-        if @instvarbuilding_type == 'HighriseApartment'
-          if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
-            OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at  #{} are not available, the measure is disabled for this specific type.")
-            return false
-            #elsif @@template == 'NECB 2011'
-            #  OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at @@template #{@@template} is not available, the measure is disabled for this specific type.")
-            #  return false
-          end
-        end
-        #optionally  determine the climate zone from the epw and stat files.
-        if climate_zone == 'NECB HDD Method'
-          climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone()
-        else
-          #this is required to be blank otherwise it may cause side effects.
-          epw_file = ""
-        end
-        model = load_initial_osm(@geometry_file)
-        model.getBuilding.setName(self.class.to_s)
-        #save new basefile to new geometry folder as class name.
-        model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
-        model_add_loads(model)
-        model_apply_infiltration_standard(model)
-        model_modify_infiltration_coefficients(model, @instvarbuilding_type, climate_zone)
-        model_modify_surface_convection_algorithm(model)
-        model_add_constructions(model, @instvarbuilding_type, climate_zone)
-        model_create_thermal_zones(model, @space_multiplier_map)
-        model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
-        model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
-        model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
-        model_custom_swh_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
-        model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
-        model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
-        model.add_design_days_and_weather_file(climate_zone, epw_file)
-        model.add_ground_temperatures(@instvarbuilding_type, climate_zone, instvartemplate)
-        model_apply_sizing_parameters(model, @instvarbuilding_type)
-        model.yearDescription.get.setDayofWeekforStartDay('Sunday')
-        # set climate zone and building type
-        model.getBuilding.setStandardsBuildingType(building_type)
-        if climate_zone.include? 'ASHRAE 169-2006-'
-          model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
-        end
-        # Perform a sizing model_run(model)
-        return false if model.runSizingRun("#{sizing_run_dir}/SR1") == false
-        # If there are any multizone systems, reset damper positions
-        # to achieve a 60% ventilation effectiveness minimum for the system
-        # following the ventilation rate procedure from 62.1
-        model_apply_multizone_vav_outdoor_air_sizing(model)
-        # Apply the prototype HVAC assumptions
-        # which include sizing the fan pressure rises based
-        # on the flow rate of the system.
-        model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-        # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
-        # AHU1 doesn't have economizer
-        model_modify_oa_controller(model)
-        # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-        model_reset_or_room_vav_minimum_damper(@prototype_input, model)
-        model_modify_oa_controller(model)
-        # Apply the HVAC efficiency standard
-        model_apply_hvac_efficiency_standard(model, climate_zone)
-        # Fix EMS references.
-        # Temporary workaround for OS issue #2598
-        model_temp_fix_ems_references(model)
-        # Add daylighting controls per standard
-        # only four zones in large hotel have daylighting controls
-        # todo: YXC to merge to the main function
-        model_add_daylighting_controls(model)
-        model_update_exhaust_fan_efficiency(model)
-        model_update_fan_efficiency(model)
-        # Add output variables for debugging
-        model_request_timeseries_outputs(model) if debug
+    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
+    if @instvarbuilding_type == 'HighriseApartment'
+      if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
+        OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at  #{} are not available, the measure is disabled for this specific type.")
+        return false
+        #elsif @@template == 'NECB 2011'
+        #  OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at @@template #{@@template} is not available, the measure is disabled for this specific type.")
+        #  return false
+      end
     end
+    #optionally  determine the climate zone from the epw and stat files.
+    if climate_zone == 'NECB HDD Method'
+      climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone()
+    else
+      #this is required to be blank otherwise it may cause side effects.
+      epw_file = ""
+    end
+    model = load_initial_osm(@geometry_file)
+    model.getBuilding.setName(self.class.to_s)
+    #save new basefile to new geometry folder as class name.
+    model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
+    model_add_loads(model)
+    model_apply_infiltration_standard(model)
+    model_modify_infiltration_coefficients(model, @instvarbuilding_type, climate_zone)
+    model_modify_surface_convection_algorithm(model)
+    model_add_constructions(model, @instvarbuilding_type, climate_zone)
+    model_create_thermal_zones(model, @space_multiplier_map)
+    model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+    model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
+    model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+    model_custom_swh_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
+    model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
+    model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
+    model.add_design_days_and_weather_file(climate_zone, epw_file)
+    model.add_ground_temperatures(@instvarbuilding_type, climate_zone, instvartemplate)
+    model_apply_sizing_parameters(model, @instvarbuilding_type)
+    model.yearDescription.get.setDayofWeekforStartDay('Sunday')
+    # set climate zone and building type
+    model.getBuilding.setStandardsBuildingType(building_type)
+    if climate_zone.include? 'ASHRAE 169-2006-'
+      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
+    end
+    # Perform a sizing model_run(model)
+    return false if model.runSizingRun("#{sizing_run_dir}/SR1") == false
+    # If there are any multizone systems, reset damper positions
+    # to achieve a 60% ventilation effectiveness minimum for the system
+    # following the ventilation rate procedure from 62.1
+    model_apply_multizone_vav_outdoor_air_sizing(model)
+    # Apply the prototype HVAC assumptions
+    # which include sizing the fan pressure rises based
+    # on the flow rate of the system.
+    model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
+    # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
+    # AHU1 doesn't have economizer
+    model_modify_oa_controller(model)
+    # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+    model_reset_or_room_vav_minimum_damper(@prototype_input, model)
+    model_modify_oa_controller(model)
+    # Apply the HVAC efficiency standard
+    model_apply_hvac_efficiency_standard(model, climate_zone)
+    # Fix EMS references.
+    # Temporary workaround for OS issue #2598
+    model_temp_fix_ems_references(model)
+    # Add daylighting controls per standard
+    # only four zones in large hotel have daylighting controls
+    # todo: YXC to merge to the main function
+    model_add_daylighting_controls(model)
+    model_update_exhaust_fan_efficiency(model)
+    model_update_fan_efficiency(model)
+    # Add output variables for debugging
+    model_request_timeseries_outputs(model) if debug
     return model
   end
-
 
 
   # Replaces all objects in the current model
@@ -188,7 +125,6 @@ StandardsModel.class_eval do
   end
 
 
-
   def get_space_type_maps_from_model(model)
     #check to see if there are s
     #Do all spaces have Spacetypes?
@@ -208,7 +144,7 @@ StandardsModel.class_eval do
         end
       end
     end
-    if  all_spaceTypes_have_standard_space_types and all_spaceTypes_have_standard_space_types
+    if all_spaceTypes_have_standard_space_types and all_spaceTypes_have_standard_space_types
       return space_type_map
     end
     return nil
@@ -1212,7 +1148,7 @@ StandardsModel.class_eval do
 
     # Gas Heating Coil
     model.getCoilHeatingGass.sort.each {|obj| coil_heating_gas_apply_prototype_efficiency(obj)}
-    
+
     ##### Add Economizers
 
     apply_economizers(climate_zone, model)
@@ -1704,7 +1640,9 @@ StandardsModel.class_eval do
     new_values.each_with_index do |new_value, i|
       day_sch.addValue(times[i], new_value)
     end
-  end # end reduce schedule
+  end
+
+  # end reduce schedule
 
   def apply_economizers(climate_zone, model)
     if instvartemplate != 'NECB 2011'
