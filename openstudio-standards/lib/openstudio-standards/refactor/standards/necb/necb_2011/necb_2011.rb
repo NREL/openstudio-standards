@@ -9,6 +9,23 @@ class NECB_2011_Model < StandardsModel
     #NECB Values
     @standards_data = {}
     @standards_data["climate_zone_sets"] = [{"name" => "NECB-CNEB ClimatZone 4-8", "climate_zones" => ["NECB HDD Method"]}]
+=begin
+    standard	Climate Zone Name	HDD Min	HDD Max	Index
+    NECB 2011	Zone 4	0	2999	0
+    NECB 2011	Zone 5	3000	3999	1
+    NECB 2011	Zone 6	4000	4999	2
+    NECB 2011	Zone 7A	5000	5999	3
+    NECB 2011	Zone 7A	6000	6999	4
+    NECB 2011	Zone 8	7000	100000	5
+    -----------------------
+    Standard	HDD min	HDD max	fdwr
+    NECB 2011	0	3999.99	0.4
+    NECB 2011	4000	7000	"(2000-0.2 * #{hdd}) /3000 )"
+    NECB 2011	7000.1	100000	0.2
+=end
+
+
+
     @standards_data["coolingSizingFactor"] = 1.3
     @standards_data["heatingSizingFactor"] = 1.3
     @standards_data["conductances"] = [
@@ -96,30 +113,7 @@ class NECB_2011_Model < StandardsModel
         {"template" => "NECB 2011", "fan_type" => "CONSTANT", "number_of_poles" => 4.0, "type" => "Enclosed", "synchronous_speed" => 1800.0, "minimum_capacity" => 0.0, "maximum_capacity" => 9999.0, "nominal_full_load_efficiency" => 0.615, "notes" => "To get total fan efficiency of 40% (0.4/0.65)"},
         {"template" => "NECB 2011", "fan_type" => "VARIABLE", "number_of_poles" => 4.0, "type" => "Enclosed", "synchronous_speed" => 1800.0, "minimum_capacity" => 0.0, "maximum_capacity" => 9999.0, "nominal_full_load_efficiency" => 0.8461, "notes" => "To get total fan efficiency of 55% (0.55/0.65)"}
     ]
-
-
-
-
-    @standards_data["space_types"] = model_find_objects($os_standards['space_types'], {'template' => @instvartemplate})
-    @standards_data["prototype_inputs"] = model_find_objects($os_standards['prototype_inputs'], {'template' => @instvartemplate}, nil)
-    @standards_data['construction_sets'] = model_find_objects($os_standards['construction_sets'], 'template' => @instvartemplate)
     @standards_data['schedules'] = $os_standards['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
-    @standards_data['heat_pumps'] = $os_standards['heat_pumps'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['heat_pumps_heating'] = $os_standards['heat_pumps_heating'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['boilers'] = $os_standards['boilers'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['chillers'] = $os_standards['chillers'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['economizers'] = $os_standards['boilers'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['water_heaters'] = $os_standards['boilers'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['heat_pumps'] = $os_standards['heat_pumps'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['motors'] = $os_standards['motors'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['unitary_acs'] = $os_standards['unitary_acs'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['motors'] = $os_standards['motors'].select {|s| s['template'] == @instvartemplate}
-    @standards_data['constructions'] = $os_standards['constructions']
-    @standards_data['curve_biquadratics'] = $os_standards['curve_biquadratics']
-    @standards_data['curve_quadratics'] = $os_standards['curve_quadratics']
-    @standards_data['curve_bicubics'] = $os_standards['curve_bicubics']
-    @standards_data['curve_cubics'] = $os_standards['curve_cubics']
-    File.write('/home/osdev/openstudio-standards/openstudio-standards/data/standards/necb.json', JSON.pretty_generate(@standards_data))
 
   end
 
