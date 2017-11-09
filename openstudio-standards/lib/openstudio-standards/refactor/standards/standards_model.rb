@@ -27,6 +27,7 @@ class StandardsModel
   #set up template class variable.
   def intialize()
     super()
+
   end
 end
 

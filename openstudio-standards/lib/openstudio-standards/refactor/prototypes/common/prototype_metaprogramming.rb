@@ -41,6 +41,7 @@ class #{template}_Prototype < #{template}_Model
   def initialize
     super()
   end
+  
 end
 DYNAMICClass
 
@@ -61,10 +62,7 @@ class #{template}#{name} < #{template}_Prototype
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    #this will load data specific to this prototype based on the class name lookup.
-    json_data = JSON.parse(File.read("\#{Folders.instance.refactor_folder}/prototypes/common/data/prototype_database.json"))
-    @prototype_database = json_data.detect {|i| i["class_name"] == self.class.name }
-    puts @prototype_database
+
     @prototype_input = self.model_find_object($os_standards['prototype_inputs'], {'template' => @instvartemplate,'building_type' => @@building_type }, nil)
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for \#{{'template' => @instvartemplate,'building_type' => @@building_type }}, cannot create model.")
@@ -73,10 +71,9 @@ class #{template}#{name} < #{template}_Prototype
     end
     @lookup_building_type = self.model_get_lookup_name(@@building_type)
     #ideally we should map the data required to a instance variable.
-    @system_to_space_map = @prototype_database["system_to_space_map"]
     @geometry_file = "\#{Folders.instance.data_geometry_folder}/\#{self.class.name}.osm"
-    \#hvac_map_file = "\#{Folders.instance.data_geometry_folder}/\#{self.class.name}_hvac_map.json"
-    \#@system_to_space_map = JSON.parse(File.read(hvac_map_file)) if File.exist?(hvac_map_file)
+    hvac_map_file = "\#{Folders.instance.data_geometry_folder}/\#{self.class.name}.hvac_map.json"
+    @system_to_space_map = JSON.parse(File.read(hvac_map_file)) if File.exist?(hvac_map_file)
 
 
     self.set_variables()
