@@ -63,17 +63,18 @@ class #{template}#{name} < #{template}_Prototype
     super()
     @instvarbuilding_type = @@building_type
 
+
     @prototype_input = self.model_find_object($os_standards['prototype_inputs'], {'template' => @instvartemplate,'building_type' => @@building_type }, nil)
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for \#{{'template' => @instvartemplate,'building_type' => @@building_type }}, cannot create model.")
-      raise()
+      raise("Could not find prototype inputs for #{template}#{name}, cannot create model.")
       return false
     end
     @lookup_building_type = self.model_get_lookup_name(@@building_type)
     #ideally we should map the data required to a instance variable.
     @geometry_file = "\#{Folders.instance.data_geometry_folder}/\#{self.class.name}.osm"
     hvac_map_file = "\#{Folders.instance.data_geometry_folder}/\#{self.class.name}.hvac_map.json"
-    @system_to_space_map = JSON.parse(File.read(hvac_map_file)) if File.exist?(hvac_map_file)
+    @system_to_space_map = JSON.parse(File.read(hvac_map_file))if File.exist?(hvac_map_file)
 
 
     self.set_variables()

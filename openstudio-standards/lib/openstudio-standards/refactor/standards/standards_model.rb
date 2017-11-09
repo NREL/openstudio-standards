@@ -5,6 +5,7 @@
 # @abstract
 class StandardsModel
   attr_reader :standards_data
+  attr_reader :instvartemplate
 
   # The code below is required for the factory method. For an explanation see
   # https://stackoverflow.com/questions/1515577/factory-methods-in-ruby and clakes post. Which I think is the cleanest
@@ -27,7 +28,15 @@ class StandardsModel
   #set up template class variable.
   def intialize()
     super()
+  end
 
+  def load_standards_database()
+    common_data_file = "#{Folders.instance.data_standards_folder}/common.json"
+    common_data = JSON.parse(File.read(common_data_file)).sort.to_h
+    standards_data_file = "#{Folders.instance.data_standards_folder}/#{@instvartemplate}.json"
+    standards_data = JSON.parse(File.read(standards_data_file)).sort.to_h
+    @standards_data = common_data.merge(standards_data)
+    return @standards_data
   end
 end
 

@@ -60,7 +60,8 @@ class TestRefactorParallel < Minitest::Test
         prototype_object = StandardsModel.get_standard_model("#{run['template']}_#{run['building_type']}")
         puts "this is a #{prototype_object.class}"
         new_model = prototype_object.model_create_prototype_model(run['climate_zone'], run['epw_file'], run['refactored_run_dir'])
-        BTAP::FileIO::save_osm(new_model, "#{run['run_dir']}/new.osm")
+        BTAP::FileIO::save_osm(new_model, "#{run['run_dir']}/../new.osm")
+        BTAP::FileIO::save_osm(new_model, "/home/osdev/regression/#{prototype_object.class}.osm")
         File.write("#{run['run_dir']}/new_space_map.json", JSON.pretty_generate(prototype_object.space_type_map))
         log_messages_to_file("#{run['refactored_run_dir']}/openstudio_standards.log", debug = false)
 
@@ -100,25 +101,25 @@ class TestRefactorParallel < Minitest::Test
   #####NREL RUNS
   nrel_building_types = [
       "FullServiceRestaurant",
-       #"Hospital",
+       "Hospital",
       "HighriseApartment",
       "LargeHotel",
       "LargeOffice",
       "MediumOffice",
       "MidriseApartment",
-      #"Outpatient",
+      "Outpatient",
       "PrimarySchool",
       "QuickServiceRestaurant",
       "RetailStandalone",
       "SecondarySchool",
-      #"SmallHotel",
+      "SmallHotel",
       "SmallOffice",
       "RetailStripmall",
       "Warehouse"
 
   ]
 
-  nrel_templates = ['90.1-2010']#,'90.1-2004','90.1-2007','90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004']
+  nrel_templates = ['90.1-2010','90.1-2004','90.1-2007','90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004']
   nrel_climate_zones = ['ASHRAE 169-2006-1A']
   nrel_epw_files = [nil] # we will need to keep this overloaded to keep arguments consistant.
   nrel_runs = self.create_runs_jobs(nrel_templates, nrel_building_types, nrel_climate_zones, nrel_epw_files)
@@ -126,18 +127,18 @@ class TestRefactorParallel < Minitest::Test
   ######NRCan runs
   nrcan_building_types = [
       "FullServiceRestaurant",#,
-      #"Hospital",
+      "Hospital",
       "HighriseApartment",
       "LargeHotel",
       "LargeOffice",
       "MediumOffice",
       "MidriseApartment",
-      #"Outpatient",
+      "Outpatient",
       "PrimarySchool",
       "QuickServiceRestaurant",
       "RetailStandalone",
       "SecondarySchool",
-      #"SmallHotel",
+      "SmallHotel",
       "SmallOffice",
       "RetailStripmall",
       "Warehouse"
@@ -146,14 +147,13 @@ class TestRefactorParallel < Minitest::Test
   nrcan_templates = ['NECB 2011']
   nrcan_climate_zones = ['NECB HDD Method']
   nrcan_epw_files = [
-      'CAN_BC_Vancouver.718920_CWEC.epw'#, #  CZ 5 - Gas HDD = 3019
-=begin
+      'CAN_BC_Vancouver.718920_CWEC.epw', #  CZ 5 - Gas HDD = 3019
       'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
       'CAN_PQ_Sherbrooke.716100_CWEC.epw', #CZ 7a - Electric HDD = 5068
       'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
       'CAN_NU_Resolute.719240_CWEC.epw', # CZ 8  -FuelOil2 HDD = 12570
       'CAN_PQ_Kuujjuarapik.719050_CWEC.epw' # CZ 8  -FuelOil2 HDD = 7986
-=end
+
 
 
   ]

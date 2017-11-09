@@ -393,7 +393,7 @@ def export_spreadsheet_to_json()
     OpenStudio.logFree(OpenStudio::Error, 'OpenStudio Standards JSON data was not loaded correctly.')
   end
    raise() if os_standards.nil?
-  ['NECB 2011', '90.1-2010','90.1-2004','90.1-2007','90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'].each do |template|
+  ['NECB 2011', '90.1-2004','90.1-2007','90.1-2010','90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'].each_with_index do |template, i|
     @standards_data ={}
     @standards_data["space_types"] = os_standards['space_types'].select {|s| s['template'] == template}
     @standards_data["prototype_inputs"] = os_standards['prototype_inputs'].select {|s| s['template'] == template}
@@ -410,8 +410,12 @@ def export_spreadsheet_to_json()
     @standards_data['motors'] = os_standards['motors'].select {|s| s['template'] == template}
     @standards_data['schedules'] = os_standards['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)} if template == 'NECB 2011'
 
-    puts "creating data for template #{template.gsub(/\s+/, "_")}.json"
-    File.write("#{File.dirname(__FILE__)}/#{template.gsub(/\s+/, "_")}.json", JSON.pretty_generate(@standards_data))
+    puts "creating data for template #{template}.json"
+
+
+
+
+    File.write("#{File.dirname(__FILE__)}/#{template}.json", JSON.pretty_generate(@standards_data))
   end
 
   #adding common items here for now. Not complete!
