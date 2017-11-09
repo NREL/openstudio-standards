@@ -381,7 +381,6 @@ module Hospital
       cw_pump_head_ft_h2o = 60.0
       cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O', 'Pa').get
       cw_pump.setRatedPumpHead(cw_pump_head_press_pa)
-      cw_pump.addToNode(condenser_water_loop.supplyInletNode)
     end
     
     return true
