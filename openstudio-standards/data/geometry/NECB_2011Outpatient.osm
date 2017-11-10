@@ -228,7 +228,7 @@ OS:Surface,
 OS:Space,
   {ee887389-8b4d-4adf-8cbb-17efba387725}, !- Handle
   Floor 3 Dressing Room,                  !- Name
-  {ed0c87e1-e7b1-45e9-8876-faddee313084}, !- Space Type Name
+  {55eace9e-7864-4483-9b67-32a949a91db4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -859,7 +859,7 @@ OS:Surface,
 OS:Space,
   {6d0295bf-e913-4f97-b6ec-87839b80a473}, !- Handle
   Floor 1 Scheduling,                     !- Name
-  {ed0c87e1-e7b1-45e9-8876-faddee313084}, !- Space Type Name
+  {55eace9e-7864-4483-9b67-32a949a91db4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1141,7 +1141,7 @@ OS:Surface,
 OS:Space,
   {7e6dd295-d2a9-4f4e-a978-83833bf6dc3b}, !- Handle
   Floor 2 Dictation,                      !- Name
-  {ed0c87e1-e7b1-45e9-8876-faddee313084}, !- Space Type Name
+  {55eace9e-7864-4483-9b67-32a949a91db4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1547,7 +1547,7 @@ OS:Surface,
 OS:Space,
   {fb2b824c-045f-4171-933e-271babc674c3}, !- Handle
   Floor 1 Dictation,                      !- Name
-  {ed0c87e1-e7b1-45e9-8876-faddee313084}, !- Space Type Name
+  {55eace9e-7864-4483-9b67-32a949a91db4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2730,7 +2730,7 @@ OS:Surface,
 OS:Space,
   {852338ce-e675-4513-9495-b5f8776d035d}, !- Handle
   Floor 3 Humid,                          !- Name
-  {ed0c87e1-e7b1-45e9-8876-faddee313084}, !- Space Type Name
+  {55eace9e-7864-4483-9b67-32a949a91db4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4545,7 +4545,7 @@ OS:Surface,
 OS:Space,
   {c743988c-2a22-4e10-98d2-5695f528ac3b}, !- Handle
   Floor 1 Dressing Room,                  !- Name
-  {ed0c87e1-e7b1-45e9-8876-faddee313084}, !- Space Type Name
+  {55eace9e-7864-4483-9b67-32a949a91db4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4802,7 +4802,7 @@ OS:Surface,
 OS:Space,
   {d4cdcde6-a42a-45ec-ab09-a28ca7c4cc24}, !- Handle
   Floor 1 IT Room,                        !- Name
-  {ed0c87e1-e7b1-45e9-8876-faddee313084}, !- Space Type Name
+  {55eace9e-7864-4483-9b67-32a949a91db4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -7593,7 +7593,7 @@ OS:Surface,
 OS:Space,
   {ec36227c-e5fd-4b8e-a8a3-4c796a7267cb}, !- Handle
   Floor 1 Humid,                          !- Name
-  {ed0c87e1-e7b1-45e9-8876-faddee313084}, !- Space Type Name
+  {55eace9e-7864-4483-9b67-32a949a91db4}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -33191,22 +33191,6 @@ OS:Rendering:Color,
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
-OS:SpaceType,
-  {ed0c87e1-e7b1-45e9-8876-faddee313084}, !- Handle
-  Space Function Office - enclosed - occsens, !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {87920675-1ad4-466a-a607-53cdae6cf51e}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  Office - enclosed - occsens;            !- Standards Space Type
-
-OS:Rendering:Color,
-  {87920675-1ad4-466a-a607-53cdae6cf51e}, !- Handle
-  Space Function Office - enclosed - occsens, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {90998f66-fb33-465c-a2b4-6c08b0277f8e}, !- Handle

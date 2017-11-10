@@ -80,6 +80,7 @@ class OpenStudio::Model::Model
 
      # Ensure that surfaces are intersected properly.
       load_geometry(building_type, template)
+      getThermostatSetpointDualSetpoints(&:remove)
       getSpaces.each { |space1| getSpaces.each { |space2| space1.intersectSurfaces(space2) } }
       osm_file_increment += 1
       BTAP::FileIO::save_osm(self,"#{sizing_run_dir}/post_#{osm_file_increment}_load_geometry.osm")  if debug_incremental_changes
@@ -181,6 +182,7 @@ class OpenStudio::Model::Model
       end
       load_building_type_methods(building_type)
       load_geometry(building_type, template)
+      getThermostatSetpointDualSetpoints(&:remove)
       getBuilding.setName("#{template}-#{building_type}-#{climate_zone} created: #{Time.new}")
       space_type_map = define_space_type_map(building_type, template, climate_zone).sort.to_h
       assign_space_type_stubs(lookup_building_type, template, space_type_map)
@@ -896,6 +898,7 @@ class OpenStudio::Model::Model
 
     # Remove any Thermal zones assigned
     getThermalZones.each(&:remove)
+
 
     # This map define the multipliers for spaces with multipliers not equals to 1
     case building_type

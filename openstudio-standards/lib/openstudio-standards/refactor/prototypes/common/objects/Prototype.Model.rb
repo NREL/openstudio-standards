@@ -24,6 +24,7 @@ StandardsModel.class_eval do
       epw_file = ""
     end
     model = load_initial_osm(@geometry_file)
+    model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
     #save new basefile to new geometry folder as class name.
     model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
@@ -151,85 +152,10 @@ StandardsModel.class_eval do
   end
 
 
-  # Reads in a mapping between names of space types and
-  # names of spaces in the model, creates an empty OpenStudio::Model::SpaceType
-  # (no loads, occupants, schedules, etc.) for each space type, and assigns this
-  # space type to the list of spaces named.  Later on, these empty space types
-  # can be used as keys in a lookup to add loads, schedules, and
-  # other inputs that are either typical or governed by a standard.
-  #
-  # @param building_type [String] the name of the building type
-  # @param space_type_map [Hash] a hash where the key is the space type name
-  #   and the value is a vector of space names that should be assigned this space type.
-  #   The hash for each building is defined inside the Prototype.building_name
-  #   e.g. (Prototype.secondary_school.rb) file.
-  # @return [Bool] returns true if successful, false if not
-  def model_assign_space_type_stubs(model, building_type, space_type_map)
-    space_type_map.each do |space_type_name, space_names|
-      # Create a new space type
-      stub_space_type = OpenStudio::Model::SpaceType.new(model)
-      stub_space_type.setStandardsBuildingType(building_type)
-      stub_space_type.setStandardsSpaceType(space_type_name)
-      stub_space_type.setName("#{building_type} #{space_type_name}")
-      space_type_apply_rendering_color(stub_space_type)
 
-      stub_space_type_occsens = nil
-      occsensSpaceTypeCreated = false # Flag to determine need for another space type
-      occsensSpaceTypeCount = 0
 
-      space_names.each do |space_name|
-        space = model.getSpaceByName(space_name)
-        next if space.empty?
-        space = space.get
 
-        occsensSpaceTypeUsed = false
 
-        if instvartemplate == "NECB 2011"
-          # Check if space type for this space matches NECB 2011 specific space type
-          # for occupancy sensor that is area dependent. Note: space.floorArea in m2.
-          space_type_name_occsens = space_type_name + " - occsens"
-          if ((space_type_name=='Storage area' && space.floorArea < 100) ||
-              (space_type_name=='Storage area - refrigerated' && space.floorArea < 100) ||
-              (space_type_name=='Hospital - medical supply' && space.floorArea < 100) ||
-              (space_type_name=='Office - enclosed' && space.floorArea < 25))
-            # If there is only one space assigned to this space type, then reassign this stub
-            # to the @@template duplicate with appendage " - occsens", otherwise create a new stub
-            # for this space. Required to use reduced LPD by NECB 2011 0.9 factor.
-            occsensSpaceTypeUsed = true
-            if !occsensSpaceTypeCreated
-              # create a new space type just once for space_type_name appended with " - occsens"
-              stub_space_type_occsens = OpenStudio::Model::SpaceType.new(model)
-              stub_space_type_occsens.setStandardsBuildingType(building_type)
-              stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
-              stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
-              space_type_apply_rendering_color(stub_space_type_occsens)
-              occsensSpaceTypeCreated = true
-              occsensSpaceTypeCount += 1
-            else
-              # reassign occsens space type stub already created...
-              stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
-              stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
-              occsensSpaceTypeCount += 1
-            end
-          end
-        end
-
-        if occsensSpaceTypeUsed
-          space.setSpaceType(stub_space_type_occsens)
-        else
-          space.setSpaceType(stub_space_type)
-        end
-
-        if occsensSpaceTypeCount == space_names.length
-          # delete the stub_space_type since all spaces were reassigned to stub_space_type_occsens
-          stub_space_type.remove
-        end
-
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Setting #{space.name} to #{building_type}.#{space_type_name}")
-      end
-    end
-    return true
-  end
 
   def model_add_full_space_type_libs(model)
     space_type_properties_list = model_find_objects($os_standards['space_types'], '' => 'NECB 2011')

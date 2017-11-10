@@ -8,12 +8,18 @@ class NECB_2011_Model < StandardsModel
     @instvartemplate = @@template
     @standards_data = self.load_standards_database()
 
-
     #NECB Values
-    @standards_data["climate_zone_sets"] = [{"name" => "NECB-CNEB ClimatZone 4-8", "climate_zones" => ["NECB HDD Method"]}]
+    @standards_data["climate_zone_sets"] = [
+        {"name" => "NECB-CNEB ClimatZone 4-8", "climate_zones" => ["NECB HDD Method"]}
+    ]
+    @standards_data["occupancy_sensors"] = [
+        {"standard_space_type_name " => 'Storage area', "max_floor_area" => 100.0},
+        {"standard_space_type_name " => 'Storage area - refrigerated', "max_floor_area" => 100.0},
+        {"standard_space_type_name " => 'Hospital - medical supply', "max_floor_area" => 100.0},
+        {"standard_space_type_name " => 'Office - enclosed', "max_floor_area" => 25.0}
+    ]
 
     @standards_data["climate_zone_info"] = [
-
         {"template" => 'NECB 2011', "climate_zone_name" => "NECB_2011_Zone 4", "max_hdd" => 2999.0},
         {"template" => 'NECB 2011', "climate_zone_name" => "NECB_2011_Zone 5", "max_hdd" => 3999.0},
         {"template" => 'NECB 2011', "climate_zone_name" => "NECB_2011_Zone 6", "max_hdd" => 4999.0},
@@ -34,7 +40,6 @@ class NECB_2011_Model < StandardsModel
         {"surface" => "ground_wall", "thermal_transmittance" => 0.284, "hdd" => 5999},
         {"surface" => "ground_wall", "thermal_transmittance" => 0.284, "hdd" => 6999},
         {"surface" => "ground_wall", "thermal_transmittance" => 0.210, "hdd" => 999999},
-
 
 
         {"surface" => "wall", "thermal_transmittance" => 0.315, "hdd" => 3000},
@@ -132,11 +137,13 @@ class NECB_2011_Model < StandardsModel
     model = nil
     #prototype generation.
     model = load_initial_osm(@geometry_file) #standard candidate
+    model.getThermostatSetpointDualSetpoints(&:remove)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model.add_design_days_and_weather_file(climate_zone, epw_file) #Standards
     model.add_ground_temperatures(@instvarbuilding_type, climate_zone, instvartemplate) #prototype candidate
     model.getBuilding.setName(self.class.to_s)
     model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
+    self.set_occ_sensor_spacetypes(model, @space_type_map)
     model_add_loads(model) #standards candidate
     model_apply_infiltration_standard(model) #standards candidate
     model_modify_surface_convection_algorithm(model) #standards
@@ -149,7 +156,7 @@ class NECB_2011_Model < StandardsModel
 
     return false if model.runSizingRun("#{sizing_run_dir}/SR0") == false
     #Create Reference HVAC Systems.
-    model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file) #standards for NECB Prototype for NREL candidate
+    model_add_hvac(model, epw_file) #standards for NECB Prototype for NREL candidate
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_apply_sizing_parameters(model)
 
@@ -364,6 +371,47 @@ class NECB_2011_Model < StandardsModel
     infiltration.setSpace(space)
 
 
+    return true
+  end
+
+  # @return [Bool] returns true if successful, false if not
+  def set_occ_sensor_spacetypes(model, space_type_map)
+    building_type = 'Space Function'
+    space_type_map.each do |space_type_name, space_names|
+      space_names.each do |space_name|
+        space = model.getSpaceByName(space_name)
+        next if space.empty?
+        space = space.get
+        occsensSpaceTypeUsed = false
+
+        # Check if space type for this space matches NECB 2011 specific space type
+        # for occupancy sensor that is area dependent. Note: space.floorArea in m2.
+
+        if ((space_type_name=='Storage area' && space.floorArea < 100) ||
+            (space_type_name=='Storage area - refrigerated' && space.floorArea < 100) ||
+            (space_type_name=='Hospital - medical supply' && space.floorArea < 100) ||
+            (space_type_name=='Office - enclosed' && space.floorArea < 25))
+          # If there is only one space assigned to this space type, then reassign this stub
+          # to the @@template duplicate with appendage " - occsens", otherwise create a new stub
+          # for this space. Required to use reduced LPD by NECB 2011 0.9 factor.
+          space_type_name_occsens = space_type_name + " - occsens"
+          stub_space_type_occsens = model.getSpaceTypeByName("#{building_type} #{space_type_name_occsens}")
+
+          if stub_space_type_occsens.empty?
+            # create a new space type just once for space_type_name appended with " - occsens"
+            stub_space_type_occsens = OpenStudio::Model::SpaceType.new(model)
+            stub_space_type_occsens.setStandardsBuildingType(building_type)
+            stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
+            stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
+            space_type_apply_rendering_color(stub_space_type_occsens)
+          else
+            # reassign occsens space type stub already created...
+            stub_space_type_occsens = stub_space_type_occsens.get
+            space.setSpaceType(stub_space_type_occsens)
+          end
+        end
+      end
+    end
     return true
   end
 

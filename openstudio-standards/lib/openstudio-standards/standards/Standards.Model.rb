@@ -4497,7 +4497,7 @@ class OpenStudio::Model::Model
         # determine num_parking_spots in another method
 
         # loop through spaces to get mis values
-        space_type.spaces.each do |space|
+        space_type.spaces.sort.each do |space|
           next if not space.partofTotalFloorArea
           effective_num_spaces += space.multiplier
           floor_area += space.floorArea * space.multiplier
@@ -4556,7 +4556,7 @@ class OpenStudio::Model::Model
       end
     end
 
-    return space_type_hash
+    return space_type_hash.sort.to_h
   end
 
   private

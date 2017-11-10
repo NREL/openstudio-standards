@@ -1,7 +1,7 @@
 
 class NECB_2011_Model
 
-  def model_add_hvac(model, building_type, climate_zone, prototype_input, epw_file)
+  def model_add_hvac(model, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
     boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
     self.necb_autozone_and_autosystem(model, nil, false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype)
@@ -2895,6 +2895,7 @@ class NECB_2011_Model
 
     #remove any thermal zones used for sizing to start fresh. Should only do this after the above system selection method.
     model.getThermalZones.sort.each {|zone| zone.remove}
+
 
 
     #now lets apply the rules.

@@ -1922,7 +1922,7 @@ OS:Surface,
 OS:Space,
   {d02a2ad8-7579-4e33-845e-5db0f25d0008}, !- Handle
   Office1_Mult4_Flr_1,                    !- Name
-  {e5b4a69f-fa76-43d2-a21a-0f40ad4369d8}, !- Space Type Name
+  {41813c5f-07f8-4136-9eca-1a2b1ba82380}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -9677,7 +9677,7 @@ OS:BuildingStory,
 OS:Space,
   {cd21f8d0-03aa-4d07-a5bb-c171a57e6b9d}, !- Handle
   Office1_Flr_5,                          !- Name
-  {e5b4a69f-fa76-43d2-a21a-0f40ad4369d8}, !- Space Type Name
+  {41813c5f-07f8-4136-9eca-1a2b1ba82380}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -10696,7 +10696,7 @@ OS:Surface,
 OS:Space,
   {5712cb79-eb78-4cbc-b940-f61c745b36d9}, !- Handle
   Office4_Mult6_Flr_5,                    !- Name
-  {e5b4a69f-fa76-43d2-a21a-0f40ad4369d8}, !- Space Type Name
+  {41813c5f-07f8-4136-9eca-1a2b1ba82380}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -15718,22 +15718,6 @@ OS:Rendering:Color,
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
-OS:SpaceType,
-  {e5b4a69f-fa76-43d2-a21a-0f40ad4369d8}, !- Handle
-  Space Function Office - enclosed - occsens, !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {280abeba-b947-4a29-8db3-92e3316bdb39}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  Office - enclosed - occsens;            !- Standards Space Type
-
-OS:Rendering:Color,
-  {280abeba-b947-4a29-8db3-92e3316bdb39}, !- Handle
-  Space Function Office - enclosed - occsens, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {3a701532-6207-4ec0-87bd-bfedaaabcb1b}, !- Handle
