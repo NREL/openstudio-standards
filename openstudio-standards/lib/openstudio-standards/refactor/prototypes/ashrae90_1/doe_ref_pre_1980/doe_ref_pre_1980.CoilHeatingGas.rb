@@ -15,7 +15,22 @@ class DOERefPre1980_Model < A90_1_Model
                     'PSZ-AC-2 Gas Htg',
                     'PSZ-AC-3 Gas Htg',
                     'PSZ-AC-4 Gas Htg',
-                    'PSZ-AC-5 Gas Htg'
+                    'PSZ-AC-5 Gas Htg',
+                    'PSZ-AC_3-7 Gas Htg',
+                    'PSZ-AC_2-6 Gas Htg',
+                    'PSZ-AC_5-9 Gas Htg',
+                    'PSZ-AC_1-5 Gas Htg',
+                    'PSZ-AC_4-8 Gas Htg',
+                    'PSZ-AC_1 Gas Htg',
+                    'PSZ-AC_2 Gas Htg',
+                    'PSZ-AC_3 Gas Htg',
+                    'PSZ-AC_4 Gas Htg',
+                    'PSZ-AC_5 Gas Htg',
+                    'PSZ-AC_6 Gas Htg',
+                    'PSZ-AC_7 Gas Htg',
+                    'PSZ-AC_8 Gas Htg',
+                    'PSZ-AC_9 Gas Htg',
+                    'PSZ-AC_10 Gas Htg'
                     ]
     name_patterns.each do |pattern|
       if coil_heating_gas.name.get.include?(pattern)
