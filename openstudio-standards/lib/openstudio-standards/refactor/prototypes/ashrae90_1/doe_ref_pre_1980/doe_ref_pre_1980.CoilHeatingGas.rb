@@ -6,7 +6,17 @@ class DOERefPre1980_Model < A90_1_Model
   # @todo Refactor: remove inconsistency in logic; all coils should be lower efficiency
   def coil_heating_gas_apply_prototype_efficiency(coil_heating_gas)
     # Only modify coils in PSZ-AC units
-    name_patterns = ['PSZ-AC Gas Htg Coil', 'ZN HVAC_', 'PSZ-AC_2-7 Gas Htg', 'PSZ-AC_2-5 Gas Htg', 'PSZ-AC_1-6 Gas Htg']
+    name_patterns = ['PSZ-AC Gas Htg Coil',
+                    'ZN HVAC_',
+                    'PSZ-AC_2-7 Gas Htg',
+                    'PSZ-AC_2-5 Gas Htg',
+                    'PSZ-AC_1-6 Gas Htg',
+                    'PSZ-AC-1 Gas Htg',
+                    'PSZ-AC-2 Gas Htg',
+                    'PSZ-AC-3 Gas Htg',
+                    'PSZ-AC-4 Gas Htg',
+                    'PSZ-AC-5 Gas Htg'
+                    ]
     name_patterns.each do |pattern|
       if coil_heating_gas.name.get.include?(pattern)
         coil_heating_gas.setGasBurnerEfficiency(0.78)
