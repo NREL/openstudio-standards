@@ -112,7 +112,7 @@ class StandardsModel
 
         # Attaches the end uses if specified by space type
         space_type_map = @space_type_map
-
+        
         if instvartemplate == 'NECB 2011'
           building_type = 'Space Function'
         end

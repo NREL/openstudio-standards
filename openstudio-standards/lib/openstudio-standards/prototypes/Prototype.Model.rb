@@ -498,7 +498,7 @@ class OpenStudio::Model::Model
       occsensSpaceTypeCreated = false # Flag to determine need for another space type
       occsensSpaceTypeCount = 0
 
-      space_names.each do |space_name|
+      space_names.sort.each do |space_name|
         space = getSpaceByName(space_name)
         next if space.empty?
         space = space.get
@@ -546,7 +546,7 @@ class OpenStudio::Model::Model
           stub_space_type.remove
         end
 
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Setting #{space.name} to #{building_type}.#{space_type_name}")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Setting #{space.name} to #{space.spaceType.get.name}")
       end
     end
     return true

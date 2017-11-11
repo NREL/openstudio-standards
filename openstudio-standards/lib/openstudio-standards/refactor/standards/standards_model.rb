@@ -31,11 +31,12 @@ class StandardsModel
   end
 
   def load_standards_database()
-    common_data_file = "#{Folders.instance.data_standards_folder}/common.json"
-    common_data = JSON.parse(File.read(common_data_file)).sort.to_h
-    standards_data_file = "#{Folders.instance.data_standards_folder}/#{@instvartemplate}.json"
-    standards_data = JSON.parse(File.read(standards_data_file)).sort.to_h
-    @standards_data = common_data.merge(standards_data)
+    # common_data_file = "#{Folders.instance.data_standards_folder}/common.json"
+    # common_data = JSON.parse(File.read(common_data_file)).sort.to_h
+    # standards_data_file = "#{Folders.instance.data_standards_folder}/#{@instvartemplate}.json"
+    # standards_data = JSON.parse(File.read(standards_data_file)).sort.to_h
+    # @standards_data = common_data.merge(standards_data)
+    @standards_data = $os_standards
     return @standards_data
   end
 end

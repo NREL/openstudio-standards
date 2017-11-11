@@ -112,7 +112,7 @@ class OpenStudio::Model::Model
 
         # Attaches the end uses if specified by space type
         space_type_map = define_space_type_map(building_type, template, climate_zone).sort.to_h
-
+        
         if template == 'NECB 2011'
           building_type = 'Space Function'
         end

@@ -126,7 +126,7 @@ class NECB_2011_Model < StandardsModel
         {"template" => "NECB 2011", "fan_type" => "CONSTANT", "number_of_poles" => 4.0, "type" => "Enclosed", "synchronous_speed" => 1800.0, "minimum_capacity" => 0.0, "maximum_capacity" => 9999.0, "nominal_full_load_efficiency" => 0.615, "notes" => "To get total fan efficiency of 40% (0.4/0.65)"},
         {"template" => "NECB 2011", "fan_type" => "VARIABLE", "number_of_poles" => 4.0, "type" => "Enclosed", "synchronous_speed" => 1800.0, "minimum_capacity" => 0.0, "maximum_capacity" => 9999.0, "nominal_full_load_efficiency" => 0.8461, "notes" => "To get total fan efficiency of 55% (0.55/0.65)"}
     ]
-    @standards_data['schedules'] = $os_standards['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
+    # @standards_data['schedules'] = $os_standards['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
 
   end
 
@@ -378,7 +378,7 @@ class NECB_2011_Model < StandardsModel
   def set_occ_sensor_spacetypes(model, space_type_map)
     building_type = 'Space Function'
     space_type_map.each do |space_type_name, space_names|
-      space_names.each do |space_name|
+      space_names.sort.each do |space_name|
         space = model.getSpaceByName(space_name)
         next if space.empty?
         space = space.get
@@ -404,6 +404,7 @@ class NECB_2011_Model < StandardsModel
             stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
             stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
             space_type_apply_rendering_color(stub_space_type_occsens)
+            space.setSpaceType(stub_space_type_occsens)
           else
             # reassign occsens space type stub already created...
             stub_space_type_occsens = stub_space_type_occsens.get
