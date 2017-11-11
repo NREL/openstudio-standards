@@ -28,6 +28,5 @@ coverage/
 /data/costing/rs_means_auth
 /tmp/
 *.log
-*.json
 
 
