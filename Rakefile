@@ -57,8 +57,8 @@ namespace :test do
       test_list = FileList.new
       # Read the parallelized list of tests
       # created by the circleci CLI in config.yml
-      if File.exist?("../node_tests.txt")
-        File.open("../node_tests.txt", "r") do |f|
+      if File.exist?("node_tests.txt")
+        File.open("node_tests.txt", "r") do |f|
           f.each_line do |line|
             # Skip comments the CLI may have included
             next unless line.include?('.rb')
@@ -176,6 +176,7 @@ YARD::Rake::YardocTask.new(:doc) do |t|
   # Dir.chdir('../')
   t.stats_options = ['--list-undoc']
 end
+
 desc 'Show the documentation in a web browser'
 task 'doc:show' => [:doc] do
   link = "#{Dir.pwd}/doc/index.html"
@@ -200,4 +201,16 @@ RuboCop::RakeTask.new(:rubocop) do |t|
   t.formatters = ['RuboCop::Formatter::CheckstyleFormatter']
   # don't abort rake on failure
   t.fail_on_error = false
+end
+
+desc 'Show the rubocop output in a web browser'
+task 'rubocop:show' => [:rubocop] do
+  link = "#{Dir.pwd}/.rubocop/rubocop-results.html"
+  if RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
+    system "start #{link}"
+  elsif RbConfig::CONFIG['host_os'] =~ /darwin/
+    system "open #{link}"
+  elsif RbConfig::CONFIG['host_os'] =~ /linux|bsd/
+    system "xdg-open #{link}"
+  end
 end
