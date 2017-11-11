@@ -1,12 +1,33 @@
-output/
-run-legacy-updated/
-# TODO change btap/measures.rb to save in an /output directory
-/measures/**/sample*.csv
-/.yardoc
+# IDE files
 /.idea
 /netbeans
-/test/reports
-/coverage/
-Archive/
-/openstudio-standards/lib/openstudio-standards/btap/compliance_1.rb
+
+# Developer installation
+/.bundle/
+/Gemfile.lock
+
+# Build output
+/pkg/
+
+# Rubocop output
+/.rubocop
+
+# Doc generation output
+/.yardoc
+/doc/
+
+# Test output
+output/
 coverage/
+/spec/reports/
+/test/doe_prototype/output
+/test/reports
+
+# Miscelaneous
+/test/refactor/
+/data/costing/rs_means_auth
+/tmp/
+*.log
+*.json
+
+

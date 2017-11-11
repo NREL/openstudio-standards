@@ -1,10 +1,13 @@
---output-dir openstudio-standards/doc/
-openstudio-standards/lib/openstudio-standards/refactor/standards/**/*.rb
+--embed-mixins
+lib/openstudio-standards/standards/**/*.rb
+lib/openstudio-standards/prototypes/**/*.rb
+lib/openstudio-standards/utilities/**/*.rb
+lib/openstudio-standards/weather/**/*.rb
 -
-openstudio-standards/docs/UserQuickStartGuide.md
-openstudio-standards/docs/Architecture.md
-openstudio-standards/docs/DeveloperInformation.md
-openstudio-standards/docs/CodeStructure.md
-openstudio-standards/docs/AddingAStandard.md
-openstudio-standards/License.txt
-openstudio-standards/LGPL-2.1
+docs/UserQuickStartGuide.md
+docs/Architecture.md
+docs/DeveloperInformation.md
+docs/CodeStructure.md
+docs/AddingAStandard.md
+License.txt
+LGPL-2.1

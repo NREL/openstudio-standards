@@ -24,7 +24,7 @@ namespace :test do
 
   desc 'Run BTAP.perform_qaqc() test'
   Rake::TestTask.new(:btap_json_test) do |t|
-    file_list = FileList.new('openstudio-standards/test/test_necb_qaqc.rb')
+    file_list = FileList.new('test/test_necb_qaqc.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = true
@@ -173,12 +173,12 @@ end
 require 'yard'
 desc 'Generate the documentation'
 YARD::Rake::YardocTask.new(:doc) do |t|
-  Dir.chdir('../')
+  # Dir.chdir('../')
   t.stats_options = ['--list-undoc']
 end
 desc 'Show the documentation in a web browser'
 task 'doc:show' => [:doc] do
-  link = "#{Dir.pwd}/openstudio-standards/doc/index.html"
+  link = "#{Dir.pwd}/doc/index.html"
   if RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
     system "start #{link}"
   elsif RbConfig::CONFIG['host_os'] =~ /darwin/
@@ -192,7 +192,7 @@ require 'rubocop/rake_task'
 desc 'Check the code for style consistency'
 RuboCop::RakeTask.new(:rubocop) do |t|
   # Make a folder for the output
-  out_dir = 'openstudio-standards/.rubocop'
+  out_dir = '.rubocop'
   Dir.mkdir(out_dir) unless File.exist?(out_dir)
   # Output both XML (CheckStyle format) and HTML
   t.options = ["--out=#{out_dir}/rubocop-results.xml", '--format=h', "--out=#{out_dir}/rubocop-results.html", '--format=offenses', "--out=#{out_dir}/rubocop-summary.txt"]
