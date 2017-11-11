@@ -40,6 +40,10 @@ def model_load_openstudio_standards_json()
   #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
   # Combine the data from the JSON files into a single hash
   top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+  puts "top_dir = #{top_dir}, contents:"
+  Dir["#{top_dir}/*"].each do |f|
+    puts f
+  end
   standards_data_dir = "#{top_dir}/data/standards"
   standards_data = {}
   standards_files.sort.each do |standards_file|
@@ -47,6 +51,10 @@ def model_load_openstudio_standards_json()
     begin
       temp = load_resource_relative("../../../data/standards/#{standards_file}", 'r:UTF-8')
     rescue NoMethodError
+      puts "standards_data_dir = #{standards_data_dir}, contents:"
+      Dir["#{standards_data_dir}/*"].each do |f|
+        puts f
+      end
       File.open("#{standards_data_dir}/#{standards_file}", 'r:UTF-8') do |f|
         temp = f.read
       end
