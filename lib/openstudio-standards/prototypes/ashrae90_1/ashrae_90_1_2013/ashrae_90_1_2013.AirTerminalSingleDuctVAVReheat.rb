@@ -4,7 +4,6 @@ class A90_1_2013_Model < A90_1_Model
   # Zones with low OA per area get lower initial guesses.
   # Final position will be adjusted upward
   # as necessary by Standards.AirLoopHVAC.apply_minimum_vav_damper_positions
-  # @param template [String] the template
   # @param zone_oa_per_area [Double] the zone outdoor air per area, m^3/s
   # @return [Bool] returns true if successful, false if not
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, building_type, zone_oa_per_area)

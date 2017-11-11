@@ -4,7 +4,6 @@ class DOERefPre1980_Model < A90_1_Model
   # Zones with low OA per area get lower initial guesses.
   # Final position will be adjusted upward
   # as necessary by Standards.AirLoopHVAC.apply_minimum_vav_damper_positions
-  # @param template [String] the template
   # @param zone_oa_per_area [Double] the zone outdoor air per area, m^3/s
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.

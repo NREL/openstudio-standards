@@ -3,7 +3,6 @@ class StandardsModel
 
   # Add exterior lighting to the model
   #
-  # @param template [String] Valid choices are
   # @param exterior_lighting_zone_number [Integer] Valid choices are
   # @return [Hash] the resulting exterior lights
   # @todo - would be nice to add argument for some building types (SmallHotel, MidriseApartment, PrimarySchool, SecondarySchool, RetailStripmall) if it has interior or exterior circulation.

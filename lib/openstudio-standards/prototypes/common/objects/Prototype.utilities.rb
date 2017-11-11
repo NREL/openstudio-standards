@@ -142,7 +142,7 @@ end
 # and cost savings analysis of ASHRAE Standard 90.1-2010
 # Thornton, et al 2011
 #
-# @param [Double] COP
+# @param cop [Double] COP
 # @return [Double] Seasonal Energy Efficiency Ratio
 def cop_to_seer(cop)
   delta = 0.3796**2 - 4.0 * 0.0076 * cop
@@ -194,7 +194,7 @@ end
 # and cost savings analysis of ASHRAE Standard 90.1-2010
 # Thornton, et al 2011
 #
-# @param [Double] COP
+# @param cop [Double] COP
 # @return [Double] Energy Efficiency Ratio (EER)
 def cop_to_eer(cop, capacity_w = nil)
   eer = nil
@@ -261,10 +261,10 @@ end
 
 # A helper method to convert from thermal efficiency to combustion efficiency
 #
-# @param combustion_eff [Double] Thermal efficiency
-# @return [Double] Thermal efficiency
-def thermal_eff_to_comb_eff(teff)
-  return teff + 0.007 # Per PNNL doc, Boiler Addendum 90.1-04an
+# @param thermal_eff [Double] Thermal efficiency
+# @return [Double] Combustion efficiency
+def thermal_eff_to_comb_eff(thermal_eff)
+  return thermal_eff + 0.007 # Per PNNL doc, Boiler Addendum 90.1-04an
 end
 
 # Convert one infiltration rate at a given pressure

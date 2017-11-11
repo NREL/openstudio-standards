@@ -153,7 +153,6 @@ class StandardsModel
   
   # Add refrigerated case to the model.
   #
-  # @param template
   # @param case_type [String] the case type.  Valid choices include:
   # LT Coffin Ice Cream, LT Coffin Frozen Food, LT Reach-In Ice Cream, LT Reach-In Frozen Food,
   # MT Coffin, MT Vertical Open, MT Service, MT Reach-In
@@ -289,7 +288,6 @@ class StandardsModel
   # Coil fan power and total lighting power are given for both “old (2004, 2007, and 2010)‿ and “new (2013)‿ walk-ins.  
   # It is assumed that only walk-in freezers have electric defrost while walk-in coolers use off-cycle defrost.
   #
-  # @param template [String]
   # @param walkin_type [String] the walkin type.  valid choices are:
   # Walk-In Freezer, Walk-In Cooler, Walk-In Cooler Glass Door
   # @param walkin_name [String] the name of the walkin
@@ -440,13 +438,12 @@ class StandardsModel
   # Adds a full commercial refrigeration rack, as would be found in a supermarket,
   # to the model.
   #
-  # @param template [String]
   # @param compressor_type [String] the system temperature range.  valid choices are:
   # Low Temp, Med Temp
   # @param sys_name [String] the name of the refrigeration system
-  # @cases [Array<Hash>] an array of cases with keys:
+  # @param cases [Array<Hash>] an array of cases with keys:
   # case_type, case_name, length, number_of_cases, and space_names.
-  # @walkins [Array<Hashs>] an array of walkins with keys:
+  # @param walkins [Array<Hashs>] an array of walkins with keys:
   # walkin_type, walkin_name, insulated_floor_area, space_names, and number_of_walkins
   # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
   # refrigeration piping is located.

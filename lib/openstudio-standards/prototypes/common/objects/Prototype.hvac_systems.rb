@@ -119,8 +119,7 @@ class StandardsModel
 
   # Creates a chilled water loop and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
+
   # @param chw_pumping_type [String] valid choices are const_pri, const_pri_var_sec
   # @param chiller_cooling_type [String] valid choices are AirCooled, WaterCooled
   # @param chiller_condenser_type [String] valid choices are WithCondenser, WithoutCondenser, nil
@@ -712,8 +711,7 @@ class StandardsModel
 
   # Creates a VAV system and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
+
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to
@@ -960,8 +958,7 @@ class StandardsModel
 
   # Creates a VAV system with parallel fan powered boxes and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
+
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to
   # @param thermal_zones [String] zones to connect to this system
@@ -1125,8 +1122,6 @@ class StandardsModel
 
   # Creates a packaged VAV system and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
@@ -1319,8 +1314,6 @@ class StandardsModel
 
   # Creates a packaged VAV system with parallel fan powered boxes and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
@@ -1489,8 +1482,6 @@ class StandardsModel
 
   # Creates a packaged VAV system and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to.
   # @param thermal_zones [String] zones to connect to this system
@@ -1710,8 +1701,6 @@ class StandardsModel
 
   # Creates a PSZ-AC system for each zone and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating coil to, or nil
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to, or nil
@@ -2367,8 +2356,6 @@ class StandardsModel
 
   # Creates a data center PSZ-AC system for each zone.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heatin coil to
   # @param heat_pump_loop [String] heat pump water loop to connect heat pump to
@@ -2598,8 +2585,6 @@ class StandardsModel
 
   # Creates a split DX AC system for each zone and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
@@ -3070,8 +3055,6 @@ class StandardsModel
 
   # Creates a PTAC system for each zone and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating coil to.
   #   Set to nil for heating types besides water.
@@ -3351,8 +3334,6 @@ class StandardsModel
 
   # Creates a PTHP system for each zone and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
@@ -3545,8 +3526,6 @@ class StandardsModel
 
   # Creates a unit heater for each zone and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
@@ -3644,8 +3623,6 @@ class StandardsModel
 
   # Creates a high temp radiant heater for each zone and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param heating_type [Double] valid choices are
@@ -3678,11 +3655,8 @@ class StandardsModel
     return rad_heaters
   end
 
-# Creates an evaporative cooler for each zone and adds it to the model.
+  # Creates an evaporative cooler for each zone and adds it to the model.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
-  # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] the resulting evaporative coolers
@@ -3855,8 +3829,6 @@ class StandardsModel
 
   # Creates a service water heating loop.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone]
   # zones to place water heater in.  If nil, will be assumed in 70F air for heat loss.
@@ -3986,8 +3958,6 @@ class StandardsModel
   # Creates a water heater and attaches it to the supplied
   # service water heating loop.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param water_heater_fuel [Double] valid choices are
@@ -4111,8 +4081,6 @@ class StandardsModel
   # Creates a booster water heater and attaches it
   # to the supplied service water heating loop.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param main_service_water_loop [OpenStudio::Model::PlantLoop]
   # the main service water loop that this booster assists.
   # @param water_heater_capacity [Double] water heater capacity, in W
@@ -4275,8 +4243,6 @@ class StandardsModel
   # Creates water fixtures and attaches them
   # to the supplied service water loop.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param use_name [String] The name that will be assigned
   # to the newly created fixture.
   # @param swh_loop [OpenStudio::Model::PlantLoop]
@@ -4436,8 +4402,6 @@ class StandardsModel
   # Creates water fixtures and attaches them
   # to the supplied booster water loop.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param swh_booster_loop [OpenStudio::Model::PlantLoop]
   # the booster water loop to add water fixtures to.
   # @param peak_flowrate [Double] in m^3/s
@@ -4486,8 +4450,6 @@ class StandardsModel
   # Creates a DOAS system with fan coil units
   # for each zone.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating and zone fan coils to
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to
@@ -4705,8 +4667,6 @@ class StandardsModel
 
   # Adds hydronic or electric baseboard heating to each zone.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param hot_water_loop [OpenStudio::Model::PlantLoop]
   # the hot water loop that serves the baseboards.  If nil, baseboards are electric.
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add baseboards to.
@@ -4744,8 +4704,6 @@ class StandardsModel
 
   # Adds four pipe fan coil units to each zone.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param hot_water_loop [OpenStudio::Model::PlantLoop]
   # the hot water loop that serves the fan coils.  If nil, a zero-capacity,
   # electric heating coil set to Always-Off will be included in the unit.
@@ -4835,8 +4793,6 @@ class StandardsModel
   # Code adapted from:
   # https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACRoomAirConditioner/measure.rb
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] and array of PTACs used as window AC units
   def model_add_window_ac(model,
@@ -4913,8 +4869,6 @@ class StandardsModel
   # Code adapted from:
   # https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACFurnaceFuel/measure.rb
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
   # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
   # @param cooling [Bool] if true, the unit will include a DX cooling coil
@@ -5069,8 +5023,6 @@ class StandardsModel
   # Code adapted from:
   # https://github.com/NREL/OpenStudio-BEopt/blob/master/measures/ResidentialHVACAirSourceHeatPumpSingleSpeed/measure.rb
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
   # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
   # @param cooling [Bool] if true, the unit will include a DX cooling coil
@@ -5707,8 +5659,6 @@ class StandardsModel
   # specified zones based on the specified template.
   # For multi-zone system types, add one system per story.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param system_type [String] The system type.  Valid choices are
   # TODO enumerate the valid strings
   # @return [Bool] returns true if successful, false if not
@@ -6135,8 +6085,6 @@ class StandardsModel
 
   # Determine the typical system type given the inputs.
   #
-  # @param template [String] Valid choices are 90.1-2004,
-  # 90.1-2007, 90.1-2010, 90.1-2013
   # @param area_type [String] Valid choices are residential
   # and nonresidential
   # @param delivery_type [String] Conditioning delivery type.

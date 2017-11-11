@@ -215,11 +215,10 @@ class StandardsModel
 
   # add typical swh demand and supply to model
   #
-  # @param [String] template
-  # @param [Bool] trust_effective_num_spaces
-  # @param [String] fuel (gas, electric, nil) nil is smart
-  # @param [Double] pipe_insul_in
-  # @param [String] circulating, (circulating, noncirculating, nil) nil is smart
+  # @param trust_effective_num_spaces [Bool]
+  # @param fuel [String] (gas, electric, nil) nil is smart
+  # @param pipe_insul_in [Double]
+  # @param circulating [String] (circulating, noncirculating, nil) nil is smart
   # @return [Array] hot water loops
   # @todo - add in losses from tank and pipe insulation, etc.
   def model_add_typical_swh(model, trust_effective_num_spaces = false, fuel = nil, pipe_insul_in = nil, circulating = nil)
@@ -661,11 +660,11 @@ class StandardsModel
 
   # set capacity, volume, and parasitic
   #
-  # @param [Array] array of water use equipment objects that will be using this water heater
-  # @param [Double] storage_to_cap_ratio gal of storage to kBtu/hr of capacitiy
-  # @param [Double] htg_eff fraction
-  # @param [Double] cld_wtr_temp_ip cold water temperature F
-  # @param [Double] target_temp F
+  # @param water_use_equipment_array [Array] array of water use equipment objects that will be using this water heater
+  # @param storage_to_cap_ratio [Double]  gal of storage to kBtu/hr of capacitiy
+  # @param htg_eff [Double] fraction
+  # @param inlet_temp_ip [Double] cold water temperature F
+  # @param target_temp_ip [Double] F
   # @return [Hash] hash with values needed to size water heater made with downstream method
   def model_find_water_heater_capacity_volume_and_parasitic(model, water_use_equipment_array, pipe_hash = {}, storage_to_cap_ratio = 1.0,htg_eff = 0.8,inlet_temp_ip = 40.0,target_temp_ip = 140.0,peak_flow_fraction = 1.0)
 

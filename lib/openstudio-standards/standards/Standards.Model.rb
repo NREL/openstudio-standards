@@ -4511,8 +4511,6 @@ class StandardsModel
 
   # Loads a osm as a starting point.
   #
-  # @param building_type [String] the building type
-  # @param climate_zone [String] the climate zone
   # @return [Bool] returns true if successful, false if not
   def load_initial_osm(osm_file)
     # Load the geometry .osm
