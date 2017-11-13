@@ -13,7 +13,7 @@ class StandardsModel
 
     # Determine the multipliers for all spaces
     multipliers = []
-    spaces.each do |space|
+    building_story.spaces.each do |space|
       # Ignore spaces that aren't part of the total floor area
       next unless space.partofTotalFloorArea
       multipliers << space.multiplier
@@ -46,9 +46,9 @@ class StandardsModel
   # @return [Double] the minimum z-value, in m
   def building_story_minimum_z_value(building_story)
     z_heights = []
-    spaces.each do |space|
+    building_story.spaces.each do |space|
       # Skip plenum spaces
-      next if thermal_zone_plenum?(space) 
+      next if space_plenum?(space)
 
       # Get the z value of the space, which
       # vertices in space surfaces are relative to.

@@ -564,15 +564,15 @@ class StandardsModel
   # @return [hash] hash of construction properties
   def space_type_get_construction_properties(space_type, intended_surface_type, standards_construction_type)
     # get building_category value
-    building_category = if !get_standards_data(template).nil? && space_type_get_standards_data(space_type)['is_residential'] == 'Yes'
+    building_category = if !space_type_get_standards_data(space_type).nil? && space_type_get_standards_data(space_type)['is_residential'] == 'Yes'
                           'Residential'
                         else
                           'Nonresidential'
                         end
 
     # get climate_zone_set
-    climate_zone = space_type.model.get_building_climate_zone_and_building_type['climate_zone']
-    climate_zone_set = model_find_climate_zone_set(model, climate_zone)
+    climate_zone = model_get_building_climate_zone_and_building_type(space_type.model)['climate_zone']
+    climate_zone_set = model_find_climate_zone_set(space_type.model, climate_zone)
 
     # populate search hash
     search_criteria = {

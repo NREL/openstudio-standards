@@ -9,14 +9,14 @@ class StandardsModel
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")
 
     # Convert this to the actual class type
-    zone_hvac = if to_ZoneHVACFourPipeFanCoil.is_initialized
-                  to_ZoneHVACFourPipeFanCoil.get
-                elsif to_ZoneHVACUnitHeater.is_initialized
-                  to_ZoneHVACUnitHeater.get
-                elsif to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-                  to_ZoneHVACPackagedTerminalAirConditioner.get
-                elsif to_ZoneHVACPackagedTerminalHeatPump.is_initialized
-                  to_ZoneHVACPackagedTerminalHeatPump.get
+    zone_hvac = if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
+                  zone_hvac_component.to_ZoneHVACFourPipeFanCoil.get
+                elsif zone_hvac_component.to_ZoneHVACUnitHeater.is_initialized
+                  zone_hvac_component.to_ZoneHVACUnitHeater.get
+                elsif zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+                  zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
+                elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+                  zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
                 else
                   nil
                 end

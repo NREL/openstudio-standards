@@ -1485,7 +1485,7 @@ class StandardsModel
     end
 
     # Get the category from the zone
-    htd = zone.get.heated?
+    htd = thermal_zone_heated?(zone.get)
 
     return htd
   end
@@ -1506,7 +1506,7 @@ class StandardsModel
     end
 
     # Get the category from the zone
-    cld = zone.get.cooled?
+    cld = thermal_zone_cooled?(zone.get)
 
     return cld
   end
@@ -1529,7 +1529,7 @@ class StandardsModel
       if act_sch.is_initialized
         if act_sch.get.to_ScheduleRuleset.is_initialized
           act_sch = act_sch.get.to_ScheduleRuleset.get
-          w_per_person = act_sch.annual_min_max_value['max']
+          w_per_person = schedule_ruleset_annual_min_max_value(act_sch)['max']
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
         end
@@ -1564,11 +1564,11 @@ class StandardsModel
     space.surfaces.each do |surface|
       adj_surface = surface.adjacentSurface
       unless adj_surface.empty?
-        space.model.getSpaces.sort.each do |space|
-          next if space == space
-          space.surfaces.each do |surf|
+        space.model.getSpaces.sort.each do |other_space|
+          next if other_space == space
+          other_space.surfaces.each do |surf|
             if surf == adj_surface.get
-              spaces << space
+              spaces << other_space
             end
           end
         end
@@ -1596,14 +1596,14 @@ class StandardsModel
       adj_surface = surface.adjacentSurface
       unless adj_surface.empty?
         # go through each of the adjeacent spaces to find the matching  surface/space.
-        spaces.each_with_index do |space, index|
-          next if space == space
-          space.surfaces.each do |surf|
+        spaces.each_with_index do |other_space, index|
+          next if other_space == space
+          other_space.surfaces.each do |surf|
             if surf == adj_surface.get
               # initialize array index to zero for first time so += will work.
               area_index[index] = 0 if area_index[index].nil?
               area_index[index] += surf.grossArea
-              array_hash[space] = area_index[index]
+              array_hash[other_space] = area_index[index]
             end
           end
         end

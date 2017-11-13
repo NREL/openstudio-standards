@@ -140,7 +140,7 @@ class NECB_2011_Model < StandardsModel
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) #Standards
-    model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone, instvartemplate) #prototype candidate
+    model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone) #prototype candidate
     model.getBuilding.setName(self.class.to_s)
     model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
     self.set_occ_sensor_spacetypes(model, @space_type_map)

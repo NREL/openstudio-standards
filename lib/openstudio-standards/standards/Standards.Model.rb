@@ -169,7 +169,7 @@ class StandardsModel
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
     sys_groups.each do |sys_group|
       # Determine the primary baseline system type
-      system_type = model_prm_baseline_system_type(model, instvartemplate,
+      system_type = model_prm_baseline_system_type(model,
                                                    climate_zone,
                                                    sys_group['occ'],
                                                    sys_group['fuel'],
@@ -186,7 +186,7 @@ class StandardsModel
       end
 
       # Add the system type for these zones
-      model_add_prm_baseline_system(model, instvartemplate,
+      model_add_prm_baseline_system(model,
                                     system_type[0],
                                     system_type[1],
                                     system_type[2],
@@ -195,10 +195,14 @@ class StandardsModel
     end
 
     # Set the zone sizing SAT for each zone in the model
-    model.getThermalZones.each(&:apply_prm_baseline_supply_temperatures)
+    model.getThermalZones.each do |zone|
+      thermal_zone_apply_prm_baseline_supply_temperatures(zone)
+    end
 
     # Set the system sizing properties based on the zone sizing information
-    model.getAirLoopHVACs.each(&:apply_prm_sizing_temperatures)
+    model.getAirLoopHVACs.each do |air_loop|
+      air_loop_hvac_apply_prm_sizing_temperatures(air_loop)
+    end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
 
@@ -295,7 +299,7 @@ class StandardsModel
     # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
 
     model_status = 'final'
-    save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
+    model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
 
     # Translate to IDF and save for debugging
     forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
@@ -586,7 +590,7 @@ class StandardsModel
       heated_only_zones = []
       heated_cooled_zones = []
       gp['zones'].each do |zn|
-        if zn['zone'].heated? && !zn['zone'].cooled?
+        if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
           heated_only_zones << zn
         else
           heated_cooled_zones << zn
@@ -853,7 +857,7 @@ class StandardsModel
                            end
 
           # Add a hot water PTAC to each zone
-          model_add_ptac(model, instvartemplate,
+          model_add_ptac(model,
                          nil,
                          hot_water_loop,
                          zones,
@@ -869,7 +873,7 @@ class StandardsModel
           # Add an air-source packaged terminal
           # heat pump with electric supplemental heat
           # to each zone.
-          model_add_pthp(model, instvartemplate,
+          model_add_pthp(model,
                          nil,
                          zones,
                          'ConstantVolume')
@@ -900,7 +904,7 @@ class StandardsModel
             chilled_water_loop = if model.getPlantLoopByName('Chilled Water Loop').is_initialized
                                    model.getPlantLoopByName('Chilled Water Loop').get
                                  else
-                                   model_add_chw_loop(model, instvartemplate,
+                                   model_add_chw_loop(model,
                                                       'const_pri',
                                                       chiller_cooling_type = nil,
                                                       chiller_condenser_type = nil,
@@ -915,7 +919,7 @@ class StandardsModel
           # Add a gas-fired PSZ-AC to each zone
           # hvac_op_sch=nil means always on
           # oa_damper_sch to nil means always open
-          model_add_psz_ac(model, instvartemplate,
+          model_add_psz_ac(model,
                            sys_name = nil,
                            hot_water_loop,
                            chilled_water_loop,
@@ -938,7 +942,7 @@ class StandardsModel
           # Add an air-source packaged single zone
           # heat pump with electric supplemental heat
           # to each zone.
-          model_add_psz_ac(model, instvartemplate,
+          model_add_psz_ac(model,
                            'PSZ-HP',
                            nil,
                            nil,
@@ -971,7 +975,7 @@ class StandardsModel
           chilled_water_loop = if model.getPlantLoopByName('Chilled Water Loop').is_initialized
                                  model.getPlantLoopByName('Chilled Water Loop').get
                                else
-                                 model_add_chw_loop(model, instvartemplate,
+                                 model_add_chw_loop(model,
                                                     'const_pri',
                                                     chiller_cooling_type = nil,
                                                     chiller_condenser_type = nil,
@@ -1004,7 +1008,7 @@ class StandardsModel
           # Add a PVAV with Reheat for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, space.buildingStory.get.minimum_z_value]
+            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
           story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} PVAV_Reheat (Sys5)"
@@ -1013,7 +1017,7 @@ class StandardsModel
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
 
-            model_add_pvav(model, instvartemplate,
+            model_add_pvav(model,
                            sys_name,
                            pri_zones,
                            nil,
@@ -1039,7 +1043,7 @@ class StandardsModel
           chilled_water_loop = if model.getPlantLoopByName('Chilled Water Loop').is_initialized
                                  model.getPlantLoopByName('Chilled Water Loop').get
                                else
-                                 model_add_chw_loop(model, instvartemplate,
+                                 model_add_chw_loop(model,
                                                     'const_pri',
                                                     chiller_cooling_type = nil,
                                                     chiller_condenser_type = nil,
@@ -1066,13 +1070,13 @@ class StandardsModel
           # Add an VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, space.buildingStory.get.minimum_z_value]
+            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
           story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
-            model_add_pvav_pfp_boxes(model, instvartemplate,
+            model_add_pvav_pfp_boxes(model,
                                      sys_name,
                                      pri_zones,
                                      nil,
@@ -1107,7 +1111,7 @@ class StandardsModel
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
           if cool_fuel == 'DistrictCooling'
-            chilled_water_loop = model_add_chw_loop(model, instvartemplate,
+            chilled_water_loop = model_add_chw_loop(model,
                                                     'const_pri',
                                                     chiller_cooling_type = nil,
                                                     chiller_condenser_type = nil,
@@ -1117,14 +1121,14 @@ class StandardsModel
                                                     building_type = nil)
           else
             fan_type = model_baseline_system_vav_fan_type(model)
-            condenser_water_loop = model_add_cw_loop(model, instvartemplate,
+            condenser_water_loop = model_add_cw_loop(model,
                                                      'Open Cooling Tower',
                                                      'Propeller or Axial',
                                                      fan_type,
                                                      1,
                                                      1,
                                                      nil)
-            chilled_water_loop = model_add_chw_loop(model, instvartemplate,
+            chilled_water_loop = model_add_chw_loop(model,
                                                     'const_pri_var_sec',
                                                     'WaterCooled',
                                                     chiller_condenser_type = nil,
@@ -1161,7 +1165,7 @@ class StandardsModel
           # Add a VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, space.buildingStory.get.minimum_z_value]
+            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
           story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} VAV_Reheat (Sys7)"
@@ -1169,7 +1173,7 @@ class StandardsModel
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
-            model_add_vav_reheat(model, instvartemplate,
+            model_add_vav_reheat(model,
                                  sys_name,
                                  hot_water_loop,
                                  chilled_water_loop,
@@ -1199,7 +1203,7 @@ class StandardsModel
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
           if cool_fuel == 'DistrictCooling'
-            chilled_water_loop = model_add_chw_loop(model, instvartemplate,
+            chilled_water_loop = model_add_chw_loop(model,
                                                     'const_pri',
                                                     chiller_cooling_type = nil,
                                                     chiller_condenser_type = nil,
@@ -1209,14 +1213,14 @@ class StandardsModel
                                                     building_type = nil)
           else
             fan_type = model_baseline_system_vav_fan_type(model)
-            condenser_water_loop = model_add_cw_loop(model, instvartemplate,
+            condenser_water_loop = model_add_cw_loop(model,
                                                      'Open Cooling Tower',
                                                      'Propeller or Axial',
                                                      fan_type,
                                                      1,
                                                      1,
                                                      nil)
-            chilled_water_loop = model_add_chw_loop(model, instvartemplate,
+            chilled_water_loop = model_add_chw_loop(model,
                                                     'const_pri_var_sec',
                                                     'WaterCooled',
                                                     chiller_condenser_type = nil,
@@ -1243,13 +1247,13 @@ class StandardsModel
           # Add an VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, space.buildingStory.get.minimum_z_value]
+            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
           story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
-            model_add_vav_pfp_boxes(model, instvartemplate,
+            model_add_vav_pfp_boxes(model,
                                     sys_name,
                                     chilled_water_loop,
                                     pri_zones,
@@ -1280,7 +1284,7 @@ class StandardsModel
           end
 
           # Add a System 9 - Gas Unit Heater to each zone
-          model_add_unitheater(model, instvartemplate,
+          model_add_unitheater(model,
                                nil,
                                zones,
                                nil,
@@ -1297,7 +1301,7 @@ class StandardsModel
         unless zones.empty?
 
           # Add a System 10 - Electric Unit Heater to each zone
-          model_add_unitheater(model, instvartemplate,
+          model_add_unitheater(model,
                                nil,
                                zones,
                                nil,
@@ -1349,7 +1353,7 @@ class StandardsModel
     # the groups of zones and add that system type.
     sys_groups.each do |sys_group|
       # Determine the primary baseline system type
-      pri_system_type = model_prm_baseline_system_type(model, instvartemplate,
+      pri_system_type = model_prm_baseline_system_type(model,
                                                        climate_zone,
                                                        sys_group['occ'],
                                                        sys_group['fuel'],
@@ -1370,10 +1374,10 @@ class StandardsModel
           # Determine the secondary system type
           sec_system_type = nil
           case pri_system_type
-            when 'PVAV_Reheat', 'VAV_Reheat'
-              sec_system_type = 'PSZ_AC'
-            when 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'
-              sec_system_type = 'PSZ_HP'
+          when 'PVAV_Reheat', 'VAV_Reheat'
+            sec_system_type = 'PSZ_AC'
+          when 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'
+            sec_system_type = 'PSZ_HP'
           end
 
           # Group zones by story
@@ -2220,9 +2224,9 @@ class StandardsModel
   # @return schedule
   def model_add_constant_schedule_ruleset(model, value, name = nil)
     schedule = OpenStudio::Model::ScheduleRuleset.new(model)
-    if not name.nil?
+    unless name.nil?
       schedule.setName(name)
-      schedule.defaultDaySchedule.setName("#{model.name} Default")
+      schedule.defaultDaySchedule.setName("#{name} Default")
     end
     schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
 
@@ -2961,11 +2965,11 @@ class StandardsModel
         next if end_use == 'Exterior Equipment'
 
         # Get the legacy results number
-        legacy_val = legacy_idf_results.dig(building_type, climate_zone, fuel_type, end_use)
+        legacy_val = legacy_idf_results.dig(building_type, instvartemplate, climate_zone, fuel_type, end_use)
 
         # Combine the exterior lighting and exterior equipment
         if end_use == 'Exterior Lighting'
-          legacy_exterior_equipment = legacy_idf_results.dig(building_type, climate_zone, fuel_type, 'Exterior Equipment')
+          legacy_exterior_equipment = legacy_idf_results.dig(building_type, instvartemplate, climate_zone, fuel_type, 'Exterior Equipment')
           unless legacy_exterior_equipment.nil?
             legacy_val += legacy_exterior_equipment
           end
@@ -3079,7 +3083,7 @@ class StandardsModel
     end
 
     # map office building type to small medium or large
-    if building_type == 'Office' && model_remap_office(model)
+    if building_type == 'Office' && remap_office
       open_studio_area = model.getBuilding.floorArea
       building_type = model_remap_office(model, open_studio_area)
     end
@@ -3502,7 +3506,7 @@ class StandardsModel
   # @return [hash] hash of construction properties
   def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category = 'Nonresidential')
     # get climate_zone_set
-    climate_zone = get_building_climate_zone_and_building_type['climate_zone']
+    climate_zone = model_get_building_climate_zone_and_building_type(model)['climate_zone']
     climate_zone_set = model_find_climate_zone_set(model, climate_zone)
 
     # populate search hash
@@ -3583,8 +3587,7 @@ class StandardsModel
         cat = 'Semiheated'
         # Heated and Cooled
       else
-        raise("hello")
-        res = thermal_zone_residential?(space)
+        res = space_residential?(space)
         cat = if res
                 'ResConditioned'
               else

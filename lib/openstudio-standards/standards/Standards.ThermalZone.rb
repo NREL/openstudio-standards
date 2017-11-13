@@ -430,7 +430,7 @@ class StandardsModel
     electric = false
 
     # Fossil heating
-    htg_fuels = heating_fuels
+    htg_fuels = thermal_zone.heating_fuels
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('PropaneGas') ||
        htg_fuels.include?('FuelOil#1') ||
@@ -449,7 +449,7 @@ class StandardsModel
 
     # Cooling fuels, for determining
     # unconditioned zones
-    clg_fuels = cooling_fuels
+    clg_fuels = thermal_zone.cooling_fuels
 
     # Categorize
     fuel_type = nil
@@ -767,19 +767,19 @@ class StandardsModel
       # Get the setpoint from the schedule
       if htg_sch.to_ScheduleRuleset.is_initialized
         htg_sch = htg_sch.to_ScheduleRuleset.get
-        max_c = htg_sch.annual_min_max_value['max']
+        max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
         if max_c > temp_c
           htd = true
         end
       elsif htg_sch.to_ScheduleConstant.is_initialized
         htg_sch = htg_sch.to_ScheduleConstant.get
-        max_c = htg_sch.annual_min_max_value['max']
+        max_c = schedule_constant_annual_min_max_value(htg_sch)['max']
         if max_c > temp_c
           htd = true
         end
       elsif htg_sch.to_ScheduleCompact.is_initialized
         htg_sch = htg_sch.to_ScheduleCompact.get
-        max_c = htg_sch.annual_min_max_value['max']
+        max_c = schedule_compact_annual_min_max_value(htg_sch)['max']
         if max_c > temp_c
           htd = true
         end
@@ -803,19 +803,19 @@ class StandardsModel
         htg_sch = htg_sch.get
         if htg_sch.to_ScheduleRuleset.is_initialized
           htg_sch = htg_sch.to_ScheduleRuleset.get
-          max_c = htg_sch.annual_min_max_value['max']
+          max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
           if max_c > temp_c
             htd = true
           end
         elsif htg_sch.to_ScheduleConstant.is_initialized
           htg_sch = htg_sch.to_ScheduleConstant.get
-          max_c = htg_sch.annual_min_max_value['max']
+          max_c = schedule_constant_annual_min_max_value(htg_sch)['max']
           if max_c > temp_c
             htd = true
           end
         elsif htg_sch.to_ScheduleCompact.is_initialized
           htg_sch = htg_sch.to_ScheduleCompact.get
-          max_c = htg_sch.annual_min_max_value['max']
+          max_c = schedule_compact_annual_min_max_value(htg_sch)['max']
           if max_c > temp_c
             htd = true
           end
@@ -831,7 +831,7 @@ class StandardsModel
         htg_sch = htg_sch.get
         if htg_sch.to_ScheduleRuleset.is_initialized
           htg_sch = htg_sch.to_ScheduleRuleset.get
-          max_c = htg_sch.annual_min_max_value['max']
+          max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
           if max_c > temp_c
             htd = true
           end
@@ -900,19 +900,19 @@ class StandardsModel
       # Get the setpoint from the schedule
       if clg_sch.to_ScheduleRuleset.is_initialized
         clg_sch = clg_sch.to_ScheduleRuleset.get
-        min_c = clg_sch.annual_min_max_value['min']
+        min_c = schedule_ruleset_annual_min_max_value(clg_sch)['min']
         if min_c < temp_c
           cld = true
         end
       elsif clg_sch.to_ScheduleConstant.is_initialized
         clg_sch = clg_sch.to_ScheduleConstant.get
-        min_c = clg_sch.annual_min_max_value['min']
+        min_c = schedule_constant_annual_min_max_value(clg_sch)['min']
         if min_c < temp_c
           cld = true
         end
       elsif clg_sch.to_ScheduleCompact.is_initialized
         clg_sch = clg_sch.to_ScheduleCompact.get
-        min_c = clg_sch.annual_min_max_value['min']
+        min_c = schedule_compact_annual_min_max_value(clg_sch)['min']
         if min_c < temp_c
           cld = true
         end
@@ -936,19 +936,19 @@ class StandardsModel
         clg_sch = clg_sch.get
         if clg_sch.to_ScheduleRuleset.is_initialized
           clg_sch = clg_sch.to_ScheduleRuleset.get
-          min_c = clg_sch.annual_min_max_value['min']
+          min_c = schedule_ruleset_annual_min_max_value(clg_sch)['min']
           if min_c < temp_c
             cld = true
           end
         elsif clg_sch.to_ScheduleConstant.is_initialized
           clg_sch = clg_sch.to_ScheduleConstant.get
-          min_c = clg_sch.annual_min_max_value['min']
+          min_c = schedule_constant_annual_min_max_value(clg_sch)['min']
           if min_c < temp_c
             cld = true
           end
         elsif clg_sch.to_ScheduleCompact.is_initialized
           clg_sch = clg_sch.to_ScheduleCompact.get
-          min_c = clg_sch.annual_min_max_value['min']
+          min_c = schedule_compact_annual_min_max_value(clg_sch)['min']
           if min_c < temp_c
             cld = true
           end
@@ -964,7 +964,7 @@ class StandardsModel
         clg_sch = clg_sch.get
         if clg_sch.to_ScheduleRuleset.is_initialized
           clg_sch = clg_sch.to_ScheduleRuleset.get
-          min_c = clg_sch.annual_min_max_value['min']
+          min_c = schedule_ruleset_annual_min_max_value(clg_sch)['min']
           if min_c < temp_c
             cld = true
           end
@@ -1105,13 +1105,13 @@ class StandardsModel
         setpoint_sch = setpoint_sch.get
         if setpoint_sch.to_ScheduleRuleset.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
-          setpoint_c = setpoint_sch.annual_min_max_value['max']
+          setpoint_c = schedule_ruleset_annual_min_max_value(setpoint_sch)['max']
         elsif setpoint_sch.to_ScheduleConstant.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleConstant.get
-          setpoint_c = setpoint_sch.annual_min_max_value['max']
+          setpoint_c = schedule_constant_annual_min_max_value(setpoint_sch)['max']
         elsif setpoint_sch.to_ScheduleCompact.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleCompact.get
-          setpoint_c = setpoint_sch.annual_min_max_value['max']
+          setpoint_c = schedule_compact_annual_min_max_value(setpoint_sch)['max']
         end
       end
     end
@@ -1162,13 +1162,13 @@ class StandardsModel
         setpoint_sch = setpoint_sch.get
         if setpoint_sch.to_ScheduleRuleset.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
-          setpoint_c = setpoint_sch.annual_min_max_value['min']
+          setpoint_c = schedule_ruleset_annual_min_max_value(setpoint_sch)['min']
         elsif setpoint_sch.to_ScheduleConstant.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleConstant.get
-          setpoint_c = setpoint_sch.annual_min_max_value['min']
+          setpoint_c = schedule_constant_annual_min_max_value(setpoint_sch)['min']
         elsif setpoint_sch.to_ScheduleCompact.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleCompact.get
-          setpoint_c = setpoint_sch.annual_min_max_value['min']
+          setpoint_c = schedule_compact_annual_min_max_value(setpoint_sch)['min']
         end
       end
     end
@@ -1272,7 +1272,7 @@ class StandardsModel
   def thermal_zone_design_internal_load(thermal_zone)
     load_w = 0.0
 
-    spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       load_w += space_design_internal_load(space) 
     end
 
@@ -1286,7 +1286,7 @@ class StandardsModel
   def thermal_zone_majority_space_type(thermal_zone)
     space_type_to_area = Hash.new(0.0)
 
-    spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       if space.spaceType.is_initialized
         space_type = space.spaceType.get
         space_type_to_area[space_type] += space.floorArea
@@ -1443,7 +1443,7 @@ class StandardsModel
         exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
       else
         sch_name = space_type_properties['exhaust_schedule']
-        exhaust_schedule = model_add_schedule(model, sch_name)
+        exhaust_schedule = model_add_schedule(thermal_zone.model, sch_name)
         unless exhaust_schedule
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "Could not find an exhaust schedule called #{sch_name}, exhaust fans will run continuously.")
           exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
@@ -1471,11 +1471,11 @@ class StandardsModel
 
         # add balanced schedule to zone_exhaust_fan
         balanced_sch_name = space_type_properties['balanced_exhaust_fraction_schedule']
-        balanced_exhaust_schedule = model_add_schedule(model, balanced_sch_name).to_ScheduleRuleset.get
+        balanced_exhaust_schedule = model_add_schedule(thermal_zone.model, balanced_sch_name).to_ScheduleRuleset.get
         zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_exhaust_schedule)
 
         # use max value of balanced exhaust fraction schedule for maximum flow rate
-        max_sch_val = balanced_exhaust_schedule.annual_min_max_value['max']
+        max_sch_val = schedule_ruleset_annual_min_max_value(balanced_exhaust_schedule)['max']
         transfer_air_zone_mixing_si = maximum_flow_rate_si * max_sch_val
 
         # add dummy exhaust fan to a transfer_air_source_zones

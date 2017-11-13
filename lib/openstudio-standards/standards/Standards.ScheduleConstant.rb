@@ -9,7 +9,7 @@ class StandardsModel
   def schedule_constant_annual_equivalent_full_load_hrs(schedule_constant)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "Calculating total annual EFLH for schedule: #{schedule_constant.name}")
 
-    return annual_flh = value * 8760
+    return annual_flh = schedule_constant.value * 8760
   end
 
   # Returns the min and max value for this schedule.
@@ -18,7 +18,7 @@ class StandardsModel
   # @author David Goldwasser, NREL.
   # return [Hash] Hash has two keys, min and max.
   def schedule_constant_annual_min_max_value(schedule_constant)
-    result = { 'min' => value, 'max' => value }
+    result = { 'min' => schedule_constant.value, 'max' => schedule_constant.value }
 
     return result
   end

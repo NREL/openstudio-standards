@@ -2621,6 +2621,7 @@ class NECB_2011_Model
     #Array to store schedule objects
     schedule_type_array = []
 
+    standard = StandardsModel.get_standard_model('NECB 2011')
 
     #find the number of stories in the model this include multipliers.
     number_of_stories = model.getBuilding.standardsNumberOfAboveGroundStories()
@@ -2643,7 +2644,7 @@ class NECB_2011_Model
         space_system_index = nil
       else
         #gets row information from standards spreadsheet.
-        space_type_property = space.model.find_object($os_standards["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
+        space_type_property = standard.model_find_object($os_standards["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
         raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
         #stores the Building or SpaceType System type name.
         necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']

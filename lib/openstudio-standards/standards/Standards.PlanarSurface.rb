@@ -21,11 +21,11 @@ class StandardsModel
   # spreadsheet with the enumerations in OpenStudio (follow CBECC-Com).
   def planar_surface_apply_standard_construction(planar_surface, climate_zone, previous_construction_map = {})
     # Skip surfaces not in a space
-    return previous_construction_map if space.empty?
+    return previous_construction_map if planar_surface.space.empty?
     space = planar_surface.space.get
 
     # Skip surfaces that don't have a construction
-    return previous_construction_map if construction.empty?
+    return previous_construction_map if planar_surface.construction.empty?
     construction = planar_surface.construction.get
 
     # Determine if residential or nonresidential
@@ -36,7 +36,7 @@ class StandardsModel
     end
 
     # Get the climate zone set
-    climate_zone_set = model_find_climate_zone_set(model, climate_zone)
+    climate_zone_set = model_find_climate_zone_set(planar_surface.model, climate_zone)
 
     # Get the intended surface type
     standards_info = construction.standardsInformation
@@ -108,7 +108,7 @@ class StandardsModel
     if previous_construction_map[type]
       new_construction = previous_construction_map[type]
     else
-      new_construction = model_find_and_add_construction(model, instvartemplate,
+      new_construction = model_find_and_add_construction(planar_surface.model,
                                                          climate_zone_set,
                                                          surf_type,
                                                          stds_type,

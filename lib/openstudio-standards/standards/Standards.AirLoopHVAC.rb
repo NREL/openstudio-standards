@@ -1868,7 +1868,7 @@ class StandardsModel
 
     # Attach the setpoint manager to the
     # supply outlet node of the system.
-    sat_warmest_reset.addToNode(supplyOutletNode)
+    sat_warmest_reset.addToNode(air_loop_hvac.supplyOutletNode)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset was enabled using a SPM Warmest with a min SAT of #{design_sat_f.round}F and a max SAT of #{max_sat_f.round}F.")
 

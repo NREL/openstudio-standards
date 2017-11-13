@@ -230,7 +230,7 @@ class StandardsModel
     water_use_equipment_hash = {} # key is standards building type value is array of water use equipment
 
     # create space type hash (need num_units for MidriseApartment and RetailStripmall)
-    space_type_hash = model.create_space_type_hash(trust_effective_num_spaces = false)
+    space_type_hash = model_create_space_type_hash(model, trust_effective_num_spaces = false)
 
     # add temperate schedules to hash so they can be shared across water use equipment
     water_use_def_schedules = {} # key is temp C value is schedule
@@ -244,7 +244,7 @@ class StandardsModel
       stds_space_type = space_type.standardsSpaceType.get
 
       # lookup space_type_properties
-      space_type_properties = space_type.get_standards_data()
+      space_type_properties = space_type_get_standards_data(space_type)
       gal_hr_per_area = space_type_properties['service_water_heating_peak_flow_per_area']
       gal_hr_peak_flow_rate = space_type_properties['service_water_heating_peak_flow_rate']
       flow_rate_fraction_schedule = model_add_schedule(model, space_type_properties['service_water_heating_schedule'])
@@ -278,7 +278,7 @@ class StandardsModel
         if water_use_def_schedules.has_key?(name)
           target_temperature_sch = water_use_def_schedules[name]
         else
-          target_temperature_sch = model.add_constant_schedule_ruleset(target_temp,name)
+          target_temperature_sch = model_add_constant_schedule_ruleset(model, target_temp,name)
           water_use_def_schedules[name] = target_temperature_sch
         end
         water_use_equip_def.setTargetTemperatureSchedule(target_temperature_sch)
@@ -286,7 +286,7 @@ class StandardsModel
         if water_use_def_schedules.has_key?(name)
           service_water_fraction_sensible_sch = water_use_def_schedules[name]
         else
-          service_water_fraction_sensible_sch = model.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          service_water_fraction_sensible_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible,name)
           water_use_def_schedules[name] = service_water_fraction_sensible_sch
         end
         water_use_equip_def.setSensibleFractionSchedule(service_water_fraction_sensible_sch)
@@ -294,7 +294,7 @@ class StandardsModel
         if water_use_def_schedules.has_key?(name)
           service_water_fraction_latent_sch = water_use_def_schedules[name]
         else
-          service_water_fraction_latent_sch = model.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          service_water_fraction_latent_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible,name)
           water_use_def_schedules[name] = service_water_fraction_latent_sch
         end
         water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
@@ -353,9 +353,9 @@ class StandardsModel
 
           # apply efficiency to hot water heater
           unit_hot_water_loop.supplyComponents.sort.each do |component|
-            next if not component.to_WaterHeaterMixed.is_initialized
+            next if component.to_WaterHeaterMixed.empty?
             component = component.to_WaterHeaterMixed.get
-            component.apply_efficiency()
+            water_heater_mixed_apply_efficiency(component)
           end
 
           # add to list of systems
@@ -377,7 +377,7 @@ class StandardsModel
         if water_use_def_schedules.has_key?(name)
           target_temperature_sch = water_use_def_schedules[name]
         else
-          target_temperature_sch = model.add_constant_schedule_ruleset(target_temp,name)
+          target_temperature_sch = model_add_constant_schedule_ruleset(model, target_temp,name)
           water_use_def_schedules[name] = target_temperature_sch
         end
         water_use_equip_def.setTargetTemperatureSchedule(target_temperature_sch)
@@ -385,7 +385,7 @@ class StandardsModel
         if water_use_def_schedules.has_key?(name)
           service_water_fraction_sensible_sch = water_use_def_schedules[name]
         else
-          service_water_fraction_sensible_sch = model.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          service_water_fraction_sensible_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible,name)
           water_use_def_schedules[name] = service_water_fraction_sensible_sch
         end
         water_use_equip_def.setSensibleFractionSchedule(service_water_fraction_sensible_sch)
@@ -393,7 +393,7 @@ class StandardsModel
         if water_use_def_schedules.has_key?(name)
           service_water_fraction_latent_sch = water_use_def_schedules[name]
         else
-          service_water_fraction_latent_sch = model.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          service_water_fraction_latent_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible,name)
           water_use_def_schedules[name] = service_water_fraction_latent_sch
         end
         water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
@@ -445,11 +445,11 @@ class StandardsModel
 
         # find water heater
         dedicated_hot_water_loop.supplyComponents.sort.each do |component|
-          next if not component.to_WaterHeaterMixed.is_initialized
+          next if component.to_WaterHeaterMixed.empty?
           water_heater = component.to_WaterHeaterMixed.get
 
           # apply efficiency to hot water heater
-          water_heater.apply_efficiency()
+          water_heater_mixed_apply_efficiency(water_heater)
         end
 
         # add to list of systems
@@ -488,11 +488,11 @@ class StandardsModel
 
           # find water heater
           booster_service_water_loop.supplyComponents.sort.each do |component|
-            next if not component.to_WaterHeaterMixed.is_initialized
+            next if component.to_WaterHeaterMixed.empty?
             water_heater = component.to_WaterHeaterMixed.get
 
             # apply efficiency to hot water heater
-            water_heater.apply_efficiency()
+            water_heater_mixed_apply_efficiency(water_heater)
           end
 
           # rename booster loop
@@ -516,7 +516,7 @@ class StandardsModel
         if water_use_def_schedules.has_key?(name)
           target_temperature_sch = water_use_def_schedules[name]
         else
-          target_temperature_sch = model.add_constant_schedule_ruleset(target_temp,name)
+          target_temperature_sch = model_add_constant_schedule_ruleset(model, target_temp,name)
           water_use_def_schedules[name] = target_temperature_sch
         end
         water_use_equip_def.setTargetTemperatureSchedule(target_temperature_sch)
@@ -524,7 +524,7 @@ class StandardsModel
         if water_use_def_schedules.has_key?(name)
           service_water_fraction_sensible_sch = water_use_def_schedules[name]
         else
-          service_water_fraction_sensible_sch = model.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          service_water_fraction_sensible_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible,name)
           water_use_def_schedules[name] = service_water_fraction_sensible_sch
         end
         water_use_equip_def.setSensibleFractionSchedule(service_water_fraction_sensible_sch)
@@ -532,7 +532,7 @@ class StandardsModel
         if water_use_def_schedules.has_key?(name)
           service_water_fraction_latent_sch = water_use_def_schedules[name]
         else
-          service_water_fraction_latent_sch = model.add_constant_schedule_ruleset(service_water_fraction_sensible,name)
+          service_water_fraction_latent_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible,name)
           water_use_def_schedules[name] = service_water_fraction_latent_sch
         end
         water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
@@ -554,7 +554,7 @@ class StandardsModel
 
     # get building floor area and effective number of stories
     bldg_floor_area = model.getBuilding.floorArea
-    bldg_effective_num_stories_hash = model.effective_num_stories
+    bldg_effective_num_stories_hash = model_effective_num_stories(model)
     bldg_effective_num_stories = bldg_effective_num_stories_hash[:below_grade] + bldg_effective_num_stories_hash[:above_grade]
 
     # add non-dedicated system(s) here. Separate systems for water use equipment from different building types
@@ -629,11 +629,11 @@ class StandardsModel
 
       # find water heater
       shared_hot_water_loop.supplyComponents.sort.each do |component|
-        next if not component.to_WaterHeaterMixed.is_initialized
+        next if component.to_WaterHeaterMixed.empty?
         water_heater = component.to_WaterHeaterMixed.get
 
         # apply efficiency to hot water heater
-        water_heater.apply_efficiency()
+        water_heater_mixed_apply_efficiency(water_heater)
       end
 
       # loop through water use equipment
@@ -680,12 +680,15 @@ class StandardsModel
       water_use_equip_sch = water_use_equip_sch.get
       if water_use_equip_sch.to_ScheduleRuleset.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get
+        max_sch_value = schedule_ruleset_annual_min_max_value(water_use_equip_sch)['max']
       elsif water_use_equip_sch.to_ScheduleConstant.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleConstant.get
+        max_sch_value = schedule_constant_annual_min_max_value(water_use_equip_sch)['max']
       elsif water_use_equip_sch.to_ScheduleCompact.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleCompact.get
+        max_sch_value = schedule_compact_annual_min_max_value(water_use_equip_sch)['max']
       end
-      max_sch_value = water_use_equip_sch.annual_min_max_value['max']
+      
 
       # get water_use_equip_def to get max flow rate
       water_use_equip_def = water_use_equip.waterUseEquipmentDefinition

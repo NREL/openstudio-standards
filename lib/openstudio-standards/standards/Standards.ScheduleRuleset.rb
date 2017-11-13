@@ -120,7 +120,7 @@ class StandardsModel
     # test profiles
     min = nil
     max = nil
-    schedule_ruleset.profiles.each do |profile|
+    profiles.each do |profile|
       profile.values.each do |value|
         if min.nil?
           min = value

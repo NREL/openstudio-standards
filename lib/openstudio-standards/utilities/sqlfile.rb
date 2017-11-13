@@ -1,19 +1,23 @@
 StandardsModel.class_eval do
 
-  def sql_file
+  # Gets the sql file for the model, erroring if not found
+  # @todo candidate for C++
+  def model_sql_file(model)
 
     # Ensure that the model has a sql file associated with it
-    if self.sqlFile.empty?
+    if model.sqlFile.empty?
       OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', 'Failed to retrieve data because the sql file containing results is missing.')
       return false
     end
 
-    return self.sqlFile.get
+    return model.sqlFile.get
   end
 
-  def annual_occupied_unmet_hours
+  # Gets the annual occupied unmet hours from the sql file
+  # @todo candidate for C++
+  def model_annual_occupied_unmet_hours(model)
 
-    sql = self.sql_file
+    sql = model_sql_file(model)
 
     # setup the queries
     heating_setpoint_unmet_query = "SELECT Value
@@ -48,9 +52,11 @@ StandardsModel.class_eval do
     return heating_or_cooling_setpoint_unmet
   end
 
-  def annual_occupied_unmet_heating_hours
+  # Gets the annual occupied unmet heating hours from the sql file
+  # @todo candidate for C++
+  def model_annual_occupied_unmet_heating_hours(model)
 
-    sql = self.sql_file
+    sql = model_sql_file(model)
 
     # setup the queries
     heating_setpoint_unmet_query = "SELECT Value
@@ -73,9 +79,11 @@ StandardsModel.class_eval do
     return heating_setpoint_unmet.get
   end
 
-  def annual_occupied_unmet_cooling_hours
+  # Gets the annual occupied unmet cooling hours from the sql file
+  # @todo candidate for C++  
+  def model_annual_occupied_unmet_cooling_hours(model)
 
-    sql = self.sql_file
+    sql = model_sql_file(model)
 
     # setup the queries
     cooling_setpoint_unmet_query = "SELECT Value
@@ -98,11 +106,13 @@ StandardsModel.class_eval do
     return cooling_setpoint_unmet.get
   end
 
-  def annual_eui_kbtu_per_ft2
+  # Gets the annual EUI from the sql file
+  # @todo candidate for C++  
+  def model_annual_eui_kbtu_per_ft2(model)
 
-    sql = self.sql_file
+    sql = model_sql_file(model)
 
-    building = self.getBuilding
+    building = model.getBuilding
     
     # make sure all required data are available
     if sql.totalSiteEnergy.empty?
@@ -119,9 +129,11 @@ StandardsModel.class_eval do
     return site_eui_kbtu_per_ft2
   end
 
-  def net_conditioned_floor_area
+  # Gets the net conditioned area from the sql file
+  # @todo candidate for C++    
+  def model_net_conditioned_floor_area(model)
 
-    sql = self.sql_file
+    sql = model_sql_file(model)
 
     # setup the queries
     area_query = "SELECT Value
@@ -144,9 +156,11 @@ StandardsModel.class_eval do
     return area_m2.get
   end
 
-  def annual_energy_by_fuel_and_enduse(fuel_type, end_use)
+  # Gets the annual energy consumption by fuel and enduse from the sql file
+  # @todo candidate for C++    
+  def model_annual_energy_by_fuel_and_enduse(model, fuel_type, end_use)
 
-    sql = self.sql_file
+    sql = model_sql_file(model)
 
     # setup the queries
     query = "SELECT Value

@@ -27,10 +27,10 @@ class StandardsModel
     end
 
     # get building types and ratio (needed to get correct schedules, parking area, entries, canopies, and drive throughs)
-    space_type_hash = model.create_space_type_hash()
+    space_type_hash = model_create_space_type_hash(model)
 
     # get model specific values to map to exterior_lighting_properties
-    area_length_count_hash = model.create_exterior_lighting_area_length_count_hash(space_type_hash,use_model_for_entries_and_canopies)
+    area_length_count_hash = model_create_exterior_lighting_area_length_count_hash(model, space_type_hash,use_model_for_entries_and_canopies)
 
     # using midnight to 6am setback or shutdown
     start_setback_shutoff = {:hr => 24, :min => 0}
@@ -305,7 +305,7 @@ class StandardsModel
     # rename Office to SmallOffice MediumOffice or LargeOffice
     office_type = nil
     if building_type_hash.has_key?("Office")
-      office_type = model.remap_office(building_type_hash["Office"])
+      office_type = model_remap_office(model, building_type_hash["Office"])
     end
 
     # parking areas and drives area
@@ -387,7 +387,7 @@ class StandardsModel
     area_length_count_hash[:drive_through_windows] = drive_through_windows
 
     # determine effective number of stories to find first above grade story exterior wall area
-    effective_num_stories = model.effective_num_stories
+    effective_num_stories = model_effective_num_stories(model)
     ground_story = effective_num_stories[:story_hash].keys[effective_num_stories[:below_grade]]
     ground_story_ext_wall_area_si = effective_num_stories[:story_hash][ground_story][:ext_wall_area]
     ground_story_ext_wall_area_ip = OpenStudio::convert(ground_story_ext_wall_area_si,"m^2","ft^2").get

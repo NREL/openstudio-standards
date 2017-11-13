@@ -254,7 +254,7 @@ StandardsModel.class_eval do
       ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
       ideal_loads.addToThermalZone(zone)
     end
-    model.model_run_sizing_run(model, sizing_run_dir)
+    model_run_sizing_run(model, sizing_run_dir)
     model.getSpaces.each do |space|
       if not space.thermalZone.empty?
         space_load_array << {"space_name"=> space.name, "CoolingDesignLoad" => space.thermalZone.get.coolingDesignLoad, "HeatingDesignLoad" => space.thermalZone.get.heatingDesignLoad }

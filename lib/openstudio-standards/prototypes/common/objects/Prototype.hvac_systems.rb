@@ -5314,14 +5314,14 @@ class StandardsModel
       supply_fan.setName("#{zone.name} ERV Supply Fan")
       supply_fan.setMotorEfficiency(fan_motor_efficiency)
       impeller_eff = fan_baseline_impeller_efficiency(supply_fan)
-      supply_fan.change_impeller_efficiency(impeller_eff)
+      fan_change_impeller_efficiency(supply_fan, impeller_eff)
       supply_fan.setPressureRise(fan_static_pressure_pa)
       supply_fan.setMotorInAirstreamFraction(1)
 
       exhaust_fan = OpenStudio::Model::FanOnOff.new(model)
       exhaust_fan.setName("#{zone.name} ERV Exhaust Fan")
       exhaust_fan.setMotorEfficiency(fan_motor_efficiency)
-      exhaust_fan.change_impeller_efficiency(impeller_eff)
+      fan_change_impeller_efficiency(exhaust_fan, impeller_eff)
       exhaust_fan.setPressureRise(fan_static_pressure_pa)
       exhaust_fan.setMotorInAirstreamFraction(1)
 

@@ -74,8 +74,8 @@ class StandardsModel
   def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
-    capacity_tons = OpenStudio.convert(find_capacity, 'W', 'ton').get 
-    chlr_props = model_find_object( search_criteria, capacity_tons, Date.today)
+    capacity_tons = OpenStudio.convert(chiller_electric_eir_find_capacity(chiller_electric_eir), 'W', 'ton').get 
+    chlr_props = model_find_object($os_standards['chillers'], search_criteria, capacity_tons, Date.today)
 
     # lookup the efficiency value
     kw_per_ton = nil

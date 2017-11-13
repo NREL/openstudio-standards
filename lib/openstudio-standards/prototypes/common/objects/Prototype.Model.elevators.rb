@@ -145,7 +145,7 @@ class StandardsModel
   def model_add_elevators(model)
 
     # determine effective number of stories
-    effective_num_stories = model.effective_num_stories
+    effective_num_stories = model_effective_num_stories(model)
 
     # determine elevator type
     # todo - add logic here or upstream to have some multi-story buildings without elevators (e.g. small multi-family and small hotels)
@@ -175,7 +175,7 @@ class StandardsModel
     building_type_hash = {}
 
     # apply building type specific log to add to number of elevators based on Beyer (2009) rules of thumb
-    space_type_hash = model.create_space_type_hash()
+    space_type_hash = model_create_space_type_hash(model)
     space_type_hash.each do |space_type,hash|
 
       # update building_type_hash
@@ -293,7 +293,7 @@ class StandardsModel
     building_type = building_type_hash.key(building_type_hash.values.max)
     # rename space types as needed
     if building_type == "Office"
-      building_type = model.remap_office(building_type_hash["Office"])
+      building_type = model_remap_office(model, building_type_hash["Office"])
     end
     if building_type == "SmallHotel" then building_type = "LargeHotel" end # no elevator schedules for SmallHotel
     if building_type == "PrimarySchool" then building_type = "SecondarySchool" end # no elevator schedules for PrimarySchool
@@ -309,7 +309,7 @@ class StandardsModel
         'building_type' => building_type
     }
 
-    prototype_input = find_object($os_standards['prototype_inputs'], search_criteria, nil)
+    prototype_input = model_find_object($os_standards['prototype_inputs'], search_criteria, nil)
     if prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find prototype inputs for #{search_criteria}, cannot add elevators.")
       return nil

@@ -6,7 +6,7 @@ class A90_1_2013_Model < A90_1_Model
   # @param design_oat_wb_c [Double] the design OA wetbulb temperature (C)
   # @return [Array<Double>] [leaving_cw_t_c, approach_k, range_k]
   def plant_loop_prm_baseline_condenser_water_temperatures(plant_loop, design_oat_wb_c)
-    design_oat_wb_f = OpenStudio.convert(design_oat_wb_f, 'F', 'C').get
+    design_oat_wb_f = OpenStudio.convert(design_oat_wb_c, 'C', 'F').get
     
     # G3.1.3.11 - CW supply temp shall be evaluated at 0.4% evaporative design OATwb
     # per the formulat approach_F = 25.72 - (0.24 * OATwb_F)
