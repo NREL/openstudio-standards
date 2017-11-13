@@ -485,7 +485,7 @@ class NECB_2011_Model
     capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'kBtu/hr').get
 
     # Get the boiler properties
-    blr_props = model_find_object( $os_standards['boilers'], search_criteria, capacity_btu_per_hr)
+    blr_props = model_find_object( standards_data['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false
@@ -542,7 +542,7 @@ class NECB_2011_Model
   #
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
-    chillers = $os_standards['chillers']
+    chillers = standards_data['chillers']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -750,9 +750,9 @@ class NECB_2011_Model
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if heat_pump == true
-                 model_find_object( $os_standards['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object( standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object( $os_standards['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object( standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
@@ -979,7 +979,7 @@ class NECB_2011_Model
     return [fan_motor_eff, 0] if motor_bhp == 0.0
 
     # Lookup the minimum motor efficiency
-    motors = $os_standards['motors']
+    motors = standards_data['motors']
 
     # Assuming all fan motors are 4-pole ODP
     instvartemplate_mod = instvartemplate.dup
@@ -1199,7 +1199,7 @@ class NECB_2011_Model
     result = nil
 
     possible_climate_zones = []
-    $os_standards['climate_zone_sets'].each do |climate_zone_set|
+    standards_data['climate_zone_sets'].each do |climate_zone_set|
       if climate_zone_set['climate_zones'].include?(clim)
         possible_climate_zones << climate_zone_set['name']
       end
@@ -2644,7 +2644,7 @@ class NECB_2011_Model
         space_system_index = nil
       else
         #gets row information from standards spreadsheet.
-        space_type_property = standard.model_find_object($os_standards["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
+        space_type_property = standard.model_find_object(standards_data["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
         raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
         #stores the Building or SpaceType System type name.
         necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']

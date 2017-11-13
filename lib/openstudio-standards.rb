@@ -52,12 +52,6 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/hash'
   require_relative 'openstudio-standards/utilities/sqlfile'
 
-  # Load the Openstudio Standards JSON
-  # and assign to a constant.  This
-  # should never be altered by the gem.
-  # @Todo: A constant in ruby is $CONSTANT not $constant
-  $os_standards = model_load_openstudio_standards_json
-
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'
 

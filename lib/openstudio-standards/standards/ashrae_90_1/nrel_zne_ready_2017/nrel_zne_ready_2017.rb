@@ -8,5 +8,6 @@ class NRELZNEReady2017_Model < A90_1_Model
   def initialize
     super()
     @instvartemplate = @@template
+    load_standards_database
   end
 end

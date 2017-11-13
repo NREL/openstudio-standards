@@ -29,7 +29,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         "template" => template,
       }
       # lookup space type properties
-      standard.model_find_objects($os_standards["space_types"], search_criteria).each do |space_type_properties|
+      standard.model_find_objects(standard.standards_data["space_types"], search_criteria).each do |space_type_properties|
         header_output = ""
         # Create a space type
         st = OpenStudio::Model::SpaceType.new(@model)

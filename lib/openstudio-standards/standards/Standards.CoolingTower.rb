@@ -30,7 +30,7 @@ module CoolingTower
     design_water_flow_gpm = OpenStudio.convert(design_water_flow_m3_per_s, 'm^3/s', 'gal/min').get
 
     # Get the table of cooling tower efficiencies
-    heat_rejection = $os_standards['heat_rejection']
+    heat_rejection = standards_data['heat_rejection']
 
     # Define the criteria to find the cooling tower properties
     # in the hvac standards data set.
@@ -88,7 +88,7 @@ module CoolingTower
 
     # Lookup the minimum motor efficiency
     fan_motor_eff = 0.85
-    motors = $os_standards['motors']
+    motors = standards_data['motors']
 
     # Assuming all fan motors are 4-pole Enclosed
     search_criteria = {

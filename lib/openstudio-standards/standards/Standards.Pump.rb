@@ -20,11 +20,20 @@ module Pump
 
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
-    flow_m3_per_s = if pump.autosizedRatedFlowRate.is_initialized
-                      pump.autosizedRatedFlowRate.get
-                    else
-                      pump.ratedFlowRate.get
+    flow_m3_per_s = if pump.to_PumpVariableSpeed.is_initialized || pump.to_PumpConstantSpeed.is_initialized
+                      if pump.autosizedRatedFlowRate.is_initialized
+                        pump.autosizedRatedFlowRate.get
+                      else
+                        pump.ratedFlowRate.get
+                      end
+                    elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
+                      if pump.autosizedTotalRatedFlowRate.is_initialized
+                        pump.autosizedTotalRatedFlowRate.get
+                      else
+                        pump.totalRatedFlowRate.get
+                      end
                     end
+
     flow_gpm = OpenStudio.convert(flow_m3_per_s, 'm^3/s', 'gal/min').get
 
     # Calculate the target total pump motor power consumption
@@ -118,7 +127,7 @@ module Pump
     return [1.0, 0] if motor_bhp == 0.0
 
     # Lookup the minimum motor efficiency
-    motors = $os_standards['motors']
+    motors = standards_data['motors']
 
     # Assuming all pump motors are 4-pole ODP
     search_criteria = {
@@ -161,10 +170,18 @@ module Pump
   def pump_pumppower(pump)
     # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
-    flow_m3_per_s = if pump.autosizedRatedFlowRate.is_initialized
-                      pump.autosizedRatedFlowRate.get
-                    else
-                      pump.ratedFlowRate.get
+    flow_m3_per_s = if pump.to_PumpVariableSpeed.is_initialized || pump.to_PumpConstantSpeed.is_initialized
+                      if pump.autosizedRatedFlowRate.is_initialized
+                        pump.autosizedRatedFlowRate.get
+                      else
+                        pump.ratedFlowRate.get
+                      end
+                    elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
+                      if pump.autosizedTotalRatedFlowRate.is_initialized
+                        pump.autosizedTotalRatedFlowRate.get
+                      else
+                        pump.totalRatedFlowRate.get
+                      end
                     end
 
     # E+ default impeller efficiency
@@ -195,11 +212,20 @@ module Pump
   #   @units horsepower (hp)
   def pump_brake_horsepower(pump)
     # Get flow rate (whether autosized or hard-sized)
+    # Get flow rate (whether autosized or hard-sized)
     flow_m3_per_s = 0
-    flow_m3_per_s = if pump.autosizedRatedFlowRate.is_initialized
-                      pump.autosizedRatedFlowRate.get
-                    else
-                      pump.ratedFlowRate.get
+    flow_m3_per_s = if pump.to_PumpVariableSpeed.is_initialized || pump.to_PumpConstantSpeed.is_initialized
+                      if pump.autosizedRatedFlowRate.is_initialized
+                        pump.autosizedRatedFlowRate.get
+                      else
+                        pump.ratedFlowRate.get
+                      end
+                    elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
+                      if pump.autosizedTotalRatedFlowRate.is_initialized
+                        pump.autosizedTotalRatedFlowRate.get
+                      else
+                        pump.totalRatedFlowRate.get
+                      end
                     end
 
     # E+ default impeller efficiency

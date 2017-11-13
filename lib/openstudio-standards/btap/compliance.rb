@@ -422,7 +422,7 @@ module BTAP
       #return s.each [String]
       def self.determine_dominant_necb_schedule_type(model)
         # lookup necb space type properties
-        space_type_properties = model.find_objects($os_standards["space_types"], {"template" => 'NECB 2011'})
+        space_type_properties = model.find_objects(standards_data["space_types"], {"template" => 'NECB 2011'})
 
         # Here is a hash to keep track of the m2 running total of spacetypes for each
         # sched type.
@@ -476,7 +476,7 @@ module BTAP
       def self.determine_necb_schedule_type(space)
         raise ("Undefined spacetype for space #{space.get.name}) if space.spaceType.empty?") if space.spaceType.empty?
         raise ("Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?") if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
-        space_type_properties = space.model.find_object($os_standards["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
+        space_type_properties = space.model.find_object(standards_data["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
         return space_type_properties['necb_schedule_type'].strip
       end
 
@@ -524,7 +524,7 @@ module BTAP
             space_system_index = nil
           else
             #gets row information from standards spreadsheet.
-            space_type_property = space.model.find_object($os_standards["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
+            space_type_property = space.model.find_object(standards_data["space_types"], {"template" => 'NECB 2011', "space_type" => space.spaceType.get.standardsSpaceType.get, "building_type" => space.spaceType.get.standardsBuildingType.get})
             raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
             #stores the Building or SpaceType System type name.
             necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']

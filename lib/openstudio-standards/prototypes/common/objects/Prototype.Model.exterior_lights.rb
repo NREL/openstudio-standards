@@ -18,7 +18,7 @@ class StandardsModel
     }
     
     # load exterior_lighting_properties
-    exterior_lighting_properties = model_find_object( $os_standards['exterior_lighting'], search_criteria)
+    exterior_lighting_properties = model_find_object( standards_data['exterior_lighting'], search_criteria)
 
     # make sure lighting properties were found
     if exterior_lighting_properties.nil?
@@ -331,7 +331,7 @@ class StandardsModel
 
       # load illuminated_parking_area_properties
       search_criteria = {'building_type' => building_type}
-      illuminated_parking_area_lookup = model_find_object( $os_standards['parking'], search_criteria)
+      illuminated_parking_area_lookup = model_find_object( standards_data['parking'], search_criteria)
       if not illuminated_parking_area_lookup["building_area_per_spot"].nil?
         num_spots += floor_area_ip / illuminated_parking_area_lookup["building_area_per_spot"].to_f
       elsif not illuminated_parking_area_lookup["units_per_spot"].nil?
@@ -347,7 +347,7 @@ class StandardsModel
 
       # load illuninated_parking_area_properties
       search_criteria = {'building_type' => building_type}
-      exterior_lighting_assumptions_lookup = model_find_object( $os_standards['entryways'], search_criteria)
+      exterior_lighting_assumptions_lookup = model_find_object( standards_data['entryways'], search_criteria)
 
       # lookup doors
       if use_model_for_entries_and_canopies

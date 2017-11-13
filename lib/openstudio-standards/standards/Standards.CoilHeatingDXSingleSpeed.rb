@@ -114,7 +114,7 @@ class StandardsModel
     cop = nil
 
     # find object
-    ac_props = model_find_object( $os_standards['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = model_find_object( standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?
@@ -186,7 +186,7 @@ class StandardsModel
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies
-    ac_props = model_find_object( $os_standards['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = model_find_object( standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?

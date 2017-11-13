@@ -58,7 +58,7 @@ class NECB_2011_Model
               'building_type' => model_get_lookup_name(building_type),
               'space_type' => space_type_name
           }
-          data = model_find_object($os_standards['space_types'], search_criteria)
+          data = model_find_object(standards_data['space_types'], search_criteria)
 
           # Skip space types with no data
           next if data.nil?

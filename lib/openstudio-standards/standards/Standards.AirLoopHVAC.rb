@@ -724,7 +724,7 @@ class StandardsModel
       'climate_zone' => climate_zone,
       'data_center' => is_dc
     }
-    econ_limits = model_find_object($os_standards['economizers'], search_criteria, nil)
+    econ_limits = model_find_object(standards_data['economizers'], search_criteria, nil)
     if econ_limits.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "Cannot find economizer limits for #{instvartemplate}, #{climate_zone}, assuming no economizer required.")
       return economizer_required

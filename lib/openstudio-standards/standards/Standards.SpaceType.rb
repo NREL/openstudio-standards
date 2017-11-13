@@ -20,7 +20,7 @@ class StandardsModel
 
     # lookup space type properties
 
-    space_type_properties = model_find_object( $os_standards['space_types'], search_criteria)
+    space_type_properties = model_find_object( standards_data['space_types'], search_criteria)
 
     if space_type_properties.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
@@ -584,7 +584,7 @@ class StandardsModel
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = model_find_object( $os_standards['construction_properties'], search_criteria)
+    construction_properties = model_find_object( standards_data['construction_properties'], search_criteria)
 
     return construction_properties
   end

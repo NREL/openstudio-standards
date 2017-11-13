@@ -158,7 +158,7 @@ StandardsModel.class_eval do
 
 
   def model_add_full_space_type_libs(model)
-    space_type_properties_list = model_find_objects($os_standards['space_types'], '' => 'NECB 2011')
+    space_type_properties_list = model_find_objects(standards_data['space_types'], '' => 'NECB 2011')
     space_type_properties_list.each do |space_type_property|
       stub_space_type = OpenStudio::Model::SpaceType.new(model)
       stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
@@ -397,7 +397,7 @@ StandardsModel.class_eval do
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = model_find_object($os_standards['space_types'], 'template' => instvartemplate, 'building_type' => new_lookup_building_type, 'space_type' => space_type_name)
+          data = model_find_object(standards_data['space_types'], 'template' => instvartemplate, 'building_type' => new_lookup_building_type, 'space_type' => space_type_name)
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end

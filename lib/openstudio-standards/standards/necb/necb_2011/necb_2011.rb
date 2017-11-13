@@ -6,7 +6,7 @@ class NECB_2011_Model < StandardsModel
   def initialize
     super()
     @instvartemplate = @@template
-    @standards_data = self.load_standards_database()
+    load_standards_database
 
     #NECB Values
     # @standards_data["climate_zone_sets"] = [
@@ -126,7 +126,7 @@ class NECB_2011_Model < StandardsModel
         {"template" => "NECB 2011", "fan_type" => "CONSTANT", "number_of_poles" => 4.0, "type" => "Enclosed", "synchronous_speed" => 1800.0, "minimum_capacity" => 0.0, "maximum_capacity" => 9999.0, "nominal_full_load_efficiency" => 0.615, "notes" => "To get total fan efficiency of 40% (0.4/0.65)"},
         {"template" => "NECB 2011", "fan_type" => "VARIABLE", "number_of_poles" => 4.0, "type" => "Enclosed", "synchronous_speed" => 1800.0, "minimum_capacity" => 0.0, "maximum_capacity" => 9999.0, "nominal_full_load_efficiency" => 0.8461, "notes" => "To get total fan efficiency of 55% (0.55/0.65)"}
     ]
-    # @standards_data['schedules'] = $os_standards['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
+    # @standards_data['schedules'] = standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
 
   end
 

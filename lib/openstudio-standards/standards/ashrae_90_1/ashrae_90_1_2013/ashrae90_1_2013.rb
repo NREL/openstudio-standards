@@ -8,6 +8,6 @@ class A90_1_2013_Model < A90_1_Model
   def initialize
     super()
     @instvartemplate = @@template
-    @standards_data = self.load_standards_database()
+    load_standards_database
   end
 end

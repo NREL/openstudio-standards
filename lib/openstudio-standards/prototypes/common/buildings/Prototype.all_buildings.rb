@@ -573,7 +573,7 @@ module LargeHotel
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = model_find_object($os_standards['space_types'], 'template' => instvartemplate, 'building_type' => building_type, 'space_type' => space_type_name)
+      space_type_data = model_find_object(standards_data['space_types'], 'template' => instvartemplate, 'building_type' => building_type, 'space_type' => space_type_name)
       if space_type_data.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{instvartemplate}-#{building_type}-#{space_type_name}")
         return false
@@ -1262,7 +1262,7 @@ module Outpatient
           'building_type' => building_type,
           'space_type' => space_type_name
       }
-      data = model_find_object($os_standards['space_types'], search_criteria)
+      data = model_find_object(standards_data['space_types'], search_criteria)
 
       if data.nil? ###
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Could not find data for #{search_criteria}")

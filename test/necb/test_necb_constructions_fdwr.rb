@@ -115,7 +115,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     climate_zone = 'NECB HDD Method'
     standard = StandardsModel.get_standard_model(template)
     
-    space_type_properties = standard.model_find_object($os_standards["space_types"], { "template" => template, "building_type" =>  building_type , "space_type" => space_type })
+    space_type_properties = standard.model_find_object(standard.standards_data["space_types"], { "template" => template, "building_type" =>  building_type , "space_type" => space_type })
     
     st = OpenStudio::Model::SpaceType.new(@model)
     st.setStandardsBuildingType(space_type_properties['building_type'])

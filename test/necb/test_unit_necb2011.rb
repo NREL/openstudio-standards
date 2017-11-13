@@ -16,8 +16,8 @@ class TestNECBLargeOffice < CreateDOEPrototypeBuildingTest
   model_add_ground_temperatures(model, building_type, climate_zone)
   model.check_weather_file()
 
-  puts JSON.pretty_generate($os_standards["necb_fdwr"])
-  puts JSON.pretty_generate($os_standards["necb_surface_conductances"])
+  puts JSON.pretty_generate(standards_data["necb_fdwr"])
+  puts JSON.pretty_generate(standards_data["necb_surface_conductances"])
 
   puts model.get_standard_max_fdwr
   puts model.standard_climate_zone_index

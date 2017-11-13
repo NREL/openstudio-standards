@@ -1,67 +1,3 @@
-# Loads the openstudio standards dataset.
-#
-# @return [Hash] a hash of standards data
-def model_load_openstudio_standards_json()
-  standards_files = []
-  standards_files << 'OpenStudio_Standards_boilers.json'
-  standards_files << 'OpenStudio_Standards_chillers.json'
-  standards_files << 'OpenStudio_Standards_climate_zone_sets.json'
-  standards_files << 'OpenStudio_Standards_climate_zones.json'
-  standards_files << 'OpenStudio_Standards_construction_properties.json'
-  standards_files << 'OpenStudio_Standards_construction_sets.json'
-  standards_files << 'OpenStudio_Standards_constructions.json'
-  standards_files << 'OpenStudio_Standards_curve_bicubics.json'
-  standards_files << 'OpenStudio_Standards_curve_biquadratics.json'
-  standards_files << 'OpenStudio_Standards_curve_cubics.json'
-  standards_files << 'OpenStudio_Standards_curve_quadratics.json'
-  standards_files << 'OpenStudio_Standards_ground_temperatures.json'
-  standards_files << 'OpenStudio_Standards_heat_pumps_heating.json'
-  standards_files << 'OpenStudio_Standards_heat_pumps.json'
-  standards_files << 'OpenStudio_Standards_materials.json'
-  standards_files << 'OpenStudio_Standards_motors.json'
-  standards_files << 'OpenStudio_Standards_prototype_inputs.json'
-  standards_files << 'OpenStudio_Standards_schedules.json'
-  standards_files << 'OpenStudio_Standards_space_types.json'
-  standards_files << 'OpenStudio_Standards_templates.json'
-  standards_files << 'OpenStudio_Standards_unitary_acs.json'
-  standards_files << 'OpenStudio_Standards_heat_rejection.json'
-  standards_files << 'OpenStudio_Standards_exterior_lighting.json'
-  standards_files << 'OpenStudio_Standards_parking.json'
-  standards_files << 'OpenStudio_Standards_entryways.json'
-  standards_files << 'OpenStudio_Standards_necb_climate_zones.json'
-  standards_files << 'OpenStudio_Standards_necb_fdwr.json'
-  standards_files << 'OpenStudio_Standards_necb_hvac_system_selection_type.json'
-  standards_files << 'OpenStudio_Standards_necb_surface_conductances.json'
-  standards_files << 'OpenStudio_Standards_water_heaters.json'
-  standards_files << 'OpenStudio_Standards_economizers.json'
-  standards_files << 'OpenStudio_Standards_refrigerated_cases.json'
-  standards_files << 'OpenStudio_Standards_walkin_refrigeration.json'
-  standards_files << 'OpenStudio_Standards_refrigeration_compressors.json'
-  #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
-  # Combine the data from the JSON files into a single hash
-  top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-  standards_data_dir = "#{top_dir}/data/standards"
-  standards_data = {}
-  standards_files.sort.each do |standards_file|
-    temp = ""
-    begin
-      temp = load_resource_relative("../../../data/standards/#{standards_file}", 'r:UTF-8')
-    rescue NoMethodError
-      File.open("#{standards_data_dir}/#{standards_file}", 'r:UTF-8') do |f|
-        temp = f.read
-      end
-    end
-    file_hash = JSON.load(temp)
-    standards_data = standards_data.merge(file_hash)
-  end
-
-  # Check that standards data was loaded
-  if standards_data.keys.size.zero?
-    OpenStudio.logFree(OpenStudio::Error, 'OpenStudio Standards JSON data was not loaded correctly.')
-  end
-  return standards_data
-end
-
 # open the class to add methods to apply HVAC efficiency standards
 class StandardsModel
 
@@ -1120,7 +1056,7 @@ class StandardsModel
                                                     condenser_water_loop = nil,
                                                     building_type = nil)
           else
-            fan_type = model_baseline_system_vav_fan_type(model)
+            fan_type = model_cw_loop_cooling_tower_fan_type(model)
             condenser_water_loop = model_add_cw_loop(model,
                                                      'Open Cooling Tower',
                                                      'Propeller or Axial',
@@ -1212,7 +1148,7 @@ class StandardsModel
                                                     condenser_water_loop = nil,
                                                     building_type = nil)
           else
-            fan_type = model_baseline_system_vav_fan_type(model)
+            fan_type = model_cw_loop_cooling_tower_fan_type(model)
             condenser_water_loop = model_add_cw_loop(model,
                                                      'Open Cooling Tower',
                                                      'Propeller or Axial',
@@ -1698,9 +1634,9 @@ class StandardsModel
     end
 
     # Get the object data
-    data = model_find_object($os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
+    data = model_find_object(standards_data['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
-      data = model_find_object($os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
+      data = model_find_object(standards_data['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
       unless data
         return construction_set
       end
@@ -1988,7 +1924,7 @@ class StandardsModel
   #   the minimum_capacity and maximum_capacity values.
   # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
   # @example Find all the schedule rules that match the name
-  #   rules = model_find_objects(self, $os_standards['schedules'], {'name'=>schedule_name})
+  #   rules = model_find_objects(self, standards_data['schedules'], {'name'=>schedule_name})
   #   if rules.size == 0
   #     OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false #TODO change to return empty optional schedule:ruleset?
@@ -2254,7 +2190,7 @@ class StandardsModel
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding schedule: #{schedule_name}")
 
     # Find all the schedule rules that match the name
-    rules = model_find_objects($os_standards['schedules'], 'name' => schedule_name)
+    rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
     if rules.size.zero?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
       return false # TODO: change to return empty optional schedule:ruleset?
@@ -2363,7 +2299,7 @@ class StandardsModel
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding material: #{material_name}")
 
     # Get the object data
-    data = model_find_object($os_standards['materials'], 'name' => material_name)
+    data = model_find_object(standards_data['materials'], 'name' => material_name)
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
       return false # TODO: change to return empty optional material
@@ -2464,7 +2400,7 @@ class StandardsModel
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding construction: #{construction_name}")
 
     # Get the object data
-    data = model_find_object($os_standards['constructions'], 'name' => construction_name)
+    data = model_find_object(standards_data['constructions'], 'name' => construction_name)
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for construction: #{construction_name}, will not be created.")
       return OpenStudio::Model::OptionalConstruction.new
@@ -2570,7 +2506,7 @@ class StandardsModel
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = model_find_object($os_standards['construction_properties'], 'template' => instvartemplate,
+    props = model_find_object(standards_data['construction_properties'], 'template' => instvartemplate,
                               'climate_zone_set' => climate_zone_set,
                               'intended_surface_type' => intended_surface_type,
                               'standards_construction_type' => standards_construction_type,
@@ -2616,12 +2552,12 @@ class StandardsModel
 
     # Get the object data
 
-    data = model_find_object($os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
+    data = model_find_object(standards_data['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
-      data = model_find_object($os_standards['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
+      data = model_find_object(standards_data['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
       unless data
         # if nothing matches say that we could not find it.
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{instvartemplate}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in $os_standards['construction_sets']")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{instvartemplate}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']")
         return construction_set
       end
     end
@@ -2791,10 +2727,10 @@ class StandardsModel
 
     success = false
 
-    curve_biquadratics = $os_standards['curve_biquadratics']
-    curve_quadratics = $os_standards['curve_quadratics']
-    curve_bicubics = $os_standards['curve_bicubics']
-    curve_cubics = $os_standards['curve_cubics']
+    curve_biquadratics = standards_data['curve_biquadratics']
+    curve_quadratics = standards_data['curve_quadratics']
+    curve_bicubics = standards_data['curve_bicubics']
+    curve_cubics = standards_data['curve_cubics']
 
     # Make biquadratic curves
     curve_data = model_find_object(curve_biquadratics, 'name' => curve_name)
@@ -3519,7 +3455,7 @@ class StandardsModel
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = model_find_object($os_standards['construction_properties'], search_criteria)
+    construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
 
     return construction_properties
   end
@@ -4096,7 +4032,7 @@ class StandardsModel
     result = nil
 
     possible_climate_zone_sets = []
-    $os_standards['climate_zone_sets'].each do |climate_zone_set|
+    standards_data['climate_zone_sets'].each do |climate_zone_set|
       if climate_zone_set['climate_zones'].include?(clim)
         possible_climate_zone_sets << climate_zone_set['name']
       end
@@ -4147,7 +4083,7 @@ class StandardsModel
               'space_type' => space.spaceType.get.standardsSpaceType.get
           }
           # lookup space type properties
-          space_type_properties = model_find_object($os_standards['space_types'], search_criteria)
+          space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
           if space_type_properties.nil?
             error_string << "Could not find spacetype of criteria : #{search_criteria}. Please ensure you have a valid standardSpaceType and stantdardBuildingType defined.\n"
             space_type_properties = {}

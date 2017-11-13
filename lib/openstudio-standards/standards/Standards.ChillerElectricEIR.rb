@@ -75,7 +75,7 @@ class StandardsModel
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     capacity_tons = OpenStudio.convert(chiller_electric_eir_find_capacity(chiller_electric_eir), 'W', 'ton').get 
-    chlr_props = model_find_object($os_standards['chillers'], search_criteria, capacity_tons, Date.today)
+    chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
 
     # lookup the efficiency value
     kw_per_ton = nil
@@ -94,7 +94,7 @@ class StandardsModel
   #
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
-    chillers = $os_standards['chillers']
+    chillers = standards_data['chillers']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
