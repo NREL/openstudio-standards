@@ -4147,7 +4147,7 @@ class StandardsModel
               'space_type' => space.spaceType.get.standardsSpaceType.get
           }
           # lookup space type properties
-          space_type_properties = @model.find_object($os_standards['space_types'], search_criteria)
+          space_type_properties = model_find_object($os_standards['space_types'], search_criteria)
           if space_type_properties.nil?
             error_string << "Could not find spacetype of criteria : #{search_criteria}. Please ensure you have a valid standardSpaceType and stantdardBuildingType defined.\n"
             space_type_properties = {}
