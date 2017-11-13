@@ -5,6 +5,7 @@ class TestChillerElectricEir < Minitest::Test
   def test_chiller_electric_eir
 
     template = '90.1-2013'
+    standard = StandardsModel.get_standard_model(template)
 
     # make a model
     model = OpenStudio::Model::Model.new
@@ -17,7 +18,7 @@ class TestChillerElectricEir < Minitest::Test
     chiller.setName("#{target_cap_tons} ton WithoutCondenser Chiller")
 
     # run standard_minimum_cop
-    min_full_load_cop = chiller.standard_minimum_full_load_efficiency(template)
+    min_full_load_cop = standard.chiller_electric_eir_standard_minimum_full_load_efficiency(chiller)
 
     # Minimum kW/ton = 1.188
     correct_kw_per_ton = 1.188

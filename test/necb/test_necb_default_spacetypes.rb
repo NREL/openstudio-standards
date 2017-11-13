@@ -18,7 +18,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
     #Create only above ground geometry (Used for infiltration tests) 
     length = 100.0; width = 100.0 ; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
     BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
- 
+    standard = StandardsModel.get_standard_model('NECB 2011')
 
     header_output = ""
     output = ""
@@ -29,15 +29,15 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         "template" => template,
       }
       # lookup space type properties
-      @model.find_objects($os_standards["space_types"], search_criteria).each do |space_type_properties|
+      standard.model_find_objects($os_standards["space_types"], search_criteria).each do |space_type_properties|
         header_output = ""
         # Create a space type
         st = OpenStudio::Model::SpaceType.new(@model)
         st.setStandardsBuildingType(space_type_properties['building_type'])
         st.setStandardsSpaceType(space_type_properties['space_type'])
         st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
-        st.apply_rendering_color(template)
-        @model.add_loads(template)
+        standard.space_type_apply_rendering_color(st)
+        standard.model_add_loads(@model)
   
         #Set all spaces to spacetype
         @model.getSpaces.each do |space|
@@ -45,7 +45,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         end
           
         #Add Infiltration rates to the space objects themselves. 
-        @model.apply_infiltration_standard(template)
+        standard.model_apply_infiltration_standard(@model)
           
         #Get handle for space. 
         space = @model.getSpaces[0]
@@ -118,7 +118,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         shw__schedule = ""
         area_per_occ = 0.0
         area_per_occ = total_occ_dens[0] unless total_occ_dens[0].nil?
-        water_fixture = @model.add_swh_end_uses_by_space(st.standardsBuildingType.get, template, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
+        water_fixture = standard.model_add_swh_end_uses_by_space(@model, st.standardsBuildingType.get, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
         if water_fixture.nil?
           shw_watts_per_person = 0.0
           shw__fraction_schedule = 0.0

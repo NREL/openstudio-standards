@@ -1,11 +1,6 @@
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
-
-
-
-
-
 #LargeOffice
 class TestNECBLargeOffice < CreateDOEPrototypeBuildingTest
   building_type = 'LargeOffice'
@@ -18,7 +13,7 @@ class TestNECBLargeOffice < CreateDOEPrototypeBuildingTest
   model = NECB_2011.new()
   model.load_building_type_methods(building_type, template, climate_zone)
   model_add_design_days_and_weather_file(model,  climate_zone, epw_file)
-  model_add_ground_temperatures(model, building_type, climate_zone, template)
+  model_add_ground_temperatures(model, building_type, climate_zone)
   model.check_weather_file()
 
   puts JSON.pretty_generate($os_standards["necb_fdwr"])

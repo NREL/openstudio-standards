@@ -16,6 +16,9 @@ class TestEffectiveNumStories < Minitest::Test
     model = translator.loadModel(path)
     model = model.get
 
+    template = '90.1-2010'
+    standard = StandardsModel.get_standard_model(template)
+    
     test_story_a = nil
     test_story_b = nil
     model.getBuildingStorys.each do |story|
@@ -27,7 +30,7 @@ class TestEffectiveNumStories < Minitest::Test
     end
 
     # create story hash
-    story_hash = model.create_story_hash
+    story_hash = standard.model_create_story_hash(model) 
 
     # check recommendation
     assert(story_hash.size == 5)
@@ -47,8 +50,11 @@ class TestEffectiveNumStories < Minitest::Test
     model = translator.loadModel(path)
     model = model.get
 
+    template = '90.1-2010'
+    standard = StandardsModel.get_standard_model(template)
+    
     # create story hash
-    effective_num_stories = model.effective_num_stories
+    effective_num_stories = standard.model_effective_num_stories(model)
 
     # check recommendation
     assert(effective_num_stories[:below_grade] == 1)

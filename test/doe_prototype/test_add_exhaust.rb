@@ -13,12 +13,13 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
+    standard = StandardsModel.get_standard_model(template)
 
     zone_exhaust_fans = {}
 
     # loop through thermal zones and add exhaust where needed
     model.getThermalZones.each do |thermal_zone|
-      zone_exhaust_hash = thermal_zone.add_exhaust(template)
+      zone_exhaust_hash = standard.thermal_zone_add_exhaust(thermal_zone, {})
 
       # pouplate zone_exhaust_fans
       zone_exhaust_fans.merge!(zone_exhaust_hash)
@@ -49,9 +50,10 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
+    standard = StandardsModel.get_standard_model(template)
 
     # add exhaust
-    zone_exhaust_fans = model.add_exhaust(template,"None")
+    zone_exhaust_fans = standard.model_add_exhaust(model, "None")
 
     #zone_exhaust_fans.each do |zone_exhaust_fan,hash|
     #  puts zone_exhaust_fan
@@ -72,9 +74,10 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
+    standard = StandardsModel.get_standard_model(template)
 
     # add exhaust
-    zone_exhaust_fans = model.add_exhaust(template,"Adjacent")
+    zone_exhaust_fans = standard.model_add_exhaust(model, "Adjacent")
 
     zone_exhaust_fans.each do |zone_exhaust_fan,hash|
 
@@ -107,9 +110,10 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
+    standard = StandardsModel.get_standard_model(template)
 
     # add exhaust
-    zone_exhaust_fans = model.add_exhaust(template,"Adjacent")
+    zone_exhaust_fans = standard.model_add_exhaust(model, "Adjacent")
 
     zone_exhaust_fans.each do |zone_exhaust_fan,hash|
 
@@ -135,9 +139,10 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
+    standard = StandardsModel.get_standard_model(template)
 
     # add exhaust
-    zone_exhaust_fans = model.add_exhaust(template,"Largest Zone")
+    zone_exhaust_fans = standard.model_add_exhaust(model, "Largest Zone")
 
     zone_exhaust_fans.each do |zone_exhaust_fan,hash|
 
@@ -174,9 +179,10 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
+    standard = StandardsModel.get_standard_model(template)
 
     # add exhaust
-    zone_exhaust_fans = model.add_exhaust(template,"Largest Zone")
+    zone_exhaust_fans = standard.model_add_exhaust(model, "Largest Zone")
 
     #zone_exhaust_fans.each do |zone_exhaust_fan,hash|
     #  puts zone_exhaust_fan
@@ -198,9 +204,12 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = '90.1-2010'
+    standard = StandardsModel.get_standard_model(template)
 
     # add exhaust
-    zone_exhaust_fans = model.add_exhaust(template,"Largest Zone")
+    zone_exhaust_fans = standard.model_add_exhaust(model, "Largest Zone")
+    zone_exhaust_fans = standard.model_add_exhaust(model, "Largest Zone")
+    standard = StandardsModel.get_standard_model(template)
 
     puts"hellotest"
     puts zone_exhaust_fans

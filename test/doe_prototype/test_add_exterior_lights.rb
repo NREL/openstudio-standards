@@ -13,10 +13,11 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2013'
+    standard = StandardsModel.get_standard_model(template)
     exterior_lighting_zone_number = 3
 
     # add lights
-    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number)
+    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number)
 
     # check results
     assert(exterior_lights.size == 4)
@@ -39,10 +40,11 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2013'
+    standard = StandardsModel.get_standard_model(template)
     exterior_lighting_zone_number = 3
 
     # add lights
-    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number,1.0,true)
+    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number,1.0,true)
 
     # check results
     assert(exterior_lights.size == 5)
@@ -65,10 +67,11 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2004'
+    standard = StandardsModel.get_standard_model(template)
     exterior_lighting_zone_number = 3
 
     # add lights
-    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number,1.0,true)
+    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number,1.0,true)
 
     # check results
     assert(exterior_lights.size == 5)
@@ -91,10 +94,11 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = 'DOE Ref 1980-2004'
+    standard = StandardsModel.get_standard_model(template)
     exterior_lighting_zone_number = 3
 
     # add lights
-    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number,1.0,true)
+    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number,1.0,true)
 
     # check results
     assert(exterior_lights.size == 5)
@@ -117,10 +121,11 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2004'
+    standard = StandardsModel.get_standard_model(template)
     exterior_lighting_zone_number = 4
 
     # add lights
-    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number)
+    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number)
     #exterior_lights.each do |key,light|
     #  puts light
     #  puts light.exteriorLightsDefinition
@@ -152,10 +157,11 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = 'DOE Ref Pre-1980'
+    standard = StandardsModel.get_standard_model(template)
     exterior_lighting_zone_number = 4
 
     # add lights
-    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number)
+    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number)
     #exterior_lights.each do |key,light|
     #  puts light
     #  puts light.exteriorLightsDefinition
@@ -185,10 +191,11 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = 'DOE Ref 1980-2004'
+    standard = StandardsModel.get_standard_model(template)
     exterior_lighting_zone_number = 2
 
     # add lights
-    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number)
+    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number)
     exterior_lights.each do |key,light|
     #  puts light
     #  puts light.exteriorLightsDefinition
@@ -220,10 +227,11 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2010'
+    standard = StandardsModel.get_standard_model(template)
     exterior_lighting_zone_number = 1
 
     # add lights
-    exterior_lights = model.add_typical_exterior_lights(template,exterior_lighting_zone_number)
+    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number)
     exterior_lights.each do |key,light|
     #  puts light
     #  puts light.exteriorLightsDefinition

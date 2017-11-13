@@ -123,9 +123,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       model = nil
             
       # Create the model, if requested
-      if create_models  
-        model = OpenStudio::Model::Model.new
-        model.create_prototype_building(building_type,template,climate_zone,epw_file,run_dir)  
+      if create_models
+        prototype_creator = StandardsModel.get_standard_model("#{template}_#{building_type}")
+        model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
         output_variable_array =
           [
           "Facility Total Electric Demand Power",
@@ -167,7 +167,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             
         # Load the model from disk if not already in memory
         if model.nil?
-          model = safe_load_model(osm_path_string)
+          model = standard.safe_load_model(osm_path_string)
           forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
           idf = forward_translator.translateModel(model)
           idf.save(idf_path,true)
@@ -688,13 +688,6 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     csv_file_simple.close
     #### Return the list of failures
     return failures
-  end
-
-  def CreateDOEPrototypeBuildingTest.archive(bldg_types, vintages, climate_zones, file_ext="")
-    
-    
-    
-    
   end
 
 end

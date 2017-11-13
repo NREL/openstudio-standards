@@ -17,6 +17,7 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
     #report variables. 
     header_output = ""
     results_array = []
+    standard = StandardsModel.get_standard_model('NECB 2011')
     
     #Create new model for testing. 
     empty_model = OpenStudio::Model::Model.new
@@ -30,13 +31,13 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
         model = OpenStudio::Model::Model.new
         template = 'NECB 2011'
         #Set weather file
-        model_add_design_days_and_weather_file(model, template, File.basename('CAN_BC_Vancouver.718920_CWEC.epw'))
-        model_add_ground_temperatures(model, 'HighriseApartment', 'NECB HDD Method', template)
+        standard.model_add_design_days_and_weather_file(model, template, File.basename('CAN_BC_Vancouver.718920_CWEC.epw'))
+        standard.model_add_ground_temperatures(model, 'HighriseApartment', 'NECB HDD Method')
         #Create Floors
         (1..number_of_floors).each {|floor| OpenStudio::Model::BuildingStory.new(model)}
         
         #Go Through each space type. with a counter
-        empty_model.find_objects($os_standards["space_types"], { "template" => 'NECB 2011'}).each_with_index do |space_type_properties , index|
+        standard.model_find_objects($os_standards["space_types"], { "template" => 'NECB 2011'}).each_with_index do |space_type_properties , index|
 
           # Create a space type
           #puts "Testing spacetype #{space_type_properties["building_type"]}-#{space_type_properties["space_type"]}"
@@ -45,17 +46,17 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
           st.setStandardsSpaceType(space_type_properties['space_type'])
           st_name = "#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}"
           st.setName(st_name)
-          st.apply_rendering_color(template)
+          standard.space_type_apply_rendering_color(st)
           
           #create space and add the space type to it. 
           space = OpenStudio::Model::Space.new(model)
           space.setSpaceType(st)
 
         end
-        model.add_loads(template)
+        standard.model_add_loads(model)
       
         #Assign Thermal zone and thermostats
-        model.create_thermal_zones(nil, nil, nil)
+        standard.model_create_thermal_zones(model, nil)
 
         #Run method to test. 
         schedule_type_array , space_zoning_data_array = BTAP::Compliance::NECB2011::necb_spacetype_system_selection(model,heatingDesignLoad,coolingDesignLoad)

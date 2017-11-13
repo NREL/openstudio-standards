@@ -13,9 +13,10 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = 'DOE Ref 1980-2004'
+    standard = StandardsModel.get_standard_model(template)
 
     # add_typical_swh
-    typical_swh = model.add_typical_swh(template)
+    typical_swh = standard.model_add_typical_swh(model)
 
     # check the capacity and volume of the water heaters against Table A.1. Water Heating Equipment in PrototypeModelEnhancements_2014_0.pdf
     non_booster_capacity = 0.0 # combine kitchen and shared
@@ -86,9 +87,10 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = '90.1-2010'
+    standard = StandardsModel.get_standard_model(template)
 
     # add_typical_swh
-    typical_swh = model.add_typical_swh(template)
+    typical_swh = standard.model_add_typical_swh(model)
 
     # check the capacity and volume of the water heaters against Table A.1. Water Heating Equipment in PrototypeModelEnhancements_2014_0.pdf
     non_booster_capacity = 0.0 # combine kitchen and shared
@@ -166,9 +168,10 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = '90.1-2013'
+    standard = StandardsModel.get_standard_model(template)
 
     # add_typical_swh
-    typical_swh = model.add_typical_swh(template)
+    typical_swh = standard.model_add_typical_swh(model)
     typical_swh.each do |loop|
       puts loop.name
     end
@@ -189,13 +192,14 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = '90.1-2004'
+    standard = StandardsModel.get_standard_model(template)
 
     model.getPlantLoops.each do |loop|
       loop.remove
     end
 
     # add_typical_swh
-    typical_swh = model.add_typical_swh(template)
+    typical_swh = standard.model_add_typical_swh(model)
     typical_swh.each do |loop|
       puts loop.name
     end
@@ -216,13 +220,14 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = '90.1-2010'
+    standard = StandardsModel.get_standard_model(template)
 
     model.getPlantLoops.each do |loop|
       loop.remove
     end
 
     # add_typical_swh
-    typical_swh = model.add_typical_swh(template)
+    typical_swh = standard.model_add_typical_swh(model)
     typical_swh.each do |loop|
       puts loop.name
     end

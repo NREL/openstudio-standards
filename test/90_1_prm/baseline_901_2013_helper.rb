@@ -65,6 +65,8 @@ module Baseline9012013
   # @author Eric Ringold, Ambient Energy
   def check_sat_delta(model)
 
+    standard = StandardsModel.get_standard_model('90.1-2013')
+
     delta_good = []
     cool_delta_bad = []
     heat_delta_bad = []
@@ -79,8 +81,8 @@ module Baseline9012013
         cooling_sch = tstat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
         
         # get heating and cooling setpoints 
-        heating_min_max = heating_sch.annual_min_max_value
-        cooling_min_max = cooling_sch.annual_min_max_value
+        heating_min_max = standard.schedule_ruleset_annual_min_max_value(heating_sch)
+        cooling_min_max = standard.schedule_ruleset_annual_min_max_value(cooling_sch)
         
         heat_set_t = OpenStudio.convert(heating_min_max['max'],"C","F").get
         cool_set_t = OpenStudio.convert(cooling_min_max['min'],"C","F").get
@@ -158,7 +160,9 @@ module Baseline9012013
   # or accreditation standards, whichever is larger.
   # @author Eric Ringold, Ambient Energy
   def check_min_vav_setpoints(model)
-  
+
+    standard = StandardsModel.get_standard_model('90.1-2013')
+
     min_good = []
     min_bad = []
     
@@ -183,7 +187,7 @@ module Baseline9012013
           end
 
           #get outdoor air rate from DSOA
-          min_oa_flow = zone.outdoor_airflow_rate
+          min_oa_flow = standard.thermal_zone_outdoor_airflow_rate(zone)
           
           # larger of fixed 20% fraction and fraction based
           # on minimum OA requirement
@@ -375,11 +379,11 @@ module Baseline9012013
   # shall be modeled as 100% outdoor air.  
   # @author Eric Ringold, Ambient Energy
   def check_ventilation_rates(model, proposed_model)
-    
+    standard = StandardsModel.get_standard_model('90.1-2013')
     # get proposed ventilation from designSpecificationOutdoorAir
     zone_oa = {}
     proposed_model.getThermalZones.sort.each do |zone|
-      oa_rate = zone.outdoor_airflow_rate
+      oa_rate = standard.thermal_zone_outdoor_airflow_rate(zone)
       zone_oa["#{zone.name.get}"] = oa_rate
     end
 
@@ -392,7 +396,7 @@ module Baseline9012013
       if bzone.is_initialized
         bzone = bzone.get
         #puts bzone.name
-        oa_rate = bzone.outdoor_airflow_rate
+        oa_rate = standard.thermal_zone_outdoor_airflow_rate(bzone)
         # compare baseline and proposed rates
         if (oa_rate - zone_oa[k]).abs <= 0.0001 
           #puts "#{bzone.name} MEETS Requirement with Prop OA: #{zone_oa[k]}, Base OA: #{oa_rate}"
@@ -667,7 +671,7 @@ module Baseline9012013
 
   # @author Matt Steen, Ambient Energy
   def check_plant_controls(base_model, prop_model)
-
+    standard = StandardsModel.get_standard_model('90.1-2013')
     prm_maj_sec = 'G3.1.3 System-Specific Baseline HVAC System Requirements'
 
     # get model objects
@@ -691,7 +695,7 @@ module Baseline9012013
         case loop_type
         when 'Heating'
           # Don't check Service Water Heating loops
-          next if pl.swh_loop?
+          next if standard.plant_loop_swh_loop?(pl)
         
           # G3.1.3.3 Hot-Water Supply Temperature (Systems 1, 5, 7, and 12)
           prm_min_sec = 'Hot-Water Supply Temperature'

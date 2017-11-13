@@ -45,9 +45,15 @@ rescue
   puts 'Using installed openstudio-standards gem.' 
 end
 
+# Format test output differently depending on whether running
+# on CircleCI, RubyMine, or terminal
 if ENV['CI'] == 'true'
   puts "Saving test results to #{Minitest::Ci.report_dir}"
 else
-  Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new, Minitest::Reporters::RubyMineReporter.new]
+  if ENV["RM_INFO"]
+    Minitest::Reporters.use! [Minitest::Reporters::RubyMineReporter.new]
+  else
+    Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
+  end
 end
 

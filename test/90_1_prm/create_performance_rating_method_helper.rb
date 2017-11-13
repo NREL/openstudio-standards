@@ -135,7 +135,8 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
 
   # Create the baseline model from the
   # supplied proposed test model
-  model.create_prm_baseline_building(building_type,standard,climate_zone,custom,osm_directory,debug)
+  standard = StandardsModel.get_standard_model(standard)
+  standard.model_create_prm_baseline_building(model, building_type, climate_zone, custom, osm_directory, debug) 
 
   # Show the output messages
   errs = []
@@ -179,7 +180,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   
   # Run a sizing run for the baseline model
   # so that the sql matches the actual equipment names
-  if model_run_sizing_run(model, "#{osm_directory}/SRB") == false
+  if standard.model_run_sizing_run(model, "#{osm_directory}/SRB") == false
     return false
   end
   

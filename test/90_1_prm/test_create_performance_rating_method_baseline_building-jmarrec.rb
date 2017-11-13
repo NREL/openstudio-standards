@@ -18,13 +18,13 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
     sizing_run_dir = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}-#{custom}"
 
     # Run sizing run with the HVAC equipment
-    if model_run_sizing_run(model, "#{sizing_run_dir}/SizingRunFinalCheckOnly") == false
+    if standard.model_run_sizing_run(model, "#{sizing_run_dir}/SizingRunFinalCheckOnly") == false
       return false
     end
 
     model.getPlantLoops.each do |loop|
 
-      total_rated_w_per_gpm = loop.total_rated_w_per_gpm
+      plant_loop_total_rated_w_per_gpm(plant_loop)  = loop.total_rated_w_per_gpm
 
       loop_type = loop.sizingPlant.loopType
 
@@ -210,7 +210,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     boundary_cond = 'Outdoors'
     surf_type = 'ExteriorWall'
-    model.find_constructions(boundary_cond, surf_type)
+    model_find_constructions(model, boundary_cond, surf_type)
     # Minitest::UnexpectedError: ArgumentError: comparison of OpenStudio::Model::OptionalConstructionBase with OpenStudio::Model::OptionalConstructionBase failed
 
 

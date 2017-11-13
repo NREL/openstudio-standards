@@ -11,12 +11,16 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
     # make an empty model
     model = OpenStudio::Model::Model.new
 
+    
+    template = '90.1-2010'
+    standard = StandardsModel.get_standard_model(template)
+
     # set climate zone and building type
     model.getBuilding.setStandardsBuildingType(building_types.first)
     model.getClimateZones.setClimateZone("ASHRAE",climate_zones.first)
 
     # get climate zone
-    data = model.get_building_climate_zone_and_building_type(remap_office = true)
+    data = standard.model_get_building_climate_zone_and_building_type(model, remap_office = true)
     building_type = data[:building_type]
     climate_zone = data[:climate_zone]
 

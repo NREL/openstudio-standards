@@ -12,13 +12,15 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
     # make an empty model
     model = OpenStudio::Model::Model.new
 
+    standard = StandardsModel.get_standard_model(template)
+    
     # create space type and set standards info
     space_type = OpenStudio::Model::SpaceType.new(model)
     space_type.setStandardsBuildingType(standard_building_type)
     space_type.setStandardsSpaceType(standard_space_type)
 
     # lookup standards data for space type
-    data = space_type.get_standards_data(template)
+    data = standard.space_type_get_standards_data(space_type)
 
     # gather specific internal load values for testing
     lighting_per_area = data['lighting_per_area']

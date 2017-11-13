@@ -15,7 +15,8 @@ class HVACEfficienciesTest < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     boiler_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_boiler_efficiencies_expected_results.csv')
-
+    standard = StandardsModel.get_standard_model('NECB 2011')
+    
     # Initialize hashes for storing expected boiler efficiency data from file
     fuel_type_min_cap = {}
     fuel_type_min_cap['Electricity'] = []
@@ -119,10 +120,10 @@ class HVACEfficienciesTest < MiniTest::Test
       for int in 0..fuel_type_cap[ifuel].size - 1
         output_line_text += "#{ifuel},#{fuel_type_min_cap[ifuel][int]},#{fuel_type_max_cap[ifuel][int]},"
         if efficiency_type[ifuel][int] == 'Annual Fuel Utilization Efficiency (AFUE)'
-          actual_boiler_eff[ifuel][int] = (thermal_eff_to_afue(actual_boiler_thermal_eff[ifuel][int]) + 0.0001).round(3)
+          actual_boiler_eff[ifuel][int] = (standard.thermal_eff_to_afue(actual_boiler_thermal_eff[ifuel][int]) + 0.0001).round(3)
           output_line_text += "#{actual_boiler_eff[ifuel][int]},,\n"
         elsif efficiency_type[ifuel][int] == 'Combustion Efficiency'
-          actual_boiler_eff[ifuel][int] = (thermal_eff_to_comb_eff(actual_boiler_thermal_eff[ifuel][int]) + 0.0001).round(3)
+          actual_boiler_eff[ifuel][int] = (standard.thermal_eff_to_comb_eff(actual_boiler_thermal_eff[ifuel][int]) + 0.0001).round(3)
           output_line_text += ",,#{actual_boiler_eff[ifuel][int]}\n"
         elsif efficiency_type[ifuel][int] == 'Thermal Efficiency'
           actual_boiler_eff[ifuel][int] = (actual_boiler_thermal_eff[ifuel][int] + 0.0001).round(3)
@@ -300,22 +301,15 @@ class HVACEfficienciesTest < MiniTest::Test
       building_vintage = 'NECB 2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
-      # building_vintage = '90.1-2013'
-
-      # Load the Openstudio_Standards JSON files
-      # model.load_openstudio_standards_json
-
-      # Assign the standards to the model
-      # model.template = building_vintage
-
+      standard = StandardsModel.get_standard_model(building_vintage)
+      
       # Make a directory to run the sizing run in
-
       unless Dir.exist? sizing_dir
         FileUtils.mkdir_p(sizing_dir)
       end
 
       # Perform a sizing run
-      if model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
+      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
         puts "could not find sizing run #{sizing_dir}/SizingRun1"
         raise("could not find sizing run #{sizing_dir}/SizingRun1")
         return false
@@ -326,9 +320,9 @@ class HVACEfficienciesTest < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
-      model.apply_prototype_hvac_assumptions(building_type, building_vintage, climate_zone)
+      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
       # Apply the HVAC efficiency standard
-      model.apply_hvac_efficiency_standard(building_vintage, climate_zone)
+      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")

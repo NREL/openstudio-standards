@@ -401,22 +401,14 @@ class FullHVACTest < MiniTest::Test
       building_vintage = 'NECB 2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
-      #building_vintage = '90.1-2013'
-   
-#      # Load the Openstudio_Standards JSON files
-#      model.load_openstudio_standards_json
-
-#      # Assign the standards to the model
-#      model.template = building_vintage    
-    
-      # Make a directory to run the sizing run in
+      standard = StandardsModel.get_standard_model(building_vintage)
 
       if !Dir.exists?(sizing_dir)
         FileUtils.mkdir_p(sizing_dir)
       end
 
       # Perform a sizing run
-      if model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
+      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
         puts "could not find sizing run #{sizing_dir}/SizingRun1"
         raise("could not find sizing run #{sizing_dir}/SizingRun1")
         return false

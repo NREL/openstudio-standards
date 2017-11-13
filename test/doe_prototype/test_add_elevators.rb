@@ -13,7 +13,8 @@ class TestAddElevators < Minitest::Test
 
     # create story hash
     template = '90.1-2013'
-    elevators = model.add_elevators(template)
+    standard = StandardsModel.get_standard_model(template)
+    elevators = standard.model_add_elevators(model)
 
     puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
     puts elevators
@@ -33,7 +34,8 @@ class TestAddElevators < Minitest::Test
 
     # create story hash
     template = '90.1-2004'
-    elevators = model.add_elevators(template)
+    standard = StandardsModel.get_standard_model(template)
+    elevators = standard.model_add_elevators(model)
 
     puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
     puts elevators
@@ -53,7 +55,8 @@ class TestAddElevators < Minitest::Test
 
     # create story hash
     template = '90.1-2010'
-    elevators = model.add_elevators(template)
+    standard = StandardsModel.get_standard_model(template)
+    elevators = standard.model_add_elevators(model)
 
     puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
     puts elevators
@@ -73,7 +76,8 @@ class TestAddElevators < Minitest::Test
 
     # create story hash
     template = '90.1-2013'
-    elevators = model.add_elevators(template)
+    standard = StandardsModel.get_standard_model(template)
+    elevators = standard.model_add_elevators(model)
 
     puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
     puts elevators
@@ -93,7 +97,8 @@ class TestAddElevators < Minitest::Test
 
     # create story hash
     template = 'DOE Ref Pre-1980'
-    elevators = model.add_elevators(template)
+    standard = StandardsModel.get_standard_model(template)
+    elevators = standard.model_add_elevators(model)
 
     puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
     puts elevators
@@ -114,7 +119,8 @@ class TestAddElevators < Minitest::Test
 
     # create story hash
     template = '90.1-2010'
-    elevators = model.add_elevators(template)
+    standard = StandardsModel.get_standard_model(template)
+    elevators = standard.model_add_elevators(model)
 
     puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
     puts elevators
@@ -134,7 +140,8 @@ class TestAddElevators < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
-    elevators = model.add_elevators(template)
+    standard = StandardsModel.get_standard_model(template)
+    elevators = standard.model_add_elevators(model)
 
     puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
     puts elevators
@@ -154,7 +161,8 @@ class TestAddElevators < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
-    elevators = model.add_elevators(template)
+    standard = StandardsModel.get_standard_model(template)
+    elevators = standard.model_add_elevators(model)
 
     puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
     puts elevators
@@ -174,7 +182,8 @@ class TestAddElevators < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
-    elevators = model.add_elevators(template)
+    standard = StandardsModel.get_standard_model(template)
+    elevators = standard.model_add_elevators(model)
 
     puts "Building floor area is #{OpenStudio.convert(model.getBuilding.floorArea,'m^2','ft^2')}"
     puts elevators

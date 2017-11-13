@@ -85,6 +85,7 @@ class TestAddHVACSystems < Minitest::Test
     ]
 
     template = '90.1-2013'
+    standard = StandardsModel.get_standard_model(template)
 
     # Add each HVAC system to the test model
     # and run a sizing run to ensure it simulates.
@@ -104,26 +105,26 @@ class TestAddHVACSystems < Minitest::Test
       if File.exist?("#{model_dir}/final.osm")
 
         model = OpenStudio::Model::Model.new
-        sql = safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
+        sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
         model.setSqlFile(sql)
 
       # If not created, make and run annual simulation
       else
 
         # Load the test model
-        model = safe_load_model("#{File.dirname(__FILE__)}/models/basic_2_story_office_no_hvac.osm")
+        model = standard.safe_load_model("#{File.dirname(__FILE__)}/models/basic_2_story_office_no_hvac.osm")
 
         # Assign a weather file
-        model_add_design_days_and_weather_file(model, 'ASHRAE 169-2006-7A', '')
-        model_add_ground_temperatures(model, 'MediumOffice', template, 'ASHRAE 169-2006-7A')
+        standard.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2006-7A', '')
+        standard.model_add_ground_temperatures(model, 'MediumOffice', 'ASHRAE 169-2006-7A')
         # Add the HVAC
-        model.add_hvac_system(template, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, model.getThermalZones)
+        standard.model_add_hvac_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, model.getThermalZones)
 
         # Save the model
         model.save("#{model_dir}/final.osm", true)
 
         # Run the sizing run
-        annual_run_success = model_run_simulation_and_log_errors(model, "#{model_dir}/AR")
+        annual_run_success = standard.model_run_simulation_and_log_errors(model, "#{model_dir}/AR")
 
         # Log the errors
         log_messages_to_file("#{model_dir}/openstudio-standards.log", debug=false)
@@ -133,10 +134,10 @@ class TestAddHVACSystems < Minitest::Test
       end
 
       # Check the conditioned floor area
-      errs << "For #{type_desc} there was no conditioned area." if model.net_conditioned_floor_area == 0
+      errs << "For #{type_desc} there was no conditioned area." if standard.model_net_conditioned_floor_area(model) == 0
 
       # Check the unmet hours
-      unmet_hrs = model.annual_occupied_unmet_hours
+      unmet_hrs = standard.model_annual_occupied_unmet_hours(model)
       max_unmet_hrs = 550
       if unmet_hrs
         errs << "For #{type_desc} there were #{unmet_hrs} unmet occupied heating and cooling hours, more than the limit of #{max_unmet_hrs}." if unmet_hrs > max_unmet_hrs

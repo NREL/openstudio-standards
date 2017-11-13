@@ -1,5 +1,5 @@
 
-def find_object(hash_of_objects, search_criteria)
+def model_find_object(model, hash_of_objects, search_criteria)
 
   desired_object = nil
   matching_objects = []
@@ -79,7 +79,7 @@ def load_or_create_sql(bldg_type, vintage, climate_zone)
       model = model.get
       
       # Run the sizing run
-      if model_run_sizing_run(model, sizing_run_dir) == false
+      if standard.model_run_sizing_run(model, sizing_run_dir) == false
         errs << "#{bldg_type}-#{vintage}-#{climate_zone} Sizing run to create sql file failed."
         return [nil, errs]
       end
@@ -396,7 +396,7 @@ def compare_properties(property_type, bldg_types, vintages, climate_zones)
           "template" => vintage,
           "climate_zone" => climate_zone
         }
-        legacy_vals = find_object(legacy_data, search_criteria)
+        legacy_vals = model_find_object(model, legacy_data, search_criteria)
         if legacy_vals.nil?
           fails << "Could not find legacy IDF data for #{bldg_type}-#{vintage}-#{climate_zone}"
           next

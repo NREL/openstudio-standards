@@ -5,6 +5,7 @@ class TestCoilDX < Minitest::Test
   def test_coil_cooling_dx_single_speed
 
     template = '90.1-2013'
+    standard = StandardsModel.get_standard_model(template)
 
     # make a model
     model = OpenStudio::Model::Model.new
@@ -16,11 +17,11 @@ class TestCoilDX < Minitest::Test
     coil.setRatedTotalCoolingCapacity(cap_watts)
 
     # run standard_minimum_cop
-    min_cop = coil.standard_minimum_cop(template)
+    min_cop = standard.coil_cooling_dx_single_speed_standard_minimum_cop(coil, template)
 
     # Minimum EER = 11.2
     correct_eer = 11.2
-    correct_min_cop = eer_to_cop(correct_eer, cap_watts)
+    correct_min_cop = standard.eer_to_cop(correct_eer, cap_watts)
     
     # Check the lookup against the truth
     assert_in_delta(min_cop, correct_min_cop, 0.1, "Expected #{correct_eer} EER AKA #{correct_min_cop.round(2)} COP.  Got #{min_cop} COP instead.")
@@ -30,6 +31,7 @@ class TestCoilDX < Minitest::Test
   def test_coil_cooling_dx_two_speed
 
     template = '90.1-2013'
+    standard = StandardsModel.get_standard_model(template)
 
     # make a model
     model = OpenStudio::Model::Model.new
@@ -41,11 +43,11 @@ class TestCoilDX < Minitest::Test
     coil.setRatedHighSpeedTotalCoolingCapacity(OpenStudio::OptionalDouble.new(cap_watts))
 
     # run standard_minimum_cop
-    min_cop = coil.standard_minimum_cop(template)
+    min_cop = standard.coil_cooling_dx_two_speed_standard_minimum_cop(coil)
 
     # Minimum EER = 11.2
     correct_eer = 11.2
-    correct_min_cop = eer_to_cop(correct_eer, cap_watts)
+    correct_min_cop = standard.eer_to_cop(correct_eer, cap_watts)
     
     # Check the lookup against the truth
     assert_in_delta(min_cop, correct_min_cop, 0.1, "Expected #{correct_eer} EER AKA #{correct_min_cop.round(2)} COP.  Got #{min_cop} COP instead.")
@@ -56,6 +58,7 @@ class TestCoilDX < Minitest::Test
 
   def test_coil_heating_dx_single_speed
     template = '90.1-2013'
+    standard = StandardsModel.get_standard_model(template)
 
     # make a model
     model = OpenStudio::Model::Model.new
@@ -86,11 +89,11 @@ class TestCoilDX < Minitest::Test
                                                                                supplemental_htg_coil)
 
     # run standard_minimum_cop
-    min_cop = htg_coil.standard_minimum_cop(template, true)
+    min_cop = standard.coil_heating_dx_single_speed_standard_minimum_cop(htg_coil, true)
 
     # Minimum COPH = 3.3
     correct_coph = 3.3
-    correct_min_cop = cop_heating_to_cop_heating_no_fan(correct_coph, clg_cap_watts)
+    correct_min_cop = standard.cop_heating_to_cop_heating_no_fan(correct_coph, clg_cap_watts)
     
     # Check the lookup against the truth
     assert_in_delta(min_cop, correct_min_cop, 0.1, "Expected #{correct_coph} COPH AKA #{correct_min_cop.round(2)} COP.  Got #{min_cop} COP instead.")

@@ -15,7 +15,8 @@ class HVACEfficienciesTest < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     heatpump_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_heatpump_efficiencies_expected_results.csv')
-
+    standard = StandardsModel.get_standard_model('NECB 2011')
+    
     # Initialize hashes for storing expected heat pump efficiency data from file
     min_caps = []
     max_caps = []
@@ -92,7 +93,7 @@ class HVACEfficienciesTest < MiniTest::Test
     for int in 0..test_caps.size - 1
       output_line_text += "#{min_caps[int]},#{max_caps[int]},"
       if efficiency_type[int] == 'Energy Efficiency Ratio (EER)'
-        actual_heatpump_eff[int] = (cop_to_eer(actual_heatpump_cop[int].to_f,test_caps[int]) + 0.001).round(1)
+        actual_heatpump_eff[int] = (standard.cop_to_eer(actual_heatpump_cop[int].to_f,test_caps[int]) + 0.001).round(1)
         output_line_text += "#{actual_heatpump_eff[int]}\n"
       end
     end
@@ -205,22 +206,15 @@ class HVACEfficienciesTest < MiniTest::Test
       building_vintage = 'NECB 2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
-      # building_vintage = '90.1-2013'
-
-      # Load the Openstudio_Standards JSON files
-      # model.load_openstudio_standards_json
-
-      # Assign the standards to the model
-      # model.template = building_vintage
-
+      standard = StandardsModel.get_standard_model(building_vintage)
+      
       # Make a directory to run the sizing run in
-
       unless Dir.exist? sizing_dir
         FileUtils.mkdir_p(sizing_dir)
       end
 
       # Perform a sizing run
-      if model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
+      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
         puts "could not find sizing run #{sizing_dir}/SizingRun1"
         raise("could not find sizing run #{sizing_dir}/SizingRun1")
         return false
@@ -231,9 +225,9 @@ class HVACEfficienciesTest < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
-      model.apply_prototype_hvac_assumptions(building_type, building_vintage, climate_zone)
+      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
       # Apply the HVAC efficiency standard
-      model.apply_hvac_efficiency_standard(building_vintage, climate_zone)
+      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")

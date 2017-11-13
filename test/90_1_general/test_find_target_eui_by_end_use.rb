@@ -16,12 +16,14 @@ class TestFindTargetEuiByEndUse < Minitest::Test
     model.getBuilding.setStandardsBuildingType(building_types.first)
     model.getClimateZones.setClimateZone("ASHRAE",climate_zones.first)
 
+    standard = StandardsModel.get_standard_model(templates.first)
+    
     # todo - create space and zone
     # this is needed to break office into small, medium, or large
 
     # use find_target_eui method to lookup and calculate the target EUI by end use
     # this will also test process_results_for_datapoint and find_prototype_floor_area method
-    target_eui_by_end_use = model.find_target_eui_by_end_use(templates.first)
+    target_eui_by_end_use = standard.model_find_target_eui_by_end_use(model)
     target_eui_int_equip = target_eui_by_end_use['Interior Equipment']
 
     puts "target eui for Interior Equipment #{target_eui_int_equip} (GJ/m^2)"

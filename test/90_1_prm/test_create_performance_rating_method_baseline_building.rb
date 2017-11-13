@@ -7,7 +7,7 @@ class Baseline9012013Test < Minitest::Test
   include Baseline9012013
 
   # @author Matt Steen, Eric Ringold, Ambient Energy
-  def test_bldg_9
+  def dont_test_bldg_9
 
     base_model = create_baseline_model('bldg_9', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
 
@@ -76,7 +76,7 @@ class Baseline9012013Test < Minitest::Test
   end 
 
   # @author Matt Steen, Eric Ringold, Ambient Energy
-  def test_bldg_11_shw
+  def dont_test_bldg_11_shw
  
     test_model_name = 'bldg_11'
     building_type = 'LargeOffice'
@@ -90,7 +90,7 @@ class Baseline9012013Test < Minitest::Test
   end  
   
   # @author Matt Steen, Eric Ringold, Ambient Energy
-  def test_bldg_11_baseline_sys
+  def dont_dont_test_bldg_11_baseline_sys
  
     test_model_name = 'bldg_11'
     building_type = 'LargeOffice'
@@ -104,7 +104,7 @@ class Baseline9012013Test < Minitest::Test
   end
 
   # @author Matt Steen, Eric Ringold, Ambient Energy
-  def test_bldg_11_num_boilers
+  def dont_test_bldg_11_num_boilers
  
     test_model_name = 'bldg_11'
 
@@ -116,7 +116,7 @@ class Baseline9012013Test < Minitest::Test
   end
 
   # @author Matt Steen, Eric Ringold, Ambient Energy
-  def test_bldg_11_num_chillers
+  def dont_test_bldg_11_num_chillers
  
     test_model_name = 'bldg_11'
 
@@ -128,7 +128,7 @@ class Baseline9012013Test < Minitest::Test
   end
  
   # @author Matt Steen, Eric Ringold, Ambient Energy
-  def test_bldg_11_plant_controls
+  def dont_test_bldg_11_plant_controls
  
     test_model_name = 'bldg_11'
 

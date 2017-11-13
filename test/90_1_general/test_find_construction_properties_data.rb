@@ -12,6 +12,8 @@ class TestFindConstructionPropertiesData < Minitest::Test
     standards_construction_type = 'SteelFramed'
     test_climate_zone = '3B'
 
+    standard = StandardsModel.get_standard_model(template)
+    
     # make an empty model
     model = OpenStudio::Model::Model.new
 
@@ -25,7 +27,7 @@ class TestFindConstructionPropertiesData < Minitest::Test
     climateZones.setClimateZone("ASHRAE",test_climate_zone)
 
     # lookup standards data for space type
-    data = space_type.get_construction_properties(template,intended_surface_type,standards_construction_type)
+    data = standard.space_type_get_construction_properties(space_type, intended_surface_type,standards_construction_type)
 
     # gather specific internal load values for testing
     u_value = data['assembly_maximum_u_value']

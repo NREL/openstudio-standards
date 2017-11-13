@@ -82,7 +82,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       end
     end
     
-    @model.clear_and_set_example_constructions()
+    standard = StandardsModel.get_standard_model("NECB 2011")
+    standard.model_clear_and_set_example_constructions(@model)
     #Ensure that building is Conditioned add spacetype to each space. 
     
     
@@ -112,40 +113,42 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     building_type = "Office"
     space_type = "WholeBuilding"
     climate_zone = 'NECB HDD Method'
-    space_type_properties = @model.find_object($os_standards["space_types"], { "template" => template, "building_type" =>  building_type , "space_type" => space_type })
+    standard = StandardsModel.get_standard_model(template)
+    
+    space_type_properties = standard.model_find_object($os_standards["space_types"], { "template" => template, "building_type" =>  building_type , "space_type" => space_type })
     
     st = OpenStudio::Model::SpaceType.new(@model)
     st.setStandardsBuildingType(space_type_properties['building_type'])
     st.setStandardsSpaceType(space_type_properties['space_type'])
     st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
-    st.apply_rendering_color(template)
-    @model.add_loads(template)
+    standard.space_type_apply_rendering_color(st)
+    standard.model_add_loads(@model)
     #Now loop through each space and assign the spacetype. 
     @model.getSpaces.each do |space|
       space.setSpaceType(st)
     end
     
     #Create Zones.
-    @model.create_thermal_zones(building_type, template, climate_zone)
+    standard.model_create_thermal_zones(@model)
     
     #Iterate through the weather files. 
     NECB_epw_files_for_cdn_climate_zones.each do |weather_file|
       @hdd = BTAP::Environment::WeatherFile.new(weather_file).hdd18
       #Iterate through the vintage templates 'NECB 2011', etc..
       Templates.each do |template|
-      
+            
         #Add weather file, HDD.
-        model_add_design_days_and_weather_file(model, 'NECB HDD Method', File.basename(weather_file))
-        model_add_ground_temperatures(model, 'HighriseApartment', 'NECB HDD Method', template)
+        standard.model_add_design_days_and_weather_file(@model, 'NECB HDD Method', File.basename(weather_file))
+        standard.model_add_ground_temperatures(@model, 'HighriseApartment', 'NECB HDD Method')
         # Reduce the WWR and SRR, if necessary
-        @model.apply_prm_baseline_window_to_wall_ratio(template,nil)
-        @model.apply_prm_baseline_skylight_to_roof_ratio(template)
+        standard.model_apply_prm_baseline_window_to_wall_ratio(@model,nil)
+        standard.model_apply_prm_baseline_skylight_to_roof_ratio(@model)
         
         # Apply Construction
-        @model.apply_prm_construction_types(template)
+        standard.model_apply_prm_construction_types(@model)
         
         #Add Infiltration rates to the space objects themselves. 
-        @model.apply_infiltration_standard(template)
+        standard.model_apply_infiltration_standard(@model)
         
 
       
@@ -209,7 +212,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
             @output << "NA,"
           else
             #Do some math to determine the effective infiltration rate of the walls and roof only as per NECB. 
-            wall_roof_infiltration_rate  = space.spaceInfiltrationDesignFlowRates[0].flowperExteriorSurfaceArea.get *  space.exteriorArea / space.exterior_wall_and_roof_and_subsurface_area
+            wall_roof_infiltration_rate  = space.spaceInfiltrationDesignFlowRates[0].flowperExteriorSurfaceArea.get *  space.exteriorArea / standard.space_exterior_wall_and_roof_and_subsurface_area(space) 
             #Output effective infiltration rate
             @output << "#{(wall_roof_infiltration_rate * 1000).round(3)},"
           end

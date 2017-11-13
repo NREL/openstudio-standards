@@ -18,6 +18,7 @@ class SHWTests < MiniTest::Test
     CSV.foreach(shw_expected_result_file, headers: true) do |data|
       shw_curve_names << data['Curve Name']
     end
+    standard = StandardsModel.get_standard_model('NECB 2011')
  
     # Generate the osm files for all relevant cases to generate the test data
     shw_res_file_output_text = "Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
@@ -36,7 +37,7 @@ class SHWTests < MiniTest::Test
     prototype_input['main_water_heater_capacity'] = 100000.0
     prototype_input['main_water_heater_fuel'] = 'NaturalGas'
     prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-    model.add_swh_loop('NECB 2011',
+    standard.model_add_swh_loop(model,
                         'Main Service Water Loop',
                         nil,
                         prototype_input['main_service_water_temperature'],
@@ -88,6 +89,7 @@ class SHWTests < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/shw_elec_eff_losses"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    standard = StandardsModel.get_standard_model('NECB 2011')
  
     # test tank capacities and volumes (liters)
     test_caps = [10.0,20.0]
@@ -112,7 +114,7 @@ class SHWTests < MiniTest::Test
         prototype_input['main_water_heater_capacity'] = 100000.0
         prototype_input['main_water_heater_fuel'] = 'Electricity'
         prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-        model.add_swh_loop('NECB 2011',
+        standard.model_add_swh_loop(model, 
                             'Main Service Water Loop',
                             nil,
                             prototype_input['main_service_water_temperature'],
@@ -207,22 +209,15 @@ class SHWTests < MiniTest::Test
       building_vintage = 'NECB 2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
-      # building_vintage = '90.1-2013'
-
-      # Load the Openstudio_Standards JSON files
-      # model.load_openstudio_standards_json
-
-      # Assign the standards to the model
-      # model.template = building_vintage
-
+      standard = StandardsModel.get_standard_model(building_vintage)
+      
       # Make a directory to run the sizing run in
-
       unless Dir.exist? sizing_dir
         FileUtils.mkdir_p(sizing_dir)
       end
 
       # Perform a sizing run
-      if model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
+      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
         puts "could not find sizing run #{sizing_dir}/SizingRun1"
         raise("could not find sizing run #{sizing_dir}/SizingRun1")
         return false
@@ -233,9 +228,9 @@ class SHWTests < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
-      model.apply_prototype_hvac_assumptions(building_type, building_vintage, climate_zone)
+      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
       # Apply the HVAC efficiency standard
-      model.apply_hvac_efficiency_standard(building_vintage, climate_zone)
+      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
       BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")

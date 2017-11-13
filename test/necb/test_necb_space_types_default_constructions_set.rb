@@ -14,12 +14,13 @@ class NECB2011SpaceTypesDefaultConstructionsTest < Minitest::Test
     output = ""
     #Iterate through all spacetypes/buildingtypes.
     Templates.each do |template|
+      standard = StandardsModel.get_standard_model(template)
       #Get spacetypes from googledoc.
       search_criteria = {
           "template" => template,
       }
       # lookup space type properties
-      @model.find_objects($os_standards["space_types"], search_criteria).each do |space_type_properties|
+      standard.model_find_objects($os_standards["space_types"], search_criteria).each do |space_type_properties|
         [1, 2, 3, 5].each do |stories|
           header_output = ""
           # Create a space type
@@ -27,7 +28,7 @@ class NECB2011SpaceTypesDefaultConstructionsTest < Minitest::Test
           st.setStandardsBuildingType(space_type_properties['building_type'])
           st.setStandardsSpaceType(space_type_properties['space_type'])
           st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
-          st.apply_rendering_color(template)
+          standard.space_type_apply_rendering_color(st)
 
           #Set all spaces to spacetype
           @model.getSpaces.each do |space|

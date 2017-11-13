@@ -5,6 +5,7 @@ class TestBoilerHotWater < Minitest::Test
   def test_boiler_hot_water
 
     template = '90.1-2013'
+    standard = StandardsModel.get_standard_model(template)
 
     # make an empty model
     model = OpenStudio::Model::Model.new
@@ -16,7 +17,7 @@ class TestBoilerHotWater < Minitest::Test
     boiler.setNominalCapacity(target_cap_btu_per_watts)
 
     # run standard_minimum_cop
-    min_thermal_eff = boiler.standard_minimum_thermal_efficiency(template)
+    min_thermal_eff = standard.boiler_hot_water_standard_minimum_thermal_efficiency(boiler)
 
     # Minimum thermal efficiency = 0.8
     correct_thermal_eff = 0.8

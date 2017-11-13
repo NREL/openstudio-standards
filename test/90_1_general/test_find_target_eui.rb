@@ -16,12 +16,14 @@ class TestFindTargetEui < Minitest::Test
     model.getBuilding.setStandardsBuildingType(building_types.first)
     model.getClimateZones.setClimateZone("ASHRAE",climate_zones.first)
 
+    standard = StandardsModel.get_standard_model(templates.first)
+    
     # todo - create space and zone
     # this is needed to break office into small, medium, or large
 
     # use find_target_eui method to lookup and calculate the target EUI
     # this will also test process_results_for_datapoint and find_prototype_floor_area method
-    target_eui = model.find_target_eui(templates.first)
+    target_eui = standard.model_find_target_eui(model)
     puts "target eui is #{target_eui} (GJ/m^2)"
 
     # below is data from results json for LargeHotel 2007 2A
