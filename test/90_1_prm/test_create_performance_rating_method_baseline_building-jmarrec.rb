@@ -24,7 +24,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     model.getPlantLoops.each do |loop|
 
-      plant_loop_total_rated_w_per_gpm(plant_loop)  = loop.total_rated_w_per_gpm
+      total_rated_w_per_gpm = plant_loop_total_rated_w_per_gpm(plant_loop)
 
       loop_type = loop.sizingPlant.loopType
 

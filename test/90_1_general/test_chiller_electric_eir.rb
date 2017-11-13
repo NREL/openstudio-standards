@@ -22,7 +22,7 @@ class TestChillerElectricEir < Minitest::Test
 
     # Minimum kW/ton = 1.188
     correct_kw_per_ton = 1.188
-    correct_min_cop = kw_per_ton_to_cop(correct_kw_per_ton)
+    correct_min_cop = standard.kw_per_ton_to_cop(correct_kw_per_ton)
 
     # Check the lookup against the truth
     assert_in_delta(min_full_load_cop, correct_min_cop, 0.1, "Expected #{correct_kw_per_ton} kW/ton AKA #{correct_min_cop.round(2)} COP.  Got #{min_full_load_cop} COP instead.")

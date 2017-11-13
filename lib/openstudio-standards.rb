@@ -14,7 +14,7 @@ class Folders
 
   def initialize
     folders = []
-    folders << @data_costing_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/costing/")
+    # folders << @data_costing_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/costing/")
     folders << @data_geometry_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/geometry/")
     folders << @data_standards_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/standards/")
     folders << @data_weather_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/weather/")

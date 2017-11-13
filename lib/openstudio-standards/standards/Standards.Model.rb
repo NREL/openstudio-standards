@@ -122,7 +122,7 @@ class StandardsModel
     # be the user's intent in the proposed model.
     model.getLightss.sort.each do |lights|
       if lights.schedule.empty?
-        lights.setSchedule(alwaysOffDiscreteSchedule)
+        lights.setSchedule(model.alwaysOffDiscreteSchedule)
       end
     end
 
@@ -1523,7 +1523,7 @@ class StandardsModel
             end
           elsif lights_sch.to_ScheduleConstant.is_initialized
             lights_sch = lights_sch.to_ScheduleConstant.get
-            full_load_hrs = schedule_ruleset_annual_equivalent_full_load_hrs(lights_sch)
+            full_load_hrs = schedule_constant_annual_equivalent_full_load_hrs(lights_sch)
             if full_load_hrs > 0
               ann_op_hrs = full_load_hrs
               break # Stop after the first schedule with more than 0 hrs
@@ -3786,7 +3786,7 @@ class StandardsModel
     model.getSpaces.sort.each do |space|
       # Determine the space category
       cat = 'NonRes'
-      if thermal_zone_residential?(space)
+      if space_residential?(space)
         cat = 'Res'
       end
       # if space.is_semiheated
