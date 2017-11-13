@@ -22,6 +22,7 @@ coverage/
 /spec/reports/
 /test/doe_prototype/output
 /test/reports
+/test/necb/data/*test_results.csv
 
 # Miscelaneous
 /test/refactor/
