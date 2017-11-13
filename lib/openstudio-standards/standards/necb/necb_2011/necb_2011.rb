@@ -9,9 +9,9 @@ class NECB_2011_Model < StandardsModel
     @standards_data = self.load_standards_database()
 
     #NECB Values
-    @standards_data["climate_zone_sets"] = [
-        {"name" => "NECB-CNEB ClimatZone 4-8", "climate_zones" => ["NECB HDD Method"]}
-    ]
+    # @standards_data["climate_zone_sets"] = [
+    #     {"name" => "NECB-CNEB ClimatZone 4-8", "climate_zones" => ["NECB HDD Method"]}
+    # ]
     @standards_data["occupancy_sensors"] = [
         {"standard_space_type_name " => 'Storage area', "max_floor_area" => 100.0},
         {"standard_space_type_name " => 'Storage area - refrigerated', "max_floor_area" => 100.0},
