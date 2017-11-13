@@ -2868,10 +2868,10 @@ class NECB_2011_Model
       if space_zone_data.system_number.nil?
         #iterate through all adjacent spaces from largest shared wall area to smallest.
         # Set system type to match first space system that is not nil.
-        adj_spaces = space_zone_data.space.get_adjacent_spaces_with_shared_wall_areas(true)
+        adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space_zone_data.space, true)
         if adj_spaces.nil?
           puts ("Warning: No adjacent spaces for #{space_zone_data.space.name} on same floor, looking for others above and below to set system")
-          adj_spaces = space_zone_data.space.get_adjacent_spaces_with_shared_wall_areas(false)
+          adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space_zone_data.space, false)
         end
         adj_spaces.sort.each do |adj_space|
           #if there are no adjacent spaces. Raise an error.
