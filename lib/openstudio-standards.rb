@@ -57,6 +57,7 @@ module OpenstudioStandards
   # should never be altered by the gem.
   # @Todo: A constant in ruby is $CONSTANT not $constant
   $os_standards = model_load_openstudio_standards_json
+  puts JSON.pretty_generate($os_standards)
 
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'

@@ -46,9 +46,11 @@ def model_load_openstudio_standards_json()
     temp = ""
     begin
       temp = load_resource_relative("../../../data/standards/#{standards_file}", 'r:UTF-8')
+      puts "loaded #{standards_file} using load_resource_relative"
     rescue NoMethodError
       File.open("#{standards_data_dir}/#{standards_file}", 'r:UTF-8') do |f|
         temp = f.read
+        puts "loaded #{standards_file} using File.open"
       end
     end
     file_hash = JSON.load(temp)
@@ -4147,7 +4149,7 @@ class StandardsModel
               'space_type' => space.spaceType.get.standardsSpaceType.get
           }
           # lookup space type properties
-          space_type_properties = @model.find_object($os_standards['space_types'], search_criteria)
+          space_type_properties = model_find_object($os_standards['space_types'], search_criteria)
           if space_type_properties.nil?
             error_string << "Could not find spacetype of criteria : #{search_criteria}. Please ensure you have a valid standardSpaceType and stantdardBuildingType defined.\n"
             space_type_properties = {}
