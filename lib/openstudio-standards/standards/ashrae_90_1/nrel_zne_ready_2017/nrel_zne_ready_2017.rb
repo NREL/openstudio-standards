@@ -3,11 +3,11 @@
 class NRELZNEReady2017_Model < A90_1_Model
   @@template = 'NREL ZNE Ready 2017'
   register_standard (@@template)
-  attr_reader :instvartemplate
+  attr_reader :template
 
   def initialize
     super()
-    @instvartemplate = @@template
+    @template = @@template
     load_standards_database
   end
 end

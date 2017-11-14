@@ -24,7 +24,7 @@ class NECB_2011_Model
                                          OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
                                          swh_fueltype,
                                          OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                         building_type) unless building_type == 'RetailStripmall' && instvartemplate != 'NECB 2011'
+                                         building_type) unless building_type == 'RetailStripmall' && template != 'NECB 2011'
 
       # Attach the end uses if specified in prototype inputs
       # TODO remove special logic for large office SWH end uses
@@ -54,7 +54,7 @@ class NECB_2011_Model
 
         space_type_map.sort.each do |space_type_name, space_names|
           search_criteria = {
-              'template' => instvartemplate,
+              'template' => template,
               'building_type' => model_get_lookup_name(building_type),
               'space_type' => space_type_name
           }
@@ -273,7 +273,7 @@ class NECB_2011_Model
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{instvartemplate}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
 
     return true
   end

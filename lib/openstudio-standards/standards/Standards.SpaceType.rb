@@ -13,7 +13,7 @@ class StandardsModel
 
     # populate search hash
     search_criteria = {
-      'template' => instvartemplate,
+      'template' => template,
       'building_type' => standards_building_type,
       'space_type' => standards_space_type
     }
@@ -576,7 +576,7 @@ class StandardsModel
 
     # populate search hash
     search_criteria = {
-      'template' => instvartemplate,
+      'template' => template,
       'climate_zone_set' => climate_zone_set,
       'intended_surface_type' => intended_surface_type,
       'standards_construction_type' => standards_construction_type,

@@ -356,7 +356,7 @@ class StandardsModel
 
     # For 90.1-2010, single-zone VAV systems use the
     # constant volume limitation per 6.5.3.1.1
-    if instvartemplate == 'ASHRAE 90.1-2010' && fan_pwr_limit_type == 'variable volume' && num_zones_served == 1
+    if template == 'ASHRAE 90.1-2010' && fan_pwr_limit_type == 'variable volume' && num_zones_served == 1
       fan_pwr_limit_type = 'constant volume'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Using the constant volume limitation because single-zone VAV system.")
     end
@@ -434,7 +434,7 @@ class StandardsModel
   def air_loop_hvac_system_fan_brake_horsepower(air_loop_hvac, include_terminal_fans = true)
     # TODO: get the template from the parent model itself?
     # Or not because maybe you want to see the difference between two standards?
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name}-Determining #{instvartemplate} allowable system fan power.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name}-Determining #{template} allowable system fan power.")
 
     # Get all fans
     fans = []
@@ -472,7 +472,7 @@ class StandardsModel
   # the system hitting the baseline allowable fan power
   #
   def air_loop_hvac_apply_baseline_fan_pressure_rise(air_loop_hvac)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name}-Setting #{instvartemplate} baseline fan power.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name}-Setting #{template} baseline fan power.")
 
     # Get the total system bhp from the proposed system, including terminal fans
     proposed_sys_bhp = air_loop_hvac_system_fan_brake_horsepower(air_loop_hvac, true)
@@ -720,13 +720,13 @@ class StandardsModel
 
     # Retrieve economizer limits from JSON
     search_criteria = {
-      'template' => instvartemplate,
+      'template' => template,
       'climate_zone' => climate_zone,
       'data_center' => is_dc
     }
     econ_limits = model_find_object(standards_data['economizers'], search_criteria, nil)
     if econ_limits.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "Cannot find economizer limits for #{instvartemplate}, #{climate_zone}, assuming no economizer required.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "Cannot find economizer limits for #{template}, #{climate_zone}, assuming no economizer required.")
       return economizer_required
     end
     
@@ -1222,7 +1222,7 @@ class StandardsModel
       erv_required = false
       return erv_required
     end
-    case instvartemplate
+    case template
     when '90.1-2004', '90.1-2007' # TODO Refactor figure out how to remove this.
       if air_loop_hvac.name.to_s.include? 'VAV_ICU'
         erv_required = false
@@ -1711,7 +1711,7 @@ class StandardsModel
 
     # If the limits are zero for both, DCV not required
     if min_oa_without_economizer_cfm.zero? && min_oa_with_economizer_cfm.zero?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{instvartemplate} #{climate_zone}:  #{air_loop_hvac.name}: DCV is not required for any system.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{air_loop_hvac.name}: DCV is not required for any system.")
       return dcv_required
     end    
     

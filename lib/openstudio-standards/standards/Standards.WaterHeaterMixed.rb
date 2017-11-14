@@ -39,7 +39,7 @@ class StandardsModel
 
     # Get the water heater properties
     search_criteria = {}
-    search_criteria['template'] = instvartemplate
+    search_criteria['template'] = template
     search_criteria['fuel_type'] = fuel_type
     wh_props = model_find_object( standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
     unless wh_props
@@ -166,7 +166,7 @@ class StandardsModel
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{instvartemplate}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
 
     return true
   end

@@ -35,7 +35,7 @@ module CoolingTower
     # Define the criteria to find the cooling tower properties
     # in the hvac standards data set.
     search_criteria = {}
-    search_criteria['template'] = instvartemplate
+    search_criteria['template'] = template
 
     # By definition cooling towers in E+ are open.
     # Closed cooling towers are the fluidcooler objects.
@@ -92,7 +92,7 @@ module CoolingTower
 
     # Assuming all fan motors are 4-pole Enclosed
     search_criteria = {
-      'template' => instvartemplate,
+      'template' => template,
       'number_of_poles' => 4.0,
       'type' => 'Enclosed'
     }

@@ -13,7 +13,7 @@ class StandardsModel
 
     # populate search hash
     search_criteria = {
-        'template' => instvartemplate,
+        'template' => template,
         'exterior_lighting_zone_number' => exterior_lighting_zone_number,
     }
     
@@ -22,7 +22,7 @@ class StandardsModel
 
     # make sure lighting properties were found
     if exterior_lighting_properties.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.exterior_lights', "Exterior lighting properties not found for #{instvartemplate}, ext lighting zone #{exterior_lighting_zone_number}, none will be added to model.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.exterior_lights', "Exterior lighting properties not found for #{template}, ext lighting zone #{exterior_lighting_zone_number}, none will be added to model.")
       return exterior_lights
     end
 

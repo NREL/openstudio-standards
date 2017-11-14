@@ -3,11 +3,11 @@
 class A90_1_2004_Model < A90_1_Model
   @@template = '90.1-2004'
   register_standard (@@template)
-  attr_reader :instvartemplate
+  attr_reader :template
 
   def initialize
     super()
-    @instvartemplate = @@template
+    @template = @@template
     load_standards_database
   end
 end

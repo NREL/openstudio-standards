@@ -104,7 +104,7 @@ class StandardsModel
     # Check if the construction type was already created.
     # If yes, use that construction.  If no, make a new one.
     new_construction = nil
-    type = [instvartemplate, climate_zone, surf_type, stds_type, occ_type]
+    type = [template, climate_zone, surf_type, stds_type, occ_type]
     if previous_construction_map[type]
       new_construction = previous_construction_map[type]
     else

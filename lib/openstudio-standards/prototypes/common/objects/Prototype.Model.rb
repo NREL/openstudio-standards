@@ -8,7 +8,7 @@ StandardsModel.class_eval do
     model = nil
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if @instvarbuilding_type == 'HighriseApartment'
-      if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
+      if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
         OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at  #{} are not available, the measure is disabled for this specific type.")
         return false
         #elsif @@template == 'NECB 2011'
@@ -339,7 +339,7 @@ StandardsModel.class_eval do
 
     # Make the default construction set for the building
     spc_type = nil
-    spc_type = "WholeBuilding" if instvartemplate == 'NECB 2011'
+    spc_type = "WholeBuilding" if template == 'NECB 2011'
     bldg_def_const_set = model_add_construction_set(model, climate_zone, new_lookup_building_type, spc_type, is_residential)
 
     if bldg_def_const_set.is_initialized
@@ -382,7 +382,7 @@ StandardsModel.class_eval do
     end
 
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
-    if new_lookup_building_type == 'SmallHotel' && instvartemplate != 'NECB 2011'
+    if new_lookup_building_type == 'SmallHotel' && template != 'NECB 2011'
       model.getBuildingStorys.sort.each do |story|
         next if story.name.get == 'AtticStory'
         # puts "story = #{story.name}"
@@ -397,7 +397,7 @@ StandardsModel.class_eval do
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = model_find_object(standards_data['space_types'], 'template' => instvartemplate, 'building_type' => new_lookup_building_type, 'space_type' => space_type_name)
+          data = model_find_object(standards_data['space_types'], 'template' => template, 'building_type' => new_lookup_building_type, 'space_type' => space_type_name)
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
@@ -449,15 +449,15 @@ StandardsModel.class_eval do
     # get all the space types that are conditioned
 
     # not required for NECB 2011
-    unless instvartemplate == 'NECB 2011'
+    unless template == 'NECB 2011'
       conditioned_space_names = model_find_conditioned_space_names(model, building_type, climate_zone)
     end
 
     # add internal mass
     # not required for NECB 2011
-    unless (instvartemplate == 'NECB 2011') ||
+    unless (template == 'NECB 2011') ||
         ((building_type == 'SmallHotel') &&
-            (instvartemplate == '90.1-2004' || instvartemplate == '90.1-2007' || instvartemplate == '90.1-2010' || instvartemplate == '90.1-2013' || instvartemplate == 'NREL ZNE Ready 2017'))
+            (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
@@ -530,7 +530,7 @@ StandardsModel.class_eval do
       else
         thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostat_clone)
-        if instvartemplate == 'NECB 2011'
+        if template == 'NECB 2011'
           #Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
           ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
           ideal_loads.addToThermalZone(zone)
@@ -783,7 +783,7 @@ StandardsModel.class_eval do
   # @todo genericize and move this method to Standards.Space
   def model_add_occupancy_sensors(model, building_type, climate_zone)
     # Only add occupancy sensors for 90.1-2010
-    case instvartemplate
+    case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
         return true
     end
@@ -957,7 +957,7 @@ StandardsModel.class_eval do
     # Select the terrain type, which
     # impacts wind speed, and in turn infiltration
     terrain = 'City'
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
         case building_type
           when 'Warehouse'
@@ -970,7 +970,7 @@ StandardsModel.class_eval do
     model.getSite.setTerrain(terrain)
 
     # modify the infiltration coefficients
-    case instvartemplate
+    case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         # TODO make this consistent with newer prototypes
         const_coeff = 1.0
@@ -1002,7 +1002,7 @@ StandardsModel.class_eval do
     inside = model.getInsideSurfaceConvectionAlgorithm
     outside = model.getOutsideSurfaceConvectionAlgorithm
 
-    case instvartemplate
+    case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         inside.setAlgorithm('TARP')
         outside.setAlgorithm('DOE-2')
@@ -1022,7 +1022,7 @@ StandardsModel.class_eval do
     # Default unless otherwise specified
     clg = 1.2
     htg = 1.2
-    case instvartemplate
+    case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         case building_type
           when 'PrimarySchool', 'SecondarySchool', 'Outpatient'
@@ -1571,7 +1571,7 @@ StandardsModel.class_eval do
   # end reduce schedule
 
   def apply_economizers(climate_zone, model)
-    if instvartemplate != 'NECB 2011'
+    if template != 'NECB 2011'
       # Create an economizer maximum OA fraction of 70%
       # to reflect damper leakage per PNNL
       econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -1592,7 +1592,7 @@ StandardsModel.class_eval do
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
         economizer_type = nil
-        case instvartemplate
+        case template
           when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
             economizer_type = 'DifferentialDryBulb'
           when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
@@ -1623,7 +1623,7 @@ StandardsModel.class_eval do
         end
         oa_control = oa_sys.getControllerOutdoorAir
         oa_control.setEconomizerControlType(economizer_type)
-        if instvartemplate != 'NECB 2011'
+        if template != 'NECB 2011'
           # oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
         end
 

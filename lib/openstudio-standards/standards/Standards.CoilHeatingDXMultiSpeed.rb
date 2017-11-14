@@ -10,7 +10,7 @@ class StandardsModel
     # Define the criteria to find the unitary properties
     # in the hvac standards data set.
     search_criteria = {}
-    search_criteria['template'] = instvartemplate
+    search_criteria['template'] = template
 
     # Determine supplemental heating type if unitary
     heat_pump = false
@@ -165,7 +165,7 @@ class StandardsModel
       min_seer = hp_props['minimum_seasonal_energy_efficiency_ratio']
       cop = seer_to_cop(min_seer)
       coil_heating_dx_multi_speed.setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{instvartemplate}: #{coil_heating_dx_multi_speed.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{template}: #{coil_heating_dx_multi_speed.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # If specified as EER
@@ -173,7 +173,7 @@ class StandardsModel
       min_eer = hp_props['minimum_energy_efficiency_ratio']
       cop = eer_to_cop(min_eer)
       coil_heating_dx_multi_speed.setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER")
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{instvartemplate}: #{coil_heating_dx_multi_speed.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{template}: #{coil_heating_dx_multi_speed.name}:  #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # Set the efficiency values

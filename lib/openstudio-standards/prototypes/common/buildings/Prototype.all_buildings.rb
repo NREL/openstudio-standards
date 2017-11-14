@@ -30,7 +30,7 @@ module FullServiceRestaurant
 
   def add_door_infiltration( climate_zone, model)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
-    unless instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'NECB 2011'
+    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980' || template == 'NECB 2011'
       dining_space = model.getSpaceByName('Dining').get
       attic_space = model.getSpaceByName('Attic').get
       infiltration_diningdoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
@@ -38,10 +38,10 @@ module FullServiceRestaurant
       infiltration_diningdoor.setName('Dining door Infiltration')
       infiltration_per_zone_diningdoor = 0
       infiltration_per_zone_attic = 0.2378
-      if instvartemplate == '90.1-2004'
+      if template == '90.1-2004'
         infiltration_per_zone_diningdoor = 0.614474994
         infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
-      elsif instvartemplate == '90.1-2007'
+      elsif template == '90.1-2007'
         case climate_zone
           when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B',
               'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C'
@@ -51,7 +51,7 @@ module FullServiceRestaurant
             infiltration_per_zone_diningdoor = 0.389828222
             infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
         end
-      elsif instvartemplate == '90.1-2010' || instvartemplate == '90.1-2013'
+      elsif template == '90.1-2010' || template == '90.1-2013'
         case climate_zone
           when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C'
             infiltration_per_zone_diningdoor = 0.614474994
@@ -70,7 +70,7 @@ module FullServiceRestaurant
   end
 
   def model_update_exhaust_fan_efficiency( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
           fan_name = exhaust_fan.name.to_s
@@ -95,7 +95,7 @@ module FullServiceRestaurant
     zone_dining = space_dining.thermalZone.get
     zone_mixing_kitchen = OpenStudio::Model::ZoneMixing.new(zone_kitchen)
     zone_mixing_kitchen.setSchedule(model_add_schedule(model, 'RestaurantSitDown Hours_of_operation'))
-    case instvartemplate
+    case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         zone_mixing_kitchen.setDesignFlowRate(1.828)
       when '90.1-2007', '90.1-2010', '90.1-2013'
@@ -116,7 +116,7 @@ module FullServiceRestaurant
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
@@ -124,7 +124,7 @@ module FullServiceRestaurant
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if instvartemplate == '90.1-2013'
+        if template == '90.1-2013'
           elec_equip_def1.setDesignLevel(457.5)
           elec_equip_def2.setDesignLevel(570)
         else
@@ -154,7 +154,7 @@ module FullServiceRestaurant
   end
 
   def update_sizing_zone( model)
-    case instvartemplate
+    case template
       when '90.1-2007', '90.1-2010', '90.1-2013'
         zone_sizing = model.getSpaceByName('Dining').get.thermalZone.get.sizingZone
         zone_sizing.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
@@ -177,7 +177,7 @@ module FullServiceRestaurant
       space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
       thermostat_name = space_type_name + ' Thermostat'
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
-      case instvartemplate
+      case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
           if climate_zone == 'ASHRAE 169-2006-2B' || climate_zone == 'ASHRAE 169-2006-1B' || climate_zone == 'ASHRAE 169-2006-3B'
             case space_name
@@ -199,7 +199,7 @@ module FullServiceRestaurant
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
     ventilation.setOutdoorAirFlowperPerson(0)
     ventilation.setOutdoorAirFlowperFloorArea(0)
-    case instvartemplate
+    case template
       when '90.1-2010', '90.1-2013'
         ventilation.setOutdoorAirFlowRate(1.21708392)
       when '90.1-2007'
@@ -210,7 +210,7 @@ module FullServiceRestaurant
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           if water_heater.name.to_s.include?('Booster')
@@ -261,7 +261,7 @@ module HighriseApartment
     elec_equip_def2.setFractionRadiant(0)
     elec_equip_def2.setFractionLost(0.95)
     elec_equip_def1.setDesignLevel(20_370)
-    case instvartemplate
+    case template
       when '90.1-2013'
         elec_equip_def2.setDesignLevel(63)
       when '90.1-2010'
@@ -277,7 +277,7 @@ module HighriseApartment
     elec_equip1.setSpace(corridor_top_space)
     elec_equip2.setSpace(corridor_top_space)
     elec_equip1.setSchedule(model_add_schedule(model, 'ApartmentMidRise BLDG_ELEVATORS'))
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007'
         elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7'))
       when '90.1-2010', '90.1-2013'
@@ -286,7 +286,7 @@ module HighriseApartment
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(46.288874618)
@@ -301,7 +301,7 @@ module HighriseApartment
     infiltration_g_corridor_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
     infiltration_g_corridor_door.setName('G Corridor door Infiltration')
     infiltration_g_corridor_door.setSpace(g_corridor)
-    case instvartemplate
+    case template
       when '90.1-2004'
         infiltration_g_corridor_door.setDesignFlowRate(1.523916863)
         infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentHighRise INFIL_Door_Opening_SCH_0.144'))
@@ -355,7 +355,7 @@ module Hospital
       end
     end
     if hot_water_loop
-      case instvartemplate
+      case template
         when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
           space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2', 'ICU_Flr_2', 'PatRoom5_Mult10_Flr_4', 'Lab_Flr_3']
           space_names.each do |space_name|
@@ -376,7 +376,7 @@ module Hospital
     model_reset_or_room_vav_minimum_damper(prototype_input, model)
 
     # Modify the condenser water pump
-    if instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+    if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       cw_pump = model.getPumpConstantSpeedByName('Condenser Water Loop Pump').get
       cw_pump_head_ft_h2o = 60.0
       cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O', 'Pa').get
@@ -395,7 +395,7 @@ module Hospital
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
@@ -403,7 +403,7 @@ module Hospital
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if instvartemplate == '90.1-2013'
+        if template == '90.1-2013'
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(855)
         else
@@ -424,7 +424,7 @@ module Hospital
 
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           if water_heater.name.to_s.include?('Booster')
@@ -450,7 +450,7 @@ module Hospital
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
     ventilation.setOutdoorAirFlowperPerson(0)
     ventilation.setOutdoorAirFlowperFloorArea(0)
-    case instvartemplate
+    case template
       when '90.1-2010', '90.1-2013'
         ventilation.setOutdoorAirFlowRate(3.398)
       when '90.1-2004', '90.1-2007', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -459,7 +459,7 @@ module Hospital
   end
 
   def model_update_exhaust_fan_efficiency( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
           exhaust_fan.setFanEfficiency(0.16)
@@ -498,7 +498,7 @@ module Hospital
         supply_outlet_node = air_loop.supplyOutletNode
         humidifier.addToNode(heating_coil_outlet_node)
         humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
-        case instvartemplate
+        case template
           when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
             extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
             extra_elec_htg_coil.setName("#{space_name} Electric Htg Coil")
@@ -524,7 +524,7 @@ module Hospital
   end
 
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007'
         return true
       when '90.1-2010', '90.1-2013'
@@ -565,7 +565,7 @@ module LargeHotel
     # Add Exhaust Fan
     space_type_map = define_space_type_map(building_type, climate_zone)
     exhaust_fan_space_types = []
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007'
         exhaust_fan_space_types = ['Kitchen', 'Laundry']
       else
@@ -573,15 +573,15 @@ module LargeHotel
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = model_find_object(standards_data['space_types'], 'template' => instvartemplate, 'building_type' => building_type, 'space_type' => space_type_name)
+      space_type_data = model_find_object(standards_data['space_types'], 'template' => template, 'building_type' => building_type, 'space_type' => space_type_name)
       if space_type_data.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{instvartemplate}-#{building_type}-#{space_type_name}")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{template}-#{building_type}-#{space_type_name}")
         return false
       end
 
       exhaust_schedule = model_add_schedule(model, space_type_data['exhaust_schedule'])
       if exhaust_schedule.class.to_s == 'NilClass'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{instvartemplate}-#{building_type}-#{space_type_name}")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{template}-#{building_type}-#{space_type_name}")
         return false
       end
 
@@ -648,7 +648,7 @@ module LargeHotel
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
@@ -656,7 +656,7 @@ module LargeHotel
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if instvartemplate == '90.1-2013'
+        if template == '90.1-2013'
           elec_equip_def1.setDesignLevel(457.7)
           elec_equip_def2.setDesignLevel(285)
         else
@@ -739,7 +739,7 @@ module LargeOffice
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
@@ -788,15 +788,15 @@ module MediumOffice
 
   def add_door_infiltration( climate_zone, model)
     # add extra infiltration for entry door in m3/s (there is no attic in 'DOE Ref Pre-1980')
-    unless instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       entry_space = model.getSpaceByName('Perimeter_bot_ZN_1').get
       infiltration_entrydoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_entrydoor.setName('entry door Infiltration')
       infiltration_per_zone_entrydoor = 0
-      if instvartemplate == '90.1-2004'
+      if template == '90.1-2004'
         infiltration_per_zone_entrydoor = 1.04300287
         infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
-      elsif instvartemplate == '90.1-2007' || instvartemplate == '90.1-2010'|| instvartemplate == '90.1-2013'
+      elsif template == '90.1-2007' || template == '90.1-2010'|| template == '90.1-2013'
         case climate_zone
           when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B'
             infiltration_per_zone_entrydoor = 1.04300287
@@ -812,7 +812,7 @@ module MediumOffice
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(7.561562668)
@@ -854,7 +854,7 @@ module MidriseApartment
     space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
     thermostat_name = space_type_name + ' Thermostat'
     thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010'
         case climate_zone
           when 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-3B'
@@ -870,7 +870,7 @@ module MidriseApartment
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def1.setName('Ground Corridor Electric Equipment Definition1')
     elec_equip_def2.setName('Ground Corridor Electric Equipment Definition2')
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0)
@@ -879,9 +879,9 @@ module MidriseApartment
         elec_equip_def2.setFractionRadiant(0)
         elec_equip_def2.setFractionLost(0.95)
         elec_equip_def1.setDesignLevel(16_055)
-        if instvartemplate == '90.1-2013'
+        if template == '90.1-2013'
           elec_equip_def2.setDesignLevel(63)
-        elsif instvartemplate == '90.1-2010'
+        elsif template == '90.1-2010'
           elec_equip_def2.setDesignLevel(105.9)
         else
           elec_equip_def2.setDesignLevel(161.9)
@@ -894,7 +894,7 @@ module MidriseApartment
         elec_equip1.setSpace(corridor_ground_space)
         elec_equip2.setSpace(corridor_ground_space)
         elec_equip1.setSchedule(model_add_schedule(model, 'ApartmentMidRise BLDG_ELEVATORS'))
-        case instvartemplate
+        case template
           when '90.1-2004', '90.1-2007'
             elec_equip2.setSchedule(model_add_schedule(model, 'ApartmentMidRise ELEV_LIGHT_FAN_SCH_24_7'))
           when '90.1-2010', '90.1-2013'
@@ -914,7 +914,7 @@ module MidriseApartment
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(46.288874618)
@@ -925,7 +925,7 @@ module MidriseApartment
 
   # add extra infiltration for ground floor corridor
   def add_door_infiltration( climate_zone, model)
-    case instvartemplate
+    case template
       when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
         # no door infiltration in these two vintages
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
@@ -933,7 +933,7 @@ module MidriseApartment
         infiltration_g_corridor_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
         infiltration_g_corridor_door.setName('G Corridor door Infiltration')
         infiltration_g_corridor_door.setSpace(g_corridor)
-        case instvartemplate
+        case template
           when '90.1-2004'
             infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
@@ -1009,7 +1009,7 @@ module Outpatient
       hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU1-Fan_Pre2004')
       # Outpatient has different temperature settings for sizing
       clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
-      sys_dsn_clg_sa_temp_f = if instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+      sys_dsn_clg_sa_temp_f = if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
                                 52
                               else
                                 45
@@ -1041,7 +1041,7 @@ module Outpatient
     elec_equip = OpenStudio::Model::ElectricEquipment.new(elec_equip_def)
     elec_equip.setName('Elevator Pump Room Elevator Equipment')
     elec_equip.setSpace(elevator_pump_room)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip.setSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_ELEVATORS'))
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -1055,7 +1055,7 @@ module Outpatient
       space_type_name = space_type.name.get
       thermostat_name = space_type_name + ' Thermostat'
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
-      case instvartemplate
+      case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
           case climate_zone
             when 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-3B'
@@ -1067,7 +1067,7 @@ module Outpatient
   end
 
   def adjust_infiltration( model)
-    case instvartemplate
+    case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         model.getSpaces.sort.each do |space|
           space_type = space.spaceType.get
@@ -1104,7 +1104,7 @@ module Outpatient
 
   def add_door_infiltration( climate_zone, model)
     # add extra infiltration for vestibule door
-    case instvartemplate
+    case template
       when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
         return true
       else
@@ -1112,7 +1112,7 @@ module Outpatient
         infiltration_vestibule_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
         infiltration_vestibule_door.setName('Vestibule door Infiltration')
         infiltration_rate_vestibule_door = 0
-        case instvartemplate
+        case template
           when '90.1-2004'
             infiltration_rate_vestibule_door = 1.186002811
             infiltration_vestibule_door.setSchedule(model_add_schedule(model, 'OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
@@ -1132,7 +1132,7 @@ module Outpatient
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           if water_heater.name.to_s.include?('Booster')
@@ -1171,7 +1171,7 @@ module Outpatient
         supply_outlet_node = air_loop.supplyOutletNode
         humidifier.addToNode(heating_coil_outlet_node)
         humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
-        case instvartemplate
+        case template
           when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
             extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
             extra_elec_htg_coil.setName('AHU1 extra Electric Htg Coil')
@@ -1202,7 +1202,7 @@ module Outpatient
         controller_oa.setMinimumFractionofOutdoorAirSchedule(model_add_schedule(model, 'OutPatientHealthCare AHU-1_OAminOAFracSchedule'))
         # for AHU2, at vintages '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', the minimum OA schedule is not the same as
         # airloop availability schedule, but separately assigned.
-      elsif instvartemplate == '90.1-2004' || instvartemplate == '90.1-2007' || instvartemplate == '90.1-2010' || instvartemplate == '90.1-2013'
+      elsif template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'
         controller_oa.setMinimumOutdoorAirSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_OA_SCH'))
         # add minimum fraction of outdoor air schedule to AHU2
         controller_oa.setMinimumFractionofOutdoorAirSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_OA_FRAC_SCH'))
@@ -1212,7 +1212,7 @@ module Outpatient
 
   # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007'
         return true
       when '90.1-2010', '90.1-2013'
@@ -1233,7 +1233,7 @@ module Outpatient
   end
 
   def model_update_exhaust_fan_efficiency( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
           fan_name = exhaust_fan.name.to_s
@@ -1258,7 +1258,7 @@ module Outpatient
     model.getSpaces.sort.each do |space|
       space_type_name = space.spaceType.get.standardsSpaceType.get
       search_criteria = {
-          'template' => instvartemplate,
+          'template' => template,
           'building_type' => building_type,
           'space_type' => space_type_name
       }
@@ -1282,7 +1282,7 @@ module Outpatient
       zone = space.thermalZone.get
       sizingzone = zone.sizingZone
       sizingzone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
-      case instvartemplate
+      case template
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
           sizingzone.setCoolingMinimumAirFlow(minimum_airflow_per_zone)
         when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
@@ -1322,7 +1322,7 @@ module PrimarySchool
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
@@ -1330,7 +1330,7 @@ module PrimarySchool
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if instvartemplate == '90.1-2013'
+        if template == '90.1-2013'
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(570)
         else
@@ -1383,7 +1383,7 @@ module QuickServiceRestaurant
 
   def add_door_infiltration( climate_zone, model)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
-    unless instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       dining_space = model.getSpaceByName('Dining').get
       attic_space = model.getSpaceByName('Attic').get
       infiltration_diningdoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
@@ -1391,10 +1391,10 @@ module QuickServiceRestaurant
       infiltration_diningdoor.setName('Dining door Infiltration')
       infiltration_per_zone_diningdoor = 0
       infiltration_per_zone_attic = 0.0729
-      if instvartemplate == '90.1-2004'
+      if template == '90.1-2004'
         infiltration_per_zone_diningdoor = 0.902834611
         infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
-      elsif instvartemplate == '90.1-2007'
+      elsif template == '90.1-2007'
         case climate_zone
           when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B',
               'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C'
@@ -1404,7 +1404,7 @@ module QuickServiceRestaurant
             infiltration_per_zone_diningdoor = 0.583798439
             infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood VESTIBULE_DOOR_INFIL_SCH'))
         end
-      elsif instvartemplate == '90.1-2010' || instvartemplate == '90.1-2013'
+      elsif template == '90.1-2010' || template == '90.1-2013'
         case climate_zone
           when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C'
             infiltration_per_zone_diningdoor = 0.902834611
@@ -1431,7 +1431,7 @@ module QuickServiceRestaurant
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
@@ -1439,7 +1439,7 @@ module QuickServiceRestaurant
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if instvartemplate == '90.1-2013'
+        if template == '90.1-2013'
           elec_equip_def1.setDesignLevel(457.5)
           elec_equip_def2.setDesignLevel(570)
         else
@@ -1469,7 +1469,7 @@ module QuickServiceRestaurant
   end
 
   def update_sizing_zone( model)
-    case instvartemplate
+    case template
       when '90.1-2007', '90.1-2010', '90.1-2013'
         zone_sizing = model.getSpaceByName('Dining').get.thermalZone.get.sizingZone
         zone_sizing.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
@@ -1492,7 +1492,7 @@ module QuickServiceRestaurant
       space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
       thermostat_name = space_type_name + ' Thermostat'
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
-      case instvartemplate
+      case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
           if climate_zone == 'ASHRAE 169-2006-2B' || climate_zone == 'ASHRAE 169-2006-1B' || climate_zone == 'ASHRAE 169-2006-3B'
             case space_name
@@ -1514,7 +1514,7 @@ module QuickServiceRestaurant
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
     ventilation.setOutdoorAirFlowperPerson(0)
     ventilation.setOutdoorAirFlowperFloorArea(0)
-    case instvartemplate
+    case template
       when '90.1-2007', '90.1-2010', '90.1-2013'
         ventilation.setOutdoorAirFlowRate(1.14135966)
       when '90.1-2004', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -1523,7 +1523,7 @@ module QuickServiceRestaurant
   end
 
   def model_update_exhaust_fan_efficiency( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
           fan_name = exhaust_fan.name.to_s
@@ -1548,7 +1548,7 @@ module QuickServiceRestaurant
     zone_dining = space_dining.thermalZone.get
     zone_mixing_kitchen = OpenStudio::Model::ZoneMixing.new(zone_kitchen)
     zone_mixing_kitchen.setSchedule(model_add_schedule(model, 'RestaurantFastFood Hours_of_operation'))
-    case instvartemplate
+    case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         zone_mixing_kitchen.setDesignFlowRate(0.834532374)
       when '90.1-2007', '90.1-2010', '90.1-2013'
@@ -1561,7 +1561,7 @@ module QuickServiceRestaurant
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(7.561562668)
@@ -1592,7 +1592,7 @@ module RetailStandalone
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # Add the door infiltration for template 2004,2007,2010,2013
-    case instvartemplate
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       entry_space = model.getSpaceByName('Front_Entry').get
       infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
@@ -1604,14 +1604,14 @@ module RetailStandalone
     end
 
     # Update the zone sizing SAT
-    if instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+    if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       model.getSizingZones.each do |sizing_zone|
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(14)
       end
     end
     
     # Add economizer max fraction schedules
-    case instvartemplate
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
       model.getAirLoopHVACs.each do |air_loop|
@@ -1630,7 +1630,7 @@ module RetailStandalone
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
@@ -1658,7 +1658,7 @@ module RetailStripmall
 
     # Add infiltration door opening
     # Spaces names to design infiltration rates (m3/s)
-    case instvartemplate
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       door_infiltration_map = {['LGstore1', 'LGstore2'] => 0.388884328,
                                ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037}
@@ -1683,7 +1683,7 @@ module RetailStripmall
     end
 
     # Add economizer max fraction schedules
-    case instvartemplate
+    case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
       model.getAirLoopHVACs.each do |air_loop|
@@ -1703,7 +1703,7 @@ module RetailStripmall
   # add hvac
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.205980747)
@@ -1758,7 +1758,7 @@ module SecondarySchool
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
     elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip_def1.setFractionLatent(0)
         elec_equip_def1.setFractionRadiant(0.25)
@@ -1766,7 +1766,7 @@ module SecondarySchool
         elec_equip_def2.setFractionLatent(0)
         elec_equip_def2.setFractionRadiant(0.25)
         elec_equip_def2.setFractionLost(0)
-        if instvartemplate == '90.1-2013'
+        if template == '90.1-2013'
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(570)
         else
@@ -1804,11 +1804,11 @@ module SmallHotel
     # add extra infiltration for corridor1 door
     corridor_space = model.getSpaceByName('CorridorFlr1')
     corridor_space = corridor_space.get
-    unless instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       infiltration_corridor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_corridor.setName('Corridor1 door Infiltration')
       infiltration_per_zone = 0
-      infiltration_per_zone = if instvartemplate == '90.1-2010' || instvartemplate == '90.1-2007'
+      infiltration_per_zone = if template == '90.1-2010' || template == '90.1-2007'
                                 0.591821538
                               else
                                 0.91557718
@@ -1819,7 +1819,7 @@ module SmallHotel
     end
 
     # hardsize corridor1. put in standards in the future  #TODO
-    unless instvartemplate == 'DOE Ref 1980-2004' || instvartemplate == 'DOE Ref Pre-1980'
+    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       model.getZoneHVACPackagedTerminalAirConditioners.sort.each do |ptac|
         zone = ptac.thermalZone.get
         if zone.spaces.include?(corridor_space)
@@ -1852,7 +1852,7 @@ module SmallHotel
     elec_equip = OpenStudio::Model::ElectricEquipment.new(elec_equip_def)
     elec_equip.setName('Elevator Coreflr1 Elevator Lights/Fans Equipment')
     elec_equip.setSpace(elevator_coreflr1)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip.setSchedule(model_add_schedule(model, 'HotelSmall ELEV_LIGHT_FAN_SCH_ADD_DF'))
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -1962,7 +1962,7 @@ module SuperMarket
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
@@ -1988,7 +1988,7 @@ module Warehouse
   end
 
   def update_waterheater_loss_coefficient( model)
-    case instvartemplate
+    case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)

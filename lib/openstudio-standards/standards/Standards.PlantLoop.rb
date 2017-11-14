@@ -1000,7 +1000,7 @@ class StandardsModel
 
     # Set the sizing factor and the chiller types
     final_chillers.each_with_index do |final_chiller, i|
-      final_chiller.setName("#{instvartemplate} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i + 1} of #{final_chillers.size}")
+      final_chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i + 1} of #{final_chillers.size}")
       final_chiller.setSizingFactor(per_chiller_sizing_factor)
       final_chiller.setCondenserType(chiller_cooling_type)
     end

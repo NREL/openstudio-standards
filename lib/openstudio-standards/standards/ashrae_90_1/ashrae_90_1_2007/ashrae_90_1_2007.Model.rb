@@ -11,7 +11,7 @@ class A90_1_2007_Model < A90_1_Model
     # a different standard instead of the specified standard.
     # if custom == "90.1-2007 with addenda dn"
       # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Addenda dn of 90.1-2007, System 10 and 11 (same as system 9 and 10 in 90.1-2010) will be used for heated only space.')
-      # instvartemplate = '90.1-2010'
+      # template = '90.1-2010'
       # sys_num = model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
       # return sys_num
     # end

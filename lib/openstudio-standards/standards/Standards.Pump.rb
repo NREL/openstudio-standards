@@ -131,7 +131,7 @@ module Pump
 
     # Assuming all pump motors are 4-pole ODP
     search_criteria = {
-      'template' => instvartemplate,
+      'template' => template,
       'number_of_poles' => 4.0,
       'type' => 'Enclosed'
     }

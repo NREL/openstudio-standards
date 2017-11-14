@@ -164,7 +164,7 @@ class StandardsModel
 
     # Get the case properties
     search_criteria = {
-      'template' => instvartemplate,
+      'template' => template,
       'case_type' => case_type
     }
 
@@ -298,7 +298,7 @@ class StandardsModel
 
     # Get the walkin properties
     search_criteria = {
-      'template' => instvartemplate,
+      'template' => template,
       'walkin_type' => walkin_type
     }
 
@@ -413,7 +413,7 @@ class StandardsModel
   def model_add_refrigeration_compressor(model, compressor_type)
     # Get the compressor properties
     search_criteria = {
-      'template' => instvartemplate,
+      'template' => template,
       'compressor_type' => compressor_type
     }
 

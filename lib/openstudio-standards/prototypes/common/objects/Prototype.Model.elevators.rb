@@ -305,7 +305,7 @@ class StandardsModel
 
     # Retrieve the Prototype Inputs from JSON
     search_criteria = {
-        'template' => instvartemplate,
+        'template' => template,
         'building_type' => building_type
     }
 

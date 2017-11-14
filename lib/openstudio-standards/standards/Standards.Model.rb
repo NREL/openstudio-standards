@@ -25,7 +25,7 @@ class StandardsModel
   # @return [Bool] returns true if successful, false if not
   def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
 
-    model.getBuilding.setName("#{instvartemplate}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
+    model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
     # Remove external shading devices
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
@@ -707,9 +707,9 @@ class StandardsModel
 
     if system_type.nil?
       system_type = [nil, nil, nil, nil]
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not determine system type for #{instvartemplate}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not determine system type for #{template}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
     else
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type[0]} for #{instvartemplate}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "System type is #{system_type[0]} for #{template}, #{area_type}, #{fuel_type}, #{area_ft2.round} ft^2, #{num_stories} stories.")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[1]} for main heating") unless system_type[1].nil?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[2]} for zone heat/reheat") unless system_type[2].nil?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{system_type[3]} for cooling") unless system_type[3].nil?
@@ -1634,15 +1634,15 @@ class StandardsModel
     end
 
     # Get the object data
-    data = model_find_object(standards_data['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
+    data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
-      data = model_find_object(standards_data['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
+      data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
       unless data
         return construction_set
       end
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{instvartemplate}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
 
     name = model_make_name(model, clim, building_type, spc_type)
 
@@ -2506,14 +2506,14 @@ class StandardsModel
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = model_find_object(standards_data['construction_properties'], 'template' => instvartemplate,
+    props = model_find_object(standards_data['construction_properties'], 'template' => template,
                               'climate_zone_set' => climate_zone_set,
                               'intended_surface_type' => intended_surface_type,
                               'standards_construction_type' => standards_construction_type,
                               'building_category' => building_category)
 
     if !props
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{instvartemplate}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
       # Return an empty construction
       construction = OpenStudio::Model::Construction.new(model)
       construction.setName('Could not find construction properties set to Adiabatic ')
@@ -2521,12 +2521,12 @@ class StandardsModel
       construction.insertLayer(0, almost_adiabatic)
       return construction
     else
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{instvartemplate}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
     end
 
     # Make sure that a construction is specified
     if props['construction'].nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No typical construction is specified for construction properties of: #{instvartemplate}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.  Make sure it is entered in the spreadsheet.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No typical construction is specified for construction properties of: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.  Make sure it is entered in the spreadsheet.")
       # Return an empty construction
       construction = OpenStudio::Model::Construction.new(model)
       construction.setName('No typical construction was specified')
@@ -2552,17 +2552,17 @@ class StandardsModel
 
     # Get the object data
 
-    data = model_find_object(standards_data['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
+    data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
-      data = model_find_object(standards_data['construction_sets'], 'template' => instvartemplate, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
+      data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
       unless data
         # if nothing matches say that we could not find it.
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{instvartemplate}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{template}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']")
         return construction_set
       end
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{instvartemplate}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
 
     name = model_make_name(model, clim, building_type, spc_type)
 
@@ -2901,11 +2901,11 @@ class StandardsModel
         next if end_use == 'Exterior Equipment'
 
         # Get the legacy results number
-        legacy_val = legacy_idf_results.dig(building_type, instvartemplate, climate_zone, fuel_type, end_use)
+        legacy_val = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, end_use)
 
         # Combine the exterior lighting and exterior equipment
         if end_use == 'Exterior Lighting'
-          legacy_exterior_equipment = legacy_idf_results.dig(building_type, instvartemplate, climate_zone, fuel_type, 'Exterior Equipment')
+          legacy_exterior_equipment = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, 'Exterior Equipment')
           unless legacy_exterior_equipment.nil?
             legacy_val += legacy_exterior_equipment
           end
@@ -3072,7 +3072,7 @@ class StandardsModel
         result = nil
       end
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find target results for #{climate_zone},#{building_type},#{instvartemplate}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find target results for #{climate_zone},#{building_type},#{template}")
       result = nil # couldn't calculate EUI consumpiton lookup failed
     end
 
@@ -3106,7 +3106,7 @@ class StandardsModel
         result = nil
       end
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find target results for #{climate_zone},#{building_type},#{instvartemplate}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find target results for #{climate_zone},#{building_type},#{template}")
       result = nil # couldn't calculate EUI consumpiton lookup failed
     end
 
@@ -3447,7 +3447,7 @@ class StandardsModel
 
     # populate search hash
     search_criteria = {
-        'template' => instvartemplate,
+        'template' => template,
         'climate_zone_set' => climate_zone_set,
         'intended_surface_type' => intended_surface_type,
         'standards_construction_type' => standards_construction_type,
@@ -4007,7 +4007,7 @@ class StandardsModel
       building_type = 'Warehouse'
     end
 
-    parts = [instvartemplate]
+    parts = [template]
 
     unless building_type.empty?
       parts << building_type
@@ -4050,7 +4050,7 @@ class StandardsModel
 
     # Check that a climate zone set was found
     if climate_zone_set.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{instvartemplate}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{template}")
     end
 
     return climate_zone_set
@@ -4074,11 +4074,11 @@ class StandardsModel
     model.getSpaces.sort.each do |space|
       unless space.spaceType.empty?
         if space.spaceType.get.standardsSpaceType.empty? || space.spaceType.get.standardsBuildingType.empty?
-          error_string << "Space: #{space.name} has SpaceType of #{space.spaceType.get.name} but the standardSpaceType or standardBuildingType  is undefined. Please use an appropriate standardSpaceType for #{instvartemplate}\n"
+          error_string << "Space: #{space.name} has SpaceType of #{space.spaceType.get.name} but the standardSpaceType or standardBuildingType  is undefined. Please use an appropriate standardSpaceType for #{template}\n"
           next
         else
           search_criteria = {
-              'template' => instvartemplate,
+              'template' => template,
               'building_type' => space.spaceType.get.standardsBuildingType.get,
               'space_type' => space.spaceType.get.standardsSpaceType.get
           }

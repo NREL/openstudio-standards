@@ -7,7 +7,7 @@ class StandardsModel
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
 
-      if instvartemplate == 'NECB 2011'
+      if template == 'NECB 2011'
         # vars x1..x10 not required here, only service water heating fuel type, which is
         # weather file dependent for NECB 2011
         x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
@@ -26,13 +26,13 @@ class StandardsModel
                                    OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
                                    swh_fueltype,
                                    OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                   building_type) unless building_type == 'RetailStripmall' && instvartemplate != 'NECB 2011'
+                                   building_type) unless building_type == 'RetailStripmall' && template != 'NECB 2011'
 
       # Attach the end uses if specified in prototype inputs
       # TODO remove special logic for large office SWH end uses
       # TODO remove special logic for stripmall SWH end uses and service water loops
       # TODO remove special logic for large hotel SWH end uses
-      if building_type == 'LargeOffice' && instvartemplate != 'NECB 2011'
+      if building_type == 'LargeOffice' && template != 'NECB 2011'
 
         # Only the core spaces have service water
         ['Core_bottom', 'Core_mid', 'Core_top'].sort.each do |space_name|
@@ -46,7 +46,7 @@ class StandardsModel
                            space_name,
                            building_type)
         end
-      elsif building_type == 'LargeOfficeDetail' && instvartemplate != 'NECB 2011'
+      elsif building_type == 'LargeOfficeDetail' && template != 'NECB 2011'
 
         # Only mechanical rooms have service water
         ['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].sort.each do |space_name| # for new space type large office
@@ -59,9 +59,9 @@ class StandardsModel
                            space_name,
                            building_type)
         end
-      elsif building_type == 'RetailStripmall' && instvartemplate != 'NECB 2011'
+      elsif building_type == 'RetailStripmall' && template != 'NECB 2011'
 
-        return true if instvartemplate == 'DOE Ref Pre-1980' || instvartemplate == 'DOE Ref 1980-2004'
+        return true if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
 
         # Create a separate hot water loop & water heater for each space in the list
         swh_space_names = ['LGstore1', 'SMstore1', 'SMstore2', 'SMstore3', 'LGstore2', 'SMstore5', 'SMstore6']
@@ -113,13 +113,13 @@ class StandardsModel
         # Attaches the end uses if specified by space type
         space_type_map = @space_type_map
         
-        if instvartemplate == 'NECB 2011'
+        if template == 'NECB 2011'
           building_type = 'Space Function'
         end
 
         space_type_map.sort.each do |space_type_name, space_names|
           search_criteria = {
-            'template' => instvartemplate,
+            'template' => template,
             'building_type' => model_get_lookup_name(building_type),
             'space_type' => space_type_name
           }
@@ -129,13 +129,13 @@ class StandardsModel
           next if data.nil?
 
           # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-          next unless instvartemplate == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
+          next unless template == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
 
           # Add a service water use for each space
           space_names.sort.each do |space_name|
             space = model.getSpaceByName(space_name).get
             space_multiplier =  nil
-            case instvartemplate
+            case template
             when 'NECB 2011'
             #Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes. 
               space_multiplier = 1
