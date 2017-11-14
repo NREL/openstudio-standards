@@ -1,5 +1,5 @@
 #Repopening Standards Class
-StandardsModel.class_eval do
+Standard.class_eval do
 # I am replacing all prototype inputs.
 # Right now.
   def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)

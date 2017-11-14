@@ -1,4 +1,4 @@
-class NECB_2011_Model
+class NECB2011
 
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4

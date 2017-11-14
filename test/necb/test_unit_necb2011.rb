@@ -10,7 +10,7 @@ class TestNECBLargeOffice < CreateDOEPrototypeBuildingTest
   epw_file = 'CAN_ON_Toronto.716240_CWEC.epw'
 
 
-  model = NECB_2011.new()
+  model = NECB2011.new()
   model.load_building_type_methods(building_type, template, climate_zone)
   model_add_design_days_and_weather_file(model,  climate_zone, epw_file)
   model_add_ground_temperatures(model, building_type, climate_zone)

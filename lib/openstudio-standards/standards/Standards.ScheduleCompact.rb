@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   # Returns the min and max value for this schedule.
   #
   # @author Andrew Parker, NREL.

@@ -124,7 +124,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             
       # Create the model, if requested
       if create_models
-        prototype_creator = StandardsModel.get_standard_model("#{template}_#{building_type}")
+        prototype_creator = Standard.build("#{template}_#{building_type}")
         model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
         output_variable_array =
           [

@@ -1,4 +1,4 @@
-class NRELZNEReady2017_Model < A90_1_Model
+class NRELZNEReady2017 < ASHRAE901
   include NRELZNEReady2017CoolingTower
 
   # Apply the efficiency, plus Multicell heat rejection with VSD per 90.1-2013 6.5.2.2

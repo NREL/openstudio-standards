@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   # Returns the equivalent full load hours (EFLH) for this schedule.
   # For example, an always-on fractional schedule
   # (always 1.0, 24/7, 365) would return a value of 8760.

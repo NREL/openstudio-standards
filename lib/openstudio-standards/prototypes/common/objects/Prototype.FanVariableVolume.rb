@@ -1,4 +1,4 @@
-class StandardsModel
+class Standard
   include PrototypeFan
 
   # Sets the fan pressure rise based on the Prototype buildings inputs

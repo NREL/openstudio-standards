@@ -1,4 +1,4 @@
-class NECB_2011_Model
+class NECB2011
 
   # Sets the selected internal loads to standards-based or typical values.
   # For each category that is selected get all load instances. Remove all

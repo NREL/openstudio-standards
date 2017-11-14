@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   # Returns standards data for selected space type and template
   #
   # @return [hash] hash of internal loads for different load types

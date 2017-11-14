@@ -13,7 +13,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     exterior_lighting_zone_number = 3
 
     # add lights
@@ -40,7 +40,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     exterior_lighting_zone_number = 3
 
     # add lights
@@ -67,7 +67,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     exterior_lighting_zone_number = 3
 
     # add lights
@@ -94,7 +94,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = 'DOE Ref 1980-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     exterior_lighting_zone_number = 3
 
     # add lights
@@ -121,7 +121,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     exterior_lighting_zone_number = 4
 
     # add lights
@@ -157,7 +157,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = 'DOE Ref Pre-1980'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     exterior_lighting_zone_number = 4
 
     # add lights
@@ -191,7 +191,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = 'DOE Ref 1980-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     exterior_lighting_zone_number = 2
 
     # add lights
@@ -227,7 +227,7 @@ class TestAddExteriorLights < Minitest::Test
 
     # gather inputs
     template = '90.1-2010'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     exterior_lighting_zone_number = 1
 
     # add lights

@@ -1,6 +1,6 @@
 
 # open the class to add methods to return sizing values
-class StandardsModel
+class Standard
   include CoilDX
 
   # Finds capacity in W.  This is the cooling capacity of the

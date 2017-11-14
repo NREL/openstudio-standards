@@ -5,7 +5,7 @@ class TestBoilerHotWater < Minitest::Test
   def test_boiler_hot_water
 
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # make an empty model
     model = OpenStudio::Model::Model.new

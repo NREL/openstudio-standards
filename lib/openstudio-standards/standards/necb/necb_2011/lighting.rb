@@ -1,4 +1,4 @@
-class NECB_2011_Model
+class NECB2011
 
   def apply_standard_lights(set_lights, space_type, space_type_properties)
     lights_have_info = false

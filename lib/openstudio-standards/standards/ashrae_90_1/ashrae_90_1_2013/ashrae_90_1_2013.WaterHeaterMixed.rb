@@ -1,4 +1,4 @@
-class A90_1_2013_Model < A90_1_Model
+class ASHRAE9012013 < ASHRAE901
   # Applies the correct fuel type for the water heaters
   # in the baseline model. 90.1-2013 requires a change
   # from the proposed building in some scenarios.

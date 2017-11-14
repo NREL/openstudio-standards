@@ -1,6 +1,6 @@
 
 # Reopen the OpenStudio class to add methods to apply standards to this object
-class StandardsModel
+class Standard
   # Sets the convergence tolerance to 0.0001 deltaC
   # for all hot water coils.
   #

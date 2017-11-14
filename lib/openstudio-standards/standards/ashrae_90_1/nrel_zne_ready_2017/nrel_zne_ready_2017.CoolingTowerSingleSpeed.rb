@@ -1,3 +1,3 @@
-class NRELZNEReady2017_Model < A90_1_Model
+class NRELZNEReady2017 < ASHRAE901
   include NRELZNEReady2017CoolingTower
 end

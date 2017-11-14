@@ -82,7 +82,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       end
     end
     
-    standard = StandardsModel.get_standard_model("NECB 2011")
+    standard = Standard.build("NECB 2011")
     standard.model_clear_and_set_example_constructions(@model)
     #Ensure that building is Conditioned add spacetype to each space. 
     
@@ -113,7 +113,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     building_type = "Office"
     space_type = "WholeBuilding"
     climate_zone = 'NECB HDD Method'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     
     space_type_properties = standard.model_find_object(standard.standards_data["space_types"], { "template" => template, "building_type" =>  building_type , "space_type" => space_type })
     

@@ -16,7 +16,7 @@ class TestFindTargetEuiByEndUse < Minitest::Test
     model.getBuilding.setStandardsBuildingType(building_types.first)
     model.getClimateZones.setClimateZone("ASHRAE",climate_zones.first)
 
-    standard = StandardsModel.get_standard_model(templates.first)
+    standard = Standard.build(templates.first)
     
     # todo - create space and zone
     # this is needed to break office into small, medium, or large

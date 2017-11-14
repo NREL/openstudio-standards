@@ -135,7 +135,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
 
   # Create the baseline model from the
   # supplied proposed test model
-  standard = StandardsModel.get_standard_model(standard)
+  standard = Standard.build(standard)
   standard.model_create_prm_baseline_building(model, building_type, climate_zone, custom, osm_directory, debug) 
 
   # Show the output messages

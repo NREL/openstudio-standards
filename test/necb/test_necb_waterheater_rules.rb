@@ -18,7 +18,7 @@ class SHWTests < MiniTest::Test
     CSV.foreach(shw_expected_result_file, headers: true) do |data|
       shw_curve_names << data['Curve Name']
     end
-    standard = StandardsModel.get_standard_model('NECB 2011')
+    standard = Standard.build('NECB 2011')
  
     # Generate the osm files for all relevant cases to generate the test data
     shw_res_file_output_text = "Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
@@ -89,7 +89,7 @@ class SHWTests < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/shw_elec_eff_losses"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    standard = StandardsModel.get_standard_model('NECB 2011')
+    standard = Standard.build('NECB 2011')
  
     # test tank capacities and volumes (liters)
     test_caps = [10.0,20.0]
@@ -209,7 +209,7 @@ class SHWTests < MiniTest::Test
       building_vintage = 'NECB 2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
-      standard = StandardsModel.get_standard_model(building_vintage)
+      standard = Standard.build(building_vintage)
       
       # Make a directory to run the sizing run in
       unless Dir.exist? sizing_dir

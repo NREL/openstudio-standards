@@ -22,7 +22,7 @@ class TestModelCreateSpaceTypeHash < Minitest::Test
 
     # create story hash
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     space_type_hash = standard.model_create_space_type_hash(model)
     puts space_type_hash.size
     space_type_hash.each do |k,v|

@@ -1,5 +1,5 @@
 # open the class to add methods to apply HVAC efficiency standards
-class StandardsModel
+class Standard
 
 
   attr_accessor :space_multiplier_map

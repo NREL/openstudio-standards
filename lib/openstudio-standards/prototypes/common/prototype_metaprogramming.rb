@@ -22,21 +22,21 @@ prototype_buildings = [
 ]
 
 
-templates = ['NECB_2011',
-             'A90_1_2004',
-             'A90_1_2007',
-             'A90_1_2010',
-             'A90_1_2013',
-             'DOERef1980_2004',
+templates = ['NECB2011',
+             'ASHRAE9012004',
+             'ASHRAE9012007',
+             'ASHRAE9012010',
+             'ASHRAE9012013',
+             'DOERef1980to2004',
              'DOERefPre1980',
              'NRELZNEReady2017'
 ]
 
 templates.each do |template|
   #Create Prototype base class (May not be needed...)
-  #Ex: class NECB_2011_Prototype < NECB_2011_Model
+  #Ex: class NECB2011_Prototype < NECB2011
   eval <<DYNAMICClass
-class #{template}_Prototype < #{template}_Model
+class #{template}_Prototype < #{template}
   attr_reader :instvarbuilding_type
   def initialize
     super()
@@ -46,10 +46,10 @@ end
 DYNAMICClass
 
   #Create Building Specific classes for each building.
-  #Example class NECB_2011Hospital
+  #Example class NECB2011Hospital
   prototype_buildings.each do |name|
     eval <<DYNAMICClass
-class #{template}#{name} < #{template}_Prototype
+class #{template}#{name} < #{template}
   @@building_type = "#{name}"
   register_standard ("\#{@@template}_\#{@@building_type}")
   attr_accessor :prototype_database

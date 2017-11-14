@@ -1,5 +1,5 @@
 
-class NECB_2011_Model
+class NECB2011
 
   def model_add_hvac(model, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
@@ -2621,7 +2621,7 @@ class NECB_2011_Model
     #Array to store schedule objects
     schedule_type_array = []
 
-    standard = StandardsModel.get_standard_model('NECB 2011')
+    standard = Standard.build('NECB 2011')
 
     #find the number of stories in the model this include multipliers.
     number_of_stories = model.getBuilding.standardsNumberOfAboveGroundStories()

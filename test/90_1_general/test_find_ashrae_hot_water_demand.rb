@@ -11,7 +11,7 @@ class TestFindASHRAEHotWaterDemand < Minitest::Test
     model.getBuilding.setStandardsBuildingType("LargeHotel")
 
     template = '90.1-2010'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     
     # lookup hot water recommendations
     hot_water_recommendations = standard.model_find_ashrae_hot_water_demand(model) 

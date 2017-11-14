@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   include CoilDX
 
   # Finds capacity in W

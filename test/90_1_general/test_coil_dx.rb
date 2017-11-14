@@ -5,7 +5,7 @@ class TestCoilDX < Minitest::Test
   def test_coil_cooling_dx_single_speed
 
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # make a model
     model = OpenStudio::Model::Model.new
@@ -31,7 +31,7 @@ class TestCoilDX < Minitest::Test
   def test_coil_cooling_dx_two_speed
 
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # make a model
     model = OpenStudio::Model::Model.new
@@ -58,7 +58,7 @@ class TestCoilDX < Minitest::Test
 
   def test_coil_heating_dx_single_speed
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # make a model
     model = OpenStudio::Model::Model.new

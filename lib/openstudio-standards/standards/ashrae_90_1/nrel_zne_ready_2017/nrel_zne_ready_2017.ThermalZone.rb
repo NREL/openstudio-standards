@@ -1,4 +1,4 @@
-class NRELZNEReady2017_Model < A90_1_Model 
+class NRELZNEReady2017 < ASHRAE901
   # Determine the area and occupancy level limits for
   # demand control ventilation.
   #

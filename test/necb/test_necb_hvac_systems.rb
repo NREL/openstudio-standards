@@ -401,7 +401,7 @@ class FullHVACTest < MiniTest::Test
       building_vintage = 'NECB 2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
-      standard = StandardsModel.get_standard_model(building_vintage)
+      standard = Standard.build(building_vintage)
 
       if !Dir.exists?(sizing_dir)
         FileUtils.mkdir_p(sizing_dir)

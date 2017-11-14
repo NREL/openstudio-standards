@@ -13,7 +13,7 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = 'DOE Ref 1980-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # add_typical_swh
     typical_swh = standard.model_add_typical_swh(model)
@@ -87,7 +87,7 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = '90.1-2010'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # add_typical_swh
     typical_swh = standard.model_add_typical_swh(model)
@@ -168,7 +168,7 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # add_typical_swh
     typical_swh = standard.model_add_typical_swh(model)
@@ -192,7 +192,7 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = '90.1-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     model.getPlantLoops.each do |loop|
       loop.remove
@@ -220,7 +220,7 @@ class TestAddSwh < Minitest::Test
 
     # gather inputs
     template = '90.1-2010'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     model.getPlantLoops.each do |loop|
       loop.remove

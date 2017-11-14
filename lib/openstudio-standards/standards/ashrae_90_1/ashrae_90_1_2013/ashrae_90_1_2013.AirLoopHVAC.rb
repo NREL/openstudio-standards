@@ -1,4 +1,4 @@
-class A90_1_2013_Model < A90_1_Model
+class ASHRAE9012013 < ASHRAE901
   # Apply multizone vav outdoor air method and
   # adjust multizone VAV damper positions
   # to achieve a system minimum ventilation effectiveness

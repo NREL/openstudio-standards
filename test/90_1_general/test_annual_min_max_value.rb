@@ -8,7 +8,7 @@ class TestAnnualMinMaxValue < Minitest::Test
     model = OpenStudio::Model::Model.new
 
     template = '90.1-2010'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     
     # make ruleset schedule
     schedule_ruleset = standard.model_add_schedule(model, 'Office Bldg Light')

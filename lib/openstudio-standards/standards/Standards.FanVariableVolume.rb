@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   include Fan
 
   # Modify the fan curve coefficients to reflect a specific type of control.

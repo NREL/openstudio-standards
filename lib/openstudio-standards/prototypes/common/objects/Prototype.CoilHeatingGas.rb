@@ -1,4 +1,4 @@
-class StandardsModel
+class Standard
   # Updates the efficiency of some gas heating coils
   # per the prototype assumptions.  Defaults to
   # making no changes.

@@ -1,4 +1,4 @@
-class A90_1_2007_Model < A90_1_Model
+class ASHRAE9012007 < ASHRAE901
   # Determine the base infiltration rate at 75 PA.
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2

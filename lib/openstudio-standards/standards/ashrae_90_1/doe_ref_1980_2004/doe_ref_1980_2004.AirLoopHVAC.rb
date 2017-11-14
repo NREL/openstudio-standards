@@ -1,4 +1,4 @@
-class DOERef1980_2004_Model < A90_1_Model
+class DOERef1980to2004 < ASHRAE901
   # Apply multizone vav outdoor air method and
   # adjust multizone VAV damper positions.  Currently
   # doesn't do anything for the DOE prototype buildings.

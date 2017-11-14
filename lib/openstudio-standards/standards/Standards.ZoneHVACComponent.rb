@@ -1,5 +1,5 @@
 # open the class to add methods to apply HVAC efficiency standards
-class StandardsModel
+class Standard
   # Sets the fan power of zone level HVAC equipment 
   # (PTACs, PTHPs, Fan Coils, and Unit Heaters)
   # based on the W/cfm specified in the standard.

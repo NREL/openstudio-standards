@@ -1,4 +1,4 @@
-class A90_1_2013_Model < A90_1_Model
+class ASHRAE9012013 < ASHRAE901
   # Determine the performance rating method specified 
   # design condenser water temperature, approach, and range
   #

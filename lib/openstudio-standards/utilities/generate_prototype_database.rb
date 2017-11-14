@@ -24,7 +24,7 @@ nrel_building_types = [
 ]
 
 templates = ['90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'NECB 2011']
-new_templates = ['A90_1_2004', 'A90_1_2007', 'A90_1_2010', 'A90_1_2013', 'DOERefPre1980', 'DOERef1980_2004', 'NECB_2011']
+new_templates = ['ASHRAE9012004', 'ASHRAE9012007', 'ASHRAE9012010', 'ASHRAE9012013', 'DOERefPre1980', 'DOERef1980to2004', 'NECB2011']
 
 
 array = []

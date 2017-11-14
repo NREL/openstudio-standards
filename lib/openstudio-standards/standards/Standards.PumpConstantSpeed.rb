@@ -1,4 +1,4 @@
 
-class StandardsModel
+class Standard
   include Pump
 end

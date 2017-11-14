@@ -13,7 +13,7 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
 
     
     template = '90.1-2010'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # set climate zone and building type
     model.getBuilding.setStandardsBuildingType(building_types.first)

@@ -1,6 +1,6 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class StandardsModel
+class Standard
   # Sets the fan power of a PIU fan based on the W/cfm
   # specified in the standard.
   #

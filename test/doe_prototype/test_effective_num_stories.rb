@@ -17,7 +17,7 @@ class TestEffectiveNumStories < Minitest::Test
     model = model.get
 
     template = '90.1-2010'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     
     test_story_a = nil
     test_story_b = nil
@@ -51,7 +51,7 @@ class TestEffectiveNumStories < Minitest::Test
     model = model.get
 
     template = '90.1-2010'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     
     # create story hash
     effective_num_stories = standard.model_effective_num_stories(model)

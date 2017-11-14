@@ -1,4 +1,4 @@
-class A90_1_2007_Model < A90_1_Model
+class ASHRAE9012007 < ASHRAE901
   # Determines the OA flow rates above which an economizer is required.
   # Two separate rates, one for systems with an economizer and another
   # for systems without.

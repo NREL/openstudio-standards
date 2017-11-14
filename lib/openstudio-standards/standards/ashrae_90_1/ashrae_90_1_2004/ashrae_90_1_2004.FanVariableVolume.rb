@@ -1,4 +1,4 @@
-class A90_1_2004_Model < A90_1_Model
+class ASHRAE9012004 < ASHRAE901
   # The threhold horsepower below which part load control is not required.
   # 15 nameplate HP threshold is equivalent to motors with input powers of 9.9  HP per TSD
   #

@@ -1,4 +1,4 @@
-class StandardsModel
+class Standard
   # Set the initial minimum damper position based on OA
   # rate of the space and the template.
   # Defaults to basic behavior, but this method is overridden

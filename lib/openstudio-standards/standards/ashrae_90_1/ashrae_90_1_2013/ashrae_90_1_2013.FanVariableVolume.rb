@@ -1,4 +1,4 @@
-class A90_1_2013_Model < A90_1_Model
+class ASHRAE9012013 < ASHRAE901
 
   # The threhold horsepower below which part load control is not required.
   # Per 90.1-2013, table 6.5.3.2.1: the fan motor size for chiller-water

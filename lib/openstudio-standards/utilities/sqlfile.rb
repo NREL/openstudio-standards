@@ -1,4 +1,4 @@
-StandardsModel.class_eval do
+Standard.class_eval do
 
   # Gets the sql file for the model, erroring if not found
   # @todo candidate for C++

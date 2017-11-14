@@ -1,4 +1,4 @@
-class A90_1_2004_Model < A90_1_Model
+class ASHRAE9012004 < ASHRAE901
   # Determine which climate zone to use.
   # Uses the most specific climate zone set for most
   # climate zones, except for ClimateZone 3, which

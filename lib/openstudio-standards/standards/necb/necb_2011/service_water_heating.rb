@@ -1,4 +1,4 @@
-class NECB_2011_Model
+class NECB2011
 
 
   def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)

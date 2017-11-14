@@ -12,7 +12,7 @@ class TestFindConstructionPropertiesData < Minitest::Test
     standards_construction_type = 'SteelFramed'
     test_climate_zone = '3B'
 
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     
     # make an empty model
     model = OpenStudio::Model::Model.new

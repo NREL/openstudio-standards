@@ -85,7 +85,7 @@ class TestAddHVACSystems < Minitest::Test
     ]
 
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # Add each HVAC system to the test model
     # and run a sizing run to ensure it simulates.

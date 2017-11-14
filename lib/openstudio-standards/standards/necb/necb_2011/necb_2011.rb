@@ -1,4 +1,4 @@
-class NECB_2011_Model < StandardsModel
+class NECB2011 < Standard
   @@template = 'NECB 2011'
   register_standard (@@template)
   attr_reader :template

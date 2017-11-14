@@ -1,4 +1,4 @@
-class A90_1_2010_Model < A90_1_Model
+class ASHRAE9012010 < ASHRAE901
   # Determine the area and occupancy level limits for
   # demand control ventilation.
   #

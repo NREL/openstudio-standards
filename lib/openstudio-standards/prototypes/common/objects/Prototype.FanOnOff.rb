@@ -1,6 +1,6 @@
 
 # open the class to add methods to return sizing values
-class StandardsModel
+class Standard
   include PrototypeFan
 
   # Sets the fan pressure rise based on the Prototype buildings inputs

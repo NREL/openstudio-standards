@@ -1,4 +1,4 @@
-class A90_1_2010_Model < A90_1_Model  
+class ASHRAE9012010 < ASHRAE901
   # Determines the method used to extend the daylighted area horizontally
   # next to a window.  If the method is 'fixed', 2 ft is added to the
   # width of each window.  If the method is 'proportional', a distance

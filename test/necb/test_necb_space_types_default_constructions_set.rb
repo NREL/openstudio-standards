@@ -14,7 +14,7 @@ class NECB2011SpaceTypesDefaultConstructionsTest < Minitest::Test
     output = ""
     #Iterate through all spacetypes/buildingtypes.
     Templates.each do |template|
-      standard = StandardsModel.get_standard_model(template)
+      standard = Standard.build(template)
       #Get spacetypes from googledoc.
       search_criteria = {
           "template" => template,

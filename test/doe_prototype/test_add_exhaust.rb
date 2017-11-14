@@ -13,7 +13,7 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     zone_exhaust_fans = {}
 
@@ -50,7 +50,7 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # add exhaust
     zone_exhaust_fans = standard.model_add_exhaust(model, "None")
@@ -74,7 +74,7 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # add exhaust
     zone_exhaust_fans = standard.model_add_exhaust(model, "Adjacent")
@@ -110,7 +110,7 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # add exhaust
     zone_exhaust_fans = standard.model_add_exhaust(model, "Adjacent")
@@ -139,7 +139,7 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # add exhaust
     zone_exhaust_fans = standard.model_add_exhaust(model, "Largest Zone")
@@ -179,7 +179,7 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = 'DOE Ref 1980-2004'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # add exhaust
     zone_exhaust_fans = standard.model_add_exhaust(model, "Largest Zone")
@@ -204,12 +204,12 @@ class TestAddExhaust < Minitest::Test
 
     # create story hash
     template = '90.1-2010'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # add exhaust
     zone_exhaust_fans = standard.model_add_exhaust(model, "Largest Zone")
     zone_exhaust_fans = standard.model_add_exhaust(model, "Largest Zone")
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     puts"hellotest"
     puts zone_exhaust_fans

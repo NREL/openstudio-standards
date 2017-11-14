@@ -1,6 +1,6 @@
 
 # Open the class to add methods to put weather info into the model
-class StandardsModel
+class Standard
   # Helper method to set the weather file, import the design days, set
   # water mains temperature, and set ground temperature.
   # Based on ChangeBuildingLocation measure by Nicholas Long

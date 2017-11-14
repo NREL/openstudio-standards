@@ -1,4 +1,4 @@
-class NRELZNEReady2017_Model < A90_1_Model
+class NRELZNEReady2017 < ASHRAE901
   # Specifies the minimum damper position for VAV dampers.
   # For terminals with hot water heat and DDC, the minimum is 20%,
   # otherwise the minimum is 30%.

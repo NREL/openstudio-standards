@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   include Pump
 
   # Takes the total rated flow rate and returns per-pump values

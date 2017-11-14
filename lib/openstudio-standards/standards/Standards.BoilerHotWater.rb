@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   # find search criteria
   #
   # @return [Hash] used for model_find_object(model) 

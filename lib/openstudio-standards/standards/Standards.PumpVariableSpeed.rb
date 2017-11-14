@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   include Pump
 
   # Set the pump curve coefficients based

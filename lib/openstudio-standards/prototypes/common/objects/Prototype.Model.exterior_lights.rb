@@ -1,5 +1,5 @@
 # open the class to add methods to add exterior lighting
-class StandardsModel
+class Standard
 
   # Add exterior lighting to the model
   #

@@ -5,7 +5,7 @@ class TestChillerElectricEir < Minitest::Test
   def test_chiller_electric_eir
 
     template = '90.1-2013'
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
 
     # make a model
     model = OpenStudio::Model::Model.new

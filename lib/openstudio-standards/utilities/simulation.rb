@@ -1,4 +1,4 @@
-StandardsModel.class_eval do
+Standard.class_eval do
   def model_run_simulation_and_log_errors(model, run_dir = "#{Dir.pwd}/Run")
     # Make the directory if it doesn't exist
     unless Dir.exist?(run_dir)

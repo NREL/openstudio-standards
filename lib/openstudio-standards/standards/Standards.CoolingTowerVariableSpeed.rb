@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   include CoolingTower
 
   # Applies the standard efficiency ratings and typical performance curves to this object.

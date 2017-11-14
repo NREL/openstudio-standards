@@ -1,4 +1,4 @@
-class A90_1_2013_Model < A90_1_Model
+class ASHRAE9012013 < ASHRAE901
   include ASHRAE9012013CoolingTower
 
   # Apply the efficiency, plus Multicell heat rejection with VSD per 90.1-2013 6.5.2.2

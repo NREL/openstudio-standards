@@ -1,4 +1,4 @@
-class StandardsModel
+class Standard
   # Apply all standard required controls to the plantloop
   #
   # @param (see #economizer_required?)

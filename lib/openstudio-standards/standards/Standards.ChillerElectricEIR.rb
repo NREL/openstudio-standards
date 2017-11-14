@@ -1,5 +1,5 @@
 
-class StandardsModel
+class Standard
   # Finds the search criteria
   #
   # @return [hash] has for search criteria to be used for find object

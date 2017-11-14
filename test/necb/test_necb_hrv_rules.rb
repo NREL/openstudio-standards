@@ -12,7 +12,7 @@ class HRVTests < MiniTest::Test
   def test_hrv_eff
     output_folder = "#{File.dirname(__FILE__)}/output/hrv_eff"
     FileUtils.rm_rf(output_folder)
-    standard = StandardsModel.get_standard_model('NECB 2011')
+    standard = Standard.build('NECB 2011')
  
     # Generate the osm files for all relevant cases to generate the test data
     model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
@@ -99,7 +99,7 @@ class HRVTests < MiniTest::Test
       building_vintage = 'NECB 2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
-      standard = StandardsModel.get_standard_model(building_vintage)
+      standard = Standard.build(building_vintage)
       
       # Make a directory to run the sizing run in
       unless Dir.exist? sizing_dir

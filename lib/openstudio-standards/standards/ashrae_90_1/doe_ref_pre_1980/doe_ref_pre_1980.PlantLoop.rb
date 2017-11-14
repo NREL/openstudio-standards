@@ -1,4 +1,4 @@
-class DOERefPre1980_Model < A90_1_Model
+class DOERefPre1980 < ASHRAE901
   # Determine if temperature reset is required.
   # Not required for the older DOE buildings.
   def plant_loop_supply_water_temperature_reset_required?(plant_loop)

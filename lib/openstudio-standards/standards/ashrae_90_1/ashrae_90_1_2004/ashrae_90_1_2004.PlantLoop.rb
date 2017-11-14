@@ -1,4 +1,4 @@
-class A90_1_2004_Model < A90_1_Model
+class ASHRAE9012004 < ASHRAE901
 
   # Set the primary and secondary pumping control types for the
   # chilled water loop, as specified in Appendix G.

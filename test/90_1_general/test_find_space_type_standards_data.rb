@@ -12,7 +12,7 @@ class TestFindSpaceTypeStandardsData < Minitest::Test
     # make an empty model
     model = OpenStudio::Model::Model.new
 
-    standard = StandardsModel.get_standard_model(template)
+    standard = Standard.build(template)
     
     # create space type and set standards info
     space_type = OpenStudio::Model::SpaceType.new(model)

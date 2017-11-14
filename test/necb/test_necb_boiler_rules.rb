@@ -15,7 +15,7 @@ class HVACEfficienciesTest < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     boiler_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_boiler_efficiencies_expected_results.csv')
-    standard = StandardsModel.get_standard_model('NECB 2011')
+    standard = Standard.build('NECB 2011')
     
     # Initialize hashes for storing expected boiler efficiency data from file
     fuel_type_min_cap = {}
@@ -301,7 +301,7 @@ class HVACEfficienciesTest < MiniTest::Test
       building_vintage = 'NECB 2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
-      standard = StandardsModel.get_standard_model(building_vintage)
+      standard = Standard.build(building_vintage)
       
       # Make a directory to run the sizing run in
       unless Dir.exist? sizing_dir

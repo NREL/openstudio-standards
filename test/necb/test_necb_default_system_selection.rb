@@ -17,7 +17,7 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
     #report variables. 
     header_output = ""
     results_array = []
-    standard = StandardsModel.get_standard_model('NECB 2011')
+    standard = Standard.build('NECB 2011')
     
     #Create new model for testing. 
     empty_model = OpenStudio::Model::Model.new

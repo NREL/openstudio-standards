@@ -1,6 +1,6 @@
 
 # open the class to add methods to apply HVAC efficiency standards
-class StandardsModel
+class Standard
   # Determine the component infiltration rate for this surface
   #
   # @param type [String] choices are 'baseline' and 'advanced'
