@@ -6,11 +6,10 @@
 
 AllCops:
   Exclude:
-    - 'measures/**/*'
-    - 'openstudio-standards/data/**/*'
-    - 'openstudio-standards/test/**/*'
-    - 'openstudio-standards/lib/openstudio-standards/hvac_sizing/**/*'
-    - 'openstudio-standards/lib/openstudio-standards/btap/**/*'
+    - 'data/**/*'
+    - 'test/**/*'
+    - 'lib/openstudio-standards/hvac_sizing/**/*'
+    - 'lib/openstudio-standards/btap/**/*'
 
 # ==================== Linters ====================
 
@@ -65,7 +64,11 @@ Metrics/ModuleLength:
 # Disable this metric.  This is a complex engineering-focused library.
 Metrics/AbcSize:
   Enabled: false
-  
+
+# Disable this metric.  This is a complex engineering-focused library.
+Metrics/BlockLength:
+  Enabled: false
+
 # Disable this metric.  This is a complex engineering-focused library.
 Metrics/PerceivedComplexity:
   Enabled: false
@@ -80,15 +83,6 @@ Metrics/CyclomaticComplexity:
 # Enforce ['Word1', 'Word2'] for readability
 Style/WordArray:
   EnforcedStyle: brackets
-
-# Intentionally allow set_foo because these methods do not
-# take have cooresponding getters.
-Style/AccessorMethodName:
-  Enabled: false
-
-# Allow indented case statements
-Style/CaseIndentation:
-  Enabled: false
 
 # Disabled because in most of this codebase,
 # the current approach is more readable.
@@ -116,10 +110,6 @@ Style/Next:
 Style/IfUnlessModifier:
   Enabled: false
 
-# Ignore file name convention; choices based on OpenStudio C++ class names
-Style/FileName:
-  Enabled: false
-
 # Documentation will be covered by YARD.
 Style/Documentation:
   Enabled: false  
@@ -127,3 +117,41 @@ Style/Documentation:
 # Unclear what this Cop is about; disregard
 Style/ClassAndModuleChildren:
   Enabled: false
+
+# Allow multiple comparisons via || for clarity
+Style/MultipleComparison:
+  Enabled: false
+
+# Allow for i in 0..3 loops
+Style/For:
+  Enabled: false
+
+# ==================== Naming ====================
+
+# Ignore file name convention; choices based on OpenStudio C++ class names
+Naming/FileName:
+  Enabled: false
+
+# Intentionally allow set_foo because these methods do not
+# take have cooresponding getters.
+Naming/AccessorMethodName:
+  Enabled: false
+
+# Allow variables like coeff_1 for legibility
+Naming/VariableNumber:
+  Enabled: false
+
+# ==================== Layout ====================
+
+# Allow indented case statements
+Layout/CaseIndentation:
+  Enabled: false
+
+
+# ==================== Performance ====================
+
+# Allow hash.each
+Performance/HashEachMethods:
+    Enabled: false
+
+
