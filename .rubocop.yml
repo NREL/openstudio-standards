@@ -116,12 +116,6 @@ Style/Next:
 Style/IfUnlessModifier:
   Enabled: false
 
-# Allow global variables because using $os_standards 
-# to avoid passing it around to every method.
-# Should not use any more global variables though.
-Style/GlobalVars:
-  Enabled: false 
- 
 # Ignore file name convention; choices based on OpenStudio C++ class names
 Style/FileName:
   Enabled: false
