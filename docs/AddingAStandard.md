@@ -12,17 +12,4 @@ This document gives a high-level overview of adding a new Template (energy code,
 3. Add your Template to the **Templates** tab.
 3. Add your new information to the remaining tabs.
 
-## 3. Enable your new Template in the code
-
-1. Decide which methods you want to enable your Template for
-
-Typical examples might be:
-
-1.  
-
-
-- Making 
-- dfd
-- df
-- 
- 
+## 3. TODO - Need to write up instructions

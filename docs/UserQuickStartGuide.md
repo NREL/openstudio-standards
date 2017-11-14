@@ -17,13 +17,17 @@ Starting with OpenStudio 1.11.3, the "Create DOE Prototype Building" Measure is 
      require 'openstudio-standards'
      ...
 
+## Examples
+
+### TODO - Put examples of common use cases here
+
 ## Installing OpenStudio-Standards from RubyGems
 If you want to install the most current release of this gem from RubyGems.org
 
-1. Install the {https://www.openstudio.net/downloads latest version of OpenStudio}.  Minimum supported version is 1.9.0. 
-2. **On Windows**, install {http://rubyinstaller.org/ Ruby 2.0} (`ruby -v` from command prompt to check installed version).  
-3. **On Mac** Ruby 2.0 is already installed.
-4. **On Windows**, Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby200-x64\lib\ruby\gems\2.0.0`.
+1. Install the [latest version of OpenStudio](https://www.openstudio.net/downloads).  Minimum supported version is 1.9.0. 
+2. **On Windows**, install [Ruby 2.2](http://rubyinstaller.org/) (`ruby -v` from command prompt to check installed version).  
+3. **On Mac** install Ruby 2.2 using [rbenv](http://octopress.org/docs/setup/rbenv/) (`ruby -v` from command prompt to check installed version).
+4. **On Windows**, Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby22-x64\lib\ruby\gems\2.2.0`.
 6. `gem install openstudio-standards`
 
 Now, your installed versions of OpenStudio will have access to this gem.  If you install new versions of OpenStudio, they will also have access to this gem.
@@ -31,11 +35,11 @@ Now, your installed versions of OpenStudio will have access to this gem.  If you
 ## Installing OpenStudio-Standards from Source Code
 If you want access to a newer version of the gem than is available on RubyGems.org
 
-1. Install the {https://www.openstudio.net/downloads latest version of OpenStudio}.  Minimum supported version is 1.9.0. 
-2. **On Windows**, install {http://rubyinstaller.org/ Ruby 2.0} (`ruby -v` from command prompt to check installed version).  
-3. **On Mac** Ruby 2.0 is already installed.
-4. **On Windows**, Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby200-x64\lib\ruby\gems\2.0.0`.
-5. {https://github.com/NREL/openstudio-standards/archive/master.zip Download the source code} or {https://github.com/NREL/openstudio-standards.git clone the source code} using {https://git-scm.com/ Git}.
+1. Install the [latest version of OpenStudio](https://www.openstudio.net/downloads).  Minimum supported version is 1.9.0. 
+2. **On Windows**, install [Ruby 2.2](http://rubyinstaller.org/) (`ruby -v` from command prompt to check installed version).  
+3. **On Mac** install Ruby 2.2 using [rbenv](http://octopress.org/docs/setup/rbenv/) (`ruby -v` from command prompt to check installed version).
+4. **On Windows**, Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby22-x64\lib\ruby\gems\2.2.0`.
+5. [Download the source code](https://github.com/NREL/openstudio-standards/archive/master.zip) or [clone the source code](https://github.com/NREL/openstudio-standards.git) using [Git](https://git-scm.com/).
 5. In a command prompt, navigate to the `openstudio-standards/openstudio-standards` directory of the source code.
 5. `gem build openstudio-standards.gemspec`   ENTER to build the gem.
 6. `gem install openstudio-standards-0.1.X.gem`   ENTER to install the gem.

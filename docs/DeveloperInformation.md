@@ -1,11 +1,11 @@
 # Developer Information
-# Really MUST BE UPDATED
+
 ## Setup
 
 1. Install the [latest version of OpenStudio](https://www.openstudio.net/downloads)
 2. Install Ruby:
       1. **On Mac**:
-      2. Ruby 2.2 is already installed, go to the next step.
+      2. Install Ruby 2.2 using [rbenv](http://octopress.org/docs/setup/rbenv/) (`ruby -v` from command prompt to check installed version).
       3. **On Windows**:
       4. Install [Ruby 2.2.6](http://rubyinstaller.org/downloads/) (`ruby -v` from command prompt to check installed version).
       5. Install [Ruby DevKit](http://rubyinstaller.org/downloads/) by following [these installation instructions](https://github.com/oneclick/rubyinstaller/wiki/Development-Kit)
@@ -17,9 +17,9 @@
 	4. Save it here: `/usr/lib/ruby/site_ruby/openstudio.rb`
 	5. **On Windows**:
 	6. Create a file called `openstudio.rb`
-	7. Contents: `require "C:/openstudio-2.1.0/Ruby/openstudio.so"`  Modify `2.1.0` to the version you installed.
+	7. Contents: `require "C:/openstudio-2.1.0/Ruby/openstudio.rb"`  Modify `2.1.0` to the version you installed.
 	8. Save it here: `C:/Ruby22-x64/lib/ruby/site_ruby/openstudio.rb`
-	9. Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby22-x64\lib\ruby\gems\2.0.0`.
+	9. Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby22-x64\lib\ruby\gems\2.2.0`.
 
 5. Install the `bundler` ruby gem. (`gem install bundler` from command prompt)
 6. Install the `json` ruby gem. (`gem install json` from command prompt)
@@ -29,7 +29,7 @@
 9. Run all commands below from the `/openstudio-standards/openstudio-standards` directory 
 10. **On Windows**, use the Git Bash instead of the default command prompt.
 11. **On Mac** the default terminal is fine.
-11. Navigate to the `openstudio-standards/openstudio-standards` directory.
+11. Navigate to the `openstudio-standards` directory.
 12. Command prompt: `bundle install`. This will install all ruby gems necessary to develop this code.
 13. Sign up for an account at [CircleCI](https://circleci.com/) and follow the `NREL/openstudio-standards` project.
 14. That's it, you are ready to make changes!
@@ -61,6 +61,7 @@ This project uses [Rake](http://rake.rubyforge.org/) to run tasks from the termi
 - `rake install:local`: installs the gem locally
 - `rake release`: pushes the code to RubyGems.org. Don't use this without asking!
 - `rake rubocop`: checks the code syntax
+- `rake rubocop`: checks the code syntax and shows the report
 - `rake rubocop:auto_correct`: fixes mistakes in code syntax
 - `rake test:compliance`: runs tests for NECB compliance (Canadian)
 - `rake test:necb-buildings`: runs tests for NECB buildings (Canadian)
@@ -69,11 +70,12 @@ This project uses [Rake](http://rake.rubyforge.org/) to run tasks from the termi
  
 ### Modify the code
 
-As you add to/modify the code, please try to fit changes into the current structure rather than bolting things on willy-nilly.  See the {file:openstudio-standards/docs/CodeStructure.md Code Structure page} to see how the code is organized.  If you don't understand something or want to discuss your plan before you get started, contact {mailto:andrew.parker@nrel.gov}.
+As you add to/modify the code, please try to fit changes into the current structure rather than bolting things on willy-nilly.  See the {file:docs/CodeStructure.md Code Structure page} to see how the code is organized.  If you don't understand something or want to discuss your plan before you get started, contact <mailto:andrew.parker@nrel.gov>.
 
 1. Make a new branch for your changes.
 2. Modify the code on your branch.
 3. Modify the [OpenStudio_Standards Google Spreadsheet](https://docs.google.com/spreadsheets/d/15-mlZrWbA4srtFHtWRP1dgPeuI5plFdjCb1B79fEukI/edit?usp=sharing)
+ - To get edit access to this spreadsheet, contact <mailto:andrew.parker@nrel.gov>.
 4. `rake data:update` to download the latest version of the spreadsheet from Google Drive and export the JSON files.
 
 ### Test the code

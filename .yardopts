@@ -1,11 +1,13 @@
+--main docs/Home.md
 --embed-mixins
 lib/openstudio-standards/standards/**/*.rb
 lib/openstudio-standards/prototypes/**/*.rb
 lib/openstudio-standards/utilities/**/*.rb
 lib/openstudio-standards/weather/**/*.rb
 -
+docs/Home.md
 docs/UserQuickStartGuide.md
-docs/Architecture.md
+docs/Features.md
 docs/DeveloperInformation.md
 docs/CodeStructure.md
 docs/AddingAStandard.md

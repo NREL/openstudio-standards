@@ -1,4 +1,4 @@
-# Architecture
+# Features
 
 This library has been developed with three main use-cases in mind:
 
