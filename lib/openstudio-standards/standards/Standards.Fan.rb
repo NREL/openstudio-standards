@@ -62,7 +62,7 @@ module Fan
     # Calculate the new power
     new_power_w = fan_fanpower(fan) 
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: pressure rise = #{new_pressure_rise_in_h2o.round(1)} in w.c., power = #{motor_horsepower.round(2)}HP.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: pressure rise = #{new_pressure_rise_in_h2o.round(1)} in w.c., power = #{fan_motor_horsepower(fan).round(2)}HP.")
 
     return true
   end

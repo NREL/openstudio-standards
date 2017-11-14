@@ -1,4 +1,4 @@
-class A90_1_2010_Model < A90_1_Model
+class A90_1_2013_Model < A90_1_Model
   # Determines the area of the building above which point
   # the non-dominant area type gets it's own HVAC system type.
   # @return [Double] the minimum area (m^2)
@@ -30,27 +30,25 @@ class A90_1_2010_Model < A90_1_Model
       limit_ft2 = 25_000
 
       case area_type
-        when 'residential'
-          sys_num = '1_or_2'
-        when 'nonresidential'
-          # nonresidential and 3 floors or less and <25,000 ft2
-          if num_stories <= 3 && area_ft2 < limit_ft2
-            sys_num = '3_or_4'
-            # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
-          elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150_000))
-            sys_num = '5_or_6'
-            # nonresidential and more than 5 floors or >150,000 ft2
-          elsif num_stories >= 5 || area_ft2 > 150_000
-            sys_num = '7_or_8'
-          end
-        when 'heatedonly'
-          sys_num = '9_or_10'
-        when 'retail'
-          # Should only be hit by Xcel EDA
+      when 'residential'
+        sys_num = '1_or_2'
+      when 'nonresidential'
+        # nonresidential and 3 floors or less and <25,000 ft2
+        if num_stories <= 3 && area_ft2 < limit_ft2
           sys_num = '3_or_4'
+          # nonresidential and 4 or 5 floors or 5 floors or less and 25,000 ft2 to 150,000 ft2
+        elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < limit_ft2) || (num_stories <= 5 && (area_ft2 >= limit_ft2 && area_ft2 <= 150_000))
+          sys_num = '5_or_6'
+          # nonresidential and more than 5 floors or >150,000 ft2
+        elsif num_stories >= 5 || area_ft2 > 150_000
+          sys_num = '7_or_8'
+        end
+      when 'heatedonly'
+        sys_num = '9_or_10'
+      when 'retail'
+        # Should only be hit by Xcel EDA
+        sys_num = '3_or_4'
       end
-
-      return sys_num
 
     else
     
@@ -77,15 +75,20 @@ class A90_1_2010_Model < A90_1_Model
         sys_num = '3_or_4'
       end
 
-      return sys_num
-
     end
+
+    return sys_num
   end
   
   # Change the fuel type based on climate zone, depending on the standard.
   # For 90.1-2013, fuel type is based on climate zone, not the proposed model.
   # @return [String] the revised fuel type
-  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
+  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
+    if custom == 'Xcel Energy CO EDA'
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 rules for heating fuel type (based on proposed model) rules apply.')
+      return fuel_type
+    end
+
     # For 90.1-2013 the fuel type is determined based on climate zone.
     # Don't change the fuel if it purchased heating or cooling.
     if fuel_type == 'electric' || fuel_type == 'fossil'

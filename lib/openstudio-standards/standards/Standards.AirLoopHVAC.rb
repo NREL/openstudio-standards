@@ -254,7 +254,7 @@ class StandardsModel
     air_loop_hvac.demandComponents.each do |dc|
       next if dc.to_AirTerminalSingleDuctParallelPIUReheat.empty?
       pfp_term = dc.to_AirTerminalSingleDuctParallelPIUReheat.get
-      zone_hvac_component_apply_prm_baseline_fan_power(pfp_term)
+      air_terminal_single_duct_parallel_piu_reheat_apply_prm_baseline_fan_power(pfp_term)
     end
 
     return true

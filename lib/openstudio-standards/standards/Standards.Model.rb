@@ -174,7 +174,7 @@ class StandardsModel
 
     # Set the baseline fan power for all airloops
     model.getAirLoopHVACs.sort.each do |air_loop|
-      zone_hvac_component_apply_prm_baseline_fan_power(air_loop)
+      air_loop_hvac_apply_prm_baseline_fan_power(air_loop)
     end
 
     # Set the baseline fan power for all zone HVAC
@@ -664,7 +664,7 @@ class StandardsModel
     sys_num = model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
 
     # Modify the fuel type if called for by the standard
-    fuel_type = model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
+    fuel_type = model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom)
 
     # Define the lookup by row and by fuel type
     sys_lookup = Hash.new {|h, k| h[k] = Hash.new(&h.default_proc)}
@@ -754,7 +754,7 @@ class StandardsModel
   # Change the fuel type based on climate zone, depending on the standard.
   # Defaults to no change.
   # @return [String] the revised fuel type
-  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
+  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
     return fuel_type # Don't change fuel type for most templates
   end
 
