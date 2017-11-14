@@ -34,7 +34,7 @@ class NECB2011
       end
 
       # Determine the space category
-      # TODO This should really use the heating/cooling loads
+      # zTODO This should really use the heating/cooling loads
       # from the proposed building.  However, in an attempt
       # to avoid another sizing run just for this purpose,
       # conditioned status is based on heating/cooling
@@ -241,13 +241,7 @@ class NECB2011
   # @return [Double] a constant float
   def max_fwdr(hdd)
     # NECB 3.2.1.4
-    if hdd < 4000
-      return 0.40
-    elsif (hdd >= 4000) && (hdd <= 7000)
-      return (2000 - 0.2 * hdd) / 3000
-    elsif hdd > 7000
-      return 0.20
-    end
+    eval(@standards_data['fdwr_formula'])
   end
 
   # Go through the default construction sets and hard-assigned
@@ -316,14 +310,14 @@ class NECB2011
     new_name = "#{old_name} at hdd = #{hdd}"
     @standards_data['conductances']
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * @standards_data['conductances'].find { |i| (i['surface'] == 'wall') && (i['hdd'] > hdd) }['thermal_transmittance'])
-    floor_rsi = 1.0 / (scale_floor * @standards_data['conductances'].find { |i| (i['surface'] == 'floor') && (i['hdd'] > hdd) }['thermal_transmittance'])
-    roof_rsi = 1.0 / (scale_roof * @standards_data['conductances'].find { |i| (i['surface'] == 'roof') && (i['hdd'] > hdd) }['thermal_transmittance'])
-    ground_wall_rsi = 1.0 / (scale_ground_wall * @standards_data['conductances'].find { |i| (i['surface'] == 'ground_wall') && (i['hdd'] > hdd) }['thermal_transmittance'])
-    ground_floor_rsi = 1.0 / (scale_ground_floor * @standards_data['conductances'].find { |i| (i['surface'] == 'ground_floor') && (i['hdd'] > hdd) }['thermal_transmittance'])
-    ground_roof_rsi = 1.0 / (scale_ground_roof * @standards_data['conductances'].find { |i| (i['surface'] == 'ground_roof') && (i['hdd'] > hdd) }['thermal_transmittance'])
-    door_rsi = 1.0 / (scale_door * @standards_data['conductances'].find { |i| (i['surface'] == 'door') && (i['hdd'] > hdd) }['thermal_transmittance'])
-    window_rsi = 1.0 / (scale_window * @standards_data['conductances'].find { |i| (i['surface'] == 'window') && (i['hdd'] > hdd) }['thermal_transmittance'])
+    wall_rsi = 1.0 / (scale_wall * eval(@standards_data['thermal_transmitance']['wall_W_per_m2_K']))
+    floor_rsi = 1.0 / (scale_floor * eval(@standards_data['thermal_transmitance']['floor_W_per_m2_K']))
+    roof_rsi = 1.0 / (scale_roof * eval(@standards_data['thermal_transmitance']['roof_W_per_m2_K']))
+    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(@standards_data['thermal_transmitance']['ground_wall_W_per_m2_K']))
+    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(@standards_data['thermal_transmitance']['ground_floor_W_per_m2_K']))
+    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(@standards_data['thermal_transmitance']['ground_roof_W_per_m2_K']))
+    door_rsi = 1.0 / (scale_door * eval(@standards_data['thermal_transmitance']['door_W_per_m2_K']))
+    window_rsi = 1.0 / (scale_window * eval(@standards_data['thermal_transmitance']['window_W_per_m2_K']))
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
                                                                                                 wall_rsi, floor_rsi, roof_rsi,
                                                                                                 ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,

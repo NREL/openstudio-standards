@@ -13,19 +13,19 @@ class NECB2011 < Standard
     #     {"name" => "NECB-CNEB ClimatZone 4-8", "climate_zones" => ["NECB HDD Method"]}
     # ]
     @standards_data['occupancy_sensors'] = [
-      { 'standard_space_type_name ' => 'Storage area', 'max_floor_area' => 100.0 },
+      { 'standard_space_type_name ' => 'Storage area',                'max_floor_area' => 100.0 },
       { 'standard_space_type_name ' => 'Storage area - refrigerated', 'max_floor_area' => 100.0 },
-      { 'standard_space_type_name ' => 'Hospital - medical supply', 'max_floor_area' => 100.0 },
-      { 'standard_space_type_name ' => 'Office - enclosed', 'max_floor_area' => 25.0 }
+      { 'standard_space_type_name ' => 'Hospital - medical supply',   'max_floor_area' => 100.0 },
+      { 'standard_space_type_name ' => 'Office - enclosed',           'max_floor_area' =>  25.0 }
     ]
 
     @standards_data['climate_zone_info'] = [
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 4', 'max_hdd' => 2999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 5', 'max_hdd' => 3999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 6', 'max_hdd' => 4999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 7a', 'max_hdd' => 5999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 7a', 'max_hdd' => 6999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 8', 'max_hdd' => 9999.0 }
+      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 4',   'max_hdd' => 2999.0 },
+      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 5',   'max_hdd' => 3999.0 },
+      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 6',   'max_hdd' => 4999.0 },
+      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 7a',  'max_hdd' => 5999.0 },
+      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 7a',  'max_hdd' => 6999.0 },
+      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 8',   'max_hdd' => 9999.0 }
     ]
     # NECB_2011_S_3_2_1_4
     # This is the formula that will be used in a ruby eval given the hdd variable.
@@ -33,63 +33,20 @@ class NECB2011 < Standard
     @standards_data['coolingSizingFactor'] = 1.3
     @standards_data['heatingSizingFactor'] = 1.3
 
-    @standards_data['conductances'] = [
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.568, 'hdd' => 3000 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.379, 'hdd' => 3999 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.284, 'hdd' => 4999 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.284, 'hdd' => 5999 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.284, 'hdd' => 6999 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.210, 'hdd' => 999_999 },
+    @standards_data['thermal_transmitance'] = {}
+    #Surfaces
+    @standards_data['thermal_transmitance']['wall_W_per_m2_K']                = '(hdd < 3000) ? 0.315 : (hdd < 4000) ? 0.278 : (hdd < 5000) ? 0.247 : (hdd < 6000) ? 0.210 :(hdd < 7000) ? 0.210 : 0.183'
+    @standards_data['thermal_transmitance']['roof_W_per_m2_K']                = '(hdd < 3000) ? 0.227 : (hdd < 4000) ? 0.183 : (hdd < 5000) ? 0.183 : (hdd < 6000) ? 0.162 :(hdd < 7000) ? 0.162 : 0.142'
+    @standards_data['thermal_transmitance']['floor_W_per_m2_K']               = '(hdd < 3000) ? 0.227 : (hdd < 4000) ? 0.183 : (hdd < 5000) ? 0.183 : (hdd < 6000) ? 0.162 :(hdd < 7000) ? 0.162 : 0.142'
 
-      { 'surface' => 'wall', 'thermal_transmittance' => 0.315, 'hdd' => 3000 },
-      { 'surface' => 'wall', 'thermal_transmittance' => 0.278, 'hdd' => 3999 },
-      { 'surface' => 'wall', 'thermal_transmittance' => 0.247, 'hdd' => 4999 },
-      { 'surface' => 'wall', 'thermal_transmittance' => 0.210, 'hdd' => 5999 },
-      { 'surface' => 'wall', 'thermal_transmittance' => 0.210, 'hdd' => 6999 },
-      { 'surface' => 'wall', 'thermal_transmittance' => 0.183, 'hdd' => 999_999 },
-      { 'surface' => 'roof', 'thermal_transmittance' => 0.227, 'hdd' => 3000 },
-      { 'surface' => 'roof', 'thermal_transmittance' => 0.183, 'hdd' => 3999 },
-      { 'surface' => 'roof', 'thermal_transmittance' => 0.183, 'hdd' => 4999 },
-      { 'surface' => 'roof', 'thermal_transmittance' => 0.162, 'hdd' => 5999 },
-      { 'surface' => 'roof', 'thermal_transmittance' => 0.162, 'hdd' => 6999 },
-      { 'surface' => 'roof', 'thermal_transmittance' => 0.142, 'hdd' => 999_999 },
-      { 'surface' => 'floor', 'thermal_transmittance' => 0.227, 'hdd' => 3000 },
-      { 'surface' => 'floor', 'thermal_transmittance' => 0.183, 'hdd' => 3999 },
-      { 'surface' => 'floor', 'thermal_transmittance' => 0.183, 'hdd' => 4999 },
-      { 'surface' => 'floor', 'thermal_transmittance' => 0.162, 'hdd' => 5999 },
-      { 'surface' => 'floor', 'thermal_transmittance' => 0.162, 'hdd' => 6999 },
-      { 'surface' => 'floor', 'thermal_transmittance' => 0.142, 'hdd' => 999_999 },
-      { 'surface' => 'window', 'thermal_transmittance' => 2.400, 'hdd' => 3000 },
-      { 'surface' => 'window', 'thermal_transmittance' => 2.200, 'hdd' => 3999 },
-      { 'surface' => 'window', 'thermal_transmittance' => 2.200, 'hdd' => 4999 },
-      { 'surface' => 'window', 'thermal_transmittance' => 2.200, 'hdd' => 5999 },
-      { 'surface' => 'window', 'thermal_transmittance' => 2.200, 'hdd' => 6999 },
-      { 'surface' => 'window', 'thermal_transmittance' => 1.600, 'hdd' => 999_999 },
-      { 'surface' => 'door', 'thermal_transmittance' => 2.400, 'hdd' => 3000 },
-      { 'surface' => 'door', 'thermal_transmittance' => 2.200, 'hdd' => 3999 },
-      { 'surface' => 'door', 'thermal_transmittance' => 2.200, 'hdd' => 4999 },
-      { 'surface' => 'door', 'thermal_transmittance' => 2.200, 'hdd' => 5999 },
-      { 'surface' => 'door', 'thermal_transmittance' => 2.200, 'hdd' => 6999 },
-      { 'surface' => 'door', 'thermal_transmittance' => 1.600, 'hdd' => 999_999 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.568, 'hdd' => 3000 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.379, 'hdd' => 3999 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.284, 'hdd' => 4999 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.284, 'hdd' => 5999 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.284, 'hdd' => 6999 },
-      { 'surface' => 'ground_wall', 'thermal_transmittance' => 0.210, 'hdd' => 999_999 },
-      { 'surface' => 'ground_roof', 'thermal_transmittance' => 0.568, 'hdd' => 3000 },
-      { 'surface' => 'ground_roof', 'thermal_transmittance' => 0.379, 'hdd' => 3999 },
-      { 'surface' => 'ground_roof', 'thermal_transmittance' => 0.284, 'hdd' => 4999 },
-      { 'surface' => 'ground_roof', 'thermal_transmittance' => 0.284, 'hdd' => 5999 },
-      { 'surface' => 'ground_roof', 'thermal_transmittance' => 0.284, 'hdd' => 6999 },
-      { 'surface' => 'ground_roof', 'thermal_transmittance' => 0.210, 'hdd' => 999_999 },
-      { 'surface' => 'ground_floor', 'thermal_transmittance' => 0.757, 'hdd' => 3000 },
-      { 'surface' => 'ground_floor', 'thermal_transmittance' => 0.757, 'hdd' => 3999 },
-      { 'surface' => 'ground_floor', 'thermal_transmittance' => 0.757, 'hdd' => 4999 },
-      { 'surface' => 'ground_floor', 'thermal_transmittance' => 0.757, 'hdd' => 5999 },
-      { 'surface' => 'ground_floor', 'thermal_transmittance' => 0.757, 'hdd' => 6999 },
-      { 'surface' => 'ground_floor', 'thermal_transmittance' => 0.379, 'hdd' => 999_999 }
-    ]
+    @standards_data['thermal_transmitance']['ground_wall_W_per_m2_K']         = '(hdd < 3000) ? 0.568 : (hdd < 4000) ? 0.379 : (hdd < 7000) ? 0.284 : 0.210'
+    @standards_data['thermal_transmitance']['ground_roof_W_per_m2_K']         = '(hdd < 3000) ? 0.568 : (hdd < 4000) ? 0.379 : (hdd < 7000) ? 0.284 : 0.210'
+    @standards_data['thermal_transmitance']['ground_floor_W_per_m2_K']        = '(hdd < 7000) ? 0.757 : 0.379'
+    @standards_data['thermal_transmitance']['ground_floor_perimeter_depth_m'] = '(hdd < 7000) ? 1.2 : 999999999.9'
+    #Subsurfaces
+    @standards_data['thermal_transmitance']['window_W_per_m2_K']              = '(hdd < 3000) ? 2.400 : (hdd < 7000) ? 2.200 : 1.600'
+    @standards_data['thermal_transmitance']['door_W_per_m2_K']                = '(hdd < 3000) ? 2.400 : (hdd < 7000) ? 2.200 : 1.600'
+
 
     @standards_data['fan_variable_volume_pressure_rise'] = 1458.33
     @standards_data['fan_constant_volume_pressure_rise'] = 640.00
