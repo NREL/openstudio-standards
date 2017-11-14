@@ -140,12 +140,12 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         #Add weather file, HDD.
         standard.model_add_design_days_and_weather_file(@model, 'NECB HDD Method', File.basename(weather_file))
         standard.model_add_ground_temperatures(@model, 'HighriseApartment', 'NECB HDD Method')
-        # Reduce the WWR and SRR, if necessary
-        standard.model_apply_prm_baseline_window_to_wall_ratio(@model,nil)
-        standard.model_apply_prm_baseline_skylight_to_roof_ratio(@model)
-        
-        # Apply Construction
-        standard.model_apply_prm_construction_types(@model)
+
+
+        standard.apply_standard_construction_properties(@model) # standards candidate
+        standard.apply_standard_window_to_wall_ratio(@model) # standards candidate
+        standard.apply_standard_skylight_to_roof_ratio(@model) # standards candidate
+
         
         #Add Infiltration rates to the space objects themselves. 
         standard.model_apply_infiltration_standard(@model)

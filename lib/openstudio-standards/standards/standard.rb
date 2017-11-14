@@ -13,7 +13,7 @@ class Standard
   # This creates a constant HASH to be set  during class instantiation.
   # When adding standards you must register the class by invoking 'register_standard ('NECB 2011')' for example for
   # NECB 2011.
-  StandardsList = {}.freeze
+  StandardsList = {}
 
   # Register the standard.
   def self.register_standard(name)
