@@ -10,17 +10,16 @@ end
 require 'rake/testtask'
 namespace :test do
   full_file_list = nil
-  if File.exist?("test/circleci_tests.txt")
-    #load test files from file. 
+  if File.exist?('test/circleci_tests.txt')
+    # load test files from file.
     full_file_list = FileList.new(File.readlines('test/circleci_tests.txt'))
-    #Select only .rb files that exist 
-    full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
-    full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
+    # Select only .rb files that exist
+    full_file_list.select! { |item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}")) }
+    full_file_list.map! { |item| File.absolute_path("test/#{item.strip}") }
   else
-    puts "Could not find list of files to test at test/circleci_tests.txt"
+    puts 'Could not find list of files to test at test/circleci_tests.txt'
     return false
   end
-
 
   desc 'Run BTAP.perform_qaqc() test'
   Rake::TestTask.new(:btap_json_test) do |t|
@@ -33,20 +32,18 @@ namespace :test do
   ['90_1_prm', '90_1_general', 'doe_prototype', 'necb', 'necb_bldg'].each do |type|
     desc "Manual Run CircleCI tests #{type}"
     Rake::TestTask.new("circ-#{type}") do |t|
-      array = full_file_list.select {|item| item.include?("#{type}")}
+      array = full_file_list.select { |item| item.include?(type.to_s) }
       t.libs << 'test'
       t.test_files = array
     end
   end
 
-
-  desc "Manual Run All CircleCI tests"
-  Rake::TestTask.new("circ-all-tests") do |t|
+  desc 'Manual Run All CircleCI tests'
+  Rake::TestTask.new('circ-all-tests') do |t|
     array = full_file_list
     t.libs << 'test'
     t.test_files = array
   end
-
 
   # These tests only available in the CI environment
   if ENV['CI'] == 'true'
@@ -57,8 +54,8 @@ namespace :test do
       test_list = FileList.new
       # Read the parallelized list of tests
       # created by the circleci CLI in config.yml
-      if File.exist?("node_tests.txt")
-        File.open("node_tests.txt", "r") do |f|
+      if File.exist?('node_tests.txt')
+        File.open('node_tests.txt', 'r') do |f|
           f.each_line do |line|
             # Skip comments the CLI may have included
             next unless line.include?('.rb')
@@ -77,7 +74,7 @@ namespace :test do
         # Assign the tests to this task
         t.test_files = test_list
       else
-        puts "Could not find parallelized list of CI tests."
+        puts 'Could not find parallelized list of CI tests.'
       end
     end
 
@@ -88,7 +85,7 @@ namespace :test do
       files_to_times = {}
       tests_to_times = {}
       Dir['test/reports/*.xml'].each do |xml|
-        doc = File.open(xml) {|f| Nokogiri::XML(f)}
+        doc = File.open(xml) { |f| Nokogiri::XML(f) }
         doc.css('testcase').each do |testcase|
           time = testcase.attr('time').to_f
           file = testcase.attr('file')
@@ -105,19 +102,18 @@ namespace :test do
           else
             tests_to_times[name] += time
           end
-
         end
       end
 
       # Write out the test results to file
       folder = "#{Dir.pwd}/timing"
-      Dir.mkdir(folder) unless File.exists?(folder)
+      Dir.mkdir(folder) unless File.exist?(folder)
 
       # By file
       File.open("#{Dir.pwd}/timing/test_by_file.html", 'w') do |html|
         html.puts '<table><tr><th>File Name</th><th>Time (min)</th></tr>'
         files_to_times.each do |f, t|
-          s = (t/60).round(1) # convert time from sec to min
+          s = (t / 60).round(1) # convert time from sec to min
           html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
         end
         html.puts '</table>'
@@ -127,7 +123,7 @@ namespace :test do
       File.open("#{Dir.pwd}/timing/test_by_name.html", 'w') do |html|
         html.puts '<table><tr><th>Test Name</th><th>Time (min)</th></tr>'
         tests_to_times.each do |f, t|
-          s = (t/60).round(1) # convert time from sec to min
+          s = (t / 60).round(1) # convert time from sec to min
           html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
         end
         html.puts '</table>'
@@ -135,12 +131,10 @@ namespace :test do
     end
 
   end
-
 end
 
 # Tasks to manage the spreadsheet data
 namespace :data do
-
   require "#{File.dirname(__FILE__)}/data/standards/manage_OpenStudio_Standards.rb"
   desc 'Download OpenStudio_Standards from Google & export JSONs'
   task 'update' do
@@ -166,7 +160,7 @@ namespace :data do
       require 'openstudio-standards'
       puts 'Using installed openstudio-standards gem.'
     end
-    BTAPCosting.instance()
+    BTAPCosting.instance
   end
 end
 

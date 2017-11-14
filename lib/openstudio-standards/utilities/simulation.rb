@@ -160,84 +160,81 @@ Standard.class_eval do
 
     return true
   end
-  
+
   # A helper method to run a sizing run and pull any values calculated during
   # autosizing back into the model.
   def model_run_sizing_run(model, sizing_run_dir = "#{Dir.pwd}/SR")
-
-
     # Change the simulation to only run the sizing days
     sim_control = model.getSimulationControl
     sim_control.setRunSimulationforSizingPeriods(true)
     sim_control.setRunSimulationforWeatherFileRunPeriods(false)
 
-    #check that all zones have surfaces. 
-    raise ("Error: Sizing Run Failed. Thermal Zones with no surfaces exist.") unless model_do_all_zones_have_surfaces?(model)
+    # check that all zones have surfaces.
+    raise 'Error: Sizing Run Failed. Thermal Zones with no surfaces exist.' unless model_do_all_zones_have_surfaces?(model)
     # Run the sizing run
     success = model_run_simulation_and_log_errors(model, sizing_run_dir)
-    
+
     # Change the model back to running the weather file
     sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(true)
-    
-    return success
 
+    return success
   end
-  
-  #Method to check if all zones have surfaces. This is required to run a simulation. 
+
+  # Method to check if all zones have surfaces. This is required to run a simulation.
   def model_do_all_zones_have_surfaces?(model)
-    error_string = ""
+    error_string = ''
     error = false
-    #Check to see if all zones have surfaces. 
+    # Check to see if all zones have surfaces.
     model.getThermalZones.each do |zone|
-      if  0 == BTAP::Geometry::Surfaces::get_surfaces_from_thermal_zones([zone]).size
+      if BTAP::Geometry::Surfaces.get_surfaces_from_thermal_zones([zone]).empty?
         error_string << "Error: Thermal zone #{zone.name} does not contain surfaces.\n"
         error = true
       end
       if error == true
         puts error_string
-        OpenStudio::logFree(OpenStudio::Error, 'openstudio.Siz.Model', error_string)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Siz.Model', error_string)
         return false
       else
         return true
       end
     end
   end
-  
+
   # A helper method to run a sizing run and pull any values calculated during
   # autosizing back into the model.
   def runSpaceSizingRun(sizing_run_dir = "#{Dir.pwd}/SpaceSR")
-    puts "*************Runing sizing space Run ***************************"
-    #Make copy of model
-    model = BTAP::FileIO::deep_copy(model, true)
+    puts '*************Runing sizing space Run ***************************'
+    # Make copy of model
+    model = BTAP::FileIO.deep_copy(model, true)
     space_load_array = []
-    
-    #Make sure the model is good to run. 
-    #1. Ensure External surfaces are set to a construction
-    ext_surfaces =  BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces, ["Outdoors",
-        "Ground",
-        "GroundFCfactorMethod",
-        "GroundSlabPreprocessorAverage",
-        "GroundSlabPreprocessorCore",
-        "GroundSlabPreprocessorPerimeter",
-        "GroundBasementPreprocessorAverageWall",
-        "GroundBasementPreprocessorAverageFloor",
-        "GroundBasementPreprocessorUpperWall",
-        "GroundBasementPreprocessorLowerWall"])
+
+    # Make sure the model is good to run.
+    # 1. Ensure External surfaces are set to a construction
+    ext_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(model.getSurfaces, ['Outdoors',
+                                                                                             'Ground',
+                                                                                             'GroundFCfactorMethod',
+                                                                                             'GroundSlabPreprocessorAverage',
+                                                                                             'GroundSlabPreprocessorCore',
+                                                                                             'GroundSlabPreprocessorPerimeter',
+                                                                                             'GroundBasementPreprocessorAverageWall',
+                                                                                             'GroundBasementPreprocessorAverageFloor',
+                                                                                             'GroundBasementPreprocessorUpperWall',
+                                                                                             'GroundBasementPreprocessorLowerWall'])
     fail = false
     ext_surfaces.each do |surface|
       if surface.construction.nil?
-        OpenStudio::logFree(OpenStudio::Error,'openstudio.model.Model', "Ext Surface #{surface.name} does not have a construction.Cannot perform sizing.") 
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Ext Surface #{surface.name} does not have a construction.Cannot perform sizing.")
         fail = true
       end
     end
     puts "#{ext_surfaces.size} External Surfaces counted."
-    raise ("Can't run sizing since envelope is not set.") if fail == true
-    
-    #remove any thermal zones. 
-    model.getThermalZones.each {|zone| zone.remove}
-    
-    #assign a zone to each space. 
+    raise "Can't run sizing since envelope is not set." if fail == true
+
+    # remove any thermal zones.
+    model.getThermalZones.each(&:remove)
+
+    # assign a zone to each space.
     # Create a thermal zone for each space in the model
     model.getSpaces.each do |space|
       zone = OpenStudio::Model::ThermalZone.new(model)
@@ -245,8 +242,8 @@ Standard.class_eval do
       space.setThermalZone(zone)
     end
     # Add a thermostat
-    BTAP::Compliance::NECB2011::set_zones_thermostat_schedule_based_on_space_type_schedules(model)
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
+    BTAP::Compliance::NECB2011.set_zones_thermostat_schedule_based_on_space_type_schedules(model)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
     # Add ideal loads to every zone/space and run
     # a sizing run to determine heating/cooling loads,
     # which will impact HVAC systems.
@@ -256,13 +253,12 @@ Standard.class_eval do
     end
     model_run_sizing_run(model, sizing_run_dir)
     model.getSpaces.each do |space|
-      if not space.thermalZone.empty?
-        space_load_array << {"space_name"=> space.name, "CoolingDesignLoad" => space.thermalZone.get.coolingDesignLoad, "HeatingDesignLoad" => space.thermalZone.get.heatingDesignLoad }
+      unless space.thermalZone.empty?
+        space_load_array << { 'space_name' => space.name, 'CoolingDesignLoad' => space.thermalZone.get.coolingDesignLoad, 'HeatingDesignLoad' => space.thermalZone.get.heatingDesignLoad }
       end
     end
     puts space_load_array
-    puts "*************Done Runing sizing space Run ***************************"
+    puts '*************Done Runing sizing space Run ***************************'
     return model
   end
-  
 end

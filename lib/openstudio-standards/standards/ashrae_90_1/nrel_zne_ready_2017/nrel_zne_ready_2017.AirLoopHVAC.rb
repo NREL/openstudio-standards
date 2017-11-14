@@ -13,8 +13,8 @@ class NRELZNEReady2017 < ASHRAE901
     # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
     # (2) AHU1 in 2004-2013
     # TODO refactor: move building-type-specific code to Prototype classes
-    if air_loop_hvac_multizone_vav_system?(air_loop_hvac)  && !(air_loop_hvac.name.to_s.include? 'Outpatient F1')
-      air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac) 
+    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && !(air_loop_hvac.name.to_s.include? 'Outpatient F1')
+      air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
     end
 
     # Second time adjustment:
@@ -22,12 +22,12 @@ class NRELZNEReady2017 < ASHRAE901
     # TODO maybe apply to hospital as well?
     # TODO refactor: move building-type-specific code to Prototype classes
     if air_loop_hvac.name.to_s.include? 'Outpatient'
-      air_loop_hvac_adjust_minimum_vav_damper_positions_outpatient(air_loop_hvac) 
+      air_loop_hvac_adjust_minimum_vav_damper_positions_outpatient(air_loop_hvac)
     end
 
     return true
-  end  
-  
+  end
+
   # Determine the limits for the type of economizer present
   # on the AirLoopHVAC, if any.
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
@@ -35,7 +35,7 @@ class NRELZNEReady2017 < ASHRAE901
     drybulb_limit_f = nil
     enthalpy_limit_btu_per_lb = nil
     dewpoint_limit_f = nil
-    
+
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
     if oa_sys.is_initialized
@@ -75,17 +75,17 @@ class NRELZNEReady2017 < ASHRAE901
       drybulb_limit_f = 75
       dewpoint_limit_f = 55
     end
-  
+
     return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   end
-  
+
   # Determine if the system economizer must be integrated or not.
   # All economizers must be integrated in NREL ZNE Ready 2017
   def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
     integrated_economizer_required = true
     return integrated_economizer_required
-  end  
-  
+  end
+
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
   # is acceptable per the standard.
   #
@@ -178,7 +178,7 @@ class NRELZNEReady2017 < ASHRAE901
     end
 
     # Not required for systems that require an ERV
-    if air_loop_hvac_energy_recovery?(air_loop_hvac) 
+    if air_loop_hvac_energy_recovery?(air_loop_hvac)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: multizone vav optimization is not required because the system has Energy Recovery.")
       return multizone_opt_required
     end
@@ -260,10 +260,10 @@ class NRELZNEReady2017 < ASHRAE901
     dcv_required_when_erv_present = true
     return dcv_required_when_erv_present
   end
-  
+
   # Determine the air flow and number of story limits
   # for whether motorized OA damper is required.
-  # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]  
+  # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]
   def air_loop_hvac_motorized_oa_damper_limits(air_loop_hvac, climate_zone)
     case climate_zone
     when 'ASHRAE 169-2006-1A',
@@ -282,7 +282,7 @@ class NRELZNEReady2017 < ASHRAE901
 
     return [minimum_oa_flow_cfm, maximum_stories]
   end
-  
+
   # Determine the number of stages that should be used as controls
   # for single zone DX systems.  NREL ZNE Ready matches 90.1-2013,
   # and depends on the cooling capacity of the system.
@@ -298,10 +298,10 @@ class NRELZNEReady2017 < ASHRAE901
       num_stages = 1
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: two-stage control is not required since cooling capacity of #{clg_cap_btu_per_hr.round} Btu/hr is less than the minimum of #{min_clg_cap_btu_per_hr.round} Btu/hr .")
     end
-    
+
     return num_stages
-  end  
-  
+  end
+
   # Determine if the system required supply air temperature
   # (SAT) reset. For NREL ZNE Ready 2017, SAT reset requirements are based
   # the same climate zone requirements as 90.1-2013.
@@ -313,7 +313,7 @@ class NRELZNEReady2017 < ASHRAE901
 
     # Only required for multizone VAV systems
     unless air_loop_hvac_multizone_vav_system?(air_loop_hvac)
-      return is_sat_reset_required  
+      return is_sat_reset_required
     end
 
     case climate_zone
@@ -343,5 +343,4 @@ class NRELZNEReady2017 < ASHRAE901
       return is_sat_reset_required
     end
   end
-  
 end

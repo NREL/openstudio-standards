@@ -1,6 +1,6 @@
 # open the class to add methods to apply HVAC efficiency standards
 class Standard
-  # Sets the fan power of zone level HVAC equipment 
+  # Sets the fan power of zone level HVAC equipment
   # (PTACs, PTHPs, Fan Coils, and Unit Heaters)
   # based on the W/cfm specified in the standard.
   #
@@ -17,8 +17,6 @@ class Standard
                   zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
                 elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
                   zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
-                else
-                  nil
                 end
 
     # Do nothing for other types of zone HVAC equipment

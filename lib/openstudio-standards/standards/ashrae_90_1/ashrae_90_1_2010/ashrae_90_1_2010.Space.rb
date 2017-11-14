@@ -22,7 +22,7 @@ class ASHRAE9012010 < ASHRAE901
     req_top_ctrl = true
     req_pri_ctrl = true
     req_sec_ctrl = false
-  
+
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "primary_sidelighted_area = #{areas['primary_sidelighted_area']}")
 
     # Sidelighting
@@ -62,10 +62,10 @@ class ASHRAE9012010 < ASHRAE901
         req_top_ctrl = false
       end
     end
-    
+
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
   end
-  
+
   # Determine the fraction controlled by each sensor and which
   # window each sensor should go near.
   #
@@ -77,7 +77,7 @@ class ASHRAE9012010 < ASHRAE901
   # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
   def space_daylighting_fractions_and_windows(space,
                                               areas,
-                                              sorted_windows, 
+                                              sorted_windows,
                                               sorted_skylights,
                                               req_top_ctrl,
                                               req_pri_ctrl,
@@ -86,11 +86,11 @@ class ASHRAE9012010 < ASHRAE901
     sensor_2_frac = 0.0
     sensor_1_window = nil
     sensor_2_window = nil
-    
+
     # Get the area of the space
     space_area_m2 = space.floorArea
 
-     if req_top_ctrl && req_pri_ctrl
+    if req_top_ctrl && req_pri_ctrl
       # Sensor 1 controls toplighted area
       sensor_1_frac = areas['toplighted_area'] / space_area_m2
       sensor_1_window = sorted_skylights[0]
@@ -114,16 +114,16 @@ class ASHRAE9012010 < ASHRAE901
         sensor_2_frac = (areas['primary_sidelighted_area'] / space_area_m2) / 2
         sensor_2_window = sorted_windows[1]
       end
-    end
-    
+   end
+
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
-  
+
   # Determine the base infiltration rate at 75 PA.
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.
-  def space_infiltration_rate_75_pa(space) 
+  def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 1.0
     return basic_infil_rate_cfm_per_ft2
   end

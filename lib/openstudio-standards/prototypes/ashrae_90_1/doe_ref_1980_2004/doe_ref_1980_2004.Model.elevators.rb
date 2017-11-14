@@ -12,15 +12,15 @@ class DOERef1980to2004 < ASHRAE901
   # @param building_type [String] the building type
   # @return [OpenStudio::Model::ElectricEquipment] the resulting elevator
   # @todo Inconsistency.  Older vintages don't have lights or fans
-  # in elevators, which is not realistic.  
+  # in elevators, which is not realistic.
   def model_add_elevator(model,
-                   space,
-                   number_of_elevators,
-                   elevator_type,
-                   elevator_schedule,
-                   elevator_fan_schedule,
-                   elevator_lights_schedule,
-                   building_type = nil)
+                         space,
+                         number_of_elevators,
+                         elevator_type,
+                         elevator_schedule,
+                         elevator_fan_schedule,
+                         elevator_lights_schedule,
+                         building_type = nil)
 
     # Lift motor assumptions
     lift_pwr_w = model_elevator_lift_power(model, elevator_type, building_type)
@@ -39,13 +39,13 @@ class DOERef1980to2004 < ASHRAE901
 
     # Heating fraction radiant assumptions
     elec_equip_frac_radiant = 0.5
-  
+
     # Lighting assumptions
     design_ltg_lm_per_ft2 = 30
     light_loss_factor = 0.75
     pct_incandescent = model_elevator_lighting_pct_incandescent(model)
     pct_led = 1.0 - pct_incandescent
-    
+
     incandescent_efficacy_lm_per_w = 10.0
     led_efficacy_lm_per_w = 35.0
     target_ltg_lm_per_ft2 = design_ltg_lm_per_ft2 / light_loss_factor # 40
@@ -60,7 +60,7 @@ class DOERef1980to2004 < ASHRAE901
     elevator_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elevator_definition.setName('Elevator Lift Motor')
     elevator_definition.setDesignLevel(lift_pwr_w)
-    elevator_definition.setFractionRadiant(elec_equip_frac_radiant)	
+    elevator_definition.setFractionRadiant(elec_equip_frac_radiant)
 
     elevator_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_definition)
     elevator_equipment.setName("#{number_of_elevators.round} Elevator Lift Motors")
@@ -91,7 +91,7 @@ class DOERef1980to2004 < ASHRAE901
       lift_pwr_w = 14_610.0
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Elevator type '#{elevator_type}', not recognized, will assume Hydraulic elevator, #{lift_pwr_w} W.")
     end
-    
+
     return lift_pwr_w
   end
 end

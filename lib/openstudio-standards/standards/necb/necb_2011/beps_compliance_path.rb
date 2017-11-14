@@ -1,5 +1,4 @@
 class NECB2011
-
   # Sets the selected internal loads to standards-based or typical values.
   # For each category that is selected get all load instances. Remove all
   # but the first instance if multiple instances.  Add a new instance/definition
@@ -33,7 +32,7 @@ class NECB2011
     # Get the space Type data from @standards data
     standards_building_type = space_type.standardsBuildingType.is_initialized ? space_type.standardsBuildingType.get : nil
     standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
-    space_type_properties = @standards_data["space_types"].select { |s| s['building_type'] ==standards_building_type and s['space_type'] == standards_space_type  }[0]
+    space_type_properties = @standards_data['space_types'].select { |s| (s['building_type'] == standards_building_type) && (s['space_type'] == standards_space_type) }[0]
 
     # Need to add a check, or it'll crash on space_type_properties['occupancy_per_area'].to_f below
     if space_type_properties.nil?
@@ -312,5 +311,4 @@ class NECB2011
       end
     end
   end
-
 end

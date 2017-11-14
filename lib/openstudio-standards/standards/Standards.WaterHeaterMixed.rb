@@ -41,12 +41,12 @@ class Standard
     search_criteria = {}
     search_criteria['template'] = template
     search_criteria['fuel_type'] = fuel_type
-    wh_props = model_find_object( standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
+    wh_props = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
     unless wh_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{water_heater_mixed.name}, cannot find water heater properties, cannot apply efficiency standard.")
       return false
     end
-    
+
     # Calculate the water heater efficiency and
     # skin loss coefficient (UA) using different methods,
     # depending on the metrics specified by the standard
@@ -60,7 +60,7 @@ class Standard
       # Fixed UA
       ua_btu_per_hr_per_f = 11.37
     end
-    
+
     # Typically specified this way for small electric water heaters
     # and small natural gas water heaters
     if wh_props['energy_factor_base'] && wh_props['energy_factor_volume_derate']
@@ -98,13 +98,13 @@ class Standard
       # Calculate the max allowable standby loss (SL)
       sl_base = wh_props['standby_loss_base']
       sl_drt = wh_props['standby_loss_volume_allowance']
-      sl_btu_per_hr = sl_base + (sl_drt * Math.sqrt(volume_gal)) 
+      sl_btu_per_hr = sl_base + (sl_drt * Math.sqrt(volume_gal))
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = sl_btu_per_hr / 70
     end
 
     # Typically specified this way for newer large electric water heaters
-    if wh_props['hourly_loss_base'] && wh_props['hourly_loss_volume_allowance']  
+    if wh_props['hourly_loss_base'] && wh_props['hourly_loss_volume_allowance']
       # Fixed water heater efficiency per PNNL
       water_heater_eff = 1
       # Calculate the percent loss per hr
@@ -186,7 +186,6 @@ class Standard
   #
   # @return [Double] capacity in Btu/hr to be used for find object
   def water_heater_mixed_find_capacity(water_heater_mixed)
-
     # Get the coil capacity
     capacity_w = nil
     if water_heater_mixed.heaterMaximumCapacity.is_initialized
@@ -194,14 +193,13 @@ class Standard
     elsif water_heater_mixed.autosizedHeaterMaximumCapacity.is_initialized
       capacity_w = water_heater_mixed.autosizedHeaterMaximumCapacity.get
     else
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name} capacity is not available.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name} capacity is not available.")
       return false
     end
 
     # Convert capacity to Btu/hr
-    capacity_btu_per_hr = OpenStudio.convert(capacity_w, "W", "Btu/hr").get
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     return capacity_btu_per_hr
-
   end
 end

@@ -10,7 +10,7 @@ class DOERef1980to2004 < ASHRAE901
     OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', 'Damper positions not modified for DOE Ref Pre-1980 or DOE Ref 1980-2004 vintages.')
     return true
   end
-  
+
   # Determine if static pressure reset is required for this
   # system.  Not required by DOE Ref 1980-2004.
   #
@@ -24,7 +24,7 @@ class DOERef1980to2004 < ASHRAE901
   def air_loop_hvac_static_pressure_reset_required?(air_loop_hvac, has_ddc)
     sp_reset_required = false
     return sp_reset_required
-  end  
+  end
 
   # Determine whether the VAV damper control is single maximum or
   # dual maximum control.  Single Maximum for DOE Ref 1980-2004.
@@ -34,5 +34,4 @@ class DOERef1980to2004 < ASHRAE901
     damper_action = 'Single Maximum'
     return damper_action
   end
-  
 end

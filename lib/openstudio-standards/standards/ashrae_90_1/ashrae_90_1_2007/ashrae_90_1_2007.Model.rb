@@ -6,16 +6,16 @@ class ASHRAE9012007 < ASHRAE901
   def model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
     sys_num = nil
 
-    # TODO refactor: figure out this weird template switching case
+    # TODO: refactor: figure out this weird template switching case
     # For a custom scenario, use the lookup method from
     # a different standard instead of the specified standard.
     # if custom == "90.1-2007 with addenda dn"
-      # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Addenda dn of 90.1-2007, System 10 and 11 (same as system 9 and 10 in 90.1-2010) will be used for heated only space.')
-      # template = '90.1-2010'
-      # sys_num = model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
-      # return sys_num
+    # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Addenda dn of 90.1-2007, System 10 and 11 (same as system 9 and 10 in 90.1-2010) will be used for heated only space.')
+    # template = '90.1-2010'
+    # sys_num = model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
+    # return sys_num
     # end
-    
+
     # Set the area limit
     limit_ft2 = 25_000
 
@@ -39,7 +39,7 @@ class ASHRAE9012007 < ASHRAE901
         sys_num = '7_or_8'
       end
     end
-    
+
     return sys_num
   end
 end

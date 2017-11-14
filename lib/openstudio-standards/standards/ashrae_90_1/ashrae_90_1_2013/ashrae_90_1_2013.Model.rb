@@ -13,7 +13,7 @@ class ASHRAE9012013 < ASHRAE901
     exception_min_area_m2 = OpenStudio.convert(exception_min_area_ft2, 'ft^2', 'm^2').get
     return exception_min_area_m2
   end
-  
+
   # Determines which system number is used
   # for the baseline system.
   # @return [String] the system number: 1_or_2, 3_or_4,
@@ -51,7 +51,7 @@ class ASHRAE9012013 < ASHRAE901
       end
 
     else
-    
+
       # Set the area limit
       limit_ft2 = 25_000
 
@@ -79,7 +79,7 @@ class ASHRAE9012013 < ASHRAE901
 
     return sys_num
   end
-  
+
   # Change the fuel type based on climate zone, depending on the standard.
   # For 90.1-2013, fuel type is based on climate zone, not the proposed model.
   # @return [String] the revised fuel type
@@ -102,10 +102,10 @@ class ASHRAE9012013 < ASHRAE901
       end
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Heating fuel is #{fuel_type} for 90.1-2013, climate zone #{climate_zone}.  This is independent of the heating fuel type in the proposed building, per G3.1.1-3.  This is different than previous versions of 90.1.")
     end
-    
+
     return fuel_type
   end
-  
+
   # Determines the fan type used by VAV_Reheat and VAV_PFP_Boxes systems.
   # Variable speed fan for 90.1-2013
   # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan

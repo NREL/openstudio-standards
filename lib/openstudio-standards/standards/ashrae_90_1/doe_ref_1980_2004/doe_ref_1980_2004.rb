@@ -2,7 +2,7 @@
 # used in the DOE 1980-2004 Reference Buildings to a given model.
 class DOERef1980to2004 < ASHRAE901
   @@template = 'DOE Ref 1980-2004'
-  register_standard (@@template)
+  register_standard @@template
   attr_reader :template
 
   def initialize

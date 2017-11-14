@@ -3,23 +3,21 @@ require_relative '../objects/Prototype.utilities'
 # Modules for building-type specific methods
 
 module FullServiceRestaurant
-
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add extra equipment for kitchen
-    self.add_extra_equip_kitchen( model)
+    add_extra_equip_kitchen(model)
     # add extra infiltration for dining room door and attic
-    self.add_door_infiltration( climate_zone, model)
+    add_door_infiltration(climate_zone, model)
     # add zone_mixing between kitchen and dining
-    self.add_zone_mixing( model)
+    add_zone_mixing(model)
     # Update Sizing Zone
-    self.update_sizing_zone( model)
+    update_sizing_zone(model)
     # adjust the cooling setpoint
-    self.adjust_clg_setpoint( climate_zone, model)
+    adjust_clg_setpoint(climate_zone, model)
     # reset the design OA of kitchen
-    self.reset_kitchen_oa( model)
+    reset_kitchen_oa(model)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
@@ -28,7 +26,7 @@ module FullServiceRestaurant
 
   # add hvac
 
-  def add_door_infiltration( climate_zone, model)
+  def add_door_infiltration(climate_zone, model)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
     unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980' || template == 'NECB 2011'
       dining_space = model.getSpaceByName('Dining').get
@@ -69,7 +67,7 @@ module FullServiceRestaurant
     end
   end
 
-  def model_update_exhaust_fan_efficiency( model)
+  def model_update_exhaust_fan_efficiency(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
@@ -87,7 +85,7 @@ module FullServiceRestaurant
     end
   end
 
-  def add_zone_mixing( model)
+  def add_zone_mixing(model)
     # add zone_mixing between kitchen and dining
     space_kitchen = model.getSpaceByName('Kitchen').get
     zone_kitchen = space_kitchen.thermalZone.get
@@ -108,7 +106,7 @@ module FullServiceRestaurant
   end
 
   # add extra equipment for kitchen
-  def add_extra_equip_kitchen( model)
+  def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen')
     kitchen_space = kitchen_space.get
     kitchen_space_type = kitchen_space.spaceType.get
@@ -153,7 +151,7 @@ module FullServiceRestaurant
     end
   end
 
-  def update_sizing_zone( model)
+  def update_sizing_zone(model)
     case template
       when '90.1-2007', '90.1-2010', '90.1-2013'
         zone_sizing = model.getSpaceByName('Dining').get.thermalZone.get.sizingZone
@@ -172,7 +170,7 @@ module FullServiceRestaurant
     end
   end
 
-  def adjust_clg_setpoint( climate_zone, model)
+  def adjust_clg_setpoint(climate_zone, model)
     ['Dining', 'Kitchen'].each do |space_name|
       space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
       thermostat_name = space_type_name + ' Thermostat'
@@ -194,7 +192,7 @@ module FullServiceRestaurant
   # In order to provide sufficient OSA to replace exhaust flow through kitchen hoods (3,300 cfm),
   # modeled OSA to kitchen is different from OSA determined based on ASHRAE  62.1.
   # It takes into account the available OSA in dining as transfer air.
-  def reset_kitchen_oa( model)
+  def reset_kitchen_oa(model)
     space_kitchen = model.getSpaceByName('Kitchen').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
     ventilation.setOutdoorAirFlowperPerson(0)
@@ -209,7 +207,7 @@ module FullServiceRestaurant
     end
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -225,22 +223,20 @@ module FullServiceRestaurant
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
 
     return true
   end
 end
 
-
 # Modules for building-type specific methods
 
 module HighriseApartment
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     # add elevator and lights&fans for the ground floor corridor
-    self.add_extra_equip_corridor( model)
+    add_extra_equip_corridor(model)
     # add extra infiltration for ground floor corridor
-    self.add_door_infiltration( climate_zone, model)
+    add_door_infiltration(climate_zone, model)
 
     return true
   end
@@ -248,7 +244,7 @@ module HighriseApartment
   # add hvac
 
   # add elevator and lights&fans for the top floor corridor
-  def add_extra_equip_corridor( model)
+  def add_extra_equip_corridor(model)
     corridor_top_space = model.getSpaceByName('T Corridor').get
     elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -285,7 +281,7 @@ module HighriseApartment
     end
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -296,7 +292,7 @@ module HighriseApartment
   end
 
   # add extra infiltration for ground floor corridor
-  def add_door_infiltration( climate_zone, model)
+  def add_door_infiltration(climate_zone, model)
     g_corridor = model.getSpaceByName('G Corridor').get
     infiltration_g_corridor_door = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
     infiltration_g_corridor_door.setName('G Corridor door Infiltration')
@@ -325,27 +321,22 @@ module HighriseApartment
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
 
     return true
   end
 end
 
-
 # Modules for building-type specific methods
 
 module Hospital
-
-
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
     # add extra equipment for kitchen
-    self.add_extra_equip_kitchen( model)
+    add_extra_equip_kitchen(model)
 
-
-    system_to_space_map = self.define_hvac_system_map(building_type, climate_zone)
+    system_to_space_map = define_hvac_system_map(building_type, climate_zone)
 
     hot_water_loop = nil
     model.getPlantLoops.sort.each do |loop|
@@ -359,20 +350,20 @@ module Hospital
         when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
           space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2', 'ICU_Flr_2', 'PatRoom5_Mult10_Flr_4', 'Lab_Flr_3']
           space_names.each do |space_name|
-            self.add_humidifier(space_name, hot_water_loop, model)
+            add_humidifier(space_name, hot_water_loop, model)
           end
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
           space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2']
           space_names.each do |space_name|
-            self.add_humidifier(space_name, hot_water_loop, model)
+            add_humidifier(space_name, hot_water_loop, model)
           end
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find hot water loop to attach humidifier to.')
     end
 
-    self.reset_kitchen_oa( model)
-    model_update_exhaust_fan_efficiency( model)
+    reset_kitchen_oa(model)
+    model_update_exhaust_fan_efficiency(model)
     model_reset_or_room_vav_minimum_damper(prototype_input, model)
 
     # Modify the condenser water pump
@@ -382,12 +373,12 @@ module Hospital
       cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O', 'Pa').get
       cw_pump.setRatedPumpHead(cw_pump_head_press_pa)
     end
-    
+
     return true
   end
 
   # add extra equipment for kitchen
-  def add_extra_equip_kitchen( model)
+  def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen_Flr_5')
     kitchen_space = kitchen_space.get
     kitchen_space_type = kitchen_space.spaceType.get
@@ -407,8 +398,8 @@ module Hospital
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(855)
         else
-          elec_equip_def1.setDesignLevel(99999.88)
-          elec_equip_def2.setDesignLevel(99999.99)
+          elec_equip_def1.setDesignLevel(99_999.88)
+          elec_equip_def2.setDesignLevel(99_999.99)
         end
         # Create the electric equipment instance and hook it up to the space type
         elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
@@ -422,8 +413,7 @@ module Hospital
     end
   end
 
-
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -439,13 +429,13 @@ module Hospital
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
     return true
   end
 
   # add swh
 
-  def reset_kitchen_oa( model)
+  def reset_kitchen_oa(model)
     space_kitchen = model.getSpaceByName('Kitchen_Flr_5').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
     ventilation.setOutdoorAirFlowperPerson(0)
@@ -458,7 +448,7 @@ module Hospital
     end
   end
 
-  def model_update_exhaust_fan_efficiency( model)
+  def model_update_exhaust_fan_efficiency(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
@@ -515,7 +505,7 @@ module Hospital
     end
   end
 
-  def model_add_daylighting_controls( model)
+  def model_add_daylighting_controls(model)
     space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
@@ -538,7 +528,7 @@ module Hospital
     end
   end
 
-  def model_modify_oa_controller( model)
+  def model_modify_oa_controller(model)
     model.getAirLoopHVACs.sort.each do |air_loop|
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
       oa_control = oa_sys.getControllerOutdoorAir
@@ -550,17 +540,14 @@ module Hospital
   end
 end
 
-
 # Modules for building-type specific methods
 
 module LargeHotel
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add extra equipment for kitchen
-    self.add_extra_equip_kitchen( model)
-
+    add_extra_equip_kitchen(model)
 
     # Add Exhaust Fan
     space_type_map = define_space_type_map(building_type, climate_zone)
@@ -638,9 +625,8 @@ module LargeHotel
 
   # add hvac
 
-
   # add extra equipment for kitchen
-  def add_extra_equip_kitchen( model)
+  def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen_Flr_6')
     kitchen_space = kitchen_space.get
     kitchen_space_type = kitchen_space.spaceType.get
@@ -660,8 +646,8 @@ module LargeHotel
           elec_equip_def1.setDesignLevel(457.7)
           elec_equip_def2.setDesignLevel(285)
         else
-          elec_equip_def1.setDesignLevel(99999.88)
-          elec_equip_def2.setDesignLevel(99999.99)
+          elec_equip_def1.setDesignLevel(99_999.88)
+          elec_equip_def2.setDesignLevel(99_999.99)
         end
         # Create the electric equipment instance and hook it up to the space type
         elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
@@ -677,9 +663,8 @@ module LargeHotel
     end
   end
 
-
   # Add the daylighting controls for lobby, cafe, dinning and banquet
-  def model_add_daylighting_controls( model)
+  def model_add_daylighting_controls(model)
     space_names = ['Banquet_Flr_6', 'Dining_Flr_6', 'Cafe_Flr_1', 'Lobby_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
@@ -692,11 +677,9 @@ module LargeHotel
   end
 end
 
-
 # Modules for building-type specific methods
 
 module LargeOffice
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     system_to_space_map = define_hvac_system_map(building_type, climate_zone)
 
@@ -738,7 +721,7 @@ module LargeOffice
     return true
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -749,16 +732,14 @@ module LargeOffice
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
     return true
   end
 end
 
-
 # Modules for building-type specific methods
 
 module MediumOffice
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
@@ -778,7 +759,7 @@ module MediumOffice
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     # add extra infiltration for entry door
-    self.add_door_infiltration( climate_zone, model)
+    add_door_infiltration(climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Added door infiltration')
 
     return true
@@ -786,7 +767,7 @@ module MediumOffice
 
   # add hvac
 
-  def add_door_infiltration( climate_zone, model)
+  def add_door_infiltration(climate_zone, model)
     # add extra infiltration for entry door in m3/s (there is no attic in 'DOE Ref Pre-1980')
     unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       entry_space = model.getSpaceByName('Perimeter_bot_ZN_1').get
@@ -796,7 +777,7 @@ module MediumOffice
       if template == '90.1-2004'
         infiltration_per_zone_entrydoor = 1.04300287
         infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
-      elsif template == '90.1-2007' || template == '90.1-2010'|| template == '90.1-2013'
+      elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'
         case climate_zone
           when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B'
             infiltration_per_zone_entrydoor = 1.04300287
@@ -811,7 +792,7 @@ module MediumOffice
     end
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -822,34 +803,31 @@ module MediumOffice
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
 
     return true
   end
 end
 
-
 # Modules for building-type specific methods
 
 module MidriseApartment
-
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # adjust the cooling setpoint
-    self.adjust_clg_setpoint( climate_zone, model)
+    adjust_clg_setpoint(climate_zone, model)
     # add elevator and lights&fans for the ground floor corridor
-    self.add_extra_equip_corridor( model)
+    add_extra_equip_corridor(model)
     # add extra infiltration for ground floor corridor
-    self.add_door_infiltration( climate_zone, model)
+    add_door_infiltration(climate_zone, model)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     return true
   end
 
-  def adjust_clg_setpoint( climate_zone, model)
+  def adjust_clg_setpoint(climate_zone, model)
     space_name = 'Office'
     space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
     thermostat_name = space_type_name + ' Thermostat'
@@ -864,7 +842,7 @@ module MidriseApartment
   end
 
   # add elevator and lights&fans for the ground floor corridor
-  def add_extra_equip_corridor( model)
+  def add_extra_equip_corridor(model)
     corridor_ground_space = model.getSpaceByName('G Corridor').get
     elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -913,7 +891,7 @@ module MidriseApartment
     end
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -924,7 +902,7 @@ module MidriseApartment
   end
 
   # add extra infiltration for ground floor corridor
-  def add_door_infiltration( climate_zone, model)
+  def add_door_infiltration(climate_zone, model)
     case template
       when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
         # no door infiltration in these two vintages
@@ -958,26 +936,24 @@ module MidriseApartment
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
 
     return true
   end
 end
 
-
 # Modules for building-type specific methods
 
 module Outpatient
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
-    system_to_space_map = self.define_hvac_system_map(building_type, climate_zone)
+    system_to_space_map = define_hvac_system_map(building_type, climate_zone)
 
     # add elevator for the elevator pump room (the fan&lights are already added via standard spreadsheet)
-    self.add_extra_equip_elevator_pump_room( model)
+    add_extra_equip_elevator_pump_room(model)
     # adjust cooling setpoint at vintages 1B,2B,3B
-    self.adjust_clg_setpoint( climate_zone, model)
+    adjust_clg_setpoint(climate_zone, model)
     # Get the hot water loop
     hot_water_loop = nil
     model.getPlantLoops.sort.each do |loop|
@@ -988,49 +964,47 @@ module Outpatient
     end
     # add humidifier to AHU1 (contains operating room 1)
     if hot_water_loop
-      self.add_humidifier( hot_water_loop, model)
+      add_humidifier(hot_water_loop, model)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find hot water loop to attach humidifier to.')
     end
     # adjust infiltration for vintages 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-    self.adjust_infiltration( model)
+    adjust_infiltration(model)
     # add door infiltration for vertibule
-    self.add_door_infiltration( climate_zone, model)
+    add_door_infiltration(climate_zone, model)
     # reset boiler sizing factor to 0.3 (default 1)
-    self.reset_boiler_sizing_factor(model)
+    reset_boiler_sizing_factor(model)
     # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone
-    self.apply_minimum_total_ach(building_type, model)
+    apply_minimum_total_ach(building_type, model)
 
     # Some exceptions for the Outpatient
     # TODO Refactor: not sure if this is actually enabled in the original code
-=begin
-    if sys_name.include? 'PVAV Outpatient F1'
-      # Outpatient two AHU1 and AHU2 have different HVAC schedule
-      hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU1-Fan_Pre2004')
-      # Outpatient has different temperature settings for sizing
-      clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
-      sys_dsn_clg_sa_temp_f = if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-                                52
-                              else
-                                45
-                              end
-      zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
-      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
-    elsif sys_name.include? 'PVAV Outpatient F2 F3'
-      hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU2-Fan_Pre2004')
-      clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
-      sys_dsn_clg_sa_temp_f = 52
-      zn_dsn_clg_sa_temp_f = 55 # zone cooling design SAT
-      zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
-    end  
-=end    
-    
+    #     if sys_name.include? 'PVAV Outpatient F1'
+    #       # Outpatient two AHU1 and AHU2 have different HVAC schedule
+    #       hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU1-Fan_Pre2004')
+    #       # Outpatient has different temperature settings for sizing
+    #       clg_sa_temp_f = 52 # for AHU1 in Outpatient, SAT is 52F
+    #       sys_dsn_clg_sa_temp_f = if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+    #                                 52
+    #                               else
+    #                                 45
+    #                               end
+    #       zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
+    #       zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
+    #     elsif sys_name.include? 'PVAV Outpatient F2 F3'
+    #       hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU2-Fan_Pre2004')
+    #       clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
+    #       sys_dsn_clg_sa_temp_f = 52
+    #       zn_dsn_clg_sa_temp_f = 55 # zone cooling design SAT
+    #       zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
+    #     end
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
 
     return true
   end
 
-  def add_extra_equip_elevator_pump_room( model)
+  def add_extra_equip_elevator_pump_room(model)
     elevator_pump_room = model.getSpaceByName('Floor 1 Elevator Pump Room').get
     elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def.setName('Elevator Pump Room Electric Equipment Definition')
@@ -1050,7 +1024,7 @@ module Outpatient
     return true
   end
 
-  def adjust_clg_setpoint( climate_zone, model)
+  def adjust_clg_setpoint(climate_zone, model)
     model.getSpaceTypes.sort.each do |space_type|
       space_type_name = space_type.name.get
       thermostat_name = space_type_name + ' Thermostat'
@@ -1066,7 +1040,7 @@ module Outpatient
     return true
   end
 
-  def adjust_infiltration( model)
+  def adjust_infiltration(model)
     case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         model.getSpaces.sort.each do |space|
@@ -1102,7 +1076,7 @@ module Outpatient
     end
   end
 
-  def add_door_infiltration( climate_zone, model)
+  def add_door_infiltration(climate_zone, model)
     # add extra infiltration for vestibule door
     case template
       when 'DOE Ref 1980-2004', 'DOE Ref Pre-1980'
@@ -1131,7 +1105,7 @@ module Outpatient
     end
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -1147,7 +1121,7 @@ module Outpatient
   end
 
   # add humidifier to AHU1 (contains operating room1)
-  def add_humidifier( hot_water_loop, model)
+  def add_humidifier(hot_water_loop, model)
     operatingroom1_space = model.getSpaceByName('Floor 1 Operating Room 1').get
     operatingroom1_zone = operatingroom1_space.thermalZone.get
     humidistat = OpenStudio::Model::ZoneControlHumidistat.new(model)
@@ -1190,7 +1164,7 @@ module Outpatient
 
   # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
   # AHU1 doesn't have economizer
-  def model_modify_oa_controller( model)
+  def model_modify_oa_controller(model)
     model.getAirLoopHVACs.sort.each do |air_loop|
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
@@ -1232,7 +1206,7 @@ module Outpatient
     end
   end
 
-  def model_update_exhaust_fan_efficiency( model)
+  def model_update_exhaust_fan_efficiency(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
@@ -1258,9 +1232,9 @@ module Outpatient
     model.getSpaces.sort.each do |space|
       space_type_name = space.spaceType.get.standardsSpaceType.get
       search_criteria = {
-          'template' => template,
-          'building_type' => building_type,
-          'space_type' => space_type_name
+        'template' => template,
+        'building_type' => building_type,
+        'space_type' => space_type_name
       }
       data = model_find_object(standards_data['space_types'], search_criteria)
 
@@ -1292,29 +1266,26 @@ module Outpatient
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
 
     return true
   end
 end
 
-
 # Modules for building-type specific methods
 
 module PrimarySchool
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     #
     # add extra equipment for kitchen
-    self.add_extra_equip_kitchen( model)
+    add_extra_equip_kitchen(model)
     return true
   end
 
-
   # add extra equipment for kitchen
-  def add_extra_equip_kitchen( model)
+  def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen_ZN_1_FLR_1')
     kitchen_space = kitchen_space.get
     kitchen_space_type = kitchen_space.spaceType.get
@@ -1334,8 +1305,8 @@ module PrimarySchool
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(570)
         else
-          elec_equip_def1.setDesignLevel(99999.88)
-          elec_equip_def2.setDesignLevel(99999.99)
+          elec_equip_def1.setDesignLevel(99_999.88)
+          elec_equip_def2.setDesignLevel(99_999.99)
         end
         # Create the electric equipment instance and hook it up to the space type
         elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
@@ -1349,39 +1320,36 @@ module PrimarySchool
     end
   end
 
-
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
 
-
 # Modules for building-type specific methods
 
 module QuickServiceRestaurant
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add extra equipment for kitchen
-    self.add_extra_equip_kitchen( model)
+    add_extra_equip_kitchen(model)
     # add extra infiltration for dining room door and attic
-    self.add_door_infiltration( climate_zone, model)
+    add_door_infiltration(climate_zone, model)
     # add zone_mixing between kitchen and dining
-    self.add_zone_mixing( model)
+    add_zone_mixing(model)
     # Update Sizing Zone
-    self.update_sizing_zone( model)
+    update_sizing_zone(model)
     # adjust the cooling setpoint
-    self.adjust_clg_setpoint( climate_zone, model)
+    adjust_clg_setpoint(climate_zone, model)
     # reset the design OA of kitchen
-    self.reset_kitchen_oa( model)
+    reset_kitchen_oa(model)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     return true
   end
 
-  def add_door_infiltration( climate_zone, model)
+  def add_door_infiltration(climate_zone, model)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
     unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
       dining_space = model.getSpaceByName('Dining').get
@@ -1423,7 +1391,7 @@ module QuickServiceRestaurant
   end
 
   # add extra equipment for kitchen
-  def add_extra_equip_kitchen( model)
+  def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen')
     kitchen_space = kitchen_space.get
     kitchen_space_type = kitchen_space.spaceType.get
@@ -1468,7 +1436,7 @@ module QuickServiceRestaurant
     end
   end
 
-  def update_sizing_zone( model)
+  def update_sizing_zone(model)
     case template
       when '90.1-2007', '90.1-2010', '90.1-2013'
         zone_sizing = model.getSpaceByName('Dining').get.thermalZone.get.sizingZone
@@ -1487,7 +1455,7 @@ module QuickServiceRestaurant
     end
   end
 
-  def adjust_clg_setpoint( climate_zone, model)
+  def adjust_clg_setpoint(climate_zone, model)
     ['Dining', 'Kitchen'].each do |space_name|
       space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
       thermostat_name = space_type_name + ' Thermostat'
@@ -1509,7 +1477,7 @@ module QuickServiceRestaurant
   # In order to provide sufficient OSA to replace exhaust flow through kitchen hoods (3,300 cfm),
   # modeled OSA to kitchen is different from OSA determined based on ASHRAE  62.1.
   # It takes into account the available OSA in dining as transfer air.
-  def reset_kitchen_oa( model)
+  def reset_kitchen_oa(model)
     space_kitchen = model.getSpaceByName('Kitchen').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
     ventilation.setOutdoorAirFlowperPerson(0)
@@ -1522,7 +1490,7 @@ module QuickServiceRestaurant
     end
   end
 
-  def model_update_exhaust_fan_efficiency( model)
+  def model_update_exhaust_fan_efficiency(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getFanZoneExhausts.sort.each do |exhaust_fan|
@@ -1540,7 +1508,7 @@ module QuickServiceRestaurant
     end
   end
 
-  def add_zone_mixing( model)
+  def add_zone_mixing(model)
     # add zone_mixing between kitchen and dining
     space_kitchen = model.getSpaceByName('Kitchen').get
     zone_kitchen = space_kitchen.thermalZone.get
@@ -1560,7 +1528,7 @@ module QuickServiceRestaurant
     zone_mixing_kitchen.setDeltaTemperature(0)
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -1571,12 +1539,11 @@ module QuickServiceRestaurant
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
 
     return true
   end
 end
-
 
 # Extend the class to add Medium Office specific stuff
 
@@ -1585,8 +1552,6 @@ module RetailStandalone
   # TODO: There is an OpenStudio bug where two heat exchangers are on the equipment list and it references the same single heat exchanger for both. This doubles the heat recovery energy.
   # TODO: The HeatExchangerAirToAir is not calculating correctly. It does not equal the legacy IDF and has higher energy usage due to that.
   # TODO: Need to determine if WaterHeater can be alone or if we need to 'fake' it.
-
-
 
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
@@ -1609,7 +1574,7 @@ module RetailStandalone
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(14)
       end
     end
-    
+
     # Add economizer max fraction schedules
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
@@ -1623,13 +1588,13 @@ module RetailStandalone
         end
       end
     end
-    
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     return true
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -1640,28 +1605,26 @@ module RetailStandalone
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
 
     return true
   end
 end
 
-
 # Modules for building-type specific methods
 
 module RetailStripmall
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-    system_to_space_map = self.define_hvac_system_map(building_type, climate_zone)
+    system_to_space_map = define_hvac_system_map(building_type, climate_zone)
 
     # Add infiltration door opening
     # Spaces names to design infiltration rates (m3/s)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-      door_infiltration_map = {['LGstore1', 'LGstore2'] => 0.388884328,
-                               ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037}
+      door_infiltration_map = { ['LGstore1', 'LGstore2'] => 0.388884328,
+                                ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037 }
 
       door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|
         space_names.each do |space_name|
@@ -1695,14 +1658,14 @@ module RetailStripmall
         end
       end
     end
-    
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
     return true
   end
 
   # add hvac
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -1713,23 +1676,21 @@ module RetailStripmall
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
 
     return true
   end
 end
 
-
 # Modules for building-type specific methods
 
 module SecondarySchool
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     #
     # add extra equipment for kitchen
-    self.add_extra_equip_kitchen( model)
+    add_extra_equip_kitchen(model)
 
     model.getSpaces.sort.each do |space|
       if space.name.get.to_s == 'Mech_ZN_1_FLR_1'
@@ -1750,7 +1711,7 @@ module SecondarySchool
   end
 
   # add extra equipment for kitchen
-  def add_extra_equip_kitchen( model)
+  def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen_ZN_1_FLR_1')
     kitchen_space = kitchen_space.get
     kitchen_space_type = kitchen_space.spaceType.get
@@ -1770,8 +1731,8 @@ module SecondarySchool
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(570)
         else
-          elec_equip_def1.setDesignLevel(99999.88)
-          elec_equip_def2.setDesignLevel(99999.99)
+          elec_equip_def1.setDesignLevel(99_999.88)
+          elec_equip_def2.setDesignLevel(99_999.99)
         end
         # Create the electric equipment instance and hook it up to the space type
         elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
@@ -1790,16 +1751,14 @@ module SecondarySchool
   end
 end
 
-
 # Modules for building-type specific methods
 
 module SmallHotel
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add elevator for the elevator coreflr1  (the elevator lift already added via standard spreadsheet)
-    self.add_extra_equip_elevator_coreflr1( model)
+    add_extra_equip_elevator_coreflr1(model)
 
     # add extra infiltration for corridor1 door
     corridor_space = model.getSpaceByName('CorridorFlr1')
@@ -1841,7 +1800,7 @@ module SmallHotel
   end
 
   # add this for elevator lights/fans (elevator lift is implemented through standard lookup)
-  def add_extra_equip_elevator_coreflr1( model)
+  def add_extra_equip_elevator_coreflr1(model)
     elevator_coreflr1 = model.getSpaceByName('ElevatorCoreFlr1').get
     elec_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
     elec_equip_def.setName('Elevator CoreFlr1 Electric Equipment Definition')
@@ -1861,17 +1820,14 @@ module SmallHotel
     return true
   end
 
-
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
 end
-
 
 # Extend the class to add Small Office specific stuff
 
 module SmallOffice
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
@@ -1881,23 +1837,20 @@ module SmallOffice
   end
 end
 
-
 # Modules for building-type specific methods
 
 module SuperMarket
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
-
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # add humidistat to all spaces
-    self.add_humidistat( model)
+    add_humidistat(model)
 
     # additional kitchen loads
-    self.add_extra_equip_kitchen( model)
+    add_extra_equip_kitchen(model)
 
     # reset bakery & deli OA reset
-    self.reset_bakery_deli_oa( model)
+    reset_bakery_deli_oa(model)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
@@ -1905,27 +1858,27 @@ module SuperMarket
   end
 
   # define additional kitchen loads based on AEDG baseline model
-  def add_extra_equip_kitchen( model)
+  def add_extra_equip_kitchen(model)
     space_names = ['Deli', 'Bakery']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
       kitchen_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
-      kitchen_definition.setName("kitchen load")
-      kitchen_definition.setDesignLevel(11674.5)
+      kitchen_definition.setName('kitchen load')
+      kitchen_definition.setDesignLevel(11_674.5)
       kitchen_definition.setFractionLatent(0.25)
       kitchen_definition.setFractionRadiant(0.3)
       kitchen_definition.setFractionLost(0.2)
 
       kitchen_equipment = OpenStudio::Model::ElectricEquipment.new(kitchen_definition)
-      kitchen_equipment.setName("kitchen equipment")
-      kitchen_sch = model_add_schedule(model, "SuperMarketEle Kit Equip Sch")
+      kitchen_equipment.setName('kitchen equipment')
+      kitchen_sch = model_add_schedule(model, 'SuperMarketEle Kit Equip Sch')
       kitchen_equipment.setSchedule(kitchen_sch)
       kitchen_equipment.setSpace(space)
     end
   end
 
   # add humidistat to all spaces
-  def add_humidistat( model)
+  def add_humidistat(model)
     space_names = ['Main Sales', 'Produce', 'West Perimeter Sales', 'East Perimeter Sales', 'Deli', 'Bakery',
                    'Enclosed Office', 'Meeting Room', 'Dining Room', 'Restroom', 'Mechanical Room', 'Corridor', 'Vestibule', 'Active Storage']
     space_names.each do |space_name|
@@ -1939,29 +1892,29 @@ module SuperMarket
   end
 
   # Update exhuast fan efficiency
-  def model_update_exhaust_fan_efficiency( model)
+  def model_update_exhaust_fan_efficiency(model)
     model.getFanZoneExhausts.sort.each do |exhaust_fan|
       exhaust_fan.setFanEfficiency(0.45)
       exhaust_fan.setPressureRise(125)
     end
   end
 
-  #reset bakery & deli OA from AEDG baseline model
-  def reset_bakery_deli_oa( model)
+  # reset bakery & deli OA from AEDG baseline model
+  def reset_bakery_deli_oa(model)
     space_names = ['Deli', 'Bakery']
     space_names.each do |space_name|
       space_kitchen = model.getSpaceByName(space_name).get
       ventilation = space_kitchen.designSpecificationOutdoorAir.get
       ventilation.setOutdoorAirFlowperPerson(0)
       ventilation.setOutdoorAirFlowperFloorArea(0.0015)
-      #case template
-      #when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
+      # case template
+      # when '90.1-2004','90.1-2007','90.1-2010', '90.1-2013'
       #  ventilation.setOutdoorAirFlowRate(4.27112436)
-      #end
+      # end
     end
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -1972,22 +1925,20 @@ module SuperMarket
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
 
     return true
   end
 end
-
 
 # Modules for building-type specific methods
 
 module Warehouse
-
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
 
-  def update_waterheater_loss_coefficient( model)
+  def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
@@ -1998,8 +1949,7 @@ module Warehouse
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    self.update_waterheater_loss_coefficient( model)
+    update_waterheater_loss_coefficient(model)
     return true
   end
 end
-

@@ -3,9 +3,7 @@
 # the implementation in the child class is used.
 # @abstract
 class ASHRAE901 < Standard
-
   def initialize
     super()
   end
-  
 end

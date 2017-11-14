@@ -10,7 +10,7 @@ class NRELZNEReady2017 < ASHRAE901
     method = 'proportional'
     return method
   end
-  
+
   # Determine if the space requires daylighting controls for
   # toplighting, primary sidelighting, and secondary sidelighting.
   # Defaults to false for all types.
@@ -25,7 +25,7 @@ class NRELZNEReady2017 < ASHRAE901
 
     # Get the LPD of the space
     space_lpd_w_per_m2 = space.lightingPowerPerFloorArea
-    
+
     # Primary Sidelighting
     # Check if the primary sidelit area contains less than 150W of lighting
     if areas['primary_sidelighted_area'] == 0.0
@@ -66,10 +66,10 @@ class NRELZNEReady2017 < ASHRAE901
     elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because less than 150W of lighting are present in the toplighted area per 9.4.1.1(f).")
       req_top_ctrl = false
-    end  
+    end
 
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
-  end 
+  end
 
   # Determine the fraction controlled by each sensor and which
   # window each sensor should go near.
@@ -82,7 +82,7 @@ class NRELZNEReady2017 < ASHRAE901
   # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
   def space_daylighting_fractions_and_windows(space,
                                               areas,
-                                              sorted_windows, 
+                                              sorted_windows,
                                               sorted_skylights,
                                               req_top_ctrl,
                                               req_pri_ctrl,
@@ -91,10 +91,10 @@ class NRELZNEReady2017 < ASHRAE901
     sensor_2_frac = 0.0
     sensor_1_window = nil
     sensor_2_window = nil
-    
+
     # Get the area of the space
     space_area_m2 = space.floorArea
-    
+
     if req_top_ctrl && req_pri_ctrl && req_sec_ctrl
       # Sensor 1 controls toplighted area
       sensor_1_frac = areas['toplighted_area'] / space_area_m2
@@ -129,16 +129,16 @@ class NRELZNEReady2017 < ASHRAE901
       sensor_1_frac = areas['secondary_sidelighted_area'] / space_area_m2
       sensor_1_window = sorted_windows[0]
     end
-    
+
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
-  
+
   # Determine the base infiltration rate at 75 PA.
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.
-  def space_infiltration_rate_75_pa(space) 
+  def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 0.5 # Half of 90.1-2013
     return basic_infil_rate_cfm_per_ft2
-  end  
+  end
 end

@@ -74,7 +74,7 @@ class Standard
   def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
-    capacity_tons = OpenStudio.convert(chiller_electric_eir_find_capacity(chiller_electric_eir), 'W', 'ton').get 
+    capacity_tons = OpenStudio.convert(chiller_electric_eir_find_capacity(chiller_electric_eir), 'W', 'ton').get
     chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
 
     # lookup the efficiency value
@@ -104,13 +104,13 @@ class Standard
     compressor_type = search_criteria['compressor_type']
 
     # Get the chiller capacity
-    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir) 
+    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
 
     # Convert capacity to tons
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
 
     # Get the chiller properties
-    chlr_props = model_find_object( chillers, search_criteria, capacity_tons, Date.today)
+    chlr_props = model_find_object(chillers, search_criteria, capacity_tons, Date.today)
     unless chlr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
       successfully_set_all_properties = false

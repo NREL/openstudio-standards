@@ -4,9 +4,9 @@ class DOERefPre1980 < ASHRAE901
   # @return [String] the SWH pump type: ConstantSpeed, VariableSpeed
   def model_swh_pump_type(model, building_type)
     swh_pump_type = if building_type == 'Medium Office'
-                   'ConstantSpeed'
-                 else
-                   'VariableSpeed'
+                      'ConstantSpeed'
+                    else
+                      'VariableSpeed'
                  end
     return swh_pump_type
   end

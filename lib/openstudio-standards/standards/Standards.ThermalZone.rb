@@ -82,7 +82,7 @@ class Standard
     end
 
     # Get the OA flow rate
-    tot_oa_flow_rate = thermal_zone_outdoor_airflow_rate(thermal_zone) 
+    tot_oa_flow_rate = thermal_zone_outdoor_airflow_rate(thermal_zone)
 
     # Calculate the per-area value
     tot_oa_flow_rate_per_area = tot_oa_flow_rate / sum_floor_area
@@ -96,7 +96,6 @@ class Standard
   #
   # @return [Bool] true if successful, false if not
   def thermal_zone_convert_oa_req_to_per_area(thermal_zone)
-
     # For each space in the zone, convert
     # all design OA to per-area
     thermal_zone.spaces.each do |space|
@@ -125,7 +124,6 @@ class Standard
       dsn_oa.setOutdoorAirFlowperPerson(0.0)
       dsn_oa.setOutdoorAirFlowAirChangesperHour(0.0)
       dsn_oa.setOutdoorAirFlowRate(0.0)
-
     end
 
     return true
@@ -603,7 +601,7 @@ class Standard
     # Get the zone heating and cooling fuels
     htg_fuels = heating_fuels
     clg_fuels = cooling_fuels
-    is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone) 
+    is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
 
     # Infer the HVAC type
     sys_type = 'Unknown'
@@ -717,7 +715,7 @@ class Standard
     area_plenum = 0
     area_non_plenum = 0
     thermal_zone.spaces.each do |space|
-      if space_plenum?(space) 
+      if space_plenum?(space)
         area_plenum += space.floorArea
       else
         area_non_plenum += space.floorArea
@@ -739,7 +737,7 @@ class Standard
         equip = equip.to_ZoneHVACHighTemperatureRadiant.get
         if equip.heatingSetpointTemperatureSchedule.is_initialized
           htg_sch = equip.heatingSetpointTemperatureSchedule.get
-        end 
+        end
       elsif equip.to_ZoneHVACLowTemperatureRadiantElectric.is_initialized
         equip = equip.to_ZoneHVACLowTemperatureRadiantElectric.get
         htg_sch = equip.heatingSetpointTemperatureSchedule.get
@@ -760,7 +758,7 @@ class Standard
           if htg_coil.heatingControlTemperatureSchedule.is_initialized
             htg_sch = htg_coil.heatingControlTemperatureSchedule.get
           end
-        end    
+        end
       end
       # Move on if no heating schedule was found
       next if htg_sch.nil?
@@ -858,7 +856,7 @@ class Standard
     area_plenum = 0
     area_non_plenum = 0
     thermal_zone.spaces.each do |space|
-      if space_plenum?(space) 
+      if space_plenum?(space)
         area_plenum += space.floorArea
       else
         area_non_plenum += space.floorArea
@@ -893,7 +891,7 @@ class Standard
           if clg_coil.coolingControlTemperatureSchedule.is_initialized
             clg_sch = clg_coil.coolingControlTemperatureSchedule.get
           end
-        end    
+        end
       end
       # Move on if no cooling schedule was found
       next if clg_sch.nil?
@@ -985,7 +983,7 @@ class Standard
     area_plenum = 0
     area_non_plenum = 0
     thermal_zone.spaces.each do |space|
-      if space_plenum?(space) 
+      if space_plenum?(space)
         area_plenum += space.floorArea
       else
         area_non_plenum += space.floorArea
@@ -1209,14 +1207,14 @@ class Standard
   # @return [Bool] true if successful, false if not
   def thermal_zone_apply_prm_baseline_supply_temperatures(thermal_zone)
     # Skip spaces that aren't heated or cooled
-    return true unless thermal_zone_heated?(thermal_zone) || thermal_zone_cooled?(thermal_zone) 
+    return true unless thermal_zone_heated?(thermal_zone) || thermal_zone_cooled?(thermal_zone)
 
     # Heating
-    htg_sat_c = thermal_zone_prm_baseline_heating_design_supply_temperature(thermal_zone) 
+    htg_sat_c = thermal_zone_prm_baseline_heating_design_supply_temperature(thermal_zone)
     htg_success = thermal_zone.sizingZone.setZoneHeatingDesignSupplyAirTemperature(htg_sat_c)
 
     # Cooling
-    clg_sat_c = thermal_zone_prm_baseline_cooling_design_supply_temperature(thermal_zone) 
+    clg_sat_c = thermal_zone_prm_baseline_cooling_design_supply_temperature(thermal_zone)
     clg_success = thermal_zone.sizingZone.setZoneCoolingDesignSupplyAirTemperature(clg_sat_c)
 
     htg_sat_f = OpenStudio.convert(htg_sat_c, 'C', 'F').get
@@ -1273,7 +1271,7 @@ class Standard
     load_w = 0.0
 
     thermal_zone.spaces.each do |space|
-      load_w += space_design_internal_load(space) 
+      load_w += space_design_internal_load(space)
     end
 
     return load_w
@@ -1334,12 +1332,12 @@ class Standard
 
     # Get the limits
     min_area_m2, min_area_m2_per_occ = thermal_zone_demand_control_ventilation_limits(thermal_zone)
-    
+
     # Not required if both limits nil
     if min_area_m2.nil? && min_area_m2_per_occ.nil?
-      return dcv_required 
+      return dcv_required
     end
-    
+
     # Get the area served and the number of occupants
     area_served_m2 = 0
     num_people = 0
@@ -1349,7 +1347,7 @@ class Standard
     end
     area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
-    # Check the minimum area if there is a limit 
+    # Check the minimum area if there is a limit
     if min_area_m2
       # Convert limit to IP
       min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
@@ -1360,7 +1358,7 @@ class Standard
       end
     end
 
-    # Check the minimum occupancy density if there is a limit 
+    # Check the minimum occupancy density if there is a limit
     if min_area_m2_per_occ
       # Convert limit to IP
       min_area_ft2_per_occ = OpenStudio.convert(min_area_m2_per_occ, 'm^2', 'ft^2').get
@@ -1374,7 +1372,7 @@ class Standard
         return dcv_required
       end
     end
-    
+
     # If here, DCV is required
     dcv_required = true
 
@@ -1393,14 +1391,13 @@ class Standard
     min_area_per_occ = nil
     return [min_area_m2, min_area_per_occ]
   end
-  
+
   # Add Exhaust Fans based on space type lookup
   # This measure doesn't look if DCV is needed. Others methods can check if DCV needed and add it
   #
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
   # @todo - Combine availability and fraction flow schedule to make zone mixing schedule
-  def thermal_zone_add_exhaust(thermal_zone,exhaust_makeup_inputs = {})
-
+  def thermal_zone_add_exhaust(thermal_zone, exhaust_makeup_inputs = {})
     exhaust_fans = {} # key is primary exhaust value is hash of arrays of secondary objects
 
     # hash to store space type information
@@ -1408,37 +1405,35 @@ class Standard
 
     # get space type ratio for spaces in zone, making more than one exhaust fan if necessary
     thermal_zone.spaces.each do |space|
-      next if not space.spaceType.is_initialized
-      next if not space.partofTotalFloorArea
+      next unless space.spaceType.is_initialized
+      next unless space.partofTotalFloorArea
       space_type = space.spaceType.get
-      if space_type_hash.has_key?(space_type)
+      if space_type_hash.key?(space_type)
         space_type_hash[space_type] += space.floorArea # excluding space.multiplier since used to calc loads in zone
       else
-        next if not space_type.standardsBuildingType.is_initialized
-        next if not space_type.standardsSpaceType.is_initialized
+        next unless space_type.standardsBuildingType.is_initialized
+        next unless space_type.standardsSpaceType.is_initialized
         space_type_hash[space_type] = space.floorArea # excluding space.multiplier since used to calc loads in zone
       end
-
     end
 
     # loop through space type hash and add exhaust as needed
-    space_type_hash.each do |space_type,floor_area|
-
+    space_type_hash.each do |space_type, floor_area|
       # get floor custom or calculated floor area for max flow rate calculation
-      makeup_target = [space_type.standardsBuildingType.get,space_type.standardsSpaceType.get]
-      if exhaust_makeup_inputs.has_key?(makeup_target) and exhaust_makeup_inputs[makeup_target].has_key?(:target_effective_floor_area)
+      makeup_target = [space_type.standardsBuildingType.get, space_type.standardsSpaceType.get]
+      if exhaust_makeup_inputs.key?(makeup_target) && exhaust_makeup_inputs[makeup_target].key?(:target_effective_floor_area)
         # pass in custom floor area
         floor_area_si = exhaust_makeup_inputs[makeup_target][:target_effective_floor_area] / thermal_zone.multiplier.to_f
-        floor_area_ip = OpenStudio.convert(floor_area_si,'m^2','ft^2').get
+        floor_area_ip = OpenStudio.convert(floor_area_si, 'm^2', 'ft^2').get
       else
-        floor_area_ip = OpenStudio.convert(floor_area,'m^2','ft^2').get
+        floor_area_ip = OpenStudio.convert(floor_area, 'm^2', 'ft^2').get
       end
 
       space_type_properties = space_type_get_standards_data(space_type)
       exhaust_per_area = space_type_properties['exhaust_per_area']
       next if exhaust_per_area.nil?
       maximum_flow_rate_ip = exhaust_per_area * floor_area_ip
-      maximum_flow_rate_si = OpenStudio.convert(maximum_flow_rate_ip,'cfm','m^3/s').get
+      maximum_flow_rate_si = OpenStudio.convert(maximum_flow_rate_ip, 'cfm', 'm^3/s').get
       if space_type_properties['exhaust_schedule'].nil?
         exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
       else
@@ -1461,13 +1456,13 @@ class Standard
       exhaust_fans[zone_exhaust_fan] = {} # keys are :zone_mixing and :transfer_air_source_zone_exhaust
 
       # set fan pressure rise
-      fan_zone_exhaust_apply_prototype_fan_pressure_rise(zone_exhaust_fan) 
+      fan_zone_exhaust_apply_prototype_fan_pressure_rise(zone_exhaust_fan)
 
       # update efficiency and pressure rise
-      prototype_fan_apply_prototype_fan_efficiency(zone_exhaust_fan, )
+      prototype_fan_apply_prototype_fan_efficiency(zone_exhaust_fan)
 
       # add and alter objectxs related to zone exhaust makeup air
-      if exhaust_makeup_inputs.has_key?(makeup_target) and exhaust_makeup_inputs[makeup_target][:source_zone]
+      if exhaust_makeup_inputs.key?(makeup_target) && exhaust_makeup_inputs[makeup_target][:source_zone]
 
         # add balanced schedule to zone_exhaust_fan
         balanced_sch_name = space_type_properties['balanced_exhaust_fraction_schedule']
@@ -1490,7 +1485,7 @@ class Standard
         transfer_air_source_zone_exhaust.addToThermalZone(exhaust_makeup_inputs[makeup_target][:source_zone])
         exhaust_fans[zone_exhaust_fan][:transfer_air_source_zone_exhaust] = transfer_air_source_zone_exhaust
 
-        # todo - make zone mixing schedule by combining exhaust availability and fraction flow
+        # TODO: - make zone mixing schedule by combining exhaust availability and fraction flow
         zone_mixing_schedule = exhaust_schedule
 
         # add zone mixing
@@ -1501,11 +1496,9 @@ class Standard
         exhaust_fans[zone_exhaust_fan][:zone_mixing] = zone_mixing
 
       end
-
     end
 
     return exhaust_fans
-
   end
 
   # returns adjacant_zones_with_shared_wall_areas
@@ -1513,14 +1506,13 @@ class Standard
   # @param [Bool] same_floor (only valid option for now is true)
   # @return [Array] adjacent zones
   def thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone, same_floor = true)
-
     adjacent_zones = []
 
     thermal_zone.spaces.each do |space|
-      adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space) 
-      adj_spaces.each do |k,v|
+      adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space)
+      adj_spaces.each do |k, v|
         # skip if space is in current thermal zone.
-        next if not space.thermalZone.is_initialized
+        next unless space.thermalZone.is_initialized
         next if k.thermalZone.get == thermal_zone
         adjacent_zones << k.thermalZone.get
       end
@@ -1529,27 +1521,21 @@ class Standard
     adjacent_zones = adjacent_zones.uniq
 
     return adjacent_zones
-
   end
 
   # returns true if DCV is required for exhaust fan for specified tempate
   #
   # @return [Bool] returns true if DCV is required for exhaust fan for specified tempate
-  def thermal_zone_exhaust_fan_dcv_required?(thermal_zone)
-
-  end
+  def thermal_zone_exhaust_fan_dcv_required?(thermal_zone); end
 
   # Add DCV to exhaust fan and if requsted to related objects
   #
   # @return [Bool] not sure if there is anything to turn here other than if it was sucessful, no new objects made?
-  def thermal_zone_add_exhaust_fan_dcv(thermal_zone, change_related_objects = true,zone_mixing_objects = [],transfer_air_source_zones = [])
-
+  def thermal_zone_add_exhaust_fan_dcv(thermal_zone, change_related_objects = true, zone_mixing_objects = [], transfer_air_source_zones = [])
     # set flow fraction schedule for all zone exhaust fans and then set zone mixing schedule to the intersection of exhaust avaialability and exhaust fractional schedule
 
     # are there associated zone mixing or dummy exhaust objects that need to change when this changes?
     # How are these ojects identifed?
     # If this is run directly after thermal_zone_add_exhaust(thermal_zone)  it will return a hash where each key is an exhaust object and hash is a hash of related zone mizing and dummy exhaust from the source zone
-
   end
-
 end

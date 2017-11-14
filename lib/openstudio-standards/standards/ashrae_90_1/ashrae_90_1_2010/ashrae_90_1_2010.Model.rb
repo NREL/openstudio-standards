@@ -2,7 +2,7 @@ class ASHRAE9012010 < ASHRAE901
   # Determine if there needs to be a sizing run after constructions
   # are added so that EnergyPlus can calculate the VLTs of
   # layer-by-layer glazing constructions.  These VLT values are
-  # needed for the daylighting controls logic for 90.1-2010. 
+  # needed for the daylighting controls logic for 90.1-2010.
   def model_create_prm_baseline_building_requires_vlt_sizing_run(model)
     return true # Required for 90.1-2010
   end
@@ -46,7 +46,7 @@ class ASHRAE9012010 < ASHRAE901
       # Should only be hit by Xcel EDA
       sys_num = '3_or_4'
     end
-    
+
     return sys_num
   end
 end

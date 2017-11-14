@@ -7,7 +7,7 @@ class ASHRAE9012013 < ASHRAE901
     pct_incandescent = 0.0 # 100% LED
     return pct_incandescent
   end
-  
+
   # Determines the power of the elevator ventilation fan.
   # 90.1-2013 has a requirement
   # for ventilation fan efficiency.
@@ -16,7 +16,7 @@ class ASHRAE9012013 < ASHRAE901
     vent_pwr_per_flow_w_per_cfm = 0.33
     vent_pwr_w = vent_pwr_per_flow_w_per_cfm * vent_rate_cfm
     # addendum 90.1-2007 aj has requirement on efficiency
-    vent_pwr_w = vent_pwr_w * 0.29 / 0.70  
+    vent_pwr_w = vent_pwr_w * 0.29 / 0.70
 
     return vent_pwr_w
   end

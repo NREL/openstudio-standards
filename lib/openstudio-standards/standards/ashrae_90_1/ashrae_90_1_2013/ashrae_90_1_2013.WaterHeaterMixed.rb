@@ -37,4 +37,3 @@ class ASHRAE9012013 < ASHRAE901
     return true
   end
 end
-  

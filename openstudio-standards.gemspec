@@ -1,4 +1,4 @@
-# coding: utf-8
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'openstudio-standards/version'
@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest-parallel_fork'
   spec.add_development_dependency 'ruby-progressbar'
   spec.add_development_dependency 'parallel_tests'
-  spec.add_development_dependency "nokogiri", "<= 1.6.8.1"
+  spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
   spec.add_development_dependency 'bundler', '~> 1.9'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'yard', '~> 0.8'
@@ -34,10 +34,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'activesupport', '4.2.5' # pairs with google-api-client, > 5.0.0 does not work
   spec.add_development_dependency 'google-api-client', '0.8.6' # to download Openstudio_Standards Google Spreadsheet
   spec.add_development_dependency 'codecov' # to perform code coverage checking
-  spec.add_development_dependency 'roo' , '2.7.1'
+  spec.add_development_dependency 'roo', '2.7.1'
   spec.add_development_dependency 'rest-client', '2.0.2'
   spec.add_development_dependency 'aes', '0.5.0'
   spec.add_development_dependency 'geocoder', '1.4.4'
   spec.add_development_dependency 'highline'
-  spec.add_development_dependency 'launchy' 
+  spec.add_development_dependency 'launchy'
 end

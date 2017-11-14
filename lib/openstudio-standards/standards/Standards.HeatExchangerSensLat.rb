@@ -18,7 +18,7 @@ class Standard
 
     return true
   end
-  
+
   # Defines the minimum sensible and latent effectiveness of
   # the heat exchanger.  Assumed to apply to sensible and latent
   # effectiveness at all flow rates.

@@ -1,7 +1,7 @@
 class DOERef1980to2004 < ASHRAE901
   # Apply the air leakage requirements to the model.
-  # "For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004', 
-  # infiltration rates are not defined using this method, 
+  # "For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004',
+  # infiltration rates are not defined using this method,
   # no changes are actually made to the model.
   #
   # base infiltration rates off of.
@@ -23,5 +23,5 @@ class DOERef1980to2004 < ASHRAE901
   def model_get_climate_zone_set_from_list(model, possible_climate_zone_sets)
     climate_zone_set = possible_climate_zone_sets.sort.last
     return climate_zone_set
-  end  
+  end
 end

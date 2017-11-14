@@ -80,7 +80,7 @@ module Pump
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "For #{pump.name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_efficiency * 100).round(2)}%; #{target_w_per_gpm.round} W/gpm translates to a pressure rise of #{pressure_rise_ft_h2o.round(2)} ftH2O.")
 
     # Calculate the W/gpm for verification
-    calculated_w = pump_pumppower(pump) 
+    calculated_w = pump_pumppower(pump)
 
     calculated_w_per_gpm = calculated_w / flow_gpm
 
@@ -93,7 +93,7 @@ module Pump
   # based on the motor's brake horsepower.
   def pump_apply_standard_minimum_motor_efficiency(pump)
     # Get the horsepower
-    bhp = pump_brake_horsepower(pump) 
+    bhp = pump_brake_horsepower(pump)
 
     # Find the motor efficiency
     motor_eff, nominal_hp = pump_standard_minimum_motor_efficiency_and_size(pump, bhp)
@@ -136,7 +136,7 @@ module Pump
       'type' => 'Enclosed'
     }
 
-    motor_properties = model_find_object( motors, search_criteria, motor_bhp)
+    motor_properties = model_find_object(motors, search_criteria, motor_bhp)
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
       return [motor_eff, nominal_hp]
@@ -151,7 +151,7 @@ module Pump
 
     # Get the efficiency based on the nominal horsepower
     # Add 0.01 hp to avoid search errors.
-    motor_properties = model_find_object( motors, search_criteria, nominal_hp + 0.01)
+    motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{pump.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
       return [motor_eff, nominal_hp]
@@ -251,7 +251,7 @@ module Pump
   # @return [Double] horsepower
   def pump_motor_horsepower(pump)
     # Get the pump power
-    pump_power_w = pump_pumppower(pump) 
+    pump_power_w = pump_pumppower(pump)
 
     # Convert to HP
     pump_hp = pump_power_w / 745.7 # 745.7 W/HP

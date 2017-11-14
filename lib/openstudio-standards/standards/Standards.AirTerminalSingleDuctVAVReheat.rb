@@ -37,7 +37,7 @@ class Standard
     min_damper_position = 0.3
     return min_damper_position
   end
-  
+
   # Sets the capacity of the reheat coil based on the minimum flow fraction,
   # and the maximum flow rate.
   def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
@@ -46,7 +46,7 @@ class Standard
       reheat_coil = air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.get
       if reheat_coil.autosizedRatedCapacity.to_f < 1.0e-6
         cap = 1.2 * 1000.0 * air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction * air_terminal_single_duct_vav_reheat.autosizedMaximumAirFlowRate.to_f * (18.0 - 13.0)
-        reheat_coil.setPerformanceInputMethod("NominalCapacity")
+        reheat_coil.setPerformanceInputMethod('NominalCapacity')
         reheat_coil.setRatedCapacity(cap)
         air_terminal_single_duct_vav_reheat.setMaximumReheatAirTemperature(18.0)
       end
@@ -72,5 +72,4 @@ class Standard
 
     return type
   end
-
 end

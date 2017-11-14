@@ -22,7 +22,7 @@ class Standard
     # If there are no spaces on this story, assume
     # a multiplier of 1
     if multipliers.size.zero?
-      return floor_multiplier 
+      return floor_multiplier
     end
 
     # Calculate the average multiplier and
@@ -63,8 +63,8 @@ class Standard
     end
 
     # Error if no z heights were found
-    z = 999.9 
-    if z_heights.size > 0
+    z = 999.9
+    if !z_heights.empty?
       z = z_heights.min
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "For #{building_story.name} could not find the minimum_z_value, which means the story has no spaces assigned or the spaces have no surfaces.")

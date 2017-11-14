@@ -2,7 +2,7 @@
 # to a given model.
 class ASHRAE9012004 < ASHRAE901
   @@template = '90.1-2004'
-  register_standard (@@template)
+  register_standard @@template
   attr_reader :template
 
   def initialize
@@ -11,11 +11,3 @@ class ASHRAE9012004 < ASHRAE901
     load_standards_database
   end
 end
-
-
-
-
-
-
-
-

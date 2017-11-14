@@ -66,7 +66,7 @@ class Standard
     capacity_kbtu_per_hr = OpenStudio.convert(clg_capacity, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
-    hp_props = model_find_object( standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    hp_props = model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if hp_props.nil?

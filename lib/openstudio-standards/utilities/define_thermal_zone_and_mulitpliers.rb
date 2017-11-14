@@ -1,7 +1,6 @@
-#tyson's code attempt 1 below
+# tyson's code attempt 1 below
 
-#load the
-
+# load the
 
 require_relative '../../../test/helpers/minitest_helper'
 require 'json'
@@ -10,7 +9,7 @@ array = []
 geometry_folder_path = "#{File.dirname(__FILE__)}/../../../data/geometry/"
 geometry_json_path = "#{File.dirname(__FILE__)}/../../../data/geometry/archetypes/geometry.json"
 
-geometry_json =JSON.parse('
+geometry_json = JSON.parse('
     {
             "FullServiceRestaurant": {
                 "above_ground_floors": 1,
@@ -77,32 +76,25 @@ geometry_json =JSON.parse('
                 "below_ground_floors": 0
             }
 }
-'
-)
-
+')
 
 # this reads in the json file.
 data_hash = JSON.parse(File.read("#{File.dirname(__FILE__)}/../refactor/prototypes/common/data/prototype_database.json"))
 
 data_hash.each do |info|
   info.delete('geometry')
-=begin
-  if info['template'] == 'NECB 2011'
-    puts "fudsfadfas"
-    info.delete("system_to_space_map")
+  #   if info['template'] == 'NECB 2011'
+  #     puts "fudsfadfas"
+  #     info.delete("system_to_space_map")
+  #
+  #     puts info["system_to_space_map"]
+  #   end
+  #   info.delete("space_type_map")
 
-    puts info["system_to_space_map"]
-  end
-  info.delete("space_type_map")
-=end
-
-=begin
-  File.delete("#{geometry_folder_path}/#{info["class_name"]}.hvac_map.json") if File.exist?("#{geometry_folder_path}/#{info["class_name"]}.hvac_map.json")
-  unless info["system_to_space_map"].nil?
-    File.write("#{geometry_folder_path}/#{info["class_name"]}.hvac_map.json", JSON.pretty_generate(info["system_to_space_map"]))
-    info["system_to_space_map"] = "#{info["class_name"]}.hvac_map.json"
-  end
-=end
-
+  #   File.delete("#{geometry_folder_path}/#{info["class_name"]}.hvac_map.json") if File.exist?("#{geometry_folder_path}/#{info["class_name"]}.hvac_map.json")
+  #   unless info["system_to_space_map"].nil?
+  #     File.write("#{geometry_folder_path}/#{info["class_name"]}.hvac_map.json", JSON.pretty_generate(info["system_to_space_map"]))
+  #     info["system_to_space_map"] = "#{info["class_name"]}.hvac_map.json"
+  #   end
 end
 data_hash = File.write("#{File.dirname(__FILE__)}/../refactor/prototypes/common/data/prototype_database.json", JSON.pretty_generate(data_hash))

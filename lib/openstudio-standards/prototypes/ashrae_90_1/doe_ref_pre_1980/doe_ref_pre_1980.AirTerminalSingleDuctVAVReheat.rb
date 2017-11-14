@@ -8,7 +8,6 @@ class DOERefPre1980 < ASHRAE901
   # @return [Bool] returns true if successful, false if not
   # @todo remove exception where older vintages don't have minimum positions adjusted.
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, building_type, zone_oa_per_area)
-
     vav_name = air_terminal_single_duct_vav_reheat.name.get
     min_damper_position = if building_type == 'Outpatient' && vav_name.include?('Floor 1')
                             1

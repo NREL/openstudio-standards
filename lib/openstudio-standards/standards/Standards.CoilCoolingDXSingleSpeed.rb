@@ -40,22 +40,22 @@ class Standard
   #
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
-  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, rename=false)
+  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, rename = false)
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
     sub_category = search_criteria['subcategory']
-    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed) 
+    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Look up the efficiency characteristics    
+    # Look up the efficiency characteristics
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed) 
-                 model_find_object( standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object( standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
@@ -95,7 +95,7 @@ class Standard
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
       # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
       # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
-      eer_calc_cap_btu_per_hr = capacity_btu_per_hr      
+      eer_calc_cap_btu_per_hr = capacity_btu_per_hr
       eer_calc_cap_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
       eer_calc_cap_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
       ptac_eer = ptac_eer_coeff_1 - (ptac_eer_coeff_2 * eer_calc_cap_btu_per_hr / 1000.0)
@@ -135,7 +135,7 @@ class Standard
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
-  
+
     # Rename
     if rename
       coil_cooling_dx_single_speed.setName(new_comp_name)
@@ -154,16 +154,16 @@ class Standard
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed)
 
     # Get the capacity
-    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed) 
+    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed) 
-                 model_find_object( standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object( standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found

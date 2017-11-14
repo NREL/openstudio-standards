@@ -1,5 +1,4 @@
 class Standard
-
   # load a model into OS & version translates, exiting and erroring if a problem is found
   def safe_load_model(model_path_string)
     model_path = OpenStudio::Path.new(model_path_string)
@@ -286,9 +285,9 @@ class Standard
   # Convert the infiltration rate at a 75 Pa
   # to an infiltration rate at the typical value for the prototype buildings
   # per method described here:  http://www.pnl.gov/main/publications/external/technical_reports/PNNL-18898.pdf
-  # Gowri K, DW Winiarski, and RE Jarnagin. 2009. 
-  # Infiltration modeling guidelines for commercial building energy analysis. 
-  # PNNL-18898, Pacific Northwest National Laboratory, Richland, WA. 
+  # Gowri K, DW Winiarski, and RE Jarnagin. 2009.
+  # Infiltration modeling guidelines for commercial building energy analysis.
+  # PNNL-18898, Pacific Northwest National Laboratory, Richland, WA.
   #
   # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
   # @return [Double]
@@ -322,7 +321,7 @@ class Standard
   # @author Scott Horowitz, NREL
   # @param coeffs [Array<Double>] an array of 6 coefficients, in order
   # @return [Array<Double>] the revised coefficients in the new unit system
-  def convert_curve_biquadratic(coeffs, ip_to_si=true)
+  def convert_curve_biquadratic(coeffs, ip_to_si = true)
     if ip_to_si
       # Convert IP curves to SI curves
       si_coeffs = []
@@ -331,17 +330,17 @@ class Standard
       si_coeffs << 81.0 / 25.0 * coeffs[2]
       si_coeffs << 9.0 / 5.0 * coeffs[3] + 576.0 / 5.0 * coeffs[4] + 288.0 / 5.0 * coeffs[5]
       si_coeffs << 81.0 / 25.0 * coeffs[4]
-      si_coeffs << 81.0 / 25.0 * coeffs[5]        
+      si_coeffs << 81.0 / 25.0 * coeffs[5]
       return si_coeffs
     else
       # Convert SI curves to IP curves
       ip_coeffs = []
-      ip_coeffs << coeffs[0] - 160.0/9.0 * (coeffs[1] + coeffs[3]) + 25600.0/81.0 * (coeffs[2] + coeffs[4] + coeffs[5])
-      ip_coeffs << 5.0/9.0 * (coeffs[1] - 320.0/9.0 * coeffs[2] - 160.0/9.0 * coeffs[5])
-      ip_coeffs << 25.0/81.0 * coeffs[2]
-      ip_coeffs << 5.0/9.0 * (coeffs[3] - 320.0/9.0 * coeffs[4] - 160.0/9.0 * coeffs[5])
-      ip_coeffs << 25.0/81.0 * coeffs[4]
-      ip_coeffs << 25.0/81.0 * coeffs[5]
+      ip_coeffs << coeffs[0] - 160.0 / 9.0 * (coeffs[1] + coeffs[3]) + 25_600.0 / 81.0 * (coeffs[2] + coeffs[4] + coeffs[5])
+      ip_coeffs << 5.0 / 9.0 * (coeffs[1] - 320.0 / 9.0 * coeffs[2] - 160.0 / 9.0 * coeffs[5])
+      ip_coeffs << 25.0 / 81.0 * coeffs[2]
+      ip_coeffs << 5.0 / 9.0 * (coeffs[3] - 320.0 / 9.0 * coeffs[4] - 160.0 / 9.0 * coeffs[5])
+      ip_coeffs << 25.0 / 81.0 * coeffs[4]
+      ip_coeffs << 25.0 / 81.0 * coeffs[5]
       return ip_coeffs
     end
   end
@@ -422,7 +421,7 @@ class Standard
   # @param maxOut [Double] the maximum value of dependent variable Z
   # @param is_dimensionless [Bool] if true, the X independent variable is considered unitless
   # and the resulting output dependent variable is considered unitless
-  def create_curve_quadratic(coeffs, crv_name, minX, maxX, minOut, maxOut, is_dimensionless=false)
+  def create_curve_quadratic(coeffs, crv_name, minX, maxX, minOut, maxOut, is_dimensionless = false)
     curve = OpenStudio::Model::CurveQuadratic.new(self)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
@@ -433,8 +432,8 @@ class Standard
     curve.setMinimumCurveOutput(minOut) unless minOut.nil?
     curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
     if is_dimensionless
-      curve.setInputUnitTypeforX("Dimensionless")
-      curve.setOutputUnitType("Dimensionless")
+      curve.setInputUnitTypeforX('Dimensionless')
+      curve.setOutputUnitType('Dimensionless')
     end
     return curve
   end
@@ -449,7 +448,7 @@ class Standard
   # @param maxX [Double] the maximum value of independent variable X that will be used
   # @param minOut [Double] the minimum value of dependent variable Z
   # @param maxOut [Double] the maximum value of dependent variable Z
-  def create_curve_cubic(coeffs, crv_name, minX, maxX, minOut, maxOut)    
+  def create_curve_cubic(coeffs, crv_name, minX, maxX, minOut, maxOut)
     curve = OpenStudio::Model::CurveCubic.new(self)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])

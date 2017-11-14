@@ -1,36 +1,33 @@
 class NECB2011
-
-
   def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
 
-
       # vars x1..x10 not required here, only service water heating fuel type, which is
       # weather file dependent for NECB 2011
       x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
 
-
       # Add the main service water loop
-      main_swh_loop = model_add_swh_loop(model,
-                                         'Main Service Water Loop',
-                                         nil,
-                                         OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
-                                         prototype_input['main_service_water_pump_head'],
-                                         prototype_input['main_service_water_pump_motor_efficiency'],
-                                         OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
-                                         OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
-                                         swh_fueltype,
-                                         OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                         building_type) unless building_type == 'RetailStripmall' && template != 'NECB 2011'
+      unless building_type == 'RetailStripmall' && template != 'NECB 2011'
+        main_swh_loop = model_add_swh_loop(model,
+                                           'Main Service Water Loop',
+                                           nil,
+                                           OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
+                                           prototype_input['main_service_water_pump_head'],
+                                           prototype_input['main_service_water_pump_motor_efficiency'],
+                                           OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
+                                           OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
+                                           swh_fueltype,
+                                           OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
+                                           building_type)
+      end
 
       # Attach the end uses if specified in prototype inputs
       # TODO remove special logic for large office SWH end uses
       # TODO remove special logic for stripmall SWH end uses and service water loops
       # TODO remove special logic for large hotel SWH end uses
-
 
       if prototype_input['main_service_water_peak_flowrate']
 
@@ -54,9 +51,9 @@ class NECB2011
 
         space_type_map.sort.each do |space_type_name, space_names|
           search_criteria = {
-              'template' => template,
-              'building_type' => model_get_lookup_name(building_type),
-              'space_type' => space_type_name
+            'template' => template,
+            'building_type' => model_get_lookup_name(building_type),
+            'space_type' => space_type_name
           }
           data = model_find_object(standards_data['space_types'], search_criteria)
 
@@ -71,7 +68,7 @@ class NECB2011
             space = model.getSpaceByName(space_name).get
             space_multiplier = nil
 
-            #Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes.
+            # Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes.
             space_multiplier = 1
 
             model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
@@ -80,7 +77,6 @@ class NECB2011
                                             space_type_name,
                                             space_name,
                                             space_multiplier)
-
           end
         end
       end
@@ -144,7 +140,6 @@ class NECB2011
   end
 
   # add swh
-
 
   # Applies the standard efficiency ratings and typical losses and paraisitic loads to this object.
   # Efficiency and skin loss coefficient (UA)

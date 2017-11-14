@@ -2,7 +2,7 @@ require 'singleton'
 require_relative 'openstudio-standards/version'
 
 class Folders
-  #A place to keep all folder paths and ensure that they exist!
+  # A place to keep all folder paths and ensure that they exist!
   # Usage is
   # Folders.instance.refactor_folder
   include Singleton
@@ -20,18 +20,16 @@ class Folders
     folders << @data_weather_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/weather/")
     error = false
     folders.each do |folder|
-
       unless Dir.exist?(folder)
         puts "#{folder} does not exist. Please check paths relative to this file."
         error = true
       end
     end
-    raise("Folder paths are incorrect. Standards Cannot continue.") if error
+    raise('Folder paths are incorrect. Standards Cannot continue.') if error
   end
 end
 
 module OpenstudioStandards
-
   require 'json' # Used to load standards JSON files
 
   # HVAC sizing
@@ -65,7 +63,6 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/necb_2011/service_water_heating"
   require_relative "#{stds}/necb/necb_2011/electrical_power_systems_and_motors"
   require_relative "#{stds}/necb/necb_2011/beps_compliance_path"
-
 
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
@@ -184,15 +181,12 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Space"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ThermalZone"
 
-
   ### Prototypes ###
   # Building Types
   require_relative "#{proto}/common/buildings/Prototype.all_buildings"
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
-
-
 
   # Model Objects
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
@@ -251,5 +245,4 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
-
 end

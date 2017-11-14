@@ -13,7 +13,7 @@ class Standard
   # This creates a constant HASH to be set  during class instantiation.
   # When adding standards you must register the class by invoking 'register_standard ('NECB 2011')' for example for
   # NECB 2011.
-  StandardsList = {}
+  StandardsList = {}.freeze
 
   # Register the standard.
   def self.register_standard(name)
@@ -33,8 +33,8 @@ class Standard
     return StandardsList[name].new
   end
 
-  #set up template class variable.
-  def intialize()
+  # set up template class variable.
+  def intialize
     super()
   end
 
@@ -83,7 +83,7 @@ class Standard
     standards_data_dir = "#{top_dir}/data/standards"
     @standards_data = {}
     standards_files.sort.each do |standards_file|
-      temp = ""
+      temp = ''
       begin
         temp = load_resource_relative("../../../data/standards/#{standards_file}", 'r:UTF-8')
       rescue NoMethodError
@@ -102,7 +102,3 @@ class Standard
     return @standards_data
   end
 end
-
-
-
-

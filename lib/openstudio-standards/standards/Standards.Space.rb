@@ -552,7 +552,7 @@ class Standard
     method = 'none'
     return method
   end
-  
+
   # Returns the sidelighting effective aperture
   # space_sidelighting_effective_aperture(space)  = E(window area * window VT) / primary_sidelighted_area
   #
@@ -823,7 +823,7 @@ class Standard
     end
 
     areas = nil
-    
+
     # Get the area of the space
     space_area_m2 = space.floorArea
 
@@ -832,7 +832,7 @@ class Standard
 
     # Get the daylighting areas
     areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
-    
+
     # Determine the type of daylighting controls required
     req_top_ctrl, req_pri_ctrl, req_sec_ctrl = space_daylighting_control_required?(space, areas)
 
@@ -963,54 +963,54 @@ class Standard
     # find the specific space_type properties
     space_type = space.spaceType
     if space_type.empty?
-      OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "Space #{space_type} is an unknown space type, assuming #{daylight_stpt_lux} Lux daylight setpoint")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Space #{space_type} is an unknown space type, assuming #{daylight_stpt_lux} Lux daylight setpoint")
     else
       space_type = space_type.get
       standards_building_type = if space_type.standardsBuildingType.is_initialized
-                                   space_type.standardsBuildingType.get
+                                  space_type.standardsBuildingType.get
                                 end
       standards_space_type = if space_type.standardsSpaceType.is_initialized
-                                space_type.standardsSpaceType.get
+                               space_type.standardsSpaceType.get
                              end
 
       # use the building type (standards_building_type) and space type (standards_space_type)
-      # as well as template to locate the space type data 
+      # as well as template to locate the space type data
       search_criteria = {
-         'template' => template,
-         'building_type' => standards_building_type,
-         'space_type' => standards_space_type
+        'template' => template,
+        'building_type' => standards_building_type,
+        'space_type' => standards_space_type
       }
 
-      data = model_find_object( standards_data['space_types'], search_criteria)
+      data = model_find_object(standards_data['space_types'], search_criteria)
       if data.nil?
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.standards.Space", "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
-      else 
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
+      else
         # Read the illuminance setpoint value
         # If 'na', daylighting is not appropriate for this space type for some reason
         daylight_stpt_lux = data['target_illuminance_setpoint']
         if daylight_stpt_lux == 'na'
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: daylighting is not appropriate for #{template} #{standards_building_type} #{standards_space_type}.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}: daylighting is not appropriate for #{template} #{standards_building_type} #{standards_space_type}.")
           return true
         end
         # If a setpoint is specified, use that.  Otherwise use a default.
         daylight_stpt_lux = daylight_stpt_lux.to_f
         if daylight_stpt_lux.zero?
           daylight_stpt_lux = 375
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: no specific illuminance setpoint defined for #{template} #{standards_building_type} #{standards_space_type}, assuming #{daylight_stpt_lux} Lux.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}: no specific illuminance setpoint defined for #{template} #{standards_building_type} #{standards_space_type}, assuming #{daylight_stpt_lux} Lux.")
         else
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: illuminance setpoint = #{daylight_stpt_lux} Lux")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}: illuminance setpoint = #{daylight_stpt_lux} Lux")
         end
         # for the office prototypes where core and perimeter zoning is used,
         # there are additional assumptions about how much of the daylit area can be used.
         if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
-          psa_nongeo_frac = data['psa_nongeometry_fraction'].to_f 
-          ssa_nongeo_frac = data['ssa_nongeometry_fraction'].to_f 
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: assuming only #{(psa_nongeo_frac*100).round}% of the primary sidelit area is daylightable based on typical design practice.")
-          OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.Space", "For #{space.name}: assuming only #{(ssa_nongeo_frac*100).round}% of the secondary sidelit area is daylightable based on typical design practice.")
+          psa_nongeo_frac = data['psa_nongeometry_fraction'].to_f
+          ssa_nongeo_frac = data['ssa_nongeometry_fraction'].to_f
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}: assuming only #{(psa_nongeo_frac * 100).round}% of the primary sidelit area is daylightable based on typical design practice.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}: assuming only #{(ssa_nongeo_frac * 100).round}% of the secondary sidelit area is daylightable based on typical design practice.")
         end
       end
     end
-    
+
     # Get the zone that the space is in
     zone = space.thermalZone
     if zone.empty?
@@ -1039,7 +1039,7 @@ class Standard
     # Determine the sensor fractions and the attached windows
     sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window = space_daylighting_fractions_and_windows(space,
                                                                                                              areas,
-                                                                                                             sorted_windows, 
+                                                                                                             sorted_windows,
                                                                                                              sorted_skylights,
                                                                                                              req_top_ctrl,
                                                                                                              req_pri_ctrl,
@@ -1049,8 +1049,8 @@ class Standard
     # office prototypes based on assumptions about geometry that is not explicitly
     # defined in the model.
     if standards_building_type == 'Office' && standards_space_type.include?('WholeBuilding')
-      sensor_1_frac = sensor_1_frac * psa_nongeo_frac unless psa_nongeo_frac.nil?
-      sensor_2_frac = sensor_2_frac * ssa_nongeo_frac unless ssa_nongeo_frac.nil?
+      sensor_1_frac *= psa_nongeo_frac unless psa_nongeo_frac.nil?
+      sensor_2_frac *= ssa_nongeo_frac unless ssa_nongeo_frac.nil?
     end
 
     # Place the sensors and set control fractions
@@ -1093,7 +1093,7 @@ class Standard
       sensor_1.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
       sensor_1.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
       sensor_1.setMaximumAllowableDiscomfortGlareIndex(22.0)
-  
+
       # Place sensor depending on skylight or window
       sensor_vertex = nil
       if sensor_1_window[1][:facade] == '0-Up'
@@ -1177,10 +1177,10 @@ class Standard
     req_top_ctrl = false
     req_pri_ctrl = false
     req_sec_ctrl = false
-  
+
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
   end
-  
+
   # Determine the fraction controlled by each sensor and which
   # window each sensor should go near.
   #
@@ -1189,7 +1189,7 @@ class Standard
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
   def space_daylighting_fractions_and_windows(space,
                                               areas,
-                                              sorted_windows, 
+                                              sorted_windows,
                                               sorted_skylights,
                                               req_top_ctrl,
                                               req_pri_ctrl,
@@ -1198,10 +1198,10 @@ class Standard
     sensor_2_frac = 0.0
     sensor_1_window = nil
     sensor_2_window = nil
-    
+
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
-  
+
   # Set the infiltration rate for this space to include
   # the impact of air leakage requirements in the standard.
   #
@@ -1210,7 +1210,7 @@ class Standard
   def space_apply_infiltration_rate(space)
     # Determine the total building baseline infiltration rate
     basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa(space)
-    
+
     # Do nothing if no infiltration
     return true if basic_infil_rate_cfm_per_ft2.zero?
 
@@ -1223,7 +1223,7 @@ class Standard
     adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
     adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
     # Get the exterior wall area
-    exterior_wall_and_window_area_m2 = space_exterior_wall_and_window_area(space) 
+    exterior_wall_and_window_area_m2 = space_exterior_wall_and_window_area(space)
 
     # Don't create an object if there is no exterior wall area
     if exterior_wall_and_window_area_m2 <= 0.0
@@ -1285,11 +1285,11 @@ class Standard
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.
-  def space_infiltration_rate_75_pa(space) 
+  def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 0
     return basic_infil_rate_cfm_per_ft2
   end
-  
+
   # Calculate the area of the exterior walls,
   # including the area of the windows on these walls.
   #
@@ -1395,7 +1395,7 @@ class Standard
 
     # If this space is a plenum, check the space type
     # of the space below the largest floor in the space
-    if space_plenum?(space) 
+    if space_plenum?(space)
       # Find the largest floor
       largest_floor_area = 0.0
       largest_surface = nil
@@ -1434,11 +1434,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
         is_res = false
       else
-        is_res = if space_type_properties['is_residential'] == 'Yes'
-                   true
-                 else
-                   false
-                 end
+        is_res = space_type_properties['is_residential'] == 'Yes'
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{space_to_check.name}, assuming nonresidential.")
@@ -1464,7 +1460,7 @@ class Standard
     end
 
     # Get the category from the zone
-    cond_cat = zone.get.conditioning_category( climate_zone)
+    cond_cat = zone.get.conditioning_category(climate_zone)
 
     return cond_cat
   end
@@ -1907,11 +1903,11 @@ class Standard
     # Report logged errors to user
     if join_errs > 0
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, #{join_errs} of #{polygons.size} #{space.name} were not joined properly due to limitations of the geometry calculation methods.  The resulting daylighted areas will be smaller than they should be.")
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons','')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons', '')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
     if inner_loop_errs > 0
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, #{inner_loop_errs} of #{polygons.size} #{space.name} were not joined properly becasue the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons','')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons', '')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Joined #{polygons.size} #{space.name} into #{combined_polygons.size} polygons.")

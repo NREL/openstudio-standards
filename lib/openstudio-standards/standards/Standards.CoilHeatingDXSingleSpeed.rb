@@ -5,14 +5,14 @@ class Standard
 
   # Finds capacity in W.  This is the cooling capacity of the
   # paired DX cooling coil.
-  #   
+  #
   # @return [Double] capacity in W to be used for find object
   def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
     capacity_w = nil
-    
+
     # Get the paired cooling coil
     clg_coil = nil
-    
+
     # Unitary and zone equipment
     if coil_heating_dx_single_speed.airLoopHVAC.empty?
       if coil_heating_dx_single_speed.containingHVACComponent.is_initialized
@@ -44,7 +44,7 @@ class Standard
                    'OS:Coil:Cooling:DX:MultiSpeed']
       clg_types.each do |ct|
         coils = air_loop.supplyComponents(ct.to_IddObjectType)
-        next unless coils.size > 0
+        next if coils.empty?
         clg_coil = coils[0]
         break # Stop on first DX cooling coil found
       end
@@ -101,12 +101,12 @@ class Standard
   # Finds lookup object in standards and return efficiency
   #
   # @return [Double] full load efficiency (COP)
-  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename=false)
+  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false)
     # find ac properties
     search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed)
     sub_category = search_criteria['subcategory']
     suppl_heating_type = search_criteria['heating_type']
-    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed) 
+    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -114,7 +114,7 @@ class Standard
     cop = nil
 
     # find object
-    ac_props = model_find_object( standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = model_find_object(standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?
@@ -181,12 +181,12 @@ class Standard
     search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed)
 
     # Get the capacity
-    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed) 
+    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies
-    ac_props = model_find_object( standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = model_find_object(standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?

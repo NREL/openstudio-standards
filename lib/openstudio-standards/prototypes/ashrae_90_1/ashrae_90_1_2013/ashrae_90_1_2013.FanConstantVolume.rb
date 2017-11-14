@@ -4,7 +4,6 @@ class ASHRAE9012013 < ASHRAE901
   # @return [Double] the pressure rise (in H2O).  Defaults
   # to the logic from ASHRAE 90.1-2004 prototypes.
   def fan_constant_volume_airloop_fan_pressure_rise(fan_constant_volume)
-  
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if fan_constant_volume.maximumFlowRate.is_initialized
@@ -18,7 +17,7 @@ class ASHRAE9012013 < ASHRAE901
 
     # Convert max flow rate to cfm
     maximum_flow_rate_cfm = OpenStudio.convert(maximum_flow_rate_m3_per_s, 'm^3/s', 'cfm').get
-  
+
     # Determine the pressure rise
     pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7437
                              2.5
@@ -28,5 +27,4 @@ class ASHRAE9012013 < ASHRAE901
 
     return pressure_rise_in_h2o
   end
-  
 end

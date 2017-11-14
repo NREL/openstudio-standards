@@ -1,5 +1,5 @@
 class ASHRAE9012013 < ASHRAE901
-  # Determine the performance rating method specified 
+  # Determine the performance rating method specified
   # design condenser water temperature, approach, and range
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] the condenser water loop
@@ -7,7 +7,7 @@ class ASHRAE9012013 < ASHRAE901
   # @return [Array<Double>] [leaving_cw_t_c, approach_k, range_k]
   def plant_loop_prm_baseline_condenser_water_temperatures(plant_loop, design_oat_wb_c)
     design_oat_wb_f = OpenStudio.convert(design_oat_wb_c, 'C', 'F').get
-    
+
     # G3.1.3.11 - CW supply temp shall be evaluated at 0.4% evaporative design OATwb
     # per the formulat approach_F = 25.72 - (0.24 * OATwb_F)
     # 55F <= OATwb <= 90F
@@ -28,7 +28,7 @@ class ASHRAE9012013 < ASHRAE901
 
     # Calculate the leaving CW temp
     leaving_cw_t_f = design_oat_wb_f + approach_r
-    
+
     # Convert to SI units
     leaving_cw_t_c = OpenStudio.convert(leaving_cw_t_f, 'F', 'C').get
     approach_k = OpenStudio.convert(approach_r, 'R', 'K').get
@@ -37,4 +37,3 @@ class ASHRAE9012013 < ASHRAE901
     return [leaving_cw_t_c, approach_k, range_k]
   end
 end
-  

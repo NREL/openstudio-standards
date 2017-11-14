@@ -1,6 +1,5 @@
 
 class ASHRAE901 < Standard
-
   # The threhold horsepower below which part load control is not required.
   #
   # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] the fan
@@ -18,5 +17,4 @@ class ASHRAE901 < Standard
     cap_limit_btu_per_hr = nil # No minimum limit
     return cap_limit_btu_per_hr
   end
-  
 end

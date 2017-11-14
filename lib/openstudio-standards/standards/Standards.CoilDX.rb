@@ -6,7 +6,7 @@ module CoilDX
   # Finds the subcategory.  Possible choices are:
   # Single Package, Split System, PTAC, or PTHP
   #
-  # @return [String] the coil_dx_subcategory(coil_dx) 
+  # @return [String] the coil_dx_subcategory(coil_dx)
   # @todo Add add split system vs single package to model object
   def coil_dx_subcategory(coil_dx)
     sub_category = 'Single Package'
@@ -85,24 +85,24 @@ module CoilDX
     if coil_dx.airLoopHVAC.is_initialized
       air_loop = coil_dx.airLoopHVAC.get
       htg_type = if !air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).empty?
-                       'Electric Resistance or None'
-                     elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).empty?
-                       'All Other'
-                     elsif !air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).empty?
-                       'All Other'
-                     elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty?
-                       'All Other'
-                     elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas:MultiStage'.to_IddObjectType).empty?
-                       'All Other'
-                     elsif !air_loop.supplyComponents('OS:Coil:Heating:Desuperheater'.to_IddObjectType).empty?
-                       'All Other'
-                     elsif !air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).empty?
-                       'All Other'
-                     else
-                       'Electric Resistance or None'
+                   'Electric Resistance or None'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).empty?
+                   'All Other'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).empty?
+                   'All Other'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty?
+                   'All Other'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas:MultiStage'.to_IddObjectType).empty?
+                   'All Other'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:Desuperheater'.to_IddObjectType).empty?
+                   'All Other'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).empty?
+                   'All Other'
+                 else
+                   'Electric Resistance or None'
                      end
     end
-    
+
     return htg_type
   end
 
@@ -122,17 +122,17 @@ module CoilDX
                                         'AirCooled'
                                       end
 
-    # Get the coil_dx_subcategory(coil_dx) 
-    search_criteria['subcategory'] = coil_dx_subcategory(coil_dx) 
+    # Get the coil_dx_subcategory(coil_dx)
+    search_criteria['subcategory'] = coil_dx_subcategory(coil_dx)
 
     # Add the heating type to the search criteria
     unless coil_dx_heating_type(coil_dx).nil?
-      search_criteria['heating_type'] = coil_dx_heating_type(coil_dx) 
+      search_criteria['heating_type'] = coil_dx_heating_type(coil_dx)
     end
 
     # Unitary heat pumps don't have a heating type
     # as part of the search
-    if coil_dx_heat_pump?(coil_dx) 
+    if coil_dx_heat_pump?(coil_dx)
       if coil_dx.airLoopHVAC.empty?
         if coil_dx.containingHVACComponent.is_initialized
           containing_comp = coil_dx.containingHVACComponent.get

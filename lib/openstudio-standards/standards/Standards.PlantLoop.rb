@@ -337,7 +337,7 @@ class Standard
     return true
   end
 
-  # Determine the performance rating method specified 
+  # Determine the performance rating method specified
   # design condenser water temperature, approach, and range
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] the condenser water loop
@@ -368,7 +368,7 @@ class Standard
   end
 
   # Determine if temperature reset is required.
-  # Required if heating or cooling capacity is greater than 
+  # Required if heating or cooling capacity is greater than
   # 300,000 Btu/hr.
   def plant_loop_supply_water_temperature_reset_required?(plant_loop)
     reset_required = false
@@ -1218,7 +1218,6 @@ class Standard
   #
   # @return [Boolean] true if it's indeed a SHW loop, false otherwise
   def plant_loop_swh_loop?(plant_loop)
-
     serves_swh = false
     plant_loop.demandComponents.each do |comp|
       if comp.to_WaterUseConnections.is_initialized
@@ -1253,7 +1252,6 @@ class Standard
     secondary_heating_capacity = 0
 
     plant_loop.supplyComponents.each do |component|
-
       # Get the object type
       obj_type = component.iddObjectType.valueName.to_s
 
@@ -1316,8 +1314,8 @@ class Standard
 
         when 'OS_HeatExchanger_FluidToFluid'
           hx = component.to_HeatExchangerFluidToFluid.get
-          cooling_hx_control_types = ["CoolingSetpointModulated", "CoolingSetpointOnOff", "CoolingDifferentialOnOff", "CoolingSetpointOnOffWithComponentOverride"]
-          cooling_hx_control_types.each {|x| x.downcase!}
+          cooling_hx_control_types = ['CoolingSetpointModulated', 'CoolingSetpointOnOff', 'CoolingDifferentialOnOff', 'CoolingSetpointOnOffWithComponentOverride']
+          cooling_hx_control_types.each(&:downcase!)
           if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
             source_plant_loop = hx.secondaryPlantLoop.get
             secondary_fuels += plant_loop.model.plant_loop_heating_fuels(source_plant_loop)
@@ -1326,10 +1324,7 @@ class Standard
 
         when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
           # To avoid extraneous debug messages
-        else
-          #OpenStudio::logFree(OpenStudio::Debug, 'openstudio.sizing.Model', "No heating fuel types found for #{obj_type}")
-      end
-
+        end
     end
 
     # @Todo: decide how to handle primary and secondary stuff
@@ -1342,7 +1337,5 @@ class Standard
     # end
 
     return fuels.uniq.sort, combination_system, storage_capacity, total_heating_capacity
-
-  end # end classify_swh_system_type  
-
+  end # end classify_swh_system_type
 end

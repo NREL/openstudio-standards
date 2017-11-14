@@ -35,38 +35,38 @@ class Standard
           condenser_water_loop = nil
           if prototype_input['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = model_add_cw_loop(model,
-                                               'Open Cooling Tower',
-                                               'Centrifugal',
-                                               'Fan Cycling',
-                                               2,
-                                               1,
-                                               building_type)
+                                                     'Open Cooling Tower',
+                                                     'Centrifugal',
+                                                     'Fan Cycling',
+                                                     2,
+                                                     1,
+                                                     building_type)
           end
 
           chilled_water_loop = model_add_chw_loop(model,
-                                            prototype_input['chw_pumping_type'],
-                                            prototype_input['chiller_cooling_type'],
-                                            prototype_input['chiller_condenser_type'],
-                                            prototype_input['chiller_compressor_type'],
-                                            'Electricity',
-                                            condenser_water_loop)
+                                                  prototype_input['chw_pumping_type'],
+                                                  prototype_input['chiller_cooling_type'],
+                                                  prototype_input['chiller_condenser_type'],
+                                                  prototype_input['chiller_compressor_type'],
+                                                  'Electricity',
+                                                  condenser_water_loop)
 
         end
 
         # Add the VAV
         model_add_vav_reheat(model,
-                       system['name'],
-                       hot_water_loop,
-                       chilled_water_loop,
-                       thermal_zones,
-                       prototype_input['vav_operation_schedule'],
-                       prototype_input['vav_oa_damper_schedule'],
-                       prototype_input['vav_fan_efficiency'],
-                       prototype_input['vav_fan_motor_efficiency'],
-                       prototype_input['vav_fan_pressure_rise'],
-                       return_plenum,
-                       reheat_type = 'Water',
-                       building_type)
+                             system['name'],
+                             hot_water_loop,
+                             chilled_water_loop,
+                             thermal_zones,
+                             prototype_input['vav_operation_schedule'],
+                             prototype_input['vav_oa_damper_schedule'],
+                             prototype_input['vav_fan_efficiency'],
+                             prototype_input['vav_fan_motor_efficiency'],
+                             prototype_input['vav_fan_pressure_rise'],
+                             return_plenum,
+                             reheat_type = 'Water',
+                             building_type)
 
       when 'CAV'
 
@@ -85,33 +85,33 @@ class Standard
         elsif building_type == 'Hospital'
           condenser_water_loop = nil
           if prototype_input['chiller_cooling_type'] == 'WaterCooled'
-            condenser_water_loop = model_add_cw_loop(model) 
+            condenser_water_loop = model_add_cw_loop(model)
           end
 
           chilled_water_loop = model_add_chw_loop(model,
-                                            prototype_input['chw_pumping_type'],
-                                            prototype_input['chiller_cooling_type'],
-                                            prototype_input['chiller_condenser_type'],
-                                            prototype_input['chiller_compressor_type'],
-                                            prototype_input['chiller_capacity_guess'],
-                                            condenser_water_loop)
+                                                  prototype_input['chw_pumping_type'],
+                                                  prototype_input['chiller_cooling_type'],
+                                                  prototype_input['chiller_condenser_type'],
+                                                  prototype_input['chiller_compressor_type'],
+                                                  prototype_input['chiller_capacity_guess'],
+                                                  condenser_water_loop)
         end
 
         # Add the CAV
         model_add_cav(model,
-                system['name'],
-                hot_water_loop,
-                thermal_zones,
-                prototype_input['vav_operation_schedule'],
-                prototype_input['vav_oa_damper_schedule'],
-                prototype_input['vav_fan_efficiency'],
-                prototype_input['vav_fan_motor_efficiency'],
-                prototype_input['vav_fan_pressure_rise'],
-                chilled_water_loop,
-                building_type)
+                      system['name'],
+                      hot_water_loop,
+                      thermal_zones,
+                      prototype_input['vav_operation_schedule'],
+                      prototype_input['vav_oa_damper_schedule'],
+                      prototype_input['vav_fan_efficiency'],
+                      prototype_input['vav_fan_motor_efficiency'],
+                      prototype_input['vav_fan_pressure_rise'],
+                      chilled_water_loop,
+                      building_type)
 
       when 'PSZ-AC'
-  
+
         # Retrieve the existing chilled water loop
         # or add a new one if necessary.
 
@@ -144,18 +144,18 @@ class Standard
         end
 
         model_add_psz_ac(model,
-                   system['name'],
-                   heat_pump_loop, # Typically nil unless water source hp
-                   heat_pump_loop, # Typically nil unless water source hp
-                   thermal_zones,
-                   hvac_op_sch,
-                   oa_sch,
-                   fan_position,
-                   prototype_input['pszac_fan_type'],
-                   prototype_input['pszac_heating_type'],
-                   prototype_input['pszac_supplemental_heating_type'],
-                   prototype_input['pszac_cooling_type'],
-                   building_type)
+                         system['name'],
+                         heat_pump_loop, # Typically nil unless water source hp
+                         heat_pump_loop, # Typically nil unless water source hp
+                         thermal_zones,
+                         hvac_op_sch,
+                         oa_sch,
+                         fan_position,
+                         prototype_input['pszac_fan_type'],
+                         prototype_input['pszac_heating_type'],
+                         prototype_input['pszac_supplemental_heating_type'],
+                         prototype_input['pszac_cooling_type'],
+                         building_type)
 
       when 'PVAV'
 
@@ -171,15 +171,15 @@ class Standard
                          end
 
         model_add_pvav(model,
-                 system['name'],
-                 thermal_zones,
-                 prototype_input['vav_operation_schedule'],
-                 prototype_input['vav_oa_damper_schedule'],
-                 electric_reheat = false,
-                 hot_water_loop,
-                 chilled_water_loop = nil,
-                 return_plenum,
-                 building_type)
+                       system['name'],
+                       thermal_zones,
+                       prototype_input['vav_operation_schedule'],
+                       prototype_input['vav_oa_damper_schedule'],
+                       electric_reheat = false,
+                       hot_water_loop,
+                       chilled_water_loop = nil,
+                       return_plenum,
+                       building_type)
 
       when 'DOAS'
 
@@ -201,38 +201,38 @@ class Standard
           condenser_water_loop = nil
           if prototype_input['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = model_add_cw_loop(model,
-                                               'Open Cooling Tower',
-                                               'Centrifugal',
-                                               'Fan Cycling',
-                                               2,
-                                               1,
-                                               building_type)
+                                                     'Open Cooling Tower',
+                                                     'Centrifugal',
+                                                     'Fan Cycling',
+                                                     2,
+                                                     1,
+                                                     building_type)
           end
 
           chilled_water_loop = model_add_chw_loop(model,
-                                            prototype_input['chw_pumping_type'],
-                                            prototype_input['chiller_cooling_type'],
-                                            prototype_input['chiller_condenser_type'],
-                                            prototype_input['chiller_compressor_type'],
-                                            'Electricity',
-                                            condenser_water_loop)
+                                                  prototype_input['chw_pumping_type'],
+                                                  prototype_input['chiller_cooling_type'],
+                                                  prototype_input['chiller_condenser_type'],
+                                                  prototype_input['chiller_compressor_type'],
+                                                  'Electricity',
+                                                  condenser_water_loop)
         end
 
         model_add_doas(model,
-                 system['name'],
-                 hot_water_loop,
-                 chilled_water_loop,
-                 thermal_zones,
-                 prototype_input['vav_operation_schedule'],
-                 prototype_input['doas_oa_damper_schedule'],
-                 prototype_input['doas_fan_maximum_flow_rate'],
-                 prototype_input['doas_economizer_control_type'],
-                 building_type)
+                       system['name'],
+                       hot_water_loop,
+                       chilled_water_loop,
+                       thermal_zones,
+                       prototype_input['vav_operation_schedule'],
+                       prototype_input['doas_oa_damper_schedule'],
+                       prototype_input['doas_fan_maximum_flow_rate'],
+                       prototype_input['doas_economizer_control_type'],
+                       building_type)
 
         model_add_four_pipe_fan_coil(model,
-                                hot_water_loop,
-                                chilled_water_loop,
-                                thermal_zones)
+                                     hot_water_loop,
+                                     chilled_water_loop,
+                                     thermal_zones)
 
       when 'DC' # Data Center
 
@@ -255,92 +255,92 @@ class Standard
                          end
 
         model_add_data_center_hvac(model,
-                             nil,
-                             hot_water_loop,
-                             heat_pump_loop,
-                             thermal_zones,
-                             prototype_input['flow_fraction_schedule_name'],
-                             prototype_input['flow_fraction_schedule_name'],
-                             system['main_data_center'])
+                                   nil,
+                                   hot_water_loop,
+                                   heat_pump_loop,
+                                   thermal_zones,
+                                   prototype_input['flow_fraction_schedule_name'],
+                                   prototype_input['flow_fraction_schedule_name'],
+                                   system['main_data_center'])
 
       when 'SAC'
 
         model_add_split_ac(model,
-                     nil,
-                     thermal_zones,
-                     prototype_input['sac_operation_schedule'],
-                     prototype_input['sac_operation_schedule_meeting'],
-                     prototype_input['sac_oa_damper_schedule'],
-                     prototype_input['sac_fan_type'],
-                     prototype_input['sac_heating_type'],
-                     prototype_input['sac_heating_type'],
-                     prototype_input['sac_cooling_type'],
-                     building_type)
+                           nil,
+                           thermal_zones,
+                           prototype_input['sac_operation_schedule'],
+                           prototype_input['sac_operation_schedule_meeting'],
+                           prototype_input['sac_oa_damper_schedule'],
+                           prototype_input['sac_fan_type'],
+                           prototype_input['sac_heating_type'],
+                           prototype_input['sac_heating_type'],
+                           prototype_input['sac_cooling_type'],
+                           building_type)
 
       when 'UnitHeater'
 
         model_add_unitheater(model,
-                       nil,
-                       thermal_zones,
-                       prototype_input['unitheater_operation_schedule'],
-                       prototype_input['unitheater_fan_control_type'],
-                       OpenStudio.convert(prototype_input['unitheater_fan_static_pressure'], 'inH_{2}O', 'Pa').get,
-                       prototype_input['unitheater_heating_type'],
-                       hot_water_loop = nil,
-                       building_type)
+                             nil,
+                             thermal_zones,
+                             prototype_input['unitheater_operation_schedule'],
+                             prototype_input['unitheater_fan_control_type'],
+                             OpenStudio.convert(prototype_input['unitheater_fan_static_pressure'], 'inH_{2}O', 'Pa').get,
+                             prototype_input['unitheater_heating_type'],
+                             hot_water_loop = nil,
+                             building_type)
 
       when 'PTAC'
 
         model_add_ptac(model,
-                 nil,
-                 nil,
-                 thermal_zones,
-                 prototype_input['ptac_fan_type'],
-                 prototype_input['ptac_heating_type'],
-                 prototype_input['ptac_cooling_type'],
-                 building_type)
+                       nil,
+                       nil,
+                       thermal_zones,
+                       prototype_input['ptac_fan_type'],
+                       prototype_input['ptac_heating_type'],
+                       prototype_input['ptac_cooling_type'],
+                       building_type)
 
       when 'Exhaust Fan'
 
         model_add_exhaust_fan(model, system['availability_sch_name'],
-                        system['flow_rate'],
-                        system['flow_fraction_schedule_name'],
-                        system['balanced_exhaust_fraction_schedule_name'],
-                        thermal_zones)
+                              system['flow_rate'],
+                              system['flow_fraction_schedule_name'],
+                              system['balanced_exhaust_fraction_schedule_name'],
+                              thermal_zones)
 
       when 'Zone Ventilation'
 
         model_add_zone_ventilation(model, system['availability_sch_name'],
-                             system['flow_rate'],
-                             system['ventilation_type'],
-                             thermal_zones)
+                                   system['flow_rate'],
+                                   system['ventilation_type'],
+                                   thermal_zones)
 
       when 'Refrigeration'
 
         model_add_refrigeration(model,
-                          system['case_type'],
-                          system['cooling_capacity_per_length'],
-                          system['length'],
-                          system['evaporator_fan_pwr_per_length'],
-                          system['lighting_per_length'],
-                          system['lighting_sch_name'],
-                          system['defrost_pwr_per_length'],
-                          system['restocking_sch_name'],
-                          system['cop'],
-                          system['cop_f_of_t_curve_name'],
-                          system['condenser_fan_pwr'],
-                          system['condenser_fan_pwr_curve_name'],
-                          thermal_zones[0])
-            
-      # When multiple cases and walk-ins asssigned to a system        
+                                system['case_type'],
+                                system['cooling_capacity_per_length'],
+                                system['length'],
+                                system['evaporator_fan_pwr_per_length'],
+                                system['lighting_per_length'],
+                                system['lighting_sch_name'],
+                                system['defrost_pwr_per_length'],
+                                system['restocking_sch_name'],
+                                system['cop'],
+                                system['cop_f_of_t_curve_name'],
+                                system['condenser_fan_pwr'],
+                                system['condenser_fan_pwr_curve_name'],
+                                thermal_zones[0])
+
+      # When multiple cases and walk-ins asssigned to a system
       when 'Refrigeration_system'
 
         model_add_refrigeration_system(model,
-                                 system['compressor_type'],
-                                 system['sys_name'],
-                                 system['cases'],
-                                 system['walkins'],
-                                 thermal_zones[0])
+                                       system['compressor_type'],
+                                       system['sys_name'],
+                                       system['cases'],
+                                       system['walkins'],
+                                       thermal_zones[0])
 
       else
 
@@ -353,7 +353,7 @@ class Standard
 
     return true
   end # add hvac
-  
+
   private
 
   def model_get_zones_from_spaces_on_system(model, system)

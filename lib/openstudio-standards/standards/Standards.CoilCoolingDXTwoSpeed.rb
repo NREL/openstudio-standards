@@ -12,7 +12,7 @@ class Standard
     elsif coil_cooling_dx_two_speed.autosizedRatedHighSpeedTotalCoolingCapacity.is_initialized
       capacity_w = coil_cooling_dx_two_speed.autosizedRatedHighSpeedTotalCoolingCapacity.get
     else
-      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_two_speed.name} capacity is not available, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_two_speed.name} capacity is not available, cannot apply efficiency standard.")
       return 0.0
     end
 
@@ -22,21 +22,21 @@ class Standard
   # Finds lookup object in standards and return efficiency
   #
   # @return [Double] full load efficiency (COP)
-  def coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, rename=false)
+  def coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, rename = false)
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
     sub_category = search_criteria['subcategory']
-    capacity_w = coil_cooling_dx_two_speed_find_capacity(coil_cooling_dx_two_speed) 
+    capacity_w = coil_cooling_dx_two_speed_find_capacity(coil_cooling_dx_two_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_two_speed) 
-                 model_find_object( standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_two_speed)
+                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object( standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
@@ -105,16 +105,16 @@ class Standard
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed)
 
     # Get the capacity
-    capacity_w = coil_cooling_dx_two_speed_find_capacity(coil_cooling_dx_two_speed) 
+    capacity_w = coil_cooling_dx_two_speed_find_capacity(coil_cooling_dx_two_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_two_speed) 
-                 model_find_object( standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_two_speed)
+                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 model_find_object( standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found

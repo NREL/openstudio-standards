@@ -1,33 +1,33 @@
-#Repopening Standards Class
+# Repopening Standards Class
 Standard.class_eval do
-# I am replacing all prototype inputs.
-# Right now.
+  # I am replacing all prototype inputs.
+  # Right now.
   def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
     building_type = @instvarbuilding_type
-    raise ("no building_type!") if @instvarbuilding_type.nil?
+    raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
     # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
     if @instvarbuilding_type == 'HighriseApartment'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
-        OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at  #{} are not available, the measure is disabled for this specific type.")
+        OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at   are not available, the measure is disabled for this specific type.")
         return false
-        #elsif @@template == 'NECB 2011'
+        # elsif @@template == 'NECB 2011'
         #  OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at @@template #{@@template} is not available, the measure is disabled for this specific type.")
         #  return false
       end
     end
-    #optionally  determine the climate zone from the epw and stat files.
+    # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'
-      climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone()
+      climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone
     else
-      #this is required to be blank otherwise it may cause side effects.
-      epw_file = ""
+      # this is required to be blank otherwise it may cause side effects.
+      epw_file = ''
     end
     model = load_initial_osm(@geometry_file)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
-    #save new basefile to new geometry folder as class name.
-    model.getBuilding.setName("#{}-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
+    # save new basefile to new geometry folder as class name.
+    model.getBuilding.setName("-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
     model_add_loads(model)
     model_apply_infiltration_standard(model)
     model_modify_infiltration_coefficients(model, @instvarbuilding_type, climate_zone)
@@ -81,7 +81,6 @@ Standard.class_eval do
     return model
   end
 
-
   # Replaces all objects in the current model
   # with the objects in the .osm.  Typically used to
   # load a model as a starting point.
@@ -92,7 +91,7 @@ Standard.class_eval do
     # Take the existing model and remove all the objects
     # (this is cheesy), but need to keep the same memory block
     handles = OpenStudio::UUIDVector.new
-    model.objects.each {|objects| handles << objects.handle}
+    model.objects.each { |objects| handles << objects.handle }
     model.removeObjects(handles)
     model = nil
     if File.dirname(__FILE__)[0] == ':'
@@ -111,7 +110,7 @@ Standard.class_eval do
       # version translate from string
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
       model = version_translator.loadModel(abs_path)
-      raise()
+      raise
     end
 
     if model.empty?
@@ -125,12 +124,11 @@ Standard.class_eval do
     return true
   end
 
-
   def get_space_type_maps_from_model(model)
-    #check to see if there are s
-    #Do all spaces have Spacetypes?
+    # check to see if there are s
+    # Do all spaces have Spacetypes?
     all_spaces_have_space_types = true
-    #Do all spacetypes have StandardSpaceTypes
+    # Do all spacetypes have StandardSpaceTypes
     all_spaceTypes_have_standard_space_types = true
     space_type_map = {}
     model.getSpaces.each do |space|
@@ -140,22 +138,16 @@ Standard.class_eval do
         if space.spaceType.get.standardsSpaceType.empty?
           all_spaceTypes_have_standard_space_types = false
         else
-          space_type_map[space.spaceType.get.standardsSpaceType().get.to_s] = [] if space_type_map[space.spaceType.get.standardsSpaceType().get.to_s].nil?
-          space_type_map[space.spaceType.get.standardsSpaceType().get.to_s] << space.name.get
+          space_type_map[space.spaceType.get.standardsSpaceType.get.to_s] = [] if space_type_map[space.spaceType.get.standardsSpaceType.get.to_s].nil?
+          space_type_map[space.spaceType.get.standardsSpaceType.get.to_s] << space.name.get
         end
       end
     end
-    if all_spaceTypes_have_standard_space_types and all_spaceTypes_have_standard_space_types
+    if all_spaceTypes_have_standard_space_types && all_spaceTypes_have_standard_space_types
       return space_type_map
     end
     return nil
   end
-
-
-
-
-
-
 
   def model_add_full_space_type_libs(model)
     space_type_properties_list = model_find_objects(standards_data['space_types'], '' => 'NECB 2011')
@@ -163,14 +155,14 @@ Standard.class_eval do
       stub_space_type = OpenStudio::Model::SpaceType.new(model)
       stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
       stub_space_type.setStandardsSpaceType(space_type_property['space_type'])
-      stub_space_type.setName("#{}-#{space_type_property['building_type']}-#{space_type_property['space_type']}")
+      stub_space_type.setName("-#{space_type_property['building_type']}-#{space_type_property['space_type']}")
       space_type_apply_rendering_color(stub_space_type)
     end
     model_add_loads(model)
   end
 
   def model_assign_building_story(model, building_story_map = nil)
-    if building_story_map.nil? or building_story_map.empty?
+    if building_story_map.nil? || building_story_map.empty?
 
       model_assign_spaces_to_stories(model)
       return true
@@ -236,7 +228,7 @@ Standard.class_eval do
     # The constructions lookup table uses a slightly different list of
     # building types.
     @lookup_building_type = model_get_lookup_name(building_type)
-    # TODO this is a workaround.  Need to synchronize the building type names
+    # TODO: this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
     case building_type
       when 'SmallOffice', 'MediumOffice', 'LargeOffice'
@@ -339,7 +331,7 @@ Standard.class_eval do
 
     # Make the default construction set for the building
     spc_type = nil
-    spc_type = "WholeBuilding" if template == 'NECB 2011'
+    spc_type = 'WholeBuilding' if template == 'NECB 2011'
     bldg_def_const_set = model_add_construction_set(model, climate_zone, new_lookup_building_type, spc_type, is_residential)
 
     if bldg_def_const_set.is_initialized
@@ -456,8 +448,8 @@ Standard.class_eval do
     # add internal mass
     # not required for NECB 2011
     unless (template == 'NECB 2011') ||
-        ((building_type == 'SmallHotel') &&
-            (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
+           ((building_type == 'SmallHotel') &&
+               (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
@@ -472,7 +464,6 @@ Standard.class_eval do
       end
     end
 
-
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
 
     return true
@@ -485,7 +476,6 @@ Standard.class_eval do
   # @param (see #add_constructions)
   # @return [Array<String>] returns an array of space names as strings
   def model_find_conditioned_space_names(model, building_type, climate_zone)
-
     conditioned_space_names = OpenStudio::StringVector.new
     @system_to_space_map.each do |system|
       system['space_names'].each do |space_name|
@@ -508,12 +498,11 @@ Standard.class_eval do
     # Remove any Thermal zones assigned
     model.getThermalZones.each(&:remove)
 
-
     # Create a thermal zone for each space in the self
     model.getSpaces.sort.each do |space|
       zone = OpenStudio::Model::ThermalZone.new(model)
       zone.setName("#{space.name} ZN")
-      unless space_multiplier_map[space.name.to_s].nil? or space_multiplier_map[space.name.to_s] == 1
+      unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
         zone.setMultiplier(space_multiplier_map[space.name.to_s])
       end
       space.setThermalZone(zone)
@@ -531,7 +520,7 @@ Standard.class_eval do
         thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostat_clone)
         if template == 'NECB 2011'
-          #Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
+          # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
           ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
           ideal_loads.addToThermalZone(zone)
         end
@@ -548,14 +537,13 @@ Standard.class_eval do
   #
   # @param kitchen_makeup [String] Valid choices are
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
-  def model_add_exhaust(model, kitchen_makeup = "Adjacent") # kitchen_makeup options are (None, Largest Zone, Adjacent)
-
+  def model_add_exhaust(model, kitchen_makeup = 'Adjacent') # kitchen_makeup options are (None, Largest Zone, Adjacent)
     zone_exhaust_fans = {}
 
     # apply use specified kitchen_makup logic
-    if not ["Adjacent", "Largest Zone"].include?(kitchen_makeup)
+    if !['Adjacent', 'Largest Zone'].include?(kitchen_makeup)
 
-      if not kitchen_makeup == "None"
+      if kitchen_makeup != 'None'
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
       end
 
@@ -571,33 +559,32 @@ Standard.class_eval do
 
       # populate standard_space_types_with_makup_air
       standard_space_types_with_makup_air = {}
-      standard_space_types_with_makup_air[["FullServiceRestaurant", "Kitchen"]] = ["FullServiceRestaurant", "Dining"]
-      standard_space_types_with_makup_air[["QuickServiceRestaurant", "Kitchen"]] = ["QuickServiceRestaurant", "Dining"]
-      standard_space_types_with_makup_air[["Hospital", "Kitchen"]] = ["Hospital", "Dining"]
-      standard_space_types_with_makup_air[["SecondarySchool", "Kitchen"]] = ["SecondarySchool", "Cafeteria"]
-      standard_space_types_with_makup_air[["PrimarySchool", "Kitchen"]] = ["PrimarySchool", "Cafeteria"]
-      standard_space_types_with_makup_air[["LargeHotel", "Kitchen"]] = ["LargeHotel", "Cafe"]
+      standard_space_types_with_makup_air[['FullServiceRestaurant', 'Kitchen']] = ['FullServiceRestaurant', 'Dining']
+      standard_space_types_with_makup_air[['QuickServiceRestaurant', 'Kitchen']] = ['QuickServiceRestaurant', 'Dining']
+      standard_space_types_with_makup_air[['Hospital', 'Kitchen']] = ['Hospital', 'Dining']
+      standard_space_types_with_makup_air[['SecondarySchool', 'Kitchen']] = ['SecondarySchool', 'Cafeteria']
+      standard_space_types_with_makup_air[['PrimarySchool', 'Kitchen']] = ['PrimarySchool', 'Cafeteria']
+      standard_space_types_with_makup_air[['LargeHotel', 'Kitchen']] = ['LargeHotel', 'Cafe']
 
       # gather information on zones organized by standards building type and space type. zone may be in this multiple times if it has multiple space types
       zones_by_standards = {}
 
       model.getThermalZones.sort.each do |thermal_zone|
-
         # get space type ratio for spaces in zone
         space_type_hash = {} # key is  space type,  value hash with floor area, standards building type, standards space type, and array of adjacent zones
         thermal_zone.spaces.each do |space|
-          next if not space.spaceType.is_initialized
-          next if not space.partofTotalFloorArea
+          next unless space.spaceType.is_initialized
+          next unless space.partofTotalFloorArea
           space_type = space.spaceType.get
-          next if not space_type.standardsBuildingType.is_initialized
-          next if not space_type.standardsSpaceType.is_initialized
+          next unless space_type.standardsBuildingType.is_initialized
+          next unless space_type.standardsSpaceType.is_initialized
 
           # add entry in hash for space_type_standardsif it doesn't already exist
-          if not space_type_hash.has_key?(space_type)
+          unless space_type_hash.key?(space_type)
             space_type_hash[space_type] = {}
             space_type_hash[space_type][:effective_floor_area] = 0.0
-            space_type_hash[space_type][:standards_array] =[space_type.standardsBuildingType.get, space_type.standardsSpaceType.get]
-            if kitchen_makeup == "Adjacent"
+            space_type_hash[space_type][:standards_array] = [space_type.standardsBuildingType.get, space_type.standardsSpaceType.get]
+            if kitchen_makeup == 'Adjacent'
               space_type_hash[space_type][:adjacent_zones] = []
             end
           end
@@ -605,33 +592,30 @@ Standard.class_eval do
           # populate floor area
           space_type_hash[space_type][:effective_floor_area] += space.floorArea * space.multiplier
 
-          # todo - populate adjacent zones (need to add methods to space and zone for this)
-          if kitchen_makeup == "Adjacent"
+          # TODO: - populate adjacent zones (need to add methods to space and zone for this)
+          if kitchen_makeup == 'Adjacent'
             space_type_hash[space_type][:adjacent_zones] << nil
           end
 
           # populate zones_by_standards
-          if not zones_by_standards.has_key?(space_type_hash[space_type][:standards_array])
+          unless zones_by_standards.key?(space_type_hash[space_type][:standards_array])
             zones_by_standards[space_type_hash[space_type][:standards_array]] = {}
           end
           zones_by_standards[space_type_hash[space_type][:standards_array]][thermal_zone] = space_type_hash
-
         end
-
       end
 
-      if kitchen_makeup == "Largest Zone"
+      if kitchen_makeup == 'Largest Zone'
 
         zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust model_run(model)  on it
 
         # loop through standard_space_types_with_makup_air
         standard_space_types_with_makup_air.each do |makeup_target, makeup_source|
-
           # hash to manage lookups
           markup_target_effective_floor_area = {}
           markup_source_effective_floor_area = {}
 
-          if zones_by_standards.has_key?(makeup_target)
+          if zones_by_standards.key?(makeup_target)
 
             # process zones of each makeup_target
             zones_by_standards[makeup_target].each do |thermal_zone, space_type_hash|
@@ -649,7 +633,7 @@ Standard.class_eval do
             target_effective_floor_area = markup_target_effective_floor_area.values.reduce(0, :+)
 
             # find zones that match makeup_target with makeup_source
-            if zones_by_standards.has_key?(makeup_source)
+            if zones_by_standards.key?(makeup_source)
 
               # process zones of each makeup_source
               zones_by_standards[makeup_source].each do |thermal_zone, space_type_hash|
@@ -679,7 +663,6 @@ Standard.class_eval do
             exhaust_makeup_inputs[makeup_target][:target_effective_floor_area] = target_effective_floor_area
             exhaust_makeup_inputs[makeup_target][:source_zone] = largest_source_zone
 
-
             # add exhaust
             next if zones_applied.include?(largest_target_zone) # would only hit this if zone has two space types each requesting makeup air
             zone_exhaust_hash = thermal_zone_add_exhaust(largest_target_zone, exhaust_makeup_inputs)
@@ -687,12 +670,11 @@ Standard.class_eval do
             zone_exhaust_fans.merge!(zone_exhaust_hash)
 
           end
-
         end
 
         # add exhaust to zones that did not contain space types with standard_space_types_with_makup_air
         zones_by_standards.each do |standards_array, zones_hash|
-          next if standard_space_types_with_makup_air.has_key?(standards_array)
+          next if standard_space_types_with_makup_air.key?(standards_array)
 
           # loop through zones adding exhaust
           zones_hash.each do |thermal_zone, space_type_hash|
@@ -703,32 +685,28 @@ Standard.class_eval do
             zones_applied << thermal_zone
             zone_exhaust_fans.merge!(zone_exhaust_hash)
           end
-
         end
 
-
-      else #kitchen_makeup == "Adjacent"
+      else # kitchen_makeup == "Adjacent"
 
         zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust model_run(model)  on it
 
         standard_space_types_with_makup_air.each do |makeup_target, makeup_source|
-          if zones_by_standards.has_key?(makeup_target)
+          if zones_by_standards.key?(makeup_target)
             # process zones of each makeup_target
             zones_by_standards[makeup_target].each do |thermal_zone, space_type_hash|
-
               # get adjacent zones
               adjacent_zones = thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone)
 
               # find adjacent zones matching key and value from standard_space_types_with_makup_air
               first_adjacent_makeup_source = nil
               adjacent_zones.each do |adjacent_zone|
+                next unless first_adjacent_makeup_source.nil?
 
-                next if not first_adjacent_makeup_source.nil?
-
-                if zones_by_standards.has_key?(makeup_source) and zones_by_standards[makeup_source].has_key?(adjacent_zone)
+                if zones_by_standards.key?(makeup_source) && zones_by_standards[makeup_source].key?(adjacent_zone)
                   first_adjacent_makeup_source = adjacent_zone
 
-                  # todo - add in extra arguments for makeup air
+                  # TODO: - add in extra arguments for makeup air
                   exhaust_makeup_inputs = {}
                   exhaust_makeup_inputs[makeup_target] = {} # for now only one makeup target per zone, but method could have multiple
                   exhaust_makeup_inputs[makeup_target][:source_zone] = first_adjacent_makeup_source
@@ -738,7 +716,6 @@ Standard.class_eval do
                   zones_applied << thermal_zone
                   zone_exhaust_fans.merge!(zone_exhaust_hash)
                 end
-
               end
 
               if first_adjacent_makeup_source.nil?
@@ -752,7 +729,6 @@ Standard.class_eval do
                 zone_exhaust_fans.merge!(zone_exhaust_hash)
 
               end
-
             end
 
           end
@@ -772,7 +748,6 @@ Standard.class_eval do
     end
 
     return zone_exhaust_fans
-
   end
 
   # Adds occupancy sensors to certain space types per
@@ -791,8 +766,8 @@ Standard.class_eval do
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Occupancy Sensors')
 
     space_type_reduction_map = {
-        'SecondarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22},
-        'PrimarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22}
+      'SecondarySchool' => { 'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22 },
+      'PrimarySchool' => { 'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22 }
     }
 
     # Loop through all the space types and reduce lighting operation schedule fractions as-specified
@@ -972,7 +947,7 @@ Standard.class_eval do
     # modify the infiltration coefficients
     case template
       when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-        # TODO make this consistent with newer prototypes
+        # TODO: make this consistent with newer prototypes
         const_coeff = 1.0
         temp_coeff = 0.0
         velo_coeff = 0.0
@@ -1039,7 +1014,7 @@ Standard.class_eval do
             htg = 1.0
         end
       when 'NECB 2011'
-        raise("do not use this method for NECB")
+        raise('do not use this method for NECB')
       else
         # Use the sizing factors from 90.1 PRM
         clg = 1.15
@@ -1061,19 +1036,19 @@ Standard.class_eval do
     # Fans
     # Pressure Rise
 
-    model.getFanConstantVolumes.sort.each {|obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj)}
-    model.getFanVariableVolumes.sort.each {|obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj)}
-    model.getFanOnOffs.sort.each {|obj| fan_on_off_apply_prototype_fan_pressure_rise(obj)}
-    model.getFanZoneExhausts.sort.each {|obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj)}
+    model.getFanConstantVolumes.sort.each { |obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj) }
+    model.getFanVariableVolumes.sort.each { |obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj) }
+    model.getFanOnOffs.sort.each { |obj| fan_on_off_apply_prototype_fan_pressure_rise(obj) }
+    model.getFanZoneExhausts.sort.each { |obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj) }
 
     # Motor Efficiency
-    model.getFanConstantVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
-    model.getFanVariableVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
-    model.getFanOnOffs.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
-    model.getFanZoneExhausts.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
+    model.getFanConstantVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
+    model.getFanVariableVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
+    model.getFanOnOffs.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
+    model.getFanZoneExhausts.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
 
     # Gas Heating Coil
-    model.getCoilHeatingGass.sort.each {|obj| coil_heating_gas_apply_prototype_efficiency(obj)}
+    model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_prototype_efficiency(obj) }
 
     ##### Add Economizers
 
@@ -1081,7 +1056,7 @@ Standard.class_eval do
 
     # TODO: What is the logic behind hard-sizing
     # hot water coil convergence tolerances?
-    model.getControllerWaterCoils.sort.each {|obj| controller_water_coil_set_convergence_limits(obj)}
+    model.getControllerWaterCoils.sort.each { |obj| controller_water_coil_set_convergence_limits(obj) }
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
   end
@@ -1195,7 +1170,7 @@ Standard.class_eval do
       idd_path = OpenStudio::Path.new(ep_dir.to_s + '/Energy+.idd')
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
-      # Make a run manager and queue up the sizing model_run(model) 
+      # Make a run manager and queue up the sizing model_run(model)
       run_manager_db_path = OpenStudio::Path.new("#{run_dir}/run.db")
       run_manager = OpenStudio::Runmanager::RunManager.new(run_manager_db_path, true, false, false, false)
       job = OpenStudio::Runmanager::JobFactory.createEnergyPlusJob(ep_tool,
@@ -1234,7 +1209,7 @@ Standard.class_eval do
 
     end
 
-    # Load the sql file created by the sizing model_run(model) 
+    # Load the sql file created by the sizing model_run(model)
     sql_path = OpenStudio::Path.new("#{run_dir}/Energyplus/eplusout.sql")
     if OpenStudio.exists(sql_path)
       sql = OpenStudio::SqlFile.new(sql_path)
@@ -1439,7 +1414,7 @@ Standard.class_eval do
   # a different system type.
   # @return [Array<Hash>] an array of hashes of area information,
   # with keys area_ft2, type, stories, and zones (an array of zones)
-  def model_group_zones_by_type(model, min_area_m2=20_000)
+  def model_group_zones_by_type(model, min_area_m2 = 20_000)
     min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
 
     # Get occupancy type, fuel type, and area information for all zones,
@@ -1452,13 +1427,13 @@ Standard.class_eval do
 
     # Ensure that there is at least one conditioned zone
     if zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', "The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
       return []
     end
 
     # Group the zones by occupancy type
-    type_to_area = Hash.new {0.0}
-    zones_grouped_by_occ = zones.group_by {|z| z['occ']}
+    type_to_area = Hash.new { 0.0 }
+    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
 
     # Determine the dominant occupancy type by area
     zones_grouped_by_occ.each do |occ_type, zns|
@@ -1466,7 +1441,7 @@ Standard.class_eval do
         type_to_area[occ_type] += zn['area']
       end
     end
-    dom_occ = type_to_area.sort_by {|k, v| v}.reverse[0][0]
+    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
 
     # Get the dominant occupancy type group
     dom_occ_group = zones_grouped_by_occ[dom_occ]
@@ -1496,7 +1471,6 @@ Standard.class_eval do
       else
         dom_occ_group += zns
       end
-
     end
     # Add the dominant occupancy group to the list
     occ_groups << [dom_occ, dom_occ_group]
@@ -1534,12 +1508,10 @@ Standard.class_eval do
         end
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
       end
-
     end
 
     return final_groups
   end
-
 
   # Method to multiply the values in a day schedule by a specified value
   # but only when the existing value is higher than a specified lower limit.
@@ -1630,21 +1602,11 @@ Standard.class_eval do
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.
         unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone)
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for #{}, climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for , climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
           oa_control.setEconomizerControlType('NoEconomizer')
         end
 
       end
     end
   end
-
-
 end
-
-
-
-
-
-
-
-

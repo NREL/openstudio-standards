@@ -1,5 +1,4 @@
 class ASHRAE9012004 < ASHRAE901
-
   # Set the primary and secondary pumping control types for the
   # chilled water loop, as specified in Appendix G.
   def plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)
@@ -7,7 +6,7 @@ class ASHRAE9012004 < ASHRAE901
     minimum_area_ft2 = 120_000
 
     # Determine the area served
-    area_served_m2 = plant_loop_total_floor_area_served(plant_loop) 
+    area_served_m2 = plant_loop_total_floor_area_served(plant_loop)
     area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
 
     # Determine the primary pump type
@@ -35,7 +34,7 @@ class ASHRAE9012004 < ASHRAE901
         pump_variable_speed_set_control_type(pump, pri_control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, control_type)        
+        headered_pump_variable_speed_set_control_type(pump, control_type)
       end
     end
 
@@ -49,7 +48,7 @@ class ASHRAE9012004 < ASHRAE901
         headered_pump_variable_speed_set_control_type(pump, control_type)
       end
     end
-  
+
     return true
   end
 end

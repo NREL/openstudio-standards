@@ -152,7 +152,7 @@ class Standard
     # Get the minimum efficiency standards
     cop = nil
 
-    if coil_dx_subcategory(coil_cooling_dx_multi_speed)  == 'PTAC'
+    if coil_dx_subcategory(coil_cooling_dx_multi_speed) == 'PTAC'
       ptac_eer_coeff_1 = ac_props['ptac_eer_coefficient_1']
       ptac_eer_coeff_2 = ac_props['ptac_eer_coefficient_2']
       capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000

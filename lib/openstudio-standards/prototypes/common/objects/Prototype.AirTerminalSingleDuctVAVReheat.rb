@@ -11,7 +11,7 @@ class Standard
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, building_type, zone_oa_per_area)
     vav_name = air_terminal_single_duct_vav_reheat.name.get
     min_damper_position = 0.3
-    
+
     # High OA zones
     # Determine whether or not to use the high minimum guess.
     # Cutoff was determined by correlating apparent minimum guesses
@@ -22,7 +22,7 @@ class Standard
 
     # Set the minimum flow fraction
     air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
-    
+
     return true
   end
 end

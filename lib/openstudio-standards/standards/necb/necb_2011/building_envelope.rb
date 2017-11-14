@@ -1,5 +1,4 @@
 class NECB2011
-
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
   def apply_standard_window_to_wall_ratio(model)
@@ -53,7 +52,7 @@ class NECB2011
         cat = 'Semiheated'
         # Heated and Cooled
       else
-        res = thermal_zone_residential?(space.thermalZone.get())
+        res = thermal_zone_residential?(space.thermalZone.get)
         cat = if res
                 'ResConditioned'
               else
@@ -79,7 +78,6 @@ class NECB2011
           sh_wall_m2 += wall_area_m2
           sh_wind_m2 += wind_area_m2
       end
-
     end
 
     # Calculate the WWR of each category
@@ -106,15 +104,15 @@ class NECB2011
     wwr_lim = 40.0
 
     # Check against WWR limit
-    red_nr = wwr_nr > wwr_lim ? true : false
-    red_res = wwr_res > wwr_lim ? true : false
-    red_sh = wwr_sh > wwr_lim ? true : false
+    red_nr = wwr_nr > wwr_lim
+    red_res = wwr_res > wwr_lim
+    red_sh = wwr_sh > wwr_lim
 
     # NECB FDWR limit
     hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
     fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
-    #puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
-    #puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
+    # puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
+    # puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
     # Stop here unless windows / doors need reducing
     return true unless fdwr > fdwr_lim
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{wwr_lim.round}%.")
@@ -205,12 +203,12 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
     # SRR limit
-    srr_lim = @standards_data["skylight_to_roof_ratio"] * 100.0
+    srr_lim = @standards_data['skylight_to_roof_ratio'] * 100.0
 
     # Check against SRR limit
-    red_nr = srr_nr > srr_lim ? true : false
-    red_res = srr_res > srr_lim ? true : false
-    red_sh = srr_sh > srr_lim ? true : false
+    red_nr = srr_nr > srr_lim
+    red_res = srr_res > srr_lim
+    red_sh = srr_sh > srr_lim
 
     # Stop here unless windows need reducing
     return true unless srr > srr_lim
@@ -238,16 +236,16 @@ class NECB2011
     return true
   end
 
-  #@author phylroy.lopez@nrcan.gc.ca
-  #@param hdd [Float]
-  #@return [Double] a constant float
+  # @author phylroy.lopez@nrcan.gc.ca
+  # @param hdd [Float]
+  # @return [Double] a constant float
   def max_fwdr(hdd)
-    #NECB 3.2.1.4
+    # NECB 3.2.1.4
     if hdd < 4000
       return 0.40
-    elsif hdd >= 4000 and hdd <=7000
-      return (2000-0.2 * hdd)/3000
-    elsif hdd >7000
+    elsif (hdd >= 4000) && (hdd <= 7000)
+      return (2000 - 0.2 * hdd) / 3000
+    elsif hdd > 7000
       return 0.20
     end
   end
@@ -261,42 +259,40 @@ class NECB2011
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
   def apply_standard_construction_properties(model,
-                                         runner = nil,
-                                         scale_wall = 1.0,
-                                         scale_floor = 1.0,
-                                         scale_roof = 1.0,
-                                         scale_ground_wall = 1.0,
-                                         scale_ground_floor = 1.0,
-                                         scale_ground_roof = 1.0,
-                                         scale_door = 1.0,
-                                         scale_window = 1.0)
+                                             runner = nil,
+                                             scale_wall = 1.0,
+                                             scale_floor = 1.0,
+                                             scale_roof = 1.0,
+                                             scale_ground_wall = 1.0,
+                                             scale_ground_floor = 1.0,
+                                             scale_ground_roof = 1.0,
+                                             scale_door = 1.0,
+                                             scale_window = 1.0)
 
     model.getDefaultConstructionSets.sort.each do |set|
-      self.set_construction_set_to_necb!(model,
-                                         set,
-                                         runner,
-                                         scale_wall,
-                                         scale_floor,
-                                         scale_roof,
-                                         scale_ground_wall,
-                                         scale_ground_floor,
-                                         scale_ground_roof,
-                                         scale_door,
-                                         scale_window)
+      set_construction_set_to_necb!(model,
+                                    set,
+                                    runner,
+                                    scale_wall,
+                                    scale_floor,
+                                    scale_roof,
+                                    scale_ground_wall,
+                                    scale_ground_floor,
+                                    scale_ground_roof,
+                                    scale_door,
+                                    scale_window)
     end
-    #sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
-    model.getPlanarSurfaces.sort.each {|item| item.resetConstruction}
-    #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
-    BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
+    # sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
+    model.getPlanarSurfaces.sort.each(&:resetConstruction)
+    # if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
+    BTAP::Resources::Envelope.assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
   end
 
-
-
   # this will create a copy and convert all construction sets to NECB reference conductances.
-  #@author phylroy.lopez@nrcan.gc.ca
-  #@param model [OpenStudio::model::Model] A model object
-  #@param default_surface_construction_set [String]
-  #@return [Boolean] returns true if sucessful, false if not
+  # @author phylroy.lopez@nrcan.gc.ca
+  # @param model [OpenStudio::model::Model] A model object
+  # @param default_surface_construction_set [String]
+  # @return [Boolean] returns true if sucessful, false if not
   def set_construction_set_to_necb!(model, default_surface_construction_set,
                                     runner = nil,
                                     scale_wall = 1.0,
@@ -306,107 +302,101 @@ class NECB2011
                                     scale_ground_floor = 1.0,
                                     scale_ground_roof = 1.0,
                                     scale_door = 1.0,
-                                    scale_window = 1.0
-  )
-    BTAP::runner_register("Info", "set_construction_set_to_necb!", runner)
-    if model.weatherFile.empty? or model.weatherFile.get.path.empty? or not File.exists?(model.weatherFile.get.path.get.to_s)
+                                    scale_window = 1.0)
+    BTAP.runner_register('Info', 'set_construction_set_to_necb!', runner)
+    if model.weatherFile.empty? || model.weatherFile.get.path.empty? || !File.exist?(model.weatherFile.get.path.get.to_s)
 
-      BTAP::runner_register("Error", "Weather file is not defined. Please ensure the weather file is defined and exists.", runner)
+      BTAP.runner_register('Error', 'Weather file is not defined. Please ensure the weather file is defined and exists.', runner)
       return false
     end
     hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
 
     old_name = default_surface_construction_set.name.get.to_s
 
-
-
     new_name = "#{old_name} at hdd = #{hdd}"
-    @standards_data["conductances"]
-    #convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * @standards_data["conductances"].find {|i| i["surface"] == 'wall' and i["hdd"] > hdd}["thermal_transmittance"])
-    floor_rsi = 1.0 / (scale_floor * @standards_data["conductances"].find {|i| i["surface"] == 'floor' and i["hdd"] > hdd}["thermal_transmittance"])
-    roof_rsi = 1.0 / (scale_roof * @standards_data["conductances"].find {|i| i["surface"] == 'roof' and i["hdd"] > hdd}["thermal_transmittance"])
-    ground_wall_rsi = 1.0 / (scale_ground_wall * @standards_data["conductances"].find {|i| i["surface"] == 'ground_wall' and i["hdd"] > hdd}["thermal_transmittance"])
-    ground_floor_rsi = 1.0 / (scale_ground_floor * @standards_data["conductances"].find {|i| i["surface"] == 'ground_floor' and i["hdd"] > hdd}["thermal_transmittance"])
-    ground_roof_rsi = 1.0 / (scale_ground_roof * @standards_data["conductances"].find {|i| i["surface"] == 'ground_roof' and i["hdd"] > hdd}["thermal_transmittance"])
-    door_rsi = 1.0 / (scale_door * @standards_data["conductances"].find {|i| i["surface"] == 'door' and i["hdd"] > hdd}["thermal_transmittance"])
-    window_rsi = 1.0 / (scale_window * @standards_data["conductances"].find {|i| i["surface"] == 'window' and i["hdd"] > hdd}["thermal_transmittance"])
-    BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
-                                                                                                 wall_rsi, floor_rsi, roof_rsi,
-                                                                                                  ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
-                                                                                                 window_rsi, nil, nil,
-                                                                                                 window_rsi, nil, nil,
-                                                                                                 door_rsi,
-                                                                                                 door_rsi, nil, nil,
-                                                                                                 door_rsi,
-                                                                                                 window_rsi, nil, nil,
-                                                                                                 window_rsi, nil, nil,
-                                                                                                 window_rsi, nil, nil
-    )
-    BTAP::runner_register("Info", "set_construction_set_to_necb! was sucessful.", runner)
+    @standards_data['conductances']
+    # convert conductance values to rsi values. (Note: we should really be only using conductances in)
+    wall_rsi = 1.0 / (scale_wall * @standards_data['conductances'].find { |i| (i['surface'] == 'wall') && (i['hdd'] > hdd) }['thermal_transmittance'])
+    floor_rsi = 1.0 / (scale_floor * @standards_data['conductances'].find { |i| (i['surface'] == 'floor') && (i['hdd'] > hdd) }['thermal_transmittance'])
+    roof_rsi = 1.0 / (scale_roof * @standards_data['conductances'].find { |i| (i['surface'] == 'roof') && (i['hdd'] > hdd) }['thermal_transmittance'])
+    ground_wall_rsi = 1.0 / (scale_ground_wall * @standards_data['conductances'].find { |i| (i['surface'] == 'ground_wall') && (i['hdd'] > hdd) }['thermal_transmittance'])
+    ground_floor_rsi = 1.0 / (scale_ground_floor * @standards_data['conductances'].find { |i| (i['surface'] == 'ground_floor') && (i['hdd'] > hdd) }['thermal_transmittance'])
+    ground_roof_rsi = 1.0 / (scale_ground_roof * @standards_data['conductances'].find { |i| (i['surface'] == 'ground_roof') && (i['hdd'] > hdd) }['thermal_transmittance'])
+    door_rsi = 1.0 / (scale_door * @standards_data['conductances'].find { |i| (i['surface'] == 'door') && (i['hdd'] > hdd) }['thermal_transmittance'])
+    window_rsi = 1.0 / (scale_window * @standards_data['conductances'].find { |i| (i['surface'] == 'window') && (i['hdd'] > hdd) }['thermal_transmittance'])
+    BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
+                                                                                                wall_rsi, floor_rsi, roof_rsi,
+                                                                                                ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
+                                                                                                window_rsi, nil, nil,
+                                                                                                window_rsi, nil, nil,
+                                                                                                door_rsi,
+                                                                                                door_rsi, nil, nil,
+                                                                                                door_rsi,
+                                                                                                window_rsi, nil, nil,
+                                                                                                window_rsi, nil, nil,
+                                                                                                window_rsi, nil, nil)
+    BTAP.runner_register('Info', 'set_construction_set_to_necb! was sucessful.', runner)
     return true
   end
 
-  #Set all external surface conductances to NECB values.
-  #@author phylroy.lopez@nrcan.gc.ca
-  #@param surface [String]
-  #@param hdd [Float]
-  #@param is_radiant [Boolian]
-  #@param scaling_factor [Float]
-  #@return [String] surface as RSI
+  # Set all external surface conductances to NECB values.
+  # @author phylroy.lopez@nrcan.gc.ca
+  # @param surface [String]
+  # @param hdd [Float]
+  # @param is_radiant [Boolian]
+  # @param scaling_factor [Float]
+  # @return [String] surface as RSI
   def set_necb_external_surface_conductance(surface, hdd, is_radiant = false, scaling_factor = 1.0)
     conductance_value = 0
 
-
-    if surface.outsideBoundaryCondition.downcase == "outdoors"
+    if surface.outsideBoundaryCondition.casecmp('outdoors').zero?
 
       case surface.surfaceType.downcase
-        when "wall"
-          conductance_value = @standards_data["conductances"]["Wall"].find {|i| i["hdd"] > hdd}["thermal_transmittance"] * scaling_factor
-        when "floor"
-          conductance_value = @standards_data["conductances"]["Floor"].find {|i| i["hdd"] > hdd}["thermal_transmittance"] * scaling_factor
-        when "roofceiling"
-          conductance_value = @standards_data["conductances"]["Roof"].find {|i| i["hdd"] > hdd}["thermal_transmittance"] * scaling_factor
+        when 'wall'
+          conductance_value = @standards_data['conductances']['Wall'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+        when 'floor'
+          conductance_value = @standards_data['conductances']['Floor'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+        when 'roofceiling'
+          conductance_value = @standards_data['conductances']['Roof'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       end
-      if (is_radiant)
-        conductance_value = conductance_value * 0.80
+      if is_radiant
+        conductance_value *= 0.80
       end
-      return BTAP::Geometry::Surfaces::set_surfaces_construction_conductance([surface], conductance_value)
+      return BTAP::Geometry::Surfaces.set_surfaces_construction_conductance([surface], conductance_value)
     end
 
-
-    if surface.outsideBoundaryCondition.downcase.match(/ground/)
+    if surface.outsideBoundaryCondition.downcase =~ /ground/
       case surface.surfaceType.downcase
-        when "wall"
-          conductance_value = @standards_data["conductances"]["GroundWall"].find {|i| i["hdd"] > hdd}["thermal_transmittance"] * scaling_factor
-        when "floor"
-          conductance_value = @standards_data["conductances"]["GroundFloor"].find {|i| i["hdd"] > hdd}["thermal_transmittance"] * scaling_factor
-        when "roofceiling"
-          conductance_value = @standards_data["conductances"]["GroundRoof"].find {|i| i["hdd"] > hdd}["thermal_transmittance"] * scaling_factor
+        when 'wall'
+          conductance_value = @standards_data['conductances']['GroundWall'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+        when 'floor'
+          conductance_value = @standards_data['conductances']['GroundFloor'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+        when 'roofceiling'
+          conductance_value = @standards_data['conductances']['GroundRoof'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       end
-      if (is_radiant)
-        conductance_value = conductance_value * 0.80
+      if is_radiant
+        conductance_value *= 0.80
       end
-      return BTAP::Geometry::Surfaces::set_surfaces_construction_conductance([surface], conductance_value)
+      return BTAP::Geometry::Surfaces.set_surfaces_construction_conductance([surface], conductance_value)
 
     end
   end
 
-  #Set all external subsurfaces (doors, windows, skylights) to NECB values.
-  #@author phylroy.lopez@nrcan.gc.ca
-  #@param subsurface [String]
-  #@param hdd [Float]
+  # Set all external subsurfaces (doors, windows, skylights) to NECB values.
+  # @author phylroy.lopez@nrcan.gc.ca
+  # @param subsurface [String]
+  # @param hdd [Float]
   def set_necb_external_subsurface_conductance(subsurface, hdd)
     conductance_value = 0
 
-    if subsurface.outsideBoundaryCondition.downcase.match("outdoors")
+    if subsurface.outsideBoundaryCondition.downcase.match('outdoors')
       case subsurface.subSurfaceType.downcase
         when /window/
-          conductance_value = @standards_data["conductances"]["Window"].find {|i| i["hdd"] > hdd}["thermal_transmittance"] * scaling_factor
+          conductance_value = @standards_data['conductances']['Window'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
         when /door/
-          conductance_value = @standards_data["conductances"]["Door"].find {|i| i["hdd"] > hdd}["thermal_transmittance"] * scaling_factor
+          conductance_value = @standards_data['conductances']['Door'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
       end
-      subsurface.setRSI(1/conductance_value)
+      subsurface.setRSI(1 / conductance_value)
     end
   end
 end

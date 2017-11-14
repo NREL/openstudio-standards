@@ -1,7 +1,7 @@
 class DOERefPre1980 < ASHRAE901
   # Apply the air leakage requirements to the model.
-  # "For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004', 
-  # infiltration rates are not defined using this method, 
+  # "For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004',
+  # infiltration rates are not defined using this method,
   # no changes are actually made to the model.
   #
   # base infiltration rates off of.
@@ -16,7 +16,7 @@ class DOERefPre1980 < ASHRAE901
 
     return true
   end
-  
+
   # Determine which climate zone to use.
   # For Pre-1980 and 1980-2004, use the most specific climate zone set.
   # For example, 2A and 2 both contain 2A, so use 2A.

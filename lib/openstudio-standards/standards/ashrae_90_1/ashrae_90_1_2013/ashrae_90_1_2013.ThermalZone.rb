@@ -13,7 +13,7 @@ class ASHRAE9012013 < ASHRAE901
 
     # Based on the space type that
     # represents a majority of the zone.
-    space_type = thermal_zone_majority_space_type(thermal_zone) 
+    space_type = thermal_zone_majority_space_type(thermal_zone)
     if space_type.is_initialized
       space_type = space_type.get
       bldg_type = space_type.standardsBuildingType
@@ -32,7 +32,7 @@ class ASHRAE9012013 < ASHRAE901
 
     return occ_type
   end
-  
+
   # Determine the area and occupancy level limits for
   # demand control ventilation.
   #

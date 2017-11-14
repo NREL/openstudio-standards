@@ -2,7 +2,6 @@
 # A variety of fan calculation methods that are the same regardless of fan type.
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
 module Fan
-
   # Applies the minimum motor efficiency for this fan
   # based on the motor's brake horsepower.
   def fan_apply_standard_minimum_motor_efficiency(fan, allowed_bhp)
@@ -15,12 +14,12 @@ module Fan
     fan_change_motor_efficiency(fan, motor_eff)
 
     # Calculate the total motor HP
-    motor_hp = fan_motor_horsepower(fan) 
+    motor_hp = fan_motor_horsepower(fan)
 
     # Exception for small fans, including
     # zone exhaust, fan coil, and fan powered terminals.
     # In this case, 0.5 HP is used for the lookup.
-    if fan_small_fan?(fan) 
+    if fan_small_fan?(fan)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: motor eff = #{(motor_eff * 100).round(2)}%; assumed to represent several < 1 HP motors.")
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: motor nameplate = #{nominal_hp}HP, motor eff = #{(motor_eff * 100).round(2)}%.")
@@ -44,7 +43,7 @@ module Fan
                             end
 
     # Get the current fan power
-    current_fan_power_w = fan_fanpower(fan) 
+    current_fan_power_w = fan_fanpower(fan)
 
     # Get the current pressure rise (Pa)
     pressure_rise_pa = fan.pressureRise
@@ -60,7 +59,7 @@ module Fan
     fan.setPressureRise(new_pressure_rise_pa)
 
     # Calculate the new power
-    new_power_w = fan_fanpower(fan) 
+    new_power_w = fan_fanpower(fan)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Fan', "For #{fan.name}: pressure rise = #{new_pressure_rise_in_h2o.round(1)} in w.c., power = #{fan_motor_horsepower(fan).round(2)}HP.")
 
@@ -112,7 +111,7 @@ module Fan
     end
 
     # Get the fan power (W)
-    fan_power_w = fan_fanpower(fan) 
+    fan_power_w = fan_fanpower(fan)
 
     # Calculate the brake horsepower (bhp)
     fan_bhp = fan_power_w * existing_motor_eff / 746
@@ -127,7 +126,7 @@ module Fan
   # @return [Double] horsepower
   def fan_motor_horsepower(fan)
     # Get the fan power
-    fan_power_w = fan_fanpower(fan) 
+    fan_power_w = fan_fanpower(fan)
 
     # Convert to HP
     fan_hp = fan_power_w / 745.7 # 745.7 W/HP
@@ -235,10 +234,10 @@ module Fan
     # Exception for small fans, including
     # zone exhaust, fan coil, and fan powered terminals.
     # In this case, use the 0.5 HP for the lookup.
-    if fan_small_fan?(fan) 
+    if fan_small_fan?(fan)
       nominal_hp = 0.5
     else
-      motor_properties = model_find_object( motors, search_criteria, motor_bhp)
+      motor_properties = model_find_object(motors, search_criteria, motor_bhp)
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
         return [fan_motor_eff, nominal_hp]
@@ -259,7 +258,7 @@ module Fan
 
     # Get the efficiency based on the nominal horsepower
     # Add 0.01 hp to avoid search errors.
-    motor_properties = model_find_object( motors, search_criteria, nominal_hp + 0.01)
+    motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
       return [fan_motor_eff, nominal_hp]
@@ -314,7 +313,7 @@ module Fan
     if rated_power_w.is_initialized
       rated_power_w = rated_power_w.get
     else
-      rated_power_w = fan_fanpower(fan) 
+      rated_power_w = fan_fanpower(fan)
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{fan.name}, could not find rated fan power from Equipment Summary. Will calculate it based on current pressure rise and total fan efficiency")
     end
 
@@ -331,6 +330,6 @@ module Fan
 
     rated_w_per_cfm = OpenStudio.convert(rated_w_per_m3s, 'W*s/m^3', 'W*min/ft^3').get
 
-    return rated_w_per_cfm 
+    return rated_w_per_cfm
   end
 end

@@ -5,7 +5,6 @@ class Standard
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
-
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if fan_variable_volume.maximumFlowRate.is_initialized
@@ -49,13 +48,12 @@ class Standard
 
     return true
   end
-  
+
   # Determine the prototype fan pressure rise for a variable volume
   # fan on an AirLoopHVAC based on the airflow of the system.
   # @return [Double] the pressure rise (in H2O).  Defaults
   # to the logic from ASHRAE 90.1-2004 prototypes.
   def fan_variable_volume_airloop_fan_pressure_rise(fan_variable_volume)
-  
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if fan_variable_volume.maximumFlowRate.is_initialized
@@ -69,7 +67,7 @@ class Standard
 
     # Convert max flow rate to cfm
     maximum_flow_rate_cfm = OpenStudio.convert(maximum_flow_rate_m3_per_s, 'm^3/s', 'cfm').get
-  
+
     # Determine the pressure rise
     pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
                              4.0

@@ -114,15 +114,14 @@ class Standard
   # @param percent_reduction [Double] the fractional amount
   # to reduce the area.
   def sub_surface_reduce_area_by_percent_by_raising_sill(sub_surface, percent_reduction)
-
     mult = 1 - percent_reduction
 
     # Calculate the original area
     area_original = sub_surface.netArea
 
     # Find the min and max z values
-    min_z_val = 99999
-    max_z_val = -99999
+    min_z_val = 99_999
+    max_z_val = -99_999
     sub_surface.vertices.each do |vertex|
       # Min z value
       if vertex.z < min_z_val
@@ -138,7 +137,7 @@ class Standard
     height = max_z_val - min_z_val
 
     # Calculate the new sill height
-    new_sill_z = max_z_val - (height * mult)    
+    new_sill_z = max_z_val - (height * mult)
 
     # Reset the z value of the lowest points
     new_vertices = []

@@ -3,24 +3,23 @@
 # separate files for each template in the templates folder.
 require 'json'
 prototype_buildings = [
-    "FullServiceRestaurant",
-    "Hospital",
-    "HighriseApartment",
-    "LargeHotel",
-    "LargeOffice",
-    "MediumOffice",
-    "MidriseApartment",
-    "Outpatient",
-    "PrimarySchool",
-    "QuickServiceRestaurant",
-    "RetailStandalone",
-    "SecondarySchool",
-    "SmallHotel",
-    "SmallOffice",
-    "RetailStripmall",
-    "Warehouse"
+  'FullServiceRestaurant',
+  'Hospital',
+  'HighriseApartment',
+  'LargeHotel',
+  'LargeOffice',
+  'MediumOffice',
+  'MidriseApartment',
+  'Outpatient',
+  'PrimarySchool',
+  'QuickServiceRestaurant',
+  'RetailStandalone',
+  'SecondarySchool',
+  'SmallHotel',
+  'SmallOffice',
+  'RetailStripmall',
+  'Warehouse'
 ]
-
 
 templates = ['NECB2011',
              'ASHRAE9012004',
@@ -29,24 +28,23 @@ templates = ['NECB2011',
              'ASHRAE9012013',
              'DOERef1980to2004',
              'DOERefPre1980',
-             'NRELZNEReady2017'
-]
+             'NRELZNEReady2017']
 
 templates.each do |template|
-  #Create Prototype base class (May not be needed...)
-  #Ex: class NECB2011_Prototype < NECB2011
+  # Create Prototype base class (May not be needed...)
+  # Ex: class NECB2011_Prototype < NECB2011
   eval <<DYNAMICClass
 class #{template}_Prototype < #{template}
   attr_reader :instvarbuilding_type
   def initialize
     super()
   end
-  
+
 end
 DYNAMICClass
 
-  #Create Building Specific classes for each building.
-  #Example class NECB2011Hospital
+  # Create Building Specific classes for each building.
+  # Example class NECB2011Hospital
   prototype_buildings.each do |name|
     eval <<DYNAMICClass
 class #{template}#{name} < #{template}
@@ -84,10 +82,10 @@ class #{template}#{name} < #{template}
     puts geometry_file
     puts @space_type_map
     puts @system_to_space_map
-    #add all building methods for now. 
+    #add all building methods for now.
     self.extend(#{name}) unless @template == 'NECB 2011'
   end
-#Common Methods to all prototypes. 
+#Common Methods to all prototypes.
   def define_space_type_map(building_type, climate_zone)
     return @space_type_map
   end

@@ -97,7 +97,7 @@ module CoolingTower
       'type' => 'Enclosed'
     }
 
-    motor_properties = model_find_object( motors, search_criteria, fan_motor_nameplate_hp)
+    motor_properties = model_find_object(motors, search_criteria, fan_motor_nameplate_hp)
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp.")
       return false
@@ -133,7 +133,7 @@ module CoolingTower
 
     return true
   end
-  
+
   # Above this point, centrifugal fan cooling towers must meet the limits
   # of propeller or axial cooling towers instead.
   #
@@ -145,5 +145,4 @@ module CoolingTower
     gpm_limit = nil
     return gpm_limit
   end
-  
 end

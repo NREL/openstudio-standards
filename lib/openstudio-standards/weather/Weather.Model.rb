@@ -45,11 +45,11 @@ class Standard
     }
 
     # Get the weather file name from the hash
-    if epw_file.nil? or epw_file.to_s.strip == ""
-    weather_file_name = climate_zone_weather_file_map[climate_zone]
-    else
-      weather_file_name = epw_file.to_s
-    end
+    weather_file_name = if epw_file.nil? || (epw_file.to_s.strip == '')
+                          climate_zone_weather_file_map[climate_zone]
+                        else
+                          epw_file.to_s
+                        end
     if weather_file_name.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}.")
       return false
@@ -59,25 +59,25 @@ class Standard
     weather_dir = nil
     if File.dirname(__FILE__)[0] == ':'
       # running embedded copy of the gem
-      
+
       # load weather file from embedded files
       epw_string = load_resource_relative("../../../data/weather/#{weather_file_name}")
-      ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw','.ddy')}")
-      stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw','.stat')}")
-      
+      ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.ddy')}")
+      stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
+
       # extract to local weather dir
-      weather_dir = File.expand_path(File.join(Dir.pwd, "extracted_files/weather/"))
+      weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
       puts "Extracting weather files to #{weather_dir}"
       FileUtils.mkdir_p(weather_dir)
-      File.open("#{weather_dir}/#{weather_file_name}", 'wb') {|f| f << epw_string ; f.flush}
-      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw','.ddy')}", 'wb') {|f| f << ddy_string ; f.flush}
-      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw','.stat')}", 'wb') {|f| f << stat_string ; f.flush}
+      File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
     else
       # loaded gem from system path
       top_dir = File.expand_path('../../..', File.dirname(__FILE__))
       weather_dir = File.expand_path("#{top_dir}/data/weather")
     end
-    
+
     # Add Weather File
     unless (Pathname.new weather_dir).absolute?
       weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
@@ -114,8 +114,6 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .stat file for: #{stat_filename}.")
       return false
     end
-
-
 
     # Load in the ddy file based on convention that it is in
     # the same directory and has the same basename as the epw file.
@@ -186,7 +184,6 @@ class Standard
 
     return heating_design_outdoor_temps
   end
-
 end
 
 # *********************************************************************
@@ -262,7 +259,7 @@ module BTAP
       { file: 'CAN_BC_Prince.Rupert.718980_CWEC.epw', location_name: ' CAN-BC-Prince Rupert', energy_plus_location_name: 'Prince Rupert_BC_CAN', country: 'CAN', state_province_region: 'BC', city: 'Prince Rupert', hdd18: 4151, cdd18: 0, latitude: 54.3, longitude: -130.43, elevation: 34, deltadb: 13.5, a90_1_2004_climate_zone: '6A', boiler_fueltype: 'NaturalGas', baseboard_type: 'Hot Water', mau_type: true, mau_heating_coil_type: 'Hot Water', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Gas', heating_coil_type_sys4: 'Gas', heating_coil_type_sys6: 'Hot Water', fan_type: 'var_speed_drive', swh_fueltype: 'NaturalGas' },
       { file: 'CAN_PQ_Quebec.717140_CWEC.epw', location_name: ' CAN-PQ-Quebec City', energy_plus_location_name: 'Quebec City_PQ_CAN', country: 'CAN', state_province_region: 'PQ', city: 'Quebec City', hdd18: 4964, cdd18: 111, latitude: 46.8, longitude: -71.38, elevation: 73, deltadb: 31, a90_1_2004_climate_zone: '6A', boiler_fueltype: 'Electricity', baseboard_type: 'Electric', mau_type: true, mau_heating_coil_type: 'Electric', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' },
       { file: 'CAN_SK_Regina.718630_CWEC.epw', location_name: ' CAN-SK-Regina', energy_plus_location_name: 'Regina_SK_CAN', country: 'CAN', state_province_region: 'SK', city: 'Regina', hdd18: 5646, cdd18: 129, latitude: 50.43, longitude: -104.67, elevation: 577, deltadb: 35.4, a90_1_2004_climate_zone: 7, boiler_fueltype: 'NaturalGas', baseboard_type: 'Hot Water', mau_type: true, mau_heating_coil_type: 'Hot Water', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Gas', heating_coil_type_sys4: 'Gas', heating_coil_type_sys6: 'Hot Water', fan_type: 'var_speed_drive', swh_fueltype: 'NaturalGas' },
-      { file: 'CAN_NU_Resolute.719240_CWEC.epw', location_name: ' CAN-NU-Resolute', energy_plus_location_name: 'Resolute_NU_CAN', country: 'CAN', state_province_region: 'NU', city: 'Resolute', hdd18: 12570, cdd18: 0, latitude: 74.72, longitude: -94.98, elevation: 67, deltadb: 35.9, a90_1_2004_climate_zone: 8, boiler_fueltype: 'FuelOil#2', baseboard_type: 'Hot Water', mau_type: true, mau_heating_coil_type: 'Hot Water', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' },
+      { file: 'CAN_NU_Resolute.719240_CWEC.epw', location_name: ' CAN-NU-Resolute', energy_plus_location_name: 'Resolute_NU_CAN', country: 'CAN', state_province_region: 'NU', city: 'Resolute', hdd18: 12_570, cdd18: 0, latitude: 74.72, longitude: -94.98, elevation: 67, deltadb: 35.9, a90_1_2004_climate_zone: 8, boiler_fueltype: 'FuelOil#2', baseboard_type: 'Hot Water', mau_type: true, mau_heating_coil_type: 'Hot Water', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' },
       { file: 'CAN_PQ_Riviere.du.Loup.717150_CWEC.epw', location_name: ' CAN-PQ-Riviere Du Loup', energy_plus_location_name: 'Riviere Du Loup_PQ_CAN', country: 'CAN', state_province_region: 'PQ', city: 'Riviere Du Loup', hdd18: 5424, cdd18: 82, latitude: 47.8, longitude: -69.55, elevation: 148, deltadb: 30.1, a90_1_2004_climate_zone: 7, boiler_fueltype: 'Electricity', baseboard_type: 'Electric', mau_type: true, mau_heating_coil_type: 'Electric', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' },
       { file: 'CAN_PQ_Roberval.717280_CWEC.epw', location_name: ' CAN-PQ-Roberval', energy_plus_location_name: 'Roberval_PQ_CAN', country: 'CAN', state_province_region: 'PQ', city: 'Roberval', hdd18: 5757, cdd18: 97, latitude: 48.52, longitude: -72.27, elevation: 179, deltadb: 35.6, a90_1_2004_climate_zone: 7, boiler_fueltype: 'Electricity', baseboard_type: 'Electric', mau_type: true, mau_heating_coil_type: 'Electric', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' },
       { file: 'CAN_NS_Sable.Island.716000_CWEC.epw', location_name: ' CAN-NS-Sable Island', energy_plus_location_name: 'Sable Island_NS_CAN', country: 'CAN', state_province_region: 'NS', city: 'Sable Island', hdd18: 3860, cdd18: 14, latitude: 43.93, longitude: -60.02, elevation: 4, deltadb: 18.3, a90_1_2004_climate_zone: '5A', boiler_fueltype: 'NaturalGas', baseboard_type: 'Hot Water', mau_type: true, mau_heating_coil_type: 'Hot Water', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Gas', heating_coil_type_sys4: 'Gas', heating_coil_type_sys6: 'Hot Water', fan_type: 'var_speed_drive', swh_fueltype: 'NaturalGas' },
@@ -336,36 +333,36 @@ module BTAP
 
     class WeatherFile
       attr_accessor :location_name,
-        :energy_plus_location_name,
-        :latitude,
-        :longitude,
-        :elevation,
-        :city,
-        :state_province_region,
-        :country,
-        :hdd18,
-        :cdd18,
-        :hdd10,
-        :cdd10,
-        :heating_design_info,
-        :cooling_design_info,
-        :extremes_design_info,
-        :monthly_dry_bulb,
-        :delta_dry_bulb,
-        :climate_zone,
-        :standard,
-        :summer_wet_months,
-        :winter_dry_months,
-        :autumn_months,
-        :spring_months,
-        :typical_summer_wet_week,
-        :typical_winter_dry_week,
-        :typical_autumn_week,
-        :typical_spring_week,
-        :epw_filepath,
-        :ddy_filepath,
-        :stat_filepath,
-        :db990
+                    :energy_plus_location_name,
+                    :latitude,
+                    :longitude,
+                    :elevation,
+                    :city,
+                    :state_province_region,
+                    :country,
+                    :hdd18,
+                    :cdd18,
+                    :hdd10,
+                    :cdd10,
+                    :heating_design_info,
+                    :cooling_design_info,
+                    :extremes_design_info,
+                    :monthly_dry_bulb,
+                    :delta_dry_bulb,
+                    :climate_zone,
+                    :standard,
+                    :summer_wet_months,
+                    :winter_dry_months,
+                    :autumn_months,
+                    :spring_months,
+                    :typical_summer_wet_week,
+                    :typical_winter_dry_week,
+                    :typical_autumn_week,
+                    :typical_spring_week,
+                    :epw_filepath,
+                    :ddy_filepath,
+                    :stat_filepath,
+                    :db990
 
       YEAR = 0
       MONTH = 1
@@ -477,57 +474,56 @@ module BTAP
         @db990 = @heating_design_info[2]
         return self
       end
-      
+
       # This method returns the Thermal Zone based on cdd10 and hdd18
       # @author padmassun.rajakareyar@canada.ca
       # @return [String] thermal_zone
-      def a169_2006_climate_zone()
+      def a169_2006_climate_zone
         cdd10 = self.cdd10.to_f
         hdd18 = self.hdd18.to_f
-        
-        case
-        when (6000 < cdd10) #Extremely Hot  Humid (0A), Dry (0B)
+
+        if cdd10 > 6000 # Extremely Hot  Humid (0A), Dry (0B)
           return 'ASHRAE 169-2006-0A'
-          
-        when (5000 < cdd10 and cdd10 <= 6000) #Very Hot  Humid (1A), Dry (1B)
+
+        elsif (cdd10 > 5000) && (cdd10 <= 6000) # Very Hot  Humid (1A), Dry (1B)
           return 'ASHRAE 169-2006-1A'
-          
-        when (3500 < cdd10 and cdd10 <= 5000) #Hot  Humid (2A), Dry (2B)
+
+        elsif (cdd10 > 3500) && (cdd10 <= 5000) # Hot  Humid (2A), Dry (2B)
           return 'ASHRAE 169-2006-2A'
-          
-        when ((2500 < cdd10 and cdd10 < 3500) and (hdd18 <= 2000)) #Warm  Humid (3A), Dry (3B)
-          return 'ASHRAE 169-2006-3A' #and 'ASHRAE 169-2006-3B'
-          
-        when ((cdd10 <= 2500) and (hdd18 <= 2000)) #Warm  Marine (3C)
+
+        elsif ((cdd10 > 2500) && (cdd10 < 3500)) && (hdd18 <= 2000) # Warm  Humid (3A), Dry (3B)
+          return 'ASHRAE 169-2006-3A' # and 'ASHRAE 169-2006-3B'
+
+        elsif (cdd10 <= 2500) && (hdd18 <= 2000) # Warm  Marine (3C)
           return 'ASHRAE 169-2006-3C'
-          
-        when ((1500 < cdd10 and cdd10 < 3500) and (2000 < hdd18 and hdd18 <= 3000)) #Mixed  Humid (4A), Dry (4B)
-          return 'ASHRAE 169-2006-4A' #and 'ASHRAE 169-2006-4B'
-          
-        when ((1500 >= cdd10) and (2000 < hdd18 and hdd18 <= 3000)) #Mixed  Marine
+
+        elsif ((cdd10 > 1500) && (cdd10 < 3500)) && ((hdd18 > 2000) && (hdd18 <= 3000)) # Mixed  Humid (4A), Dry (4B)
+          return 'ASHRAE 169-2006-4A' # and 'ASHRAE 169-2006-4B'
+
+        elsif (cdd10 <= 1500) && ((hdd18 > 2000) && (hdd18 <= 3000)) # Mixed  Marine
           return 'ASHRAE 169-2006-4C'
-          
-        when ((1000 < cdd10 and cdd10 <= 3500) and (3000 < hdd18 and hdd18 <= 4000)) #Cool Humid (5A), Dry (5B)
-          return 'ASHRAE 169-2006-5A' #and 'ASHRAE 169-2006-5B'
-          
-        when ((1000 >= cdd10) and (3000 < hdd18 and hdd18 <= 4000)) #Cool  Marine (5C)
+
+        elsif ((cdd10 > 1000) && (cdd10 <= 3500)) && ((hdd18 > 3000) && (hdd18 <= 4000)) # Cool Humid (5A), Dry (5B)
+          return 'ASHRAE 169-2006-5A' # and 'ASHRAE 169-2006-5B'
+
+        elsif (cdd10 <= 1000) && ((hdd18 > 3000) && (hdd18 <= 4000)) # Cool  Marine (5C)
           return 'ASHRAE 169-2006-5C'
-          
-        when (4000 < hdd18 and hdd18 <= 5000) #Cold  Humid (6A), Dry (6B)
-          return 'ASHRAE 169-2006-6A' #and 'ASHRAE 169-2006-6B'
-          
-        when (5000 < hdd18 and hdd18 <= 7000) #Very Cold (7)
+
+        elsif (hdd18 > 4000) && (hdd18 <= 5000) # Cold  Humid (6A), Dry (6B)
+          return 'ASHRAE 169-2006-6A' # and 'ASHRAE 169-2006-6B'
+
+        elsif (hdd18 > 5000) && (hdd18 <= 7000) # Very Cold (7)
           return 'ASHRAE 169-2006-7A'
-          
-        when (7000 < hdd18) #Subarctic/Arctic (8)
+
+        elsif hdd18 > 7000 # Subarctic/Arctic (8)
           return 'ASHRAE 169-2006-8A'
-          
+
         else
-          #raise ("invalid cdd10 of #{cdd10} or hdd18 of #{hdd18}")
+          # raise ("invalid cdd10 of #{cdd10} or hdd18 of #{hdd18}")
           return '[INVALID]'
         end
       end
-      
+
       # This method will set the weather file and returns a log string.
       # @author phylroy.lopez@nrcan.gc.ca
       # @param model [OpenStudio::model::Model] A model object
