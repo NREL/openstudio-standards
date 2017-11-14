@@ -54,6 +54,7 @@ necb/test_necb_bldg_small_office.rb
 necb/test_necb_bldg_warehouse.rb
 necb/test_necb_boiler_rules.rb
 necb/test_necb_chiller_rules.rb
+necb/test_necb_constructions_fdwr.rb
 necb/test_necb_coolingtower_rules.rb
 necb/test_necb_fan_rules.rb
 necb/test_necb_heatpump_rules.rb
@@ -62,3 +63,4 @@ necb/test_necb_loop_rules.rb
 necb/test_necb_unitary_rules.rb
 necb/test_necb_waterheater_rules.rb
 necb/test_necb_weather.rb
+
