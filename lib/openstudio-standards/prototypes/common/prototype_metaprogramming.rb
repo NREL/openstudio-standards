@@ -2,54 +2,57 @@
 # these for now to expediate testing. This only works now since we all use the same buildings.. as the buildings change in the future will require
 # separate files for each template in the templates folder.
 require 'json'
-prototype_buildings = [
-  'FullServiceRestaurant',
-  'Hospital',
-  'HighriseApartment',
-  'LargeHotel',
-  'LargeOffice',
-  'MediumOffice',
-  'MidriseApartment',
-  'Outpatient',
-  'PrimarySchool',
-  'QuickServiceRestaurant',
-  'RetailStandalone',
-  'SecondarySchool',
-  'SmallHotel',
-  'SmallOffice',
-  'RetailStripmall',
-  'Warehouse'
-]
 
-templates = ['NECB2011',
-             'ASHRAE9012004',
-             'ASHRAE9012007',
-             'ASHRAE9012010',
-             'ASHRAE9012013',
-             'DOERef1980to2004',
-             'DOERefPre1980',
-             'NRELZNEReady2017']
+def create_class_array ()
+  prototype_buildings = [
+      'FullServiceRestaurant',
+      'Hospital',
+      'HighriseApartment',
+      'LargeHotel',
+      'LargeOffice',
+      'MediumOffice',
+      'MidriseApartment',
+      'Outpatient',
+      'PrimarySchool',
+      'QuickServiceRestaurant',
+      'RetailStandalone',
+      'SecondarySchool',
+      'SmallHotel',
+      'SmallOffice',
+      'RetailStripmall',
+      'Warehouse'
+  ]
 
-templates.each do |template|
-  # Create Prototype base class (May not be needed...)
-  # Ex: class NECB2011_Prototype < NECB2011
-  eval <<DYNAMICClass
-class #{template}_Prototype < #{template}
+  templates = ['NECB2011',
+               'ASHRAE9012004',
+               'ASHRAE9012007',
+               'ASHRAE9012010',
+               'ASHRAE9012013',
+               'DOERef1980to2004',
+               'DOERefPre1980',
+               'NRELZNEReady2017']
+  class_array = []
+  templates.each do |template|
+    # Create Prototype base class (May not be needed...)
+    # Ex: class NECB2011_Prototype < NECB2011
+    class_array << "
+  class #{template}_Prototype < #{template}
   attr_reader :instvarbuilding_type
   def initialize
     super()
   end
-
 end
-DYNAMICClass
+"
 
-  # Create Building Specific classes for each building.
-  # Example class NECB2011Hospital
-  prototype_buildings.each do |name|
-    eval <<DYNAMICClass
-class #{template}#{name} < #{template}
-  @@building_type = "#{name}"
-  register_standard ("\#{@@template}_\#{@@building_type}")
+
+    # Create Building Specific classes for each building.
+    # Example class NECB2011Hospital
+    prototype_buildings.each do |name|
+
+      class_array << "
+      class #{template}#{name} < #{template}
+  @@building_type = \"#{name}\"
+  register_standard (\"\#{@@template}_\#{@@building_type}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -60,21 +63,17 @@ class #{template}#{name} < #{template}
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-
-
     @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type }, nil)
     if @prototype_input.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type }}, cannot create model.")
-      raise("Could not find prototype inputs for #{template}#{name}, cannot create model.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type }}, cannot create model.\")
+      raise(\"Could not find prototype inputs for #{template}#{name}, cannot create model.\")
       return false
     end
     @lookup_building_type = self.model_get_lookup_name(@@building_type)
     #ideally we should map the data required to a instance variable.
-    @geometry_file = "\#{Folders.instance.data_geometry_folder}/\#{self.class.name}.osm"
-    hvac_map_file = "\#{Folders.instance.data_geometry_folder}/\#{self.class.name}.hvac_map.json"
+    @geometry_file = Folders.instance.data_geometry_folder + '/' + self.class.name + '.osm'
+    hvac_map_file =  Folders.instance.data_geometry_folder + '/' + self.class.name + '.hvac_map.json'
     @system_to_space_map = JSON.parse(File.read(hvac_map_file))if File.exist?(hvac_map_file)
-
-
     self.set_variables()
   end
   def set_variables()
@@ -93,8 +92,6 @@ class #{template}#{name} < #{template}
   def define_hvac_system_map(building_type, climate_zone)
     return @system_to_space_map
   end
-
-
 
  def define_building_story_map(building_type, climate_zone)
     return @building_story_map
@@ -137,8 +134,25 @@ class #{template}#{name} < #{template}
     end
     return lookup_name
   end
+end
+"
 
-end
-DYNAMICClass
+    end
   end
+  return class_array
 end
+
+def create_meta_classes()
+  create_class_array().each {|item| eval(item)}
+end
+
+def save_meta_classes_to_file()
+  filepath = "#{File.dirname(__FILE__)}/do_not_edit_metaclasses.rb"
+  File.open(filepath, 'w') { |f| create_class_array.each { |item| f << item } }
+end
+
+def remove_meta_class_file()
+  filepath = "#{File.dirname(__FILE__)}/do_not_edit_metaclasses.rb"
+  FileUtils.rm(filepath)
+end
+

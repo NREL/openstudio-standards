@@ -168,6 +168,8 @@ require 'yard'
 desc 'Generate the documentation'
 YARD::Rake::YardocTask.new(:doc) do |t|
   # Dir.chdir('../')
+  require '/home/osdev/refactor/openstudio-standards/lib/openstudio-standards/prototypes/common/prototype_metaprogramming.rb'
+  save_meta_classes_to_file()
   t.stats_options = ['--list-undoc']
 end
 

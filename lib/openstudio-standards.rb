@@ -187,6 +187,7 @@ module OpenstudioStandards
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
+  create_meta_classes()
 
   # Model Objects
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
