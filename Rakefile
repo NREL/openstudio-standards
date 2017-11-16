@@ -167,8 +167,9 @@ end
 require 'yard'
 desc 'Generate the documentation'
 YARD::Rake::YardocTask.new(:doc) do |t|
-  # Dir.chdir('../')
-  require '/home/osdev/refactor/openstudio-standards/lib/openstudio-standards/prototypes/common/prototype_metaprogramming.rb'
+  require_relative 'lib/openstudio-standards/prototypes/common/prototype_metaprogramming.rb'
+  # Generate temporary building type class files so that
+  # the documentation shows these classes
   save_meta_classes_to_file()
   t.stats_options = ['--list-undoc']
 end
@@ -183,6 +184,8 @@ task 'doc:show' => [:doc] do
   elsif RbConfig::CONFIG['host_os'] =~ /linux|bsd/
     system "xdg-open #{link}"
   end
+  # Remove the generated temporary files
+  remove_meta_class_file()
 end
 
 require 'rubocop/rake_task'
