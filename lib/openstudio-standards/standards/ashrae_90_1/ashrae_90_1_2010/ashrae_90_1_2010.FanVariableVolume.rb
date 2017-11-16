@@ -1,4 +1,6 @@
 class ASHRAE9012010 < ASHRAE901
+  # @!group FanVariableVolume
+
   # The threhold horsepower below which part load control is not required.
   # 10 nameplate HP threshold is equivalent to motors with input powers of 7.54  HP per TSD
   #

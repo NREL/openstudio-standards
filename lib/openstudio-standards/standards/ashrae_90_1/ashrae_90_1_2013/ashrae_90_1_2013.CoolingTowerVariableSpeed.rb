@@ -1,4 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
+  # @!group CoolingTowerVariableSpeed
+
   include ASHRAE9012013CoolingTower
 
   # Apply the efficiency, plus Multicell heat rejection with VSD per 90.1-2013 6.5.2.2

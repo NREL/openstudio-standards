@@ -1,4 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
+  # @!group elevators
+
   # Determines the percentage of the elevator cab
   # lighting that is incandescent.  The remainder
   # is assumed to be LED.  Defaults to 0% incandescent

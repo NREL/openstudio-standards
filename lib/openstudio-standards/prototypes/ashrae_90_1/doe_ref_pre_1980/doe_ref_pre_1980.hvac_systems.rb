@@ -1,4 +1,6 @@
 class DOERefPre1980 < ASHRAE901
+  # @!group hvac_systems
+
   # Determine the type of SWH pump that
   # a model will have.
   # @return [String] the SWH pump type: ConstantSpeed, VariableSpeed

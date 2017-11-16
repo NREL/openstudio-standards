@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group ThermalZone
+
   # Calculates the zone outdoor airflow requirement (Voz)
   # based on the inputs in the DesignSpecification:OutdoorAir obects
   # in all spaces in the zone.

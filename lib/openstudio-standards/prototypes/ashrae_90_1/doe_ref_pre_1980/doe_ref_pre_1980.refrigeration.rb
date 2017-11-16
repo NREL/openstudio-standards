@@ -1,4 +1,6 @@
 class DOERefPre1980 < ASHRAE901
+  # @!group refrigeration
+
   # Determine the latent case credit curve to use
   # for walkins.
   # @todo Should probably use the model_add_refrigeration_walkin

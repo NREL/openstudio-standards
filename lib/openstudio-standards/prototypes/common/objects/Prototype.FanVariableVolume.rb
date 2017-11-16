@@ -1,4 +1,6 @@
 class Standard
+  # @!group FanVariableVolume
+
   include PrototypeFan
 
   # Sets the fan pressure rise based on the Prototype buildings inputs

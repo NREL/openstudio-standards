@@ -1,5 +1,6 @@
 --main docs/Home.md
 --embed-mixins
+--exclude lib/openstudio-standards/prototypes/common/buildings/Prototype.all_buildings.rb
 lib/openstudio-standards/standards/**/*.rb
 lib/openstudio-standards/prototypes/**/*.rb
 lib/openstudio-standards/utilities/**/*.rb

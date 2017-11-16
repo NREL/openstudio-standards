@@ -1,4 +1,6 @@
 class DOERefPre1980 < ASHRAE901
+  # @!group Model
+
   # Apply the air leakage requirements to the model.
   # "For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004',
   # infiltration rates are not defined using this method,

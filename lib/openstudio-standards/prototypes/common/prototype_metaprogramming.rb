@@ -50,7 +50,8 @@ end
     prototype_buildings.each do |name|
 
       class_array << "
-      class #{template}#{name} < #{template}
+  # This class represents a prototypical #{template} #{name}.
+  class #{template}#{name} < #{template}
   @@building_type = \"#{name}\"
   register_standard (\"\#{@@template}_\#{@@building_type}\")
   attr_accessor :prototype_database
@@ -60,6 +61,7 @@ end
   attr_accessor :geometry_file
   attr_accessor :building_story_map
   attr_accessor :system_to_space_map
+
   def initialize
     super()
     @instvarbuilding_type = @@building_type
@@ -76,40 +78,55 @@ end
     @system_to_space_map = JSON.parse(File.read(hvac_map_file))if File.exist?(hvac_map_file)
     self.set_variables()
   end
+
+  # This method is used to extend the class with building-type-specific
+  # methods, as defined in Prototype.all_buildings.rb.  Each building type
+  # has its own set of methods that change things which are not
+  # common across all prototype buildings, even within a given Standard.
   def set_variables()
-    #Will be overwritten in class reopen file.
-    puts geometry_file
-    puts @space_type_map
-    puts @system_to_space_map
-    #add all building methods for now.
+    # Will be overwritten in class reopen file.
+    # add all building methods for now.
     self.extend(#{name}) unless @template == 'NECB 2011'
   end
-#Common Methods to all prototypes.
+
+  # Returns the mapping between the names of the spaces
+  # in the geometry .osm file and the space types
+  # available for this particular Standard.
   def define_space_type_map(building_type, climate_zone)
     return @space_type_map
   end
 
+  # Returns the mapping between the names of the spaces
+  # in the geometry .osm file and the HVAC system that will
+  # be applied to those spaces.
   def define_hvac_system_map(building_type, climate_zone)
     return @system_to_space_map
   end
 
- def define_building_story_map(building_type, climate_zone)
-    return @building_story_map
- end
+  # Returns the mapping between the names of the spaces
+  # in the geometry .osm file and the building story
+  # that they are located on.
+  def define_building_story_map(building_type, climate_zone)
+     return @building_story_map
+  end
 
- def model_modify_oa_controller(model)
- end
+  # Does nothing unless implmented by the specific standard
+  def model_modify_oa_controller(model)
+  end
 
- def model_reset_or_room_vav_minimum_damper(prototype_input, model)
- end
+  # Does nothing unless implmented by the specific standard
+  def model_reset_or_room_vav_minimum_damper(prototype_input, model)
+  end
 
- def model_update_exhaust_fan_efficiency(model)
- end
+  # Does nothing unless implmented by the specific standard
+  def model_update_exhaust_fan_efficiency(model)
+  end
 
- def model_update_fan_efficiency(model)
- end
+  # Does nothing unless implmented by the specific standard
+  def model_update_fan_efficiency(model)
+  end
 
-   # Get the name of the building type used in lookups
+  # Get the name of the building type used in lookups
   #
   # @param building_type [String] the building type
   # @return [String] returns the lookup name as a string

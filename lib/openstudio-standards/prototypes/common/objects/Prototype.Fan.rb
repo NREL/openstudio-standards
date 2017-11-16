@@ -2,6 +2,8 @@
 # Prototype fan calculation methods that are the same regardless of fan type.
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
 module PrototypeFan
+  # @!group Fan
+
   # Sets the fan motor efficiency using the Prototype
   # model assumptions for fan impeller efficiency,
   # motor type, and a 10% safety factor on brake horsepower.

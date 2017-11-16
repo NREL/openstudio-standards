@@ -1,4 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
+  # @!group ThermalZone
+
   # Determine the thermal zone's occupancy type category.
   # Options are: residential, nonresidential, publicassembly, retail
   #

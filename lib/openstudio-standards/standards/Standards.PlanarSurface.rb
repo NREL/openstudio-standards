@@ -1,4 +1,6 @@
 class Standard
+  # @!group PlanarSurface
+
   # If construction properties can be found
   # based on the template,
   # the standards intended surface type,

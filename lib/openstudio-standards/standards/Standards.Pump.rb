@@ -2,6 +2,8 @@
 # A variety of pump calculation methods that are the same regardless of pump type.
 # These methods are available to PumpConstantSpeed, PumpVariableSpeed
 module Pump
+  # @!group Pump
+
   # Set the pressure rise that cooresponds to the
   # target power per flow number, given the standard
   # pump efficiency and the default EnergyPlus pump impeller efficiency

@@ -1,6 +1,6 @@
-
-# open the class to add methods to apply HVAC efficiency standards
 class Standard
+  # @!group BuildingStory
+
   # Checks all spaces on this story that are part of the total
   # floor area to see if they have the same multiplier.
   # If they do, assume that the multipliers are being used

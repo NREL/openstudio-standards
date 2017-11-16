@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group AirTerminalSingleDuctVAVReheat
+
   # Set the minimum damper position based on OA
   # rate of the space and the template.
   # Zones with low OA per area get lower initial guesses.

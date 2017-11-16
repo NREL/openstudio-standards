@@ -1,4 +1,6 @@
 class ASHRAE9012007 < ASHRAE901
+  # @!group Model
+
   # Determines which system number is used
   # for the baseline system.
   # @return [String] the system number: 1_or_2, 3_or_4,

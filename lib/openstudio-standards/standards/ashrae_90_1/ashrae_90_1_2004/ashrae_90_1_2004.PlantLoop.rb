@@ -1,4 +1,6 @@
 class ASHRAE9012004 < ASHRAE901
+  # @!group PlantLoop
+
   # Set the primary and secondary pumping control types for the
   # chilled water loop, as specified in Appendix G.
   def plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)

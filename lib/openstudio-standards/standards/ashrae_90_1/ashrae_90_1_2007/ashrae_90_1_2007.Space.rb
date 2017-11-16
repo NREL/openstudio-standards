@@ -1,4 +1,6 @@
 class ASHRAE9012007 < ASHRAE901
+  # @!group Space
+
   # Determine the base infiltration rate at 75 PA.
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2

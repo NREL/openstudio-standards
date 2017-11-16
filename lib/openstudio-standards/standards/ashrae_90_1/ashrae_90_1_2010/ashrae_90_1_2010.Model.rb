@@ -1,4 +1,6 @@
 class ASHRAE9012010 < ASHRAE901
+  # @!group Model
+
   # Determine if there needs to be a sizing run after constructions
   # are added so that EnergyPlus can calculate the VLTs of
   # layer-by-layer glazing constructions.  These VLT values are

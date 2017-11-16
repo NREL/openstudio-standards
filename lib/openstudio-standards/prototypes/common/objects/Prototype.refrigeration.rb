@@ -1,4 +1,6 @@
 class Standard
+  # @!group refrigeration
+
   # Adds a single refrigerated case connected to a rack composed
   # of a single compressor and a single air-cooled condenser.
   #

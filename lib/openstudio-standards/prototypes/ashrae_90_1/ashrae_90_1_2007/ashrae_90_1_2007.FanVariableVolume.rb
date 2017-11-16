@@ -1,4 +1,6 @@
 class ASHRAE9012007 < ASHRAE901
+  # @!group FanVariableVolume
+
   # Determine the prototype fan pressure rise for a variable volume
   # fan on an AirLoopHVAC based on the airflow of the system.
   # @return [Double] the pressure rise (in H2O).  Defaults

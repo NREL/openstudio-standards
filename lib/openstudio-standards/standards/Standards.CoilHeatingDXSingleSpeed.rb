@@ -1,6 +1,6 @@
-
-# open the class to add methods to return sizing values
 class Standard
+  # @!group CoilHeatingDXSingleSpeed
+
   include CoilDX
 
   # Finds capacity in W.  This is the cooling capacity of the

@@ -1,4 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
+  # @!group Model
+
   # Determines the area of the building above which point
   # the non-dominant area type gets it's own HVAC system type.
   # @return [Double] the minimum area (m^2)

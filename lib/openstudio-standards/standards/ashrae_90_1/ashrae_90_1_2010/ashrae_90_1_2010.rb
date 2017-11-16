@@ -1,4 +1,4 @@
-# This class holds methods that apply ASHRAE 90.1-2004
+# This class holds methods that apply ASHRAE 90.1-2010
 # to a given model.
 class ASHRAE9012010 < ASHRAE901
   @@template = '90.1-2010'

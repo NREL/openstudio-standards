@@ -1,4 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
+  # @!group hvac_systems
+
   # Determine which type of fan the cooling tower
   # will have.  Variable Speed Fan for ASHRAE 90.1-2013.
   # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan

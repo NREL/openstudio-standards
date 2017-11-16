@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group WaterHeaterMixed
+
   # Applies the standard efficiency ratings and typical losses and paraisitic loads to this object.
   # Efficiency and skin loss coefficient (UA)
   # Per PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf

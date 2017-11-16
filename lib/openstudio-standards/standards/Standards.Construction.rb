@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group Construction
+
   # Sets the U-value of a construction to a specified value
   # by modifying the thickness of the insulation layer.
   #

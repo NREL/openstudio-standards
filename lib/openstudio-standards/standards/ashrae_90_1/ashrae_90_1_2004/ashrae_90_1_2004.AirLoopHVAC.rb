@@ -1,4 +1,6 @@
 class ASHRAE9012004 < ASHRAE901
+  # @!group AirLoopHVAC
+
   # Determine if an economizer is required per the PRM.
   #
   # @param (see #economizer_required?)

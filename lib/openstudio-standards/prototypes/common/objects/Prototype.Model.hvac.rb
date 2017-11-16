@@ -1,5 +1,3 @@
-
-# open the class to add methods to size all HVAC equipment
 class Standard
   def model_add_hvac(model, building_type, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')

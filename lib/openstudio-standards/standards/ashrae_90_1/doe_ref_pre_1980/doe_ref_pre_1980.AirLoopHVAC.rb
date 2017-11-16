@@ -1,4 +1,6 @@
 class DOERefPre1980 < ASHRAE901
+  # @!group AirLoopHVAC
+
   # Apply multizone vav outdoor air method and
   # adjust multizone VAV damper positions.  Currently
   # doesn't do anything for the DOE prototype buildings.

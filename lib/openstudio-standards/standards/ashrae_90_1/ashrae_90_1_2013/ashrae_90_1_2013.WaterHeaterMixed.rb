@@ -1,4 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
+  # @!group WaterHeaterMixed
+
   # Applies the correct fuel type for the water heaters
   # in the baseline model. 90.1-2013 requires a change
   # from the proposed building in some scenarios.

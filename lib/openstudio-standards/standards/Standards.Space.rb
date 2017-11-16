@@ -1,6 +1,6 @@
-
-# open the class to add methods to apply HVAC efficiency standards
 class Standard
+  # @!group Space
+
   # Returns values for the different types of daylighted areas in the space.
   # Definitions for each type of area follow the respective template.
   # @note This method is super complicated because of all the polygon/geometry math required.

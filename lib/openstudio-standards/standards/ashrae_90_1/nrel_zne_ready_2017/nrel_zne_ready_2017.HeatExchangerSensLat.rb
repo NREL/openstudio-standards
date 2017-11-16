@@ -1,4 +1,6 @@
 class NRELZNEReady2017 < ASHRAE901
+  # @!group HeatExchangerSensLat
+
   # Defines the minimum sensible and latent effectiveness of
   # the heat exchanger.  Assumed to apply to sensible and latent
   # effectiveness at all flow rates.  For NREL ZNE Ready 2017, assume

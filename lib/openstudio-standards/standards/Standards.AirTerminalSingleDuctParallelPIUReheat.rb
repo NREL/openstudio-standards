@@ -1,6 +1,6 @@
-
-# open the class to add methods to apply HVAC efficiency standards
 class Standard
+  # @!group AirTerminalSingleDuctParallelPIUReheat
+
   # Sets the fan power of a PIU fan based on the W/cfm
   # specified in the standard.
   #

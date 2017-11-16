@@ -1,4 +1,6 @@
 class NRELZNEReady2017 < ASHRAE901
+  # @!group hvac_systems
+
   # Determine which type of fan the cooling tower
   # will have.  Variable Speed Fan for NREL ZNE Ready 2017.
   # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan

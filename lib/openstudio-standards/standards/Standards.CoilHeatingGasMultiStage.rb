@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group CoilHeatingGasMultiStage
+
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @return [Bool] true if successful, false if not

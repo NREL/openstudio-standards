@@ -1,10 +1,12 @@
-# open the class to add methods to apply HVAC efficiency standards
 class Standard
+
   attr_accessor :space_multiplier_map
 
   def define_space_multiplier
     return @space_multiplier_map
   end
+
+  # @!group Model
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # based on the inputs currently in the model.

@@ -1,4 +1,6 @@
 class Standard
+  # @!group AirTerminalSingleDuctVAVReheat
+
   # Set the initial minimum damper position based on OA
   # rate of the space and the template.
   # Defaults to basic behavior, but this method is overridden

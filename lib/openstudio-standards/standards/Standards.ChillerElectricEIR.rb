@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group ChillerElectricEIR
+
   # Finds the search criteria
   #
   # @return [hash] has for search criteria to be used for find object

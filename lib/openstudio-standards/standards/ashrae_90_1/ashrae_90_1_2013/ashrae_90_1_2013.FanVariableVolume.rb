@@ -1,4 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
+  # @!group FanVariableVolume
+
   # The threhold horsepower below which part load control is not required.
   # Per 90.1-2013, table 6.5.3.2.1: the fan motor size for chiller-water
   # and evaporative cooling is 0.25 hp as of 1/1/2014 instead of 5 hp

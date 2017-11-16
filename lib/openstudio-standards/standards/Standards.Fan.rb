@@ -2,6 +2,8 @@
 # A variety of fan calculation methods that are the same regardless of fan type.
 # These methods are available to FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
 module Fan
+  # @!group Fan
+
   # Applies the minimum motor efficiency for this fan
   # based on the motor's brake horsepower.
   def fan_apply_standard_minimum_motor_efficiency(fan, allowed_bhp)

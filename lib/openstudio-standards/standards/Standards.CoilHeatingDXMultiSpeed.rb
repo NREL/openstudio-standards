@@ -1,6 +1,6 @@
-
-# open the class to add methods to return sizing values
 class Standard
+  # @!group CoilHeatingDXMultiSpeed
+
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @return [Bool] true if successful, false if not

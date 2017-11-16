@@ -1,4 +1,6 @@
 class DOERefPre1980 < ASHRAE901
+  # @!group elevators
+
   # Add an elevator the the specified space
   #
   # @param space [OpenStudio::Model::Space] the space

@@ -1,4 +1,6 @@
 class DOERefPre1980 < ASHRAE901
+  # @!group CoilHeatingGas
+
   # Updates the efficiency of some gas heating coils
   # per the prototype assumptions. Sets heating coils
   # inside PSZ-AC systems to 78% efficiency per

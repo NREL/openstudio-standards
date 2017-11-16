@@ -1,4 +1,3 @@
-# open the class to add methods to add elevators
 class Standard
   # Add an elevator the the specified space
   #

@@ -1,4 +1,6 @@
 class ASHRAE9012010 < ASHRAE901
+  # @!group FanOnOff
+
   # Determine the prototype fan pressure rise for an on off
   # fan on an AirLoopHVAC or inside a unitary system
   # based on the airflow of the system.

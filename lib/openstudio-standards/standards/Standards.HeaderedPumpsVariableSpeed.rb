@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group HeaderedPumpsVariableSpeed
+
   include Pump
 
   # Takes the total rated flow rate and returns per-pump values

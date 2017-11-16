@@ -1,4 +1,6 @@
 class ASHRAE9012007 < ASHRAE901
+  # @!group AirLoopHVAC
+
   # Determines the OA flow rates above which an economizer is required.
   # Two separate rates, one for systems with an economizer and another
   # for systems without.

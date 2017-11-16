@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group CoilCoolingDXTwoSpeed
+
   include CoilDX
 
   # Finds capacity in W

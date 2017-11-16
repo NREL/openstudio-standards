@@ -1,4 +1,6 @@
 class Standard
+  # @!group PlantLoop
+
   # Apply all standard required controls to the plantloop
   #
   # @param (see #economizer_required?)

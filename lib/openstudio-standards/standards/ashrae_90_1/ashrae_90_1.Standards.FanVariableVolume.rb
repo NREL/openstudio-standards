@@ -1,5 +1,7 @@
 
 class ASHRAE901 < Standard
+  # @!group FanVariableVolume
+
   # The threhold horsepower below which part load control is not required.
   #
   # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] the fan

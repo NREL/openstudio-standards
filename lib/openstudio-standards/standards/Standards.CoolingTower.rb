@@ -2,6 +2,8 @@
 # A variety of cooling tower methods that are the same regardless of type.
 # These methods are available to CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, and CoolingTowerVariableSpeed
 module CoolingTower
+  # @!group CoolingTower
+
   # Set the cooling tower fan power such that the tower
   # hits the minimum performance (gpm/hp) specified by the standard.
   # Note that in this case hp is motor nameplate hp, per 90.1.

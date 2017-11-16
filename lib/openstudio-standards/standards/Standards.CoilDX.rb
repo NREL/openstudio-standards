@@ -3,6 +3,8 @@
 # These methods are available to:
 # CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
 module CoilDX
+  # @!group CoilDX
+
   # Finds the subcategory.  Possible choices are:
   # Single Package, Split System, PTAC, or PTHP
   #

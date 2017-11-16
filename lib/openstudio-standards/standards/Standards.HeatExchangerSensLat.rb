@@ -1,4 +1,6 @@
 class Standard
+  # @!group HeatExchangerSensLat
+
   # Sets the minimum effectiveness of the heat exchanger per
   # the standard.
   def heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(heat_exchanger_air_to_air_sensible_and_latent)

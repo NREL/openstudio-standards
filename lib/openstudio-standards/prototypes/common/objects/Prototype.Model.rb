@@ -1,7 +1,7 @@
-# Repopening Standards Class
+
 Standard.class_eval do
-  # I am replacing all prototype inputs.
-  # Right now.
+  # @!group Model
+
   def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?

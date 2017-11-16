@@ -1,4 +1,6 @@
 class Standard
+  # @!group utilities
+
   # load a model into OS & version translates, exiting and erroring if a problem is found
   def safe_load_model(model_path_string)
     model_path = OpenStudio::Path.new(model_path_string)

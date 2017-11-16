@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group AirLoopHVAC
+
   # Apply multizone vav outdoor air method and
   # adjust multizone VAV damper positions
   # to achieve a system minimum ventilation effectiveness

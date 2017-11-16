@@ -1,3 +1,4 @@
+# This class holds methods that apply NECB 2011 rules.
 class NECB2011 < Standard
   @@template = 'NECB 2011'
   register_standard @@template

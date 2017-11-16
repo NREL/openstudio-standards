@@ -1,4 +1,6 @@
 class ASHRAE9012010 < ASHRAE901
+  # @!group AirTerminalSingleDuctVAVReheat
+
   # Set the initial minimum damper position based on OA
   # rate of the space and the template.
   # Zones with low OA per area get lower initial guesses.

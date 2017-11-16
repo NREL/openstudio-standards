@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group PumpVariableSpeed
+
   include Pump
 
   # Set the pump curve coefficients based

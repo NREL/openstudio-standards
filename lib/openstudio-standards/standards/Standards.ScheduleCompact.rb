@@ -1,5 +1,7 @@
 
 class Standard
+  # @!group ScheduleCompact
+
   # Returns the min and max value for this schedule.
   #
   # @author Andrew Parker, NREL.

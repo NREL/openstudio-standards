@@ -1,4 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
+  # @!group PlantLoop
+
   # Determine the performance rating method specified
   # design condenser water temperature, approach, and range
   #

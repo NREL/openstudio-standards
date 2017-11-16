@@ -1,4 +1,6 @@
 class NRELZNEReady2017 < ASHRAE901
+  # @!group ThermalZone
+
   # Determine the area and occupancy level limits for
   # demand control ventilation.
   #

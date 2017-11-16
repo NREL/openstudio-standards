@@ -1,6 +1,8 @@
 # A variety of cooling tower methods that are the same regardless of type.
 # These methods are available to CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, and CoolingTowerVariableSpeed
 module ASHRAE9012010CoolingTower
+  # @!group CoolingTower
+
   # Above this point, centrifugal fan cooling towers must meet the limits
   # of propeller or axial cooling towers instead.
   # 90.1 6.5.5.3 Limit on Centrifugal Fan Open Circuit Cooling Towers.
