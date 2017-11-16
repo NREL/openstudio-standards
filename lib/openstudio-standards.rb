@@ -204,7 +204,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
   require_relative "#{proto}/common/objects/Prototype.Model.swh"
-  require_relative "#{proto}/common/objects/Prototype.building_specific_methods"
   require_relative "#{proto}/common/objects/Prototype.hvac_systems"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
   require_relative "#{proto}/common/objects/Prototype.utilities"
