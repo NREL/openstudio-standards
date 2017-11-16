@@ -353,13 +353,13 @@ class Standard
   # @author Scott Horowitz, NREL
   # @param coeffs [Array<Double>] an array of 6 coefficients, in order
   # @param crv_name [String] the name of the curve
-  # @param minX [Double] the minimum value of independent variable X that will be used
-  # @param maxX [Double] the maximum value of independent variable X that will be used
-  # @param minY [Double] the minimum value of independent variable Y that will be used
-  # @param maxY [Double] the maximum value of independent variable Y that will be used
-  # @param minOut [Double] the minimum value of dependent variable Z
-  # @param maxOut [Double] the maximum value of dependent variable Z
-  def create_curve_biquadratic(coeffs, crv_name, minX, maxX, minY, maxY, minOut, maxOut)
+  # @param min_x [Double] the minimum value of independent variable X that will be used
+  # @param max_x [Double] the maximum value of independent variable X that will be used
+  # @param min_y [Double] the minimum value of independent variable Y that will be used
+  # @param max_y [Double] the maximum value of independent variable Y that will be used
+  # @param min_out [Double] the minimum value of dependent variable Z
+  # @param max_out [Double] the maximum value of dependent variable Z
+  def create_curve_biquadratic(coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
     curve = OpenStudio::Model::CurveBiquadratic.new(self)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
@@ -368,12 +368,12 @@ class Standard
     curve.setCoefficient4y(coeffs[3])
     curve.setCoefficient5yPOW2(coeffs[4])
     curve.setCoefficient6xTIMESY(coeffs[5])
-    curve.setMinimumValueofx(minX) unless minX.nil?
-    curve.setMaximumValueofx(maxX) unless maxX.nil?
-    curve.setMinimumValueofy(minY) unless minY.nil?
-    curve.setMaximumValueofy(maxY) unless maxY.nil?
-    curve.setMinimumCurveOutput(minOut) unless minOut.nil?
-    curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+    curve.setMinimumValueofx(min_x) unless min_x.nil?
+    curve.setMaximumValueofx(max_x) unless max_x.nil?
+    curve.setMinimumValueofy(min_y) unless min_y.nil?
+    curve.setMaximumValueofy(max_y) unless max_y.nil?
+    curve.setMinimumCurveOutput(min_out) unless min_out.nil?
+    curve.setMaximumCurveOutput(max_out) unless max_out.nil?
     return curve
   end
 
@@ -383,13 +383,13 @@ class Standard
   # @author Scott Horowitz, NREL
   # @param coeffs [Array<Double>] an array of 10 coefficients, in order
   # @param crv_name [String] the name of the curve
-  # @param minX [Double] the minimum value of independent variable X that will be used
-  # @param maxX [Double] the maximum value of independent variable X that will be used
-  # @param minY [Double] the minimum value of independent variable Y that will be used
-  # @param maxY [Double] the maximum value of independent variable Y that will be used
-  # @param minOut [Double] the minimum value of dependent variable Z
-  # @param maxOut [Double] the maximum value of dependent variable Z
-  def create_curve_bicubic(coeffs, crv_name, minX, maxX, minY, maxY, minOut, maxOut)
+  # @param min_x [Double] the minimum value of independent variable X that will be used
+  # @param max_x [Double] the maximum value of independent variable X that will be used
+  # @param min_y [Double] the minimum value of independent variable Y that will be used
+  # @param max_y [Double] the maximum value of independent variable Y that will be used
+  # @param min_out [Double] the minimum value of dependent variable Z
+  # @param max_out [Double] the maximum value of dependent variable Z
+  def create_curve_bicubic(coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
     curve = OpenStudio::Model::CurveBicubic.new(self)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
@@ -402,12 +402,12 @@ class Standard
     curve.setCoefficient8yPOW3(coeffs[7])
     curve.setCoefficient9xPOW2TIMESY(coeffs[8])
     curve.setCoefficient10xTIMESYPOW2(coeffs[9])
-    curve.setMinimumValueofx(minX) unless minX.nil?
-    curve.setMaximumValueofx(maxX) unless maxX.nil?
-    curve.setMinimumValueofy(minY) unless minY.nil?
-    curve.setMaximumValueofy(maxY) unless maxY.nil?
-    curve.setMinimumCurveOutput(minOut) unless minOut.nil?
-    curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+    curve.setMinimumValueofx(min_x) unless min_x.nil?
+    curve.setMaximumValueofx(max_x) unless max_x.nil?
+    curve.setMinimumValueofy(min_y) unless min_y.nil?
+    curve.setMaximumValueofy(max_y) unless max_y.nil?
+    curve.setMinimumCurveOutput(min_out) unless min_out.nil?
+    curve.setMaximumCurveOutput(max_out) unless max_out.nil?
     return curve
   end
 
@@ -417,22 +417,22 @@ class Standard
   # @author Scott Horowitz, NREL
   # @param coeffs [Array<Double>] an array of 3 coefficients, in order
   # @param crv_name [String] the name of the curve
-  # @param minX [Double] the minimum value of independent variable X that will be used
-  # @param maxX [Double] the maximum value of independent variable X that will be used
-  # @param minOut [Double] the minimum value of dependent variable Z
-  # @param maxOut [Double] the maximum value of dependent variable Z
+  # @param min_x [Double] the minimum value of independent variable X that will be used
+  # @param max_x [Double] the maximum value of independent variable X that will be used
+  # @param min_out [Double] the minimum value of dependent variable Z
+  # @param max_out [Double] the maximum value of dependent variable Z
   # @param is_dimensionless [Bool] if true, the X independent variable is considered unitless
   # and the resulting output dependent variable is considered unitless
-  def create_curve_quadratic(coeffs, crv_name, minX, maxX, minOut, maxOut, is_dimensionless = false)
+  def create_curve_quadratic(coeffs, crv_name, min_x, max_x, min_out, max_out, is_dimensionless = false)
     curve = OpenStudio::Model::CurveQuadratic.new(self)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])
     curve.setCoefficient3xPOW2(coeffs[2])
-    curve.setMinimumValueofx(minX) unless minX.nil?
-    curve.setMaximumValueofx(maxX) unless maxX.nil?
-    curve.setMinimumCurveOutput(minOut) unless minOut.nil?
-    curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+    curve.setMinimumValueofx(min_x) unless min_x.nil?
+    curve.setMaximumValueofx(max_x) unless max_x.nil?
+    curve.setMinimumCurveOutput(min_out) unless min_out.nil?
+    curve.setMaximumCurveOutput(max_out) unless max_out.nil?
     if is_dimensionless
       curve.setInputUnitTypeforX('Dimensionless')
       curve.setOutputUnitType('Dimensionless')
@@ -446,21 +446,21 @@ class Standard
   # @author Scott Horowitz, NREL
   # @param coeffs [Array<Double>] an array of 4 coefficients, in order
   # @param crv_name [String] the name of the curve
-  # @param minX [Double] the minimum value of independent variable X that will be used
-  # @param maxX [Double] the maximum value of independent variable X that will be used
-  # @param minOut [Double] the minimum value of dependent variable Z
-  # @param maxOut [Double] the maximum value of dependent variable Z
-  def create_curve_cubic(coeffs, crv_name, minX, maxX, minOut, maxOut)
+  # @param min_x [Double] the minimum value of independent variable X that will be used
+  # @param max_x [Double] the maximum value of independent variable X that will be used
+  # @param min_out [Double] the minimum value of dependent variable Z
+  # @param max_out [Double] the maximum value of dependent variable Z
+  def create_curve_cubic(coeffs, crv_name, min_x, max_x, min_out, max_out)
     curve = OpenStudio::Model::CurveCubic.new(self)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])
     curve.setCoefficient3xPOW2(coeffs[2])
     curve.setCoefficient4xPOW3(coeffs[3])
-    curve.setMinimumValueofx(minX) unless minX.nil?
-    curve.setMaximumValueofx(maxX) unless maxX.nil?
-    curve.setMinimumCurveOutput(minOut) unless minOut.nil?
-    curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+    curve.setMinimumValueofx(min_x) unless min_x.nil?
+    curve.setMaximumValueofx(max_x) unless max_x.nil?
+    curve.setMinimumCurveOutput(min_out) unless min_out.nil?
+    curve.setMaximumCurveOutput(max_out) unless max_out.nil?
     return curve
   end
 
@@ -470,20 +470,20 @@ class Standard
   # @author Scott Horowitz, NREL
   # @param coeffs [Array<Double>] an array of 3 coefficients, in order
   # @param crv_name [String] the name of the curve
-  # @param minX [Double] the minimum value of independent variable X that will be used
-  # @param maxX [Double] the maximum value of independent variable X that will be used
-  # @param minOut [Double] the minimum value of dependent variable Z
-  # @param maxOut [Double] the maximum value of dependent variable Z
-  def create_curve_exponent(coeffs, crv_name, minX, maxX, minOut, maxOut)
+  # @param min_x [Double] the minimum value of independent variable X that will be used
+  # @param max_x [Double] the maximum value of independent variable X that will be used
+  # @param min_out [Double] the minimum value of dependent variable Z
+  # @param max_out [Double] the maximum value of dependent variable Z
+  def create_curve_exponent(coeffs, crv_name, min_x, max_x, min_out, max_out)
     curve = OpenStudio::Model::CurveExponent.new(self)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2Constant(coeffs[1])
     curve.setCoefficient3Constant(coeffs[2])
-    curve.setMinimumValueofx(minX) unless minX.nil?
-    curve.setMaximumValueofx(maxX) unless maxX.nil?
-    curve.setMinimumCurveOutput(minOut) unless minOut.nil?
-    curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+    curve.setMinimumValueofx(min_x) unless min_x.nil?
+    curve.setMaximumValueofx(max_x) unless max_x.nil?
+    curve.setMinimumCurveOutput(min_out) unless min_out.nil?
+    curve.setMaximumCurveOutput(max_out) unless max_out.nil?
     return curve
   end
 end

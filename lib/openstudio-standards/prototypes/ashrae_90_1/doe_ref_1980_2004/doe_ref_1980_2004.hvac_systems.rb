@@ -9,7 +9,7 @@ class DOERef1980to2004 < ASHRAE901
                       'ConstantSpeed'
                     else
                       'VariableSpeed'
-                 end
+                    end
     return swh_pump_type
   end
 end

@@ -30,9 +30,9 @@ module Pump
                       end
                     elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
                       if pump.autosizedTotalRatedFlowRate.is_initialized
-                        pump.autosizedTotalRatedFlowRate.get
+                        pump.autosizedTotalRatedFlowRate.get / pump.numberofPumpsinBank
                       else
-                        pump.totalRatedFlowRate.get
+                        pump.totalRatedFlowRate.get / pump.numberofPumpsinBank
                       end
                     end
 

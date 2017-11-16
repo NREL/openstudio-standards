@@ -731,7 +731,7 @@ class Standard
                                17.5
                              else
                                30.8
-                                                  end
+                             end
                            else
                              if pipe_hash[:insulation_thickness] >= 1.0
                                11.27
@@ -739,7 +739,7 @@ class Standard
                                12.25
                              else
                                28.07
-                                                  end
+                             end
                            end
 
       # calculate pipe loss (from Table A.3 in section A.4.2)

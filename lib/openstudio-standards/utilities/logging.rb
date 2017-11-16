@@ -1,14 +1,14 @@
 
 # Open a log for the library
-$OPENSTUDIO_LOG = OpenStudio::StringStreamLogSink.new
-$OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug)
+$OPENSTUDIO_LOG = OpenStudio::StringStreamLogSink.new # rubocop:disable Style/GlobalVars
+$OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug) # rubocop:disable Style/GlobalVars
 
 # Log the info, warning, and error messages to a runner.
 # runner @param [Runner] The Measure runner to add the messages to
 # debug @param [Boolean] If true, include the debug messages in the log
 # @return [Runner] The same Measure runner, with messages from the openstudio-standards library added
 def log_messages_to_runner(runner, debug = false)
-  $OPENSTUDIO_LOG.logMessages.each do |msg|
+  $OPENSTUDIO_LOG.logMessages.each do |msg| # rubocop:disable Style/GlobalVars
     # DLM: you can filter on log channel here for now
     if /openstudio.*/ =~ msg.logChannel # /openstudio\.model\..*/
       # Skip certain messages that are irrelevant/misleading
@@ -43,7 +43,7 @@ def log_messages_to_file(file_path, debug = false)
   messages = []
 
   File.open(file_path, 'w') do |file|
-    $OPENSTUDIO_LOG.logMessages.each do |msg|
+    $OPENSTUDIO_LOG.logMessages.each do |msg| # rubocop:disable Style/GlobalVars
       # DLM: you can filter on log channel here for now
       if /openstudio.*/ =~ msg.logChannel # /openstudio\.model\..*/
         # Skip certain messages that are irrelevant/misleading
@@ -85,7 +85,7 @@ end
 def get_logs(log_type = OpenStudio::Error)
   errors = []
 
-  $OPENSTUDIO_LOG.logMessages.each do |msg|
+  $OPENSTUDIO_LOG.logMessages.each do |msg| # rubocop:disable Style/GlobalVars
     if /openstudio.*/ =~ msg.logChannel
       # Skip certain messages that are irrelevant/misleading
       next if msg.logMessage.include?('Skipping layer') || # Annoying/bogus "Skipping layer" warnings
@@ -107,5 +107,5 @@ def get_logs(log_type = OpenStudio::Error)
 end
 
 def reset_log
-  $OPENSTUDIO_LOG.resetStringStream
+  $OPENSTUDIO_LOG.resetStringStream # rubocop:disable Style/GlobalVars
 end

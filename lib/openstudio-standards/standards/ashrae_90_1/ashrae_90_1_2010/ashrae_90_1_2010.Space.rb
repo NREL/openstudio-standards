@@ -116,7 +116,7 @@ class ASHRAE9012010 < ASHRAE901
         sensor_2_frac = (areas['primary_sidelighted_area'] / space_area_m2) / 2
         sensor_2_window = sorted_windows[1]
       end
-   end
+    end
 
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end

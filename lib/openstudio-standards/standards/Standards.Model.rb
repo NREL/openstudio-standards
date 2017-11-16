@@ -1,5 +1,4 @@
 class Standard
-
   attr_accessor :space_multiplier_map
 
   def define_space_multiplier
@@ -443,8 +442,8 @@ class Standard
       # from the subset of the dominant area type zones
       fuel_to_area = Hash.new { 0.0 }
       zones_grouped_by_fuel = dom_occ_zns.group_by { |z| z['fuel'] }
-      zones_grouped_by_fuel.each do |fuel, zns|
-        zns.each do |zn|
+      zones_grouped_by_fuel.each do |fuel, zns_by_fuel|
+        zns_by_fuel.each do |zn|
           fuel_to_area[fuel] += zn['area']
         end
       end
@@ -478,13 +477,13 @@ class Standard
       # If they are, leave the group standing alone.
       # If they are not, add the zones in that group
       # back to the dominant occupancy type group.
-      zones_grouped_by_fuel.each do |fuel_type, zns|
+      zones_grouped_by_fuel.each do |fuel_type, zns_by_fuel|
         # Skip the dominant occupancy type
         next if fuel_type == dom_fuel
 
         # Add up the floor area of the group
         area_m2 = 0
-        zns.each do |zn|
+        zns_by_fuel.each do |zn|
           area_m2 += zn['area']
         end
         area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
@@ -494,12 +493,12 @@ class Standard
           group = {}
           group['occ'] = occ_type
           group['fuel'] = fuel_type
-          group['zones'] = zns
+          group['zones'] = zns_by_fuel
           occ_and_fuel_groups << group
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with an occupancy type of #{occ_type} and fuel type of #{fuel_type} is bigger than the minimum exception area of #{exception_min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
           # Otherwise, add the zones back to the dominant group.
         else
-          dom_fuel_group['zones'] += zns
+          dom_fuel_group['zones'] += zns_by_fuel
         end
       end
       # Add the dominant occupancy group to the list
@@ -4179,7 +4178,7 @@ class Standard
       next if hash[:part_of_floor_area].empty?
 
       # only count as below grade if ground wall area is greater than ext wall area and story below is also below grade
-      if (above_grade == 0) && (hash[:ground_wall_area] > hash[:ext_wall_area])
+      if above_grade.zero? && (hash[:ground_wall_area] > hash[:ext_wall_area])
         below_grade += 1 * hash[:multipliers].min
       else
         above_grade += 1 * hash[:multipliers].min

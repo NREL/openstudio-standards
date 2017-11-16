@@ -374,7 +374,7 @@ class Standard
     # Calculate and report the total area for debugging/testing
     floor_area_served_m2 = air_loop_hvac_floor_area_served(air_loop_hvac)
 
-    if floor_area_served_m2 == 0
+    if floor_area_served_m2.zero?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "AirLoopHVAC #{air_loop_hvac.name} serves zero floor area. Check that it has thermal zones attached to it, and that they have non-zero floor area'.")
       return allowable_fan_bhp
     end

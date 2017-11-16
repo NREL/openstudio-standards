@@ -1573,10 +1573,10 @@ class Standard
     # If looking for only spaces adjacent on the same floor.
     if same_floor == true
       raise "Cannot get adjacent spaces of space #{space.name} since space not set to BuildingStory" if space.buildingStory.empty?
-      spaces.each do |space|
+      spaces.each do |other_space|
         raise "One or more adjecent spaces to space #{space.name} is not assigned to a BuildingStory. Ensure all spaces are assigned." if space.buildingStory.empty?
-        if space.buildingStory.get == space.buildingStory.get
-          same_floor_spaces << space
+        if other_space.buildingStory.get == space.buildingStory.get
+          same_floor_spaces << other_space
         end
       end
       spaces = same_floor_spaces

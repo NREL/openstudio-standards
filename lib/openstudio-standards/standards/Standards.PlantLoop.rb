@@ -1325,8 +1325,8 @@ class Standard
           end
 
         when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
-          # To avoid extraneous debug messages
-        end
+        # To avoid extraneous debug messages
+      end
     end
 
     # @Todo: decide how to handle primary and secondary stuff

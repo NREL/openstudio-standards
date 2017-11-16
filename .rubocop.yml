@@ -10,6 +10,7 @@ AllCops:
     - 'test/**/*'
     - 'lib/openstudio-standards/hvac_sizing/**/*'
     - 'lib/openstudio-standards/btap/**/*'
+    - 'lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb'
 
 # ==================== Linters ====================
 
@@ -26,12 +27,18 @@ Lint/UselessAssignment:
 Lint/UnusedMethodArgument:
   Enabled: false  
   
-# Allow unused blow arguments.
+# Allow unused block arguments.
 # The ruby _arg convention will not be understood
 # by many of the non-Rubyists maintaining the code.
 Lint/UnusedBlockArgument:
   Enabled: false  
-  
+
+# Allow empty when branches to give
+# a space to clearly document the
+# reason that nothing is happening.
+Lint/EmptyWhen:
+  Enabled: false
+
 # ==================== Metrics ====================
 Metrics/BlockNesting:
   Max: 4

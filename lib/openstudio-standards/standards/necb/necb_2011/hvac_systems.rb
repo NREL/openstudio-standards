@@ -1174,8 +1174,8 @@ class NECB2011
              BTAP::Resources::Schedules.create_annual_thermostat_setpoint_dual_setpoint(model, name, htg_sched, clg_sched)
            end
 
-      thermostatClone = ds.clone.to_ThermostatSetpointDualSetpoint.get
-      zone.setThermostatSetpointDualSetpoint(thermostatClone)
+      thermostat_clone = ds.clone.to_ThermostatSetpointDualSetpoint.get
+      zone.setThermostatSetpointDualSetpoint(thermostat_clone)
       BTAP.runner_register('Info', "ThermalZone #{zone.name} set to DualSetpoint Schedule NECB-#{array[0]}", runner)
     end
 
@@ -2296,25 +2296,25 @@ class NECB2011
 
         air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
         air_loop.setName('VAV with Reheat')
-        sizingSystem = air_loop.sizingSystem
-        sizingSystem.setCentralCoolingDesignSupplyAirTemperature(13.0)
-        sizingSystem.setCentralHeatingDesignSupplyAirTemperature(13.1)
-        sizingSystem.autosizeDesignOutdoorAirFlowRate
-        sizingSystem.setMinimumSystemAirFlowRatio(0.3)
-        sizingSystem.setPreheatDesignTemperature(7.0)
-        sizingSystem.setPreheatDesignHumidityRatio(0.008)
-        sizingSystem.setPrecoolDesignTemperature(13.0)
-        sizingSystem.setPrecoolDesignHumidityRatio(0.008)
-        sizingSystem.setSizingOption('NonCoincident')
-        sizingSystem.setAllOutdoorAirinCooling(false)
-        sizingSystem.setAllOutdoorAirinHeating(false)
-        sizingSystem.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
-        sizingSystem.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
-        sizingSystem.setCoolingDesignAirFlowMethod('DesignDay')
-        sizingSystem.setCoolingDesignAirFlowRate(0.0)
-        sizingSystem.setHeatingDesignAirFlowMethod('DesignDay')
-        sizingSystem.setHeatingDesignAirFlowRate(0.0)
-        sizingSystem.setSystemOutdoorAirMethod('ZoneSum')
+        sizing_system = air_loop.sizingSystem
+        sizing_system.setCentralCoolingDesignSupplyAirTemperature(13.0)
+        sizing_system.setCentralHeatingDesignSupplyAirTemperature(13.1)
+        sizing_system.autosizeDesignOutdoorAirFlowRate
+        sizing_system.setMinimumSystemAirFlowRatio(0.3)
+        sizing_system.setPreheatDesignTemperature(7.0)
+        sizing_system.setPreheatDesignHumidityRatio(0.008)
+        sizing_system.setPrecoolDesignTemperature(13.0)
+        sizing_system.setPrecoolDesignHumidityRatio(0.008)
+        sizing_system.setSizingOption('NonCoincident')
+        sizing_system.setAllOutdoorAirinCooling(false)
+        sizing_system.setAllOutdoorAirinHeating(false)
+        sizing_system.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
+        sizing_system.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
+        sizing_system.setCoolingDesignAirFlowMethod('DesignDay')
+        sizing_system.setCoolingDesignAirFlowRate(0.0)
+        sizing_system.setHeatingDesignAirFlowMethod('DesignDay')
+        sizing_system.setHeatingDesignAirFlowRate(0.0)
+        sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
         fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
 
@@ -2542,7 +2542,7 @@ class NECB2011
     return clg_tower
   end
 
-  def necb_spacetype_system_selection(model, heatingDesignLoad = nil, coolingDesignLoad = nil)
+  def necb_spacetype_system_selection(model, heating_design_load = nil, cooling_design_load = nil)
     spacezoning_data = Struct.new(
       :space, # the space object
       :space_name, # the space name
@@ -2592,8 +2592,8 @@ class NECB2011
 
       # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
       # Make sure we don't have sideeffects by changing the argument variables.
-      cooling_load = coolingDesignLoad
-      heating_load = heatingDesignLoad
+      cooling_load = cooling_design_load
+      heating_load = heating_design_load
       if space.spaceType.get.standardsSpaceType.get == '- undefined -'
         cooling_load = 0.0
         heating_load = 0.0
@@ -2622,7 +2622,7 @@ class NECB2011
           system = 4
 
         when 'Data Processing Area'
-          system = if coolingDesignLoad > 20 # KW...need a sizing run.
+          system = if cooling_design_load > 20 # KW...need a sizing run.
                      2
                    else
                      1
@@ -2888,8 +2888,8 @@ class NECB2011
                     OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name} ZN")
                     raise " Thermostat #{thermostat_name} not found for space name: #{space.name}"
                   else
-                    thermostatClone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
-                    thermal_zone.setThermostatSetpointDualSetpoint(thermostatClone)
+                    thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
+                    thermal_zone.setThermostatSetpointDualSetpoint(thermostat_clone)
                   end
                   # Add thermal to zone system number.
                   system_zone_array[system_number] << thermal_zone

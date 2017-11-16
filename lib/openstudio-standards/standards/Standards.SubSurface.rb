@@ -173,7 +173,7 @@ class Standard
       z_vals << vertex.z
     end
     z_vals = z_vals.sort
-    return false unless z_vals[0] = z_vals[1]
+    return false unless z_vals[0] == z_vals[1]
 
     # Check if the diagonals are equal length
     diag_a = verts[0] - verts[2]

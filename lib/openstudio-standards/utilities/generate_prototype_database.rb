@@ -41,9 +41,9 @@ Dir.glob('/home/osdev/openstudio-standards/openstudio-standards/data/geometry/ar
     end
     system_to_space_map = {}
 
-    eval <<DYNAMICClass
+    eval <<DYNAMICCLASS
 system_to_space_map =  PrototypeBuilding::#{building_name}.define_hvac_system_map("#{building_name}", "#{template}", nil)
-DYNAMICClass
+DYNAMICCLASS
 
     array << info = {}
 

@@ -3,24 +3,24 @@
 # separate files for each template in the templates folder.
 require 'json'
 
-def create_class_array ()
+def create_class_array
   prototype_buildings = [
-      'FullServiceRestaurant',
-      'Hospital',
-      'HighriseApartment',
-      'LargeHotel',
-      'LargeOffice',
-      'MediumOffice',
-      'MidriseApartment',
-      'Outpatient',
-      'PrimarySchool',
-      'QuickServiceRestaurant',
-      'RetailStandalone',
-      'SecondarySchool',
-      'SmallHotel',
-      'SmallOffice',
-      'RetailStripmall',
-      'Warehouse'
+    'FullServiceRestaurant',
+    'Hospital',
+    'HighriseApartment',
+    'LargeHotel',
+    'LargeOffice',
+    'MediumOffice',
+    'MidriseApartment',
+    'Outpatient',
+    'PrimarySchool',
+    'QuickServiceRestaurant',
+    'RetailStandalone',
+    'SecondarySchool',
+    'SmallHotel',
+    'SmallOffice',
+    'RetailStripmall',
+    'Warehouse'
   ]
 
   templates = ['NECB2011',
@@ -44,11 +44,9 @@ def create_class_array ()
 end
 "
 
-
     # Create Building Specific classes for each building.
     # Example class NECB2011Hospital
     prototype_buildings.each do |name|
-
       class_array << "
   # This class represents a prototypical #{template} #{name}.
   class #{template}#{name} < #{template}
@@ -153,23 +151,21 @@ end
   end
 end
 "
-
     end
   end
   return class_array
 end
 
-def create_meta_classes()
-  create_class_array().each {|item| eval(item)}
+def create_meta_classes
+  create_class_array.each { |item| eval(item) } # rubocop:disable Security/Eval
 end
 
-def save_meta_classes_to_file()
+def save_meta_classes_to_file
   filepath = "#{File.dirname(__FILE__)}/do_not_edit_metaclasses.rb"
   File.open(filepath, 'w') { |f| create_class_array.each { |item| f << item } }
 end
 
-def remove_meta_class_file()
+def remove_meta_class_file
   filepath = "#{File.dirname(__FILE__)}/do_not_edit_metaclasses.rb"
   FileUtils.rm(filepath)
 end
-

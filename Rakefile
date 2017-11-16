@@ -112,8 +112,8 @@ namespace :test do
       # By file
       File.open("#{Dir.pwd}/timing/test_by_file.html", 'w') do |html|
         html.puts '<table><tr><th>File Name</th><th>Time (min)</th></tr>'
-        files_to_times.each do |f, t|
-          s = (t / 60).round(1) # convert time from sec to min
+        files_to_times.each do |f, time_s|
+          s = (time_s / 60).round(1) # convert time from sec to min
           html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
         end
         html.puts '</table>'
@@ -122,8 +122,8 @@ namespace :test do
       # By name
       File.open("#{Dir.pwd}/timing/test_by_name.html", 'w') do |html|
         html.puts '<table><tr><th>Test Name</th><th>Time (min)</th></tr>'
-        tests_to_times.each do |f, t|
-          s = (t / 60).round(1) # convert time from sec to min
+        tests_to_times.each do |f, time_s|
+          s = (time_s / 60).round(1) # convert time from sec to min
           html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
         end
         html.puts '</table>'
@@ -156,7 +156,7 @@ namespace :data do
     begin
       require_relative 'lib/openstudio-standards.rb'
       puts 'DEVELOPERS OF OPENSTUDIO-STANDARDS: Requiring code directly instead of using installed gem.  This avoids having to run rake install every time you make a change.'
-    rescue
+    rescue LoadError
       require 'openstudio-standards'
       puts 'Using installed openstudio-standards gem.'
     end
@@ -170,7 +170,7 @@ YARD::Rake::YardocTask.new(:doc) do |t|
   require_relative 'lib/openstudio-standards/prototypes/common/prototype_metaprogramming.rb'
   # Generate temporary building type class files so that
   # the documentation shows these classes
-  save_meta_classes_to_file()
+  save_meta_classes_to_file
   t.stats_options = ['--list-undoc']
 end
 
@@ -185,7 +185,7 @@ task 'doc:show' => [:doc] do
     system "xdg-open #{link}"
   end
   # Remove the generated temporary files
-  remove_meta_class_file()
+  remove_meta_class_file
 end
 
 require 'rubocop/rake_task'

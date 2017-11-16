@@ -286,7 +286,7 @@ class Standard
   #  - Rated cooling coil fan power (function of cooling capacity)
   #  - Rated total lighting power (function of floor area)
   #  - Defrost power (function of cooling capacity)
-  # Coil fan power and total lighting power are given for both “old (2004, 2007, and 2010)‿ and “new (2013)‿ walk-ins.
+  # Coil fan power and total lighting power are given for both old (2004, 2007, and 2010) and new (2013) walk-ins.
   # It is assumed that only walk-in freezers have electric defrost while walk-in coolers use off-cycle defrost.
   #
   # @param walkin_type [String] the walkin type.  valid choices are:
@@ -317,9 +317,9 @@ class Standard
     defrost_control_type = props['defrost_control_type']
     defrost_type = props['defrost_type']
     defrost_power_mult = props['defrost_power_mult']
-    insulated_floor_U = props['insulated_floor_u']
-    insulated_surface_U = props['insulated_surface_u']
-    stocking_door_U = props['insulated_door_u']
+    insulated_floor_u = props['insulated_floor_u']
+    insulated_surface_u = props['insulated_surface_u']
+    stocking_door_u = props['insulated_door_u']
     reachin_door_area_mult = props['reachin_door_area_mult']
     fan_power_mult = props['fan_power_mult']
     lighting_power_mult = props['lighting_power_mult']
@@ -390,16 +390,16 @@ class Standard
     ref_walkin.setTemperatureTerminationDefrostFractiontoIce(0.7)
     ref_walkin.setRestockingSchedule(model_add_schedule(model, always_off_name))
     ref_walkin.setInsulatedFloorSurfaceArea(insulated_floor_area)
-    ref_walkin.setInsulatedFloorUValue(insulated_floor_U)
+    ref_walkin.setInsulatedFloorUValue(insulated_floor_u)
     ref_walkin.setZoneBoundaryThermalZone(thermal_zone)
     ref_walkin.setZoneBoundaryTotalInsulatedSurfaceAreaFacingZone(insulated_surface_area)
-    ref_walkin.setZoneBoundaryInsulatedSurfaceUValueFacingZone(insulated_surface_U)
+    ref_walkin.setZoneBoundaryInsulatedSurfaceUValueFacingZone(insulated_surface_u)
     ref_walkin.setZoneBoundaryAreaofGlassReachInDoorsFacingZone(reachin_door_area)
     ref_walkin.setZoneBoundaryHeightofGlassReachInDoorsFacingZone(1.83)
     ref_walkin.setZoneBoundaryGlassReachInDoorUValueFacingZone(2.27)
     ref_walkin.setZoneBoundaryAreaofStockingDoorsFacingZone(3.3)
     ref_walkin.setZoneBoundaryHeightofStockingDoorsFacingZone(2.1)
-    ref_walkin.setZoneBoundaryStockingDoorUValueFacingZone(stocking_door_U)
+    ref_walkin.setZoneBoundaryStockingDoorUValueFacingZone(stocking_door_u)
     ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(model_add_schedule(model, walkin_door_sch))
 
     insulated_floor_area_ft2 = OpenStudio.convert(insulated_floor_area, 'm^2', 'ft^2').get

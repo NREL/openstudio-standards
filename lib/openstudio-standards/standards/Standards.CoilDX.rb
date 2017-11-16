@@ -102,7 +102,7 @@ module CoilDX
                    'All Other'
                  else
                    'Electric Resistance or None'
-                     end
+                 end
     end
 
     return htg_type

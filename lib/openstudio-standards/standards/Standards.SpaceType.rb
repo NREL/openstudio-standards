@@ -214,8 +214,8 @@ class Standard
       space_type.lights.sort.each do |inst|
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
-          occSensLPDfactor = 1.0
-          definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occSensLPDfactor, 'W/ft^2', 'W/m^2').get)
+          occ_sens_lpd_factor = 1.0
+          definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occ_sens_lpd_factor, 'W/ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
         end
         unless lighting_per_person.zero?

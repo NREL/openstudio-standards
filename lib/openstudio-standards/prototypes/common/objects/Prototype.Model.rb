@@ -11,9 +11,6 @@ Standard.class_eval do
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
         OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at   are not available, the measure is disabled for this specific type.")
         return false
-        # elsif @@template == 'NECB 2011'
-        #  OpenStudio.logFree(OpenStudio::Error, 'Not available', "Reference model for #{building_type} at @@template #{@@template} is not available, the measure is disabled for this specific type.")
-        #  return false
       end
     end
     # optionally  determine the climate zone from the epw and stat files.
@@ -129,21 +126,21 @@ Standard.class_eval do
     # Do all spaces have Spacetypes?
     all_spaces_have_space_types = true
     # Do all spacetypes have StandardSpaceTypes
-    all_spaceTypes_have_standard_space_types = true
+    all_space_types_have_standard_space_types = true
     space_type_map = {}
     model.getSpaces.each do |space|
       if space.spaceType.empty?
         all_spaces_have_space_types = false
       else
         if space.spaceType.get.standardsSpaceType.empty?
-          all_spaceTypes_have_standard_space_types = false
+          all_space_types_have_standard_space_types = false
         else
           space_type_map[space.spaceType.get.standardsSpaceType.get.to_s] = [] if space_type_map[space.spaceType.get.standardsSpaceType.get.to_s].nil?
           space_type_map[space.spaceType.get.standardsSpaceType.get.to_s] << space.name.get
         end
       end
     end
-    if all_spaceTypes_have_standard_space_types && all_spaceTypes_have_standard_space_types
+    if all_spaces_have_space_types && all_space_types_have_standard_space_types
       return space_type_map
     end
     return nil

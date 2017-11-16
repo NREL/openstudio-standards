@@ -5627,7 +5627,7 @@ class Standard
                        model.getPlantLoopByName('Heat Pump Loop').get
                      else
                        model_add_hp_loop(model)
-                         end
+                     end
 
     return heat_pump_loop
   end
@@ -5886,9 +5886,9 @@ class Standard
 
     when 'PVAV PFP Boxes'
       chilled_water_loop = case cool_fuel
-      when 'DistrictCooling'
-        model_get_or_add_chilled_water_loop(model, cool_fuel)
-      end
+                           when 'DistrictCooling'
+                             model_get_or_add_chilled_water_loop(model, cool_fuel)
+                           end
 
       model_add_pvav_pfp_boxes(model,
                                sys_name = nil,
@@ -5913,11 +5913,11 @@ class Standard
                                chilled_water_loop)
 
     when 'Water Source Heat Pumps'
-      condenser_loop = case 'main_heat_fuel'
-      when 'NaturalGas'
-        model_get_or_add_ambient_water_loop(model)
-      else
-        model_get_or_add_heat_pump_loop(model)
+      condenser_loop = case main_heat_fuel
+                       when 'NaturalGas'
+                         model_get_or_add_ambient_water_loop(model)
+                       else
+                         model_get_or_add_heat_pump_loop(model)
                        end
 
       model_add_water_source_hp(model, condenser_loop,

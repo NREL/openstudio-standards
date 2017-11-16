@@ -203,7 +203,7 @@ Standard.class_eval do
 
   # A helper method to run a sizing run and pull any values calculated during
   # autosizing back into the model.
-  def runSpaceSizingRun(sizing_run_dir = "#{Dir.pwd}/SpaceSR")
+  def model_run_space_sizing_run(sizing_run_dir = "#{Dir.pwd}/SpaceSR")
     puts '*************Runing sizing space Run ***************************'
     # Make copy of model
     model = BTAP::FileIO.deep_copy(model, true)

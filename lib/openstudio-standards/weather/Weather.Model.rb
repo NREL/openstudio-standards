@@ -209,8 +209,10 @@ module BTAP
   module Environment
     require_relative 'Weather.stat_file'
 
+    # rubocop:disable Style/MutableConstant
+
     # Keeping data in hash for now.
-    WeatherData1 = [
+    WEATHER_DATA1 = [
       { file: 'CAN_BC_Abbotsford.711080_CWEC.epw', location_name: ' CAN-BC-Abbotsford', energy_plus_location_name: 'Abbotsford_BC_CAN', country: 'CAN', state_province_region: 'BC', city: 'Abbotsford', hdd18: 3134, cdd18: 33, latitude: 49.03, longitude: -122.37, elevation: 58, deltadb: 14.3, a90_1_2004_climate_zone: '5C', boiler_fueltype: 'NaturalGas', baseboard_type: 'Hot Water', mau_type: true, mau_heating_coil_type: 'Hot Water', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Gas', heating_coil_type_sys4: 'Gas', heating_coil_type_sys6: 'Hot Water', fan_type: 'var_speed_drive', swh_fueltype: 'NaturalGas' },
       { file: 'CAN_PQ_Bagotville.717270_CWEC.epw', location_name: ' CAN-PQ-Bagotville', energy_plus_location_name: 'Bagotville_PQ_CAN', country: 'CAN', state_province_region: 'PQ', city: 'Bagotville', hdd18: 5781, cdd18: 49, latitude: 48.33, longitude: -71, elevation: 159, deltadb: 32.4, a90_1_2004_climate_zone: 7, boiler_fueltype: 'Electricity', baseboard_type: 'Electric', mau_type: true, mau_heating_coil_type: 'Electric', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' },
       { file: 'CAN_PQ_Baie.Comeau.711870_CWEC.epw', location_name: ' CAN-PQ-Baie Comeau', energy_plus_location_name: 'Baie Comeau_PQ_CAN', country: 'CAN', state_province_region: 'PQ', city: 'Baie Comeau', hdd18: 5889, cdd18: 3, latitude: 49.13, longitude: -68.2, elevation: 22, deltadb: 29.8, a90_1_2004_climate_zone: 7, boiler_fueltype: 'Electricity', baseboard_type: 'Electric', mau_type: true, mau_heating_coil_type: 'Electric', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' },
@@ -293,16 +295,18 @@ module BTAP
       { file: 'CAN_NT_Yellowknife.719360_CWEC.epw', location_name: ' CAN-NT-Yellowknife', energy_plus_location_name: 'Yellowknife_NT_CAN', country: 'CAN', state_province_region: 'NT', city: 'Yellowknife', hdd18: 8306, cdd18: 33, latitude: 62.47, longitude: -114.45, elevation: 206, deltadb: 42.1, a90_1_2004_climate_zone: 8, boiler_fueltype: 'FuelOil#2', baseboard_type: 'Hot Water', mau_type: true, mau_heating_coil_type: 'Hot Water', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' }
     ]
 
+    # rubocop:enable Style/MutableConstant
+
     # this method is used to populate user interfaces if needed from the hash above.
     def self.get_canadian_weather_file_names
       canadian_file_names = []
-      BTAP::Environment::WeatherData1.each { |hash| canadian_file_names << hash[:file] }
+      BTAP::Environment::WEATHER_DATA1.each { |hash| canadian_file_names << hash[:file] }
       return canadian_file_names
     end
 
     # this method returns the default system fuel types by epw_file.
     def self.get_canadian_system_defaults_by_weatherfile_name(epw_file)
-      if (data = BTAP::Environment::WeatherData1.find { |d| d[:file] == epw_file.strip })
+      if (data = BTAP::Environment::WEATHER_DATA1.find { |d| d[:file] == epw_file.strip })
         return data[:boiler_fueltype], data[:baseboard_type], data[:mau_type], data[:mau_heating_coil_type], data[:mau_cooling_type], data[:chiller_type], data[:heating_coil_type_sys_3], data[:heating_coil_type_sys4], data[:heating_coil_type_sys6], data[:fan_type], data[:swh_fueltype]
       else
         puts 'Not found!'

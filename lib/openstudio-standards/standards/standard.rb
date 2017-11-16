@@ -16,11 +16,11 @@ class Standard
 
   # A list of available Standards subclasses that can
   # be created using the Standard.build() method.
-  StandardsList = {}
+  STANDARDS_LIST = {} # rubocop:disable Style/MutableConstant
 
-  # Add the standard to the StandardsList.
+  # Add the standard to the STANDARDS_LIST.
   def self.register_standard(name)
-    StandardsList[name] = self
+    STANDARDS_LIST[name] = self
   end
 
   # Create an instance of a Standard by passing it's name
@@ -31,10 +31,10 @@ class Standard
   # @example Create a new Standard object by name
   #   standard = Standard.build('NECB 2011')
   def self.build(name)
-    if StandardsList[name].nil?
-      raise "ERROR: Did not find a class called '#{name}' to create in #{StandardsList}"
+    if STANDARDS_LIST[name].nil?
+      raise "ERROR: Did not find a class called '#{name}' to create in #{STANDARDS_LIST}"
     end
-    return StandardsList[name].new
+    return STANDARDS_LIST[name].new
   end
 
   # set up template class variable.
@@ -95,7 +95,7 @@ class Standard
           temp = f.read
         end
       end
-      file_hash = JSON.load(temp)
+      file_hash = JSON.parse(temp)
       @standards_data = @standards_data.merge(file_hash)
     end
 

@@ -114,11 +114,11 @@ Standard.class_eval do
       return false
     end
 
-    total_site_energy_kBtu = OpenStudio.convert(sql.totalSiteEnergy.get, 'GJ', 'kBtu').get
+    total_site_energy_kbtu = OpenStudio.convert(sql.totalSiteEnergy.get, 'GJ', 'kBtu').get
 
     floor_area_ft2 = OpenStudio.convert(building.floorArea, 'm^2', 'ft^2').get
 
-    site_eui_kbtu_per_ft2 = total_site_energy_kBtu / floor_area_ft2
+    site_eui_kbtu_per_ft2 = total_site_energy_kbtu / floor_area_ft2
 
     return site_eui_kbtu_per_ft2
   end

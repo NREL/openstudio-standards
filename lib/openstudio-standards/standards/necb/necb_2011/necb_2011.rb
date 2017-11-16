@@ -1,6 +1,6 @@
 # This class holds methods that apply NECB 2011 rules.
 class NECB2011 < Standard
-  @@template = 'NECB 2011'
+  @@template = 'NECB 2011' # rubocop:disable Style/ClassVars
   register_standard @@template
   attr_reader :template
 
@@ -17,7 +17,7 @@ class NECB2011 < Standard
       { 'standard_space_type_name ' => 'Storage area',                'max_floor_area' => 100.0 },
       { 'standard_space_type_name ' => 'Storage area - refrigerated', 'max_floor_area' => 100.0 },
       { 'standard_space_type_name ' => 'Hospital - medical supply',   'max_floor_area' => 100.0 },
-      { 'standard_space_type_name ' => 'Office - enclosed',           'max_floor_area' =>  25.0 }
+      { 'standard_space_type_name ' => 'Office - enclosed',           'max_floor_area' => 25.0 }
     ]
 
     @standards_data['climate_zone_info'] = [
@@ -35,7 +35,7 @@ class NECB2011 < Standard
     @standards_data['heatingSizingFactor'] = 1.3
 
     @standards_data['thermal_transmitance'] = {}
-    #Surfaces
+    # Surfaces
     @standards_data['thermal_transmitance']['wall_W_per_m2_K']                = '(hdd < 3000) ? 0.315 : (hdd < 4000) ? 0.278 : (hdd < 5000) ? 0.247 : (hdd < 6000) ? 0.210 :(hdd < 7000) ? 0.210 : 0.183'
     @standards_data['thermal_transmitance']['roof_W_per_m2_K']                = '(hdd < 3000) ? 0.227 : (hdd < 4000) ? 0.183 : (hdd < 5000) ? 0.183 : (hdd < 6000) ? 0.162 :(hdd < 7000) ? 0.162 : 0.142'
     @standards_data['thermal_transmitance']['floor_W_per_m2_K']               = '(hdd < 3000) ? 0.227 : (hdd < 4000) ? 0.183 : (hdd < 5000) ? 0.183 : (hdd < 6000) ? 0.162 :(hdd < 7000) ? 0.162 : 0.142'
@@ -44,10 +44,9 @@ class NECB2011 < Standard
     @standards_data['thermal_transmitance']['ground_roof_W_per_m2_K']         = '(hdd < 3000) ? 0.568 : (hdd < 4000) ? 0.379 : (hdd < 7000) ? 0.284 : 0.210'
     @standards_data['thermal_transmitance']['ground_floor_W_per_m2_K']        = '(hdd < 7000) ? 0.757 : 0.379'
     @standards_data['thermal_transmitance']['ground_floor_perimeter_depth_m'] = '(hdd < 7000) ? 1.2 : 999999999.9'
-    #Subsurfaces
+    # Subsurfaces
     @standards_data['thermal_transmitance']['window_W_per_m2_K']              = '(hdd < 3000) ? 2.400 : (hdd < 7000) ? 2.200 : 1.600'
     @standards_data['thermal_transmitance']['door_W_per_m2_K']                = '(hdd < 3000) ? 2.400 : (hdd < 7000) ? 2.200 : 1.600'
-
 
     @standards_data['fan_variable_volume_pressure_rise'] = 1458.33
     @standards_data['fan_constant_volume_pressure_rise'] = 640.00
@@ -333,7 +332,6 @@ class NECB2011 < Standard
         space = model.getSpaceByName(space_name)
         next if space.empty?
         space = space.get
-        occsensSpaceTypeUsed = false
 
         # Check if space type for this space matches NECB 2011 specific space type
         # for occupancy sensor that is area dependent. Note: space.floorArea in m2.

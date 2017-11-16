@@ -79,7 +79,7 @@ class Standard
                              4.46
                            else # Over 20,000 cfm
                              4.09
-                       end
+                           end
 
     return pressure_rise_in_h2o
   end
