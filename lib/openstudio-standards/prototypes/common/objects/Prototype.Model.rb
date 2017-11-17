@@ -121,16 +121,18 @@ Standard.class_eval do
     return true
   end
 
+  # Read the space type to space map from the model
+  # instead of relying on an externally-defined mapping.
   def get_space_type_maps_from_model(model)
-    # check to see if there are s
     # Do all spaces have Spacetypes?
-    all_spaces_have_space_types = true
+    # @todo is this necessary?
+    # all_spaces_have_space_types = true
     # Do all spacetypes have StandardSpaceTypes
     all_space_types_have_standard_space_types = true
     space_type_map = {}
     model.getSpaces.each do |space|
       if space.spaceType.empty?
-        all_spaces_have_space_types = false
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space #{space.name} does not have a Space Type assigned.")
       else
         if space.spaceType.get.standardsSpaceType.empty?
           all_space_types_have_standard_space_types = false
@@ -140,7 +142,7 @@ Standard.class_eval do
         end
       end
     end
-    if all_spaces_have_space_types && all_space_types_have_standard_space_types
+    if all_space_types_have_standard_space_types
       return space_type_map
     end
     return nil
