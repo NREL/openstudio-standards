@@ -39,7 +39,7 @@ class Hash
             end
           end
           seed[key] = seed[key].sort_by {|hsh| [hsh['template'], hsh['building_type'], hsh['climate_zone_set'], hsh['space_type'], hsh['exterior_walls'], hsh['exterior_roofs'], hsh['exterior_floors']]}
-          # Replace 'zzzz' back to nil        
+          # Replace 'zzzz' back to nil
           seed[key].each do |item|
             item.keys.each do |key2|
               if item[key2] == 'zzzz'
@@ -109,7 +109,7 @@ def download_google_spreadsheet
   #   Authorized client instance
   # @param [Google::APIClient::Schema::Drive::V2::File]
   #   Drive File instance
-  # @return 
+  # @return
   #   File's content if successful, nil otherwise
   def download_xlsx_spreadsheet(client, google_spreadsheet, path)
     file_name = google_spreadsheet.title
@@ -158,8 +158,7 @@ def download_google_spreadsheet
 
 end
 
-def export_spreadsheet_to_json()
-  os_standards = {}
+def export_spreadsheet_to_json
 
   # Path to the xlsx file
   xlsx_path = "#{File.dirname(__FILE__)}/OpenStudio_Standards.xlsx"
@@ -208,12 +207,9 @@ def export_spreadsheet_to_json()
   bool_cols << 'data_center'
 
   # Open workbook
-  puts "parsing workbook....."
   workbook = RubyXL::Parser.parse(xlsx_path)
 
   # Loop through and export each tab to a separate JSON file
-  standards_files = []
-  puts "iterating through each worksheet."
   workbook.worksheets.each do |worksheet|
     sheet_name = worksheet.sheet_name.snake_case
 
@@ -357,79 +353,19 @@ def export_spreadsheet_to_json()
     # Report how many objects were found
     puts "--found #{objs.size} rows"
 
-    # Save this hash 
+    # Save this hash
     standards_data[sheet_name] = objs
 
     # Sort the standard data so it can be diffed easily
     sorted_standards_data = standards_data.sort_by_key_updated(true) {|x, y| x.to_s <=> y.to_s}
 
     # Write the hash to a JSON file
-    json_file = "#{File.dirname(__FILE__)}/OpenStudio_Standards_#{sheet_name}.json"
-    standards_files << json_file
-    File.open(json_file, 'w:UTF-8') do |file|
+    File.open("#{File.dirname(__FILE__)}/OpenStudio_Standards_#{sheet_name}.json", 'w:UTF-8') do |file|
       file << JSON::pretty_generate(sorted_standards_data)
     end
     puts "Successfully generated OpenStudio_Standards_#{sheet_name}.json"
+
+
   end
-  #create vintages and common json.. this is only a start and will need to be reworked.
-
-  top_dir = File.expand_path(File.dirname(__FILE__))
-  standards_data_dir = "/"
-
-  standards_files.sort.each do |standards_file|
-    temp = ""
-    begin
-      temp = load_resource_relative("../../../data/standards/#{standards_file}", 'r:UTF-8')
-    rescue NoMethodError
-      File.open("#{standards_data_dir}/#{standards_file}", 'r:UTF-8') do |f|
-        temp = f.read
-      end
-    end
-    file_hash = JSON.load(temp)
-    os_standards = os_standards.merge(file_hash)
-  end
-  # Check that standards data was loaded
-  if os_standards.keys.size.zero?
-    OpenStudio.logFree(OpenStudio::Error, 'OpenStudio Standards JSON data was not loaded correctly.')
-  end
-   raise() if os_standards.nil?
-  ['NECB 2011', '90.1-2004','90.1-2007','90.1-2010','90.1-2013', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'].each_with_index do |template, i|
-    @standards_data ={}
-    @standards_data["space_types"] = os_standards['space_types'].select {|s| s['template'] == template}
-    @standards_data["prototype_inputs"] = os_standards['prototype_inputs'].select {|s| s['template'] == template}
-    @standards_data['construction_sets'] = os_standards['construction_sets'].select {|s| s['template'] == template}
-    @standards_data['heat_pumps'] = os_standards['heat_pumps'].select {|s| s['template'] == template}
-    @standards_data['heat_pumps_heating'] = os_standards['heat_pumps_heating'].select {|s| s['template'] == template}
-    @standards_data['boilers'] = os_standards['boilers'].select {|s| s['template'] == template}
-    @standards_data['chillers'] = os_standards['chillers'].select {|s| s['template'] == template}
-    @standards_data['economizers'] = os_standards['boilers'].select {|s| s['template'] == template}
-    @standards_data['water_heaters'] = os_standards['boilers'].select {|s| s['template'] == template}
-    @standards_data['heat_pumps'] = os_standards['heat_pumps'].select {|s| s['template'] == template}
-    @standards_data['motors'] = os_standards['motors'].select {|s| s['template'] == template}
-    @standards_data['unitary_acs'] = os_standards['unitary_acs'].select {|s| s['template'] == template}
-    @standards_data['motors'] = os_standards['motors'].select {|s| s['template'] == template}
-    @standards_data['schedules'] = os_standards['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)} if template == 'NECB 2011'
-
-    puts "creating data for template #{template}.json"
-
-
-
-
-    File.write("#{File.dirname(__FILE__)}/#{template}.json", JSON.pretty_generate(@standards_data))
-  end
-
-  #adding common items here for now. Not complete!
-  @common = {}
-  @common['constructions'] = os_standards['constructions']
-  @common['materials'] = os_standards['materials']
-  @common['curve_biquadratics'] = os_standards['curve_biquadratics']
-  @common['curve_quadratics'] = os_standards['curve_quadratics']
-  @common['curve_bicubics'] = os_standards['curve_bicubics']
-  @common['curve_cubics'] = os_standards['curve_cubics']
-  @common['schedules'] = os_standards['curve_cubics']  #this will be overwritten by NECB above when merged later...messy.
-  puts "creating data for template common.json"
-  File.write("#{File.dirname(__FILE__)}/common.json", JSON.pretty_generate(@common))
 
 end
-
-
