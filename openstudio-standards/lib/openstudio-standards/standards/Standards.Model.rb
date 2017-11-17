@@ -4019,6 +4019,7 @@ class OpenStudio::Model::Model
     # Outdoor VRF units (not in zone, not in loops)
     getAirConditionerVariableRefrigerantFlows.each(&:remove)
 
+    # Looks like the only way this would fail is with an exception
     return true
   end
 

@@ -57,9 +57,6 @@ class OpenStudio::Model::Model
 
     case template
     when 'NECB 2011'
-
-
-
       debug_incremental_changes = false
       load_building_type_methods(building_type, template, climate_zone)
       osm_file_increment += 1
@@ -1094,7 +1091,6 @@ class OpenStudio::Model::Model
                   zones_applied << thermal_zone
                   zone_exhaust_fans.merge!(zone_exhaust_hash)
                 end
-
               end
 
               if first_adjacent_makeup_source.nil?

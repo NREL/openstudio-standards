@@ -225,8 +225,15 @@ class OpenStudio::Model::Model
       dist_clg.setName('Purchased Cooling')
       dist_clg.autosizeNominalCapacity
       chilled_water_loop.addSupplyBranchForComponent(dist_clg)
-    # Chiller
+    elsif cooling_fuel == 'HeatPump'
+      water_to_water_hp = OpenStudio::Model::HeatPumpWaterToWaterEquationFitCooling.new(self)
+      chilled_water_loop.addSupplyBranchForComponent(water_to_water_hp)
+
+      if condenser_water_loop
+        condenser_water_loop.addDemandBranchForComponent(water_to_water_hp)
+      end
     else
+      # Chiller
 
       # Make the correct type of chiller based these properties
       num_chillers.times do |i|
@@ -638,38 +645,58 @@ class OpenStudio::Model::Model
   # @todo handle ground and heat pump with this; make heating/cooling source options (boiler, fluid cooler, district)
   def add_district_ambient_loop
 
-    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding district ambient loop.")  
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding district ambient loop.")
 
-    # Ambient loop
-    loop = OpenStudio::Model::PlantLoop.new(self)
-    loop.setName('Ambient Loop')
-    loop.setMaximumLoopTemperature(80)
-    loop.setMinimumLoopTemperature(5)
-
-    # Ambient loop controls
+    amb_temp = 65 # degF
     amb_high_temp_f = 90 # Supplemental cooling below 65F
     amb_low_temp_f = 41 # Supplemental heat below 41F
-    amb_temp_sizing_f = 102.2 #CW sized to deliver 102.2F
-    amb_delta_t_r = 19.8 #19.8F delta-T
+    # Leave the sizing values the same for the heating loop -- even though we won't hit these.
+    amb_temp_sizing_f = amb_temp # Sized to deliver only max temp
+    amb_delta_t_r = 19.8 # 19.8F delta-T
 
+    # Ambient loop controls
+    # amb_high_temp_f = 90 # Supplemental cooling below 65F
+    # amb_low_temp_f = 41 # Supplemental heat below 41F
+    # amb_temp_sizing_f = 102.2 #CW sized to deliver 102.2F
+    # amb_delta_t_r = 19.8 #19.8F delta-T
+
+    amb_temp_c = OpenStudio.convert(amb_temp,'F','C').get
     amb_high_temp_c = OpenStudio.convert(amb_high_temp_f,'F','C').get
     amb_low_temp_c = OpenStudio.convert(amb_low_temp_f,'F','C').get
     amb_temp_sizing_c = OpenStudio.convert(amb_temp_sizing_f,'F','C').get
     amb_delta_t_k = OpenStudio.convert(amb_delta_t_r,'R','K').get
 
-    amb_high_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-    amb_high_temp_sch.setName("Ambient Loop High Temp - #{amb_high_temp_f}F")
-    amb_high_temp_sch.defaultDaySchedule.setName("Ambient Loop High Temp - #{amb_high_temp_f}F Default")
-    amb_high_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),amb_high_temp_c)
+    # Ambient loop
+    loop = OpenStudio::Model::PlantLoop.new(self)
+    loop.setName('Ambient Loop')
+    loop.setMaximumLoopTemperature(amb_high_temp_c)
+    loop.setMinimumLoopTemperature(amb_low_temp_c)
 
-    amb_low_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
-    amb_low_temp_sch.setName("Ambient Loop Low Temp - #{amb_low_temp_f}F")
-    amb_low_temp_sch.defaultDaySchedule.setName("Ambient Loop Low Temp - #{amb_low_temp_f}F Default")
-    amb_low_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),amb_low_temp_c)
+    amb_loop_schedule = OpenStudio::Model::ScheduleRuleset.new(self)
+    amb_loop_schedule.setName("Ambient Loop Temp - #{amb_temp}F")
+    amb_loop_schedule.defaultDaySchedule.setName("Ambient Loop Temp - #{amb_temp}F Default")
+    amb_loop_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), amb_temp_c)
 
-    amb_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(self)
-    amb_stpt_manager.setHighSetpointSchedule(amb_high_temp_sch)
-    amb_stpt_manager.setLowSetpointSchedule(amb_low_temp_sch)
+
+    # amb_high_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+    # amb_high_temp_sch.setName("Ambient Loop High Temp - #{amb_high_temp_f}F")
+    # amb_high_temp_sch.defaultDaySchedule.setName("Ambient Loop High Temp - #{amb_high_temp_f}F Default")
+    # amb_high_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),amb_high_temp_c)
+    #
+    # amb_low_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
+    # amb_low_temp_sch.setName("Ambient Loop Low Temp - #{amb_low_temp_f}F")
+    # amb_low_temp_sch.defaultDaySchedule.setName("Ambient Loop Low Temp - #{amb_low_temp_f}F Default")
+    # amb_low_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0,24,0,0),amb_low_temp_c)
+
+    # amb_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(self)
+    # amb_stpt_manager.setName("Ambient Loop Setpoint Manager")
+    # amb_stpt_manager.setHighSetpointSchedule(amb_high_temp_sch)
+    # amb_stpt_manager.setLowSetpointSchedule(amb_low_temp_sch)
+    # amb_stpt_manager.addToNode(loop.supplyOutletNode)
+
+    amb_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self, amb_loop_schedule)
+    amb_stpt_manager.setName('Ambient Loop Setpoint Manager - Scheduled')
+    amb_stpt_manager.setControlVariable("Temperature")
     amb_stpt_manager.addToNode(loop.supplyOutletNode)
 
     sizing_plant = loop.sizingPlant
@@ -717,7 +744,7 @@ class OpenStudio::Model::Model
     demand_outlet_pipe.setName("#{loop.name} Demand Outlet")
     demand_outlet_pipe.addToNode(loop.demandOutletNode)
 
-    return loop  
+    return loop
 
   end
 
@@ -5320,9 +5347,7 @@ class OpenStudio::Model::Model
   # no ventilation will be supplied through the unit, with the expectation that it will be provided
   # by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACWaterToAirHeatPump>] an array of heat pumps
-  def add_water_source_hp(condenser_loop,
-                               thermal_zones,
-                               ventilation=true)
+  def add_water_source_hp(condenser_loop, thermal_zones, ventilation=true)
   
     OpenStudio::logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding zone water-to-air heat pump.")
 
@@ -5896,7 +5921,7 @@ class OpenStudio::Model::Model
   # Electricity, DistrictCooling, and HeatPump.
   # @param air_cooled [Bool] if true, the chiller will be air-cooled.
   #   if false, it will be water-cooled.
-  def get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=true)
+  def get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=true, ambient_loop)
     # Retrieve the existing chilled water loop
     # or add a new one if necessary.
     chilled_water_loop = nil
@@ -5914,13 +5939,13 @@ class OpenStudio::Model::Model
                                           condenser_water_loop = nil,
                                           building_type = nil)
       when 'HeatPump'
-        condenser_water_loop = get_or_add_ambient_water_loop
+        condenser_water_loop = ambient_loop
         chilled_water_loop = add_chw_loop(template,
                                           'const_pri_var_sec',
                                           'WaterCooled',
                                           chiller_condenser_type = nil,
                                           'Rotary Screw',
-                                          cooling_fuel = nil,
+                                          cooling_fuel = cool_fuel,
                                           condenser_water_loop,
                                           building_type = nil)
       when 'Electricity'
@@ -5965,15 +5990,14 @@ class OpenStudio::Model::Model
   #
   # @param heat_fuel [String] the heating fuel.
   # Valid choices are NaturalGas, Electricity, DistrictHeating
-  def get_or_add_hot_water_loop(heat_fuel)
+  def get_or_add_hot_water_loop(heat_fuel, ambient_loop=nil)
 
     # Retrieve the existing hot water loop
     # or add a new one if necessary.
-    hot_water_loop = nil
     hot_water_loop = if getPlantLoopByName('Hot Water Loop').is_initialized
                        getPlantLoopByName('Hot Water Loop').get
                      else
-                       add_hw_loop(heat_fuel)
+                       add_hw_loop(heat_fuel, nil, ambient_loop)
                      end
 
     return hot_water_loop
@@ -5986,7 +6010,6 @@ class OpenStudio::Model::Model
 
     # Retrieve the existing hot water loop
     # or add a new one if necessary.
-    ambient_water_loop = nil
     ambient_water_loop = if getPlantLoopByName('Ambient Loop').is_initialized
                            getPlantLoopByName('Ambient Loop').get
                          else
@@ -6030,6 +6053,44 @@ class OpenStudio::Model::Model
     return heat_pump_loop
   end
 
+
+  # Add Energy Transfer Station
+  # Used for Ambient Loop connections.
+  def add_energy_transfer_station(primary_system, zones)
+    return true if zones.empty?
+
+    if primary_system.downcase == 'water-to-air heat pump'
+      condenser_loop = get_or_add_ambient_water_loop
+
+      add_water_source_hp(condenser_loop, zones, ventilation=false)
+    elsif primary_system.downcase == 'water-to-water heat pump'
+      ambient_loop = get_or_add_ambient_water_loop
+      hot_water_loop = get_or_add_hot_water_loop('HeatPump', ambient_loop)
+      chilled_water_loop = get_or_add_chilled_water_loop('90.1-2010', 'HeatPump', true, ambient_loop)
+
+      add_vav_reheat('90.1-2010',
+                     sys_name=nil,
+                     hot_water_loop,
+                     chilled_water_loop,
+                     zones,
+                     hvac_op_sch=nil,
+                     oa_damper_sch=nil,
+                     vav_fan_efficiency=0.62,
+                     vav_fan_motor_efficiency=0.9,
+                     vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                     return_plenum=nil,
+                     reheat_type='Water')
+
+      # add water-to-water heat pumps in place of the boilers and chillers
+      # add_water_source_hp(condenser_loop, zones, ventilation=false)
+    else
+      raise "Unknown primary system '#{primary_system}' for #{__method__}"
+    end
+
+  end
+
+
+
   # Add the specified system type to the
   # specified zones based on the specified template.
   # For multi-zone system types, add one system per story.
@@ -6045,419 +6106,425 @@ class OpenStudio::Model::Model
     return true if zones.empty?
 
     case system_type
-    when 'PTAC'
-      case main_heat_fuel
-      when 'NaturalGas', 'DistrictHeating'
-        heating_type = 'Water'
+      when 'PTAC'
+        case main_heat_fuel
+          when 'NaturalGas', 'DistrictHeating'
+            heating_type = 'Water'
+            hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
+          when 'Electricity'
+            heating_type = main_heat_fuel
+            hot_water_loop = nil
+          when nil
+            heating_type = zone_heat_fuel
+            hot_water_loop = nil
+        end
+
+        add_ptac(template,
+                 sys_name=nil,
+                 hot_water_loop,
+                 zones,
+                 fan_type='ConstantVolume',
+                 heating_type,
+                 cooling_type='Single Speed DX AC')
+
+      when 'PTHP'
+        add_pthp(template,
+                 sys_name=nil,
+                 zones,
+                 fan_type='ConstantVolume')
+
+      when 'PSZ-AC'
+        case main_heat_fuel
+          when 'NaturalGas'
+            heating_type = main_heat_fuel
+            supplemental_heating_type = 'Electricity'
+            hot_water_loop = nil
+          when 'DistrictHeating'
+            heating_type = 'Water'
+            supplemental_heating_type = 'Electricity'
+            hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
+          when nil
+            heating_type = nil
+            supplemental_heating_type = nil
+            hot_water_loop = nil
+          when 'Electricity'
+            heating_type = main_heat_fuel
+            supplemental_heating_type = 'Electricity'
+        end
+
+        case cool_fuel
+          when 'DistrictCooling'
+            chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel)
+            cooling_type='Water'
+          else
+            chilled_water_loop = nil
+            cooling_type='Single Speed DX AC'
+        end
+
+        add_psz_ac(template,
+                   sys_name = nil,
+                   hot_water_loop,
+                   chilled_water_loop,
+                   zones,
+                   hvac_op_sch=nil,
+                   oa_damper_sch=nil,
+                   fan_location='DrawThrough',
+                   fan_type='ConstantVolume',
+                   heating_type,
+                   supplemental_heating_type,
+                   cooling_type)
+
+      when 'PSZ-HP'
+        add_psz_ac(template,
+                   sys_name = 'PSZ-HP',
+                   hot_water_loop=nil,
+                   chilled_water_loop=nil,
+                   zones,
+                   hvac_op_sch=nil,
+                   oa_damper_sch=nil,
+                   fan_location='DrawThrough',
+                   fan_type='ConstantVolume',
+                   heating_type='Single Speed Heat Pump',
+                   supplemental_heating_type='Electricity',
+                   cooling_type='Single Speed Heat Pump')
+
+      when 'Fan Coil'
+        case main_heat_fuel
+          when 'NaturalGas', 'DistrictHeating', 'Electricity'
+            hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
+          when nil
+            hot_water_loop = nil
+        end
+
+        case cool_fuel
+          when 'Electricity', 'DistrictCooling'
+            chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=true)
+          when nil
+            chilled_water_loop = nil
+        end
+
+        add_four_pipe_fan_coil(template,
+                               hot_water_loop,
+                               chilled_water_loop,
+                               zones)
+
+      when 'Baseboards'
+        case main_heat_fuel
+          when 'NaturalGas', 'DistrictHeating'
+            hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
+          when 'Electricity'
+            hot_water_loop = nil
+          when nil
+            # TODO Error, Baseboard systems must have a main_heat_fuel
+            # return ??
+        end
+
+        add_baseboard(template,
+                      hot_water_loop,
+                      zones)
+
+      when 'Unit Heaters'
+        add_unitheater(template,
+                       sys_name=nil,
+                       zones,
+                       hvac_op_sch=nil,
+                       fan_control_type='ConstantVolume',
+                       fan_pressure_rise=OpenStudio.convert(0.2, 'inH_{2}O', 'Pa').get,
+                       main_heat_fuel,
+                       hot_water_loop=nil)
+
+      when 'Window AC'
+        add_window_ac(template,
+                      zones)
+
+      when 'Residential AC'
+        add_furnace_central_ac(template,
+                               zones,
+                               heating=false,
+                               cooling=true,
+                               ventilation=false)
+
+      when 'Forced Air Furnace'
+        add_furnace_central_ac(template,
+                               zones,
+                               heating=true,
+                               cooling=false,
+                               ventilation=true)
+
+      when 'Residential Forced Air Furnace'
+        add_furnace_central_ac(template,
+                               zones,
+                               heating=true,
+                               cooling=false,
+                               ventilation=false)
+
+
+      when 'Residential Air Source Heat Pump'
+        heating = true unless main_heat_fuel.nil?
+        cooling = true unless cool_fuel.nil?
+
+        add_central_air_source_heat_pump(template,
+                                         zones,
+                                         heating,
+                                         cooling,
+                                         ventilation=false)
+
+      when 'VAV Reheat'
         hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      when 'Electricity'
-        heating_type = main_heat_fuel        
-        hot_water_loop = nil
-      when nil
-        heating_type = zone_heat_fuel        
-        hot_water_loop = nil
-      end
+        chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
 
-      add_ptac(template,
-               sys_name=nil,
-               hot_water_loop,
-               zones,
-               fan_type='ConstantVolume',
-               heating_type,
-               cooling_type='Single Speed DX AC')
+        reheat_type = 'Water'
+        if zone_heat_fuel == 'Electricity'
+          reheat_type = 'Electricity'
+        end
 
-    when 'PTHP'
-      add_pthp(template,
-               sys_name=nil,
-               zones,
-               fan_type='ConstantVolume')
+        add_vav_reheat(template,
+                       sys_name=nil,
+                       hot_water_loop,
+                       chilled_water_loop,
+                       zones,
+                       hvac_op_sch=nil,
+                       oa_damper_sch=nil,
+                       vav_fan_efficiency=0.62,
+                       vav_fan_motor_efficiency=0.9,
+                       vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                       return_plenum=nil,
+                       reheat_type)
 
-    when 'PSZ-AC'
-      case main_heat_fuel
-      when 'NaturalGas'
-        heating_type = main_heat_fuel  
-        supplemental_heating_type = 'Electricity'
-        hot_water_loop = nil
-      when 'DistrictHeating'
-        heating_type = 'Water'
-        supplemental_heating_type = 'Electricity'
+      when 'VAV No Reheat'
+        chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+
+        add_vav_reheat(template,
+                       sys_name=nil,
+                       hot_water_loop,
+                       chilled_water_loop,
+                       zones,
+                       hvac_op_sch=nil,
+                       oa_damper_sch=nil,
+                       vav_fan_efficiency=0.62,
+                       vav_fan_motor_efficiency=0.9,
+                       vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                       return_plenum=nil,
+                       reheat_type=nil)
+
+      when 'VAV Gas Reheat'
+        chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+
+        add_vav_reheat(template,
+                       sys_name=nil,
+                       hot_water_loop,
+                       chilled_water_loop,
+                       zones,
+                       hvac_op_sch=nil,
+                       oa_damper_sch=nil,
+                       vav_fan_efficiency=0.62,
+                       vav_fan_motor_efficiency=0.9,
+                       vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                       return_plenum=nil,
+                       reheat_type='NaturalGas')
+
+      when 'PVAV Reheat'
         hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      when nil
-        heating_type = nil  
-        supplemental_heating_type = nil
-        hot_water_loop = nil
-      when 'Electricity'
-        heating_type = main_heat_fuel  
-        supplemental_heating_type = 'Electricity'
-      end
+        chilled_water_loop = case cool_fuel
+                               when 'Electricity'
+                                 nil
+                               else
+                                 get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+                             end
 
-      case cool_fuel
-      when 'DistrictCooling'
-        chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel)
-        cooling_type='Water'
-      else
-        chilled_water_loop = nil
-        cooling_type='Single Speed DX AC'
-      end
+        electric_reheat = false
+        if zone_heat_fuel == 'Electricity'
+          electric_reheat = true
+        end
 
-      add_psz_ac(template,
-                 sys_name = nil,
+        add_pvav(template,
+                 sys_name=nil,
+                 zones,
+                 hvac_op_sch=nil,
+                 oa_damper_sch=nil,
+                 electric_reheat,
+                 hot_water_loop,
+                 chilled_water_loop,
+                 return_plenum=nil)
+
+      when 'PVAV PFP Boxes'
+        case cool_fuel
+          when 'DistrictCooling'
+            chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel)
+          else
+            chilled_water_loop = nil
+        end
+
+        add_pvav_pfp_boxes(template,
+                           sys_name=nil,
+                           zones,
+                           hvac_op_sch=nil,
+                           oa_damper_sch=nil,
+                           vav_fan_efficiency=0.62,
+                           vav_fan_motor_efficiency=0.9,
+                           vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                           chilled_water_loop)
+      when 'VAV PFP Boxes'
+        chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+
+        add_pvav_pfp_boxes(template,
+                           sys_name=nil,
+                           zones,
+                           hvac_op_sch=nil,
+                           oa_damper_sch=nil,
+                           vav_fan_efficiency=0.62,
+                           vav_fan_motor_efficiency=0.9,
+                           vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                           chilled_water_loop)
+
+      when 'Water Source Heat Pumps'
+        case 'main_heat_fuel'
+          when 'NaturalGas'
+            condenser_loop = get_or_add_ambient_water_loop
+          else
+            condenser_loop = get_or_add_heat_pump_loop
+        end
+
+        add_water_source_hp(condenser_loop,
+                            zones,
+                            ventilation=false)
+
+      when 'Water to Water Heat Pumps'
+        case 'main_heat_fuel'
+          when 'Electric'
+            condenser_loop = get_or_add_ambient_water_loop
+          else
+            raise "Unable to configure water-to-water heat pump if not using electricity"
+        end
+      when 'Ground Source Heat Pumps'
+        # TODO replace condenser loop w/ ground HX model
+        # that does not involve district objects
+        condenser_loop = get_or_add_ground_hx_loop
+        add_water_source_hp(condenser_loop,
+                            zones,
+                            ventilation=false)
+
+      when 'DOAS'
+        hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
+        chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+
+        add_doas(template,
+                 sys_name=nil,
                  hot_water_loop,
                  chilled_water_loop,
                  zones,
                  hvac_op_sch=nil,
                  oa_damper_sch=nil,
-                 fan_location='DrawThrough',
-                 fan_type='ConstantVolume',
-                 heating_type,
-                 supplemental_heating_type,
-                 cooling_type)
+                 fan_max_flow_rate=nil,
+                 economizer_control_type='FixedDryBulb',
+                 building_type = nil)
 
-    when 'PSZ-HP'
-      add_psz_ac(template,
-                 sys_name = 'PSZ-HP',
-                 hot_water_loop=nil,
-                 chilled_water_loop=nil,
-                 zones,
-                 hvac_op_sch=nil,
-                 oa_damper_sch=nil,
-                 fan_location='DrawThrough',
-                 fan_type='ConstantVolume',
-                 heating_type='Single Speed Heat Pump',
-                 supplemental_heating_type='Electricity',
-                 cooling_type='Single Speed Heat Pump')
+      when 'ERVs'
+        add_zone_erv(template, zones)
 
-    when 'Fan Coil'
-      case main_heat_fuel
-      when 'NaturalGas', 'DistrictHeating', 'Electricity'
-        hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      when nil            
-        hot_water_loop = nil
-      end
+      when 'Evaporative Cooler'
+        add_evap_cooler(template,
+                        zones)
 
-      case cool_fuel
-      when 'Electricity', 'DistrictCooling'
-        chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=true)
-      when nil            
-        chilled_water_loop = nil
-      end
+      when 'Ideal Air Loads'
+        add_ideal_air_loads(template,
+                            zones)
 
-      add_four_pipe_fan_coil(template,
-                              hot_water_loop,
-                              chilled_water_loop,
-                              zones)
+      ### Combination Systems ###
+      when 'Water Source Heat Pumps with ERVs'
+        add_hvac_system(template,
+                        system_type='Water Source Heat Pumps',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-    when 'Baseboards'
-      case main_heat_fuel
-      when 'NaturalGas', 'DistrictHeating'
-        hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      when 'Electricity'             
-        hot_water_loop = nil
-      when nil
-        # TODO Error, Baseboard systems must have a main_heat_fuel
-        # return ??
-      end
+        add_hvac_system(template,
+                        system_type='ERVs',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-      add_baseboard(template,
-                     hot_water_loop,
-                     zones)
+      when 'Water Source Heat Pumps with DOAS'
+        add_hvac_system(template,
+                        system_type='Water Source Heat Pumps',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-    when 'Unit Heaters'
-      add_unitheater(template,
-                     sys_name=nil,
-                     zones,
-                     hvac_op_sch=nil,
-                     fan_control_type='ConstantVolume',
-                     fan_pressure_rise=OpenStudio.convert(0.2, 'inH_{2}O', 'Pa').get,
-                     main_heat_fuel,
-                     hot_water_loop=nil)
+        add_hvac_system(template,
+                        system_type='DOAS',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-    when 'Window AC'
-      add_window_ac(template,
-                    zones)
+      when 'Ground Source Heat Pumps with ERVs'
+        add_hvac_system(template,
+                        system_type='Ground Source Heat Pumps',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-    when 'Residential AC'
-      add_furnace_central_ac(template,
-                             zones,
-                             heating=false,
-                             cooling=true,
-                             ventilation=false)
+        add_hvac_system(template,
+                        system_type='ERVs',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-    when 'Forced Air Furnace'
-      add_furnace_central_ac(template,
-                             zones,
-                             heating=true,
-                             cooling=false,
-                             ventilation=true)
+      when 'Ground Source Heat Pumps with DOAS'
+        add_hvac_system(template,
+                        system_type='Ground Source Heat Pumps',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-    when 'Residential Forced Air Furnace'
-      add_furnace_central_ac(template,
-                             zones,
-                             heating=true,
-                             cooling=false,
-                             ventilation=false)
+        add_hvac_system(template,
+                        system_type='DOAS',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
+      when 'Fan Coil with DOAS'
+        add_hvac_system(template,
+                        system_type='Fan Coil',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-    when 'Residential Air Source Heat Pump'
-      heating = true unless main_heat_fuel.nil?
-      cooling = true unless cool_fuel.nil?
-    
-      add_central_air_source_heat_pump(template,
-                                       zones,
-                                       heating,
-                                       cooling,
-                                       ventilation=false)
+        add_hvac_system(template,
+                        system_type='DOAS',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-    when 'VAV Reheat'
-      hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+      when 'Fan Coil with ERVs'
+        add_hvac_system(template,
+                        system_type='Fan Coil',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-      reheat_type = 'Water'
-      if zone_heat_fuel == 'Electricity'
-        reheat_type = 'Electricity'
-      end
+        add_hvac_system(template,
+                        system_type='ERVs',
+                        main_heat_fuel,
+                        zone_heat_fuel,
+                        cool_fuel,
+                        zones)
 
-      add_vav_reheat(template,
-                     sys_name=nil,
-                     hot_water_loop,
-                     chilled_water_loop,
-                     zones,
-                     hvac_op_sch=nil,
-                     oa_damper_sch=nil,
-                     vav_fan_efficiency=0.62,
-                     vav_fan_motor_efficiency=0.9,
-                     vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
-                     return_plenum=nil,
-                     reheat_type)
-
-    when 'VAV No Reheat'
-      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
-
-      add_vav_reheat(template,
-                     sys_name=nil,
-                     hot_water_loop,
-                     chilled_water_loop,
-                     zones,
-                     hvac_op_sch=nil,
-                     oa_damper_sch=nil,
-                     vav_fan_efficiency=0.62,
-                     vav_fan_motor_efficiency=0.9,
-                     vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
-                     return_plenum=nil,
-                     reheat_type=nil)
-
-    when 'VAV Gas Reheat'
-      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
-
-      add_vav_reheat(template,
-                     sys_name=nil,
-                     hot_water_loop,
-                     chilled_water_loop,
-                     zones,
-                     hvac_op_sch=nil,
-                     oa_damper_sch=nil,
-                     vav_fan_efficiency=0.62,
-                     vav_fan_motor_efficiency=0.9,
-                     vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
-                     return_plenum=nil,
-                     reheat_type='NaturalGas')
-
-    when 'PVAV Reheat'
-      hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      chilled_water_loop = case cool_fuel
-                           when 'Electricity'
-                             nil
-                           else
-                             get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
-                           end
-
-      electric_reheat = false
-      if zone_heat_fuel == 'Electricity'
-        electric_reheat = true
-      end
-
-      add_pvav(template,
-               sys_name=nil,
-               zones,
-               hvac_op_sch=nil,
-               oa_damper_sch=nil,
-               electric_reheat,
-               hot_water_loop,
-               chilled_water_loop,
-               return_plenum=nil)
-
-    when 'PVAV PFP Boxes'
-      case cool_fuel
-      when 'DistrictCooling'
-        chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel)
       else
-        chilled_water_loop = nil
-      end
-
-      add_pvav_pfp_boxes(template,
-                         sys_name=nil,
-                         zones,
-                         hvac_op_sch=nil,
-                         oa_damper_sch=nil,
-                         vav_fan_efficiency=0.62,
-                         vav_fan_motor_efficiency=0.9,
-                         vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
-                         chilled_water_loop)
-    when 'VAV PFP Boxes'
-      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
-
-      add_pvav_pfp_boxes(template,
-                         sys_name=nil,
-                         zones,
-                         hvac_op_sch=nil,
-                         oa_damper_sch=nil,
-                         vav_fan_efficiency=0.62,
-                         vav_fan_motor_efficiency=0.9,
-                         vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
-                         chilled_water_loop)
-
-    when 'Water Source Heat Pumps'
-      case 'main_heat_fuel'
-      when 'NaturalGas'
-        condenser_loop = get_or_add_ambient_water_loop
-      else 
-        condenser_loop = get_or_add_heat_pump_loop
-      end
-
-      add_water_source_hp(condenser_loop,
-                          zones,
-                          ventilation=false)
-
-    when 'Ground Source Heat Pumps'
-      # TODO replace condenser loop w/ ground HX model
-      # that does not involve district objects
-      condenser_loop = get_or_add_ground_hx_loop
-      add_water_source_hp(condenser_loop,
-                          zones,
-                          ventilation=false)
-
-    when 'DOAS'
-      hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
-
-      add_doas(template,
-               sys_name=nil,
-               hot_water_loop,
-               chilled_water_loop,
-               zones,
-               hvac_op_sch=nil,
-               oa_damper_sch=nil,
-               fan_max_flow_rate=nil,
-               economizer_control_type='FixedDryBulb',
-               building_type = nil)
-
-    when 'ERVs'
-      add_zone_erv(template, zones)
-
-    when 'Evaporative Cooler'
-      add_evap_cooler(template,
-                      zones)
-
-    when 'Ideal Air Loads'
-      add_ideal_air_loads(template,
-                          zones)
-
-    ### Combination Systems ###
-    when 'Water Source Heat Pumps with ERVs'
-      add_hvac_system(template,
-                      system_type='Water Source Heat Pumps',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-      add_hvac_system(template,
-                      system_type='ERVs',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-    when 'Water Source Heat Pumps with DOAS'
-      add_hvac_system(template,
-                      system_type='Water Source Heat Pumps',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-      add_hvac_system(template,
-                      system_type='DOAS',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-    when 'Ground Source Heat Pumps with ERVs'
-      add_hvac_system(template,
-                      system_type='Ground Source Heat Pumps',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-      add_hvac_system(template,
-                      system_type='ERVs',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-    when 'Ground Source Heat Pumps with DOAS'
-      add_hvac_system(template,
-                      system_type='Ground Source Heat Pumps',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-      add_hvac_system(template,
-                      system_type='DOAS',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-    when 'Fan Coil with DOAS'
-      add_hvac_system(template,
-                      system_type='Fan Coil',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-      add_hvac_system(template,
-                      system_type='DOAS',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-    when 'Fan Coil with ERVs'
-      add_hvac_system(template,
-                      system_type='Fan Coil',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-      add_hvac_system(template,
-                      system_type='ERVs',
-                      main_heat_fuel,
-                      zone_heat_fuel,
-                      cool_fuel,
-                      zones)
-
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "HVAC system type '#{system_type}' not recognized")
-      return false
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "HVAC system type '#{system_type}' not recognized")
+        return false
     end
-
   end
 
   # Determine the typical system type given the inputs.
