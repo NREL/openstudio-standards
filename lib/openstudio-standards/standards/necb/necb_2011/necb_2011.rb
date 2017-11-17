@@ -1,4 +1,5 @@
 # This class holds methods that apply NECB 2011 rules.
+# @ref [References::NECB2011]
 class NECB2011 < Standard
   @@template = 'NECB 2011' # rubocop:disable Style/ClassVars
   register_standard @@template

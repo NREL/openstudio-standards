@@ -24,9 +24,7 @@ coverage/
 /test/necb/data/*test_results.csv
 
 # Miscelaneous
+/lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb
 /test/refactor/
 /data/costing/rs_means_auth
 /tmp/
-*.log
-
-

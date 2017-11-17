@@ -103,7 +103,7 @@ class Standard
   end
 
   # Convert from SEER to COP (no fan) for cooling coils
-  # per the method specified in 90.1-2013 Appendix G
+  # @ref [References::ASHRAE9012013] Appendix G
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
@@ -114,7 +114,7 @@ class Standard
   end
 
   # Convert from COP_H to COP (no fan) for heat pump heating coils
-  # per the method specified in 90.1-2013 Appendix G
+  # @ref [References::ASHRAE9012013] Appendix G
   #
   # @param coph47 [Double] coefficient of performance at 47F Tdb, 42F Twb
   # @param capacity_w [Double] the heating capacity at AHRI rating conditions, in W
@@ -129,7 +129,7 @@ class Standard
   end
 
   # Convert from HSPF to COP (no fan) for heat pump heating coils
-  # per the method specified in 90.1-2013 Appendix G
+  # @ref [References::ASHRAE9012013] Appendix G
   #
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
@@ -140,9 +140,7 @@ class Standard
   end
 
   # Convert from COP to SEER
-  # per the method specified in "Achieving the 30% Goal: Energy
-  # and cost savings analysis of ASHRAE Standard 90.1-2010
-  # Thornton, et al 2011
+  # @ref [References::USDOEPrototypeBuildings]
   #
   # @param cop [Double] COP
   # @return [Double] Seasonal Energy Efficiency Ratio
@@ -154,12 +152,8 @@ class Standard
   end
 
   # Convert from EER to COP
-  # If capacity is not supplied, use the method specified
-  # in "Achieving the 30% Goal: Energy and cost savings
-  # analysis of ASHRAE Standard 90.1-2010
-  # Thornton, et al 2011.
-  # If capacity is supplied, use the method specified in
-  # 90.1-2013.
+  # @ref [References::USDOEPrototypeBuildings] If capacity is not supplied, use DOE Prototype Building method.
+  # @ref [References::ASHRAE9012013] If capacity is supplied, use the 90.1-2013 method
   #
   # @param eer [Double] Energy Efficiency Ratio (EER)
   # @param capacity_w [Double] the heating capacity at AHRI rating conditions, in W
@@ -192,9 +186,7 @@ class Standard
   end
 
   # Convert from COP to EER
-  # per the method specified in "Achieving the 30% Goal: Energy
-  # and cost savings analysis of ASHRAE Standard 90.1-2010
-  # Thornton, et al 2011
+  # @ref [References::USDOEPrototypeBuildings]
   #
   # @param cop [Double] COP
   # @return [Double] Energy Efficiency Ratio (EER)
@@ -238,35 +230,39 @@ class Standard
   end
 
   # A helper method to convert from AFUE to thermal efficiency
+  # @ref [References::USDOEPrototypeBuildings] Boiler Addendum 90.1-04an
   #
   # @param afue [Double] Annual Fuel Utilization Efficiency
   # @return [Double] Thermal efficiency (%)
   def afue_to_thermal_eff(afue)
-    return afue # Per PNNL doc, Boiler Addendum 90.1-04an
+    return afue
   end
 
   # A helper method to convert from thermal efficiency to AFUE
+  # @ref [References::USDOEPrototypeBuildings] Boiler Addendum 90.1-04an
   #
   # @param teff [Double] Thermal Efficiency
   # @return [Double] AFUE
   def thermal_eff_to_afue(teff)
-    return teff # Per PNNL doc, Boiler Addendum 90.1-04an
+    return teff
   end
 
   # A helper method to convert from combustion efficiency to thermal efficiency
+  # @ref [References::USDOEPrototypeBuildings] Boiler Addendum 90.1-04an
   #
   # @param combustion_eff [Double] Combustion efficiency (%)
   # @return [Double] Thermal efficiency (%)
   def combustion_eff_to_thermal_eff(combustion_eff)
-    return combustion_eff - 0.007 # Per PNNL doc, Boiler Addendum 90.1-04an
+    return combustion_eff - 0.007
   end
 
   # A helper method to convert from thermal efficiency to combustion efficiency
+  # @ref [References::USDOEPrototypeBuildings] Boiler Addendum 90.1-04an
   #
   # @param thermal_eff [Double] Thermal efficiency
   # @return [Double] Combustion efficiency
   def thermal_eff_to_comb_eff(thermal_eff)
-    return thermal_eff + 0.007 # Per PNNL doc, Boiler Addendum 90.1-04an
+    return thermal_eff + 0.007
   end
 
   # Convert one infiltration rate at a given pressure

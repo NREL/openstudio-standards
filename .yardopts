@@ -1,10 +1,12 @@
 --main docs/Home.md
 --embed-mixins
 --exclude lib/openstudio-standards/prototypes/common/buildings/Prototype.all_buildings.rb
+--type-tag ref:"Technical References"
 lib/openstudio-standards/standards/**/*.rb
 lib/openstudio-standards/prototypes/**/*.rb
 lib/openstudio-standards/utilities/**/*.rb
 lib/openstudio-standards/weather/**/*.rb
+lib/openstudio-standards/refs/references.rb
 -
 docs/Home.md
 docs/UserQuickStartGuide.md
