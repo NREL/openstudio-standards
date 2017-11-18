@@ -4661,6 +4661,23 @@ class Standard
                      building_type = nil,
                      energy_recovery = false)
 
+    # Check the total OA requirement for all zones on the system
+    tot_oa_req = 0
+    thermal_zones.each do |zone|
+      tot_oa_req += thermal_zone_outdoor_airflow_rate(zone)
+      break if tot_oa_req > 0
+    end
+
+    # If the total OA requirement is zero do not add the DOAS system
+    # because the simulations will fail.
+    if tot_oa_req.zero?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Not adding DOAS system for #{thermal_zones.size} zones because combined OA requirement for all zones is zero.")
+      thermal_zones.each do |zone|
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
+      end
+      return false
+    end
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding DOAS system for #{thermal_zones.size} zones.")
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
