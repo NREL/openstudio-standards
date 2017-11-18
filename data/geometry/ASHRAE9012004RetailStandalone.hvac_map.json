@@ -1,0 +1,17 @@
+[
+  {
+    "type": "PSZ-AC",
+    "space_names": [
+      "Back_Space",
+      "Core_Retail",
+      "Point_Of_Sale",
+      "Front_Retail"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "space_names": [
+      "Front_Entry"
+    ]
+  }
+]
