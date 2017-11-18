@@ -20,7 +20,8 @@ def create_class_array
     'SmallHotel',
     'SmallOffice',
     'RetailStripmall',
-    'Warehouse'
+    'Warehouse',
+    'SuperMarket'
   ]
 
   templates = ['NECB2011',
@@ -78,7 +79,7 @@ end
   end
 
   # This method is used to extend the class with building-type-specific
-  # methods, as defined in Prototype.all_buildings.rb.  Each building type
+  # methods, as defined in Prototype.SomeBuildingType.rb.  Each building type
   # has its own set of methods that change things which are not
   # common across all prototype buildings, even within a given Standard.
   def set_variables()

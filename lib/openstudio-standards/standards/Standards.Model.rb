@@ -4403,6 +4403,9 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   def load_initial_osm(osm_file)
     # Load the geometry .osm
+    unless File.exist?(osm_file)
+      raise("The initial osm path: #{osm_file} does not exist.")
+    end
     osm_model_path = OpenStudio::Path.new(osm_file.to_s)
     # Upgrade version if required.
     version_translator = OpenStudio::OSVersion::VersionTranslator.new

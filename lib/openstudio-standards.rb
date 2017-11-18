@@ -183,7 +183,23 @@ module OpenstudioStandards
 
   ### Prototypes ###
   # Building Types
-  require_relative "#{proto}/common/buildings/Prototype.all_buildings"
+  require_relative "#{proto}/common/buildings/Prototype.FullServiceRestaurant"
+  require_relative "#{proto}/common/buildings/Prototype.HighRiseApartment"
+  require_relative "#{proto}/common/buildings/Prototype.Hospital"
+  require_relative "#{proto}/common/buildings/Prototype.LargeHotel"
+  require_relative "#{proto}/common/buildings/Prototype.LargeOffice"
+  require_relative "#{proto}/common/buildings/Prototype.MediumOffice"
+  require_relative "#{proto}/common/buildings/Prototype.MidriseApartment"
+  require_relative "#{proto}/common/buildings/Prototype.Outpatient"
+  require_relative "#{proto}/common/buildings/Prototype.PrimarySchool"
+  require_relative "#{proto}/common/buildings/Prototype.QuickServiceRestaurant"
+  require_relative "#{proto}/common/buildings/Prototype.RetailStandalone"
+  require_relative "#{proto}/common/buildings/Prototype.RetailStripmall"
+  require_relative "#{proto}/common/buildings/Prototype.SecondarySchool"
+  require_relative "#{proto}/common/buildings/Prototype.SmallHotel"
+  require_relative "#{proto}/common/buildings/Prototype.SmallOffice"
+  require_relative "#{proto}/common/buildings/Prototype.SuperMarket"
+  require_relative "#{proto}/common/buildings/Prototype.Warehouse"
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
