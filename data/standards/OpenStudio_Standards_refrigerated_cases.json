@@ -241,7 +241,7 @@
       "anti_sweat_power": 0.0
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "case_type": "LT Coffin Frozen Food",
       "latent_heat_ratio": 0.2,
       "case_temp": -22.8,
@@ -256,7 +256,7 @@
       "anti_sweat_power": 254.6
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "case_type": "LT Coffin Ice Cream",
       "latent_heat_ratio": 0.2,
       "case_temp": -26.1,
@@ -271,7 +271,7 @@
       "anti_sweat_power": 254.6
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "case_type": "LT Reach-In Frozen Food",
       "latent_heat_ratio": 0.1,
       "case_temp": -20.0,
@@ -286,7 +286,7 @@
       "anti_sweat_power": 286.7
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "case_type": "LT Reach-In Ice Cream",
       "latent_heat_ratio": 0.1,
       "case_temp": -23.9,
@@ -301,7 +301,7 @@
       "anti_sweat_power": 286.7
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "case_type": "MT Coffin",
       "latent_heat_ratio": 0.2,
       "case_temp": -2.9,
@@ -316,7 +316,7 @@
       "anti_sweat_power": 63.6
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "case_type": "MT Service",
       "latent_heat_ratio": 0.1,
       "case_temp": -2.9,
@@ -331,7 +331,7 @@
       "anti_sweat_power": 63.6
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "case_type": "MT Vertical Open",
       "latent_heat_ratio": 0.3,
       "case_temp": 0.6,
@@ -346,7 +346,7 @@
       "anti_sweat_power": 0.0
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "case_type": "MT Reach-Ins",
       "latent_heat_ratio": 0.1,
       "case_temp": 1.5,
@@ -361,7 +361,7 @@
       "anti_sweat_power": 0.0
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "case_type": "LT Coffin Frozen Food",
       "latent_heat_ratio": 0.2,
       "case_temp": -22.8,
@@ -376,7 +376,7 @@
       "anti_sweat_power": 254.6
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "case_type": "LT Coffin Ice Cream",
       "latent_heat_ratio": 0.2,
       "case_temp": -26.1,
@@ -391,7 +391,7 @@
       "anti_sweat_power": 254.6
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "case_type": "LT Reach-In Frozen Food",
       "latent_heat_ratio": 0.1,
       "case_temp": -20.0,
@@ -406,7 +406,7 @@
       "anti_sweat_power": 286.7
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "case_type": "LT Reach-In Ice Cream",
       "latent_heat_ratio": 0.1,
       "case_temp": -23.9,
@@ -421,7 +421,7 @@
       "anti_sweat_power": 286.7
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "case_type": "MT Coffin",
       "latent_heat_ratio": 0.2,
       "case_temp": -2.9,
@@ -436,7 +436,7 @@
       "anti_sweat_power": 63.6
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "case_type": "MT Service",
       "latent_heat_ratio": 0.1,
       "case_temp": -2.9,
@@ -451,7 +451,7 @@
       "anti_sweat_power": 63.6
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "case_type": "MT Vertical Open",
       "latent_heat_ratio": 0.3,
       "case_temp": 0.6,
@@ -466,7 +466,7 @@
       "anti_sweat_power": 0.0
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "case_type": "MT Reach-Ins",
       "latent_heat_ratio": 0.1,
       "case_temp": 1.5,
@@ -481,7 +481,7 @@
       "anti_sweat_power": 0.0
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "case_type": "LT Coffin Frozen Food",
       "latent_heat_ratio": 0.2,
       "case_temp": -22.8,
@@ -496,7 +496,7 @@
       "anti_sweat_power": 254.6
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "case_type": "LT Coffin Ice Cream",
       "latent_heat_ratio": 0.2,
       "case_temp": -26.1,
@@ -511,7 +511,7 @@
       "anti_sweat_power": 254.6
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "case_type": "LT Reach-In Frozen Food",
       "latent_heat_ratio": 0.1,
       "case_temp": -20.0,
@@ -526,7 +526,7 @@
       "anti_sweat_power": 286.7
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "case_type": "LT Reach-In Ice Cream",
       "latent_heat_ratio": 0.1,
       "case_temp": -23.9,
@@ -541,7 +541,7 @@
       "anti_sweat_power": 286.7
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "case_type": "MT Coffin",
       "latent_heat_ratio": 0.2,
       "case_temp": -2.9,
@@ -556,7 +556,7 @@
       "anti_sweat_power": 63.6
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "case_type": "MT Service",
       "latent_heat_ratio": 0.1,
       "case_temp": -2.9,
@@ -571,7 +571,7 @@
       "anti_sweat_power": 63.6
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "case_type": "MT Vertical Open",
       "latent_heat_ratio": 0.3,
       "case_temp": 0.6,
@@ -586,7 +586,7 @@
       "anti_sweat_power": 0.0
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "case_type": "MT Reach-Ins",
       "latent_heat_ratio": 0.1,
       "case_temp": 1.5,
@@ -601,7 +601,7 @@
       "anti_sweat_power": 0.0
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "case_type": "LT Coffin Frozen Food",
       "latent_heat_ratio": 0.2,
       "case_temp": -22.8,
@@ -616,7 +616,7 @@
       "anti_sweat_power": 78.7
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "case_type": "LT Coffin Ice Cream",
       "latent_heat_ratio": 0.2,
       "case_temp": -28.3,
@@ -631,7 +631,7 @@
       "anti_sweat_power": 78.7
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "case_type": "LT Reach-In Frozen Food",
       "latent_heat_ratio": 0.1,
       "case_temp": -20.0,
@@ -646,7 +646,7 @@
       "anti_sweat_power": 139.4
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "case_type": "LT Reach-In Ice Cream",
       "latent_heat_ratio": 0.1,
       "case_temp": -23.9,
@@ -661,7 +661,7 @@
       "anti_sweat_power": 139.4
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "case_type": "MT Coffin",
       "latent_heat_ratio": 0.2,
       "case_temp": -2.9,
@@ -676,7 +676,7 @@
       "anti_sweat_power": 63.6
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "case_type": "MT Service",
       "latent_heat_ratio": 0.1,
       "case_temp": -2.9,
@@ -691,7 +691,7 @@
       "anti_sweat_power": 63.3
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "case_type": "MT Vertical Open",
       "latent_heat_ratio": 0.3,
       "case_temp": 0.6,
@@ -706,7 +706,7 @@
       "anti_sweat_power": 0.0
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "case_type": "MT Reach-Ins",
       "latent_heat_ratio": 0.1,
       "case_temp": 1.5,

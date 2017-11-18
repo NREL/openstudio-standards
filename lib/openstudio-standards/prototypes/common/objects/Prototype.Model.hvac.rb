@@ -230,7 +230,8 @@ class Standard
         model_add_four_pipe_fan_coil(model,
                                      hot_water_loop,
                                      chilled_water_loop,
-                                     thermal_zones)
+                                     thermal_zones,
+                                     ventilation=false)
 
       when 'DC' # Data Center
 

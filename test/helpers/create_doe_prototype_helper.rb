@@ -174,7 +174,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         end
 
         # Run the annual simulation
-        model_run_simulation_and_log_errors(model, full_sim_dir)
+        standard = Standard.build("#{template}")
+        standard.model_run_simulation_and_log_errors(model, full_sim_dir)
 
       end           
             
