@@ -109,7 +109,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "walkin_type": "Walk-In Freezer",
       "cooling_capacity_c2": -0.3087,
       "cooling_capacity_c1": 152.9,
@@ -127,7 +127,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "walkin_type": "Walk-In Cooler",
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -145,7 +145,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2004",
+      "template": "90.1-2004",
       "walkin_type": "Walk-In Cooler Glass Door",
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -163,7 +163,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "walkin_type": "Walk-In Freezer",
       "cooling_capacity_c2": -0.3087,
       "cooling_capacity_c1": 152.9,
@@ -181,7 +181,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "walkin_type": "Walk-In Cooler",
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -199,7 +199,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2007",
+      "template": "90.1-2007",
       "walkin_type": "Walk-In Cooler Glass Door",
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -217,7 +217,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "walkin_type": "Walk-In Freezer",
       "cooling_capacity_c2": -0.3087,
       "cooling_capacity_c1": 152.9,
@@ -235,7 +235,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "walkin_type": "Walk-In Cooler",
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -253,7 +253,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2010",
+      "template": "90.1-2010",
       "walkin_type": "Walk-In Cooler Glass Door",
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -271,7 +271,7 @@
       "lighting_power_mult": 10.8
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "walkin_type": "Walk-In Freezer",
       "cooling_capacity_c2": -0.3087,
       "cooling_capacity_c1": 152.9,
@@ -289,7 +289,7 @@
       "lighting_power_mult": 5.4
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "walkin_type": "Walk-In Cooler",
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -307,7 +307,7 @@
       "lighting_power_mult": 5.4
     },
     {
-      "template": "ASHRAE 90.1-2013",
+      "template": "90.1-2013",
       "walkin_type": "Walk-In Cooler Glass Door",
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,

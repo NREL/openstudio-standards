@@ -256,12 +256,12 @@ class Standard
     ref_case.setCaseOperatingTemperature(case_temp)
     ref_case.setStandardCaseFanPowerperUnitLength(evaporator_fan_pwr_per_length)
     ref_case.setOperatingCaseFanPowerperUnitLength(evaporator_fan_pwr_per_length)
-    ref_case.setStandardCaseLightingPowerperUnitLength(lighting_per_length)
+    ref_case.setStandardCaseLightingPowerperUnitLength(lighting_per_length) unless lighting_per_length.nil?
     ref_case.resetInstalledCaseLightingPowerperUnitLength
     ref_case.setCaseLightingSchedule(model.alwaysOnDiscreteSchedule)
     ref_case.setHumidityatZeroAntiSweatHeaterEnergy(anti_power)
     ref_case.setCaseDefrostType(defrost_type)
-    ref_case.setCaseDefrostPowerperUnitLength(defrost_pwr_per_length)
+    ref_case.setCaseDefrostPowerperUnitLength(defrost_pwr_per_length) unless defrost_pwr_per_length.nil?
     ref_case.setCaseDefrostDripDownSchedule(defrost_dripdown_sch)
     ref_case.setUnderCaseHVACReturnAirFraction(0)
     ref_case.setFractionofAntiSweatHeaterEnergytoCase(0.7)
