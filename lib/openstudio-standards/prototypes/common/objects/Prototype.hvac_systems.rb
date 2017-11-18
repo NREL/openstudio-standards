@@ -6142,9 +6142,9 @@ class Standard
     when 'Water Source Heat Pumps'
       condenser_loop = case main_heat_fuel
                        when 'NaturalGas'
-                         model_get_or_add_ambient_water_loop(model)
-                       else
                          model_get_or_add_heat_pump_loop(model)
+                       else
+                         model_get_or_add_ambient_water_loop(model)
                        end
 
       model_add_water_source_hp(model, condenser_loop,
