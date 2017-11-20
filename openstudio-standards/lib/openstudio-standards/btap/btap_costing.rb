@@ -219,14 +219,15 @@ class BTAPCosting
     costing_report = {}
     #Creates a Hash in the hash for envelope costing.
     costing_report["Envelope"] = {}
-    #Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
-    if model.getBuilding.standardsBuildingType.empty? or
-        model.getBuilding.standardsNumberOfAboveGroundStories
-      raise("Building information is not complete, please ensure that the standardsBuildingType and standardsNumberOfAboveGroundStories are entered in the model. ")
-    end
 
     #store number of stories. Required for envelope costing logic.
     num_of_above_ground_stories = model.getBuilding.standardsNumberOfAboveGroundStories
+    num_of_above_ground_stories = 1 # Temporary over-ride for testing (JTB:20-Nov-17)
+
+    #Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
+    if model.getBuilding.standardsBuildingType.empty? or num_of_above_ground_stories.empty?
+      raise("Building information is not complete, please ensure that the standardsBuildingType and standardsNumberOfAboveGroundStories are entered in the model. ")
+    end
 
     #Iterate through the thermal zones.
     model.getThermalZones.each do |zone|
