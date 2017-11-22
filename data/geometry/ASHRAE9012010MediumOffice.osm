@@ -2132,7 +2132,7 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   3,                                      !- Standards Number of Stories
-  0,                                      !- Standards Number of Above Ground Stories
+  3,                                      !- Standards Number of Above Ground Stories
   MediumOffice,                           !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable

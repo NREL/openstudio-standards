@@ -5149,7 +5149,7 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   3,                                      !- Standards Number of Stories
-  0,                                      !- Standards Number of Above Ground Stories
+  3,                                      !- Standards Number of Above Ground Stories
   Outpatient;                             !- Standards Building Type
 
 OS:Surface,
@@ -33190,7 +33190,6 @@ OS:Rendering:Color,
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
-
 
 OS:SpaceType,
   {90998f66-fb33-465c-a2b4-6c08b0277f8e}, !- Handle
