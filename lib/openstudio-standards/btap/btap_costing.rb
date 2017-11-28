@@ -224,6 +224,7 @@ class BTAPCosting
     #Creates a Hash in the hash for envelope costing.
     costing_report["Building"] = {}
     costing_report["Envelope"] = {}
+    totEnvCost = 0
 
     #Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
     if model.getBuilding.standardsBuildingType.empty? or model.getBuilding.standardsNumberOfAboveGroundStories.empty?
@@ -237,20 +238,20 @@ class BTAPCosting
     costing_report["Building"]["WeatherProv"] = model.getWeatherFile.stateProvinceRegion
     costing_report["Building"]["WeatherCity"] = model.getWeatherFile.city
 
-        #Iterate through the thermal zones.
+    # Iterate through the thermal zones.
     model.getThermalZones.each do |zone|
-      #Iterate through spaces.
+      # Iterate through spaces.
       zone.spaces.each do |space|
-        #Get SpaceType defined for space.. if not defined it will skip the spacetype. May have to deal with Attic spaces.
+        # Get SpaceType defined for space.. if not defined it will skip the spacetype. May have to deal with Attic spaces.
         if space.spaceType.empty? or space.spaceType.get.standardsSpaceType.empty? or space.spaceType.get.standardsBuildingType.empty?
           raise ("standards Space type and building type is not defined for space:#{space.name.get}. Skipping this space for costing.")
         end
 
-        #Get space type standard names.
+        # Get space type standard names.
         space_type = space.spaceType.get.standardsSpaceType
         building_type = space.spaceType.get.standardsBuildingType
 
-        #Get standard constructions based on collected information (spacetype, no of stories, etc..)
+        # Get standard constructions based on collected information (spacetype, no of stories, etc..)
         # This is a standard way to search a hash.
         construction_set = @costing_database['raw']['construction_sets'].select {|data|
           data['building_type'].to_s == building_type.to_s and
@@ -333,7 +334,6 @@ class BTAPCosting
 
           #Iterate through actual surfaces in the model of surface_type.
           numSurfType = 0
-          totEnvCost = 0
           surfaces[surface_type].each do |surface|
             numSurfType = numSurfType + 1
 
