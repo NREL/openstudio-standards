@@ -51,4 +51,6 @@ pretty_output = JSON.pretty_generate(data_hash)
 
 File.delete("#{File.dirname(__FILE__)}/../btap/csvToJsonUpdate.json")
 
+File.delete("#{File.dirname(__FILE__)}/../btap/csvFile1.csv")
+
 File.write("#{File.dirname(__FILE__)}/../btap/WeatherData1.json", pretty_output)
