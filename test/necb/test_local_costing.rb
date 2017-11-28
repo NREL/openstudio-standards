@@ -7,10 +7,10 @@ class TestCosting < NECB2011
   template = 'NECB 2011'
   building_type = 'FullServiceRestaurant'
   climate_zone = 'NECB HDD Method'
-  #epw_file = 'CAN_AB_Edmonton.711230_CWEC.epw'
+  epw_file = 'CAN_AB_Edmonton.711230_CWEC.epw'
   #epw_file = 'CAN_ON_Toronto.716240_CWEC.epw'
   #epw_file = 'CAN_BC_Vancouver.718920_CWEC.epw'
-  epw_file = 'CAN_PQ_Sherbrooke.716100_CWEC.epw'
+  #epw_file = 'CAN_PQ_Sherbrooke.716100_CWEC.epw'
 
   model = nil
 
@@ -25,5 +25,7 @@ class TestCosting < NECB2011
   cost_result = costing.cost_audit_envelope(model)
   #cost_result = cost_result + costing.cost_audit_lighting(model)
   #cost_result = cost_result + costing.cost_audit_hvac(model)
+
+  puts "Total envelope cost is $#{'%.2f' % cost_result}"
 
 end
