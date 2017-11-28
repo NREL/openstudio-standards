@@ -23,7 +23,7 @@ class TestCosting < NECB2011
   costing = BTAPCosting.instance()
   costing.load('13421j23lk4j1k2897198324hkjhk13j2')
   cost_result = costing.cost_audit_envelope(model)
-  #cost_result = costing.cost_audit_lighting(model)
-  #cost_result = costing.cost_audit_hvac(model)
+  #cost_result = cost_result + costing.cost_audit_lighting(model)
+  #cost_result = cost_result + costing.cost_audit_hvac(model)
 
 end

@@ -27,18 +27,23 @@ class BTAPCosting
   end
 
   #Initialize the singleton costing object.
-  def load(key = nil)
+  def load(key = nil, aws = false)
     @key = key
     if @key.nil?
       #load local keyfile for debugging.
       @key = load_local_keyfile()
     end
-    if FileUtils.uptodate?(@encrypted_file, [@xlsx_path])
-      puts "National Costing Excel Sheet is older than database, using stored encrypted database."
+    if aws
+      # Always use encrypted costing database when running in cloud (Amazon Web Service)
       @costing_database = decrypt_hash(@key, File.read(@encrypted_file))
     else
-      puts "National Costing Excel Sheet is newer than database, recreating database using RSMeans..."
-      self.recreate_database()
+      if FileUtils.uptodate?(@encrypted_file, [@xlsx_path])
+        puts "National Costing Excel Sheet is older than database, using stored encrypted database."
+        @costing_database = decrypt_hash(@key, File.read(@encrypted_file))
+      else
+        puts "National Costing Excel Sheet is newer than database, recreating database using RSMeans..."
+        self.recreate_database()
+      end
     end
   end
 
@@ -328,18 +333,21 @@ class BTAPCosting
 
           #Iterate through actual surfaces in the model of surface_type.
           numSurfType = 0
+          totEnvCost = 0
           surfaces[surface_type].each do |surface|
             numSurfType = numSurfType + 1
-            #get RSI of surface existing surface.
+
+            # get RSI of existing model surface.
             rsi = BTAP::Resources::Envelope::Constructions::get_rsi(OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get)
 
-            #Use the cost_range_array to interpolate the estimated cost for the given rsi. Windows use U val!
+            # Use the cost_range_array to interpolate the estimated cost for the given rsi.
+            # Note that window costs in RS Means use U val (1/rsi)!
             if surface_type == "ExteriorFixedWindow" or surface_type == "ExteriorOperableWindow" or surface_type == "ExteriorSkylight"
               if rsi > 0.0 then rsi = 1.0/rsi else 0.0 end
             end
             cost = interpolate(cost_range_array, rsi)
 
-            #If the cost is nil, that means the rsi is out of range. This should be flagged in the report.
+            # If the cost is nil, that means the rsi is out of range. This should be flagged in the report.
             if cost.nil?
               if surface_type == "ExteriorFixedWindow" or surface_type == "ExteriorOperableWindow" or surface_type == "ExteriorSkylight"
                 if rsi > 0.0 then rsi = 1.0/rsi else 0.0 end
@@ -350,21 +358,25 @@ class BTAPCosting
               notes = "OK"
             end
 
-            #bin costing by construction standard type and rsi
+            surfArea = (surface.netArea * zone.multiplier)
+            surfCost = cost * surface.netArea * zone.multiplier
+            totEnvCost = totEnvCost + surfCost
+
+            # Bin the costing by construction standard type and rsi
             name = "#{construction_set[surface_type]}_#{rsi}"
             if costing_report["Envelope"].has_key?(name)
-              costing_report["Envelope"][name]['area'] += (surface.netArea * zone.multiplier)
-              costing_report["Envelope"][name]['total_cost'] += (cost * surface.netArea * zone.multiplier)
+              costing_report["Envelope"][name]['area'] += surfArea
+              costing_report["Envelope"][name]['total_cost'] += surfCost
               costing_report["Envelope"][name]['note'] += " / #{numSurfType}: #{notes}"
             else
-              costing_report["Envelope"][name]={'area' => (surface.netArea * zone.multiplier), 'total_cost' => (cost * surface.netArea * zone.multiplier)}
+              costing_report["Envelope"][name]={'area' => surfArea,
+                                                'total_cost' => surfCost}
               costing_report["Envelope"][name]['note'] = "Surf ##{numSurfType}: #{notes}"
             end
-
-          end #surfaces of surface type
-        end #surface_type
-      end #spaces
-    end #thermalzone
+          end # surfaces of surface type
+        end # surface_type
+      end # spaces
+    end # thermalzone
 
     # Save the costing_report to a file.
     File.open(@cost_output_file, "w") do |f|
@@ -372,6 +384,8 @@ class BTAPCosting
     end
 
     puts "\nCost report file cost_output.json successfully generated.\nLocation: #{@cost_output_file}"
+
+    return totEnvCost
 
   end
 
