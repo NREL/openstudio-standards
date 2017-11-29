@@ -214,7 +214,7 @@ module BTAP
     # rubocop:disable Style/MutableConstant
 
     # Keeping data in hash for now.
-    =begin
+=begin
     WEATHER_DATA1 = [
       { file: 'CAN_BC_Abbotsford.711080_CWEC.epw', location_name: ' CAN-BC-Abbotsford', energy_plus_location_name: 'Abbotsford_BC_CAN', country: 'CAN', state_province_region: 'BC', city: 'Abbotsford', hdd18: 3134, cdd18: 33, latitude: 49.03, longitude: -122.37, elevation: 58, deltadb: 14.3, a90_1_2004_climate_zone: '5C', boiler_fueltype: 'NaturalGas', baseboard_type: 'Hot Water', mau_type: true, mau_heating_coil_type: 'Hot Water', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Gas', heating_coil_type_sys4: 'Gas', heating_coil_type_sys6: 'Hot Water', fan_type: 'var_speed_drive', swh_fueltype: 'NaturalGas' },
       { file: 'CAN_PQ_Bagotville.717270_CWEC.epw', location_name: ' CAN-PQ-Bagotville', energy_plus_location_name: 'Bagotville_PQ_CAN', country: 'CAN', state_province_region: 'PQ', city: 'Bagotville', hdd18: 5781, cdd18: 49, latitude: 48.33, longitude: -71, elevation: 159, deltadb: 32.4, a90_1_2004_climate_zone: 7, boiler_fueltype: 'Electricity', baseboard_type: 'Electric', mau_type: true, mau_heating_coil_type: 'Electric', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' },
@@ -297,7 +297,7 @@ module BTAP
       { file: 'CAN_MB_Winnipeg.718520_CWEC.epw', location_name: " CAN-MB-Winnipeg Int'l", energy_plus_location_name: "Winnipeg Int'l_MB_CAN", country: 'CAN', state_province_region: 'MB', city: "Winnipeg Int'l", hdd18: 5754, cdd18: 197, latitude: 49.9, longitude: -97.23, elevation: 239, deltadb: 37.8, a90_1_2004_climate_zone: 7, boiler_fueltype: 'Electricity', baseboard_type: 'Electric', mau_type: true, mau_heating_coil_type: 'Electric', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' },
       { file: 'CAN_NT_Yellowknife.719360_CWEC.epw', location_name: ' CAN-NT-Yellowknife', energy_plus_location_name: 'Yellowknife_NT_CAN', country: 'CAN', state_province_region: 'NT', city: 'Yellowknife', hdd18: 8306, cdd18: 33, latitude: 62.47, longitude: -114.45, elevation: 206, deltadb: 42.1, a90_1_2004_climate_zone: 8, boiler_fueltype: 'FuelOil#2', baseboard_type: 'Hot Water', mau_type: true, mau_heating_coil_type: 'Hot Water', mau_cooling_type: 'DX', chiller_type: 'Scroll', heating_coil_type_sys_3: 'Electric', heating_coil_type_sys4: 'Electric', heating_coil_type_sys6: 'Electric', fan_type: 'var_speed_drive', swh_fueltype: 'Electricity' }
     ]
-      =end
+=end
     weatherData1 = File.read("#{File.dirname(__FILE__)}/../btap/WeatherData1.json")
     
     WEATHER_DATA1= JSON.parse(weatherData1,:symbolize_names => true)
