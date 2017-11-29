@@ -90,8 +90,10 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
       FileUtils.rm(model_out_path(test_name))
     end
     output_folder = "#{File.dirname(__FILE__)}/output#{Time.now.strftime("%m-%d")}/#{test_name}"
-    model = OpenStudio::Model::Model.new
-    model.create_prototype_building(info['building'], templates, climate_zones, info['epw'], output_folder)
+    prototype_creator = Standard.build("#{templates}_#{info['building']}")
+    model = prototype_creator.model_create_prototype_model(climate_zones, info['epw'], output_folder)
+
+
     BTAP::Environment::WeatherFile.new(info['epw']).set_weather_file(model)
     model_run_simulation_and_log_errors(model, run_dir(test_name))
     qaqc = BTAP.perform_qaqc(model)
