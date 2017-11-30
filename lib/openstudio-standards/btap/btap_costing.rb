@@ -352,8 +352,13 @@ class BTAPCosting
               if surface_type == "ExteriorFixedWindow" or surface_type == "ExteriorOperableWindow" or surface_type == "ExteriorSkylight"
                 if rsi > 0.0 then rsi = 1.0/rsi else 0.0 end
               end
-              notes = "RSI out of the range (#{'%.2f' % rsi}) or cost is 0!. Range for #{construction_set[surface_type]} is #{'%.2f' % cost_range_array.first[0]}-#{'%.2f' % cost_range_array.last[0]}."
-              cost = 0.0
+              if !cost_range_array.empty?
+                notes = "RSI out of the range (#{'%.2f' % rsi}) or cost is 0!. Range for #{construction_set[surface_type]} is #{'%.2f' % cost_range_array.first[0]}-#{'%.2f' % cost_range_array.last[0]}."
+                cost = 0.0
+              else
+                notes = "Cost is 0!"
+                cost = 0.0
+              end
             else
               notes = "OK"
             end
@@ -511,13 +516,13 @@ class BTAPCosting
     return json
   end
 
-  #Brute force interpolation...Could be improved easily. Only use for small amount of points.
+  # Brute force interpolation...Could be improved easily. Only use for small amount of points.
   def interpolate(x_y_array, x2)
     array = x_y_array.sort {|a, b| a[0] <=> b[0]}
-    if x2 < array.first[0].to_f or x2 > array.last[0].to_f
+    if array.empty? or x2 < array.first[0].to_f or x2 > array.last[0].to_f
       return nil
     else
-      #ugly hack to interpolate...but it works.
+      # ugly hack to interpolate...but it works.
       array.each_index do |counter|
 
         #skip last value.
@@ -528,10 +533,10 @@ class BTAPCosting
         x1 = array[counter+1][0]
         y1 = array[counter+1][1]
 
-        #skip if x2 is not between x0 and x1
+        # skip if x2 is not between x0 and x1
         next if x2 < x0 and x2 > x1
 
-        #Do interpolation
+        # Do interpolation
         y2 = 0
         if((x1-x0)>0.0)
           y2 = y0.to_f + ((y1-y0).to_f*(x2-x0).to_f/(x1-x0).to_f)
@@ -543,7 +548,7 @@ class BTAPCosting
     end
   end
 
-  #Enter in [latitude, logitude] for each loc and this method will return the distance.
+  # Enter in [latitude, logitude] for each loc and this method will return the distance.
   def distance (loc1, loc2)
     rad_per_deg = Math::PI/180 # PI / 180
     rkm = 6371 # Earth radius in kilometers
