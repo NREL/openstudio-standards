@@ -87,7 +87,7 @@ class NECB2011 < Standard
     # @standards_data['schedules'] = standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
   end
 
-  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
@@ -143,7 +143,13 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
-    return model
+    # If measure model is passed, then replace measure model with new model created here.
+    if measure_model.nil?
+      return model
+    else
+      model_replace_model(measure_model, model)
+      return measure_model
+    end
   end
 
   def set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)

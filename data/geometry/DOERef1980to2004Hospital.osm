@@ -8840,7 +8840,7 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   6,                                      !- Standards Number of Stories
-  1,                                      !- Standards Number of Above Ground Stories
+  5,                                      !- Standards Number of Above Ground Stories
   Hospital,                               !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable

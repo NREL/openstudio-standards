@@ -4262,7 +4262,7 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   4,                                      !- Standards Number of Stories
-  0,                                      !- Standards Number of Above Ground Stories
+  4,                                      !- Standards Number of Above Ground Stories
   SmallHotel;                             !- Standards Building Type
 
 OS:Surface,

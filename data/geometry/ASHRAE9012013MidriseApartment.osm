@@ -1098,7 +1098,7 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   4,                                      !- Standards Number of Stories
-  0,                                      !- Standards Number of Above Ground Stories
+  4,                                      !- Standards Number of Above Ground Stories
   MidriseApartment,                       !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable

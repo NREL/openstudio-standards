@@ -799,7 +799,7 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   1,                                      !- Standards Number of Stories
-  0,                                      !- Standards Number of Above Ground Stories
+  1,                                      !- Standards Number of Above Ground Stories
   RetailStandalone;                       !- Standards Building Type
 
 OS:Surface,

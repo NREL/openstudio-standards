@@ -262,7 +262,7 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   7,                                      !- Standards Number of Stories
-  1,                                      !- Standards Number of Above Ground Stories
+  6,                                      !- Standards Number of Above Ground Stories
   LargeHotel;                             !- Standards Building Type
 
 OS:Connection,

@@ -1227,7 +1227,7 @@ OS:Building,
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   13,                                     !- Standards Number of Stories
-  1,                                      !- Standards Number of Above Ground Stories
+  12,                                     !- Standards Number of Above Ground Stories
   LargeOffice,                            !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable

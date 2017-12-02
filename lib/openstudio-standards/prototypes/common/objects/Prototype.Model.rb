@@ -1,8 +1,7 @@
-
 Standard.class_eval do
   # @!group Model
 
-  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false)
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
@@ -75,8 +74,38 @@ Standard.class_eval do
     model_update_fan_efficiency(model)
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
-    return model
+    # If measure model is passed, then replace measure model with new model created here.
+    if measure_model.nil?
+      return model
+    else
+      model_replace_model(measure_model, model)
+      return measure_model
+    end
   end
+
+
+  def model_replace_model(model, new_model, runner = nil)
+
+    # pull original design days over
+    new_model.getDesignDays.sort.each {|designDay|
+      designDay.remove
+    }
+    model.getDesignDays.sort.each {|designDay|
+      designDay.clone(new_model)
+    }
+
+    # swap underlying data in model with underlying data in new_model
+    # remove existing objects from model
+    handles = OpenStudio::UUIDVector.new
+    model.objects.each do |obj|
+      handles << obj.handle
+    end
+    model.removeObjects(handles)
+    # add new file to empty model
+    model.addObjects(new_model.toIdfFile.objects)
+    BTAP::runner_register("Info", "Model name is now #{model.building.get.name}.", runner)
+  end
+
 
   # Replaces all objects in the current model
   # with the objects in the .osm.  Typically used to
@@ -84,11 +113,11 @@ Standard.class_eval do
   #
   # @param rel_path_to_osm [String] the path to an .osm file, relative to this file
   # @return [Bool] returns true if successful, false if not
-  def model_replace_model(model, rel_path_to_osm)
+  def model_replace_model_from_osm(model, rel_path_to_osm)
     # Take the existing model and remove all the objects
     # (this is cheesy), but need to keep the same memory block
     handles = OpenStudio::UUIDVector.new
-    model.objects.each { |objects| handles << objects.handle }
+    model.objects.each {|objects| handles << objects.handle}
     model.removeObjects(handles)
     model = nil
     if File.dirname(__FILE__)[0] == ':'
@@ -447,8 +476,8 @@ Standard.class_eval do
     # add internal mass
     # not required for NECB 2011
     unless (template == 'NECB 2011') ||
-           ((building_type == 'SmallHotel') &&
-               (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
+        ((building_type == 'SmallHotel') &&
+            (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
@@ -765,8 +794,8 @@ Standard.class_eval do
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Occupancy Sensors')
 
     space_type_reduction_map = {
-      'SecondarySchool' => { 'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22 },
-      'PrimarySchool' => { 'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22 }
+        'SecondarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22},
+        'PrimarySchool' => {'Classroom' => 0.32, 'Restroom' => 0.34, 'Office' => 0.22}
     }
 
     # Loop through all the space types and reduce lighting operation schedule fractions as-specified
@@ -1035,19 +1064,19 @@ Standard.class_eval do
     # Fans
     # Pressure Rise
 
-    model.getFanConstantVolumes.sort.each { |obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj) }
-    model.getFanVariableVolumes.sort.each { |obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj) }
-    model.getFanOnOffs.sort.each { |obj| fan_on_off_apply_prototype_fan_pressure_rise(obj) }
-    model.getFanZoneExhausts.sort.each { |obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj) }
+    model.getFanConstantVolumes.sort.each {|obj| fan_constant_volume_apply_prototype_fan_pressure_rise(obj)}
+    model.getFanVariableVolumes.sort.each {|obj| fan_variable_volume_apply_prototype_fan_pressure_rise(obj)}
+    model.getFanOnOffs.sort.each {|obj| fan_on_off_apply_prototype_fan_pressure_rise(obj)}
+    model.getFanZoneExhausts.sort.each {|obj| fan_zone_exhaust_apply_prototype_fan_pressure_rise(obj)}
 
     # Motor Efficiency
-    model.getFanConstantVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
-    model.getFanVariableVolumes.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
-    model.getFanOnOffs.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
-    model.getFanZoneExhausts.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
+    model.getFanConstantVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
+    model.getFanVariableVolumes.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
+    model.getFanOnOffs.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
+    model.getFanZoneExhausts.sort.each {|obj| prototype_fan_apply_prototype_fan_efficiency(obj)}
 
     # Gas Heating Coil
-    model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_prototype_efficiency(obj) }
+    model.getCoilHeatingGass.sort.each {|obj| coil_heating_gas_apply_prototype_efficiency(obj)}
 
     ##### Add Economizers
 
@@ -1055,7 +1084,7 @@ Standard.class_eval do
 
     # TODO: What is the logic behind hard-sizing
     # hot water coil convergence tolerances?
-    model.getControllerWaterCoils.sort.each { |obj| controller_water_coil_set_convergence_limits(obj) }
+    model.getControllerWaterCoils.sort.each {|obj| controller_water_coil_set_convergence_limits(obj)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
   end
@@ -1431,8 +1460,8 @@ Standard.class_eval do
     end
 
     # Group the zones by occupancy type
-    type_to_area = Hash.new { 0.0 }
-    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
+    type_to_area = Hash.new {0.0}
+    zones_grouped_by_occ = zones.group_by {|z| z['occ']}
 
     # Determine the dominant occupancy type by area
     zones_grouped_by_occ.each do |occ_type, zns|
@@ -1440,7 +1469,7 @@ Standard.class_eval do
         type_to_area[occ_type] += zn['area']
       end
     end
-    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
+    dom_occ = type_to_area.sort_by {|k, v| v}.reverse[0][0]
 
     # Get the dominant occupancy type group
     dom_occ_group = zones_grouped_by_occ[dom_occ]
