@@ -1,3 +1,5 @@
+#converts the WeatherData1.xlsx spreadsheet into a ruby hash using the rubyXL gem
+
 require 'csv'
 require 'json'
 require 'rubyXL'
@@ -44,6 +46,7 @@ data_hash.each do |info|
   info['longitude'] = info['longitude'].to_f
   info['elevation'] = info['elevation'].to_i
   info['deltadb'] = info['deltadb'].to_f
+  info['mau_type'] = true
 
 end
 
