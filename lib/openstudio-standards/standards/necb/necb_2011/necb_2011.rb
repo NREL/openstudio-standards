@@ -10,47 +10,92 @@ class NECB2011 < Standard
     @template = @@template
     load_standards_database
 
-    # NECB Values
-    # @standards_data["climate_zone_sets"] = [
-    #     {"name" => "NECB-CNEB ClimatZone 4-8", "climate_zones" => ["NECB HDD Method"]}
-    # ]
-    @standards_data['occupancy_sensors'] = [
-      { 'standard_space_type_name ' => 'Storage area',                'max_floor_area' => 100.0 },
-      { 'standard_space_type_name ' => 'Storage area - refrigerated', 'max_floor_area' => 100.0 },
-      { 'standard_space_type_name ' => 'Hospital - medical supply',   'max_floor_area' => 100.0 },
-      { 'standard_space_type_name ' => 'Office - enclosed',           'max_floor_area' => 25.0 }
-    ]
-
-    @standards_data['climate_zone_info'] = [
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 4',   'max_hdd' => 2999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 5',   'max_hdd' => 3999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 6',   'max_hdd' => 4999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 7a',  'max_hdd' => 5999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 7a',  'max_hdd' => 6999.0 },
-      { 'template' => 'NECB 2011', 'climate_zone_name' => 'NECB_2011_Zone 8',   'max_hdd' => 9999.0 }
-    ]
-    # NECB_2011_S_3_2_1_4
-    # This is the formula that will be used in a ruby eval given the hdd variable.
-    @standards_data['fdwr_formula'] = '(hdd < 4000.0) ? 0.4 : (hdd >= 4000.0 and hdd < 7000.0 ) ? ( (2000.0 - 0.2* hdd) / 3000.00) : 0.2'
-    @standards_data['coolingSizingFactor'] = 1.3
-    @standards_data['heatingSizingFactor'] = 1.3
-
-    @standards_data['thermal_transmitance'] = {}
     # Surfaces
-    @standards_data['thermal_transmitance']['wall_W_per_m2_K']                = '(hdd < 3000) ? 0.315 : (hdd < 4000) ? 0.278 : (hdd < 5000) ? 0.247 : (hdd < 6000) ? 0.210 :(hdd < 7000) ? 0.210 : 0.183'
-    @standards_data['thermal_transmitance']['roof_W_per_m2_K']                = '(hdd < 3000) ? 0.227 : (hdd < 4000) ? 0.183 : (hdd < 5000) ? 0.183 : (hdd < 6000) ? 0.162 :(hdd < 7000) ? 0.162 : 0.142'
-    @standards_data['thermal_transmitance']['floor_W_per_m2_K']               = '(hdd < 3000) ? 0.227 : (hdd < 4000) ? 0.183 : (hdd < 5000) ? 0.183 : (hdd < 6000) ? 0.162 :(hdd < 7000) ? 0.162 : 0.142'
+    @standards_data['surface_thermal_transmittance_table'] = {
+        'data_type' => 'table',
+        'ref' => ['NECB2011_S_3.2.2.2', 'NECB2011_S_3.2.2.3', 'NECB2011_S_3.2.2.4', 'NECB2011_S_3.2.3.1'],
+        'units' => 'W_per_m2_K',
+        'formula_variable_ranges' => {
+            'hdd' => [0.0,10000.0]
+        },
+        'table' => [
+            {'boundary_condition' => 'Outdoors', 'surface' => 'Wall', 'formula' => "( hdd < 3000) ? 0.315 : ( hdd < 4000) ? 0.278 : ( hdd < 5000 ) ? 0.247 : ( hdd < 6000) ? 0.210 :( hdd < 7000) ? 0.210 : 0.183"},
+            {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling', 'formula' => "( hdd < 3000) ? 0.227 : ( hdd < 4000) ? 0.183 : ( hdd < 5000 ) ? 0.183 : ( hdd < 6000) ? 0.162 :( hdd < 7000) ? 0.162 : 0.142"},
+            {'boundary_condition' => 'Outdoors', 'surface' => 'Floor', 'formula' => "( hdd < 3000) ? 0.227 : ( hdd < 4000) ? 0.183 : ( hdd < 5000 ) ? 0.183 : ( hdd < 6000) ? 0.162 :( hdd < 7000) ? 0.162 : 0.142"},
+            {'boundary_condition' => 'Outdoors', 'surface' => 'Window', 'formula' => " ( hdd < 3000) ? 2.400 : ( hdd < 7000) ? 2.200 : 1.600"},
+            {'boundary_condition' => 'Outdoors', 'surface' => 'Door', 'formula' => "( hdd < 3000) ? 2.400 : ( hdd < 7000) ? 2.200 : 1.600"},
+            {'boundary_condition' => 'Ground', 'surface' => 'Wall', 'formula' => "( hdd < 3000) ? 0.568 : ( hdd < 4000) ? 0.379 : ( hdd < 7000) ? 0.284 : 0.210"},
+            {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling', 'formula' => "( hdd < 3000) ? 0.568 : ( hdd < 4000) ? 0.379 : ( hdd < 7000) ? 0.284 : 0.210"},
+            {'boundary_condition' => 'Ground', 'surface' => 'Floor', 'formula' => "( hdd < 7000) ? 0.757 : 0.379"}
+        ],
+        'notes' => 'Requires hdd to be defined to be evaluated in code. Never have ground windows or doors.'
+    }
 
-    @standards_data['thermal_transmitance']['ground_wall_W_per_m2_K']         = '(hdd < 3000) ? 0.568 : (hdd < 4000) ? 0.379 : (hdd < 7000) ? 0.284 : 0.210'
-    @standards_data['thermal_transmitance']['ground_roof_W_per_m2_K']         = '(hdd < 3000) ? 0.568 : (hdd < 4000) ? 0.379 : (hdd < 7000) ? 0.284 : 0.210'
-    @standards_data['thermal_transmitance']['ground_floor_W_per_m2_K']        = '(hdd < 7000) ? 0.757 : 0.379'
-    @standards_data['thermal_transmitance']['ground_floor_perimeter_depth_m'] = '(hdd < 7000) ? 1.2 : 999999999.9'
-    # Subsurfaces
-    @standards_data['thermal_transmitance']['window_W_per_m2_K']              = '(hdd < 3000) ? 2.400 : (hdd < 7000) ? 2.200 : 1.600'
-    @standards_data['thermal_transmitance']['door_W_per_m2_K']                = '(hdd < 3000) ? 2.400 : (hdd < 7000) ? 2.200 : 1.600'
+    @standards_data['fdwr_formula'] = {
+        'data_type' => 'formula',
+        'refs' => ['NECB2011_S_3.2.1.4(1)'],
+        'formula_variable_ranges' => {
+            'hdd' => [ 0.0, 10000.0]
+        },
+        'formula' => ' ( hdd < 4000.0) ? 0.4 :
+                       ( hdd >= 4000.0 and hdd < 7000.0 ) ? ( (2000.0 - 0.2* hdd) / 3000.00) :
+                        0.2;',
+        'units' => 'ratio',
+        'notes' => 'Requires hdd to be defined to be evaluated in code.'
+    }
 
-    @standards_data['fan_variable_volume_pressure_rise'] = 1458.33
-    @standards_data['fan_constant_volume_pressure_rise'] = 640.00
+    @standards_data['skylight_to_roof_ratio_max_value'] = {
+        'data_type' => 'value',
+        'refs' => ['NECB2011_S_3.2.1.4(2)'],
+        'value' => 0.05,
+        'units' => 'ratio'
+    }
+
+    @standards_data['sizing_factor_max_cooling'] = {
+        'data_type' => 'value',
+        'refs' => 'NECB2011_S_8.4.4.9(1)',
+        'unit' => 'ratio',
+        'value' => 1.10
+    }
+
+    @standards_data['sizing_factor_max_heating'] = {
+        'data_type' => 'value',
+        'refs' => ['NECB2011_S_8.4.4.9(2)'],
+        'unit' => 'ratio',
+        'value' => 1.30
+    }
+
+
+    @standards_data['occupancy_sensors_space_types_formula'] = {
+        'data_type' => 'formula',
+        'ref' => ['NECB2011_S_8.4.4.6(3)'],
+        'formula_variable_ranges' => {
+            'standard_space_type_name' => ["String"],
+            'floor_area' => [0.0, 9999999999.9]
+        },
+        'formula' => " ( [ 'Storage area','Storage area - refrigerated','Hospital - medical supply'].include?(standard_space_type_name) and floor_area < 100.0) or ( 'Office - enclosed' == standard_space_type_name and floor_area < 25.0) ? true : false ",
+        'units' => 'bool',
+        'note' => ''
+
+    }
+
+    #Fan Information
+    @standards_data['fan_constant_volume_pressure_rise_value'] = {
+        'data_type' => 'value',
+        'ref' => ['Assumption'],
+        'value' => 640.00,
+        'units' => 'Pa'
+    }
+
+    @standards_data['fan_variable_volume_pressure_rise_value'] = {
+        'data_type' => 'value',
+        'ref' => ['Assumption'],
+        'value' => 1458.33,
+        'units' => 'Pa',
+        'notes' => 'Sets the fan pressure rise based on the Prototype buildings inputs which are governed by the flow rate coming through the fan and whether the fan lives inside a unit heater, PTAC, etc. 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)'
+    }
+
+
     # NECB Infiltration rate information for standard.
     @standards_data['infiltration'] = {}
     @standards_data['infiltration']['rate_m3_per_s_per_m2'] = 0.25 * 0.001 # m3/s/m2
@@ -60,30 +105,27 @@ class NECB2011 < Standard
     @standards_data['infiltration']['velocity_squared_term_coefficient'] = 0.0
     @standards_data['skylight_to_roof_ratio'] = 0.05
     @standards_data['necb_hvac_system_selection_type'] = [
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => '- undefined -', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 0, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Assembly Area', 'min_stories' => 0, 'max_stories' => 4, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 3, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Assembly Area', 'min_stories' => 4, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 6, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Automotive Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 4, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Data Processing Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 19.999, 'system_type' => 1, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Data Processing Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 2, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'General Area', 'min_stories' => 2, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 3, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'General Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 6, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Historical Collections Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 2, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Hospital Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 3, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Indoor Arena', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 7, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Industrial Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 3, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Residential/Accomodation Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 1, 'dwelling' => true },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Sleeping Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 3, 'dwelling' => true },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Supermarket/Food Services Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 3, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Supermarket/Food Services Area - vented', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 4, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Warehouse Area', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 4, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Warehouse Area - refrigerated', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => 5, 'dwelling' => false },
-      { 'template' => 'NECB 2011', 'necb_hvac_system_selection_type' => 'Wildcard', 'min_stories' => 0, 'max_stories' => 99_999, 'max_cooling_capacity_kw' => 99_999, 'system_type' => nil, 'dwelling' => false }
+      { 'necb_hvac_system_selection_type' => '- undefined -', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 0, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Assembly Area', 'min_stories' => 0, 'max_stories' => 4, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Assembly Area', 'min_stories' => 4, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 6, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Automotive Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 4, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Data Processing Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 19.999, 'system_type' => 1, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Data Processing Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 2, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'General Area', 'min_stories' => 2, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'General Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 6, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Historical Collections Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 2, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Hospital Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Indoor Arena', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 7, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Industrial Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Residential/Accomodation Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 1, 'dwelling' => true },
+      { 'necb_hvac_system_selection_type' => 'Sleeping Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => true },
+      { 'necb_hvac_system_selection_type' => 'Supermarket/Food Services Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Supermarket/Food Services Area - vented', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 4, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Warehouse Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 4, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Warehouse Area - refrigerated', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 5, 'dwelling' => false },
+      { 'necb_hvac_system_selection_type' => 'Wildcard', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => nil, 'dwelling' => false }
     ]
-    @standards_data['fan_motors'] = [
-      { 'template' => 'NECB 2011', 'fan_type' => 'CONSTANT', 'number_of_poles' => 4.0, 'type' => 'Enclosed', 'synchronous_speed' => 1800.0, 'minimum_capacity' => 0.0, 'maximum_capacity' => 9999.0, 'nominal_full_load_efficiency' => 0.615, 'notes' => 'To get total fan efficiency of 40% (0.4/0.65)' },
-      { 'template' => 'NECB 2011', 'fan_type' => 'VARIABLE', 'number_of_poles' => 4.0, 'type' => 'Enclosed', 'synchronous_speed' => 1800.0, 'minimum_capacity' => 0.0, 'maximum_capacity' => 9999.0, 'nominal_full_load_efficiency' => 0.8461, 'notes' => 'To get total fan efficiency of 55% (0.55/0.65)' }
-    ]
+
     # @standards_data['schedules'] = standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
   end
 

@@ -1071,13 +1071,13 @@ class NECB2011
   end
 
   def model_apply_sizing_parameters(model)
-    model.getSizingParameters.setHeatingSizingFactor(@standards_data['coolingSizingFactor'])
-    model.getSizingParameters.setCoolingSizingFactor(@standards_data['heatingSizingFactor'])
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{@standards_data['heatingSizingFactor']} for heating and #{@standards_data['coolingSizingFactor']} for cooling.")
+    model.getSizingParameters.setHeatingSizingFactor(@standards_data['sizing_factor_max_heating']['value'])
+    model.getSizingParameters.setCoolingSizingFactor(@standards_data['sizing_factor_max_cooling']['value'])
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{@standards_data['sizing_factor_max_heating']['value']} for heating and #{@standards_data['sizing_factor_max_cooling']['value']} for cooling.")
   end
 
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
-    fan_constant_volume.setPressureRise(@standards_data['fan_constant_volume_pressure_rise'])
+    fan_constant_volume.setPressureRise(@standards_data['fan_constant_volume_pressure_rise_value']['value'])
     return true
   end
 
@@ -1086,7 +1086,7 @@ class NECB2011
   # and whether the fan lives inside a unit heater, PTAC, etc.
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
-    fan_variable_volume.setPressureRise(@standards_data['fan_variable_volume_pressure_rise'])
+    fan_variable_volume.setPressureRise(@standards_data['fan_variable_volume_pressure_rise_value']['value'] )
     return true
   end
 

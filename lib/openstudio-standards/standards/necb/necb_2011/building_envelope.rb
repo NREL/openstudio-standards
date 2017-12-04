@@ -203,7 +203,7 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
     # SRR limit
-    srr_lim = @standards_data['skylight_to_roof_ratio'] * 100.0
+    srr_lim = @standards_data['skylight_to_roof_ratio_max_value']['value'] * 100.0
 
     # Check against SRR limit
     red_nr = srr_nr > srr_lim
@@ -240,8 +240,7 @@ class NECB2011
   # @param hdd [Float]
   # @return [Double] a constant float
   def max_fwdr(hdd)
-    # NECB 3.2.1.4
-    eval(@standards_data['fdwr_formula'])
+    return eval(@standards_data['fdwr_formula']['formula'])
   end
 
   # Go through the default construction sets and hard-assigned
@@ -303,21 +302,22 @@ class NECB2011
       BTAP.runner_register('Error', 'Weather file is not defined. Please ensure the weather file is defined and exists.', runner)
       return false
     end
+
+    #Note:hdd needs to be defined for eval to work on table eval below.
     hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
 
     old_name = default_surface_construction_set.name.get.to_s
-
     new_name = "#{old_name} at hdd = #{hdd}"
-    @standards_data['conductances']
+    table = @standards_data['surface_thermal_transmittance_table']['table']
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * eval(@standards_data['thermal_transmitance']['wall_W_per_m2_K']))
-    floor_rsi = 1.0 / (scale_floor * eval(@standards_data['thermal_transmitance']['floor_W_per_m2_K']))
-    roof_rsi = 1.0 / (scale_roof * eval(@standards_data['thermal_transmitance']['roof_W_per_m2_K']))
-    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(@standards_data['thermal_transmitance']['ground_wall_W_per_m2_K']))
-    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(@standards_data['thermal_transmitance']['ground_floor_W_per_m2_K']))
-    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(@standards_data['thermal_transmitance']['ground_roof_W_per_m2_K']))
-    door_rsi = 1.0 / (scale_door * eval(@standards_data['thermal_transmitance']['door_W_per_m2_K']))
-    window_rsi = 1.0 / (scale_window * eval(@standards_data['thermal_transmitance']['window_W_per_m2_K']))
+    wall_rsi = 1.0 / (scale_wall * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Wall'}['formula']))
+    floor_rsi = 1.0 / (scale_floor * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Floor'}['formula']))
+    roof_rsi = 1.0 / (scale_roof * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'RoofCeiling'}['formula']))
+    ground_wall_rsi = 1.0 / (scale_ground_wall * eval( table.detect {|row| row['boundary_condition'] == 'Ground' and row['surface'] == 'Wall'}['formula']))
+    ground_floor_rsi = 1.0 / (scale_ground_floor * eval( table.detect {|row| row['boundary_condition'] == 'Ground' and row['surface'] == 'Floor'}['formula']))
+    ground_roof_rsi = 1.0 / (scale_ground_roof * eval( table.detect {|row| row['boundary_condition'] == 'Ground' and row['surface'] == 'RoofCeiling'}['formula']))
+    door_rsi = 1.0 / (scale_door * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Door'}['formula']))
+    window_rsi = 1.0 / (scale_window * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Window'}['formula']))
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
                                                                                                 wall_rsi, floor_rsi, roof_rsi,
                                                                                                 ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
