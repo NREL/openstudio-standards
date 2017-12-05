@@ -545,7 +545,7 @@
       "notes": "From CBECC Appendix_3.7_PerformanceCurves-S901G.xlsx"
     },
     {
-      "name": "Curve Biquadratic 1",
+      "name": "Curve_Biquadratic_CBES_1",
       "coeff_1": 0.9425878,
       "coeff_2": 0.00954335,
       "coeff_3": 0.00068377,
@@ -558,10 +558,10 @@
       "max_y": 46.0,
       "min_out": null,
       "max_out": null,
-      "notes": "CBES StandAloneRetail"
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "name": "Curve Biquadratic 2",
+      "name": "Curve_Biquadratic_CBES_2",
       "coeff_1": 0.3424144,
       "coeff_2": 0.03488501,
       "coeff_3": -0.0006237,
@@ -574,10 +574,10 @@
       "max_y": 46.0,
       "min_out": null,
       "max_out": null,
-      "notes": "CBES StandAloneRetail"
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "name": "Curve Biquadratic 3",
+      "name": "Curve_Biquadratic_CBES_3",
       "coeff_1": 0.9425878,
       "coeff_2": 0.00954335,
       "coeff_3": 0.00068377,
@@ -590,10 +590,10 @@
       "max_y": 46.0,
       "min_out": null,
       "max_out": null,
-      "notes": "CBES Medium Office"
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "name": "Curve Biquadratic 4",
+      "name": "Curve_Biquadratic_CBES_4",
       "coeff_1": 0.3424144,
       "coeff_2": 0.03488501,
       "coeff_3": -0.0006237,
@@ -606,7 +606,7 @@
       "max_y": 46.0,
       "min_out": null,
       "max_out": null,
-      "notes": "CBES Medium Office"
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "name": "DOE Ref DX Clg Coil Cool-Cap-fT",
@@ -1310,7 +1310,7 @@
       "max_y": 100.0,
       "min_out": null,
       "max_out": null,
-      "notes": "CBES Small Office"
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "name": "back perimeter space Energy input ration of temperature",
@@ -1326,7 +1326,7 @@
       "max_y": 43.3,
       "min_out": null,
       "max_out": null,
-      "notes": "CBES Small Office"
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     }
   ]
 }

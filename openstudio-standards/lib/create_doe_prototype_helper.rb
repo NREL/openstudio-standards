@@ -390,7 +390,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
   def CreateDOEPrototypeBuildingTest.compare_test_results(bldg_types, vintages, climate_zones, file_ext="")
   
     #### Compare results against legacy idf results      
-    acceptable_error_percentage = 10 # Max 5% error for any end use/fuel type combo
+    acceptable_error_percentage = 0 # Max 5% error for any end use/fuel type combo
     failures = []
     
     # Load the legacy idf results JSON file into a ruby hash
@@ -511,7 +511,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               if osm_val > 0 && legacy_val > 0
                 # If both
                 percent_error = ((osm_val - legacy_val)/legacy_val) * 100
-                if percent_error.abs > acceptable_error_percentage
+                if percent_error.abs >= acceptable_error_percentage
                   failures << "#{building_type}-#{building_vintage}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round}% (#{osm_val}, #{legacy_val})"
                 end
               elsif osm_val > 0 && legacy_val.abs < 1e-6

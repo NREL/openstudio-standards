@@ -508,7 +508,7 @@ class OpenStudio::Model::Model
           water_heater = component.to_WaterHeaterMixed.get
 
           # apply efficiency to hot water heater
-          water_heater.apply_efficiency(template)
+          water_heater.apply_efficiency(template, building_type)
         end
 
         # add to list of systems
@@ -551,7 +551,7 @@ class OpenStudio::Model::Model
             water_heater = component.to_WaterHeaterMixed.get
 
             # apply efficiency to hot water heater
-            water_heater.apply_efficiency(template)
+            water_heater.apply_efficiency(template, building_type)
           end
 
           # rename booster loop
@@ -692,7 +692,7 @@ class OpenStudio::Model::Model
         water_heater = component.to_WaterHeaterMixed.get
 
         # apply efficiency to hot water heater
-        water_heater.apply_efficiency(template)
+        water_heater.apply_efficiency(template, building_type)
       end
 
       # loop through water use equipment

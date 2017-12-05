@@ -53,10 +53,10 @@ class TestSmallOffice < CreateDOEPrototypeBuildingTest
   epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw']
   
   create_models = true
-  run_models = false
-  compare_results = false
+  run_models = true
+  compare_results = true
   
-  debug = false
+  debug = true
   
   TestSmallOffice.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   

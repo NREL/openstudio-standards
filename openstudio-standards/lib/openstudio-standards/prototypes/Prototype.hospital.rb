@@ -449,7 +449,7 @@ module Hospital
     space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
-      space.add_daylighting_controls(template, false, false)
+      space.add_daylighting_controls(template, climate_zone, false, false)
     end
   end
 

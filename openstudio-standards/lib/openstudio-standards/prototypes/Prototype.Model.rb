@@ -138,6 +138,12 @@ class OpenStudio::Model::Model
       add_loads(template, climate_zone)
       apply_infiltration_standard(template)
       modify_infiltration_coefficients(building_type, template, climate_zone)
+      
+      # add a runperiod daylight saving objects
+      apply_runperiodcontrol_daylightsavingtime(template)
+      # apply_runperiodcontrol_thanksgiving(template)
+      # apply_runperiodcontrol_newyear(template)
+      # apply_runperiodcontrol_specialdays(template)
       modify_surface_convection_algorithm(template)
       add_constructions(building_type, template, climate_zone)
       create_thermal_zones(building_type, template, climate_zone)
@@ -196,7 +202,7 @@ class OpenStudio::Model::Model
     end
 
     # Apply the HVAC efficiency standard
-    apply_hvac_efficiency_standard(template, climate_zone)
+    apply_hvac_efficiency_standard(template, climate_zone,building_type)
 
     # Fix EMS references.
     # Temporary workaround for OS issue #2598
@@ -210,7 +216,7 @@ class OpenStudio::Model::Model
     elsif building_type == 'Hospital'
       PrototypeBuilding::Hospital.hospital_add_daylighting_controls(template, self)
     else
-      add_daylighting_controls(template)
+      add_daylighting_controls(template,climate_zone)
     end
 
     if building_type == 'QuickServiceRestaurant'
@@ -1374,6 +1380,67 @@ class OpenStudio::Model::Model
     end
   end
 
+  
+  # insert a run period control daylight saving objects.
+  #
+  # @param (see #add_constructions)
+  # @return [Bool] returns true if successful, false if not
+  def apply_runperiodcontrol_daylightsavingtime(template)
+    # Default unless otherwise specified
+    start_date  = '2nd Sunday in March'
+    end_date = '1st Sunday in November'
+
+    runperiodctrl_daylgtsaving = getRunPeriodControlDaylightSavingTime
+    runperiodctrl_daylgtsaving.setStartDate(start_date)
+    runperiodctrl_daylgtsaving.setEndDate(end_date)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set Daylight Saving Start Date to #{start_date} and end date to #{end_date} for cooling.")
+  end
+
+  # insert a run period control daylight saving objects.
+  #
+  # @param (see #add_constructions)
+  # @return [Bool] returns true if successful, false if not
+  def apply_runperiodcontrol_newyear(template)
+  
+    newyear = OpenStudio::Model::RunPeriodControlSpecialDays.new('1/1', self)
+    newyear.setName('New Year')
+    newyear.setSpecialDayType('Holiday')
+    
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "New Year to Holiday.")
+  end
+
+  
+  def apply_runperiodcontrol_thanksgiving(template)
+  
+    fourth = OpenStudio::NthDayOfWeekInMonth.new(4)
+    thurs = OpenStudio::DayOfWeek.new('Thursday')
+    nov = OpenStudio::MonthOfYear.new('November')
+    thanksgiving = OpenStudio::Model::RunPeriodControlSpecialDays.new(fourth, thurs, nov, self)
+    thanksgiving.setName('Thanksgiving')
+    thanksgiving.setSpecialDayType('Holiday')
+    
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set Thanksgiving to Holiday.")
+  end  
+
+  
+    # Default unless otherwise specified
+    # start_date  = 'January 1'
+    # duration = '1'
+    # specialDayType = 'Holiday'
+   
+  
+    # OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "#############$$$$$$$$$$$$$$$$$$$$###################")
+    
+    # runperiodctrl_specialdays = getRunPeriodControlSpecialDays('New Year')
+    # runperiodctrl_specialdays.setStartDate(start_date)
+    # r# unperiodctrl_specialdays.setDuration(duration)
+    # runperiodctrl_specialdays.setSpecialDayType(specialDayType)
+  
+    # OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set Special Day Start Date to #{start_date} and dat type to #{specialDayType}.")
+  # end
+  
+  
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)

@@ -466,15 +466,6 @@
       ]
     },
     {
-      "name": "NACM_Drop Ceiling",
-      "intended_surface_type": "InteriorCeiling",
-      "standards_construction_type": null,
-      "insulation_layer": null,
-      "materials": [
-        "NACM_Acoustic Tile 3/4in"
-      ]
-    },
-    {
       "name": "NACM_Interior Floor",
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": null,
@@ -2228,138 +2219,111 @@
       ]
     },
     {
-      "name": "Window10",
+      "name": "U0.47_SHGC0.46_SimpleGlazing_Window_07",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window10"
+        "U0.47_SHGC0.46_SimpleGlazing_Window_07"
       ]
     },
     {
-      "name": "Window11",
+      "name": "U0.47_SHGC0.47_SimpleGlazing_Window_06",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window11"
+        "U0.47_SHGC0.47_SimpleGlazing_Window_06"
       ]
     },
     {
-      "name": "Window12",
+      "name": "U0.47_SHGC0.47_SimpleGlazing_Window_11",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window12"
+        "U0.47_SHGC0.47_SimpleGlazing_Window_11"
       ]
     },
     {
-      "name": "Window2",
+      "name": "U0.47_SHGC0.5_SimpleGlazing_Window_03",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window2"
+        "U0.47_SHGC0.5_SimpleGlazing_Window_03"
       ]
     },
     {
-      "name": "Window3",
+      "name": "U0.47_SHGC_0.49_SimpleGlazing_Window_05",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window3"
+        "U0.47_SHGC_0.49_SimpleGlazing_Window_05"
       ]
     },
     {
-      "name": "Window4",
+      "name": "U0.77_SHGC0.5_SimpleGlazing_Window_09",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window4"
+        "U0.77_SHGC0.5_SimpleGlazing_Window_09"
       ]
     },
     {
-      "name": "Window5",
+      "name": "U0.77_SHGC0.61_SimpleGlazing_Window_08",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window5"
+        "U0.77_SHGC0.61_SimpleGlazing_Window_08"
       ]
     },
     {
-      "name": "Window6",
+      "name": "U0.77_SHGC0.62_SimpleGlazing_Window_04",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window6"
+        "U0.77_SHGC0.62_SimpleGlazing_Window_04"
       ]
     },
     {
-      "name": "Window7",
+      "name": "U0.77_SHGC_0.77_SimpleGlazing_Window_02",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window7"
+        "U0.77_SHGC_0.77_SimpleGlazing_Window_02"
       ]
     },
     {
-      "name": "Window8",
+      "name": "U1.23_SHGC0.5_SimpleGlazing_Window_12",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window8"
+        "U1.23_SHGC0.5_SimpleGlazing_Window_12"
       ]
     },
     {
-      "name": "Window9",
+      "name": "U1.23_SHGC0.82_SimpleGlazing_Window_01",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window9"
+        "U1.23_SHGC0.82_SimpleGlazing_Window_01"
       ]
     },
     {
-      "name": "Window_Skylt_T24_2013",
-      "intended_surface_type": "Skylight",
-      "standards_construction_type": null,
-      "insulation_layer": null,
-      "materials": [
-        "Window_Skylt_T24_2013"
-      ]
-    },
-    {
-      "name": "Window_m1",
+      "name": "U1.23_SHGC0.82_SimpleGlazing_Window_10",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
       "materials": [
-        "Window_m1"
-      ]
-    },
-    {
-      "name": "Window_m2",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": null,
-      "insulation_layer": null,
-      "materials": [
-        "Window_m2"
-      ]
-    },
-    {
-      "name": "Window_u2_T24_2013",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": null,
-      "insulation_layer": null,
-      "materials": [
-        "Window_u2_T24_2013"
+        "U1.23_SHGC0.82_SimpleGlazing_Window_10"
       ]
     },
     {
@@ -2372,6 +2336,16 @@
         "Compliance Insulation R6.46",
         "Air - Metal Wall Framing - 16 or 24 in. OC",
         "Gypsum Board - 3/8 in."
+      ]
+    },
+    {
+      "name": "ceiling_Metal roof",
+      "intended_surface_type": "InteriorCeiling",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "materials": [
+        "Metal Standing Seam - 1/16 in.",
+        "ceiling_2_Insulation"
       ]
     },
     {
@@ -2440,15 +2414,6 @@
       "materials": [
         "1/2 in. Gypsum Board",
         "1/2 in. Gypsum Board"
-      ]
-    },
-    {
-      "name": "window1",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": null,
-      "insulation_layer": null,
-      "materials": [
-        "window1"
       ]
     }
   ]

@@ -23,7 +23,8 @@ module RetailStandalone
         'Back_Space' => ['Back_Space'],
         'Entry' => ['Front_Entry'],
         'Point_of_Sale' => ['Point_Of_Sale'],
-        'Retail' => ['Core_Retail', 'Front_Retail']
+        'Core_Retail' => ['Core_Retail'],
+        'Front_Retail' => ['Front_Retail']
       }
     end
     return space_type_map
@@ -43,20 +44,63 @@ module RetailStandalone
     return system_to_space_map
   end
 
+
+  # def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
+    # OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+
+    # # Add the door infiltration for template 2004,2007,2010,2013
+    # case template
+    # when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      # entry_space = model.getSpaceByName('Front_Entry').get
+      # infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+      # infiltration_entry.setName('Entry door Infiltration')
+      # infiltration_per_zone = 1.418672682
+      # infiltration_entry.setDesignFlowRate(infiltration_per_zone)
+      # infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH'))
+      # infiltration_entry.setSpace(entry_space)
+    # end
+
+    # OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
+
+    # return true
+  # end
+  
   def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
     # Add the door infiltration for template 2004,2007,2010,2013
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004'
       entry_space = model.getSpaceByName('Front_Entry').get
       infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_entry.setName('Entry door Infiltration')
       infiltration_per_zone = 1.418672682
       infiltration_entry.setDesignFlowRate(infiltration_per_zone)
-      infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH'))
+      infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH'))        
       infiltration_entry.setSpace(entry_space)
+    
+    # temporal solution for CZ dependent door infiltration rate.  In fact other standards need similar change as well
+    when '90.1-2007', '90.1-2010', '90.1-2013'
+      entry_space = model.getSpaceByName('Front_Entry').get
+      infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+      infiltration_entry.setName('Entry door Infiltration')
+      case climate_zone
+      when 'ASHRAE 169-2006-1A','ASHRAE 169-2006-1B','ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+        infiltration_per_zone = 1.418672682    
+        infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH')) 
+      else
+        infiltration_per_zone = 0.937286742
+        infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH_2013')) 
+      end
+      infiltration_entry.setDesignFlowRate(infiltration_per_zone)               
+      infiltration_entry.setSpace(entry_space)    
     end
+    
+    # add these additional coefficient inputs
+    infiltration_entry.setConstantTermCoefficient(1.0)
+    infiltration_entry.setTemperatureTermCoefficient(0.0)
+    infiltration_entry.setVelocityTermCoefficient(0.0)
+    infiltration_entry.setVelocitySquaredTermCoefficient(0.0)    
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 

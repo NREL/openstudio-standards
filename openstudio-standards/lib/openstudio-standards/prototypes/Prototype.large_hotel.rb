@@ -244,7 +244,7 @@ module LargeHotel
     space_names = ['Banquet_Flr_6', 'Dining_Flr_6', 'Cafe_Flr_1', 'Lobby_Flr_1']
     space_names.each do |space_name|
       space = model.getSpaceByName(space_name).get
-      space.add_daylighting_controls(template, false, false)
+      space.add_daylighting_controls(template, climate_zone,false, false)
     end
   end
 

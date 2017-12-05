@@ -780,7 +780,7 @@ class OpenStudio::Model::Space
   # @todo stop skipping non-horizontal roofs
   # @todo Determine the illuminance setpoint for the controls based on space type
   # @todo rotate sensor to face window (only needed for glare calcs)
-  def add_daylighting_controls(template, remove_existing_controls, draw_daylight_areas_for_debugging = false)
+  def add_daylighting_controls(template, climate_zone,remove_existing_controls, draw_daylight_areas_for_debugging = false)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "******For #{name}, adding daylight controls.")
 
     # Check for existing daylighting controls
@@ -1228,9 +1228,16 @@ class OpenStudio::Model::Space
         sensor_1_frac = areas['secondary_sidelighted_area'] / space_area_m2
         sensor_1_window = sorted_windows[0]
       end
-
     end
 
+    # hard code 2 sensors for retail standalone 
+    if standards_building_type == 'Retail' && standards_space_type.include?('Core_Retail') 
+      sensor_1_frac = 0.25
+      sensor_2_frac = 0.25   
+      sensor_1_window = sorted_skylights[0]
+      sensor_2_window = sorted_skylights[0]
+    end
+    
     # Further adjust the sensor controlled fraction for the three
     # office prototypes for 90.1-2010 and 90.1-2013
     # based on assumptions about geometry that is not explicitly
@@ -1243,6 +1250,35 @@ class OpenStudio::Model::Space
        end
     end
 
+    # reset sensor fractions to match the PNNL prototypes fpr 90.1-2013.  No touch on all others
+    case template
+    when '90.1-2013'
+      case standards_building_type
+      when 'Office'
+        case standards_space_type
+        when 'WholeBuilding - Sm Office'
+          sensor_1_frac = 0.2399
+          sensor_2_frac = 0.0302
+        when 'WholeBuilding - Md Office'
+          sensor_1_frac = 0.3835
+          sensor_2_frac = 0.1395        
+        end
+      when 'Retail'
+        case standards_space_type
+        when 'Core_Retail'
+          case climate_zone
+          when 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B','ASHRAE 169-2006-7A','ASHRAE 169-2006-8A'
+            sensor_1_frac = 0.1724
+            sensor_2_frac = 0.1724
+          else
+            sensor_1_frac = 0.25
+            sensor_2_frac = 0.25
+          end
+        end
+      end
+    end
+    
+    
     # Place the sensors and set control fractions
     # get the zone that the space is in
     zone = thermalZone
@@ -1305,6 +1341,13 @@ class OpenStudio::Model::Space
         sensor_vertex = vertex_on_floorplane + floor_outward_normal.reverseVector
       end
       sensor_1.setPosition(sensor_vertex)
+      
+      # reset sensor 1 position
+      if standards_building_type == 'Retail' && standards_space_type.include?('Core_Retail') 
+        sensor_1.setPositionXCoordinate(14.2)
+        sensor_1.setPositionYCoordinate(14.2)
+        sensor_1.setPositionZCoordinate(0)
+      end
 
       # TODO: rotate sensor to face window (only needed for glare calcs)
       zone.setPrimaryDaylightingControl(sensor_1)
@@ -1347,6 +1390,13 @@ class OpenStudio::Model::Space
         sensor_vertex = vertex_on_floorplane + floor_outward_normal.reverseVector
       end
       sensor_2.setPosition(sensor_vertex)
+      
+      # reset sensor 2 position
+      if standards_building_type == 'Retail' && standards_space_type.include?('Core_Retail') 
+        sensor_2.setPositionXCoordinate(3.4)
+        sensor_2.setPositionYCoordinate(14.2)
+        sensor_2.setPositionZCoordinate(0)
+      end      
 
       # TODO: rotate sensor to face window (only needed for glare calcs)
       zone.setSecondaryDaylightingControl(sensor_2)
