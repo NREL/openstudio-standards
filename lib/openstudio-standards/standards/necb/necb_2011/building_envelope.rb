@@ -308,7 +308,7 @@ class NECB2011
 
     old_name = default_surface_construction_set.name.get.to_s
     new_name = "#{old_name} at hdd = #{hdd}"
-    table = @standards_data['surface_thermal_transmittance_table']['table']
+    table = @standards_data['surface_thermal_transmittance']['table']
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
     wall_rsi = 1.0 / (scale_wall * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Wall'}['formula']))
     floor_rsi = 1.0 / (scale_floor * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Floor'}['formula']))
