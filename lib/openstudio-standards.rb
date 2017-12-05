@@ -189,6 +189,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.LargeHotel"
   require_relative "#{proto}/common/buildings/Prototype.LargeOffice"
   require_relative "#{proto}/common/buildings/Prototype.MediumOffice"
+  require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.MidriseApartment"
   require_relative "#{proto}/common/buildings/Prototype.Outpatient"
   require_relative "#{proto}/common/buildings/Prototype.PrimarySchool"

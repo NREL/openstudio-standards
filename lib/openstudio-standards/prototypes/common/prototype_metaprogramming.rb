@@ -10,6 +10,7 @@ def create_class_array
     'HighriseApartment',
     'LargeHotel',
     'LargeOffice',
+	'MediumOfficeDetailed'
     'MediumOffice',
     'MidriseApartment',
     'Outpatient',

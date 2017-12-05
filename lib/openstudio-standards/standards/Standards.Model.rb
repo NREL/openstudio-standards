@@ -2933,6 +2933,8 @@ class Standard
       result = 46_320
     elsif building_type == 'MediumOffice' # 53,600 ft^2
       result = 4982
+	elsif building_type == 'MediumOfficeDetailed' # 53,600 ft^2
+      result = 4982  
     elsif building_type == 'MidriseApartment' # 33,700 ft^2
       result = 3135
     elsif building_type == 'Office'
@@ -3859,7 +3861,7 @@ class Standard
       result << { units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0 }
       result << { units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0 }
       result << { units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0 }
-    elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice'].include? building_type
+    elsif ['Office', 'LargeOffice', 'MediumOffice', 'MediumOfficeDetailed','SmallOffice'].include? building_type
       result << { units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0 }
     elsif building_type == 'Outpatient'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")

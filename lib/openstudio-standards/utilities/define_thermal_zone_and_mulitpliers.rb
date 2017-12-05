@@ -31,6 +31,10 @@ geometry_json = JSON.parse('
                 "above_ground_floors": 3,
                 "below_ground_floors": 0
             },
+			"MediumOfficeDetailed": {
+                "above_ground_floors": 3,
+                "below_ground_floors": 0
+            },
             "MidriseApartment": {
                 "above_ground_floors": 4,
                 "below_ground_floors": 0

@@ -1,0 +1,38 @@
+{
+  "MediumOfficeDetailed": {
+    "geometry": {
+      "90.1-2004": "Geometry.medium_office_detailed.osm",
+      "90.1-2007": "Geometry.medium_office_detailed.osm",
+      "90.1-2010": "Geometry.medium_office_detailed.osm",
+      "90.1-2013": "Geometry.medium_office_detailed.osm",
+      "DOE Ref 1980-2004": "Geometry.medium_office_detailed.osm",
+      "DOE Ref Pre-1980": "Geometry.medium_office_detailed.osm"
+    },
+    "space_map": [
+      {
+        "template": [
+          "90.1-2004",
+          "90.1-2007",
+          "90.1-2010",
+          "90.1-2013",
+          "DOE Ref 1980-2004",
+          "DOE Ref Pre-1980"
+        ],
+        "space_type_map": {
+        "MediumOffice - OpenOffice" : ["OpenOffice_Bot_1","OpenOffice_Bot_2","OpenOffice_Bot_3","OpenOffice_Mid_1","OpenOffice_Mid_2","OpenOffice_Mid_3","OpenOffice_Mid_4","OpenOffice_Top_1","OpenOffice_Top_2","OpenOffice_Top_3","OpenOffice_Top_4"],
+		"MediumOffice - ClosedOffice" : ["EnclosedOffice_Bot_1","EnclosedOffice_Bot_2","EnclosedOffice_Bot_3","EnclosedOffice_Bot_4","EnclosedOffice_Mid_1","EnclosedOffice_Mid_2","EnclosedOffice_Mid_3","EnclosedOffice_Top_1","EnclosedOffice_Top_2","EnclosedOffice_Top_3"],
+        "MediumOffice - Storage" : ["ActiveStorage_Bot_1","ActiveStorage_Bot_2","ActiveStorage_Bot_3","ActiveStorage_Bot_4","ActiveStorage_Mid_1","ActiveStorage_Mid_2","ActiveStorage_Mid_3","ActiveStorage_Mid_4","ActiveStorage_Top_1","ActiveStorage_Top_1","ActiveStorage_Top_2","ActiveStorage_Top_3","ActiveStorage_Top_4"],
+		"MediumOffice - Classroom" : ["ClassRoom_Bot"],
+		"MediumOffice - Conference" : ["ConfRoom_Bot_1","ConfRoom_Bot_2","ConfRoom_Mid_1","ConfRoom_Mid_2","ConfRoom_Top_1","ConfRoom_Top_2"],
+		"MediumOffice - Corridor" : ["Corridor_Bot_1", "Corridor_Bot_2","Corridor_Mid_1","Corridor_Mid_2","Corridor_Top_1","Corridor_Top_2"],
+		"MediumOffice - Dining" : ["Dining_Bot","Dining_Mid","Dining_Top"],
+		"MediumOffice - Lobby" : ["Lobby_Bot","Lobby_Mid","Lobby_Top","Lounge_Bot"],
+		"MediumOffice - Elec/MechRoom" : ["Mechanical_Bot","Mechanical_Mid","Mechanical_Top"],
+		"MediumOffice - Restroom" : ["Restroom_Bot","Restroom_Mid","Restroom_Top"],
+		"MediumOffice - Stair" : ["Stair_Bot_1","Stair_Bot_2","Stair_Mid_1","Stair_Mid_2","Stair_Top_1","Stair_Top_2"]
+	  
+        }
+      }
+    ]
+  }
+}

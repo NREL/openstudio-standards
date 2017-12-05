@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='352.772749' skipped='0' failures='0' errors='0' name="TestMediumOfficeDetailed" assertions='1' tests='1'>
+  <testcase time='352.772749' file="C:/openstudio-standards/openstudio-standards/test/helpers/create_doe_prototype_helper.rb" name="test_MediumOfficeDetailed-90.1-2010-ASHRAE_169-2006-7A" assertions='1'>
+  </testcase>
+</testsuite>
