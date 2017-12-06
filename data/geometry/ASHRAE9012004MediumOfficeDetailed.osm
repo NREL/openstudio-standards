@@ -227,8 +227,8 @@ OS:Building,
   ,                                       !- Space Type Name
   {58749418-1c83-496b-94e6-80aa0fd3ac39}, !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Standards Number of Stories
-  ,                                       !- Standards Number of Above Ground Stories
+  3,                                       !- Standards Number of Stories
+  0,                                       !- Standards Number of Above Ground Stories
   ,                                       !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable

@@ -230,8 +230,10 @@ Standard.class_eval do
     # TODO: this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
     case building_type
-      when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'MediumOfficeDetailed'
+      when 'SmallOffice', 'MediumOffice', 'LargeOffice'
         new_lookup_building_type = building_type
+	  when 'MediumOfficeDetailed'
+        new_lookup_building_type = 'MediumOffice'		  
       else
         new_lookup_building_type = model_get_lookup_name(building_type)
     end
