@@ -303,9 +303,9 @@ class BTAPCosting
             "GroundContactFloor"
         ]
 
-        #Iterate through
+        # Iterate through
         costed_surfaces.each do |surface_type|
-          #Get Costs for this construction type. This will get the cost for the particular construction type for all rsi
+          # Get Costs for this construction type. This will get the cost for the particular construction type for all rsi
           # levels for that city. This has been collected by RS means.
           cost_range_hash = @costing_database['constructions_costs'].select {|construction|
             construction['construction_type_name'] == construction_set[surface_type] and
@@ -313,11 +313,14 @@ class BTAPCosting
                  model.getWeatherFile.city.upcase.include?(construction['city'])
           }
 
-          #We don't need all the information, just the rsi and cost. However, for windows rsi = 1/u_w_per_m2_k
-          if surface_type == "ExteriorFixedWindow" or surface_type == "ExteriorOperableWindow" or surface_type == "ExteriorSkylight"
+          # We don't need all the information, just the rsi and cost. However, for windows rsi = 1/u_w_per_m2_k
+          surfaceIsGlazing = (surface_type == 'ExteriorFixedWindow' || surface_type == 'ExteriorOperableWindow' ||
+                          surface_type == 'ExteriorSkylight' || surface_type == 'ExteriorTubularDaylightDiffuser' ||
+                          surface_type == 'ExteriorTubularDaylightDome' || surface_type == 'ExteriorGlassDoor')
+          if surfaceIsGlazing
             cost_range_array = cost_range_hash.map {|cost|
               [
-                  (1.0/cost['u_w_per_m2_k'].to_f).to_s,
+                  (1.0/cost['u_w_per_m2_k'].to_f),
                   cost['total_cost_with_op']
               ]
             }
@@ -329,27 +332,24 @@ class BTAPCosting
               ]
             }
           end
-          #Sorted based on rsi.
+          # Sorted based on rsi.
           cost_range_array.sort! {|a, b| a[0] <=> b[0]}
 
-          #Iterate through actual surfaces in the model of surface_type.
+          # Iterate through actual surfaces in the model of surface_type.
           numSurfType = 0
           surfaces[surface_type].each do |surface|
             numSurfType = numSurfType + 1
 
-            # get RSI of existing model surface.
+            # Get RSI of existing model surface (actually returns rsi for glazings too!).
             rsi = BTAP::Resources::Envelope::Constructions::get_rsi(OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get)
 
             # Use the cost_range_array to interpolate the estimated cost for the given rsi.
-            # Note that window costs in RS Means use U val (1/rsi)!
-            if surface_type == "ExteriorFixedWindow" or surface_type == "ExteriorOperableWindow" or surface_type == "ExteriorSkylight"
-              if rsi > 0.0 then rsi = 1.0/rsi else 0.0 end
-            end
+            # Note that window costs in RS Means use U val, which was converted to rsi for cost_range_array above
             cost = interpolate(cost_range_array, rsi)
 
             # If the cost is nil, that means the rsi is out of range. This should be flagged in the report.
             if cost.nil?
-              if surface_type == "ExteriorFixedWindow" or surface_type == "ExteriorOperableWindow" or surface_type == "ExteriorSkylight"
+              if surfaceIsGlazing
                 if rsi > 0.0 then rsi = 1.0/rsi else 0.0 end
               end
               if !cost_range_array.empty?
@@ -444,7 +444,13 @@ class BTAPCosting
           raise()
         else
           regional_material, regional_installation = get_regional_cost_factors(location['province-state'], location['city'], material)
-          #Get RSMeans cost information from lookup.
+
+          # Get RSMeans cost information from lookup.
+          # Note that "glazing" types don't have a 'quantity' hash entry!
+          # Don't need "and" below but using in-case this hash field is added in the future.
+          if type == 'glazing' and material['quantity'].to_f == 0.0
+            material['quantity'] = '1.0'
+          end
           material_cost = rs_means_data['baseCosts']['materialOpCost'].to_f * material['quantity'].to_f * material['material_mult'].to_f
           labour_cost = rs_means_data['baseCosts']['labourOpCost'].to_f * material['labour_mult'].to_f
           equipment_cost = rs_means_data['baseCosts']['equipmentOpCost'].to_f
