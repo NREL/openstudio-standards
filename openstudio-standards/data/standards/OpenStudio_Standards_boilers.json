@@ -418,7 +418,7 @@
       "minimum_thermal_efficiency": 0.78,
       "minimum_combustion_efficiency": null,
       "efffplr": "Boiler Constant Efficiency Curve",
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 1978",
@@ -429,10 +429,10 @@
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_annual_fuel_utilization_efficiency": null,
-      "minimum_thermal_efficiency": 0.78,
+      "minimum_thermal_efficiency": 0.8,
       "minimum_combustion_efficiency": null,
       "efffplr": "Boiler Constant Efficiency Curve",
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 1992",
@@ -443,10 +443,10 @@
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_annual_fuel_utilization_efficiency": null,
-      "minimum_thermal_efficiency": 0.78,
+      "minimum_thermal_efficiency": 0.8,
       "minimum_combustion_efficiency": null,
       "efffplr": "Boiler Constant Efficiency Curve",
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 2001",
@@ -457,10 +457,10 @@
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_annual_fuel_utilization_efficiency": null,
-      "minimum_thermal_efficiency": 0.78,
+      "minimum_thermal_efficiency": 0.8,
       "minimum_combustion_efficiency": null,
       "efffplr": "Boiler Constant Efficiency Curve",
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 2005",
@@ -471,10 +471,10 @@
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_annual_fuel_utilization_efficiency": null,
-      "minimum_thermal_efficiency": 0.78,
+      "minimum_thermal_efficiency": 0.8,
       "minimum_combustion_efficiency": null,
       "efffplr": "Boiler Constant Efficiency Curve",
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 2008",
@@ -485,10 +485,10 @@
       "start_date": "9/9/1919",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_annual_fuel_utilization_efficiency": null,
-      "minimum_thermal_efficiency": 0.78,
+      "minimum_thermal_efficiency": 0.8,
       "minimum_combustion_efficiency": null,
       "efffplr": "Boiler Constant Efficiency Curve",
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     }
   ]
 }

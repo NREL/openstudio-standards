@@ -366,7 +366,7 @@ class OpenStudio::Model::SpaceType
     if set_ventilation && ventilation_have_info
 
       # Modify the ventilation properties
-      ventilation.setOutdoorAirMethod('Sum')
+      ventilation.setOutdoorAirMethod('Maximum')
       unless ventilation_per_area.zero?
         ventilation.setOutdoorAirFlowperFloorArea(OpenStudio.convert(ventilation_per_area.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set ventilation per area to #{ventilation_per_area} cfm/ft^2.")
