@@ -103,23 +103,6 @@
       "dec": 21.05
     },
     {
-      "building_type": "MediumOfficeDetailed",
-      "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-1A",
-      "jan": 20.99,
-      "feb": 20.98,
-      "mar": 20.99,
-      "apr": 21.04,
-      "may": 21.06,
-      "jun": 23.22,
-      "jul": 23.57,
-      "aug": 23.64,
-      "sep": 23.66,
-      "oct": 21.46,
-      "nov": 21.16,
-      "dec": 21.05
-    },
-    {
       "building_type": "MidriseApartment",
       "template": "90.1-2004",
       "climate_zone": "ASHRAE 169-2006-1A",
@@ -376,23 +359,6 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-1A",
-      "jan": 20.99,
-      "feb": 20.98,
-      "mar": 20.99,
-      "apr": 21.04,
-      "may": 21.06,
-      "jun": 23.22,
-      "jul": 23.57,
-      "aug": 23.64,
-      "sep": 23.66,
-      "oct": 21.46,
-      "nov": 21.16,
-      "dec": 21.05
-    },
-    {
-      "building_type": "MediumOfficeDetailed",
       "template": "90.1-2007",
       "climate_zone": "ASHRAE 169-2006-1A",
       "jan": 20.99,
