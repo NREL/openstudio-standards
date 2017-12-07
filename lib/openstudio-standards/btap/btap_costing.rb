@@ -525,37 +525,36 @@ class BTAPCosting
   # Brute force interpolation...Could be improved easily. Only use for small amount of points.
   def interpolate(x_y_array, x2)
     array = x_y_array.sort {|a, b| a[0] <=> b[0]}
-    if array.empty? or x2 < array.first[0].to_f or x2 > array.last[0].to_f
+
+    # Note: The return value will be NIL, if x2 is out-of-range for array!
+    if array.empty? || x2 < array.first[0].to_f || x2 > array.last[0].to_f
       return nil
     else
-      # ugly hack to interpolate...but it works.
       array.each_index do |counter|
 
-        #skip last value.
+        # skip last value.
         next if array[counter] == array.last
 
         x0 = array[counter][0]
         y0 = array[counter][1]
-        x1 = array[counter+1][0]
-        y1 = array[counter+1][1]
+        x1 = array[counter + 1][0]
+        y1 = array[counter + 1][1]
 
         # skip if x2 is not between x0 and x1
-        next if x2 < x0 and x2 > x1
+        next if x2 < x0 || x2 > x1
 
         # Do interpolation
-        y2 = 0
+        y2 = y0 # just in-case x0 and x1 and x2 are the same!
         if((x1-x0)>0.0)
-          y2 = y0.to_f + ((y1-y0).to_f*(x2-x0).to_f/(x1-x0).to_f)
-          #log ("y2 = #{y2}")
-          y2 = y2.ceil
+          y2 = y0.to_f + ((y1-y0).to_f * (x2-x0).to_f / (x1-x0).to_f)
         end
         return y2
       end
     end
   end
 
-  # Enter in [latitude, logitude] for each loc and this method will return the distance.
-  def distance (loc1, loc2)
+  # Enter in [latitude, longitude] for each loc and this method will return the distance.
+  def distance(loc1, loc2)
     rad_per_deg = Math::PI/180 # PI / 180
     rkm = 6371 # Earth radius in kilometers
     rm = rkm * 1000 # Radius in meters
@@ -574,7 +573,7 @@ class BTAPCosting
   def get_closest_cost_city(lat, long)
     dist = 1000000000000000000000.0
     closest_city = nil
-    #province-state	city	latitude	longitude	source
+    # province-state	city	latitude	longitude	source
     @costing_database['raw']['rsmeans_locations'].each do |location|
       if distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f]) < dist
         closest_city = location
