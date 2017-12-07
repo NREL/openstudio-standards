@@ -11,10 +11,7 @@ def load_openstudio_standards_json
   standards_files << 'OpenStudio_Standards_construction_properties.json'
   standards_files << 'OpenStudio_Standards_construction_sets.json'
   standards_files << 'OpenStudio_Standards_constructions.json'
-  standards_files << 'OpenStudio_Standards_curve_bicubics.json'
-  standards_files << 'OpenStudio_Standards_curve_biquadratics.json'
-  standards_files << 'OpenStudio_Standards_curve_cubics.json'
-  standards_files << 'OpenStudio_Standards_curve_quadratics.json'
+  standards_files << 'OpenStudio_Standards_curves.json'
   standards_files << 'OpenStudio_Standards_ground_temperatures.json'
   standards_files << 'OpenStudio_Standards_heat_pumps_heating.json'
   standards_files << 'OpenStudio_Standards_heat_pumps.json'
@@ -2871,112 +2868,100 @@ class OpenStudio::Model::Model
   def add_curve(curve_name)
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
-    success = false
-
-    curve_biquadratics = $os_standards['curve_biquadratics']
-    curve_quadratics = $os_standards['curve_quadratics']
-    curve_bicubics = $os_standards['curve_bicubics']
-    curve_cubics = $os_standards['curve_cubics']
-
-    # Make biquadratic curves
-    curve_data = find_object(curve_biquadratics, 'name' => curve_name)
-    if curve_data
-      curve = OpenStudio::Model::CurveBiquadratic.new(self)
-      curve.setName(curve_data['name'])
-      curve.setCoefficient1Constant(curve_data['coeff_1'])
-      curve.setCoefficient2x(curve_data['coeff_2'])
-      curve.setCoefficient3xPOW2(curve_data['coeff_3'])
-      curve.setCoefficient4y(curve_data['coeff_4'])
-      curve.setCoefficient5yPOW2(curve_data['coeff_5'])
-      curve.setCoefficient6xTIMESY(curve_data['coeff_6'])
-      curve.setMinimumValueofx(curve_data['min_x'])
-      curve.setMaximumValueofx(curve_data['max_x'])
-      curve.setMinimumValueofy(curve_data['min_y'])
-      curve.setMaximumValueofy(curve_data['max_y'])
-      if curve_data['min_out']
-        curve.setMinimumCurveOutput(curve_data['min_out'])
-      end
-      if curve_data['max_out']
-        curve.setMaximumCurveOutput(curve_data['max_out'])
-      end
-      success = true
-      return curve
-    end
-
-    # Make quadratic curves
-    curve_data = find_object(curve_quadratics, 'name' => curve_name)
-    if curve_data
-      curve = OpenStudio::Model::CurveQuadratic.new(self)
-      curve.setName(curve_data['name'])
-      curve.setCoefficient1Constant(curve_data['coeff_1'])
-      curve.setCoefficient2x(curve_data['coeff_2'])
-      curve.setCoefficient3xPOW2(curve_data['coeff_3'])
-      curve.setMinimumValueofx(curve_data['min_x'])
-      curve.setMaximumValueofx(curve_data['max_x'])
-      if curve_data['min_out']
-        curve.setMinimumCurveOutput(curve_data['min_out'])
-      end
-      if curve_data['max_out']
-        curve.setMaximumCurveOutput(curve_data['max_out'])
-      end
-      success = true
-      return curve
-    end
-
-    # Make cubic curves
-    curve_data = find_object(curve_cubics, 'name' => curve_name)
-    if curve_data
-      curve = OpenStudio::Model::CurveCubic.new(self)
-      curve.setName(curve_data['name'])
-      curve.setCoefficient1Constant(curve_data['coeff_1'])
-      curve.setCoefficient2x(curve_data['coeff_2'])
-      curve.setCoefficient3xPOW2(curve_data['coeff_3'])
-      curve.setCoefficient4xPOW3(curve_data['coeff_4'])
-      curve.setMinimumValueofx(curve_data['min_x'])
-      curve.setMaximumValueofx(curve_data['max_x'])
-      if curve_data['min_out']
-        curve.setMinimumCurveOutput(curve_data['min_out'])
-      end
-      if curve_data['max_out']
-        curve.setMaximumCurveOutput(curve_data['max_out'])
-      end
-      success = true
-      return curve
-    end
-
-    # Make bicubic curves
-    curve_data = find_object(curve_bicubics, 'name' => curve_name)
-    if curve_data
-      curve = OpenStudio::Model::CurveBicubic.new(self)
-      curve.setName(curve_data['name'])
-      curve.setCoefficient1Constant(curve_data['coeff_1'])
-      curve.setCoefficient2x(curve_data['coeff_2'])
-      curve.setCoefficient3xPOW2(curve_data['coeff_3'])
-      curve.setCoefficient4y(curve_data['coeff_4'])
-      curve.setCoefficient5yPOW2(curve_data['coeff_5'])
-      curve.setCoefficient6xTIMESY(curve_data['coeff_6'])
-      curve.setCoefficient7xPOW3(curve_data['coeff_7'])
-      curve.setCoefficient8yPOW3(curve_data['coeff_8'])
-      curve.setCoefficient9xPOW2TIMESY(curve_data['coeff_9'])
-      curve.setCoefficient10xTIMESYPOW2(curve_data['coeff_10'])
-      curve.setMinimumValueofx(curve_data['min_x'])
-      curve.setMaximumValueofx(curve_data['max_x'])
-      curve.setMinimumValueofy(curve_data['min_y'])
-      curve.setMaximumValueofy(curve_data['max_y'])
-      if curve_data['min_out']
-        curve.setMinimumCurveOutput(curve_data['min_out'])
-      end
-      if curve_data['max_out']
-        curve.setMaximumCurveOutput(curve_data['max_out'])
-      end
-      success = true
-      return curve
-    end
-
-    # Return false if the curve was not created
-    if success == false
-      # OpenStudio::logFree(OpenStudio::Warn, "openstudio.prototype.addCurve", "Could not find a curve called '#{curve_name}' in the standards.")
+    # Find curve data
+    data = find_object($os_standards['curves'], 'name' => curve_name)
+    if data.nil?
+      OpenStudio::logFree(OpenStudio::Warn, "openstudio.Model.Model", "Could not find a curve called '#{curve_name}' in the standards.")
       return nil
+    end
+
+    # Make the correct type of curve
+    case data['form']
+      when 'Linear'
+        curve = OpenStudio::Model::CurveLinear.new(self)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'Cubic'
+        curve = OpenStudio::Model::CurveCubic.new(self)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient3xPOW2(data['coeff_3'])
+        curve.setCoefficient4xPOW3(data['coeff_4'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'Quadratic'
+        curve = OpenStudio::Model::CurveQuadratic.new(self)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient3xPOW2(data['coeff_3'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'BiCubic'
+        curve = OpenStudio::Model::CurveBicubic.new(self)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient3xPOW2(data['coeff_3'])
+        curve.setCoefficient4y(data['coeff_4'])
+        curve.setCoefficient5yPOW2(data['coeff_5'])
+        curve.setCoefficient6xTIMESY(data['coeff_6'])
+        curve.setCoefficient7xPOW3(data['coeff_7'])
+        curve.setCoefficient8yPOW3(data['coeff_8'])
+        curve.setCoefficient9xPOW2TIMESY(data['coeff_9'])
+        curve.setCoefficient10xTIMESYPOW2(data['coeff_10'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumValueofy(data['minimum_independent_variable_2']) if data['minimum_independent_variable_2']
+        curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'BiQuadratic'
+        curve = OpenStudio::Model::CurveBiquadratic.new(self)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient3xPOW2(data['coeff_3'])
+        curve.setCoefficient4y(data['coeff_4'])
+        curve.setCoefficient5yPOW2(data['coeff_5'])
+        curve.setCoefficient6xTIMESY(data['coeff_6'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumValueofy(data['minimum_independent_variable_2']) if data['minimum_independent_variable_2']
+        curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'BiLinear'
+        curve = OpenStudio::Model::CurveBiquadratic.new(self)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient4y(data['coeff_3'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumValueofy(data['minimum_independent_variable_2']) if data['minimum_independent_variable_2']
+        curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      else
+        OpenStudio::logFree(OpenStudio::Error, "openstudio.Model.Model", "#{curve_name}' has an invalid form: #{data['form']}', cannot create this curve.")
+        return nil
     end
   end
 
