@@ -138,12 +138,6 @@ class OpenStudio::Model::Model
       add_loads(template, climate_zone)
       apply_infiltration_standard(template)
       modify_infiltration_coefficients(building_type, template, climate_zone)
-      
-      # add a runperiod daylight saving objects
-      apply_runperiodcontrol_daylightsavingtime(template)
-      # apply_runperiodcontrol_thanksgiving(template)
-      # apply_runperiodcontrol_newyear(template)
-      # apply_runperiodcontrol_specialdays(template)
       modify_surface_convection_algorithm(template)
       add_constructions(building_type, template, climate_zone)
       create_thermal_zones(building_type, template, climate_zone)
@@ -154,6 +148,7 @@ class OpenStudio::Model::Model
       add_exterior_lights(building_type, template, climate_zone, prototype_input)
       add_occupancy_sensors(building_type, template, climate_zone)
       add_design_days_and_weather_file(building_type, template, climate_zone, epw_file)
+      add_daylight_savings(template)
       apply_sizing_parameters(building_type, template)
       yearDescription.get.setDayofWeekforStartDay('Sunday')
 
@@ -1380,13 +1375,10 @@ class OpenStudio::Model::Model
     end
   end
 
-  
-  # insert a run period control daylight saving objects.
+  # Set up daylight savings
   #
-  # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
-  def apply_runperiodcontrol_daylightsavingtime(template)
-    # Default unless otherwise specified
+  def add_daylight_savings(template)
+
     start_date  = '2nd Sunday in March'
     end_date = '1st Sunday in November'
 
@@ -1394,53 +1386,26 @@ class OpenStudio::Model::Model
     runperiodctrl_daylgtsaving.setStartDate(start_date)
     runperiodctrl_daylgtsaving.setEndDate(end_date)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set Daylight Saving Start Date to #{start_date} and end date to #{end_date} for cooling.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set Daylight Saving Start Date to #{start_date} and end date to #{end_date}.")
   end
 
-  # insert a run period control daylight saving objects.
-  #
-  # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
-  def apply_runperiodcontrol_newyear(template)
-  
+  # Adds holidays to the model.
+  # @todo enable holidays once supported inside OpenStudio schedules
+  def add_holidays(template)
     newyear = OpenStudio::Model::RunPeriodControlSpecialDays.new('1/1', self)
-    newyear.setName('New Year')
+    newyear.setName('New Years')
     newyear.setSpecialDayType('Holiday')
-    
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "New Year to Holiday.")
-  end
 
-  
-  def apply_runperiodcontrol_thanksgiving(template)
-  
     fourth = OpenStudio::NthDayOfWeekInMonth.new(4)
     thurs = OpenStudio::DayOfWeek.new('Thursday')
     nov = OpenStudio::MonthOfYear.new('November')
     thanksgiving = OpenStudio::Model::RunPeriodControlSpecialDays.new(fourth, thurs, nov, self)
     thanksgiving.setName('Thanksgiving')
     thanksgiving.setSpecialDayType('Holiday')
-    
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set Thanksgiving to Holiday.")
-  end  
 
-  
-    # Default unless otherwise specified
-    # start_date  = 'January 1'
-    # duration = '1'
-    # specialDayType = 'Holiday'
-   
-  
-    # OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "#############$$$$$$$$$$$$$$$$$$$$###################")
-    
-    # runperiodctrl_specialdays = getRunPeriodControlSpecialDays('New Year')
-    # runperiodctrl_specialdays.setStartDate(start_date)
-    # r# unperiodctrl_specialdays.setDuration(duration)
-    # runperiodctrl_specialdays.setSpecialDayType(specialDayType)
-  
-    # OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set Special Day Start Date to #{start_date} and dat type to #{specialDayType}.")
-  # end
-  
-  
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Added holidays: New Years, Thanksgiving.")
+  end
+
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)

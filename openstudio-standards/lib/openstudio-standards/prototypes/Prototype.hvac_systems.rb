@@ -548,8 +548,6 @@ class OpenStudio::Model::Model
                      electric_reheat = false,
                      building_type = nil)
 
-
-    
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding VAV system for #{thermal_zones.size} zones.")
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
@@ -1085,9 +1083,6 @@ class OpenStudio::Model::Model
       clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
     end
 
-
-
-    
     # Outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
@@ -1463,8 +1458,6 @@ class OpenStudio::Model::Model
     clg_coil.setName("#{air_loop.name} Clg Coil")
     clg_coil.addToNode(air_loop.supplyInletNode)
 
-
-    
     # Outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
     oa_intake_controller.setName("#{air_loop.name} OA Controller")
@@ -1567,11 +1560,7 @@ class OpenStudio::Model::Model
                  supplemental_heating_type,
                  cooling_type,
                  building_type = nil)
-                 
-    # puts "------------------------------------------------------------------------- enter add_psz_ac ------------------------------------------------------------\n"                
-    # puts "template\t#{template}\nbuilding_type\t#{building_type}\nthermal_zones\t#{thermal_zones}\nhvac_op_sch\t#{hvac_op_sch}\noa_damper_sch\t#{oa_damper_sch}\n"
-    # puts "-------------------------------------------------------------------------------------------------------------------------------------------------------\n"  
-    
+
     unless hot_water_loop.nil? || chilled_water_loop.nil?
       hw_temp_f = 180 # HW setpoint 180F
       hw_delta_t_r = 20 # 20F delta-T
@@ -2053,8 +2042,6 @@ class OpenStudio::Model::Model
         chilled_water_loop.addDemandBranchForComponent(clg_coil)
       end
 
-
-      
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(self)
       oa_controller.setName("#{air_loop.name} OA Sys Controller")
       oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
@@ -2174,7 +2161,6 @@ class OpenStudio::Model::Model
       diffuser.setName("#{air_loop.name} Diffuser")
       air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
     end
-
 
     return air_loops
   end
@@ -3394,10 +3380,6 @@ class OpenStudio::Model::Model
                      heating_type,
                      hot_water_loop = nil,
                      building_type = nil)
-                     
-    # puts "---------------------------- unitheater --------------------------------------\n"                
-    # puts "template\t#{template}\nbuilding_type\t#{building_type}\nthermal_zones\t#{thermal_zones}\nhvac_op_sch\t#{hvac_op_sch}\nfan_control_type\t#{fan_control_type}\n"
-    # puts "------------------------------------------------------------------------------\n"                      
 
     # Control temps for HW loop
     # will only be used when hot_water_loop is provided.
@@ -3730,7 +3712,6 @@ class OpenStudio::Model::Model
     water_heater.setDeadbandTemperatureDifference(OpenStudio.convert(3.6, 'R', 'K').get)
     water_heater.setHeaterControlType('Cycle')
     water_heater.setHeaterMaximumCapacity(OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'W').get)
-    # water_heater.setOffCycleParasiticHeatFractiontoTank(0.8)
     water_heater.setOffCycleParasiticHeatFractiontoTank(0.0)
     water_heater.setIndirectWaterHeatingRecoveryTime(1.5) # 1.5hrs
     if water_heater_fuel == 'Electricity'
@@ -3866,7 +3847,6 @@ class OpenStudio::Model::Model
     water_heater.setDeadbandTemperatureDifference(OpenStudio.convert(3.6, 'R', 'K').get)
     water_heater.setHeaterControlType('Cycle')
     water_heater.setHeaterMaximumCapacity(OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'W').get)
-    # water_heater.setOffCycleParasiticHeatFractiontoTank(0.8)
     water_heater.setOffCycleParasiticHeatFractiontoTank(0.0)
     water_heater.setIndirectWaterHeatingRecoveryTime(1.5) # 1.5hrs
     if water_heater_fuel == 'Electricity'
@@ -3985,14 +3965,8 @@ class OpenStudio::Model::Model
     mixed_water_temp_f = OpenStudio.convert(water_use_temperature, 'C', 'F').get
     mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(self)
     mixed_water_temp_sch.setName("Mixed Water At Faucet Temp - #{mixed_water_temp_f.round}F")
-    
-    # overwritten the target mixed water temperature schedule with an empty string
-    # This cannot do the job.
-    # mixed_water_temp_sch.setName(",  ! ")
-    
     mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get)
-    # overwritten the target mixed water temperature schedule with an empty string
-    # water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
+    # water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch) # Prototypes specify flow rates for only hot water, not mixed water
     water_fixture_def.resetTargetTemperatureSchedule()
 
     # Water use equipment

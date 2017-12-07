@@ -147,29 +147,6 @@ class OpenStudio::Model::WaterHeaterMixed
           # Calculate the skin loss coefficient (UA)
           # based on the actual capacity.
           ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 67.5
-          
-          # temporaily overwrite the UA calculated on RetailStandlone (4.288586975652166 (IP) | 2.262349394065861 (SI) to 7.8 (IP) | 4.109 (SI)
-          # case building_type
-          # when 'RetailStandalone'
-          #   ua_btu_per_hr_per_f = 7.8   
-          # end
-          
-          # a0 = "cap:" + cap.to_s
-          # a1 = "water_heater_eff:" + water_heater_eff.to_s
-          # a2 = "re:" + re.to_s
-          # a3 = "capacity_btu_per_hr:" + capacity_btu_per_hr.to_s
-          # a4 = "heaterMaximumCapacity:" + heaterMaximumCapacity.to_s
-          # a5 = "ef:" + ef.to_s
-          # a6 = "ua_btu_per_hr_per_f:" + ua_btu_per_hr_per_f.to_s
-          # puts a1
-          # puts a2
-          # puts a3
-          # puts a4
-          # puts a5
-          # puts a6
-          
-          
-          
         else
           # Thermal efficiency requirement from 90.1
           et = 0.8
@@ -203,9 +180,6 @@ class OpenStudio::Model::WaterHeaterMixed
     when 'SmallOffice'    
       ua_btu_per_hr_per_c = 1.205980747
     end    
-    
-    # a7 = "ua_btu_per_hr_per_c:" + ua_btu_per_hr_per_c.to_s
-    # puts a7
 
     # Set the water heater properties
     # Efficiency
@@ -221,7 +195,6 @@ class OpenStudio::Model::WaterHeaterMixed
     setOnCycleParasiticHeatFractiontoTank(0)
     setOffCycleParasiticFuelType(fuel_type)
     # self.setOffCycleParasiticFuelConsumptionRate(??)
-    # setOffCycleParasiticHeatFractiontoTank(0.8)
     setOffCycleParasiticHeatFractiontoTank(0.0)
 
     # set part-load performance curve

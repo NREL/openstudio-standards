@@ -189,8 +189,6 @@ class OpenStudio::Model::SpaceType
     lights_frac_replaceable = space_type_properties['lighting_fraction_replaceable'].to_f
     lights_have_info = true unless lighting_per_area.zero?
     lights_have_info = true unless lighting_per_person.zero?
-    
-    # puts "lights_frac_replaceable: #{lights_frac_replaceable}"
 
     if set_lights && lights_have_info
 
@@ -202,12 +200,8 @@ class OpenStudio::Model::SpaceType
         instance = OpenStudio::Model::Lights.new(definition)
         instance.setName("#{name} Lights")
         instance.setSpaceType(self)
-        
-        # puts "----------------------------"
         instance.setFractionReplaceable(lights_frac_replaceable)
-        # puts "#{instance.setFractionReplaceable(lights_frac_replaceable)}"
-        # puts "----------------------------"
-        
+
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} had no lights, one has been created.")
         instances << instance
       elsif instances.size > 1
@@ -220,13 +214,7 @@ class OpenStudio::Model::SpaceType
 
       # Modify the definition of the instance
       lights.sort.each do |inst|
-      
-        
-        puts "----------------------------"
         inst.setFractionReplaceable(lights_frac_replaceable)
-        puts "#{inst.setFractionReplaceable(lights_frac_replaceable)}"
-        puts "----------------------------"        
-        
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
@@ -260,14 +248,11 @@ class OpenStudio::Model::SpaceType
         additional_lights_def.setReturnAirFraction(lights_frac_to_return_air)
         additional_lights_def.setFractionRadiant(lights_frac_radiant)
         additional_lights_def.setFractionVisible(lights_frac_visible)
-        # additional_lights_def.setFractionReplaceable(lights_frac_replaceable)
-
 
         # Create the lighting instance and hook it up to the space type
         additional_lights = OpenStudio::Model::Lights.new(additional_lights_def)
         additional_lights.setName("#{name} Additional Lights")
         additional_lights.setSpaceType(self)
-        
         additional_lights.setFractionReplaceable(110.0)
       end
 
