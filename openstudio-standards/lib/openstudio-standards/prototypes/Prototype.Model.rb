@@ -212,9 +212,9 @@ class OpenStudio::Model::Model
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
     if building_type == 'LargeHotel'
-      PrototypeBuilding::LargeHotel.large_hotel_add_daylighting_controls(template, self)
+      PrototypeBuilding::LargeHotel.large_hotel_add_daylighting_controls(template,climate_zone, self)
     elsif building_type == 'Hospital'
-      PrototypeBuilding::Hospital.hospital_add_daylighting_controls(template, self)
+      PrototypeBuilding::Hospital.hospital_add_daylighting_controls(template,climate_zone, self)
     else
       add_daylighting_controls(template,climate_zone)
     end
