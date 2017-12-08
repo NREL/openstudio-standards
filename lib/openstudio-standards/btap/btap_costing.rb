@@ -224,6 +224,9 @@ class BTAPCosting
     #Creates a Hash in the hash for envelope costing.
     costing_report["Building"] = {}
     costing_report["Envelope"] = {}
+    costing_report["Lighting"] = {}
+    costing_report["HVAC"] = {}
+    costing_report["Totals"] = {}
     totEnvCost = 0
 
     #Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
@@ -234,9 +237,15 @@ class BTAPCosting
     #store number of stories. Required for envelope costing logic.
     num_of_above_ground_stories = model.getBuilding.standardsNumberOfAboveGroundStories.to_i
 
+    closest_loc = get_closest_cost_location(model.getWeatherFile.latitude, model.getWeatherFile.longitude)
+    closest_city = closest_loc['city']
+    closest_prov = closest_loc['province-state']
+
     costing_report["Building"]["BuildingType"] = model.getBuilding.standardsBuildingType.to_s
     costing_report["Building"]["WeatherProv"] = model.getWeatherFile.stateProvinceRegion
     costing_report["Building"]["WeatherCity"] = model.getWeatherFile.city
+    costing_report["Building"]["ClosestProv"] = closest_prov
+    costing_report["Building"]["ClosestCity"] = closest_city
 
     # Iterate through the thermal zones.
     model.getThermalZones.each do |zone|
@@ -308,9 +317,9 @@ class BTAPCosting
           # Get Costs for this construction type. This will get the cost for the particular construction type for all rsi
           # levels for that city. This has been collected by RS means.
           cost_range_hash = @costing_database['constructions_costs'].select {|construction|
-            construction['construction_type_name'] == construction_set[surface_type] and
-                construction['province-state'] == expandProvAbbrev(model.getWeatherFile.stateProvinceRegion) and
-                 model.getWeatherFile.city.upcase.include?(construction['city'])
+            construction['construction_type_name'] == construction_set[surface_type] &&
+            construction['province-state'] == closest_prov &&
+            construction['city'] == closest_city
           }
 
           # We don't need all the information, just the rsi and cost. However, for windows rsi = 1/u_w_per_m2_k
@@ -344,14 +353,11 @@ class BTAPCosting
             rsi = BTAP::Resources::Envelope::Constructions::get_rsi(OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get)
 
             # Use the cost_range_array to interpolate the estimated cost for the given rsi.
-            # Note that window costs in RS Means use U val, which was converted to rsi for cost_range_array above
+            # Note that window costs in RS Means use U-value, which was converted to rsi for cost_range_array above
             cost = interpolate(cost_range_array, rsi)
 
-            # If the cost is nil, that means the rsi is out of range. This should be flagged in the report.
+            # If the cost is nil, that means the rsi is out of range. Flag in the report.
             if cost.nil?
-              if surfaceIsGlazing
-                if rsi > 0.0 then rsi = 1.0/rsi else 0.0 end
-              end
               if !cost_range_array.empty?
                 notes = "RSI out of the range (#{'%.2f' % rsi}) or cost is 0!. Range for #{construction_set[surface_type]} is #{'%.2f' % cost_range_array.first[0]}-#{'%.2f' % cost_range_array.last[0]}."
                 cost = 0.0
@@ -369,19 +375,21 @@ class BTAPCosting
 
             # Bin the costing by construction standard type and rsi
             name = "#{construction_set[surface_type]}_#{rsi}"
-            if costing_report["Envelope"].has_key?(name)
-              costing_report["Envelope"][name]['area'] += surfArea
-              costing_report["Envelope"][name]['total_cost'] += surfCost
-              costing_report["Envelope"][name]['note'] += " / #{numSurfType}: #{notes}"
+            if costing_report['Envelope'].has_key?(name)
+              costing_report['Envelope'][name]['area'] += surfArea
+              costing_report['Envelope'][name]['cost'] += surfCost
+              costing_report['Envelope'][name]['note'] += " / #{numSurfType}: #{notes}"
             else
-              costing_report["Envelope"][name]={'area' => surfArea,
-                                                'total_cost' => surfCost}
-              costing_report["Envelope"][name]['note'] = "Surf ##{numSurfType}: #{notes}"
+              costing_report['Envelope'][name]={'area' => surfArea,
+                                                'cost' => surfCost}
+              costing_report['Envelope'][name]['note'] = "Surf ##{numSurfType}: #{notes}"
             end
           end # surfaces of surface type
         end # surface_type
       end # spaces
     end # thermalzone
+
+    costing_report['Envelope']['TotalEnvelopeCost'] = totEnvCost
 
     # Save the costing_report to a file.
     File.open(@cost_output_file, "w") do |f|
@@ -393,28 +401,6 @@ class BTAPCosting
     return totEnvCost
 
   end
-
-  #This will expand the two letter province abbreviation to a full uppercase province name
-  def expandProvAbbrev(abbrev)
-
-    # Note that the proper abbreviation for Quebec is QC not PQ. However, we've used PQ!
-    Hash provAbbrev = {"AB" => "ALBERTA",
-                       "BC" => "BRITISH COLUMBIA",
-                       "MB" => "MANITOBA",
-                       "NB" => "NEW BRUNSWICK",
-                       "NL" => "NEWFOUNDLAND AND LABRADOR",
-                       "NT" => "NORTHWEST TERRITORIES",
-                       "NS" => "NOVA SCOTIA",
-                       "NU" => "NUNAVUT",
-                       "ON" => "ONTARIO",
-                       "PE" => "PRINCE EDWARD ISLAND",
-                       "PQ" => "QUEBEC",
-                       "SK" => "SASKATCHEWAN",
-                       "YK" => "YUKON"
-                       }
-    return provAbbrev[abbrev]
-  end
-
 
   #This will convert a sheet in a given workbook into an array of hashes with the headers as symbols.
   def convert_workbook_sheet_to_array_of_hashes(xlsx_path, sheet_name)
@@ -479,18 +465,17 @@ class BTAPCosting
     @costing_database['constructions_costs'] << new_construction
   end
 
-  def get_regional_cost_factors(provincestate, city, material)
-    @costing_database['raw']['rsmeans_local_factors'].select {|code| code['province-state'] == provincestate and code['city'] == city}.each do |code|
+  def get_regional_cost_factors(provinceState, city, material)
+    @costing_database['raw']['rsmeans_local_factors'].select { |code| code['province-state'] == provinceState && code['city'] == city }.each do |code|
       id = material['id'].to_s
-      prefixes = code["code_prefixes"].split(',')
+      prefixes = code['code_prefixes'].split(',')
       prefixes.each do |prefix|
-        # puts " #{id} == #{prefix}"
         if id.start_with?(prefix.strip)
-          return code["material"].to_f, code["installation"].to_f
+          return code['material'].to_f, code['installation'].to_f
         end
       end
     end
-    error = [material, "Could not find regional adjustment factor for rs-means material"]
+    error = [material, "Could not find regional adjustment factor for rs-means material used in #{city}, #{provinceState}."]
     @costing_database['rs_mean_errors'] << error unless @costing_database['rs_mean_errors'].include?(error)
     return 100.0, 100.0
   end
@@ -522,13 +507,20 @@ class BTAPCosting
     return json
   end
 
-  # Brute force interpolation...Could be improved easily. Only use for small amount of points.
+  # Interpolate array of hashes that contain 2 values (key=rsi, data=cost)
   def interpolate(x_y_array, x2)
-    array = x_y_array.sort {|a, b| a[0] <=> b[0]}
+    array = x_y_array.sort { |a, b| a[0] <=> b[0] }
 
-    # Note: The return value will be NIL, if x2 is out-of-range for array!
-    if array.empty? || x2 < array.first[0].to_f || x2 > array.last[0].to_f
+    # Check if value x2 is within range of array for interpolation
+    # Extrapolate when x2 is out-of-range by +/- 10% of end values.
+    if array.empty? || x2 < (0.9 * array.first[0].to_f) || x2 > (1.1 * array.last[0].to_f)
       return nil
+    elsif x2 < array.first[0].to_f
+      # Extrapolate down using first cost value to this out-of-range input
+      return array.first[1].to_f
+    elsif x2 > array.last[0].to_f
+      # Extrapolate up using last cost value to this out-of-range input
+      return array.last[1].to_f
     else
       array.each_index do |counter|
 
@@ -540,13 +532,13 @@ class BTAPCosting
         x1 = array[counter + 1][0]
         y1 = array[counter + 1][1]
 
-        # skip if x2 is not between x0 and x1
+        # skip to next if x2 is not between x0 and x1
         next if x2 < x0 || x2 > x1
 
         # Do interpolation
-        y2 = y0 # just in-case x0 and x1 and x2 are the same!
-        if((x1-x0)>0.0)
-          y2 = y0.to_f + ((y1-y0).to_f * (x2-x0).to_f / (x1-x0).to_f)
+        y2 = y0 # just in-case x0, x1 and x2 are identical!
+        if(x1 - x0) > 0.0
+          y2 = y0.to_f + ((y1 - y0).to_f * (x2 - x0).to_f / (x1 - x0).to_f)
         end
         return y2
       end
@@ -570,19 +562,39 @@ class BTAPCosting
     rm * c # Delta in meters
   end
 
-  def get_closest_cost_city(lat, long)
+  def get_closest_cost_location(lat, long)
     dist = 1000000000000000000000.0
-    closest_city = nil
+    closest_loc = nil
     # province-state	city	latitude	longitude	source
     @costing_database['raw']['rsmeans_locations'].each do |location|
       if distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f]) < dist
-        closest_city = location
+        closest_loc = location
         dist = distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f])
       end
     end
-    return closest_city
+    return closest_loc
   end
 
+  # This will expand the two letter province abbreviation to a full uppercase province name
+  def expandProvAbbrev(abbrev)
+
+    # Note that the proper abbreviation for Quebec is QC not PQ. However, we've used PQ in openstudio-standards!
+    Hash provAbbrev = {"AB" => "ALBERTA",
+                       "BC" => "BRITISH COLUMBIA",
+                       "MB" => "MANITOBA",
+                       "NB" => "NEW BRUNSWICK",
+                       "NL" => "NEWFOUNDLAND AND LABRADOR",
+                       "NT" => "NORTHWEST TERRITORIES",
+                       "NS" => "NOVA SCOTIA",
+                       "NU" => "NUNAVUT",
+                       "ON" => "ONTARIO",
+                       "PE" => "PRINCE EDWARD ISLAND",
+                       "PQ" => "QUEBEC",
+                       "SK" => "SASKATCHEWAN",
+                       "YT" => "YUKON"
+    }
+    return provAbbrev[abbrev]
+  end
 
 end
 
