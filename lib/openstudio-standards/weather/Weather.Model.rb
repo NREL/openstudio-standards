@@ -145,7 +145,7 @@ class Standard
 	when 'LargeOfficeDetail'
 	   lookup_name = 'LargeOffice'
 	end  
-	ground_temp_vals = model_find_object(standards_data['ground_temperatures'], 'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type)
+	ground_temp_vals = model_find_object(standards_data['ground_temperatures'], 'template' => template, 'climate_zone' => climate_zone, 'building_type' => lookup_name)
     if ground_temp_vals && ground_temp_vals['jan']
       ground_temp = model.getSiteGroundTemperatureBuildingSurface
       ground_temp.setJanuaryGroundTemperature(ground_temp_vals['jan'])
