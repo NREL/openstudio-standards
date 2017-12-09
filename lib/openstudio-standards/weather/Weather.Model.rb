@@ -333,6 +333,53 @@ module BTAP
       puts "parsed #{counter} weather files."
     end
 
+
+
+    # This method will create a climate index file.
+    # @author phylroy.lopez@nrcan.gc.ca
+    # @param folder [String]
+    # @param output_file [String]
+    def self.create_climate_json_file(folder = "#{File.dirname(__FILE__)}/../../../weather", output_file = 'C:/test/phylroy.csv')
+      data_array = []
+      File.open(output_file, 'w') do |file|
+
+        BTAP::FileIO.get_find_files_from_folder_by_extension(folder, 'epw').sort.each do |wfile|
+          wf = BTAP::Environment::WeatherFile.new(wfile)
+          data = {}
+          data_array << data
+          data['file'] = File.basename(wfile).encode('UTF-8')
+          data['location_name'] = wf.location_name.force_encoding('ISO-8859-1').encode('UTF-8')
+          data['energy_plus_location_name'] = wf.energy_plus_location_name.force_encoding('ISO-8859-1').encode('UTF-8')
+          data['country'] = wf.country.force_encoding('ISO-8859-1').encode('UTF-8')
+          data['state_province_region'] = wf.state_province_region.force_encoding('ISO-8859-1').encode('UTF-8')
+          data['city'] =  wf.city.force_encoding('ISO-8859-1').encode('UTF-8')
+          data['hdd10'] = wf.hdd10
+          data['hdd18'] = wf.hdd18
+          data['cdd10'] = wf.cdd10
+          data['cdd18'] = wf.cdd18
+          data['latitude'] = wf.latitude
+          data['longitude'] = wf.longitude
+          data['elevation'] = wf.delta_dry_bulb
+          data['climate_zone'] = wf.climate_zone.force_encoding('ISO-8859-1').encode('UTF-8')
+          data['standard'] = wf.standard
+          data['summer_wet_months'] = wf.summer_wet_months.force_encoding('ISO-8859-1').encode('UTF-8')
+          data['winter_dry_months'] = wf.autumn_months.force_encoding('ISO-8859-1').encode('UTF-8')
+          data['spring_months'] = wf.spring_months.force_encoding('ISO-8859-1').encode('UTF-8')
+          data['typical_summer_wet_week'] = wf.typical_summer_wet_week
+          data['typical_winter_dry_week'] = wf.typical_winter_dry_week
+          data['typical_autumn_week'] = wf.typical_autumn_week
+          data['typical_spring_week'] = wf.typical_spring_week
+          data['wf.heating_design_info[1]'] = wf.heating_design_info[1]
+          data['cooling_design_info[1]'] = wf.cooling_design_info[1]
+          data['extremes_design_info[1]'] = wf.extremes_design_info[1].force_encoding('ISO-8859-1').encode('UTF-8')
+          data['db990'] = wf.db990
+
+        end
+        File.write('/home/osdev/out.json',JSON.pretty_generate(data_array))
+      end
+    end
+
+
     class WeatherFile
       attr_accessor :location_name,
                     :energy_plus_location_name,
