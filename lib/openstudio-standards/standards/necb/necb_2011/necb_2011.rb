@@ -12,6 +12,10 @@ class NECB2011 < Standard
     load_standards_database
     @necb_standards_data = {}
 
+    @necb_standard_data['necb_2015_table_c1'] = {
+
+    }
+
     # Surfaces
     @necb_standards_data['surface_thermal_transmittance'] = {
         'data_type' => 'table',
@@ -167,8 +171,6 @@ class NECB2011 < Standard
     }
 
 
-
-
     @standards_data = @standards_data.merge(@necb_standards_data)
 
     #@standards_data['schedules'] = standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
@@ -233,9 +235,46 @@ class NECB2011 < Standard
         table_row += 1
       end
     end
-
-
     necb_2011_workbook.write("/home/osdev/windows-host/projects/file.xlsx")
+  end
+
+  # Enter in [latitude, longitude] for each loc and this method will return the distance.
+  def distance(loc1, loc2)
+    rad_per_deg = Math::PI/180 # PI / 180
+    rkm = 6371 # Earth radius in kilometers
+    rm = rkm * 1000 # Radius in meters
+
+    dlat_rad = (loc2[0]-loc1[0]) * rad_per_deg # Delta, converted to rad
+    dlon_rad = (loc2[1]-loc1[1]) * rad_per_deg
+
+    lat1_rad, lon1_rad = loc1.map {|i| i * rad_per_deg}
+    lat2_rad, lon2_rad = loc2.map {|i| i * rad_per_deg}
+
+    a = Math.sin(dlat_rad/2)**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad/2)**2
+    c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1-a))
+    rm * c # Delta in meters
+  end
+
+  def get_necb_hdd18(model)
+    max_distance_tolerance = 50
+    min_distance = 100000000000000.0
+    necb_closest = nil
+    epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+    @standards_data['necb_2015_table_c1']['table'].each do |necb|
+      next if necb['lat_long'].nil? #Need this until Tyson cleans up table.
+      dist = distance([epw.latitude.to_f, epw.longitude.to_f], necb['lat_long'])
+      if min_distance > dist
+        min_distance = dist
+        necb_closest = necb
+      end
+    end
+    if (d/1000.0) > max_distance_tolerance
+      puts "Could not find close NECB HDD from Table C1 < #{max_distance_tolerance}km. Closest city is #{dist/1000.0}km away. Using epw hdd18 instead."
+      return epw.hdd18
+    else
+      puts "found close match to epw #{epw['file']}, #{necb_closest['city']},#{necb_closest['province']},distance_km' #{'%.2f' % (min_distance/1000.0)}}"
+      return necb_closest['degree_days_below_18_c']
+    end
   end
 
 
