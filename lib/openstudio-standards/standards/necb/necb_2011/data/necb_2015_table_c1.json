@@ -2,8 +2,9 @@
   "NECB2011_Table C1": {
     "data_type": "table",
     "refs": [
-      "NECB2011_Table C1"
+      "NECB2011_Table_C1","GoogleMapsApi"
     ],
+    "notes": "Table imported from NECB 2015 by NRC. GoogleAPI used to supplement lat_long data",
     "table": [
       {
         "city": "100 Mile House",
