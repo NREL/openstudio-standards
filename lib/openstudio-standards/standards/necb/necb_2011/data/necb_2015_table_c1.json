@@ -715,7 +715,10 @@
         "degree_days_below_15_c": "2980",
         "hourly_wind_pressures_one_tenth": "0.37",
         "hourly_wind_pressures_one_fiftyth": "0.48",
-        "lat_long": null
+        "lat_long": [
+          54.063168,
+          -128.637131
+        ]
       },
       {
         "city": "Ladysmith",
@@ -8793,7 +8796,7 @@
         ]
       },
       {
-        "city": "Perc?",
+        "city": "Percé",
         "province": "QC",
         "elevation": "5",
         "design_temp_jan_2_5p": "-21",
@@ -8804,7 +8807,10 @@
         "degree_days_below_15_c": "4470",
         "hourly_wind_pressures_one_tenth": "0.56",
         "hourly_wind_pressures_one_fiftyth": "0.72",
-        "lat_long": null
+        "lat_long": [
+          48.5244,
+          64.2127
+        ]
       },
       {
         "city": "Pincourt",
@@ -11011,7 +11017,10 @@
         "degree_days_below_15_c": "8250",
         "hourly_wind_pressures_one_tenth": "0.41",
         "hourly_wind_pressures_one_fiftyth": "0.53",
-        "lat_long": null
+        "lat_long": [
+          66.089218,
+          -118.014297
+        ]
       },
       {
         "city": "Fort Good Hope",
@@ -11382,7 +11391,10 @@
         "degree_days_below_15_c": "10180",
         "hourly_wind_pressures_one_tenth": "0.56",
         "hourly_wind_pressures_one_fiftyth": "0.72",
-        "lat_long": null
+        "lat_long": [
+          70.4764,
+          68.6013
+        ]
       },
       {
         "city": "Coppermine (Kugluktuk)",
