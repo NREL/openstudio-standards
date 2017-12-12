@@ -19,6 +19,7 @@ nrel_building_types = [
   'SecondarySchool',
   'SmallHotel',
   'SmallOffice',
+  'SmallOfficeDetailed',
   'RetailStripmall',
   'Warehouse'
 

@@ -199,6 +199,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.SecondarySchool"
   require_relative "#{proto}/common/buildings/Prototype.SmallHotel"
   require_relative "#{proto}/common/buildings/Prototype.SmallOffice"
+  require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.SuperMarket"
   require_relative "#{proto}/common/buildings/Prototype.Warehouse"
 

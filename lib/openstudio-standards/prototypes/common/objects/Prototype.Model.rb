@@ -233,7 +233,9 @@ Standard.class_eval do
       when 'SmallOffice', 'MediumOffice', 'LargeOffice'
         new_lookup_building_type = building_type
 	  when 'MediumOfficeDetailed'
-        new_lookup_building_type = 'MediumOffice'		  
+        new_lookup_building_type = 'MediumOffice'
+      when 'SmallOfficeDetailed'
+        new_lookup_building_type = 'SmallOffice'	  
       else
         new_lookup_building_type = model_get_lookup_name(building_type)
     end

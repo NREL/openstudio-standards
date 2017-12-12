@@ -1,0 +1,121 @@
+[
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "ConfRoom_1"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-2",
+    "space_names": [
+      "ConfRoom_2"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-3",
+    "space_names": [
+      "Corridor_1"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "Corridor_2"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "EnclosedOffice_1"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "EnclosedOffice_2"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "EnclosedOffice_3"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "EnclosedOffice_4"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "EnclosedOffice_5"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "EnclosedOffice_6"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "Lobby"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "Mechanical"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "OpenOffice"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "Restroom_1"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "Restroom_2"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "Stair"
+    ]
+  },
+   {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "space_names": [
+      "Storage"
+    ]
+  }
+]

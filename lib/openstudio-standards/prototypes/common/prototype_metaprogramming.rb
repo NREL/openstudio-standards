@@ -20,6 +20,7 @@ def create_class_array
     'SecondarySchool',
     'SmallHotel',
     'SmallOffice',
+	'SmallOfficeDetailed',
     'RetailStripmall',
     'Warehouse',
     'SuperMarket'

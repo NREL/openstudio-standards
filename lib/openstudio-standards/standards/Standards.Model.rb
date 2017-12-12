@@ -2954,6 +2954,8 @@ class Standard
       result = 4014
     elsif building_type == 'SmallOffice' # 5500 ft^2
       result = 511
+	elsif building_type == 'SmallOfficeDetailed' # 5500 ft^2
+      result = 511  
     elsif building_type == 'StripMall' # 22,500 ft^2
       result = 2090
     elsif building_type == 'SuperMarket' # 45,002 ft2 (from legacy reference idf file)

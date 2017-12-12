@@ -868,7 +868,8 @@ module Baseline9012013
          'Outpatient' # Health-care clinic
       prm_shw_fuel = 'NaturalGas'
     when 'SmallOffice', 'MediumOffice', 'LargeOffice', # Office
-         'RetailStandalone', 'RetailStripmall', # Retail
+         'SmallOfficeDetailed', 'MediumOfficeDetailed',
+		 'RetailStandalone', 'RetailStripmall', # Retail
          'Warehouse' # Warehouse
       prm_shw_fuel = 'Electricity'
     else

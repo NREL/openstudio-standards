@@ -2562,7 +2562,7 @@
     },
     {
       "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.000_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_0.000_in",
@@ -2574,7 +2574,7 @@
     },
     {
       "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.334_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_0.334_in",
@@ -2586,7 +2586,7 @@
     },
     {
       "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.430_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_0.430_in",
@@ -2598,7 +2598,7 @@
     },
     {
       "name": "Window_U_0.55_SHGC_0.35_Skylight_Frame_Width_0.709_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_0.709_in",
@@ -2610,7 +2610,7 @@
     },
     {
       "name": "Window_U_0.65_SHGC_0.35_Skylight_Frame_Width_2.339_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_2.339_in",
@@ -2622,7 +2622,7 @@
     },
     {
       "name": "Window_U_0.75_SHGC_0.35_Skylight_Frame_Width_2.339_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_2.339_in",
