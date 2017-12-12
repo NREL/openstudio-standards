@@ -210,11 +210,9 @@ class BTAPCosting
       @costing_database["raw"]['constructions_opaque'].each do |construction|
         cost_construction(construction, counter, location, 'opaque')
       end
-
       @costing_database["raw"]['constructions_glazing'].each do |construction|
         cost_construction(construction, counter, location, 'glazing')
       end
-
     end
   end
 
@@ -359,7 +357,8 @@ class BTAPCosting
             # If the cost is nil, that means the rsi is out of range. Flag in the report.
             if cost.nil?
               if !cost_range_array.empty?
-                notes = "RSI out of the range (#{'%.2f' % rsi}) or cost is 0!. Range for #{construction_set[surface_type]} is #{'%.2f' % cost_range_array.first[0]}-#{'%.2f' % cost_range_array.last[0]}."
+
+  notes = "RSI out of the range (#{'%.2f' % rsi}) or cost is 0!. Range for #{construction_set[surface_type]} is #{'%.2f' % cost_range_array.first[0]}-#{'%.2f' % cost_range_array.last[0]}."
                 cost = 0.0
               else
                 notes = "Cost is 0!"
@@ -419,7 +418,7 @@ class BTAPCosting
     total_with_op = 0.0
     material_cost_pairs = []
     construction[material_layers].split(',').reject {|c| c.empty?}.each do |material_index|
-      material = materials_database.find {|data| data[material_id].to_s == material_index.to_s}
+      material = materials_database.find { |data| data[material_id].to_s == material_index.to_s }
       if material.nil?
         puts "material error..could not find material #{material_index} in #{materials_database}"
         raise()
@@ -466,7 +465,8 @@ class BTAPCosting
   end
 
   def get_regional_cost_factors(provinceState, city, material)
-    @costing_database['raw']['rsmeans_local_factors'].select { |code| code['province-state'] == provinceState && code['city'] == city }.each do |code|
+    @costing_database['raw']['rsmeans_local_factors'].select { |code|
+      code['province-state'] == provinceState && code['city'] == city }.each do |code|
       id = material['id'].to_s
       prefixes = code['code_prefixes'].split(',')
       prefixes.each do |prefix|
