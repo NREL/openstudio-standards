@@ -109,7 +109,7 @@ class NECB2011
     red_sh = wwr_sh > wwr_lim
 
     # NECB FDWR limit
-    hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
+    hdd = self.get_necb_hdd18( model )
     fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
     # puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
     # puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
@@ -304,7 +304,7 @@ class NECB2011
     end
 
     #Note:hdd needs to be defined for eval to work on table eval below.
-    hdd = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get).hdd18
+    hdd = self.get_necb_hdd18( model )
 
     old_name = default_surface_construction_set.name.get.to_s
     new_name = "#{old_name} at hdd = #{hdd}"

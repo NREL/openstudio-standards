@@ -10,11 +10,10 @@ class NECB2011 < Standard
     super()
     @template = @@template
     load_standards_database
-    @necb_standards_data = {}
+    @necb_standards_data = Hash.new
 
-    @necb_standard_data['necb_2015_table_c1'] = {
+    @necb_standards_data = @necb_standards_data.merge ( JSON.parse(File.read("#{File.dirname(__FILE__)}/data/necb_2015_table_c1.json")))
 
-    }
 
     # Surfaces
     @necb_standards_data['surface_thermal_transmittance'] = {
@@ -256,10 +255,11 @@ class NECB2011 < Standard
   end
 
   def get_necb_hdd18(model)
-    max_distance_tolerance = 50
+    max_distance_tolerance = 500000
     min_distance = 100000000000000.0
     necb_closest = nil
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+    puts @standards_data['necb_2015_table_c1']
     @standards_data['necb_2015_table_c1']['table'].each do |necb|
       next if necb['lat_long'].nil? #Need this until Tyson cleans up table.
       dist = distance([epw.latitude.to_f, epw.longitude.to_f], necb['lat_long'])
@@ -268,12 +268,12 @@ class NECB2011 < Standard
         necb_closest = necb
       end
     end
-    if (d/1000.0) > max_distance_tolerance
-      puts "Could not find close NECB HDD from Table C1 < #{max_distance_tolerance}km. Closest city is #{dist/1000.0}km away. Using epw hdd18 instead."
-      return epw.hdd18
+    if (min_distance / 1000.0) > max_distance_tolerance and not epw.hdd18.nil?
+      puts "Could not find close NECB HDD from Table C1 < #{max_distance_tolerance}km. Closest city is #{min_distance/1000.0}km away. Using epw hdd18 instead."
+      return epw.hdd18.to_f
     else
-      puts "found close match to epw #{epw['file']}, #{necb_closest['city']},#{necb_closest['province']},distance_km' #{'%.2f' % (min_distance/1000.0)}}"
-      return necb_closest['degree_days_below_18_c']
+      puts "found close match to epw #{model.weatherFile.get.path.get}, #{necb_closest['city']},#{necb_closest['province']},distance_km' #{'%.2f' % (min_distance/1000.0)}}"
+      return necb_closest['degree_days_below_18_c'].to_f
     end
   end
 

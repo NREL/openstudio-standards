@@ -1,5 +1,5 @@
 {
-  "NECB2011_Table C1": {
+  "necb_2015_table_c1": {
     "data_type": "table",
     "refs": [
       "NECB2011_Table_C1","GoogleMapsApi"

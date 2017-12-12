@@ -133,13 +133,14 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     
     #Iterate through the weather files. 
     NECB_epw_files_for_cdn_climate_zones.each do |weather_file|
-      @hdd = BTAP::Environment::WeatherFile.new(weather_file).hdd18
+
       #Iterate through the vintage templates 'NECB 2011', etc..
       Templates.each do |template|
             
         #Add weather file, HDD.
         standard.model_add_design_days_and_weather_file(@model, 'NECB HDD Method', File.basename(weather_file))
         standard.model_add_ground_temperatures(@model, 'HighriseApartment', 'NECB HDD Method')
+        @hdd = standard.get_necb_hdd18( @model )
 
 
         standard.apply_standard_construction_properties(@model) # standards candidate
