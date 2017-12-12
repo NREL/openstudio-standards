@@ -250,7 +250,7 @@ module EnergyPlus
         match_data = text.match(regex)
         if match_data.nil?
           puts "Can't find heating design information"
-          raise()
+
         else
           # first match is outdoor air temps
 
@@ -258,8 +258,7 @@ module EnergyPlus
 
           # have to be 14 data points
           if heating_design_info_raw.size != 15
-            puts "Can't find cooling design info, found #{heating_design_info_raw.size}"
-            raise()
+            puts "Can't find heating design info, found #{heating_design_info_raw.size}"
           end
 
           # insert as numbers
@@ -273,7 +272,6 @@ module EnergyPlus
         match_data = text.match(regex)
         if match_data.nil?
           puts "Can't find cooling design information"
-          raise()
         else
           # first match is outdoor air temps
 
@@ -282,7 +280,6 @@ module EnergyPlus
           # have to be 14 data points
           if design_info_raw.size != 32
             puts "Can't find cooling design info, found #{design_info_raw.size} "
-            raise()
           end
 
           # insert as numbers
@@ -296,7 +293,6 @@ module EnergyPlus
         match_data = text.match(regex)
         if match_data.nil?
           puts "Can't find extremes design information"
-          raise()
         else
           # first match is outdoor air temps
 
@@ -375,7 +371,7 @@ module EnergyPlus
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't Summer months")
         @autumn_months = 'NA'
-        raise()
+
       else
         @autumn_months = match_data[1].to_s.strip
       end
@@ -384,7 +380,7 @@ module EnergyPlus
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't Summer months")
         @spring_months = 'NA'
-        raise()
+
       else
         @spring_months = match_data[1].to_s.strip
       end
@@ -398,7 +394,6 @@ module EnergyPlus
         @typical_summer_wet_week = Date.parse("#{match_data[0][0].split(':')[0]} 2000")
         @typical_winter_dry_week = Date.parse("#{match_data[1][0].split(':')[0]} 2000")
         if match_data[2].nil?
-          raise()
           @typical_autumn_week = 'NA'
           @typical_spring_week = 'NA'
         else
@@ -411,7 +406,6 @@ module EnergyPlus
       match_data = text.match(regex)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find Extreme hot weather week")
-        raise()
       else
         @extreme_hot_week = Date.parse((match_data[1].split(':')[0]).to_s)
       end
