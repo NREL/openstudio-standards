@@ -12,7 +12,14 @@ class NECB2011 < Standard
     load_standards_database
     @necb_standards_data = Hash.new
 
-    @necb_standards_data = @necb_standards_data.merge ( JSON.parse(File.read("#{File.dirname(__FILE__)}/data/necb_2015_table_c1.json")))
+    #load NECB 2015 Table C1 for NECB 2011 work
+    file = "#{File.dirname(__FILE__)}/data/necb_2015_table_c1.json"
+    @necb_standards_data = @necb_standards_data.merge ( JSON.parse(File.read(file)))
+
+    file = "#{File.dirname(__FILE__)}/data/regional_fuel_use.json"
+    @necb_standards_data = @necb_standards_data.merge ( JSON.parse(File.read(file)))
+
+
 
 
     # Surfaces
@@ -252,6 +259,15 @@ class NECB2011 < Standard
     a = Math.sin(dlat_rad/2)**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad/2)**2
     c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1-a))
     rm * c # Delta in meters
+  end
+
+  # this method returns the default system fuel types by epw_file.
+  def self.get_canadian_system_defaults_by_weatherfile_name( model )
+    epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+    fuel_sources = @standards_data["regional_fuel_use"]["table"].detect{|fuel_sources| fuel_sources['state_province_region'] == epw.state_province_region }
+    raise() if fuel_sources.nil?
+    #data[:boiler_fueltype], data[:baseboard_type], data[:mau_type], data[:mau_heating_coil_type], data[:mau_cooling_type], data[:chiller_type], data[:heating_coil_type_sys_3], data[:heating_coil_type_sys4], data[:heating_coil_type_sys6], data[:fan_type], data[:swh_fueltype]
+    return fuel_sources
   end
 
   def get_necb_hdd18(model)
