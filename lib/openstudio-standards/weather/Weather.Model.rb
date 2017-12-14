@@ -305,7 +305,7 @@ module BTAP
     end
 
     # this method returns the default system fuel types by epw_file.
-    def self.get_canadian_system_defaults_by_weatherfile_name(epw_file)
+    def self.get_canadian_system_defaults_by_weatherfile_name( epw_file )
       if (data = BTAP::Environment::WEATHER_DATA1.find { |d| d[:file] == epw_file.strip })
         return data[:boiler_fueltype], data[:baseboard_type], data[:mau_type], data[:mau_heating_coil_type], data[:mau_cooling_type], data[:chiller_type], data[:heating_coil_type_sys_3], data[:heating_coil_type_sys4], data[:heating_coil_type_sys6], data[:fan_type], data[:swh_fueltype]
       else

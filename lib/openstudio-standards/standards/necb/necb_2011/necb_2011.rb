@@ -20,8 +20,6 @@ class NECB2011 < Standard
     @necb_standards_data = @necb_standards_data.merge ( JSON.parse(File.read(file)))
 
 
-
-
     # Surfaces
     @necb_standards_data['surface_thermal_transmittance'] = {
         'data_type' => 'table',
@@ -262,11 +260,11 @@ class NECB2011 < Standard
   end
 
   # this method returns the default system fuel types by epw_file.
-  def self.get_canadian_system_defaults_by_weatherfile_name( model )
+  def get_canadian_system_defaults_by_weatherfile_name( model )
+    #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = @standards_data["regional_fuel_use"]["table"].detect{|fuel_sources| fuel_sources['state_province_region'] == epw.state_province_region }
-    raise() if fuel_sources.nil?
-    #data[:boiler_fueltype], data[:baseboard_type], data[:mau_type], data[:mau_heating_coil_type], data[:mau_cooling_type], data[:chiller_type], data[:heating_coil_type_sys_3], data[:heating_coil_type_sys4], data[:heating_coil_type_sys6], data[:fan_type], data[:swh_fueltype]
+    fuel_sources = @standards_data["regional_fuel_use"]["table"].detect{|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }
+    raise() if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
 
@@ -275,7 +273,6 @@ class NECB2011 < Standard
     min_distance = 100000000000000.0
     necb_closest = nil
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    puts @standards_data['necb_2015_table_c1']
     @standards_data['necb_2015_table_c1']['table'].each do |necb|
       next if necb['lat_long'].nil? #Need this until Tyson cleans up table.
       dist = distance([epw.latitude.to_f, epw.longitude.to_f], necb['lat_long'])
@@ -288,7 +285,7 @@ class NECB2011 < Standard
       puts "Could not find close NECB HDD from Table C1 < #{max_distance_tolerance}km. Closest city is #{min_distance/1000.0}km away. Using epw hdd18 instead."
       return epw.hdd18.to_f
     else
-      puts "found close match to epw #{model.weatherFile.get.path.get}, #{necb_closest['city']},#{necb_closest['province']},distance_km' #{'%.2f' % (min_distance/1000.0)}}"
+      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of #{'%.2f' % (min_distance/1000.0)}km from epw location. Ref:necb_2015_table_c1"
       return necb_closest['degree_days_below_18_c'].to_f
     end
   end

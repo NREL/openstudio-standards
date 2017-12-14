@@ -1,12 +1,9 @@
-
 class NECB2011
   def model_add_hvac(model, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
-    necb_autozone_and_autosystem(model, nil, false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype)
-
+    system_fuel_defaults = self.get_canadian_system_defaults_by_weatherfile_name(model)
+    necb_autozone_and_autosystem(model, nil, false, system_fuel_defaults)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
-
     return true
   end
 
@@ -381,7 +378,7 @@ class NECB2011
       # For versions of OpenStudio using E+ 8.6 or lower
       damper_action_eplus = if air_loop_hvac.model.version < OpenStudio::VersionString.new('2.0.5')
                               'Reverse'
-                            # For versions of OpenStudio using E+ 8.7 or higher
+                              # For versions of OpenStudio using E+ 8.7 or higher
                             else
                               'ReverseWithLimits'
                             end
@@ -1007,9 +1004,9 @@ class NECB2011
     end
 
     search_criteria = {
-      'template' => template_mod,
-      'number_of_poles' => 4.0,
-      'type' => 'Enclosed'
+        'template' => template_mod,
+        'number_of_poles' => 4.0,
+        'type' => 'Enclosed'
     }
 
     # Exception for small fans, including
@@ -1086,7 +1083,7 @@ class NECB2011
   # and whether the fan lives inside a unit heater, PTAC, etc.
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
-    fan_variable_volume.setPressureRise(@standards_data['fan_variable_volume_pressure_rise_value']['value'] )
+    fan_variable_volume.setPressureRise(@standards_data['fan_variable_volume_pressure_rise_value']['value'])
     return true
   end
 
@@ -2544,20 +2541,20 @@ class NECB2011
 
   def necb_spacetype_system_selection(model, heating_design_load = nil, cooling_design_load = nil)
     spacezoning_data = Struct.new(
-      :space, # the space object
-      :space_name, # the space name
-      :building_type_name, # space type name
-      :space_type_name, # space type name
-      :necb_hvac_system_selection_type, #
-      :system_number, # the necb system type
-      :number_of_stories, # number of stories
-      :horizontal_placement, # the horizontal placement (norht, south, east, west, core)
-      :vertical_placment, # the vertical placement ( ground, top, both, middle )
-      :people_obj, # Spacetype people object
-      :heating_capacity,
-      :cooling_capacity,
-      :is_dwelling_unit, # Checks if it is a dwelling unit.
-      :is_wildcard
+        :space, # the space object
+        :space_name, # the space name
+        :building_type_name, # space type name
+        :space_type_name, # space type name
+        :necb_hvac_system_selection_type, #
+        :system_number, # the necb system type
+        :number_of_stories, # number of stories
+        :horizontal_placement, # the horizontal placement (norht, south, east, west, core)
+        :vertical_placment, # the vertical placement ( ground, top, both, middle )
+        :people_obj, # Spacetype people object
+        :heating_capacity,
+        :cooling_capacity,
+        :is_dwelling_unit, # Checks if it is a dwelling unit.
+        :is_wildcard
     )
 
     # Array to store schedule objects
@@ -2716,78 +2713,68 @@ class NECB2011
       model = nil,
       runner = nil,
       use_ideal_air_loads = false,
-      boiler_fueltype = 'NaturalGas',
-      mau_type = true,
-      mau_heating_coil_type = 'Hot Water',
-      baseboard_type = 'Hot Water',
-      chiller_type = 'Scroll',
-      mua_cooling_type = 'DX',
-      heating_coil_types_sys3 = 'Gas',
-      heating_coil_types_sys4 = 'Gas',
-      heating_coil_types_sys6 = 'Hot Water',
-      fan_type = 'AF_or_BI_rdg_fancurve',
-      swh_fueltype = 'NaturalGas'
+      system_fuel_defaults
   )
 
     # Create a data struct for the space to system to placement information.
 
     # system assignment.
-    unless ['NaturalGas', 'Electricity', 'PropaneGas', 'FuelOil#1', 'FuelOil#2', 'Coal', 'Diesel', 'Gasoline', 'OtherFuel1'].include?(boiler_fueltype)
-      BTAP.runner_register('ERROR', "boiler_fueltype = #{boiler_fueltype}", runner)
+    unless ['NaturalGas', 'Electricity', 'PropaneGas', 'FuelOil#1', 'FuelOil#2', 'Coal', 'Diesel', 'Gasoline', 'OtherFuel1'].include?(system_fuel_defaults['boiler_fueltype'])
+      BTAP.runner_register('ERROR', "boiler_fueltype = #{system_fuel_defaults['boiler_fueltype']}", runner)
       return
     end
 
-    unless [true, false].include?(mau_type)
-      BTAP.runner_register('ERROR', "mau_type = #{mau_type}", runner)
+    unless [true, false].include?(system_fuel_defaults['mau_type'])
+      BTAP.runner_register('ERROR', "mau_type = #{system_fuel_defaults['mau_type']}", runner)
       return
     end
 
-    unless ['Hot Water', 'Electric'].include?(mau_heating_coil_type)
-      BTAP.runner_register('ERROR', "mau_heating_coil_type = #{mau_heating_coil_type}", runner)
+    unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['mau_heating_coil_type'])
+      BTAP.runner_register('ERROR', "mau_heating_coil_type = #{system_fuel_defaults['mau_heating_coil_type']}", runner)
       return false
     end
 
-    unless ['Hot Water', 'Electric'].include?(baseboard_type)
-      BTAP.runner_register('ERROR', "baseboard_type = #{baseboard_type}", runner)
+    unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['baseboard_type'])
+      BTAP.runner_register('ERROR', "baseboard_type = #{system_fuel_defaults['baseboard_type']}", runner)
       return false
     end
 
-    unless ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'].include?(chiller_type)
-      BTAP.runner_register('ERROR', "chiller_type = #{chiller_type}", runner)
+    unless ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'].include?(system_fuel_defaults['chiller_type'])
+      BTAP.runner_register('ERROR', "chiller_type = #{system_fuel_defaults['chiller_type']}", runner)
       return false
     end
-    unless ['DX', 'Hydronic'].include?(mua_cooling_type)
-      BTAP.runner_register('ERROR', "mua_cooling_type = #{mua_cooling_type}", runner)
-      return false
-    end
-
-    unless ['Electric', 'Gas', 'DX'].include?(heating_coil_types_sys3)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys3 = #{heating_coil_types_sys3}", runner)
+    unless ['DX', 'Hydronic'].include?(system_fuel_defaults['mau_cooling_type'])
+      BTAP.runner_register('ERROR', "mau_cooling_type = #{system_fuel_defaults['mau_cooling_type']}", runner)
       return false
     end
 
-    unless ['Electric', 'Gas', 'DX'].include?(heating_coil_types_sys4)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys4 = #{heating_coil_types_sys4}", runner)
+    unless ['Electric', 'Gas', 'DX'].include?(system_fuel_defaults['heating_coil_type_sys3'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys3 = #{system_fuel_defaults['heating_coil_type_sys3']}", runner)
       return false
     end
 
-    unless ['Hot Water', 'Electric'].include?(heating_coil_types_sys6)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys6 = #{heating_coil_types_sys6}", runner)
+    unless ['Electric', 'Gas', 'DX'].include?(system_fuel_defaults['heating_coil_type_sys4'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys4 = #{system_fuel_defaults['heating_coil_type_sys4']}", runner)
       return false
     end
 
-    unless ['AF_or_BI_rdg_fancurve', 'AF_or_BI_inletvanes', 'fc_inletvanes', 'var_speed_drive'].include?(fan_type)
-      BTAP.runner_register('ERROR', "fan_type = #{fan_type}", runner)
+    unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['heating_coil_type_sys6'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys6 = #{system_fuel_defaults['heating_coil_type_sys6']}", runner)
+      return false
+    end
+
+    unless ['AF_or_BI_rdg_fancurve', 'AF_or_BI_inletvanes', 'fc_inletvanes', 'var_speed_drive'].include?(system_fuel_defaults['fan_type'])
+      BTAP.runner_register('ERROR', "fan_type = #{system_fuel_defaults['fan_type']}", runner)
       return false
     end
     # REPEATED CODE!!
-    unless ['Electric', 'Hot Water'].include?(heating_coil_types_sys6)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys6 = #{heating_coil_types_sys6}", runner)
+    unless ['Electric', 'Hot Water'].include?(system_fuel_defaults['heating_coil_type_sys6'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys6 = #{system_fuel_defaults['heating_coil_type_sys6']}", runner)
       return false
     end
     # REPEATED CODE!!
-    unless ['Electric', 'Gas'].include?(heating_coil_types_sys4)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys4 = #{heating_coil_types_sys4}", runner)
+    unless ['Electric', 'Gas'].include?(system_fuel_defaults['heating_coil_type_sys4'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys4 = #{system_fuel_defaults['heating_coil_type_sys4']}", runner)
       return false
     end
 
@@ -2812,7 +2799,7 @@ class NECB2011
         adj_spaces.sort.each do |adj_space|
           # if there are no adjacent spaces. Raise an error.
           raise "Could not determine adj space to space #{space_zone_data.space.name.get}" if adj_space.nil?
-          adj_space_data = space_zoning_data_array.find { |data| data.space == adj_space[0] }
+          adj_space_data = space_zoning_data_array.find {|data| data.space == adj_space[0]}
           if adj_space_data.system_number.nil?
             next
           else
@@ -2856,10 +2843,10 @@ class NECB2011
               space_zoning_data_array.each do |space_info|
                 # puts "Spacename: #{space_info.space.name}:#{space_info.space.spaceType.get.name}"
                 if (space_info.system_number == system_number) &&
-                   (space_info.space.buildingStory.get == story) &&
-                   (determine_necb_schedule_type(space_info.space).to_s == schedule_type) &&
-                   (space_info.horizontal_placement == horizontal_placement) &&
-                   (space_info.is_dwelling_unit == is_dwelling_unit)
+                    (space_info.space.buildingStory.get == story) &&
+                    (determine_necb_schedule_type(space_info.space).to_s == schedule_type) &&
+                    (space_info.horizontal_placement == horizontal_placement) &&
+                    (space_info.is_dwelling_unit == is_dwelling_unit)
                   space_array << space_info.space
                 end
               end
@@ -2912,13 +2899,13 @@ class NECB2011
       hw_loop_needed = false
       system_zone_array.each_with_index do |zones, system_index|
         next if zones.empty?
-        if system_index == 1 && (mau_heating_coil_type == 'Hot Water' || baseboard_type == 'Hot Water')
+        if system_index == 1 && (system_fuel_defaults['mau_heating_coil_type'] == 'Hot Water' || system_fuel_defaults['baseboard_type'] == 'Hot Water')
           hw_loop_needed = true
         elsif system_index == 2 || system_index == 5 || system_index == 7
           hw_loop_needed = true
-        elsif (system_index == 3 || system_index == 4) && baseboard_type == 'Hot Water'
+        elsif (system_index == 3 || system_index == 4) && system_fuel_defaults['baseboard_type'] == 'Hot Water'
           hw_loop_needed = true
-        elsif system_index == 6 && (mau_heating_coil_type == 'Hot Water' || baseboard_type == 'Hot Water')
+        elsif system_index == 6 && (system_fuel_defaults['mau_heating_coil_type'] == 'Hot Water' || system_fuel_defaults['baseboard_type'] == 'Hot Water')
           hw_loop_needed = true
         end
         if hw_loop_needed
@@ -2928,7 +2915,7 @@ class NECB2011
       if hw_loop_needed
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        setup_hw_loop_with_components( model, hw_loop, system_fuel_defaults['boiler_fueltype'], always_on )
       end
       system_zone_array.each_with_index do |zones, system_index|
         # skip if no thermal zones for this system.
@@ -2937,20 +2924,19 @@ class NECB2011
           when 0, nil
             # Do nothing no system assigned to zone. Used for Unconditioned spaces
           when 1
-
-            add_sys1_unitary_ac_baseboard_heating(model, zones, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, hw_loop)
+            add_sys1_unitary_ac_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['mau_type'], system_fuel_defaults['mau_heating_coil_type'], system_fuel_defaults['baseboard_type'], hw_loop)
           when 2
-            add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype, chiller_type, 'FPFC', mua_cooling_type, hw_loop)
+            add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
           when 3
-            add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model, zones, boiler_fueltype, heating_coil_types_sys3, baseboard_type, hw_loop)
+            add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys3'], system_fuel_defaults['baseboard_type'], hw_loop)
           when 4
-            add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model, zones, boiler_fueltype, heating_coil_types_sys4, baseboard_type, hw_loop)
+            add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys4'], system_fuel_defaults['baseboard_type'], hw_loop)
           when 5
-            add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype, chiller_type, 'TPFC', mua_cooling_type, hw_loop)
+            add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'TPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
           when 6
-            add_sys6_multi_zone_built_up_system_with_baseboard_heating(model, zones, boiler_fueltype, heating_coil_types_sys6, baseboard_type, chiller_type, fan_type, hw_loop)
+            add_sys6_multi_zone_built_up_system_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys6'], system_fuel_defaults['baseboard_type'], system_fuel_defaults['chiller_type'], system_fuel_defaults['fan_type'], hw_loop)
           when 7
-            add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype, chiller_type, 'FPFC', mua_cooling_type, hw_loop)
+            add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
         end
       end
     end
